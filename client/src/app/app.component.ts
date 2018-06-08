@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
       if (e instanceof NavigationEnd) {
         const pathname = window.location.pathname
         if (!pathname || pathname === '/' || is18nPath(pathname)) {
-          this.redirectService.redirectToHomepage()
+          this.redirectService.redirectToHomepage(true)
         }
       }
     })

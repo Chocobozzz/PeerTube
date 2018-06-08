@@ -28,10 +28,10 @@ export class RedirectService {
         })
   }
 
-  redirectToHomepage () {
+  redirectToHomepage (skipLocationChange = false) {
     console.log('Redirecting to %s...', RedirectService.DEFAULT_ROUTE)
 
-    this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange: true })
+    this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange })
         .catch(() => {
           console.error(
             'Cannot navigate to %s, resetting default route to %s.',
@@ -40,7 +40,7 @@ export class RedirectService {
           )
 
           RedirectService.DEFAULT_ROUTE = RedirectService.INIT_DEFAULT_ROUTE
-          return this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange: true })
+          return this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { skipLocationChange })
         })
 
   }

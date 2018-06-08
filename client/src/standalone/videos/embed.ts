@@ -21,7 +21,6 @@ import * as videojs from 'video.js'
 
 import { VideoDetails } from '../../../../shared'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
-import { environment } from '../../environments/environment'
 
 function getVideoUrl (id: string) {
   return window.location.origin + '/api/v1/videos/' + id
@@ -62,7 +61,7 @@ const urlParts = window.location.href.split('/')
 const lastPart = urlParts[urlParts.length - 1]
 const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
 
-loadLocale(environment.apiUrl, videojs, navigator.language)
+loadLocale(window.location.origin, videojs, navigator.language)
   .then(() => loadVideoInfo(videoId))
   .then(async response => {
     const videoContainerId = 'video-container'

@@ -18,35 +18,42 @@ exports.config = {
   multiCapabilities: [
     {
       browserName: 'Chrome',
-      version: '66'
+      version: '66',
+      name: 'Latest Chrome Desktop'
     },
     {
       browserName: 'Safari',
-      version: '11.1'
+      version: '11.1',
+      name: 'Safari Desktop'
     },
     {
       browserName: 'Firefox',
-      version: '52' // ESR
+      version: '52', // ESR,
+      name: 'Old Firefox ESR Desktop'
     },
     {
       browserName: 'Firefox',
-      version: '60'
+      version: '60',
+      name: 'Latest Firefox Desktop'
     },
     {
       browserName: 'Edge',
-      version: '16'
+      version: '16',
+      name: 'Latest Edge Desktop'
     },
     {
       browserName: 'Chrome',
       device: 'Google Nexus 6',
       realMobile: 'true',
-      os_version: '5.0'
+      os_version: '5.0',
+      name: 'Latest Chrome Android'
     },
     {
       browserName: 'Safari',
       device: 'iPhone SE',
       realMobile: 'true',
-      os_version: '11.2'
+      os_version: '11.2',
+      name: 'Latest Safari iPhone'
     }
   ],
 

@@ -41,7 +41,7 @@ export class VideoWatchPage {
       .then(seconds => parseInt(seconds, 10))
   }
 
-  async pauseVideo (isAutoplay: boolean) {
+  async pauseVideo (isAutoplay: boolean, isMobileDevice: boolean) {
     if (isAutoplay === false) {
       const playButton = element(by.css('.vjs-big-play-button'))
       await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
