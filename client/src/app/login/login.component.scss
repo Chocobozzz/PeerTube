@@ -17,13 +17,7 @@ input[type=submit] {
   @include orange-button;
 }
 
-.forgot-password-button {
-  display: inline-block;
-  cursor: pointer;
-}
-
-.create-an-account {
-  @include disable-default-a-behaviour;
-
+.create-an-account, .forgot-password-button {
   color: #000;
+  cursor: pointer;
 }

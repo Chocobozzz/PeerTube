@@ -17,7 +17,7 @@
           or create an account
         </a>
 
-        <a i18n *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#getting-started" target="_blank" class="create-an-account">
+        <a i18n *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#getting-started" target="_blank" title="Click here to see how to get started!" class="create-an-account">
           or create an account on another instance
         </a>
 
@@ -39,7 +39,7 @@
           type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2"
           formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
         >
-        <div i18n class="forgot-password-button" (click)="openForgotPasswordModal()">I forgot my password</div>
+        <a i18n class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
       </div>
       <div *ngIf="formErrors.password" class="form-error">
         {{ formErrors.password }}
