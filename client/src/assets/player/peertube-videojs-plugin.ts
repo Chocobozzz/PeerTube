@@ -263,7 +263,7 @@ class PeerTubePlugin extends Plugin {
     const options = {
       forcePlay: false,
       delay,
-      seek: currentTime
+      seek: currentTime + (delay / 1000)
     }
     this.updateVideoFile(newVideoFile, options)
   }
@@ -310,6 +310,7 @@ class PeerTubePlugin extends Plugin {
                           this.player.pause()
                           this.player.posterImage.show()
                           this.player.removeClass('vjs-has-autoplay')
+                          this.player.removeClass('vjs-has-big-play-button-clicked')
 
                           return done()
                         })

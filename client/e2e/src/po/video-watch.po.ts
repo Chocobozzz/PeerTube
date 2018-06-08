@@ -54,6 +54,12 @@ export class VideoWatchPage {
     const videojsEl = element(by.css('div.video-js'))
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
 
+    // On Android, we need to click twice on "play" (BrowserStack particularity)
+    if (isMobileDevice) {
+      await browser.sleep(3000)
+      await videojsEl.click()
+    }
+
     await browser.sleep(7000)
 
     return videojsEl.click()
