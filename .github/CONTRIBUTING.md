@@ -129,6 +129,7 @@ $ npm run play
 Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
 with the `root` as username and `test{1,2,3}` for the password.
 
+Instance configurations are in `config/test-{1,2,3}.yaml`.
 
 ### Unit tests
 
@@ -153,3 +154,6 @@ If you just want to run 1 test:
 ```
 $ npm run mocha -- --exit --require ts-node/register/type-check --bail server/tests/api/index.ts
 ```
+
+Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
+Note that only instance 2 has transcoding enabled.
