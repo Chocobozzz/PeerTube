@@ -39,7 +39,7 @@ const SORTABLE_COLUMNS = {
 }
 
 const OAUTH_LIFETIME = {
-  ACCESS_TOKEN: 3600 * 4, // 4 hours
+  ACCESS_TOKEN: 3600 * 24, // 1 day, for upload
   REFRESH_TOKEN: 1209600 // 2 weeks
 }
 
