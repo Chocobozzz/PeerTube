@@ -1,8 +1,10 @@
 import * as request from 'supertest'
 import { readFileBufferPromise } from '../../../helpers/core-utils'
 
-function getXMLfeed (url: string, format?: string) {
-  const path = '/feeds/videos.xml'
+type FeedType = 'videos' | 'video-comments'
+
+function getXMLfeed (url: string, feed: FeedType, format?: string) {
+  const path = '/feeds/' + feed + '.xml'
 
   return request(url)
           .get(path)
@@ -12,8 +14,8 @@ function getXMLfeed (url: string, format?: string) {
           .expect('Content-Type', /xml/)
 }
 
-function getJSONfeed (url: string) {
-  const path = '/feeds/videos.json'
+function getJSONfeed (url: string, feed: FeedType) {
+  const path = '/feeds/' + feed + '.json'
 
   return request(url)
           .get(path)
