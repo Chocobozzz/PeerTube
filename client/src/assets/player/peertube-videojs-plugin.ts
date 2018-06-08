@@ -7,7 +7,7 @@ import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from
 import {
   getAverageBandwidth,
   getStoredMute,
-  getStoredVolume,
+  getStoredVolume, isMobile,
   saveAverageBandwidth,
   saveMuteInStore,
   saveVolumeInStore,
@@ -366,6 +366,8 @@ class PeerTubePlugin extends Plugin {
   }
 
   private initializePlayer () {
+    if (isMobile()) this.player.addClass('vjs-is-mobile')
+
     this.initSmoothProgressBar()
 
     this.alterInactivity()

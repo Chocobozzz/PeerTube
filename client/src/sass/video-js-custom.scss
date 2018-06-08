@@ -23,6 +23,8 @@ $setting-transition-easing: ease-out;
 
 $context-menu-width: 350px;
 
+$progress-margin: 10px;
+
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
   color: $primary-foreground-color;
@@ -164,56 +166,61 @@ $context-menu-width: 350px;
       opacity: $primary-foreground-opacity;
     }
 
-    .vjs-slider {
-      background-color: rgba(255, 255, 255, .2);
-      border-radius: 2px;
-      height: 5px;
-
-      .vjs-slider-bar {
-        background: $primary-foreground-color;
-      }
-    }
-
-    .vjs-play-progress {
-      padding-right: 4px;
-
-      &::before {
-        top: -0.3em;
-
-        &:hover {
-          top: -0.372em;
-        }
-      }
-
-      .vjs-time-tooltip {
-        display: none;
-      }
-    }
-
-    .vjs-load-progress {
-      &, & div {
-        background: rgba(255, 255, 255, .2);
-      }
-    }
-
     .vjs-progress-control {
-      bottom: 34px;
-      width: 100%;
       position: absolute;
-      height: 5px;
+      z-index: 100; // On top of the progress bar
+      bottom: 29px;
+      width: calc(100% - (2 * #{$progress-margin}));
+      margin-left: $progress-margin;
+      height: 14px;
 
-      .vjs-progress-holder {
+      .vjs-slider {
         margin: 0;
         border-radius: 0;
+        background-color: rgba(255, 255, 255, .2);
+        height: 3px;
+        transition: none;
+
+        .vjs-play-progress {
+          background: $primary-foreground-color;
+
+          // Not display the circle if the progress is not hovered
+          &::before {
+            opacity: 0;
+            transition: opacity 0.1s ease;
+            font-size: 14px;
+
+            top: -0.3em;
+          }
+
+          .vjs-time-tooltip {
+            display: none;
+          }
+        }
+
+        .vjs-load-progress {
+          &, & div {
+            background: rgba(255, 255, 255, .2);
+          }
+        }
       }
     }
+
+    .vjs-progress-control:hover .vjs-slider,
+    .vjs-slider.vjs-sliding {
+      height: 5px;
+
+      .vjs-play-progress::before {
+        opacity: 1;
+      }
+    }
+
 
     .vjs-play-control {
       @include disable-outline;
 
       cursor: pointer;
       font-size: $font-size;
-      padding: 0 17px;
       margin-right: 5px;
     }
 
@@ -404,6 +411,7 @@ $context-menu-width: 350px;
       @include disable-outline;
 
       width: 37px;
+      margin-right: 11px;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -816,6 +824,20 @@ $context-menu-width: 350px;
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+/* Special mobile style */
+
+.video-js.vjs-peertube-skin.vjs-is-mobile {
+  .vjs-control-bar {
+    .vjs-progress-control .vjs-slider .vjs-play-progress {
+      // Always display the circle on mobile
+      &::before {
+        margin-top: -1px;
+        opacity: 1;
+      }
     }
   }
 }
