@@ -1,15 +1,14 @@
 # CLI tools guide
 
- - [Installation](#installation)
- - [Usage](#usage)
+ - [Remote tools](#remote-tools)
    - [import-videos.js](#import-videosjs)
    - [upload.js](#uploadjs)
+ - [Server tools](#server-tools)
    - [create-transcoding-job.js](#create-transcoding-jobjs)
    - [create-import-video-file-job.js](#create-import-video-file-jobjs)
+   - [prune-storage.js](#prune-storagejs)
 
-## Installation
-
-## Prerequisites
+## Remote Tools
 
 You need at least 512MB RAM to run the script.
 Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
@@ -39,8 +38,6 @@ Build server tools:
 $ cd ${CLONE}
 $ npm run build:server
 ```
-
-## Tools 
 
 ### import-videos.js
 
@@ -78,14 +75,17 @@ $ cd ${CLONE}
 $ node dist/server/tools/upload.js --help
 ```
 
-## Tools to create jobs in the queue
+
+## Server tools
+
+These scripts should be run on the server, in `peertube-latest` directory.
 
 ### create-transcoding-job.js
 
 You can use this script to force transcoding of an existing video.
 
 ```
-$ npm run create-transcoding-job -- -v [videoUUID]
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
 ```
    
 ### create-import-video-file-job.js
@@ -93,5 +93,14 @@ $ npm run create-transcoding-job -- -v [videoUUID]
 You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video.
 
 ```
-$ npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
+```
+
+### prune-storage.js
+
+Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
+To delete them (a confirmation will be demanded first):
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
