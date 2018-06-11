@@ -35,7 +35,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
     this.userInformationLoaded.subscribe(() => {
       this.form.patchValue({
         nsfwPolicy: this.user.nsfwPolicy,
-        autoPlayVideo: this.user.autoPlayVideo === true ? 'true' : 'false'
+        autoPlayVideo: this.user.autoPlayVideo === true
       })
     })
   }
