@@ -400,7 +400,7 @@
   }
 }
 
-@mixin create-button {
+@mixin create-button ($imageUrl) {
   @include peertube-button-link;
   @include orange-button;
 
@@ -408,6 +408,6 @@
     @include icon(22px);
 
     margin-right: 3px;
-    background-image: url('/assets/images/admin/add.svg');
+    background-image: url($imageUrl);
   }
 }

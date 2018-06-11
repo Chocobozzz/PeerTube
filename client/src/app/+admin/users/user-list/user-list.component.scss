@@ -2,5 +2,5 @@
 @import '_mixins';
 
 .add-button {
-  @include create-button;
+  @include create-button('../../../../assets/images/global/add.svg');
 }
