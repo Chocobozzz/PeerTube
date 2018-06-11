@@ -73,22 +73,22 @@ describe('Test create import video jobs', function () {
 
       expect(videoDetail.files).to.have.lengthOf(2)
       const [originalVideo, transcodedVideo] = videoDetail.files
-      assertVideoProperties(originalVideo, 720, 'webm')
-      assertVideoProperties(transcodedVideo, 480, 'webm')
+      assertVideoProperties(originalVideo, 720, 'webm', 218910)
+      assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
 
       if (!magnetUri) magnetUri = transcodedVideo.magnetUri
       else expect(transcodedVideo.magnetUri).to.equal(magnetUri)
     }
   })
 
-  it('Should run a import job on video 2 with the same resolution', async function () {
+  it('Should run a import job on video 2 with the same resolution and a different extension', async function () {
     const env = getEnvCli(servers[1])
     await execCLI(`${env} npm run create-import-video-file-job -- -v ${video2UUID} -i server/tests/fixtures/video_short.ogv`)
 
     await wait(30000)
 
     let magnetUri: string
-    for (const server of servers.reverse()) {
+    for (const server of servers) {
       const { data: videos } = (await getVideosList(server.url)).body
       expect(videos).to.have.lengthOf(2)
 
@@ -104,6 +104,30 @@ describe('Test create import video jobs', function () {
 
       if (!magnetUri) magnetUri = originalVideo.magnetUri
       else expect(originalVideo.magnetUri).to.equal(magnetUri)
+    }
+  })
+
+  it('Should run a import job on video 2 with the same resolution and the same extension', async function () {
+    const env = getEnvCli(servers[0])
+    await execCLI(`${env} npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short2.webm`)
+
+    await wait(30000)
+
+    let magnetUri: string
+    for (const server of servers) {
+      const { data: videos } = (await getVideosList(server.url)).body
+      expect(videos).to.have.lengthOf(2)
+
+      const video = videos.find(({ uuid }) => uuid === video1UUID)
+      const videoDetail: VideoDetails = (await getVideo(server.url, video.uuid)).body
+
+      expect(videoDetail.files).to.have.lengthOf(2)
+      const [ video720, video480 ] = videoDetail.files
+      assertVideoProperties(video720, 720, 'webm', 942961)
+      assertVideoProperties(video480, 480, 'webm', 69217)
+
+      if (!magnetUri) magnetUri = video720.magnetUri
+      else expect(video720.magnetUri).to.equal(magnetUri)
     }
   })
 

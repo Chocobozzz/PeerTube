@@ -1325,9 +1325,6 @@ export class VideoModel extends Model<VideoModel> {
       videoId: this.id
     })
 
-    const outputPath = this.getVideoFilePath(updatedVideoFile)
-    await copyFilePromise(inputFilePath, outputPath)
-
     const currentVideoFile = this.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
 
     if (currentVideoFile) {
@@ -1343,6 +1340,9 @@ export class VideoModel extends Model<VideoModel> {
 
       updatedVideoFile = currentVideoFile
     }
+
+    const outputPath = this.getVideoFilePath(updatedVideoFile)
+    await copyFilePromise(inputFilePath, outputPath)
 
     await this.createTorrentAndSetInfoHash(updatedVideoFile)
 
