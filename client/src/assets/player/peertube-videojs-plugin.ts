@@ -55,6 +55,7 @@ class PeerTubePlugin extends Plugin {
   private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
+  private fakeRenderer
   private autoResolution = true
   private isAutoResolutionObservation = false
 
@@ -123,6 +124,8 @@ class PeerTubePlugin extends Plugin {
 
     // Don't need to destroy renderer, video player will be destroyed
     this.flushVideoFile(this.currentVideoFile, false)
+
+    this.destroyFakeRenderer()
   }
 
   getCurrentResolutionId () {
@@ -185,7 +188,6 @@ class PeerTubePlugin extends Plugin {
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
-    let fakeRenderer
     const torrentOptions = {
       store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
         max: 100
@@ -205,7 +207,7 @@ class PeerTubePlugin extends Plugin {
         if (options.delay) {
           const fakeVideoElem = document.createElement('video')
           renderVideo(torrent.files[0], fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
-            fakeRenderer = renderer
+            this.fakeRenderer = renderer
 
             if (err) console.error('Cannot render new torrent in fake video element.', err)
 
@@ -217,16 +219,7 @@ class PeerTubePlugin extends Plugin {
 
       // Render the video in a few seconds? (on resolution change for example, we wait some seconds of the new video resolution)
       this.addTorrentDelay = setTimeout(() => {
-        if (fakeRenderer) {
-          if (fakeRenderer.destroy) {
-            try {
-              fakeRenderer.destroy()
-            } catch (err) {
-              console.log('Cannot destroy correctly fake renderer.', err)
-            }
-          }
-          fakeRenderer = undefined
-        }
+        this.destroyFakeRenderer()
 
         const paused = this.player.paused()
 
@@ -565,6 +558,19 @@ class PeerTubePlugin extends Plugin {
     if (this.videoFiles.length === 1) return this.videoFiles[0]
 
     return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
+  }
+
+  private destroyFakeRenderer () {
+    if (this.fakeRenderer) {
+      if (this.fakeRenderer.destroy) {
+        try {
+          this.fakeRenderer.destroy()
+        } catch (err) {
+          console.log('Cannot destroy correctly fake renderer.', err)
+        }
+      }
+      this.fakeRenderer = undefined
+    }
   }
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657

@@ -51,12 +51,23 @@ function getAverageBandwidth () {
   return undefined
 }
 
+function getStoredTheater () {
+  const value = getLocalStorage('theater-enabled')
+  if (value !== null && value !== undefined) return value === 'true'
+
+  return undefined
+}
+
 function saveVolumeInStore (value: number) {
   return setLocalStorage('volume', value.toString())
 }
 
 function saveMuteInStore (value: boolean) {
   return setLocalStorage('mute', value.toString())
+}
+
+function saveTheaterInStore (enabled: boolean) {
+  return setLocalStorage('theater-enabled', enabled.toString())
 }
 
 function saveAverageBandwidth (value: number) {
@@ -133,6 +144,8 @@ export {
   videoFileMaxByResolution,
   videoFileMinByResolution,
   copyToClipboard,
+  getStoredTheater,
+  saveTheaterInStore,
   isMobile,
   bytes
 }

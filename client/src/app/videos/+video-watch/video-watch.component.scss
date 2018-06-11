@@ -21,6 +21,11 @@
       position: relative !important;
     }
   }
+
+  /deep/ .video-js.vjs-theater-enabled {
+    width: 100%;
+    height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+  }
 }
 
 #video-not-found {

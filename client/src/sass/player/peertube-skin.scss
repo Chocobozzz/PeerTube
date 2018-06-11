@@ -135,6 +135,7 @@
     .vjs-resolution-control,
     .vjs-fullscreen-control,
     .vjs-peertube-link,
+    .vjs-theater-control,
     .vjs-settings
     {
       color: $primary-foreground-color !important;
@@ -394,6 +395,26 @@
       padding: 0 5px;
     }
 
+    .vjs-theater-control {
+      @include disable-outline;
+
+      width: 37px;
+      margin-right: 1px;
+
+      .vjs-icon-placeholder {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+        background: url('#{$assets-path}/player/images/theater.svg') no-repeat;
+        background-size: contain;
+
+        &::before {
+          content: '';
+        }
+      }
+    }
+
     .vjs-fullscreen-control {
       @include disable-outline;
 
@@ -440,6 +461,10 @@
   }
 
   @media screen and (max-width: 750px) {
+    .vjs-theater-control {
+      display: none;
+    }
+
     .vjs-dock-text {
       font-size: 16px;
     }

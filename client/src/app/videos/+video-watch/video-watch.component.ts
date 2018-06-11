@@ -368,7 +368,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       enableHotkeys: true,
       peertubeLink: false,
       poster: this.video.previewUrl,
-      startTime
+      startTime,
+      theaterMode: true
     })
 
     if (this.videojsLocaleLoaded === false) {

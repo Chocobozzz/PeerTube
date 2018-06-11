@@ -99,7 +99,8 @@ loadLocale(window.location.origin, videojs, navigator.language)
       enableHotkeys: true,
       peertubeLink: true,
       poster: window.location.origin + videoInfo.previewPath,
-      startTime
+      startTime,
+      theaterMode: false
     })
     videojs(videoContainerId, videojsOptions, function () {
       const player = this
