@@ -10,7 +10,8 @@ $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
 @import '~primeng/resources/primeng.css';
 @import '~video.js/dist/video-js.css';
 
-@import './video-js-custom';
+$assets-path: '../assets/';
+@import './player/player';
 @import './loading-bar';
 
 [hidden] {
