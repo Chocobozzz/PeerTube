@@ -296,7 +296,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private setVideoLikesBarTooltipText () {
     this.likesBarTooltipText = this.i18n(
       '{{likesNumber}} likes / {{dislikesNumber}} dislikes',
-      { likesNumber: this.video.likes, dislikes: this.video.dislikes }
+      { likesNumber: this.video.likes, dislikesNumber: this.video.dislikes }
     )
   }
 
