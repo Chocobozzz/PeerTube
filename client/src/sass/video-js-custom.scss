@@ -139,6 +139,9 @@ $progress-margin: 10px;
 
   .vjs-control-bar {
     height: $control-bar-height;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+    box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 
     .vjs-progress-control,
     .vjs-play-control,
