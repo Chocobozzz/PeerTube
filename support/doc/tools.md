@@ -92,6 +92,11 @@ You can use this script to force transcoding of an existing video.
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
 ```
+
+Or to transcode to a specific resolution:
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
+```
    
 ### create-import-video-file-job.js
 
