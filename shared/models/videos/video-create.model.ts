@@ -7,7 +7,8 @@ export interface VideoCreate {
   description?: string
   support?: string
   channelId: number
-  nsfw: boolean
+  nsfw?: boolean
+  waitTranscoding?: boolean
   name: string
   tags?: string[]
   commentsEnabled?: boolean

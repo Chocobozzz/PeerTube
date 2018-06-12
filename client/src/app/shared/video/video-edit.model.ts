@@ -1,7 +1,8 @@
 import { VideoDetails } from './video-details.model'
 import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
+import { VideoUpdate } from '../../../../../shared/models/videos'
 
-export class VideoEdit {
+export class VideoEdit implements VideoUpdate {
   category: number
   licence: number
   language: string
@@ -10,6 +11,7 @@ export class VideoEdit {
   tags: string[]
   nsfw: boolean
   commentsEnabled: boolean
+  waitTranscoding: boolean
   channelId: number
   privacy: VideoPrivacy
   support: string
@@ -32,6 +34,7 @@ export class VideoEdit {
       this.tags = videoDetails.tags
       this.nsfw = videoDetails.nsfw
       this.commentsEnabled = videoDetails.commentsEnabled
+      this.waitTranscoding = videoDetails.waitTranscoding
       this.channelId = videoDetails.channel.id
       this.privacy = videoDetails.privacy.id
       this.support = videoDetails.support
@@ -42,7 +45,7 @@ export class VideoEdit {
 
   patch (values: Object) {
     Object.keys(values).forEach((key) => {
-      this[key] = values[key]
+      this[ key ] = values[ key ]
     })
   }
 
@@ -57,6 +60,7 @@ export class VideoEdit {
       tags: this.tags,
       nsfw: this.nsfw,
       commentsEnabled: this.commentsEnabled,
+      waitTranscoding: this.waitTranscoding,
       channelId: this.channelId,
       privacy: this.privacy
     }

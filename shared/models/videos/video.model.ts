@@ -1,4 +1,4 @@
-import { VideoResolution } from '../../index'
+import { VideoResolution, VideoState } from '../../index'
 import { Account } from '../actors'
 import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './video-channel.model'
@@ -41,6 +41,9 @@ export interface Video {
   dislikes: number
   nsfw: boolean
 
+  waitTranscoding?: boolean
+  state?: VideoConstant<VideoState>
+
   account: {
     id: number
     uuid: string
@@ -70,4 +73,8 @@ export interface VideoDetails extends Video {
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
+
+  // Not optional in details (unlike in Video)
+  waitTranscoding: boolean
+  state: VideoConstant<VideoState>
 }

@@ -65,7 +65,7 @@ describe('Test create transcoding jobs', function () {
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run create-transcoding-job -- -v ${video2UUID}`)
 
-    await wait(30000)
+    await wait(40000)
 
     for (const server of servers) {
       const res = await getVideosList(server.url)

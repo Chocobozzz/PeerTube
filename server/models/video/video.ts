@@ -25,7 +25,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { VideoPrivacy, VideoResolution } from '../../../shared'
+import { VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
@@ -47,7 +47,7 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoPrivacyValid,
+  isVideoPrivacyValid, isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
@@ -66,7 +66,7 @@ import {
   VIDEO_EXT_MIMETYPE,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
-  VIDEO_PRIVACIES
+  VIDEO_PRIVACIES, VIDEO_STATES
 } from '../../initializers'
 import {
   getVideoCommentsActivityPubUrl,
@@ -93,10 +93,7 @@ enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
-  WITH_FILES = 'WITH_FILES',
-  WITH_SHARES = 'WITH_SHARES',
-  WITH_RATES = 'WITH_RATES',
-  WITH_COMMENTS = 'WITH_COMMENTS'
+  WITH_FILES = 'WITH_FILES'
 }
 
 @Scopes({
@@ -183,7 +180,20 @@ enum ScopeNames {
             ')'
           )
         },
-        privacy: VideoPrivacy.PUBLIC
+        // Always list public videos
+        privacy: VideoPrivacy.PUBLIC,
+        // Always list published videos, or videos that are being transcoded but on which we don't want to wait for transcoding
+        [ Sequelize.Op.or ]: [
+          {
+            state: VideoState.PUBLISHED
+          },
+          {
+            [ Sequelize.Op.and ]: {
+              state: VideoState.TO_TRANSCODE,
+              waitTranscoding: false
+            }
+          }
+        ]
       },
       include: [ videoChannelInclude ]
     }
@@ -272,42 +282,6 @@ enum ScopeNames {
         required: true
       }
     ]
-  },
-  [ScopeNames.WITH_SHARES]: {
-    include: [
-      {
-        ['separate' as any]: true,
-        model: () => VideoShareModel.unscoped()
-      }
-    ]
-  },
-  [ScopeNames.WITH_RATES]: {
-    include: [
-      {
-        ['separate' as any]: true,
-        model: () => AccountVideoRateModel,
-        include: [
-          {
-            model: () => AccountModel.unscoped(),
-            required: true,
-            include: [
-              {
-                attributes: [ 'url' ],
-                model: () => ActorModel.unscoped()
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  [ScopeNames.WITH_COMMENTS]: {
-    include: [
-      {
-        ['separate' as any]: true,
-        model: () => VideoCommentModel.unscoped()
-      }
-    ]
   }
 })
 @Table({
@@ -335,7 +309,7 @@ enum ScopeNames {
       fields: [ 'channelId' ]
     },
     {
-      fields: [ 'id', 'privacy' ]
+      fields: [ 'id', 'privacy', 'state', 'waitTranscoding' ]
     },
     {
       fields: [ 'url'],
@@ -434,6 +408,16 @@ export class VideoModel extends Model<VideoModel> {
   @AllowNull(false)
   @Column
   commentsEnabled: boolean
+
+  @AllowNull(false)
+  @Column
+  waitTranscoding: boolean
+
+  @AllowNull(false)
+  @Default(null)
+  @Is('VideoState', value => throwIfNotValid(value, isVideoStateValid, 'state'))
+  @Column
+  state: VideoState
 
   @CreatedAt
   createdAt: Date
@@ -671,7 +655,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listAccountVideosForApi (accountId: number, start: number, count: number, sort: string, hideNSFW: boolean, withFiles = false) {
+  static listUserVideosForApi (accountId: number, start: number, count: number, sort: string, hideNSFW: boolean, withFiles = false) {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
@@ -858,12 +842,13 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
-  static loadByUUIDAndPopulateAccountAndServerAndTags (uuid: string) {
+  static loadByUUIDAndPopulateAccountAndServerAndTags (uuid: string, t?: Sequelize.Transaction) {
     const options = {
       order: [ [ 'Tags', 'name', 'ASC' ] ],
       where: {
         uuid
-      }
+      },
+      transaction: t
     }
 
     return VideoModel
@@ -905,31 +890,23 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static getCategoryLabel (id: number) {
-    let categoryLabel = VIDEO_CATEGORIES[id]
-    if (!categoryLabel) categoryLabel = 'Misc'
-
-    return categoryLabel
+    return VIDEO_CATEGORIES[id] || 'Misc'
   }
 
   private static getLicenceLabel (id: number) {
-    let licenceLabel = VIDEO_LICENCES[id]
-    if (!licenceLabel) licenceLabel = 'Unknown'
-
-    return licenceLabel
+    return VIDEO_LICENCES[id] || 'Unknown'
   }
 
   private static getLanguageLabel (id: string) {
-    let languageLabel = VIDEO_LANGUAGES[id]
-    if (!languageLabel) languageLabel = 'Unknown'
-
-    return languageLabel
+    return VIDEO_LANGUAGES[id] || 'Unknown'
   }
 
   private static getPrivacyLabel (id: number) {
-    let privacyLabel = VIDEO_PRIVACIES[id]
-    if (!privacyLabel) privacyLabel = 'Unknown'
+    return VIDEO_PRIVACIES[id] || 'Unknown'
+  }
 
-    return privacyLabel
+  private static getStateLabel (id: number) {
+    return VIDEO_STATES[id] || 'Unknown'
   }
 
   getOriginalFile () {
@@ -1026,11 +1003,16 @@ export class VideoModel extends Model<VideoModel> {
     return join(STATIC_PATHS.PREVIEWS, this.getPreviewName())
   }
 
-  toFormattedJSON (): Video {
+  toFormattedJSON (options?: {
+    additionalAttributes: {
+      state: boolean,
+      waitTranscoding: boolean
+    }
+  }): Video {
     const formattedAccount = this.VideoChannel.Account.toFormattedJSON()
     const formattedVideoChannel = this.VideoChannel.toFormattedJSON()
 
-    return {
+    const videoObject: Video = {
       id: this.id,
       uuid: this.uuid,
       name: this.name,
@@ -1082,6 +1064,19 @@ export class VideoModel extends Model<VideoModel> {
         avatar: formattedVideoChannel.avatar
       }
     }
+
+    if (options) {
+      if (options.additionalAttributes.state) {
+        videoObject.state = {
+          id: this.state,
+          label: VideoModel.getStateLabel(this.state)
+        }
+      }
+
+      if (options.additionalAttributes.waitTranscoding) videoObject.waitTranscoding = this.waitTranscoding
+    }
+
+    return videoObject
   }
 
   toFormattedDetailsJSON (): VideoDetails {
@@ -1094,6 +1089,11 @@ export class VideoModel extends Model<VideoModel> {
       account: this.VideoChannel.Account.toFormattedJSON(),
       tags: map(this.Tags, 'name'),
       commentsEnabled: this.commentsEnabled,
+      waitTranscoding: this.waitTranscoding,
+      state: {
+        id: this.state,
+        label: VideoModel.getStateLabel(this.state)
+      },
       files: []
     }
 
@@ -1207,6 +1207,8 @@ export class VideoModel extends Model<VideoModel> {
       language,
       views: this.views,
       sensitive: this.nsfw,
+      waitTranscoding: this.waitTranscoding,
+      state: this.state,
       commentsEnabled: this.commentsEnabled,
       published: this.publishedAt.toISOString(),
       updated: this.updatedAt.toISOString(),

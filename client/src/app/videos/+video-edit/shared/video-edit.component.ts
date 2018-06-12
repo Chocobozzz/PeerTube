@@ -47,6 +47,7 @@ export class VideoEditComponent implements OnInit {
     const defaultValues = {
       nsfw: 'false',
       commentsEnabled: 'true',
+      waitTranscoding: 'true',
       tags: []
     }
     const obj = {
@@ -55,6 +56,7 @@ export class VideoEditComponent implements OnInit {
       channelId: this.videoValidatorsService.VIDEO_CHANNEL,
       nsfw: null,
       commentsEnabled: null,
+      waitTranscoding: null,
       category: this.videoValidatorsService.VIDEO_CATEGORY,
       licence: this.videoValidatorsService.VIDEO_LICENCE,
       language: this.videoValidatorsService.VIDEO_LANGUAGE,
@@ -74,13 +76,13 @@ export class VideoEditComponent implements OnInit {
     )
 
     // We will update the "support" field depending on the channel
-    this.form.controls['channelId']
+    this.form.controls[ 'channelId' ]
       .valueChanges
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
         newChannelId => {
-          const oldChannelId = parseInt(this.form.value['channelId'], 10)
-          const currentSupport = this.form.value['support']
+          const oldChannelId = parseInt(this.form.value[ 'channelId' ], 10)
+          const currentSupport = this.form.value[ 'support' ]
 
           // Not initialized yet
           if (isNaN(newChannelId)) return

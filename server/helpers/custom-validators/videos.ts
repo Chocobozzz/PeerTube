@@ -10,7 +10,8 @@ import {
   VIDEO_LICENCES,
   VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES,
-  VIDEO_RATE_TYPES
+  VIDEO_RATE_TYPES,
+  VIDEO_STATES
 } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isFileValid } from './misc'
@@ -21,11 +22,15 @@ const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
 function isVideoCategoryValid (value: any) {
-  return value === null || VIDEO_CATEGORIES[value] !== undefined
+  return value === null || VIDEO_CATEGORIES[ value ] !== undefined
+}
+
+function isVideoStateValid (value: any) {
+  return exists(value) && VIDEO_STATES[ value ] !== undefined
 }
 
 function isVideoLicenceValid (value: any) {
-  return value === null || VIDEO_LICENCES[value] !== undefined
+  return value === null || VIDEO_LICENCES[ value ] !== undefined
 }
 
 function isVideoLanguageValid (value: any) {
@@ -79,20 +84,22 @@ function isVideoRatingTypeValid (value: string) {
 
 const videoFileTypes = Object.keys(VIDEO_MIMETYPE_EXT).map(m => `(${m})`)
 const videoFileTypesRegex = videoFileTypes.join('|')
+
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
   return isFileValid(files, videoFileTypesRegex, 'videofile')
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
-  .map(v => v.replace('.', ''))
-  .join('|')
+                                          .map(v => v.replace('.', ''))
+                                          .join('|')
 const videoImageTypesRegex = `image/(${videoImageTypes})`
+
 function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
   return isFileValid(files, videoImageTypesRegex, field, true)
 }
 
 function isVideoPrivacyValid (value: string) {
-  return validator.isInt(value + '') && VIDEO_PRIVACIES[value] !== undefined
+  return validator.isInt(value + '') && VIDEO_PRIVACIES[ value ] !== undefined
 }
 
 function isVideoFileInfoHashValid (value: string) {
@@ -118,8 +125,8 @@ async function isVideoExist (id: string, res: Response) {
 
   if (!video) {
     res.status(404)
-      .json({ error: 'Video not found' })
-      .end()
+       .json({ error: 'Video not found' })
+       .end()
 
     return false
   }
@@ -169,6 +176,7 @@ export {
   isVideoTagsValid,
   isVideoAbuseReasonValid,
   isVideoFile,
+  isVideoStateValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,
   isVideoDurationValid,

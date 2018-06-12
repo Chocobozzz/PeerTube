@@ -924,7 +924,7 @@ describe('Test multiple servers', function () {
 
   describe('With minimum parameters', function () {
     it('Should upload and propagate the video', async function () {
-      this.timeout(50000)
+      this.timeout(60000)
 
       const path = '/api/v1/videos/upload'
 
@@ -934,16 +934,14 @@ describe('Test multiple servers', function () {
         .set('Authorization', 'Bearer ' + servers[1].accessToken)
         .field('name', 'minimum parameters')
         .field('privacy', '1')
-        .field('nsfw', 'false')
         .field('channelId', '1')
-        .field('commentsEnabled', 'true')
 
       const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
 
       await req.attach('videofile', filePath)
         .expect(200)
 
-      await wait(25000)
+      await wait(40000)
 
       for (const server of servers) {
         const res = await getVideosList(server.url)
@@ -964,7 +962,7 @@ describe('Test multiple servers', function () {
           },
           isLocal,
           duration: 5,
-          commentsEnabled: true,
+          commentsEnabled: false,
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {

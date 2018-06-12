@@ -1,7 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { ActivityUpdate } from '../../../../shared/models/activitypub'
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
-import { VideoTorrentObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { resetSequelizeInstance } from '../../../helpers/utils'
@@ -13,6 +12,7 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
 import {
+  fetchRemoteVideo,
   generateThumbnailFromUrl,
   getOrCreateAccountAndVideoAndChannel,
   getOrCreateVideoChannel,
@@ -51,15 +51,18 @@ function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
 }
 
 async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
-  const videoAttributesToUpdate = activity.object as VideoTorrentObject
+  const videoUrl = activity.object.id
 
-  const res = await getOrCreateAccountAndVideoAndChannel(videoAttributesToUpdate.id)
+  const videoObject = await fetchRemoteVideo(videoUrl)
+  if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
+
+  const res = await getOrCreateAccountAndVideoAndChannel(videoObject.id)
 
   // Fetch video channel outside the transaction
-  const newVideoChannelActor = await getOrCreateVideoChannel(videoAttributesToUpdate)
+  const newVideoChannelActor = await getOrCreateVideoChannel(videoObject)
   const newVideoChannel = newVideoChannelActor.VideoChannel
 
-  logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
+  logger.debug('Updating remote video "%s".', videoObject.uuid)
   let videoInstance = res.video
   let videoFieldsSave: any
 
@@ -77,7 +80,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
         throw new Error('Account ' + actor.url + ' does not own video channel ' + videoChannel.Actor.url)
       }
 
-      const videoData = await videoActivityObjectToDBAttributes(newVideoChannel, videoAttributesToUpdate, activity.to)
+      const videoData = await videoActivityObjectToDBAttributes(newVideoChannel, videoObject, activity.to)
       videoInstance.set('name', videoData.name)
       videoInstance.set('uuid', videoData.uuid)
       videoInstance.set('url', videoData.url)
@@ -88,6 +91,8 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       videoInstance.set('support', videoData.support)
       videoInstance.set('nsfw', videoData.nsfw)
       videoInstance.set('commentsEnabled', videoData.commentsEnabled)
+      videoInstance.set('waitTranscoding', videoData.waitTranscoding)
+      videoInstance.set('state', videoData.state)
       videoInstance.set('duration', videoData.duration)
       videoInstance.set('createdAt', videoData.createdAt)
       videoInstance.set('updatedAt', videoData.updatedAt)
@@ -98,8 +103,8 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       await videoInstance.save(sequelizeOptions)
 
       // Don't block on request
-      generateThumbnailFromUrl(videoInstance, videoAttributesToUpdate.icon)
-        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoAttributesToUpdate.id, { err }))
+      generateThumbnailFromUrl(videoInstance, videoObject.icon)
+        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
 
       // Remove old video files
       const videoFileDestroyTasks: Bluebird<void>[] = []
@@ -108,16 +113,16 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       }
       await Promise.all(videoFileDestroyTasks)
 
-      const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoAttributesToUpdate)
+      const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoObject)
       const tasks = videoFileAttributes.map(f => VideoFileModel.create(f))
       await Promise.all(tasks)
 
-      const tags = videoAttributesToUpdate.tag.map(t => t.name)
+      const tags = videoObject.tag.map(t => t.name)
       const tagInstances = await TagModel.findOrCreateTags(tags, t)
       await videoInstance.$set('Tags', tagInstances, sequelizeOptions)
     })
 
-    logger.info('Remote video with uuid %s updated', videoAttributesToUpdate.uuid)
+    logger.info('Remote video with uuid %s updated', videoObject.uuid)
   } catch (err) {
     if (videoInstance !== undefined && videoFieldsSave !== undefined) {
       resetSequelizeInstance(videoInstance, videoFieldsSave)

@@ -682,6 +682,10 @@ paths:
           in: formData
           type: string
           description: 'Video description'
+        - name: waitTranscoding
+          in: formData
+          type: boolean
+          description: 'Whether or not we wait transcoding before publish the video'
         - name: support
           in: formData
           type: string
@@ -814,6 +818,10 @@ paths:
           in: formData
           type: number
           description: 'Video category'
+        - name: waitTranscoding
+          in: formData
+          type: boolean
+          description: 'Whether or not we wait transcoding before publish the video'
         - name: licence
           in: formData
           type: number

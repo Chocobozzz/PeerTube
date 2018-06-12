@@ -1,6 +1,6 @@
 import { IConfig } from 'config'
 import { dirname, join } from 'path'
-import { JobType, VideoRateType } from '../../shared/models'
+import { JobType, VideoRateType, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoPrivacy } from '../../shared/models/videos'
@@ -14,7 +14,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 215
+const LAST_MIGRATION_VERSION = 220
 
 // ---------------------------------------------------------------------------
 
@@ -326,6 +326,11 @@ const VIDEO_PRIVACIES = {
   [VideoPrivacy.PRIVATE]: 'Private'
 }
 
+const VIDEO_STATES = {
+  [VideoState.PUBLISHED]: 'Published',
+  [VideoState.TO_TRANSCODE]: 'To transcode'
+}
+
 const VIDEO_MIMETYPE_EXT = {
   'video/webm': '.webm',
   'video/ogg': '.ogv',
@@ -493,6 +498,7 @@ export {
   VIDEO_LANGUAGES,
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
+  VIDEO_STATES,
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,

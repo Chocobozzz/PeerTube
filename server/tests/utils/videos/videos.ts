@@ -27,6 +27,7 @@ type VideoAttributes = {
   language?: string
   nsfw?: boolean
   commentsEnabled?: boolean
+  waitTranscoding?: boolean
   description?: string
   tags?: string[]
   channelId?: number
@@ -326,6 +327,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     language: 'zh',
     channelId: defaultChannelId,
     nsfw: true,
+    waitTranscoding: false,
     description: 'my super description',
     support: 'my super support text',
     tags: [ 'tag' ],
@@ -341,6 +343,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('name', attributes.name)
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
+              .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
 

@@ -164,6 +164,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
+    const waitTranscoding = true
     const commentsEnabled = true
     const channelId = this.firstStepChannelId.toString()
 
@@ -173,6 +174,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('commentsEnabled', '' + commentsEnabled)
+    formData.append('waitTranscoding', '' + waitTranscoding)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 

@@ -55,8 +55,13 @@ const videosAddValidator = [
     .customSanitizer(toValueOrNull)
     .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw')
+    .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+  body('waitTranscoding')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
   body('description')
     .optional()
     .customSanitizer(toValueOrNull)
@@ -70,6 +75,7 @@ const videosAddValidator = [
     .customSanitizer(toValueOrNull)
     .custom(isVideoTagsValid).withMessage('Should have correct tags'),
   body('commentsEnabled')
+    .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
   body('privacy')
@@ -149,6 +155,10 @@ const videosUpdateValidator = [
     .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+  body('waitTranscoding')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
   body('privacy')
     .optional()
     .toInt()

@@ -11,7 +11,7 @@ async function buildVideoAnnounce (byActor: ActorModel, videoShare: VideoShareMo
 
   const accountsToForwardView = await getActorsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  return announceActivityData(videoShare.url, byActor, announcedObject, t, audience)
+  return announceActivityData(videoShare.url, byActor, announcedObject, audience)
 }
 
 async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
@@ -20,16 +20,8 @@ async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareMod
   return broadcastToFollowers(data, byActor, [ byActor ], t)
 }
 
-async function announceActivityData (
-  url: string,
-  byActor: ActorModel,
-  object: string,
-  t: Transaction,
-  audience?: ActivityAudience
-): Promise<ActivityAnnounce> {
-  if (!audience) {
-    audience = await getAudience(byActor, t)
-  }
+function announceActivityData (url: string, byActor: ActorModel, object: string, audience?: ActivityAudience): ActivityAnnounce {
+  if (!audience) audience = getAudience(byActor)
 
   return {
     type: 'Announce',

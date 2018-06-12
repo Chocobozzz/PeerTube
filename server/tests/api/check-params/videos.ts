@@ -175,6 +175,7 @@ describe('Test videos API validator', function () {
         language: 'pt',
         nsfw: false,
         commentsEnabled: true,
+        waitTranscoding: true,
         description: 'my super description',
         support: 'my super support text',
         tags: [ 'tag1', 'tag2' ],
@@ -219,20 +220,6 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a bad language', async function () {
       const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
-      const attaches = baseCorrectAttaches
-
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
-    it('Should fail without nsfw attribute', async function () {
-      const fields = omit(baseCorrectParams, 'nsfw')
-      const attaches = baseCorrectAttaches
-
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
-    it('Should fail without commentsEnabled attribute', async function () {
-      const fields = omit(baseCorrectParams, 'commentsEnabled')
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })

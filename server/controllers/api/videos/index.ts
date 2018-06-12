@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { extname, join } from 'path'
-import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
+import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
@@ -21,11 +21,11 @@ import {
 } from '../../../initializers'
 import {
   changeVideoChannelShare,
+  federateVideoIfNeeded,
   fetchRemoteVideoDescription,
-  getVideoActivityPubUrl,
-  shareVideoByServerAndChannel
+  getVideoActivityPubUrl
 } from '../../../lib/activitypub'
-import { sendCreateVideo, sendCreateView, sendUpdateVideo } from '../../../lib/activitypub/send'
+import { sendCreateView } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
@@ -51,7 +51,7 @@ import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
-import { isNSFWHidden, createReqFiles } from '../../../helpers/express-utils'
+import { createReqFiles, isNSFWHidden } from '../../../helpers/express-utils'
 
 const videosRouter = express.Router()
 
@@ -185,8 +185,10 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     category: videoInfo.category,
     licence: videoInfo.licence,
     language: videoInfo.language,
-    commentsEnabled: videoInfo.commentsEnabled,
-    nsfw: videoInfo.nsfw,
+    commentsEnabled: videoInfo.commentsEnabled || false,
+    waitTranscoding: videoInfo.waitTranscoding || false,
+    state: CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED,
+    nsfw: videoInfo.nsfw || false,
     description: videoInfo.description,
     support: videoInfo.support,
     privacy: videoInfo.privacy,
@@ -194,19 +196,20 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     channelId: res.locals.videoChannel.id
   }
   const video = new VideoModel(videoData)
-  video.url = getVideoActivityPubUrl(video)
+  video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
+  // Build the file object
   const { videoFileResolution } = await getVideoFileResolution(videoPhysicalFile.path)
-
   const videoFileData = {
     extname: extname(videoPhysicalFile.filename),
     resolution: videoFileResolution,
     size: videoPhysicalFile.size
   }
   const videoFile = new VideoFileModel(videoFileData)
+
+  // Move physical file
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
   const destination = join(videoDir, video.getVideoFilename(videoFile))
-
   await renamePromise(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
   videoPhysicalFile.filename = video.getVideoFilename(videoFile)
@@ -230,6 +233,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     await video.createPreview(videoFile)
   }
 
+  // Create the torrent file
   await video.createTorrentAndSetInfoHash(videoFile)
 
   const videoCreated = await sequelizeTypescript.transaction(async t => {
@@ -251,20 +255,14 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
       video.Tags = tagInstances
     }
 
-    // Let transcoding job send the video to friends because the video file extension might change
-    if (CONFIG.TRANSCODING.ENABLED === true) return videoCreated
-    // Don't send video to remote servers, it is private
-    if (video.privacy === VideoPrivacy.PRIVATE) return videoCreated
-
-    await sendCreateVideo(video, t)
-    await shareVideoByServerAndChannel(video, t)
+    await federateVideoIfNeeded(video, true, t)
 
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
     return videoCreated
   })
 
-  if (CONFIG.TRANSCODING.ENABLED === true) {
+  if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now
     const dataInput = {
       videoUUID: videoCreated.uuid,
@@ -318,6 +316,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
+      if (videoInfoToUpdate.waitTranscoding !== undefined) videoInstance.set('waitTranscoding', videoInfoToUpdate.waitTranscoding)
       if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
       if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
@@ -343,19 +342,13 @@ async function updateVideo (req: express.Request, res: express.Response) {
       // Video channel update?
       if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {
         await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel, { transaction: t })
-        videoInstance.VideoChannel = res.locals.videoChannel
+        videoInstanceUpdated.VideoChannel = res.locals.videoChannel
 
         if (wasPrivateVideo === false) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
       }
 
-      // Now we'll update the video's meta data to our friends
-      if (wasPrivateVideo === false) await sendUpdateVideo(videoInstanceUpdated, t)
-
-      // Video is not private anymore, send a create action to remote servers
-      if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {
-        await sendCreateVideo(videoInstanceUpdated, t)
-        await shareVideoByServerAndChannel(videoInstanceUpdated, t)
-      }
+      const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
+      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo)
     })
 
     logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)

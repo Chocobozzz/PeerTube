@@ -8,22 +8,24 @@ import { signObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
 
 function activityPubContextify <T> (data: T) {
-  return Object.assign(data,{
+  return Object.assign(data, {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
       'https://w3id.org/security/v1',
       {
-        'RsaSignature2017': 'https://w3id.org/security#RsaSignature2017',
-        'Hashtag': 'as:Hashtag',
-        'uuid': 'http://schema.org/identifier',
-        'category': 'http://schema.org/category',
-        'licence': 'http://schema.org/license',
-        'sensitive': 'as:sensitive',
-        'language': 'http://schema.org/inLanguage',
-        'views': 'http://schema.org/Number',
-        'size': 'http://schema.org/Number',
-        'commentsEnabled': 'http://schema.org/Boolean',
-        'support': 'http://schema.org/Text'
+        RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
+        Hashtag: 'as:Hashtag',
+        uuid: 'http://schema.org/identifier',
+        category: 'http://schema.org/category',
+        licence: 'http://schema.org/license',
+        sensitive: 'as:sensitive',
+        language: 'http://schema.org/inLanguage',
+        views: 'http://schema.org/Number',
+        stats: 'http://schema.org/Number',
+        size: 'http://schema.org/Number',
+        commentsEnabled: 'http://schema.org/Boolean',
+        waitTranscoding: 'http://schema.org/Boolean',
+        support: 'http://schema.org/Text'
       },
       {
         likes: {

@@ -166,7 +166,7 @@ export {
 
 async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.oauth.token.User as UserModel
-  const resultList = await VideoModel.listAccountVideosForApi(
+  const resultList = await VideoModel.listUserVideosForApi(
     user.Account.id,
     req.query.start as number,
     req.query.count as number,
@@ -174,7 +174,8 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
     false // Display my NSFW videos
   )
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  const additionalAttributes = { waitTranscoding: true, state: true }
+  return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }
 
 async function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -318,7 +319,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
 }
 
 async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const avatarPhysicalFile = req.files['avatarfile'][0]
+  const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user = res.locals.oauth.token.user
   const actor = user.Account.Actor
 

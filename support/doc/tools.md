@@ -63,12 +63,17 @@ $ node dist/server/tools/import-videos.js \
   * Vimeo: https://vimeo.com/xxxxxx
   * Dailymotion: https://www.dailymotion.com/xxxxx
 
- The script will get all public videos from Youtube, download them and upload to PeerTube.  
- Already downloaded videos will not be uploaded twice, so you can run and re-run the script in case of crash, disconnection...
+The script will get all public videos from Youtube, download them and upload to PeerTube.
+Already downloaded videos will not be uploaded twice, so you can run and re-run the script in case of crash, disconnection...
+
+Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
+
 
 ### upload.js
 
 You can use this script to import videos directly from the CLI.
+
+Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
 ```
 $ cd ${CLONE}

@@ -1,8 +1,9 @@
 import * as Bluebird from 'bluebird'
+import * as sequelize from 'sequelize'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
 import * as request from 'request'
-import { ActivityIconObject } from '../../../shared/index'
+import { ActivityIconObject, VideoState } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
@@ -21,6 +22,21 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { addVideoComments } from './video-comments'
 import { crawlCollectionPage } from './crawl'
+import { sendCreateVideo, sendUpdateVideo } from './send'
+import { shareVideoByServerAndChannel } from './index'
+
+async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
+  // If the video is not private and published, we federate it
+  if (video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
+    if (isNewVideo === true) {
+      // Now we'll add the video's meta data to our followers
+      await sendCreateVideo(video, transaction)
+      await shareVideoByServerAndChannel(video, transaction)
+    } else {
+      await sendUpdateVideo(video, transaction)
+    }
+  }
+}
 
 function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
   const host = video.VideoChannel.Account.Actor.Server.host
@@ -55,9 +71,11 @@ function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) 
   return doRequestAndSaveToFile(options, thumbnailPath)
 }
 
-async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelModel,
-                                                  videoObject: VideoTorrentObject,
-                                                  to: string[] = []) {
+async function videoActivityObjectToDBAttributes (
+  videoChannel: VideoChannelModel,
+  videoObject: VideoTorrentObject,
+  to: string[] = []
+) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
   const duration = videoObject.duration.replace(/[^\d]+/, '')
 
@@ -90,6 +108,8 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     support,
     nsfw: videoObject.sensitive,
     commentsEnabled: videoObject.commentsEnabled,
+    waitTranscoding: videoObject.waitTranscoding,
+    state: videoObject.state,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
     createdAt: new Date(videoObject.published),
@@ -185,21 +205,19 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
 }
 
 async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentObject | string, actor?: ActorModel) {
-  if (typeof videoObject === 'string') {
-    const videoUrl = videoObject
+  const videoUrl = typeof videoObject === 'string' ? videoObject : videoObject.id
 
-    const videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
-    if (videoFromDatabase) {
-      return {
-        video: videoFromDatabase,
-        actor: videoFromDatabase.VideoChannel.Account.Actor,
-        channelActor: videoFromDatabase.VideoChannel.Actor
-      }
+  const videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
+  if (videoFromDatabase) {
+    return {
+      video: videoFromDatabase,
+      actor: videoFromDatabase.VideoChannel.Account.Actor,
+      channelActor: videoFromDatabase.VideoChannel.Actor
     }
-
-    videoObject = await fetchRemoteVideo(videoUrl)
-    if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
   }
+
+  videoObject = await fetchRemoteVideo(videoUrl)
+  if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
   if (!actor) {
     const actorObj = videoObject.attributedTo.find(a => a.type === 'Person')
@@ -291,20 +309,6 @@ async function addVideoShares (shareUrls: string[], instance: VideoModel) {
   }
 }
 
-export {
-  getOrCreateAccountAndVideoAndChannel,
-  fetchRemoteVideoPreview,
-  fetchRemoteVideoDescription,
-  generateThumbnailFromUrl,
-  videoActivityObjectToDBAttributes,
-  videoFileActivityUrlToDBAttributes,
-  getOrCreateVideo,
-  getOrCreateVideoChannel,
-  addVideoShares
-}
-
-// ---------------------------------------------------------------------------
-
 async function fetchRemoteVideo (videoUrl: string): Promise<VideoTorrentObject> {
   const options = {
     uri: videoUrl,
@@ -323,4 +327,18 @@ async function fetchRemoteVideo (videoUrl: string): Promise<VideoTorrentObject> 
   }
 
   return body
+}
+
+export {
+  federateVideoIfNeeded,
+  fetchRemoteVideo,
+  getOrCreateAccountAndVideoAndChannel,
+  fetchRemoteVideoPreview,
+  fetchRemoteVideoDescription,
+  generateThumbnailFromUrl,
+  videoActivityObjectToDBAttributes,
+  videoFileActivityUrlToDBAttributes,
+  getOrCreateVideo,
+  getOrCreateVideoChannel,
+  addVideoShares
 }

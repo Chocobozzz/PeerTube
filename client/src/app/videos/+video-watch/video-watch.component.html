@@ -3,6 +3,10 @@
   <div id="video-element-wrapper">
   </div>
 
+  <div i18n id="warning-transcoding" class="alert alert-warning" *ngIf="isVideoToTranscode()">
+    The video is being transcoded, it may not work properly.
+  </div>
+
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
     <div class="video-info">
