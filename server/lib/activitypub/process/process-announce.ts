@@ -5,7 +5,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity } from '../send/misc'
+import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
@@ -58,7 +58,8 @@ async function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounc
     if (video.isOwned() && created === true) {
       // Don't resend the activity to the sender
       const exceptions = [ actorAnnouncer ]
-      await forwardActivity(activity, t, exceptions)
+
+      await forwardVideoRelatedActivity(activity, t, exceptions, video)
     }
 
     return undefined

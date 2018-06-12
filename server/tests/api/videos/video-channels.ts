@@ -17,7 +17,6 @@ import {
   setAccessTokensToServers,
   updateVideoChannel
 } from '../../utils/index'
-import { getAccountsList } from '../../utils/users/accounts'
 
 const expect = chai.expect
 
@@ -99,7 +98,7 @@ describe('Test video channels', function () {
   })
 
   it('Should have two video channels when getting account channels on server 1', async function () {
-    const res = await getAccountVideoChannelsList(servers[0].url, userInfo.account.uuid)
+    const res = await getAccountVideoChannelsList(servers[0].url, userInfo.account.name + '@' + userInfo.account.host)
     expect(res.body.total).to.equal(2)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(2)
@@ -112,7 +111,7 @@ describe('Test video channels', function () {
   })
 
   it('Should have one video channel when getting account channels on server 2', async function () {
-    const res = await getAccountVideoChannelsList(servers[1].url, userInfo.account.uuid)
+    const res = await getAccountVideoChannelsList(servers[1].url, userInfo.account.name + '@' + userInfo.account.host)
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)

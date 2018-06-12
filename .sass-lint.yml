@@ -22,4 +22,4 @@ rules:
   space-before-colon: 1
   hex-length: 1
   hex-notation: 0
-  indentation: 1
+  indentation: 2

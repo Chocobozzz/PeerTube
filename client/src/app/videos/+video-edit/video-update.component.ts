@@ -1,6 +1,5 @@
 import { map, switchMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -8,10 +7,11 @@ import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
-import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-videos-update',
@@ -22,14 +22,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  form: FormGroup
-  formErrors: { [ id: string ]: string } = {}
-  validationMessages: ValidatorMessage = {}
   videoPrivacies = []
   userVideoChannels = []
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -37,18 +34,14 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private videoService: VideoService,
     private authService: AuthService,
     private loadingBar: LoadingBarService,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({})
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({})
 
     this.serverService.videoPrivaciesLoaded
       .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
@@ -63,10 +56,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           }),
           switchMap(video => {
             return this.videoChannelService
-                       .listAccountVideoChannels(video.account.id)
+                       .listAccountVideoChannels(video.account)
                        .pipe(
                          map(result => result.data),
-                         map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName }))),
+                         map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName, support: c.support }))),
                          map(videoChannels => ({ video, videoChannels }))
                        )
           })
@@ -91,7 +84,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
           err => {
             console.error(err)
-            this.notificationsService.error('Error', err.message)
+            this.notificationsService.error(this.i18n('Error'), err.message)
           }
         )
   }
@@ -116,13 +109,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                        () => {
                          this.isUpdatingVideo = false
                          this.loadingBar.complete()
-                         this.notificationsService.success('Success', 'Video updated.')
+                         this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))
                          this.router.navigate([ '/videos/watch', this.video.uuid ])
                        },
 
                        err => {
                          this.isUpdatingVideo = false
-                         this.notificationsService.error('Error', err.message)
+                         this.notificationsService.error(this.i18n('Error'), err.message)
                          console.error(err)
                        }
                       )

@@ -5,6 +5,7 @@ import { AccountFollow } from '../../../../../../shared/models/actors/follow.mod
 import { ConfirmService } from '../../../core/confirm/confirm.service'
 import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-followers-list',
@@ -20,7 +21,8 @@ export class FollowingListComponent extends RestTable implements OnInit {
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private followService: FollowService
+    private followService: FollowService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -30,16 +32,22 @@ export class FollowingListComponent extends RestTable implements OnInit {
   }
 
   async removeFollowing (follow: AccountFollow) {
-    const res = await this.confirmService.confirm(`Do you really want to unfollow ${follow.following.host}?`, 'Unfollow')
+    const res = await this.confirmService.confirm(
+      this.i18n('Do you really want to unfollow {{host}}?', { host: follow.following.host }),
+      this.i18n('Unfollow')
+    )
     if (res === false) return
 
     this.followService.unfollow(follow).subscribe(
       () => {
-        this.notificationsService.success('Success', `You are not following ${follow.following.host} anymore.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('You are not following {{host}} anymore.', { host: follow.following.host })
+        )
         this.loadData()
       },
 
-      err => this.notificationsService.error('Error', err.message)
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
     )
   }
 
@@ -51,7 +59,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notificationsService.error('Error', err.message)
+                        err => this.notificationsService.error(this.i18n('Error'), err.message)
                       )
   }
 }

@@ -5,6 +5,7 @@ import { SortMeta } from 'primeng/components/common/sortmeta'
 import { VideoAbuse } from '../../../../../../shared'
 
 import { RestPagination, RestTable, VideoAbuseService } from '../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -20,7 +21,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
   constructor (
     private notificationsService: NotificationsService,
-    private videoAbuseService: VideoAbuseService
+    private videoAbuseService: VideoAbuseService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -41,7 +43,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
                    this.totalRecords = resultList.total
                  },
 
-                 err => this.notificationsService.error('Error', err.message)
+                 err => this.notificationsService.error(this.i18n('Error'), err.message)
                )
   }
 }

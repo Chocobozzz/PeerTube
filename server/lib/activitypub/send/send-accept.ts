@@ -2,7 +2,7 @@ import { ActivityAccept, ActivityFollow } from '../../../../shared/models/activi
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from '../url'
-import { unicastTo } from './misc'
+import { unicastTo } from './utils'
 import { followActivityData } from './send-follow'
 
 async function sendAccept (actorFollow: ActorFollowModel) {

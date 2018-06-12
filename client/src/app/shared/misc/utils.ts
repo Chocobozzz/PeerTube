@@ -17,7 +17,7 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function populateAsyncUserVideoChannels (authService: AuthService, channel: any[]) {
+function populateAsyncUserVideoChannels (authService: AuthService, channel: { id: number, label: string, support: string }[]) {
   return new Promise(res => {
     authService.userInformationLoaded
       .subscribe(
@@ -28,7 +28,7 @@ function populateAsyncUserVideoChannels (authService: AuthService, channel: any[
           const videoChannels = user.videoChannels
           if (Array.isArray(videoChannels) === false) return
 
-          videoChannels.forEach(c => channel.push({ id: c.id, label: c.displayName }))
+          videoChannels.forEach(c => channel.push({ id: c.id, label: c.displayName, support: c.support }))
 
           return res()
         }
@@ -98,7 +98,7 @@ function lineFeedToHtml (obj: object, keyToNormalize: string) {
 
 // Try to cache a little bit window.innerWidth
 let windowInnerWidth = window.innerWidth
-// setInterval(() => windowInnerWidth = window.innerWidth, 500)
+setInterval(() => windowInnerWidth = window.innerWidth, 500)
 
 function isInSmallView () {
   return windowInnerWidth < 600

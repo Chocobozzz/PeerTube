@@ -3,7 +3,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { isInSmallView } from '@app/shared/misc/utils'
 import { MarkdownService } from '@app/videos/shared'
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs/Subject'
 import truncate from 'lodash-es/truncate'
 
 @Component({

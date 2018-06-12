@@ -6,6 +6,7 @@ import { VideoRateType } from '../../../shared/models/videos'
 import { VIDEO_RATE_TYPES } from '../../initializers'
 import { VideoModel } from '../video/video'
 import { AccountModel } from './account'
+import { ActorModel } from '../activitypub/actor'
 
 /*
   Account rates per video.
@@ -65,5 +66,33 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     if (transaction) options.transaction = transaction
 
     return AccountVideoRateModel.findOne(options)
+  }
+
+  static listAndCountAccountUrlsByVideoId (rateType: VideoRateType, videoId: number, start: number, count: number, t?: Transaction) {
+    const query = {
+      start,
+      count,
+      where: {
+        videoId,
+        type: rateType
+      },
+      transaction: t,
+      include: [
+        {
+          attributes: [ 'actorId' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'url' ],
+              model: ActorModel.unscoped(),
+              required: true
+            }
+          ]
+        }
+      ]
+    }
+
+    return AccountVideoRateModel.findAndCountAll(query)
   }
 }

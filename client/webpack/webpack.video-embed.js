@@ -1,4 +1,5 @@
 const helpers = require('./helpers')
+const path = require('path')
 
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -24,7 +25,11 @@ module.exports = function () {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [ helpers.root('src'), helpers.root('node_modules') ]
+      modules: [ helpers.root('src'), helpers.root('node_modules') ],
+
+      alias: {
+        'video.js$': path.resolve('node_modules/video.js/dist/alt/video.core.js')
+      }
     },
 
     output: {
@@ -34,6 +39,8 @@ module.exports = function () {
       chunkFilename: '[id].chunk.js',
       publicPath: '/client/standalone/videos/'
     },
+
+    // devtool: 'source-map',
 
     module: {
 

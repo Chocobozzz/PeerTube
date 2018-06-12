@@ -1,6 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
@@ -11,10 +10,11 @@ import { Subscription } from 'rxjs'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
-import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-videos-add',
@@ -38,25 +38,22 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   }
   videoFileName: string
 
-  form: FormGroup
-  formErrors: { [ id: string ]: string } = {}
-  validationMessages: ValidatorMessage = {}
-
-  userVideoChannels = []
+  userVideoChannels: { id: number, label: string, support: string }[] = []
   userVideoQuotaUsed = 0
   videoPrivacies = []
   firstStepPrivacyId = 0
   firstStepChannelId = 0
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private router: Router,
     private notificationsService: NotificationsService,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
     private videoService: VideoService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -65,13 +62,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     return this.serverService.getConfig().video.file.extensions.join(',')
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({})
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({})
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
       .then(() => this.firstStepChannelId = this.userVideoChannels[0].id)
@@ -99,10 +91,11 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     let text = ''
 
     if (this.videoUploaded === true) {
-      text = 'Your video was uploaded in your account and is private.' +
-        ' But associated data (tags, description...) will be lost, are you sure you want to leave this page?'
+      // FIXME: cannot concatenate strings inside i18n service :/
+      text = this.i18n('Your video was uploaded in your account and is private.') +
+        this.i18n('But associated data (tags, description...) will be lost, are you sure you want to leave this page?')
     } else {
-      text = 'Your video is not uploaded yet, are you sure you want to leave this page?'
+      text = this.i18n('Your video is not uploaded yet, are you sure you want to leave this page?')
     }
 
     return {
@@ -127,7 +120,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
       this.videoUploadObservable = null
-      this.notificationsService.info('Info', 'Upload cancelled')
+      this.notificationsService.info(this.i18n('Info'), this.i18n('Upload cancelled'))
     }
   }
 
@@ -137,7 +130,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     // Cannot upload videos > 4GB for now
     if (videofile.size > 4 * 1024 * 1024 * 1024) {
-      this.notificationsService.error('Error', 'We are sorry but PeerTube cannot handle videos > 4GB')
+      this.notificationsService.error(this.i18n('Error'), this.i18n('We are sorry but PeerTube cannot handle videos > 4GB'))
       return
     }
 
@@ -145,11 +138,15 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
       const bytePipes = new BytesPipe()
 
-      const msg = 'Your video quota is exceeded with this video ' +
-        `(video size: ${bytePipes.transform(videofile.size, 0)}, ` +
-        `used: ${bytePipes.transform(this.userVideoQuotaUsed, 0)}, ` +
-        `quota: ${bytePipes.transform(videoQuota, 0)})`
-      this.notificationsService.error('Error', msg)
+      const msg = this.i18n(
+        'Your video quota is exceeded with this video (video size: {{ videoSize }}, used: {{ videoQuotaUsed }}, quota: {{ videoQuota }})',
+        {
+          videoSize: bytePipes.transform(videofile.size, 0),
+          videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
+          videoQuota: bytePipes.transform(videoQuota, 0)
+        }
+      )
+      this.notificationsService.error(this.i18n('Error'), msg)
       return
     }
 
@@ -192,8 +189,6 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
         if (event.type === HttpEventType.UploadProgress) {
           this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
         } else if (event instanceof HttpResponse) {
-          console.log('Video uploaded.')
-
           this.videoUploaded = true
 
           this.videoUploadedIds = event.body.video
@@ -207,7 +202,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
         this.videoUploadObservable = null
-        this.notificationsService.error('Error', err.message)
+        this.notificationsService.error(this.i18n('Error'), err.message)
       }
     )
   }
@@ -231,13 +226,13 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
           this.isUploadingVideo = false
           this.loadingBar.complete()
 
-          this.notificationsService.success('Success', 'Video published.')
+          this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
           this.router.navigate([ '/videos/watch', video.uuid ])
         },
 
         err => {
           this.isUpdatingVideo = false
-          this.notificationsService.error('Error', err.message)
+          this.notificationsService.error(this.i18n('Error'), err.message)
           console.error(err)
         }
       )

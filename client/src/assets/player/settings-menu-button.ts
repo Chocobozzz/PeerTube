@@ -275,7 +275,7 @@ class SettingsDialog extends Component {
 
 }
 
-SettingsButton.prototype.controlText_ = 'Settings Button'
+SettingsButton.prototype.controlText_ = 'Settings'
 
 Component.registerComponent('SettingsButton', SettingsButton)
 Component.registerComponent('SettingsDialog', SettingsDialog)

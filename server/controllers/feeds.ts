@@ -1,20 +1,27 @@
 import * as express from 'express'
 import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
-import { asyncMiddleware, feedsValidator, setDefaultSort, videosSortValidator } from '../middlewares'
+import { asyncMiddleware, videoFeedsValidator, setDefaultSort, videosSortValidator, videoCommentsFeedsValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
 import { AccountModel } from '../models/account/account'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoChannelModel } from '../models/video/video-channel'
+import { VideoCommentModel } from '../models/video/video-comment'
 
 const feedsRouter = express.Router()
+
+feedsRouter.get('/feeds/video-comments.:format',
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  asyncMiddleware(videoCommentsFeedsValidator),
+  asyncMiddleware(generateVideoCommentsFeed)
+)
 
 feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
   asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
-  asyncMiddleware(feedsValidator),
-  asyncMiddleware(generateFeed)
+  asyncMiddleware(videoFeedsValidator),
+  asyncMiddleware(generateVideoFeed)
 )
 
 // ---------------------------------------------------------------------------
@@ -25,7 +32,36 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function generateFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateVideoCommentsFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
+  let feed = initFeed()
+  const start = 0
+
+  const videoId: number = res.locals.video ? res.locals.video.id : undefined
+
+  const comments = await VideoCommentModel.listForFeed(start, FEEDS.COUNT, videoId)
+
+  // Adding video items to the feed, one at a time
+  comments.forEach(comment => {
+    feed.addItem({
+      title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,
+      id: comment.url,
+      link: comment.url,
+      content: comment.text,
+      author: [
+        {
+          name: comment.Account.getDisplayName(),
+          link: comment.Account.Actor.url
+        }
+      ],
+      date: comment.createdAt
+    })
+  })
+
+  // Now the feed generation is done, let's send it!
+  return sendFeed(feed, req, res)
+}
+
+async function generateVideoFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
   let feed = initFeed()
   const start = 0
 

@@ -4,9 +4,12 @@ set -e
 # Populate config directory
 if [ -z "$(ls -A /config)" ]; then
     cp /app/support/docker/production/config/* /config
-    cp /app/config/default.yaml /config
-    chown -R peertube:peertube /config
 fi
+
+# Always copy default and custom env configuration file, in cases where new keys were added
+cp /app/config/default.yaml /config
+cp /app/support/docker/production/config/custom-environment-variables.yaml /config
+chown -R peertube:peertube /config
 
 # first arg is `-f` or `--some-option`
 # or first arg is `something.conf`

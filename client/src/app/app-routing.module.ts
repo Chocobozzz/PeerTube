@@ -19,6 +19,10 @@ const routes: Routes = [
   {
     path: 'video-channels',
     loadChildren: './+video-channels/video-channels.module#VideoChannelsModule'
+  },
+  {
+    path: '**',
+    loadChildren: './+page-not-found/page-not-found.module#PageNotFoundModule'
   }
 ]
 

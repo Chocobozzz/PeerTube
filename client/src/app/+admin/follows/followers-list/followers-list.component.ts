@@ -5,6 +5,7 @@ import { SortMeta } from 'primeng/primeng'
 import { AccountFollow } from '../../../../../../shared/models/actors/follow.model'
 import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-followers-list',
@@ -20,7 +21,8 @@ export class FollowersListComponent extends RestTable implements OnInit {
 
   constructor (
     private notificationsService: NotificationsService,
-    private followService: FollowService
+    private followService: FollowService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -37,7 +39,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notificationsService.error('Error', err.message)
+                        err => this.notificationsService.error(this.i18n('Error'), err.message)
                       )
   }
 }

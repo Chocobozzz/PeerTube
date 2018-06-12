@@ -3,6 +3,7 @@ import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 import { ModalDirective } from 'ngx-bootstrap/modal'
 
 import { ConfirmService } from './confirm.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-confirm',
@@ -20,7 +21,10 @@ export class ConfirmComponent implements OnInit {
   inputValue = ''
   confirmButtonText = ''
 
-  constructor (private confirmService: ConfirmService) {
+  constructor (
+    private confirmService: ConfirmService,
+    private i18n: I18n
+  ) {
     // Empty
   }
 
@@ -38,7 +42,7 @@ export class ConfirmComponent implements OnInit {
         this.inputLabel = inputLabel
         this.expectedInputValue = expectedInputValue
 
-        this.confirmButtonText = confirmButtonText || 'Confirm'
+        this.confirmButtonText = confirmButtonText || this.i18n('Confirm')
 
         this.showModal()
       }

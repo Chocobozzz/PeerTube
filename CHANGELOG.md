@@ -1,5 +1,66 @@
 # Changelog
 
+## v1.0.0-beta.8
+
+### Features
+
+ * Docker:
+   * Add disable_starttls and transcoding configuration variables
+   * `.env` file to define env variables (instead of defining them in `docker-compose.yml`)
+   * Some improvements that should make the upgrades less painful
+ * Add ability to manually run transcoding jobs (admin with CLI)
+ * Add ability to import a video file (admin with CLI)
+ * Add context menu to the player
+ * Add number of videos published by an account/video channel
+ * Improve player progress bar
+ * Improve Twitter configuration help tooltips
+ * Pick average video file instead of max quality in "Auto" resolution mode
+ * Increase access token lifetime to 1 day
+ * Add video comments RSS
+
+### Bug fixes
+
+ * Clicking on "Download" correctly opens a popup to download the video
+ (instead of opening the video in a new tab)
+ * Fix frequent logout
+ * Fix `publishedAt` video attribute when following a new instance
+ * Correctly resumes the video on "PeerTube" link click in embed
+ * Fix markdown links truncation
+ * Fix account/channel pages not updated if we only change the account/channel
+ * Fix player resolution change that plays even if the video was paused
+ * Fix posting view in embed that contains search params
+ * Fix video watch tooltips regarding subscriptions by using the account name
+ instead of the display name
+ * Rename "my settings" to "my account" in menu
+
+
+## v1.0.0-beta.7
+
+### BREAKING CHANGES
+
+ * Account client URLs are now `/accounts/{username}/` (and not `/accounts/{id}/`)
+
+### Documentation
+
+ * Better documentation on how to deploy with Docker: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md
+
+### Features
+
+ * Add short description in about page
+ * Add owner account name in video channel page
+ * Improve performance in ActivityPub controllers
+ * Video **support** field inherits video channel **support** field when uploading/updating a video
+ * Resume video when clicking on "PeerTube" link in embed
+
+### Bug fixes
+
+ * Fix player on Android
+ * Fix player when Firefox has cookies disabled
+ * Reload "my videos" after a delete
+ * Fix missing key configuration when upgrading with Docker
+ * Fix CC audience in Activity Pub objects/activities
+
+
 ## v1.0.0-beta.6
 
 ### Features

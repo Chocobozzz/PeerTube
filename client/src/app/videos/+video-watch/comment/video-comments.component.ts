@@ -11,6 +11,7 @@ import { VideoSortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-comments',
@@ -40,7 +41,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private i18n: I18n
   ) {}
 
   ngOnInit () {
@@ -77,7 +79,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           if (highlightThread) this.highlightedThread = new VideoComment(res.comment)
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 
@@ -89,7 +91,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.componentPagination.totalItems = res.totalComments
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 
@@ -111,9 +113,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
-    if (commentToDelete.totalReplies !== 0) message += `${commentToDelete.totalReplies} would be deleted too.`
+    if (commentToDelete.totalReplies !== 0) {
+      message += this.i18n(' {{totalReplies}} replies will be deleted too.', { totalReplies: commentToDelete.totalReplies })
+    }
 
-    const res = await this.confirmService.confirm(message, 'Delete')
+    const res = await this.confirmService.confirm(message, this.i18n('Delete'))
     if (res === false) return
 
     this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
@@ -136,7 +140,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.componentPagination.totalItems--
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 

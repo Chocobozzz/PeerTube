@@ -1,13 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { NotificationsService } from 'angular2-notifications'
 import { UserService } from '../shared'
-import { User, USER_EMAIL, USER_ROLE, USER_VIDEO_QUOTA } from '../../../shared'
+import { User } from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { UserUpdate } from '../../../../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-user-update',
@@ -19,43 +21,28 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   userId: number
   username: string
 
-  form: FormGroup
-  formErrors = {
-    'email': '',
-    'role': '',
-    'videoQuota': ''
-  }
-  validationMessages = {
-    'email': USER_EMAIL.MESSAGES,
-    'role': USER_ROLE.MESSAGES,
-    'videoQuota': USER_VIDEO_QUOTA.MESSAGES
-  }
-
   private paramsSub: Subscription
 
   constructor (
+    protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
+    private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
-    private formBuilder: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      email:    [ '', USER_EMAIL.VALIDATORS ],
-      role: [ '', USER_ROLE.VALIDATORS ],
-      videoQuota: [ '-1', USER_VIDEO_QUOTA.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    const defaultValues = { videoQuota: '-1' }
+    this.buildForm({
+      email: this.userValidatorsService.USER_EMAIL,
+      role: this.userValidatorsService.USER_ROLE,
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
+    }, defaultValues)
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const userId = routeParams['id']
@@ -81,7 +68,10 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.userService.updateUser(this.userId, userUpdate).subscribe(
       () => {
-        this.notificationsService.success('Success', `User ${this.username} updated.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('User {{username}} updated.', { username: this.username })
+        )
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -94,7 +84,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   }
 
   getFormButtonTitle () {
-    return 'Update user'
+    return this.i18n('Update user')
   }
 
   private onUserFetched (userJson: User) {

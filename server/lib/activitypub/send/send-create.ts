@@ -7,17 +7,15 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
+import { broadcastToActors, broadcastToFollowers, unicastTo } from './utils'
 import {
   audiencify,
-  broadcastToActors,
-  broadcastToFollowers,
   getActorsInvolvedInVideo,
   getAudience,
   getObjectFollowersAudience,
-  getOriginVideoAudience,
-  getVideoCommentAudience,
-  unicastTo
-} from './misc'
+  getVideoAudience,
+  getVideoCommentAudience
+} from '../audience'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
@@ -83,7 +81,7 @@ async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transa
 
   // Send to origin
   if (video.isOwned() === false) {
-    const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
+    const audience = getVideoAudience(video, actorsInvolvedInVideo)
     const data = await createActivityData(url, byActor, viewActivityData, t, audience)
 
     return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
@@ -107,7 +105,7 @@ async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Tra
 
   // Send to origin
   if (video.isOwned() === false) {
-    const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
+    const audience = getVideoAudience(video, actorsInvolvedInVideo)
     const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
 
     return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)

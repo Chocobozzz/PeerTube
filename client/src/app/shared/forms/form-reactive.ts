@@ -1,40 +1,48 @@
 import { FormGroup } from '@angular/forms'
+import { BuildFormArgument, BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+
+export type FormReactiveErrors = { [ id: string ]: string }
+export type FormReactiveValidationMessages = {
+  [ id: string ]: {
+    [ name: string ]: string
+  }
+}
 
 export abstract class FormReactive {
-  abstract form: FormGroup
-  abstract formErrors: Object
-  abstract validationMessages: Object
+  protected abstract formValidatorService: FormValidatorService
 
-  abstract buildForm (): void
+  form: FormGroup
+  formErrors: FormReactiveErrors
+  validationMessages: FormReactiveValidationMessages
 
-  protected onValueChanged (data?: any) {
+  buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
+    const { formErrors, validationMessages, form } = this.formValidatorService.buildForm(obj, defaultValues)
+
+    this.form = form
+    this.formErrors = formErrors
+    this.validationMessages = validationMessages
+
+    this.form.valueChanges.subscribe(data => this.onValueChanged(false))
+  }
+
+  protected onValueChanged (forceCheck = false) {
     for (const field in this.formErrors) {
       // clear previous error message (if any)
-      this.formErrors[field] = ''
+      this.formErrors[ field ] = ''
       const control = this.form.get(field)
 
-      if (control && control.dirty && !control.valid) {
-        const messages = this.validationMessages[field]
+      // Don't care if dirty on force check
+      const isDirty = control.dirty || forceCheck === true
+      if (control && isDirty && !control.valid) {
+        const messages = this.validationMessages[ field ]
         for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' '
+          this.formErrors[ field ] += messages[ key ] + ' '
         }
       }
     }
   }
 
-  // Same as onValueChanged but force checking even if the field is not dirty
   protected forceCheck () {
-    for (const field in this.formErrors) {
-      // clear previous error message (if any)
-      this.formErrors[field] = ''
-      const control = this.form.get(field)
-
-      if (control && !control.valid) {
-        const messages = this.validationMessages[field]
-        for (const key in control.errors) {
-          this.formErrors[field] += messages[key] + ' '
-        }
-      }
-    }
+    return this.onValueChanged(true)
   }
 }

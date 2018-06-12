@@ -1,6 +1,7 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
+import * as videojs from 'video.js'
 import { toTitleCase } from './utils'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
@@ -132,7 +133,7 @@ class SettingsMenuItem extends MenuItem {
     const button = this.subMenu.menu.addChild('MenuItem', {}, 0)
     button.name_ = 'BackButton'
     button.addClass('vjs-back-button')
-    button.el_.innerHTML = this.subMenu.controlText_
+    button.el_.innerHTML = this.player_.localize(this.subMenu.controlText_)
   }
 
   /**
@@ -201,7 +202,7 @@ class SettingsMenuItem extends MenuItem {
       saveUpdateLabel.call(this.subMenu)
     }
 
-    this.settingsSubMenuTitleEl_.innerHTML = this.subMenu.controlText_
+    this.settingsSubMenuTitleEl_.innerHTML = this.player_.localize(this.subMenu.controlText_)
     this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
     this.panelChildEl.appendChild(this.settingsSubMenuEl_)
     this.update()

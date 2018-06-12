@@ -326,6 +326,42 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findAll(query)
   }
 
+  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Sequelize.Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+    const query = {
+      order: [ [ 'createdAt', order ] ],
+      start,
+      count,
+      where: {
+        videoId
+      },
+      transaction: t
+    }
+
+    return VideoCommentModel.findAndCountAll(query)
+  }
+
+  static listForFeed (start: number, count: number, videoId?: number) {
+    const query = {
+      order: [ [ 'createdAt', 'DESC' ] ],
+      start,
+      count,
+      where: {},
+      include: [
+        {
+          attributes: [ 'name' ],
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+
+    if (videoId) query.where['videoId'] = videoId
+
+    return VideoCommentModel
+      .scope([ ScopeNames.WITH_ACCOUNT ])
+      .findAll(query)
+  }
+
   static async getStats () {
     const totalLocalVideoComments = await VideoCommentModel.count({
       include: [

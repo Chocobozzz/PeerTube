@@ -19,7 +19,8 @@
     ],
     "baseUrl": "src",
     "paths": {
-      "@app/*": [ "app/*" ]
+      "@app/*": [ "app/*" ],
+      "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ]
     }
   }
 }

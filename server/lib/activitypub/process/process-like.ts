@@ -4,8 +4,9 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity } from '../send/misc'
+import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { getActorsInvolvedInVideo } from '../audience'
 
 async function processLikeActivity (activity: ActivityLike) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -54,7 +55,8 @@ async function createVideoLike (byActor: ActorModel, activity: ActivityLike) {
     if (video.isOwned() && created === true) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
-      await forwardActivity(activity, t, exceptions)
+
+      await forwardVideoRelatedActivity(activity, t, exceptions, video)
     }
   })
 }

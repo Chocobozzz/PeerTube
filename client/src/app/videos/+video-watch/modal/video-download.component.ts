@@ -41,7 +41,7 @@ export class VideoDownloadComponent implements OnInit {
       return
     }
 
-    const link = this.downloadType === 'direct' ? file.fileUrl : file.torrentUrl
-    window.open(link)
+    const link = this.downloadType === 'direct' ? file.fileDownloadUrl : file.torrentDownloadUrl
+    window.location.assign(link)
   }
 }

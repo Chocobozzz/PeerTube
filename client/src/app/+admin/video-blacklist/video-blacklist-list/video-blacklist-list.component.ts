@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-
 import { NotificationsService } from 'angular2-notifications'
-
 import { ConfirmService } from '../../../core'
-import { VideoBlacklistService, RestTable, RestPagination } from '../../../shared'
+import { RestPagination, RestTable, VideoBlacklistService } from '../../../shared'
 import { BlacklistedVideo } from '../../../../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-blacklist-list',
@@ -22,7 +21,8 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private videoBlacklistService: VideoBlacklistService
+    private videoBlacklistService: VideoBlacklistService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -32,18 +32,23 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   }
 
   async removeVideoFromBlacklist (entry: BlacklistedVideo) {
-    const confirmMessage = 'Do you really want to remove this video from the blacklist ? It will be available again in the videos list.'
+    const confirmMessage = this.i18n(
+      'Do you really want to remove this video from the blacklist ? It will be available again in the videos list.'
+    )
 
-    const res = await this.confirmService.confirm(confirmMessage, 'Unblacklist')
+    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Unblacklist'))
     if (res === false) return
 
     this.videoBlacklistService.removeVideoFromBlacklist(entry.videoId).subscribe(
       () => {
-        this.notificationsService.success('Success', `Video ${entry.name} removed from the blacklist.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('Video {{name}} removed from the blacklist.', { name: entry.name })
+        )
         this.loadData()
       },
 
-      err => this.notificationsService.error('Error', err.message)
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
     )
   }
 
@@ -55,7 +60,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
           this.totalRecords = resultList.total
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 }

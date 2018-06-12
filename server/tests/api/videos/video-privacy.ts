@@ -73,6 +73,8 @@ describe('Test video privacy', function () {
   })
 
   it('Should not be able to watch this private video with another user', async function () {
+    this.timeout(10000)
+
     const user = {
       username: 'hello',
       password: 'super password'

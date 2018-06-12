@@ -3,7 +3,8 @@ import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/ac
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
-import { broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from './misc'
+import { broadcastToFollowers } from './utils'
+import { getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from '../audience'
 
 async function buildVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const announcedObject = video.url

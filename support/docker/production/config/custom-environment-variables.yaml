@@ -33,6 +33,9 @@ smtp:
   tls:
     __name: "PEERTUBE_SMTP_TLS"
     __format: "json"
+  disable_starttls:
+    __name: "PEERTUBE_SMTP_DISABLE_STARTTLS"
+    __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
 
 user:

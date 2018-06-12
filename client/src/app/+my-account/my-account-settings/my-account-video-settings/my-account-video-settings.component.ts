@@ -1,9 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { UserUpdateMe } from '../../../../../../shared'
 import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { Subject } from 'rxjs/Subject'
 
 @Component({
   selector: 'my-account-video-settings',
@@ -12,31 +14,30 @@ import { FormReactive, User, UserService } from '../../../shared'
 })
 export class MyAccountVideoSettingsComponent extends FormReactive implements OnInit {
   @Input() user: User = null
-
-  form: FormGroup
-  formErrors = {}
-  validationMessages = {}
+  @Input() userInformationLoaded: Subject<any>
 
   constructor (
+    protected formValidatorService: FormValidatorService,
     private authService: AuthService,
-    private formBuilder: FormBuilder,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      nsfwPolicy: [ this.user.nsfwPolicy ],
-      autoPlayVideo: [ this.user.autoPlayVideo ]
+  ngOnInit () {
+    this.buildForm({
+      nsfwPolicy: null,
+      autoPlayVideo: null
     })
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
-  ngOnInit () {
-    this.buildForm()
+    this.userInformationLoaded.subscribe(() => {
+      this.form.patchValue({
+        nsfwPolicy: this.user.nsfwPolicy,
+        autoPlayVideo: this.user.autoPlayVideo === true
+      })
+    })
   }
 
   updateDetails () {
@@ -49,12 +50,12 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
 
     this.userService.updateMyProfile(details).subscribe(
       () => {
-        this.notificationsService.success('Success', 'Information updated.')
+        this.notificationsService.success(this.i18n('Success'), this.i18n('Information updated.'))
 
         this.authService.refreshUserInformation()
       },
 
-      err => this.notificationsService.error('Error', err.message)
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
     )
   }
 }

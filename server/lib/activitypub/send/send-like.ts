@@ -3,15 +3,8 @@ import { ActivityAudience, ActivityLike } from '../../../../shared/models/activi
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { getVideoLikeActivityPubUrl } from '../url'
-import {
-  audiencify,
-  broadcastToFollowers,
-  getActorsInvolvedInVideo,
-  getAudience,
-  getObjectFollowersAudience,
-  getOriginVideoAudience,
-  unicastTo
-} from './misc'
+import { broadcastToFollowers, unicastTo } from './utils'
+import { audiencify, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience, getVideoAudience } from '../audience'
 
 async function sendLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byActor, video)
@@ -20,7 +13,7 @@ async function sendLike (byActor: ActorModel, video: VideoModel, t: Transaction)
 
   // Send to origin
   if (video.isOwned() === false) {
-    const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
+    const audience = getVideoAudience(video, accountsInvolvedInVideo)
     const data = await likeActivityData(url, byActor, video, t, audience)
 
     return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)

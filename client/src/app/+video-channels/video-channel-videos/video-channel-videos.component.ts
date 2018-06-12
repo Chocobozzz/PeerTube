@@ -9,6 +9,9 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { tap } from 'rxjs/operators'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -19,12 +22,13 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
   ]
 })
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage = 'Published videos'
+  titlePage: string
   marginContent = false // Disable margin
   currentRoute = '/video-channel/videos'
   loadOnInit = false
 
   private videoChannel: VideoChannel
+  private videoChannelSub: Subscription
 
   constructor (
     protected router: Router,
@@ -33,34 +37,45 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected i18n: I18n,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService
   ) {
     super()
+
+    this.titlePage = this.i18n('Published videos')
   }
 
   ngOnInit () {
     super.ngOnInit()
 
     // Parent get the video channel for us
-    this.videoChannelService.videoChannelLoaded
+    this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
         this.currentRoute = '/video-channel/' + this.videoChannel.uuid + '/videos'
 
-        this.loadMoreVideos(this.pagination.currentPage)
+        this.reloadVideos()
         this.generateSyndicationList()
       })
   }
 
   ngOnDestroy () {
+    if (this.videoChannelSub) this.videoChannelSub.unsubscribe()
+
     super.ngOnDestroy()
   }
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
+    return this.videoService
+               .getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
+               .pipe(
+                 tap(({ totalVideos }) => {
+                   this.titlePage = this.i18n('Published {{totalVideos}} videos', { totalVideos })
+                 })
+               )
   }
 
   generateSyndicationList () {

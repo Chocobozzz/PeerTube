@@ -8,6 +8,7 @@ import { AccountService } from '../account/account.service'
 import { ResultList } from '../../../../../shared'
 import { VideoChannel } from './video-channel.model'
 import { environment } from '../../../environments/environment'
+import { Account } from '@app/shared/account/account.model'
 
 @Injectable()
 export class VideoChannelService {
@@ -29,8 +30,8 @@ export class VideoChannelService {
                )
   }
 
-  listAccountVideoChannels (accountId: number): Observable<ResultList<VideoChannel>> {
-    return this.authHttp.get<ResultList<VideoChannelServer>>(AccountService.BASE_ACCOUNT_URL + accountId + '/video-channels')
+  listAccountVideoChannels (account: Account): Observable<ResultList<VideoChannel>> {
+    return this.authHttp.get<ResultList<VideoChannelServer>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels')
                .pipe(
                  map(res => this.extractVideoChannels(res)),
                  catchError((res) => this.restExtractor.handleError(res))

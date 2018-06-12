@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
-import { FormReactive, USER_DESCRIPTION, USER_DISPLAY_NAME, UserService } from '../../../shared'
+import { FormReactive, UserService } from '../../../shared'
 import { User } from '@app/shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { Subject } from 'rxjs/Subject'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-account-profile',
@@ -11,38 +14,32 @@ import { User } from '@app/shared'
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
   @Input() user: User = null
+  @Input() userInformationLoaded: Subject<any>
 
   error: string = null
 
-  form: FormGroup
-  formErrors = {
-    'display-name': '',
-    'description': ''
-  }
-  validationMessages = {
-    'display-name': USER_DISPLAY_NAME.MESSAGES,
-    'description': USER_DESCRIPTION.MESSAGES
-  }
-
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      'display-name': [ this.user.account.displayName, USER_DISPLAY_NAME.VALIDATORS ],
-      'description': [ this.user.account.description, USER_DESCRIPTION.VALIDATORS ]
+  ngOnInit () {
+    this.buildForm({
+      'display-name': this.userValidatorsService.USER_DISPLAY_NAME,
+      description: this.userValidatorsService.USER_DESCRIPTION
     })
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
-  ngOnInit () {
-    this.buildForm()
+    this.userInformationLoaded.subscribe(() => {
+      this.form.patchValue({
+        'display-name': this.user.account.displayName,
+        description: this.user.account.description
+      })
+    })
   }
 
   updateMyProfile () {
@@ -56,7 +53,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
         this.user.account.displayName = displayName
         this.user.account.description = description
 
-        this.notificationsService.success('Success', 'Profile updated.')
+        this.notificationsService.success(this.i18n('Success'), this.i18n('Profile updated.'))
       },
 
       err => this.error = err.message

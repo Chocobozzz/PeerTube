@@ -2,7 +2,7 @@
   <img [src]="comment.accountAvatarUrl" alt="Avatar" />
 
   <div class="comment">
-    <div *ngIf="highlightedComment === true" class="highlighted-comment">Highlighted comment</div>
+    <div *ngIf="highlightedComment === true" class="highlighted-comment" i18n>Highlighted comment</div>
 
     <div class="comment-account-date">
       <a [href]="comment.account.url"  target="_blank" rel="noopener noreferrer" class="comment-account">{{ comment.by }}</a>
@@ -11,8 +11,8 @@
     <div class="comment-html" [innerHTML]="sanitizedCommentHTML"></div>
 
     <div class="comment-actions">
-      <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply">Reply</div>
-      <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete">Delete</div>
+      <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply" i18n>Reply</div>
+      <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete" i18n>Delete</div>
     </div>
 
     <my-video-comment-add

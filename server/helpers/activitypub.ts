@@ -1,8 +1,11 @@
+import * as Bluebird from 'bluebird'
+import * as validator from 'validator'
 import { ResultList } from '../../shared/models'
 import { Activity, ActivityPubActor } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
 import { signObject } from './peertube-crypto'
+import { pageToStartAndCount } from './core-utils'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data,{
@@ -44,16 +47,23 @@ function activityPubContextify <T> (data: T) {
   })
 }
 
-function activityPubCollection (url: string, results: any[]) {
-  return {
-    id: url,
-    type: 'OrderedCollection',
-    totalItems: results.length,
-    orderedItems: results
-  }
-}
+type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Bluebird<ResultList<any>> | Promise<ResultList<any>>
+async function activityPubCollectionPagination (url: string, handler: ActivityPubCollectionPaginationHandler, page?: any) {
+  if (!page || !validator.isInt(page)) {
+    // We just display the first page URL, we only need the total items
+    const result = await handler(0, 1)
 
-function activityPubCollectionPagination (url: string, page: any, result: ResultList<any>) {
+    return {
+      id: url,
+      type: 'OrderedCollection',
+      totalItems: result.total,
+      first: url + '?page=1'
+    }
+  }
+
+  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+  const result = await handler(start, count)
+
   let next: string
   let prev: string
 
@@ -69,27 +79,16 @@ function activityPubCollectionPagination (url: string, page: any, result: Result
     prev = url + '?page=' + (page - 1)
   }
 
-  const orderedCollectionPagination = {
+  return {
     id: url + '?page=' + page,
     type: 'OrderedCollectionPage',
     prev,
     next,
     partOf: url,
-    orderedItems: result.data
+    orderedItems: result.data,
+    totalItems: result.total
   }
 
-  if (page === 1) {
-    return activityPubContextify({
-      id: url,
-      type: 'OrderedCollection',
-      totalItems: result.total,
-      first: orderedCollectionPagination
-    })
-  } else {
-    orderedCollectionPagination['totalItems'] = result.total
-  }
-
-  return orderedCollectionPagination
 }
 
 function buildSignedActivity (byActor: ActorModel, data: Object) {
@@ -110,6 +109,5 @@ export {
   getActorUrl,
   activityPubContextify,
   activityPubCollectionPagination,
-  activityPubCollection,
   buildSignedActivity
 }

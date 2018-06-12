@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { USER_PASSWORD, UserService } from '@app/shared'
+import { UserService, UserValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { ResetPasswordValidatorsService } from '@app/shared/forms/form-validators/reset-password-validators.service'
 
 @Component({
   selector: 'my-login',
@@ -13,49 +15,34 @@ import { FormReactive } from '../shared'
 })
 
 export class ResetPasswordComponent extends FormReactive implements OnInit {
-  form: FormGroup
-  formErrors = {
-    'password': '',
-    'password-confirm': ''
-  }
-  validationMessages = {
-    'password': USER_PASSWORD.MESSAGES,
-    'password-confirm': {
-      'required': 'Confirmation of the password is required.'
-    }
-  }
-
   private userId: number
   private verificationString: string
 
   constructor (
+    protected formValidatorService: FormValidatorService,
+    private resetPasswordValidatorsService: ResetPasswordValidatorsService,
+    private userValidatorsService: UserValidatorsService,
     private authService: AuthService,
     private userService: UserService,
     private notificationsService: NotificationsService,
-    private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      password: [ '', USER_PASSWORD.VALIDATORS ],
-      'password-confirm': [ '', Validators.required ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({
+      password: this.userValidatorsService.USER_PASSWORD,
+      'password-confirm': this.resetPasswordValidatorsService.RESET_PASSWORD_CONFIRM
+    })
 
     this.userId = this.route.snapshot.queryParams['userId']
     this.verificationString = this.route.snapshot.queryParams['verificationString']
 
     if (!this.userId || !this.verificationString) {
-      this.notificationsService.error('Error', 'Unable to find user id or verification string.')
+      this.notificationsService.error(this.i18n('Error'), this.i18n('Unable to find user id or verification string.'))
       this.router.navigate([ '/' ])
     }
   }
@@ -64,7 +51,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     this.userService.resetPassword(this.userId, this.verificationString, this.form.value.password)
       .subscribe(
         () => {
-          this.notificationsService.success('Success', 'Your password has been successfully reset!')
+          this.notificationsService.success(this.i18n('Success'), this.i18n('Your password has been successfully reset!'))
           this.router.navigate([ '/login' ])
         },
 

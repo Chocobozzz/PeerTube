@@ -1,5 +1,5 @@
 <div class="admin-sub-header">
-  <div class="form-sub-title">Video abuses list</div>
+  <div i18n class="form-sub-title">Video abuses list</div>
 </div>
 
 <p-table
@@ -8,10 +8,10 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th>Reason</th>
-      <th>Reporter</th>
-      <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th>Video</th>
+      <th i18n>Reason</th>
+      <th i18n>Reporter</th>
+      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n>Video</th>
     </tr>
   </ng-template>
 
@@ -19,13 +19,13 @@
     <tr>
       <td>{{ videoAbuse.reason }}</td>
       <td>
-        <a [href]="videoAbuse.reporterAccount.url" title="Go to the account" target="_blank" rel="noopener noreferrer">
+        <a [href]="videoAbuse.reporterAccount.url" i18n-title title="Go to the account" target="_blank" rel="noopener noreferrer">
           {{ createByString(videoAbuse.reporterAccount) }}
         </a>
       </td>
       <td>{{ videoAbuse.createdAt }}</td>
       <td>
-        <a [href]="videoAbuse.video.url" title="Go to the video" target="_blank" rel="noopener noreferrer">
+        <a [href]="videoAbuse.video.url" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
           {{ videoAbuse.video.name }}
         </a>
       </td>

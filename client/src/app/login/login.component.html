@@ -1,5 +1,5 @@
 <div class="margin-content">
-  <div class="title-page title-page-single">
+  <div i18n class="title-page title-page-single">
     Login
   </div>
 
@@ -8,21 +8,21 @@
   <form role="form" (ngSubmit)="login()" [formGroup]="form">
     <div class="form-group">
       <div>
-        <label for="username">User</label>
+        <label i18n for="username">User</label>
         <input
-          type="text" id="username" placeholder="Username or email address" required tabindex="1"
+          type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
           formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
         >
-        <a *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
+        <a i18n *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
           or create an account
         </a>
 
-        <a *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#getting-started" target="_blank" class="create-an-account">
+        <a i18n *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#getting-started" target="_blank" title="Click here to see how to get started!" class="create-an-account">
           or create an account on another instance
         </a>
 
         <my-help
-          *ngIf="signupAllowed === false" helpType="custom"
+          *ngIf="signupAllowed === false" helpType="custom" i18n-customHtml
           customHtml="User registration is not allowed on this instance, but you can register on many others!"
         ></my-help>
       </div>
@@ -33,13 +33,13 @@
     </div>
 
     <div class="form-group">
-      <label for="password">Password</label>
+      <label i18n for="password">Password</label>
       <div>
         <input
-          type="password" name="password" id="password" placeholder="Password" required tabindex="2"
+          type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2"
           formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
         >
-        <div class="forgot-password-button" (click)="openForgotPasswordModal()">I forgot my password</div>
+        <a i18n class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
       </div>
       <div *ngIf="formErrors.password" class="form-error">
         {{ formErrors.password }}
@@ -56,25 +56,25 @@
 
       <div class="modal-header">
         <span class="close" aria-hidden="true" (click)="hideForgotPasswordModal()"></span>
-        <h4 class="modal-title">Forgot your password</h4>
+        <h4 i18n class="modal-title">Forgot your password</h4>
       </div>
 
       <div class="modal-body">
         <div class="form-group">
-          <label for="forgot-password-email">Email</label>
+          <label i18n for="forgot-password-email">Email</label>
           <input
-            type="email" id="forgot-password-email" placeholder="Email address" required
+            type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required
             [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
           >
         </div>
 
         <div class="form-group inputs">
-          <span class="action-button action-button-cancel" (click)="hideForgotPasswordModal()">
+          <span i18n class="action-button action-button-cancel" (click)="hideForgotPasswordModal()">
             Cancel
           </span>
 
           <input
-            type="submit" value="Send me an email to reset my password" class="action-button-submit"
+            type="submit" i18n-value value="Send me an email to reset my password" class="action-button-submit"
             (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
           >
         </div>

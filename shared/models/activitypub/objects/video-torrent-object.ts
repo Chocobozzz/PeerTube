@@ -26,10 +26,10 @@ export interface VideoTorrentObject {
   support: string
   icon: ActivityIconObject
   url: ActivityUrlObject[]
-  likes?: ActivityPubOrderedCollection<string>
-  dislikes?: ActivityPubOrderedCollection<string>
-  shares?: ActivityPubOrderedCollection<string>
-  comments?: ActivityPubOrderedCollection<string>
+  likes: string
+  dislikes: string
+  shares: string
+  comments: string
   attributedTo: ActivityPubAttributedTo[]
   to?: string[]
   cc?: string[]

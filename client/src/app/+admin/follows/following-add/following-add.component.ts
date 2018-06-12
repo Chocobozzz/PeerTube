@@ -4,6 +4,7 @@ import { NotificationsService } from 'angular2-notifications'
 import { ConfirmService } from '../../../core'
 import { validateHost } from '../../../shared'
 import { FollowService } from '../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-following-add',
@@ -19,7 +20,8 @@ export class FollowingAddComponent {
     private router: Router,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private followService: FollowService
+    private followService: FollowService,
+    private i18n: I18n
   ) {}
 
   httpEnabled () {
@@ -34,7 +36,7 @@ export class FollowingAddComponent {
 
     for (const host of hosts) {
       if (validateHost(host) === false) {
-        newHostsErrors.push(`${host} is not valid`)
+        newHostsErrors.push(this.i18n('{{host}} is not valid', { host }))
       }
     }
 
@@ -48,26 +50,26 @@ export class FollowingAddComponent {
 
     const hosts = this.getNotEmptyHosts()
     if (hosts.length === 0) {
-      this.error = 'You need to specify hosts to follow.'
+      this.error = this.i18n('You need to specify hosts to follow.')
     }
 
     if (!this.isHostsUnique(hosts)) {
-      this.error = 'Hosts need to be unique.'
+      this.error = this.i18n('Hosts need to be unique.')
       return
     }
 
-    const confirmMessage = 'If you confirm, you will send a follow request to:<br /> - ' + hosts.join('<br /> - ')
-    const res = await this.confirmService.confirm(confirmMessage, 'Follow new server(s)')
+    const confirmMessage = this.i18n('If you confirm, you will send a follow request to:<br /> - ') + hosts.join('<br /> - ')
+    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Follow new server(s)'))
     if (res === false) return
 
     this.followService.follow(hosts).subscribe(
       () => {
-        this.notificationsService.success('Success', 'Follow request(s) sent!')
+        this.notificationsService.success(this.i18n('Success'), this.i18n('Follow request(s) sent!'))
 
         setTimeout(() => this.router.navigate([ '/admin/follows/following-list' ]), 500)
       },
 
-      err => this.notificationsService.error('Error', err.message)
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
     )
   }
 
@@ -76,10 +78,8 @@ export class FollowingAddComponent {
   }
 
   private getNotEmptyHosts () {
-    const hosts = this.hostsString
+    return this.hostsString
       .split('\n')
       .filter(host => host && host.length !== 0) // Eject empty hosts
-
-    return hosts
   }
 }

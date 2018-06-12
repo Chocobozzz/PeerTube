@@ -11,8 +11,8 @@
     height: 500px;
 
     @media screen and (max-width: 600px) {
-      height: auto;
-      max-height: calc(100vh - #{$header-height});
+      width: 100vw;
+      height: calc(100vw / 1.7); // 16/9
     }
 
     // VideoJS create an inner video player
@@ -20,6 +20,11 @@
       outline: 0;
       position: relative !important;
     }
+  }
+
+  /deep/ .video-js.vjs-theater-enabled {
+    width: 100%;
+    height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
   }
 }
 
@@ -158,8 +163,8 @@
               }
             }
 
-            &.action-button-share {
-              width: 82px;
+            .icon-text {
+              margin-left: 3px;
             }
 
             &.action-button-like.activated {

@@ -2,10 +2,9 @@ import * as Bluebird from 'bluebird'
 import { map, maxBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
-import { join } from 'path'
+import { extname, join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy,
   AllowNull,
   BeforeDestroy,
   BelongsTo,
@@ -30,9 +29,13 @@ import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
-import { activityPubCollection } from '../../helpers/activitypub'
 import {
-  createTorrentPromise, peertubeTruncate, renamePromise, statPromise, unlinkPromise,
+  copyFilePromise,
+  createTorrentPromise,
+  peertubeTruncate,
+  renamePromise,
+  statPromise,
+  unlinkPromise,
   writeFilePromise
 } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -56,9 +59,11 @@ import {
   CONSTRAINTS_FIELDS,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
+  STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
+  VIDEO_EXT_MIMETYPE,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
@@ -599,6 +604,7 @@ export class VideoModel extends Model<VideoModel> {
           attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
           required: false,
+          // We only want videos shared by this actor
           where: {
             [Sequelize.Op.and]: [
               {
@@ -628,47 +634,18 @@ export class VideoModel extends Model<VideoModel> {
               required: true,
               include: [
                 {
-                  attributes: [ 'id', 'url' ],
+                  attributes: [ 'id', 'url', 'followersUrl' ],
                   model: ActorModel.unscoped(),
                   required: true
                 }
               ]
             },
             {
-              attributes: [ 'id', 'url' ],
+              attributes: [ 'id', 'url', 'followersUrl' ],
               model: ActorModel.unscoped(),
               required: true
             }
           ]
-        },
-        {
-          attributes: [ 'type' ],
-          model: AccountVideoRateModel,
-          required: false,
-          include: [
-            {
-              attributes: [ 'id' ],
-              model: AccountModel.unscoped(),
-              include: [
-                {
-                  attributes: [ 'url' ],
-                  model: ActorModel.unscoped(),
-                  include: [
-                    {
-                      attributes: [ 'host' ],
-                      model: ServerModel,
-                      required: false
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          attributes: [ 'url' ],
-          model: VideoCommentModel,
-          required: false
         },
         VideoFileModel,
         TagModel
@@ -894,26 +871,6 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
-  static loadAndPopulateAll (id: number) {
-    const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ],
-      where: {
-        id
-      }
-    }
-
-    return VideoModel
-      .scope([
-        ScopeNames.WITH_RATES,
-        ScopeNames.WITH_SHARES,
-        ScopeNames.WITH_TAGS,
-        ScopeNames.WITH_FILES,
-        ScopeNames.WITH_ACCOUNT_DETAILS,
-        ScopeNames.WITH_COMMENTS
-      ])
-      .findOne(options)
-  }
-
   static async getStats () {
     const totalLocalVideos = await VideoModel.count({
       where: {
@@ -1022,6 +979,10 @@ export class VideoModel extends Model<VideoModel> {
       this.getThumbnailName(),
       THUMBNAILS_SIZE
     )
+  }
+
+  getTorrentFilePath (videoFile: VideoFileModel) {
+    return join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
   }
 
   getVideoFilePath (videoFile: VideoFileModel) {
@@ -1157,7 +1118,9 @@ export class VideoModel extends Model<VideoModel> {
             magnetUri: this.generateMagnetUri(videoFile, baseUrlHttp, baseUrlWs),
             size: videoFile.size,
             torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
-            fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp)
+            torrentDownloadUrl: this.getTorrentDownloadUrl(videoFile, baseUrlHttp),
+            fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp),
+            fileDownloadUrl: this.getVideoFileDownloadUrl(videoFile, baseUrlHttp)
           } as VideoFile
         })
         .sort((a, b) => {
@@ -1200,30 +1163,11 @@ export class VideoModel extends Model<VideoModel> {
       }
     }
 
-    let likesObject
-    let dislikesObject
-
-    if (Array.isArray(this.AccountVideoRates)) {
-      const res = this.toRatesActivityPubObjects()
-      likesObject = res.likesObject
-      dislikesObject = res.dislikesObject
-    }
-
-    let sharesObject
-    if (Array.isArray(this.VideoShares)) {
-      sharesObject = this.toAnnouncesActivityPubObject()
-    }
-
-    let commentsObject
-    if (Array.isArray(this.VideoComments)) {
-      commentsObject = this.toCommentsActivityPubObject()
-    }
-
     const url = []
     for (const file of this.VideoFiles) {
       url.push({
         type: 'Link',
-        mimeType: 'video/' + file.extname.replace('.', ''),
+        mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
         width: file.resolution,
         size: file.size
@@ -1277,10 +1221,10 @@ export class VideoModel extends Model<VideoModel> {
         height: THUMBNAILS_SIZE.height
       },
       url,
-      likes: likesObject,
-      dislikes: dislikesObject,
-      shares: sharesObject,
-      comments: commentsObject,
+      likes: getVideoLikesActivityPubUrl(this),
+      dislikes: getVideoDislikesActivityPubUrl(this),
+      shares: getVideoSharesActivityPubUrl(this),
+      comments: getVideoCommentsActivityPubUrl(this),
       attributedTo: [
         {
           type: 'Person',
@@ -1292,44 +1236,6 @@ export class VideoModel extends Model<VideoModel> {
         }
       ]
     }
-  }
-
-  toAnnouncesActivityPubObject () {
-    const shares: string[] = []
-
-    for (const videoShare of this.VideoShares) {
-      shares.push(videoShare.url)
-    }
-
-    return activityPubCollection(getVideoSharesActivityPubUrl(this), shares)
-  }
-
-  toCommentsActivityPubObject () {
-    const comments: string[] = []
-
-    for (const videoComment of this.VideoComments) {
-      comments.push(videoComment.url)
-    }
-
-    return activityPubCollection(getVideoCommentsActivityPubUrl(this), comments)
-  }
-
-  toRatesActivityPubObjects () {
-    const likes: string[] = []
-    const dislikes: string[] = []
-
-    for (const rate of this.AccountVideoRates) {
-      if (rate.type === 'like') {
-        likes.push(rate.Account.Actor.url)
-      } else if (rate.type === 'dislike') {
-        dislikes.push(rate.Account.Actor.url)
-      }
-    }
-
-    const likesObject = activityPubCollection(getVideoLikesActivityPubUrl(this), likes)
-    const dislikesObject = activityPubCollection(getVideoDislikesActivityPubUrl(this), dislikes)
-
-    return { likesObject, dislikesObject }
   }
 
   getTruncatedDescription () {
@@ -1411,6 +1317,40 @@ export class VideoModel extends Model<VideoModel> {
     this.VideoFiles.push(newVideoFile)
   }
 
+  async importVideoFile (inputFilePath: string) {
+    let updatedVideoFile = new VideoFileModel({
+      resolution: (await getVideoFileResolution(inputFilePath)).videoFileResolution,
+      extname: extname(inputFilePath),
+      size: (await statPromise(inputFilePath)).size,
+      videoId: this.id
+    })
+
+    const currentVideoFile = this.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
+
+    if (currentVideoFile) {
+      // Remove old file and old torrent
+      await this.removeFile(currentVideoFile)
+      await this.removeTorrent(currentVideoFile)
+      // Remove the old video file from the array
+      this.VideoFiles = this.VideoFiles.filter(f => f !== currentVideoFile)
+
+      // Update the database
+      currentVideoFile.set('extname', updatedVideoFile.extname)
+      currentVideoFile.set('size', updatedVideoFile.size)
+
+      updatedVideoFile = currentVideoFile
+    }
+
+    const outputPath = this.getVideoFilePath(updatedVideoFile)
+    await copyFilePromise(inputFilePath, outputPath)
+
+    await this.createTorrentAndSetInfoHash(updatedVideoFile)
+
+    await updatedVideoFile.save()
+
+    this.VideoFiles.push(updatedVideoFile)
+  }
+
   getOriginalFileResolution () {
     const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
 
@@ -1469,8 +1409,16 @@ export class VideoModel extends Model<VideoModel> {
     return baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
   }
 
+  private getTorrentDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+  }
+
   private getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
     return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+  }
+
+  private getVideoFileDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + this.getVideoFilename(videoFile)
   }
 
   private generateMagnetUri (videoFile: VideoFileModel, baseUrlHttp: string, baseUrlWs: string) {

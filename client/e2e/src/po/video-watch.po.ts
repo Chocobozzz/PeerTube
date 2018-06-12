@@ -1,11 +1,11 @@
-import { by, element, browser } from 'protractor'
+import { browser, by, element } from 'protractor'
 
 export class VideoWatchPage {
-  async goOnVideosList (isIphoneDevice: boolean, isSafari: boolean) {
+  async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
     let url: string
 
-    if (isIphoneDevice === true) {
-      // Local testing is buggy :/
+    // We did not upload a file on a mobile device
+    if (isMobileDevice === true || isSafari === true) {
       url = 'https://peertube2.cpy.re/videos/local'
     } else {
       url = '/videos/recently-added'
@@ -26,8 +26,11 @@ export class VideoWatchPage {
                   .then((texts: any) => texts.map(t => t.trim()))
   }
 
-  waitWatchVideoName (videoName: string) {
+  waitWatchVideoName (videoName: string, isSafari: boolean) {
     const elem = element(by.css('.video-info .video-info-name'))
+
+    if (isSafari) return browser.sleep(5000)
+
     return browser.wait(browser.ExpectedConditions.textToBePresentInElement(elem, videoName))
   }
 
@@ -38,27 +41,28 @@ export class VideoWatchPage {
       .then(seconds => parseInt(seconds, 10))
   }
 
-  async pauseVideo (pauseAfterMs: number, isAutoplay: boolean, isSafari: boolean) {
+  async pauseVideo (isAutoplay: boolean, isMobileDevice: boolean) {
     if (isAutoplay === false) {
       const playButton = element(by.css('.vjs-big-play-button'))
       await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
       await playButton.click()
     }
 
-    if (isSafari === true) {
-      await browser.sleep(1000)
-      await element(by.css('.vjs-play-control')).click()
-    }
-
     await browser.sleep(1000)
     await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
 
-    const el = element(by.css('div.video-js'))
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(el))
+    const videojsEl = element(by.css('div.video-js'))
+    await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
 
-    await browser.sleep(pauseAfterMs)
+    // On Android, we need to click twice on "play" (BrowserStack particularity)
+    if (isMobileDevice) {
+      await browser.sleep(3000)
+      await videojsEl.click()
+    }
 
-    return el.click()
+    await browser.sleep(7000)
+
+    return videojsEl.click()
   }
 
   async clickOnVideo (videoName: string) {
@@ -70,10 +74,13 @@ export class VideoWatchPage {
   }
 
   async clickOnFirstVideo () {
-    const video = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
-    await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
-    const textToReturn = video.getText()
+    const video = element.all(by.css('.videos .video-miniature .video-thumbnail')).first()
+    const videoName = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
 
+    // Don't know why but the expectation fails on Safari
+    await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
+
+    const textToReturn = videoName.getText()
     await video.click()
 
     await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))

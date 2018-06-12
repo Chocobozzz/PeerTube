@@ -2,7 +2,7 @@
 
 <form (ngSubmit)="addFollowing()">
   <div class="form-group">
-    <label for="hosts">1 host (without "http://") per line</label>
+    <label i18n for="hosts">1 host (without "http://") per line</label>
 
     <textarea
       type="text" class="form-control" placeholder="example.com" id="hosts" name="hosts"
@@ -14,9 +14,9 @@
     </div>
   </div>
 
-  <div *ngIf="httpEnabled() === false"  class="alert alert-warning">
+  <div i18n *ngIf="httpEnabled() === false"  class="alert alert-warning">
     It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
   </div>
 
-  <input type="submit" value="Add following" [disabled]="hostsError || !hostsString" class="btn btn-default">
+  <input type="submit" i18n-value value="Add following" [disabled]="hostsError || !hostsString" class="btn btn-default">
 </form>

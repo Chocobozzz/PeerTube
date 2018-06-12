@@ -19,8 +19,8 @@ function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected =
   })
 }
 
-function getAccount (url: string, accountId: number | string, statusCodeExpected = 200) {
-  const path = '/api/v1/accounts/' + accountId
+function getAccount (url: string, accountName: string, statusCodeExpected = 200) {
+  const path = '/api/v1/accounts/' + accountName
 
   return makeGetRequest({
     url,

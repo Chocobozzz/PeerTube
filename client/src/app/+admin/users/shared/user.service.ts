@@ -7,6 +7,7 @@ import { Observable } from 'rxjs'
 import { ResultList, UserCreate, UserUpdate } from '../../../../../../shared'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService, User } from '../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Injectable()
 export class UserService {
@@ -16,9 +17,9 @@ export class UserService {
   constructor (
     private authHttp: HttpClient,
     private restService: RestService,
-    private restExtractor: RestExtractor
-  ) {
-  }
+    private restExtractor: RestExtractor,
+    private i18n: I18n
+  ) { }
 
   addUser (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL, userCreate)
@@ -61,7 +62,7 @@ export class UserService {
   private formatUser (user: User) {
     let videoQuota
     if (user.videoQuota === -1) {
-      videoQuota = 'Unlimited'
+      videoQuota = this.i18n('Unlimited')
     } else {
       videoQuota = this.bytesPipe.transform(user.videoQuota)
     }

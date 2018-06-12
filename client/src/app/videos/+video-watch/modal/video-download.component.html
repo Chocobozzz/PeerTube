@@ -4,7 +4,7 @@
 
       <div class="modal-header">
         <span class="close" aria-hidden="true" (click)="hide()"></span>
-        <h4 class="modal-title">Download video</h4>
+        <h4 i18n class="modal-title">Download video</h4>
       </div>
 
       <div class="modal-body">
@@ -17,22 +17,22 @@
         <div class="download-type">
           <div class="peertube-radio-container">
             <input type="radio" name="download" id="download-torrent" [(ngModel)]="downloadType" value="torrent">
-            <label for="download-torrent">Torrent</label>
+            <label i18n for="download-torrent">Torrent</label>
           </div>
 
           <div class="peertube-radio-container">
             <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
-            <label for="download-direct">Direct download</label>
+            <label i18n for="download-direct">Direct download</label>
           </div>
         </div>
 
         <div class="form-group inputs">
-          <span class="action-button action-button-cancel" (click)="hide()">
+          <span i18n class="action-button action-button-cancel" (click)="hide()">
             Cancel
           </span>
 
           <input
-            type="submit" value="Download" class="action-button-submit"
+            type="submit" i18n-value value="Download" class="action-button-submit"
             (click)="download()"
           >
         </div>

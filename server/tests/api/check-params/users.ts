@@ -279,7 +279,7 @@ describe('Test users API validators', function () {
     it('Should fail without an incorrect input file', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', 'fixtures', 'video_short.mp4')
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
       }
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -287,7 +287,7 @@ describe('Test users API validators', function () {
     it('Should fail with a big file', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -295,7 +295,7 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', 'fixtures', 'avatar.png')
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
       await makeUploadRequest({
         url: server.url,

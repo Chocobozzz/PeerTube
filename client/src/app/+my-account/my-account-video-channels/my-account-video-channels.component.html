@@ -1,7 +1,7 @@
 <div class="video-channels-header">
   <a class="create-button" routerLink="create">
     <span class="icon icon-add"></span>
-    Create another video channel
+    <ng-container i18n>Create another video channel</ng-container>
   </a>
 </div>
 
@@ -12,13 +12,13 @@
     </a>
 
     <div class="video-channel-info">
-      <a [routerLink]="[ '/video-channels', videoChannel.uuid ]" class="video-channel-names" title="Go to the channel">
+      <a [routerLink]="[ '/video-channels', videoChannel.uuid ]" class="video-channel-names" i18n-title title="Go to the channel">
         <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
         <!-- Hide the name for now, because it's an UUID not very friendly -->
         <!--<div class="video-channel-name">{{ videoChannel.name }}</div>-->
       </a>
 
-      <div class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
+      <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
     </div>
 
     <div class="video-channel-buttons">

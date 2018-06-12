@@ -9,6 +9,9 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
+import { tap } from 'rxjs/operators'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-account-videos',
@@ -19,12 +22,13 @@ import { AccountService } from '@app/shared/account/account.service'
   ]
 })
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage = 'Published videos'
+  titlePage: string
   marginContent = false // Disable margin
   currentRoute = '/account/videos'
   loadOnInit = false
 
   private account: Account
+  private accountSub: Subscription
 
   constructor (
     protected router: Router,
@@ -33,34 +37,45 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected i18n: I18n,
     private accountService: AccountService,
     private videoService: VideoService
   ) {
     super()
+
+    this.titlePage = this.i18n('Published videos')
   }
 
   ngOnInit () {
     super.ngOnInit()
 
     // Parent get the account for us
-    this.accountService.accountLoaded
+    this.accountSub = this.accountService.accountLoaded
       .subscribe(account => {
         this.account = account
-        this.currentRoute = '/account/' + this.account.id + '/videos'
+        this.currentRoute = '/account/' + this.account.nameWithHost + '/videos'
 
-        this.loadMoreVideos(this.pagination.currentPage)
+        this.reloadVideos()
         this.generateSyndicationList()
       })
   }
 
   ngOnDestroy () {
+    if (this.accountSub) this.accountSub.unsubscribe()
+
     super.ngOnDestroy()
   }
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getAccountVideos(this.account, newPagination, this.sort)
+    return this.videoService
+               .getAccountVideos(this.account, newPagination, this.sort)
+               .pipe(
+                 tap(({ totalVideos }) => {
+                   this.titlePage = this.i18n('Published {{totalVideos}} videos', { totalVideos })
+                 })
+               )
   }
 
   generateSyndicationList () {

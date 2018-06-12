@@ -11,8 +11,31 @@ import { JobQueue } from '../job-queue'
 
 export type VideoFilePayload = {
   videoUUID: string
-  resolution?: VideoResolution,
+  isNewVideo: boolean
+  resolution?: VideoResolution
   isPortraitMode?: boolean
+}
+
+export type VideoFileImportPayload = {
+  videoUUID: string,
+  filePath: string
+}
+
+async function processVideoFileImport (job: kue.Job) {
+  const payload = job.data as VideoFileImportPayload
+  logger.info('Processing video file import in job %d.', job.id)
+
+  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  // No video, maybe deleted?
+  if (!video) {
+    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
+    return undefined
+  }
+
+  await video.importVideoFile(payload.filePath)
+
+  await onVideoFileTranscoderOrImportSuccess(video)
+  return video
 }
 
 async function processVideoFile (job: kue.Job) {
@@ -29,16 +52,16 @@ async function processVideoFile (job: kue.Job) {
   // Transcoding in other resolution
   if (payload.resolution) {
     await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode)
-    await onVideoFileTranscoderSuccess(video)
+    await onVideoFileTranscoderOrImportSuccess(video)
   } else {
     await video.optimizeOriginalVideofile()
-    await onVideoFileOptimizerSuccess(video)
+    await onVideoFileOptimizerSuccess(video, payload.isNewVideo)
   }
 
   return video
 }
 
-async function onVideoFileTranscoderSuccess (video: VideoModel) {
+async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
   if (video === undefined) return undefined
 
   // Maybe the video changed in database, refresh it
@@ -53,7 +76,7 @@ async function onVideoFileTranscoderSuccess (video: VideoModel) {
   return undefined
 }
 
-async function onVideoFileOptimizerSuccess (video: VideoModel) {
+async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boolean) {
   if (video === undefined) return undefined
 
   // Maybe the video changed in database, refresh it
@@ -62,11 +85,15 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
   if (!videoDatabase) return undefined
 
   if (video.privacy !== VideoPrivacy.PRIVATE) {
-    // Now we'll add the video's meta data to our followers
-    await sequelizeTypescript.transaction(async t => {
-      await sendCreateVideo(video, t)
-      await shareVideoByServerAndChannel(video, t)
-    })
+    if (isNewVideo !== false) {
+      // Now we'll add the video's meta data to our followers
+      await sequelizeTypescript.transaction(async t => {
+        await sendCreateVideo(video, t)
+        await shareVideoByServerAndChannel(video, t)
+      })
+    } else {
+      await sendUpdateVideo(video, undefined)
+    }
   }
 
   const { videoFileResolution } = await videoDatabase.getOriginalFileResolution()
@@ -84,7 +111,8 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
     for (const resolution of resolutionsEnabled) {
       const dataInput = {
         videoUUID: videoDatabase.uuid,
-        resolution
+        resolution,
+        isNewVideo
       }
 
       const p = JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
@@ -103,5 +131,6 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoFile
+  processVideoFile,
+  processVideoFileImport
 }

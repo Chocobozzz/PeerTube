@@ -267,7 +267,8 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   if (CONFIG.TRANSCODING.ENABLED === true) {
     // Put uuid because we don't have id auto incremented for now
     const dataInput = {
-      videoUUID: videoCreated.uuid
+      videoUUID: videoCreated.uuid,
+      isNewVideo: true
     }
 
     await JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })

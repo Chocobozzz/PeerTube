@@ -1,5 +1,5 @@
 <div class="admin-sub-header">
-  <div class="form-sub-title">Blacklisted videos</div>
+  <div i18n class="form-sub-title">Blacklisted videos</div>
 </div>
 
 <p-table
@@ -8,12 +8,12 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
-      <th>Description</th>
-      <th pSortableColumn="views">Views <p-sortIcon field="views"></p-sortIcon></th>
-      <th>NSFW</th>
-      <th>UUID</th>
-      <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+      <th i18n>Description</th>
+      <th i18n pSortableColumn="views">Views <p-sortIcon field="views"></p-sortIcon></th>
+      <th i18n>NSFW</th>
+      <th i18n>UUID</th>
+      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th></th>
     </tr>
   </ng-template>
@@ -27,7 +27,7 @@
       <td>{{ videoBlacklist.uuid }}</td>
       <td>{{ videoBlacklist.createdAt }}</td>
       <td class="action-cell">
-        <my-delete-button label="Unblacklist" (click)="removeVideoFromBlacklist(videoBlacklist)"></my-delete-button>
+        <my-delete-button i18n-label label="Unblacklist" (click)="removeVideoFromBlacklist(videoBlacklist)"></my-delete-button>
       </td>
     </tr>
   </ng-template>

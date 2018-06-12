@@ -10,6 +10,7 @@ import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { VideoSortField } from './sort-field.type'
 import { Video } from './video.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private static LINES_PER_PAGE = 4
@@ -40,6 +41,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected abstract authService: AuthService
   protected abstract router: Router
   protected abstract route: ActivatedRoute
+  protected abstract i18n: I18n
   protected abstract location: Location
   protected abstract currentRoute: string
   abstract titlePage: string
@@ -124,7 +126,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
       },
       error => {
         this.loadingPage[page] = false
-        this.notificationsService.error('Error', error.message)
+        this.notificationsService.error(this.i18n('Error'), error.message)
       }
     )
   }

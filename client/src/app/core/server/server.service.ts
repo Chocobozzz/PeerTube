@@ -1,17 +1,20 @@
-import { tap } from 'rxjs/operators'
+import { map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
-import { ReplaySubject } from 'rxjs'
-import { ServerConfig } from '../../../../../shared'
+import { Observable, ReplaySubject, of } from 'rxjs'
+import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
+import { isDefaultLocale } from '../../../../../shared/models/i18n'
+import { getDevLocale, isOnDevLocale, peertubeTranslate } from '@app/shared/i18n/i18n-utils'
 
 @Injectable()
 export class ServerService {
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
   configLoaded = new ReplaySubject<boolean>(1)
@@ -19,6 +22,7 @@ export class ServerService {
   videoCategoriesLoaded = new ReplaySubject<boolean>(1)
   videoLicencesLoaded = new ReplaySubject<boolean>(1)
   videoLanguagesLoaded = new ReplaySubject<boolean>(1)
+  localeObservable: Observable<any>
 
   private config: ServerConfig = {
     instance: {
@@ -64,7 +68,11 @@ export class ServerService {
   private videoLanguages: Array<VideoConstant<string>> = []
   private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
 
-  constructor (private http: HttpClient) {
+  constructor (
+    private http: HttpClient,
+    @Inject(LOCALE_ID) private localeId: string
+  ) {
+    this.loadServerLocale()
     this.loadConfigLocally()
   }
 
@@ -124,26 +132,48 @@ export class ServerService {
     notifier: ReplaySubject<boolean>,
     sort = false
   ) {
-    return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
-       .subscribe(data => {
-         Object.keys(data)
-               .forEach(dataKey => {
-                 hashToPopulate.push({
-                   id: dataKey,
-                   label: data[dataKey]
-                 })
-               })
+    this.localeObservable
+        .pipe(
+          switchMap(translations => {
+            return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
+                       .pipe(map(data => ({ data, translations })))
+          })
+        )
+        .subscribe(({ data, translations }) => {
+          Object.keys(data)
+                .forEach(dataKey => {
+                  const label = data[ dataKey ]
 
-         if (sort === true) {
-           hashToPopulate.sort((a, b) => {
-             if (a.label < b.label) return -1
-             if (a.label === b.label) return 0
-             return 1
-           })
-         }
+                  hashToPopulate.push({
+                    id: dataKey,
+                    label: peertubeTranslate(label, translations)
+                  })
+                })
 
-         notifier.next(true)
-       })
+          if (sort === true) {
+            hashToPopulate.sort((a, b) => {
+              if (a.label < b.label) return -1
+              if (a.label === b.label) return 0
+              return 1
+            })
+          }
+
+          notifier.next(true)
+        })
+  }
+
+  private loadServerLocale () {
+    const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
+
+    // Default locale, nothing to translate
+    if (isDefaultLocale(completeLocale)) {
+      this.localeObservable = of({}).pipe(share())
+      return
+    }
+
+    this.localeObservable = this.http
+                                  .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
+                                  .pipe(share())
   }
 
   private saveConfigLocally (config: ServerConfig) {

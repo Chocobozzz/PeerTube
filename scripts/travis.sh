@@ -9,7 +9,8 @@ fi
 
 if [ "$1" = "misc" ]; then
     npm run build
-    mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/client.ts server/tests/activitypub.ts
+    mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/client.ts server/tests/activitypub.ts \
+        server/tests/feeds/feeds.ts
 elif [ "$1" = "api" ]; then
     npm run build:server
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index.ts

@@ -7,6 +7,7 @@ import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
 import { RestExtractor } from '../../../shared/rest/rest-extractor.service'
 import { JobService } from '../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-jobs-list',
@@ -27,7 +28,8 @@ export class JobsListComponent extends RestTable implements OnInit {
   constructor (
     private notificationsService: NotificationsService,
     private restExtractor: RestExtractor,
-    private jobsService: JobService
+    private jobsService: JobService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -51,7 +53,7 @@ export class JobsListComponent extends RestTable implements OnInit {
           this.totalRecords = resultList.total
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 

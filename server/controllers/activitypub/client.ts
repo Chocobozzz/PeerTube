@@ -1,11 +1,10 @@
 // Intercept ActivityPub client requests
 import * as express from 'express'
-import { VideoPrivacy } from '../../../shared/models/videos'
+import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
-import { pageToStartAndCount } from '../../helpers/core-utils'
-import { ACTIVITY_PUB, CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
+import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
 import { buildVideoAnnounce } from '../../lib/activitypub/send'
-import { audiencify, getAudience } from '../../lib/activitypub/send/misc'
+import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { createActivityData } from '../../lib/activitypub/send/send-create'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
@@ -18,6 +17,14 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
 import { cacheRoute } from '../../middlewares/cache'
+import { activityPubResponse } from './utils'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
+import {
+  getVideoCommentsActivityPubUrl,
+  getVideoDislikesActivityPubUrl,
+  getVideoLikesActivityPubUrl,
+  getVideoSharesActivityPubUrl
+} from '../../lib/activitypub'
 
 const activityPubClientRouter = express.Router()
 
@@ -116,10 +123,8 @@ async function accountFollowingController (req: express.Request, res: express.Re
 async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
 
-  // We need more attributes
-  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const audience = await getAudience(video.VideoChannel.Account.Actor, undefined, video.privacy === VideoPrivacy.PUBLIC)
-  const videoObject = audiencify(videoAll.toActivityPubObject(), audience)
+  const videoObject = audiencify(video.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
     const data = await createActivityData(video.url, video.VideoChannel.Account.Actor, videoObject, undefined, audience)
@@ -139,41 +144,45 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 async function videoAnnouncesController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
 
-  // We need more attributes
-  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
-  const object = videoAll.toAnnouncesActivityPubObject()
+  const handler = async (start: number, count: number) => {
+    const result = await VideoShareModel.listAndCountByVideoId(video.id, start, count)
+    return {
+      total: result.count,
+      data: result.rows.map(r => r.url)
+    }
+  }
+  const json = await activityPubCollectionPagination(getVideoSharesActivityPubUrl(video), handler, req.query.page)
 
-  return activityPubResponse(activityPubContextify(object), res)
+  return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoLikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
+  const json = await videoRates(req, 'like', video, getVideoLikesActivityPubUrl(video))
 
-  // We need more attributes
-  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
-  const { likesObject } = videoAll.toRatesActivityPubObjects()
-
-  return activityPubResponse(activityPubContextify(likesObject), res)
+  return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
+  const json = await videoRates(req, 'dislike', video, getVideoDislikesActivityPubUrl(video))
 
-  // We need more attributes
-  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
-  const { dislikesObject } = videoAll.toRatesActivityPubObjects()
-
-  return activityPubResponse(activityPubContextify(dislikesObject), res)
+  return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
 
-  // We need more attributes
-  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
-  const commentsObject = videoAll.toCommentsActivityPubObject()
+  const handler = async (start: number, count: number) => {
+    const result = await VideoCommentModel.listAndCountByVideoId(video.id, start, count)
+    return {
+      total: result.count,
+      data: result.rows.map(r => r.url)
+    }
+  }
+  const json = await activityPubCollectionPagination(getVideoCommentsActivityPubUrl(video), handler, req.query.page)
 
-  return activityPubResponse(activityPubContextify(commentsObject), res)
+  return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -216,23 +225,28 @@ async function videoCommentController (req: express.Request, res: express.Respon
 // ---------------------------------------------------------------------------
 
 async function actorFollowing (req: express.Request, actor: ActorModel) {
-  const page = req.query.page || 1
-  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+  const handler = (start: number, count: number) => {
+    return ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
+  }
 
-  const result = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, handler, req.query.page)
 }
 
 async function actorFollowers (req: express.Request, actor: ActorModel) {
-  const page = req.query.page || 1
-  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+  const handler = (start: number, count: number) => {
+    return ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
+  }
 
-  const result = await ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, handler, req.query.page)
 }
 
-function activityPubResponse (data: any, res: express.Response) {
-  return res.type('application/activity+json; charset=utf-8')
-    .json(data)
-    .end()
+function videoRates (req: express.Request, rateType: VideoRateType, video: VideoModel, url: string) {
+  const handler = async (start: number, count: number) => {
+    const result = await AccountVideoRateModel.listAndCountAccountUrlsByVideoId(rateType, video.id, start, count)
+    return {
+      total: result.count,
+      data: result.rows.map(r => r.Account.Actor.url)
+    }
+  }
+  return activityPubCollectionPagination(url, handler, req.query.page)
 }

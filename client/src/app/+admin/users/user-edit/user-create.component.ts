@@ -1,20 +1,13 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
 import { UserService } from '../shared'
-import {
-  USER_USERNAME,
-  USER_EMAIL,
-  USER_PASSWORD,
-  USER_VIDEO_QUOTA,
-  USER_ROLE
-} from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-user-create',
@@ -24,46 +17,31 @@ import { UserEdit } from './user-edit'
 export class UserCreateComponent extends UserEdit implements OnInit {
   error: string
 
-  form: FormGroup
-  formErrors = {
-    'username': '',
-    'email': '',
-    'password': '',
-    'role': '',
-    'videoQuota': ''
-  }
-  validationMessages = {
-    'username': USER_USERNAME.MESSAGES,
-    'email': USER_EMAIL.MESSAGES,
-    'password': USER_PASSWORD.MESSAGES,
-    'role': USER_ROLE.MESSAGES,
-    'videoQuota': USER_VIDEO_QUOTA.MESSAGES
-  }
-
   constructor (
     protected serverService: ServerService,
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      username: [ '', USER_USERNAME.VALIDATORS ],
-      email:    [ '', USER_EMAIL.VALIDATORS ],
-      password: [ '', USER_PASSWORD.VALIDATORS ],
-      role: [ UserRole.USER, USER_ROLE.VALIDATORS ],
-      videoQuota: [ '-1', USER_VIDEO_QUOTA.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    const defaultValues = {
+      role: UserRole.USER.toString(),
+      videoQuota: '-1'
+    }
+
+    this.buildForm({
+      username: this.userValidatorsService.USER_USERNAME,
+      email: this.userValidatorsService.USER_EMAIL,
+      password: this.userValidatorsService.USER_PASSWORD,
+      role: this.userValidatorsService.USER_ROLE,
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
+    }, defaultValues)
   }
 
   formValidated () {
@@ -76,7 +54,10 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     this.userService.addUser(userCreate).subscribe(
       () => {
-        this.notificationsService.success('Success', `User ${userCreate.username} created.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('User {{username}} created.', { username: userCreate.username })
+        )
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -89,6 +70,6 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   }
 
   getFormButtonTitle () {
-    return 'Create user'
+    return this.i18n('Create user')
   }
 }

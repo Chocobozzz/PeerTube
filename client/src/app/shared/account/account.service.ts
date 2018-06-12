@@ -18,7 +18,7 @@ export class AccountService {
     private restExtractor: RestExtractor
   ) {}
 
-  getAccount (id: number): Observable<Account> {
+  getAccount (id: number | string): Observable<Account> {
     return this.authHttp.get<ServerAccount>(AccountService.BASE_ACCOUNT_URL + id)
                .pipe(
                  map(accountHash => new Account(accountHash)),

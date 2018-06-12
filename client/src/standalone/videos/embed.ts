@@ -14,14 +14,13 @@ import 'core-js/es6/regexp'
 import 'core-js/es6/map'
 import 'core-js/es6/weak-map'
 import 'core-js/es6/set'
-
 // For google bot that uses Chrome 41 and does not understand fetch
 import 'whatwg-fetch'
 
 import * as videojs from 'video.js'
 
 import { VideoDetails } from '../../../../shared'
-import { getVideojsOptions } from '../../assets/player/peertube-player'
+import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
 
 function getVideoUrl (id: string) {
   return window.location.origin + '/api/v1/videos/' + id
@@ -59,9 +58,11 @@ function videoFetchError (videoElement: HTMLVideoElement) {
 }
 
 const urlParts = window.location.href.split('/')
-const videoId = urlParts[urlParts.length - 1]
+const lastPart = urlParts[urlParts.length - 1]
+const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
 
-loadVideoInfo(videoId)
+loadLocale(window.location.origin, videojs, navigator.language)
+  .then(() => loadVideoInfo(videoId))
   .then(async response => {
     const videoContainerId = 'video-container'
     const videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
@@ -98,15 +99,18 @@ loadVideoInfo(videoId)
       enableHotkeys: true,
       peertubeLink: true,
       poster: window.location.origin + videoInfo.previewPath,
-      startTime
+      startTime,
+      theaterMode: false
     })
     videojs(videoContainerId, videojsOptions, function () {
       const player = this
 
       player.dock({
         title: videoInfo.name,
-        description: 'Uses P2P, others may know you are watching this video.'
+        description: player.localize('Uses P2P, others may know you are watching this video.')
       })
+
+      addContextMenu(player, window.location.origin + videoInfo.embedPath)
     })
   })
   .catch(err => console.error(err))

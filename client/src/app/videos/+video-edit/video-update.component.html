@@ -1,5 +1,5 @@
 <div class="margin-content">
-  <div class="title-page title-page-single">
+  <div i18n class="title-page title-page-single">
     Update {{ video?.name }}
   </div>
 
@@ -13,7 +13,7 @@
     <div class="submit-container">
       <div class="submit-button" (click)="update()" [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true }">
         <span class="icon icon-validate"></span>
-        <input type="button" value="Update" />
+        <input type="button" i18n-value value="Update" />
       </div>
     </div>
   </form>

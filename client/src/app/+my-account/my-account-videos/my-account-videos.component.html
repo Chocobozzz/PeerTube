@@ -1,4 +1,4 @@
-<div *ngIf="pagination.totalItems === 0">No results.</div>
+<div i18n *ngIf="pagination.totalItems === 0">No results.</div>
 
 <div
   myInfiniteScroller
@@ -17,18 +17,18 @@
 
       <div class="video-info">
         <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-        <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+        <span i18n class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
         <div class="video-info-private">{{ video.privacy.label }}</div>
       </div>
 
       <!-- Display only once -->
       <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0 && j === 0">
         <div class="action-selection-mode-child">
-          <span class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
+          <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
             Cancel
           </span>
 
-          <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+          <span i18n class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
             <span class="icon icon-delete-white"></span>
             Delete
           </span>

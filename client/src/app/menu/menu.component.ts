@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { UserRight } from '../../../../shared/models/users/user-right.enum'
-import { AuthService, AuthStatus, ServerService } from '../core'
+import { AuthService, AuthStatus, RedirectService, ServerService } from '../core'
 import { User } from '../shared/users/user.model'
 
 @Component({
@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
   constructor (
     private authService: AuthService,
     private serverService: ServerService,
-    private router: Router
+    private redirectService: RedirectService
   ) {}
 
   ngOnInit () {
@@ -87,7 +87,7 @@ export class MenuComponent implements OnInit {
 
     this.authService.logout()
     // Redirect to home page
-    this.router.navigate(['/videos/list'])
+    this.redirectService.redirectToHomepage()
   }
 
   private computeIsUserHasAdminAccess () {

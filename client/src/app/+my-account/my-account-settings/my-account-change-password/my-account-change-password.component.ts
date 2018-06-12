@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
-import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
+import { FormReactive, UserService } from '../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-account-change-password',
@@ -11,35 +13,21 @@ import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string = null
 
-  form: FormGroup
-  formErrors = {
-    'new-password': '',
-    'new-confirmed-password': ''
-  }
-  validationMessages = {
-    'new-password': USER_PASSWORD.MESSAGES,
-    'new-confirmed-password': USER_PASSWORD.MESSAGES
-  }
-
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      'new-password': [ '', USER_PASSWORD.VALIDATORS ],
-      'new-confirmed-password': [ '', USER_PASSWORD.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({
+      'new-password': this.userValidatorsService.USER_PASSWORD,
+      'new-confirmed-password': this.userValidatorsService.USER_PASSWORD
+    })
   }
 
   changePassword () {
@@ -49,12 +37,12 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     this.error = null
 
     if (newPassword !== newConfirmedPassword) {
-      this.error = 'The new password and the confirmed password do not correspond.'
+      this.error = this.i18n('The new password and the confirmed password do not correspond.')
       return
     }
 
     this.userService.changePassword(newPassword).subscribe(
-      () => this.notificationsService.success('Success', 'Password updated.'),
+      () => this.notificationsService.success(this.i18n('Success'), this.i18n('Password updated.')),
 
       err => this.error = err.message
     )

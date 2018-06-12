@@ -1,3 +1,6 @@
+import { is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
+import { VideoFile } from '../../../../shared/models/videos'
+
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
@@ -48,12 +51,23 @@ function getAverageBandwidth () {
   return undefined
 }
 
+function getStoredTheater () {
+  const value = getLocalStorage('theater-enabled')
+  if (value !== null && value !== undefined) return value === 'true'
+
+  return undefined
+}
+
 function saveVolumeInStore (value: number) {
   return setLocalStorage('volume', value.toString())
 }
 
 function saveMuteInStore (value: boolean) {
   return setLocalStorage('mute', value.toString())
+}
+
+function saveTheaterInStore (enabled: boolean) {
+  return setLocalStorage('theater-enabled', enabled.toString())
 }
 
 function saveAverageBandwidth (value: number) {
@@ -64,14 +78,75 @@ function isMobile () {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
+function buildVideoLink (time?: number) {
+  let href = window.location.href.replace('/embed/', '/watch/')
+  if (time) {
+    const timeInt = Math.floor(time)
+
+    if (window.location.search) href += '&start=' + timeInt
+    else href += '?start=' + timeInt
+  }
+
+  return href
+}
+
+function buildVideoEmbed (embedUrl: string) {
+  return '<iframe width="560" height="315" ' +
+    'sandbox="allow-same-origin allow-scripts" ' +
+    'src="' + embedUrl + '" ' +
+    'frameborder="0" allowfullscreen>' +
+    '</iframe>'
+}
+
+function copyToClipboard (text: string) {
+  const el = document.createElement('textarea')
+  el.value = text
+  el.setAttribute('readonly', '')
+  el.style.position = 'absolute'
+  el.style.left = '-9999px'
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el)
+}
+
+function videoFileMaxByResolution (files: VideoFile[]) {
+  let max = files[0]
+
+  for (let i = 1; i < files.length; i++) {
+    const file = files[i]
+    if (max.resolution.id < file.resolution.id) max = file
+  }
+
+  return max
+}
+
+function videoFileMinByResolution (files: VideoFile[]) {
+  let min = files[0]
+
+  for (let i = 1; i < files.length; i++) {
+    const file = files[i]
+    if (min.resolution.id > file.resolution.id) min = file
+  }
+
+  return min
+}
+
 export {
   toTitleCase,
+  buildVideoLink,
   getStoredVolume,
   saveVolumeInStore,
   saveAverageBandwidth,
   getAverageBandwidth,
   saveMuteInStore,
+  buildVideoEmbed,
   getStoredMute,
+  videoFileMaxByResolution,
+  videoFileMinByResolution,
+  copyToClipboard,
+  getStoredTheater,
+  saveTheaterInStore,
   isMobile,
   bytes
 }

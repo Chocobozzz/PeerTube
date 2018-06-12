@@ -1,11 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
+.form-group:first-child {
+  margin-bottom: 15px;
+}
+
 input[type=text] {
   @include peertube-input-text(340px);
 
   display: block;
-  margin-bottom: 15px;
 }
 
 textarea {

@@ -7,6 +7,7 @@ import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
+import { invert } from 'lodash'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -38,7 +39,7 @@ const SORTABLE_COLUMNS = {
 }
 
 const OAUTH_LIFETIME = {
-  ACCESS_TOKEN: 3600 * 4, // 4 hours
+  ACCESS_TOKEN: 3600 * 24, // 1 day, for upload
   REFRESH_TOKEN: 1209600 // 2 weeks
 }
 
@@ -74,6 +75,7 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
   'activitypub-follow': 5,
+  'video-file-import': 1,
   'video-file': 1,
   'email': 5
 }
@@ -82,6 +84,7 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
   'activitypub-follow': 3,
+  'video-file-import': 1,
   'video-file': 1,
   'email': 5
 }
@@ -328,6 +331,7 @@ const VIDEO_MIMETYPE_EXT = {
   'video/ogg': '.ogv',
   'video/mp4': '.mp4'
 }
+const VIDEO_EXT_MIMETYPE = invert(VIDEO_MIMETYPE_EXT)
 
 const IMAGE_MIMETYPE_EXT = {
   'image/png': '.png',
@@ -388,6 +392,10 @@ const STATIC_PATHS = {
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   AVATARS: '/static/avatars/'
+}
+const STATIC_DOWNLOAD_PATHS = {
+  TORRENTS: '/download/torrents/',
+  VIDEOS: '/download/videos/'
 }
 
 // Cache control
@@ -493,9 +501,12 @@ export {
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
+  STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
+  VIDEO_EXT_MIMETYPE,
   JOB_COMPLETED_LIFETIME,
-  VIDEO_VIEW_LIFETIME
+  VIDEO_VIEW_LIFETIME,
+  buildLanguages
 }
 
 // ---------------------------------------------------------------------------

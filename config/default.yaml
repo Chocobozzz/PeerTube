@@ -1,3 +1,5 @@
+# /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
+
 listen:
   hostname: '127.0.0.1'
   port: 9000
@@ -60,7 +62,7 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
-  filters: 
+  filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []
       blacklist: []
@@ -72,11 +74,11 @@ user:
 
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
-# Uses a lot of CPU and increases storage!
+# Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
   threads: 1
-  resolutions: # Only created if the original video has a higher resolution
+  resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
     360p: false
     480p: false
@@ -103,7 +105,7 @@ instance:
 services:
   # Cards configuration to format video in Twitter
   twitter:
-    username: '@Chocobozzz' # The Twitter @username the card should be attributed to
+    username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
     # If true, a video player will be embedded in the Twitter feed on PeerTube video share
     # If false, we use an image link card that will redirect on your PeerTube instance
     # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted

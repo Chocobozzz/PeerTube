@@ -8,7 +8,7 @@
         (change)="fileChange($event)"
       />
     </div>
-    <div class="image-constraints">(extensions: {{ videoImageExtensions }}, max size: {{ maxVideoImageSize | bytes }})</div>
+    <div i18n class="image-constraints">(extensions: {{ videoImageExtensions }}, max size: {{ maxVideoImageSize | bytes }})</div>
   </div>
 
   <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" />

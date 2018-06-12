@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-videos-search',
@@ -15,7 +16,7 @@ import { VideoService } from '../../shared/video/video.service'
   templateUrl: '../../shared/video/abstract-video-list.html'
 })
 export class VideoSearchComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage = 'Search'
+  titlePage: string
   currentRoute = '/videos/search'
   loadOnInit = false
 
@@ -24,15 +25,19 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   }
   private subActivatedRoute: Subscription
 
-  constructor (protected router: Router,
-               protected route: ActivatedRoute,
-               protected notificationsService: NotificationsService,
-               protected authService: AuthService,
-               protected location: Location,
-               private videoService: VideoService,
-               private redirectService: RedirectService
+  constructor (
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected notificationsService: NotificationsService,
+    protected authService: AuthService,
+    protected location: Location,
+    protected i18n: I18n,
+    private videoService: VideoService,
+    private redirectService: RedirectService
   ) {
     super()
+
+    this.titlePage = i18n('Search')
   }
 
   ngOnInit () {

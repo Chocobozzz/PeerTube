@@ -18,7 +18,7 @@ import {
 import { isViewActivityValid } from './view'
 
 function isRootActivityValid (activity: any) {
-  return Array.isArray(activity['@context']) &&
+  return Array.isArray(activity['@context']) && (
     (
       (activity.type === 'Collection' || activity.type === 'OrderedCollection') &&
       validator.isInt(activity.totalItems, { min: 0 }) &&
@@ -28,6 +28,7 @@ function isRootActivityValid (activity: any) {
       isActivityPubUrlValid(activity.id) &&
       (isActivityPubUrlValid(activity.actor) || isActivityPubUrlValid(activity.actor.id))
     )
+  )
 }
 
 const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean } = {

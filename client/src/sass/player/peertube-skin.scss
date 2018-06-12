@@ -1,5 +1,6 @@
 @import '_variables';
 @import '_mixins';
+@import './_player-variables';
 
 @mixin big-play-button-triangle-size($triangle-size) {
   width: $triangle-size;
@@ -7,19 +8,6 @@
   top: calc(50% - #{$triangle-size / 2});
   left: calc(53% - #{($triangle-size / 2)});
 }
-
-$primary-foreground-color: #fff;
-$primary-foreground-opacity: 0.9;
-$primary-foreground-opacity-hover: 1;
-$primary-background-color: #000;
-
-$font-size: 13px;
-$control-bar-height: 34px;
-
-$slider-bg-color: lighten($primary-background-color, 33%);
-
-$setting-transition-duration: 0.15s;
-$setting-transition-easing: ease-out;
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
@@ -87,7 +75,7 @@ $setting-transition-easing: ease-out;
       @include big-play-button-triangle-size(45px);
 
       content: '';
-      background-image: url('../assets/player/images/big-play-button.svg');
+      background-image: url('#{$assets-path}/player/images/big-play-button.svg');
     }
 
     &:hover {
@@ -128,39 +116,6 @@ $setting-transition-easing: ease-out;
     background-color: rgba($primary-background-color, 0.5);
   }
 
-  .vjs-slider {
-    background-color: rgba(255, 255, 255, .3);
-    border-radius: 2px;
-    height: 5px;
-
-    .vjs-slider-bar {
-      background: $primary-foreground-color;
-    }
-  }
-
-  .vjs-play-progress {
-
-    &::before {
-      top: -0.3em;
-
-      &:hover {
-        top: -0.372em;
-      }
-    }
-
-    .vjs-time-tooltip {
-      display: none;
-    }
-  }
-
-  .vjs-load-progress {
-    background: rgba($slider-bg-color, 0.5);
-
-    div {
-      background: rgba($slider-bg-color, 0.75);
-    }
-  }
-
   .vjs-poster {
     outline: none; /* Remove Blue Outline on Click*/
     outline: 0;
@@ -168,6 +123,9 @@ $setting-transition-easing: ease-out;
 
   .vjs-control-bar {
     height: $control-bar-height;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+    box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 
     .vjs-progress-control,
     .vjs-play-control,
@@ -177,6 +135,7 @@ $setting-transition-easing: ease-out;
     .vjs-resolution-control,
     .vjs-fullscreen-control,
     .vjs-peertube-link,
+    .vjs-theater-control,
     .vjs-settings
     {
       color: $primary-foreground-color !important;
@@ -196,27 +155,66 @@ $setting-transition-easing: ease-out;
     }
 
     .vjs-progress-control {
-      bottom: 34px;
-      width: 100%;
       position: absolute;
-      height: 5px;
+      z-index: 100; // On top of the progress bar
+      bottom: 29px;
+      width: calc(100% - (2 * #{$progress-margin}));
+      margin-left: $progress-margin;
+      height: 14px;
 
-      .vjs-progress-holder {
+      .vjs-slider {
         margin: 0;
         border-radius: 0;
+        background-color: rgba(255, 255, 255, .2);
+        height: 3px;
+        transition: none;
+
+        .vjs-play-progress {
+          background: $primary-foreground-color;
+
+          // Not display the circle if the progress is not hovered
+          &::before {
+            opacity: 0;
+            transition: opacity 0.1s ease;
+            font-size: 14px;
+
+            top: -0.3em;
+          }
+
+          .vjs-time-tooltip {
+            display: none;
+          }
+        }
+
+        .vjs-load-progress {
+          &, & div {
+            background: rgba(255, 255, 255, .2);
+          }
+        }
       }
     }
+
+    .vjs-progress-control:hover .vjs-slider,
+    .vjs-slider.vjs-sliding {
+      height: 5px;
+
+      .vjs-play-progress::before {
+        opacity: 1;
+      }
+    }
+
 
     .vjs-play-control {
       @include disable-outline;
 
       cursor: pointer;
       font-size: $font-size;
-      padding: 0 17px;
       margin-right: 5px;
     }
 
     .vjs-time-control {
+      line-height: inherit;
+
       &.vjs-current-time {
         font-size: $font-size;
         display: inline-block;
@@ -279,11 +277,11 @@ $setting-transition-easing: ease-out;
         top: -1px;
 
         &.icon-download {
-          background-image: url('../assets/player/images/arrow-down.svg');
+          background-image: url('#{$assets-path}/player/images/arrow-down.svg');
         }
 
         &.icon-upload {
-          background-image: url('../assets/player/images/arrow-up.svg');
+          background-image: url('#{$assets-path}/player/images/arrow-up.svg');
         }
       }
     }
@@ -314,7 +312,7 @@ $setting-transition-easing: ease-out;
         width: 22px;
         height: 22px;
         vertical-align: middle;
-        background: url('../assets/player/images/volume.svg') no-repeat;
+        background: url('#{$assets-path}/player/images/volume.svg') no-repeat;
         background-size: contain;
 
         &::before {
@@ -323,7 +321,7 @@ $setting-transition-easing: ease-out;
       }
 
       &.vjs-vol-0 .vjs-icon-placeholder {
-        background: url('../assets/player/images/volume-mute.svg') no-repeat;
+        background: url('#{$assets-path}/player/images/volume-mute.svg') no-repeat;
         background-size: contain;
       }
     }
@@ -397,17 +395,38 @@ $setting-transition-easing: ease-out;
       padding: 0 5px;
     }
 
-    .vjs-fullscreen-control {
+    .vjs-theater-control {
       @include disable-outline;
 
       width: 37px;
+      margin-right: 1px;
 
       .vjs-icon-placeholder {
         display: inline-block;
         width: 22px;
         height: 22px;
         vertical-align: middle;
-        background: url('../assets/player/images/fullscreen.svg') no-repeat;
+        background: url('#{$assets-path}/player/images/theater.svg') no-repeat;
+        background-size: contain;
+
+        &::before {
+          content: '';
+        }
+      }
+    }
+
+    .vjs-fullscreen-control {
+      @include disable-outline;
+
+      width: 37px;
+      margin-right: 11px;
+
+      .vjs-icon-placeholder {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+        background: url('#{$assets-path}/player/images/fullscreen.svg') no-repeat;
         background-size: contain;
 
         &::before {
@@ -442,6 +461,10 @@ $setting-transition-easing: ease-out;
   }
 
   @media screen and (max-width: 750px) {
+    .vjs-theater-control {
+      display: none;
+    }
+
     .vjs-dock-text {
       font-size: 16px;
     }
@@ -544,58 +567,6 @@ $setting-transition-easing: ease-out;
   }
 }
 
-// Thanks: https://projects.lukehaas.me/css-loaders/
-.vjs-loading-spinner {
-  left: 50%;
-  font-size: 10px;
-  text-indent: -9999em;
-  border: 0.7em solid rgba(255, 255, 255, 0.2);
-  border-left-color: #ffffff;
-  transform: translateZ(0);
-  animation: 0.3s ease-out 1.1s forwards vjs-spinner-show, spinner 1.4s infinite linear !important;
-  overflow: hidden;
-  visibility: hidden;
-
-  &::before {
-    animation: none !important;
-  }
-
-  &::after {
-    border-radius: 50%;
-    width: 6em;
-    height: 6em;
-    animation: none !important;
-  }
-
-  @keyframes spinner {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes vjs-spinner-show {
-    0% {
-      display: none;
-      opacity: 0;
-    }
-
-    1% {
-      display: block;
-      visibility: visible;
-      opacity: 0;
-    }
-
-    100% {
-      display: block;
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-}
-
 // Error display disabled
 .vjs-error:not(.vjs-error-display-enabled) {
   .vjs-error-display {
@@ -611,180 +582,5 @@ $setting-transition-easing: ease-out;
 .vjs-error.vjs-error-display-enabled {
   .vjs-error-display {
     display: block;
-  }
-}
-
-
-/* Sass for videojs-settings-menu */
-
-.video-js {
-
-  .vjs-settings {
-    @include disable-outline;
-
-    cursor: pointer;
-    width: 37px;
-
-    .vjs-icon-placeholder {
-      display: inline-block;
-      width: 17px;
-      height: 17px;
-      vertical-align: middle;
-      background: url('../assets/player/images/settings.svg') no-repeat;
-      background-size: contain;
-
-      &::before {
-        content: '';
-      }
-    }
-  }
-
-  .vjs-settings-sub-menu-title {
-    width: 4em;
-    text-transform: initial;
-  }
-
-  .vjs-settings-dialog {
-    position: absolute;
-    right: .5em;
-    bottom: 3.5em;
-    color: $primary-foreground-color;
-    opacity: $primary-foreground-opacity;
-    margin: 0 auto;
-    font-size: $font-size !important;
-
-    width: auto;
-    overflow: hidden;
-
-    transition: width $setting-transition-duration $setting-transition-easing,  height $setting-transition-duration $setting-transition-easing;
-
-    .vjs-settings-sub-menu-value,
-    .vjs-settings-sub-menu-title {
-      display: table-cell;
-      padding: 0 5px;
-    }
-
-    .vjs-settings-sub-menu-title {
-      text-align: left;
-      font-weight: $font-semibold;
-    }
-
-    .vjs-settings-sub-menu-value {
-      width: 100%;
-      text-align: right;
-
-      small {
-        font-size: 0.85em;
-        opacity: 0.8;
-      }
-    }
-
-    .vjs-settings-panel {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      border-radius: 1px;
-    }
-
-    .vjs-settings-panel-child {
-      display: flex;
-
-      align-items: flex-end;
-      white-space: nowrap;
-
-      &:focus,
-      &:active {
-        outline: none;
-      }
-
-      > .vjs-menu {
-        flex: 1;
-        min-width: 200px;
-      }
-
-      > .vjs-menu,
-      > .vjs-settings-sub-menu {
-        transition: all $setting-transition-duration $setting-transition-easing;
-
-        .vjs-menu-item {
-
-          &:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-          }
-
-          &:first-child {
-            margin-top: 5px;
-          }
-
-          &:last-child {
-            margin-bottom: 5px;
-          }
-        }
-
-        li {
-          font-size: 1em;
-          text-transform: initial;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-      }
-
-      > .vjs-menu {
-        .vjs-menu-item {
-          padding: 8px 16px;
-        }
-
-        .vjs-settings-sub-menu-value::after {
-          @include chevron-right(9px, 2px);
-
-          margin-left: 5px;
-        }
-      }
-
-      > .vjs-settings-sub-menu {
-        width: 80px;
-
-        .vjs-menu-item {
-          outline: 0;
-          font-weight: $font-semibold;
-
-          padding: 5px 8px;
-          text-align: right;
-
-          &.vjs-back-button {
-            background-color: inherit;
-            padding: 8px 8px 13px 8px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid grey;
-
-            &::before {
-              @include chevron-left(9px, 2px);
-
-              margin-right: 5px;
-            }
-          }
-
-          &.vjs-selected {
-            background-color: inherit;
-            color: inherit;
-            position: relative;
-
-            &::before {
-              @include icon(15px);
-
-              position: absolute;
-              left: 8px;
-              content: ' ';
-              margin-top: 1px;
-              background-image: url('../assets/player/images/tick.svg');
-            }
-          }
-        }
-      }
-    }
   }
 }

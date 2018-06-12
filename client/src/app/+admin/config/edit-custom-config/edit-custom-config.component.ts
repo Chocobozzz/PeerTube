@@ -1,19 +1,13 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ConfirmService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
-import { FormReactive, USER_VIDEO_QUOTA } from '@app/shared'
-import {
-  ADMIN_EMAIL,
-  CACHE_PREVIEWS_SIZE,
-  INSTANCE_NAME, INSTANCE_SHORT_DESCRIPTION, SERVICES_TWITTER_USERNAME,
-  SIGNUP_LIMIT,
-  TRANSCODING_THREADS
-} from '@app/shared/forms/form-validators/custom-config'
+import { CustomConfigValidatorsService, FormReactive, UserValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -41,43 +35,19 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 8, label: '8' }
   ]
 
-  form: FormGroup
-  formErrors = {
-    instanceName: '',
-    instanceShortDescription: '',
-    instanceDescription: '',
-    instanceTerms: '',
-    instanceDefaultClientRoute: '',
-    instanceDefaultNSFWPolicy: '',
-    servicesTwitterUsername: '',
-    cachePreviewsSize: '',
-    signupLimit: '',
-    adminEmail: '',
-    userVideoQuota: '',
-    transcodingThreads: '',
-    customizationJavascript: '',
-    customizationCSS: ''
-  }
-  validationMessages = {
-    instanceShortDescription: INSTANCE_SHORT_DESCRIPTION.MESSAGES,
-    instanceName: INSTANCE_NAME.MESSAGES,
-    servicesTwitterUsername: SERVICES_TWITTER_USERNAME,
-    cachePreviewsSize: CACHE_PREVIEWS_SIZE.MESSAGES,
-    signupLimit: SIGNUP_LIMIT.MESSAGES,
-    adminEmail: ADMIN_EMAIL.MESSAGES,
-    userVideoQuota: USER_VIDEO_QUOTA.MESSAGES
-  }
-
   private oldCustomJavascript: string
   private oldCustomCSS: string
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
+    private customConfigValidatorsService: CustomConfigValidatorsService,
+    private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notificationsService: NotificationsService,
     private configService: ConfigService,
     private serverService: ServerService,
-    private confirmService: ConfirmService
+    private confirmService: ConfirmService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -86,39 +56,35 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     return 'transcodingResolution' + resolution
   }
 
-  buildForm () {
+  ngOnInit () {
     const formGroupData = {
-      instanceName: [ '', INSTANCE_NAME.VALIDATORS ],
-      instanceShortDescription: [ '', INSTANCE_SHORT_DESCRIPTION.VALIDATORS ],
-      instanceDescription: [ '' ],
-      instanceTerms: [ '' ],
-      instanceDefaultClientRoute: [ '' ],
-      instanceDefaultNSFWPolicy: [ '' ],
-      servicesTwitterUsername: [ '', SERVICES_TWITTER_USERNAME.VALIDATORS ],
-      servicesTwitterWhitelisted: [ ],
-      cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
-      signupEnabled: [ ],
-      signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
-      adminEmail: [ '', ADMIN_EMAIL.VALIDATORS ],
-      userVideoQuota: [ '', USER_VIDEO_QUOTA.VALIDATORS ],
-      transcodingThreads: [ '', TRANSCODING_THREADS.VALIDATORS ],
-      transcodingEnabled: [ ],
-      customizationJavascript: [ '' ],
-      customizationCSS: [ '' ]
+      instanceName: this.customConfigValidatorsService.INSTANCE_NAME,
+      instanceShortDescription: this.customConfigValidatorsService.INSTANCE_SHORT_DESCRIPTION,
+      instanceDescription: null,
+      instanceTerms: null,
+      instanceDefaultClientRoute: null,
+      instanceDefaultNSFWPolicy: null,
+      servicesTwitterUsername: this.customConfigValidatorsService.SERVICES_TWITTER_USERNAME,
+      servicesTwitterWhitelisted: null,
+      cachePreviewsSize: this.customConfigValidatorsService.CACHE_PREVIEWS_SIZE,
+      signupEnabled: null,
+      signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+      adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
+      userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
+      transcodingEnabled: null,
+      customizationJavascript: null,
+      customizationCSS: null
     }
 
+    const defaultValues: BuildFormDefaultValues = {}
     for (const resolution of this.resolutions) {
       const key = this.getResolutionKey(resolution)
-      formGroupData[key] = [ false ]
+      defaultValues[key] = 'false'
+      formGroupData[key] = null
     }
 
-    this.form = this.formBuilder.group(formGroupData)
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
-  ngOnInit () {
-    this.buildForm()
+    this.buildForm(formGroupData)
 
     this.configService.getCustomConfig()
       .subscribe(
@@ -133,7 +99,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           this.forceCheck()
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 
@@ -156,10 +122,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     if (customizations.length !== 0) {
       const customizationsText = customizations.join('/')
 
-      const message = `You set custom ${customizationsText}. ` +
-        'This could lead to security issues or bugs if you do not understand it. ' +
-        'Are you sure you want to update the configuration?'
-      const label = `Please type "I understand the ${customizationsText} I set" to confirm.`
+      // FIXME: i18n service does not support string concatenation
+      const message = this.i18n('You set custom {{customizationsText}}. ', { customizationsText }) +
+        this.i18n('This could lead to security issues or bugs if you do not understand it. ') +
+        this.i18n('Are you sure you want to update the configuration?')
+
+      const label = this.i18n('Please type') + ` "I understand the ${customizationsText} I set" ` + this.i18n('to confirm.')
       const expectedInputValue = `I understand the ${customizationsText} I set`
 
       const confirmRes = await this.confirmService.confirmWithInput(message, label, expectedInputValue)
@@ -223,10 +191,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
           this.updateForm()
 
-          this.notificationsService.success('Success', 'Configuration updated.')
+          this.notificationsService.success(this.i18n('Success'), this.i18n('Configuration updated.'))
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 

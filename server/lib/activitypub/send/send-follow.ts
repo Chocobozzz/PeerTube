@@ -2,7 +2,7 @@ import { ActivityFollow } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowActivityPubUrl } from '../url'
-import { unicastTo } from './misc'
+import { unicastTo } from './utils'
 
 function sendFollow (actorFollow: ActorFollowModel) {
   const me = actorFollow.ActorFollower

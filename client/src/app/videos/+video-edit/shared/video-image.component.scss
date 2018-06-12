@@ -7,7 +7,9 @@
   align-items: center;
 
   .button-file {
-    @include peertube-button-file(190px);
+    @include peertube-button-file(auto);
+
+    min-width: 190px;
   }
 
   .image-constraints {

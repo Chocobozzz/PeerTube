@@ -3,30 +3,30 @@
 
   <div class="user-info">
     <div class="user-info-names">
-      <div class="user-info-display-name">{{ user.account.displayName }}</div>
+      <div class="user-info-display-name">{{ user.account?.displayName }}</div>
       <div class="user-info-username">{{ user.username }}</div>
     </div>
-    <div class="user-info-followers">{{ user.account?.followersCount }} subscribers</div>
+    <div i18n class="user-info-followers">{{ user.account?.followersCount }} subscribers</div>
   </div>
 </div>
 
 <div class="button-file">
-  <span>Change your avatar</span>
+  <span i18n>Change your avatar</span>
   <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="changeAvatar()" />
 </div>
-<div class="file-max-size">(extensions: {{ avatarExtensions }}, max size: {{ maxAvatarSize | bytes }})</div>
+<div i18n class="file-max-size">(extensions: {{ avatarExtensions }}, max size: {{ maxAvatarSize | bytes }})</div>
 
 <div class="user-quota">
-  <span class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
+  <span i18n class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
 </div>
 
 <ng-template [ngIf]="user && user.account">
-  <div class="account-title">Profile</div>
-  <my-account-profile [user]="user"></my-account-profile>
+  <div i18n class="account-title">Profile</div>
+  <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
 </ng-template>
 
-<div class="account-title">Password</div>
+<div i18n class="account-title">Password</div>
 <my-account-change-password></my-account-change-password>
 
-<div class="account-title">Video settings</div>
-<my-account-video-settings [user]="user"></my-account-video-settings>
+<div i18n class="account-title">Video settings</div>
+<my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>

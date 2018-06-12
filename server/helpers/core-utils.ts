@@ -6,7 +6,7 @@
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
 import { pseudoRandomBytes } from 'crypto'
-import { readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
+import { copyFile, readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
@@ -136,6 +136,7 @@ function promisify2WithVoid<T, U> (func: (arg1: T, arg2: U, cb: (err: any) => vo
   }
 }
 
+const copyFilePromise = promisify2WithVoid<string, string>(copyFile)
 const readFileBufferPromise = promisify1<string, Buffer>(readFile)
 const unlinkPromise = promisify1WithVoid<string>(unlink)
 const renamePromise = promisify2WithVoid<string, string>(rename)
@@ -167,6 +168,7 @@ export {
   promisify0,
   promisify1,
 
+  copyFilePromise,
   readdirPromise,
   readFileBufferPromise,
   unlinkPromise,

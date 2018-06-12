@@ -7,18 +7,18 @@
       <div class="actor-info">
         <div class="actor-names">
           <div class="actor-display-name">{{ account.displayName }}</div>
-          <div class="actor-name">{{ account.name }}</div>
+          <div class="actor-name">{{ account.nameWithHost }}</div>
         </div>
-        <div class="actor-followers">{{ account.followersCount }} subscribers</div>
+        <div i18n class="actor-followers">{{ account.followersCount }} subscribers</div>
       </div>
     </div>
 
     <div class="links">
-      <a routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
+      <a i18n routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
 
-      <a routerLink="video-channels" routerLinkActive="active" class="title-page">Video channels</a>
+      <a i18n routerLink="video-channels" routerLinkActive="active" class="title-page">Video channels</a>
 
-      <a routerLink="about" routerLinkActive="active" class="title-page">About</a>
+      <a i18n routerLink="about" routerLinkActive="active" class="title-page">About</a>
     </div>
   </div>
 

@@ -20,6 +20,7 @@ import { VideoFileModel } from '../../models/video/video-file'
 import { VideoShareModel } from '../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { addVideoComments } from './video-comments'
+import { crawlCollectionPage } from './crawl'
 
 function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
   const host = video.VideoChannel.Account.Actor.Server.host
@@ -92,6 +93,7 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
     createdAt: new Date(videoObject.published),
+    publishedAt: new Date(videoObject.published),
     // FIXME: updatedAt does not seems to be considered by Sequelize
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
@@ -216,25 +218,17 @@ async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentOb
   const video = await retryTransactionWrapper(getOrCreateVideo, options)
 
   // Process outside the transaction because we could fetch remote data
-  if (videoObject.likes && Array.isArray(videoObject.likes.orderedItems)) {
-    logger.info('Adding likes of video %s.', video.uuid)
-    await createRates(videoObject.likes.orderedItems, video, 'like')
-  }
+  logger.info('Adding likes of video %s.', video.uuid)
+  await crawlCollectionPage<string>(videoObject.likes, (items) => createRates(items, video, 'like'))
 
-  if (videoObject.dislikes && Array.isArray(videoObject.dislikes.orderedItems)) {
-    logger.info('Adding dislikes of video %s.', video.uuid)
-    await createRates(videoObject.dislikes.orderedItems, video, 'dislike')
-  }
+  logger.info('Adding dislikes of video %s.', video.uuid)
+  await crawlCollectionPage<string>(videoObject.dislikes, (items) => createRates(items, video, 'dislike'))
 
-  if (videoObject.shares && Array.isArray(videoObject.shares.orderedItems)) {
-    logger.info('Adding shares of video %s.', video.uuid)
-    await addVideoShares(video, videoObject.shares.orderedItems)
-  }
+  logger.info('Adding shares of video %s.', video.uuid)
+  await crawlCollectionPage<string>(videoObject.shares, (items) => addVideoShares(items, video))
 
-  if (videoObject.comments && Array.isArray(videoObject.comments.orderedItems)) {
-    logger.info('Adding comments of video %s.', video.uuid)
-    await addVideoComments(video, videoObject.comments.orderedItems)
-  }
+  logger.info('Adding comments of video %s.', video.uuid)
+  await crawlCollectionPage<string>(videoObject.comments, (items) => addVideoComments(items, video))
 
   return { actor, channelActor, video }
 }
@@ -266,7 +260,7 @@ async function createRates (actorUrls: string[], video: VideoModel, rate: VideoR
   return
 }
 
-async function addVideoShares (instance: VideoModel, shareUrls: string[]) {
+async function addVideoShares (shareUrls: string[], instance: VideoModel) {
   for (const shareUrl of shareUrls) {
     // Fetch url
     const { body } = await doRequest({

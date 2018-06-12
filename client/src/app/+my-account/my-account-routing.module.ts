@@ -16,6 +16,11 @@ const myAccountRoutes: Routes = [
     canActivateChild: [ MetaGuard, LoginGuard ],
     children: [
       {
+        path: '',
+        redirectTo: 'settings',
+        pathMatch: 'full'
+      },
+      {
         path: 'settings',
         component: MyAccountSettingsComponent,
         data: {

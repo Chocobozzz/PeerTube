@@ -2,12 +2,18 @@ import { VideoFile } from '../../../../shared/models/videos'
 
 import 'videojs-hotkeys'
 import 'videojs-dock'
+import 'videojs-contextmenu'
+import 'videojs-contextmenu-ui'
 import './peertube-link-button'
 import './resolution-menu-button'
 import './settings-menu-button'
 import './webtorrent-info-button'
 import './peertube-videojs-plugin'
+import './peertube-load-progress-bar'
+import './theater-button'
 import { videojsUntyped } from './peertube-videojs-typings'
+import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
+import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -23,6 +29,7 @@ function getVideojsOptions (options: {
   peertubeLink: boolean,
   poster: string,
   startTime: number
+  theaterMode: boolean
 }) {
   const videojsOptions = {
     controls: true,
@@ -58,6 +65,7 @@ function getVideojsOptions (options: {
 
 function getControlBarChildren (options: {
   peertubeLink: boolean
+  theaterMode: boolean
 }) {
   const children = {
     'playToggle': {},
@@ -67,7 +75,16 @@ function getControlBarChildren (options: {
     'liveDisplay': {},
 
     'flexibleWidthSpacer': {},
-    'progressControl': {},
+    'progressControl': {
+      children: {
+        'seekBar': {
+          children: {
+            'peerTubeLoadProgressBar': {},
+            'playProgressBar': {}
+          }
+        }
+      }
+    },
 
     'webTorrentButton': {},
 
@@ -91,6 +108,12 @@ function getControlBarChildren (options: {
     })
   }
 
+  if (options.theaterMode === true) {
+    Object.assign(children, {
+      'theaterButton': {}
+    })
+  }
+
   Object.assign(children, {
     'fullscreenToggle': {}
   })
@@ -98,4 +121,44 @@ function getControlBarChildren (options: {
   return children
 }
 
-export { getVideojsOptions }
+function addContextMenu (player: any, videoEmbedUrl: string) {
+  player.contextmenuUI({
+    content: [
+      {
+        label: player.localize('Copy the video URL'),
+        listener: function () {
+          copyToClipboard(buildVideoLink())
+        }
+      },
+      {
+        label: player.localize('Copy the video URL at the current time'),
+        listener: function () {
+          const player = this
+          copyToClipboard(buildVideoLink(player.currentTime()))
+        }
+      },
+      {
+        label: player.localize('Copy embed code'),
+        listener: () => {
+          copyToClipboard(buildVideoEmbed(videoEmbedUrl))
+        }
+      }
+    ]
+  })
+}
+
+function loadLocale (serverUrl: string, videojs: any, locale: string) {
+  const completeLocale = getCompleteLocale(locale)
+
+  if (!is18nLocale(completeLocale) || isDefaultLocale(completeLocale)) return Promise.resolve(undefined)
+
+  return fetch(serverUrl + '/client/locales/' + completeLocale + '/player.json')
+    .then(res => res.json())
+    .then(json => videojs.addLanguage(getShortLocale(completeLocale), json))
+}
+
+export {
+  loadLocale,
+  getVideojsOptions,
+  addContextMenu
+}

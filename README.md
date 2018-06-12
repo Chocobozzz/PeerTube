@@ -2,15 +2,14 @@
   PeerTube
 </h1>
 
-<h4 align="center">
+<p align="center">
 Federated (ActivityPub) video streaming platform using P2P (BitTorrent)
 directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
-</h4>
+</p>
 
-**PeerTube is developed by [Framasoft](https://framasoft.org/?l=en), a non-profit
-that promotes and spreads free culture in general, and free-libre software in
-particular. If you want to support this project, please [consider
-donating to them](https://soutenir.framasoft.org/en/).**
+<p align="center">
+<strong>We are running <a href="https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform">a crowdfunding campaign</a> to pave the road to version 1.0 of PeerTube!</strong>
+</p>
 
 <p align="center">
   <strong>Client</strong>
@@ -109,6 +108,11 @@ BitTorrent) inside the web browser, as of today.
 ## Run using Docker
 
 See the [docker guide](/support/doc/docker.md)
+
+## Run on YunoHost
+[![Install Peertube with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=peertube)
+
+Peertube app for [YunoHost](https://yunohost.org). See [here](https://github.com/YunoHost-Apps/peertube_ynh)
 
 ## Production
 

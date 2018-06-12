@@ -1,6 +1,6 @@
 <a
   [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name"
-class="video-thumbnail"
+  class="video-thumbnail"
 >
 <img [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 

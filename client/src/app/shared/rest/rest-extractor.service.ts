@@ -1,10 +1,19 @@
-import { of, throwError as observableThrowError } from 'rxjs'
+import { throwError as observableThrowError } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { dateToHuman } from '@app/shared/misc/utils'
 import { ResultList } from '../../../../../shared'
+import { Router } from '@angular/router'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Injectable()
 export class RestExtractor {
+
+  constructor (
+    private router: Router,
+    private i18n: I18n
+  ) {
+    // empty
+  }
 
   extractDataBool () {
     return true
@@ -55,17 +64,19 @@ export class RestExtractor {
       } else if (err.error && err.error.error) {
         errorMessage = err.error.error
       } else if (err.status === 413) {
-        errorMessage = 'Request is too large for the server. Please contact you administrator if you want to increase the limit size.'
+        errorMessage = this.i18n(
+          'Request is too large for the server. Please contact you administrator if you want to increase the limit size.'
+        )
       } else if (err.status === 429) {
         const secondsLeft = err.headers.get('retry-after')
         if (secondsLeft) {
           const minutesLeft = Math.floor(parseInt(secondsLeft, 10) / 60)
-          errorMessage = 'Too many attempts, please try again after ' + minutesLeft + ' minutes.'
+          errorMessage = this.i18n('Too many attempts, please try again after {{minutesLeft}} minutes.', { minutesLeft })
         } else {
-          errorMessage = 'Too many attempts, please try again later.'
+          errorMessage = this.i18n('Too many attempts, please try again later.')
         }
       } else if (err.status === 500) {
-        errorMessage = 'Server error. Please retry later.'
+        errorMessage = this.i18n('Server error. Please retry later.')
       }
 
       errorMessage = errorMessage ? errorMessage : 'Unknown error.'
@@ -86,5 +97,14 @@ export class RestExtractor {
     }
 
     return observableThrowError(errorObj)
+  }
+
+  redirectTo404IfNotFound (obj: { status: number }, status = [ 404 ]) {
+    if (obj && obj.status && status.indexOf(obj.status) !== -1) {
+      // Do not use redirectService to avoid circular dependencies
+      this.router.navigate([ '/404' ], { skipLocationChange: true })
+    }
+
+    return observableThrowError(obj)
   }
 }

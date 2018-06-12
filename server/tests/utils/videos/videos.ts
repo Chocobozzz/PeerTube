@@ -167,8 +167,8 @@ function getMyVideos (url: string, accessToken: string, start: number, count: nu
     .expect('Content-Type', /json/)
 }
 
-function getAccountVideos (url: string, accessToken: string, accountId: number | string, start: number, count: number, sort?: string) {
-  const path = '/api/v1/accounts/' + accountId + '/videos'
+function getAccountVideos (url: string, accessToken: string, accountName: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/accounts/' + accountName + '/videos'
 
   return makeGetRequest({
     url,
@@ -447,6 +447,7 @@ async function completeVideoCheck (
     nsfw: boolean
     commentsEnabled: boolean
     description: string
+    publishedAt?: string
     support: string
     account: {
       name: string
@@ -499,6 +500,10 @@ async function completeVideoCheck (
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
+
+  if (attributes.publishedAt) {
+    expect(video.publishedAt).to.equal(attributes.publishedAt)
+  }
 
   const res = await getVideo(url, video.uuid)
   const videoDetails: VideoDetails = res.body

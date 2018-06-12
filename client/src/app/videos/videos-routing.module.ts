@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core'
-import { RouterModule, Routes } from '@angular/router'
+import { RouterModule, Routes, UrlSegment } from '@angular/router'
 import { VideoLocalComponent } from '@app/videos/video-list/video-local.component'
 import { MetaGuard } from '@ngx-meta/core'
 import { VideoSearchComponent } from './video-list'
@@ -71,11 +71,6 @@ const videosRoutes: Routes = [
             title: 'Edit a video'
           }
         }
-      },
-      {
-        path: ':uuid',
-        pathMatch: 'full',
-        redirectTo: 'watch/:uuid'
       },
       {
         path: 'watch/:uuid',

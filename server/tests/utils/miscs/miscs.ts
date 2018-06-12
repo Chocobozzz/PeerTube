@@ -46,7 +46,7 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
 
     const body = res.body
 
-    const data = await readFileBufferPromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + extension))
+    const data = await readFileBufferPromise(join(__dirname, '..', '..', 'fixtures', imageName + extension))
     const minLength = body.length - ((20 * body.length) / 100)
     const maxLength = body.length + ((20 * body.length) / 100)
 
@@ -63,7 +63,7 @@ function buildAbsoluteFixturePath (path: string) {
     return path
   }
 
-  return join(__dirname, '..', '..', 'api', 'fixtures', path)
+  return join(__dirname, '..', '..', 'fixtures', path)
 }
 
 // ---------------------------------------------------------------------------

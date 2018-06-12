@@ -1,26 +1,26 @@
 <div class="row">
   <div class="sub-menu">
-    <a *ngIf="hasUsersRight()" routerLink="/admin/users" routerLinkActive="active" class="title-page">
+    <a i18n *ngIf="hasUsersRight()" routerLink="/admin/users" routerLinkActive="active" class="title-page">
       Users
     </a>
 
-    <a *ngIf="hasServerFollowRight()" routerLink="/admin/follows" routerLinkActive="active" class="title-page">
+    <a i18n *ngIf="hasServerFollowRight()" routerLink="/admin/follows" routerLinkActive="active" class="title-page">
       Manage follows
     </a>
 
-    <a *ngIf="hasVideoAbusesRight()" routerLink="/admin/video-abuses" routerLinkActive="active" class="title-page">
+    <a i18n *ngIf="hasVideoAbusesRight()" routerLink="/admin/video-abuses" routerLinkActive="active" class="title-page">
       Video abuses
     </a>
 
-    <a *ngIf="hasVideoBlacklistRight()" routerLink="/admin/video-blacklist" routerLinkActive="active" class="title-page">
+    <a i18n *ngIf="hasVideoBlacklistRight()" routerLink="/admin/video-blacklist" routerLinkActive="active" class="title-page">
       Video blacklist
     </a>
 
-    <a *ngIf="hasJobsRight()" routerLink="/admin/jobs" routerLinkActive="active" class="title-page">
+    <a i18n *ngIf="hasJobsRight()" routerLink="/admin/jobs" routerLinkActive="active" class="title-page">
       Jobs
     </a>
 
-    <a *ngIf="hasConfigRight()" routerLink="/admin/config" routerLinkActive="active" class="title-page">
+    <a i18n *ngIf="hasConfigRight()" routerLink="/admin/config" routerLinkActive="active" class="title-page">
       Configuration
     </a>
   </div>

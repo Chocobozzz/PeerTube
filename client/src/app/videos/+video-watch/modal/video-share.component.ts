@@ -4,6 +4,8 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { ModalDirective } from 'ngx-bootstrap/modal'
 import { VideoDetails } from '../../../shared/video/video-details.model'
+import { buildVideoEmbed } from '../../../../assets/player/utils'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-share',
@@ -15,7 +17,10 @@ export class VideoShareComponent {
 
   @ViewChild('modal') modal: ModalDirective
 
-  constructor (private notificationsService: NotificationsService) {
+  constructor (
+    private notificationsService: NotificationsService,
+    private i18n: I18n
+  ) {
     // empty
   }
 
@@ -28,10 +33,7 @@ export class VideoShareComponent {
   }
 
   getVideoIframeCode () {
-    return '<iframe width="560" height="315" ' +
-           'src="' + this.video.embedUrl + '" ' +
-           'frameborder="0" allowfullscreen>' +
-           '</iframe>'
+    return buildVideoEmbed(this.video.embedUrl)
   }
 
   getVideoUrl () {
@@ -43,6 +45,6 @@ export class VideoShareComponent {
   }
 
   activateCopiedMessage () {
-    this.notificationsService.success('Success', 'Copied')
+    this.notificationsService.success(this.i18n('Success'), this.i18n('Copied'))
   }
 }
