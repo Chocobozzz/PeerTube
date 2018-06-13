@@ -2,7 +2,6 @@ import * as express from 'express'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
@@ -30,6 +29,7 @@ import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
   asyncMiddleware,
+  asyncRetryTransactionMiddleware,
   authenticate,
   optionalAuthenticate,
   paginationValidator,
@@ -104,13 +104,13 @@ videosRouter.put('/:id',
   authenticate,
   reqVideoFileUpdate,
   asyncMiddleware(videosUpdateValidator),
-  asyncMiddleware(updateVideoRetryWrapper)
+  asyncRetryTransactionMiddleware(updateVideo)
 )
 videosRouter.post('/upload',
   authenticate,
   reqVideoFileAdd,
   asyncMiddleware(videosAddValidator),
-  asyncMiddleware(addVideoRetryWrapper)
+  asyncRetryTransactionMiddleware(addVideo)
 )
 
 videosRouter.get('/:id/description',
@@ -129,7 +129,7 @@ videosRouter.post('/:id/views',
 videosRouter.delete('/:id',
   authenticate,
   asyncMiddleware(videosRemoveValidator),
-  asyncMiddleware(removeVideoRetryWrapper)
+  asyncRetryTransactionMiddleware(removeVideo)
 )
 
 // ---------------------------------------------------------------------------
@@ -156,25 +156,8 @@ function listVideoPrivacies (req: express.Request, res: express.Response) {
   res.json(VIDEO_PRIVACIES)
 }
 
-// Wrapper to video add that retry the function if there is a database error
-// We need this because we run the transaction in SERIALIZABLE isolation that can fail
-async function addVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res, req.files['videofile'][0] ],
-    errorMessage: 'Cannot insert the video with many retries.'
-  }
-
-  const video = await retryTransactionWrapper(addVideo, options)
-
-  res.json({
-    video: {
-      id: video.id,
-      uuid: video.uuid
-    }
-  }).end()
-}
-
-async function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
+async function addVideo (req: express.Request, res: express.Response) {
+  const videoPhysicalFile = req.files['videofile'][0]
   const videoInfo: VideoCreate = req.body
 
   // Prepare data so we don't block the transaction
@@ -272,18 +255,12 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     await JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
   }
 
-  return videoCreated
-}
-
-async function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot update the video with many retries.'
-  }
-
-  await retryTransactionWrapper(updateVideo, options)
-
-  return res.type('json').status(204).end()
+  return res.json({
+    video: {
+      id: videoCreated.id,
+      uuid: videoCreated.uuid
+    }
+  }).end()
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
@@ -360,6 +337,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
     throw err
   }
+
+  return res.type('json').status(204).end()
 }
 
 function getVideo (req: express.Request, res: express.Response) {
@@ -414,17 +393,6 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function removeVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot remove the video with many retries.'
-  }
-
-  await retryTransactionWrapper(removeVideo, options)
-
-  return res.type('json').status(204).end()
-}
-
 async function removeVideo (req: express.Request, res: express.Response) {
   const videoInstance: VideoModel = res.locals.video
 
@@ -433,6 +401,8 @@ async function removeVideo (req: express.Request, res: express.Response) {
   })
 
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
+
+  return res.type('json').status(204).end()
 }
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {

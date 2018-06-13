@@ -4,7 +4,6 @@ import { extname, join } from 'path'
 import * as uuidv4 from 'uuid/v4'
 import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { processImage } from '../../helpers/image-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
@@ -16,6 +15,7 @@ import { Redis } from '../../lib/redis'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
   asyncMiddleware,
+  asyncRetryTransactionMiddleware,
   authenticate,
   ensureUserHasRight,
   ensureUserRegistrationAllowed,
@@ -102,14 +102,14 @@ usersRouter.post('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersAddValidator),
-  asyncMiddleware(createUserRetryWrapper)
+  asyncRetryTransactionMiddleware(createUser)
 )
 
 usersRouter.post('/register',
   asyncMiddleware(ensureUserRegistrationAllowed),
   ensureUserRegistrationAllowedForIP,
   asyncMiddleware(usersRegisterValidator),
-  asyncMiddleware(registerUserRetryWrapper)
+  asyncRetryTransactionMiddleware(registerUser)
 )
 
 usersRouter.put('/me',
@@ -178,26 +178,7 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }
 
-async function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req ],
-    errorMessage: 'Cannot insert the user with many retries.'
-  }
-
-  const { user, account } = await retryTransactionWrapper(createUser, options)
-
-  return res.json({
-    user: {
-      id: user.id,
-      account: {
-        id: account.id,
-        uuid: account.Actor.uuid
-      }
-    }
-  }).end()
-}
-
-async function createUser (req: express.Request) {
+async function createUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
   const userToCreate = new UserModel({
     username: body.username,
@@ -213,21 +194,18 @@ async function createUser (req: express.Request) {
 
   logger.info('User %s with its channel and account created.', body.username)
 
-  return { user, account }
+  return res.json({
+    user: {
+      id: user.id,
+      account: {
+        id: account.id,
+        uuid: account.Actor.uuid
+      }
+    }
+  }).end()
 }
 
-async function registerUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req ],
-    errorMessage: 'Cannot insert the user with many retries.'
-  }
-
-  await retryTransactionWrapper(registerUser, options)
-
-  return res.type('json').status(204).end()
-}
-
-async function registerUser (req: express.Request) {
+async function registerUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
 
   const user = new UserModel({
@@ -243,6 +221,8 @@ async function registerUser (req: express.Request) {
   await createUserAccountAndChannel(user)
 
   logger.info('User %s with its channel and account registered.', body.username)
+
+  return res.type('json').status(204).end()
 }
 
 async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {

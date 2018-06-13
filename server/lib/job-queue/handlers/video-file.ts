@@ -52,19 +52,11 @@ async function processVideoFile (job: kue.Job) {
   if (payload.resolution) {
     await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode)
 
-    const options = {
-      arguments: [ video ],
-      errorMessage: 'Cannot execute onVideoFileTranscoderOrImportSuccess with many retries.'
-    }
-    await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, options)
+    await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
   } else {
     await video.optimizeOriginalVideofile()
 
-    const options = {
-      arguments: [ video, payload.isNewVideo ],
-      errorMessage: 'Cannot execute onVideoFileOptimizerSuccess with many retries.'
-    }
-    await retryTransactionWrapper(onVideoFileOptimizerSuccess, options)
+    await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload.isNewVideo)
   }
 
   return video

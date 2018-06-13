@@ -11,7 +11,7 @@ async function processFollowActivity (activity: ActivityFollow) {
   const activityObject = activity.object
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  return processFollow(actor, activityObject)
+  return retryTransactionWrapper(processFollow, actor, activityObject)
 }
 
 // ---------------------------------------------------------------------------
@@ -22,16 +22,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processFollow (actor: ActorModel, targetActorURL: string) {
-  const options = {
-    arguments: [ actor, targetActorURL ],
-    errorMessage: 'Cannot follow with many retries.'
-  }
-
-  return retryTransactionWrapper(follow, options)
-}
-
-async function follow (actor: ActorModel, targetActorURL: string) {
+async function processFollow (actor: ActorModel, targetActorURL: string) {
   await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrl(targetActorURL, t)
 

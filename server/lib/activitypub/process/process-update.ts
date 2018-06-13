@@ -25,9 +25,9 @@ async function processUpdateActivity (activity: ActivityUpdate) {
   const objectType = activity.object.type
 
   if (objectType === 'Video') {
-    return processUpdateVideo(actor, activity)
+    return retryTransactionWrapper(processUpdateVideo, actor, activity)
   } else if (objectType === 'Person' || objectType === 'Application' || objectType === 'Group') {
-    return processUpdateActor(actor, activity)
+    return retryTransactionWrapper(processUpdateActor, actor, activity)
   }
 
   return undefined
@@ -41,16 +41,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
-  const options = {
-    arguments: [ actor, activity ],
-    errorMessage: 'Cannot update the remote video with many retries'
-  }
-
-  return retryTransactionWrapper(updateRemoteVideo, options)
-}
-
-async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
+async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
   const videoObject = activity.object as VideoTorrentObject
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
@@ -136,16 +127,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
   }
 }
 
-function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {
-  const options = {
-    arguments: [ actor, activity ],
-    errorMessage: 'Cannot update the remote actor with many retries'
-  }
-
-  return retryTransactionWrapper(updateRemoteActor, options)
-}
-
-async function updateRemoteActor (actor: ActorModel, activity: ActivityUpdate) {
+async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {
   const actorAttributesToUpdate = activity.object as ActivityPubActor
 
   logger.debug('Updating remote account "%s".', actorAttributesToUpdate.uuid)

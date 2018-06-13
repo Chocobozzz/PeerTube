@@ -228,12 +228,7 @@ async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentOb
 
   const channelActor = await getOrCreateVideoChannel(videoObject)
 
-  const options = {
-    arguments: [ videoObject, channelActor ],
-    errorMessage: 'Cannot insert the remote video with many retries.'
-  }
-
-  const video = await retryTransactionWrapper(getOrCreateVideo, options)
+  const video = await retryTransactionWrapper(getOrCreateVideo, videoObject, channelActor)
 
   // Process outside the transaction because we could fetch remote data
   logger.info('Adding likes of video %s.', video.uuid)

@@ -26,12 +26,8 @@ async function processActivityPubFollow (job: kue.Job) {
   const targetActor = await getOrCreateActorAndServerAndModel(actorUrl)
 
   const fromActor = await getServerActor()
-  const options = {
-    arguments: [ fromActor, targetActor ],
-    errorMessage: 'Cannot follow with many retries.'
-  }
 
-  return retryTransactionWrapper(follow, options)
+  return retryTransactionWrapper(follow, fromActor, targetActor)
 }
 // ---------------------------------------------------------------------------
 
