@@ -20,6 +20,7 @@ import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../u
 import { setAccessTokensToServers } from '../../utils/users/login'
 import { User } from '../../../../shared/models/users'
 import { VideoChannel } from '../../../../shared/models/videos'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -76,7 +77,7 @@ describe('Test users with multiple servers', function () {
       videoUUID = resVideo.body.video.uuid
     }
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should be able to update my display name', async function () {
@@ -92,7 +93,7 @@ describe('Test users with multiple servers', function () {
     user = res.body
     expect(user.account.displayName).to.equal('my super display name')
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should be able to update my description', async function () {
@@ -109,7 +110,7 @@ describe('Test users with multiple servers', function () {
     expect(user.account.displayName).to.equal('my super display name')
     expect(user.account.description).to.equal('my super description updated')
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should be able to update my avatar', async function () {
@@ -128,7 +129,7 @@ describe('Test users with multiple servers', function () {
 
     await testImage(servers[0].url, 'avatar2-resized', user.account.avatar.path, '.png')
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have updated my profile on other servers too', async function () {
@@ -178,7 +179,7 @@ describe('Test users with multiple servers', function () {
 
     await removeUser(servers[0].url, userId, servers[0].accessToken)
 
-    await wait(5000)
+    await waitJobs(servers)
 
     for (const server of servers) {
       const resAccounts = await getAccountsList(server.url, '-createdAt')
@@ -209,10 +210,5 @@ describe('Test users with multiple servers', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this[ 'ok' ]) {
-      await flushTests()
-    }
   })
 })

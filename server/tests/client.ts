@@ -11,7 +11,7 @@ import {
   runServer,
   serverLogin,
   uploadVideo,
-  getVideosList, updateCustomConfig, getCustomConfig
+  getVideosList, updateCustomConfig, getCustomConfig, killallServers
 } from './utils'
 
 describe('Test a client controllers', function () {
@@ -102,11 +102,6 @@ describe('Test a client controllers', function () {
   })
 
   after(async function () {
-    process.kill(-server.app.pid)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    killallServers([ server ])
   })
 })

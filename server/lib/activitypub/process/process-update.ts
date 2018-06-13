@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { ActivityUpdate } from '../../../../shared/models/activitypub'
+import { ActivityUpdate, VideoTorrentObject } from '../../../../shared/models/activitypub'
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
@@ -12,13 +12,13 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
 import {
-  fetchRemoteVideo,
   generateThumbnailFromUrl,
   getOrCreateAccountAndVideoAndChannel,
   getOrCreateVideoChannel,
   videoActivityObjectToDBAttributes,
   videoFileActivityUrlToDBAttributes
 } from '../videos'
+import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -30,7 +30,7 @@ async function processUpdateActivity (activity: ActivityUpdate) {
     return processUpdateActor(actor, activity)
   }
 
-  return
+  return undefined
 }
 
 // ---------------------------------------------------------------------------
@@ -51,10 +51,12 @@ function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
 }
 
 async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
-  const videoUrl = activity.object.id
+  const videoObject = activity.object as VideoTorrentObject
 
-  const videoObject = await fetchRemoteVideo(videoUrl)
-  if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
+  if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
+    logger.debug('Video sent by update is not valid.', { videoObject })
+    return undefined
+  }
 
   const res = await getOrCreateAccountAndVideoAndChannel(videoObject.id)
 

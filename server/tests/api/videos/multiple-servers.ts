@@ -15,7 +15,8 @@ import {
   dateIsValid,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests, getLocalVideos,
+  flushTests,
+  getLocalVideos,
   getVideo,
   getVideoChannelsList,
   getVideosList,
@@ -39,7 +40,7 @@ import {
   getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
-import { getAccountsList } from '../../utils/users/accounts'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -102,7 +103,7 @@ describe('Test multiple servers', function () {
       }
       await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
 
-      await wait(10000)
+      await waitJobs(servers)
 
       // All servers should have this video
       let publishedAt: string = null
@@ -177,7 +178,7 @@ describe('Test multiple servers', function () {
       await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
       // Transcoding
-      await wait(30000)
+      await waitJobs(servers)
 
       // All servers should have this video
       for (const server of servers) {
@@ -266,7 +267,7 @@ describe('Test multiple servers', function () {
       }
       await uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes2)
 
-      await wait(10000)
+      await waitJobs(servers)
 
       // All servers should have this video
       for (const server of servers) {
@@ -496,15 +497,15 @@ describe('Test multiple servers', function () {
       await viewVideo(servers[2].url, localVideosServer3[1])
 
       await Promise.all(tasks)
-      await wait(1500)
+      await waitJobs(servers)
 
       await viewVideo(servers[2].url, localVideosServer3[0])
 
-      await wait(1500)
+      await waitJobs(servers)
 
       await viewVideo(servers[2].url, localVideosServer3[0])
 
-      await wait(5000)
+      await waitJobs(servers)
 
       for (const server of servers) {
         const res = await getVideosList(server.url)
@@ -535,7 +536,7 @@ describe('Test multiple servers', function () {
 
       await Promise.all(tasks)
 
-      await wait(10000)
+      await waitJobs(servers)
 
       let baseVideos = null
 
@@ -572,7 +573,7 @@ describe('Test multiple servers', function () {
       await wait(200)
       await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like')
 
-      await wait(10000)
+      await waitJobs(servers)
 
       let baseVideos = null
       for (const server of servers) {
@@ -614,7 +615,7 @@ describe('Test multiple servers', function () {
 
       await updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, attributes)
 
-      await wait(5000)
+      await waitJobs(servers)
     })
 
     it('Should have the video 3 updated on each server', async function () {
@@ -670,7 +671,7 @@ describe('Test multiple servers', function () {
       await removeVideo(servers[2].url, servers[2].accessToken, toRemove[0].id)
       await removeVideo(servers[2].url, servers[2].accessToken, toRemove[1].id)
 
-      await wait(5000)
+      await waitJobs(servers)
     })
 
     it('Should not have files of videos 3 and 3-2 on each server', async function () {
@@ -749,7 +750,7 @@ describe('Test multiple servers', function () {
         await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, text)
       }
 
-      await wait(5000)
+      await waitJobs(servers)
 
       {
         const res = await getVideoCommentThreads(servers[1].url, videoUUID, 0, 5)
@@ -759,7 +760,7 @@ describe('Test multiple servers', function () {
         await addVideoCommentReply(servers[ 1 ].url, servers[ 1 ].accessToken, videoUUID, threadId, text)
       }
 
-      await wait(5000)
+      await waitJobs(servers)
 
       {
         const res1 = await getVideoCommentThreads(servers[2].url, videoUUID, 0, 5)
@@ -775,7 +776,7 @@ describe('Test multiple servers', function () {
         await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, childCommentId, text2)
       }
 
-      await wait(5000)
+      await waitJobs(servers)
     })
 
     it('Should have these threads', async function () {
@@ -848,7 +849,7 @@ describe('Test multiple servers', function () {
 
       await deleteVideoComment(servers[2].url, servers[2].accessToken, videoUUID, childOfFirstChild.comment.id)
 
-      await wait(5000)
+      await waitJobs(servers)
     })
 
     it('Should not have this comment anymore', async function () {
@@ -877,7 +878,7 @@ describe('Test multiple servers', function () {
       const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
       await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
 
-      await wait(5000)
+      await waitJobs(servers)
     })
 
     it('Should have the thread comments deleted on other servers too', async function () {
@@ -910,7 +911,7 @@ describe('Test multiple servers', function () {
 
       await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, attributes)
 
-      await wait(5000)
+      await waitJobs(servers)
 
       for (const server of servers) {
         const res = await getVideo(server.url, videoUUID)
@@ -941,7 +942,7 @@ describe('Test multiple servers', function () {
       await req.attach('videofile', filePath)
         .expect(200)
 
-      await wait(40000)
+      await waitJobs(servers)
 
       for (const server of servers) {
         const res = await getVideosList(server.url)

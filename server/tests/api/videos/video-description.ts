@@ -4,7 +4,6 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   flushAndRunMultipleServers,
-  flushTests,
   getVideo,
   getVideoDescription,
   getVideosList,
@@ -12,10 +11,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateVideo,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -46,7 +45,7 @@ describe('Test video description', function () {
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
 
-    await wait(5000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[0].url)
 
@@ -85,7 +84,7 @@ describe('Test video description', function () {
     }
     await updateVideo(servers[0].url, servers[0].accessToken, videoId, attributes)
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have a small description on each server', async function () {
@@ -102,10 +101,5 @@ describe('Test video description', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

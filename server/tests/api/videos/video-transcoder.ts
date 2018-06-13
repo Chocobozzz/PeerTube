@@ -7,7 +7,6 @@ import { getVideoFileFPS } from '../../../helpers/ffmpeg-utils'
 import {
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   getMyVideos,
   getVideo,
   getVideosList,
@@ -16,10 +15,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  wait,
   webtorrentAdd
 } from '../../utils'
 import { join } from 'path'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -45,7 +44,7 @@ describe('Test video transcoding', function () {
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
 
-    await wait(10000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[0].url)
     const video = res.body.data[0]
@@ -73,7 +72,7 @@ describe('Test video transcoding', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-    await wait(20000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[1].url)
 
@@ -102,7 +101,7 @@ describe('Test video transcoding', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-    await wait(20000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[1].url)
 
@@ -125,7 +124,7 @@ describe('Test video transcoding', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    await wait(15000)
+    await waitJobs(servers)
 
     {
       // Upload the video, but wait transcoding
@@ -161,7 +160,7 @@ describe('Test video transcoding', function () {
       await getVideo(servers[0].url, videoId, 404)
     }
 
-    await wait(30000)
+    await waitJobs(servers)
 
     for (const server of servers) {
       const res = await getVideosList(server.url)
@@ -179,10 +178,5 @@ describe('Test video transcoding', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

@@ -3,22 +3,22 @@
 import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
-const expect = chai.expect
-
 import {
   execCLI,
   flushTests,
   getEnvCli,
+  getVideo,
   getVideosList,
   killallServers,
   parseTorrentVideo,
   runServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait,
-  getVideo
+  uploadVideo
 } from '../utils'
+import { waitJobs } from '../utils/server/jobs'
+
+const expect = chai.expect
 
 describe('Test update host scripts', function () {
   let server: ServerInfo
@@ -41,7 +41,8 @@ describe('Test update host scripts', function () {
     const videoAttributes = {}
     await uploadVideo(server.url, server.accessToken, videoAttributes)
     await uploadVideo(server.url, server.accessToken, videoAttributes)
-    await wait(30000)
+
+    await waitJobs(server)
   })
 
   it('Should update torrent hosts', async function () {
@@ -82,10 +83,5 @@ describe('Test update host scripts', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

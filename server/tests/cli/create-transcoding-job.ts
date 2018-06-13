@@ -3,22 +3,22 @@
 import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
-const expect = chai.expect
-
 import {
+  doubleFollow,
   execCLI,
+  flushAndRunMultipleServers,
   flushTests,
   getEnvCli,
+  getVideo,
   getVideosList,
   killallServers,
-  parseTorrentVideo,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait,
-  getVideo, flushAndRunMultipleServers, doubleFollow
+  uploadVideo, wait
 } from '../utils'
+import { waitJobs } from '../utils/server/jobs'
+
+const expect = chai.expect
 
 describe('Test create transcoding jobs', function () {
   let servers: ServerInfo[] = []
@@ -40,7 +40,7 @@ describe('Test create transcoding jobs', function () {
     const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video2' })
     video2UUID = res.body.video.uuid
 
-    await wait(3000)
+    await waitJobs(servers)
   })
 
   it('Should have two video files on each server', async function () {
@@ -65,7 +65,7 @@ describe('Test create transcoding jobs', function () {
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run create-transcoding-job -- -v ${video2UUID}`)
 
-    await wait(40000)
+    await waitJobs(servers)
 
     for (const server of servers) {
       const res = await getVideosList(server.url)
@@ -102,10 +102,5 @@ describe('Test create transcoding jobs', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

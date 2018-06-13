@@ -449,14 +449,21 @@ const FEEDS = {
 // Special constants for a test instance
 if (isTestInstance() === true) {
   ACTOR_FOLLOW_SCORE.BASE = 20
+
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
+
   STATIC_MAX_AGE = '0'
+
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
+
   SCHEDULER_INTERVAL = 10000
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
+
+  JOB_ATTEMPTS['email'] = 1
 }
 
 updateWebserverConfig()
