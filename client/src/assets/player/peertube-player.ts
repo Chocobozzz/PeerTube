@@ -80,6 +80,7 @@ function getControlBarChildren (options: {
         'seekBar': {
           children: {
             'peerTubeLoadProgressBar': {},
+            'mouseTimeDisplay': {},
             'playProgressBar': {}
           }
         }
