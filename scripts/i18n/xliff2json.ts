@@ -1,7 +1,7 @@
 import * as xliff12ToJs from 'xliff/xliff12ToJs'
-import { unlink, readFileSync, writeFile } from 'fs'
+import { readFile, readFileSync, unlink, writeFile } from 'fs'
 import { join } from 'path'
-import { buildFileLocale, I18N_LOCALES, isDefaultLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
+import { buildFileLocale, I18N_LOCALES, isDefaultLocale } from '../../shared/models/i18n/i18n'
 import { eachSeries } from 'async'
 
 const sources: string[] = []
@@ -9,7 +9,7 @@ const availableLocales = Object.keys(I18N_LOCALES)
                                .filter(l => isDefaultLocale(l) === false)
                                .map(l => buildFileLocale(l))
 
-for (const file of LOCALE_FILES) {
+for (const file of [ 'player', 'server', 'iso639' ]) {
   for (const locale of availableLocales) {
     sources.push(join(__dirname, '../../../client/src/locale/target/', `${file}_${locale}.xml`))
   }
@@ -20,7 +20,11 @@ eachSeries(sources, (source, cb) => {
 }, err => {
   if (err) return handleError(err)
 
-  process.exit(0)
+  mergeISO639InServer(err => {
+    if (err) return handleError(err)
+
+    process.exit(0)
+  })
 })
 
 function handleError (err: any) {
@@ -46,6 +50,28 @@ function xliffFile2JSON (filePath: string, cb) {
       return unlink(filePath, cb)
     })
   })
+}
+
+function mergeISO639InServer (cb) {
+  eachSeries(availableLocales, (locale, eachCallback) => {
+    const serverPath = join(__dirname, '../../../client/src/locale/target/', `server_${locale}.json`)
+    const iso639Path = join(__dirname, '../../../client/src/locale/target/', `iso639_${locale}.json`)
+
+    const resServer = readFileSync(serverPath).toString()
+    const resISO639 = readFileSync(iso639Path).toString()
+
+    const jsonServer = JSON.parse(resServer)
+    const jsonISO639 = JSON.parse(resISO639)
+
+    Object.assign(jsonServer, jsonISO639)
+    const serverString = JSON.stringify(jsonServer)
+
+    writeFile(serverPath, serverString, err => {
+      if (err) return eachCallback(err)
+
+      return unlink(iso639Path, eachCallback)
+    })
+  }, cb)
 }
 
 function removeFirstLine (str: string) {
