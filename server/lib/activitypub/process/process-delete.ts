@@ -15,7 +15,7 @@ async function processDeleteActivity (activity: ActivityDelete) {
 
   if (activity.actor === objectUrl) {
     let actor = await ActorModel.loadByUrl(activity.actor)
-    if (!actor) return
+    if (!actor) return undefined
 
     if (actor.type === 'Person') {
       if (!actor.Account) throw new Error('Actor ' + actor.url + ' is a person but we cannot find it in database.')
@@ -45,7 +45,7 @@ async function processDeleteActivity (activity: ActivityDelete) {
     }
   }
 
-  return
+  return undefined
 }
 
 // ---------------------------------------------------------------------------
