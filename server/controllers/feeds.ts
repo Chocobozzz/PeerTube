@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
-import { asyncMiddleware, videoFeedsValidator, setDefaultSort, videosSortValidator, videoCommentsFeedsValidator } from '../middlewares'
+import { asyncMiddleware, setDefaultSort, videoCommentsFeedsValidator, videoFeedsValidator, videosSortValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
 import { AccountModel } from '../models/account/account'
@@ -33,12 +33,16 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateVideoCommentsFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
-  let feed = initFeed()
   const start = 0
 
-  const videoId: number = res.locals.video ? res.locals.video.id : undefined
+  const video = res.locals.video as VideoModel
+  const videoId: number = video ? video.id : undefined
 
   const comments = await VideoCommentModel.listForFeed(start, FEEDS.COUNT, videoId)
+
+  const name = video ? video.name : CONFIG.INSTANCE.NAME
+  const description = video ? video.description : CONFIG.INSTANCE.DESCRIPTION
+  const feed = initFeed(name, description)
 
   // Adding video items to the feed, one at a time
   comments.forEach(comment => {
@@ -62,12 +66,27 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 }
 
 async function generateVideoFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
-  let feed = initFeed()
   const start = 0
 
   const account: AccountModel = res.locals.account
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const hideNSFW = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
+
+  let name: string
+  let description: string
+
+  if (videoChannel) {
+    name = videoChannel.getDisplayName()
+    description = videoChannel.description
+  } else if (account) {
+    name = account.getDisplayName()
+    description = account.description
+  } else {
+    name = CONFIG.INSTANCE.NAME
+    description = CONFIG.INSTANCE.DESCRIPTION
+  }
+
+  const feed = initFeed(name, description)
 
   const resultList = await VideoModel.listForApi({
     start,
@@ -112,12 +131,12 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
   return sendFeed(feed, req, res)
 }
 
-function initFeed () {
+function initFeed (name: string, description: string) {
   const webserverUrl = CONFIG.WEBSERVER.URL
 
   return new Feed({
-    title: CONFIG.INSTANCE.NAME,
-    description: CONFIG.INSTANCE.DESCRIPTION,
+    title: name,
+    description,
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: webserverUrl,
     link: webserverUrl,
