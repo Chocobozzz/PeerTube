@@ -63,7 +63,9 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
   </a>
 </p>
 
-<p align="center">
+## Getting Started
+
+<p align="left">
   <strong><a title="Website" target="_blank" href="https://joinpeertube.org">Website</a> |
   <a title="Instances list" target="_blank" href="https://instances.joinpeertube.org">Instances list</a>
   </strong>
