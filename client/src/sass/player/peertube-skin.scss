@@ -10,6 +10,7 @@
 }
 
 .video-js.vjs-peertube-skin {
+
   font-size: $font-size;
   color: $primary-foreground-color;
 
@@ -402,6 +403,7 @@
       margin-right: 1px;
 
       .vjs-icon-placeholder {
+        transition: transform 0.2s ease;
         display: inline-block;
         width: 22px;
         height: 22px;
@@ -534,6 +536,24 @@
 
     .vjs-settings {
       width: 33px;
+    }
+  }
+
+  // Theater mode is enabled
+  &.vjs-theater-enabled {
+    .vjs-theater-control {
+      width: 30px;
+
+      .vjs-icon-placeholder {
+        transform: scale(0.8);
+      }
+    }
+  }
+
+  // On fullscreen, hide theater control
+  &.vjs-fullscreen {
+    .vjs-theater-control {
+      display: none;
     }
   }
 }
