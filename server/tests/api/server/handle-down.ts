@@ -138,7 +138,7 @@ describe('Test handle downs', function () {
 
     await waitJobs(servers[0])
     // Wait scheduler
-    await wait(3000)
+    await wait(11000)
 
     const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 1, 'createdAt')
     expect(res.body.data).to.be.an('array')
