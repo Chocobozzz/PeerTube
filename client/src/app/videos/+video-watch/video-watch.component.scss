@@ -243,6 +243,10 @@
         @include peertube-word-wrap;
       }
 
+      .glyphicon, .description-loading {
+        margin-left: 3px;
+      }
+
       .description-loading {
         display: inline-block;
       }
