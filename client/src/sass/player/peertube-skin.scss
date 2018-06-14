@@ -196,7 +196,7 @@
     }
 
     .vjs-progress-control:hover .vjs-slider,
-    .vjs-slider.vjs-sliding {
+    .vjs-progress-control .vjs-slider.vjs-sliding {
       height: 5px;
 
       .vjs-play-progress::before {
@@ -349,6 +349,11 @@
         max-width: 22px;
         max-height: 14px;
         height: 100%;
+      }
+
+      &:focus {
+        text-shadow: none;
+        box-shadow: none;
       }
     }
 
