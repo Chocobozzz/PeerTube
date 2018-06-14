@@ -46,10 +46,12 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   // Adding video items to the feed, one at a time
   comments.forEach(comment => {
+    const link = CONFIG.WEBSERVER.URL + '/videos/watch/' + comment.Video.uuid + ';threadId=' + comment.getThreadId()
+
     feed.addItem({
       title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,
       id: comment.url,
-      link: comment.url,
+      link,
       content: comment.text,
       author: [
         {
@@ -111,7 +113,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
     feed.addItem({
       title: video.name,
       id: video.url,
-      link: video.url,
+      link: CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid,
       description: video.getTruncatedDescription(),
       content: video.description,
       author: [

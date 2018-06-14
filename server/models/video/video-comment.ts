@@ -348,7 +348,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       where: {},
       include: [
         {
-          attributes: [ 'name' ],
+          attributes: [ 'name', 'uuid' ],
           model: VideoModel.unscoped(),
           required: true
         }
