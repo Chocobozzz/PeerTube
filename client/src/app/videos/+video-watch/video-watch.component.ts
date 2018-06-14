@@ -101,14 +101,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      if (this.player) {
-        this.player.pause()
-      }
-
       const uuid = routeParams[ 'uuid' ]
 
       // Video did not change
       if (this.video && this.video.uuid === uuid) return
+
+      if (this.player) this.player.pause()
+
       // Video did change
       this.videoService
           .getVideo(uuid)
@@ -469,7 +468,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private isAutoplay () {
-    // True by default
+    // We'll jump to the thread id, so do not play the video
+    if (this.route.snapshot.params['threadId']) return false
+
+    // Otherwise true by default
     if (!this.user) return true
 
     // Be sure the autoPlay is set to false
