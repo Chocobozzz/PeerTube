@@ -13,4 +13,8 @@ export interface VideoCreate {
   tags?: string[]
   commentsEnabled?: boolean
   privacy: VideoPrivacy
+  scheduleUpdate?: {
+    updateAt: Date
+    privacy?: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED
+  }
 }

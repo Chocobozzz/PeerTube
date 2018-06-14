@@ -3,7 +3,7 @@ import 'express-validator'
 import { values } from 'lodash'
 import 'multer'
 import * as validator from 'validator'
-import { UserRight, VideoRateType } from '../../../shared'
+import { UserRight, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
   VIDEO_CATEGORIES,
@@ -98,8 +98,16 @@ function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } |
   return isFileValid(files, videoImageTypesRegex, field, true)
 }
 
-function isVideoPrivacyValid (value: string) {
+function isVideoPrivacyValid (value: number) {
   return validator.isInt(value + '') && VIDEO_PRIVACIES[ value ] !== undefined
+}
+
+function isScheduleVideoUpdatePrivacyValid (value: number) {
+  return validator.isInt(value + '') &&
+    (
+      value === VideoPrivacy.UNLISTED ||
+      value === VideoPrivacy.PUBLIC
+    )
 }
 
 function isVideoFileInfoHashValid (value: string) {
@@ -174,6 +182,7 @@ export {
   isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
+  isScheduleVideoUpdatePrivacyValid,
   isVideoAbuseReasonValid,
   isVideoFile,
   isVideoStateValid,

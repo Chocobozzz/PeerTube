@@ -35,6 +35,10 @@ type VideoAttributes = {
   fixture?: string
   thumbnailfile?: string
   previewfile?: string
+  scheduleUpdate?: {
+    updateAt: string
+    privacy?: VideoPrivacy
+  }
 }
 
 function getVideoCategories (url: string) {
@@ -371,6 +375,14 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
   }
 
+  if (attributes.scheduleUpdate) {
+    req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+
+    if (attributes.scheduleUpdate.privacy) {
+      req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
+    }
+  }
+
   return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
             .expect(specialStatus)
 }
@@ -389,6 +401,7 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
   if (attributes.channelId) body['channelId'] = attributes.channelId
+  if (attributes.scheduleUpdate) body['scheduleUpdate'] = attributes.scheduleUpdate
 
   // Upload request
   if (attributes.thumbnailfile || attributes.previewfile) {

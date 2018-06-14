@@ -43,6 +43,10 @@ export interface Video {
 
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
+  scheduledUpdate?: {
+    updateAt: Date | string
+    privacy?: VideoPrivacy
+  }
 
   account: {
     id: number

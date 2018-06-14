@@ -174,7 +174,11 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
     false // Display my NSFW videos
   )
 
-  const additionalAttributes = { waitTranscoding: true, state: true }
+  const additionalAttributes = {
+    waitTranscoding: true,
+    state: true,
+    scheduledUpdate: true
+  }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }
 

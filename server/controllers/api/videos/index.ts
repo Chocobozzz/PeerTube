@@ -52,6 +52,7 @@ import { rateVideoRouter } from './rate'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
 import { createReqFiles, isNSFWHidden } from '../../../helpers/express-utils'
+import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 
 const videosRouter = express.Router()
 
@@ -231,11 +232,21 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     video.VideoFiles = [ videoFile ]
 
+    // Create tags
     if (videoInfo.tags !== undefined) {
       const tagInstances = await TagModel.findOrCreateTags(videoInfo.tags, t)
 
       await video.$set('Tags', tagInstances, sequelizeOptions)
       video.Tags = tagInstances
+    }
+
+    // Schedule an update in the future?
+    if (videoInfo.scheduleUpdate) {
+      await ScheduleVideoUpdateModel.create({
+        videoId: video.id,
+        updateAt: videoInfo.scheduleUpdate.updateAt,
+        privacy: videoInfo.scheduleUpdate.privacy || null
+      }, { transaction: t })
     }
 
     await federateVideoIfNeeded(video, true, t)
@@ -322,6 +333,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
         videoInstanceUpdated.VideoChannel = res.locals.videoChannel
 
         if (wasPrivateVideo === false) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
+      }
+
+      // Schedule an update in the future?
+      if (videoInfoToUpdate.scheduleUpdate) {
+        await ScheduleVideoUpdateModel.upsert({
+          videoId: videoInstanceUpdated.id,
+          updateAt: videoInfoToUpdate.scheduleUpdate.updateAt,
+          privacy: videoInfoToUpdate.scheduleUpdate.privacy || null
+        }, { transaction: t })
       }
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE

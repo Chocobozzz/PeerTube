@@ -22,11 +22,15 @@ function retryTransactionWrapper <T, A> (
 ): Promise<T>
 
 function retryTransactionWrapper <T> (
+  functionToRetry: () => Promise<T> | Bluebird<T>
+): Promise<T>
+
+function retryTransactionWrapper <T> (
   functionToRetry: (...args: any[]) => Promise<T> | Bluebird<T>,
   ...args: any[]
 ): Promise<T> {
   return transactionRetryer<T>(callback => {
-    functionToRetry.apply(this, args)
+    functionToRetry.apply(null, args)
         .then((result: T) => callback(null, result))
         .catch(err => callback(err))
   })

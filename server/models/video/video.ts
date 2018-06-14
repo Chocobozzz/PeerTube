@@ -15,6 +15,7 @@ import {
   Default,
   ForeignKey,
   HasMany,
+  HasOne,
   IFindOptions,
   Is,
   IsInt,
@@ -47,7 +48,8 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoPrivacyValid, isVideoStateValid,
+  isVideoPrivacyValid,
+  isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
@@ -66,7 +68,8 @@ import {
   VIDEO_EXT_MIMETYPE,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
-  VIDEO_PRIVACIES, VIDEO_STATES
+  VIDEO_PRIVACIES,
+  VIDEO_STATES
 } from '../../initializers'
 import {
   getVideoCommentsActivityPubUrl,
@@ -88,8 +91,9 @@ import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
+import { ScheduleVideoUpdateModel } from './schedule-video-update'
 
-enum ScopeNames {
+export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
@@ -495,6 +499,15 @@ export class VideoModel extends Model<VideoModel> {
   })
   VideoComments: VideoCommentModel[]
 
+  @HasOne(() => ScheduleVideoUpdateModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  ScheduleVideoUpdate: ScheduleVideoUpdateModel
+
   @BeforeDestroy
   static async sendDelete (instance: VideoModel, options) {
     if (instance.isOwned()) {
@@ -673,6 +686,10 @@ export class VideoModel extends Model<VideoModel> {
               required: true
             }
           ]
+        },
+        {
+          model: ScheduleVideoUpdateModel,
+          required: false
         }
       ]
     }
@@ -1006,7 +1023,8 @@ export class VideoModel extends Model<VideoModel> {
   toFormattedJSON (options?: {
     additionalAttributes: {
       state: boolean,
-      waitTranscoding: boolean
+      waitTranscoding: boolean,
+      scheduledUpdate: boolean
     }
   }): Video {
     const formattedAccount = this.VideoChannel.Account.toFormattedJSON()
@@ -1073,7 +1091,16 @@ export class VideoModel extends Model<VideoModel> {
         }
       }
 
-      if (options.additionalAttributes.waitTranscoding) videoObject.waitTranscoding = this.waitTranscoding
+      if (options.additionalAttributes.waitTranscoding) {
+        videoObject.waitTranscoding = this.waitTranscoding
+      }
+
+      if (options.additionalAttributes.scheduledUpdate && this.ScheduleVideoUpdate) {
+        videoObject.scheduledUpdate = {
+          updateAt: this.ScheduleVideoUpdate.updateAt,
+          privacy: this.ScheduleVideoUpdate.privacy || undefined
+        }
+      }
     }
 
     return videoObject

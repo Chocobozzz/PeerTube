@@ -8,6 +8,8 @@ import { VideoPrivacy } from '../../shared/models/videos'
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
+import { RemoveOldJobsScheduler } from '../lib/schedulers/remove-old-jobs-scheduler'
+import { UpdateVideosScheduler } from '../lib/schedulers/update-videos-scheduler'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -94,7 +96,11 @@ const JOB_REQUEST_TTL = 60000 * 10 // 10 minutes
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 
 // 1 hour
-let SCHEDULER_INTERVAL = 60000 * 60
+let SCHEDULER_INTERVALS_MS = {
+  badActorFollow: 60000 * 60, // 1 hour
+  removeOldJobs: 60000 * 60, // 1 jour
+  updateVideos: 60000 * 1, // 1 minute
+}
 
 // ---------------------------------------------------------------------------
 
@@ -460,7 +466,10 @@ if (isTestInstance() === true) {
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 
-  SCHEDULER_INTERVAL = 10000
+  SCHEDULER_INTERVALS_MS.badActorFollow = 10000
+  SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
+  SCHEDULER_INTERVALS_MS.updateVideos = 5000
+
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
@@ -513,7 +522,7 @@ export {
   JOB_REQUEST_TTL,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
-  SCHEDULER_INTERVAL,
+  SCHEDULER_INTERVALS_MS,
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,

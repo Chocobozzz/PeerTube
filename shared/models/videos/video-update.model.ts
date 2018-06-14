@@ -15,4 +15,8 @@ export interface VideoUpdate {
   channelId?: number
   thumbnailfile?: Blob
   previewfile?: Blob
+  scheduleUpdate?: {
+    updateAt: Date
+    privacy?: VideoPrivacy
+  }
 }
