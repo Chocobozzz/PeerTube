@@ -115,11 +115,7 @@ describe('Test create transcoding jobs', function () {
       const videos = res.body.data
       expect(videos).to.have.lengthOf(2)
 
-      let infoHashes: { [ id: number ]: string }
-
-      const video = videos.find(v => v.uuid === video1UUID)
-
-      const res2 = await getVideo(server.url, video.uuid)
+      const res2 = await getVideo(server.url, video1UUID)
       const videoDetail: VideoDetails = res2.body
 
       expect(videoDetail.files).to.have.lengthOf(2)
