@@ -1216,14 +1216,19 @@ Check this checkbox, save the configuration and test with a video URL of your in
           <context context-type="sourcefile">app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
-      </trans-unit><trans-unit id="a475a4862efc4e473d6201f09b258e05d651c1df" datatype="html">
-        <source>
-            &lt;x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/&gt;&lt;x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/&gt;
-            Delete
-          </source>
+      </trans-unit><trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7" datatype="html">
+        <source>Delete</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-videos/my-account-videos.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-watch/comment/video-comment.component.ts</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit><trans-unit id="73c1cefc348a6f361497210dea1ed79499fd1260" datatype="html">
         <source>Create another video channel</source>
@@ -1402,13 +1407,13 @@ When you will upload a video in this channel, the video support field will be au
         <source>Publish will be available when upload is finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/video-add.component.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit><trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3" datatype="html">
         <source>Publish</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/video-add.component.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit><trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e" datatype="html">
         <source>Title</source>
@@ -1452,35 +1457,41 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
+      </trans-unit><trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5" datatype="html">
+        <source>Schedule publication (&lt;x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/&gt;)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
       </trans-unit><trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee" datatype="html">
         <source>This video contains mature or explicit content</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">116</context>
         </context-group>
-      </trans-unit><trans-unit id="73743a7cbb03abe81de0960a6bc4b6c42c18633a" datatype="html">
-        <source>Some instances do not list NSFW videos by default.</source>
+      </trans-unit><trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644" datatype="html">
+        <source>Some instances do not list videos containing mature or explicit content by default.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit><trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a" datatype="html">
         <source>Enable video comments</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit><trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0" datatype="html">
         <source>Wait transcoding before publishing the video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit><trans-unit id="0001ec53fe3dfd603b7ad80fd32d262170e3d9a5" datatype="html">
         <source>If you decide to not wait transcoding before publishing the video, it can be unplayable until it transcoding ends.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit><trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7" datatype="html">
         <source>Basic info</source>
@@ -1492,19 +1503,19 @@ When you will upload a video in this channel, the video support field will be au
         <source>Upload thumbnail</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit><trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639" datatype="html">
         <source>Upload preview</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit><trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604" datatype="html">
         <source>Support</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">159</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-support.component.ts</context>
@@ -1512,19 +1523,19 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit><trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit><trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1" datatype="html">
         <source>Advanced settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit><trans-unit id="c07377d8b52fde03fcf70824a980346b9222d056" datatype="html">
         <source>(extensions: &lt;x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/&gt;, max size: &lt;x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/&gt;)</source>
@@ -1548,7 +1559,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit><trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611" datatype="html">
         <source>Download video</source>
@@ -1576,7 +1587,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit><trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b" datatype="html">
         <source>Report video</source>
@@ -1612,7 +1623,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit><trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6" datatype="html">
         <source>URL</source>
@@ -1642,113 +1653,111 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">6</context>
         </context-group>
+      </trans-unit><trans-unit id="fbc205ea3d06fa8f65973fa3b490ae172f71c087" datatype="html">
+        <source>
+    This video will be published on &lt;x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: &apos;full&apos; }}"/&gt;
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
       </trans-unit><trans-unit id="643ab402461b1169eebbe2ed790e12a9a83551aa" datatype="html">
         <source>
             &lt;x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/&gt; - &lt;x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/&gt; views
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit><trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33" datatype="html">
         <source>Go the channel page</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit><trans-unit id="57075c778cf28b81272df4eb17da944366c98e51" datatype="html">
         <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@&lt;x id="INTERPOLATION" equiv-text="{{video.account.name}}"/&gt;@&lt;x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/&gt;&lt;/strong&gt; and subscribe there. Subscription as a PeerTube user is being worked on in &lt;a href=&apos;https://github.com/Chocobozzz/PeerTube/issues/470&apos;&gt;#470&lt;/a&gt;.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit><trans-unit id="ccc07df383b7a32be3e2e105faa5488caf261c1c" datatype="html">
         <source>By &lt;x id="INTERPOLATION" equiv-text="{{ video.by }}"/&gt;</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit><trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c" datatype="html">
         <source>Go to the account page</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit><trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced" datatype="html">
         <source>Like this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit><trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509" datatype="html">
         <source>Dislike this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit><trans-unit id="144fff5c40b85414d59e644d8dee7cfefba925a2" datatype="html">
         <source>Download the video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit><trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a" datatype="html">
         <source>Report</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit><trans-unit id="2f4894617d9c44010f87473e583bd4604b7d6ecf" datatype="html">
         <source>Report this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit><trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61" datatype="html">
         <source>Blacklist</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit><trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037" datatype="html">
         <source>Blacklist this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit><trans-unit id="cd27f761b923a5bdb16ba9844da632edd878f1b1" datatype="html">
         <source>Update this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-      </trans-unit><trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7" datatype="html">
-        <source>Delete</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">95</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/videos/+video-watch/comment/video-comment.component.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit><trans-unit id="3dbfdc68f83d91cb360172eb65578cae94e7cbe5" datatype="html">
         <source>Delete this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit><trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b" datatype="html">
         <source>Show more</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit><trans-unit id="5403a767248e304199592271bba3366d2ca3f903" datatype="html">
         <source>Show less</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit><trans-unit id="8057a9b7f9e908ff350edfd71417b96c174e5911" datatype="html">
         <source>
@@ -1756,7 +1765,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit><trans-unit id="bd407eca607a8905a26a9e30c9d0cd70f4465db8" datatype="html">
         <source>
@@ -1764,7 +1773,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit><trans-unit id="af5072bd79ea3cd767ab74a6622d2eee791b3832" datatype="html">
         <source>
@@ -1772,7 +1781,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit><trans-unit id="a911eee019174741b0aec6fcf3fbd5752fab3e67" datatype="html">
         <source>
@@ -1780,7 +1789,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit><trans-unit id="ecf7007c2842cc26a7b91d08d48c7a4f5f749fb3" datatype="html">
         <source>
@@ -1788,7 +1797,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit><trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>
@@ -1796,13 +1805,13 @@ When you will upload a video in this channel, the video support field will be au
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit><trans-unit id="fb779d2b25c4d0ffa7d52c823a240717e8c1fe6c" datatype="html">
         <source>Friendly Reminder:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit><trans-unit id="4c2fca29fd9d7e85abe85a206958a4226f403be2" datatype="html">
         <source>
@@ -1810,19 +1819,19 @@ When you will upload a video in this channel, the video support field will be au
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit><trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e" datatype="html">
         <source>More information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit><trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318" datatype="html">
         <source>Get more information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit><trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f" datatype="html">
         <source>
@@ -1830,7 +1839,7 @@ When you will upload a video in this channel, the video support field will be au
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit><trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7" datatype="html">
         <source>
@@ -1856,7 +1865,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>View all &lt;x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/&gt; replies</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/comment/video-comments.component.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit><trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828" datatype="html">
         <source>
@@ -1864,7 +1873,7 @@ When you will upload a video in this channel, the video support field will be au
   </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/comment/video-comments.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit><trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e" datatype="html">
         <source>Add comment...</source>
@@ -2493,6 +2502,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8e6d54c4f760d9e90518eef5334211c48c0b71e2" datatype="html">
+        <source>Publication scheduled on </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4a7e91ebe1cf184db5f2bfecf9c16ff81c9e2c02" datatype="html">
         <source>Waiting transcoding</source>
         <context-group purpose="location">
@@ -2502,13 +2518,6 @@ When you will upload a video in this channel, the video support field will be au
       </trans-unit>
       <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a" datatype="html">
         <source>To transcode</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="28eed5307c7f1bdc4442b5b7cacbf9d6583b89d0" datatype="html">
-        <source>Unknown state</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2952,6 +2961,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0" datatype="html">
+        <source>A date is required to schedule video update.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4" datatype="html">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
         <context-group purpose="location">
@@ -2965,6 +2981,365 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="sourcefile">src/app/shared/guards/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
+      </trans-unit>
+      <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf" datatype="html">
+        <source>Sunday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596" datatype="html">
+        <source>Monday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee" datatype="html">
+        <source>Tuesday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9" datatype="html">
+        <source>Wednesday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b" datatype="html">
+        <source>Thursday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215" datatype="html">
+        <source>Friday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e" datatype="html">
+        <source>Saturday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6549890cd0d6b59fb0e1aa383b00483a68a55eef" datatype="html">
+        <source>Sun</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="3382aa5d7f520e197fb59a4995fe1beffca2d0ff" datatype="html">
+        <source>Mon</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="f883ec926274974df0fc46c037cbffd6a863ebc9" datatype="html">
+        <source>Tue</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="242b4f4b5651e24f9a9007ef153a57981e4b989d" datatype="html">
+        <source>Wed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="5a2c39d56b8f00a6a4670a63b53caacbda953be6" datatype="html">
+        <source>Thu</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="4cdf23d523a0e52e0dec9cd650ffd9bd6952792c" datatype="html">
+        <source>Fri</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="1283d165a942d7f4c469ba34f99dbb9e927d0261" datatype="html">
+        <source>Sat</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name short</note>
+      </trans-unit>
+      <trans-unit id="2fba8448ff13105c57665a9a6ffcfe9615d855dd" datatype="html">
+        <source>Su</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="388144af7ac7651d2615b9be0e84f43ae71d9fb3" datatype="html">
+        <source>Mo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="d96313e42b5f0751ce2676a31d309b4d322ab462" datatype="html">
+        <source>Tu</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="06cc3d39f78c0615b707cef39cd4875599611fef" datatype="html">
+        <source>We</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="790894436cca9d675d59be9a8aafd58acccde2cd" datatype="html">
+        <source>Th</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="42dfe37169f8471367c31489155229bbe1747ea5" datatype="html">
+        <source>Fr</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="1b64ea3e04ceeb512e8974eb0019dee4f211c7a0" datatype="html">
+        <source>Sa</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Day name min</note>
+      </trans-unit>
+      <trans-unit id="e7815f1c4a6d3cc157a16407a48865023cc35ec0" datatype="html">
+        <source>January</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0393a96b58df82af39a2ec83deec624749e42036" datatype="html">
+        <source>February</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea41ee3743ec5bdbbf863ab793bbdd6e6d9af96e" datatype="html">
+        <source>March</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b87ee784d9e93b5557aca9bdc9464dbd4328920a" datatype="html">
+        <source>April</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="862da1034ac2707cc44123ed963b2f42109b6b3e" datatype="html">
+        <source>May</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f234249d4c3c39e27c0f05d4a6b73a7959caeb2" datatype="html">
+        <source>June</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="11447f95e83c8de675ab6c492150f88e4d9bd15e" datatype="html">
+        <source>July</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddd9a3d59a8db4e822e54e9473c05b571aca9829" datatype="html">
+        <source>August</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e21dc41f9b3fdaf35ab6b2d9e2e5e8a926fb1938" datatype="html">
+        <source>September</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71f49c502d13e22079a958a5532afa28dbe98b3b" datatype="html">
+        <source>October</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64b5ce921faa5e3d277d6d528ddcfc8c2bfe9f52" datatype="html">
+        <source>November</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2006e2aabb31714ebc684dc382539649f690ed5c" datatype="html">
+        <source>December</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8270e687cfb5624b3f6fbb7991a2e916c96464b7" datatype="html">
+        <source>Jan</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60" datatype="html">
+        <source>Feb</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7" datatype="html">
+        <source>Mar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="964a5f032bc846d32806a4838580a4f81cf14463" datatype="html">
+        <source>Apr</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="8f7274f606f71d9290ed01c5683092d701632d7f" datatype="html">
+        <source>Jun</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="7c3d8318d6d8d9920ae0a80350616732c33a3211" datatype="html">
+        <source>Jul</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212" datatype="html">
+        <source>Aug</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="4f739d03be1c936c58978739c317d91566348204" datatype="html">
+        <source>Sep</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="6607cacb987a588530a13de7018d959240d19153" datatype="html">
+        <source>Oct</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="e597400ded12a366855615e18fcc8f9ac05b72e0" datatype="html">
+        <source>Nov</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e" datatype="html">
+        <source>Dec</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Month name short</note>
+      </trans-unit>
+      <trans-unit id="7fb1099e29660162f9154d5b2feee7743a423df6" datatype="html">
+        <source>Today</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46" datatype="html">
+        <source>Clear</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5" datatype="html">
+        <source>yy-mm-dd </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="description">Date format in this locale.</note>
       </trans-unit>
       <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d" datatype="html">
         <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; years ago</source>
