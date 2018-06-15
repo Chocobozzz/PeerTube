@@ -280,6 +280,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
+  hasVideoScheduledPublication () {
+    return this.video && this.video.scheduledUpdate !== undefined
+  }
+
   private updateVideoDescription (description: string) {
     this.video.description = description
     this.setVideoDescriptionHTML()

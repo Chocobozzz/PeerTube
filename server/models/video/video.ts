@@ -97,7 +97,8 @@ export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
-  WITH_FILES = 'WITH_FILES'
+  WITH_FILES = 'WITH_FILES',
+  WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE'
 }
 
 @Scopes({
@@ -284,6 +285,14 @@ export enum ScopeNames {
       {
         model: () => VideoFileModel.unscoped(),
         required: true
+      }
+    ]
+  },
+  [ScopeNames.WITH_SCHEDULED_UPDATE]: {
+    include: [
+      {
+        model: () => ScheduleVideoUpdateModel.unscoped(),
+        required: false
       }
     ]
   }
@@ -843,7 +852,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS ])
+      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_SCHEDULED_UPDATE ])
       .findById(id, options)
   }
 
@@ -869,7 +878,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS ])
+      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_SCHEDULED_UPDATE ])
       .findOne(options)
   }
 
@@ -1022,9 +1031,9 @@ export class VideoModel extends Model<VideoModel> {
 
   toFormattedJSON (options?: {
     additionalAttributes: {
-      state: boolean,
-      waitTranscoding: boolean,
-      scheduledUpdate: boolean
+      state?: boolean,
+      waitTranscoding?: boolean,
+      scheduledUpdate?: boolean
     }
   }): Video {
     const formattedAccount = this.VideoChannel.Account.toFormattedJSON()
@@ -1084,18 +1093,18 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     if (options) {
-      if (options.additionalAttributes.state) {
+      if (options.additionalAttributes.state === true) {
         videoObject.state = {
           id: this.state,
           label: VideoModel.getStateLabel(this.state)
         }
       }
 
-      if (options.additionalAttributes.waitTranscoding) {
+      if (options.additionalAttributes.waitTranscoding === true) {
         videoObject.waitTranscoding = this.waitTranscoding
       }
 
-      if (options.additionalAttributes.scheduledUpdate && this.ScheduleVideoUpdate) {
+      if (options.additionalAttributes.scheduledUpdate === true && this.ScheduleVideoUpdate) {
         videoObject.scheduledUpdate = {
           updateAt: this.ScheduleVideoUpdate.updateAt,
           privacy: this.ScheduleVideoUpdate.privacy || undefined
@@ -1107,7 +1116,11 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   toFormattedDetailsJSON (): VideoDetails {
-    const formattedJson = this.toFormattedJSON()
+    const formattedJson = this.toFormattedJSON({
+      additionalAttributes: {
+        scheduledUpdate: true
+      }
+    })
 
     const detailsJson = {
       support: this.support,

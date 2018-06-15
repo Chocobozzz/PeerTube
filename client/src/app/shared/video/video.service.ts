@@ -83,7 +83,8 @@ export class VideoService {
       waitTranscoding: video.waitTranscoding,
       commentsEnabled: video.commentsEnabled,
       thumbnailfile: video.thumbnailfile,
-      previewfile: video.previewfile
+      previewfile: video.previewfile,
+      scheduleUpdate: video.scheduleUpdate || undefined
     }
 
     const data = objectToFormData(body)

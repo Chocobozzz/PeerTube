@@ -25,7 +25,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
   @AllowNull(true)
   @Default(null)
   @Column
-  privacy: VideoPrivacy
+  privacy: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED
 
   @CreatedAt
   createdAt: Date
@@ -44,6 +44,21 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
     onDelete: 'cascade'
   })
   Video: VideoModel
+
+  static areVideosToUpdate () {
+    const query = {
+      logging: false,
+      attributes: [ 'id' ],
+      where: {
+        updateAt: {
+          [Sequelize.Op.lte]: new Date()
+        }
+      }
+    }
+
+    return ScheduleVideoUpdateModel.findOne(query)
+      .then(res => !!res)
+  }
 
   static listVideosToUpdate (t: Transaction) {
     const query = {
@@ -68,4 +83,10 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
     return ScheduleVideoUpdateModel.findAll(query)
   }
 
+  toFormattedJSON () {
+    return {
+      updateAt: this.updateAt,
+      privacy: this.privacy || undefined
+    }
+  }
 }

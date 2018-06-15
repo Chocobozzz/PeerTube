@@ -1,8 +1,11 @@
 import { VideoDetails } from './video-details.model'
 import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
 import { VideoUpdate } from '../../../../../shared/models/videos'
+import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class VideoEdit implements VideoUpdate {
+  static readonly SPECIAL_SCHEDULED_PRIVACY = -1
+
   category: number
   licence: number
   language: string
@@ -21,6 +24,7 @@ export class VideoEdit implements VideoUpdate {
   previewUrl: string
   uuid?: string
   id?: number
+  scheduleUpdate?: VideoScheduleUpdate
 
   constructor (videoDetails?: VideoDetails) {
     if (videoDetails) {
@@ -40,6 +44,8 @@ export class VideoEdit implements VideoUpdate {
       this.support = videoDetails.support
       this.thumbnailUrl = videoDetails.thumbnailUrl
       this.previewUrl = videoDetails.previewUrl
+
+      this.scheduleUpdate = videoDetails.scheduledUpdate
     }
   }
 
@@ -47,10 +53,22 @@ export class VideoEdit implements VideoUpdate {
     Object.keys(values).forEach((key) => {
       this[ key ] = values[ key ]
     })
+
+    // If schedule publication, the video is private and will be changed to public privacy
+    if (values['schedulePublicationAt']) {
+      const updateAt = (values['schedulePublicationAt'] as Date)
+      updateAt.setSeconds(0)
+
+      this.privacy = VideoPrivacy.PRIVATE
+      this.scheduleUpdate = {
+        updateAt: updateAt.toISOString(),
+        privacy: VideoPrivacy.PUBLIC
+      }
+    }
   }
 
-  toJSON () {
-    return {
+  toFormPatch () {
+    const json = {
       category: this.category,
       licence: this.licence,
       language: this.language,
@@ -64,5 +82,15 @@ export class VideoEdit implements VideoUpdate {
       channelId: this.channelId,
       privacy: this.privacy
     }
+
+    // Special case if we scheduled an update
+    if (this.scheduleUpdate) {
+      Object.assign(json, {
+        privacy: VideoEdit.SPECIAL_SCHEDULED_PRIVACY,
+        schedulePublicationAt: new Date(this.scheduleUpdate.updateAt.toString())
+      })
+    }
+
+    return json
   }
 }

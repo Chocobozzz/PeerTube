@@ -3,8 +3,12 @@
   <div id="video-element-wrapper">
   </div>
 
-  <div i18n id="warning-transcoding" class="alert alert-warning" *ngIf="isVideoToTranscode()">
+  <div i18n class="alert alert-warning" *ngIf="isVideoToTranscode()">
     The video is being transcoded, it may not work properly.
+  </div>
+
+  <div i18n class="alert alert-info" *ngIf="hasVideoScheduledPublication()">
+    This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}
   </div>
 
   <!-- Video information -->

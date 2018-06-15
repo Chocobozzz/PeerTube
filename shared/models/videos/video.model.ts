@@ -3,6 +3,7 @@ import { Account } from '../actors'
 import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
+import { VideoScheduleUpdate } from './video-schedule-update.model'
 
 export interface VideoConstant <T> {
   id: T
@@ -43,10 +44,7 @@ export interface Video {
 
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
-  scheduledUpdate?: {
-    updateAt: Date | string
-    privacy?: VideoPrivacy
-  }
+  scheduledUpdate?: VideoScheduleUpdate
 
   account: {
     id: number

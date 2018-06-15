@@ -6,6 +6,7 @@ import { getAbsoluteAPIUrl } from '../misc/utils'
 import { ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
+import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
   by: string
@@ -38,6 +39,7 @@ export class Video implements VideoServerModel {
 
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
+  scheduledUpdate?: VideoScheduleUpdate
 
   account: {
     id: number
@@ -109,6 +111,7 @@ export class Video implements VideoServerModel {
     this.language.label = peertubeTranslate(this.language.label, translations)
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
 
+    this.scheduledUpdate = hash.scheduledUpdate
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
   }
 

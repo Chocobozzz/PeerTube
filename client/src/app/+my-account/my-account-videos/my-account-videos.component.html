@@ -18,7 +18,7 @@
       <div class="video-info">
         <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
         <span i18n class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
-        <div class="video-info-private">{{ video.privacy.label }} - {{ getStateLabel(video) }}</div>
+        <div class="video-info-private">{{ video.privacy.label }}{{ getStateLabel(video) }}</div>
       </div>
 
       <!-- Display only once -->
@@ -28,9 +28,9 @@
             Cancel
           </span>
 
-          <span i18n class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+          <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
             <span class="icon icon-delete-white"></span>
-            Delete
+            <ng-container i18n>Delete</ng-container>
           </span>
         </div>
       </div>

@@ -27,6 +27,9 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   @ViewChild('videofileInput') videofileInput
 
+  // So that it can be accessed in the template
+  readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+
   isUploadingVideo = false
   isUpdatingVideo = false
   videoUploaded = false

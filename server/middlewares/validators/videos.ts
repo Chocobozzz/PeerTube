@@ -223,7 +223,7 @@ const videosUpdateValidator = [
 
     if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
       return res.status(409)
-        .json({ error: 'Cannot set "private" a video that was not private anymore.' })
+        .json({ error: 'Cannot set "private" a video that was not private.' })
         .end()
     }
 

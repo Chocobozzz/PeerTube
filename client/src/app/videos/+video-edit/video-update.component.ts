@@ -24,6 +24,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   isUpdatingVideo = false
   videoPrivacies = []
   userVideoChannels = []
+  schedulePublicationPossible = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -70,13 +71,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.userVideoChannels = videoChannels
 
             // We cannot set private a video that was not private
-            if (video.privacy.id !== VideoPrivacy.PRIVATE) {
-              const newVideoPrivacies = []
-              for (const p of this.videoPrivacies) {
-                if (p.id !== VideoPrivacy.PRIVATE) newVideoPrivacies.push(p)
-              }
-
-              this.videoPrivacies = newVideoPrivacies
+            if (this.video.privacy !== VideoPrivacy.PRIVATE) {
+              this.videoPrivacies = this.videoPrivacies.filter(p => p.id !== VideoPrivacy.PRIVATE)
+            } else { // We can schedule video publication only if it it is private
+              this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
             }
 
             this.hydrateFormFromVideo()
@@ -123,7 +121,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   private hydrateFormFromVideo () {
-    this.form.patchValue(this.video.toJSON())
+    this.form.patchValue(this.video.toFormPatch())
 
     const objects = [
       {

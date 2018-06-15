@@ -5,11 +5,14 @@ import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
   doubleFollow,
-  flushAndRunMultipleServers, getMyVideos,
+  flushAndRunMultipleServers,
+  getMyVideos,
   getVideosList,
+  getVideoWithToken,
   killallServers,
   ServerInfo,
-  setAccessTokensToServers, updateVideo,
+  setAccessTokensToServers,
+  updateVideo,
   uploadVideo,
   wait
 } from '../../utils'
@@ -69,17 +72,22 @@ describe('Test video update scheduler', function () {
     const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 5)
     expect(res.body.total).to.equal(1)
 
-    const video = res.body.data[0]
-    expect(video.name).to.equal('video 1')
-    expect(video.privacy.id).to.equal(VideoPrivacy.PRIVATE)
-    expect(new Date(video.scheduledUpdate.updateAt)).to.be.above(new Date())
-    expect(video.scheduledUpdate.privacy).to.equal(VideoPrivacy.PUBLIC)
+    const videoFromList = res.body.data[0]
+    const res2 = await getVideoWithToken(servers[0].url, servers[0].accessToken, videoFromList.uuid)
+    const videoFromGet = res2.body
+
+    for (const video of [ videoFromList, videoFromGet ]) {
+      expect(video.name).to.equal('video 1')
+      expect(video.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      expect(new Date(video.scheduledUpdate.updateAt)).to.be.above(new Date())
+      expect(video.scheduledUpdate.privacy).to.equal(VideoPrivacy.PUBLIC)
+    }
   })
 
   it('Should wait some seconds and have the video in public privacy', async function () {
     this.timeout(20000)
 
-    await wait(10000)
+    await wait(15000)
     await waitJobs(servers)
 
     for (const server of servers) {
@@ -144,7 +152,7 @@ describe('Test video update scheduler', function () {
   it('Should wait some seconds and have the updated video in public privacy', async function () {
     this.timeout(20000)
 
-    await wait(10000)
+    await wait(15000)
     await waitJobs(servers)
 
     for (const server of servers) {

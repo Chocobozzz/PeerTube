@@ -33,7 +33,9 @@ export class UpdateVideosScheduler extends AbstractScheduler {
     }
   }
 
-  private updateVideos () {
+  private async updateVideos () {
+    if (!await ScheduleVideoUpdateModel.areVideosToUpdate()) return undefined
+
     return sequelizeTypescript.transaction(async t => {
       const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate(t)
 

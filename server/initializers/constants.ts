@@ -8,8 +8,6 @@ import { VideoPrivacy } from '../../shared/models/videos'
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
-import { RemoveOldJobsScheduler } from '../lib/schedulers/remove-old-jobs-scheduler'
-import { UpdateVideosScheduler } from '../lib/schedulers/update-videos-scheduler'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -98,8 +96,8 @@ const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 // 1 hour
 let SCHEDULER_INTERVALS_MS = {
   badActorFollow: 60000 * 60, // 1 hour
-  removeOldJobs: 60000 * 60, // 1 jour
-  updateVideos: 60000 * 1, // 1 minute
+  removeOldJobs: 60000 * 60, // 1 hour
+  updateVideos: 60000 // 1 minute
 }
 
 // ---------------------------------------------------------------------------

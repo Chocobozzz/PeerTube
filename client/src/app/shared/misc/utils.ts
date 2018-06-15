@@ -96,26 +96,12 @@ function lineFeedToHtml (obj: object, keyToNormalize: string) {
   })
 }
 
-// Try to cache a little bit window.innerWidth
-let windowInnerWidth = window.innerWidth
-setInterval(() => windowInnerWidth = window.innerWidth, 500)
-
-function isInSmallView () {
-  return windowInnerWidth < 600
-}
-
-function isInMobileView () {
-  return windowInnerWidth < 500
-}
-
 export {
   objectToUrlEncoded,
   getParameterByName,
   populateAsyncUserVideoChannels,
   getAbsoluteAPIUrl,
   dateToHuman,
-  isInSmallView,
-  isInMobileView,
   immutableAssign,
   objectToFormData,
   lineFeedToHtml

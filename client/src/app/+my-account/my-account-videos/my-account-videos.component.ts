@@ -1,6 +1,6 @@
 import { from as observableFrom, Observable } from 'rxjs'
 import { concatAll, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Inject, LOCALE_ID } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
@@ -12,7 +12,8 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoState } from '../../../../../shared/models/videos'
+import { VideoPrivacy, VideoState } from '../../../../../shared/models/videos'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-account-videos',
@@ -39,8 +40,10 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected screenService: ScreenService,
     protected i18n: I18n,
-    private videoService: VideoService
+    private videoService: VideoService,
+    @Inject(LOCALE_ID) private localeId: string
   ) {
     super()
 
@@ -131,12 +134,22 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
   }
 
   getStateLabel (video: Video) {
-    if (video.state.id === VideoState.PUBLISHED) return this.i18n('Published')
+    let suffix: string
 
-    if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) return this.i18n('Waiting transcoding')
-    if (video.state.id === VideoState.TO_TRANSCODE) return this.i18n('To transcode')
+    if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
+      suffix = this.i18n('Published')
+    } else if (video.scheduledUpdate) {
+      const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
+      suffix = this.i18n('Publication scheduled on ') + updateAt
+    } else if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
+      suffix = this.i18n('Waiting transcoding')
+    } else if (video.state.id === VideoState.TO_TRANSCODE) {
+      suffix = this.i18n('To transcode')
+    } else {
+      return ''
+    }
 
-    return this.i18n('Unknown state')
+    return ' - ' + suffix
   }
 
   protected buildVideoHeight () {
