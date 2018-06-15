@@ -94,7 +94,7 @@
       .video-info-by a {
         @include disable-default-a-behaviour;
 
-        display: flex;
+        display: inline;
         align-items: center;
         font-size: 13px;
         color: #000;
