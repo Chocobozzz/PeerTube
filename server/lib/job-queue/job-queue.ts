@@ -79,6 +79,7 @@ class JobQueue {
           const res = await handlers[ handlerName ](job)
           return done(null, res)
         } catch (err) {
+          logger.error('Cannot execute job %d.', job.id, { err })
           return done(err)
         }
       })

@@ -5,18 +5,17 @@ import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
   flushAndRunMultipleServers,
-  flushTests,
   getVideosList,
   killallServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
 import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../utils/videos/videos'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -48,7 +47,7 @@ describe('Test video privacy', function () {
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should not have this private video on server 2', async function () {
@@ -99,7 +98,7 @@ describe('Test video privacy', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, attributes)
 
     // Server 2 has transcoding enabled
-    await wait(10000)
+    await waitJobs(servers)
   })
 
   it('Should not have this unlisted video listed on server 1 and 2', async function () {
@@ -139,7 +138,7 @@ describe('Test video privacy', function () {
     now = Date.now()
     await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, attribute)
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have this new public video listed on server 1 and 2', async function () {
@@ -155,10 +154,5 @@ describe('Test video privacy', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

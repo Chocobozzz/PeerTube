@@ -1,15 +1,24 @@
 import * as express from 'express'
 import { ResultList } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { buildFormattedCommentTree, createVideoComment } from '../../../lib/video-comment'
-import { asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setDefaultPagination } from '../../../middlewares'
+import {
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  paginationValidator,
+  setDefaultPagination,
+  setDefaultSort
+} from '../../../middlewares'
 import { videoCommentThreadsSortValidator } from '../../../middlewares/validators'
 import {
-  addVideoCommentReplyValidator, addVideoCommentThreadValidator, listVideoCommentThreadsValidator, listVideoThreadCommentsValidator,
+  addVideoCommentReplyValidator,
+  addVideoCommentThreadValidator,
+  listVideoCommentThreadsValidator,
+  listVideoThreadCommentsValidator,
   removeVideoCommentValidator
 } from '../../../middlewares/validators/video-comments'
 import { VideoModel } from '../../../models/video/video'
@@ -33,17 +42,17 @@ videoCommentRouter.get('/:videoId/comment-threads/:threadId',
 videoCommentRouter.post('/:videoId/comment-threads',
   authenticate,
   asyncMiddleware(addVideoCommentThreadValidator),
-  asyncMiddleware(addVideoCommentThreadRetryWrapper)
+  asyncRetryTransactionMiddleware(addVideoCommentThread)
 )
 videoCommentRouter.post('/:videoId/comments/:commentId',
   authenticate,
   asyncMiddleware(addVideoCommentReplyValidator),
-  asyncMiddleware(addVideoCommentReplyRetryWrapper)
+  asyncRetryTransactionMiddleware(addVideoCommentReply)
 )
 videoCommentRouter.delete('/:videoId/comments/:commentId',
   authenticate,
   asyncMiddleware(removeVideoCommentValidator),
-  asyncMiddleware(removeVideoCommentRetryWrapper)
+  asyncRetryTransactionMiddleware(removeVideoComment)
 )
 
 // ---------------------------------------------------------------------------
@@ -86,23 +95,10 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   return res.json(buildFormattedCommentTree(resultList))
 }
 
-async function addVideoCommentThreadRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot insert the video comment thread with many retries.'
-  }
-
-  const comment = await retryTransactionWrapper(addVideoCommentThread, options)
-
-  res.json({
-    comment: comment.toFormattedJSON()
-  }).end()
-}
-
-function addVideoCommentThread (req: express.Request, res: express.Response) {
+async function addVideoCommentThread (req: express.Request, res: express.Response) {
   const videoCommentInfo: VideoCommentCreate = req.body
 
-  return sequelizeTypescript.transaction(async t => {
+  const comment = await sequelizeTypescript.transaction(async t => {
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: null,
@@ -110,25 +106,16 @@ function addVideoCommentThread (req: express.Request, res: express.Response) {
       account: res.locals.oauth.token.User.Account
     }, t)
   })
-}
 
-async function addVideoCommentReplyRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot insert the video comment reply with many retries.'
-  }
-
-  const comment = await retryTransactionWrapper(addVideoCommentReply, options)
-
-  res.json({
+  return res.json({
     comment: comment.toFormattedJSON()
   }).end()
 }
 
-function addVideoCommentReply (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function addVideoCommentReply (req: express.Request, res: express.Response) {
   const videoCommentInfo: VideoCommentCreate = req.body
 
-  return sequelizeTypescript.transaction(async t => {
+  const comment = await sequelizeTypescript.transaction(async t => {
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: res.locals.videoComment,
@@ -136,17 +123,10 @@ function addVideoCommentReply (req: express.Request, res: express.Response, next
       account: res.locals.oauth.token.User.Account
     }, t)
   })
-}
 
-async function removeVideoCommentRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot remove the video comment with many retries.'
-  }
-
-  await retryTransactionWrapper(removeVideoComment, options)
-
-  return res.type('json').status(204).end()
+  return res.json({
+    comment: comment.toFormattedJSON()
+  }).end()
 }
 
 async function removeVideoComment (req: express.Request, res: express.Response) {
@@ -157,4 +137,6 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
   })
 
   logger.info('Video comment %d deleted.', videoCommentInstance.id)
+
+  return res.type('json').status(204).end()
 }

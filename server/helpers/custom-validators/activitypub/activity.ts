@@ -16,6 +16,7 @@ import {
   sanitizeAndCheckVideoTorrentUpdateActivity
 } from './videos'
 import { isViewActivityValid } from './view'
+import { exists } from '../misc'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) && (
@@ -26,6 +27,7 @@ function isRootActivityValid (activity: any) {
     ) ||
     (
       isActivityPubUrlValid(activity.id) &&
+      exists(activity.actor) &&
       (isActivityPubUrlValid(activity.actor) || isActivityPubUrlValid(activity.actor.id))
     )
   )

@@ -28,6 +28,10 @@
   }
 }
 
+.alert {
+  text-align: center;
+}
+
 #video-not-found {
   height: 300px;
   line-height: 300px;
@@ -90,7 +94,7 @@
       .video-info-by a {
         @include disable-default-a-behaviour;
 
-        display: flex;
+        display: inline;
         align-items: center;
         font-size: 13px;
         color: #000;
@@ -237,6 +241,10 @@
 
       .video-info-description-html {
         @include peertube-word-wrap;
+      }
+
+      .glyphicon, .description-loading {
+        margin-left: 3px;
       }
 
       .description-loading {

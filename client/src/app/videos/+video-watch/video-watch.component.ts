@@ -1,5 +1,5 @@
 import { catchError } from 'rxjs/operators'
-import { Component, ElementRef, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild, Inject } from '@angular/core'
+import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { UserVideoRateType, VideoRateType } from '../../../../../shared'
+import { UserVideoRateType, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -21,7 +21,7 @@ import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
-import { getVideojsOptions, loadLocale, addContextMenu } from '../../../assets/player/peertube-player'
+import { addContextMenu, getVideojsOptions, loadLocale } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
@@ -91,35 +91,32 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
-      .subscribe(
-        data => {
-          this.otherVideos = data.videos
-          this.updateOtherVideosDisplayed()
-        },
+        .subscribe(
+          data => {
+            this.otherVideos = data.videos
+            this.updateOtherVideosDisplayed()
+          },
 
-        err => console.error(err)
-      )
+          err => console.error(err)
+        )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      if (this.player) {
-        this.player.pause()
-      }
-
-      const uuid = routeParams['uuid']
+      const uuid = routeParams[ 'uuid' ]
 
       // Video did not change
       if (this.video && this.video.uuid === uuid) return
+
+      if (this.player) this.player.pause()
+
       // Video did change
       this.videoService
           .getVideo(uuid)
           .pipe(catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ])))
-          .subscribe(
-            video => {
-              const startTime = this.route.snapshot.queryParams.start
-              this.onVideoFetched(video, startTime)
-                  .catch(err => this.handleError(err))
-            }
-          )
+          .subscribe(video => {
+            const startTime = this.route.snapshot.queryParams.start
+            this.onVideoFetched(video, startTime)
+                .catch(err => this.handleError(err))
+          })
     })
   }
 
@@ -157,17 +154,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (res === false) return
 
     this.videoBlacklistService.blacklistVideo(this.video.id)
-                              .subscribe(
-                                status => {
-                                  this.notificationsService.success(
-                                    this.i18n('Success'),
-                                    this.i18n('Video {{videoName}} had been blacklisted.', { videoName: this.video.name })
-                                  )
-                                  this.redirectService.redirectToHomepage()
-                                },
+        .subscribe(
+          () => {
+            this.notificationsService.success(
+              this.i18n('Success'),
+              this.i18n('Video {{videoName}} had been blacklisted.', { videoName: this.video.name })
+            )
+            this.redirectService.redirectToHomepage()
+          },
 
-                                error => this.notificationsService.error(this.i18n('Error'), error.message)
-                              )
+          error => this.notificationsService.error(this.i18n('Error'), error.message)
+        )
   }
 
   showMoreDescription () {
@@ -188,22 +185,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.descriptionLoading = true
 
     this.videoService.loadCompleteDescription(this.video.descriptionPath)
-      .subscribe(
-        description => {
-          this.completeDescriptionShown = true
-          this.descriptionLoading = false
+        .subscribe(
+          description => {
+            this.completeDescriptionShown = true
+            this.descriptionLoading = false
 
-          this.shortVideoDescription = this.video.description
-          this.completeVideoDescription = description
+            this.shortVideoDescription = this.video.description
+            this.completeVideoDescription = description
 
-          this.updateVideoDescription(this.completeVideoDescription)
-        },
+            this.updateVideoDescription(this.completeVideoDescription)
+          },
 
-        error => {
-          this.descriptionLoading = false
-          this.notificationsService.error(this.i18n('Error'), error.message)
-        }
-      )
+          error => {
+            this.descriptionLoading = false
+            this.notificationsService.error(this.i18n('Error'), error.message)
+          }
+        )
   }
 
   showReportModal (event: Event) {
@@ -259,24 +256,32 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
-      .subscribe(
-        status => {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name })
-          )
+        .subscribe(
+          status => {
+            this.notificationsService.success(
+              this.i18n('Success'),
+              this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name })
+            )
 
-          // Go back to the video-list.
-          this.redirectService.redirectToHomepage()
-        },
+            // Go back to the video-list.
+            this.redirectService.redirectToHomepage()
+          },
 
-        error => this.notificationsService.error(this.i18n('Error'), error.message)
-      )
+          error => this.notificationsService.error(this.i18n('Error'), error.message)
+        )
   }
 
   acceptedPrivacyConcern () {
     peertubeLocalStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
     this.hasAlreadyAcceptedPrivacyConcern = true
+  }
+
+  isVideoToTranscode () {
+    return this.video && this.video.state.id === VideoState.TO_TRANSCODE
+  }
+
+  hasVideoScheduledPublication () {
+    return this.video && this.video.scheduledUpdate !== undefined
   }
 
   private updateVideoDescription (description: string) {
@@ -294,10 +299,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setVideoLikesBarTooltipText () {
-    this.likesBarTooltipText = this.i18n(
-      '{{likesNumber}} likes / {{dislikesNumber}} dislikes',
-      { likesNumber: this.video.likes, dislikesNumber: this.video.dislikes }
-    )
+    this.likesBarTooltipText = this.i18n('{{likesNumber}} likes / {{dislikesNumber}} dislikes', {
+      likesNumber: this.video.likes,
+      dislikesNumber: this.video.dislikes
+    })
   }
 
   private handleError (err: any) {
@@ -320,15 +325,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.isUserLoggedIn() === false) return
 
     this.videoService.getUserVideoRating(this.video.id)
-                     .subscribe(
-                       ratingObject => {
-                         if (ratingObject) {
-                           this.userRating = ratingObject.rating
-                         }
-                       },
+        .subscribe(
+          ratingObject => {
+            if (ratingObject) {
+              this.userRating = ratingObject.rating
+            }
+          },
 
-                       err => this.notificationsService.error(this.i18n('Error'), err.message)
-                      )
+          err => this.notificationsService.error(this.i18n('Error'), err.message)
+        )
   }
 
   private async onVideoFetched (video: VideoDetails, startTime = 0) {
@@ -409,14 +414,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     method.call(this.videoService, this.video.id)
-     .subscribe(
-      () => {
-        // Update the video like attribute
-        this.updateVideoRating(this.userRating, nextRating)
-        this.userRating = nextRating
-      },
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
-     )
+          .subscribe(
+            () => {
+              // Update the video like attribute
+              this.updateVideoRating(this.userRating, nextRating)
+              this.userRating = nextRating
+            },
+
+            err => this.notificationsService.error(this.i18n('Error'), err.message)
+          )
   }
 
   private updateVideoRating (oldRating: UserVideoRateType, newRating: VideoRateType) {
@@ -466,7 +472,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private isAutoplay () {
-    // True by default
+    // We'll jump to the thread id, so do not play the video
+    if (this.route.snapshot.params['threadId']) return false
+
+    // Otherwise true by default
     if (!this.user) return true
 
     // Be sure the autoPlay is set to false

@@ -5,6 +5,7 @@ import 'mocha'
 import { askResetPassword, createUser, reportVideoAbuse, resetPassword, runServer, uploadVideo, userLogin, wait } from '../../utils'
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { mockSmtpServer } from '../../utils/miscs/email'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -32,8 +33,6 @@ describe('Test emails', function () {
       }
     }
     server = await runServer(1, overrideConfig)
-
-    await wait(5000)
     await setAccessTokensToServers([ server ])
 
     {
@@ -57,7 +56,7 @@ describe('Test emails', function () {
 
       await askResetPassword(server.url, 'user_1@example.com')
 
-      await wait(3000)
+      await waitJobs(server)
       expect(emails).to.have.lengthOf(1)
 
       const email = emails[0]
@@ -101,7 +100,7 @@ describe('Test emails', function () {
       const reason = 'my super bad reason'
       await reportVideoAbuse(server.url, server.accessToken, videoUUID, reason)
 
-      await wait(3000)
+      await waitJobs(server)
       expect(emails).to.have.lengthOf(2)
 
       const email = emails[1]
@@ -115,10 +114,5 @@ describe('Test emails', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

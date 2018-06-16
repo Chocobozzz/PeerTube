@@ -28,7 +28,7 @@ form {
 
 .submit-comment {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 
   button {
     @include peertube-button;

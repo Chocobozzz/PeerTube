@@ -2,8 +2,17 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntOrNull, toValueOrNull } from '../../helpers/custom-validators/misc'
 import {
+  isBooleanValid,
+  isDateValid,
+  isIdOrUUIDValid,
+  isIdValid,
+  isUUIDValid,
+  toIntOrNull,
+  toValueOrNull
+} from '../../helpers/custom-validators/misc'
+import {
+  isScheduleVideoUpdatePrivacyValid,
   isVideoAbuseReasonValid,
   isVideoCategoryValid,
   isVideoChannelOfAccountExist,
@@ -55,8 +64,13 @@ const videosAddValidator = [
     .customSanitizer(toValueOrNull)
     .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw')
+    .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+  body('waitTranscoding')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
   body('description')
     .optional()
     .customSanitizer(toValueOrNull)
@@ -70,6 +84,7 @@ const videosAddValidator = [
     .customSanitizer(toValueOrNull)
     .custom(isVideoTagsValid).withMessage('Should have correct tags'),
   body('commentsEnabled')
+    .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
   body('privacy')
@@ -78,14 +93,21 @@ const videosAddValidator = [
     .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('channelId')
     .toInt()
-    .custom(isIdValid)
-    .withMessage('Should have correct video channel id'),
+    .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('scheduleUpdate.updateAt')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a valid schedule update date'),
+  body('scheduleUpdate.privacy')
+    .optional()
+    .toInt()
+    .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return
     if (areErrorsInVideoImageFiles(req, res)) return
+    if (areErrorsInScheduleUpdate(req, res)) return
 
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
@@ -149,6 +171,10 @@ const videosUpdateValidator = [
     .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+  body('waitTranscoding')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
   body('privacy')
     .optional()
     .toInt()
@@ -173,12 +199,20 @@ const videosUpdateValidator = [
     .optional()
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('scheduleUpdate.updateAt')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a valid schedule update date'),
+  body('scheduleUpdate.privacy')
+    .optional()
+    .toInt()
+    .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
     if (areErrorsInVideoImageFiles(req, res)) return
+    if (areErrorsInScheduleUpdate(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
     const video = res.locals.video
@@ -189,7 +223,7 @@ const videosUpdateValidator = [
 
     if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
       return res.status(409)
-        .json({ error: 'Cannot set "private" a video that was not private anymore.' })
+        .json({ error: 'Cannot set "private" a video that was not private.' })
         .end()
     }
 
@@ -361,8 +395,22 @@ function areErrorsInVideoImageFiles (req: express.Request, res: express.Response
     const imageFile = req.files[ imageField ][ 0 ] as Express.Multer.File
     if (imageFile.size > CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max) {
       res.status(400)
-        .send({ error: `The size of the ${imageField} is too big (>${CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max}).` })
+        .json({ error: `The size of the ${imageField} is too big (>${CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max}).` })
         .end()
+      return true
+    }
+  }
+
+  return false
+}
+
+function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
+  if (req.body.scheduleUpdate) {
+    if (!req.body.scheduleUpdate.updateAt) {
+      res.status(400)
+         .json({ error: 'Schedule update at is mandatory.' })
+         .end()
+
       return true
     }
   }

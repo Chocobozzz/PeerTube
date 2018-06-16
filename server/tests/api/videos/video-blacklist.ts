@@ -5,16 +5,15 @@ import 'mocha'
 import {
   addVideoToBlacklist,
   flushAndRunMultipleServers,
-  flushTests,
   getVideosList,
   killallServers,
   searchVideo,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -41,7 +40,7 @@ describe('Test video blacklists', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
     // Wait videos propagation, server 2 has transcoding enabled
-    await wait(10000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[0].url)
     const videos = res.body.data
@@ -89,10 +88,5 @@ describe('Test video blacklists', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

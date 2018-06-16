@@ -682,6 +682,10 @@ paths:
           in: formData
           type: string
           description: 'Video description'
+        - name: waitTranscoding
+          in: formData
+          type: boolean
+          description: 'Whether or not we wait transcoding before publish the video'
         - name: support
           in: formData
           type: string
@@ -707,6 +711,12 @@ paths:
           type: string
           enum: [Public, Unlisted]
           description: 'Video privacy'
+        - name: scheduleUpdate
+          in: formData
+          required: false
+          description: 'Schedule an update at a specific datetime'
+          type:
+            $ref: '#/definitions/ScheduleVideoUpdate'
       responses:
         '200':
           description: successful operation
@@ -814,6 +824,10 @@ paths:
           in: formData
           type: number
           description: 'Video category'
+        - name: waitTranscoding
+          in: formData
+          type: boolean
+          description: 'Whether or not we wait transcoding before publish the video'
         - name: licence
           in: formData
           type: number
@@ -856,9 +870,15 @@ paths:
         - name: privacy
           in: formData
           required: true
-          type: string
-          enum: [Public, Unlisted, Private]
+          type:
+            $ref: '#/definitions/VideoPrivacy'
           description: 'Video privacy'
+        - name: scheduleUpdate
+          in: formData
+          required: false
+          description: 'Schedule an update at a specific datetime'
+          type:
+            $ref: '#/definitions/ScheduleVideoUpdate'
       responses:
         '200':
           description: successful operation
@@ -1701,3 +1721,12 @@ definitions:
         type: string
       description:
         type: string
+  ScheduleVideoUpdate:
+    properties:
+      updateAt:
+        type: dateTime
+        description: 'When to update the video'
+        required: true
+      privacy:
+        $ref: '#/definitions/VideoPrivacy'
+        required: false

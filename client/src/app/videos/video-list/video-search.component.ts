@@ -9,6 +9,7 @@ import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-videos-search',
@@ -32,6 +33,7 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
     protected authService: AuthService,
     protected location: Location,
     protected i18n: I18n,
+    protected screenService: ScreenService,
     private videoService: VideoService,
     private redirectService: RedirectService
   ) {

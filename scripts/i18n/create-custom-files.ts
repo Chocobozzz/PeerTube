@@ -34,10 +34,6 @@ values(VIDEO_CATEGORIES)
   .concat(values(VIDEO_PRIVACIES))
   .forEach(v => serverKeys[v] = v)
 
-// ISO 639 keys
-const languages = buildLanguages()
-Object.keys(languages).forEach(k => serverKeys[languages[k]] = languages[k])
-
 // More keys
 Object.assign(serverKeys, {
   'Misc': 'Misc',
@@ -49,13 +45,27 @@ const serverTranslations = {
   data: serverKeys
 }
 
+// ISO 639 keys
+const languageKeys: any = {}
+const languages = buildLanguages()
+Object.keys(languages).forEach(k => languageKeys[languages[k]] = languages[k])
+
+const iso639Translations = {
+  target: join(__dirname, '../../../client/src/locale/source/iso639_en_US.xml'),
+  data: languageKeys
+}
+
 saveToXliffFile(playerTranslations, err => {
   if (err) return handleError(err)
 
   saveToXliffFile(serverTranslations, err => {
     if (err) return handleError(err)
 
-    process.exit(0)
+    saveToXliffFile(iso639Translations, err => {
+      if (err) return handleError(err)
+
+      process.exit(0)
+    })
   })
 })
 

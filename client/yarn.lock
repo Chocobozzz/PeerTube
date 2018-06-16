@@ -7656,9 +7656,9 @@ pretty-error@^2.0.2:
     renderkid "^2.0.1"
     utila "~0.4"
 
-primeng@^5.2.6:
-  version "5.2.7"
-  resolved "https://registry.yarnpkg.com/primeng/-/primeng-5.2.7.tgz#9dcf461b6a82ea46de85751dc235ea82303e64b1"
+primeng@^6.0.0-rc.1:
+  version "6.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/primeng/-/primeng-6.0.0-rc.1.tgz#038e5657a5395e08a5c1fd9312b12cac1a44b527"
 
 private@^0.1.6, private@^0.1.8, private@~0.1.5:
   version "0.1.8"

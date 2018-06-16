@@ -14,9 +14,9 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../utils'
+import { waitJobs } from '../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -54,14 +54,14 @@ describe('Test create import video jobs', function () {
     video2UUID = res2.body.video.uuid
 
     // Transcoding
-    await wait(40000)
+    await waitJobs(servers)
   })
 
   it('Should run a import job on video 1 with a lower resolution', async function () {
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short-480.webm`)
 
-    await wait(30000)
+    await waitJobs(servers)
 
     let magnetUri: string
     for (const server of servers) {
@@ -85,7 +85,7 @@ describe('Test create import video jobs', function () {
     const env = getEnvCli(servers[1])
     await execCLI(`${env} npm run create-import-video-file-job -- -v ${video2UUID} -i server/tests/fixtures/video_short.ogv`)
 
-    await wait(30000)
+    await waitJobs(servers)
 
     let magnetUri: string
     for (const server of servers) {
@@ -111,7 +111,7 @@ describe('Test create import video jobs', function () {
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run create-import-video-file-job -- -v ${video1UUID} -i server/tests/fixtures/video_short2.webm`)
 
-    await wait(30000)
+    await waitJobs(servers)
 
     let magnetUri: string
     for (const server of servers) {
@@ -133,10 +133,5 @@ describe('Test create import video jobs', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

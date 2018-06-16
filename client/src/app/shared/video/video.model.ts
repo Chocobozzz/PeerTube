@@ -1,11 +1,12 @@
 import { User } from '../'
-import { Video as VideoServerModel, VideoPrivacy } from '../../../../../shared'
+import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 import { ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
+import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
   by: string
@@ -36,6 +37,10 @@ export class Video implements VideoServerModel {
   dislikes: number
   nsfw: boolean
 
+  waitTranscoding?: boolean
+  state?: VideoConstant<VideoState>
+  scheduledUpdate?: VideoScheduleUpdate
+
   account: {
     id: number
     uuid: string
@@ -58,15 +63,14 @@ export class Video implements VideoServerModel {
 
   private static createDurationString (duration: number) {
     const hours = Math.floor(duration / 3600)
-    const minutes = Math.floor(duration % 3600 / 60)
+    const minutes = Math.floor((duration % 3600) / 60)
     const seconds = duration % 60
 
     const minutesPadding = minutes >= 10 ? '' : '0'
     const secondsPadding = seconds >= 10 ? '' : '0'
     const displayedHours = hours > 0 ? hours.toString() + ':' : ''
 
-    return displayedHours + minutesPadding +
-        minutes.toString() + ':' + secondsPadding + seconds.toString()
+    return displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
   }
 
   constructor (hash: VideoServerModel, translations = {}) {
@@ -78,6 +82,8 @@ export class Video implements VideoServerModel {
     this.licence = hash.licence
     this.language = hash.language
     this.privacy = hash.privacy
+    this.waitTranscoding = hash.waitTranscoding
+    this.state = hash.state
     this.description = hash.description
     this.duration = hash.duration
     this.durationLabel = Video.createDurationString(hash.duration)
@@ -104,6 +110,9 @@ export class Video implements VideoServerModel {
     this.licence.label = peertubeTranslate(this.licence.label, translations)
     this.language.label = peertubeTranslate(this.language.label, translations)
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
+
+    this.scheduledUpdate = hash.scheduledUpdate
+    if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

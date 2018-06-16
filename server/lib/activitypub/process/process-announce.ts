@@ -11,7 +11,7 @@ import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 async function processAnnounceActivity (activity: ActivityAnnounce) {
   const actorAnnouncer = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  return processVideoShare(actorAnnouncer, activity)
+  return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity)
 }
 
 // ---------------------------------------------------------------------------
@@ -22,16 +22,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
-  const options = {
-    arguments: [ actorAnnouncer, activity ],
-    errorMessage: 'Cannot share the video activity with many retries.'
-  }
-
-  return retryTransactionWrapper(shareVideo, options)
-}
-
-async function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
+async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
   let video: VideoModel
 

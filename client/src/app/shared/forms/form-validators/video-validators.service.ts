@@ -15,6 +15,7 @@ export class VideoValidatorsService {
   readonly VIDEO_DESCRIPTION: BuildFormValidator
   readonly VIDEO_TAGS: BuildFormValidator
   readonly VIDEO_SUPPORT: BuildFormValidator
+  readonly VIDEO_SCHEDULE_PUBLICATION_AT: BuildFormValidator
 
   constructor (private i18n: I18n) {
 
@@ -82,6 +83,13 @@ export class VideoValidatorsService {
       MESSAGES: {
         'minlength': this.i18n('Video support must be at least 3 characters long.'),
         'maxlength': this.i18n('Video support cannot be more than 500 characters long.')
+      }
+    }
+
+    this.VIDEO_SCHEDULE_PUBLICATION_AT = {
+      VALIDATORS: [ ],
+      MESSAGES: {
+        'required': this.i18n('A date is required to schedule video update.')
       }
     }
   }

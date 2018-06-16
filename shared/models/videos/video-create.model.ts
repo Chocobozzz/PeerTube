@@ -1,4 +1,5 @@
 import { VideoPrivacy } from './video-privacy.enum'
+import { VideoScheduleUpdate } from './video-schedule-update.model'
 
 export interface VideoCreate {
   category?: number
@@ -7,9 +8,11 @@ export interface VideoCreate {
   description?: string
   support?: string
   channelId: number
-  nsfw: boolean
+  nsfw?: boolean
+  waitTranscoding?: boolean
   name: string
   tags?: string[]
   commentsEnabled?: boolean
   privacy: VideoPrivacy
+  scheduleUpdate?: VideoScheduleUpdate
 }

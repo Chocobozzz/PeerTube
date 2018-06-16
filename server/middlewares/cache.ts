@@ -14,7 +14,7 @@ function cacheRoute (lifetime: number) {
 
       // Not cached
       if (!cached) {
-        logger.debug('Not cached result for route %s.', req.originalUrl)
+        logger.debug('No cached results for route %s.', req.originalUrl)
 
         const sendSave = res.send.bind(res)
 

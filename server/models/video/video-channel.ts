@@ -237,7 +237,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
-      displayName: this.name,
+      displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
@@ -265,5 +265,9 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
         }
       ]
     })
+  }
+
+  getDisplayName () {
+    return this.name
   }
 }

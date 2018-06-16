@@ -68,7 +68,6 @@
     }
   },
   "lint-staged": {
-    "*.{css,md}": "precise-commits",
     "*.scss": [
       "sass-lint -c .sass-lint.yml",
       "git add"
@@ -166,7 +165,6 @@
     "maildev": "^1.0.0-rc3",
     "mocha": "^5.0.0",
     "nodemon": "^1.11.0",
-    "precise-commits": "^1.0.2",
     "prettier": "1.13.2",
     "prompt": "^1.0.0",
     "sass-lint": "^1.12.1",

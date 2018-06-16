@@ -190,8 +190,8 @@ export class VideoShareModel extends Model<VideoShareModel> {
 
   static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Sequelize.Transaction) {
     const query = {
-      start,
-      count,
+      offset: start,
+      limit: count,
       where: {
         videoId
       },

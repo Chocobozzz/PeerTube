@@ -10,6 +10,7 @@
 }
 
 .video-js.vjs-peertube-skin {
+
   font-size: $font-size;
   color: $primary-foreground-color;
 
@@ -195,7 +196,7 @@
     }
 
     .vjs-progress-control:hover .vjs-slider,
-    .vjs-slider.vjs-sliding {
+    .vjs-progress-control .vjs-slider.vjs-sliding {
       height: 5px;
 
       .vjs-play-progress::before {
@@ -349,6 +350,11 @@
         max-height: 14px;
         height: 100%;
       }
+
+      &:focus {
+        text-shadow: none;
+        box-shadow: none;
+      }
     }
 
     .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active,
@@ -402,6 +408,7 @@
       margin-right: 1px;
 
       .vjs-icon-placeholder {
+        transition: transform 0.2s ease;
         display: inline-block;
         width: 22px;
         height: 22px;
@@ -534,6 +541,24 @@
 
     .vjs-settings {
       width: 33px;
+    }
+  }
+
+  // Theater mode is enabled
+  &.vjs-theater-enabled {
+    .vjs-theater-control {
+      width: 30px;
+
+      .vjs-icon-placeholder {
+        transform: scale(0.8);
+      }
+    }
+  }
+
+  // On fullscreen, hide theater control
+  &.vjs-fullscreen {
+    .vjs-theater-control {
+      display: none;
     }
   }
 }

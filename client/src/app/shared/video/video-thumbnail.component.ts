@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { isInMobileView } from '@app/shared/misc/utils'
 import { Video } from './video.model'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-video-thumbnail',
@@ -11,10 +11,12 @@ export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
 
+  constructor (private screenService: ScreenService) {}
+
   getImageUrl () {
     if (!this.video) return ''
 
-    if (isInMobileView()) {
+    if (this.screenService.isInMobileView()) {
       return this.video.previewUrl
     }
 

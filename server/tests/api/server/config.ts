@@ -234,11 +234,6 @@ describe('Test config', function () {
   })
 
   after(async function () {
-    process.kill(-server.app.pid)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    killallServers([ server ])
   })
 })

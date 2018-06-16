@@ -12,6 +12,7 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -37,6 +38,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected screenService: ScreenService,
     protected i18n: I18n,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService

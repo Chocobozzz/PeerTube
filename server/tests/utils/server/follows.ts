@@ -1,6 +1,7 @@
 import * as request from 'supertest'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
+import { waitJobs } from './jobs'
 
 function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string) {
   const path = '/api/v1/server/followers'
@@ -61,7 +62,7 @@ async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
   ])
 
   // Wait request propagation
-  await wait(10000)
+  await waitJobs([ server1, server2 ])
 
   return true
 }

@@ -88,6 +88,7 @@
             <select id="privacy" formControlName="privacy">
               <option></option>
               <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+              <option *ngIf="schedulePublicationPossible" [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
             </select>
           </div>
 
@@ -96,17 +97,43 @@
           </div>
         </div>
 
+        <div *ngIf="schedulePublicationEnabled" class="form-group">
+          <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
+          <p-calendar
+            id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
+            [locale]="calendarLocale" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+          >
+          </p-calendar>
+
+          <div *ngIf="formErrors.schedulePublicationAt" class="form-error">
+            {{ formErrors.schedulePublicationAt }}
+          </div>
+        </div>
+
         <div class="form-group form-group-checkbox">
           <input type="checkbox" id="nsfw" formControlName="nsfw" />
           <label for="nsfw"></label>
           <label i18n for="nsfw">This video contains mature or explicit content</label>
-          <my-help tooltipPlacement="top" helpType="custom" i18n-customHtml customHtml="Some instances do not list NSFW videos by default."></my-help>
+          <my-help
+            tooltipPlacement="top" helpType="custom" i18n-customHtml
+            customHtml="Some instances do not list videos containing mature or explicit content by default."
+          ></my-help>
         </div>
 
         <div class="form-group form-group-checkbox">
           <input type="checkbox" id="commentsEnabled" formControlName="commentsEnabled" />
           <label for="commentsEnabled"></label>
           <label i18n for="commentsEnabled">Enable video comments</label>
+        </div>
+
+        <div class="form-group form-group-checkbox">
+          <input type="checkbox" id="waitTranscoding" formControlName="waitTranscoding" />
+          <label for="waitTranscoding"></label>
+          <label i18n for="waitTranscoding">Wait transcoding before publishing the video</label>
+          <my-help
+            tooltipPlacement="top" helpType="custom" i18n-customHtml
+            customHtml="If you decide to not wait transcoding before publishing the video, it can be unplayable until it transcoding ends."
+          ></my-help>
         </div>
 
       </div>
