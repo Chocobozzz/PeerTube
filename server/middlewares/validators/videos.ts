@@ -94,6 +94,9 @@ const videosAddValidator = [
   body('channelId')
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('scheduleUpdate')
+    .optional()
+    .customSanitizer(toValueOrNull),
   body('scheduleUpdate.updateAt')
     .optional()
     .custom(isDateValid).withMessage('Should have a valid schedule update date'),
@@ -199,6 +202,9 @@ const videosUpdateValidator = [
     .optional()
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('scheduleUpdate')
+    .optional()
+    .customSanitizer(toValueOrNull),
   body('scheduleUpdate.updateAt')
     .optional()
     .custom(isDateValid).withMessage('Should have a valid schedule update date'),

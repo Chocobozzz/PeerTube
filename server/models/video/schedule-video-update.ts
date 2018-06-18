@@ -83,6 +83,17 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
     return ScheduleVideoUpdateModel.findAll(query)
   }
 
+  static deleteByVideoId (videoId: number, t: Transaction) {
+    const query = {
+      where: {
+        videoId
+      },
+      transaction: t
+    }
+
+    return ScheduleVideoUpdateModel.destroy(query)
+  }
+
   toFormattedJSON () {
     return {
       updateAt: this.updateAt,

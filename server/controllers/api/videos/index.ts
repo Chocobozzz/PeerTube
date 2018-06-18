@@ -342,10 +342,12 @@ async function updateVideo (req: express.Request, res: express.Response) {
           updateAt: videoInfoToUpdate.scheduleUpdate.updateAt,
           privacy: videoInfoToUpdate.scheduleUpdate.privacy || null
         }, { transaction: t })
+      } else if (videoInfoToUpdate.scheduleUpdate === null) {
+        await ScheduleVideoUpdateModel.deleteByVideoId(videoInstanceUpdated.id, t)
       }
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
-      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo)
+      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
     })
 
     logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
