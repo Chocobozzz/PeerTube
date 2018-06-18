@@ -15,6 +15,7 @@ import { ActorModel } from '../activitypub/actor'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { AvatarModel } from '../avatar/avatar'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -39,7 +40,13 @@ enum ScopeNames {
         include: [
           {
             model: () => ActorModel.unscoped(),
-            required: true
+            required: true,
+            include: [
+              {
+                model: () => AvatarModel.unscoped(),
+                required: false
+              }
+            ]
           }
         ]
       }
