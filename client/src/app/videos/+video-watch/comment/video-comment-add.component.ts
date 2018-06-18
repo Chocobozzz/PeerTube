@@ -27,6 +27,8 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   @ViewChild('textarea') private textareaElement: ElementRef
 
+  private addingComment = false
+
   constructor (
     protected formValidatorService: FormValidatorService,
     private videoCommentValidatorsService: VideoCommentValidatorsService,
@@ -66,6 +68,11 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   }
 
   formValidated () {
+    // If we validate very quickly the comment form, we might comment twice
+    if (this.addingComment) return
+
+    this.addingComment = true
+
     const commentCreate: VideoCommentCreate = this.form.value
     let obs: Observable<any>
 
@@ -77,11 +84,16 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
     obs.subscribe(
       comment => {
+        this.addingComment = false
         this.commentCreated.emit(comment)
         this.form.reset()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.text)
+      err => {
+        this.addingComment = false
+
+        this.notificationsService.error(this.i18n('Error'), err.text)
+      }
     )
   }
 
