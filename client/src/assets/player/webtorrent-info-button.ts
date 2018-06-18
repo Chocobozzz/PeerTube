@@ -57,7 +57,7 @@ class WebtorrentInfoButton extends Button {
       className: 'vjs-peertube-hidden'
     })
     const subDivHttpText = videojsUntyped.dom.createEl('span', {
-      className: 'peers-number',
+      className: 'http-fallback',
       textContent: 'HTTP'
     })
 

@@ -258,11 +258,11 @@
         display: none;
       }
 
-      .download-speed-number, .upload-speed-number, .peers-number {
+      .download-speed-number, .upload-speed-number, .peers-number, .http-fallback {
         font-weight: $font-semibold;
       }
 
-      .download-speed-text, .upload-speed-text, .peers-text {
+      .download-speed-text, .upload-speed-text, .peers-text, .http-fallback {
         margin-right: 15px;
       }
 
