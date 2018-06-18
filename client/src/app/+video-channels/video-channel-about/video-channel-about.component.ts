@@ -4,6 +4,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
+import { MarkdownService } from '@app/videos/shared'
 
 @Component({
   selector: 'my-video-channel-about',
@@ -12,19 +13,27 @@ import { Subscription } from 'rxjs'
 })
 export class VideoChannelAboutComponent implements OnInit, OnDestroy {
   videoChannel: VideoChannel
+  descriptionHTML = ''
+  supportHTML = ''
 
   private videoChannelSub: Subscription
 
   constructor (
     private route: ActivatedRoute,
     private i18n: I18n,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private markdownService: MarkdownService
   ) { }
 
   ngOnInit () {
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
-      .subscribe(videoChannel => this.videoChannel = videoChannel)
+      .subscribe(videoChannel => {
+        this.videoChannel = videoChannel
+
+        this.descriptionHTML = this.markdownService.textMarkdownToHTML(this.videoChannel.description)
+        this.supportHTML = this.markdownService.enhancedMarkdownToHTML(this.videoChannel.support)
+      })
   }
 
   ngOnDestroy () {
@@ -32,7 +41,7 @@ export class VideoChannelAboutComponent implements OnInit, OnDestroy {
   }
 
   getVideoChannelDescription () {
-    if (this.videoChannel.description) return this.videoChannel.description
+    if (this.descriptionHTML) return this.descriptionHTML
 
     return this.i18n('No description')
   }

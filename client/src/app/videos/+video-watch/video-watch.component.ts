@@ -290,11 +290,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setVideoDescriptionHTML () {
-    if (!this.video.description) {
-      this.videoHTMLDescription = ''
-      return
-    }
-
     this.videoHTMLDescription = this.markdownService.textMarkdownToHTML(this.video.description)
   }
 
