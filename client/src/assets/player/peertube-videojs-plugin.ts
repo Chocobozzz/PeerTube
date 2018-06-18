@@ -4,18 +4,17 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import {
-  getAverageBandwidth,
-  getStoredMute,
-  getStoredVolume, isMobile,
-  saveAverageBandwidth,
-  saveMuteInStore,
-  saveVolumeInStore,
-  videoFileMaxByResolution,
-  videoFileMinByResolution
-} from './utils'
+import { isMobile, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
+import {
+  getAverageBandwidthInStore,
+  getStoredMute,
+  getStoredVolume,
+  saveAverageBandwidth,
+  saveMuteInStore,
+  saveVolumeInStore
+} from './peertube-player-local-storage'
 
 const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
@@ -148,7 +147,7 @@ class PeerTubePlugin extends Plugin {
   ) {
     // Automatically choose the adapted video file
     if (videoFile === undefined) {
-      const savedAverageBandwidth = getAverageBandwidth()
+      const savedAverageBandwidth = getAverageBandwidthInStore()
       videoFile = savedAverageBandwidth
         ? this.getAppropriateFile(savedAverageBandwidth)
         : this.pickAverageVideoFile()
