@@ -54,12 +54,12 @@ $ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip pyth
 $ sudo yum update
 $ sudo yum install epel-release centos-release-scl
 $ sudo yum update
-$ sudo yum install nginx postgresql postgresql-server openssl gcc-c++ make redis git devtoolset-6
+$ sudo yum install nginx postgresql postgresql-server openssl gcc-c++ make redis git devtoolset-7
 ```
 
   5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-6.
 ```
-$ sudo scl devtoolset-6 bash
+$ sudo scl enable devtoolset-7 bash
 ```
 
 ## FreeBSD
