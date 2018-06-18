@@ -502,6 +502,8 @@ class PeerTubePlugin extends Plugin {
   }
 
   private addViewToVideo () {
+    if (!this.videoViewUrl) return Promise.resolve(undefined)
+
     return fetch(this.videoViewUrl, { method: 'POST' })
   }
 

@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { UserVideoRateType, VideoRateType, VideoState } from '../../../../../shared'
+import { UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -368,7 +368,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       inactivityTimeout: 2500,
       videoFiles: this.video.files,
       playerElement: this.playerElement,
-      videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
+      videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
       videoDuration: this.video.duration,
       enableHotkeys: true,
       peertubeLink: false,
