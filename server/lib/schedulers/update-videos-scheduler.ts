@@ -1,6 +1,4 @@
-import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
-import { JobQueue } from '../job-queue'
 import { AbstractScheduler } from './abstract-scheduler'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update'
 import { retryTransactionWrapper } from '../../helpers/database-utils'

@@ -17,23 +17,7 @@ import {
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 
-const webtorrent = new WebTorrent({
-  tracker: {
-    rtcConfig: {
-      iceServers: [
-        {
-          urls: 'stun:stun.stunprotocol.org'
-        },
-        {
-          urls: 'stun:stun.framasoft.org'
-        }
-      ]
-    }
-  },
-  dht: false
-})
-
-const Plugin: VideoJSComponentInterface = videojsUntyped.getPlugin('plugin')
+const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
   private readonly playerElement: HTMLVideoElement
 
@@ -52,9 +36,26 @@ class PeerTubePlugin extends Plugin {
     BANDWIDTH_AVERAGE_NUMBER_OF_VALUES: 5 // Last 5 seconds to build average bandwidth
   }
 
+  private readonly webtorrent = new WebTorrent({
+    tracker: {
+      rtcConfig: {
+        iceServers: [
+          {
+            urls: 'stun:stun.stunprotocol.org'
+          },
+          {
+            urls: 'stun:stun.framasoft.org'
+          }
+        ]
+      }
+    },
+    dht: false
+  })
+
   private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
+  private renderer
   private fakeRenderer
   private autoResolution = true
   private isAutoResolutionObservation = false
@@ -194,7 +195,7 @@ class PeerTubePlugin extends Plugin {
       })
     }
 
-    this.torrent = webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
+    this.torrent = this.webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
       console.log('Added ' + magnetOrTorrentUrl + '.')
 
       if (oldTorrent) {
@@ -287,10 +288,10 @@ class PeerTubePlugin extends Plugin {
   }
 
   flushVideoFile (videoFile: VideoFile, destroyRenderer = true) {
-    if (videoFile !== undefined && webtorrent.get(videoFile.magnetUri)) {
+    if (videoFile !== undefined && this.webtorrent.get(videoFile.magnetUri)) {
       if (destroyRenderer === true && this.renderer && this.renderer.destroy) this.renderer.destroy()
 
-      webtorrent.remove(videoFile.magnetUri)
+      this.webtorrent.remove(videoFile.magnetUri)
       console.log('Removed ' + videoFile.magnetUri)
     }
   }
@@ -460,8 +461,8 @@ class PeerTubePlugin extends Plugin {
       // Http fallback
       if (this.torrent === null) return this.trigger('torrentInfo', false)
 
-      // webtorrent.downloadSpeed because we need to take into account the potential old torrent too
-      if (webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(webtorrent.downloadSpeed)
+      // this.webtorrent.downloadSpeed because we need to take into account the potential old torrent too
+      if (this.webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(this.webtorrent.downloadSpeed)
 
       return this.trigger('torrentInfo', {
         downloadSpeed: this.torrent.downloadSpeed,
@@ -596,5 +597,5 @@ class PeerTubePlugin extends Plugin {
   }
 }
 
-videojsUntyped.registerPlugin('peertube', PeerTubePlugin)
+videojs.registerPlugin('peertube', PeerTubePlugin)
 export { PeerTubePlugin }
