@@ -10,3 +10,4 @@ for i in 1 2 3; do
 done
 
 npm run i18n:xliff2json
+

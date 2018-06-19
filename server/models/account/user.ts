@@ -36,6 +36,10 @@ import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
 import { NSFW_POLICY_TYPES } from '../../initializers'
 
+enum ScopeNames {
+  WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
+}
+
 @DefaultScope({
   include: [
     {
@@ -45,7 +49,7 @@ import { NSFW_POLICY_TYPES } from '../../initializers'
   ]
 })
 @Scopes({
-  withVideoChannel: {
+  [ScopeNames.WITH_VIDEO_CHANNEL]: {
     include: [
       {
         model: () => AccountModel,
@@ -199,7 +203,7 @@ export class UserModel extends Model<UserModel> {
       }
     }
 
-    return UserModel.scope('withVideoChannel').findOne(query)
+    return UserModel.scope(ScopeNames.WITH_VIDEO_CHANNEL).findOne(query)
   }
 
   static loadByEmail (email: string) {
