@@ -86,9 +86,9 @@ transcoding:
     1080p: false
 
 instance:
-  name: 'PeerTube'
-  short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
-  description: 'Welcome to this PeerTube instance!' # Support markdown
+  name: 'Betamax'
+  short_description: 'A federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
+  description: 'Welcome to Betamax.video' # Support markdown
   terms: 'No terms for now.' # Support markdown
   default_client_route: '/videos/trending'
   # By default, "do_not_list" or "blur" or "display" NSFW videos
@@ -105,7 +105,7 @@ instance:
 services:
   # Cards configuration to format video in Twitter
   twitter:
-    username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
+    username: '@usbsnowcrash' # Indicates the Twitter account for the website or platform on which the content was published
     # If true, a video player will be embedded in the Twitter feed on PeerTube video share
     # If false, we use an image link card that will redirect on your PeerTube instance
     # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted

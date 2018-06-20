@@ -124,7 +124,8 @@
     "validator": "^10.2.0",
     "webfinger.js": "^2.6.6",
     "winston": "3.0.0-rc1",
-    "ws": "^5.0.0"
+    "ws": "^5.0.0",
+    "yarn": "^1.7.0"
   },
   "devDependencies": {
     "@types/async": "^2.0.40",

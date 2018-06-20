@@ -18,9 +18,8 @@ services:
   peertube:
     # If you don't want to use the official image and build one from sources
     # build:
-    #   context: .
-    #   dockerfile: ./support/docker/production/Dockerfile.stretch
-    image: chocobozzz/peertube:production-stretch
+    context: .
+    dockerfile: ./support/docker/production/Dockerfile.stretch
     environment:
       PEERTUBE_WEBSERVER_HOSTNAME: ${PEERTUBE_WEBSERVER_HOSTNAME}
       PEERTUBE_WEBSERVER_PORT: ${PEERTUBE_WEBSERVER_PORT}
