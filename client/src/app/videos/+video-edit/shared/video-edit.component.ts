@@ -101,7 +101,6 @@ export class VideoEditComponent implements OnInit {
     this.videoCategories = this.serverService.getVideoCategories()
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
-  console.log(this.videoLanguages)
 
     setTimeout(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
   }

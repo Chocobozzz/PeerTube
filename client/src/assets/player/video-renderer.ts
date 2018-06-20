@@ -45,10 +45,10 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
 
   function useVideostream () {
     prepareElem()
-    preparedElem.addEventListener('error', function onError () {
+    preparedElem.addEventListener('error', function onError (err) {
       preparedElem.removeEventListener('error', onError)
 
-      return fallbackToMediaSource()
+      return callback(err)
     })
     preparedElem.addEventListener('loadstart', onLoadStart)
     return videostream(file, preparedElem)
