@@ -21,6 +21,7 @@ import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
+import { ActorModel } from '../../models/activitypub/actor'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -268,6 +269,14 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
     res.status(409)
               .send({ error: 'User with this username or email already exists.' })
               .end()
+    return false
+  }
+
+  const actor = await ActorModel.loadLocalByName(username)
+  if (actor) {
+    res.status(409)
+       .send({ error: 'Another actor (account/channel) with this name already exists.' })
+       .end()
     return false
   }
 
