@@ -117,11 +117,11 @@ Peertube app for [YunoHost](https://yunohost.org). See [here](https://github.com
 
 See the [production guide](/support/doc/production.md).
 
-## Contributing/Test
+## Contribute/Translate/Test
 
 See the [contributing
 guide](/.github/CONTRIBUTING.md)
-to see how to test or contribute to PeerTube. Spoiler alert: you don't need to be a
+to see how to test or contribute to PeerTube (write documentation, translate, develop...). Spoiler alert: you don't need to be a
 coder to help!
 
 ## API REST documentation
