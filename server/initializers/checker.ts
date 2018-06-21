@@ -3,6 +3,28 @@ import { promisify0 } from '../helpers/core-utils'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
+import { parse } from 'url'
+import { CONFIG } from './constants'
+import { logger } from '../helpers/logger'
+import { getServerActor } from '../helpers/utils'
+
+async function checkActivityPubUrls () {
+  const actor = await getServerActor()
+
+  const parsed = parse(actor.url)
+  if (CONFIG.WEBSERVER.HOST !== parsed.host) {
+    const NODE_ENV = config.util.getEnv('NODE_ENV')
+    const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
+
+    logger.warn(
+      'It seems PeerTube was started (and created some data) with another domain name. ' +
+      'This means you will not be able to federate! ' +
+      'Please use %s %s npm run update-host to fix this.',
+      NODE_CONFIG_DIR ? `NODE_CONFIG_DIR=${NODE_CONFIG_DIR}` : '',
+      NODE_ENV ? `NODE_ENV=${NODE_ENV}` : ''
+    )
+  }
+}
 
 // Some checks on configuration files
 // Return an error message, or null if everything is okay
@@ -95,5 +117,6 @@ export {
   checkMissedConfig,
   clientsExist,
   usersExist,
-  applicationExist
+  applicationExist,
+  checkActivityPubUrls
 }

@@ -1,6 +1,4 @@
 // FIXME: https://github.com/nodejs/node/pull/16853
-import { ScheduleVideoUpdateModel } from './server/models/video/schedule-video-update'
-
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
@@ -26,7 +24,7 @@ process.title = 'peertube'
 const app = express()
 
 // ----------- Core checker -----------
-import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
+import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } from './server/initializers/checker'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
@@ -190,6 +188,13 @@ async function startApplication () {
   const hostname = CONFIG.LISTEN.HOSTNAME
 
   await installApplication()
+
+  // Check activity pub urls are valid
+  checkActivityPubUrls()
+    .catch(err => {
+      logger.error('Error in ActivityPub URLs checker.', { err })
+      process.exit(-1)
+    })
 
   // Email initialization
   Emailer.Instance.init()
