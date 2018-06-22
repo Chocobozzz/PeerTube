@@ -466,7 +466,9 @@ class PeerTubePlugin extends Plugin {
       return this.trigger('torrentInfo', {
         downloadSpeed: this.torrent.downloadSpeed,
         numPeers: this.torrent.numPeers,
-        uploadSpeed: this.torrent.uploadSpeed
+        uploadSpeed: this.torrent.uploadSpeed,
+        downloaded: this.torrent.downloaded,
+        uploaded: this.torrent.uploaded
       })
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
