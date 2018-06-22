@@ -12,7 +12,7 @@ export class VideoDownloadComponent implements OnInit {
 
   @ViewChild('modal') modal: ModalDirective
 
-  downloadType: 'direct' | 'torrent' = 'torrent'
+  downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
   resolutionId: number | string = -1
 
   constructor () {
@@ -41,7 +41,19 @@ export class VideoDownloadComponent implements OnInit {
       return
     }
 
-    const link = this.downloadType === 'direct' ? file.fileDownloadUrl : file.torrentDownloadUrl
+    const link = (() => {
+      switch (this.downloadType) {
+        case 'direct': {
+          return file.fileDownloadUrl
+        }
+        case 'torrent': {
+          return file.torrentDownloadUrl
+        }
+        case 'magnet': {
+          return file.magnetUri
+        }
+      }
+    })()
     window.location.assign(link)
   }
 }
