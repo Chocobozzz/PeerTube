@@ -118,7 +118,7 @@ const usersUpdateMeValidator = [
 
 const usersUpdateMyAvatarValidator = [
   body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(
-    'This file is not supported. Please, make sure it is of the following type : '
+    'This file is not supported or too large. Please, make sure it is of the following type : '
     + CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME.join(', ')
   ),
 
@@ -126,14 +126,6 @@ const usersUpdateMyAvatarValidator = [
     logger.debug('Checking usersUpdateMyAvatarValidator parameters', { files: req.files })
 
     if (areValidationErrors(req, res)) return
-
-    const imageFile = req.files['avatarfile'][0] as Express.Multer.File
-    if (imageFile.size > CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max) {
-      res.status(400)
-        .send({ error: `The size of the avatar is too big (>${CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max}).` })
-        .end()
-      return
-    }
 
     return next()
   }

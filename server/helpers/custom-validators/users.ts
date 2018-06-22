@@ -2,7 +2,6 @@ import 'express-validator'
 import * as validator from 'validator'
 import { UserRole } from '../../../shared'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers'
-
 import { exists, isFileValid } from './misc'
 import { values } from 'lodash'
 
@@ -52,7 +51,7 @@ const avatarMimeTypes = CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
   .join('|')
 const avatarMimeTypesRegex = `image/(${avatarMimeTypes})`
 function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, avatarMimeTypesRegex, 'avatarfile')
+  return isFileValid(files, avatarMimeTypesRegex, 'avatarfile', CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max)
 }
 
 // ---------------------------------------------------------------------------

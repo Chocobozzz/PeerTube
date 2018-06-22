@@ -86,7 +86,7 @@ const videoFileTypes = Object.keys(VIDEO_MIMETYPE_EXT).map(m => `(${m})`)
 const videoFileTypesRegex = videoFileTypes.join('|')
 
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  return isFileValid(files, videoFileTypesRegex, 'videofile')
+  return isFileValid(files, videoFileTypesRegex, 'videofile', null)
 }
 
 const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
@@ -95,7 +95,7 @@ const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
 const videoImageTypesRegex = `image/(${videoImageTypes})`
 
 function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
-  return isFileValid(files, videoImageTypesRegex, field, true)
+  return isFileValid(files, videoImageTypesRegex, field, CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max, true)
 }
 
 function isVideoPrivacyValid (value: number) {
