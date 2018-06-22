@@ -57,6 +57,7 @@ class PeerTubePlugin extends Plugin {
   private renderer
   private fakeRenderer
   private autoResolution = true
+  private forbidAutoResolution = false
   private isAutoResolutionObservation = false
 
   private videoViewInterval
@@ -304,9 +305,15 @@ class PeerTubePlugin extends Plugin {
     this.trigger('autoResolutionUpdate')
   }
 
-  disableAutoResolution () {
+  disableAutoResolution (forbid = false) {
+    if (forbid === true) this.forbidAutoResolution = true
+
     this.autoResolution = false
     this.trigger('autoResolutionUpdate')
+  }
+
+  isAutoResolutionForbidden () {
+    return this.forbidAutoResolution === true
   }
 
   getCurrentVideoFile () {
@@ -509,6 +516,8 @@ class PeerTubePlugin extends Plugin {
   }
 
   private fallbackToHttp (done?: Function, play = true) {
+    this.disableAutoResolution(true)
+
     this.flushVideoFile(this.currentVideoFile, true)
     this.torrent = null
 
@@ -555,7 +564,7 @@ class PeerTubePlugin extends Plugin {
     this.player.controlBar.on('mouseenter', () => disableInactivity())
     settingsDialog.on('mouseenter', () => disableInactivity())
     this.player.controlBar.on('mouseleave', () => enableInactivity())
-    settingsDialog.on('mouseleave', () => enableInactivity())
+    // settingsDialog.on('mouseleave', () => enableInactivity())
   }
 
   private pickAverageVideoFile () {
