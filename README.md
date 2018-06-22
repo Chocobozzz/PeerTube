@@ -73,9 +73,9 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 Want to see it in action?
 
    * Demonstration servers:
-     * [peertube.cpy.re](http://peertube.cpy.re)
-     * [peertube2.cpy.re](http://peertube2.cpy.re)
-     * [peertube3.cpy.re](http://peertube3.cpy.re)
+     * [peertube.cpy.re](https://peertube.cpy.re)
+     * [peertube2.cpy.re](https://peertube2.cpy.re)
+     * [peertube3.cpy.re](https://peertube3.cpy.re)
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
      to see what the "decentralization feature" looks like
    * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) to see
