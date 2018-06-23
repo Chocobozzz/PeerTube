@@ -1,6 +1,5 @@
 import { Model } from 'sequelize-typescript'
 import * as ipaddr from 'ipaddr.js'
-const isCidr = require('is-cidr')
 import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers'
@@ -10,6 +9,8 @@ import { ApplicationModel } from '../models/application/application'
 import { pseudoRandomBytesPromise } from './core-utils'
 import { logger } from './logger'
 
+const isCidr = require('is-cidr')
+
 async function generateRandomString (size: number) {
   const raw = await pseudoRandomBytesPromise(size)
 
@@ -17,22 +18,20 @@ async function generateRandomString (size: number) {
 }
 
 interface FormattableToJSON {
-  toFormattedJSON ()
+  toFormattedJSON (args?: any)
 }
 
-function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number) {
+function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number, formattedArg?: any) {
   const formattedObjects: U[] = []
 
   objects.forEach(object => {
-    formattedObjects.push(object.toFormattedJSON())
+    formattedObjects.push(object.toFormattedJSON(formattedArg))
   })
 
-  const res: ResultList<U> = {
+  return {
     total: objectsTotal,
     data: formattedObjects
-  }
-
-  return res
+  } as ResultList<U>
 }
 
 async function isSignupAllowed () {
@@ -87,16 +86,17 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   const resolutionsEnabled: number[] = []
   const configResolutions = CONFIG.TRANSCODING.RESOLUTIONS
 
+  // Put in the order we want to proceed jobs
   const resolutions = [
-    VideoResolution.H_240P,
-    VideoResolution.H_360P,
     VideoResolution.H_480P,
+    VideoResolution.H_360P,
     VideoResolution.H_720P,
+    VideoResolution.H_240P,
     VideoResolution.H_1080P
   ]
 
   for (const resolution of resolutions) {
-    if (configResolutions[resolution + 'p'] === true && videoFileHeight > resolution) {
+    if (configResolutions[ resolution + 'p' ] === true && videoFileHeight > resolution) {
       resolutionsEnabled.push(resolution)
     }
   }

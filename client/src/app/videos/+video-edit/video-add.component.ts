@@ -27,6 +27,9 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   @ViewChild('videofileInput') videofileInput
 
+  // So that it can be accessed in the template
+  readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+
   isUploadingVideo = false
   isUpdatingVideo = false
   videoUploaded = false
@@ -164,6 +167,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
+    const waitTranscoding = true
     const commentsEnabled = true
     const channelId = this.firstStepChannelId.toString()
 
@@ -173,6 +177,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('commentsEnabled', '' + commentsEnabled)
+    formData.append('waitTranscoding', '' + waitTranscoding)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 

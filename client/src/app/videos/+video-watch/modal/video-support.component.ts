@@ -23,11 +23,7 @@ export class VideoSupportComponent {
   show () {
     this.modal.show()
 
-    if (this.video.support) {
-      this.videoHTMLSupport = this.markdownService.enhancedMarkdownToHTML(this.video.support)
-    } else {
-      this.videoHTMLSupport = ''
-    }
+    this.videoHTMLSupport = this.markdownService.enhancedMarkdownToHTML(this.video.support)
   }
 
   hide () {

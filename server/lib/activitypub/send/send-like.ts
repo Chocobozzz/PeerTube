@@ -14,36 +14,31 @@ async function sendLike (byActor: ActorModel, video: VideoModel, t: Transaction)
   // Send to origin
   if (video.isOwned() === false) {
     const audience = getVideoAudience(video, accountsInvolvedInVideo)
-    const data = await likeActivityData(url, byActor, video, t, audience)
+    const data = likeActivityData(url, byActor, video, audience)
 
     return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
   }
 
   // Send to followers
   const audience = getObjectFollowersAudience(accountsInvolvedInVideo)
-  const data = await likeActivityData(url, byActor, video, t, audience)
+  const data = likeActivityData(url, byActor, video, audience)
 
   const followersException = [ byActor ]
   return broadcastToFollowers(data, byActor, accountsInvolvedInVideo, t, followersException)
 }
 
-async function likeActivityData (
-  url: string,
-  byActor: ActorModel,
-  video: VideoModel,
-  t: Transaction,
-  audience?: ActivityAudience
-): Promise<ActivityLike> {
-  if (!audience) {
-    audience = await getAudience(byActor, t)
-  }
+function likeActivityData (url: string, byActor: ActorModel, video: VideoModel, audience?: ActivityAudience): ActivityLike {
+  if (!audience) audience = getAudience(byActor)
 
-  return audiencify({
-    type: 'Like' as 'Like',
-    id: url,
-    actor: byActor.url,
-    object: video.url
-  }, audience)
+  return audiencify(
+    {
+      type: 'Like' as 'Like',
+      id: url,
+      actor: byActor.url,
+      object: video.url
+    },
+    audience
+  )
 }
 
 // ---------------------------------------------------------------------------

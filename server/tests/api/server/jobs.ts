@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers, wait } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
-import { getJobsList, getJobsListPaginationAndSort } from '../../utils/server/jobs'
+import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../utils/server/jobs'
 import { flushAndRunMultipleServers } from '../../utils/server/servers'
 import { uploadVideo } from '../../utils/videos/videos'
 import { dateIsValid } from '../../utils/miscs/miscs'
@@ -31,7 +31,7 @@ describe('Test jobs', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video1' })
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video2' })
 
-    await wait(15000)
+    await waitJobs(servers)
   })
 
   it('Should list jobs', async function () {
@@ -55,10 +55,5 @@ describe('Test jobs', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

@@ -12,6 +12,7 @@ class ResolutionMenuButton extends MenuButton {
     this.player = player
 
     player.peertube().on('videoFileUpdate', () => this.updateLabel())
+    player.peertube().on('autoResolutionUpdate', () => this.updateLabel())
   }
 
   createEl () {

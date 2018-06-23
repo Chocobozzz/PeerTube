@@ -9,6 +9,7 @@ import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-videos-local',
@@ -28,6 +29,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
     protected authService: AuthService,
     protected location: Location,
     protected i18n: I18n,
+    protected screenService: ScreenService,
     private videoService: VideoService
   ) {
     super()

@@ -54,12 +54,12 @@ async function buildActivities (actor: ActorModel, start: number, count: number)
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
       const videoShare = video.VideoShares[0]
-      const announceActivity = await announceActivityData(videoShare.url, actor, video.url, undefined, createActivityAudience)
+      const announceActivity = announceActivityData(videoShare.url, actor, video.url, createActivityAudience)
 
       activities.push(announceActivity)
     } else {
       const videoObject = video.toActivityPubObject()
-      const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
+      const createActivity = createActivityData(video.url, byActor, videoObject, createActivityAudience)
 
       activities.push(createActivity)
     }

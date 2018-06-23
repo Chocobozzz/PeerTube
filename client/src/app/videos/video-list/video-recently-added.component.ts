@@ -8,6 +8,7 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-videos-recently-added',
@@ -26,6 +27,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
     protected notificationsService: NotificationsService,
     protected authService: AuthService,
     protected i18n: I18n,
+    protected screenService: ScreenService,
     private videoService: VideoService
   ) {
     super()

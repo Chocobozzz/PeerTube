@@ -2,7 +2,9 @@
 @import '_mixins';
 @import '~video.js/dist/video-js.css';
 @import '~videojs-dock/dist/videojs-dock.css';
-@import '../../sass/video-js-custom.scss';
+
+$assets-path: '../../assets/';
+@import '../../sass/player/player';
 
 [hidden] {
   display: none !important;

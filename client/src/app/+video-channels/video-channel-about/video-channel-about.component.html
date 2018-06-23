@@ -2,12 +2,12 @@
   <div class="description col-md-6 col-sm-12">
     <div class="block">
       <div i18n class="small-title">Description</div>
-      <div class="content">{{ getVideoChannelDescription() }}</div>
+      <div class="content" [innerHtml]="getVideoChannelDescription()"></div>
     </div>
 
-    <div class="block" *ngIf="videoChannel.support">
+    <div class="block" *ngIf="supportHTML">
       <div i18n class="small-title">Support this channel</div>
-      <div class="content">{{ videoChannel.support }}</div>
+      <div class="content" [innerHtml]="supportHTML"></div>
     </div>
   </div>
 

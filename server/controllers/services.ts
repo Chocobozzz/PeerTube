@@ -45,7 +45,8 @@ function generateOEmbed (req: express.Request, res: express.Response, next: expr
     thumbnailUrl = undefined
   }
 
-  const html = `<iframe width="${embedWidth}" height="${embedHeight}" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
+  const html = `<iframe width="${embedWidth}" height="${embedHeight}" sandbox="allow-same-origin allow-scripts" ` +
+    `src="${embedUrl}" frameborder="0" allowfullscreen></iframe>`
 
   const json: any = {
     type: 'video',

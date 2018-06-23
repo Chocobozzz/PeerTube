@@ -6,7 +6,6 @@ import 'mocha'
 import {
   addVideoToBlacklist,
   flushAndRunMultipleServers,
-  flushTests,
   getBlacklistedVideosList,
   getSortedBlacklistedVideosList,
   getVideosList,
@@ -14,10 +13,10 @@ import {
   removeVideoFromBlacklist,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 const orderBy = lodash.orderBy
@@ -51,7 +50,7 @@ describe('Test video blacklist management', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 2nd video', description: 'A video on server 2' })
 
     // Wait videos propagation, server 2 has transcoding enabled
-    await wait(15000)
+    await waitJobs(servers)
 
     // Blacklist the two videos on server 1
     await blacklistVideosOnServer(servers[0])
@@ -154,9 +153,5 @@ describe('Test video blacklist management', function () {
 
   after(async function () {
     killallServers(servers)
-
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

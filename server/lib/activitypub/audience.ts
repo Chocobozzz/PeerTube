@@ -20,7 +20,7 @@ function getVideoCommentAudience (
   isOrigin = false
 ) {
   const to = [ ACTIVITY_PUB.PUBLIC ]
-  const cc = [ ]
+  const cc = []
 
   // Owner of the video we comment
   if (isOrigin === false) {
@@ -55,7 +55,7 @@ async function getActorsInvolvedInVideo (video: VideoModel, t: Transaction) {
   return actors
 }
 
-async function getAudience (actorSender: ActorModel, t: Transaction, isPublic = true) {
+function getAudience (actorSender: ActorModel, isPublic = true) {
   return buildAudience([ actorSender.followersUrl ], isPublic)
 }
 
@@ -67,14 +67,14 @@ function buildAudience (followerUrls: string[], isPublic = true) {
     to = [ ACTIVITY_PUB.PUBLIC ]
     cc = followerUrls
   } else { // Unlisted
-    to = [ ]
-    cc = [ ]
+    to = []
+    cc = []
   }
 
   return { to, cc }
 }
 
-function audiencify <T> (object: T, audience: ActivityAudience) {
+function audiencify<T> (object: T, audience: ActivityAudience) {
   return Object.assign(object, audience)
 }
 

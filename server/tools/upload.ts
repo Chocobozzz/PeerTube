@@ -84,6 +84,7 @@ async function run () {
     fixture: program['file'],
     thumbnailfile: program['thumbnailPath'],
     previewfile: program['previewPath'],
+    waitTranscoding: true,
     privacy: program['privacy'],
     support: undefined
   }

@@ -50,6 +50,10 @@ export class MyAccountSettingsComponent implements OnInit {
 
   changeAvatar () {
     const avatarfile = this.avatarfileInput.nativeElement.files[ 0 ]
+    if (avatarfile.size > this.maxAvatarSize) {
+      this.notificationsService.error('Error', 'This image is too large.')
+      return
+    }
 
     const formData = new FormData()
     formData.append('avatarfile', avatarfile)
@@ -59,7 +63,7 @@ export class MyAccountSettingsComponent implements OnInit {
         data => {
           this.notificationsService.success(this.i18n('Success'), this.i18n('Avatar changed.'))
 
-          this.user.account.avatar = data.avatar
+          this.user.updateAccountAvatar(data.avatar)
         },
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)

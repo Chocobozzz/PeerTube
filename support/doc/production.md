@@ -59,10 +59,10 @@ $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/down
 $ sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
-*If you're using CentOS7, do not forget to activate the devtoolset-6 software collection.
+*If you're using CentOS7, do not forget to activate the devtoolset-7 software collection.
 And after that, follow the step as usual. Do not forget to exit the environment after installing Peertube:*
 ```
-$ scl enable devtool-6 bash
+$ sudo scl enable devtoolset-7 bash
 ```
 
 Install Peertube:
@@ -200,13 +200,16 @@ Now your instance is up you can:
 
 ## Upgrade
 
+### PeerTube code
+
+**Check the changelog (in particular BREAKING CHANGES!):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
+
 #### Auto (minor versions only)
 
 The password it asks is PeerTube's database user password.
 
 ```
 $ cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
-$ sudo systemctl restart peertube && sudo journalctl -fu peertube
 ```
 
 #### Manually
@@ -256,10 +259,42 @@ $ cd /var/www/peertube && \
     sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 ```
 
+### nginx
 
-Restart PeerTube:
+Check changes in nginx configuration:
+
 ```
-$ sudo systemctl restart peertube
+$ cd /var/www/peertube/versions
+$ diff "$(ls --sort=t | head -2 | tail -1)/support/nginx/peertube" "$(ls --sort=t | head -1)/support/nginx/peertube"
+```
+
+### systemd
+
+Check changes in systemd configuration:
+
+```
+$ cd /var/www/peertube/versions
+$ diff "$(ls --sort=t | head -2 | tail -1)/support/systemd/peertube.service" "$(ls --sort=t | head -1)/support/systemd/peertube.service"
+```
+
+### Restart PeerTube
+
+If you changed your nginx configuration:
+
+```
+$ sudo systemctl reload nginx
+```
+
+If you changed your systemd configuration:
+
+```
+$ sudo systemctl daemon-reload
+```
+
+Restart PeerTube and check the logs:
+
+```
+$ sudo systemctl restart peertube && sudo journalctl -fu peertube
 ```
 
 ### Things went wrong?

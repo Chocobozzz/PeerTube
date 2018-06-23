@@ -64,7 +64,7 @@ export class UserService {
     if (user.videoQuota === -1) {
       videoQuota = this.i18n('Unlimited')
     } else {
-      videoQuota = this.bytesPipe.transform(user.videoQuota)
+      videoQuota = this.bytesPipe.transform(user.videoQuota, 0)
     }
 
     return Object.assign(user, {

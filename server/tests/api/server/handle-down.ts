@@ -12,7 +12,7 @@ import {
   wait
 } from '../../utils/index'
 import { follow, getFollowersListPaginationAndSort } from '../../utils/server/follows'
-import { getJobsListPaginationAndSort } from '../../utils/server/jobs'
+import { getJobsListPaginationAndSort, waitJobs } from '../../utils/server/jobs'
 import {
   addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
   getVideoThreadComments
@@ -94,11 +94,11 @@ describe('Test handle downs', function () {
 
     await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
 
-    await wait(5000)
+    await waitJobs(servers)
 
     await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
 
-    await wait(5000)
+    await waitJobs(servers)
 
     for (const server of servers) {
       const res = await getVideosList(server.url)
@@ -118,7 +118,7 @@ describe('Test handle downs', function () {
       videos.push(resVideo.body.video)
     }
 
-    await wait(2000)
+    await waitJobs(servers[0])
 
     await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributes)
 
@@ -136,7 +136,9 @@ describe('Test handle downs', function () {
       commentIdServer1 = resComment.body.comment.id
     }
 
-    await wait(10000)
+    await waitJobs(servers[0])
+    // Wait scheduler
+    await wait(11000)
 
     const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 1, 'createdAt')
     expect(res.body.data).to.be.an('array')
@@ -159,7 +161,7 @@ describe('Test handle downs', function () {
 
     await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
 
-    await wait(5000)
+    await waitJobs(servers)
 
     const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 1, 'createdAt')
     expect(res.body.data).to.be.an('array')
@@ -171,7 +173,7 @@ describe('Test handle downs', function () {
 
     await viewVideo(servers[0].url, videos[0].uuid)
 
-    await wait(5000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[1].url)
     expect(res.body.data).to.be.an('array')
@@ -189,7 +191,7 @@ describe('Test handle downs', function () {
 
     await addVideoCommentReply(servers[0].url, servers[0].accessToken, videos[1].uuid, commentIdServer1, 'comment 1-3')
 
-    await wait(5000)
+    await waitJobs(servers)
 
     const resVideo = await getVideo(servers[1].url, videos[0].uuid)
     expect(resVideo.body).not.to.be.undefined
@@ -230,7 +232,7 @@ describe('Test handle downs', function () {
 
     await addVideoCommentReply(servers[1].url, servers[1].accessToken, videos[1].uuid, commentIdServer2, 'comment 1-4')
 
-    await wait(5000)
+    await waitJobs(servers)
 
     {
       const resComment = await getVideoThreadComments(servers[0].url, videos[1].uuid, threadIdServer1)
@@ -259,10 +261,5 @@ describe('Test handle downs', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

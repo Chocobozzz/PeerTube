@@ -21,13 +21,13 @@ async function processCreateActivity (activity: ActivityCreate) {
   if (activityType === 'View') {
     return processCreateView(actor, activity)
   } else if (activityType === 'Dislike') {
-    return processCreateDislike(actor, activity)
+    return retryTransactionWrapper(processCreateDislike, actor, activity)
   } else if (activityType === 'Video') {
     return processCreateVideo(actor, activity)
   } else if (activityType === 'Flag') {
-    return processCreateVideoAbuse(actor, activityObject as VideoAbuseObject)
+    return retryTransactionWrapper(processCreateVideoAbuse, actor, activityObject as VideoAbuseObject)
   } else if (activityType === 'Note') {
-    return processCreateVideoComment(actor, activity)
+    return retryTransactionWrapper(processCreateVideoComment, actor, activity)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -54,15 +54,6 @@ async function processCreateVideo (
 }
 
 async function processCreateDislike (byActor: ActorModel, activity: ActivityCreate) {
-  const options = {
-    arguments: [ byActor, activity ],
-    errorMessage: 'Cannot dislike the video with many retries.'
-  }
-
-  return retryTransactionWrapper(createVideoDislike, options)
-}
-
-async function createVideoDislike (byActor: ActorModel, activity: ActivityCreate) {
   const dislike = activity.object as DislikeObject
   const byAccount = byActor.Account
 
@@ -109,16 +100,7 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
   }
 }
 
-function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
-  const options = {
-    arguments: [ actor, videoAbuseToCreateData ],
-    errorMessage: 'Cannot insert the remote video abuse with many retries.'
-  }
-
-  return retryTransactionWrapper(addRemoteVideoAbuse, options)
-}
-
-async function addRemoteVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
+async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
   const account = actor.Account
@@ -139,16 +121,7 @@ async function addRemoteVideoAbuse (actor: ActorModel, videoAbuseToCreateData: V
   })
 }
 
-function processCreateVideoComment (byActor: ActorModel, activity: ActivityCreate) {
-  const options = {
-    arguments: [ byActor, activity ],
-    errorMessage: 'Cannot create video comment with many retries.'
-  }
-
-  return retryTransactionWrapper(createVideoComment, options)
-}
-
-async function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
+async function processCreateVideoComment (byActor: ActorModel, activity: ActivityCreate) {
   const comment = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 

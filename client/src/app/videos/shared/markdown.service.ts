@@ -23,14 +23,16 @@ export class MarkdownService {
   }
 
   textMarkdownToHTML (markdown: string) {
-    const html = this.textMarkdownIt.render(markdown)
+    if (!markdown) return ''
 
+    const html = this.textMarkdownIt.render(markdown)
     return this.avoidTruncatedLinks(html)
   }
 
   enhancedMarkdownToHTML (markdown: string) {
-    const html = this.enhancedMarkdownIt.render(markdown)
+    if (!markdown) return ''
 
+    const html = this.enhancedMarkdownIt.render(markdown)
     return this.avoidTruncatedLinks(html)
   }
 

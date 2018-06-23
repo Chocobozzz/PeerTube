@@ -10,6 +10,7 @@ import './settings-menu-button'
 import './webtorrent-info-button'
 import './peertube-videojs-plugin'
 import './peertube-load-progress-bar'
+import './theater-button'
 import { videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
@@ -28,6 +29,7 @@ function getVideojsOptions (options: {
   peertubeLink: boolean,
   poster: string,
   startTime: number
+  theaterMode: boolean
 }) {
   const videojsOptions = {
     controls: true,
@@ -63,6 +65,7 @@ function getVideojsOptions (options: {
 
 function getControlBarChildren (options: {
   peertubeLink: boolean
+  theaterMode: boolean
 }) {
   const children = {
     'playToggle': {},
@@ -77,6 +80,7 @@ function getControlBarChildren (options: {
         'seekBar': {
           children: {
             'peerTubeLoadProgressBar': {},
+            'mouseTimeDisplay': {},
             'playProgressBar': {}
           }
         }
@@ -102,6 +106,12 @@ function getControlBarChildren (options: {
   if (options.peertubeLink === true) {
     Object.assign(children, {
       'peerTubeLinkButton': {}
+    })
+  }
+
+  if (options.theaterMode === true) {
+    Object.assign(children, {
+      'theaterButton': {}
     })
   }
 

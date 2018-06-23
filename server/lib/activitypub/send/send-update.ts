@@ -15,9 +15,9 @@ async function sendUpdateVideo (video: VideoModel, t: Transaction) {
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
   const videoObject = video.toActivityPubObject()
-  const audience = await getAudience(byActor, t, video.privacy === VideoPrivacy.PUBLIC)
+  const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
 
-  const data = await updateActivityData(url, byActor, videoObject, t, audience)
+  const data = updateActivityData(url, byActor, videoObject, audience)
 
   const actorsInvolved = await VideoShareModel.loadActorsByShare(video.id, t)
   actorsInvolved.push(byActor)
@@ -30,8 +30,8 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
 
   const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
   const accountOrChannelObject = accountOrChannel.toActivityPubObject()
-  const audience = await getAudience(byActor, t)
-  const data = await updateActivityData(url, byActor, accountOrChannelObject, t, audience)
+  const audience = getAudience(byActor)
+  const data = updateActivityData(url, byActor, accountOrChannelObject, audience)
 
   let actorsInvolved: ActorModel[]
   if (accountOrChannel instanceof AccountModel) {
@@ -56,21 +56,17 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateActivityData (
-  url: string,
-  byActor: ActorModel,
-  object: any,
-  t: Transaction,
-  audience?: ActivityAudience
-): Promise<ActivityUpdate> {
-  if (!audience) {
-    audience = await getAudience(byActor, t)
-  }
+function updateActivityData (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityUpdate {
+  if (!audience) audience = getAudience(byActor)
 
-  return audiencify({
-    type: 'Update' as 'Update',
-    id: url,
-    actor: byActor.url,
-    object: audiencify(object, audience)
-  }, audience)
+  return audiencify(
+    {
+      type: 'Update' as 'Update',
+      id: url,
+      actor: byActor.url,
+      object: audiencify(object, audience
+      )
+    },
+    audience
+  )
 }

@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import { User, Video } from '../../../../shared/index'
-import { doubleFollow, flushAndRunMultipleServers, getVideoChannelVideos, updateVideo, uploadVideo, wait } from '../../utils'
+import { doubleFollow, flushAndRunMultipleServers, getVideoChannelVideos, updateVideo, uploadVideo } from '../../utils'
 import {
   addVideoChannel,
   deleteVideoChannel,
@@ -17,6 +17,7 @@ import {
   setAccessTokensToServers,
   updateVideoChannel
 } from '../../utils/index'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -49,7 +50,7 @@ describe('Test video channels', function () {
       firstVideoChannelUUID = user.videoChannels[0].uuid
     }
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have one video channel (created with root)', async () => {
@@ -80,7 +81,7 @@ describe('Test video channels', function () {
       videoUUID = res.body.video.uuid
     }
 
-    await wait(3000)
+    await waitJobs(servers)
   })
 
   it('Should have two video channels when getting my information', async () => {
@@ -142,7 +143,7 @@ describe('Test video channels', function () {
 
     await updateVideoChannel(servers[0].url, servers[0].accessToken, secondVideoChannelId, videoChannelAttributes)
 
-    await wait(3000)
+    await waitJobs(servers)
   })
 
   it('Should have video channel updated', async function () {
@@ -184,7 +185,7 @@ describe('Test video channels', function () {
 
     await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { channelId: firstVideoChannelId })
 
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should list the first video channel videos', async function () {
@@ -219,10 +220,5 @@ describe('Test video channels', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

@@ -13,6 +13,7 @@ rules:
   attribute-quotes: 0
   border-zero: 0
   no-color-keywords: 0
+  no-color-literals: 0
   no-css-comments: 0
   no-important: 0
   no-trailing-zero: 1
@@ -20,6 +21,10 @@ rules:
   space-before-bang: 1
   space-after-colon: 1
   space-before-colon: 1
+  clean-import-paths: 0
   hex-length: 1
   hex-notation: 0
+  nesting-depth:
+    - 1
+    - max-depth: 4
   indentation: 2

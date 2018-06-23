@@ -5,7 +5,7 @@ import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { Subject } from 'rxjs/Subject'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-account-video-settings',

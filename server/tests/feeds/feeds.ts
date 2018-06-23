@@ -11,12 +11,12 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../utils'
 import { join } from 'path'
 import * as libxmljs from 'libxmljs'
 import { addVideoCommentThread } from '../utils/videos/video-comments'
+import { waitJobs } from '../utils/server/jobs'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -46,7 +46,7 @@ describe('Test syndication feeds', () => {
     await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'super comment 1')
     await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'super comment 2')
 
-    await wait(10000)
+    await waitJobs(servers)
   })
 
   describe('All feed', function () {

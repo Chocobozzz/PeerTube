@@ -2,10 +2,13 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { AbstractScheduler } from './abstract-scheduler'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers'
 
 export class BadActorFollowScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
+
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.badActorFollow
 
   private constructor () {
     super()

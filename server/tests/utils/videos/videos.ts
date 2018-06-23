@@ -27,6 +27,7 @@ type VideoAttributes = {
   language?: string
   nsfw?: boolean
   commentsEnabled?: boolean
+  waitTranscoding?: boolean
   description?: string
   tags?: string[]
   channelId?: number
@@ -34,6 +35,10 @@ type VideoAttributes = {
   fixture?: string
   thumbnailfile?: string
   previewfile?: string
+  scheduleUpdate?: {
+    updateAt: string
+    privacy?: VideoPrivacy
+  }
 }
 
 function getVideoCategories (url: string) {
@@ -326,6 +331,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     language: 'zh',
     channelId: defaultChannelId,
     nsfw: true,
+    waitTranscoding: false,
     description: 'my super description',
     support: 'my super support text',
     tags: [ 'tag' ],
@@ -341,6 +347,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('name', attributes.name)
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
+              .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
 
@@ -368,6 +375,14 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
   }
 
+  if (attributes.scheduleUpdate) {
+    req.field('scheduleUpdate[updateAt]', attributes.scheduleUpdate.updateAt)
+
+    if (attributes.scheduleUpdate.privacy) {
+      req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
+    }
+  }
+
   return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
             .expect(specialStatus)
 }
@@ -386,6 +401,7 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
   if (attributes.channelId) body['channelId'] = attributes.channelId
+  if (attributes.scheduleUpdate) body['scheduleUpdate'] = attributes.scheduleUpdate
 
   // Upload request
   if (attributes.thumbnailfile || attributes.previewfile) {

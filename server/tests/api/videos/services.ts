@@ -32,7 +32,8 @@ describe('Test services', function () {
     const oembedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
 
     const res = await getOEmbed(server.url, oembedUrl)
-    const expectedHtml = `<iframe width="560" height="315" src="http://localhost:9001/videos/embed/${server.video.uuid}" ` +
+    const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
+                         `src="http://localhost:9001/videos/embed/${server.video.uuid}" ` +
                          'frameborder="0" allowfullscreen></iframe>'
     const expectedThumbnailUrl = 'http://localhost:9001/static/previews/' + server.video.uuid + '.jpg'
 
@@ -53,7 +54,8 @@ describe('Test services', function () {
     const maxWidth = 50
 
     const res = await getOEmbed(server.url, oembedUrl, format, maxHeight, maxWidth)
-    const expectedHtml = `<iframe width="50" height="50" src="http://localhost:9001/videos/embed/${server.video.uuid}" ` +
+    const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts" ' +
+                         `src="http://localhost:9001/videos/embed/${server.video.uuid}" ` +
                          'frameborder="0" allowfullscreen></iframe>'
 
     expect(res.body.html).to.equal(expectedHtml)
@@ -68,10 +70,5 @@ describe('Test services', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

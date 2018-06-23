@@ -15,6 +15,7 @@ import { ActorModel } from '../activitypub/actor'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { AvatarModel } from '../avatar/avatar'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -39,7 +40,13 @@ enum ScopeNames {
         include: [
           {
             model: () => ActorModel.unscoped(),
-            required: true
+            required: true,
+            include: [
+              {
+                model: () => AvatarModel.unscoped(),
+                required: false
+              }
+            ]
           }
         ]
       }
@@ -237,7 +244,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
-      displayName: this.name,
+      displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
@@ -265,5 +272,9 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
         }
       ]
     })
+  }
+
+  getDisplayName () {
+    return this.name
   }
 }

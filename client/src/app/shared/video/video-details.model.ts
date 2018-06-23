@@ -1,4 +1,11 @@
-import { UserRight, VideoChannel, VideoDetails as VideoDetailsServerModel, VideoFile } from '../../../../../shared'
+import {
+  UserRight,
+  VideoChannel,
+  VideoConstant,
+  VideoDetails as VideoDetailsServerModel,
+  VideoFile,
+  VideoState
+} from '../../../../../shared'
 import { AuthUser } from '../../core'
 import { Video } from '../../shared/video/video.model'
 import { Account } from '@app/shared/account/account.model'
@@ -11,6 +18,9 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
+
+  waitTranscoding: boolean
+  state: VideoConstant<VideoState>
 
   likesPercent: number
   dislikesPercent: number
