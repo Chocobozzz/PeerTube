@@ -1,12 +1,12 @@
 # CLI tools guide
 
  - [Remote tools](#remote-tools)
-   - [import-videos.js](#import-videosjs)
-   - [upload.js](#uploadjs)
+   - [import-videos.ts](#import-videosjs)
+   - [upload.ts](#uploadjs)
  - [Server tools](#server-tools)
-   - [create-transcoding-job.js](#create-transcoding-jobjs)
-   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
-   - [prune-storage.js](#prune-storagejs)
+   - [create-transcoding-job.ts](#create-transcoding-jobjs)
+   - [create-import-video-file-job.ts](#create-import-video-file-jobjs)
+   - [prune-storage.ts](#prune-storagejs)
 
 ## Remote Tools
 
@@ -39,13 +39,13 @@ $ cd ${CLONE}
 $ npm run build:server
 ```
 
-### import-videos.js
+### import-videos.ts
 
 You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
 Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
-$ node dist/server/tools/import-videos.js \
+$ node dist/server/tools/import-videos.ts \
     -u "PEERTUBE_URL" \
     -U "PEERTUBE_USER" \
     --password "PEERTUBE_PASSWORD" \
@@ -69,7 +69,7 @@ Already downloaded videos will not be uploaded twice, so you can run and re-run 
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
 
-### upload.js
+### upload.ts
 
 You can use this script to import videos directly from the CLI.
 
@@ -77,7 +77,7 @@ Videos will be publicly available after transcoding (you can see them before tha
 
 ```
 $ cd ${CLONE}
-$ node dist/server/tools/upload.js --help
+$ node dist/server/tools/upload.ts --help
 ```
 
 
@@ -85,7 +85,7 @@ $ node dist/server/tools/upload.js --help
 
 These scripts should be run on the server, in `peertube-latest` directory.
 
-### create-transcoding-job.js
+### create-transcoding-job.ts
 
 You can use this script to force transcoding of an existing video.
 
@@ -98,7 +98,7 @@ Or to transcode to a specific resolution:
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
    
-### create-import-video-file-job.js
+### create-import-video-file-job.ts
 
 You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video.
 
@@ -106,7 +106,7 @@ You can use this script to import a video file to replace an already uploaded fi
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
 
-### prune-storage.js
+### prune-storage.ts
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
 To delete them (a confirmation will be demanded first):
@@ -115,7 +115,7 @@ To delete them (a confirmation will be demanded first):
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
-### update-host.js
+### update-host.ts
 
 If you started PeerTube with a domain, and then changed it you will have invalid torrent files and invalid URLs in your database.
 To fix this, you have to run:
