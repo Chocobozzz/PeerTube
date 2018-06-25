@@ -92,7 +92,7 @@ function isActorUpdateActivityValid (activity: any) {
 }
 
 function normalizeActor (actor: any) {
-  if (!actor) return
+  if (!actor || !actor.url) return
 
   if (typeof actor.url !== 'string') {
     actor.url = actor.url.href || actor.url.url

@@ -68,6 +68,7 @@ export class VideoService {
     const category = video.category || null
     const description = video.description || null
     const support = video.support || null
+    const scheduleUpdate = video.scheduleUpdate || null
 
     const body: VideoUpdate = {
       name: video.name,
@@ -84,7 +85,7 @@ export class VideoService {
       commentsEnabled: video.commentsEnabled,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile,
-      scheduleUpdate: video.scheduleUpdate || undefined
+      scheduleUpdate
     }
 
     const data = objectToFormData(body)

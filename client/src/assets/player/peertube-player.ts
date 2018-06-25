@@ -143,6 +143,13 @@ function addContextMenu (player: any, videoEmbedUrl: string) {
         listener: () => {
           copyToClipboard(buildVideoEmbed(videoEmbedUrl))
         }
+      },
+      {
+        label: player.localize('Copy magnet URI'),
+        listener: function () {
+          const player = this
+          copyToClipboard(player.peertube().getCurrentVideoFile().magnetUri)
+        }
       }
     ]
   })

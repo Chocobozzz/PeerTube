@@ -1,9 +1,14 @@
+import * as program from 'commander'
 import { createReadStream } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
 import { labelFormatter } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/constants'
+
+program
+  .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
+  .parse(process.argv)
 
 const excludedKeys = {
   level: true,
@@ -27,7 +32,7 @@ const loggerFormat = winston.format.printf((info) => {
 const logger = new winston.createLogger({
   transports: [
     new winston.transports.Console({
-      level: 'debug',
+      level: program['level'] || 'debug',
       stderrLevels: [],
       format: winston.format.combine(
         winston.format.splat(),

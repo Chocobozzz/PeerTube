@@ -38,18 +38,21 @@ import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
 
 const videosAddValidator = [
-  body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
-    'This file is not supported. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
-  ),
-  body('thumbnailfile').custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-    'This thumbnail file is not supported. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-  ),
-  body('previewfile').custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-    'This preview file is not supported. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-  ),
+  body('videofile')
+    .custom((value, { req }) => isVideoFile(req.files)).withMessage(
+      'This file is not supported or too large. Please, make sure it is of the following type : '
+      + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+    ),
+  body('thumbnailfile')
+    .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
+      'This thumbnail file is not supported or too large. Please, make sure it is of the following type : '
+      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ),
+  body('previewfile')
+    .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
+      'This preview file is not supported or too large. Please, make sure it is of the following type : '
+      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('category')
     .optional()
@@ -94,6 +97,9 @@ const videosAddValidator = [
   body('channelId')
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('scheduleUpdate')
+    .optional()
+    .customSanitizer(toValueOrNull),
   body('scheduleUpdate.updateAt')
     .optional()
     .custom(isDateValid).withMessage('Should have a valid schedule update date'),
@@ -144,14 +150,16 @@ const videosAddValidator = [
 
 const videosUpdateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('thumbnailfile').custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-    'This thumbnail file is not supported. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-  ),
-  body('previewfile').custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-    'This preview file is not supported. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-  ),
+  body('thumbnailfile')
+    .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
+      'This thumbnail file is not supported or too large. Please, make sure it is of the following type : '
+      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ),
+  body('previewfile')
+    .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
+      'This preview file is not supported or too large. Please, make sure it is of the following type : '
+      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ),
   body('name')
     .optional()
     .custom(isVideoNameValid).withMessage('Should have a valid name'),
@@ -199,6 +207,9 @@ const videosUpdateValidator = [
     .optional()
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('scheduleUpdate')
+    .optional()
+    .customSanitizer(toValueOrNull),
   body('scheduleUpdate.updateAt')
     .optional()
     .custom(isDateValid).withMessage('Should have a valid schedule update date'),

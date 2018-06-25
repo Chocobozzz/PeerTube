@@ -26,3 +26,4 @@
 /server/tools/import-mediacore.ts
 /docker-volume/
 /.zanata-cache
+/scripts/i18n/generate-iso639-target.ts

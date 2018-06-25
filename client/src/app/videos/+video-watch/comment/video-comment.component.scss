@@ -48,15 +48,17 @@
     .comment-html {
       @include peertube-word-wrap;
 
+      // Mentions
       /deep/ a {
-        @include disable-default-a-behaviour;
 
-        color: #000;
-
-        // Semi bold mentions
         &:not(.linkified-url) {
+          @include disable-default-a-behaviour;
+
+          color: #000;
+
           font-weight: $font-semibold;
         }
+
       }
     }
 
@@ -64,7 +66,8 @@
       margin: 10px 0;
       display: flex;
 
-      .comment-action-reply, .comment-action-delete {
+      .comment-action-reply,
+      .comment-action-delete {
         color: #585858;
         cursor: pointer;
         margin-right: 10px;
@@ -92,7 +95,7 @@
 
 @media screen and (max-width: 600px) {
   .children {
-    margin-left: -40px;
+    margin-left: -35px;
   }
 
   .root-comment {

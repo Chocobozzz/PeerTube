@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.0.0-beta.9
+
+### Features
+
+ * Theater/Cinema mode in player
+ * Add ability to wait transcoding before publishing it
+ * Add ability for uploaders to schedule video update
+ * Add time display to see where we seek the video
+ * Add title in player peers info to show total downloaded/uploaded data
+ * Provide magnet URI in player and download modal ([@rigelk](https://github.com/rigelk))
+ * Add warning if the domain name is different from the one of the first start of Peertube
+ * Add resolution to create-transcoding-job script ([@fflorent](https://github.com/fflorent))
+
+### Bug fixes
+
+ * Fix dislikes number in video watch page
+ * Fix import when the imported file has the same extension than an already existing file
+ * Fix bad RSS descriptions when filtering videos by account or channel
+ * Fix RSS results limit
+ * Fix glitch when updating player volume
+ * Use local object URLs for feeds
+ * Automatically jump to the highlighted thread
+ * Fix account link width on video view ([@sesn](https://github.com/sesn))
+ * Prevent commenting twice
+ * Blue links color in comments
+ * Fix quota precision in users list
+ * Handle markdown in account/video channel pages
+ * Fix avatar image in channel page
+ * Fix slow HTTP fallback on Firefox
+ * Do not create a user with the same username than another actor name
+ * Reset search on page change
+ * Fix images size limit
+ * Log torrent errors/warnings in the console, instead of disturbing users
+
+
 ## v1.0.0-beta.8
 
 ### Features

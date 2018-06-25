@@ -76,5 +76,9 @@
         <source>Food</source>
         <target>Cocina</target>
       </trans-unit>
+      <trans-unit id="Attribution">
+        <source>Attribution</source>
+        <target>Asignación</target>
+      </trans-unit>
     </body>
   </file></xliff>

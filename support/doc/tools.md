@@ -114,3 +114,12 @@ To delete them (a confirmation will be demanded first):
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
+
+### update-host.js
+
+If you started PeerTube with a domain, and then changed it you will have invalid torrent files and invalid URLs in your database.
+To fix this, you have to run:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
+```

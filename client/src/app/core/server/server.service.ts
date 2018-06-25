@@ -141,7 +141,6 @@ export class ServerService {
         )
         .subscribe(({ data, translations }) => {
           Object.keys(data)
-                .map(dataKey => parseInt(dataKey, 10))
                 .forEach(dataKey => {
                   const label = data[ dataKey ]
 

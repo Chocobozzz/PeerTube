@@ -9,6 +9,7 @@ import {
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Actor } from '@app/shared/actor/actor.model'
 import { Account } from '@app/shared/account/account.model'
+import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 
 export type UserConstructorHash = {
   id: number,
@@ -80,6 +81,12 @@ export class User implements UserServerModel {
     if (obj.account !== undefined) {
       this.account = new Account(obj.account)
     }
+
+    this.updateComputedAttributes()
+  }
+
+  updateAccountAvatar (newAccountAvatar: Avatar) {
+    this.account.avatar = newAccountAvatar
 
     this.updateComputedAttributes()
   }

@@ -326,7 +326,7 @@ describe('Test videos API validator', function () {
       const fields = baseCorrectParams
       const attaches = {
         'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png'),
-        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -336,7 +336,7 @@ describe('Test videos API validator', function () {
       const fields = baseCorrectParams
       const attaches = {
         'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png'),
-        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -346,7 +346,7 @@ describe('Test videos API validator', function () {
       const fields = baseCorrectParams
       const attaches = {
         'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png'),
-        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -356,7 +356,7 @@ describe('Test videos API validator', function () {
       const fields = baseCorrectParams
       const attaches = {
         'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png'),
-        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })

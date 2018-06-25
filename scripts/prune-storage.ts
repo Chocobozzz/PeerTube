@@ -1,7 +1,5 @@
 import * as prompt from 'prompt'
-import { createReadStream } from 'fs'
 import { join } from 'path'
-import { createInterface } from 'readline'
 import { readdirPromise, unlinkPromise } from '../server/helpers/core-utils'
 import { CONFIG } from '../server/initializers/constants'
 import { VideoModel } from '../server/models/video/video'

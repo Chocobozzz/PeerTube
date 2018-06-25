@@ -1,7 +1,4 @@
 import * as program from 'commander'
-import { createReadStream } from 'fs'
-import { join } from 'path'
-import { createInterface } from 'readline'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
 import { JobQueue } from '../server/lib/job-queue'

@@ -99,8 +99,11 @@ $setting-transition-easing: ease-out;
         transition: all $setting-transition-duration $setting-transition-easing;
 
         .vjs-menu-item {
+          font-size: 1em;
+          text-transform: initial;
 
           &:hover {
+            cursor: pointer;
             background-color: rgba(255, 255, 255, 0.2);
           }
 
@@ -111,14 +114,11 @@ $setting-transition-easing: ease-out;
           &:last-child {
             margin-bottom: 5px;
           }
-        }
 
-        li {
-          font-size: 1em;
-          text-transform: initial;
-
-          &:hover {
-            cursor: pointer;
+          &.disabled {
+            opacity: 0.5;
+            cursor: default !important;
+            background-color: inherit !important;
           }
         }
       }

@@ -35,7 +35,6 @@ export class VideoEditComponent implements OnInit {
 
   schedulePublicationEnabled = false
 
-  error: string = null
   calendarLocale: any = {}
   minScheduledDate = new Date()
 
