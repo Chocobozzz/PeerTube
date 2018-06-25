@@ -242,7 +242,7 @@ class PeerTubePlugin extends Plugin {
       }, options.delay || 0)
     })
 
-    this.torrent.on('error', err => this.handleError(err))
+    this.torrent.on('error', err => console.error(err))
 
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
@@ -250,7 +250,7 @@ class PeerTubePlugin extends Plugin {
 
       // Users don't care about issues with WebRTC, but developers do so log it in the console
       if (err.message.indexOf('Ice connection failed') !== -1) {
-        console.error(err)
+        console.log(err)
         return
       }
 
@@ -261,7 +261,7 @@ class PeerTubePlugin extends Plugin {
         return this.addTorrent(this.torrent['xs'], previousVideoFile, options, done)
       }
 
-      return this.handleError(err)
+      return console.warn(err)
     })
   }
 
@@ -564,7 +564,7 @@ class PeerTubePlugin extends Plugin {
     this.player.controlBar.on('mouseenter', () => disableInactivity())
     settingsDialog.on('mouseenter', () => disableInactivity())
     this.player.controlBar.on('mouseleave', () => enableInactivity())
-    // settingsDialog.on('mouseleave', () => enableInactivity())
+    settingsDialog.on('mouseleave', () => enableInactivity())
   }
 
   private pickAverageVideoFile () {
