@@ -529,6 +529,11 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: category
+          in: query
+          required: false
+          type: number
+          description: category id of the video
         - name: start
           in: query
           required: false
