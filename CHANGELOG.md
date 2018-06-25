@@ -10,7 +10,7 @@
  * Add time display to see where we seek the video
  * Add title in player peers info to show total downloaded/uploaded data
  * Provide magnet URI in player and download modal ([@rigelk](https://github.com/rigelk))
- * Add warning if the domain name is different from the from the first start of PeerTube
+ * Add warning if the domain name is different from the one of the first start of Peertube
  * Add resolution to create-transcoding-job script ([@fflorent](https://github.com/fflorent))
 
 ### Bug fixes
