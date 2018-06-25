@@ -170,8 +170,8 @@ export class VideoService {
       params = params.set('filter', filter)
     }
 
-    if (category){
-      params = params.set('category', category+"")
+    if (category) {
+      params = params.set('category', category + '')
     }
 
     return this.authHttp
@@ -212,7 +212,7 @@ export class VideoService {
 
     if (filter) params = params.set('filter', filter)
 
-    if (category) params = params.set('category', category+"")
+    if (category) params = params.set('category', category + '')
 
     return this.buildBaseFeedUrls(params)
   }
