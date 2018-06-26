@@ -3,22 +3,28 @@
 import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
-const expect = chai.expect
-
+import { waitJobs } from '../utils/server/jobs'
+import { addVideoCommentThread } from '../utils/videos/video-comments'
 import {
+  addVideoChannel,
+  createUser,
   execCLI,
   flushTests,
   getEnvCli,
+  getVideo,
+  getVideoChannelsList,
   getVideosList,
   killallServers,
+  makeActivityPubGetRequest,
   parseTorrentVideo,
   runServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait,
-  getVideo
+  uploadVideo
 } from '../utils'
+import { getAccountsList } from '../utils/users/accounts'
+
+const expect = chai.expect
 
 describe('Test update host scripts', function () {
   let server: ServerInfo
@@ -39,12 +45,28 @@ describe('Test update host scripts', function () {
 
     // Upload two videos for our needs
     const videoAttributes = {}
+    const resVideo1 = await uploadVideo(server.url, server.accessToken, videoAttributes)
+    const video1UUID = resVideo1.body.video.uuid
     await uploadVideo(server.url, server.accessToken, videoAttributes)
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
-    await wait(30000)
+
+    // Create a user
+    await createUser(server.url, server.accessToken, 'toto', 'coucou')
+
+    // Create channel
+    const videoChannel = {
+      displayName: 'second video channel',
+      description: 'super video channel description'
+    }
+    await addVideoChannel(server.url, server.accessToken, videoChannel)
+
+    // Create comments
+    const text = 'my super first comment'
+    await addVideoCommentThread(server.url, server.accessToken, video1UUID, text)
+
+    await waitJobs(server)
   })
 
-  it('Should update torrent hosts', async function () {
+  it('Should run update host', async function () {
     this.timeout(30000)
 
     killallServers([ server ])
@@ -53,6 +75,44 @@ describe('Test update host scripts', function () {
 
     const env = getEnvCli(server)
     await execCLI(`${env} npm run update-host`)
+  })
+
+  it('Should have updated videos url', async function () {
+    const res = await getVideosList(server.url)
+    expect(res.body.total).to.equal(2)
+
+    for (const video of res.body.data) {
+      const { body } = await makeActivityPubGetRequest(server.url, '/videos/watch/' + video.uuid)
+
+      expect(body.id).to.equal('http://localhost:9002/videos/watch/' + video.uuid)
+    }
+  })
+
+  it('Should have updated video channels url', async function () {
+    const res = await getVideoChannelsList(server.url, 0, 5, '-name')
+    expect(res.body.total).to.equal(3)
+
+    for (const channel of res.body.data) {
+      const { body } = await makeActivityPubGetRequest(server.url, '/video-channels/' + channel.uuid)
+
+      expect(body.id).to.equal('http://localhost:9002/video-channels/' + channel.uuid)
+    }
+  })
+
+  it('Should have update accounts url', async function () {
+    const res = await getAccountsList(server.url)
+    expect(res.body.total).to.equal(3)
+
+    for (const account of res.body.data) {
+      const usernameWithDomain = account.name
+      const { body } = await makeActivityPubGetRequest(server.url, '/accounts/' + usernameWithDomain)
+
+      expect(body.id).to.equal('http://localhost:9002/accounts/' + usernameWithDomain)
+    }
+  })
+
+  it('Should update torrent hosts', async function () {
+    this.timeout(30000)
 
     const res = await getVideosList(server.url)
     const videos = res.body.data
@@ -82,10 +142,5 @@ describe('Test update host scripts', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

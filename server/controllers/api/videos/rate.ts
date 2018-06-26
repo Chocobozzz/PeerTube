@@ -1,10 +1,9 @@
 import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript, VIDEO_RATE_TYPES } from '../../../initializers'
 import { sendVideoRateChange } from '../../../lib/activitypub'
-import { asyncMiddleware, authenticate, videoRateValidator } from '../../../middlewares'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoRateValidator } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoModel } from '../../../models/video/video'
@@ -14,7 +13,7 @@ const rateVideoRouter = express.Router()
 rateVideoRouter.put('/:id/rate',
   authenticate,
   asyncMiddleware(videoRateValidator),
-  asyncMiddleware(rateVideoRetryWrapper)
+  asyncRetryTransactionMiddleware(rateVideo)
 )
 
 // ---------------------------------------------------------------------------
@@ -24,17 +23,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
-async function rateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot update the user video rate.'
-  }
-
-  await retryTransactionWrapper(rateVideo, options)
-
-  return res.type('json').status(204).end()
-}
 
 async function rateVideo (req: express.Request, res: express.Response) {
   const body: UserVideoRateUpdate = req.body
@@ -87,4 +75,6 @@ async function rateVideo (req: express.Request, res: express.Response) {
   })
 
   logger.info('Account video rate for video %s of account %s updated.', videoInstance.name, accountInstance.name)
+
+  return res.type('json').status(204).end()
 }

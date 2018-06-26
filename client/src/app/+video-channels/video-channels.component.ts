@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { RestExtractor } from '@app/shared'
-import { catchError, switchMap, map, distinctUntilChanged } from 'rxjs/operators'
-import { Subscription } from 'rxjs/Subscription'
+import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
+import { Subscription } from 'rxjs'
 
 @Component({
   templateUrl: './video-channels.component.html',

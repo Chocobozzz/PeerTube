@@ -62,18 +62,10 @@ async function getOrCreateActorAndServerAndModel (activityActor: string | Activi
       }
     }
 
-    const options = {
-      arguments: [ result, ownerActor ],
-      errorMessage: 'Cannot save actor and server with many retries.'
-    }
-    actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, options)
+    actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, result, ownerActor)
   }
 
-  const options = {
-    arguments: [ actor ],
-    errorMessage: 'Cannot refresh actor if needed with many retries.'
-  }
-  return retryTransactionWrapper(refreshActorIfNeeded, options)
+  return retryTransactionWrapper(refreshActorIfNeeded, actor)
 }
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {

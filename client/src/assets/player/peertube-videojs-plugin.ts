@@ -4,36 +4,19 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import {
-  getAverageBandwidth,
-  getStoredMute,
-  getStoredVolume, isMobile,
-  saveAverageBandwidth,
-  saveMuteInStore,
-  saveVolumeInStore,
-  videoFileMaxByResolution,
-  videoFileMinByResolution
-} from './utils'
+import { isMobile, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
+import {
+  getAverageBandwidthInStore,
+  getStoredMute,
+  getStoredVolume,
+  saveAverageBandwidth,
+  saveMuteInStore,
+  saveVolumeInStore
+} from './peertube-player-local-storage'
 
-const webtorrent = new WebTorrent({
-  tracker: {
-    rtcConfig: {
-      iceServers: [
-        {
-          urls: 'stun:stun.stunprotocol.org'
-        },
-        {
-          urls: 'stun:stun.framasoft.org'
-        }
-      ]
-    }
-  },
-  dht: false
-})
-
-const Plugin: VideoJSComponentInterface = videojsUntyped.getPlugin('plugin')
+const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
   private readonly playerElement: HTMLVideoElement
 
@@ -52,10 +35,29 @@ class PeerTubePlugin extends Plugin {
     BANDWIDTH_AVERAGE_NUMBER_OF_VALUES: 5 // Last 5 seconds to build average bandwidth
   }
 
+  private readonly webtorrent = new WebTorrent({
+    tracker: {
+      rtcConfig: {
+        iceServers: [
+          {
+            urls: 'stun:stun.stunprotocol.org'
+          },
+          {
+            urls: 'stun:stun.framasoft.org'
+          }
+        ]
+      }
+    },
+    dht: false
+  })
+
   private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
+  private renderer
+  private fakeRenderer
   private autoResolution = true
+  private forbidAutoResolution = false
   private isAutoResolutionObservation = false
 
   private videoViewInterval
@@ -123,6 +125,8 @@ class PeerTubePlugin extends Plugin {
 
     // Don't need to destroy renderer, video player will be destroyed
     this.flushVideoFile(this.currentVideoFile, false)
+
+    this.destroyFakeRenderer()
   }
 
   getCurrentResolutionId () {
@@ -144,7 +148,7 @@ class PeerTubePlugin extends Plugin {
   ) {
     // Automatically choose the adapted video file
     if (videoFile === undefined) {
-      const savedAverageBandwidth = getAverageBandwidth()
+      const savedAverageBandwidth = getAverageBandwidthInStore()
       videoFile = savedAverageBandwidth
         ? this.getAppropriateFile(savedAverageBandwidth)
         : this.pickAverageVideoFile()
@@ -185,14 +189,13 @@ class PeerTubePlugin extends Plugin {
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
-    let fakeRenderer
     const torrentOptions = {
       store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
         max: 100
       })
     }
 
-    this.torrent = webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
+    this.torrent = this.webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
       console.log('Added ' + magnetOrTorrentUrl + '.')
 
       if (oldTorrent) {
@@ -205,7 +208,7 @@ class PeerTubePlugin extends Plugin {
         if (options.delay) {
           const fakeVideoElem = document.createElement('video')
           renderVideo(torrent.files[0], fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
-            fakeRenderer = renderer
+            this.fakeRenderer = renderer
 
             if (err) console.error('Cannot render new torrent in fake video element.', err)
 
@@ -217,16 +220,7 @@ class PeerTubePlugin extends Plugin {
 
       // Render the video in a few seconds? (on resolution change for example, we wait some seconds of the new video resolution)
       this.addTorrentDelay = setTimeout(() => {
-        if (fakeRenderer) {
-          if (fakeRenderer.destroy) {
-            try {
-              fakeRenderer.destroy()
-            } catch (err) {
-              console.log('Cannot destroy correctly fake renderer.', err)
-            }
-          }
-          fakeRenderer = undefined
-        }
+        this.destroyFakeRenderer()
 
         const paused = this.player.paused()
 
@@ -248,7 +242,7 @@ class PeerTubePlugin extends Plugin {
       }, options.delay || 0)
     })
 
-    this.torrent.on('error', err => this.handleError(err))
+    this.torrent.on('error', err => console.error(err))
 
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
@@ -256,7 +250,7 @@ class PeerTubePlugin extends Plugin {
 
       // Users don't care about issues with WebRTC, but developers do so log it in the console
       if (err.message.indexOf('Ice connection failed') !== -1) {
-        console.error(err)
+        console.log(err)
         return
       }
 
@@ -267,7 +261,7 @@ class PeerTubePlugin extends Plugin {
         return this.addTorrent(this.torrent['xs'], previousVideoFile, options, done)
       }
 
-      return this.handleError(err)
+      return console.warn(err)
     })
   }
 
@@ -294,10 +288,10 @@ class PeerTubePlugin extends Plugin {
   }
 
   flushVideoFile (videoFile: VideoFile, destroyRenderer = true) {
-    if (videoFile !== undefined && webtorrent.get(videoFile.magnetUri)) {
+    if (videoFile !== undefined && this.webtorrent.get(videoFile.magnetUri)) {
       if (destroyRenderer === true && this.renderer && this.renderer.destroy) this.renderer.destroy()
 
-      webtorrent.remove(videoFile.magnetUri)
+      this.webtorrent.remove(videoFile.magnetUri)
       console.log('Removed ' + videoFile.magnetUri)
     }
   }
@@ -311,9 +305,15 @@ class PeerTubePlugin extends Plugin {
     this.trigger('autoResolutionUpdate')
   }
 
-  disableAutoResolution () {
+  disableAutoResolution (forbid = false) {
+    if (forbid === true) this.forbidAutoResolution = true
+
     this.autoResolution = false
     this.trigger('autoResolutionUpdate')
+  }
+
+  isAutoResolutionForbidden () {
+    return this.forbidAutoResolution === true
   }
 
   getCurrentVideoFile () {
@@ -467,13 +467,15 @@ class PeerTubePlugin extends Plugin {
       // Http fallback
       if (this.torrent === null) return this.trigger('torrentInfo', false)
 
-      // webtorrent.downloadSpeed because we need to take into account the potential old torrent too
-      if (webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(webtorrent.downloadSpeed)
+      // this.webtorrent.downloadSpeed because we need to take into account the potential old torrent too
+      if (this.webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(this.webtorrent.downloadSpeed)
 
       return this.trigger('torrentInfo', {
         downloadSpeed: this.torrent.downloadSpeed,
         numPeers: this.torrent.numPeers,
-        uploadSpeed: this.torrent.uploadSpeed
+        uploadSpeed: this.torrent.uploadSpeed,
+        downloaded: this.torrent.downloaded,
+        uploaded: this.torrent.uploaded
       })
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
@@ -508,10 +510,14 @@ class PeerTubePlugin extends Plugin {
   }
 
   private addViewToVideo () {
+    if (!this.videoViewUrl) return Promise.resolve(undefined)
+
     return fetch(this.videoViewUrl, { method: 'POST' })
   }
 
   private fallbackToHttp (done?: Function, play = true) {
+    this.disableAutoResolution(true)
+
     this.flushVideoFile(this.currentVideoFile, true)
     this.torrent = null
 
@@ -567,6 +573,19 @@ class PeerTubePlugin extends Plugin {
     return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
   }
 
+  private destroyFakeRenderer () {
+    if (this.fakeRenderer) {
+      if (this.fakeRenderer.destroy) {
+        try {
+          this.fakeRenderer.destroy()
+        } catch (err) {
+          console.log('Cannot destroy correctly fake renderer.', err)
+        }
+      }
+      this.fakeRenderer = undefined
+    }
+  }
+
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
   private initSmoothProgressBar () {
     const SeekBar = videojsUntyped.getComponent('SeekBar')
@@ -590,5 +609,5 @@ class PeerTubePlugin extends Plugin {
   }
 }
 
-videojsUntyped.registerPlugin('peertube', PeerTubePlugin)
+videojs.registerPlugin('peertube', PeerTubePlugin)
 export { PeerTubePlugin }

@@ -16,7 +16,7 @@ import { MenuComponent } from './menu'
 import { SharedModule } from './shared'
 import { SignupModule } from './signup'
 import { VideosModule } from './videos'
-import { buildFileLocale, getCompleteLocale, getDefaultLocale, isDefaultLocale } from '../../../shared/models/i18n'
+import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 
 export function metaFactory (serverService: ServerService): MetaLoader {

@@ -5,11 +5,20 @@ import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import { testImage } from '../../utils'
 import {
-  dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, updateMyAvatar,
+  dateIsValid,
+  flushTests,
+  killallServers,
+  runServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  updateMyAvatar,
   uploadVideo
 } from '../../utils/index'
 import {
-  addVideoCommentReply, addVideoCommentThread, deleteVideoComment, getVideoCommentThreads,
+  addVideoCommentReply,
+  addVideoCommentThread,
+  deleteVideoComment,
+  getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
 
@@ -194,10 +203,5 @@ describe('Test video comments', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

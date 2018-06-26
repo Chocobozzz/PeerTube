@@ -17,6 +17,7 @@ import {
 import { flushTests, setAccessTokensToServers } from '../../utils/index'
 import { getStats } from '../../utils/server/stats'
 import { addVideoCommentThread } from '../../utils/videos/video-comments'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -46,7 +47,7 @@ describe('Test stats', function () {
     await viewVideo(servers[0].url, videoUUID)
 
     await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have the correct stats on instance 1', async function () {
@@ -93,10 +94,5 @@ describe('Test stats', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

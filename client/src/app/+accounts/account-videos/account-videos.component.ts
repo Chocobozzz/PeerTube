@@ -12,6 +12,7 @@ import { AccountService } from '@app/shared/account/account.service'
 import { tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-account-videos',
@@ -37,6 +38,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected screenService: ScreenService,
     protected i18n: I18n,
     private accountService: AccountService,
     private videoService: VideoService

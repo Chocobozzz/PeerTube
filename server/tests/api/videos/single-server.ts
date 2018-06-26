@@ -5,10 +5,31 @@ import { keyBy } from 'lodash'
 import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
-  checkVideoFilesWereRemoved, completeVideoCheck, flushTests, getVideo, getVideoCategories, getVideoLanguages, getVideoLicences,
-  getVideoPrivacies, getVideosList, getVideosListPagination, getVideosListSort, killallServers, rateVideo, removeVideo, runServer,
-  searchVideo, searchVideoWithPagination, searchVideoWithSort, ServerInfo, setAccessTokensToServers, testImage, updateVideo, uploadVideo,
-  viewVideo, wait
+  checkVideoFilesWereRemoved,
+  completeVideoCheck,
+  flushTests,
+  getVideo,
+  getVideoCategories,
+  getVideoLanguages,
+  getVideoLicences,
+  getVideoPrivacies,
+  getVideosList,
+  getVideosListPagination,
+  getVideosListSort,
+  killallServers,
+  rateVideo,
+  removeVideo,
+  runServer,
+  searchVideo,
+  searchVideoWithPagination,
+  searchVideoWithSort,
+  ServerInfo,
+  setAccessTokensToServers,
+  testImage,
+  updateVideo,
+  uploadVideo,
+  viewVideo,
+  wait
 } from '../../utils'
 
 const expect = chai.expect

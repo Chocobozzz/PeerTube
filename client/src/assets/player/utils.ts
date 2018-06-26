@@ -1,4 +1,3 @@
-import { is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 import { VideoFile } from '../../../../shared/models/videos'
 
 function toTitleCase (str: string) {
@@ -20,49 +19,6 @@ function bytes (value) {
   return [ calc, format.type ]
 }
 
-function getStoredVolume () {
-  const value = getLocalStorage('volume')
-  if (value !== null && value !== undefined) {
-    const valueNumber = parseFloat(value)
-    if (isNaN(valueNumber)) return undefined
-
-    return valueNumber
-  }
-
-  return undefined
-}
-
-function getStoredMute () {
-  const value = getLocalStorage('mute')
-  if (value !== null && value !== undefined) return value === 'true'
-
-  return undefined
-}
-
-function getAverageBandwidth () {
-  const value = getLocalStorage('average-bandwidth')
-  if (value !== null && value !== undefined) {
-    const valueNumber = parseInt(value, 10)
-    if (isNaN(valueNumber)) return undefined
-
-    return valueNumber
-  }
-
-  return undefined
-}
-
-function saveVolumeInStore (value: number) {
-  return setLocalStorage('volume', value.toString())
-}
-
-function saveMuteInStore (value: boolean) {
-  return setLocalStorage('mute', value.toString())
-}
-
-function saveAverageBandwidth (value: number) {
-  return setLocalStorage('average-bandwidth', value.toString())
-}
-
 function isMobile () {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
@@ -81,6 +37,7 @@ function buildVideoLink (time?: number) {
 
 function buildVideoEmbed (embedUrl: string) {
   return '<iframe width="560" height="315" ' +
+    'sandbox="allow-same-origin allow-scripts" ' +
     'src="' + embedUrl + '" ' +
     'frameborder="0" allowfullscreen>' +
     '</iframe>'
@@ -120,37 +77,15 @@ function videoFileMinByResolution (files: VideoFile[]) {
   return min
 }
 
+// ---------------------------------------------------------------------------
+
 export {
   toTitleCase,
   buildVideoLink,
-  getStoredVolume,
-  saveVolumeInStore,
-  saveAverageBandwidth,
-  getAverageBandwidth,
-  saveMuteInStore,
   buildVideoEmbed,
-  getStoredMute,
   videoFileMaxByResolution,
   videoFileMinByResolution,
   copyToClipboard,
   isMobile,
   bytes
-}
-
-// ---------------------------------------------------------------------------
-
-const KEY_PREFIX = 'peertube-videojs-'
-
-function getLocalStorage (key: string) {
-  try {
-    return localStorage.getItem(KEY_PREFIX + key)
-  } catch {
-    return undefined
-  }
-}
-
-function setLocalStorage (key: string, value: string) {
-  try {
-    localStorage.setItem(KEY_PREFIX + key, value)
-  } catch { /* empty */ }
 }

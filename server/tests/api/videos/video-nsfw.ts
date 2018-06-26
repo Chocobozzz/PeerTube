@@ -8,12 +8,15 @@ import { createUser } from '../../utils/users/users'
 import { getMyVideos } from '../../utils/videos/videos'
 import {
   getAccountVideos,
-  getConfig, getCustomConfig,
-  getMyUserInformation, getVideoChannelVideos,
+  getConfig,
+  getCustomConfig,
+  getMyUserInformation,
+  getVideoChannelVideos,
   getVideosListWithToken,
   runServer,
   searchVideo,
-  searchVideoWithToken, updateCustomConfig,
+  searchVideoWithToken,
+  updateCustomConfig,
   updateMyUser
 } from '../../utils'
 import { ServerConfig } from '../../../../shared/models'
@@ -201,10 +204,5 @@ describe('Test video NSFW policy', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

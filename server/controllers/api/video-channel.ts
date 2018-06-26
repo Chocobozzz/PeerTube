@@ -2,6 +2,7 @@ import * as express from 'express'
 import { getFormattedObjects, resetSequelizeInstance } from '../../helpers/utils'
 import {
   asyncMiddleware,
+  asyncRetryTransactionMiddleware,
   authenticate,
   optionalAuthenticate,
   paginationValidator,
@@ -20,7 +21,6 @@ import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
 import { isNSFWHidden } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { AccountModel } from '../../models/account/account'
 import { sequelizeTypescript } from '../../initializers'
 import { logger } from '../../helpers/logger'
@@ -39,19 +39,19 @@ videoChannelRouter.get('/',
 videoChannelRouter.post('/',
   authenticate,
   videoChannelsAddValidator,
-  asyncMiddleware(addVideoChannelRetryWrapper)
+  asyncRetryTransactionMiddleware(addVideoChannel)
 )
 
 videoChannelRouter.put('/:id',
   authenticate,
   asyncMiddleware(videoChannelsUpdateValidator),
-  updateVideoChannelRetryWrapper
+  asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
 videoChannelRouter.delete('/:id',
   authenticate,
   asyncMiddleware(videoChannelsRemoveValidator),
-  asyncMiddleware(removeVideoChannelRetryWrapper)
+  asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
 videoChannelRouter.get('/:id',
@@ -83,23 +83,6 @@ async function listVideoChannels (req: express.Request, res: express.Response, n
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-// Wrapper to video channel add that retry the async function if there is a database error
-// We need this because we run the transaction in SERIALIZABLE isolation that can fail
-async function addVideoChannelRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot insert the video video channel with many retries.'
-  }
-
-  const videoChannel = await retryTransactionWrapper(addVideoChannel, options)
-  return res.json({
-    videoChannel: {
-      id: videoChannel.id,
-      uuid: videoChannel.Actor.uuid
-    }
-  }).end()
-}
-
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
   const account: AccountModel = res.locals.oauth.token.User.Account
@@ -113,18 +96,12 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
 
   logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
 
-  return videoChannelCreated
-}
-
-async function updateVideoChannelRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot update the video with many retries.'
-  }
-
-  await retryTransactionWrapper(updateVideoChannel, options)
-
-  return res.type('json').status(204).end()
+  return res.json({
+    videoChannel: {
+      id: videoChannelCreated.id,
+      uuid: videoChannelCreated.Actor.uuid
+    }
+  }).end()
 }
 
 async function updateVideoChannel (req: express.Request, res: express.Response) {
@@ -157,15 +134,6 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 
     throw err
   }
-}
-
-async function removeVideoChannelRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot remove the video channel with many retries.'
-  }
-
-  await retryTransactionWrapper(removeVideoChannel, options)
 
   return res.type('json').status(204).end()
 }
@@ -173,12 +141,13 @@ async function removeVideoChannelRetryWrapper (req: express.Request, res: expres
 async function removeVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
 
-  return sequelizeTypescript.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     await videoChannelInstance.destroy({ transaction: t })
 
     logger.info('Video channel with name %s and uuid %s deleted.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
   })
 
+  return res.type('json').status(204).end()
 }
 
 async function getVideoChannel (req: express.Request, res: express.Response, next: express.NextFunction) {

@@ -5,17 +5,16 @@ import 'mocha'
 import { VideoAbuse } from '../../../../shared/models/videos'
 import {
   flushAndRunMultipleServers,
-  flushTests,
   getVideoAbusesList,
   getVideosList,
   killallServers,
   reportVideoAbuse,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait
+  uploadVideo
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -48,7 +47,7 @@ describe('Test video abuses', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, video2Attributes)
 
     // Wait videos propagation, server 2 has transcoding enabled
-    await wait(15000)
+    await waitJobs(servers)
 
     const res = await getVideosList(servers[0].url)
     const videos = res.body.data
@@ -68,13 +67,13 @@ describe('Test video abuses', function () {
   })
 
   it('Should report abuse on a local video', async function () {
-    this.timeout(10000)
+    this.timeout(15000)
 
     const reason = 'my super bad reason'
     await reportVideoAbuse(servers[0].url, servers[0].accessToken, servers[0].video.id, reason)
 
     // We wait requests propagation, even if the server 1 is not supposed to make a request to server 2
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have 1 video abuses on server 1 and 0 on server 2', async function () {
@@ -103,7 +102,7 @@ describe('Test video abuses', function () {
     await reportVideoAbuse(servers[0].url, servers[0].accessToken, servers[1].video.id, reason)
 
     // We wait requests propagation
-    await wait(5000)
+    await waitJobs(servers)
   })
 
   it('Should have 2 video abuse on server 1 and 1 on server 2', async function () {
@@ -137,10 +136,5 @@ describe('Test video abuses', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

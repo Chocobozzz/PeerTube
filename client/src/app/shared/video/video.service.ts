@@ -68,6 +68,7 @@ export class VideoService {
     const category = video.category || null
     const description = video.description || null
     const support = video.support || null
+    const scheduleUpdate = video.scheduleUpdate || null
 
     const body: VideoUpdate = {
       name: video.name,
@@ -80,9 +81,11 @@ export class VideoService {
       privacy: video.privacy,
       tags: video.tags,
       nsfw: video.nsfw,
+      waitTranscoding: video.waitTranscoding,
       commentsEnabled: video.commentsEnabled,
       thumbnailfile: video.thumbnailfile,
-      previewfile: video.previewfile
+      previewfile: video.previewfile,
+      scheduleUpdate
     }
 
     const data = objectToFormData(body)
@@ -98,11 +101,11 @@ export class VideoService {
     const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
 
     return this.authHttp
-               .request<{ video: { id: number, uuid: string} }>(req)
+               .request<{ video: { id: number, uuid: string } }>(req)
                .pipe(catchError(this.restExtractor.handleError))
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number}> {
+  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number }> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -120,7 +123,7 @@ export class VideoService {
     account: Account,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number}> {
+  ): Observable<{ videos: Video[], totalVideos: number }> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -138,7 +141,7 @@ export class VideoService {
     videoChannel: VideoChannel,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number}> {
+  ): Observable<{ videos: Video[], totalVideos: number }> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -156,7 +159,7 @@ export class VideoService {
     videoPagination: ComponentPagination,
     sort: VideoSortField,
     filter?: VideoFilter
-  ): Observable<{ videos: Video[], totalVideos: number}> {
+  ): Observable<{ videos: Video[], totalVideos: number }> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -225,7 +228,7 @@ export class VideoService {
     search: string,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number}> {
+  ): Observable<{ videos: Video[], totalVideos: number }> {
     const url = VideoService.BASE_VIDEO_URL + 'search'
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
@@ -295,18 +298,18 @@ export class VideoService {
 
   private extractVideos (result: ResultList<VideoServerModel>) {
     return this.serverService.localeObservable
-      .pipe(
-        map(translations => {
-          const videosJson = result.data
-          const totalVideos = result.total
-          const videos: Video[] = []
+               .pipe(
+                 map(translations => {
+                   const videosJson = result.data
+                   const totalVideos = result.total
+                   const videos: Video[] = []
 
-          for (const videoJson of videosJson) {
-            videos.push(new Video(videoJson, translations))
-          }
+                   for (const videoJson of videosJson) {
+                     videos.push(new Video(videoJson, translations))
+                   }
 
-          return { videos, totalVideos }
-        })
-      )
+                   return { videos, totalVideos }
+                 })
+               )
   }
 }

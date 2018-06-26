@@ -28,7 +28,7 @@ async function crawlCollectionPage <T> (uri: string, handler: (items: T[]) => Pr
 
     if (Array.isArray(body.orderedItems)) {
       const items = body.orderedItems
-      logger.info('Processing %i ActivityPub items for %s.', items.length, nextLink)
+      logger.info('Processing %i ActivityPub items for %s.', items.length, options.uri)
 
       await handler(items)
     }

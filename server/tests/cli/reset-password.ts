@@ -36,10 +36,5 @@ describe('Test reset password scripts', function () {
 
   after(async function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

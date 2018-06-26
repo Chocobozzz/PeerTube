@@ -1,0 +1,33 @@
+@import '_variables';
+@import '_mixins';
+@import './_player-variables';
+
+$context-menu-width: 350px;
+
+/* Sass for videojs-contextmenu-ui */
+
+.video-js .vjs-contextmenu-ui-menu {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 0;
+  width: $context-menu-width;
+
+  .vjs-menu-content {
+    opacity: $primary-foreground-opacity;
+    color: $primary-foreground-color;
+    font-size: $font-size !important;
+    font-weight: $font-semibold;
+  }
+
+  .vjs-menu-item {
+    cursor: pointer;
+    font-size: 1em;
+    padding: 8px 16px;
+    text-align: left;
+    text-transform: none;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

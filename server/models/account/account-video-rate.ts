@@ -70,8 +70,8 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
 
   static listAndCountAccountUrlsByVideoId (rateType: VideoRateType, videoId: number, start: number, count: number, t?: Transaction) {
     const query = {
-      start,
-      count,
+      offset: start,
+      limit: count,
       where: {
         videoId,
         type: rateType

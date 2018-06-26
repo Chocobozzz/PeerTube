@@ -22,6 +22,7 @@ import { VideoFileModel } from '../models/video/video-file'
 import { VideoShareModel } from '../models/video/video-share'
 import { VideoTagModel } from '../models/video/video-tag'
 import { CONFIG } from './constants'
+import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -73,7 +74,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoBlacklistModel,
     VideoTagModel,
     VideoModel,
-    VideoCommentModel
+    VideoCommentModel,
+    ScheduleVideoUpdateModel
   ])
 
   if (!silent) logger.info('Database %s is ready.', dbname)

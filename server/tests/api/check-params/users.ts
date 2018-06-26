@@ -179,6 +179,18 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail with a "peertube" username', async function () {
+      const fields = immutableAssign(baseCorrectParams, { username: 'peertube' })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields,
+        statusCodeExpected: 409
+      })
+    })
+
     it('Should succeed with the correct params', async function () {
       await makePostBodyRequest({
         url: server.url,
@@ -483,6 +495,18 @@ describe('Test users API validators', function () {
 
     it('Should fail if we register a user with the same username', async function () {
       const fields = immutableAssign(baseCorrectParams, { username: 'root' })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path: registrationPath,
+        token: server.accessToken,
+        fields,
+        statusCodeExpected: 409
+      })
+    })
+
+    it('Should fail with a "peertube" username', async function () {
+      const fields = immutableAssign(baseCorrectParams, { username: 'peertube' })
 
       await makePostBodyRequest({
         url: server.url,

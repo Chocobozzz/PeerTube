@@ -8,6 +8,7 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-videos-trending',
@@ -25,6 +26,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     protected notificationsService: NotificationsService,
     protected authService: AuthService,
     protected location: Location,
+    protected screenService: ScreenService,
     protected i18n: I18n,
     private videoService: VideoService
   ) {

@@ -24,11 +24,11 @@ process.title = 'peertube'
 const app = express()
 
 // ----------- Core checker -----------
-import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
+import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } from './server/initializers/checker'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { ACCEPT_HEADERS, API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -80,6 +80,7 @@ import {
 import { Redis } from './server/lib/redis'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
+import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
 
 // ----------- Command line -----------
 
@@ -188,6 +189,13 @@ async function startApplication () {
 
   await installApplication()
 
+  // Check activity pub urls are valid
+  checkActivityPubUrls()
+    .catch(err => {
+      logger.error('Error in ActivityPub URLs checker.', { err })
+      process.exit(-1)
+    })
+
   // Email initialization
   Emailer.Instance.init()
   await Emailer.Instance.checkConnectionOrDie()
@@ -200,6 +208,7 @@ async function startApplication () {
   // Enable Schedulers
   BadActorFollowScheduler.Instance.enable()
   RemoveOldJobsScheduler.Instance.enable()
+  UpdateVideosScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

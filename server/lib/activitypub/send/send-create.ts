@@ -23,8 +23,8 @@ async function sendCreateVideo (video: VideoModel, t: Transaction) {
   const byActor = video.VideoChannel.Account.Actor
   const videoObject = video.toActivityPubObject()
 
-  const audience = await getAudience(byActor, t, video.privacy === VideoPrivacy.PUBLIC)
-  const data = await createActivityData(video.url, byActor, videoObject, t, audience)
+  const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
+  const data = createActivityData(video.url, byActor, videoObject, audience)
 
   return broadcastToFollowers(data, byActor, [ byActor ], t)
 }
@@ -33,7 +33,7 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
 
   const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
-  const data = await createActivityData(url, byActor, videoAbuse.toActivityPubObject(), t, audience)
+  const data = createActivityData(url, byActor, videoAbuse.toActivityPubObject(), audience)
 
   return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
@@ -57,7 +57,7 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
     audience = getObjectFollowersAudience(actorsInvolvedInComment.concat(parentsCommentActors))
   }
 
-  const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
+  const data = createActivityData(comment.url, byActor, commentObject, audience)
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
@@ -82,14 +82,14 @@ async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transa
   // Send to origin
   if (video.isOwned() === false) {
     const audience = getVideoAudience(video, actorsInvolvedInVideo)
-    const data = await createActivityData(url, byActor, viewActivityData, t, audience)
+    const data = createActivityData(url, byActor, viewActivityData, audience)
 
     return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
   }
 
   // Send to followers
   const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
-  const data = await createActivityData(url, byActor, viewActivityData, t, audience)
+  const data = createActivityData(url, byActor, viewActivityData, audience)
 
   // Use the server actor to send the view
   const serverActor = await getServerActor()
@@ -106,34 +106,31 @@ async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Tra
   // Send to origin
   if (video.isOwned() === false) {
     const audience = getVideoAudience(video, actorsInvolvedInVideo)
-    const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
+    const data = createActivityData(url, byActor, dislikeActivityData, audience)
 
     return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
   }
 
   // Send to followers
   const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
-  const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
+  const data = createActivityData(url, byActor, dislikeActivityData, audience)
 
   const actorsException = [ byActor ]
   return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, actorsException)
 }
 
-async function createActivityData (url: string,
-                                   byActor: ActorModel,
-                                   object: any,
-                                   t: Transaction,
-                                   audience?: ActivityAudience): Promise<ActivityCreate> {
-  if (!audience) {
-    audience = await getAudience(byActor, t)
-  }
+function createActivityData (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityCreate {
+  if (!audience) audience = getAudience(byActor)
 
-  return audiencify({
-    type: 'Create' as 'Create',
-    id: url + '/activity',
-    actor: byActor.url,
-    object: audiencify(object, audience)
-  }, audience)
+  return audiencify(
+    {
+      type: 'Create' as 'Create',
+      id: url + '/activity',
+      actor: byActor.url,
+      object: audiencify(object, audience)
+    },
+    audience
+  )
 }
 
 function createDislikeActivityData (byActor: ActorModel, video: VideoModel) {

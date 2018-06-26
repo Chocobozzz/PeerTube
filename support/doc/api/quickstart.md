@@ -45,3 +45,10 @@ Just use the `access_token` in the `Authorization` header:
 ```
 $ curl -H 'Authorization: Bearer 90286a0bdf0f7315d9d3fe8dabf9e1d2be9c97d0' https://peertube.example.com/api/v1/jobs/complete
 ```
+
+
+### List videos
+
+```
+$ curl https://peertube.example.com/api/v1/videos
+```

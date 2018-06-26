@@ -1,10 +1,10 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { isInSmallView } from '@app/shared/misc/utils'
 import { MarkdownService } from '@app/videos/shared'
-import { Subject } from 'rxjs/Subject'
+import { Subject } from 'rxjs'
 import truncate from 'lodash-es/truncate'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -35,7 +35,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   private contentChanged = new Subject<string>()
 
-  constructor (private markdownService: MarkdownService) {}
+  constructor (
+    private screenService: ScreenService,
+    private markdownService: MarkdownService
+) {}
 
   ngOnInit () {
     this.contentChanged
@@ -76,7 +79,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   arePreviewsDisplayed () {
-    return isInSmallView() === false
+    return this.screenService.isInSmallView() === false
   }
 
   private updatePreviews () {

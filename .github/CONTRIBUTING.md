@@ -4,9 +4,15 @@ Interesting in contributing? Awesome!
 
 **Quick Links:**
 
+  * [Translate](#translate)
   * [Give your feedback](#give-your-feedback)
   * [Write documentation](#write-documentation)
   * [Develop](#develop)
+
+
+## Translate
+
+You can help us to translate the PeerTube interface to many languages! See [the documentation](/support/doc/translation.md) to know how.
 
 
 ## Give your feedback

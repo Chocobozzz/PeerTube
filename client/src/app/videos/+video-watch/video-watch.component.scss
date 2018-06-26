@@ -21,6 +21,15 @@
       position: relative !important;
     }
   }
+
+  /deep/ .video-js.vjs-theater-enabled {
+    width: 100%;
+    height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+  }
+}
+
+.alert {
+  text-align: center;
 }
 
 #video-not-found {
@@ -85,7 +94,7 @@
       .video-info-by a {
         @include disable-default-a-behaviour;
 
-        display: flex;
+        display: inline;
         align-items: center;
         font-size: 13px;
         color: #000;
@@ -232,6 +241,10 @@
 
       .video-info-description-html {
         @include peertube-word-wrap;
+      }
+
+      .glyphicon, .description-loading {
+        margin-left: 3px;
       }
 
       .description-loading {

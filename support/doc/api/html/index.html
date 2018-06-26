@@ -264,6 +264,7 @@
           <a href="#definition-GetMeVideoRating"> GetMeVideoRating </a>
           <a href="#definition-RegisterUser"> RegisterUser </a>
           <a href="#definition-VideoChannelInput"> VideoChannelInput </a>
+          <a href="#definition-ScheduleVideoUpdate"> ScheduleVideoUpdate </a>
         </nav>
       </div>
       <div id="docs" class="row collapse expanded drawer" data-drawer>
@@ -3437,6 +3438,19 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">waitTranscoding</div>
+                      <div class="prop-subtitle"> in formData </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">boolean</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Whether or not we wait transcoding before publish the video</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">support</div>
                       <div class="prop-subtitle"> in formData </div>
                       <div class="prop-subtitle">
@@ -3515,6 +3529,19 @@
                     </div>
                     <div class="prop-value">
                       <p>Video privacy</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">scheduleUpdate</div>
+                      <div class="prop-subtitle"> in formData </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">[object Object]</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p class="no-description">(no description)</p>
                     </div>
                   </div>
                 </section>
@@ -4011,6 +4038,19 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
+                      <div class="prop-title">waitTranscoding</div>
+                      <div class="prop-subtitle"> in formData </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">boolean</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Whether or not we wait transcoding before publish the video</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
                       <div class="prop-title">licence</div>
                       <div class="prop-subtitle"> in formData </div>
                       <div class="prop-subtitle">
@@ -4135,17 +4175,25 @@
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in formData </div>
                       <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-enum" title="Possible values">
-                          <span class="json-property-enum-item">Public</span>,
-                          <span class="json-property-enum-item">Unlisted</span>,
-                          <span class="json-property-enum-item">Private</span>
-                        </span>
+                        <span class="json-property-type">[object Object]</span>
                         <span class="json-property-range" title="Value limits"></span>
                       </div>
                     </div>
                     <div class="prop-value">
                       <p>Video privacy</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">scheduleUpdate</div>
+                      <div class="prop-subtitle"> in formData </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">[object Object]</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p class="no-description">(no description)</p>
                     </div>
                   </div>
                 </section>
@@ -8312,6 +8360,52 @@
                   <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="definition-ScheduleVideoUpdate" class="definition panel" data-traverse-target="definition-ScheduleVideoUpdate">
+            <h2 class="panel-title">
+              <a name="/definitions/ScheduleVideoUpdate"></a>ScheduleVideoUpdate:
+              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <span class="json-property-range" title="Value limits"></span>
+              
+              
+              </span> -->
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="json-schema-properties">
+                  <dl>
+                    <dt data-property-name="updateAt" class="has-description">
+                      <span class="json-property-name">updateAt:</span>
+                      <span class="json-property-type">dateTime</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dd>
+                      <p>When to update the video</p>
+                    </dd>
+                    <dt data-property-name="privacy">
+                      <span class="json-property-name">privacy:</span>
+                      <span class="json-property-type">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/VideoPrivacy">VideoPrivacy</a>
+                        </span>
+                      </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                  </dl>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Example</h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+  <span class="hljs-attr">&quot;updateAt&quot;</span>: <span class="hljs-string">&quot;dateTime&quot;</span>,
+  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->

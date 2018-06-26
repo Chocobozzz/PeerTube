@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
 import { AuthService, RedirectService, ServerService } from '@app/core'
-import { isInSmallView } from '@app/shared/misc/utils'
 import { is18nPath } from '../../../shared/models/i18n'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-app',
@@ -33,7 +33,8 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private serverService: ServerService,
     private domSanitizer: DomSanitizer,
-    private redirectService: RedirectService
+    private redirectService: RedirectService,
+    private screenService: ScreenService
   ) { }
 
   get serverVersion () {
@@ -75,14 +76,14 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoPrivacies()
 
     // Do not display menu on small screens
-    if (isInSmallView()) {
+    if (this.screenService.isInSmallView()) {
       this.isMenuDisplayed = false
     }
 
     this.router.events.subscribe(
       e => {
         // User clicked on a link in the menu, change the page
-        if (e instanceof GuardsCheckStart && isInSmallView()) {
+        if (e instanceof GuardsCheckStart && this.screenService.isInSmallView()) {
           this.isMenuDisplayed = false
         }
       }

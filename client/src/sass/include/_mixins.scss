@@ -281,6 +281,12 @@
     cursor: pointer;
     display: inline;
   }
+
+  &[disabled] + label,
+  &[disabled] + label + label{
+    opacity: 0.5;
+    cursor: default;
+  }
 }
 
 

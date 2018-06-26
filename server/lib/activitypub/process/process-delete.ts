@@ -15,18 +15,18 @@ async function processDeleteActivity (activity: ActivityDelete) {
 
   if (activity.actor === objectUrl) {
     let actor = await ActorModel.loadByUrl(activity.actor)
-    if (!actor) return
+    if (!actor) return undefined
 
     if (actor.type === 'Person') {
       if (!actor.Account) throw new Error('Actor ' + actor.url + ' is a person but we cannot find it in database.')
 
       actor.Account.Actor = await actor.Account.$get('Actor') as ActorModel
-      return processDeleteAccount(actor.Account)
+      return retryTransactionWrapper(processDeleteAccount, actor.Account)
     } else if (actor.type === 'Group') {
       if (!actor.VideoChannel) throw new Error('Actor ' + actor.url + ' is a group but we cannot find it in database.')
 
       actor.VideoChannel.Actor = await actor.VideoChannel.$get('Actor') as ActorModel
-      return processDeleteVideoChannel(actor.VideoChannel)
+      return retryTransactionWrapper(processDeleteVideoChannel, actor.VideoChannel)
     }
   }
 
@@ -34,18 +34,18 @@ async function processDeleteActivity (activity: ActivityDelete) {
   {
     const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoCommentInstance) {
-      return processDeleteVideoComment(actor, videoCommentInstance, activity)
+      return retryTransactionWrapper(processDeleteVideoComment, actor, videoCommentInstance, activity)
     }
   }
 
   {
     const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoInstance) {
-      return processDeleteVideo(actor, videoInstance)
+      return retryTransactionWrapper(processDeleteVideo, actor, videoInstance)
     }
   }
 
-  return
+  return undefined
 }
 
 // ---------------------------------------------------------------------------
@@ -57,15 +57,6 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processDeleteVideo (actor: ActorModel, videoToDelete: VideoModel) {
-  const options = {
-    arguments: [ actor, videoToDelete ],
-    errorMessage: 'Cannot remove the remote video with many retries.'
-  }
-
-  await retryTransactionWrapper(deleteRemoteVideo, options)
-}
-
-async function deleteRemoteVideo (actor: ActorModel, videoToDelete: VideoModel) {
   logger.debug('Removing remote video "%s".', videoToDelete.uuid)
 
   await sequelizeTypescript.transaction(async t => {
@@ -80,15 +71,6 @@ async function deleteRemoteVideo (actor: ActorModel, videoToDelete: VideoModel) 
 }
 
 async function processDeleteAccount (accountToRemove: AccountModel) {
-  const options = {
-    arguments: [ accountToRemove ],
-    errorMessage: 'Cannot remove the remote account with many retries.'
-  }
-
-  await retryTransactionWrapper(deleteRemoteAccount, options)
-}
-
-async function deleteRemoteAccount (accountToRemove: AccountModel) {
   logger.debug('Removing remote account "%s".', accountToRemove.Actor.uuid)
 
   await sequelizeTypescript.transaction(async t => {
@@ -99,15 +81,6 @@ async function deleteRemoteAccount (accountToRemove: AccountModel) {
 }
 
 async function processDeleteVideoChannel (videoChannelToRemove: VideoChannelModel) {
-  const options = {
-    arguments: [ videoChannelToRemove ],
-    errorMessage: 'Cannot remove the remote video channel with many retries.'
-  }
-
-  await retryTransactionWrapper(deleteRemoteVideoChannel, options)
-}
-
-async function deleteRemoteVideoChannel (videoChannelToRemove: VideoChannelModel) {
   logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.uuid)
 
   await sequelizeTypescript.transaction(async t => {
@@ -117,16 +90,7 @@ async function deleteRemoteVideoChannel (videoChannelToRemove: VideoChannelModel
   logger.info('Remote video channel with uuid %s removed.', videoChannelToRemove.Actor.uuid)
 }
 
-async function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
-  const options = {
-    arguments: [ byActor, videoComment, activity ],
-    errorMessage: 'Cannot remove the remote video comment with many retries.'
-  }
-
-  await retryTransactionWrapper(deleteRemoteVideoComment, options)
-}
-
-function deleteRemoteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
+function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {

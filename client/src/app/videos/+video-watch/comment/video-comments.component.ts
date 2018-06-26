@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ConfirmService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -19,6 +19,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: ['./video-comments.component.scss']
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef
   @Input() video: VideoDetails
   @Input() user: User
 
@@ -76,7 +77,16 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.threadComments[commentId] = res
           this.threadLoading[commentId] = false
 
-          if (highlightThread) this.highlightedThread = new VideoComment(res.comment)
+          if (highlightThread) {
+            this.highlightedThread = new VideoComment(res.comment)
+
+            // Scroll to the highlighted thread
+            setTimeout(() => {
+              // -60 because of the fixed header
+              const scrollY = this.commentHighlightBlock.nativeElement.offsetTop - 60
+              window.scroll(0, scrollY)
+            }, 500)
+          }
         },
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)

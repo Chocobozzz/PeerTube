@@ -6,11 +6,13 @@ import {
   isVideoAbuseReasonValid,
   isVideoDurationValid,
   isVideoNameValid,
+  isVideoStateValid,
   isVideoTagValid,
   isVideoTruncatedDescriptionValid,
   isVideoViewsValid
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
+import { VideoState } from '../../../../shared/models/videos'
 
 function sanitizeAndCheckVideoTorrentCreateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Create') &&
@@ -49,6 +51,10 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!setValidRemoteVideoUrls(video)) return false
   if (!setRemoteVideoTruncatedContent(video)) return false
   if (!setValidAttributedTo(video)) return false
+
+  // Default attributes
+  if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
+  if (!isBooleanValid(video.waitTranscoding)) video.waitTranscoding = false
 
   return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&

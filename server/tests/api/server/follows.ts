@@ -5,10 +5,13 @@ import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import { completeVideoCheck } from '../../utils'
-
 import {
-  flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
-  wait
+  flushAndRunMultipleServers,
+  getVideosList,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo
 } from '../../utils/index'
 import { dateIsValid } from '../../utils/miscs/miscs'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
@@ -16,10 +19,13 @@ import { expectAccountFollows } from '../../utils/users/accounts'
 import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import {
-  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  addVideoCommentReply,
+  addVideoCommentThread,
+  getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
 import { rateVideo } from '../../utils/videos/videos'
+import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
@@ -62,7 +68,7 @@ describe('Test follows', function () {
 
     await follow(servers[0].url, [ servers[1].url, servers[2].url ], servers[0].accessToken)
 
-    await wait(7000)
+    await waitJobs(servers)
   })
 
   it('Should have 2 followings on server 1', async function () {
@@ -135,7 +141,7 @@ describe('Test follows', function () {
 
     await unfollow(servers[0].url, servers[0].accessToken, servers[2])
 
-    await wait(3000)
+    await waitJobs(servers)
   })
 
   it('Should not follow server 3 on server 1 anymore', async function () {
@@ -175,7 +181,7 @@ describe('Test follows', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'server2' })
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3' })
 
-    await wait(5000)
+    await waitJobs(servers)
 
     let res = await getVideosList(servers[0].url)
     expect(res.body.total).to.equal(1)
@@ -240,12 +246,12 @@ describe('Test follows', function () {
         }
       }
 
-      await wait(5000)
+      await waitJobs(servers)
 
       // Server 1 follows server 3
       await follow(servers[ 0 ].url, [ servers[ 2 ].url ], servers[ 0 ].accessToken)
 
-      await wait(7000)
+      await waitJobs(servers)
     })
 
     it('Should have the correct follows counts 3', async function () {
@@ -352,7 +358,7 @@ describe('Test follows', function () {
 
       await unfollow(servers[0].url, servers[0].accessToken, servers[2])
 
-      await wait(3000)
+      await waitJobs(servers)
 
       let res = await getVideosList(servers[ 0 ].url)
       expect(res.body.total).to.equal(1)
@@ -362,10 +368,5 @@ describe('Test follows', function () {
 
   after(async function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

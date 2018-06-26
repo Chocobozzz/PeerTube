@@ -1,6 +1,6 @@
 import { from as observableFrom, Observable } from 'rxjs'
 import { concatAll, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Inject, LOCALE_ID } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
@@ -12,6 +12,8 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoPrivacy, VideoState } from '../../../../../shared/models/videos'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-account-videos',
@@ -38,8 +40,10 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected screenService: ScreenService,
     protected i18n: I18n,
-    private videoService: VideoService
+    private videoService: VideoService,
+    @Inject(LOCALE_ID) private localeId: string
   ) {
     super()
 
@@ -59,7 +63,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
   }
 
   isInSelectionMode () {
-    return Object.keys(this.checkedVideos).some(k => this.checkedVideos[k] === true)
+    return Object.keys(this.checkedVideos).some(k => this.checkedVideos[ k ] === true)
   }
 
   getVideosObservable (page: number) {
@@ -74,47 +78,78 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
   async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.checkedVideos)
-      .filter(k => this.checkedVideos[k] === true)
-      .map(k => parseInt(k, 10))
+                                    .filter(k => this.checkedVideos[ k ] === true)
+                                    .map(k => parseInt(k, 10))
 
-    const res = await this.confirmService.confirm(`Do you really want to delete ${toDeleteVideosIds.length} videos?`, 'Delete')
+    const res = await this.confirmService.confirm(
+      this.i18n('Do you really want to delete {{deleteLength}} videos?', { deleteLength: toDeleteVideosIds.length }),
+      this.i18n('Delete')
+    )
     if (res === false) return
 
     const observables: Observable<any>[] = []
     for (const videoId of toDeleteVideosIds) {
-      const o = this.videoService
-                    .removeVideo(videoId)
+      const o = this.videoService.removeVideo(videoId)
                     .pipe(tap(() => this.spliceVideosById(videoId)))
 
       observables.push(o)
     }
 
-    observableFrom(observables).pipe(
-      concatAll())
+    observableFrom(observables)
+      .pipe(concatAll())
       .subscribe(
         res => {
-          this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)
+          this.notificationsService.success(
+            this.i18n('Success'),
+            this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length })
+          )
+
           this.abortSelectionMode()
           this.reloadVideos()
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 
   async deleteVideo (video: Video) {
-    const res = await this.confirmService.confirm(`Do you really want to delete ${video.name}?`, 'Delete')
+    const res = await this.confirmService.confirm(
+      this.i18n('Do you really want to delete {{videoName}}?', { videoName: video.name }),
+      this.i18n('Delete')
+    )
     if (res === false) return
 
     this.videoService.removeVideo(video.id)
-      .subscribe(
-        status => {
-          this.notificationsService.success('Success', `Video ${video.name} deleted.`)
-          this.reloadVideos()
-        },
+        .subscribe(
+          status => {
+            this.notificationsService.success(
+              this.i18n('Success'),
+              this.i18n('Video {{videoName}} deleted.', { videoName: video.name })
+            )
+            this.reloadVideos()
+          },
 
-        error => this.notificationsService.error('Error', error.message)
-      )
+          error => this.notificationsService.error(this.i18n('Error'), error.message)
+        )
+  }
+
+  getStateLabel (video: Video) {
+    let suffix: string
+
+    if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
+      suffix = this.i18n('Published')
+    } else if (video.scheduledUpdate) {
+      const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
+      suffix = this.i18n('Publication scheduled on ') + updateAt
+    } else if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
+      suffix = this.i18n('Waiting transcoding')
+    } else if (video.state.id === VideoState.TO_TRANSCODE) {
+      suffix = this.i18n('To transcode')
+    } else {
+      return ''
+    }
+
+    return ' - ' + suffix
   }
 
   protected buildVideoHeight () {
@@ -124,7 +159,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
   private spliceVideosById (id: number) {
     for (const key of Object.keys(this.loadedPages)) {
-      const videos = this.loadedPages[key]
+      const videos = this.loadedPages[ key ]
       const index = videos.findIndex(v => v.id === id)
 
       if (index !== -1) {

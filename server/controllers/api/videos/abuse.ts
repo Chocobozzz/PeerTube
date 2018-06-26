@@ -1,12 +1,18 @@
 import * as express from 'express'
 import { UserRight, VideoAbuseCreate } from '../../../../shared'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { sendVideoAbuse } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, setDefaultSort, setDefaultPagination, videoAbuseReportValidator,
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
+  authenticate,
+  ensureUserHasRight,
+  paginationValidator,
+  setDefaultPagination,
+  setDefaultSort,
+  videoAbuseReportValidator,
   videoAbusesSortValidator
 } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
@@ -27,7 +33,7 @@ abuseVideoRouter.get('/abuse',
 abuseVideoRouter.post('/:id/abuse',
   authenticate,
   asyncMiddleware(videoAbuseReportValidator),
-  asyncMiddleware(reportVideoAbuseRetryWrapper)
+  asyncRetryTransactionMiddleware(reportVideoAbuse)
 )
 
 // ---------------------------------------------------------------------------
@@ -42,17 +48,6 @@ async function listVideoAbuses (req: express.Request, res: express.Response, nex
   const resultList = await VideoAbuseModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
-}
-
-async function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const options = {
-    arguments: [ req, res ],
-    errorMessage: 'Cannot report abuse to the video with many retries.'
-  }
-
-  await retryTransactionWrapper(reportVideoAbuse, options)
-
-  return res.type('json').status(204).end()
 }
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
@@ -77,4 +72,6 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
   })
 
   logger.info('Abuse report for video %s created.', videoInstance.name)
+
+  return res.type('json').status(204).end()
 }
