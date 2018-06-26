@@ -30,7 +30,6 @@ const consoleLoggerFormat = winston.format.printf(info => {
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  if (info.message && info.message.stack !== undefined) info.message = info.message.stack
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
@@ -38,10 +37,6 @@ const jsonLoggerFormat = winston.format.printf(infoArg => {
   let info = infoArg.err
     ? Object.assign({}, infoArg, { err: infoArg.err.stack })
     : infoArg
-
-  if (infoArg.message && infoArg.message.stack !== undefined) {
-    info = Object.assign({}, info, { message: infoArg.message.stack })
-  }
 
   return JSON.stringify(info)
 })
@@ -53,7 +48,7 @@ const labelFormatter = winston.format.label({
   label
 })
 
-const logger = new winston.createLogger({
+const logger = winston.createLogger({
   level: CONFIG.LOG.LEVEL,
   transports: [
     new winston.transports.File({
@@ -70,7 +65,6 @@ const logger = new winston.createLogger({
     }),
     new winston.transports.Console({
       handleExceptions: true,
-      humanReadableUnhandledException: true,
       format: winston.format.combine(
         timestampFormatter,
         winston.format.splat(),

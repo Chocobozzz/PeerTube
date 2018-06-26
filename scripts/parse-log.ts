@@ -1,5 +1,5 @@
 import * as program from 'commander'
-import { createReadStream } from 'fs'
+import { createReadStream, readdirSync } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
@@ -29,7 +29,7 @@ const loggerFormat = winston.format.printf((info) => {
   return `[${info.label}] ${toTimeFormat(info.timestamp)} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const logger = new winston.createLogger({
+const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       level: program['level'] || 'debug',
@@ -52,7 +52,10 @@ const logLevels = {
   debug: logger.debug.bind(logger)
 }
 
-const path = join(CONFIG.STORAGE.LOG_DIR, 'peertube.log')
+const logFiles = readdirSync(CONFIG.STORAGE.LOG_DIR)
+const lastLogFile = logFiles[logFiles.length - 1]
+
+const path = join(CONFIG.STORAGE.LOG_DIR, lastLogFile)
 console.log('Opening %s.', path)
 
 const rl = createInterface({
