@@ -10,13 +10,8 @@ if (isTestInstance()) {
 // ----------- Node modules -----------
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
-import * as http from 'http'
 import * as morgan from 'morgan'
-import * as bitTorrentTracker from 'bittorrent-tracker'
 import * as cors from 'cors'
-import { Server as WebSocketServer } from 'ws'
-
-const TrackerServer = bitTorrentTracker.Server
 
 process.title = 'peertube'
 
@@ -75,7 +70,9 @@ import {
   feedsRouter,
   staticRouter,
   servicesRouter,
-  webfingerRouter
+  webfingerRouter,
+  trackerRouter,
+  createWebsocketServer
 } from './server/controllers'
 import { Redis } from './server/lib/redis'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
@@ -116,33 +113,6 @@ app.use(bodyParser.json({
   limit: '500kb'
 }))
 
-// ----------- Tracker -----------
-
-const trackerServer = new TrackerServer({
-  http: false,
-  udp: false,
-  ws: false,
-  dht: false
-})
-
-trackerServer.on('error', function (err) {
-  logger.error('Error in websocket tracker.', err)
-})
-
-trackerServer.on('warning', function (err) {
-  logger.error('Warning in websocket tracker.', err)
-})
-
-const server = http.createServer(app)
-const wss = new WebSocketServer({ server: server, path: '/tracker/socket' })
-wss.on('connection', function (ws) {
-  trackerServer.onWebSocketConnection(ws)
-})
-
-const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
-app.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
-app.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
-
 // ----------- Views, routes and static files -----------
 
 // API
@@ -155,6 +125,7 @@ app.use('/services', servicesRouter)
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', webfingerRouter)
+app.use('/', trackerRouter)
 
 // Static files
 app.use('/', staticRouter)
@@ -180,6 +151,8 @@ app.use(function (err, req, res, next) {
   logger.error('Error in controller.', { error })
   return res.status(err.status || 500).end()
 })
+
+const server = createWebsocketServer(app)
 
 // ----------- Run -----------
 
