@@ -623,6 +623,13 @@ Cochez cette case, sauvegardez la configuration et testez avec l'URL d'une vidé
           <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
+        <source>If you disable transcoding, many videos from your users will not work!</source>
+        <target>Si vous désactivez le transcodage, de nombreuses vidéos de vos utilisateurs ne fonctionneront pas !</target>
+        <context-group name="null">
+          <context context-type="linenumber">180</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
         <target>Nombre de threads pour l'encodage</target>
@@ -726,6 +733,13 @@ Cochez cette case, sauvegardez la configuration et testez avec l'URL d'une vidé
         <target>Mettre à jour la configuration</target>
         <context-group name="null">
           <context context-type="linenumber">276</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="79fa449efc618f94816c6558433870dd71865c13">
+        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
+        <target>Il semble que la configuration est invalide. Merci de chercher les erreurs potentielles dans les différents onglets.</target>
+        <context-group name="null">
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1330,6 +1344,13 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
+        <source>Schedule publication (&lt;x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/&gt;)</source>
+        <target>Publication planifié (&lt;x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/&gt;)</target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>Cette vidéo contient du contenu sensible</target>
@@ -1337,11 +1358,32 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
+        <source>Some instances do not list videos containing mature or explicit content by default.</source>
+        <target>Certaines instances ne répertorient pas les vidéos avec du contenu mature ou explicite par défaut.</target>
+        <context-group name="null">
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>Activer les commentaires</target>
         <context-group name="null">
           <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
+        <source>Wait transcoding before publishing the video</source>
+        <target>Attente du transcodage avant de publier la vidéo</target>
+        <context-group name="null">
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0001ec53fe3dfd603b7ad80fd32d262170e3d9a5">
+        <source>If you decide to not wait transcoding before publishing the video, it can be unplayable until it transcoding ends.</source>
+        <target>Si vous décidez de ne pas attendre le transcodage avant de publier la vidéo, elle pourrait être ilisible jusqu'à la fin du transcodage.</target>
+        <context-group name="null">
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1503,6 +1545,20 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9ed65ae88f6c982bc44d6fed2796e55f47dbf304">
+         <source>The video is being transcoded, it may not work properly.</source>
+         <target>La vidéo est en cours de transcodage, cela pourrait ne pas fonctionner correctement.</target>
+         <context-group name="null">
+            <context context-type="linenumber">6</context>
+         </context-group>
+      </trans-unit>
+      <trans-unit id="fbc205ea3d06fa8f65973fa3b490ae172f71c087">
+         <source>This video will be published on &lt;x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: &apos;full&apos; }}"/&gt;</source>
+         <target>Cette vidéo sera publiée le &lt;x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: &apos;full&apos; }}"/&gt;</target>
+         <context-group name="null">
+            <context context-type="linenumber">10</context>
+         </context-group>
+      </trans-unit>
       <trans-unit id="643ab402461b1169eebbe2ed790e12a9a83551aa">
         <source>
             <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
@@ -1518,6 +1574,20 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
         <target>Aller à la page de chaîne</target>
         <context-group name="null">
           <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
+        <source>Go to the account page</source>
+        <target>Aller à la page de compte</target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="57075c778cf28b81272df4eb17da944366c98e51">
+        <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@&lt;x id="INTERPOLATION" equiv-text="{{video.account.name}}"/&gt;@&lt;x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/&gt;&lt;/strong&gt; and subscribe there. Subscription as a PeerTube user is being worked on in &lt;a href=&apos;https://github.com/Chocobozzz/PeerTube/issues/470&apos;&gt;#470&lt;/a&gt;.</source>
+        <target>Vous pouvez vous abonner à ce compte via n'importe quelle instance ActivityPub compatible fediverse. Par exemple avec Mastodon ou Pleroma vous pouvez taper dans la boîte de recherche &lt;strong&gt;@&lt;x id="INTERPOLATION" equiv-text="{{video.account.name}}"/&gt;@&lt;x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/&gt;&lt;/strong&gt; et vous y abonner. L'abonnement en tant qu'utilisateur PeerTube est en cours de développement dans &lt;a href=&apos;https://github.com/Chocobozzz/PeerTube/issues/470&apos;&gt;#470&lt;/a&gt;.</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ccc07df383b7a32be3e2e105faa5488caf261c1c">
@@ -1714,6 +1784,13 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
         <target>Commentaires</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="da8a38f72f92714cf8680560c99982dc651480d5">
+        <source>You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@&lt;x id="INTERPOLATION" equiv-text="{{video.account.name}}"/&gt;@&lt;x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/&gt;&lt;/strong&gt; and find back the video. Direct commenting capabilities are being worked on in &lt;a href=&apos;https://github.com/Chocobozzz/PeerTube/issues/224&apos;&gt;#224&lt;/a&gt;.</source>
+        <target>Vous pouvez soit commenter sur la page de votre instance où cette vidéo est fédérée avec votre compte PeerTube, ou via n'importe quelle instance ActivityPub compatible fediverse. Par exemple avec Mastodon ou Pleroma vous pouvez taper dans la boîte de recherche &lt;strong&gt;@&lt;x id="INTERPOLATION" equiv-text="{{video.account.name}}"/&gt;@&lt;x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/&gt;&lt;/strong&gt; et retrouver la vidéo. Les capacités de commentaire direct sont en cours de traitement en &lt;a href=&apos;https://github.com/Chocobozzz/PeerTube/issues/224&apos;&gt;#224&lt;/a&gt;.</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
