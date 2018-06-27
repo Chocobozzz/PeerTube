@@ -29,7 +29,7 @@ $ vim ./docker-volume/traefik/traefik.toml
 Tweak the `docker-compose.yml` file there according to your needs:
 
 ```shell
-$ vim ./docker-compose.yaml
+$ vim ./docker-compose.yml
 ```
 
 Then tweak the `.env` file to change the enviromnent variables:
