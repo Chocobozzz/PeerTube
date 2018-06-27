@@ -575,7 +575,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a registered user having too many video', async function () {
-      this.timeout(15000)
+      this.timeout(30000)
 
       const user = {
         username: 'user3',
