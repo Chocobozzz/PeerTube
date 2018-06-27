@@ -106,6 +106,7 @@ export enum ScopeNames {
     actorId: number,
     hideNSFW: boolean,
     filter?: VideoFilter,
+    category?: number,
     withFiles?: boolean,
     accountId?: number,
     videoChannelId?: number
@@ -213,6 +214,10 @@ export enum ScopeNames {
     // Hide nsfw videos?
     if (options.hideNSFW === true) {
       query.where['nsfw'] = false
+    }
+
+    if (options.category) {
+      query.where['category'] = options.category
     }
 
     if (options.accountId) {
@@ -730,6 +735,7 @@ export class VideoModel extends Model<VideoModel> {
     sort: string,
     hideNSFW: boolean,
     withFiles: boolean,
+    category?: number,
     filter?: VideoFilter,
     accountId?: number,
     videoChannelId?: number
@@ -746,6 +752,7 @@ export class VideoModel extends Model<VideoModel> {
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
           hideNSFW: options.hideNSFW,
+          category: options.category,
           filter: options.filter,
           withFiles: options.withFiles,
           accountId: options.accountId,

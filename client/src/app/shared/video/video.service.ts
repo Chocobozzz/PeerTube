@@ -158,7 +158,8 @@ export class VideoService {
   getVideos (
     videoPagination: ComponentPagination,
     sort: VideoSortField,
-    filter?: VideoFilter
+    filter?: VideoFilter,
+    category?: number
   ): Observable<{ videos: Video[], totalVideos: number }> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -167,6 +168,10 @@ export class VideoService {
 
     if (filter) {
       params = params.set('filter', filter)
+    }
+
+    if (category) {
+      params = params.set('category', category + '')
     }
 
     return this.authHttp
@@ -202,10 +207,12 @@ export class VideoService {
     return feeds
   }
 
-  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter) {
+  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, category?: number) {
     let params = this.restService.addRestGetParams(new HttpParams(), undefined, sort)
 
     if (filter) params = params.set('filter', filter)
+
+    if (category) params = params.set('category', category + '')
 
     return this.buildBaseFeedUrls(params)
   }
