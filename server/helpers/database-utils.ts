@@ -35,7 +35,7 @@ function retryTransactionWrapper <T> (
         .catch(err => callback(err))
   })
   .catch(err => {
-    logger.error('Cannot execute %s with many retries.', functionToRetry.toString(), { err })
+    logger.error(`Cannot execute ${functionToRetry.name} with many retries.`, { err })
     throw err
   })
 }
