@@ -56,6 +56,7 @@ function generateOEmbed (req: express.Request, res: express.Response, next: expr
     height: embedHeight,
     title: video.name,
     author_name: video.VideoChannel.Account.name,
+    author_url: video.VideoChannel.Account.Actor.url,
     provider_name: 'PeerTube',
     provider_url: webserverUrl
   }
