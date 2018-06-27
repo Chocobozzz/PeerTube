@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core'
 import { AboutRoutingModule } from './about-routing.module'
 import { AboutComponent } from './about.component'
 import { SharedModule } from '../shared'
+import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
+import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 
 @NgModule({
   imports: [
@@ -11,7 +13,9 @@ import { SharedModule } from '../shared'
   ],
 
   declarations: [
-    AboutComponent
+    AboutComponent,
+    AboutInstanceComponent,
+    AboutPeertubeComponent
   ],
 
   exports: [

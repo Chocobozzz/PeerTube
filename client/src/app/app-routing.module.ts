@@ -21,6 +21,10 @@ const routes: Routes = [
     loadChildren: './+video-channels/video-channels.module#VideoChannelsModule'
   },
   {
+    path: 'about',
+    loadChildren: './+about/about.module#AboutModule'
+  },
+  {
     path: '**',
     loadChildren: './+page-not-found/page-not-found.module#PageNotFoundModule'
   }

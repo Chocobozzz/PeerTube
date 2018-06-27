@@ -107,7 +107,7 @@ loadLocale(window.location.origin, videojs, navigator.language)
 
       player.dock({
         title: videoInfo.name,
-        description: player.localize('Uses P2P, others may know you are watching this video.')
+        description: player.localize('Uses P2P, others may know your IP is downloading this video.')
       })
 
       addContextMenu(player, window.location.origin + videoInfo.embedPath)

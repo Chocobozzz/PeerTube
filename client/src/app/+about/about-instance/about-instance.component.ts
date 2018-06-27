@@ -5,12 +5,12 @@ import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
-  selector: 'my-about',
-  templateUrl: './about.component.html',
-  styleUrls: [ './about.component.scss' ]
+  selector: 'my-about-instance',
+  templateUrl: './about-instance.component.html',
+  styleUrls: [ './about-instance.component.scss' ]
 })
 
-export class AboutComponent implements OnInit {
+export class AboutInstanceComponent implements OnInit {
   shortDescription = ''
   descriptionHTML = ''
   termsHTML = ''
