@@ -1,6 +1,5 @@
 import { LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { AboutModule } from '@app/about'
 import { ServerService } from '@app/core'
 import { ResetPasswordModule } from '@app/reset-password'
 
@@ -53,7 +52,6 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     SignupModule,
     SharedModule,
     VideosModule,
-    AboutModule,
 
     MetaModule.forRoot({
       provide: MetaLoader,

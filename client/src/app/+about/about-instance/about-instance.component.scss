@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+.about-instance-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-weight: $font-semibold;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.short-description, .description, .terms, .signup {
+  margin-bottom: 30px;
+}
