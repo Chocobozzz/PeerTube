@@ -820,7 +820,7 @@ Check this checkbox, save the configuration and test with a video URL of your in
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit><trans-unit id="79fa449efc618f94816c6558433870dd71865c13" datatype="html">
-        <source>It seems the configration is invalid. Please search potential errors in the different tabs.</source>
+        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">277</context>
