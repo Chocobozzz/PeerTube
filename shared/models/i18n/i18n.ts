@@ -1,8 +1,8 @@
 export const LOCALE_FILES = [ 'player', 'server' ]
 
 export const I18N_LOCALES = {
-  'en-US': 'English (US)',
-  'fr-FR': 'Français (France)'
+  'en-US': 'English',
+  'fr-FR': 'Français'
 }
 
 const I18N_LOCALE_ALIAS = {
@@ -13,8 +13,6 @@ const I18N_LOCALE_ALIAS = {
 export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
                                       .concat(Object.keys(I18N_LOCALE_ALIAS))
 
-const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)
-
 export function getDefaultLocale () {
   return 'en-US'
 }
@@ -23,6 +21,7 @@ export function isDefaultLocale (locale: string) {
   return getCompleteLocale(locale) === getCompleteLocale(getDefaultLocale())
 }
 
+const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)
 export function is18nPath (path: string) {
   return possiblePaths.indexOf(path) !== -1
 }

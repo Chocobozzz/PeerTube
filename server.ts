@@ -12,6 +12,7 @@ import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
+import * as cookieParser from 'cookie-parser'
 
 process.title = 'peertube'
 
@@ -112,6 +113,8 @@ app.use(bodyParser.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb'
 }))
+// Cookies
+app.use(cookieParser())
 
 // ----------- Views, routes and static files -----------
 

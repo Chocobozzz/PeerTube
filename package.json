@@ -84,6 +84,7 @@
     "commander": "^2.13.0",
     "concurrently": "^3.5.1",
     "config": "^1.14.0",
+    "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "create-torrent": "^3.24.5",
     "express": "^4.12.4",

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { UserRight } from '../../../../shared/models/users/user-right.enum'
 import { AuthService, AuthStatus, RedirectService, ServerService } from '../core'
 import { User } from '../shared/users/user.model'
+import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 
 @Component({
   selector: 'my-menu',
@@ -10,6 +10,8 @@ import { User } from '../shared/users/user.model'
   styleUrls: [ './menu.component.scss' ]
 })
 export class MenuComponent implements OnInit {
+  @ViewChild('languageChooserModal') languageChooserModal: LanguageChooserComponent
+
   user: User
   isLoggedIn: boolean
   userHasAdminAccess = false
@@ -88,6 +90,10 @@ export class MenuComponent implements OnInit {
     this.authService.logout()
     // Redirect to home page
     this.redirectService.redirectToHomepage()
+  }
+
+  openLanguageChooser () {
+    this.languageChooserModal.show()
   }
 
   private computeIsUserHasAdminAccess () {
