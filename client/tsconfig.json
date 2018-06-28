@@ -20,7 +20,13 @@
     "baseUrl": "src",
     "paths": {
       "@app/*": [ "app/*" ],
-      "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ]
+      "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ],
+      "fs": [ "noop" ],
+      "http": [ "noop" ],
+      "https": [ "noop" ],
+      "path": [ "noop" ],
+      "stream": [ "noop" ],
+      "crypto": [ "noop" ]
     }
   }
 }

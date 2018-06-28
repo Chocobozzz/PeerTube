@@ -17,7 +17,7 @@
     "webpack": "webpack",
     "tslint": "tslint",
     "ng": "ng",
-    "postinstall": "npm rebuild node-sass && test -f angular-cli-patch.js && node angular-cli-patch.js || true",
+    "postinstall": "npm rebuild node-sass",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
     "webdriver-manager": "webdriver-manager",
     "ngx-extractor": "ngx-extractor"
