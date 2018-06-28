@@ -18,7 +18,7 @@
   </div>
 
   <div class="sub-header-container">
-    <div *ngIf="isMenuDisplayed" class="title-menu-left">
+    <div class="title-menu-left" [class.displayed]="isMenuDisplayed">
         <my-menu></my-menu>
     </div>
 

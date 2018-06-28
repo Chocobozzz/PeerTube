@@ -62,8 +62,10 @@ label {
 
 .main-col {
   margin-left: $menu-width;
+  transition: margin-left 500ms;
 
   .margin-content {
+    transition: margin-left 500ms;
     margin-left: $not-expanded-horizontal-margins;
     margin-right: $not-expanded-horizontal-margins;
   }
@@ -76,6 +78,7 @@ label {
     display: flex;
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
+    transition: padding-left 500ms;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
@@ -289,7 +292,9 @@ table {
 // On small screen, menu is absolute
 @media screen and (max-width: 600px) {
   .title-menu-left {
-    width: 100% !important;
+    &.displayed {
+      width: 100% !important;
+    }
     position: absolute !important;
     z-index: 10000;
   }

@@ -13,7 +13,11 @@
   position: fixed;
   height: calc(100vh - #{$header-height});
   padding: 0;
-  width: $menu-width;
+  width: 0;
+  transition: width 500ms;
+  &.displayed {
+    width: $menu-width;
+  }
 
   .title-menu-left-block.menu {
     height: 100%;
