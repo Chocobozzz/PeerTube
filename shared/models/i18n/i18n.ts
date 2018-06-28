@@ -2,12 +2,18 @@ export const LOCALE_FILES = [ 'player', 'server' ]
 
 export const I18N_LOCALES = {
   'en-US': 'English',
-  'fr-FR': 'Français'
+  'fr-FR': 'Français',
+  'eu-ES': 'euskara',
+  'ca-ES': 'català'
+  // 'pl-PL': 'polski'
 }
 
 const I18N_LOCALE_ALIAS = {
   'en': 'en-US',
-  'fr': 'fr-FR'
+  'fr': 'fr-FR',
+  'eu': 'eu-ES',
+  'ca': 'ca-ES'
+  // 'pl': 'pl-PL'
 }
 
 export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
