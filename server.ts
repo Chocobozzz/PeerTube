@@ -99,7 +99,7 @@ app.use((req, res, next) => {
   }
 
   return next()
-});
+})
 
 // For the logger
 app.use(morgan('combined', {
