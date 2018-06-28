@@ -8,6 +8,8 @@ You can quickly get a server running using Docker. You need to have
 
 ### Install
 
+**PeerTube does not support webserver host change**. Keep in mind your domain name is definitive after your first PeerTube start.
+
 PeerTube needs a PostgreSQL and a Redis instance to work correctly. If you want
 to quickly set up a full environment, either for trying the service or in
 production, you can use a `docker-compose` setup.
