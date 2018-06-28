@@ -21,12 +21,12 @@
     "paths": {
       "@app/*": [ "app/*" ],
       "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ],
-      "fs": [ "noop" ],
-      "http": [ "noop" ],
-      "https": [ "noop" ],
-      "path": [ "noop" ],
-      "stream": [ "noop" ],
-      "crypto": [ "noop" ]
+      "fs": [ "./shims/noop" ],
+      "http": [ "./shims/noop" ],
+      "https": [ "./shims/noop" ],
+      "path": [ "./shims/path" ],
+      "stream": [ "./shims/noop" ],
+      "crypto": [ "./shims/noop" ]
     }
   }
 }
