@@ -75,5 +75,81 @@
         <source>Subtitles</source>
         <target>Subtitulos</target>
       </trans-unit>
+      <trans-unit id="subtitles off">
+        <source>subtitles off</source>
+        <target>Subtitulos desactivados</target>
+      </trans-unit>
+      <trans-unit id="Descriptions">
+        <source>Descriptions</source>
+        <target>Descripción</target>
+      </trans-unit>
+      <trans-unit id="descriptions off">
+        <source>descriptions off</source>
+        <target>Descripciónes desactivadas</target>
+      </trans-unit>
+      <trans-unit id="Audio Track">
+        <source>Audio Track</source>
+        <target>Pista de audio</target>
+      </trans-unit>
+      <trans-unit id="Play Video">
+        <source>Play Video</source>
+        <target>Reproducir el video</target>
+      </trans-unit>
+      <trans-unit id="White">
+        <source>White</source>
+        <target>Blanco</target>
+      </trans-unit>
+      <trans-unit id="Black">
+        <source>Black</source>
+        <target>Negro</target>
+      </trans-unit>
+      <trans-unit id="Red">
+        <source>Red</source>
+        <target>Rojo</target>
+      </trans-unit>
+      <trans-unit id="Green">
+        <source>Green</source>
+        <target>Verde</target>
+      </trans-unit>
+      <trans-unit id="Blue">
+        <source>Blue</source>
+        <target>Azul</target>
+      </trans-unit>
+      <trans-unit id="Yellow">
+        <source>Yellow</source>
+        <target>Amarillo</target>
+      </trans-unit>
+      <trans-unit id="Magenta">
+        <source>Magenta</source>
+        <target>Magenta</target>
+      </trans-unit>
+      <trans-unit id="Cyan">
+        <source>Cyan</source>
+        <target>Cian</target>
+      </trans-unit>
+      <trans-unit id="Transparent">
+        <source>Transparent</source>
+        <target>Transparente</target>
+      </trans-unit>
+      <trans-unit id="Opaque">
+        <source>Opaque</source>
+        <target>Opaco</target>
+      </trans-unit>
+      <trans-unit id="None">
+        <source>None</source>
+        <target>Ninguno</target>
+      </trans-unit>
+      <trans-unit id="Reset">
+        <source>Reset</source>
+        <target>Restablecer</target>
+      </trans-unit>
+      <trans-unit id="Quality">
+        <source>Quality</source>
+        <target>Calidad</target>
+      </trans-unit>
+      <trans-unit id="Speed">
+        <source>Speed</source>
+        <target>Velocidad</target>
+      </trans-unit>
     </body>
   </file></xliff>

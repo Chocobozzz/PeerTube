@@ -80,5 +80,9 @@
         <source>Attribution</source>
         <target>Asignación</target>
       </trans-unit>
+      <trans-unit id="Unknown">
+        <source>Unknown</source>
+        <target>Desconocido</target>
+      </trans-unit>
     </body>
   </file></xliff>
