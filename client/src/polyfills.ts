@@ -81,13 +81,13 @@ import 'zone.js/dist/zone'  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 
-(window as any).global = window;
-(window as any).process = {
+// global/process polyfills
+
+;(window as any).global = window;
+;(window as any).process = {
     version: 'web',
     env: {
         NODE_ENV: 'production'
     }
-};
-(window as any).Buffer = {
-    alloc: () => {}
-};
+}
+;(window as any).Buffer = require('buffer/').Buffer;

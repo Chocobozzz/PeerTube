@@ -61,6 +61,7 @@
     "angular2-notifications": "^1.0.2",
     "awesome-typescript-loader": "5.0.0",
     "bootstrap-sass": "^3.3.7",
+    "buffer": "^5.1.0",
     "cache-chunk-store": "^2.0.0",
     "codelyzer": "^4.0.2",
     "core-js": "^2.4.1",
