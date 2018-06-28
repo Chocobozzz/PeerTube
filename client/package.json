@@ -86,6 +86,7 @@
     "ngx-pipes": "^2.1.7",
     "node-sass": "^4.1.1",
     "npm-font-source-sans-pro": "^1.0.2",
+    "path-browserify": "^1.0.0",
     "primeng": "^6.0.0-rc.1",
     "process": "^0.11.10",
     "protractor": "^5.3.2",

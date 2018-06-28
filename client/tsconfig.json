@@ -24,7 +24,7 @@
       "fs": [ "./shims/noop" ],
       "http": [ "./shims/noop" ],
       "https": [ "./shims/noop" ],
-      "path": [ "./shims/path" ],
+      "path": [ "path/" ],
       "stream": [ "./shims/noop" ],
       "crypto": [ "./shims/noop" ]
     }

@@ -1,3 +1,1 @@
-export function join(...args) {
-    return args.join('/');
-}
+module.exports = require('path-browserify');
