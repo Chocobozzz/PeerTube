@@ -84,24 +84,22 @@ import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-sch
 
 // ----------- App -----------
 
-// Enable CORS for develop
-if (isTestInstance()) {
-  app.use((req, res, next) => {
-    // These routes have already cors
-    if (
-      req.path.indexOf(STATIC_PATHS.TORRENTS) === -1 &&
-      req.path.indexOf(STATIC_PATHS.WEBSEED) === -1
-    ) {
-      return (cors({
-        origin: '*',
-        exposedHeaders: 'Retry-After',
-        credentials: true
-      }))(req, res, next)
-    }
+// Enable CORS
+app.use((req, res, next) => {
+  // These routes have already cors
+  if (
+    req.path.indexOf(STATIC_PATHS.TORRENTS) === -1 &&
+    req.path.indexOf(STATIC_PATHS.WEBSEED) === -1
+  ) {
+    return (cors({
+      origin: '*',
+      exposedHeaders: 'Retry-After',
+      credentials: true
+    }))(req, res, next)
+  }
 
-    return next()
-  })
-}
+  return next()
+});
 
 // For the logger
 app.use(morgan('combined', {
