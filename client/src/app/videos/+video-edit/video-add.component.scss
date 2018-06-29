@@ -37,8 +37,17 @@
       @include peertube-button-file(auto);
 
       min-width: 190px;
-      margin-bottom: 45px;
     }
+
+    .button-file-extension {
+      display: block;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+  }
+
+  .form-group-channel {
+    margin-top: 35px;
   }
 }
 
