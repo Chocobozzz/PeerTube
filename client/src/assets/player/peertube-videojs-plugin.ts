@@ -331,6 +331,10 @@ class PeerTubePlugin extends Plugin {
     if (playPromise !== undefined) {
       return playPromise.then(done)
                         .catch(err => {
+                          if (err.message.indexOf('The play() request was interrupted by a call to pause()') !== -1) {
+                            return
+                          }
+
                           console.error(err)
                           this.player.pause()
                           this.player.posterImage.show()
