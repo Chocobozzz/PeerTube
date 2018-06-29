@@ -21,7 +21,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
 
   error: string
 
-  private videoChannelToUpdate: VideoChannel
+  videoChannelToUpdate: VideoChannel
   private paramsSub: Subscription
 
   constructor (
