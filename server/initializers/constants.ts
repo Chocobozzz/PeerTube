@@ -14,7 +14,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 220
+const LAST_MIGRATION_VERSION = 225
 
 // ---------------------------------------------------------------------------
 
@@ -282,7 +282,9 @@ const RATES_LIMIT = {
 let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
 const VIDEO_TRANSCODING_FPS = {
   MIN: 10,
-  MAX: 30
+  AVERAGE: 30,
+  MAX: 60,
+  KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
 }
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {

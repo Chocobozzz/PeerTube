@@ -2,7 +2,7 @@ import * as express from 'express'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
-import { getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
@@ -184,10 +184,13 @@ async function addVideo (req: express.Request, res: express.Response) {
 
   // Build the file object
   const { videoFileResolution } = await getVideoFileResolution(videoPhysicalFile.path)
+  const fps = await getVideoFileFPS(videoPhysicalFile.path)
+
   const videoFileData = {
     extname: extname(videoPhysicalFile.filename),
     resolution: videoFileResolution,
-    size: videoPhysicalFile.size
+    size: videoPhysicalFile.size,
+    fps
   }
   const videoFile = new VideoFileModel(videoFileData)
 

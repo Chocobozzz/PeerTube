@@ -52,7 +52,7 @@ import {
   isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
-import { generateImageFromVideoFile, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
+import { generateImageFromVideoFile, getVideoFileFPS, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
@@ -1168,6 +1168,7 @@ export class VideoModel extends Model<VideoModel> {
             },
             magnetUri: this.generateMagnetUri(videoFile, baseUrlHttp, baseUrlWs),
             size: videoFile.size,
+            fps: videoFile.fps,
             torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
             torrentDownloadUrl: this.getTorrentDownloadUrl(videoFile, baseUrlHttp),
             fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp),
@@ -1303,11 +1304,11 @@ export class VideoModel extends Model<VideoModel> {
     const newExtname = '.mp4'
     const inputVideoFile = this.getOriginalFile()
     const videoInputPath = join(videosDirectory, this.getVideoFilename(inputVideoFile))
-    const videoOutputPath = join(videosDirectory, this.id + '-transcoded' + newExtname)
+    const videoTranscodedPath = join(videosDirectory, this.id + '-transcoded' + newExtname)
 
     const transcodeOptions = {
       inputPath: videoInputPath,
-      outputPath: videoOutputPath
+      outputPath: videoTranscodedPath
     }
 
     // Could be very long!
@@ -1319,10 +1320,13 @@ export class VideoModel extends Model<VideoModel> {
       // Important to do this before getVideoFilename() to take in account the new file extension
       inputVideoFile.set('extname', newExtname)
 
-      await renamePromise(videoOutputPath, this.getVideoFilePath(inputVideoFile))
-      const stats = await statPromise(this.getVideoFilePath(inputVideoFile))
+      const videoOutputPath = this.getVideoFilePath(inputVideoFile)
+      await renamePromise(videoTranscodedPath, videoOutputPath)
+      const stats = await statPromise(videoOutputPath)
+      const fps = await getVideoFileFPS(videoOutputPath)
 
       inputVideoFile.set('size', stats.size)
+      inputVideoFile.set('fps', fps)
 
       await this.createTorrentAndSetInfoHash(inputVideoFile)
       await inputVideoFile.save()
@@ -1360,8 +1364,10 @@ export class VideoModel extends Model<VideoModel> {
     await transcode(transcodeOptions)
 
     const stats = await statPromise(videoOutputPath)
+    const fps = await getVideoFileFPS(videoOutputPath)
 
     newVideoFile.set('size', stats.size)
+    newVideoFile.set('fps', fps)
 
     await this.createTorrentAndSetInfoHash(newVideoFile)
 
@@ -1371,10 +1377,15 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   async importVideoFile (inputFilePath: string) {
+    const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
+    const { size } = await statPromise(inputFilePath)
+    const fps = await getVideoFileFPS(inputFilePath)
+
     let updatedVideoFile = new VideoFileModel({
-      resolution: (await getVideoFileResolution(inputFilePath)).videoFileResolution,
+      resolution: videoFileResolution,
       extname: extname(inputFilePath),
-      size: (await statPromise(inputFilePath)).size,
+      size,
+      fps,
       videoId: this.id
     })
 
@@ -1390,6 +1401,7 @@ export class VideoModel extends Model<VideoModel> {
       // Update the database
       currentVideoFile.set('extname', updatedVideoFile.extname)
       currentVideoFile.set('size', updatedVideoFile.size)
+      currentVideoFile.set('fps', updatedVideoFile.fps)
 
       updatedVideoFile = currentVideoFile
     }

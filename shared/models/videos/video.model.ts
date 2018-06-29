@@ -18,6 +18,7 @@ export interface VideoFile {
   torrentDownloadUrl: string
   fileUrl: string
   fileDownloadUrl: string
+  fps: number
 }
 
 export interface Video {

@@ -26,7 +26,7 @@ async function getVideoFileFPS (path: string) {
     if (!frames || !seconds) continue
 
     const result = parseInt(frames, 10) / parseInt(seconds, 10)
-    if (result > 0) return result
+    if (result > 0) return Math.round(result)
   }
 
   return 0
@@ -83,8 +83,6 @@ type TranscodeOptions = {
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
-    const fps = await getVideoFileFPS(options.inputPath)
-
     let command = ffmpeg(options.inputPath)
                     .output(options.outputPath)
                     .videoCodec('libx264')
@@ -92,14 +90,27 @@ function transcode (options: TranscodeOptions) {
                     .outputOption('-movflags faststart')
                     // .outputOption('-crf 18')
 
-    // Our player has some FPS limits
-    if (fps > VIDEO_TRANSCODING_FPS.MAX) command = command.withFPS(VIDEO_TRANSCODING_FPS.MAX)
-    else if (fps < VIDEO_TRANSCODING_FPS.MIN) command = command.withFPS(VIDEO_TRANSCODING_FPS.MIN)
-
+    let fps = await getVideoFileFPS(options.inputPath)
     if (options.resolution !== undefined) {
       // '?x720' or '720x?' for example
       const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
       command = command.size(size)
+
+      // On small/medium resolutions, limit FPS
+      if (
+        options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+        fps > VIDEO_TRANSCODING_FPS.AVERAGE
+      ) {
+        fps = VIDEO_TRANSCODING_FPS.AVERAGE
+      }
+    }
+
+    if (fps) {
+      // Hard FPS limits
+      if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = VIDEO_TRANSCODING_FPS.MAX
+      else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
+
+      command = command.withFPS(fps)
     }
 
     command

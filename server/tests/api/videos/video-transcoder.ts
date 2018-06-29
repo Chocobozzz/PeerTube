@@ -91,13 +91,13 @@ describe('Test video transcoding', function () {
     expect(torrent.files[0].path).match(/\.mp4$/)
   })
 
-  it('Should transcode to 30 FPS', async function () {
+  it('Should transcode a 60 FPS video', async function () {
     this.timeout(60000)
 
     const videoAttributes = {
       name: 'my super 30fps name for server 2',
       description: 'my super 30fps description for server 2',
-      fixture: 'video_60fps_short.mp4'
+      fixture: '60fps_720p_small.mp4'
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
@@ -109,14 +109,23 @@ describe('Test video transcoding', function () {
     const res2 = await getVideo(servers[1].url, video.id)
     const videoDetails: VideoDetails = res2.body
 
-    expect(videoDetails.files).to.have.lengthOf(1)
+    expect(videoDetails.files).to.have.lengthOf(4)
+    expect(videoDetails.files[0].fps).to.be.above(58).and.below(62)
+    expect(videoDetails.files[1].fps).to.be.below(31)
+    expect(videoDetails.files[2].fps).to.be.below(31)
+    expect(videoDetails.files[3].fps).to.be.below(31)
 
-    for (const resolution of [ '240' ]) {
+    for (const resolution of [ '240', '360', '480' ]) {
       const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
       const fps = await getVideoFileFPS(path)
 
       expect(fps).to.be.below(31)
     }
+
+    const path = join(root(), 'test2', 'videos', video.uuid + '-720.mp4')
+    const fps = await getVideoFileFPS(path)
+
+    expect(fps).to.be.above(58).and.below(62)
   })
 
   it('Should wait transcoding before publishing the video', async function () {

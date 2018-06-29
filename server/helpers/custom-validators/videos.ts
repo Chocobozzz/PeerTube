@@ -118,6 +118,10 @@ function isVideoFileResolutionValid (value: string) {
   return exists(value) && validator.isInt(value + '')
 }
 
+function isVideoFPSResolutionValid (value: string) {
+  return value === null || validator.isInt(value + '')
+}
+
 function isVideoFileSizeValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
 }
@@ -182,6 +186,7 @@ export {
   isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
+  isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
   isVideoAbuseReasonValid,
   isVideoFile,
