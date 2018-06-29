@@ -452,7 +452,7 @@ const FEEDS = {
 
 const TRACKER_RATE_LIMITS = {
   INTERVAL: 60000 * 5, // 5 minutes
-  ANNOUNCES_PER_IP_PER_INFOHASH: 10, // maximum announces per torrent in the interval
+  ANNOUNCES_PER_IP_PER_INFOHASH: 15, // maximum announces per torrent in the interval
   ANNOUNCES_PER_IP: 30 // maximum announces for all our torrents in the interval
 }
 
