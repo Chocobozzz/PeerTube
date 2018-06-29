@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
+import { THUMBNAILS_SIZE } from '../initializers'
 import { asyncMiddleware, setDefaultSort, videoCommentsFeedsValidator, videoFeedsValidator, videosSortValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
@@ -125,7 +126,14 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
       date: video.publishedAt,
       language: video.language,
       nsfw: video.nsfw,
-      torrent: torrents
+      torrent: torrents,
+      thumbnail: [
+        {
+          url: CONFIG.WEBSERVER.URL + video.getThumbnailPath(),
+          height: THUMBNAILS_SIZE.height,
+          width: THUMBNAILS_SIZE.width
+        }
+      ]
     })
   })
 
