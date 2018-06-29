@@ -8,8 +8,15 @@ import { accountsRouter } from './accounts'
 import { videosRouter } from './videos'
 import { badRequest } from '../../helpers/express-utils'
 import { videoChannelRouter } from './video-channel'
+import * as cors from 'cors'
 
 const apiRouter = express.Router()
+
+apiRouter.use(cors({
+  origin: '*',
+  exposedHeaders: 'Retry-After',
+  credentials: true
+}))
 
 apiRouter.use('/server', serverRouter)
 apiRouter.use('/oauth-clients', oauthClientsRouter)
