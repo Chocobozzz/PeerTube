@@ -286,11 +286,9 @@ table {
   }
 }
 
-// On small screen, menu is absolute
 @media screen and (max-width: 600px) {
   .menu-wrapper {
     width: 100% !important;
-    position: absolute !important;
     z-index: 10000;
   }
 

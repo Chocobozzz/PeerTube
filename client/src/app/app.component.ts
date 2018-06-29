@@ -115,7 +115,6 @@ export class AppComponent implements OnInit {
   }
 
   toggleMenu () {
-    window.scrollTo(0, 0)
     this.isMenuDisplayed = !this.isMenuDisplayed
   }
 }
