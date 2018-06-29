@@ -5426,9 +5426,9 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
 
-pfeed@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.5.tgz#6d0ab54209c60b45de03a15efaab7be867a3f71a"
+pfeed@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.6.tgz#0de2a1c40b116fa236227237fa264c7956c185e8"
   dependencies:
     xml "^1.0.1"
 
