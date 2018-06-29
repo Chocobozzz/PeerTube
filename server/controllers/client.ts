@@ -7,8 +7,14 @@ import { ACCEPT_HEADERS, CONFIG, EMBED_SIZE, OPENGRAPH_AND_OEMBED_COMMENT, STATI
 import { asyncMiddleware } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { buildFileLocale, getCompleteLocale, getDefaultLocale, is18nLocale } from '../../shared/models'
-import { LOCALE_FILES } from '../../shared/models/i18n/i18n'
+import {
+  buildFileLocale,
+  getCompleteLocale,
+  getDefaultLocale,
+  is18nLocale,
+  LOCALE_FILES,
+  POSSIBLE_LOCALES
+} from '../../shared/models/i18n/i18n'
 
 const clientsRouter = express.Router()
 
@@ -22,7 +28,8 @@ clientsRouter.use('/videos/watch/:id',
   asyncMiddleware(generateWatchHtmlPage)
 )
 
-clientsRouter.use('/videos/embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+clientsRouter.use('' +
+  '/videos/embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendFile(embedPath)
 })
 
@@ -63,7 +70,7 @@ clientsRouter.use('/client/*', (req: express.Request, res: express.Response, nex
 // Try to provide the right language index.html
 clientsRouter.use('/(:language)?', function (req, res) {
   if (req.accepts(ACCEPT_HEADERS) === 'html') {
-    return res.sendFile(getIndexPath(req, req.params.language))
+    return res.sendFile(getIndexPath(req, res, req.params.language))
   }
 
   return res.status(404).end()
@@ -77,16 +84,24 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getIndexPath (req: express.Request, paramLang?: string) {
+function getIndexPath (req: express.Request, res: express.Response, paramLang?: string) {
   let lang: string
 
   // Check param lang validity
   if (paramLang && is18nLocale(paramLang)) {
     lang = paramLang
+
+    // Save locale in cookies
+    res.cookie('clientLanguage', lang, {
+      secure: CONFIG.WEBSERVER.SCHEME === 'https',
+      sameSite: true,
+      maxAge: 1000 * 3600 * 24 * 90 // 3 months
+    })
+
+  } else if (req.cookies.clientLanguage && is18nLocale(req.cookies.clientLanguage)) {
+    lang = req.cookies.clientLanguage
   } else {
-    // lang = req.acceptsLanguages(POSSIBLE_LOCALES) || getDefaultLocale()
-    // Disable auto language for now
-    lang = getDefaultLocale()
+    lang = req.acceptsLanguages(POSSIBLE_LOCALES) || getDefaultLocale()
   }
 
   return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
@@ -181,18 +196,18 @@ async function generateWatchHtmlPage (req: express.Request, res: express.Respons
   } else if (validator.isInt(videoId)) {
     videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(+videoId)
   } else {
-    return res.sendFile(getIndexPath(req))
+    return res.sendFile(getIndexPath(req, res))
   }
 
   let [ file, video ] = await Promise.all([
-    readFileBufferPromise(getIndexPath(req)),
+    readFileBufferPromise(getIndexPath(req, res)),
     videoPromise
   ])
 
   const html = file.toString()
 
   // Let Angular application handle errors
-  if (!video || video.privacy === VideoPrivacy.PRIVATE) return res.sendFile(getIndexPath(req))
+  if (!video || video.privacy === VideoPrivacy.PRIVATE) return res.sendFile(getIndexPath(req, res))
 
   const htmlStringPageWithTags = addOpenGraphAndOEmbedTags(html, video)
   res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)

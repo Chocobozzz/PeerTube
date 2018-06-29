@@ -407,6 +407,7 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    category: req.query.category,
     hideNSFW: isNSFWHidden(res),
     filter: req.query.filter as VideoFilter,
     withFiles: false

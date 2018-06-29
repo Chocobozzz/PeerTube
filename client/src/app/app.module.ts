@@ -1,6 +1,5 @@
 import { LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { AboutModule } from '@app/about'
 import { ServerService } from '@app/core'
 import { ResetPasswordModule } from '@app/reset-password'
 
@@ -18,6 +17,7 @@ import { SignupModule } from './signup'
 import { VideosModule } from './videos'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -37,6 +37,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     AppComponent,
 
     MenuComponent,
+    LanguageChooserComponent,
     HeaderComponent
   ],
   imports: [
@@ -53,7 +54,6 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     SignupModule,
     SharedModule,
     VideosModule,
-    AboutModule,
 
     MetaModule.forRoot({
       provide: MetaLoader,

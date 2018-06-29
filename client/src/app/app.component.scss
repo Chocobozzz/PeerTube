@@ -9,17 +9,6 @@
   margin-top: $header-height;
 }
 
-.title-menu-left {
-  position: fixed;
-  height: calc(100vh - #{$header-height});
-  padding: 0;
-  width: $menu-width;
-
-  .title-menu-left-block.menu {
-    height: 100%;
-  }
-}
-
 .header {
   height: $header-height;
   position: fixed;

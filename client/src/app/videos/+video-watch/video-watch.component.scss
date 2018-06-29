@@ -289,9 +289,11 @@
       display: flex;
       height: 100%;
       margin-bottom: 20px;
+      flex-wrap: wrap;
 
       .video-miniature-information {
         margin-left: 10px;
+        flex-grow: 1;
       }
     }
   }
@@ -387,8 +389,12 @@
 }
 
 @media screen and (max-width: 1300px) {
+  .video-bottom {
+    flex-direction: column;
+  }
+
   .other-videos {
-    display: none;
+    padding-left: 0;
   }
 
   .privacy-concerns {

@@ -24,7 +24,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-share.component.ts</context>
@@ -263,155 +263,64 @@
           <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">86</context>
         </context-group>
-      </trans-unit><trans-unit id="b244b11c7b831849f726d9c296c7bc521289da0d" datatype="html">
+      </trans-unit><trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96" datatype="html">
+        <source>Change the language</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu/language-chooser.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu/menu.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit><trans-unit id="b8ccc4f1b3f839fca9bd59e072f715fd487d540f" datatype="html">
         <source>
-    Welcome to the &lt;x id="INTERPOLATION" equiv-text="{{ instanceName }}"/&gt; instance
-  </source>
+               My public profile
+              </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit><trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
-        <source>Description</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+accounts/account-about/account-about.component.ts</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+admin/video-blacklist/video-blacklist-list/video-blacklist-list.component.ts</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
+          <context context-type="sourcefile">app/menu/menu.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
+      </trans-unit><trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947" datatype="html">
+        <source>
+                My account
+              </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+video-channels/video-channel-about/video-channel-about.component.ts</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
+          <context context-type="sourcefile">app/menu/menu.component.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
-      </trans-unit><trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774" datatype="html">
-        <source>Terms</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
-      </trans-unit><trans-unit id="9c6e6db693ab265457c6578df179c65694141d27" datatype="html">
-        <source>User registration is allowed and</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit><trans-unit id="3e95271e48614f5ac9e6444ea3b04e9de778ec4c" datatype="html">
+      </trans-unit><trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d" datatype="html">
         <source>
-        this instance provides a baseline quota of &lt;x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/&gt; space for the videos of its users.
-      </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit><trans-unit id="6c497bd25bf8829521526deb51322b381146576a" datatype="html">
-        <source>
-        this instance provides unlimited space for the videos of its users.
-      </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">32</context>
-        </context-group>
-      </trans-unit><trans-unit id="b209efa206b87af23b39497ba45fe45391541336" datatype="html">
-        <source>
-      User registration is currently not allowed.
-    </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-      </trans-unit><trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1" datatype="html">
-        <source>P2P &amp; Privacy</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">43</context>
-        </context-group>
-      </trans-unit><trans-unit id="9a45f58e4a91f090034b12d70dad90c54a3baf5b" datatype="html">
-        <source>
-      PeerTube uses the BitTorrent protocol to share bandwidth between users. It implies that your public IP address is stored in the public BitTorrent tracker of the video PeerTube instance as long as you&apos;re watching the video.
-      If you want to keep your public IP address private, please use a VPN or Tor.
-    </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/about/about.component.ts</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
-      </trans-unit><trans-unit id="298cb43759c99e11e2ca5f92c768a145ddaa323f" datatype="html">
-        <source>
-           My public profile
-          </source>
+                Log out
+              </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit><trans-unit id="f1ae2fbc12a3515501b3d96ac6f2675c0df1cf11" datatype="html">
-        <source>
-            My account
-          </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit><trans-unit id="6326f9ce2365bfe97668c4aa146fbbb762497c1a" datatype="html">
-        <source>
-            Log out
-          </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit><trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9" datatype="html">
         <source>Login</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit><trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87" datatype="html">
         <source>Create an account</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit><trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238" datatype="html">
         <source>Videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+accounts/accounts.component.ts</context>
@@ -425,31 +334,31 @@
         <source>Trending</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit><trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1" datatype="html">
         <source>Recently added</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit><trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d" datatype="html">
         <source>Local</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit><trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919" datatype="html">
         <source>Administration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit><trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a" datatype="html">
         <source>About</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">69</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+accounts/accounts.component.ts</context>
@@ -501,6 +410,306 @@
           <context context-type="sourcefile">app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
+      </trans-unit><trans-unit id="ff78f059449d44322f627d0f66df07abe476962b" datatype="html">
+        <source>Instance</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about.component.ts</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit><trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390" datatype="html">
+        <source>PeerTube</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about.component.ts</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit><trans-unit id="5849c589454817c1e991639d3091d8da0e8d6bd2" datatype="html">
+        <source>
+  About &lt;x id="INTERPOLATION" equiv-text="{{ instanceName }}"/&gt; instance
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
+        <source>Description</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+accounts/account-about/account-about.component.ts</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+admin/video-blacklist/video-blacklist-list/video-blacklist-list.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+video-channels/video-channel-about/video-channel-about.component.ts</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit><trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774" datatype="html">
+        <source>Terms</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit><trans-unit id="9c6e6db693ab265457c6578df179c65694141d27" datatype="html">
+        <source>User registration is allowed and</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit><trans-unit id="ac324b07e7c3c972f1c33894eda02dc2917eda5e" datatype="html">
+        <source>
+      this instance provides a baseline quota of &lt;x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/&gt; space for the videos of its users.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit><trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae" datatype="html">
+        <source>
+      this instance provides unlimited space for the videos of its users.
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit><trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1" datatype="html">
+        <source>
+    User registration is currently not allowed.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit><trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc" datatype="html">
+        <source>
+  About PeerTube
+</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf" datatype="html">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit><trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5" datatype="html">
+        <source>
+    It is a free and open-source software, under the &lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/&gt;AGPLv3 licence&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt;.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit><trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a" datatype="html">
+        <source>
+    For more information, please visit &lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/&gt;joinpeertube.org&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt;.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit><trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1" datatype="html">
+        <source>P2P &amp; Privacy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit><trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6" datatype="html">
+        <source>
+    PeerTube uses the BitTorrent protocol to share bandwidth between users.
+    This implies that your IP address is stored in the instance&apos;s BitTorrent tracker as long as you download or watch the video.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit><trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231" datatype="html">
+        <source>What are the consequences?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit><trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a" datatype="html">
+        <source>
+    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
+    In practice, this is much more difficult because:
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit><trans-unit id="64f96be62df4a95a0615b6f630ad25d6348a29d3" datatype="html">
+        <source>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube&apos;s videos, we have to send as many requests as there are videos (so potentially a lot)
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit><trans-unit id="dd9a7a4ee66b0ff3fbb43ba8691ffcd042531611" datatype="html">
+        <source>
+      For each request sent, the tracker returns random peers at a limited number.
+      For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit><trans-unit id="694cf53adfc2afe8afabf713ab00fa114d5d2f8e" datatype="html">
+        <source>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit><trans-unit id="44bbecddbdf2aad1f4bad97cb806560553fb2ab3" datatype="html">
+        <source>
+      If an IP address is stored in the tracker, it doesn&apos;t mean that the person behind the IP (if this person exists) has watched the video
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit><trans-unit id="fec3239a860de66c718e3442df836b692b8568c3" datatype="html">
+        <source>
+      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit><trans-unit id="c5e62151cca9610f4248c9616909f7acaf5e5a32" datatype="html">
+        <source>
+      Web peers are not directly sent by the tracker: because we use WebRTC inside the web browser, the protocol is different from classic BitTorrent.
+      When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
+      See &lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/&gt;this document&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt; for more information
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit><trans-unit id="50d8e8388f5ceab292850ed828f306c9f2cab389" datatype="html">
+        <source>
+    The worst-case scenario of an average person spying on their friends is quite unlikely.
+    There are much more effective ways to get that kind of information.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit><trans-unit id="b7801222ec2b04de2f61d3ff01d18a04bfa17505" datatype="html">
+        <source>How does PeerTube compares to YouTube?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit><trans-unit id="2432705cbabcb92a8677338901dd5d655383ef4c" datatype="html">
+        <source>
+    The threats to privacy in YouTube are different from PeerTube&apos;s.
+    In YouTube&apos;s case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
+    Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit><trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99" datatype="html">
+        <source>What can I do to limit the exposure of my IP address?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit><trans-unit id="a545356de272b955258c2a2432b08ec637b65f7e" datatype="html">
+        <source>
+    Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more.
+    PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
+    Thinking that removing P2P from PeerTube will give you back anonymity doesn&apos;t make sense.
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit><trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41" datatype="html">
+        <source>What will be done to mitigate this problem?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit><trans-unit id="d8f1c6b816aaf1ebcb936a705dbe88bcef28eaa8" datatype="html">
+        <source>
+    PeerTube is only in beta, and want to deliver the best countermeasures possible by the time the stable is released.
+    In the meantime, we want to test different ideas related to this issue:
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit><trans-unit id="d32608aba08c6bb3cc4e4e8ec6223e5f4e78ca19" datatype="html">
+        <source>Set a limit to the number of peers sent by the tracker</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit><trans-unit id="a6d732b614143f862e69798046dc0868716547e5" datatype="html">
+        <source>Set a limit on the request frequency received by the tracker (being tested)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit><trans-unit id="ba77e356eaa5c06caaf5c8734c361d1a5415fe1c" datatype="html">
+        <source>Ring a bell if there are unusual requests (being tested)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit><trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18" datatype="html">
+        <source>Disable P2P from the administration interface</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit><trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6" datatype="html">
+        <source>An automatic video redundancy program: we wouldn&apos;t know if the IP downloaded the video on purpose or if it was the automatized program</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
       </trans-unit><trans-unit id="a835d8a12e14eb96919245a0bbafd8069c146578" datatype="html">
         <source>&lt;x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/&gt; subscribers</source>
         <context-group purpose="location">
@@ -548,12 +757,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/+accounts/account-video-channels/account-video-channels.component.ts</context>
           <context context-type="linenumber">4</context>
-        </context-group>
-      </trans-unit><trans-unit id="ff78f059449d44322f627d0f66df07abe476962b" datatype="html">
-        <source>Instance</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
-          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit><trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
@@ -819,8 +1022,8 @@ Check this checkbox, save the configuration and test with a video URL of your in
           <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">276</context>
         </context-group>
-      </trans-unit><trans-unit id="79fa449efc618f94816c6558433870dd71865c13" datatype="html">
-        <source>It seems the configration is invalid. Please search potential errors in the different tabs.</source>
+      </trans-unit><trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca" datatype="html">
+        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -1579,11 +1782,17 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
+      </trans-unit><trans-unit id="6ac01cebf6f87418b309a83d5ce965d77b4ab740" datatype="html">
+        <source>Torrent (magnet)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
       </trans-unit><trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd" datatype="html">
         <source>Download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
@@ -1902,6 +2111,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="814d28bf9dcbd3122254e664b446ac8e0442bc08" datatype="html">
+        <source>Error getting about from server</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="37b56526e384f843a15323dc730b484a97b4c968" datatype="html">
         <source>No description</source>
         <context-group purpose="location">
@@ -2019,6 +2235,10 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-image.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <context-group purpose="location">
@@ -2520,13 +2740,6 @@ When you will upload a video in this channel, the video support field will be au
         <source>To transcode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="814d28bf9dcbd3122254e664b446ac8e0442bc08" datatype="html">
-        <source>Error getting about from server</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/about/about.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -3527,6 +3740,13 @@ When you will upload a video in this channel, the video support field will be au
         <source>&lt;x id="INTERPOLATION" equiv-text="{{seconds}}"/&gt; of average quality videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/signup/signup.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d0fdbf0a14c9ac51e12b52f8781152ba5c87793" datatype="html">
+        <source>This image is too large.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-image.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

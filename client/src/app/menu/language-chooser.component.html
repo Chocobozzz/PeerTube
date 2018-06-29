@@ -1,0 +1,15 @@
+<div bsModal #modal="bs-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <span class="close" aria-hidden="true" (click)="hide()"></span>
+        <h4 i18n class="modal-title">Change the language</h4>
+      </div>
+
+      <div class="modal-body" *ngFor="let lang of languages">
+        <a [href]="buildLanguageLink(lang)">{{ lang.label }}</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -71,13 +71,18 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
+    let isNewVideo = false
+
     // We transcoded the video file in another format, now we can publish it
-    const oldState = videoDatabase.state
-    videoDatabase.state = VideoState.PUBLISHED
-    videoDatabase = await videoDatabase.save({ transaction: t })
+    if (videoDatabase.state !== VideoState.PUBLISHED) {
+      isNewVideo = true
+
+      videoDatabase.state = VideoState.PUBLISHED
+      videoDatabase.publishedAt = new Date()
+      videoDatabase = await videoDatabase.save({ transaction: t })
+    }
 
     // If the video was not published, we consider it is a new one for other instances
-    const isNewVideo = oldState !== VideoState.PUBLISHED
     await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
 
     return undefined

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
@@ -11,9 +11,9 @@ npm run ng build -- --output-path "dist/$defaultLanguage/" --deploy-url "/client
 mv "./dist/$defaultLanguage/assets" "./dist"
 
 # Supported languages
-languages="fr_FR"
+languages=("fr_FR" "eu_ES" "ca_ES")
 
-for lang in "$languages"; do
+for lang in "${languages[@]}"; do
     npm run ng build -- --prod --i18n-file "./src/locale/target/angular_$lang.xml" --i18n-format xlf --i18n-locale "$lang" \
         --output-path "dist/$lang/" --deploy-url "/client/$lang/"
 
