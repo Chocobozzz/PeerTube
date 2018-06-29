@@ -134,7 +134,10 @@ class PeerTubePlugin extends Plugin {
   }
 
   getCurrentResolutionLabel () {
-    return this.currentVideoFile ? this.currentVideoFile.resolution.label : ''
+    if (!this.currentVideoFile) return ''
+
+    const fps = this.currentVideoFile.fps >= 50 ? this.currentVideoFile.fps : ''
+    return this.currentVideoFile.resolution.label + fps
   }
 
   updateVideoFile (
