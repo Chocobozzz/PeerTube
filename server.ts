@@ -90,7 +90,8 @@ if (isTestInstance()) {
     // These routes have already cors
     if (
       req.path.indexOf(STATIC_PATHS.TORRENTS) === -1 &&
-      req.path.indexOf(STATIC_PATHS.WEBSEED) === -1
+      req.path.indexOf(STATIC_PATHS.WEBSEED) === -1 &&
+      req.path.startsWith('/api/') === false
     ) {
       return (cors({
         origin: '*',
