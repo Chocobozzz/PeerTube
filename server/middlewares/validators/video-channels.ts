@@ -13,6 +13,8 @@ import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'
+import { isAvatarFile } from '../../helpers/custom-validators/users'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 const listVideoAccountChannelsValidator = [
   param('accountName').exists().withMessage('Should have a valid account name'),

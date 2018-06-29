@@ -5,9 +5,9 @@ import { body, param } from 'express-validator/check'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isAvatarFile,
   isUserAutoPlayVideoValid,
-  isUserDescriptionValid, isUserDisplayNameValid,
+  isUserDescriptionValid,
+  isUserDisplayNameValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
@@ -17,7 +17,6 @@ import {
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/utils'
-import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
@@ -109,21 +108,6 @@ const usersUpdateMeValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // TODO: Add old password verification
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
-
-    if (areValidationErrors(req, res)) return
-
-    return next()
-  }
-]
-
-const usersUpdateMyAvatarValidator = [
-  body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(
-    'This file is not supported or too large. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME.join(', ')
-  ),
-
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersUpdateMyAvatarValidator parameters', { files: req.files })
 
     if (areValidationErrors(req, res)) return
 
@@ -239,7 +223,6 @@ export {
   ensureUserRegistrationAllowed,
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,
-  usersUpdateMyAvatarValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator
 }

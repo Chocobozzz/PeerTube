@@ -19,12 +19,16 @@ import { videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
-import { isNSFWHidden } from '../../helpers/express-utils'
+import { createReqFiles, isNSFWHidden } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
-import { sequelizeTypescript } from '../../initializers'
+import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
+import { updateAvatarValidator } from '../../middlewares/validators/avatar'
+import { updateActorAvatarFile } from '../../lib/avatar'
+
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 
 const videoChannelRouter = express.Router()
 
@@ -40,6 +44,15 @@ videoChannelRouter.post('/',
   authenticate,
   videoChannelsAddValidator,
   asyncRetryTransactionMiddleware(addVideoChannel)
+)
+
+videoChannelRouter.post('/:id/avatar/pick',
+  authenticate,
+  reqAvatarFile,
+  // Check the rights
+  asyncMiddleware(videoChannelsUpdateValidator),
+  updateAvatarValidator,
+  asyncMiddleware(updateVideoChannelAvatar)
 )
 
 videoChannelRouter.put('/:id',
@@ -81,6 +94,19 @@ async function listVideoChannels (req: express.Request, res: express.Response, n
   const resultList = await VideoChannelModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function updateVideoChannelAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
+  const videoChannel = res.locals.videoChannel
+
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel.Actor, videoChannel)
+
+  return res
+    .json({
+      avatar: avatar.toFormattedJSON()
+    })
+    .end()
 }
 
 async function addVideoChannel (req: express.Request, res: express.Response) {

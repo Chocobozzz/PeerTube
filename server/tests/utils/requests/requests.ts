@@ -1,5 +1,6 @@
 import * as request from 'supertest'
 import { buildAbsoluteFixturePath } from '../miscs/miscs'
+import { isAbsolute, join } from 'path'
 
 function makeGetRequest (options: {
   url: string,
@@ -45,7 +46,7 @@ function makeUploadRequest (options: {
   url: string,
   method?: 'POST' | 'PUT',
   path: string,
-  token: string,
+  token?: string,
   fields: { [ fieldName: string ]: any },
   attaches: { [ attachName: string ]: any },
   statusCodeExpected?: number
@@ -122,6 +123,29 @@ function makePutBodyRequest (options: {
             .expect(options.statusCodeExpected)
 }
 
+function updateAvatarRequest (options: {
+  url: string,
+  path: string,
+  accessToken: string,
+  fixture: string
+}) {
+  let filePath = ''
+  if (isAbsolute(options.fixture)) {
+    filePath = options.fixture
+  } else {
+    filePath = join(__dirname, '..', '..', 'fixtures', options.fixture)
+  }
+
+  return makeUploadRequest({
+    url: options.url,
+    path: options.path,
+    token: options.accessToken,
+    fields: {},
+    attaches: { avatarfile: filePath },
+    statusCodeExpected: 200
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -129,5 +153,6 @@ export {
   makeUploadRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  makeDeleteRequest
+  makeDeleteRequest,
+  updateAvatarRequest
 }

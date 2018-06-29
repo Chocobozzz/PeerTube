@@ -1,14 +1,10 @@
 import * as express from 'express'
 import 'multer'
-import { extname, join } from 'path'
-import * as uuidv4 from 'uuid/v4'
 import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { processImage } from '../../helpers/image-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
-import { updateActorAvatarInstance } from '../../lib/activitypub'
+import { CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { Emailer } from '../../lib/emailer'
 import { Redis } from '../../lib/redis'
@@ -33,12 +29,7 @@ import {
   usersUpdateValidator,
   usersVideoRatingValidator
 } from '../../middlewares'
-import {
-  usersAskResetPasswordValidator,
-  usersResetPasswordValidator,
-  usersUpdateMyAvatarValidator,
-  videosSortValidator
-} from '../../middlewares/validators'
+import { usersAskResetPasswordValidator, usersResetPasswordValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
@@ -46,6 +37,8 @@ import { VideoModel } from '../../models/video/video'
 import { VideoSortField } from '../../../client/src/app/shared/video/sort-field.type'
 import { createReqFiles } from '../../helpers/express-utils'
 import { UserVideoQuota } from '../../../shared/models/users/user-video-quota.model'
+import { updateAvatarValidator } from '../../middlewares/validators/avatar'
+import { updateActorAvatarFile } from '../../lib/avatar'
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 const loginRateLimiter = new RateLimit({
@@ -121,7 +114,7 @@ usersRouter.put('/me',
 usersRouter.post('/me/avatar/pick',
   authenticate,
   reqAvatarFile,
-  usersUpdateMyAvatarValidator,
+  updateAvatarValidator,
   asyncMiddleware(updateMyAvatar)
 )
 
@@ -304,22 +297,9 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
 
 async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
-  const user = res.locals.oauth.token.user
-  const actor = user.Account.Actor
+  const account = res.locals.oauth.token.user.Account
 
-  const extension = extname(avatarPhysicalFile.filename)
-  const avatarName = uuidv4() + extension
-  const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-  await processImage(avatarPhysicalFile, destination, AVATARS_SIZE)
-
-  const avatar = await sequelizeTypescript.transaction(async t => {
-    const updatedActor = await updateActorAvatarInstance(actor, avatarName, t)
-    await updatedActor.save({ transaction: t })
-
-    await sendUpdateActor(user.Account, t)
-
-    return updatedActor.Avatar
-  })
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, account.Actor, account)
 
   return res
     .json({

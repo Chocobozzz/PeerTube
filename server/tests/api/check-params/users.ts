@@ -304,6 +304,20 @@ describe('Test users API validators', function () {
       await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
+    it('Should fail with an unauthenticated user', async function () {
+      const fields = {}
+      const attaches = {
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      }
+      await makeUploadRequest({
+        url: server.url,
+        path: path + '/me/avatar/pick',
+        fields,
+        attaches,
+        statusCodeExpected: 401
+      })
+    })
+
     it('Should succeed with the correct params', async function () {
       const fields = {}
       const attaches = {

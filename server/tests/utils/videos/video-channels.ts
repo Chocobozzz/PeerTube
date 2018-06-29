@@ -1,5 +1,6 @@
 import * as request from 'supertest'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared/models/videos'
+import { updateAvatarRequest } from '../index'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-channels'
@@ -92,9 +93,22 @@ function getVideoChannel (url: string, channelId: number | string) {
     .expect('Content-Type', /json/)
 }
 
+function updateVideoChannelAvatar (options: {
+  url: string,
+  accessToken: string,
+  fixture: string,
+  videoChannelId: string | number
+}) {
+
+  const path = '/api/v1/video-channels/' + options.videoChannelId + '/avatar/pick'
+
+  return updateAvatarRequest(Object.assign(options, { path }))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  updateVideoChannelAvatar,
   getVideoChannelsList,
   getAccountVideoChannelsList,
   addVideoChannel,

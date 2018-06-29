@@ -1,6 +1,5 @@
-import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { makePostBodyRequest, makeUploadRequest, makePutBodyRequest } from '../'
+import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../'
 
 import { UserRole } from '../../../../shared/index'
 import { NSFWPolicyType } from '../../../../shared/models/videos/nsfw-policy.type'
@@ -160,21 +159,8 @@ function updateMyAvatar (options: {
   fixture: string
 }) {
   const path = '/api/v1/users/me/avatar/pick'
-  let filePath = ''
-  if (isAbsolute(options.fixture)) {
-    filePath = options.fixture
-  } else {
-    filePath = join(__dirname, '..', '..', 'fixtures', options.fixture)
-  }
 
-  return makeUploadRequest({
-    url: options.url,
-    path,
-    token: options.accessToken,
-    fields: {},
-    attaches: { avatarfile: filePath },
-    statusCodeExpected: 200
-  })
+  return updateAvatarRequest(Object.assign(options, { path }))
 }
 
 function updateUser (options: {
