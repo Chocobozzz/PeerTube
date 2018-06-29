@@ -9,6 +9,7 @@ import { ResultList } from '../../../../../shared'
 import { VideoChannel } from './video-channel.model'
 import { environment } from '../../../environments/environment'
 import { Account } from '@app/shared/account/account.model'
+import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 
 @Injectable()
 export class VideoChannelService {
@@ -52,6 +53,13 @@ export class VideoChannelService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  changeVideoChannelAvatar (videoChannelUUID: string, avatarForm: FormData) {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID + '/avatar/pick'
+
+    return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
+               .pipe(catchError(this.restExtractor.handleError))
   }
 
   removeVideoChannel (videoChannel: VideoChannel) {

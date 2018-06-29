@@ -1,20 +1,4 @@
-<div class="user">
-  <img [src]="user.accountAvatarUrl" alt="Avatar" />
-
-  <div class="user-info">
-    <div class="user-info-names">
-      <div class="user-info-display-name">{{ user.account?.displayName }}</div>
-      <div class="user-info-username">{{ user.username }}</div>
-    </div>
-    <div i18n class="user-info-followers">{{ user.account?.followersCount }} subscribers</div>
-  </div>
-</div>
-
-<div class="button-file">
-  <span i18n>Change your avatar</span>
-  <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="changeAvatar()" />
-</div>
-<div i18n class="file-max-size">(extensions: {{ avatarExtensions }}, max size: {{ maxAvatarSize | bytes }})</div>
+<my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
 
 <div class="user-quota">
   <span i18n class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}

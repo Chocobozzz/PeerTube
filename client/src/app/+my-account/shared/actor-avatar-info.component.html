@@ -1,0 +1,19 @@
+<ng-container *ngIf="actor">
+  <div class="actor">
+    <img [src]="actor.avatarUrl" alt="Avatar" />
+
+    <div class="actor-info">
+      <div class="actor-info-names">
+        <div class="actor-info-display-name">{{ actor.displayName }}</div>
+        <div class="actor-info-username">{{ actor.name }}</div>
+      </div>
+      <div i18n class="actor-info-followers">{{ actor.followersCount }} subscribers</div>
+    </div>
+  </div>
+
+  <div class="button-file">
+    <span i18n>Change the avatar</span>
+    <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()" />
+  </div>
+  <div i18n class="file-max-size">(extensions: {{ avatarExtensions }}, max size: {{ maxAvatarSize | bytes }})</div>
+</ng-container>

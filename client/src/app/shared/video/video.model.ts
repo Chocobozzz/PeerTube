@@ -11,6 +11,7 @@ import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-s
 export class Video implements VideoServerModel {
   by: string
   accountAvatarUrl: string
+  videoChannelAvatarUrl: string
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
@@ -102,9 +103,11 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
     this.account = hash.account
+    this.channel = hash.channel
 
     this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
     this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+    this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.channel)
 
     this.category.label = peertubeTranslate(this.category.label, translations)
     this.licence.label = peertubeTranslate(this.licence.label, translations)

@@ -251,6 +251,10 @@ export enum ScopeNames {
                 attributes: [ 'host' ],
                 model: () => ServerModel.unscoped(),
                 required: false
+              },
+              {
+                model: () => AvatarModel.unscoped(),
+                required: false
               }
             ]
           },

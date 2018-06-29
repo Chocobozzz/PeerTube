@@ -14,7 +14,8 @@ import {
   killallServers,
   makeGetRequest,
   makePostBodyRequest,
-  makePutBodyRequest, makeUploadRequest,
+  makePutBodyRequest,
+  makeUploadRequest,
   runServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -22,7 +23,7 @@ import {
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { User } from '../../../../shared/models/users'
-import { join } from "path"
+import { join } from 'path'
 
 const expect = chai.expect
 

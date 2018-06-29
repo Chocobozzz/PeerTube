@@ -1,5 +1,9 @@
+<my-actor-avatar-info
+  *ngIf="isCreation() === false && videoChannelToUpdate"
+  [actor]="videoChannelToUpdate" (avatarChange)="onAvatarChange($event)"
+></my-actor-avatar-info>
+
 <div i18n class="form-sub-title" *ngIf="isCreation() === true">Create a video channel</div>
-<div i18n class="form-sub-title" *ngIf="isCreation() === false">Update {{ videoChannel?.displayName }}</div>
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 

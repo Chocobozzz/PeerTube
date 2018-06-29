@@ -13,8 +13,6 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './my-account-settings.component.scss' ]
 })
 export class MyAccountSettingsComponent implements OnInit {
-  @ViewChild('avatarfileInput') avatarfileInput
-
   user: User = null
   userVideoQuota = '0'
   userVideoQuotaUsed = 0
@@ -48,16 +46,7 @@ export class MyAccountSettingsComponent implements OnInit {
       .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
   }
 
-  changeAvatar () {
-    const avatarfile = this.avatarfileInput.nativeElement.files[ 0 ]
-    if (avatarfile.size > this.maxAvatarSize) {
-      this.notificationsService.error('Error', 'This image is too large.')
-      return
-    }
-
-    const formData = new FormData()
-    formData.append('avatarfile', avatarfile)
-
+  onAvatarChange (formData: FormData) {
     this.userService.changeAvatar(formData)
       .subscribe(
         data => {
@@ -68,13 +57,5 @@ export class MyAccountSettingsComponent implements OnInit {
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
-  }
-
-  get maxAvatarSize () {
-    return this.serverService.getConfig().avatar.file.size.max
-  }
-
-  get avatarExtensions () {
-    return this.serverService.getConfig().avatar.file.extensions.join(',')
   }
 }

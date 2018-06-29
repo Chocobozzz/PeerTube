@@ -10,6 +10,7 @@ import { MyAccountProfileComponent } from '@app/+my-account/my-account-settings/
 import { MyAccountVideoChannelsComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channels.component'
 import { MyAccountVideoChannelCreateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-create.component'
 import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-update.component'
+import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-info.component'
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-accoun
     MyAccountVideosComponent,
     MyAccountVideoChannelsComponent,
     MyAccountVideoChannelCreateComponent,
-    MyAccountVideoChannelUpdateComponent
+    MyAccountVideoChannelUpdateComponent,
+    ActorAvatarInfoComponent
   ],
 
   exports: [

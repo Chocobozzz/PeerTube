@@ -84,6 +84,12 @@
           &:hover {
             opacity: 0.8;
           }
+
+          img {
+            @include avatar(18px);
+
+            margin: -2px 2px 0 5px;
+          }
         }
 
         my-help {
@@ -106,6 +112,7 @@
         img {
           @include avatar(18px);
 
+          margin-top: -2px;
           margin-left: 7px;
         }
       }

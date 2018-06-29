@@ -34,7 +34,6 @@ export class User implements UserServerModel {
   account: Account
   videoChannels: VideoChannel[]
   createdAt: Date
-  accountAvatarUrl: string
 
   constructor (hash: UserConstructorHash) {
     this.id = hash.id
@@ -65,8 +64,12 @@ export class User implements UserServerModel {
     if (hash.createdAt !== undefined) {
       this.createdAt = hash.createdAt
     }
+  }
 
-    this.updateComputedAttributes()
+  get accountAvatarUrl () {
+    if (!this.account) return ''
+
+    return this.account.avatarUrl
   }
 
   hasRight (right: UserRight) {
@@ -81,17 +84,9 @@ export class User implements UserServerModel {
     if (obj.account !== undefined) {
       this.account = new Account(obj.account)
     }
-
-    this.updateComputedAttributes()
   }
 
   updateAccountAvatar (newAccountAvatar: Avatar) {
-    this.account.avatar = newAccountAvatar
-
-    this.updateComputedAttributes()
-  }
-
-  private updateComputedAttributes () {
-    this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+    this.account.updateAvatar(newAccountAvatar)
   }
 }
