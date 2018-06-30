@@ -365,8 +365,9 @@ class PeerTubePlugin extends Plugin {
 
     if (!averageDownloadSpeed) averageDownloadSpeed = this.getAndSaveActualDownloadSpeed()
 
-    // Filter videos we can play according to our bandwidth
-    const filteredFiles = this.videoFiles.filter(f => {
+    // Filter videos we can play according to our screen resolution and bandwidth
+    const filteredFiles = this.videoFiles.filter(f => f.resolution.id <= this.playerElement.width)
+    .filter(f => {
       const fileBitrate = (f.size / this.videoDuration)
       let threshold = fileBitrate
 
