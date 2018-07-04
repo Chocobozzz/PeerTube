@@ -90,8 +90,8 @@ enough money to pay for bandwidth and video storage of its servers.
 
 So we need to have a decentralized network of servers seeding videos (as
 [Diaspora](https://github.com/diaspora/diaspora) for example).  But it's not
-enough because one video could become famous and overload the server.  It's the
-reason why we need to use a P2P protocol to limit the server load.  Thanks to
+enough because one video could become famous and overload the server.  That is 
+why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus
 BitTorrent) inside the web browser, as of today.
 
@@ -156,7 +156,7 @@ See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation.
     torrent URI of this specific video is...).
   * If a user uploads a video, the server seeds it and sends its followers some
     metadata (name, short description, torrent URI...).
-  * A server is a tracker responsible for all the videos uploaded in it.
+  * A server is a tracker responsible for all the videos uploaded on it.
   * Even if nobody watches a video, it is seeded by the server (through
     [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the
     video was uploaded.
@@ -179,8 +179,7 @@ Copyright (C) 2018 PeerTube Contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of

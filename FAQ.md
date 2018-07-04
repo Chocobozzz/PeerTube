@@ -23,7 +23,7 @@
 ## I don't like the name "PeerTube"
 
 PeerTube is just the name of the software. You can install it on your
-server, and choose the name you want. For example, [this instance](https://framatube.org/)
+server, and choose a name you want. For example, [this instance](https://framatube.org/)
 is named "Framatube".
 
 ## If nobody watches a video, is it seeded?
@@ -59,7 +59,7 @@ WEBM, MP4 or OGV videos.
 
 ## I want to change my domain name, how can I do that?
 
-You can't. You'll need to re install an instance and reupload your videos.
+You can't. You'll need to reinstall an instance and reupload your videos.
 
 
 ## Should I have a big server to run PeerTube?
@@ -106,7 +106,7 @@ Moreover, don't forget that advertisers already pay considering YouTube's large 
 ## What is "creation dynamic" and why not modify it?
 
 We define creation dynamic as the way any original content, regardless of its monetary value, is created and incentivized.
-We want to limit as much as possible the influence our platform could have on authors in order to stay neutral. We are not curators, and want to limit the scope of PeerTube instance owners and administrators' responsibilities to moderation tasks only.
+We want to stay neutral by limiting the influence of our platform on authors as much as possible. We are not curators, and want to limit the scope of PeerTube instance owners and administrators' responsibilities to moderation tasks only.
 
 If you still want to use a functionality potentially altering that state of things, then you could interface with our upcoming plug-in system, which will be the place to integrate such features in the near future.
 
