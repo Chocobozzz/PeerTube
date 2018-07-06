@@ -1,20 +1,17 @@
 import * as Channel from 'jschannel'
-import { EventRegistrar } from './events';
-import { EventHandler, PlayerEventType } from './definitions';
+import { EventRegistrar } from './events'
+import { EventHandler, PlayerEventType, PeerTubeResolution } from './definitions'
 
-const SUPPORTED_EVENTS = [
+const PASSTHROUGH_EVENTS = [
     'pause', 'play', 
     'playbackStatusUpdate',
     'playbackStatusChange',
     'resolutionUpdate'
 ]
 
-export interface PeerTubeResolution {
-    id : any
-    label : string
-    src : string
-    active : boolean
-}
+/**
+ * Allows for programmatic control of a PeerTube embed running in an <iframe> within a web page.
+ */
 export class PeerTubePlayer {
     /**
      * Construct a new PeerTubePlayer for the given PeerTube embed iframe.
@@ -29,7 +26,7 @@ export class PeerTubePlayer {
         private embedElement : HTMLIFrameElement, 
         private scope? : string
     ) {
-        this.eventRegistrar.registerTypes(SUPPORTED_EVENTS)
+        this.eventRegistrar.registerTypes(PASSTHROUGH_EVENTS)
 
         this.constructChannel()
         this.prepareToBeReady()
@@ -39,14 +36,29 @@ export class PeerTubePlayer {
     private channel : Channel.MessagingChannel
     private currentPosition = 0
 
+    /**
+     * Destroy the player object and remove the associated player from the DOM.
+     */
     public destroy() {
         this.embedElement.remove()
     }
 
+    /**
+     * Listen to an event emitted by this player.
+     * 
+     * @param event One of the supported event types
+     * @param handler A handler which will be passed an event object (or undefined if no event object is included)
+     */
     public addEventListener(event : PlayerEventType, handler : EventHandler<any>): boolean {
         return this.eventRegistrar.addListener(event, handler)
     }
 
+    /**
+     * Remove an event listener previously added with addEventListener().
+     * 
+     * @param event The name of the event previously listened to
+     * @param handler 
+     */
     public removeEventListener(event : PlayerEventType, handler : EventHandler<any>): boolean {
         return this.eventRegistrar.removeListener(event, handler)
     }
@@ -78,7 +90,7 @@ export class PeerTubePlayer {
     /**
      * Promise resolves when the player is ready.
      */
-    public get ready() {
+    public get ready(): Promise<void> {
         return this._readyPromise
     }
 
@@ -92,38 +104,75 @@ export class PeerTubePlayer {
         })
     }
 
+    /**
+     * Tell the embed to start/resume playback
+     */
     async play() {
         await this.sendMessage('play')
     }
 
+    /**
+     * Tell the embed to pause playback.
+     */
     async pause() {
         await this.sendMessage('pause')
     }
 
+    /**
+     * Tell the embed to change the audio volume
+     * @param value A number from 0 to 1
+     */
     async setVolume(value : number) {
         await this.sendMessage('setVolume', value)
     }
 
+    /**
+     * Tell the embed to seek to a specific position (in seconds)
+     * @param seconds 
+     */
     async seek(seconds : number) {
         await this.sendMessage('seek', seconds)
     }
 
+    /**
+     * Tell the embed to switch resolutions to the resolution identified
+     * by the given ID.
+     * 
+     * @param resolutionId The ID of the resolution as found with getResolutions()
+     */
     async setResolution(resolutionId : any) {
         await this.sendMessage('setResolution', resolutionId)
     }
 
+    /**
+     * Retrieve a list of the available resolutions. This may change later, listen to the 
+     * `resolutionUpdate` event with `addEventListener` in order to be updated as the available
+     * resolutions change.
+     */
     async getResolutions(): Promise<PeerTubeResolution[]> {
         return await this.sendMessage<void, PeerTubeResolution[]>('getResolutions')
     }
 
+    /**
+     * Retrieve a list of available playback rates. 
+     */
     async getPlaybackRates() : Promise<number[]> {
         return await this.sendMessage<void, number[]>('getPlaybackRates')
     }
     
+    /**
+     * Get the current playback rate. Defaults to 1 (1x playback rate).
+     */
     async getPlaybackRate() : Promise<number> {
         return await this.sendMessage<void, number>('getPlaybackRate')
     }
 
+    /**
+     * Set the playback rate. Should be one of the options returned by getPlaybackRates().
+     * Passing 0.5 means half speed, 1 means normal, 2 means 2x speed, etc.
+     * 
+     * @param rate 
+     */
     async setPlaybackRate(rate : number) {
         await this.sendMessage('setPlaybackRate', rate)
     }
