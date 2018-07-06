@@ -17,8 +17,8 @@ import 'core-js/es6/set'
 // For google bot that uses Chrome 41 and does not understand fetch
 import 'whatwg-fetch'
 
-import * as vjs from 'video.js';
-import * as Channel from 'jschannel';
+import * as vjs from 'video.js'
+import * as Channel from 'jschannel'
 
 import { VideoDetails } from '../../../../shared'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
@@ -97,8 +97,8 @@ class PeerTubeEmbedApi {
     let currentState : 'playing' | 'paused' | 'unstarted' = 'unstarted'
 
     setInterval(() => {
-      let position = this.element.currentTime;
-      let volume = this.element.volume;
+      let position = this.element.currentTime
+      let volume = this.element.volume
 
       this.channel.notify({
         method: 'playbackStatusUpdate',
@@ -112,12 +112,12 @@ class PeerTubeEmbedApi {
 
     this.element.addEventListener('play', ev => {
       currentState = 'playing'
-      this.channel.notify({ method: 'playbackStatusChange', params: 'playing' });
+      this.channel.notify({ method: 'playbackStatusChange', params: 'playing' })
     })
 
     this.element.addEventListener('pause', ev => {
       currentState = 'paused'
-      this.channel.notify({ method: 'playbackStatusChange', params: 'paused' });
+      this.channel.notify({ method: 'playbackStatusChange', params: 'paused' })
     })
 
     // PeerTube specific capabilities
@@ -167,8 +167,8 @@ class PeerTubeEmbed {
 
   static async main() {
     const videoContainerId = 'video-container'
-    const embed = new PeerTubeEmbed(videoContainerId);
-    await embed.init();
+    const embed = new PeerTubeEmbed(videoContainerId)
+    await embed.init()
   }
   
   getVideoUrl (id: string) {
@@ -214,11 +214,11 @@ class PeerTubeEmbed {
     return params.has(name) ? params.get(name) : defaultValue
   }
 
-  private api : PeerTubeEmbedApi = null;
+  private api : PeerTubeEmbedApi = null
 
   private initializeApi() {
     if (!this.enableApi)
-      return;
+      return
 
     this.api = new PeerTubeEmbedApi(this)
     this.api.initialize()
@@ -226,19 +226,19 @@ class PeerTubeEmbed {
 
   async init() {
     try {
-      await this.initCore();
+      await this.initCore()
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   }
 
-  autoplay : boolean = false;
-  controls : boolean = true;
-  muted : boolean = false;
-  loop : boolean = false;
-  enableApi : boolean = false;
-  startTime : number = 0;
-  scope : string = 'peertube';
+  autoplay : boolean = false
+  controls : boolean = true
+  muted : boolean = false
+  loop : boolean = false
+  enableApi : boolean = false
+  startTime : number = 0
+  scope : string = 'peertube'
 
   private loadParams() {
     try {
@@ -249,7 +249,7 @@ class PeerTubeEmbed {
       this.muted = this.getParamToggle(params, 'muted', this.muted)
       this.loop = this.getParamToggle(params, 'loop', this.loop)
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
-      this.scope = this.getParamString(params, 'scope', this.scope);
+      this.scope = this.getParamString(params, 'scope', this.scope)
 
       const startTimeParamString = params.get('start')
       const startTimeParamNumber = parseInt(startTimeParamString, 10)
@@ -265,8 +265,8 @@ class PeerTubeEmbed {
     const lastPart = urlParts[urlParts.length - 1]
     const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
 
-    await loadLocale(window.location.origin, vjs, navigator.language);
-    let response = await this.loadVideoInfo(videoId);
+    await loadLocale(window.location.origin, vjs, navigator.language)
+    let response = await this.loadVideoInfo(videoId)
 
     if (!response.ok) {
       if (response.status === 404) 
@@ -277,7 +277,7 @@ class PeerTubeEmbed {
 
     const videoInfo: VideoDetails = await response.json()
 
-    this.loadParams();
+    this.loadParams()
 
     const videojsOptions = getVideojsOptions({
       autoplay: this.autoplay,
@@ -300,7 +300,7 @@ class PeerTubeEmbed {
     this.playerOptions = videojsOptions
     this.player = vjs(this.videoContainerId, videojsOptions, () => {
 
-      window['videojsPlayer'] = this.player;
+      window['videojsPlayer'] = this.player
 
       if (this.controls) {
         (this.player as any).dock({
@@ -309,7 +309,7 @@ class PeerTubeEmbed {
         })
       }
       addContextMenu(this.player, window.location.origin + videoInfo.embedPath)
-      this.initializeApi();
+      this.initializeApi()
     })
   }
 }
