@@ -88,6 +88,8 @@ function transcode (options: TranscodeOptions) {
                     .videoCodec('libx264')
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
                     .outputOption('-movflags faststart')
+                    .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorythm, 16 is optimal B-frames for it
+                    .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
                     // .outputOption('-crf 18')
 
     let fps = await getVideoFileFPS(options.inputPath)
