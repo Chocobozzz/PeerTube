@@ -14,7 +14,8 @@ module.exports = function () {
 
   const configuration = {
     entry: {
-      'video-embed': './src/standalone/videos/embed.ts'
+      'video-embed': './src/standalone/videos/embed.ts',
+      'player': './src/standalone/player/player.ts'
     },
 
     resolve: {
@@ -89,7 +90,8 @@ module.exports = function () {
           use: 'raw-loader',
           exclude: [
             helpers.root('src/index.html'),
-            helpers.root('src/standalone/videos/embed.html')
+            helpers.root('src/standalone/videos/embed.html'),
+            helpers.root('src/standalone/videos/test-embed.html')
           ]
         },
 
@@ -124,7 +126,17 @@ module.exports = function () {
         filename: 'embed.html',
         title: 'PeerTube',
         chunksSortMode: 'dependency',
-        inject: 'body'
+        inject: 'body',
+        chunks: ['video-embed']
+      }),
+
+      new HtmlWebpackPlugin({
+        template: '!!raw-loader!src/standalone/videos/test-embed.html',
+        filename: 'test-embed.html',
+        title: 'PeerTube',
+        chunksSortMode: 'dependency',
+        inject: 'body',
+        chunks: ['player']
       }),
 
       /**

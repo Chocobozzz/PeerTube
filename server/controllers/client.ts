@@ -21,6 +21,7 @@ const clientsRouter = express.Router()
 const distPath = join(root(), 'client', 'dist')
 const assetsImagesPath = join(root(), 'client', 'dist', 'assets', 'images')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
+const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
@@ -31,6 +32,10 @@ clientsRouter.use('/videos/watch/:id',
 clientsRouter.use('' +
   '/videos/embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendFile(embedPath)
+})
+clientsRouter.use('' +
+  '/videos/test-embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  res.sendFile(testEmbedPath)
 })
 
 // Static HTML/CSS/JS client files
