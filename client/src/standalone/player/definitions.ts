@@ -4,6 +4,15 @@ export interface EventHandler<T> {
 }
 
 export type PlayerEventType = 
-    'playbackStateChanged'
-    | 'ready'
+    'pause' | 'play' | 
+    'playbackStatusUpdate' | 
+    'playbackStatusChange' | 
+    'resolutionUpdate'
 ;
+
+export interface PeerTubeResolution {
+    id : any
+    label : string
+    src : string
+    active : boolean
+}
