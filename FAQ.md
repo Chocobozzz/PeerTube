@@ -14,7 +14,6 @@
 - [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
-- [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
 - [Are you going to use the Steem blockchain?](#are-you-going-to-use-the-steem-blockchain)
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
@@ -26,7 +25,6 @@
 PeerTube is just the name of the software. You can install it on your
 server, and choose a name you want. For example, [this instance](https://framatube.org/)
 is named "Framatube".
-
 
 ## If nobody watches a video, is it seeded?
 
@@ -81,11 +79,6 @@ So you would need:
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
 The reason is they connects to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
 We hope to see compatibility with WebRTC in popular BitTorrent client in the future. See this issue for more information: https://github.com/webtorrent/webtorrent/issues/369
-
-
-## Why host on GitHub and Framagit?
-
-The project has initially been hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/chocobozzz/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
 
 
 ## Are you going to use the Steem blockchain?

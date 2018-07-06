@@ -6,6 +6,7 @@ import { getAbsoluteAPIUrl } from '../misc/utils'
 import { ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
+import { AuthUser } from '../../core'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
@@ -74,7 +75,8 @@ export class Video implements VideoServerModel {
     return displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
   }
 
-  constructor (hash: VideoServerModel, translations = {}) {
+  constructor (
+    hash: VideoServerModel, translations = {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.createdAt = new Date(hash.createdAt.toString())
@@ -127,5 +129,12 @@ export class Video implements VideoServerModel {
 
     // Return default instance config
     return serverConfig.instance.defaultNSFWPolicy !== 'display'
+  }
+
+  isOwner (user: AuthUser) {
+    if (user) {
+      return user.username === this.account.name
+    }
+    return false
   }
 }
