@@ -8,7 +8,7 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 </p>
 
 <p align="center">
-<strong>We are running <a href="https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform">a crowdfunding campaign</a> to pave the road to version 1.0 of PeerTube!</strong>
+<strong>We have run <a href="https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform">a crowdfunding campaign</a> to pave the road to version 1.0 of PeerTube. Thanks to everyone who pitched in and shared the news around. You can now check out [the corresponding milestone](https://github.com/Chocobozzz/PeerTube/milestone/1) and help its development!</strong>
 </p>
 
 <p align="center">
@@ -49,10 +49,6 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
   </a>
-
-  <a href="https://kiwiirc.com/client/irc.freenode.net/#peertube">
-    <img src="https://img.shields.io/badge/%23peertube-on%20freenode-brightgreen.svg" alt="PeerTube Freenode IRC" />
-  </a>
 </p>
 
 <br />
@@ -67,6 +63,9 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 
   * **[Website](https://joinpeertube.org)**
   * **[Instances list](https://instances.joinpeertube.org)**
+  * Chat:
+    * **IRC : [#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
+    * **Matrix (bridged on the IRC channel) : [#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
 
 ## Demonstration
 
@@ -105,18 +104,18 @@ BitTorrent) inside the web browser, as of today.
   * OpenSSL (cli)
   * **FFmpeg >= 3.x**
 
-## Run using Docker
+## Run in production
 
-See the [docker guide](/support/doc/docker.md)
+See the [production guide](/support/doc/production.md).
 
 ## Run on YunoHost
 [![Install Peertube with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=peertube)
 
-Peertube app for [YunoHost](https://yunohost.org). See [here](https://github.com/YunoHost-Apps/peertube_ynh)
+Peertube app for [YunoHost](https://yunohost.org). See [here](https://github.com/YunoHost-Apps/peertube_ynh).
 
-## Production
+## Run using Docker
 
-See the [production guide](/support/doc/production.md).
+See the [docker guide](/support/doc/docker.md).
 
 ## Contribute/Translate/Test
 
