@@ -8,7 +8,7 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 </p>
 
 <p align="center">
-<strong>We have run <a href="https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform">a crowdfunding campaign</a> to pave the road to version 1.0 of PeerTube. Thanks to everyone who pitched in and shared the news around. You can now check out [the corresponding milestone](https://github.com/Chocobozzz/PeerTube/milestone/1) and help its development!</strong>
+<strong>We have run <a href="https://www.kisskissbankbank.com/en/projects/peertube-a-free-and-federated-video-platform">a crowdfunding campaign</a> to pave the road to version 1.0 of PeerTube. Thanks to everyone who pitched in and shared the news around. You can now check out <a href="https://github.com/Chocobozzz/PeerTube/milestone/1">the corresponding milestone</a> and help its development!</strong>
 </p>
 
 <p align="center">
@@ -64,8 +64,8 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
   * **[Website](https://joinpeertube.org)**
   * **[Instances list](https://instances.joinpeertube.org)**
   * Chat:
-    * **IRC : [#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
-    * **Matrix (bridged on the IRC channel) : [#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+    * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
+    * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
 
 ## Demonstration
 
