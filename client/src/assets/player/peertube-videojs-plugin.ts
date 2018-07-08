@@ -240,6 +240,8 @@ class PeerTubePlugin extends Plugin {
 
             if (options.seek) this.seek(options.seek)
             if (options.forcePlay === false && paused === true) this.player.pause()
+
+            return done(err)
           })
         })
       }, options.delay || 0)
