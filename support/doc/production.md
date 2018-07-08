@@ -107,6 +107,13 @@ Activate the configuration file:
 $ sudo ln -s /etc/nginx/sites-available/peertube /etc/nginx/sites-enabled/peertube
 ```
 
+Remove default configuration file:
+
+```
+$ sudo rm /etc/nginx/sites-enabled/default
+```
+
+
 To generate the certificate for your domain as required to make https work you can use [Let's Encrypt](https://letsencrypt.org/):
 
 ```
