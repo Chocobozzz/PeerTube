@@ -55,7 +55,8 @@ function getVideojsOptions (options: {
   if (options.enableHotkeys === true) {
     Object.assign(videojsOptions.plugins, {
       hotkeys: {
-        enableVolumeScroll: false
+        enableVolumeScroll: false,
+        enableModifiersForNumbers: false
       }
     })
   }
