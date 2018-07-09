@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.modal {
+  z-index: 10005;
+}
+
 .modal-title {
   text-align: center;
 }
