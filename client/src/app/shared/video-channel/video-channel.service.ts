@@ -27,7 +27,7 @@ export class VideoChannelService {
                .pipe(
                  map(videoChannelHash => new VideoChannel(videoChannelHash)),
                  tap(videoChannel => this.videoChannelLoaded.next(videoChannel)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -35,7 +35,7 @@ export class VideoChannelService {
     return this.authHttp.get<ResultList<VideoChannelServer>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels')
                .pipe(
                  map(res => this.extractVideoChannels(res)),
-                 catchError((res) => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -59,7 +59,7 @@ export class VideoChannelService {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID + '/avatar/pick'
 
     return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
-               .pipe(catchError(this.restExtractor.handleError))
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   removeVideoChannel (videoChannel: VideoChannel) {

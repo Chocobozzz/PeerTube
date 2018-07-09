@@ -50,7 +50,7 @@ export class VideoService {
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -58,7 +58,7 @@ export class VideoService {
     return this.authHttp.post(this.getVideoViewUrl(uuid), {})
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(this.restExtractor.handleError)
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -93,7 +93,7 @@ export class VideoService {
     return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, data)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(this.restExtractor.handleError)
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -102,7 +102,7 @@ export class VideoService {
 
     return this.authHttp
                .request<{ video: { id: number, uuid: string } }>(req)
-               .pipe(catchError(this.restExtractor.handleError))
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number }> {
@@ -115,7 +115,7 @@ export class VideoService {
                .get<ResultList<Video>>(UserService.BASE_USERS_URL + '/me/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -133,7 +133,7 @@ export class VideoService {
                .get<ResultList<Video>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -151,7 +151,7 @@ export class VideoService {
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.uuid + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -178,7 +178,7 @@ export class VideoService {
                .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL, { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -248,7 +248,7 @@ export class VideoService {
                .get<ResultList<VideoServerModel>>(url, { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -257,7 +257,7 @@ export class VideoService {
                .delete(VideoService.BASE_VIDEO_URL + id)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -266,7 +266,7 @@ export class VideoService {
                .get(environment.apiUrl + descriptionPath)
                .pipe(
                  map(res => res[ 'description' ]),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -286,7 +286,7 @@ export class VideoService {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
     return this.authHttp.get<UserVideoRate>(url)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   private setVideoRate (id: number, rateType: VideoRateType) {
@@ -299,7 +299,7 @@ export class VideoService {
                .put(url, body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
