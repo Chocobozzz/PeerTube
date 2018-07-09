@@ -7,7 +7,8 @@
         <source>
             Cancel
           </source>
-        <target>Cancelar</target>
+        <target>
+Cancelar</target>
         <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
@@ -31,6 +32,16 @@
         <target>Obtener ayuda</target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
+        <source>
+    Login
+  </source>
+        <target>
+Iniciar sesión</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e08a77594f3d89311cdf6da5090044270909c194">

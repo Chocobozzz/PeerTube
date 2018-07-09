@@ -4,7 +4,9 @@ export const I18N_LOCALES = {
   'en-US': 'English',
   'fr-FR': 'Français',
   'eu-ES': 'euskara',
-  'ca-ES': 'català'
+  'ca-ES': 'català',
+  'cs-CZ': 'čeština',
+  'eo': 'Esperanto'
   // 'pl-PL': 'polski'
 }
 
@@ -12,7 +14,8 @@ const I18N_LOCALE_ALIAS = {
   'en': 'en-US',
   'fr': 'fr-FR',
   'eu': 'eu-ES',
-  'ca': 'ca-ES'
+  'ca': 'ca-ES',
+  'cs': 'cs-CZ'
   // 'pl': 'pl-PL'
 }
 

@@ -220,6 +220,46 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
+        <source>Change the language</source>
+        <target>Aldatu hizkuntza</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b8ccc4f1b3f839fca9bd59e072f715fd487d540f">
+        <source>
+               My public profile
+              </source>
+        <target>
+               Nire profil publikoa
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947">
+        <source>
+                My account
+              </source>
+        <target>
+                Nire kontua
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d">
+        <source>
+                Log out
+              </source>
+        <target>
+                Amaitu saioa
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
         <target>Hasi saioa</target>
@@ -304,6 +344,24 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
+        <source>PeerTube</source>
+        <target>PeerTube</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5849c589454817c1e991639d3091d8da0e8d6bd2">
+        <source>
+  About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instance
+</source>
+        <target>
+  <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instantziari buruz
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
         <source>Description</source>
         <target>Deskripzioa</target>
@@ -325,11 +383,299 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ac324b07e7c3c972f1c33894eda02dc2917eda5e">
+        <source>
+      this instance provides a baseline quota of <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> space for the videos of its users.
+    </source>
+        <target>
+      instantzia honek <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> eskaintzen ditu erabiltzaileen bideoetarako oinarrizko kuota gisa.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae">
+        <source>
+      this instance provides unlimited space for the videos of its users.
+    </source>
+        <target>
+      instantzia honek mugagabeko espazioa eskaintzen du bere erabiltzaileen bideoetarako.     </target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1">
+        <source>
+    User registration is currently not allowed.
+  </source>
+        <target>
+Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
+        <source>
+  About PeerTube
+</source>
+        <target>PeerTube-ri buruz</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
+        <target>PeerTube federatutako (ActivityPub) bideo banaketarako plataforma bat da, zuzenean web nabigatzailean P2P (BitTorrent) darabilena</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
+        <source>
+    It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Software libre eta kode irekikoa da, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 lizentzia<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> du.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a">
+        <source>
+    For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Informazio gehiagorako bisitatu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
         <target>P2P eta pribatutasuna</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6">
+        <source>
+    PeerTube uses the BitTorrent protocol to share bandwidth between users.
+    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+  </source>
+        <target>
+    PeerTube-k BitTorrent protokoloa darabil banda-zabalera erabiltzaileen artean elkarbanatzeko.
+    Honek esan nahi duThis implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
+        <source>What are the consequences?</source>
+        <target>Zein dira ondorioak?</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a">
+        <source>
+    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
+    In practice, this is much more difficult because:
+  </source>
+        <target>
+    Teorian, teknikoki nahiko dakien batek IP bakoitza ze bideo ikusten dagoen jakiteko script bat idatzi lezake.
+    Praktikan hau zailagoa da::
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64f96be62df4a95a0615b6f630ad25d6348a29d3">
+        <source>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </source>
+        <target>
+     HTTP eskari bat bidali behar zaio tracker bakoitzari miatu nahi den bideo bakoitzeko.
+      PeerTubeko bideo guztiak miatzeko dauden bideo beste HTTP eskari bidali beharko lirateke (asko dira)
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dd9a7a4ee66b0ff3fbb43ba8691ffcd042531611">
+        <source>
+      For each request sent, the tracker returns random peers at a limited number.
+      For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
+    </source>
+        <target>
+      Bidalitako eskari bakoitzeko, tracker-ak ausaz aukeratutako berdinen mugatutako kopuru bat bidaltzen du.
+      Adibidez 1000 berdin badaude eta tracker-ak eskariko 20 bidaltzen baditu 50 eskari behar dira gutxienez berdin guztiak ezagutzeko
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="694cf53adfc2afe8afabf713ab00fa114d5d2f8e">
+        <source>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </source>
+        <target>
+      Eskari hauek etengabe bidali behar dira bideo bat nor ikusten ari den jakiteko. Portaera mota hori erraz antzematen da
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="44bbecddbdf2aad1f4bad97cb806560553fb2ab3">
+        <source>
+      If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video
+    </source>
+        <target>
+      IP helbide bat tracker-en gordeta egoteak, ez du esan nahi IP horren antzean dagoen pertsona (baldin eta existitzen bada) bideoa ikusi duenik
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fec3239a860de66c718e3442df836b692b8568c3">
+        <source>
+      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
+    </source>
+        <target>
+      IP helbidea ez da informazio zehatz bat: aldakorra da eta hainbat pertsona edo erakunde adierazi liteke
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5e62151cca9610f4248c9616909f7acaf5e5a32">
+        <source>
+      Web peers are not directly sent by the tracker: because we use WebRTC inside the web browser, the protocol is different from classic BitTorrent.
+      When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
+      See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
+    </source>
+        <target>
+      Web bitarteko berdinak ez ditu tracker-ak bidaltzen zuzenean, web nabigatzailean  WebRTC  erabiltzen dugulako, protokoloa BitTorrent klasikotik apur bat aldentzen da.
+      Web nabigatzaile batean zaudenean, zure IP helbidea barne hartzen duen seinale bidaltzen diozu tracker-ari eta ausaz aukeratuko ditu beste berin batzuk IP helbidea hara bidaltzeko.
+      Irakurri <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>dokumentu hau<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> informazio gehiagorako
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50d8e8388f5ceab292850ed828f306c9f2cab389">
+        <source>
+    The worst-case scenario of an average person spying on their friends is quite unlikely.
+    There are much more effective ways to get that kind of information.
+  </source>
+        <target>
+    Inor bere lagunak miatzea kasu ez da oso gertagarria.
+    Badaude informazio mota hori lortzeko modu errazagoak.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7801222ec2b04de2f61d3ff01d18a04bfa17505">
+        <source>How does PeerTube compares to YouTube?</source>
+        <target>Zein da PeerTube eta YouTube-ren arteko aldea?</target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2432705cbabcb92a8677338901dd5d655383ef4c">
+        <source>
+    The threats to privacy in YouTube are different from PeerTube's.
+    In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
+    Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
+  </source>
+        <target>
+    Pribatutasunari mehatxua desberdina da YouTube-n eta PeerTube-n.
+    YouTube-ren kasuan, plataformak zure informazio pertsonal eta datu mordoa metatzen ditu (es soilik zure IP-a) hauek aztertu eta zure jarraipena egiteko.
+    Are gehiago, YouTube Google/Alphabet enpresarena da, eta konpainia honek zure jarraipena webgune ugarien bitartez egiten du (AdSense edo Google Analytics bidez).
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
+        <source>What can I do to limit the exposure of my IP address?</source>
+        <target>Zer egin dezaket nire IP helbidearen ikusgaitasuna mugatzeko?</target>
+        <context-group name="null">
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a545356de272b955258c2a2432b08ec637b65f7e">
+        <source>
+    Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more.
+    PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
+    Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
+  </source>
+        <target>
+    Zure IP helbidea publikoa da webgune bat bisitatzen duzun guztietan eta hainbatek ikusten dute (webgunea beraz gain) zure IP helbidea bere konexio egunkarietan: Hornitzailea, bideratzaileak, datu-zentruak, eta abar.
+    PeerTube gardena da honetan: ohartzen dizugu IP-a pribatu mantendu nahi baduzu VPN bat edo Tor nabigatzailea erabili behar dituzula.
+    PeerTube-tik P2P kentzeak pribatutasuna emango dizula pentsatzeak ez du zentzurik.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
+        <source>What will be done to mitigate this problem?</source>
+        <target>Zer egingo da arazo hau gutxiagotzeko?</target>
+        <context-group name="null">
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8f1c6b816aaf1ebcb936a705dbe88bcef28eaa8">
+        <source>
+    PeerTube is only in beta, and want to deliver the best countermeasures possible by the time the stable is released.
+    In the meantime, we want to test different ideas related to this issue:
+  </source>
+        <target>
+    PeerTube beta-n dago, eta ahalik eta babes onena ezartzeko gogoa dugu kaleratzen denerako.
+    Bitartean hainbat ideia saiatu nahi ditugu honetarako:
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d32608aba08c6bb3cc4e4e8ec6223e5f4e78ca19">
+        <source>Set a limit to the number of peers sent by the tracker</source>
+        <target>Tracker-ak bidaltzen dituen berdin kopurua mugatzea</target>
+        <context-group name="null">
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6d732b614143f862e69798046dc0868716547e5">
+        <source>Set a limit on the request frequency received by the tracker (being tested)</source>
+        <target>Tracker-ak jasotzen dituen eskarien maitasuna mugatzea (probetan orain)</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba77e356eaa5c06caaf5c8734c361d1a5415fe1c">
+        <source>Ring a bell if there are unusual requests (being tested)</source>
+        <target>Ezohiko eskariak badaude abisu ematea (probetan orain)</target>
+        <context-group name="null">
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18">
+        <source>Disable P2P from the administration interface</source>
+        <target>P2P desgaitzea administrazio paneletik</target>
+        <context-group name="null">
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6">
+        <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source>
+        <target>Bideoen erredundantzia programa automatiko bat: ez genuke jakingo bideoa deskargatu duen IP-a nahita ala automatikoki egin duen</target>
+        <context-group name="null">
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a835d8a12e14eb96919245a0bbafd8069c146578">
@@ -670,6 +1016,13 @@ Markatu kutxa hau, gorde konfigurazioa eta probatu zure instantziako bideo URL b
         <target>Eguneratu konfigurazioa</target>
         <context-group name="null">
           <context context-type="linenumber">276</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
+        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
+        <target>Konfigurazioa baliogabea dela dirudi. Bilatu zer egon daitekeen gaizki fitxa desberdinetan begiratuz.</target>
+        <context-group name="null">
+          <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1414,6 +1767,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         <target>Deskarga zuzena</target>
         <context-group name="null">
           <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ac01cebf6f87418b309a83d5ce965d77b4ab740">
+        <source>Torrent (magnet)</source>
+        <target>Torrent (magnet)</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -3116,6 +3476,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
         <target>Bataz besteko kalitatezko bideoen <x id="INTERPOLATION" equiv-text="{{seconds}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d0fdbf0a14c9ac51e12b52f8781152ba5c87793">
+        <source>This image is too large.</source>
+        <target>Irudi hau handiegia da.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

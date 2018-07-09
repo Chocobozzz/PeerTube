@@ -220,6 +220,35 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
+        <source>Change the language</source>
+        <target>Zmień język</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947">
+        <source>
+                My account
+              </source>
+        <target>
+                Moje konto
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d">
+        <source>
+                Log out
+              </source>
+        <target>
+                Wyloguj się
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
         <target>Zaloguj się</target>
@@ -300,6 +329,13 @@
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
         <target>Instancja</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
+        <source>PeerTube</source>
+        <target>PeerTube</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>

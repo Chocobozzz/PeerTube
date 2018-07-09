@@ -51,7 +51,7 @@
         <source>
     Login
   </source>
-        <target>Inloggen</target>
+        <target>Aanmelden</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -83,7 +83,7 @@
         <source>
           or create an account on another instance
         </source>
-        <target>of maak een account aan op een andere instantie</target>
+        <target>of maak een account aan op een andere server</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
         </context-group>
@@ -206,9 +206,43 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
+        <source>Change the language</source>
+        <target>Taal veranderen</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b8ccc4f1b3f839fca9bd59e072f715fd487d540f">
+        <source>
+               My public profile
+              </source>
+        <target>Mijn openbaar profiel</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947">
+        <source>
+                My account
+              </source>
+        <target>Mijn account</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d">
+        <source>
+                Log out
+              </source>
+        <target>Afmelden</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
-        <target>Inloggen</target>
+        <target>Aanmelden</target>
         <context-group name="null">
           <context context-type="linenumber">36</context>
         </context-group>
@@ -290,6 +324,22 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
+        <source>PeerTube</source>
+        <target>PeerTube</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5849c589454817c1e991639d3091d8da0e8d6bd2">
+        <source>
+  About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instance
+</source>
+        <target>Over de instantie <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
         <source>Description</source>
         <target>Beschrijving</target>
@@ -311,11 +361,159 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ac324b07e7c3c972f1c33894eda02dc2917eda5e">
+        <source>
+      this instance provides a baseline quota of <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> space for the videos of its users.
+    </source>
+        <target>deze instantie voorziet een basis-opslagquotum van <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> voor de video's van haar gebruikers.</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae">
+        <source>
+      this instance provides unlimited space for the videos of its users.
+    </source>
+        <target>deze instantie voorziet onbeperkte opslagruimte voor de video's van haar gebruikers.</target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1">
+        <source>
+    User registration is currently not allowed.
+  </source>
+        <target>Een account maken is momenteel niet toegelaten op deze instantie.</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
+        <source>
+  About PeerTube
+</source>
+        <target>Over PeerTube</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
+        <target>PeerTube is een gefedereerd (met ActivityPub) videostreamplatform dat peer-to-peer-technologie rechstreeks in de browser gebruikt (met WebTorrent).</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
+        <source>
+    It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>Het is vrije en open-source software, beschikbaar onder de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a">
+        <source>
+    For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>Kijk voor meer informatie op <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
         <target>Peer-to-peer en privacy</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6">
+        <source>
+    PeerTube uses the BitTorrent protocol to share bandwidth between users.
+    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+  </source>
+        <target>PeerTube gebruikt het BitTorrent-protocol om bandbreedte tussen gebruikers te delen. Dat betekent ook dat jouw IP-adres bijgehouden wordt in de BitTorrent-tracker van de PeerTube-instantie zolang je de video aan het bekijken bent.</target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
+        <source>What are the consequences?</source>
+        <target>Wat zijn de gevolgen?</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a">
+        <source>
+    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
+    In practice, this is much more difficult because:
+  </source>
+        <target>In theorie kan iemand met technische kennis een script maken dat bijhoudt welk IP-adres welke video aan het downloaden is. In de praktijk is dat wat moeilijker:</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64f96be62df4a95a0615b6f630ad25d6348a29d3">
+        <source>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </source>
+        <target>Voor elke video waarvan hij de kijkers wil bespioneren, moet hij een apart HTTP-request sturen. Om dat voor alle PeerTube-videos te doen, moeten er dus evenveel HTTP-requests als video's gebruikt worden (dat kan hoog oplopen).</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dd9a7a4ee66b0ff3fbb43ba8691ffcd042531611">
+        <source>
+      For each request sent, the tracker returns random peers at a limited number.
+      For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
+    </source>
+        <target>Voor elk request geeft de tracker een beperkt aantal willekeurige peers terug. Als er bijvoorbeeld 1000 peers beschikbaar zijn en de tracker steeds 20 peers teruggeeft, moeten er op zijn minst 50 requests gestuurd worden om alle peers te weten te komen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="694cf53adfc2afe8afabf713ab00fa114d5d2f8e">
+        <source>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </source>
+        <target>Die requests moeten regelmatig herhaald worden om te kunnen achterhalen wie begint of stopt met een video te bekijken. Het is gemakkelijk om zulk gedrag te detecteren.</target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="44bbecddbdf2aad1f4bad97cb806560553fb2ab3">
+        <source>
+      If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video
+    </source>
+        <target>Als een IP-adres opgeslagen is in de tracker, betekent dat niet dat de persoon achter dat adres (als die persoon bestaat) de video bekeken heeft</target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fec3239a860de66c718e3442df836b692b8568c3">
+        <source>
+      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
+    </source>
+        <target>Een IP-adres is vage </target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a545356de272b955258c2a2432b08ec637b65f7e">
+        <source>
+    Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more.
+    PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
+    Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
+  </source>
+        <target>Je IP-adres is geen privé-gegeven. Elke keer je een website bezoekt, is er een aantal entiteiten (bovenop de website die je effectief bezoekt) die je IP zien in hun logs: ISP's, routers, trackers, CDN's en meer.
+PeerTube is transparant: we waarschuwen je dat je, als je je IP-adres privé wil afschermen, je een VPN of de Tor-Browser moet gebruiken.
+Het Peer-to-Peer-mechanisme uit PeerTube halen zou je niet méér anonimiteit geven.</target>
+        <context-group name="null">
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a835d8a12e14eb96919245a0bbafd8069c146578">
@@ -625,20 +823,19 @@ Vink dit hokje aan, sla de configuratie op en test met een video-URL van je inst
     <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
               &lt;/pre&gt;
             </source>
-        <target>
-              Write CSS-code. Voorbeeld:&lt;br /&gt;
-              &lt;pre&gt;
+        <target>Schrijf CSS-code. Voorbeeld:&lt;br /&gt;
+&lt;pre&gt;
     body <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
       background-color: red;
     <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-              &lt;/pre&gt;
+&lt;/pre&gt;
 
-              Laat er &lt;em&gt;#custom-css&lt;/em&gt; aan voorafgaan om stijlen te overriden. Voorbeeld:
-              &lt;pre&gt;
+Laat er &lt;em&gt;#custom-css&lt;/em&gt; aan voorafgaan om stijlen te overriden. Voorbeeld:
+&lt;pre&gt;
     #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
       color: red;
     <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-              &lt;/pre&gt;
+&lt;/pre&gt;
             </target>
         <context-group name="null">
           <context context-type="linenumber">249</context>
@@ -1352,6 +1549,13 @@ Als je een video uploadt in dit kanaal, wordt deze tekst ingevuld in het "onders
   </source>
         <context-group name="null">
           <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8e6d54c4f760d9e90518eef5334211c48c0b71e2">
+        <source>Publication scheduled on </source>
+        <target>Publicatie uitgesteld tot</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4">

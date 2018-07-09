@@ -28,6 +28,27 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
+        <source>Truncated preview</source>
+        <target>画面预览</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196">
+        <source>Complete preview</source>
+        <target>完成预览</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f">
+        <source>Get help</source>
+        <target>帮助</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
         <source>
     Login
@@ -53,6 +74,33 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="02c4360c2d956e74ed6bb1f71e86812af0e19b87">
+        <source>
+          or create an account
+        </source>
+        <target>
+或创建一个帐户        </target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d6290381021b16febc426d3e3a52dda83991ce0b">
+        <source>
+          or create an account on another instance
+        </source>
+        <target>
+或在另一个机器上创建一个帐户        </target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="76e1f485e6ead4c84b606f46d413878881d66ad3">
+        <source>User registration is not allowed on this instance, but you can register on many others!</source>
+        <target>不允许用户注册，但您可以注册其他许多人！</target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407">
         <source>Password</source>
         <target>密码</target>
@@ -67,6 +115,13 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
+        <source>Forgot your password</source>
+        <target>忘记密码</target>
+        <context-group name="null">
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
         <source>Email</source>
         <target>电子邮件地址</target>
@@ -79,6 +134,54 @@
         <target>电子邮件地址</target>
         <context-group name="null">
           <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55">
+        <source>Send me an email to reset my password</source>
+        <target>输入电子邮件 重置密码</target>
+        <context-group name="null">
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
+        <source>
+    Reset my password
+  </source>
+        <target>
+重置密码  </target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7f3bdcce4b2e8c37cd7f0f6c92ef8cff34b039b8">
+        <source>Confirm password</source>
+        <target>确认密码</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3652e5c6e33165264d5271d06cc04ab7123b6df1">
+        <source>Confirmed password</source>
+        <target>确认密码</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8bdf8db5eeeaef83184b489b80c1557b516fb3c3">
+        <source>Reset my password</source>
+        <target>重置密码</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
+        <source>
+    Create an account
+  </source>
+        <target>
+创建一个帐户  </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a6807b834e01ce165aa61fad157b0ff4288b6bf1">
@@ -113,11 +216,86 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
+        <source>Change the language</source>
+        <target>更改语音</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b8ccc4f1b3f839fca9bd59e072f715fd487d540f">
+        <source>
+               My public profile
+              </source>
+        <target>
+               我的公开资料
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947">
+        <source>
+                My account
+              </source>
+        <target>
+                我的账号
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d">
+        <source>
+                Log out
+              </source>
+        <target>
+                注销
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
         <target>登录</target>
         <context-group name="null">
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
+        <source>Create an account</source>
+        <target>创建账号</target>
+        <context-group name="null">
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238">
+        <source>Videos</source>
+        <target>视频</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
+        <source>Trending</source>
+        <target>趋势</target>
+        <context-group name="null">
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
+        <source>Recently added</source>
+        <target>最近添加</target>
+        <context-group name="null">
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>本地</target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -139,6 +317,80 @@
         <target>上传</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
+        <source>No results.</source>
+        <target>没有结果</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
+        <source>Instance</source>
+        <target>例</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1">
+        <source>
+    User registration is currently not allowed.
+  </source>
+        <target>
+   不允许注册
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
+        <source>P2P &amp; Privacy</source>
+        <target>P2P隐私</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
+        <source>Stats</source>
+        <target>统计</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="512b045163a7187b2fc5d554e5f59fb3e49e174b">
+        <source>Short description</source>
+        <target>简单说明</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
+        <source>Videos Trending</source>
+        <target>视频</target>
+        <context-group name="null">
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ed013c2c29216501c688e9cb5f3a1c9fd9147b71">
+        <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
+        <target>此视频包含成人内容，确定继续播放吗？</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ba3d522e4146eefcbd5c222247c1e2423d27cd8">
+        <source>Mature or explicit content</source>
+        <target>成人内容</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
+        <source>Search</source>
+        <target>搜索</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
     </body>

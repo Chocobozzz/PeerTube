@@ -31,6 +31,10 @@
         <source>Aragonese</source>
         <target>Aragonesisch</target>
       </trans-unit>
+      <trans-unit id="American Sign Language">
+        <source>American Sign Language</source>
+        <target>Amerikanische Zeichensprache</target>
+      </trans-unit>
       <trans-unit id="Assamese">
         <source>Assamese</source>
         <target>Assamesisch</target>
@@ -62,6 +66,10 @@
       <trans-unit id="Bengali">
         <source>Bengali</source>
         <target>Bengali</target>
+      </trans-unit>
+      <trans-unit id="British Sign Language">
+        <source>British Sign Language</source>
+        <target>Englisch Zeichensprache</target>
       </trans-unit>
       <trans-unit id="Bislama">
         <source>Bislama</source>
@@ -114,6 +122,10 @@
       <trans-unit id="Cree">
         <source>Cree</source>
         <target>Cree-Sprache</target>
+      </trans-unit>
+      <trans-unit id="Chinese Sign Language">
+        <source>Chinese Sign Language</source>
+        <target>Chinesiche Zeichensprache</target>
       </trans-unit>
       <trans-unit id="Welsh">
         <source>Welsh</source>
@@ -179,6 +191,10 @@
         <source>Western Frisian</source>
         <target>Friesisch</target>
       </trans-unit>
+      <trans-unit id="French Sign Language">
+        <source>French Sign Language</source>
+        <target>Französiche Zeichensprache</target>
+      </trans-unit>
       <trans-unit id="Fulah">
         <source>Fulah</source>
         <target>Ful</target>
@@ -202,6 +218,10 @@
       <trans-unit id="Guarani">
         <source>Guarani</source>
         <target>Guaraní-Sprache</target>
+      </trans-unit>
+      <trans-unit id="German Sign Language">
+        <source>German Sign Language</source>
+        <target>Deutsche Zeichensprache</target>
       </trans-unit>
       <trans-unit id="Gujarati">
         <source>Gujarati</source>
@@ -278,6 +298,10 @@
       <trans-unit id="Japanese">
         <source>Japanese</source>
         <target>Japanisch</target>
+      </trans-unit>
+      <trans-unit id="Japanese Sign Language">
+        <source>Japanese Sign Language</source>
+        <target>Japanische Zeichensprache</target>
       </trans-unit>
       <trans-unit id="Kalaallisut">
         <source>Kalaallisut</source>
@@ -502,6 +526,10 @@
       <trans-unit id="Romanian">
         <source>Romanian</source>
         <target>Rumänisch</target>
+      </trans-unit>
+      <trans-unit id="Russian Sign Language">
+        <source>Russian Sign Language</source>
+        <target>Russische Zeichensprache</target>
       </trans-unit>
       <trans-unit id="Rundi">
         <source>Rundi</source>

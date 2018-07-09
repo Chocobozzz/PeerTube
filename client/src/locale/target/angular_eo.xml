@@ -90,7 +90,7 @@
           or create an account on another instance
         </source>
         <target>
-          aŭ kreu konton ĉe alia apero
+          aŭ kreu konton ĉe alia nodo
         </target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
@@ -98,7 +98,7 @@
       </trans-unit>
       <trans-unit id="76e1f485e6ead4c84b606f46d413878881d66ad3">
         <source>User registration is not allowed on this instance, but you can register on many others!</source>
-        <target>Registrado de novaj uzantoj ne estas permesata ĉe tiu ĉi apero, sed vi povas registriĝi ĉe multaj aliaj!</target>
+        <target>Registrado de novaj uzantoj ne estas permesata ĉe tiu ĉi nodo, sed vi povas registriĝi ĉe multaj aliaj!</target>
         <context-group name="null">
           <context context-type="linenumber">26</context>
         </context-group>
@@ -220,6 +220,46 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
+        <source>Change the language</source>
+        <target>Ŝanĝi la lingvon</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b8ccc4f1b3f839fca9bd59e072f715fd487d540f">
+        <source>
+               My public profile
+              </source>
+        <target>
+               Mia publika profilo
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947">
+        <source>
+                My account
+              </source>
+        <target>
+                Mia konto
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d">
+        <source>
+                Log out
+              </source>
+        <target>
+                Adiaŭi
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
         <target>Saluti</target>
@@ -299,9 +339,27 @@
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
-        <target>Apero</target>
+        <target>Nodo</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
+        <source>PeerTube</source>
+        <target>PeerTube</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5849c589454817c1e991639d3091d8da0e8d6bd2">
+        <source>
+  About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instance
+</source>
+        <target>
+  Pri la nodo « <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> »
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -325,11 +383,303 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ac324b07e7c3c972f1c33894eda02dc2917eda5e">
+        <source>
+      this instance provides a baseline quota of <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> space for the videos of its users.
+    </source>
+        <target>
+      ĉi tiu nodo donas bazan datumlimon de <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> da spaco por filmoj de siaj uzantoj.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae">
+        <source>
+      this instance provides unlimited space for the videos of its users.
+    </source>
+        <target>
+      ĉi tiu nodo donas senliman spacon por filmoj de siaj uzantoj.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1">
+        <source>
+    User registration is currently not allowed.
+  </source>
+        <target>
+    Registrado de novaj uzantoj nun ne estas permesata.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
+        <source>
+  About PeerTube
+</source>
+        <target>
+  Pri PeerTube
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
+        <target>PeerTube estas federa (ActivityPub) film-elsenda platformo, kiu uzas samtavolan teĥnikaron (WebTorrent) rekte en la reta foliumilo.</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
+        <source>
+    It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Ĝi estas libera programaro, sub la permesilo « <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ».
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a">
+        <source>
+    For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Por pliaj informoj, bonvolu rigardi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
         <target>Samtavola teĥnikaro ϗ privateco</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6">
+        <source>
+    PeerTube uses the BitTorrent protocol to share bandwidth between users.
+    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+  </source>
+        <target>
+    PeerTube uzas la protokolon « BitTorrent » por kunhavigi rettrafikon inter uzantoj.
+    Tio implicas, ke via IP-adreso estas konservata en kunordigilo por « BitTorrent » de la nodo, dum vi spektas aŭ elŝutas la filmon.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
+        <source>What are the consequences?</source>
+        <target>Kio sekvas el tio?</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a">
+        <source>
+    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
+    In practice, this is much more difficult because:
+  </source>
+        <target>
+    Teorie, iu sufiĉe teĥnike lerta povus krei skripton, kiu registrus, kiuj IP-adresoj elŝutas kiujn filmojn.
+    Praktike, tio estas multe pli malfacila, ĉar:
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64f96be62df4a95a0615b6f630ad25d6348a29d3">
+        <source>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </source>
+        <target>
+      HTTP-peto devas sendiĝi al ĉiu spionota kunordigilo.
+      Se oni volas spioni ĉiujn filmojn en PeerTube, oni devas sendi tiom da petoj, kiom da filmoj enestas (do eble multe)
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dd9a7a4ee66b0ff3fbb43ba8691ffcd042531611">
+        <source>
+      For each request sent, the tracker returns random peers at a limited number.
+      For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
+    </source>
+        <target>
+      Por ĉiu sendita peto, la kunordigilo redonas hazardajn samtavolanojn po limigita nombro.
+      Ekzemple, se la aro havas 1000 samtavolanojn, kaj la kunordigilo sendas nur 20 da tiuj por ĉiu peto, necesas almenaŭ 50 senditaj petoj por koni ĉiujn samtavolanojn en la aro.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="694cf53adfc2afe8afabf713ab00fa114d5d2f8e">
+        <source>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </source>
+        <target>
+      Tiuj petoj devas esti sendataj regule, por scii kiu komencis/ĉesis spekti filmon. Estas facile eltrovi tian konduton
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="44bbecddbdf2aad1f4bad97cb806560553fb2ab3">
+        <source>
+      If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video
+    </source>
+        <target>
+      Se IP-adreso estas konservita en la kunordigilo, tio ne signifas, ke la persono kun tiu IP-adreso (se iu ekzistas) la filmon spektis
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fec3239a860de66c718e3442df836b692b8568c3">
+        <source>
+      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
+    </source>
+        <target>
+      IP-adreso estas malpreciza informo: Kutime ĝi regule ŝanĝiĝas kaj povas reprezenti multajn personojn aŭ entojn
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5e62151cca9610f4248c9616909f7acaf5e5a32">
+        <source>
+      Web peers are not directly sent by the tracker: because we use WebRTC inside the web browser, the protocol is different from classic BitTorrent.
+      When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
+      See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
+    </source>
+        <target>
+      Retaj samtavolanoj ne estas rekte sendataj de la kunordigilo: Ĉar ni povas uzi teĥnikon « WebRTC » en la foliumilo, la protokolo malsamas tiun de « BitTorrent ».
+      Kiam vi uzas foliumilon, vi sendas signalon kun via IP-adreso al la kunordigilo, kiu hazarde elektos aliajn samtavolanojn, kiuj ricevos la datumon.
+      Vidu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>ĉi tiun dokumenton<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> por pliaj informoj
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50d8e8388f5ceab292850ed828f306c9f2cab389">
+        <source>
+    The worst-case scenario of an average person spying on their friends is quite unlikely.
+    There are much more effective ways to get that kind of information.
+  </source>
+        <target>
+    La plej malbona okazaro pri normala persono spionanta siajn amikojn estas malprobabla.
+    Ekzistas multe pli facilaj manieroj akiri tiajn informojn.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7801222ec2b04de2f61d3ff01d18a04bfa17505">
+        <source>How does PeerTube compares to YouTube?</source>
+        <target>Kiel PeerTube kompariĝas al YouTube?</target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2432705cbabcb92a8677338901dd5d655383ef4c">
+        <source>
+    The threats to privacy in YouTube are different from PeerTube's.
+    In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
+    Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
+  </source>
+        <target>
+    Minacoj al privateco malsamas inter YouTube kaj PeerTube.
+    Pri YouTube, la platformo kolektas multon da viaj personaj informoj (ne nur vian IP-adreson) por analizi ilin kaj spioni vin.
+    Plue, YouTube estas posedata de Google/Alphabet, firmao spionanta vin tra multaj diversaj retpaĝoj (per « AdSense » aŭ « Google Analytics »).
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
+        <source>What can I do to limit the exposure of my IP address?</source>
+        <target>Kion povas mi fari por limigi malkaŝadon de mia IP-adreso?</target>
+        <context-group name="null">
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a545356de272b955258c2a2432b08ec637b65f7e">
+        <source>
+    Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more.
+    PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
+    Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
+  </source>
+        <target>
+    Via IP-adreso estas publika, tial ĉiam, kiam vi vizitas retejon, pluraj agantoj pri la konekto (krom la cela retejo) vidas vian IP-adreson en sia protokolo: Retservestro, enkursigiloj, kunordigiloj, kaj aliaj.
+    PeerTube nenion kaŝas pri tio: Ni avertas vin, ke se vi volas teni vian IP-adreson privata, vi devas uzi virtualan privatan reton aŭ cepan enkursadon.
+    Pensi, ke forigo de samtavola teĥnikaro de PeerTube redonos al vi sennomecon, ne havas sencon.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
+        <source>What will be done to mitigate this problem?</source>
+        <target>Kio estas farota por kuraci tiun ĉi problemon?</target>
+        <context-group name="null">
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8f1c6b816aaf1ebcb936a705dbe88bcef28eaa8">
+        <source>
+    PeerTube is only in beta, and want to deliver the best countermeasures possible by the time the stable is released.
+    In the meantime, we want to test different ideas related to this issue:
+  </source>
+        <target>
+    PeerTube estas nur beta-versia, kaj ni volas liveri kiel eble plej bonajn ŝirmojn kiam la stabilo versio eldoniĝos.
+    Dume, ni volas testi diversajn ideojn pri la problemo:
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d32608aba08c6bb3cc4e4e8ec6223e5f4e78ca19">
+        <source>Set a limit to the number of peers sent by the tracker</source>
+        <target>Limigi nombron da samtavolanoj sendatan de la kunordigilo</target>
+        <context-group name="null">
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6d732b614143f862e69798046dc0868716547e5">
+        <source>Set a limit on the request frequency received by the tracker (being tested)</source>
+        <target>Limigi oftecon de petoj al la kunordigilo (nun testata)</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba77e356eaa5c06caaf5c8734c361d1a5415fe1c">
+        <source>Ring a bell if there are unusual requests (being tested)</source>
+        <target>Sciigi iun okaze de strangaj petoj (nun testata)</target>
+        <context-group name="null">
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18">
+        <source>Disable P2P from the administration interface</source>
+        <target>Malŝalti samtavolan teĥnikaron el la administra interfaco.</target>
+        <context-group name="null">
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6">
+        <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source>
+        <target>Memfara rekonado de ripetataj videoj: ni ne scius, ĉu la IP-adreso elŝulis la videon intence, aŭ ĉu tion faris la memfara programo</target>
+        <context-group name="null">
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a835d8a12e14eb96919245a0bbafd8069c146578">
@@ -444,6 +794,13 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e">
+        <source>Display</source>
+        <target>Montri</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
         <source>Signup enabled</source>
         <target>Registriĝoj ŝaltitaj</target>
@@ -507,6 +864,31 @@
           <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c">
+        <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
+        <target>Indikas konton de Twitter por la retejo aŭ platformo, sur kiu la afero publikiĝis.</target>
+        <context-group name="null">
+          <context context-type="linenumber">144</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c0716c28b9d4c9e0b2fd6031334394214e5f9605">
+        <source>Instance whitelisted by Twitter</source>
+        <target>Nodo permesata de Twitter</target>
+        <context-group name="null">
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3f008a1a07ca42c6ad258fde1bbd80ed74ada19b">
+        <source>If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.&lt;br /&gt;
+If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.&lt;br /&gt;&lt;br /&gt;
+Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; to see if you instance is whitelisted.</source>
+        <target>Se via nodo estas permesata de Twitter, film-ludujo estos enkorpigita en la abonfluo en Twitter post kunhavigo de la filmo.&lt;br /&gt;
+Se la nodo ne estas permesata, ni ligos al la filmo sur via nodo per bildo.&lt;br /&gt;&lt;br /&gt;
+Marku ĉi tiun markbutonon, konservu la agordon, kaj provu ĝin kun ligilo al filmo sur via nodo (https://ekzemplo.net/videos/watch/blablabla) en &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; por vidi, ĉu vio nodo estas permesata.</target>
+        <context-group name="null">
+          <context context-type="linenumber">162</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
         <source>Services</source>
         <target>Servoj</target>
@@ -565,7 +947,7 @@
       </trans-unit>
       <trans-unit id="bf91318659ada3d3ad1b0ca1e63ae427e5a857d5">
         <source>Previews are not federated. We fetch them directly from the origin instance and cache them.</source>
-        <target>Minoritatoj ne estas federataj. Ni prenas kaj kaŝmemoras ilin rekte el la fonta apero.</target>
+        <target>Minoritatoj ne estas federataj. Ni prenas kaj kaŝmemoras ilin rekte el la fonta nodo.</target>
         <context-group name="null">
           <context context-type="linenumber">215</context>
         </context-group>
@@ -586,7 +968,7 @@
       </trans-unit>
       <trans-unit id="fda2339a6e6ba017ee43b560caf660ed4022333c">
         <source>Write directly JavaScript code.&lt;br /&gt;Example: &lt;pre&gt;console.log('my instance is amazing');&lt;/pre&gt;</source>
-        <target>Skribu rekte Ĝavoskriptan kodon.&lt;br /&gt;Ekzemple: &lt;pre&gt;console.log('mia apero bonegas');&lt;/pre&gt;</target>
+        <target>Skribu rekte Ĝavoskriptan kodon.&lt;br /&gt;Ekzemple: &lt;pre&gt;console.log('mia nodo bonegas');&lt;/pre&gt;</target>
         <context-group name="null">
           <context context-type="linenumber">233</context>
         </context-group>
@@ -640,6 +1022,13 @@
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
+        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
+        <target>Ŝajnas, ke la agordo estas nevalida. Bonvolu serĉi eblajn erarojn en la langetoj.</target>
+        <context-group name="null">
+          <context context-type="linenumber">277</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
         <source>
       Users
@@ -660,6 +1049,131 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c9406213cf05033eda4d3df678217b5eb822315">
+        <source>
+      Video abuses
+    </source>
+        <target>
+      Filmaj misuzoj
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="96ccede058f0022f34230c3adc09e60076b6d037">
+        <source>
+      Video blacklist
+    </source>
+        <target>
+      Fortenataj videoj
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bea88c54fdccfdc9f687b0ffe9bf6a653d19368">
+        <source>
+      Jobs
+    </source>
+        <target>
+      Taskoj
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9c6ce37623b626a102002901ca12c37e7a3a7f13">
+        <source>
+      Configuration
+    </source>
+        <target>
+      Agordo
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
+        <source>1 host (without "http://") per line</source>
+        <target>Po 1 gastiganto (sen « http:// ») linie</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f7a7a00999ccbd126cbb8e74f5dd1724942dd507">
+        <source>
+    It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
+  </source>
+        <target>
+    Ŝajne vi ne uzas servilon kun HTTPS. Por aboni aliajn servilojn, necesas aktiva TLS ĉe via retservilo.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="456c6383d8e7cd15aadbcdc196d4ae7a70092437">
+        <source>Add following</source>
+        <target>Aldoni sekvajn</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
+        <source>ID</source>
+        <target>Identigilo</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="380e20a1e13d9489c69f6dbea7da19025ab6eb25">
+        <source>Score</source>
+        <target>Poentaro</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
+        <source>Host</source>
+        <target>Gastiganto</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
+        <source>State</source>
+        <target>Stato</target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
+        <source>Created <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Kreita <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5fccee488a9ea908c16d2ab9dbdaf264f1aac479">
+        <source>Manage follows</source>
+        <target>Administri abonojn</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a9f2501fcb2ff71f1376c2d2fbbbd49f200e6c8f">
+        <source>Jobs list</source>
+        <target>Listo de taskoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
+        <source>Type</source>
+        <target>Speco</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc">
@@ -711,6 +1225,19 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
+        <source>
+      Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+    </source>
+        <target>
+      Transkodado estas permesata sur la servilo. Datumlimo por filmoj pritemas nur la <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>originalan<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> filmon. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      Pleje, tiu ĉi uzanto povus uzi ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
         <source>Users list</source>
         <target>Listo de uzantoj</target>
@@ -723,6 +1250,13 @@
         <target>Salutnomo <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0c7e8870481f1287af6a142f538391d8c16c2408">
+        <source>Video abuses list</source>
+        <target>Listo de filmaj misuzoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4ba250869daa372b54d24fafc0ea934769ee4076">
@@ -760,6 +1294,13 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="00ecde6001106fe7406a34cc3459cc5b88e4aec1">
+        <source>Blacklisted videos</source>
+        <target>Fortenataj videoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7c02d113e9b7884037834cddecf2a32a5538b35b">
         <source>Name <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
         <target>Nomo <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
@@ -779,6 +1320,20 @@
         <target>Konsterna</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8c87d9527af7ff2ada84c911516a9e43a352e401">
+        <source>UUID</source>
+        <target>Universala uzantonumero</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86f26b106c67be3c2e98b82766656e5d9da86dff">
+        <source>Unblacklist</source>
+        <target>Reteni</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
@@ -814,6 +1369,13 @@
         <target>Ŝanĝi profilbildon</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c860c88df9ad58b1187084251340b232cdf0a7f9">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</source>
+        <target>(postafiksoj: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, pleja grando: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -872,11 +1434,27 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9277e6f7b8ed9538d1f6ad812b620384252ffe56">
+        <source>Update <x id="INTERPOLATION" equiv-text="{{ videoChannel?.displayName }}"/></source>
+        <target>Ĝisdatigi <x id="INTERPOLATION" equiv-text="{{ videoChannel?.displayName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9">
         <source>Display name</source>
         <target>Prezenta nomo</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="74728de5289ea2ff3f553bc2b48f1811680b931a">
+        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
+When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target>Mallonga teksto por sciigi homojn, kiel ili povas subteni vin.&lt;br /&gt;&lt;br /&gt;
+Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos tiun ĉi tekston.</target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
@@ -944,6 +1522,13 @@
         <target>Kreita de <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e006ed166ce188cab168e1ca90435b33d042d913">
+        <source>Go the owner account page</source>
+        <target>Iri al paĝo de posedanto de la konto</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1380539d91f77f565de6e21ce210da891e6644b8">
@@ -1058,6 +1643,13 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
+        <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
+        <target>Plani publikigon (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>Tiu ĉi filmo povas esti konsterna aŭ maltaŭga por neplenaĝaj.</target>
@@ -1067,7 +1659,7 @@
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
-        <target>Iuj aperoj ne listigas filmojn, kiuj estas konsternaj aŭ maltaŭgaj por neplenaĝuloj.</target>
+        <target>Iuj nodoj ne listigas filmojn, kiuj estas konsternaj aŭ maltaŭgaj por neplenaĝuloj.</target>
         <context-group name="null">
           <context context-type="linenumber">119</context>
         </context-group>
@@ -1077,6 +1669,20 @@
         <target>Ŝalti komentojn al filmo</target>
         <context-group name="null">
           <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
+        <source>Wait transcoding before publishing the video</source>
+        <target>Atendi transkodadon antaŭ publikigi la filmon</target>
+        <context-group name="null">
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0001ec53fe3dfd603b7ad80fd32d262170e3d9a5">
+        <source>If you decide to not wait transcoding before publishing the video, it can be unplayable until it transcoding ends.</source>
+        <target>Se vi decides ne atendi transkodadon antaŭ publikigi la filmon, ĝi povas esti neludebla ĝis la transkodado finiĝos.</target>
+        <context-group name="null">
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1100,11 +1706,43 @@
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
+        <source>Support</source>
+        <target>Subteno</target>
+        <context-group name="null">
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0">
+        <source>Short text to tell people how they can support you (membership platform...).</source>
+        <target>Mallonga teksto por sciigi homojn, kiel ili povas subteni vin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">160</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>Specialaj agordoj</target>
         <context-group name="null">
           <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c07377d8b52fde03fcf70824a980346b9222d056">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</source>
+        <target>(postafiksoj: <x id="INTERPOLATION" equiv-text="{{ videoImageExtensions }}"/>, pleja grando: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2335f0bd17c63d835b50cfbbcea6c459cb1314c0">
+        <source>
+    Update <x id="INTERPOLATION" equiv-text="{{ video?.name }}"/>
+  </source>
+        <target>
+    Ĝisdatigi filmon « <x id="INTERPOLATION" equiv-text="{{ video?.name }}"/> »
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1133,6 +1771,13 @@
         <target>Rekta elŝuto</target>
         <context-group name="null">
           <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ac01cebf6f87418b309a83d5ce965d77b4ab740">
+        <source>Torrent (magnet)</source>
+        <target>Torento (magneta)</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -1165,6 +1810,13 @@
             </target>
         <context-group name="null">
           <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
+        <source>Submit</source>
+        <target>Sendi</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
@@ -1210,11 +1862,40 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fbc205ea3d06fa8f65973fa3b490ae172f71c087">
+        <source>
+    This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>
+  </source>
+        <target>
+    Tiu ĉi filmo publikiĝos je <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="643ab402461b1169eebbe2ed790e12a9a83551aa">
+        <source>
+            <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
+          </source>
+        <target>
+            <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> rigardoj
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33">
         <source>Go the channel page</source>
         <target>Iri al paĝo de la kanalo</target>
         <context-group name="null">
           <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="57075c778cf28b81272df4eb17da944366c98e51">
+        <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and subscribe there. Subscription as a PeerTube user is being worked on in &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/470'&gt;#470&lt;/a&gt;.</source>
+        <target>Vi povas aboni tiun ĉi konton per iu ajn fediversa nodo, kiu subtenas protokolon « ActivityPub ». Ekzemple, en « Mastodon » aŭ « Pleroma », vi povas tajpi en serĉujon &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; kaj aboni tie. Abonado kiel uzanto de PeerTube estas prilaborata en &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/470'&gt;#470&lt;/a&gt;.</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ccc07df383b7a32be3e2e105faa5488caf261c1c">
@@ -1264,6 +1945,20 @@
         <target>Raporti tiun ĉi videon</target>
         <context-group name="null">
           <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
+        <source>Blacklist</source>
+        <target>Forteni</target>
+        <context-group name="null">
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037">
+        <source>Blacklist this video</source>
+        <target>Forteni ĉi tiun filmon</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cd27f761b923a5bdb16ba9844da632edd878f1b1">
@@ -1385,6 +2080,13 @@
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
+        <source>Get more information</source>
+        <target>Akiri pliajn informojn</target>
+        <context-group name="null">
+          <context context-type="linenumber">198</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
         <source>
       OK
@@ -1405,6 +2107,13 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="da8a38f72f92714cf8680560c99982dc651480d5">
+        <source>You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and find back the video. Direct commenting capabilities are being worked on in &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</source>
+        <target>Vi povas komenti aŭ sur la paĝo de via nodo, kie tiu ĉi filmo estas federata kun via konto ĉe PeerTube, aŭ per iu ajn nodo en fediverso, subtenanta protokolon « ActivityPub ». Ekzemple, en Mastodon aŭ Pleroma vi povas tajpi en serĉujon « &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; » kaj retrovi la filmon. Rektaj ebloj komenti estas prilaborataj en &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
@@ -1464,6 +2173,13 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="814d28bf9dcbd3122254e664b446ac8e0442bc08">
+        <source>Error getting about from server</source>
+        <target>Eraro ricevante prion de la servilo</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="37b56526e384f843a15323dc730b484a97b4c968">
         <source>No description</source>
         <target>Neniu priskribo</target>
@@ -1471,9 +2187,44 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2f03e577e8f81a9f8be0095f93e1f9376c6eedc9">
+        <source>Published videos</source>
+        <target>Publikigitaj filmoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="369ef5e9c0dd1251abdbf699a5db408bca10777f">
+        <source>Published <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> videos</source>
+        <target>Publikigis <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> filmojn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
         <source>Error</source>
         <target>Eraro</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a71a0aee65258179e90ecf0841c0a68f95beed">
+        <source>You set custom <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </source>
+        <target>Vi agordis propran <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="865bc18d22e223101ede0916967ead0abd515d0e">
+        <source>This could lead to security issues or bugs if you do not understand it. </source>
+        <target>Tio ĉi povas estigi sekurecajn problemojn aŭ erarojn, se vi ne komprenas ĝin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="262e18b2efb5912651684a522fc08d77c99972d0">
+        <source>Are you sure you want to update the configuration?</source>
+        <target>Ĉu vi certe volas ĝisdatigi la agordon?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1488,6 +2239,83 @@
       <trans-unit id="75f4bb68ee4c6b282abfd9d8d32be22c6202794d">
         <source>to confirm.</source>
         <target>por konfirmi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba">
+        <source>Success</source>
+        <target>Sukceso</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b9e64712e3e5c342ce9cd32eec6cd7d6c00f4048">
+        <source>Configuration updated.</source>
+        <target>Agordo ĝisdatigita</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc5731a28a99b25c62d43333ceebb250d60aff84">
+        <source><x id="INTERPOLATION" equiv-text="{{host}}"/> is not valid</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> ne validas</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e02f50674f1d96966384dc096beb42d4973997df">
+        <source>You need to specify hosts to follow.</source>
+        <target>Vi devas specifi abonotajn gastigantojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2a114eb000e7c38e8ad4b1768821bdf6e946d71">
+        <source>Hosts need to be unique.</source>
+        <target>Gastigantoj devas esti unikaj.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6718d6aaf5bcd1692eed48daa61d2bed62c1f50">
+        <source>If you confirm, you will send a follow request to:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> - </source>
+        <target>Se vi konfirmos, vi sendos abonpeton al:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> - </target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1266acb081ef0324c4a38ae2d514dd75d8b38409">
+        <source>Follow new server(s)</source>
+        <target>Aboni nova(j)n servilo(j)n</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="950f5111d567e5c0e971f07c26e8c2be1d919a8e">
+        <source>Follow request(s) sent!</source>
+        <target>Abonpetoj senditaj!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5729c34a858c78daa1aa606f62a3665527cf97e6">
+        <source>Do you really want to unfollow <x id="INTERPOLATION" equiv-text="{{host}}"/>?</source>
+        <target>Ĉu vi certe volas malaboni <x id="INTERPOLATION" equiv-text="{{host}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a89875525c82ab81ffe32e481a5475b43d0c2902">
+        <source>Unfollow</source>
+        <target>Malaboni</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fb4e35e2b0ea2abc1f71295a4b34830e57c07bd0">
+        <source>You are not following <x id="INTERPOLATION" equiv-text="{{host}}"/> anymore.</source>
+        <target>Vi ne plu abonas je <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1509,6 +2337,69 @@
       <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
         <source>Followers</source>
         <target>Abonantoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
+        <source>Unlimited</source>
+        <target>Senlima</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="364463fab6c5714118d6449561a0f8de1cc10bfa">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> created.</source>
+        <target>Uzanto <x id="INTERPOLATION" equiv-text="{{username}}"/> kreita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="964865a3cd90b4af99902f071644a4b2aede4c32">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> updated.</source>
+        <target>Uzanto <x id="INTERPOLATION" equiv-text="{{username}}"/> ĝisdatigita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9910122dfedd2eaa544a990f1430e5b82a76d99f">
+        <source>Update user</source>
+        <target>Ĝisdatigi uzanton</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
+        <source>You cannot delete root.</source>
+        <target>Vi ne povas forigi ĉefuzanton.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9ef88654aab4b2df4fa2083f33caa0c5419c1a60">
+        <source>Do you really want to delete this user?</source>
+        <target>Ĉu vi certe volas forigi ĉi tiun uzanton?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target>Uzanto <x id="INTERPOLATION" equiv-text="{{username}}"/> forigita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4733ad1d7e63960438c0203b9a64f165b5fc84f2">
+        <source>Do you really want to remove this video from the blacklist ? It will be available again in the videos list.</source>
+        <target>Ĉu vi certe volas forigi tiun ĉi filmon de la fortenlisto? Ĝi estos denove atingebla per la listo de filmoj.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
+        <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
+        <target>Filmo <x id="INTERPOLATION" equiv-text="{{name}}"/> forigita de la fortenlisto.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1618,9 +2509,46 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3">
+        <source>Published</source>
+        <target>Publikigita</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8e6d54c4f760d9e90518eef5334211c48c0b71e2">
+        <source>Publication scheduled on </source>
+        <target>Publikigo planita je</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4a7e91ebe1cf184db5f2bfecf9c16ff81c9e2c02">
         <source>Waiting transcoding</source>
         <target>Atendanta transkodadon</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a">
+        <source>To transcode</source>
+        <target>Transkodotaj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7">
+        <source>Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>.
+</source>
+        <target>Ne povas ricevi salutilojn kiel kliento de « OAuth Client »: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8d9b4f4b69108c3c9aa0f3b0dbde87786ba9b319">
+        <source>Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <target>Certigu ĝustan agordon de PeerTube, precipe de la sekcio « retservilo ».</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1634,6 +2562,7 @@
       </trans-unit>
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
         <source>Confirm</source>
+        <target>Konfirmi</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1641,6 +2570,13 @@
       <trans-unit id="4fe245955c7ec7d53a4236fda7a985edcb63124c">
         <source>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{ email }}"/>.</source>
         <target>Retletero kun instrukcioj pri restarigo de pasvorto estos sendota al <x id="INTERPOLATION" equiv-text="{{ email }}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
+        <source>Unable to find user id or verification string.</source>
+        <target>Ne povas trovi identigilon aŭ kontrolan ĉenon de uzanto</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1654,7 +2590,7 @@
       </trans-unit>
       <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323">
         <source>Instance name is required.</source>
-        <target>Necesas nomo de apero.</target>
+        <target>Necesas nomo de nodo.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1897,6 +2833,20 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e7182e21e9566cc81c83f92727461322f71fd69b">
+        <source>Support text must be at least 3 characters long.</source>
+        <target>Teksto pri subteno devas havi almenaŭ 3 signojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fe80c71378e127dda2dda9dbcd66b059d362813">
+        <source>Support text cannot be more than 500 characters long.</source>
+        <target>Teksto pri subteno ne povas havi pli ol 500 signojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6ca60e0f6dfbc0073b0514bce7d273150b0b9e79">
         <source>Comment is required.</source>
         <target>Necesas komento.</target>
@@ -1939,6 +2889,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
+        <source>Video privacy is required.</source>
+        <target>Necesas privateco de filmo.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16">
         <source>Video channel is required.</source>
         <target>Necesas filma kanalo.</target>
@@ -1970,6 +2927,41 @@
       <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea">
         <source>A tag should be less than 30 characters long.</source>
         <target>Etikedo havu malpli ol 30 signojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
+        <source>Video support must be at least 3 characters long.</source>
+        <target>Loka teksto pri subteno devas havi almenaŭ 3 signojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e61f1c05121fa5effa6ccddf5be6dcf1c822ff4b">
+        <source>Video support cannot be more than 500 characters long.</source>
+        <target>Loka teksto pri subteno ne povas havi pli ol 500 signojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
+        <source>A date is required to schedule video update.</source>
+        <target>Necesas dato por plani ĝisdatigon de filmo.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4">
+        <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
+        <target>Ĉiuj nekonservitaj datumoj perdiĝos; ĉu vi certe volas forlasi ĉi tiun paĝon?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a8059e31694578c1b0344a76a345357dd60e8f01">
+        <source>Warning</source>
+        <target>Averto</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2380,6 +3372,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="457f161d3ca706b8de263b0cd58e493d54e7d4c5">
+        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> compatible that supports:</source>
+        <target>Subtenas « <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> » kaj:</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980">
         <source>Emphasis</source>
         <target>Emfazo</target>
@@ -2450,6 +3449,55 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
+        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
+        <target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24">
+        <source>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</source>
+        <target>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> da filmoj je 1920×1080</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> da filmoj je 1280×720</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> da filmoj mezkvalitaj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d0fdbf0a14c9ac51e12b52f8781152ba5c87793">
+        <source>This image is too large.</source>
+        <target>Tiu ĉi bildo tro grandas.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e876f14d96cdf3b334c080fe795a2e0ab53aa3a">
+        <source>Your video was uploaded in your account and is private.</source>
+        <target>Via filmo estas alŝutita al via konto, kaj privata.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="24840228f2826b66252cfcaab9820b1c7e0da264">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target>Sed rilataj informoj (etikedoj, priskribo…) perdiĝos; ĉu vi certe volas folasi ĉi tiun paĝon?</target>
@@ -2485,9 +3533,58 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d31d39e8ee9b2f20bffb3468ee062eaa5409c59f">
+        <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{ videoSize }}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{ videoQuotaUsed }}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{ videoQuota }}"/>)</source>
+        <target>Via datumlimo por filmoj superfluas kun tiu ĉi filmo (grando: <x id="INTERPOLATION" equiv-text="{{ videoSize }}"/>, uzitaj: <x id="INTERPOLATION_1" equiv-text="{{ videoQuotaUsed }}"/>, datumlimo: <x id="INTERPOLATION_2" equiv-text="{{ videoQuota }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
+        <source>Video published.</source>
+        <target>Filmo publikigita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="757e9c083c8f3d578bd74f055cc337c72417e187">
+        <source>Video updated.</source>
+        <target>Filmo ĝisdatigita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aeb61b334cac080733c3e03766165a346bbf42fd">
+        <source> <x id="INTERPOLATION" equiv-text="{{totalReplies}}"/> replies will be deleted too.</source>
+        <target> <x id="INTERPOLATION" equiv-text="{{totalReplies}}"/> respondoj ankaŭ estos forigitaj.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
         <source>Video reported.</source>
         <target>Filmo raportita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>Kopiita</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23b2c2f4dd69e29c3bff00469e259dcb01de5633">
+        <source>Do you really want to blacklist this video?</source>
+        <target>Ĉu vi certe volas forteni tiun ĉi filmon?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cafd8ec6020e69f241a107b1cb7081bd9e773d4e">
+        <source>Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> had been blacklisted.</source>
+        <target>Filmo « <x id="INTERPOLATION" equiv-text="{{videoName}}"/> » estis fortenita.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
