@@ -94,6 +94,14 @@ export class PeerTubePlayer {
   }
 
   /**
+   * Get the current volume level in the embed.
+   * @param value A number from 0 to 1
+   */
+  async getVolume(): Promise<number> {
+    return await this.sendMessage<void, number>('setVolume')
+  }
+
+  /**
    * Tell the embed to seek to a specific position (in seconds)
    * @param seconds 
    */

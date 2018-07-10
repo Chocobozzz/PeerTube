@@ -58,6 +58,7 @@ class PeerTubeEmbedApi {
     channel.bind('pause', (txn, params) => this.embed.player.pause())
     channel.bind('seek', (txn, time) => this.embed.player.currentTime(time))
     channel.bind('setVolume', (txn, value) => this.embed.player.volume(value))
+    channel.bind('getVolume', (txn, value) => this.embed.player.volume())
     channel.bind('isReady', (txn, params) => this.isReady)
     channel.bind('setResolution', (txn, resolutionId) => this.setResolution(resolutionId))
     channel.bind('getResolutions', (txn, params) => this.resolutions)
