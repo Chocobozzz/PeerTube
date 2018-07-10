@@ -22,6 +22,7 @@ import * as Channel from 'jschannel'
 
 import { VideoDetails } from '../../../../shared'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
+import { PeerTubeResolution } from '../player/definitions';
 
 /**
  * Embed API exposes control of the embed player to the outside world via 
@@ -33,15 +34,11 @@ class PeerTubeEmbedApi {
   ) {
   }
 
-  private get player() {
-    return this.embed.player
-  }
+  private channel : Channel.MessagingChannel
+  private isReady = false
+  private resolutions : PeerTubeResolution[] = null
 
-  private get element() {
-    return this.embed.videoElement
-  }
-
-  public initialize() {
+  initialize() {
     this.constructChannel()
     this.setupStateTracking()
 
@@ -49,39 +46,40 @@ class PeerTubeEmbedApi {
 
     this.notifyReady()
   }
+  
+  private get element() {
+    return this.embed.videoElement
+  }
 
   private constructChannel() {
     let channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.scope })
     
-    channel.bind('play', (txn, params) => this.player.play())
-    channel.bind('pause', (txn, params) => this.player.pause())
-    channel.bind('seek', (txn, time) => this.player.currentTime(time))
-    channel.bind('setVolume', (txn, value) => this.player.volume(value))
+    channel.bind('play', (txn, params) => this.embed.player.play())
+    channel.bind('pause', (txn, params) => this.embed.player.pause())
+    channel.bind('seek', (txn, time) => this.embed.player.currentTime(time))
+    channel.bind('setVolume', (txn, value) => this.embed.player.volume(value))
     channel.bind('isReady', (txn, params) => this.isReady)
     channel.bind('setResolution', (txn, resolutionId) => this.setResolution(resolutionId))
     channel.bind('getResolutions', (txn, params) => this.resolutions)
-    channel.bind('setPlaybackRate', (txn, playbackRate) => this.player.playbackRate(playbackRate))
-    channel.bind('getPlaybackRate', (txn, params) => this.player.playbackRate())
+    channel.bind('setPlaybackRate', (txn, playbackRate) => this.embed.player.playbackRate(playbackRate))
+    channel.bind('getPlaybackRate', (txn, params) => this.embed.player.playbackRate())
     channel.bind('getPlaybackRates', (txn, params) => this.embed.playerOptions.playbackRates)
 
     this.channel = channel
   }
 
-  private channel : Channel.MessagingChannel
-  private isReady = false
-
   private setResolution(resolutionId : number) {
-    if (resolutionId === -1 && this.player.peertube().isAutoResolutionForbidden()) 
+    if (resolutionId === -1 && this.embed.player.peertube().isAutoResolutionForbidden()) 
       return
 
     // Auto resolution
     if (resolutionId === -1) {
-      this.player.peertube().enableAutoResolution()
+      this.embed.player.peertube().enableAutoResolution()
       return
     }
 
-    this.player.peertube().disableAutoResolution()
-    this.player.peertube().updateResolution(resolutionId)
+    this.embed.player.peertube().disableAutoResolution()
+    this.embed.player.peertube().updateResolution(resolutionId)
   }
 
   /**
@@ -122,17 +120,15 @@ class PeerTubeEmbedApi {
 
     // PeerTube specific capabilities
 
-    this.player.peertube().on('autoResolutionUpdate', () => this.loadResolutions())
-    this.player.peertube().on('videoFileUpdate', () => this.loadResolutions())
+    this.embed.player.peertube().on('autoResolutionUpdate', () => this.loadResolutions())
+    this.embed.player.peertube().on('videoFileUpdate', () => this.loadResolutions())
   }
-
-  private resolutions = null
 
   private loadResolutions() {
     let resolutions = []
-    let currentResolutionId = this.player.peertube().getCurrentResolutionId()
+    let currentResolutionId = this.embed.player.peertube().getCurrentResolutionId()
 
-    for (const videoFile of this.player.peertube().videoFiles) {
+    for (const videoFile of this.embed.player.peertube().videoFiles) {
       let label = videoFile.resolution.label
       if (videoFile.fps && videoFile.fps >= 50) {
         label += videoFile.fps
@@ -161,9 +157,17 @@ class PeerTubeEmbed {
     this.videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
   }
 
-  public videoElement : HTMLVideoElement
-  public player : any
-  public playerOptions : any
+  videoElement : HTMLVideoElement
+  player : any
+  playerOptions : any
+  api : PeerTubeEmbedApi = null
+  autoplay : boolean = false
+  controls : boolean = true
+  muted : boolean = false
+  loop : boolean = false
+  enableApi : boolean = false
+  startTime : number = 0
+  scope : string = 'peertube'
 
   static async main() {
     const videoContainerId = 'video-container'
@@ -214,8 +218,6 @@ class PeerTubeEmbed {
     return params.has(name) ? params.get(name) : defaultValue
   }
 
-  private api : PeerTubeEmbedApi = null
-
   private initializeApi() {
     if (!this.enableApi)
       return
@@ -231,14 +233,6 @@ class PeerTubeEmbed {
       console.error(e)
     }
   }
-
-  autoplay : boolean = false
-  controls : boolean = true
-  muted : boolean = false
-  loop : boolean = false
-  enableApi : boolean = false
-  startTime : number = 0
-  scope : string = 'peertube'
 
   private loadParams() {
     try {
@@ -260,7 +254,7 @@ class PeerTubeEmbed {
     }
   }
 
-  async initCore() {
+  private async initCore() {
     const urlParts = window.location.href.split('/')
     const lastPart = urlParts[urlParts.length - 1]
     const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
