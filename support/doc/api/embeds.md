@@ -2,6 +2,12 @@
 
 PeerTube lets you embed videos and programmatically control their playback. This documentation covers how to interact with the PeerTube Embed API.
 
+## Playground
+
+Any PeerTube embed URL (ie `https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93da-e8d3c12c305a`) can be viewed as an embedding playground which 
+allows you to test various aspects of PeerTube embeds. Simply replace `/embed` with `/test-embed` and visit the URL in a browser. 
+For instance, the playground URL for the above embed URL is `https://my-instance.example.com/videos/test-embed/52a10666-3a18-4e73-93da-e8d3c12c305a`.
+
 ## Quick Start
 
 Given an existing PeerTube embed `<iframe>`, one can use the PeerTube Embed API to control it by first including the library. You can include it via Yarn with:
