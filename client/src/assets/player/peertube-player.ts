@@ -29,10 +29,15 @@ function getVideojsOptions (options: {
   peertubeLink: boolean,
   poster: string,
   startTime: number
-  theaterMode: boolean
+  theaterMode: boolean,
+  controls?: boolean,
+  muted?: boolean,
+  loop?: boolean
 }) {
   const videojsOptions = {
-    controls: true,
+    controls: options.controls !== undefined ? options.controls : true,
+    muted: options.controls !== undefined ? options.muted : false,
+    loop: options.loop !== undefined ? options.loop : false,
     poster: options.poster,
     autoplay: false,
     inactivityTimeout: options.inactivityTimeout,
