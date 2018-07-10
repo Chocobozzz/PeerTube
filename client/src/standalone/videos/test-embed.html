@@ -1,132 +1,51 @@
 <html>
 <head>
-    <style>
-        * {
-            font-family: sans-serif;
-        }
-
-        iframe {
-            width: 33vw;
-            height: calc(33vw * 0.5625);
-            border: none;
-        }
-    </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-
-    <h1>PeerTube Embed Test</h1>
-    <script>        
-        const urlParts = window.location.href.split('/')
-        const lastPart = urlParts[urlParts.length - 1]
-        const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
-
-        let iframe = document.createElement('iframe')
-        iframe.src = `/videos/embed/${videoId}?autoplay=1&controls=0&api=1`
-        document.currentScript.parentElement.insertBefore(iframe, document.currentScript)
-
-        console.log(`PeerTube Embed / Player Test, waiting for document`)
-        window.addEventListener('load', async () => {
-            console.log(`Document finished loading.`)
-            let player = new PeerTubePlayer(document.querySelector('iframe'))
-
-            window['player'] = player
-
-            console.log(`Awaiting player ready...`)
-            await player.ready
-            console.log(`Player is ready.`)
-
-            let monitoredEvents = [
-                'pause', 'play', 
-                'playbackStatusUpdate', 
-                'playbackStatusChange'
-            ]
-
-            monitoredEvents.forEach(e => {
-                player.addEventListener(e, () => console.log(`PLAYER: event '${e}' received`))
-                console.log(`PLAYER: now listening for event '${e}'`)
-            })
-
-            let playbackRates = []
-            let activeRate = 1
-            let currentRate = await player.getPlaybackRate()
-
-            let updateRates = async () => {
-
-                let rateListEl = document.querySelector('#rate-list')
-                rateListEl.innerHTML = ''
-                
-                playbackRates.forEach(rate => {
-                    if (currentRate == rate) {
-                        let itemEl = document.createElement('strong')
-                        itemEl.innerText = `${rate} (active)`
-                        itemEl.style.display = 'block'
-                        rateListEl.appendChild(itemEl)
-                    } else {
-                        let itemEl = document.createElement('a')
-                        itemEl.href = 'javascript:;'
-                        itemEl.innerText = rate
-                        itemEl.addEventListener('click', () => {
-                            player.setPlaybackRate(rate)
-                            currentRate = rate
-                            updateRates()
-                        })
-                        itemEl.style.display = 'block'
-                        rateListEl.appendChild(itemEl)
-                    }
-                })
-            }
-
-            player.getPlaybackRates().then(rates => {
-                playbackRates = rates
-                updateRates()
-            })
-
-            let updateResolutions = resolutions => {
-                let resolutionListEl = document.querySelector('#resolution-list')
-                resolutionListEl.innerHTML = ''
-
-                resolutions.forEach(resolution => {
-                    if (resolution.active) {
-                        let itemEl = document.createElement('strong')
-                        itemEl.innerText = `${resolution.label} (active)`
-                        itemEl.style.display = 'block'
-                        resolutionListEl.appendChild(itemEl)
-                    } else {
-                        let itemEl = document.createElement('a')
-                        itemEl.href = 'javascript:;'
-                        itemEl.innerText = resolution.label
-                        itemEl.addEventListener('click', () => {
-                            player.setResolution(resolution.id)
-                        })
-                        itemEl.style.display = 'block'
-                        resolutionListEl.appendChild(itemEl)
-                    }
-                })
-            }
-
-            player.getResolutions().then(
-                resolutions => updateResolutions(resolutions))
-            player.addEventListener('resolutionUpdate', 
-                resolutions => updateResolutions(resolutions))
-        })
-    </script>
-
-    <div>
-        <a href="javascript:player.play()">Play</a> |
-        <a href="javascript:player.pause()">Pause</a> |
-        <a href="javascript:player.seek(parseInt(prompt('Enter position to seek to (in seconds)')))">Seek</a>
+  <header>
+    <div class="logo">
+      <div class="icon">
+        <img src="../../assets/images/logo.svg">
+      </div>
+      <div>
+        PeerTube
+      </div>
     </div>
 
-    <br/>
-    <strong>Resolutions:</strong>
-    <div id="resolution-list">
+    <div class="spacer"></div>
+    <h1>Embed Playground</h1>
+  </header>
+  <main>
+    <aside>
+      <div id="host"></div>
+    </aside>
+    <div id="controls">
+      <div>
+        <button onclick="player.play()">Play</button>
+        <button onclick="player.pause()">Pause</button>
+        <button onclick="player.seek(parseInt(prompt('Enter position to seek to (in seconds)')))">Seek</button>
+      </div>
+      <br/>
+
+      <div id="options">
+        <fieldset>
+          <legend>Resolutions:</legend>
+          <div id="resolution-list"></div>
+          <br/>
+        </fieldset>
+
+        <fieldset>
+          <legend>Rates:</legend>
+          <div id="rate-list"></div>
+        </fieldset>
+      </div>
 
     </div>
+  </main>
 
-    <br/>
-    <strong>Rates:</strong>
-    <div id="rate-list">
-
-    </div>
+  <!-- iframes are used dynamically -->
+  <iframe hidden></iframe>
+  <a hidden></a>
 </body>
 </html>

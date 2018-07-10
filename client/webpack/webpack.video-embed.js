@@ -15,7 +15,8 @@ module.exports = function () {
   const configuration = {
     entry: {
       'video-embed': './src/standalone/videos/embed.ts',
-      'player': './src/standalone/player/player.ts'
+      'player': './src/standalone/player/player.ts',
+      'test-embed': './src/standalone/videos/test-embed.ts'
     },
 
     resolve: {
@@ -112,7 +113,10 @@ module.exports = function () {
       }),
 
       new PurifyCSSPlugin({
-        paths: [ helpers.root('src/standalone/videos/embed.ts') ],
+        paths: [ 
+          helpers.root('src/standalone/videos/embed.ts'),
+          helpers.root('src/standalone/videos/test-embed.html') 
+        ],
         purifyOptions: {
           minify: true,
           whitelist: [ '*vjs*', '*video-js*' ]
@@ -131,12 +135,12 @@ module.exports = function () {
       }),
 
       new HtmlWebpackPlugin({
-        template: '!!raw-loader!src/standalone/videos/test-embed.html',
+        template: '!!html-loader!src/standalone/videos/test-embed.html',
         filename: 'test-embed.html',
         title: 'PeerTube',
         chunksSortMode: 'dependency',
         inject: 'body',
-        chunks: ['player']
+        chunks: ['test-embed']
       }),
 
       /**
