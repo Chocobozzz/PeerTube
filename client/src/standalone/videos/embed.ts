@@ -22,23 +22,21 @@ import * as Channel from 'jschannel'
 
 import { VideoDetails } from '../../../../shared'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
-import { PeerTubeResolution } from '../player/definitions';
+import { PeerTubeResolution } from '../player/definitions'
 
 /**
- * Embed API exposes control of the embed player to the outside world via 
+ * Embed API exposes control of the embed player to the outside world via
  * JSChannels and window.postMessage
  */
 class PeerTubeEmbedApi {
-  constructor(
-    private embed : PeerTubeEmbed
-  ) {
+  private channel: Channel.MessagingChannel
+  private isReady = false
+  private resolutions: PeerTubeResolution[] = null
+
+  constructor (private embed: PeerTubeEmbed) {
   }
 
-  private channel : Channel.MessagingChannel
-  private isReady = false
-  private resolutions : PeerTubeResolution[] = null
-
-  initialize() {
+  initialize () {
     this.constructChannel()
     this.setupStateTracking()
 
@@ -46,14 +44,14 @@ class PeerTubeEmbedApi {
 
     this.notifyReady()
   }
-  
-  private get element() {
+
+  private get element () {
     return this.embed.videoElement
   }
 
-  private constructChannel() {
+  private constructChannel () {
     let channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.scope })
-    
+
     channel.bind('play', (txn, params) => this.embed.player.play())
     channel.bind('pause', (txn, params) => this.embed.player.pause())
     channel.bind('seek', (txn, time) => this.embed.player.currentTime(time))
@@ -69,9 +67,8 @@ class PeerTubeEmbedApi {
     this.channel = channel
   }
 
-  private setResolution(resolutionId : number) {
-    if (resolutionId === -1 && this.embed.player.peertube().isAutoResolutionForbidden()) 
-      return
+  private setResolution (resolutionId: number) {
+    if (resolutionId === -1 && this.embed.player.peertube().isAutoResolutionForbidden()) return
 
     // Auto resolution
     if (resolutionId === -1) {
@@ -86,14 +83,13 @@ class PeerTubeEmbedApi {
   /**
    * Let the host know that we're ready to go!
    */
-  private notifyReady() {
+  private notifyReady () {
     this.isReady = true
     this.channel.notify({ method: 'ready', params: true })
   }
 
-  private setupStateTracking() {
-    
-    let currentState : 'playing' | 'paused' | 'unstarted' = 'unstarted'
+  private setupStateTracking () {
+    let currentState: 'playing' | 'paused' | 'unstarted' = 'unstarted'
 
     setInterval(() => {
       let position = this.element.currentTime
@@ -104,7 +100,7 @@ class PeerTubeEmbedApi {
         params: {
           position,
           volume,
-          playbackState: currentState,
+          playbackState: currentState
         }
       })
     }, 500)
@@ -125,7 +121,7 @@ class PeerTubeEmbedApi {
     this.embed.player.peertube().on('videoFileUpdate', () => this.loadResolutions())
   }
 
-  private loadResolutions() {
+  private loadResolutions () {
     let resolutions = []
     let currentResolutionId = this.embed.player.peertube().getCurrentResolutionId()
 
@@ -152,30 +148,28 @@ class PeerTubeEmbedApi {
 }
 
 class PeerTubeEmbed {
-  constructor(
-    private videoContainerId : string
-  ) {
-    this.videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
-  }
+  videoElement: HTMLVideoElement
+  player: any
+  playerOptions: any
+  api: PeerTubeEmbedApi = null
+  autoplay = false
+  controls = true
+  muted = false
+  loop = false
+  enableApi = false
+  startTime = 0
+  scope = 'peertube'
 
-  videoElement : HTMLVideoElement
-  player : any
-  playerOptions : any
-  api : PeerTubeEmbedApi = null
-  autoplay : boolean = false
-  controls : boolean = true
-  muted : boolean = false
-  loop : boolean = false
-  enableApi : boolean = false
-  startTime : number = 0
-  scope : string = 'peertube'
-
-  static async main() {
+  static async main () {
     const videoContainerId = 'video-container'
     const embed = new PeerTubeEmbed(videoContainerId)
     await embed.init()
   }
-  
+
+  constructor (private videoContainerId: string) {
+    this.videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
+  }
+
   getVideoUrl (id: string) {
     return window.location.origin + '/api/v1/videos/' + id
   }
@@ -219,15 +213,7 @@ class PeerTubeEmbed {
     return params.has(name) ? params.get(name) : defaultValue
   }
 
-  private initializeApi() {
-    if (!this.enableApi)
-      return
-
-    this.api = new PeerTubeEmbedApi(this)
-    this.api.initialize()
-  }
-
-  async init() {
+  async init () {
     try {
       await this.initCore()
     } catch (e) {
@@ -235,7 +221,14 @@ class PeerTubeEmbed {
     }
   }
 
-  private loadParams() {
+  private initializeApi () {
+    if (!this.enableApi) return
+
+    this.api = new PeerTubeEmbedApi(this)
+    this.api.initialize()
+  }
+
+  private loadParams () {
     try {
       let params = new URL(window.location.toString()).searchParams
 
@@ -248,24 +241,23 @@ class PeerTubeEmbed {
 
       const startTimeParamString = params.get('start')
       const startTimeParamNumber = parseInt(startTimeParamString, 10)
-      if (isNaN(startTimeParamNumber) === false) 
-        this.startTime = startTimeParamNumber
+
+      if (isNaN(startTimeParamNumber) === false) this.startTime = startTimeParamNumber
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
   }
 
-  private async initCore() {
+  private async initCore () {
     const urlParts = window.location.href.split('/')
-    const lastPart = urlParts[urlParts.length - 1]
-    const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
+    const lastPart = urlParts[ urlParts.length - 1 ]
+    const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
 
     await loadLocale(window.location.origin, vjs, navigator.language)
     let response = await this.loadVideoInfo(videoId)
 
     if (!response.ok) {
-      if (response.status === 404) 
-        return this.videoNotFound(this.videoElement)
+      if (response.status === 404) return this.videoNotFound(this.videoElement)
 
       return this.videoFetchError(this.videoElement)
     }
@@ -279,7 +271,7 @@ class PeerTubeEmbed {
       controls: this.controls,
       muted: this.muted,
       loop: this.loop,
-      startTime : this.startTime,
+      startTime: this.startTime,
 
       inactivityTimeout: 1500,
       videoViewUrl: this.getVideoUrl(videoId) + '/views',
@@ -295,14 +287,15 @@ class PeerTubeEmbed {
     this.playerOptions = videojsOptions
     this.player = vjs(this.videoContainerId, videojsOptions, () => {
 
-      window['videojsPlayer'] = this.player
+      window[ 'videojsPlayer' ] = this.player
 
       if (this.controls) {
-        (this.player as any).dock({
+        this.player.dock({
           title: videoInfo.name,
           description: this.player.localize('Uses P2P, others may know your IP is downloading this video.')
         })
       }
+
       addContextMenu(this.player, window.location.origin + videoInfo.embedPath)
       this.initializeApi()
     })
@@ -310,3 +303,4 @@ class PeerTubeEmbed {
 }
 
 PeerTubeEmbed.main()
+  .catch(err => console.error('Cannot init embed.', err))

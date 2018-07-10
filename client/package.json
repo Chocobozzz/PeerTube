@@ -13,7 +13,7 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "lint": "tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
+    "lint": "tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts' 'src/standalone/**/*.ts'",
     "webpack": "webpack",
     "tslint": "tslint",
     "ng": "ng",

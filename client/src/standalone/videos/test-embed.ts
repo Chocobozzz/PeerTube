@@ -1,49 +1,47 @@
 import './test-embed.scss'
-import { PeerTubePlayer } from '../player/player';
-import { PlayerEventType } from '../player/definitions';
+import { PeerTubePlayer } from '../player/player'
+import { PlayerEventType } from '../player/definitions'
 
 window.addEventListener('load', async () => {
-  
   const urlParts = window.location.href.split('/')
-  const lastPart = urlParts[urlParts.length - 1]
-  const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
+  const lastPart = urlParts[ urlParts.length - 1 ]
+  const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
 
   let iframe = document.createElement('iframe')
   iframe.src = `/videos/embed/${videoId}?autoplay=1&controls=0&api=1`
   let mainElement = document.querySelector('#host')
-  mainElement.appendChild(iframe);
+  mainElement.appendChild(iframe)
 
   console.log(`Document finished loading.`)
   let player = new PeerTubePlayer(document.querySelector('iframe'))
 
-  window['player'] = player
+  window[ 'player' ] = player
 
   console.log(`Awaiting player ready...`)
   await player.ready
   console.log(`Player is ready.`)
 
   let monitoredEvents = [
-    'pause', 'play', 
-    'playbackStatusUpdate', 
+    'pause',
+    'play',
+    'playbackStatusUpdate',
     'playbackStatusChange'
   ]
 
   monitoredEvents.forEach(e => {
-    player.addEventListener(<PlayerEventType>e, () => console.log(`PLAYER: event '${e}' received`))
+    player.addEventListener(e as PlayerEventType, () => console.log(`PLAYER: event '${e}' received`))
     console.log(`PLAYER: now listening for event '${e}'`)
   })
 
-  let playbackRates = []
-  let activeRate = 1
+  let playbackRates: number[] = []
   let currentRate = await player.getPlaybackRate()
 
   let updateRates = async () => {
-
     let rateListEl = document.querySelector('#rate-list')
     rateListEl.innerHTML = ''
-    
+
     playbackRates.forEach(rate => {
-      if (currentRate == rate) {
+      if (currentRate === rate) {
         let itemEl = document.createElement('strong')
         itemEl.innerText = `${rate} (active)`
         itemEl.style.display = 'block'
@@ -93,6 +91,6 @@ window.addEventListener('load', async () => {
 
   player.getResolutions().then(
     resolutions => updateResolutions(resolutions))
-  player.addEventListener('resolutionUpdate', 
+  player.addEventListener('resolutionUpdate',
     resolutions => updateResolutions(resolutions))
 })
