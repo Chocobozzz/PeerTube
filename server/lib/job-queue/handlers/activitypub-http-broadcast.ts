@@ -1,4 +1,4 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import * as Bluebird from 'bluebird'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
@@ -12,7 +12,7 @@ export type ActivitypubHttpBroadcastPayload = {
   body: any
 }
 
-async function processActivityPubHttpBroadcast (job: kue.Job) {
+async function processActivityPubHttpBroadcast (job: Bull.Job) {
   logger.info('Processing ActivityPub broadcast in job %d.', job.id)
 
   const payload = job.data as ActivitypubHttpBroadcastPayload

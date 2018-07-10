@@ -6,15 +6,21 @@ import { JobState } from '../../../../shared/models'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import { completeVideoCheck, getVideo, immutableAssign, reRunServer, viewVideo } from '../../utils'
-
 import {
-  flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
+  flushAndRunMultipleServers,
+  getVideosList,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
   wait
 } from '../../utils/index'
 import { follow, getFollowersListPaginationAndSort } from '../../utils/server/follows'
 import { getJobsListPaginationAndSort, waitJobs } from '../../utils/server/jobs'
 import {
-  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  addVideoCommentReply,
+  addVideoCommentThread,
+  getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
 
@@ -146,7 +152,7 @@ describe('Test handle downs', function () {
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
-    const states: JobState[] = [ 'inactive', 'active' ]
+    const states: JobState[] = [ 'waiting', 'active' ]
 
     for (const state of states) {
       const res = await getJobsListPaginationAndSort(servers[ 0 ].url, servers[ 0 ].accessToken, state,0, 50, '-createdAt')

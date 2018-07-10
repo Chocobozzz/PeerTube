@@ -25,8 +25,11 @@ export class JobService {
 
     return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + '/' + state, { params })
                .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'updatedAt' ])),
+                 map(res => {
+                   return this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'processedOn', 'finishedOn' ])
+                 }),
                  map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData)),
+                 map(res => this.restExtractor.applyToResultListData(res, this.buildUniqId)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -35,5 +38,9 @@ export class JobService {
     const data = JSON.stringify(obj.data, null, 2)
 
     return Object.assign(obj, { data })
+  }
+
+  private buildUniqId (obj: Job) {
+    return Object.assign(obj, { uniqId: `${obj.id}-${obj.type}` })
   }
 }

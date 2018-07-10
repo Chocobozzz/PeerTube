@@ -1,4 +1,4 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { Emailer } from '../../emailer'
 
@@ -8,7 +8,7 @@ export type EmailPayload = {
   text: string
 }
 
-async function processEmail (job: kue.Job) {
+async function processEmail (job: Bull.Job) {
   const payload = job.data as EmailPayload
   logger.info('Processing email in job %d.', job.id)
 
