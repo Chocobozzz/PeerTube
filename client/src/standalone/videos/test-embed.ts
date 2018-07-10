@@ -49,7 +49,7 @@ window.addEventListener('load', async () => {
       } else {
         let itemEl = document.createElement('a')
         itemEl.href = 'javascript:;'
-        itemEl.innerText = rate
+        itemEl.innerText = rate.toString()
         itemEl.addEventListener('click', () => {
           player.setPlaybackRate(rate)
           currentRate = rate
