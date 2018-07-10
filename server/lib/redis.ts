@@ -78,16 +78,6 @@ class Redis {
     return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
   }
 
-  listJobs (jobsPrefix: string, state: string, mode: 'alpha', order: 'ASC' | 'DESC', offset: number, count: number) {
-    return new Promise<string[]>((res, rej) => {
-      this.client.sort(jobsPrefix + ':jobs:' + state, 'by', mode, order, 'LIMIT', offset.toString(), count.toString(), (err, values) => {
-        if (err) return rej(err)
-
-        return res(values)
-      })
-    })
-  }
-
   generateResetPasswordKey (userId: number) {
     return 'reset-password-' + userId
   }

@@ -1,4 +1,4 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { processActivities } from '../../activitypub/process'
 import { ActivitypubHttpBroadcastPayload } from './activitypub-http-broadcast'
@@ -9,7 +9,7 @@ export type ActivitypubHttpFetcherPayload = {
   uris: string[]
 }
 
-async function processActivityPubHttpFetcher (job: kue.Job) {
+async function processActivityPubHttpFetcher (job: Bull.Job) {
   logger.info('Processing ActivityPub fetcher in job %d.', job.id)
 
   const payload = job.data as ActivitypubHttpBroadcastPayload
