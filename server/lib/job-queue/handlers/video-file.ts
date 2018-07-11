@@ -1,4 +1,4 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { VideoResolution, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { computeResolutionsToTranscode } from '../../../helpers/utils'
@@ -7,6 +7,7 @@ import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
+import * as Bluebird from 'bluebird'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -20,7 +21,7 @@ export type VideoFileImportPayload = {
   filePath: string
 }
 
-async function processVideoFileImport (job: kue.Job) {
+async function processVideoFileImport (job: Bull.Job) {
   const payload = job.data as VideoFileImportPayload
   logger.info('Processing video file import in job %d.', job.id)
 
@@ -37,7 +38,7 @@ async function processVideoFileImport (job: kue.Job) {
   return video
 }
 
-async function processVideoFile (job: kue.Job) {
+async function processVideoFile (job: Bull.Job) {
   const payload = job.data as VideoFilePayload
   logger.info('Processing video file in job %d.', job.id)
 
@@ -109,7 +110,7 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
     )
 
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Promise<any>[] = []
+      const tasks: Bluebird<any>[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {
