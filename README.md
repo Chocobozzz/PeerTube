@@ -137,6 +137,7 @@ Endpoints documentation:
 
  * [Import videos (YouTube, Dailymotion, Vimeo...)](/support/doc/tools.md)
  * [Upload videos from the CLI](/support/doc/tools.md)
+ * [Admin server tools (create transcoding jobs, prune storage...)](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/tools.md#server-tools)
 
 ## FAQ
 
