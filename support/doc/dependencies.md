@@ -111,6 +111,44 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
    brew services run postgresql
    brew services run redis
    ```
+
+## Gentoo
+
+* Add this to ``/etc/portage/sets/peertube``:
+```
+net-libs/nodejs
+sys-apps/yarn
+media-video/ffmpeg[x264] # Optionnally add vorbis,vpx
+dev-db/postgresql
+dev-db/redis
+dev-vcs/git
+app-arch/unzip
+dev-lang/python:2.7
+www-servers/nginx
+media-libs/vips[jpeg,png,exif]
+
+# Optionnal, client for Let’s Encrypt:
+# app-crypt/certbot
+# app-crypt/certbot-nginx
+```
+
+* Compile the peertube set:
+```
+emerge -a @peertube
+```
+
+* Initialize the PostgreSQL database if you just merged it:
+```
+emerge --config postgresql
+```
+
+* (For OpenRC) Enable and then start the services (replace with the correct PostgreSQL slot):
+```
+rc-update add redis
+rc-update add postgresql-10
+rc-service redis start
+rc-service postgresql-10 start
+```
    
 ## Other distributions
 
