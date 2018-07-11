@@ -138,7 +138,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit><trans-unit id="b87e81682959464211443afc3e23c506865d2eda" datatype="html">
         <source>I forgot my password</source>
@@ -348,6 +348,12 @@
           <context context-type="sourcefile">app/menu/menu.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
+      </trans-unit><trans-unit id="ac0f81713a84217c9bd1d9bb460245d8190b073f" datatype="html">
+        <source>More</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/menu/menu.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
       </trans-unit><trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919" datatype="html">
         <source>Administration</source>
         <context-group purpose="location">
@@ -454,11 +460,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
@@ -614,11 +620,11 @@
           <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
-      </trans-unit><trans-unit id="c5e62151cca9610f4248c9616909f7acaf5e5a32" datatype="html">
+      </trans-unit><trans-unit id="b4c2ef0143270626106b26196d40baf3439aa7b0" datatype="html">
         <source>
-      Web peers are not directly sent by the tracker: because we use WebRTC inside the web browser, the protocol is different from classic BitTorrent.
+      Web peers are not publicly accessible: because we use WebRTC inside the web browser (&lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/&gt;with the WebTorrent library&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt;), the protocol is different from classic BitTorrent.
       When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
-      See &lt;x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/&gt;this document&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt; for more information
+      See &lt;x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/&gt;this document&lt;x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/&gt; for more information
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
@@ -633,8 +639,8 @@
           <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
-      </trans-unit><trans-unit id="b7801222ec2b04de2f61d3ff01d18a04bfa17505" datatype="html">
-        <source>How does PeerTube compares to YouTube?</source>
+      </trans-unit><trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf" datatype="html">
+        <source>How does PeerTube compare with YouTube?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+about/about-peertube/about-peertube.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -1184,11 +1190,17 @@ Check this checkbox, save the configuration and test with a video URL of your in
           <context context-type="sourcefile">app/+admin/jobs/jobs-list/jobs-list.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-      </trans-unit><trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
-        <source>Updated</source>
+      </trans-unit><trans-unit id="74c8f69ec23f41a429e241126ab4d25b9d12348e" datatype="html">
+        <source>Processed on</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+admin/jobs/jobs-list/jobs-list.component.ts</context>
           <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit><trans-unit id="4fa08915c99629d38c9da8a08b1985a7f4e38e40" datatype="html">
+        <source>Finished on</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+admin/jobs/jobs-list/jobs-list.component.ts</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit><trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015" datatype="html">
         <source>Create user</source>
@@ -1377,41 +1389,23 @@ Check this checkbox, save the configuration and test with a video URL of your in
           <context context-type="sourcefile">app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
-      </trans-unit><trans-unit id="7cadf30b337f4ef9b05b7d02e13ec3cf79de9dba" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ user.account?.followersCount }}"/&gt; subscribers</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit><trans-unit id="3fb9a5f7268114445d8c109a8f48102e93471f5a" datatype="html">
-        <source>Change your avatar</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit><trans-unit id="c860c88df9ad58b1187084251340b232cdf0a7f9" datatype="html">
-        <source>(extensions: &lt;x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/&gt;, max size: &lt;x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/&gt;)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">17</context>
-        </context-group>
       </trans-unit><trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48" datatype="html">
         <source>Video quota:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit><trans-unit id="994363f08f9fbfa3b3994ff7b35c6904fdff18d8" datatype="html">
         <source>Profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit><trans-unit id="b5398623f87ee72ed23f5023918db1707771e925" datatype="html">
         <source>Video settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit><trans-unit id="8057bddbed23d6cd911df8cc3a4ec24d1f258b79" datatype="html">
         <source>&lt;x id="INTERPOLATION" equiv-text="{{ video.createdAt | myFromNow }}"/&gt; - &lt;x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/&gt; views</source>
@@ -1427,7 +1421,7 @@ Check this checkbox, save the configuration and test with a video URL of your in
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/comment/video-comment.component.ts</context>
@@ -1449,31 +1443,21 @@ Check this checkbox, save the configuration and test with a video URL of your in
         <source>Create a video channel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">6</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit><trans-unit id="9277e6f7b8ed9538d1f6ad812b620384252ffe56" datatype="html">
-        <source>Update &lt;x id="INTERPOLATION" equiv-text="{{ videoChannel?.displayName }}"/&gt;</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
-          <context context-type="linenumber">2</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit><trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9" datatype="html">
         <source>Display name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
@@ -1484,11 +1468,11 @@ Check this checkbox, save the configuration and test with a video URL of your in
 When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">36</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit><trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9" datatype="html">
         <source>Change password</source>
@@ -1535,6 +1519,24 @@ When you will upload a video in this channel, the video support field will be au
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
           <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit><trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/&gt; subscribers</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+my-account/shared/actor-avatar-info.component.ts</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit><trans-unit id="c4a959fc6349bd0793e1ad571d492052a07bdab5" datatype="html">
+        <source>Change the avatar</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+my-account/shared/actor-avatar-info.component.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit><trans-unit id="c860c88df9ad58b1187084251340b232cdf0a7f9" datatype="html">
+        <source>(extensions: &lt;x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/&gt;, max size: &lt;x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/&gt;)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/+my-account/shared/actor-avatar-info.component.ts</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit><trans-unit id="e242e3e8608a3c4a944327eb3d5c221dc6e4e3cd" datatype="html">
         <source>
@@ -1590,7 +1592,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Channel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/video-add.component.ts</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
@@ -1600,7 +1602,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Privacy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/video-add.component.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/shared/video-edit.component.ts</context>
@@ -1610,13 +1612,13 @@ When you will upload a video in this channel, the video support field will be au
         <source>Publish will be available when upload is finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/video-add.component.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit><trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3" datatype="html">
         <source>Publish</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-edit/video-add.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit><trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e" datatype="html">
         <source>Title</source>
@@ -1726,7 +1728,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit><trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0" datatype="html">
         <source>Short text to tell people how they can support you (membership platform...).</source>
@@ -1762,7 +1764,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit><trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611" datatype="html">
         <source>Download video</source>
@@ -1770,20 +1772,20 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
-      </trans-unit><trans-unit id="b92eaf680d6d1cd83e1bc61c3ee88b1b7754eb66" datatype="html">
-        <source>Torrent</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
       </trans-unit><trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c" datatype="html">
         <source>Direct download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit><trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d" datatype="html">
+        <source>Torrent (.torrent file)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
-      </trans-unit><trans-unit id="6ac01cebf6f87418b309a83d5ce965d77b4ab740" datatype="html">
-        <source>Torrent (magnet)</source>
+      </trans-unit><trans-unit id="2db8d7cf6a3071f4c1519ef2b5e2713d9ff4e87f" datatype="html">
+        <source>Torrent (magnet link)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/modal/video-download.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -1796,7 +1798,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit><trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b" datatype="html">
         <source>Report video</source>
@@ -1832,7 +1834,7 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit><trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6" datatype="html">
         <source>URL</source>
@@ -1888,85 +1890,85 @@ When you will upload a video in this channel, the video support field will be au
         <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@&lt;x id="INTERPOLATION" equiv-text="{{video.account.name}}"/&gt;@&lt;x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/&gt;&lt;/strong&gt; and subscribe there. Subscription as a PeerTube user is being worked on in &lt;a href=&apos;https://github.com/Chocobozzz/PeerTube/issues/470&apos;&gt;#470&lt;/a&gt;.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit><trans-unit id="ccc07df383b7a32be3e2e105faa5488caf261c1c" datatype="html">
         <source>By &lt;x id="INTERPOLATION" equiv-text="{{ video.by }}"/&gt;</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit><trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c" datatype="html">
         <source>Go to the account page</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit><trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced" datatype="html">
         <source>Like this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit><trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509" datatype="html">
         <source>Dislike this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit><trans-unit id="144fff5c40b85414d59e644d8dee7cfefba925a2" datatype="html">
         <source>Download the video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit><trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a" datatype="html">
         <source>Report</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit><trans-unit id="2f4894617d9c44010f87473e583bd4604b7d6ecf" datatype="html">
         <source>Report this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit><trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61" datatype="html">
         <source>Blacklist</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit><trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037" datatype="html">
         <source>Blacklist this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit><trans-unit id="cd27f761b923a5bdb16ba9844da632edd878f1b1" datatype="html">
         <source>Update this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit><trans-unit id="3dbfdc68f83d91cb360172eb65578cae94e7cbe5" datatype="html">
         <source>Delete this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit><trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b" datatype="html">
         <source>Show more</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit><trans-unit id="5403a767248e304199592271bba3366d2ca3f903" datatype="html">
         <source>Show less</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit><trans-unit id="8057a9b7f9e908ff350edfd71417b96c174e5911" datatype="html">
         <source>
@@ -1974,7 +1976,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit><trans-unit id="bd407eca607a8905a26a9e30c9d0cd70f4465db8" datatype="html">
         <source>
@@ -1982,7 +1984,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">140</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit><trans-unit id="af5072bd79ea3cd767ab74a6622d2eee791b3832" datatype="html">
         <source>
@@ -1990,7 +1992,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit><trans-unit id="a911eee019174741b0aec6fcf3fbd5752fab3e67" datatype="html">
         <source>
@@ -1998,7 +2000,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit><trans-unit id="ecf7007c2842cc26a7b91d08d48c7a4f5f749fb3" datatype="html">
         <source>
@@ -2006,7 +2008,7 @@ When you will upload a video in this channel, the video support field will be au
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">167</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit><trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>
@@ -2014,33 +2016,33 @@ When you will upload a video in this channel, the video support field will be au
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">183</context>
         </context-group>
       </trans-unit><trans-unit id="fb779d2b25c4d0ffa7d52c823a240717e8c1fe6c" datatype="html">
         <source>Friendly Reminder:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">195</context>
         </context-group>
-      </trans-unit><trans-unit id="4c2fca29fd9d7e85abe85a206958a4226f403be2" datatype="html">
+      </trans-unit><trans-unit id="329900dd14bc4ca33cec3775d25c246e4cde7867" datatype="html">
         <source>
-        The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be accessed publicly.
+        The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit><trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e" datatype="html">
         <source>More information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit><trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318" datatype="html">
         <source>Get more information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit><trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f" datatype="html">
         <source>
@@ -2048,7 +2050,7 @@ When you will upload a video in this channel, the video support field will be au
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/videos/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit><trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7" datatype="html">
         <source>
@@ -2211,6 +2213,10 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <context-group purpose="location">
@@ -2393,6 +2399,10 @@ When you will upload a video in this channel, the video support field will be au
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <context-group purpose="location">
@@ -2631,6 +2641,10 @@ When you will upload a video in this channel, the video support field will be au
         <source>Avatar changed.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -3785,8 +3799,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8b7132ca8401e9b847c242dc9a6b63cc63a80a74" datatype="html">
-        <source>We are sorry but PeerTube cannot handle videos &gt; 4GB</source>
+      <trans-unit id="c55f41189ac6ad3003cce813245f4508284ed0aa" datatype="html">
+        <source>We are sorry but PeerTube cannot handle videos &gt; 8GB</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add.component.ts</context>
           <context context-type="linenumber">1</context>
