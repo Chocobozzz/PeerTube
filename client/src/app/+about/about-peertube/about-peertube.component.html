@@ -53,7 +53,7 @@
     </li>
 
     <li i18n>
-      Web peers are not directly sent by the tracker: because we use WebRTC inside the web browser, the protocol is different from classic BitTorrent.
+      Web peers are not publicly accessible: because we use WebRTC inside the web browser (<a href="https://webtorrent.io/">with the WebTorrent library</a>), the protocol is different from classic BitTorrent.
       When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
       See <a href="https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst">this document</a> for more information
     </li>
