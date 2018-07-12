@@ -117,6 +117,7 @@
     "webpack-cli": "^2.0.14",
     "webtorrent": "^0.100.0",
     "whatwg-fetch": "^2.0.4",
-    "zone.js": "~0.8.5"
+    "zone.js": "~0.8.5",
+    "ngx-qrcode2": "^0.0.9"
   }
 }

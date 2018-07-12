@@ -16,13 +16,15 @@ import { VideoShareComponent } from './modal/video-share.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 
 import { VideoWatchComponent } from './video-watch.component'
+import { NgxQRCodeModule } from 'ngx-qrcode2'
 
 @NgModule({
   imports: [
     VideoWatchRoutingModule,
     SharedModule,
     ClipboardModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    NgxQRCodeModule
   ],
 
   declarations: [

@@ -36,6 +36,11 @@
           The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
         </div>
 
+        <div class="form-group qr-code-group">
+          <label i18n>QR-Code</label>
+          <ngx-qrcode qrc-element-type="url" [qrc-value]="getVideoUrl()" qrc-errorCorrectionLevel="Q"></ngx-qrcode>
+        </div>
+
         <div class="form-group inputs">
           <span i18n class="action-button action-button-cancel" (click)="hide()">
             Cancel
