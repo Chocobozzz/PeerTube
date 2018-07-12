@@ -28,8 +28,8 @@ import { ServerService } from '@app/core'
 
 @Injectable()
 export class VideoService {
-  private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
-  private static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
+  static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
 
   constructor (
     private authHttp: HttpClient,

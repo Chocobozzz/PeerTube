@@ -137,6 +137,7 @@ const CONFIG = {
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
+    CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
     CACHE_DIR: buildPath(config.get<string>('storage.cache'))
   },
@@ -182,6 +183,9 @@ const CONFIG = {
   CACHE: {
     PREVIEWS: {
       get SIZE () { return config.get<number>('cache.previews.size') }
+    },
+    VIDEO_CAPTIONS: {
+      get SIZE () { return config.get<number>('cache.captions.size') }
     }
   },
   INSTANCE: {
@@ -223,6 +227,14 @@ const CONSTRAINTS_FIELDS = {
     DESCRIPTION: { min: 3, max: 500 }, // Length
     SUPPORT: { min: 3, max: 500 }, // Length
     URL: { min: 3, max: 2000 } // Length
+  },
+  VIDEO_CAPTIONS: {
+    CAPTION_FILE: {
+      EXTNAME: [ '.vtt' ],
+      FILE_SIZE: {
+        max: 2 * 1024 * 1024 // 2MB
+      }
+    }
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -350,6 +362,10 @@ const IMAGE_MIMETYPE_EXT = {
   'image/jpeg': '.jpg'
 }
 
+const VIDEO_CAPTIONS_MIMETYPE_EXT = {
+  'text/vtt': '.vtt'
+}
+
 // ---------------------------------------------------------------------------
 
 const SERVER_ACTOR_NAME = 'peertube'
@@ -402,7 +418,8 @@ const STATIC_PATHS = {
   THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
-  AVATARS: '/static/avatars/'
+  AVATARS: '/static/avatars/',
+  VIDEO_CAPTIONS: '/static/video-captions/'
 }
 const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
@@ -434,7 +451,8 @@ const EMBED_SIZE = {
 // Sub folders of cache directory
 const CACHE = {
   DIRECTORIES: {
-    PREVIEWS: join(CONFIG.STORAGE.CACHE_DIR, 'previews')
+    PREVIEWS: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
+    VIDEO_CAPTIONS: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions')
   }
 }
 
@@ -489,6 +507,7 @@ updateWebserverConfig()
 
 export {
   API_VERSION,
+  VIDEO_CAPTIONS_MIMETYPE_EXT,
   AVATARS_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,

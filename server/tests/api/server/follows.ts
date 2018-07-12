@@ -26,6 +26,8 @@ import {
 } from '../../utils/videos/video-comments'
 import { rateVideo } from '../../utils/videos/videos'
 import { waitJobs } from '../../utils/server/jobs'
+import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
+import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
 
 const expect = chai.expect
 
@@ -244,6 +246,16 @@ describe('Test follows', function () {
           const text3 = 'my second answer to thread 1'
           await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
         }
+
+        {
+          await createVideoCaption({
+            url: servers[2].url,
+            accessToken: servers[2].accessToken,
+            language: 'ar',
+            videoId: video4.id,
+            fixture: 'subtitle-good2.vtt'
+          })
+        }
       }
 
       await waitJobs(servers)
@@ -266,7 +278,7 @@ describe('Test follows', function () {
       await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 1, 0)
     })
 
-    it('Should propagate videos', async function () {
+    it('Should have propagated videos', async function () {
       const res = await getVideosList(servers[ 0 ].url)
       expect(res.body.total).to.equal(7)
 
@@ -314,7 +326,7 @@ describe('Test follows', function () {
       await completeVideoCheck(servers[ 0 ].url, video4, checkAttributes)
     })
 
-    it('Should propagate comments', async function () {
+    it('Should have propagated comments', async function () {
       const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5)
 
       expect(res1.body.total).to.equal(1)
@@ -351,6 +363,18 @@ describe('Test follows', function () {
       const secondChild = tree.children[1]
       expect(secondChild.comment.text).to.equal('my second answer to thread 1')
       expect(secondChild.children).to.have.lengthOf(0)
+    })
+
+    it('Should have propagated captions', async function () {
+      const res = await listVideoCaptions(servers[0].url, video4.id)
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const caption1: VideoCaption = res.body.data[0]
+      expect(caption1.language.id).to.equal('ar')
+      expect(caption1.language.label).to.equal('Arabic')
+      expect(caption1.captionPath).to.equal('/static/video-captions/' + video4.uuid + '-ar.vtt')
+      await testCaptionFile(servers[0].url, caption1.captionPath, 'Subtitle good 2.')
     })
 
     it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {

@@ -14,6 +14,61 @@ import {
   registerUser, getCustomConfig, setAccessTokensToServers, updateCustomConfig
 } from '../../utils/index'
 
+function checkInitialConfig (data: CustomConfig) {
+  expect(data.instance.name).to.equal('PeerTube')
+  expect(data.instance.shortDescription).to.equal(
+    'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
+    'with WebTorrent and Angular.'
+  )
+  expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
+  expect(data.instance.terms).to.equal('No terms for now.')
+  expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
+  expect(data.instance.defaultNSFWPolicy).to.equal('display')
+  expect(data.instance.customizations.css).to.be.empty
+  expect(data.instance.customizations.javascript).to.be.empty
+  expect(data.services.twitter.username).to.equal('@Chocobozzz')
+  expect(data.services.twitter.whitelisted).to.be.false
+  expect(data.cache.previews.size).to.equal(1)
+  expect(data.cache.captions.size).to.equal(1)
+  expect(data.signup.enabled).to.be.true
+  expect(data.signup.limit).to.equal(4)
+  expect(data.admin.email).to.equal('admin1@example.com')
+  expect(data.user.videoQuota).to.equal(5242880)
+  expect(data.transcoding.enabled).to.be.false
+  expect(data.transcoding.threads).to.equal(2)
+  expect(data.transcoding.resolutions['240p']).to.be.true
+  expect(data.transcoding.resolutions['360p']).to.be.true
+  expect(data.transcoding.resolutions['480p']).to.be.true
+  expect(data.transcoding.resolutions['720p']).to.be.true
+  expect(data.transcoding.resolutions['1080p']).to.be.true
+}
+
+function checkUpdatedConfig (data: CustomConfig) {
+  expect(data.instance.name).to.equal('PeerTube updated')
+  expect(data.instance.shortDescription).to.equal('my short description')
+  expect(data.instance.description).to.equal('my super description')
+  expect(data.instance.terms).to.equal('my super terms')
+  expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
+  expect(data.instance.defaultNSFWPolicy).to.equal('blur')
+  expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
+  expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
+  expect(data.services.twitter.username).to.equal('@Kuja')
+  expect(data.services.twitter.whitelisted).to.be.true
+  expect(data.cache.previews.size).to.equal(2)
+  expect(data.cache.captions.size).to.equal(3)
+  expect(data.signup.enabled).to.be.false
+  expect(data.signup.limit).to.equal(5)
+  expect(data.admin.email).to.equal('superadmin1@example.com')
+  expect(data.user.videoQuota).to.equal(5242881)
+  expect(data.transcoding.enabled).to.be.true
+  expect(data.transcoding.threads).to.equal(1)
+  expect(data.transcoding.resolutions['240p']).to.be.false
+  expect(data.transcoding.resolutions['360p']).to.be.true
+  expect(data.transcoding.resolutions['480p']).to.be.true
+  expect(data.transcoding.resolutions['720p']).to.be.false
+  expect(data.transcoding.resolutions['1080p']).to.be.false
+}
+
 describe('Test config', function () {
   let server = null
 
@@ -51,35 +106,11 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body as CustomConfig
 
-    expect(data.instance.name).to.equal('PeerTube')
-    expect(data.instance.shortDescription).to.equal(
-      'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
-      'with WebTorrent and Angular.'
-    )
-    expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
-    expect(data.instance.terms).to.equal('No terms for now.')
-    expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
-    expect(data.instance.defaultNSFWPolicy).to.equal('display')
-    expect(data.instance.customizations.css).to.be.empty
-    expect(data.instance.customizations.javascript).to.be.empty
-    expect(data.services.twitter.username).to.equal('@Chocobozzz')
-    expect(data.services.twitter.whitelisted).to.be.false
-    expect(data.cache.previews.size).to.equal(1)
-    expect(data.signup.enabled).to.be.true
-    expect(data.signup.limit).to.equal(4)
-    expect(data.admin.email).to.equal('admin1@example.com')
-    expect(data.user.videoQuota).to.equal(5242880)
-    expect(data.transcoding.enabled).to.be.false
-    expect(data.transcoding.threads).to.equal(2)
-    expect(data.transcoding.resolutions['240p']).to.be.true
-    expect(data.transcoding.resolutions['360p']).to.be.true
-    expect(data.transcoding.resolutions['480p']).to.be.true
-    expect(data.transcoding.resolutions['720p']).to.be.true
-    expect(data.transcoding.resolutions['1080p']).to.be.true
+    checkInitialConfig(data)
   })
 
   it('Should update the customized configuration', async function () {
-    const newCustomConfig = {
+    const newCustomConfig: CustomConfig = {
       instance: {
         name: 'PeerTube updated',
         shortDescription: 'my short description',
@@ -101,6 +132,9 @@ describe('Test config', function () {
       cache: {
         previews: {
           size: 2
+        },
+        captions: {
+          size: 3
         }
       },
       signup: {
@@ -130,28 +164,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
-    expect(data.instance.name).to.equal('PeerTube updated')
-    expect(data.instance.shortDescription).to.equal('my short description')
-    expect(data.instance.description).to.equal('my super description')
-    expect(data.instance.terms).to.equal('my super terms')
-    expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
-    expect(data.instance.defaultNSFWPolicy).to.equal('blur')
-    expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
-    expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
-    expect(data.services.twitter.username).to.equal('@Kuja')
-    expect(data.services.twitter.whitelisted).to.be.true
-    expect(data.cache.previews.size).to.equal(2)
-    expect(data.signup.enabled).to.be.false
-    expect(data.signup.limit).to.equal(5)
-    expect(data.admin.email).to.equal('superadmin1@example.com')
-    expect(data.user.videoQuota).to.equal(5242881)
-    expect(data.transcoding.enabled).to.be.true
-    expect(data.transcoding.threads).to.equal(1)
-    expect(data.transcoding.resolutions['240p']).to.be.false
-    expect(data.transcoding.resolutions['360p']).to.be.true
-    expect(data.transcoding.resolutions['480p']).to.be.true
-    expect(data.transcoding.resolutions['720p']).to.be.false
-    expect(data.transcoding.resolutions['1080p']).to.be.false
+    checkUpdatedConfig(data)
   })
 
   it('Should have the configuration updated after a restart', async function () {
@@ -164,28 +177,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
-    expect(data.instance.name).to.equal('PeerTube updated')
-    expect(data.instance.shortDescription).to.equal('my short description')
-    expect(data.instance.description).to.equal('my super description')
-    expect(data.instance.terms).to.equal('my super terms')
-    expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
-    expect(data.instance.defaultNSFWPolicy).to.equal('blur')
-    expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
-    expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
-    expect(data.services.twitter.username).to.equal('@Kuja')
-    expect(data.services.twitter.whitelisted).to.be.true
-    expect(data.cache.previews.size).to.equal(2)
-    expect(data.signup.enabled).to.be.false
-    expect(data.signup.limit).to.equal(5)
-    expect(data.admin.email).to.equal('superadmin1@example.com')
-    expect(data.user.videoQuota).to.equal(5242881)
-    expect(data.transcoding.enabled).to.be.true
-    expect(data.transcoding.threads).to.equal(1)
-    expect(data.transcoding.resolutions['240p']).to.be.false
-    expect(data.transcoding.resolutions['360p']).to.be.true
-    expect(data.transcoding.resolutions['480p']).to.be.true
-    expect(data.transcoding.resolutions['720p']).to.be.false
-    expect(data.transcoding.resolutions['1080p']).to.be.false
+    checkUpdatedConfig(data)
   })
 
   it('Should fetch the about information', async function () {
@@ -206,31 +198,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
-    expect(data.instance.name).to.equal('PeerTube')
-    expect(data.instance.shortDescription).to.equal(
-      'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
-      'with WebTorrent and Angular.'
-    )
-    expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
-    expect(data.instance.terms).to.equal('No terms for now.')
-    expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
-    expect(data.instance.defaultNSFWPolicy).to.equal('display')
-    expect(data.instance.customizations.css).to.be.empty
-    expect(data.instance.customizations.javascript).to.be.empty
-    expect(data.services.twitter.username).to.equal('@Chocobozzz')
-    expect(data.services.twitter.whitelisted).to.be.false
-    expect(data.cache.previews.size).to.equal(1)
-    expect(data.signup.enabled).to.be.true
-    expect(data.signup.limit).to.equal(4)
-    expect(data.admin.email).to.equal('admin1@example.com')
-    expect(data.user.videoQuota).to.equal(5242880)
-    expect(data.transcoding.enabled).to.be.false
-    expect(data.transcoding.threads).to.equal(2)
-    expect(data.transcoding.resolutions['240p']).to.be.true
-    expect(data.transcoding.resolutions['360p']).to.be.true
-    expect(data.transcoding.resolutions['480p']).to.be.true
-    expect(data.transcoding.resolutions['720p']).to.be.true
-    expect(data.transcoding.resolutions['1080p']).to.be.true
+    checkInitialConfig(data)
   })
 
   after(async function () {

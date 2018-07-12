@@ -92,6 +92,7 @@ import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
+import { VideoCaptionModel } from './video-caption'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -526,6 +527,17 @@ export class VideoModel extends Model<VideoModel> {
   })
   ScheduleVideoUpdate: ScheduleVideoUpdateModel
 
+  @HasMany(() => VideoCaptionModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true,
+    ['separate' as any]: true
+  })
+  VideoCaptions: VideoCaptionModel[]
+
   @BeforeDestroy
   static async sendDelete (instance: VideoModel, options) {
     if (instance.isOwned()) {
@@ -550,7 +562,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   @BeforeDestroy
-  static async removeFilesAndSendDelete (instance: VideoModel) {
+  static async removeFiles (instance: VideoModel) {
     const tasks: Promise<any>[] = []
 
     logger.debug('Removing files of video %s.', instance.url)
@@ -615,6 +627,11 @@ export class VideoModel extends Model<VideoModel> {
         ]
       },
       include: [
+        {
+          attributes: [ 'language' ],
+          model: VideoCaptionModel.unscoped(),
+          required: false
+        },
         {
           attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
@@ -1028,15 +1045,15 @@ export class VideoModel extends Model<VideoModel> {
     videoFile.infoHash = parsedTorrent.infoHash
   }
 
-  getEmbedPath () {
+  getEmbedStaticPath () {
     return '/videos/embed/' + this.uuid
   }
 
-  getThumbnailPath () {
+  getThumbnailStaticPath () {
     return join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName())
   }
 
-  getPreviewPath () {
+  getPreviewStaticPath () {
     return join(STATIC_PATHS.PREVIEWS, this.getPreviewName())
   }
 
@@ -1077,9 +1094,9 @@ export class VideoModel extends Model<VideoModel> {
       views: this.views,
       likes: this.likes,
       dislikes: this.dislikes,
-      thumbnailPath: this.getThumbnailPath(),
-      previewPath: this.getPreviewPath(),
-      embedPath: this.getEmbedPath(),
+      thumbnailPath: this.getThumbnailStaticPath(),
+      previewPath: this.getPreviewStaticPath(),
+      embedPath: this.getEmbedStaticPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       publishedAt: this.publishedAt,
@@ -1247,6 +1264,14 @@ export class VideoModel extends Model<VideoModel> {
       href: CONFIG.WEBSERVER.URL + '/videos/watch/' + this.uuid
     })
 
+    const subtitleLanguage = []
+    for (const caption of this.VideoCaptions) {
+      subtitleLanguage.push({
+        identifier: caption.language,
+        name: VideoCaptionModel.getLanguageLabel(caption.language)
+      })
+    }
+
     return {
       type: 'Video' as 'Video',
       id: this.url,
@@ -1267,6 +1292,7 @@ export class VideoModel extends Model<VideoModel> {
       mediaType: 'text/markdown',
       content: this.getTruncatedDescription(),
       support: this.support,
+      subtitleLanguage,
       icon: {
         type: 'Image',
         url: this.getThumbnailUrl(baseUrlHttp),

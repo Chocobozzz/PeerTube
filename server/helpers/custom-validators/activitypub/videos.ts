@@ -51,6 +51,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!setValidRemoteVideoUrls(video)) return false
   if (!setRemoteVideoTruncatedContent(video)) return false
   if (!setValidAttributedTo(video)) return false
+  if (!setValidRemoteCaptions(video)) return false
 
   // Default attributes
   if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
@@ -93,6 +94,18 @@ function setValidRemoteTags (video: any) {
   video.tag = video.tag.filter(t => {
     return t.type === 'Hashtag' &&
       isVideoTagValid(t.name)
+  })
+
+  return true
+}
+
+function setValidRemoteCaptions (video: any) {
+  if (!video.subtitleLanguage) video.subtitleLanguage = []
+
+  if (Array.isArray(video.subtitleLanguage) === false) return false
+
+  video.subtitleLanguage = video.subtitleLanguage.filter(caption => {
+    return isRemoteStringIdentifierValid(caption)
   })
 
   return true

@@ -17,6 +17,7 @@ export interface VideoTorrentObject {
   category: ActivityIdentifierObject
   licence: ActivityIdentifierObject
   language: ActivityIdentifierObject
+  subtitleLanguage: ActivityIdentifierObject[]
   views: number
   sensitive: boolean
   commentsEnabled: boolean

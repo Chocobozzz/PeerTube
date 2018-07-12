@@ -129,7 +129,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
       torrent: torrents,
       thumbnail: [
         {
-          url: CONFIG.WEBSERVER.URL + video.getThumbnailPath(),
+          url: CONFIG.WEBSERVER.URL + video.getThumbnailStaticPath(),
           height: THUMBNAILS_SIZE.height,
           width: THUMBNAILS_SIZE.width
         }

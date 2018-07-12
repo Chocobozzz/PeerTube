@@ -59,6 +59,12 @@ export class ServerService {
         extensions: []
       }
     },
+    videoCaption: {
+      file: {
+        size: { max: 0 },
+        extensions: []
+      }
+    },
     user: {
       videoQuota: -1
     }

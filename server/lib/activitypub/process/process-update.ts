@@ -19,6 +19,7 @@ import {
   videoFileActivityUrlToDBAttributes
 } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
+import { VideoCaptionModel } from '../../../models/video/video-caption'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -110,9 +111,18 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
       const tasks = videoFileAttributes.map(f => VideoFileModel.create(f))
       await Promise.all(tasks)
 
-      const tags = videoObject.tag.map(t => t.name)
+      // Update Tags
+      const tags = videoObject.tag.map(tag => tag.name)
       const tagInstances = await TagModel.findOrCreateTags(tags, t)
       await videoInstance.$set('Tags', tagInstances, sequelizeOptions)
+
+      // Update captions
+      await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(videoInstance.id, t)
+
+      const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
+        return VideoCaptionModel.insertOrReplaceLanguage(videoInstance.id, c.identifier, t)
+      })
+      await Promise.all(videoCaptionsPromises)
     })
 
     logger.info('Remote video with uuid %s updated', videoObject.uuid)

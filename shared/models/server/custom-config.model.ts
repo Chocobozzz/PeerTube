@@ -25,6 +25,10 @@ export interface CustomConfig {
     previews: {
       size: number
     }
+
+    captions: {
+      size: number
+    }
   }
 
   signup: {

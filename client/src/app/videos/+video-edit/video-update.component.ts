@@ -12,6 +12,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { VideoCaptionService } from '@app/shared/video-caption'
 
 @Component({
   selector: 'my-videos-update',
@@ -25,6 +26,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   videoPrivacies = []
   userVideoChannels = []
   schedulePublicationPossible = false
+  videoCaptions = []
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -36,6 +38,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private authService: AuthService,
     private loadingBar: LoadingBarService,
     private videoChannelService: VideoChannelService,
+    private videoCaptionService: VideoCaptionService,
     private i18n: I18n
   ) {
     super()
@@ -63,12 +66,21 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                          map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName, support: c.support }))),
                          map(videoChannels => ({ video, videoChannels }))
                        )
+          }),
+          switchMap(({ video, videoChannels }) => {
+            return this.videoCaptionService
+                       .listCaptions(video.id)
+                       .pipe(
+                         map(result => result.data),
+                         map(videoCaptions => ({ video, videoChannels, videoCaptions }))
+                       )
           })
         )
         .subscribe(
-          ({ video, videoChannels }) => {
+          ({ video, videoChannels, videoCaptions }) => {
             this.video = new VideoEdit(video)
             this.userVideoChannels = videoChannels
+            this.videoCaptions = videoCaptions
 
             // We cannot set private a video that was not private
             if (this.video.privacy !== VideoPrivacy.PRIVATE) {
@@ -102,21 +114,27 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.loadingBar.start()
     this.isUpdatingVideo = true
-    this.videoService.updateVideo(this.video)
-                     .subscribe(
-                       () => {
-                         this.isUpdatingVideo = false
-                         this.loadingBar.complete()
-                         this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))
-                         this.router.navigate([ '/videos/watch', this.video.uuid ])
-                       },
 
-                       err => {
-                         this.isUpdatingVideo = false
-                         this.notificationsService.error(this.i18n('Error'), err.message)
-                         console.error(err)
-                       }
-                      )
+    // Update the video
+    this.videoService.updateVideo(this.video)
+        .pipe(
+          // Then update captions
+          switchMap(() => this.videoCaptionService.updateCaptions(this.video.id, this.videoCaptions))
+        )
+        .subscribe(
+          () => {
+            this.isUpdatingVideo = false
+            this.loadingBar.complete()
+            this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))
+            this.router.navigate([ '/videos/watch', this.video.uuid ])
+          },
+
+          err => {
+            this.isUpdatingVideo = false
+            this.notificationsService.error(this.i18n('Error'), err.message)
+            console.error(err)
+          }
+        )
 
   }
 

@@ -53,6 +53,7 @@ import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
 import { createReqFiles, isNSFWHidden } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
+import { videoCaptionsRouter } from './captions'
 
 const videosRouter = express.Router()
 
@@ -78,6 +79,7 @@ videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
+videosRouter.use('/', videoCaptionsRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)

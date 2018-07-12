@@ -1,4 +1,6 @@
 // FIXME: https://github.com/nodejs/node/pull/16853
+import { VideosCaptionCache } from './server/lib/cache/videos-caption-cache'
+
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
@@ -181,6 +183,7 @@ async function startApplication () {
 
   // Caches initializations
   VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE)
 
   // Enable Schedulers
   BadActorFollowScheduler.Instance.enable()

@@ -206,21 +206,34 @@ Check this checkbox, save the configuration and test with a video URL of your in
         </div>
       </ng-template>
 
-      <div i18n class="inner-form-title">Cache</div>
+      <div i18n class="inner-form-title">
+        Cache
+
+        <my-help
+          helpType="custom" i18n-customHtml
+          customHtml="Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them."
+        ></my-help>
+      </div>
 
       <div class="form-group">
         <label i18n for="cachePreviewsSize">Previews cache size</label>
-        <my-help
-          helpType="custom" i18n-customHtml
-          customHtml="Previews are not federated. We fetch them directly from the origin instance and cache them."
-        ></my-help>
-
         <input
           type="text" id="cachePreviewsSize"
           formControlName="cachePreviewsSize" [ngClass]="{ 'input-error': formErrors['cachePreviewsSize'] }"
         >
         <div *ngIf="formErrors.cachePreviewsSize" class="form-error">
           {{ formErrors.cachePreviewsSize }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="cachePreviewsSize">Video captions cache size</label>
+        <input
+          type="text" id="cacheCaptionsSize"
+          formControlName="cacheCaptionsSize" [ngClass]="{ 'input-error': formErrors['cacheCaptionsSize'] }"
+        >
+        <div *ngIf="formErrors.cacheCaptionsSize" class="form-error">
+          {{ formErrors.cacheCaptionsSize }}
         </div>
       </div>
 

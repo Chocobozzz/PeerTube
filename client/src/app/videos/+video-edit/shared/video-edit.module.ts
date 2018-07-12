@@ -5,6 +5,7 @@ import { SharedModule } from '../../../shared/'
 import { VideoEditComponent } from './video-edit.component'
 import { VideoImageComponent } from './video-image.component'
 import { CalendarModule } from 'primeng/components/calendar/calendar'
+import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { CalendarModule } from 'primeng/components/calendar/calendar'
 
   declarations: [
     VideoEditComponent,
-    VideoImageComponent
+    VideoImageComponent,
+    VideoCaptionAddModalComponent
   ],
 
   exports: [

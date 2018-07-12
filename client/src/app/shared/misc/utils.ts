@@ -81,7 +81,7 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
     }
 
     if (obj[key] !== null && typeof obj[ key ] === 'object' && !(obj[ key ] instanceof File)) {
-      objectToFormData(obj[ key ], fd, key)
+      objectToFormData(obj[ key ], fd, formKey)
     } else {
       fd.append(formKey, obj[ key ])
     }
@@ -96,6 +96,11 @@ function lineFeedToHtml (obj: object, keyToNormalize: string) {
   })
 }
 
+function removeElementFromArray <T> (arr: T[], elem: T) {
+  const index = arr.indexOf(elem)
+  if (index !== -1) arr.splice(index, 1)
+}
+
 export {
   objectToUrlEncoded,
   getParameterByName,
@@ -104,5 +109,6 @@ export {
   dateToHuman,
   immutableAssign,
   objectToFormData,
-  lineFeedToHtml
+  lineFeedToHtml,
+  removeElementFromArray
 }

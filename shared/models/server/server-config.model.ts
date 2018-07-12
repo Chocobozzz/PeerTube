@@ -44,6 +44,15 @@ export interface ServerConfig {
     }
   }
 
+  videoCaption: {
+    file: {
+      size: {
+        max: number
+      },
+      extensions: string[]
+    }
+  }
+
   user: {
     videoQuota: number
   }

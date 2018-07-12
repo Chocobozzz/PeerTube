@@ -38,6 +38,7 @@ storage:
   previews: '../data/previews/'
   thumbnails: '../data/thumbnails/'
   torrents: '../data/torrents/'
+  captions: '../data/captions/'
   cache: '../data/cache/'
 
 log:

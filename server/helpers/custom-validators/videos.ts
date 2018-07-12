@@ -126,6 +126,29 @@ function isVideoFileSizeValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
 }
 
+function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: UserRight, res: Response) {
+  // Retrieve the user who did the request
+  if (video.isOwned() === false) {
+    res.status(403)
+       .json({ error: 'Cannot manage a video of another server.' })
+       .end()
+    return false
+  }
+
+  // Check if the user can delete the video
+  // The user can delete it if he has the right
+  // Or if s/he is the video's account
+  const account = video.VideoChannel.Account
+  if (user.hasRight(right) === false && account.userId !== user.id) {
+    res.status(403)
+       .json({ error: 'Cannot manage a video of another user.' })
+       .end()
+    return false
+  }
+
+  return true
+}
+
 async function isVideoExist (id: string, res: Response) {
   let video: VideoModel
 
@@ -179,6 +202,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
 
 export {
   isVideoCategoryValid,
+  checkUserCanManageVideo,
   isVideoLicenceValid,
   isVideoLanguageValid,
   isVideoTruncatedDescriptionValid,

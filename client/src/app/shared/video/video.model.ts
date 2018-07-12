@@ -1,7 +1,7 @@
 import { User } from '../'
 import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
-import { VideoConstant } from '../../../../../shared/models/videos/video.model'
+import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 import { ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'

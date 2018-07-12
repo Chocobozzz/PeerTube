@@ -118,7 +118,7 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
 
   const videoNameEscaped = escapeHTML(video.name)
   const videoDescriptionEscaped = escapeHTML(video.description)
-  const embedUrl = CONFIG.WEBSERVER.URL + video.getEmbedPath()
+  const embedUrl = CONFIG.WEBSERVER.URL + video.getEmbedStaticPath()
 
   const openGraphMetaTags = {
     'og:type': 'video',
