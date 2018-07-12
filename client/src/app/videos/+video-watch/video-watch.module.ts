@@ -16,7 +16,7 @@ import { VideoShareComponent } from './modal/video-share.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 
 import { VideoWatchComponent } from './video-watch.component'
-import {NgxQRCodeModule} from 'ngx-qrcode2'
+import { NgxQRCodeModule } from 'ngx-qrcode2'
 
 @NgModule({
   imports: [
