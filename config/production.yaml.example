@@ -50,6 +50,7 @@ storage:
   previews: '/var/www/peertube/storage/previews/'
   thumbnails: '/var/www/peertube/storage/thumbnails/'
   torrents: '/var/www/peertube/storage/torrents/'
+  captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
 
 log:

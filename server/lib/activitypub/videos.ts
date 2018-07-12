@@ -24,10 +24,20 @@ import { addVideoComments } from './video-comments'
 import { crawlCollectionPage } from './crawl'
 import { sendCreateVideo, sendUpdateVideo } from './send'
 import { shareVideoByServerAndChannel } from './index'
+import { isArray } from '../../helpers/custom-validators/misc'
+import { VideoCaptionModel } from '../../models/video/video-caption'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
   if (video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
+    // Fetch more attributes that we will need to serialize in AP object
+    if (isArray(video.VideoCaptions) === false) {
+      video.VideoCaptions = await video.$get('VideoCaptions', {
+        attributes: [ 'language' ],
+        transaction
+      }) as VideoCaptionModel[]
+    }
+
     if (isNewVideo === true) {
       // Now we'll add the video's meta data to our followers
       await sendCreateVideo(video, transaction)
@@ -38,9 +48,8 @@ async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, tr
   }
 }
 
-function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
+function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Function) {
   const host = video.VideoChannel.Account.Actor.Server.host
-  const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
   // We need to provide a callback, if no we could have an uncaught exception
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
@@ -179,23 +188,31 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
     const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
     const video = VideoModel.build(videoData)
 
-    // Don't block on request
+    // Don't block on remote HTTP request (we are in a transaction!)
     generateThumbnailFromUrl(video, videoObject.icon)
       .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
 
     const videoCreated = await video.save(sequelizeOptions)
 
+    // Process files
     const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
     if (videoFileAttributes.length === 0) {
       throw new Error('Cannot find valid files for video %s ' + videoObject.url)
     }
 
-    const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
-    await Promise.all(tasks)
+    const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
+    await Promise.all(videoFilePromises)
 
+    // Process tags
     const tags = videoObject.tag.map(t => t.name)
     const tagInstances = await TagModel.findOrCreateTags(tags, t)
     await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
+
+    // Process captions
+    const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
+      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
+    })
+    await Promise.all(videoCaptionsPromises)
 
     logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
 
@@ -328,7 +345,7 @@ export {
   federateVideoIfNeeded,
   fetchRemoteVideo,
   getOrCreateAccountAndVideoAndChannel,
-  fetchRemoteVideoPreview,
+  fetchRemoteVideoStaticFile,
   fetchRemoteVideoDescription,
   generateThumbnailFromUrl,
   videoActivityObjectToDBAttributes,

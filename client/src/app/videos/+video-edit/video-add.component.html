@@ -46,7 +46,7 @@
   <!-- Hidden because we want to load the component -->
   <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
     <my-video-edit
-      [form]="form" [formErrors]="formErrors"
+      [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
       [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
     ></my-video-edit>
 

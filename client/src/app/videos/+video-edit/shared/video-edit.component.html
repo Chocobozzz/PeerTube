@@ -132,8 +132,34 @@
           <label i18n for="waitTranscoding">Wait transcoding before publishing the video</label>
           <my-help
             tooltipPlacement="top" helpType="custom" i18n-customHtml
-            customHtml="If you decide to not wait transcoding before publishing the video, it can be unplayable until it transcoding ends."
+            customHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
           ></my-help>
+        </div>
+
+      </div>
+    </tab>
+
+    <tab i18n-heading heading="Captions">
+      <div class="col-md-12 captions">
+
+        <div class="captions-header">
+          <a (click)="openAddCaptionModal()" class="create-caption">
+            <span class="icon icon-add"></span>
+            <ng-container i18n>Add another caption</ng-container>
+          </a>
+        </div>
+
+        <div class="form-group" *ngFor="let videoCaption of videoCaptions">
+
+          <div class="caption-entry">
+            <div class="caption-entry-label">{{ videoCaption.language.label }}</div>
+
+            <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
+          </div>
+        </div>
+
+        <div class="no-caption" *ngIf="videoCaptions?.length === 0">
+          No captions for now.
         </div>
 
       </div>
@@ -172,3 +198,7 @@
   </tabset>
 
 </div>
+
+<my-video-caption-add-modal
+  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" (captionAdded)="onCaptionAdded($event)"
+></my-video-caption-add-modal>

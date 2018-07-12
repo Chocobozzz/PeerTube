@@ -4,6 +4,7 @@ import { CONFIG, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../
 import { VideosPreviewCache } from '../lib/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
+import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
 
 const staticRouter = express.Router()
 
@@ -49,10 +50,16 @@ staticRouter.use(
   express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE })
 )
 
-// Video previews path for express
+// We don't have video previews, fetch them from the origin instance
 staticRouter.use(
   STATIC_PATHS.PREVIEWS + ':uuid.jpg',
   asyncMiddleware(getPreview)
+)
+
+// We don't have video captions, fetch them from the origin instance
+staticRouter.use(
+  STATIC_PATHS.VIDEO_CAPTIONS + ':videoId-:captionLanguage([a-z]+).vtt',
+  asyncMiddleware(getVideoCaption)
 )
 
 // robots.txt service
@@ -70,7 +77,17 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getPreview (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const path = await VideosPreviewCache.Instance.getPreviewPath(req.params.uuid)
+  const path = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
+  if (!path) return res.sendStatus(404)
+
+  return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
+}
+
+async function getVideoCaption (req: express.Request, res: express.Response) {
+  const path = await VideosCaptionCache.Instance.getFilePath({
+    videoId: req.params.videoId,
+    language: req.params.captionLanguage
+  })
   if (!path) return res.sendStatus(404)
 
   return res.sendFile(path, { maxAge: STATIC_MAX_AGE })

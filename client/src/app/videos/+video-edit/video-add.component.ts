@@ -15,6 +15,8 @@ import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { switchMap } from 'rxjs/operators'
+import { VideoCaptionService } from '@app/shared/video-caption'
 
 @Component({
   selector: 'my-videos-add',
@@ -46,6 +48,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   videoPrivacies = []
   firstStepPrivacyId = 0
   firstStepChannelId = 0
+  videoCaptions = []
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -56,7 +59,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     private serverService: ServerService,
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
-    private i18n: I18n
+    private i18n: I18n,
+    private videoCaptionService: VideoCaptionService
   ) {
     super()
   }
@@ -159,11 +163,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     let name: string
 
     // If the name of the file is very small, keep the extension
-    if (nameWithoutExtension.length < 3) {
-      name = videofile.name
-    } else {
-      name = nameWithoutExtension
-    }
+    if (nameWithoutExtension.length < 3) name = videofile.name
+    else name = nameWithoutExtension
 
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
@@ -225,22 +226,25 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     this.isUpdatingVideo = true
     this.loadingBar.start()
     this.videoService.updateVideo(video)
-      .subscribe(
-        () => {
-          this.isUpdatingVideo = false
-          this.isUploadingVideo = false
-          this.loadingBar.complete()
+        .pipe(
+          // Then update captions
+          switchMap(() => this.videoCaptionService.updateCaptions(video.id, this.videoCaptions))
+        )
+        .subscribe(
+          () => {
+            this.isUpdatingVideo = false
+            this.isUploadingVideo = false
+            this.loadingBar.complete()
 
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
-          this.router.navigate([ '/videos/watch', video.uuid ])
-        },
+            this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
+            this.router.navigate([ '/videos/watch', video.uuid ])
+          },
 
-        err => {
-          this.isUpdatingVideo = false
-          this.notificationsService.error(this.i18n('Error'), err.message)
-          console.error(err)
-        }
-      )
-
+          err => {
+            this.isUpdatingVideo = false
+            this.notificationsService.error(this.i18n('Error'), err.message)
+            console.error(err)
+          }
+        )
   }
 }

@@ -29,8 +29,8 @@ function generateOEmbed (req: express.Request, res: express.Response, next: expr
   const maxHeight = parseInt(req.query.maxheight, 10)
   const maxWidth = parseInt(req.query.maxwidth, 10)
 
-  const embedUrl = webserverUrl + video.getEmbedPath()
-  let thumbnailUrl = webserverUrl + video.getPreviewPath()
+  const embedUrl = webserverUrl + video.getEmbedStaticPath()
+  let thumbnailUrl = webserverUrl + video.getPreviewStaticPath()
   let embedWidth = EMBED_SIZE.width
   let embedHeight = EMBED_SIZE.height
 

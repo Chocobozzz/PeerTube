@@ -1,0 +1,47 @@
+<div bsModal #modal="bs-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content" [formGroup]="form">
+
+      <div class="modal-header">
+        <span class="close" aria-hidden="true" (click)="hide()"></span>
+        <h4 i18n class="modal-title">Add caption</h4>
+      </div>
+
+      <div class="modal-body">
+        <label i18n for="language">Language</label>
+        <div class="peertube-select-container">
+          <select id="language" formControlName="language">
+            <option></option>
+            <option *ngFor="let language of videoCaptionLanguages" [value]="language.id">{{ language.label }}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formErrors.language" class="form-error">
+          {{ formErrors.language }}
+        </div>
+
+        <div class="caption-file">
+          <my-reactive-file
+            formControlName="captionfile" inputName="captionfile" i18n-inputLabel inputLabel="Select the caption file"
+            [extensions]="videoCaptionExtensions" [maxFileSize]="videoCaptionMaxSize" [displayFilename]="true"
+          ></my-reactive-file>
+        </div>
+
+        <div *ngIf="isReplacingExistingCaption()" class="warning-replace-caption" i18n>
+          This will replace an existing caption!
+        </div>
+
+        <div class="form-group inputs">
+          <span i18n class="action-button action-button-cancel" (click)="hide()">
+            Cancel
+          </span>
+
+          <input
+            type="submit" i18n-value value="Add this caption" class="action-button-submit"
+            [disabled]="!form.valid" (click)="addCaption()"
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

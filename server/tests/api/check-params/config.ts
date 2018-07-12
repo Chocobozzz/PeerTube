@@ -35,6 +35,9 @@ describe('Test config API validators', function () {
     cache: {
       previews: {
         size: 2
+      },
+      captions: {
+        size: 3
       }
     },
     signup: {

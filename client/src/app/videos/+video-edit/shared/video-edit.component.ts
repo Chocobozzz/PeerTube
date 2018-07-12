@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { FormGroup, ValidatorFn, Validators } from '@angular/forms'
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
@@ -8,6 +8,10 @@ import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { map } from 'rxjs/operators'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
+import { VideoCaptionService } from '@app/shared/video-caption'
+import { VideoCaptionAddModalComponent } from '@app/videos/+video-edit/shared/video-caption-add-modal.component'
+import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { removeElementFromArray } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-edit',
@@ -15,13 +19,16 @@ import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calend
   templateUrl: './video-edit.component.html'
 })
 
-export class VideoEditComponent implements OnInit {
+export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
   @Input() videoPrivacies = []
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
+  @Input() videoCaptions: VideoCaptionEdit[] = []
+
+  @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
@@ -41,9 +48,12 @@ export class VideoEditComponent implements OnInit {
   calendarTimezone: string
   calendarDateFormat: string
 
+  private schedulerInterval
+
   constructor (
     private formValidatorService: FormValidatorService,
     private videoValidatorsService: VideoValidatorsService,
+    private videoCaptionService: VideoCaptionService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -91,6 +101,13 @@ export class VideoEditComponent implements OnInit {
       defaultValues
     )
 
+    this.form.addControl('captions', new FormArray([
+      new FormGroup({
+        language: new FormControl(),
+        captionfile: new FormControl()
+      })
+    ]))
+
     this.trackChannelChange()
     this.trackPrivacyChange()
   }
@@ -102,7 +119,35 @@ export class VideoEditComponent implements OnInit {
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
 
-    setTimeout(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+    this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+  }
+
+  ngOnDestroy () {
+    if (this.schedulerInterval) clearInterval(this.schedulerInterval)
+  }
+
+  getExistingCaptions () {
+    return this.videoCaptions.map(c => c.language.id)
+  }
+
+  onCaptionAdded (caption: VideoCaptionEdit) {
+    this.videoCaptions.push(
+      Object.assign(caption, { action: 'CREATE' as 'CREATE' })
+    )
+  }
+
+  deleteCaption (caption: VideoCaptionEdit) {
+    // This caption is not on the server, just remove it from our array
+    if (caption.action === 'CREATE') {
+      removeElementFromArray(this.videoCaptions, caption)
+      return
+    }
+
+    caption.action = 'REMOVE' as 'REMOVE'
+  }
+
+  openAddCaptionModal () {
+    this.videoCaptionAddModal.show()
   }
 
   private trackPrivacyChange () {

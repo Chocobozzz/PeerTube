@@ -9,6 +9,7 @@ export class CustomConfigValidatorsService {
   readonly INSTANCE_SHORT_DESCRIPTION: BuildFormValidator
   readonly SERVICES_TWITTER_USERNAME: BuildFormValidator
   readonly CACHE_PREVIEWS_SIZE: BuildFormValidator
+  readonly CACHE_CAPTIONS_SIZE: BuildFormValidator
   readonly SIGNUP_LIMIT: BuildFormValidator
   readonly ADMIN_EMAIL: BuildFormValidator
   readonly TRANSCODING_THREADS: BuildFormValidator
@@ -41,6 +42,15 @@ export class CustomConfigValidatorsService {
         'required': this.i18n('Previews cache size is required.'),
         'min': this.i18n('Previews cache size must be greater than 1.'),
         'pattern': this.i18n('Previews cache size must be a number.')
+      }
+    }
+
+    this.CACHE_CAPTIONS_SIZE = {
+      VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
+      MESSAGES: {
+        'required': this.i18n('Captions cache size is required.'),
+        'min': this.i18n('Captions cache size must be greater than 1.'),
+        'pattern': this.i18n('Captions cache size must be a number.')
       }
     }
 

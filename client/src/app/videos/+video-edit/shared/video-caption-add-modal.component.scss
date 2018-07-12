@@ -1,0 +1,15 @@
+@import '_variables';
+@import '_mixins';
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
+.caption-file {
+  margin-top: 20px;
+}
+
+.warning-replace-caption {
+  color: red;
+  margin-top: 10px;
+}

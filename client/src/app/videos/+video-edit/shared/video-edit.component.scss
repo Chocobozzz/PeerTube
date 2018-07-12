@@ -7,6 +7,7 @@
 
 .video-edit {
   height: 100%;
+  min-height: 300px;
 
   .form-group {
     margin-bottom: 25px;
@@ -46,6 +47,40 @@
 
   .advanced-settings .form-group {
     margin-bottom: 20px;
+  }
+}
+
+.captions {
+
+  .captions-header {
+    text-align: right;
+
+    .create-caption {
+      @include create-button('../../../../assets/images/global/add.svg');
+    }
+  }
+
+  .caption-entry {
+    display: flex;
+    height: 40px;
+    align-items: center;
+
+    .caption-entry-label {
+      font-size: 15px;
+      font-weight: bold;
+
+      margin-right: 20px;
+    }
+
+    .caption-entry-delete {
+      @include peertube-button;
+      @include grey-button;
+    }
+  }
+
+  .no-caption {
+    text-align: center;
+    font-size: 15px;
   }
 }
 

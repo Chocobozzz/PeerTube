@@ -16,6 +16,7 @@ storage:
   previews: 'test6/previews/'
   thumbnails: 'test6/thumbnails/'
   torrents: 'test6/torrents/'
+  captions: 'test6/captions/'
   cache: 'test6/cache/'
 
 admin:

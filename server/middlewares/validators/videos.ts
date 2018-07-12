@@ -12,6 +12,7 @@ import {
   toValueOrNull
 } from '../../helpers/custom-validators/misc'
 import {
+  checkUserCanManageVideo,
   isScheduleVideoUpdatePrivacyValid,
   isVideoAbuseReasonValid,
   isVideoCategoryValid,
@@ -31,8 +32,6 @@ import {
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { UserModel } from '../../models/account/user'
-import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
@@ -40,17 +39,17 @@ import { areValidationErrors } from './utils'
 const videosAddValidator = [
   body('videofile')
     .custom((value, { req }) => isVideoFile(req.files)).withMessage(
-      'This file is not supported or too large. Please, make sure it is of the following type : '
+      'This file is not supported or too large. Please, make sure it is of the following type: '
       + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
     ),
   body('thumbnailfile')
     .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-      'This thumbnail file is not supported or too large. Please, make sure it is of the following type : '
+      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
       + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
     ),
   body('previewfile')
     .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-      'This preview file is not supported or too large. Please, make sure it is of the following type : '
+      'This preview file is not supported or too large. Please, make sure it is of the following type: '
       + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
     ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
@@ -152,12 +151,12 @@ const videosUpdateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('thumbnailfile')
     .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-      'This thumbnail file is not supported or too large. Please, make sure it is of the following type : '
+      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
       + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
     ),
   body('previewfile')
     .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-      'This preview file is not supported or too large. Please, make sure it is of the following type : '
+      'This preview file is not supported or too large. Please, make sure it is of the following type: '
       + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
     ),
   body('name')
@@ -372,29 +371,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
-function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: UserRight, res: express.Response) {
-  // Retrieve the user who did the request
-  if (video.isOwned() === false) {
-    res.status(403)
-              .json({ error: 'Cannot manage a video of another server.' })
-              .end()
-    return false
-  }
-
-  // Check if the user can delete the video
-  // The user can delete it if he has the right
-  // Or if s/he is the video's account
-  const account = video.VideoChannel.Account
-  if (user.hasRight(right) === false && account.userId !== user.id) {
-    res.status(403)
-              .json({ error: 'Cannot manage a video of another user.' })
-              .end()
-    return false
-  }
-
-  return true
-}
 
 function areErrorsInVideoImageFiles (req: express.Request, res: express.Response) {
   // Files are optional

@@ -5,7 +5,6 @@ import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
 import { readFileBufferPromise } from '../../../helpers/core-utils'
-import { ServerInfo } from '..'
 
 const expect = chai.expect
 let webtorrent = new WebTorrent()

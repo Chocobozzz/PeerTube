@@ -49,6 +49,7 @@ storage:
   previews: 'storage/previews/'
   thumbnails: 'storage/thumbnails/'
   torrents: 'storage/torrents/'
+  captions: 'storage/captions/'
   cache: 'storage/cache/'
 
 log:
@@ -57,6 +58,8 @@ log:
 cache:
   previews:
     size: 1 # Max number of previews you want to cache
+  captions:
+    size: 1 # Max number of video captions/subtitles you want to cache
 
 admin:
   email: 'admin@example.com' # Your personal email as administrator
