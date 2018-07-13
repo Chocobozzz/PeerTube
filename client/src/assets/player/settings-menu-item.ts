@@ -32,6 +32,8 @@ class SettingsMenuItem extends MenuItem {
       throw new Error(`Component ${subMenuName} does not exist`)
     }
     this.subMenu = new SubMenuComponent(this.player(), options, menuButton, this)
+    const subMenuClass = this.subMenu.buildCSSClass().split(' ')[0]
+    this.settingsSubMenuEl_.className += ' ' + subMenuClass
 
     this.eventHandlers()
 

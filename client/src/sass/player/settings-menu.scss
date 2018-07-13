@@ -52,6 +52,7 @@ $setting-transition-easing: ease-out;
     .vjs-settings-sub-menu-title {
       display: table-cell;
       padding: 0 5px;
+      text-transform: capitalize;
     }
 
     .vjs-settings-sub-menu-title {
@@ -141,15 +142,15 @@ $setting-transition-easing: ease-out;
         .vjs-menu-item {
           outline: 0;
           font-weight: $font-semibold;
-
-          padding: 5px 8px;
           text-align: right;
+          padding: 5px 8px;
 
           &.vjs-back-button {
             background-color: inherit;
-            padding: 8px 8px 13px 8px;
+            padding: 8px 8px 13px 12px;
             margin-bottom: 5px;
             border-bottom: 1px solid grey;
+            text-align: left;
 
             &::before {
               @include chevron-left(9px, 2px);
@@ -173,6 +174,25 @@ $setting-transition-easing: ease-out;
               background-image: url('#{$assets-path}/player/images/tick.svg');
             }
           }
+        }
+
+        // Special captions case
+        // Bigger caption button
+        &.vjs-captions-button {
+          width: 200px;
+
+          .vjs-menu-item {
+            text-align: left;
+
+            .vjs-menu-item-text {
+              margin-left: 25px;
+              text-transform: capitalize;
+            }
+          }
+        }
+
+        .vjs-menu {
+          width: inherit;
         }
       }
     }

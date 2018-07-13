@@ -14,6 +14,7 @@ const playerKeys = {
   'Quality': 'Quality',
   'Auto': 'Auto',
   'Speed': 'Speed',
+  'Subtitles/CC': 'Subtitles/CC',
   'peers': 'peers',
   'Go to the video page': 'Go to the video page',
   'Settings': 'Settings',

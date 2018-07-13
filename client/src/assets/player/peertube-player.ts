@@ -11,12 +11,16 @@ import './webtorrent-info-button'
 import './peertube-videojs-plugin'
 import './peertube-load-progress-bar'
 import './theater-button'
-import { videojsUntyped } from './peertube-videojs-typings'
+import { VideoJSCaption, videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
+// Change Captions to Subtitles/CC
+videojsUntyped.getComponent('CaptionsButton').prototype.controlText_ = 'Subtitles/CC'
+// We just want to display 'Off' instead of 'captions off', keep a space so the variable == true (hacky I know)
+videojsUntyped.getComponent('CaptionsButton').prototype.label_ = ' '
 
 function getVideojsOptions (options: {
   autoplay: boolean,
@@ -30,11 +34,14 @@ function getVideojsOptions (options: {
   poster: string,
   startTime: number
   theaterMode: boolean,
+  videoCaptions: VideoJSCaption[],
   controls?: boolean,
   muted?: boolean,
   loop?: boolean
 }) {
   const videojsOptions = {
+    // We don't use text track settings for now
+    textTrackSettings: false,
     controls: options.controls !== undefined ? options.controls : true,
     muted: options.controls !== undefined ? options.muted : false,
     loop: options.loop !== undefined ? options.loop : false,
@@ -45,6 +52,7 @@ function getVideojsOptions (options: {
     plugins: {
       peertube: {
         autoplay: options.autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
+        videoCaptions: options.videoCaptions,
         videoFiles: options.videoFiles,
         playerElement: options.playerElement,
         videoViewUrl: options.videoViewUrl,
@@ -71,8 +79,16 @@ function getVideojsOptions (options: {
 
 function getControlBarChildren (options: {
   peertubeLink: boolean
-  theaterMode: boolean
+  theaterMode: boolean,
+  videoCaptions: VideoJSCaption[]
 }) {
+  const settingEntries = []
+
+  // Keep an order
+  settingEntries.push('playbackRateMenuButton')
+  if (options.videoCaptions.length !== 0) settingEntries.push('captionsButton')
+  settingEntries.push('resolutionMenuButton')
+
   const children = {
     'playToggle': {},
     'currentTimeDisplay': {},
@@ -102,10 +118,7 @@ function getControlBarChildren (options: {
       setup: {
         maxHeightOffset: 40
       },
-      entries: [
-        'resolutionMenuButton',
-        'playbackRateMenuButton'
-      ]
+      entries: settingEntries
     }
   }
 

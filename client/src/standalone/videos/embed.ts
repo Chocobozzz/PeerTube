@@ -20,9 +20,11 @@ import 'whatwg-fetch'
 import * as vjs from 'video.js'
 import * as Channel from 'jschannel'
 
-import { VideoDetails } from '../../../../shared'
+import { ResultList, VideoDetails } from '../../../../shared'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
 import { PeerTubeResolution } from '../player/definitions'
+import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
+import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
 
 /**
  * Embed API exposes control of the embed player to the outside world via
@@ -178,6 +180,10 @@ class PeerTubeEmbed {
     return fetch(this.getVideoUrl(videoId))
   }
 
+  loadVideoCaptions (videoId: string): Promise<Response> {
+    return fetch(this.getVideoUrl(videoId) + '/captions')
+  }
+
   removeElement (element: HTMLElement) {
     element.parentElement.removeChild(element)
   }
@@ -254,15 +260,27 @@ class PeerTubeEmbed {
     const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
 
     await loadLocale(window.location.origin, vjs, navigator.language)
-    let response = await this.loadVideoInfo(videoId)
+    const [ videoResponse, captionsResponse ] = await Promise.all([
+      this.loadVideoInfo(videoId),
+      this.loadVideoCaptions(videoId)
+    ])
 
-    if (!response.ok) {
-      if (response.status === 404) return this.videoNotFound(this.videoElement)
+    if (!videoResponse.ok) {
+      if (videoResponse.status === 404) return this.videoNotFound(this.videoElement)
 
       return this.videoFetchError(this.videoElement)
     }
 
-    const videoInfo: VideoDetails = await response.json()
+    const videoInfo: VideoDetails = await videoResponse.json()
+    let videoCaptions: VideoJSCaption[] = []
+    if (captionsResponse.ok) {
+      const { data } = (await captionsResponse.json()) as ResultList<VideoCaption>
+      videoCaptions = data.map(c => ({
+        label: c.language.label,
+        language: c.language.id,
+        src: window.location.origin + c.captionPath
+      }))
+    }
 
     this.loadParams()
 
@@ -273,6 +291,7 @@ class PeerTubeEmbed {
       loop: this.loop,
       startTime: this.startTime,
 
+      videoCaptions,
       inactivityTimeout: 1500,
       videoViewUrl: this.getVideoUrl(videoId) + '/views',
       playerElement: this.videoElement,
@@ -297,6 +316,7 @@ class PeerTubeEmbed {
       }
 
       addContextMenu(this.player, window.location.origin + videoInfo.embedPath)
+
       this.initializeApi()
     })
   }

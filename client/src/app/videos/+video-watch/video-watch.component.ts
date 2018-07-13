@@ -6,11 +6,11 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
+import { ResultList, UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -26,6 +26,9 @@ import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { VideoCaptionService } from '@app/shared/video-caption'
+import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
+import { VideoJSCaption } from '../../../assets/player/peertube-videojs-typings'
 
 @Component({
   selector: 'my-video-watch',
@@ -74,6 +77,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
+    private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
@@ -109,14 +113,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (this.player) this.player.pause()
 
       // Video did change
-      this.videoService
-          .getVideo(uuid)
-          .pipe(catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ])))
-          .subscribe(video => {
-            const startTime = this.route.snapshot.queryParams.start
-            this.onVideoFetched(video, startTime)
-                .catch(err => this.handleError(err))
-          })
+      forkJoin(
+        this.videoService.getVideo(uuid),
+        this.videoCaptionService.listCaptions(uuid)
+      )
+        .pipe(
+          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
+        )
+        .subscribe(([ video, captionsResult ]) => {
+          const startTime = this.route.snapshot.queryParams.start
+          this.onVideoFetched(video, captionsResult.data, startTime)
+              .catch(err => this.handleError(err))
+        })
     })
   }
 
@@ -331,7 +339,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
   }
 
-  private async onVideoFetched (video: VideoDetails, startTime = 0) {
+  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], startTime = 0) {
     this.video = video
 
     // Re init attributes
@@ -358,10 +366,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.playerElement.setAttribute('playsinline', 'true')
     playerElementWrapper.appendChild(this.playerElement)
 
+    const playerCaptions = videoCaptions.map(c => ({
+      label: c.language.label,
+      language: c.language.id,
+      src: environment.apiUrl + c.captionPath
+    }))
+
     const videojsOptions = getVideojsOptions({
       autoplay: this.isAutoplay(),
       inactivityTimeout: 2500,
       videoFiles: this.video.files,
+      videoCaptions: playerCaptions,
       playerElement: this.playerElement,
       videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
       videoDuration: this.video.duration,
