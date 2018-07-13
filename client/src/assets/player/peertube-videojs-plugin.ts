@@ -3,7 +3,7 @@ import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
-import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import { PeertubePluginOptions, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { isMobile, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
@@ -54,6 +54,7 @@ class PeerTubePlugin extends Plugin {
   private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
+  private videoCaptions: VideoJSCaption[]
   private renderer
   private fakeRenderer
   private autoResolution = true
@@ -79,6 +80,7 @@ class PeerTubePlugin extends Plugin {
     this.videoFiles = options.videoFiles
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
+    this.videoCaptions = options.videoCaptions
 
     this.savePlayerSrcFunction = this.player.src
     // Hack to "simulate" src link in video.js >= 6
@@ -421,6 +423,8 @@ class PeerTubePlugin extends Plugin {
 
     this.initSmoothProgressBar()
 
+    this.initCaptions()
+
     this.alterInactivity()
 
     if (this.autoplay === true) {
@@ -581,7 +585,7 @@ class PeerTubePlugin extends Plugin {
       this.player.options_.inactivityTimeout = 0
     }
     const enableInactivity = () => {
-      this.player.options_.inactivityTimeout = saveInactivityTimeout
+      // this.player.options_.inactivityTimeout = saveInactivityTimeout
     }
 
     const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')
@@ -608,6 +612,18 @@ class PeerTubePlugin extends Plugin {
         }
       }
       this.fakeRenderer = undefined
+    }
+  }
+
+  private initCaptions () {
+    for (const caption of this.videoCaptions) {
+      this.player.addRemoteTextTrack({
+        kind: 'captions',
+        label: caption.label,
+        language: caption.language,
+        id: caption.language,
+        src: caption.src
+      }, false)
     }
   }
 

@@ -213,6 +213,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       servicesTwitterUsername: this.customConfig.services.twitter.username,
       servicesTwitterWhitelisted: this.customConfig.services.twitter.whitelisted,
       cachePreviewsSize: this.customConfig.cache.previews.size,
+      cacheCaptionsSize: this.customConfig.cache.captions.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,
       adminEmail: this.customConfig.admin.email,
