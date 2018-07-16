@@ -84,7 +84,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
             // We cannot set private a video that was not private
             if (this.video.privacy !== VideoPrivacy.PRIVATE) {
-              this.videoPrivacies = this.videoPrivacies.filter(p => p.id !== VideoPrivacy.PRIVATE)
+              this.videoPrivacies = this.videoPrivacies.filter(p => p.id.toString() !== VideoPrivacy.PRIVATE.toString())
             } else { // We can schedule video publication only if it it is private
               this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
             }

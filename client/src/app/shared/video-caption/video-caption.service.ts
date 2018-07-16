@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { forkJoin, Observable } from 'rxjs'
+import { forkJoin, Observable, of } from 'rxjs'
 import { ResultList } from '../../../../../shared'
 import { RestExtractor, RestService } from '../rest'
 import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
@@ -42,6 +42,8 @@ export class VideoCaptionService {
   }
 
   updateCaptions (videoId: number | string, videoCaptions: VideoCaptionEdit[]) {
+    if (videoCaptions.length === 0) return of(true)
+
     const observables: Observable<any>[] = []
 
     for (const videoCaption of videoCaptions) {
