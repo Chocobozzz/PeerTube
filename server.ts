@@ -15,6 +15,7 @@ import * as express from 'express'
 import * as morgan from 'morgan'
 import * as cors from 'cors'
 import * as cookieParser from 'cookie-parser'
+import * as helmet from 'helmet'
 
 process.title = 'peertube'
 
@@ -47,6 +48,13 @@ if (errorMessage !== null) {
 
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)
+
+// Security middlewares
+app.use(helmet({
+  frameguard: {
+    action: 'deny'
+  }
+}))
 
 // ----------- Database -----------
 
