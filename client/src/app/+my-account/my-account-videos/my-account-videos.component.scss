@@ -100,6 +100,10 @@
     height: auto;
     text-align: center;
 
+    .video-info-name {
+      margin: auto;
+    }
+
     input[type=checkbox] {
       display: none;
     }

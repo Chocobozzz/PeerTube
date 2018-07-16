@@ -56,10 +56,18 @@
 }
 
 @media screen and (max-width: 800px) {
+  .video-channels-header {
+    text-align: center;
+  }
+
   .video-channel {
     flex-direction: column;
     height: auto;
     text-align: center;
+
+    .video-channel-names {
+      justify-content: center;
+    }
 
     img {
       margin-right: 0;
