@@ -112,13 +112,49 @@ p-table {
       justify-content: center;
       align-items: center;
 
+      .ui-paginator-first,
+      .ui-paginator-prev,
+      .ui-paginator-next,
+      .ui-paginator-last {
+        @include glyphicon-light;
+        padding: 5px 2px;
+        height: auto;
+        outline: none;
+        font-size: 13px;
+        top: -1px;
+
+        &.ui-state-disabled:hover {
+          background-color: #fff !important;
+        }
+
+        &.ui-paginator-first {
+          @extend .glyphicon-step-backward;
+        }
+
+        &.ui-paginator-prev {
+          @extend .glyphicon-chevron-left;
+
+          margin-right: 10px;
+        }
+
+        &.ui-paginator-next {
+          @extend .glyphicon-chevron-right;
+
+          margin-left: 10px;
+        }
+
+        &.ui-paginator-last {
+          @extend .glyphicon-step-forward;
+        }
+      }
+
       .ui-paginator-pages {
         height: auto !important;
 
         a {
           color: #000 !important;
           font-weight: $font-semibold !important;
-          margin-right: 20px !important;
+          margin-right: 0 10px !important;
           outline: 0 !important;
           border-radius: 3px !important;
           padding: 5px 2px !important;
