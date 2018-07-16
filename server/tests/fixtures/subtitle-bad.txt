@@ -1,0 +1,11 @@
+1
+00:00:01,600 --> 00:00:04,200
+English (US)
+
+2
+00:00:05,900 --> 00:00:07,999
+This is a subtitle in American English
+
+3
+00:00:10,000 --> 00:00:14,000
+Adding subtitles is very easy to do

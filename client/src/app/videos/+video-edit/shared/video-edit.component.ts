@@ -68,6 +68,12 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
   }
 
+  get existingCaptions () {
+    return this.videoCaptions
+               .filter(c => c.action !== 'REMOVE')
+               .map(c => c.language.id)
+  }
+
   updateForm () {
     const defaultValues = {
       nsfw: 'false',
@@ -126,11 +132,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     if (this.schedulerInterval) clearInterval(this.schedulerInterval)
   }
 
-  getExistingCaptions () {
-    return this.videoCaptions.map(c => c.language.id)
-  }
-
   onCaptionAdded (caption: VideoCaptionEdit) {
+    const existingCaption = this.videoCaptions.find(c => c.language.id === caption.language.id)
+
+    // Replace existing caption?
+    if (existingCaption) {
+      Object.assign(existingCaption, caption, { action: 'CREATE' as 'CREATE' })
+      return
+    }
+
     this.videoCaptions.push(
       Object.assign(caption, { action: 'CREATE' as 'CREATE' })
     )

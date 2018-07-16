@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import * as chai from 'chai'
 import 'mocha'
 import {
   createUser,
@@ -126,6 +125,40 @@ describe('Test video captions API validator', function () {
         statusCodeExpected: 401
       })
     })
+
+    it('Should fail with an invalid captionfile extension', async function () {
+      const attaches = {
+        'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.txt')
+      }
+
+      const captionPath = path + videoUUID + '/captions/fr'
+      await makeUploadRequest({
+        method: 'PUT',
+        url: server.url,
+        path: captionPath,
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: 400
+      })
+    })
+
+    // it('Should fail with an invalid captionfile srt', async function () {
+    //   const attaches = {
+    //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.srt')
+    //   }
+    //
+    //   const captionPath = path + videoUUID + '/captions/fr'
+    //   await makeUploadRequest({
+    //     method: 'PUT',
+    //     url: server.url,
+    //     path: captionPath,
+    //     token: server.accessToken,
+    //     fields,
+    //     attaches,
+    //     statusCodeExpected: 500
+    //   })
+    // })
 
     it('Should success with the correct parameters', async function () {
       const captionPath = path + videoUUID + '/captions/fr'

@@ -31,7 +31,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     if (video.isOwned()) throw new Error('Cannot load remote preview of owned video.')
 
     const remoteStaticPath = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
-    const destPath = join(CACHE.DIRECTORIES.PREVIEWS, video.getPreviewName())
+    const destPath = join(CACHE.PREVIEWS.DIRECTORY, video.getPreviewName())
 
     return this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
   }

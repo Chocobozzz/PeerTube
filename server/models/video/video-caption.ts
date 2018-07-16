@@ -75,14 +75,18 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
 
   @BeforeDestroy
   static async removeFiles (instance: VideoCaptionModel) {
+    if (!instance.Video) {
+      instance.Video = await instance.$get('Video') as VideoModel
+    }
 
     if (instance.isOwned()) {
-      if (!instance.Video) {
-        instance.Video = await instance.$get('Video') as VideoModel
-      }
-
       logger.debug('Removing captions %s of video %s.', instance.Video.uuid, instance.language)
-      return instance.removeCaptionFile()
+
+      try {
+        await instance.removeCaptionFile()
+      } catch (err) {
+        logger.error('Cannot remove caption file of video %s.', instance.Video.uuid)
+      }
     }
 
     return undefined

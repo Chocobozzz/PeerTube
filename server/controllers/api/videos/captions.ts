@@ -9,11 +9,10 @@ import { createReqFiles } from '../../../helpers/express-utils'
 import { CONFIG, sequelizeTypescript, VIDEO_CAPTIONS_MIMETYPE_EXT } from '../../../initializers'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { renamePromise } from '../../../helpers/core-utils'
-import { join } from 'path'
 import { VideoModel } from '../../../models/video/video'
 import { logger } from '../../../helpers/logger'
 import { federateVideoIfNeeded } from '../../../lib/activitypub'
+import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 
 const reqVideoCaptionAdd = createReqFiles(
   [ 'captionfile' ],
@@ -66,12 +65,7 @@ async function addVideoCaption (req: express.Request, res: express.Response) {
   videoCaption.Video = video
 
   // Move physical file
-  const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
-  const destination = join(videoCaptionsDir, videoCaption.getCaptionName())
-  await renamePromise(videoCaptionPhysicalFile.path, destination)
-  // This is important in case if there is another attempt in the retry process
-  videoCaptionPhysicalFile.filename = videoCaption.getCaptionName()
-  videoCaptionPhysicalFile.path = destination
+  await moveAndProcessCaptionFile(videoCaptionPhysicalFile, videoCaption)
 
   await sequelizeTypescript.transaction(async t => {
     await VideoCaptionModel.insertOrReplaceLanguage(video.id, req.params.captionLanguage, t)

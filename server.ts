@@ -26,7 +26,7 @@ import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } fro
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+import { API_VERSION, CONFIG, STATIC_PATHS, CACHE } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -182,8 +182,8 @@ async function startApplication () {
   await JobQueue.Instance.init()
 
   // Caches initializations
-  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
-  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE)
+  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, CACHE.PREVIEWS.MAX_AGE)
+  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, CACHE.VIDEO_CAPTIONS.MAX_AGE)
 
   // Enable Schedulers
   BadActorFollowScheduler.Instance.enable()

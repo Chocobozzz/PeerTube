@@ -301,7 +301,7 @@ function searchVideoWithSort (url: string, search: string, sort: string) {
 async function checkVideoFilesWereRemoved (videoUUID: string, serverNumber: number) {
   const testDirectory = 'test' + serverNumber
 
-  for (const directory of [ 'videos', 'thumbnails', 'torrents', 'previews' ]) {
+  for (const directory of [ 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]) {
     const directoryPath = join(root(), testDirectory, directory)
 
     const directoryExists = existsSync(directoryPath)

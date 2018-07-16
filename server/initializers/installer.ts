@@ -33,7 +33,8 @@ export {
 // ---------------------------------------------------------------------------
 
 function removeCacheDirectories () {
-  const cacheDirectories = CACHE.DIRECTORIES
+  const cacheDirectories = Object.keys(CACHE)
+    .map(k => CACHE[k].DIRECTORY)
 
   const tasks: Promise<any>[] = []
 
@@ -48,7 +49,8 @@ function removeCacheDirectories () {
 
 function createDirectoriesIfNotExist () {
   const storage = CONFIG.STORAGE
-  const cacheDirectories = CACHE.DIRECTORIES
+  const cacheDirectories = Object.keys(CACHE)
+                                 .map(k => CACHE[k].DIRECTORY)
 
   const tasks = []
   for (const key of Object.keys(storage)) {

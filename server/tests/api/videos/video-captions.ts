@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { doubleFollow, flushAndRunMultipleServers, uploadVideo } from '../../utils'
+import { checkVideoFilesWereRemoved, doubleFollow, flushAndRunMultipleServers, removeVideo, uploadVideo, wait } from '../../utils'
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { waitJobs } from '../../utils/server/jobs'
 import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
@@ -110,6 +110,51 @@ describe('Test video captions', function () {
     }
   })
 
+  it('Should replace an existing caption with a srt file and convert it', async function () {
+    this.timeout(30000)
+
+    await createVideoCaption({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      language: 'ar',
+      videoId: videoUUID,
+      fixture: 'subtitle-good.srt'
+    })
+
+    await waitJobs(servers)
+
+    // Cache invalidation
+    await wait(3000)
+  })
+
+  it('Should have this caption updated and converted', async function () {
+    for (const server of servers) {
+      const res = await listVideoCaptions(server.url, videoUUID)
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(2)
+
+      const caption1: VideoCaption = res.body.data[0]
+      expect(caption1.language.id).to.equal('ar')
+      expect(caption1.language.label).to.equal('Arabic')
+      expect(caption1.captionPath).to.equal('/static/video-captions/' + videoUUID + '-ar.vtt')
+
+      const expected = 'WEBVTT FILE\r\n' +
+        '\r\n' +
+        '1\r\n' +
+        '00:00:01.600 --> 00:00:04.200\r\n' +
+        'English (US)\r\n' +
+        '\r\n' +
+        '2\r\n' +
+        '00:00:05.900 --> 00:00:07.999\r\n' +
+        'This is a subtitle in American English\r\n' +
+        '\r\n' +
+        '3\r\n' +
+        '00:00:10.000 --> 00:00:14.000\r\n' +
+        'Adding subtitles is very easy to do\r\n'
+      await testCaptionFile(server.url, caption1.captionPath, expected)
+    }
+  })
+
   it('Should remove one caption', async function () {
     this.timeout(30000)
 
@@ -131,6 +176,12 @@ describe('Test video captions', function () {
       expect(caption.captionPath).to.equal('/static/video-captions/' + videoUUID + '-zh.vtt')
       await testCaptionFile(server.url, caption.captionPath, 'Subtitle good 2.')
     }
+  })
+
+  it('Should remove the video, and thus all video captions', async function () {
+    await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
+
+    await checkVideoFilesWereRemoved(videoUUID, 1)
   })
 
   after(async function () {

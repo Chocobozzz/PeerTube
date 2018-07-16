@@ -231,7 +231,7 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_CAPTIONS: {
     CAPTION_FILE: {
-      EXTNAME: [ '.vtt' ],
+      EXTNAME: [ '.vtt', '.srt' ],
       FILE_SIZE: {
         max: 2 * 1024 * 1024 // 2MB
       }
@@ -364,7 +364,8 @@ const IMAGE_MIMETYPE_EXT = {
 }
 
 const VIDEO_CAPTIONS_MIMETYPE_EXT = {
-  'text/vtt': '.vtt'
+  'text/vtt': '.vtt',
+  'application/x-subrip': '.srt'
 }
 
 // ---------------------------------------------------------------------------
@@ -451,9 +452,13 @@ const EMBED_SIZE = {
 
 // Sub folders of cache directory
 const CACHE = {
-  DIRECTORIES: {
-    PREVIEWS: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
-    VIDEO_CAPTIONS: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions')
+  PREVIEWS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
+    MAX_AGE: 1000 * 3600 * 3 // 3 hours
+  },
+  VIDEO_CAPTIONS: {
+    DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
+    MAX_AGE: 1000 * 3600 * 3 // 3 hours
   }
 }
 
@@ -500,6 +505,8 @@ if (isTestInstance() === true) {
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
+
+  CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
 }
 
 updateWebserverConfig()

@@ -151,7 +151,7 @@
 
         <div class="form-group" *ngFor="let videoCaption of videoCaptions">
 
-          <div class="caption-entry">
+          <div *ngIf="videoCaption.action !== 'REMOVE'" class="caption-entry">
             <div class="caption-entry-label">{{ videoCaption.language.label }}</div>
 
             <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
@@ -200,5 +200,5 @@
 </div>
 
 <my-video-caption-add-modal
-  #videoCaptionAddModal [existingCaptions]="getExistingCaptions()" (captionAdded)="onCaptionAdded($event)"
+  #videoCaptionAddModal [existingCaptions]="existingCaptions" (captionAdded)="onCaptionAdded($event)"
 ></my-video-caption-add-modal>

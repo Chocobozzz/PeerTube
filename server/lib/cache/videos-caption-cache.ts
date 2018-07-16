@@ -42,7 +42,7 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <GetPathParam> {
     if (!video) return undefined
 
     const remoteStaticPath = videoCaption.getCaptionStaticPath()
-    const destPath = join(CACHE.DIRECTORIES.VIDEO_CAPTIONS, videoCaption.getCaptionName())
+    const destPath = join(CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.getCaptionName())
 
     return this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
   }

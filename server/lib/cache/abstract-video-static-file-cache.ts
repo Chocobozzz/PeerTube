@@ -1,12 +1,9 @@
 import * as AsyncLRU from 'async-lru'
 import { createWriteStream } from 'fs'
-import { join } from 'path'
 import { unlinkPromise } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
-import { CACHE, CONFIG } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { fetchRemoteVideoStaticFile } from '../activitypub'
-import { VideoCaptionModel } from '../../models/video/video-caption'
 
 export abstract class AbstractVideoStaticFileCache <T> {
 
@@ -17,9 +14,10 @@ export abstract class AbstractVideoStaticFileCache <T> {
   // Load and save the remote file, then return the local path from filesystem
   protected abstract loadRemoteFile (key: string): Promise<string>
 
-  init (max: number) {
+  init (max: number, maxAge: number) {
     this.lru = new AsyncLRU({
       max,
+      maxAge,
       load: (key, cb) => {
         this.loadRemoteFile(key)
           .then(res => cb(null, res))
@@ -28,7 +26,8 @@ export abstract class AbstractVideoStaticFileCache <T> {
     })
 
     this.lru.on('evict', (obj: { key: string, value: string }) => {
-      unlinkPromise(obj.value).then(() => logger.debug('%s evicted from %s', obj.value, this.constructor.name))
+      unlinkPromise(obj.value)
+        .then(() => logger.debug('%s evicted from %s', obj.value, this.constructor.name))
     })
   }
 
