@@ -51,7 +51,6 @@ const videosAddValidator = getCommonVideoAttributes().concat([
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return
-    if (areErrorsInVideoImageFiles(req, res)) return
     if (areErrorsInScheduleUpdate(req, res)) return
 
     const videoFile: Express.Multer.File = req.files['videofile'][0]
@@ -101,7 +100,6 @@ const videosUpdateValidator = getCommonVideoAttributes().concat([
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (areErrorsInVideoImageFiles(req, res)) return
     if (areErrorsInScheduleUpdate(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
@@ -251,25 +249,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
-function areErrorsInVideoImageFiles (req: express.Request, res: express.Response) {
-  // Files are optional
-  if (!req.files) return false
-
-  for (const imageField of [ 'thumbnail', 'preview' ]) {
-    if (!req.files[ imageField ]) continue
-
-    const imageFile = req.files[ imageField ][ 0 ] as Express.Multer.File
-    if (imageFile.size > CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max) {
-      res.status(400)
-        .json({ error: `The size of the ${imageField} is too big (>${CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max}).` })
-        .end()
-      return true
-    }
-  }
-
-  return false
-}
 
 function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
   if (req.body.scheduleUpdate) {
