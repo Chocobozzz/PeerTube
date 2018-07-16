@@ -64,7 +64,7 @@ export class LoginComponent extends FormReactive implements OnInit {
       .subscribe(
         res => {
           const message = this.i18n(
-            'An email with the reset password instructions will be sent to {{ email }}.',
+            'An email with the reset password instructions will be sent to {{email}}.',
             { email: this.forgotPasswordEmail }
           )
           this.notificationsService.success(this.i18n('Success'), message)
