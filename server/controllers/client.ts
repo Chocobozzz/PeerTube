@@ -1,5 +1,6 @@
 import * as Bluebird from 'bluebird'
 import * as express from 'express'
+import * as helmet from 'helmet'
 import { join } from 'path'
 import * as validator from 'validator'
 import { escapeHTML, readFileBufferPromise, root } from '../helpers/core-utils'
@@ -30,9 +31,12 @@ clientsRouter.use('/videos/watch/:id',
 )
 
 clientsRouter.use('' +
-  '/videos/embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  res.sendFile(embedPath)
-})
+  '/videos/embed',
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    res.removeHeader('X-Frame-Options')
+    res.sendFile(embedPath)
+  }
+)
 clientsRouter.use('' +
   '/videos/test-embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendFile(testEmbedPath)

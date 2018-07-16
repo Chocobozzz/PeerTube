@@ -96,6 +96,7 @@
     "express-rate-limit": "^2.11.0",
     "express-validator": "^5.0.0",
     "fluent-ffmpeg": "^2.1.0",
+    "helmet": "^3.12.1",
     "ipaddr.js": "https://github.com/whitequark/ipaddr.js.git#8e69afeb4053ee32447a101845f860848280eca5",
     "is-cidr": "^2.0.5",
     "iso-639-3": "^1.0.1",
