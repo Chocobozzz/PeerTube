@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'express-validator'
-import { body, param, query } from 'express-validator/check'
+import { body, param, query, ValidationChain } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
 import {
   isBooleanValid,
@@ -36,76 +36,16 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
 
-const videosAddValidator = [
+const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
     .custom((value, { req }) => isVideoFile(req.files)).withMessage(
       'This file is not supported or too large. Please, make sure it is of the following type: '
       + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
     ),
-  body('thumbnailfile')
-    .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-    ),
-  body('previewfile')
-    .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-      'This preview file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-    ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
-  body('category')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
-  body('licence')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
-  body('language')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
-  body('nsfw')
-    .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
-  body('waitTranscoding')
-    .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
-  body('description')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
-  body('support')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
-  body('tags')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoTagsValid).withMessage('Should have correct tags'),
-  body('commentsEnabled')
-    .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
-  body('privacy')
-    .optional()
-    .toInt()
-    .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('channelId')
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
-  body('scheduleUpdate')
-    .optional()
-    .customSanitizer(toValueOrNull),
-  body('scheduleUpdate.updateAt')
-    .optional()
-    .custom(isDateValid).withMessage('Should have a valid schedule update date'),
-  body('scheduleUpdate.privacy')
-    .optional()
-    .toInt()
-    .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -145,77 +85,17 @@ const videosAddValidator = [
 
     return next()
   }
-]
+])
 
-const videosUpdateValidator = [
+const videosUpdateValidator = getCommonVideoAttributes().concat([
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('thumbnailfile')
-    .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-    ),
-  body('previewfile')
-    .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-      'This preview file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-    ),
   body('name')
     .optional()
     .custom(isVideoNameValid).withMessage('Should have a valid name'),
-  body('category')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
-  body('licence')
-    .optional()
-    .customSanitizer(toIntOrNull)
-    .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
-  body('language')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
-  body('nsfw')
-    .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
-  body('waitTranscoding')
-    .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
-  body('privacy')
-    .optional()
-    .toInt()
-    .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
-  body('description')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
-  body('support')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
-  body('tags')
-    .optional()
-    .customSanitizer(toValueOrNull)
-    .custom(isVideoTagsValid).withMessage('Should have correct tags'),
-  body('commentsEnabled')
-    .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
   body('channelId')
     .optional()
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
-  body('scheduleUpdate')
-    .optional()
-    .customSanitizer(toValueOrNull),
-  body('scheduleUpdate.updateAt')
-    .optional()
-    .custom(isDateValid).withMessage('Should have a valid schedule update date'),
-  body('scheduleUpdate.privacy')
-    .optional()
-    .toInt()
-    .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
@@ -241,7 +121,7 @@ const videosUpdateValidator = [
 
     return next()
   }
-]
+])
 
 const videosGetValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -403,4 +283,71 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   }
 
   return false
+}
+
+function getCommonVideoAttributes () {
+  return [
+    body('thumbnailfile')
+      .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
+      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
+      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ),
+    body('previewfile')
+      .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
+      'This preview file is not supported or too large. Please, make sure it is of the following type: '
+      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+    ),
+
+    body('category')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
+    body('licence')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
+    body('language')
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
+    body('nsfw')
+      .optional()
+      .toBoolean()
+      .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+    body('waitTranscoding')
+      .optional()
+      .toBoolean()
+      .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
+    body('privacy')
+      .optional()
+      .toInt()
+      .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
+    body('description')
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+    body('support')
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
+    body('tags')
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isVideoTagsValid).withMessage('Should have correct tags'),
+    body('commentsEnabled')
+      .optional()
+      .toBoolean()
+      .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
+
+    body('scheduleUpdate')
+      .optional()
+      .customSanitizer(toValueOrNull),
+    body('scheduleUpdate.updateAt')
+      .optional()
+      .custom(isDateValid).withMessage('Should have a valid schedule update date'),
+    body('scheduleUpdate.privacy')
+      .optional()
+      .toInt()
+      .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
+  ] as (ValidationChain | express.Handler)[]
 }
