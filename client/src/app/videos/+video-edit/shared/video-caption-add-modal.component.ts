@@ -76,13 +76,8 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
     this.captionAdded.emit({
       language: languageObject,
-      captionfile: this.form.value['captionfile']
+      captionfile: this.form.value[ 'captionfile' ]
     })
-    //
-    // this.form.patchValue({
-    //   language: null,
-    //   captionfile: null
-    // })
 
     this.form.reset()
   }

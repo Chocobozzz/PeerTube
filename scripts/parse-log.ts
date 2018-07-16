@@ -1,5 +1,5 @@
 import * as program from 'commander'
-import { createReadStream, readdirSync } from 'fs'
+import { createReadStream, readdirSync, statSync } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
@@ -53,7 +53,7 @@ const logLevels = {
 }
 
 const logFiles = readdirSync(CONFIG.STORAGE.LOG_DIR)
-const lastLogFile = logFiles[logFiles.length - 1]
+const lastLogFile = getNewestFile(logFiles, CONFIG.STORAGE.LOG_DIR)
 
 const path = join(CONFIG.STORAGE.LOG_DIR, lastLogFile)
 console.log('Opening %s.', path)
@@ -76,4 +76,18 @@ function toTimeFormat (time: string) {
   if (isNaN(timestamp) === true) return 'Unknown date'
 
   return new Date(timestamp).toISOString()
+}
+
+// Thanks: https://stackoverflow.com/a/37014317
+function getNewestFile (files: string[], basePath: string) {
+  const out = []
+
+  files.forEach(file => {
+    const stats = statSync(basePath + '/' + file)
+    if (stats.isFile()) out.push({ file, mtime: stats.mtime.getTime() })
+  })
+
+  out.sort((a, b) => b.mtime - a.mtime)
+
+  return (out.length > 0) ? out[ 0 ].file : ''
 }
