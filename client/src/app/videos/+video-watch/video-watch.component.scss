@@ -299,7 +299,6 @@
       flex-wrap: wrap;
 
       .video-miniature-information {
-        margin-left: 10px;
         flex-grow: 1;
       }
     }
@@ -402,6 +401,10 @@
 
   .other-videos {
     padding-left: 0;
+
+    /deep/ .video-miniature .video-miniature-information {
+      margin-left: 10px;
+    }
   }
 
   .privacy-concerns {
