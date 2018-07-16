@@ -69,10 +69,10 @@ export class ServerService {
       videoQuota: -1
     }
   }
-  private videoCategories: Array<VideoConstant<number>> = []
-  private videoLicences: Array<VideoConstant<number>> = []
+  private videoCategories: Array<VideoConstant<string>> = []
+  private videoLicences: Array<VideoConstant<string>> = []
   private videoLanguages: Array<VideoConstant<string>> = []
-  private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
+  private videoPrivacies: Array<VideoConstant<string>> = []
 
   constructor (
     private http: HttpClient,
@@ -134,7 +134,7 @@ export class ServerService {
 
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    hashToPopulate: VideoConstant<number | string>[],
+    hashToPopulate: VideoConstant<string>[],
     notifier: ReplaySubject<boolean>,
     sort = false
   ) {

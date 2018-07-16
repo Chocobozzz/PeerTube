@@ -7,7 +7,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs'
-import { VideoPrivacy } from '../../../../../shared/models/videos'
+import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
 import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
@@ -17,6 +17,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { switchMap } from 'rxjs/operators'
 import { VideoCaptionService } from '@app/shared/video-caption'
+import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 
 @Component({
   selector: 'my-videos-add',
@@ -45,10 +46,10 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
   userVideoChannels: { id: number, label: string, support: string }[] = []
   userVideoQuotaUsed = 0
-  videoPrivacies = []
+  videoPrivacies: VideoConstant<string>[] = []
   firstStepPrivacyId = 0
   firstStepChannelId = 0
-  videoCaptions = []
+  videoCaptions: VideoCaptionEdit[] = []
 
   constructor (
     protected formValidatorService: FormValidatorService,

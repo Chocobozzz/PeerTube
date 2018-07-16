@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoPrivacy } from '../../../../../shared/models/videos'
+import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
@@ -13,6 +13,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
+import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 
 @Component({
   selector: 'my-videos-update',
@@ -23,10 +24,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  videoPrivacies = []
-  userVideoChannels = []
+  videoPrivacies: VideoConstant<string>[] = []
+  userVideoChannels: { id: number, label: string, support: string }[] = []
   schedulePublicationPossible = false
-  videoCaptions = []
+  videoCaptions: VideoCaptionEdit[] = []
 
   constructor (
     protected formValidatorService: FormValidatorService,

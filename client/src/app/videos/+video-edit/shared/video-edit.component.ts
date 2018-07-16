@@ -12,18 +12,18 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaptionAddModalComponent } from '@app/videos/+video-edit/shared/video-caption-add-modal.component'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { removeElementFromArray } from '@app/shared/misc/utils'
+import { VideoConstant } from '../../../../../../shared'
 
 @Component({
   selector: 'my-video-edit',
   styleUrls: [ './video-edit.component.scss' ],
   templateUrl: './video-edit.component.html'
 })
-
 export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
-  @Input() videoPrivacies = []
+  @Input() videoPrivacies: { id: number, label: string }[] = []
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: VideoCaptionEdit[] = []
@@ -33,9 +33,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
-  videoCategories = []
-  videoLicences = []
-  videoLanguages = []
+  videoCategories: VideoConstant<string>[] = []
+  videoLicences: VideoConstant<string>[] = []
+  videoLanguages: VideoConstant<string>[] = []
 
   tagValidators: ValidatorFn[]
   tagValidatorsMessages: { [ name: string ]: string }
