@@ -27,7 +27,7 @@ type PeertubePluginOptions = {
   playerElement: HTMLVideoElement
   videoViewUrl: string
   videoDuration: number
-  startTime: number
+  startTime: number | string
   autoplay: boolean,
   videoCaptions: VideoJSCaption[]
 }

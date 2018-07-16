@@ -159,7 +159,7 @@ class PeerTubeEmbed {
   muted = false
   loop = false
   enableApi = false
-  startTime = 0
+  startTime: number | string = 0
   scope = 'peertube'
 
   static async main () {
@@ -246,9 +246,7 @@ class PeerTubeEmbed {
       this.scope = this.getParamString(params, 'scope', this.scope)
 
       const startTimeParamString = params.get('start')
-      const startTimeParamNumber = parseInt(startTimeParamString, 10)
-
-      if (isNaN(startTimeParamNumber) === false) this.startTime = startTimeParamNumber
+      if (startTimeParamString) this.startTime = startTimeParamString
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }

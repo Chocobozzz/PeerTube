@@ -4,7 +4,7 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { isMobile, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
+import { isMobile, videoFileMaxByResolution, videoFileMinByResolution, timeToInt } from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
@@ -76,7 +76,7 @@ class PeerTubePlugin extends Plugin {
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false
 
-    this.startTime = options.startTime
+    this.startTime = timeToInt(options.startTime)
     this.videoFiles = options.videoFiles
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
@@ -264,8 +264,8 @@ class PeerTubePlugin extends Plugin {
       // Magnet hash is not up to date with the torrent file, add directly the torrent file
       if (err.message.indexOf('incorrect info hash') !== -1) {
         console.error('Incorrect info hash detected, falling back to torrent file.')
-        const options = { forcePlay: true }
-        return this.addTorrent(this.torrent['xs'], previousVideoFile, options, done)
+        const newOptions = { forcePlay: true, seek: options.seek }
+        return this.addTorrent(this.torrent['xs'], previousVideoFile, newOptions, done)
       }
 
       return console.warn(err)

@@ -32,7 +32,7 @@ function getVideojsOptions (options: {
   inactivityTimeout: number,
   peertubeLink: boolean,
   poster: string,
-  startTime: number
+  startTime: number | string
   theaterMode: boolean,
   videoCaptions: VideoJSCaption[],
   controls?: boolean,
