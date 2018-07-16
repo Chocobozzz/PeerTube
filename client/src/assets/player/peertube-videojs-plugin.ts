@@ -268,7 +268,12 @@ class PeerTubePlugin extends Plugin {
         return this.addTorrent(this.torrent['xs'], previousVideoFile, newOptions, done)
       }
 
-      return console.warn(err)
+      // Remote instance is down
+      if (err.message.indexOf('http error from xs param') !== -1) {
+        this.handleError(err)
+      }
+
+      console.warn(err)
     })
   }
 

@@ -5,15 +5,37 @@
   background-color: #000;
   display: flex;
   justify-content: center;
+  height: 500px;
+
+  @media screen and (max-width: 600px) {
+    width: 100vw;
+    height: calc(100vw / 1.7); // 16/9
+  }
+
+  .remote-server-down {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background-color: #141313;
+    width: 100%;
+    height: 100%;
+    font-size: 24px;
+
+    @media screen and (max-width: 1000px) {
+      font-size: 20px;
+    }
+
+    @media screen and (max-width: 600px) {
+      font-size: 16px;
+    }
+  }
 
   /deep/ .video-js {
     width: 888px;
-    height: 500px;
-
-    @media screen and (max-width: 600px) {
-      width: 100vw;
-      height: calc(100vw / 1.7); // 16/9
-    }
+    height: 100%;
 
     // VideoJS create an inner video player
     video {

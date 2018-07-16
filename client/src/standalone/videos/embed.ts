@@ -188,9 +188,9 @@ class PeerTubeEmbed {
     element.parentElement.removeChild(element)
   }
 
-  displayError (videoElement: HTMLVideoElement, text: string) {
+  displayError (text: string) {
     // Remove video element
-    this.removeElement(videoElement)
+    if (this.videoElement) this.removeElement(this.videoElement)
 
     document.title = 'Sorry - ' + text
 
@@ -201,14 +201,14 @@ class PeerTubeEmbed {
     errorText.innerHTML = text
   }
 
-  videoNotFound (videoElement: HTMLVideoElement) {
+  videoNotFound () {
     const text = 'This video does not exist.'
-    this.displayError(videoElement, text)
+    this.displayError(text)
   }
 
-  videoFetchError (videoElement: HTMLVideoElement) {
+  videoFetchError () {
     const text = 'We cannot fetch the video. Please try again later.'
-    this.displayError(videoElement, text)
+    this.displayError(text)
   }
 
   getParamToggle (params: URLSearchParams, name: string, defaultValue: boolean) {
@@ -264,9 +264,9 @@ class PeerTubeEmbed {
     ])
 
     if (!videoResponse.ok) {
-      if (videoResponse.status === 404) return this.videoNotFound(this.videoElement)
+      if (videoResponse.status === 404) return this.videoNotFound()
 
-      return this.videoFetchError(this.videoElement)
+      return this.videoFetchError()
     }
 
     const videoInfo: VideoDetails = await videoResponse.json()
@@ -303,6 +303,7 @@ class PeerTubeEmbed {
 
     this.playerOptions = videojsOptions
     this.player = vjs(this.videoContainerId, videojsOptions, () => {
+      this.player.on('customError', (event, data) => this.handleError(data.err))
 
       window[ 'videojsPlayer' ] = this.player
 
@@ -317,6 +318,15 @@ class PeerTubeEmbed {
 
       this.initializeApi()
     })
+  }
+
+  private handleError (err: Error) {
+    if (err.message.indexOf('http error') !== -1) {
+      this.player.dispose()
+      this.videoElement = null
+      this.displayError('This video is not available because the remote instance is not responding.')
+      return
+    }
   }
 }
 

@@ -57,6 +57,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   videoHTMLDescription = ''
   likesBarTooltipText = ''
   hasAlreadyAcceptedPrivacyConcern = false
+  remoteServerDown = false
 
   private videojsLocaleLoaded = false
   private otherVideos: Video[] = []
@@ -312,15 +313,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const errorMessage: string = typeof err === 'string' ? err : err.message
     if (!errorMessage) return
 
-    let message = ''
-
+    // Display a message in the video player instead of a notification
     if (errorMessage.indexOf('http error') !== -1) {
-      message = this.i18n('Cannot fetch video from server, maybe down.')
-    } else {
-      message = errorMessage
+      this.flushPlayer()
+      this.remoteServerDown = true
+      return
     }
 
-    this.notificationsService.error(this.i18n('Error'), message)
+    this.notificationsService.error(this.i18n('Error'), errorMessage)
   }
 
   private checkUserRating () {
@@ -345,6 +345,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // Re init attributes
     this.descriptionLoading = false
     this.completeDescriptionShown = false
+    this.remoteServerDown = false
 
     this.updateOtherVideosDisplayed()
 
