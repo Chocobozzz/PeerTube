@@ -38,10 +38,10 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     protected route: ActivatedRoute,
     protected authService: AuthService,
     protected notificationsService: NotificationsService,
-    protected confirmService: ConfirmService,
     protected location: Location,
     protected screenService: ScreenService,
     protected i18n: I18n,
+    private confirmService: ConfirmService,
     private videoService: VideoService,
     @Inject(LOCALE_ID) private localeId: string
   ) {

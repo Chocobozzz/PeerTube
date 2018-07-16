@@ -49,55 +49,31 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.buildForm({})
 
     this.serverService.videoPrivaciesLoaded
-      .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
+        .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
 
-    const uuid: string = this.route.snapshot.params[ 'uuid' ]
-    this.videoService.getVideo(uuid)
-        .pipe(
-          switchMap(video => {
-            return this.videoService
-                       .loadCompleteDescription(video.descriptionPath)
-                       .pipe(map(description => Object.assign(video, { description })))
-          }),
-          switchMap(video => {
-            return this.videoChannelService
-                       .listAccountVideoChannels(video.account)
-                       .pipe(
-                         map(result => result.data),
-                         map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName, support: c.support }))),
-                         map(videoChannels => ({ video, videoChannels }))
-                       )
-          }),
-          switchMap(({ video, videoChannels }) => {
-            return this.videoCaptionService
-                       .listCaptions(video.id)
-                       .pipe(
-                         map(result => result.data),
-                         map(videoCaptions => ({ video, videoChannels, videoCaptions }))
-                       )
-          })
-        )
-        .subscribe(
-          ({ video, videoChannels, videoCaptions }) => {
-            this.video = new VideoEdit(video)
-            this.userVideoChannels = videoChannels
-            this.videoCaptions = videoCaptions
+    this.route.data
+        .pipe(map(data => data.videoData))
+        .subscribe(({ video, videoChannels, videoCaptions }) => {
+          this.video = new VideoEdit(video)
+          this.userVideoChannels = videoChannels
+          this.videoCaptions = videoCaptions
 
-            // We cannot set private a video that was not private
-            if (this.video.privacy !== VideoPrivacy.PRIVATE) {
-              this.videoPrivacies = this.videoPrivacies.filter(p => p.id.toString() !== VideoPrivacy.PRIVATE.toString())
-            } else { // We can schedule video publication only if it it is private
-              this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
-            }
-
-            this.hydrateFormFromVideo()
-          },
-
-          err => {
-            console.error(err)
-            this.notificationsService.error(this.i18n('Error'), err.message)
+          // We cannot set private a video that was not private
+          if (this.video.privacy !== VideoPrivacy.PRIVATE) {
+            this.videoPrivacies = this.videoPrivacies.filter(p => p.id.toString() !== VideoPrivacy.PRIVATE.toString())
+          } else { // We can schedule video publication only if it it is private
+            this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
           }
-        )
+
+          // FIXME: Angular does not detec
+          setTimeout(() => this.hydrateFormFromVideo())
+        },
+
+        err => {
+          console.error(err)
+          this.notificationsService.error(this.i18n('Error'), err.message)
+        }
+      )
   }
 
   checkForm () {

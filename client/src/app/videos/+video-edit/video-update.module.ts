@@ -3,6 +3,7 @@ import { SharedModule } from '../../shared'
 import { VideoEditModule } from './shared/video-edit.module'
 import { VideoUpdateRoutingModule } from './video-update-routing.module'
 import { VideoUpdateComponent } from './video-update.component'
+import { VideoUpdateResolver } from '@app/videos/+video-edit/video-update.resolver'
 
 @NgModule({
   imports: [
@@ -19,6 +20,8 @@ import { VideoUpdateComponent } from './video-update.component'
     VideoUpdateComponent
   ],
 
-  providers: [ ]
+  providers: [
+    VideoUpdateResolver
+  ]
 })
 export class VideoUpdateModule { }
