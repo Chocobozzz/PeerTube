@@ -57,9 +57,15 @@ $ sudo yum update
 $ sudo yum install nginx postgresql postgresql-server openssl gcc-c++ make redis git devtoolset-7
 ```
 
-  5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-6.
+  5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-7.
 ```
 $ sudo scl enable devtoolset-7 bash
+```
+
+Later when you invoke any node command, please prefix them with `CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++`, such as with:
+
+```
+$ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
 
 ## FreeBSD
