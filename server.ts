@@ -52,7 +52,25 @@ app.set('trust proxy', CONFIG.TRUST_PROXY)
 // Security middlewares
 app.use(helmet({
   frameguard: {
-    action: 'deny'
+    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
+  },
+  dnsPrefetchControl: {
+    allow: true
+  },
+  contentSecurityPolicy: {
+    directives: {
+      fontSrc: ["'self'"],
+      frameSrc: ["'none'"],
+      mediaSrc: ['*', 'https:'],
+      objectSrc: ["'none'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      upgradeInsecureRequests: true
+    },
+    browserSniff: false // assumes a modern browser, but allows CDN in front
+  },
+  referrerPolicy: {
+    policy: 'strict-origin-when-cross-origin'
   }
 }))
 
