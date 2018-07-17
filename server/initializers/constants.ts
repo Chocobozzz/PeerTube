@@ -590,29 +590,34 @@ function buildLanguages () {
 
   const languages: { [ id: string ]: string } = {}
 
-  const signLanguages = [
-    'sgn', // Sign languages (macro language)
-    'ase', // American
-    'sdl', // Arabian
-    'bfi', // British
-    'bzs', // Brazilian
-    'csl', // Chinese
-    'cse', // Czech
-    'dsl', // Danish
-    'fsl', // French
-    'gsg', // German
-    'pks', // Pakistan
-    'jsl', // Japanese
-    'sfs', // South African
-    'swl', // Swedish
-    'rsl' // Russian
-  ]
+  const additionalLanguages = {
+    'sgn': true, // Sign languages (macro language)
+    'ase': true, // American sign language
+    'sdl': true, // Arabian sign language
+    'bfi': true, // British sign language
+    'bzs': true, // Brazilian sign language
+    'csl': true, // Chinese sign language
+    'cse': true, // Czech sign language
+    'dsl': true, // Danish sign language
+    'fsl': true, // French sign language
+    'gsg': true, // German sign language
+    'pks': true, // Pakistan sign language
+    'jsl': true, // Japanese sign language
+    'sfs': true, // South African sign language
+    'swl': true, // Swedish sign language
+    'rsl': true, // Russian sign language: true
+
+    'epo': true, // Esperanto
+    'tlh': true, // Klingon
+    'jbo': true, // Lojban
+    'avk': true // Kotava
+  }
 
   // Only add ISO639-1 languages and some sign languages (ISO639-3)
   iso639
     .filter(l => {
       return (l.iso6391 !== null && l.type === 'living') ||
-        signLanguages.indexOf(l.iso6393) !== -1
+        additionalLanguages[l.iso6393] === true
     })
     .forEach(l => languages[l.iso6391 || l.iso6393] = l.name)
 
