@@ -59,12 +59,13 @@ app.use(helmet({
   },
   contentSecurityPolicy: {
     directives: {
-      fontSrc: ["'self'"],
+      defaultSrc: ['*', 'data:', 'wss:', 'https:'],
+      fontSrc: ["'self'", 'data:'],
       frameSrc: ["'none'"],
       mediaSrc: ['*', 'https:'],
       objectSrc: ["'none'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
       upgradeInsecureRequests: true
     },
     browserSniff: false // assumes a modern browser, but allows CDN in front
@@ -73,6 +74,18 @@ app.use(helmet({
     policy: 'strict-origin-when-cross-origin'
   }
 }))
+app.use((_, res, next) => {
+  [
+    "vibrate 'none'",
+    "geolocation 'none'",
+    "camera 'none'",
+    "microphone 'none'",
+    "magnetometer 'none'",
+    "payment 'none'",
+    "accelerometer 'none'"
+  ].forEach(e => res.append('Feature-Policy', e + ';'))
+  next()
+})
 
 // ----------- Database -----------
 
