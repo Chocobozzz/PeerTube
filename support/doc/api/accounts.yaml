@@ -1,0 +1,7 @@
+parameters:
+  name:
+    name: name
+    in: path
+    required: true
+    type: string
+    description: 'The name of the account (chocobozzz or chocobozzz@peertube.cpy.re for example)'

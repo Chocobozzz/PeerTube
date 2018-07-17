@@ -441,7 +441,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   font-weight: normal;
   line-height: 1.5;
-  color: #23241f;
+  color: #2d3134;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
@@ -1443,7 +1443,7 @@ cite {
     content: "— "; }
 
 abbr, abbr[title] {
-  border-bottom: 1px dotted #23241f;
+  border-bottom: 1px dotted #2d3134;
   cursor: help;
   text-decoration: none; }
 
@@ -1456,14 +1456,14 @@ code {
   background-color: #e6e6e6;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-weight: normal;
-  color: #23241f; }
+  color: #2d3134; }
 
 kbd {
   margin: 0;
   padding: 0.1315789474rem 0.2631578947rem 0;
   background-color: #e6e6e6;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
-  color: #23241f; }
+  color: #2d3134; }
 
 .subheader {
   margin-top: 0.2rem;
@@ -1624,16 +1624,16 @@ ul.no-bullet, ol.no-bullet {
       color: #fefefe; }
   .button.success {
     background-color: #3adb76;
-    color: #23241f; }
+    color: #2d3134; }
     .button.success:hover, .button.success:focus {
       background-color: #22bb5b;
-      color: #23241f; }
+      color: #2d3134; }
   .button.warning {
     background-color: #ffae00;
-    color: #23241f; }
+    color: #2d3134; }
     .button.warning:hover, .button.warning:focus {
       background-color: #cc8b00;
-      color: #23241f; }
+      color: #2d3134; }
   .button.alert {
     background-color: #cc4b37;
     color: #fefefe; }
@@ -1663,13 +1663,13 @@ ul.no-bullet, ol.no-bullet {
       cursor: not-allowed; }
       .button.disabled.success, .button.disabled.success:hover, .button.disabled.success:focus, .button[disabled].success, .button[disabled].success:hover, .button[disabled].success:focus {
         background-color: #3adb76;
-        color: #23241f; }
+        color: #2d3134; }
     .button.disabled.warning, .button[disabled].warning {
       opacity: 0.25;
       cursor: not-allowed; }
       .button.disabled.warning, .button.disabled.warning:hover, .button.disabled.warning:focus, .button[disabled].warning, .button[disabled].warning:hover, .button[disabled].warning:focus {
         background-color: #ffae00;
-        color: #23241f; }
+        color: #2d3134; }
     .button.disabled.alert, .button[disabled].alert {
       opacity: 0.25;
       cursor: not-allowed; }
@@ -1846,12 +1846,12 @@ textarea {
   border: 1px solid #cacaca;
   border-radius: 0;
   background-color: #fefefe;
-  box-shadow: inset 0 1px 2px rgba(35, 36, 31, 0.1);
+  box-shadow: inset 0 1px 2px rgba(45, 49, 52, 0.1);
   font-family: inherit;
   font-size: 1.0526315789rem;
   font-weight: normal;
   line-height: 1.5;
-  color: #23241f;
+  color: #2d3134;
   transition: box-shadow 0.5s, border-color 0.25s ease-in-out;
   appearance: none; }
   [type='text']:focus, [type='password']:focus, [type='date']:focus, [type='datetime']:focus, [type='datetime-local']:focus, [type='month']:focus, [type='week']:focus, [type='email']:focus, [type='number']:focus, [type='search']:focus, [type='tel']:focus, [type='time']:focus, [type='url']:focus, [type='color']:focus,
@@ -1914,7 +1914,7 @@ label {
   font-size: 0.9210526316rem;
   font-weight: normal;
   line-height: 1.8;
-  color: #23241f; }
+  color: #2d3134; }
   label.middle {
     margin: 0 0 1.0526315789rem;
     padding: 0.5921052632rem 0; }
@@ -1923,7 +1923,7 @@ label {
   margin-top: -0.5263157895rem;
   font-size: 0.8552631579rem;
   font-style: italic;
-  color: #23241f; }
+  color: #2d3134; }
 
 .input-group {
   display: flex;
@@ -1946,7 +1946,7 @@ label {
   padding: 0 1rem;
   border: 1px solid #cacaca;
   background: #e6e6e6;
-  color: #23241f;
+  color: #2d3134;
   text-align: center;
   white-space: nowrap;
   display: flex;
@@ -2007,7 +2007,7 @@ select {
   font-size: 1.0526315789rem;
   font-weight: normal;
   line-height: 1.5;
-  color: #23241f;
+  color: #2d3134;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28138, 138, 138%29'></polygon></svg>");
   background-origin: content-box;
   background-position: right -1.0526315789rem center;
@@ -2170,7 +2170,7 @@ select {
   [data-whatinput='mouse'] .close-button {
     outline: 0; }
   .close-button:hover, .close-button:focus {
-    color: #23241f; }
+    color: #2d3134; }
   .close-button.small {
     right: 0.66rem;
     top: 0.33em;
@@ -2200,10 +2200,10 @@ select {
     color: #fefefe; }
   .label.success {
     background: #3adb76;
-    color: #23241f; }
+    color: #2d3134; }
   .label.warning {
     background: #ffae00;
-    color: #23241f; }
+    color: #2d3134; }
   .label.alert {
     background: #cc4b37;
     color: #fefefe; }
@@ -2223,10 +2223,10 @@ table {
     font-weight: bold; }
   thead {
     background: #f8f8f8;
-    color: #23241f; }
+    color: #2d3134; }
   tfoot {
     background: #f1f1f1;
-    color: #23241f; }
+    color: #2d3134; }
   thead tr,
   tfoot tr {
     background: transparent; }

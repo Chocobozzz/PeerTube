@@ -1,0 +1,7 @@
+parameters:
+  id:
+    name: id
+    in: path
+    required: true
+    type: string
+    description: 'The video channel id or uuid'

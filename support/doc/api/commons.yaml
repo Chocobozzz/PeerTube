@@ -1,0 +1,23 @@
+parameters:
+  start:
+    name: start
+    in: query
+    required: false
+    type: number
+    description: 'Offset'
+  count:
+    name: count
+    in: query
+    required: false
+    type: number
+    description: 'Number of items'
+  sort:
+    name: sort
+    in: query
+    required: false
+    type: string
+    description: 'Sort column (-createdAt for example)'
+
+responses:
+  emptySuccess:
+    description: 'Successful operation'
