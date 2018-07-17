@@ -87,7 +87,8 @@ function transcode (options: TranscodeOptions) {
     let command = ffmpeg(options.inputPath)
                     .output(options.outputPath)
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
-                    .preset(standard)
+                    .renice(5) // we don't want to make the system unrepsonsive
+                     .preset(standard)
 
     let fps = await getVideoFileFPS(options.inputPath)
     if (options.resolution !== undefined) {
@@ -154,8 +155,8 @@ function getVideoFileStream (path: string) {
  * and quality. Superfast and ultrafast will give you better
  * performance, but then quality is noticeably worse.
  */
-function veryfast (ffmpeg) {
-  ffmpeg
+function veryfast (_ffmpeg) {
+  _ffmpeg
     .preset(standard)
     .outputOption('-preset:v veryfast')
     .outputOption(['--aq-mode=2', '--aq-strength=1.3'])
@@ -175,8 +176,8 @@ function veryfast (ffmpeg) {
 /**
  * A preset optimised for a stillimage audio video
  */
-function audio (ffmpeg) {
-  ffmpeg
+function audio (_ffmpeg) {
+  _ffmpeg
     .preset(veryfast)
     .outputOption('-tune stillimage')
 }
@@ -185,15 +186,22 @@ function audio (ffmpeg) {
  * A toolbox to play with audio
  */
 namespace audio {
-  export const get = (ffmpeg, pos = 0) => {
+  export const get = (_ffmpeg, pos: number | string = 0) => {
     // without position, ffprobe considers the last input only
     // we make it consider the first input only
-    ffmpeg
-      .ffprobe(pos, (_,data) => {
-        return data['streams'].find(stream => {
-          return stream['codec_type'] === 'audio'
+    // if you pass a file path to pos, then ffprobe acts on that file directly
+    return new Promise<any>((res, rej) => {
+      _ffmpeg
+        .ffprobe(pos, (err,data) => {
+          if (err) return rej(err)
+
+          if ('streams' in data) {
+            return res(data['streams'].find(stream => stream['codec_type'] === 'audio'))
+          } else {
+            rej()
+          }
         })
-      })
+    })
   }
 
   export namespace bitrate {
@@ -229,34 +237,37 @@ namespace audio {
  * As for the audio, quality '5' is the highest and ensures 96-112kbps/channel
  * See https://trac.ffmpeg.org/wiki/Encode/AAC#fdk_vbr
  */
-async function standard (ffmpeg) {
+async function standard (_ffmpeg) {
   let _bitrate = audio.bitrate.baseKbitrate
-  let _ffmpeg = ffmpeg
+  let localFfmpeg = _ffmpeg
     .format('mp4')
     .videoCodec('libx264')
     .outputOption('-level 3.1') // 3.1 is the minimal ressource allocation for our highest supported resolution
     .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorythm, 16 is optimal B-frames for it
     .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
+    .outputOption('-map_metadata -1') // strip all metadata
     .outputOption('-movflags faststart')
-  let _audio = audio.get(_ffmpeg)
+  let _audio = audio.get(localFfmpeg)
+                    .then(res => res)
+                    .catch(_ => undefined)
 
-  if (!_audio) return _ffmpeg.noAudio()
+  if (!_audio) return localFfmpeg.noAudio()
 
   // we try to reduce the ceiling bitrate by making rough correspondances of bitrates
   // of course this is far from perfect, but it might save some space in the end
   if (audio.bitrate[_audio['codec_name']]) {
     _bitrate = audio.bitrate[_audio['codec_name']](_audio['bit_rate'])
     if (_bitrate === -1) {
-      return _ffmpeg.audioCodec('copy')
+      return localFfmpeg.audioCodec('copy')
     }
   }
 
   // we favor VBR, if a good AAC encoder is available
   if ((await checkFFmpegEncoders()).get('libfdk_aac')) {
-    return _ffmpeg
+    return localFfmpeg
       .audioCodec('libfdk_aac')
       .audioQuality(5)
   }
 
-  return _ffmpeg.audioBitrate(_bitrate)
+  return localFfmpeg.audioBitrate(_bitrate)
 }
