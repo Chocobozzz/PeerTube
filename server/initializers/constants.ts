@@ -429,7 +429,7 @@ const STATIC_DOWNLOAD_PATHS = {
 }
 
 // Cache control
-let STATIC_MAX_AGE = '30d'
+let STATIC_MAX_AGE = '2h'
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {

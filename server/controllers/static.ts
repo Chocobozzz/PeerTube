@@ -31,7 +31,7 @@ const videosPhysicalPath = CONFIG.STORAGE.VIDEOS_DIR
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(videosPhysicalPath, { maxAge: STATIC_MAX_AGE })
+  express.static(videosPhysicalPath)
 )
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
