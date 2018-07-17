@@ -8,6 +8,8 @@ import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
 
 const staticRouter = express.Router()
 
+staticRouter.use(cors())
+
 /*
   Cors is very important to let other servers access torrent and video files
 */
