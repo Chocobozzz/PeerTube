@@ -77,6 +77,10 @@ usersRouter.get('/me/videos/:videoId/rating',
   asyncMiddleware(getUserVideoRating)
 )
 
+usersRouter.get('/autocomplete',
+  asyncMiddleware(autocompleteUsers)
+)
+
 usersRouter.get('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
@@ -261,6 +265,12 @@ async function getUserVideoRating (req: express.Request, res: express.Response, 
     rating
   }
   res.json(json)
+}
+
+async function autocompleteUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await UserModel.autocomplete(req.query.search as string)
+
+  return res.json(resultList)
 }
 
 async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {

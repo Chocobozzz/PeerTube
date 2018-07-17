@@ -303,4 +303,15 @@ export class UserModel extends Model<UserModel> {
         return (videoFile.size + totalBytes) < this.videoQuota
       })
   }
+
+  static autocomplete (search: string) {
+    return UserModel.findAll({
+      where: {
+        username: {
+          [Sequelize.Op.like]: `%${search || ''}%`
+        }
+      }
+    })
+      .then(u => u.map(u => u.username))
+  }
 }
