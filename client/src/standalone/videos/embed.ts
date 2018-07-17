@@ -321,7 +321,7 @@ class PeerTubeEmbed {
   }
 
   private handleError (err: Error) {
-    if (err.message.indexOf('http error') !== -1) {
+    if (err.message.indexOf('from xs param') !== -1) {
       this.player.dispose()
       this.videoElement = null
       this.displayError('This video is not available because the remote instance is not responding.')

@@ -107,6 +107,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           },
 
           err => {
+            this.loadingBar.complete()
             this.isUpdatingVideo = false
             this.notificationsService.error(this.i18n('Error'), err.message)
             console.error(err)

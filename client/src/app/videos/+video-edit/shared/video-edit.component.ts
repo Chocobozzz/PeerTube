@@ -49,6 +49,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   calendarDateFormat: string
 
   private schedulerInterval
+  private firstPatchDone = false
 
   constructor (
     private formValidatorService: FormValidatorService,
@@ -167,6 +168,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
         newPrivacyId => {
+
           this.schedulePublicationEnabled = newPrivacyId === this.SPECIAL_SCHEDULED_PRIVACY
 
           // Value changed
@@ -182,11 +184,18 @@ export class VideoEditComponent implements OnInit, OnDestroy {
             scheduleControl.clearValidators()
 
             waitTranscodingControl.enable()
-            waitTranscodingControl.setValue(true)
+
+            // Do not update the control value on first patch (values come from the server)
+            if (this.firstPatchDone === true) {
+              waitTranscodingControl.setValue(true)
+            }
           }
 
           scheduleControl.updateValueAndValidity()
           waitTranscodingControl.updateValueAndValidity()
+
+          this.firstPatchDone = true
+
         }
       )
   }

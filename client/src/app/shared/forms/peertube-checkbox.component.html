@@ -1,0 +1,9 @@
+<div class="form-group">
+  <label class="form-group-checkbox">
+    <input type="checkbox" [(ngModel)]="checked" (ngModelChange)="onModelChange()" [id]="inputName" [disabled]="isDisabled" />
+    <span role="checkbox" [attr.aria-checked]="checked"></span>
+    <span *ngIf="labelText">{{ labelText }}</span>
+  </label>
+
+  <my-help *ngIf="helpHtml" tooltipPlacement="top" helpType="custom" i18n-customHtml [customHtml]="helpHtml"></my-help>
+</div>

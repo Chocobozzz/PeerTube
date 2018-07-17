@@ -314,7 +314,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!errorMessage) return
 
     // Display a message in the video player instead of a notification
-    if (errorMessage.indexOf('http error') !== -1) {
+    if (errorMessage.indexOf('from xs param') !== -1) {
       this.flushPlayer()
       this.remoteServerDown = true
       return

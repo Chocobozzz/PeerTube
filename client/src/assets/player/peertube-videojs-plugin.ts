@@ -269,7 +269,7 @@ class PeerTubePlugin extends Plugin {
       }
 
       // Remote instance is down
-      if (err.message.indexOf('http error from xs param') !== -1) {
+      if (err.message.indexOf('from xs param') !== -1) {
         this.handleError(err)
       }
 

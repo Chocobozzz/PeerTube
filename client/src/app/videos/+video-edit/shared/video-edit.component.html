@@ -110,31 +110,22 @@
           </div>
         </div>
 
-        <div class="form-group form-group-checkbox">
-          <input type="checkbox" id="nsfw" formControlName="nsfw" />
-          <label for="nsfw"></label>
-          <label i18n for="nsfw">This video contains mature or explicit content</label>
-          <my-help
-            tooltipPlacement="top" helpType="custom" i18n-customHtml
-            customHtml="Some instances do not list videos containing mature or explicit content by default."
-          ></my-help>
-        </div>
+        <my-peertube-checkbox
+          inputName="nsfw" formControlName="nsfw"
+          i18n-labelText labelText="This video contains mature or explicit content"
+          i18n-helpHtml helpHtml="Some instances do not list videos containing mature or explicit content by default."
+        ></my-peertube-checkbox>
 
-        <div class="form-group form-group-checkbox">
-          <input type="checkbox" id="commentsEnabled" formControlName="commentsEnabled" />
-          <label for="commentsEnabled"></label>
-          <label i18n for="commentsEnabled">Enable video comments</label>
-        </div>
+        <my-peertube-checkbox
+          inputName="commentsEnabled" formControlName="commentsEnabled"
+          i18n-labelText labelText="Enable video comments"
+        ></my-peertube-checkbox>
 
-        <div class="form-group form-group-checkbox">
-          <input type="checkbox" id="waitTranscoding" formControlName="waitTranscoding" />
-          <label for="waitTranscoding"></label>
-          <label i18n for="waitTranscoding">Wait transcoding before publishing the video</label>
-          <my-help
-            tooltipPlacement="top" helpType="custom" i18n-customHtml
-            customHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
-          ></my-help>
-        </div>
+        <my-peertube-checkbox
+          inputName="waitTranscoding" formControlName="waitTranscoding"
+          i18n-labelText labelText="Wait transcoding before publishing the video"
+          i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
+        ></my-peertube-checkbox>
 
       </div>
     </tab>

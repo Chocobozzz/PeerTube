@@ -9,8 +9,7 @@
   <div *ngFor="let videos of videoPages; let i = index" class="videos-page">
     <div class="video" *ngFor="let video of videos; let j = index">
       <div class="checkbox-container">
-        <input [id]="'video-check-' + video.id" type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
-        <label [for]="'video-check-' + video.id"></label>
+        <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
       </div>
 
       <my-video-thumbnail [video]="video"></my-video-thumbnail>

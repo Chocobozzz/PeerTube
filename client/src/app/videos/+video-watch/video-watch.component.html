@@ -48,15 +48,15 @@
         <div class="video-actions-rates">
           <div class="video-actions">
             <div
-                *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
-                class="action-button action-button-like"
+              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+              class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
             >
               <span class="icon icon-like" i18n-title title="Like this video" ></span>
             </div>
 
             <div
-                *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
-                class="action-button action-button-dislike"
+              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+              class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
             >
               <span class="icon icon-dislike" i18n-title title="Dislike this video"></span>
             </div>
@@ -66,12 +66,12 @@
               <span class="icon-text" i18n>Support</span>
             </div>
 
-            <div (click)="showShareModal()" class="action-button action-button-share">
+            <div (click)="showShareModal()" class="action-button action-button-share" role="button">
               <span class="icon icon-share"></span>
               <span class="icon-text" i18n>Share</span>
             </div>
 
-            <div class="action-more" dropdown dropup="true" placement="right">
+            <div class="action-more" dropdown dropup="true" placement="right" role="button">
               <div class="action-button" dropdownToggle>
                 <span class="icon icon-more"></span>
               </div>

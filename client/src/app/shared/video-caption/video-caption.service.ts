@@ -42,8 +42,6 @@ export class VideoCaptionService {
   }
 
   updateCaptions (videoId: number | string, videoCaptions: VideoCaptionEdit[]) {
-    if (videoCaptions.length === 0) return of(true)
-
     const observables: Observable<any>[] = []
 
     for (const videoCaption of videoCaptions) {
@@ -57,6 +55,8 @@ export class VideoCaptionService {
         )
       }
     }
+
+    if (observables.length === 0) return of(true)
 
     return forkJoin(observables)
   }

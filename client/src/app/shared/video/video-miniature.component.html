@@ -3,7 +3,7 @@
 
   <div class="video-miniature-information">
     <a
-      class="video-miniature-name"
+      class="video-miniature-name" alt=""
       [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur() }"
     >
       {{ video.name }}
