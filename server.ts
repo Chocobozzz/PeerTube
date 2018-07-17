@@ -27,7 +27,7 @@ import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } fro
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, STATIC_PATHS, CACHE } from './server/initializers/constants'
+import { API_VERSION, CONFIG, STATIC_PATHS, CACHE, REMOTE_SCHEME } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -59,14 +59,14 @@ app.use(helmet({
   },
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ['*', 'data:', 'wss:', 'https:'],
+      defaultSrc: ['*', 'data:', REMOTE_SCHEME.WS + ':', REMOTE_SCHEME.HTTP + ':'],
       fontSrc: ["'self'", 'data:'],
       frameSrc: ["'none'"],
-      mediaSrc: ['*', 'https:'],
+      mediaSrc: ['*', REMOTE_SCHEME.HTTP + ':'],
       objectSrc: ["'none'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      upgradeInsecureRequests: true
+      upgradeInsecureRequests: false
     },
     browserSniff: false // assumes a modern browser, but allows CDN in front
   },
