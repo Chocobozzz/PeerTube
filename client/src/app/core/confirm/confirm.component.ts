@@ -69,6 +69,7 @@ export class ConfirmComponent implements OnInit {
   }
 
   showModal () {
+    this.inputValue = ''
     this.confirmModal.show()
   }
 
