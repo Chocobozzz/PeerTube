@@ -1,5 +1,5 @@
 import { catchError } from 'rxjs/operators'
-import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
@@ -65,6 +65,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   constructor (
     private elementRef: ElementRef,
+    private changeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private videoService: VideoService,
@@ -317,6 +318,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (errorMessage.indexOf('from xs param') !== -1) {
       this.flushPlayer()
       this.remoteServerDown = true
+      this.changeDetector.detectChanges()
+
       return
     }
 

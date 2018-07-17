@@ -5,12 +5,6 @@
   background-color: #000;
   display: flex;
   justify-content: center;
-  height: 500px;
-
-  @media screen and (max-width: 600px) {
-    width: 100vw;
-    height: calc(100vw / 1.7); // 16/9
-  }
 
   .remote-server-down {
     color: #fff;
@@ -21,8 +15,8 @@
     justify-content: center;
     background-color: #141313;
     width: 100%;
-    height: 100%;
     font-size: 24px;
+    height: 500px;
 
     @media screen and (max-width: 1000px) {
       font-size: 20px;
@@ -35,7 +29,12 @@
 
   /deep/ .video-js {
     width: 888px;
-    height: 100%;
+    height: 500px;
+
+    &.vjs-theater-enabled {
+      height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+      width: 100%;
+    }
 
     // VideoJS create an inner video player
     video {
@@ -44,9 +43,12 @@
     }
   }
 
-  /deep/ .video-js.vjs-theater-enabled {
-    width: 100%;
-    height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+  @media screen and (max-width: 600px) {
+    .remote-server-down,
+    /deep/ .video-js {
+      width: 100vw;
+      height: calc(100vw / 1.7); // 16/9
+    }
   }
 }
 
