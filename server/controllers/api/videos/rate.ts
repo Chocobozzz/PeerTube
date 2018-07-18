@@ -67,8 +67,6 @@ async function rateVideo (req: express.Request, res: express.Response) {
       dislikes: dislikesToIncrement
     }
 
-    // Even if we do not own the video we increment the attributes
-    // It is useful for the user to have a feedback
     await videoInstance.increment(incrementQuery, sequelizeOptions)
 
     await sendVideoRateChange(accountInstance, videoInstance, likesToIncrement, dislikesToIncrement, t)
