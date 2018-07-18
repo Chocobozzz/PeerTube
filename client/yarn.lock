@@ -344,8 +344,8 @@
     "@types/simple-peer" "*"
 
 "@videojs/http-streaming@^1.0.2":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@videojs/http-streaming/-/http-streaming-1.2.0.tgz#b7b15000749e50f3dbf001ecf62589b512ccfffe"
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@videojs/http-streaming/-/http-streaming-1.2.1.tgz#4a221359952c28b2ded2c612e677369a647cf57d"
   dependencies:
     aes-decrypter "3.0.0"
     global "^4.3.0"
@@ -4371,8 +4371,8 @@ jquery@^3.3.1:
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
 js-base64@^2.1.8:
-  version "2.4.6"
-  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.6.tgz#1d49f618bef43630cd191f4e122447acfdb947d8"
+  version "2.4.8"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.8.tgz#57a9b130888f956834aa40c5b165ba59c758f033"
 
 "js-tokens@^3.0.0 || ^4.0.0":
   version "4.0.0"
@@ -4987,8 +4987,8 @@ map-visit@^1.0.0:
     object-visit "^1.0.0"
 
 markdown-it@^8.4.0:
-  version "8.4.1"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-8.4.1.tgz#206fe59b0e4e1b78a7c73250af9b34a4ad0aaf44"
+  version "8.4.2"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-8.4.2.tgz#386f98998dc15a37722aa7722084f4020bdd9b54"
   dependencies:
     argparse "^1.0.7"
     entities "~1.1.1"
@@ -5106,19 +5106,15 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-"mime-db@>= 1.34.0 < 2":
+"mime-db@>= 1.34.0 < 2", mime-db@~1.35.0:
   version "1.35.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.35.0.tgz#0569d657466491283709663ad379a99b90d9ab47"
 
-mime-db@~1.33.0:
-  version "1.33.0"
-  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.33.0.tgz#a3492050a5cb9b63450541e39d9788d2272783db"
-
 mime-types@^2.1.11, mime-types@^2.1.12, mime-types@~2.1.17, mime-types@~2.1.18, mime-types@~2.1.7:
-  version "2.1.18"
-  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.18.tgz#6f323f60a83d11146f831ff11fd66e2fe5503bb8"
+  version "2.1.19"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.19.tgz#71e464537a7ef81c15f2db9d97e913fc0ff606f0"
   dependencies:
-    mime-db "~1.33.0"
+    mime-db "~1.35.0"
 
 mime@1.4.1:
   version "1.4.1"
@@ -5240,8 +5236,8 @@ move-concurrently@^1.0.1:
     run-queue "^1.0.3"
 
 mp4-box-encoding@^1.1.0, mp4-box-encoding@^1.1.1:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/mp4-box-encoding/-/mp4-box-encoding-1.1.4.tgz#c29c6dfed0d90accd65efe49119aa61d46a5a7a6"
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/mp4-box-encoding/-/mp4-box-encoding-1.2.0.tgz#1af31abb131fe5e711b4b421cf5b20b13473e4a9"
   dependencies:
     buffer-alloc "^1.1.0"
     buffer-from "^1.0.0"
@@ -8052,8 +8048,8 @@ tsutils@2.8.0:
     tslib "^1.7.1"
 
 tsutils@^2.27.2:
-  version "2.27.2"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.27.2.tgz#60ba88a23d6f785ec4b89c6e8179cac9b431f1c7"
+  version "2.28.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.28.0.tgz#6bd71e160828f9d019b6f4e844742228f85169a1"
   dependencies:
     tslib "^1.8.1"
 
@@ -8122,8 +8118,8 @@ uglify-es@^3.3.4:
     source-map "~0.6.1"
 
 uglify-js@3.4.x, uglify-js@^3.0.6:
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.4.tgz#92e79532a3aeffd4b6c65755bdba8d5bad98d607"
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.4.5.tgz#650889c0766cf0f6fd5346cea09cd212f544be69"
   dependencies:
     commander "~2.16.0"
     source-map "~0.6.1"
