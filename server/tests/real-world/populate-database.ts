@@ -38,15 +38,26 @@ async function start () {
 
   // Forever
   const fakeTab = Array.from(Array(1000000).keys())
-  await Bluebird.map(fakeTab, () => {
-    return Promise.all([
-      uploadCustom(server),
-      likeCustom(server),
-      dislikeCustom(server),
-      createUserCustom(server),
-      createCustomChannel(server)
-    ]).catch(err => console.error(err))
-  }, { concurrency: 5 })
+  const funs = [
+    uploadCustom
+    // uploadCustom,
+    // uploadCustom,
+    // uploadCustom,
+    // likeCustom,
+    // createUserCustom,
+    // createCustomChannel
+  ]
+  const promises = []
+
+  for (const fun of funs) {
+    promises.push(
+      Bluebird.map(fakeTab, () => {
+        return fun(server).catch(err => console.error(err))
+      }, { concurrency: 3 })
+    )
+  }
+
+  await Promise.all(promises)
 }
 
 function getRandomInt (min, max) {
