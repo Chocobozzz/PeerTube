@@ -19,6 +19,12 @@ start()
 // ----------------------------------------------------------------------------
 
 async function start () {
+  await flushTests()
+
+  console.log('Flushed tests.')
+
+  const server = await runServer(6)
+
   process.on('exit', async () => {
     killallServers([ server ])
     return
@@ -26,11 +32,6 @@ async function start () {
   process.on('SIGINT', goodbye)
   process.on('SIGTERM', goodbye)
 
-  await flushTests()
-
-  console.log('Flushed tests.')
-
-  const server = await runServer(6)
   await setAccessTokensToServers([ server ])
 
   console.log('Servers ran.')

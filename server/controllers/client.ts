@@ -1,21 +1,10 @@
-import * as Bluebird from 'bluebird'
 import * as express from 'express'
-import * as helmet from 'helmet'
 import { join } from 'path'
-import * as validator from 'validator'
-import { escapeHTML, readFileBufferPromise, root } from '../helpers/core-utils'
-import { ACCEPT_HEADERS, CONFIG, EMBED_SIZE, OPENGRAPH_AND_OEMBED_COMMENT, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
+import { root } from '../helpers/core-utils'
+import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers'
 import { asyncMiddleware } from '../middlewares'
-import { VideoModel } from '../models/video/video'
-import { VideoPrivacy } from '../../shared/models/videos'
-import {
-  buildFileLocale,
-  getCompleteLocale,
-  getDefaultLocale,
-  is18nLocale,
-  LOCALE_FILES,
-  POSSIBLE_LOCALES
-} from '../../shared/models/i18n/i18n'
+import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
+import { ClientHtml } from '../lib/client-html'
 
 const clientsRouter = express.Router()
 
@@ -79,7 +68,7 @@ clientsRouter.use('/client/*', (req: express.Request, res: express.Response, nex
 // Try to provide the right language index.html
 clientsRouter.use('/(:language)?', function (req, res) {
   if (req.accepts(ACCEPT_HEADERS) === 'html') {
-    return res.sendFile(getIndexPath(req, res, req.params.language))
+    return generateHTMLPage(req, res, req.params.language)
   }
 
   return res.status(404).end()
@@ -93,131 +82,20 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getIndexPath (req: express.Request, res: express.Response, paramLang?: string) {
-  let lang: string
+async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
+  const html = await ClientHtml.getIndexHTML(req, res)
 
-  // Check param lang validity
-  if (paramLang && is18nLocale(paramLang)) {
-    lang = paramLang
-
-    // Save locale in cookies
-    res.cookie('clientLanguage', lang, {
-      secure: CONFIG.WEBSERVER.SCHEME === 'https',
-      sameSite: true,
-      maxAge: 1000 * 3600 * 24 * 90 // 3 months
-    })
-
-  } else if (req.cookies.clientLanguage && is18nLocale(req.cookies.clientLanguage)) {
-    lang = req.cookies.clientLanguage
-  } else {
-    lang = req.acceptsLanguages(POSSIBLE_LOCALES) || getDefaultLocale()
-  }
-
-  return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
+  return sendHTML(html, res)
 }
 
-function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
-  const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
-  const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+async function generateWatchHtmlPage (req: express.Request, res: express.Response) {
+  const html = await ClientHtml.getWatchHTMLPage(req.params.id + '', req, res)
 
-  const videoNameEscaped = escapeHTML(video.name)
-  const videoDescriptionEscaped = escapeHTML(video.description)
-  const embedUrl = CONFIG.WEBSERVER.URL + video.getEmbedStaticPath()
-
-  const openGraphMetaTags = {
-    'og:type': 'video',
-    'og:title': videoNameEscaped,
-    'og:image': previewUrl,
-    'og:url': videoUrl,
-    'og:description': videoDescriptionEscaped,
-
-    'og:video:url': embedUrl,
-    'og:video:secure_url': embedUrl,
-    'og:video:type': 'text/html',
-    'og:video:width': EMBED_SIZE.width,
-    'og:video:height': EMBED_SIZE.height,
-
-    'name': videoNameEscaped,
-    'description': videoDescriptionEscaped,
-    'image': previewUrl,
-
-    'twitter:card': CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image',
-    'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
-    'twitter:title': videoNameEscaped,
-    'twitter:description': videoDescriptionEscaped,
-    'twitter:image': previewUrl,
-    'twitter:player': embedUrl,
-    'twitter:player:width': EMBED_SIZE.width,
-    'twitter:player:height': EMBED_SIZE.height
-  }
-
-  const oembedLinkTags = [
-    {
-      type: 'application/json+oembed',
-      href: CONFIG.WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
-      title: videoNameEscaped
-    }
-  ]
-
-  const schemaTags = {
-    '@context': 'http://schema.org',
-    '@type': 'VideoObject',
-    name: videoNameEscaped,
-    description: videoDescriptionEscaped,
-    thumbnailUrl: previewUrl,
-    uploadDate: video.createdAt.toISOString(),
-    duration: video.getActivityStreamDuration(),
-    contentUrl: videoUrl,
-    embedUrl: embedUrl,
-    interactionCount: video.views
-  }
-
-  let tagsString = ''
-
-  // Opengraph
-  Object.keys(openGraphMetaTags).forEach(tagName => {
-    const tagValue = openGraphMetaTags[tagName]
-
-    tagsString += `<meta property="${tagName}" content="${tagValue}" />`
-  })
-
-  // OEmbed
-  for (const oembedLinkTag of oembedLinkTags) {
-    tagsString += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.title}" />`
-  }
-
-  // Schema.org
-  tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
-
-  // SEO
-  tagsString += `<link rel="canonical" href="${videoUrl}" />`
-
-  return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
+  return sendHTML(html, res)
 }
 
-async function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoId = '' + req.params.id
-  let videoPromise: Bluebird<VideoModel>
+function sendHTML (html: string, res: express.Response) {
+  res.set('Content-Type', 'text/html; charset=UTF-8')
 
-  // Let Angular application handle errors
-  if (validator.isUUID(videoId, 4)) {
-    videoPromise = VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(videoId)
-  } else if (validator.isInt(videoId)) {
-    videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(+videoId)
-  } else {
-    return res.sendFile(getIndexPath(req, res))
-  }
-
-  let [ file, video ] = await Promise.all([
-    readFileBufferPromise(getIndexPath(req, res)),
-    videoPromise
-  ])
-
-  const html = file.toString()
-
-  // Let Angular application handle errors
-  if (!video || video.privacy === VideoPrivacy.PRIVATE) return res.sendFile(getIndexPath(req, res))
-
-  const htmlStringPageWithTags = addOpenGraphAndOEmbedTags(html, video)
-  res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
+  return res.send(html)
 }

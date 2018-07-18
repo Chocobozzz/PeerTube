@@ -123,6 +123,13 @@ function makePutBodyRequest (options: {
             .expect(options.statusCodeExpected)
 }
 
+function makeHTMLRequest (url: string, path: string) {
+  return request(url)
+    .get(path)
+    .set('Accept', 'text/html')
+    .expect(200)
+}
+
 function updateAvatarRequest (options: {
   url: string,
   path: string,
@@ -149,6 +156,7 @@ function updateAvatarRequest (options: {
 // ---------------------------------------------------------------------------
 
 export {
+  makeHTMLRequest,
   makeGetRequest,
   makeUploadRequest,
   makePostBodyRequest,

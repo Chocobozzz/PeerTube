@@ -466,7 +466,12 @@ const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENT
 
 // ---------------------------------------------------------------------------
 
-const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
+const CUSTOM_HTML_TAG_COMMENTS = {
+  TITLE: '<!-- title tag -->',
+  DESCRIPTION: '<!-- description tag -->',
+  CUSTOM_CSS: '<!-- custom css tag -->',
+  OPENGRAPH_AND_OEMBED: '<!-- open graph and oembed tags -->'
+}
 
 // ---------------------------------------------------------------------------
 
@@ -528,7 +533,7 @@ export {
   JOB_ATTEMPTS,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
-  OPENGRAPH_AND_OEMBED_COMMENT,
+  CUSTOM_HTML_TAG_COMMENTS,
   BROADCAST_CONCURRENCY,
   PAGINATION_COUNT_DEFAULT,
   ACTOR_FOLLOW_SCORE,
