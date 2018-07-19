@@ -53,6 +53,10 @@ $ docker-compose up
 **Important**: note that you'll get the initial `root` user password from the
 program output, so check out your logs to find them.
 
+### What now?
+
+See the production guide ["What now" section](/support/doc/production.md#what-now). 
+
 ### Upgrade
 
 Pull the latest images and rerun PeerTube:

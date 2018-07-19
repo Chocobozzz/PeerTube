@@ -35,7 +35,9 @@ const SORTABLE_COLUMNS = {
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
-  FOLLOWING: [ 'createdAt' ]
+  FOLLOWING: [ 'createdAt' ],
+
+  VIDEOS_SEARCH: [ 'bestmatch', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ]
 }
 
 const OAUTH_LIFETIME = {

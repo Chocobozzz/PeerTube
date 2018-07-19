@@ -83,7 +83,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildTrigramSearchIndex, createSearchTrigramQuery, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
@@ -93,6 +93,37 @@ import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
+
+// FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
+const indexes: Sequelize.DefineIndexesOptions[] = [
+  buildTrigramSearchIndex('video_name_trigram', 'name'),
+
+  {
+    fields: [ 'createdAt' ]
+  },
+  {
+    fields: [ 'duration' ]
+  },
+  {
+    fields: [ 'views' ]
+  },
+  {
+    fields: [ 'likes' ]
+  },
+  {
+    fields: [ 'uuid' ]
+  },
+  {
+    fields: [ 'channelId' ]
+  },
+  {
+    fields: [ 'id', 'privacy', 'state', 'waitTranscoding' ]
+  },
+  {
+    fields: [ 'url'],
+    unique: true
+  }
+]
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -309,36 +340,7 @@ export enum ScopeNames {
 })
 @Table({
   tableName: 'video',
-  indexes: [
-    {
-      fields: [ 'name' ]
-    },
-    {
-      fields: [ 'createdAt' ]
-    },
-    {
-      fields: [ 'duration' ]
-    },
-    {
-      fields: [ 'views' ]
-    },
-    {
-      fields: [ 'likes' ]
-    },
-    {
-      fields: [ 'uuid' ]
-    },
-    {
-      fields: [ 'channelId' ]
-    },
-    {
-      fields: [ 'id', 'privacy', 'state', 'waitTranscoding' ]
-    },
-    {
-      fields: [ 'url'],
-      unique: true
-    }
-  ]
+  indexes
 })
 export class VideoModel extends Model<VideoModel> {
 
@@ -794,33 +796,13 @@ export class VideoModel extends Model<VideoModel> {
 
   static async searchAndPopulateAccountAndServer (value: string, start: number, count: number, sort: string, hideNSFW: boolean) {
     const query: IFindOptions<VideoModel> = {
+      attributes: {
+        include: [ createSimilarityAttribute('VideoModel.name', value) ]
+      },
       offset: start,
       limit: count,
       order: getSort(sort),
-      where: {
-        [Sequelize.Op.or]: [
-          {
-            name: {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            }
-          },
-          {
-            preferredUsernameChannel: Sequelize.where(Sequelize.col('VideoChannel->Actor.preferredUsername'), {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            })
-          },
-          {
-            preferredUsernameAccount: Sequelize.where(Sequelize.col('VideoChannel->Account->Actor.preferredUsername'), {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            })
-          },
-          {
-            host: Sequelize.where(Sequelize.col('VideoChannel->Account->Actor->Server.host'), {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            })
-          }
-        ]
-      }
+      where: createSearchTrigramQuery('VideoModel.name', value)
     }
 
     const serverActor = await getServerActor()

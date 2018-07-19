@@ -41,6 +41,13 @@ $ sudo -u postgres createuser -P peertube
 $ sudo -u postgres createdb -O peertube peertube_prod
 ```
 
+Then enable extensions PeerTube needs:
+
+```
+$ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_prod
+$ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_prod
+```
+
 ### Prepare PeerTube directory
 
 Fetch the latest tagged version of Peertube
@@ -194,7 +201,7 @@ Now your instance is up you can:
 
 ## Upgrade
 
-### PeerTube code
+### PeerTube instance
 
 **Check the changelog (in particular BREAKING CHANGES!):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 

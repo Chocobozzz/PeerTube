@@ -8,6 +8,12 @@ function setDefaultSort (req: express.Request, res: express.Response, next: expr
   return next()
 }
 
+function setDefaultSearchSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = '-bestmatch'
+
+  return next()
+}
+
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   let newSort: SortType = { sortModel: undefined, sortValue: undefined }
 
@@ -33,5 +39,6 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 
 export {
   setDefaultSort,
+  setDefaultSearchSort,
   setBlacklistSort
 }
