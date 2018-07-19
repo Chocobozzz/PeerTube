@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'express-validator'
-import { body, param, query, ValidationChain } from 'express-validator/check'
+import { body, param, ValidationChain } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
 import {
   isBooleanValid,
@@ -172,18 +172,6 @@ const videosRemoveValidator = [
   }
 ]
 
-const videosSearchValidator = [
-  query('search').not().isEmpty().withMessage('Should have a valid search'),
-
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosSearch parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-
-    return next()
-  }
-]
-
 const videoAbuseReportValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('reason').custom(isVideoAbuseReasonValid).withMessage('Should have a valid reason'),
@@ -240,7 +228,6 @@ export {
   videosUpdateValidator,
   videosGetValidator,
   videosRemoveValidator,
-  videosSearchValidator,
   videosShareValidator,
 
   videoAbuseReportValidator,

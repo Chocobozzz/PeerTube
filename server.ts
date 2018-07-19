@@ -49,7 +49,7 @@ if (errorMessage !== null) {
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
-// Security middlewares
+// Security middleware
 app.use(helmet({
   frameguard: {
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts

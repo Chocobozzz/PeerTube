@@ -248,9 +248,9 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
 }
 
 function searchVideo (url: string, search: string) {
-  const path = '/api/v1/videos'
+  const path = '/api/v1/search/videos'
   const req = request(url)
-    .get(path + '/search')
+    .get(path)
     .query({ search })
     .set('Accept', 'application/json')
 
@@ -271,10 +271,10 @@ function searchVideoWithToken (url: string, search: string, token: string) {
 }
 
 function searchVideoWithPagination (url: string, search: string, start: number, count: number, sort?: string) {
-  const path = '/api/v1/videos'
+  const path = '/api/v1/search/videos'
 
   const req = request(url)
-                .get(path + '/search')
+                .get(path)
                 .query({ start })
                 .query({ search })
                 .query({ count })
@@ -287,10 +287,10 @@ function searchVideoWithPagination (url: string, search: string, start: number, 
 }
 
 function searchVideoWithSort (url: string, search: string, sort: string) {
-  const path = '/api/v1/videos'
+  const path = '/api/v1/search/videos'
 
   return request(url)
-          .get(path + '/search')
+          .get(path)
           .query({ search })
           .query({ sort })
           .set('Accept', 'application/json')
