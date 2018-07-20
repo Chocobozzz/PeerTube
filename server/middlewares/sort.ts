@@ -9,7 +9,7 @@ function setDefaultSort (req: express.Request, res: express.Response, next: expr
 }
 
 function setDefaultSearchSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-bestmatch'
+  if (!req.query.sort) req.query.sort = '-match'
 
   return next()
 }

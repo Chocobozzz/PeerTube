@@ -3,7 +3,7 @@ import { getFormattedObjects, resetSequelizeInstance } from '../../helpers/utils
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate,
+  authenticate, commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -19,7 +19,7 @@ import { videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
-import { createReqFiles, isNSFWHidden } from '../../helpers/express-utils'
+import { createReqFiles, buildNSFWFilter } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
@@ -79,6 +79,7 @@ videoChannelRouter.get('/:id/videos',
   setDefaultSort,
   setDefaultPagination,
   optionalAuthenticate,
+  commonVideosFiltersValidator,
   asyncMiddleware(listVideoChannelVideos)
 )
 
@@ -189,7 +190,12 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    hideNSFW: isNSFWHidden(res),
+    categoryOneOf: req.query.categoryOneOf,
+    licenceOneOf: req.query.licenceOneOf,
+    languageOneOf: req.query.languageOneOf,
+    tagsOneOf: req.query.tagsOneOf,
+    tagsAllOf: req.query.tagsAllOf,
+    nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
     videoChannelId: videoChannelInstance.id
   })

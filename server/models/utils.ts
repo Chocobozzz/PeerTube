@@ -14,7 +14,7 @@ function getSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
   }
 
   // Alias
-  if (field.toLowerCase() === 'bestmatch') field = Sequelize.col('similarity')
+  if (field.toLowerCase() === 'match') field = Sequelize.col('similarity')
 
   return [ [ field, direction ], lastSort ]
 }

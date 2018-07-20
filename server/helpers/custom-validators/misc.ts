@@ -41,6 +41,12 @@ function toValueOrNull (value: string) {
   return value
 }
 
+function toArray (value: string) {
+  if (value && isArray(value) === false) return [ value ]
+
+  return value
+}
+
 function isFileValid (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
   mimeTypeRegex: string,
@@ -80,5 +86,6 @@ export {
   toValueOrNull,
   isBooleanValid,
   toIntOrNull,
+  toArray,
   isFileValid
 }

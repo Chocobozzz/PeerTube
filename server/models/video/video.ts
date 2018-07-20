@@ -93,6 +93,7 @@ import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
+import { VideosSearchQuery } from '../../../shared/models/search'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -133,16 +134,22 @@ export enum ScopeNames {
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE'
 }
 
+type AvailableForListOptions = {
+  actorId: number,
+  filter?: VideoFilter,
+  categoryOneOf?: number[],
+  nsfw?: boolean,
+  licenceOneOf?: number[],
+  languageOneOf?: string[],
+  tagsOneOf?: string[],
+  tagsAllOf?: string[],
+  withFiles?: boolean,
+  accountId?: number,
+  videoChannelId?: number
+}
+
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: {
-    actorId: number,
-    hideNSFW: boolean,
-    filter?: VideoFilter,
-    category?: number,
-    withFiles?: boolean,
-    accountId?: number,
-    videoChannelId?: number
-  }) => {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
     const accountInclude = {
       attributes: [ 'id', 'name' ],
       model: AccountModel.unscoped(),
@@ -243,13 +250,55 @@ export enum ScopeNames {
       })
     }
 
-    // Hide nsfw videos?
-    if (options.hideNSFW === true) {
-      query.where['nsfw'] = false
+    // FIXME: issues with sequelize count when making a join on n:m relation, so we just make a IN()
+    if (options.tagsAllOf || options.tagsOneOf) {
+      const createTagsIn = (tags: string[]) => {
+        return tags.map(t => VideoModel.sequelize.escape(t))
+                   .join(', ')
+      }
+
+      if (options.tagsOneOf) {
+        query.where['id'][Sequelize.Op.in] = Sequelize.literal(
+          '(' +
+            'SELECT "videoId" FROM "videoTag" ' +
+            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+            'WHERE "tag"."name" IN (' + createTagsIn(options.tagsOneOf) + ')' +
+          ')'
+        )
+      }
+
+      if (options.tagsAllOf) {
+        query.where['id'][Sequelize.Op.in] = Sequelize.literal(
+            '(' +
+              'SELECT "videoId" FROM "videoTag" ' +
+              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+              'WHERE "tag"."name" IN (' + createTagsIn(options.tagsAllOf) + ')' +
+              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
+            ')'
+        )
+      }
     }
 
-    if (options.category) {
-      query.where['category'] = options.category
+    if (options.nsfw === true || options.nsfw === false) {
+      query.where['nsfw'] = options.nsfw
+    }
+
+    if (options.categoryOneOf) {
+      query.where['category'] = {
+        [Sequelize.Op.or]: options.categoryOneOf
+      }
+    }
+
+    if (options.licenceOneOf) {
+      query.where['licence'] = {
+        [Sequelize.Op.or]: options.licenceOneOf
+      }
+    }
+
+    if (options.languageOneOf) {
+      query.where['language'] = {
+        [Sequelize.Op.or]: options.languageOneOf
+      }
     }
 
     if (options.accountId) {
@@ -756,9 +805,13 @@ export class VideoModel extends Model<VideoModel> {
     start: number,
     count: number,
     sort: string,
-    hideNSFW: boolean,
+    nsfw: boolean,
     withFiles: boolean,
-    category?: number,
+    categoryOneOf?: number[],
+    licenceOneOf?: number[],
+    languageOneOf?: string[],
+    tagsOneOf?: string[],
+    tagsAllOf?: string[],
     filter?: VideoFilter,
     accountId?: number,
     videoChannelId?: number
@@ -774,13 +827,17 @@ export class VideoModel extends Model<VideoModel> {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
-          hideNSFW: options.hideNSFW,
-          category: options.category,
+          nsfw: options.nsfw,
+          categoryOneOf: options.categoryOneOf,
+          licenceOneOf: options.licenceOneOf,
+          languageOneOf: options.languageOneOf,
+          tagsOneOf: options.tagsOneOf,
+          tagsAllOf: options.tagsAllOf,
           filter: options.filter,
           withFiles: options.withFiles,
           accountId: options.accountId,
           videoChannelId: options.videoChannelId
-        }
+        } as AvailableForListOptions
       ]
     }
 
@@ -794,15 +851,39 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static async searchAndPopulateAccountAndServer (value: string, start: number, count: number, sort: string, hideNSFW: boolean) {
+  static async searchAndPopulateAccountAndServer (options: VideosSearchQuery) {
+    const whereAnd = [ ]
+
+    if (options.startDate || options.endDate) {
+      const publishedAtRange = { }
+
+      if (options.startDate) publishedAtRange[Sequelize.Op.gte] = options.startDate
+      if (options.endDate) publishedAtRange[Sequelize.Op.lte] = options.endDate
+
+      whereAnd.push({ publishedAt: publishedAtRange })
+    }
+
+    if (options.durationMin || options.durationMax) {
+      const durationRange = { }
+
+      if (options.durationMin) durationRange[Sequelize.Op.gte] = options.durationMin
+      if (options.durationMax) durationRange[Sequelize.Op.lte] = options.durationMax
+
+      whereAnd.push({ duration: durationRange })
+    }
+
+    whereAnd.push(createSearchTrigramQuery('VideoModel.name', options.search))
+
     const query: IFindOptions<VideoModel> = {
       attributes: {
-        include: [ createSimilarityAttribute('VideoModel.name', value) ]
+        include: [ createSimilarityAttribute('VideoModel.name', options.search) ]
       },
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      where: createSearchTrigramQuery('VideoModel.name', value)
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where: {
+        [ Sequelize.Op.and ]: whereAnd
+      }
     }
 
     const serverActor = await getServerActor()
@@ -810,8 +891,13 @@ export class VideoModel extends Model<VideoModel> {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
-          hideNSFW
-        }
+          nsfw: options.nsfw,
+          categoryOneOf: options.categoryOneOf,
+          licenceOneOf: options.licenceOneOf,
+          languageOneOf: options.languageOneOf,
+          tagsOneOf: options.tagsOneOf,
+          tagsAllOf: options.tagsAllOf
+        } as AvailableForListOptions
       ]
     }
 
