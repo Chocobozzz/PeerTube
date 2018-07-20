@@ -31,6 +31,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -49,7 +50,7 @@ import { blacklistRouter } from './blacklist'
 import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
-import { createReqFiles, isNSFWHidden } from '../../../helpers/express-utils'
+import { createReqFiles, buildNSFWFilter } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { videoCaptionsRouter } from './captions'
 
@@ -90,6 +91,7 @@ videosRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   optionalAuthenticate,
+  commonVideosFiltersValidator,
   asyncMiddleware(listVideos)
 )
 videosRouter.put('/:id',
@@ -401,8 +403,12 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    category: req.query.category,
-    hideNSFW: isNSFWHidden(res),
+    categoryOneOf: req.query.categoryOneOf,
+    licenceOneOf: req.query.licenceOneOf,
+    languageOneOf: req.query.languageOneOf,
+    tagsOneOf: req.query.tagsOneOf,
+    tagsAllOf: req.query.tagsAllOf,
+    nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false
   })
