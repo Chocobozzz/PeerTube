@@ -2,7 +2,7 @@ import * as express from 'express'
 import { areValidationErrors } from './utils'
 import { logger } from '../../helpers/logger'
 import { query } from 'express-validator/check'
-import { isNumberArray, isStringArray } from '../../helpers/custom-validators/search'
+import { isNumberArray, isStringArray, isNSFWQueryValid } from '../../helpers/custom-validators/search'
 import { isBooleanValid, isDateValid, toArray } from '../../helpers/custom-validators/misc'
 
 const searchValidator = [
@@ -46,8 +46,7 @@ const commonVideosFiltersValidator = [
     .custom(isStringArray).withMessage('Should have a valid all of tags array'),
   query('nsfw')
     .optional()
-    .toBoolean()
-    .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+    .custom(isNSFWQueryValid).withMessage('Should have a valid NSFW attribute'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking commons video filters query', { parameters: req.query })

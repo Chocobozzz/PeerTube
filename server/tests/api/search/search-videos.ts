@@ -216,7 +216,7 @@ describe('Test a videos search', function () {
       search: '1111 2222 3333',
       languageOneOf: [ 'pl', 'fr' ],
       durationMax: 4,
-      nsfw: false,
+      nsfw: 'false' as 'false',
       licenceOneOf: [ 1, 4 ]
     }
 
@@ -235,7 +235,7 @@ describe('Test a videos search', function () {
       search: '1111 2222 3333',
       languageOneOf: [ 'pl', 'fr' ],
       durationMax: 4,
-      nsfw: false,
+      nsfw: 'false' as 'false',
       licenceOneOf: [ 1, 4 ],
       sort: '-name'
     }
@@ -255,7 +255,7 @@ describe('Test a videos search', function () {
       search: '1111 2222 3333',
       languageOneOf: [ 'pl', 'fr' ],
       durationMax: 4,
-      nsfw: false,
+      nsfw: 'false' as 'false',
       licenceOneOf: [ 1, 4 ],
       sort: '-name',
       start: 0,
@@ -274,7 +274,7 @@ describe('Test a videos search', function () {
       search: '1111 2222 3333',
       languageOneOf: [ 'pl', 'fr' ],
       durationMax: 4,
-      nsfw: false,
+      nsfw: 'false' as 'false',
       licenceOneOf: [ 1, 4 ],
       sort: '-name',
       start: 3,

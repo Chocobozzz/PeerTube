@@ -851,7 +851,22 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static async searchAndPopulateAccountAndServer (options: VideosSearchQuery) {
+  static async searchAndPopulateAccountAndServer (options: {
+    search: string
+    start?: number
+    count?: number
+    sort?: string
+    startDate?: string // ISO 8601
+    endDate?: string // ISO 8601
+    nsfw?: boolean
+    categoryOneOf?: number[]
+    licenceOneOf?: number[]
+    languageOneOf?: string[]
+    tagsOneOf?: string[]
+    tagsAllOf?: string[]
+    durationMin?: number // seconds
+    durationMax?: number // seconds
+  }) {
     const whereAnd = [ ]
 
     if (options.startDate || options.endDate) {

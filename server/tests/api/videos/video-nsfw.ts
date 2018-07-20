@@ -220,6 +220,17 @@ describe('Test video NSFW policy', function () {
         expect(videos[ 0 ].name).to.equal('normal')
       }
     })
+
+    it('Should display both videos when the nsfw param === both', async function () {
+      for (const res of await getVideosFunctions(server.accessToken, { nsfw: 'both' })) {
+        expect(res.body.total).to.equal(2)
+
+        const videos = res.body.data
+        expect(videos).to.have.lengthOf(2)
+        expect(videos[ 0 ].name).to.equal('normal')
+        expect(videos[ 1 ].name).to.equal('nsfw')
+      }
+    })
   })
 
   after(async function () {

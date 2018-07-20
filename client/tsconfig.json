@@ -28,5 +28,11 @@
       "stream": [ "./shims/noop" ],
       "crypto": [ "./shims/noop" ]
     }
-  }
+  },
+  "exclude": [
+    "../node_modules",
+    "node_modules",
+    "dist",
+    "../server"
+  ]
 }
