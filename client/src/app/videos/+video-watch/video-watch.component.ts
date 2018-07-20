@@ -21,6 +21,7 @@ import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
+import { VideoChangeOwnershipComponent } from './modal/video-change-ownership.component'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -41,6 +42,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
+  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
 
   otherVideosDisplayed: Video[] = []
 
@@ -278,6 +280,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
           error => this.notificationsService.error(this.i18n('Error'), error.message)
         )
+  }
+
+  changeOwnership (event: Event) {
+    event.preventDefault()
+    this.videoChangeOwnershipModal.show()
   }
 
   acceptedPrivacyConcern () {

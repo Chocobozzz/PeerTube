@@ -107,6 +107,12 @@
                     <span class="icon icon-blacklist"></span> <ng-container i18n>Delete</ng-container>
                   </a>
                 </li>
+
+                <li *ngIf="isVideoUpdatable()" role="menuitem">
+                  <a class="dropdown-item" i18n-title title="Change ownership of this video" href="#" (click)="changeOwnership($event)">
+                    <span class="icon icon-alert"></span> <ng-container i18n>Change ownership</ng-container>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -211,4 +217,5 @@
   <my-video-share #videoShareModal [video]="video"></my-video-share>
   <my-video-download #videoDownloadModal [video]="video"></my-video-download>
   <my-video-report #videoReportModal [video]="video"></my-video-report>
+  <my-video-change-ownership #videoChangeOwnershipModal [video]="video"></my-video-change-ownership>
 </ng-template>

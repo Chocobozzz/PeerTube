@@ -27,6 +27,7 @@ import { RestExtractor, RestService } from './rest'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
+import { VideoOwnershipService } from './video-ownership'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
 import { VideoFeedComponent } from './video/video-feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
@@ -44,7 +45,8 @@ import {
   VideoAbuseValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
-  VideoValidatorsService
+  VideoValidatorsService,
+  VideoChangeOwnershipValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -126,6 +128,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     RestService,
     VideoAbuseService,
     VideoBlacklistService,
+    VideoOwnershipService,
     UserService,
     VideoService,
     AccountService,
@@ -143,6 +146,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     VideoCommentValidatorsService,
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
+    VideoChangeOwnershipValidatorsService,
 
     I18nPrimengCalendarService,
     ScreenService,
