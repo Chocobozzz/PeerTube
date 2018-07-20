@@ -2,7 +2,7 @@
 @import '_mixins';
 
 .no-result {
-  height: 70vh;
+  height: 40vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,17 +11,49 @@
 }
 
 .search-result {
-  margin-left: 40px;
-  margin-top: 40px;
+  margin: 40px;
 
-  .results-counter {
-    font-size: 15px;
+  .results-header {
+    font-size: 16px;
     padding-bottom: 20px;
     margin-bottom: 30px;
     border-bottom: 1px solid #DADADA;
 
-    .search-value {
-      font-weight: $font-semibold;
+    .first-line {
+      display: flex;
+      flex-direction: row;
+
+      .results-counter {
+        flex-grow: 1;
+
+        .search-value {
+          font-weight: $font-semibold;
+        }
+      }
+
+      .results-filter-button {
+
+        .icon.icon-filter {
+          @include icon(20px);
+
+          position: relative;
+          top: -1px;
+          margin-right: 5px;
+          background-image: url('../../assets/images/search/filter.svg');
+        }
+      }
+    }
+
+    .results-filter {
+      // Animation when we show/hide the filters
+      transition: max-height 0.3s;
+      display: block !important;
+      overflow: hidden !important;
+      max-height: 0;
+
+      &.show {
+        max-height: 800px;
+      }
     }
   }
 

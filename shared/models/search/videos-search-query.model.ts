@@ -1,3 +1,5 @@
+import { NSFWQuery } from './nsfw-query.model'
+
 export interface VideosSearchQuery {
   search: string
 
@@ -8,7 +10,7 @@ export interface VideosSearchQuery {
   startDate?: string // ISO 8601
   endDate?: string // ISO 8601
 
-  nsfw?: boolean
+  nsfw?: NSFWQuery
 
   categoryOneOf?: number[]
 

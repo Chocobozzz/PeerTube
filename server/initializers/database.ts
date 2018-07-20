@@ -86,8 +86,6 @@ async function initDatabaseModels (silent: boolean) {
   // Create custom PostgreSQL functions
   await createFunctions()
 
-  await sequelizeTypescript.query('CREATE EXTENSION IF NOT EXISTS pg_trgm', { raw: true })
-
   if (!silent) logger.info('Database %s is ready.', dbname)
 
   return

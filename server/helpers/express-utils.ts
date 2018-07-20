@@ -5,8 +5,10 @@ import { logger } from './logger'
 import { User } from '../../shared/models/users'
 import { generateRandomString } from './utils'
 
-function buildNSFWFilter (res: express.Response, paramNSFW?: boolean) {
-  if (paramNSFW === true || paramNSFW === false) return paramNSFW
+function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
+  if (paramNSFW === 'true') return true
+  if (paramNSFW === 'false') return false
+  if (paramNSFW === 'both') return undefined
 
   if (res.locals.oauth) {
     const user: User = res.locals.oauth.token.User
