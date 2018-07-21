@@ -5,14 +5,14 @@ import { asyncMiddleware, setDefaultSort, videoCommentsFeedsValidator, videoFeed
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
 import { AccountModel } from '../models/account/account'
-import { cacheRoute } from '../middlewares/cache'
+import { cache } from '../middlewares/cache'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoCommentModel } from '../models/video/video-comment'
 
 const feedsRouter = express.Router()
 
 feedsRouter.get('/feeds/video-comments.:format',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  asyncMiddleware(cache(ROUTE_CACHE_LIFETIME.FEEDS)),
   asyncMiddleware(videoCommentsFeedsValidator),
   asyncMiddleware(generateVideoCommentsFeed)
 )
@@ -20,7 +20,7 @@ feedsRouter.get('/feeds/video-comments.:format',
 feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  asyncMiddleware(cache(ROUTE_CACHE_LIFETIME.FEEDS)),
   asyncMiddleware(videoFeedsValidator),
   asyncMiddleware(generateVideoFeed)
 )
