@@ -104,6 +104,36 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
+const timeTable = {
+  ms:           1,
+  second:       1000,
+  minute:       60000,
+  hour:         3600000,
+  day:          3600000 * 24,
+  week:         3600000 * 24 * 7,
+  month:        3600000 * 24 * 30
+}
+export function parseDuration (duration: number | string, defaultDuration: number): number {
+  if (typeof duration === 'number') return duration
+
+  if (typeof duration === 'string') {
+    const split = duration.match(/^([\d\.,]+)\s?(\w+)$/)
+
+    if (split.length === 3) {
+      const len = parseFloat(split[1])
+      let unit = split[2].replace(/s$/i,'').toLowerCase()
+      if (unit === 'm') {
+        unit = 'ms'
+      }
+
+      return (len || 1) * (timeTable[unit] || 0)
+    }
+  }
+
+  logger.error('Duration could not be properly parsed, defaulting to ' + defaultDuration)
+  return defaultDuration
+}
+
 function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   Object.keys(savedFields).forEach(key => {
     const value = savedFields[key]

@@ -46,9 +46,11 @@ const OAUTH_LIFETIME = {
 }
 
 const ROUTE_CACHE_LIFETIME = {
-  FEEDS: 1000 * 60 * 15, // 15 minutes
+  FEEDS: '15 minutes',
+  ROBOTS: '2 hours',
+  NODEINFO: '10 minutes',
   ACTIVITY_PUB: {
-    VIDEOS: 1000 // 1 second, cache concurrent requests after a broadcast for example
+    VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
   }
 }
 

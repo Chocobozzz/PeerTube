@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as AsyncLock from 'async-lock'
+import { parseDuration } from '../helpers/utils'
 import { Redis } from '../lib/redis'
 import { logger } from '../helpers/logger'
 
@@ -20,7 +21,7 @@ function cacheRoute (lifetime: number) {
 
         res.send = (body) => {
           if (res.statusCode >= 200 && res.statusCode < 400) {
-            const contentType = res.getHeader('content-type').toString()
+            const contentType = res.get('content-type')
             Redis.Instance.setCachedRoute(req, body, lifetime, contentType, res.statusCode)
                  .then(() => done())
                  .catch(err => {
@@ -35,7 +36,7 @@ function cacheRoute (lifetime: number) {
         return next()
       }
 
-      if (cached.contentType) res.contentType(cached.contentType)
+      if (cached.contentType) res.set('content-type', cached.contentType)
 
       if (cached.statusCode) {
         const statusCode = parseInt(cached.statusCode, 10)
@@ -50,8 +51,14 @@ function cacheRoute (lifetime: number) {
   }
 }
 
+const cache = (duration: number | string) => {
+  const _lifetime = parseDuration(duration, 3600000)
+  return cacheRoute(_lifetime)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  cacheRoute
+  cacheRoute,
+  cache
 }
