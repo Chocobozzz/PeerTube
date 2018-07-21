@@ -83,8 +83,8 @@ Want to see it in action?
 
 ## Why
 
-We can't build a FOSS video streaming alternatives to YouTube, Dailymotion,
-Vimeo... with a centralized software. One organization alone may not have
+We can't build a FOSS video streaming alternative to YouTube, Dailymotion,
+Vimeo... with centralized software. One organization alone may not have
 enough money to pay for bandwidth and video storage of its servers.
 
 So we need to have a decentralized network of servers seeding videos (as
@@ -150,7 +150,7 @@ See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation.
 ### Backend
 
   * The backend is a REST API.
-  * Servers communicate with each others with [Activity
+  * Servers communicate with each other with [Activity
     Pub](https://www.w3.org/TR/activitypub/).
   * Each server has its own users who query it (search videos, query where the
     torrent URI of this specific video is...).
