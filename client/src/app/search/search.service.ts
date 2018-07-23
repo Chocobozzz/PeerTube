@@ -44,7 +44,7 @@ export class SearchService {
       const value = advancedSearchObject[name]
       if (!value) continue
 
-      if (Array.isArray(value)) {
+      if (Array.isArray(value) && value.length !== 0) {
         for (const v of value) params = params.append(name, v)
       } else {
         params = params.append(name, value)

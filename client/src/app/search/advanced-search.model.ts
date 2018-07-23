@@ -32,14 +32,14 @@ export class AdvancedSearch {
   }) {
     if (!options) return
 
-    this.startDate = options.startDate
-    this.endDate = options.endDate
-    this.nsfw = options.nsfw
-    this.categoryOneOf = options.categoryOneOf
-    this.licenceOneOf = options.licenceOneOf
-    this.languageOneOf = options.languageOneOf
-    this.tagsOneOf = options.tagsOneOf
-    this.tagsAllOf = options.tagsAllOf
+    this.startDate = options.startDate || undefined
+    this.endDate = options.endDate || undefined
+    this.nsfw = options.nsfw || undefined
+    this.categoryOneOf = options.categoryOneOf || undefined
+    this.licenceOneOf = options.licenceOneOf || undefined
+    this.languageOneOf = options.languageOneOf || undefined
+    this.tagsOneOf = options.tagsOneOf || undefined
+    this.tagsAllOf = options.tagsAllOf || undefined
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
 
