@@ -11,8 +11,15 @@ import {
   runServer,
   serverLogin,
   uploadVideo,
-  getVideosList, updateCustomConfig, getCustomConfig, killallServers
+  getVideosList, updateCustomConfig, getCustomConfig, killallServers, makeHTMLRequest
 } from './utils'
+import { CustomConfig } from '../../shared/models/server/custom-config.model'
+
+function checkIndexTags (html: string, title: string, description: string, css: string) {
+  expect(html).to.contain('<title>' + title + '</title>')
+  expect(html).to.contain('<meta name="description" content="' + description + '" />')
+  expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
+}
 
 describe('Test a client controllers', function () {
   let server: ServerInfo
@@ -99,6 +106,77 @@ describe('Test a client controllers', function () {
 
     expect(res.text).to.contain('<meta property="twitter:card" content="player" />')
     expect(res.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+  })
+
+  it('Should have valid index html tags (title, description...)', async function () {
+    const res = await makeHTMLRequest(server.url, '/videos/trending')
+
+    const description = 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
+      'with WebTorrent and Angular.'
+    checkIndexTags(res.text, 'PeerTube', description, '')
+  })
+
+  it('Should update the customized configuration and have the correct index html tags', async function () {
+    const newCustomConfig: CustomConfig = {
+      instance: {
+        name: 'PeerTube updated',
+        shortDescription: 'my short description',
+        description: 'my super description',
+        terms: 'my super terms',
+        defaultClientRoute: '/videos/recently-added',
+        defaultNSFWPolicy: 'blur' as 'blur',
+        customizations: {
+          javascript: 'alert("coucou")',
+          css: 'body { background-color: red; }'
+        }
+      },
+      services: {
+        twitter: {
+          username: '@Kuja',
+          whitelisted: true
+        }
+      },
+      cache: {
+        previews: {
+          size: 2
+        },
+        captions: {
+          size: 3
+        }
+      },
+      signup: {
+        enabled: false,
+        limit: 5
+      },
+      admin: {
+        email: 'superadmin1@example.com'
+      },
+      user: {
+        videoQuota: 5242881
+      },
+      transcoding: {
+        enabled: true,
+        threads: 1,
+        resolutions: {
+          '240p': false,
+          '360p': true,
+          '480p': true,
+          '720p': false,
+          '1080p': false
+        }
+      }
+    }
+    await updateCustomConfig(server.url, server.accessToken, newCustomConfig)
+
+    const res = await makeHTMLRequest(server.url, '/videos/trending')
+
+    checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
+  })
+
+  it('Should have valid index html updated tags (title, description...)', async function () {
+    const res = await makeHTMLRequest(server.url, '/videos/trending')
+
+    checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
   })
 
   after(async function () {
