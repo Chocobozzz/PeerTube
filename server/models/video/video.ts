@@ -99,26 +99,22 @@ import { VideosSearchQuery } from '../../../shared/models/search'
 const indexes: Sequelize.DefineIndexesOptions[] = [
   buildTrigramSearchIndex('video_name_trigram', 'name'),
 
+  { fields: [ 'createdAt' ] },
+  { fields: [ 'publishedAt' ] },
+  { fields: [ 'duration' ] },
+  { fields: [ 'category' ] },
+  { fields: [ 'licence' ] },
+  { fields: [ 'nsfw' ] },
+  { fields: [ 'language' ] },
+  { fields: [ 'waitTranscoding' ] },
+  { fields: [ 'state' ] },
+  { fields: [ 'remote' ] },
+  { fields: [ 'views' ] },
+  { fields: [ 'likes' ] },
+  { fields: [ 'channelId' ] },
   {
-    fields: [ 'createdAt' ]
-  },
-  {
-    fields: [ 'duration' ]
-  },
-  {
-    fields: [ 'views' ]
-  },
-  {
-    fields: [ 'likes' ]
-  },
-  {
-    fields: [ 'uuid' ]
-  },
-  {
-    fields: [ 'channelId' ]
-  },
-  {
-    fields: [ 'id', 'privacy', 'state', 'waitTranscoding' ]
+    fields: [ 'uuid' ],
+    unique: true
   },
   {
     fields: [ 'url'],
@@ -212,16 +208,16 @@ type AvailableForListOptions = {
           ),
           [ Sequelize.Op.in ]: Sequelize.literal(
             '(' +
-            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            ' UNION ' +
-            'SELECT "video"."id" AS "id" FROM "video" ' +
-            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-            'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-            'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + actorIdNumber +
+              'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+              ' UNION ' +
+              'SELECT "video"."id" AS "id" FROM "video" ' +
+              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+              'WHERE "actor"."serverId" IS NULL OR ' +
+              '"actor"."id" IN (SELECT "targetActorId" FROM "actorFollow" WHERE "actorId" = 1)' + // Subquery for optimization
             ')'
           )
         },

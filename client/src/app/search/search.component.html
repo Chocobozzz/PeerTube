@@ -9,7 +9,7 @@
 
       <div
         class="results-filter-button" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed" role="button"
-        [attr.aria-expanded]="isSearchFilterCollapsed" aria-controls="collapseBasic"
+        [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="collapseBasic"
       >
         <span class="icon icon-filter"></span>
         <ng-container i18n>Filters</ng-container>
@@ -17,7 +17,7 @@
     </div>
 
     <div class="results-filter" [collapse]="isSearchFilterCollapsed">
-      <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered($event)"></my-search-filters>
+      <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
     </div>
   </div>
 

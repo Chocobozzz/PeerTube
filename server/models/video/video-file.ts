@@ -18,6 +18,10 @@ import { VideoModel } from './video'
     },
     {
       fields: [ 'infoHash' ]
+    },
+    {
+      fields: [ 'videoId', 'resolution', 'fps' ],
+      unique: true
     }
   ]
 })

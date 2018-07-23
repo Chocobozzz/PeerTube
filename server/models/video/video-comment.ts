@@ -108,6 +108,9 @@ enum ScopeNames {
     {
       fields: [ 'url' ],
       unique: true
+    },
+    {
+      fields: [ 'accountId' ]
     }
   ]
 })
