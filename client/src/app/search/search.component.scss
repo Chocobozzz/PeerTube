@@ -52,7 +52,7 @@
       max-height: 0;
 
       &.show {
-        max-height: 800px;
+        max-height: 1500px;
       }
     }
   }
@@ -107,13 +107,18 @@
 }
 
 @media screen and (max-width: 800px) {
+  .results-header {
+    font-size: 15px !important;
+  }
+
   .entry {
     flex-direction: column;
     height: auto;
     text-align: center;
 
     &.video {
-      .video-info-name {
+      .video-info-name,
+      .video-info-account {
         margin: auto;
       }
 
