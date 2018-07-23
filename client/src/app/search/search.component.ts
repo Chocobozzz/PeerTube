@@ -27,6 +27,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private subActivatedRoute: Subscription
   private currentSearch: string
+  private isInitialLoad = true
 
   constructor (
     private i18n: I18n,
@@ -39,23 +40,28 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit () {
-    this.advancedSearch = new AdvancedSearch(this.route.snapshot.queryParams)
-    if (this.advancedSearch.containsValues()) this.isSearchFilterCollapsed = false
-
     this.subActivatedRoute = this.route.queryParams.subscribe(
       queryParams => {
         const querySearch = queryParams['search']
 
         if (!querySearch) return this.redirectService.redirectToHomepage()
-        if (querySearch === this.currentSearch) return
 
         // Search updated, reset filters
-        if (this.currentSearch) this.advancedSearch.reset()
+        if (this.currentSearch !== querySearch) {
+          this.resetPagination()
+          this.advancedSearch.reset()
 
-        this.currentSearch = querySearch
-        this.updateTitle()
+          this.currentSearch = querySearch
+          this.updateTitle()
+        }
 
-        this.reload()
+        this.advancedSearch = new AdvancedSearch(queryParams)
+
+        // Don't hide filters if we have some of them AND the user just came on the webpage
+        this.isSearchFilterCollapsed = this.isInitialLoad === false || !this.advancedSearch.containsValues()
+        this.isInitialLoad = false
+
+        this.search()
       },
 
       err => this.notificationsService.error('Error', err.text)
@@ -89,20 +95,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   onFiltered () {
-    this.updateUrlFromAdvancedSearch()
-    // Hide the filters
-    this.isSearchFilterCollapsed = true
+    this.resetPagination()
 
-    this.reload()
+    this.updateUrlFromAdvancedSearch()
   }
 
-  private reload () {
+  private resetPagination () {
     this.pagination.currentPage = 1
     this.pagination.totalItems = null
 
     this.videos = []
-
-    this.search()
   }
 
   private updateTitle () {
