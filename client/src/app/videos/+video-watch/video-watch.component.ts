@@ -252,7 +252,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
-    return this.video.tags.join(', ')
+    return this.video.tags
   }
 
   isVideoRemovable () {

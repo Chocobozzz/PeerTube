@@ -306,6 +306,23 @@
         color: #585858;
         font-weight: $font-bold;
       }
+
+      a.video-attribute-value {
+        @include disable-default-a-behaviour;
+        color: #000;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+
+      &.video-attribute-tags {
+        .video-attribute-value:not(:nth-child(2)) {
+          &::before {
+            content: ', '
+          }
+        }
+      }
     }
   }
 

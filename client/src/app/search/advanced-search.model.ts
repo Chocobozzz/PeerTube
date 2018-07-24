@@ -99,14 +99,22 @@ export class AdvancedSearch {
       startDate: this.startDate,
       endDate: this.endDate,
       nsfw: this.nsfw,
-      categoryOneOf: this.categoryOneOf ? this.categoryOneOf.split(',') : undefined,
-      licenceOneOf: this.licenceOneOf ? this.licenceOneOf.split(',') : undefined,
-      languageOneOf: this.languageOneOf ? this.languageOneOf.split(',') : undefined,
-      tagsOneOf: this.tagsOneOf ? this.tagsOneOf.split(',') : undefined,
-      tagsAllOf: this.tagsAllOf ? this.tagsAllOf.split(',') : undefined,
+      categoryOneOf: this.intoArray(this.categoryOneOf),
+      licenceOneOf: this.intoArray(this.licenceOneOf),
+      languageOneOf: this.intoArray(this.languageOneOf),
+      tagsOneOf: this.intoArray(this.tagsOneOf),
+      tagsAllOf: this.intoArray(this.tagsAllOf),
       durationMin: this.durationMin,
       durationMax: this.durationMax,
       sort: this.sort
     }
+  }
+
+  private intoArray (value: any) {
+    if (!value) return undefined
+
+    if (typeof value === 'string') return value.split(',')
+
+    return [ value ]
   }
 }

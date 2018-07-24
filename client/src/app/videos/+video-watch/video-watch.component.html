@@ -135,49 +135,43 @@
 
       <div class="video-attributes">
         <div class="video-attribute">
-          <span i18n class="video-attribute-label">
-            Privacy
-          </span>
-          <span class="video-attribute-value">
-            {{ video.privacy.label }}
-          </span>
+          <span i18n class="video-attribute-label">Privacy</span>
+          <span class="video-attribute-value">{{ video.privacy.label }}</span>
         </div>
 
         <div class="video-attribute">
-          <span i18n class="video-attribute-label">
-            Category
-          </span>
-          <span class="video-attribute-value">
-            {{ video.category.label }}
-          </span>
+          <span i18n class="video-attribute-label">Category</span>
+          <span *ngIf="!video.category.id" class="video-attribute-value">{{ video.category.label }}</span>
+          <a
+            *ngIf="video.category.id" class="video-attribute-value"
+            [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video.category.id ] }"
+          >{{ video.category.label }}</a>
         </div>
 
         <div class="video-attribute">
-          <span i18n class="video-attribute-label">
-            Licence
-          </span>
-          <span class="video-attribute-value">
-            {{ video.licence.label }}
-          </span>
+          <span i18n class="video-attribute-label">Licence</span>
+          <span *ngIf="!video.licence.id" class="video-attribute-value">{{ video.licence.label }}</span>
+          <a
+            *ngIf="video.licence.id" class="video-attribute-value"
+            [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video.licence.id ] }"
+          >{{ video.licence.label }}</a>
         </div>
 
         <div class="video-attribute">
-          <span i18n class="video-attribute-label">
-            Language
-          </span>
-          <span class="video-attribute-value">
-            {{ video.language.label }}
-          </span>
+          <span i18n class="video-attribute-label">Language</span>
+          <span *ngIf="!video.language.id" class="video-attribute-value">{{ video.language.label }}</span>
+          <a
+            *ngIf="video.language.id" class="video-attribute-value"
+            [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video.language.id ] }"
+          >{{ video.language.label }}</a>
         </div>
 
-        <div class="video-attribute">
-          <span i18n class="video-attribute-label">
-            Tags
-          </span>
-
-          <span class="video-attribute-value">
-            {{ getVideoTags() }}
-          </span>
+        <div class="video-attribute video-attribute-tags">
+          <span i18n class="video-attribute-label">Tags</span>
+          <a
+            *ngFor="let tag of getVideoTags()"
+            class="video-attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
+          >{{ tag }}</a>
         </div>
       </div>
 
