@@ -93,7 +93,6 @@ import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
-import { VideosSearchQuery } from '../../../shared/models/search'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -848,7 +847,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static async searchAndPopulateAccountAndServer (options: {
-    search: string
+    search?: string
     start?: number
     count?: number
     sort?: string
@@ -883,11 +882,41 @@ export class VideoModel extends Model<VideoModel> {
       whereAnd.push({ duration: durationRange })
     }
 
-    whereAnd.push(createSearchTrigramQuery('VideoModel.name', options.search))
+    const attributesInclude = []
+    if (options.search) {
+      whereAnd.push(
+        {
+          [ Sequelize.Op.or ]: [
+            createSearchTrigramQuery('VideoModel.name', options.search),
+
+            {
+              id: {
+                [ Sequelize.Op.in ]: Sequelize.literal(
+                  '(' +
+                    'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
+                    'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+                    'WHERE "tag"."name" = ' + VideoModel.sequelize.escape(options.search) +
+                  ')'
+                )
+              }
+            }
+          ]
+        }
+      )
+
+      attributesInclude.push(createSimilarityAttribute('VideoModel.name', options.search))
+    }
+
+    // Cannot search on similarity if we don't have a search
+    if (!options.search) {
+      attributesInclude.push(
+        Sequelize.literal('0 as similarity')
+      )
+    }
 
     const query: IFindOptions<VideoModel> = {
       attributes: {
-        include: [ createSimilarityAttribute('VideoModel.name', options.search) ]
+        include: attributesInclude
       },
       offset: options.start,
       limit: options.count,
