@@ -3,7 +3,10 @@
     <div class="first-line">
       <div class="results-counter">
         <ng-container *ngIf="pagination.totalItems">
-          {{ pagination.totalItems | myNumberFormatter }} results for <span class="search-value">{{ currentSearch }}</span>
+          {{ pagination.totalItems | myNumberFormatter }} results
+          <span *ngIf="currentSearch">
+            for <span class="search-value">{{ currentSearch }}</span>
+          </span>
         </ng-container>
       </div>
 

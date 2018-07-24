@@ -36,7 +36,8 @@ export class SearchService {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
-    params = params.append('search', search)
+
+    if (search) params = params.append('search', search)
 
     const advancedSearchObject = advancedSearch.toAPIObject()
 

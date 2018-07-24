@@ -44,7 +44,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       queryParams => {
         const querySearch = queryParams['search']
 
-        if (!querySearch) return this.redirectService.redirectToHomepage()
+        // New empty search
+        if (this.currentSearch && !querySearch) return this.redirectService.redirectToHomepage()
 
         // Search updated, reset filters
         if (this.currentSearch !== querySearch) {
