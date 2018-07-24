@@ -23,6 +23,7 @@ export class SearchFiltersComponent implements OnInit {
   videoLanguages: VideoConstant<string>[] = []
 
   publishedDateRanges: { id: string, label: string }[] = []
+  sorts: { id: string, label: string }[] = []
   durationRanges: { id: string, label: string }[] = []
 
   publishedDateRange: string
@@ -59,15 +60,30 @@ export class SearchFiltersComponent implements OnInit {
     this.durationRanges = [
       {
         id: 'short',
-        label: this.i18n('Short (< 4 minutes)')
+        label: this.i18n('Short (< 4 min)')
       },
       {
         id: 'long',
-        label: this.i18n('Long (> 10 minutes)')
+        label: this.i18n('Long (> 10 min)')
       },
       {
         id: 'medium',
-        label: this.i18n('Medium (4-10 minutes)')
+        label: this.i18n('Medium (4-10 min)')
+      }
+    ]
+
+    this.sorts = [
+      {
+        id: '-match',
+        label: this.i18n('Relevance')
+      },
+      {
+        id: '-publishedAt',
+        label: this.i18n('Publish date')
+      },
+      {
+        id: '-views',
+        label: this.i18n('Views')
       }
     ]
   }

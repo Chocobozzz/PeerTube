@@ -3,6 +3,15 @@
   <div class="row">
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
+        <div i18n class="radio-label">Sort</div>
+
+        <div class="peertube-radio-container" *ngFor="let sort of sorts">
+          <input type="radio" name="sort" [id]="sort.id" [value]="sort.id" [(ngModel)]="advancedSearch.sort">
+          <label [for]="sort.id" class="radio">{{ sort.label }}</label>
+        </div>
+      </div>
+
+      <div class="form-group">
         <div i18n class="radio-label">Published date</div>
 
         <div class="peertube-radio-container" *ngFor="let date of publishedDateRanges">

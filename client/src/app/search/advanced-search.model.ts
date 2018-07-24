@@ -18,6 +18,8 @@ export class AdvancedSearch {
   durationMin: number // seconds
   durationMax: number // seconds
 
+  sort: string
+
   constructor (options?: {
     startDate?: string
     endDate?: string
@@ -29,6 +31,7 @@ export class AdvancedSearch {
     tagsAllOf?: string
     durationMin?: string
     durationMax?: string
+    sort?: string
   }) {
     if (!options) return
 
@@ -45,11 +48,15 @@ export class AdvancedSearch {
 
     if (isNaN(this.durationMin)) this.durationMin = undefined
     if (isNaN(this.durationMax)) this.durationMax = undefined
+
+    this.sort = options.sort || '-match'
   }
 
   containsValues () {
     const obj = this.toUrlObject()
     for (const k of Object.keys(obj)) {
+      if (k === 'sort') continue // Exception
+
       if (obj[k] !== undefined) return true
     }
 
@@ -67,6 +74,8 @@ export class AdvancedSearch {
     this.tagsAllOf = undefined
     this.durationMin = undefined
     this.durationMax = undefined
+
+    this.sort = '-match'
   }
 
   toUrlObject () {
@@ -80,7 +89,8 @@ export class AdvancedSearch {
       tagsOneOf: this.tagsOneOf,
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
-      durationMax: this.durationMax
+      durationMax: this.durationMax,
+      sort: this.sort
     }
   }
 
@@ -95,7 +105,8 @@ export class AdvancedSearch {
       tagsOneOf: this.tagsOneOf ? this.tagsOneOf.split(',') : undefined,
       tagsAllOf: this.tagsAllOf ? this.tagsAllOf.split(',') : undefined,
       durationMin: this.durationMin,
-      durationMax: this.durationMax
+      durationMax: this.durationMax,
+      sort: this.sort
     }
   }
 }
