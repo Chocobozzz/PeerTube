@@ -53,7 +53,7 @@ server {
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
-  location ~ ^/static/(thumbnails|avatars)/(.*)$ {
+  location ~ ^/static/(thumbnails|avatars)/ {
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
@@ -64,16 +64,17 @@ server {
       return 204;
     }
 
-    if ($request_method = 'GET') {
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-    }
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+    add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
 
     # Cache 2 hours
     add_header Cache-Control "public, max-age=7200";
 
-    alias /var/www/peertube/storage/$1/$2;
+    root /var/www/peertube/storage;
+
+    rewrite ^/static/(thumbnails|avatars)/(.*)$ /$1/$2 break;
+    try_files $uri /;
   }
 
   location / {
