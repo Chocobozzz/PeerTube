@@ -341,6 +341,7 @@
 
       .video-miniature-information {
         flex-grow: 1;
+        margin-left: 10px;
       }
     }
   }
@@ -441,11 +442,7 @@
   }
 
   .other-videos {
-    padding-left: 0;
-
-    /deep/ .video-miniature .video-miniature-information {
-      margin-left: 10px;
-    }
+    padding-left: 0 !important;
   }
 
   .privacy-concerns {
@@ -470,6 +467,16 @@
           font-size: 20px;
           height: auto;
         }
+      }
+    }
+  }
+
+  .other-videos {
+    /deep/ .video-miniature  {
+      flex-direction: column;
+
+      .video-miniature-information {
+        margin-left: 0 !important;
       }
     }
   }
