@@ -21,8 +21,12 @@ const LAST_MIGRATION_VERSION = 235
 // API version
 const API_VERSION = 'v1'
 
-// Number of results by default for the pagination
-const PAGINATION_COUNT_DEFAULT = 15
+const PAGINATION = {
+  COUNT: {
+    DEFAULT: 15,
+    MAX: 100
+  }
+}
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
@@ -539,7 +543,7 @@ export {
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
   BROADCAST_CONCURRENCY,
-  PAGINATION_COUNT_DEFAULT,
+  PAGINATION,
   ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
