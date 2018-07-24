@@ -5,7 +5,8 @@
 
 ## Installation
 
-Please don't install PeerTube for production on a small device behind a low bandwidth connection (example: a Raspberry PI behind your ADSL link) because it could slow down the fediverse. See the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) for more information.
+Please don't install PeerTube for production on a device behind a low bandwidth connection (example: your ADSL link).
+If you want information about the appropriate hardware to run PeerTube, please see the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube).
 
 ### Dependencies
 
