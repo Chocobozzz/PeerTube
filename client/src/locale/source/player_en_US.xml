@@ -345,6 +345,10 @@
         <source>Speed</source>
         <target>undefined</target>
       </trans-unit>
+      <trans-unit id="Subtitles/CC">
+        <source>Subtitles/CC</source>
+        <target>undefined</target>
+      </trans-unit>
       <trans-unit id="peers">
         <source>peers</source>
         <target>undefined</target>

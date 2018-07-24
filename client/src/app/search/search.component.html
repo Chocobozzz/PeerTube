@@ -1,13 +1,11 @@
 <div myInfiniteScroller [autoLoading]="true" (nearOfBottom)="onNearOfBottom()" class="search-result">
-  <div i18n class="results-header">
+  <div class="results-header">
     <div class="first-line">
-      <div class="results-counter">
-        <ng-container *ngIf="pagination.totalItems">
-          {{ pagination.totalItems | myNumberFormatter }} results
-          <span *ngIf="currentSearch">
-            for <span class="search-value">{{ currentSearch }}</span>
-          </span>
-        </ng-container>
+      <div class="results-counter" *ngIf="pagination.totalItems">
+        <span i18n>{{ pagination.totalItems | myNumberFormatter }} results</span>
+        <span *ngIf="currentSearch" i18n>
+          for <span class="search-value">{{ currentSearch }}</span>
+        </span>
       </div>
 
       <div

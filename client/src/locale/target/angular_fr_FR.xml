@@ -1517,7 +1517,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
         <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
-        <target>Créé par <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
+        <target>Créée par <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
@@ -1904,7 +1904,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
         <source>Go to the account page</source>
-        <target>Aller sur la page du compte</target>
+        <target>Accéder au profil public de l'utilisateur</target>
         <context-group name="null">
           <context context-type="linenumber">34</context>
         </context-group>
@@ -3294,77 +3294,77 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> ans</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> ans</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e622d3813449fe36371ea258281059306819199d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> mois</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> mois</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> mois</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> mois</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> semaines</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> semaines</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> semaine</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> semaine</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> jours</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> jours</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> jour</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> jour</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> heures</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> heures</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> heure</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> heure</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> min</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> min</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7a158a7555a44ea7eff9fa4988df9aa24d262ceb">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</source>
-        <target>il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> sec</target>
+        <target>Publiée, il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> sec</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3623,7 +3623,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
         <source>Search</source>
-        <target>Chercher</target>
+        <target>Résultats de la recherche</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

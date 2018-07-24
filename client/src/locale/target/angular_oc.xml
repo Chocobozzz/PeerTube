@@ -380,6 +380,17 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ac324b07e7c3c972f1c33894eda02dc2917eda5e">
+        <source>
+      this instance provides a baseline quota of <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> space for the videos of its users.
+    </source>
+        <target>
+      aquesta instància provesís un quòta de basa de <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> d’espaci per las vidèos de sos utilizaires.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae">
         <source>
       this instance provides unlimited space for the videos of its users.
@@ -416,6 +427,17 @@
         <target>PeerTube es una plataforma de difusion de vidèos federada (ActivityPub) qu’emplega lo P2P (WebTorrent) dirèctament dins los navigador web.</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
+        <source>
+    It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Es un logicial liure e open-source, jos la <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>licéncia AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a">
@@ -497,6 +519,13 @@
         <target>Estatisticas</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc">
+        <source>Joined <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></source>
+        <target>Arribat lo <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8fef247fd0c5bf790151f7661cafc4b7fd0397f3">
@@ -637,6 +666,13 @@
         <target>Vòstre nom d’utilizaire Twitter</target>
         <context-group name="null">
           <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c">
+        <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
+        <target>Indica lo compte Twitter del site o de la plataforma ont lo contengut foguèt publicat.</target>
+        <context-group name="null">
+          <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c0716c28b9d4c9e0b2fd6031334394214e5f9605">

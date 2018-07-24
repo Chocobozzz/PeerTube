@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="Gaming">
         <source>Gaming</source>
-        <target>Spielen</target>
+        <target>Spiele</target>
       </trans-unit>
       <trans-unit id="People">
         <source>People</source>
@@ -39,9 +39,17 @@
         <source>Comedy</source>
         <target>Komödie</target>
       </trans-unit>
+      <trans-unit id="Entertainment">
+        <source>Entertainment</source>
+        <target>Unterhaltung</target>
+      </trans-unit>
       <trans-unit id="News">
         <source>News</source>
         <target>Nachrichten</target>
+      </trans-unit>
+      <trans-unit id="How To">
+        <source>How To</source>
+        <target>How-to</target>
       </trans-unit>
       <trans-unit id="Education">
         <source>Education</source>
@@ -53,7 +61,7 @@
       </trans-unit>
       <trans-unit id="Science &amp; Technology">
         <source>Science &amp; Technology</source>
-        <target>Wißenschaft und Technologie</target>
+        <target>Wissenschaft und Technologie</target>
       </trans-unit>
       <trans-unit id="Animals">
         <source>Animals</source>
@@ -90,6 +98,30 @@
       <trans-unit id="Attribution - Non Commercial - No Derivatives">
         <source>Attribution - Non Commercial - No Derivatives</source>
         <target>Namensnennung - nicht kommerziell, keine Bearbeitung</target>
+      </trans-unit>
+      <trans-unit id="Public Domain Dedication">
+        <source>Public Domain Dedication</source>
+        <target>In Gemeinfreiheit entlassen</target>
+      </trans-unit>
+      <trans-unit id="Public">
+        <source>Public</source>
+        <target>Öffentlich</target>
+      </trans-unit>
+      <trans-unit id="Unlisted">
+        <source>Unlisted</source>
+        <target>Ungelistet</target>
+      </trans-unit>
+      <trans-unit id="Private">
+        <source>Private</source>
+        <target>Privat</target>
+      </trans-unit>
+      <trans-unit id="Misc">
+        <source>Misc</source>
+        <target>Verschiedenes</target>
+      </trans-unit>
+      <trans-unit id="Unknown">
+        <source>Unknown</source>
+        <target>Unbekannt</target>
       </trans-unit>
     </body>
   </file></xliff>
