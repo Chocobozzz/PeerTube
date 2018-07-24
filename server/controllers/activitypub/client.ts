@@ -16,7 +16,7 @@ import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
-import { cache } from '../../middlewares/cache'
+import { cacheRoute } from '../../middlewares/cache'
 import { activityPubResponse } from './utils'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import {
@@ -43,7 +43,7 @@ activityPubClientRouter.get('/accounts?/:name/following',
 )
 
 activityPubClientRouter.get('/videos/watch/:id',
-  executeIfActivityPub(asyncMiddleware(cache(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS))),
+  executeIfActivityPub(asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS))),
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoController))
 )

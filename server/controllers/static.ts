@@ -2,7 +2,7 @@ import * as cors from 'cors'
 import * as express from 'express'
 import { CONFIG, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS, ROUTE_CACHE_LIFETIME } from '../initializers'
 import { VideosPreviewCache } from '../lib/cache'
-import { cache } from '../middlewares/cache'
+import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
@@ -71,7 +71,7 @@ staticRouter.use(
 
 // robots.txt service
 staticRouter.get('/robots.txt',
-  asyncMiddleware(cache(ROUTE_CACHE_LIFETIME.ROBOTS)),
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS)),
   (_, res: express.Response) => {
     res.type('text/plain')
     return res.send(CONFIG.INSTANCE.ROBOTS)
@@ -80,7 +80,7 @@ staticRouter.get('/robots.txt',
 
 // nodeinfo service
 staticRouter.use('/.well-known/nodeinfo',
-  asyncMiddleware(cache(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),
   (_, res: express.Response) => {
     return res.json({
       links: [
@@ -93,7 +93,7 @@ staticRouter.use('/.well-known/nodeinfo',
   }
 )
 staticRouter.use('/nodeinfo/:version.json',
-  asyncMiddleware(cache(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  // asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),
   asyncMiddleware(generateNodeinfo)
 )
 
@@ -161,13 +161,13 @@ async function generateNodeinfo (req: express.Request, res: express.Response, ne
         nodeDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION
       }
     } as HttpNodeinfoDiasporaSoftwareNsSchema20
-    res.set('Content-Type', 'application/json; profile=http://nodeinfo.diaspora.software/ns/schema/2.0#; charset=utf-8')
+    res.contentType('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
   } else {
     json = { error: 'Nodeinfo schema version not handled' }
     res.status(404)
   }
 
-  return res.end(JSON.stringify(json))
+  return res.send(json).end()
 }
 
 async function downloadTorrent (req: express.Request, res: express.Response, next: express.NextFunction) {

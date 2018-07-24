@@ -113,7 +113,7 @@ const timeTable = {
   week:         3600000 * 24 * 7,
   month:        3600000 * 24 * 30
 }
-export function parseDuration (duration: number | string, defaultDuration: number): number {
+export function parseDuration (duration: number | string): number {
   if (typeof duration === 'number') return duration
 
   if (typeof duration === 'string') {
@@ -130,8 +130,7 @@ export function parseDuration (duration: number | string, defaultDuration: numbe
     }
   }
 
-  logger.error('Duration could not be properly parsed, defaulting to ' + defaultDuration)
-  return defaultDuration
+  throw new Error('Duration could not be properly parsed')
 }
 
 function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
