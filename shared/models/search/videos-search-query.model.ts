@@ -1,7 +1,7 @@
 import { NSFWQuery } from './nsfw-query.model'
 
 export interface VideosSearchQuery {
-  search: string
+  search?: string
 
   start?: number
   count?: number

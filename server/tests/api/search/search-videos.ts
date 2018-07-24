@@ -103,6 +103,15 @@ describe('Test a videos search', function () {
       await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { tags: [ 'cccc', 'dddd' ] }))
       await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { tags: [ 'eeee', 'ffff' ] }))
     }
+
+    {
+      const attributes1 = {
+        name: 'aaaa 2',
+        category: 1
+      }
+      await uploadVideo(server.url, server.accessToken, attributes1)
+      await uploadVideo(server.url, server.accessToken, immutableAssign(attributes1, { category: 2 }))
+    }
   })
 
   it('Should make a simple search and not have results', async function () {
@@ -123,6 +132,52 @@ describe('Test a videos search', function () {
     // bestmatch
     expect(videos[0].name).to.equal('3333 4444 5555 duplicate')
     expect(videos[1].name).to.equal('3333 4444 5555')
+  })
+
+  it('Should make a search on tags too, and have results', async function () {
+    const query = {
+      search: 'aaaa',
+      categoryOneOf: [ 1 ]
+    }
+    const res = await advancedVideosSearch(server.url, query)
+
+    expect(res.body.total).to.equal(2)
+
+    const videos = res.body.data
+    expect(videos).to.have.lengthOf(2)
+
+    // bestmatch
+    expect(videos[0].name).to.equal('aaaa 2')
+    expect(videos[1].name).to.equal('9999')
+  })
+
+  it('Should filter on tags without a search', async function () {
+    const query = {
+      tagsAllOf: [ 'bbbb' ]
+    }
+    const res = await advancedVideosSearch(server.url, query)
+
+    expect(res.body.total).to.equal(2)
+
+    const videos = res.body.data
+    expect(videos).to.have.lengthOf(2)
+
+    expect(videos[0].name).to.equal('9999')
+    expect(videos[1].name).to.equal('9999')
+  })
+
+  it('Should filter on category without a search', async function () {
+    const query = {
+      categoryOneOf: [ 3 ]
+    }
+    const res = await advancedVideosSearch(server.url, query)
+
+    expect(res.body.total).to.equal(1)
+
+    const videos = res.body.data
+    expect(videos).to.have.lengthOf(1)
+
+    expect(videos[0].name).to.equal('6666 7777 8888')
   })
 
   it('Should search by tags (one of)', async function () {

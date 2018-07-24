@@ -6,7 +6,7 @@ import { isNumberArray, isStringArray, isNSFWQueryValid } from '../../helpers/cu
 import { isBooleanValid, isDateValid, toArray } from '../../helpers/custom-validators/misc'
 
 const searchValidator = [
-  query('search').not().isEmpty().withMessage('Should have a valid search'),
+  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
 
   query('startDate').optional().custom(isDateValid).withMessage('Should have a valid start date'),
   query('endDate').optional().custom(isDateValid).withMessage('Should have a valid end date'),
