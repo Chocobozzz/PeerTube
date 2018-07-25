@@ -24,7 +24,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     totalItems: null
   }
   sort: VideoSortField = '-publishedAt'
-  category?: number
+  categoryOneOf?: number
   defaultSort: VideoSortField = '-publishedAt'
   syndicationItems = []
 
@@ -168,7 +168,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   protected loadRouteParams (routeParams: { [ key: string ]: any }) {
     this.sort = routeParams['sort'] as VideoSortField || this.defaultSort
-    this.category = routeParams['category']
+    this.categoryOneOf = routeParams['categoryOneOf']
     if (routeParams['page'] !== undefined) {
       this.pagination.currentPage = parseInt(routeParams['page'], 10)
     } else {
