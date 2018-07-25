@@ -142,12 +142,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     // Replace existing caption?
     if (existingCaption) {
       Object.assign(existingCaption, caption, { action: 'CREATE' as 'CREATE' })
-      return
+    } else {
+      this.videoCaptions.push(
+        Object.assign(caption, { action: 'CREATE' as 'CREATE' })
+      )
     }
 
-    this.videoCaptions.push(
-      Object.assign(caption, { action: 'CREATE' as 'CREATE' })
-    )
+    this.sortVideoCaptions()
   }
 
   async deleteCaption (caption: VideoCaptionEdit) {
@@ -168,6 +169,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   openAddCaptionModal () {
     this.videoCaptionAddModal.show()
+  }
+
+  private sortVideoCaptions () {
+    this.videoCaptions.sort((v1, v2) => {
+      if (v1.language.label < v2.language.label) return -1
+      if (v1.language.label === v2.language.label) return 0
+
+      return 1
+    })
   }
 
   private trackPrivacyChange () {
