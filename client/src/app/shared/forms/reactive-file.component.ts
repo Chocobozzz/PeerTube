@@ -25,6 +25,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
   @Output() fileChanged = new EventEmitter<Blob>()
 
   allowedExtensionsMessage = ''
+  fileInputValue: any
 
   private file: File
 
@@ -63,6 +64,8 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
 
   writeValue (file: any) {
     this.file = file
+
+    if (!this.file) this.fileInputValue = null
   }
 
   registerOnChange (fn: (_: any) => void) {

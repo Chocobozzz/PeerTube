@@ -50,6 +50,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   private schedulerInterval
   private firstPatchDone = false
+  private initialVideoCaptions: string[] = []
 
   constructor (
     private formValidatorService: FormValidatorService,
@@ -127,6 +128,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoLanguages = this.serverService.getVideoLanguages()
 
     this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+
+    this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
   }
 
   ngOnDestroy () {
@@ -147,7 +150,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     )
   }
 
-  deleteCaption (caption: VideoCaptionEdit) {
+  async deleteCaption (caption: VideoCaptionEdit) {
+    // Caption recovers his former state
+    if (caption.action && this.initialVideoCaptions.indexOf(caption.language.id) !== -1) {
+      caption.action = undefined
+      return
+    }
+
     // This caption is not on the server, just remove it from our array
     if (caption.action === 'CREATE') {
       removeElementFromArray(this.videoCaptions, caption)
