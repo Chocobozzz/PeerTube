@@ -89,7 +89,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
-  const html = await ClientHtml.getIndexHTML(req, res)
+  const html = await ClientHtml.getIndexHTML(req, res, paramLang)
 
   return sendHTML(html, res)
 }
