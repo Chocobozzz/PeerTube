@@ -150,7 +150,7 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
 }
 
 async function isVideoExist (id: string, res: Response) {
-  let video: VideoModel
+  let video: VideoModel | null
 
   if (validator.isInt(id)) {
     video = await VideoModel.loadAndPopulateAccountAndServerAndTags(+id)
@@ -158,7 +158,7 @@ async function isVideoExist (id: string, res: Response) {
     video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(id)
   }
 
-  if (!video) {
+  if (video && video !== null) {
     res.status(404)
        .json({ error: 'Video not found' })
        .end()
@@ -173,7 +173,7 @@ async function isVideoExist (id: string, res: Response) {
 async function isVideoChannelOfAccountExist (channelId: number, user: UserModel, res: Response) {
   if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) === true) {
     const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
-    if (!videoChannel) {
+    if (videoChannel && videoChannel !== null) {
       res.status(400)
          .json({ error: 'Unknown video video channel on this instance.' })
          .end()
@@ -186,7 +186,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
   }
 
   const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, user.Account.id)
-  if (!videoChannel) {
+  if (videoChannel && videoChannel !== null) {
     res.status(400)
        .json({ error: 'Unknown video video channel for this account.' })
        .end()

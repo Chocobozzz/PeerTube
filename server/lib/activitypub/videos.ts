@@ -88,17 +88,17 @@ async function videoActivityObjectToDBAttributes (
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
   const duration = videoObject.duration.replace(/[^\d]+/, '')
 
-  let language: string = null
+  let language: string | undefined
   if (videoObject.language) {
     language = videoObject.language.identifier
   }
 
-  let category: number = null
+  let category: number | undefined
   if (videoObject.category) {
     category = parseInt(videoObject.category.identifier, 10)
   }
 
-  let licence: number = null
+  let licence: number | undefined
   if (videoObject.licence) {
     licence = parseInt(videoObject.licence.identifier, 10)
   }
@@ -143,7 +143,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
     throw new Error('Cannot find video files for ' + videoCreated.url)
   }
 
-  const attributes = []
+  const attributes: VideoFileModel[] = []
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
@@ -153,7 +153,11 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
     const parsed = magnetUtil.decode(magnet.href)
-    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) throw new Error('Cannot parse magnet URI ' + magnet.href)
+    if (!parsed ||
+        (parsed.infoHash &&
+          (isVideoFileInfoHashValid(parsed.infoHash) === false))) {
+      throw new Error('Cannot parse magnet URI ' + magnet.href)
+    }
 
     const attribute = {
       extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],
@@ -161,7 +165,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
       resolution: fileUrl.width,
       size: fileUrl.size,
       videoId: videoCreated.id
-    }
+    } as VideoFileModel
     attributes.push(attribute)
   }
 

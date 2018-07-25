@@ -20,7 +20,7 @@ function getVideoCommentAudience (
   isOrigin = false
 ) {
   const to = [ ACTIVITY_PUB.PUBLIC ]
-  const cc = []
+  const cc: string[] = []
 
   // Owner of the video we comment
   if (isOrigin === false) {
@@ -60,8 +60,8 @@ function getAudience (actorSender: ActorModel, isPublic = true) {
 }
 
 function buildAudience (followerUrls: string[], isPublic = true) {
-  let to = []
-  let cc = []
+  let to: string[] = []
+  let cc: string[] = []
 
   if (isPublic) {
     to = [ ACTIVITY_PUB.PUBLIC ]

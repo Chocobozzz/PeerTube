@@ -156,7 +156,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     as: 'InReplyToVideoComment',
     onDelete: 'CASCADE'
   })
-  InReplyToVideoComment: VideoCommentModel
+  InReplyToVideoComment: VideoCommentModel | null
 
   @ForeignKey(() => VideoModel)
   @Column
@@ -417,7 +417,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   toActivityPubObject (threadParentComments: VideoCommentModel[]): VideoCommentObject {
     let inReplyTo: string
     // New thread, so in AS we reply to the video
-    if (this.inReplyToCommentId === null) {
+    if ((this.inReplyToCommentId !== null) || (this.InReplyToVideoComment !== null)) {
       inReplyTo = this.Video.url
     } else {
       inReplyTo = this.InReplyToVideoComment.url

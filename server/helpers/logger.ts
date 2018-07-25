@@ -80,7 +80,8 @@ const logger = winston.createLogger({
 function bunyanLogFactory (level: string) {
   return function () {
     let meta = null
-    let args = [].concat(arguments)
+    let args: any[] = []
+    args.concat(arguments)
 
     if (arguments[ 0 ] instanceof Error) {
       meta = arguments[ 0 ].toString()

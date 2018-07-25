@@ -15,7 +15,7 @@ function setDefaultSearchSort (req: express.Request, res: express.Response, next
 }
 
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  let newSort: SortType = { sortModel: undefined, sortValue: undefined }
+  let newSort: SortType = { sortModel: undefined, sortValue: '' }
 
   if (!req.query.sort) req.query.sort = '-createdAt'
 

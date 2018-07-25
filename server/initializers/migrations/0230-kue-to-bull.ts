@@ -2,6 +2,7 @@ import * as Sequelize from 'sequelize'
 import { createClient } from 'redis'
 import { CONFIG } from '../constants'
 import { JobQueue } from '../../lib/job-queue'
+import { Redis } from '../../lib/redis'
 import { initDatabaseModels } from '../database'
 
 async function up (utils: {
@@ -12,11 +13,7 @@ async function up (utils: {
   await initDatabaseModels(false)
 
   return new Promise((res, rej) => {
-    const client = createClient({
-      host: CONFIG.REDIS.HOSTNAME,
-      port: CONFIG.REDIS.PORT,
-      db: CONFIG.REDIS.DB
-    })
+    const client = createClient(Redis.getRedisClient())
 
     const jobsPrefix = 'q-' + CONFIG.WEBSERVER.HOST
 
@@ -36,7 +33,7 @@ async function up (utils: {
                 return res({ type: job.type, payload: parsedData })
               } catch (err) {
                 console.error('Cannot parse data %s.', job.data)
-                return res(null)
+                return res(undefined)
               }
             })
           })

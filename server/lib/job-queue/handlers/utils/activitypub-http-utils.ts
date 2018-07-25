@@ -15,7 +15,7 @@ async function computeBody (payload: { body: any, signatureActorId?: number }) {
 }
 
 async function buildSignedRequestOptions (payload: { signatureActorId?: number }) {
-  let actor: ActorModel
+  let actor: ActorModel | null
   if (payload.signatureActorId) {
     actor = await ActorModel.load(payload.signatureActorId)
     if (!actor) throw new Error('Unknown signature actor id.')

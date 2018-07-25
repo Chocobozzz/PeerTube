@@ -154,9 +154,12 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     return OAuthTokenModel.scope(ScopeNames.WITH_ACCOUNT)
       .findOne(query)
       .then(token => {
-        token['user'] = token.User
-
-        return token
+        if (token) {
+          token['user'] = token.User
+          return token
+        } else {
+          return new OAuthTokenModel()
+        }
       })
   }
 

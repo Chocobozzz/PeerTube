@@ -42,7 +42,7 @@ function root () {
   const paths = [ __dirname, '..', '..' ]
 
   // We are under /dist directory
-  if (process.mainModule.filename.endsWith('.ts') === false) {
+  if (process.mainModule && process.mainModule.filename.endsWith('.ts') === false) {
     paths.push('..')
   }
 
@@ -143,6 +143,7 @@ const renamePromise = promisify2WithVoid<string, string>(rename)
 const writeFilePromise = promisify2WithVoid<string, any>(writeFile)
 const readdirPromise = promisify1<string, string[]>(readdir)
 const mkdirpPromise = promisify1<string, string>(mkdirp)
+// we cannot modify the Promise types, so we should make the promisify instance check mkdirp
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)

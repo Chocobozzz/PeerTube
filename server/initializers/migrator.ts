@@ -11,7 +11,7 @@ async function migrate () {
   // The installer will do that
   if (tables.length === 0) return
 
-  let actualVersion: number = null
+  let actualVersion: number | null = null
 
   const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "application"')
   if (rows && rows[0] && rows[0].migrationVersion) {

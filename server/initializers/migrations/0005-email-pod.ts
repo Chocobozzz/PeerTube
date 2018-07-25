@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
+import { Migration } from '../../models/migrations'
 
 function up (utils: {
   transaction: Sequelize.Transaction,
@@ -12,7 +13,7 @@ function up (utils: {
     type: Sequelize.STRING(400),
     allowNull: false,
     defaultValue: ''
-  }
+  } as Migration.String
 
   return q.addColumn('Pods', 'email', data)
     .then(() => {

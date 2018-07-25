@@ -52,7 +52,7 @@ async function isSignupAllowed () {
 function isSignupAllowedForCurrentIP (ip: string) {
   const addr = ipaddr.parse(ip)
   let excludeList = [ 'blacklist' ]
-  let matched: string
+  let matched = ''
 
   // if there is a valid, non-empty whitelist, we exclude all unknown adresses too
   if (CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isCidr(cidr)).length > 0) {
@@ -144,6 +144,7 @@ let serverActor: ActorModel
 async function getServerActor () {
   if (serverActor === undefined) {
     const application = await ApplicationModel.load()
+    if (!application) throw Error('Could not application.')
     serverActor = application.Account.Actor
   }
 

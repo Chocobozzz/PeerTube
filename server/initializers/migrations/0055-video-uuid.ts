@@ -24,7 +24,7 @@ function up (utils: {
       return utils.sequelize.query(query)
     })
     .then(() => {
-      dataUUID.defaultValue = null
+      dataUUID.defaultValue = null // FIXME:default value cannot be null if string
 
       return q.changeColumn('Videos', 'uuid', dataUUID)
     })

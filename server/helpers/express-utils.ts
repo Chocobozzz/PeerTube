@@ -64,7 +64,7 @@ function createReqFiles (
     }
   })
 
-  const fields = []
+  let fields: { name: string, maxCount: number }[] = []
   for (const fieldName of fieldNames) {
     fields.push({
       name: fieldName,

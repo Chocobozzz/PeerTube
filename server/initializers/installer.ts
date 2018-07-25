@@ -52,7 +52,7 @@ function createDirectoriesIfNotExist () {
   const cacheDirectories = Object.keys(CACHE)
                                  .map(k => CACHE[k].DIRECTORY)
 
-  const tasks = []
+  const tasks: Promise<string>[] = []
   for (const key of Object.keys(storage)) {
     const dir = storage[key]
     tasks.push(mkdirpPromise(dir))

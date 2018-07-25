@@ -111,7 +111,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static updateActorFollowsScore (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction) {
+  static updateActorFollowsScore (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction | undefined) {
     if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
     logger.info('Updating %d good actor follows and %d bad actor follows scores.', goodInboxes.length, badInboxes.length)
@@ -344,7 +344,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
   }
 
-  private static incrementScores (inboxUrls: string[], value: number, t: Sequelize.Transaction) {
+  private static incrementScores (inboxUrls: string[], value: number, t: Sequelize.Transaction | undefined) {
     const inboxUrlsString = inboxUrls.map(url => `'${url}'`).join(',')
 
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
@@ -354,10 +354,10 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
         'WHERE "actor"."inboxUrl" IN (' + inboxUrlsString + ') OR "actor"."sharedInboxUrl" IN (' + inboxUrlsString + ')' +
       ')'
 
-    const options = {
+    const options = t ? {
       type: Sequelize.QueryTypes.BULKUPDATE,
       transaction: t
-    }
+    } : undefined
 
     return ActorFollowModel.sequelize.query(query, options)
   }
