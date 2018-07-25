@@ -17,6 +17,7 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor {
   @Input() checked = false
   @Input() inputName: string
   @Input() labelText: string
+  @Input() labelHtml: string
   @Input() helpHtml: string
 
   isDisabled = false

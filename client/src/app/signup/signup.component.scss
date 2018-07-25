@@ -10,6 +10,9 @@
   }
 }
 
+.form-group-terms {
+  margin: 30px 0;
+}
 
 input:not([type=submit]) {
   @include peertube-input-text(340px);

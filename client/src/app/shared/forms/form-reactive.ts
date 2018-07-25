@@ -23,7 +23,7 @@ export abstract class FormReactive {
     this.formErrors = formErrors
     this.validationMessages = validationMessages
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(false))
+    this.form.valueChanges.subscribe(() => this.onValueChanged(false))
   }
 
   protected onValueChanged (forceCheck = false) {
