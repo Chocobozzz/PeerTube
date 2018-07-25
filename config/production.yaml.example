@@ -71,7 +71,9 @@ log:
 
 cache:
   previews:
-    size: 100 # Max number of previews you want to cache
+    size: 500 # Max number of previews you want to cache
+  captions:
+    size: 500 # Max number of video captions/subtitles you want to cache
 
 admin:
   email: 'admin@example.com'
