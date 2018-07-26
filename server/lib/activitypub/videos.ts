@@ -38,7 +38,7 @@ async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, tr
       }) as VideoCaptionModel[]
     }
 
-    if (isNewVideo === true) {
+    if (isNewVideo) {
       // Now we'll add the video's meta data to our followers
       await sendCreateVideo(video, transaction)
       await shareVideoByServerAndChannel(video, transaction)
@@ -153,9 +153,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
     const parsed = magnetUtil.decode(magnet.href)
-    if (!parsed ||
-        (parsed.infoHash &&
-          (isVideoFileInfoHashValid(parsed.infoHash) === false))) {
+    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }
 

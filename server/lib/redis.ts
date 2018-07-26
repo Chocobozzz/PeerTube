@@ -6,8 +6,8 @@ import { CONFIG, USER_PASSWORD_RESET_LIFETIME, VIDEO_VIEW_LIFETIME } from '../in
 
 type CachedRoute = {
   body: string,
-  contentType: string
-  statusCode: string
+  contentType?: string
+  statusCode?: string
 }
 
 class Redis {

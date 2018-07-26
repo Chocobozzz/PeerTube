@@ -144,7 +144,8 @@ let serverActor: ActorModel
 async function getServerActor () {
   if (serverActor === undefined) {
     const application = await ApplicationModel.load()
-    if (!application) throw Error('Could not application.')
+    if (!application) throw Error('Could not load Application from database.')
+
     serverActor = application.Account.Actor
   }
 

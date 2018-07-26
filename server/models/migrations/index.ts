@@ -16,6 +16,10 @@ declare namespace Migration {
   interface BigInteger extends Sequelize.DefineAttributeColumnOptions {
     defaultValue: Sequelize.DataTypeBigInt | number | null
   }
+
+  interface UUID extends Sequelize.DefineAttributeColumnOptions {
+    defaultValue: Sequelize.DataTypeUUIDv4 | null
+  }
 }
 
 export {

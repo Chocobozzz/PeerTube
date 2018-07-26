@@ -417,7 +417,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   toActivityPubObject (threadParentComments: VideoCommentModel[]): VideoCommentObject {
     let inReplyTo: string
     // New thread, so in AS we reply to the video
-    if ((this.inReplyToCommentId !== null) || (this.InReplyToVideoComment !== null)) {
+    if (this.inReplyToCommentId === null) {
       inReplyTo = this.Video.url
     } else {
       inReplyTo = this.InReplyToVideoComment.url

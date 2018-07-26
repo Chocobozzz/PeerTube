@@ -76,7 +76,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function searchTrigramNormalizeValue (value: string) {
-  return Sequelize.fn('lower', Sequelize.fn('unaccent', value))
+  return Sequelize.fn('lower', Sequelize.fn('immutable_unaccent', value))
 }
 
 function searchTrigramNormalizeCol (col: string) {

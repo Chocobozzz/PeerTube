@@ -125,10 +125,11 @@ async function checkPostgresExtensions () {
 }
 
 async function createFunctions () {
-  const query = `CREATE OR REPLACE FUNCTION immutable_unaccent(varchar)
-  RETURNS text AS $$
-    SELECT unaccent($1)
-  $$ LANGUAGE sql IMMUTABLE;`
+  const query = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
+  RETURNS text AS
+$func$
+SELECT public.unaccent('public.unaccent', $1::text)
+$func$  LANGUAGE sql IMMUTABLE;`
 
   return sequelizeTypescript.query(query, { raw: true })
 }

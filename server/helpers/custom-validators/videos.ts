@@ -110,7 +110,7 @@ function isScheduleVideoUpdatePrivacyValid (value: number) {
     )
 }
 
-function isVideoFileInfoHashValid (value: string) {
+function isVideoFileInfoHashValid (value: string | null | undefined) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
@@ -158,7 +158,7 @@ async function isVideoExist (id: string, res: Response) {
     video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(id)
   }
 
-  if (video && video !== null) {
+  if (video === null) {
     res.status(404)
        .json({ error: 'Video not found' })
        .end()
@@ -173,7 +173,7 @@ async function isVideoExist (id: string, res: Response) {
 async function isVideoChannelOfAccountExist (channelId: number, user: UserModel, res: Response) {
   if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) === true) {
     const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
-    if (videoChannel && videoChannel !== null) {
+    if (videoChannel === null) {
       res.status(400)
          .json({ error: 'Unknown video video channel on this instance.' })
          .end()
@@ -186,7 +186,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
   }
 
   const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, user.Account.id)
-  if (videoChannel && videoChannel !== null) {
+  if (videoChannel === null) {
     res.status(400)
        .json({ error: 'Unknown video video channel for this account.' })
        .end()
