@@ -214,6 +214,9 @@ const CONFIG = {
     TWITTER: {
       get USERNAME () { return config.get<string>('services.twitter.username') },
       get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }
+    },
+    WEBSUB: {
+      get HUBS () { return config.get<string[]>('services.websub.hubs') }
     }
   }
 }

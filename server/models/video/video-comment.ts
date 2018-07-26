@@ -1,14 +1,29 @@
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, IFindOptions, Is, Model, Scopes, Table,
+  AllowNull,
+  AfterCreate,
+  AfterUpdate,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  IFindOptions,
+  Is,
+  Model,
+  Scopes,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityTagObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, CONFIG } from '../../initializers'
 import { sendDeleteVideoComment } from '../../lib/activitypub/send'
+import { publishToWebSubHubs } from '../../lib/websub'
+import { unCachePrefix } from '../../middlewares/cache'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
@@ -181,6 +196,20 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     onDelete: 'CASCADE'
   })
   Account: AccountModel
+
+  @AfterCreate
+  @AfterUpdate
+  static async syndicationUpdate (instance: VideoCommentModel) {
+    // should invalidate cache for syndication of this comments instance
+    unCachePrefix('feeds:comments:' + instance.videoId)
+    unCachePrefix('feeds:comments::')
+
+    // should ping the WebSub hub
+    publishToWebSubHubs([
+      `${CONFIG.WEBSERVER.URL}/feeds/video-comments.xml?videoId=` + instance.videoId,
+      `${CONFIG.WEBSERVER.URL}/feeds/video-comments.xml`
+    ])
+  }
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoCommentModel, options) {

@@ -19,6 +19,16 @@ class Redis {
 
   private constructor () {}
 
+  static getRedisClient () {
+    return Object.assign({},
+      (CONFIG.REDIS.AUTH && CONFIG.REDIS.AUTH != null) ? { password: CONFIG.REDIS.AUTH } : {},
+      (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
+      (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) ?
+      { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT } :
+      { path: CONFIG.REDIS.SOCKET }
+    )
+  }
+
   init () {
     // Already initialized
     if (this.initialized === true) return
@@ -36,16 +46,6 @@ class Redis {
     }
 
     this.prefix = 'redis-' + CONFIG.WEBSERVER.HOST + '-'
-  }
-
-  static getRedisClient () {
-    return Object.assign({},
-      (CONFIG.REDIS.AUTH && CONFIG.REDIS.AUTH != null) ? { password: CONFIG.REDIS.AUTH } : {},
-      (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
-      (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) ?
-      { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT } :
-      { path: CONFIG.REDIS.SOCKET }
-    )
   }
 
   async setResetPasswordVerificationString (userId: number) {
@@ -68,33 +68,85 @@ class Redis {
     return this.exists(this.buildViewKey(ip, videoUUID))
   }
 
-  async getCachedRoute (req: express.Request) {
-    const cached = await this.getObject(this.buildCachedRouteKey(req))
-
-    return cached as CachedRoute
+  async getCachedRoute (req: express.Request)
+  async getCachedRoute (route: string, method: string)
+  async getCachedRoute (req: express.Request | string, method?: string) {
+    if ((req as express.Request).originalUrl !== undefined) {
+      return (await this.getObject(this.buildCachedRouteKey(req as express.Request))) as CachedRoute
+    }
+    if (typeof req === 'string' && method) {
+      return (await this.getObject(this.buildCachedRouteKey(req, method))) as CachedRoute
+    }
+    throw Error('Could not get cached route.')
   }
 
-  setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number) {
+  async getCachedRouteWithPrefix (req: express.Request, prefix) {
+    return (await this.getObject(this.buildCachedRouteKeyWithPrefix(req, prefix))) as CachedRoute
+  }
+
+  getCachedKeysMatchingPattern (pattern: string) {
+    return new Promise<string[]>((res, rej) => {
+      this.client.keys(this.prefix + pattern, (err, value) => {
+        if (err) return rej(err)
+
+        return res(value)
+      })
+    })
+  }
+
+  setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number, prefix?: string) {
     const cached: CachedRoute = Object.assign({}, {
       body: body.toString()
     },
-    (contentType) ? { contentType } : null,
-    (statusCode) ? { statusCode: statusCode.toString() } : null
+      contentType ? { contentType } : null,
+      statusCode ? { statusCode: statusCode.toString() } : null
     )
 
-    return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
+    return this.setObject(prefix ? this.buildCachedRouteKeyWithPrefix(req, prefix) : this.buildCachedRouteKey(req),
+                          cached,
+                          lifetime)
   }
 
-  generateResetPasswordKey (userId: number) {
+  delCachedRoute (req: express.Request)
+  delCachedRoute (route: string, method: string)
+  delCachedRoute (req: express.Request | string, method?: string) {
+    if ((req as express.Request).originalUrl !== undefined) {
+      return this.delObject(this.buildCachedRouteKey(req as express.Request))
+    }
+    if (typeof req === 'string' && method) {
+      return this.delObject(this.buildCachedRouteKey(req, method))
+    }
+  }
+
+  async delCachedPrefix (prefix: string) {
+    (await this.getCachedKeysMatchingPattern(prefix + '*')).forEach(async key => {
+      await this.delObject(key)
+    })
+  }
+
+  generateResetPasswordKey (userId: number): string {
     return 'reset-password-' + userId
   }
 
-  buildViewKey (ip: string, videoUUID: string) {
+  buildViewKey (ip: string, videoUUID: string): string {
     return videoUUID + '-' + ip
   }
 
-  buildCachedRouteKey (req: express.Request) {
-    return req.method + '-' + req.originalUrl
+  buildCachedRouteKey (req: express.Request)
+  buildCachedRouteKey (route: string, method: string)
+  buildCachedRouteKey (req: express.Request | string, method?: string): string {
+    if ((req as express.Request).originalUrl !== undefined) {
+      const _req = (req as express.Request)
+      return _req.method + '-' + _req.originalUrl
+    }
+    if (typeof req === 'string' && method) {
+      return method + '-' + req
+    }
+    throw Error('Could not build cache key.')
+  }
+
+  buildCachedRouteKeyWithPrefix (req: express.Request, prefix: string) {
+    return prefix + '-' + this.buildCachedRouteKey(req)
   }
 
   private getValue (key: string) {
@@ -141,6 +193,16 @@ class Redis {
         if (err) return rej(err)
 
         return res(value)
+      })
+    })
+  }
+
+  private delObject (key: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.del(this.prefix + key, (err) => {
+        if (err) return rej(err)
+
+        return res()
       })
     })
   }

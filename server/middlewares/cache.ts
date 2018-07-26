@@ -6,13 +6,16 @@ import { logger } from '../helpers/logger'
 
 const lock = new AsyncLock({ timeout: 5000 })
 
-function cacheRoute (lifetimeArg: string | number) {
+function cacheRoute (lifetimeArg: number | string, prefix?: (res: express.Response) => string) {
   return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
-    const redisKey = Redis.Instance.buildCachedRouteKey(req)
+    const _prefix = prefix ? prefix(res) : undefined
+    const redisKey = Redis.Instance.buildCachedRouteKeyWithPrefix(req, _prefix)
 
     try {
       await lock.acquire(redisKey, async (done) => {
-        const cached = await Redis.Instance.getCachedRoute(req)
+        const cached = _prefix ?
+          await Redis.Instance.getCachedRouteWithPrefix(req, _prefix) :
+          await Redis.Instance.getCachedRoute(req)
 
         // Not cached
         if (!cached) {
@@ -25,7 +28,7 @@ function cacheRoute (lifetimeArg: string | number) {
               const contentType = res.get('content-type')
               const lifetime = parseDuration(lifetimeArg)
 
-              Redis.Instance.setCachedRoute(req, body, lifetime, contentType, res.statusCode)
+              Redis.Instance.setCachedRoute(req, body, lifetime, contentType, res.statusCode, _prefix)
                    .then(() => done())
                    .catch(err => {
                      logger.error('Cannot cache route.', { err })
@@ -58,8 +61,42 @@ function cacheRoute (lifetimeArg: string | number) {
   }
 }
 
+const unCacheRoute = async (route: string, method: string) => {
+  const redisKey = Redis.Instance.buildCachedRouteKey(route, method)
+
+  await lock.acquire(redisKey, async (done) => {
+    const cached = await Redis.Instance.getCachedRoute(route, method)
+
+    if (cached) {
+      Redis.Instance.delCachedRoute(route, method)
+                    .then(() => done())
+                    .catch(err => {
+                      logger.error('Cannot delete cached route.', { err })
+                      return done(err)
+                    })
+    }
+
+    return done()
+  })
+}
+
+const unCachePrefix = async (prefix: string) => {
+  const pattern = prefix + '*'
+
+  await lock.acquire(await Redis.Instance.getCachedKeysMatchingPattern(pattern), async (done) => {
+    Redis.Instance.delCachedPrefix(pattern)
+                  .then(() => done())
+                  .catch(err => {
+                    logger.error('Cannot delete cached prefix.', { err })
+                    return done(err)
+                  })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  cacheRoute
+  cacheRoute,
+  unCacheRoute,
+  unCachePrefix
 }

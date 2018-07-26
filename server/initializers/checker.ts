@@ -53,7 +53,7 @@ function checkMissedConfig () {
     'transcoding.enabled', 'transcoding.threads',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
     'instance.default_nsfw_policy', 'instance.robots',
-    'services.twitter.username', 'services.twitter.whitelisted'
+    'services.twitter.username', 'services.twitter.whitelisted', 'services.websub.hubs'
   ]
   const requiredAlternatives = [
     [ // set

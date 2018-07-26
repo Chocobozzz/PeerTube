@@ -6,6 +6,8 @@ import { extname, join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
   AllowNull,
+  AfterCreate,
+  AfterUpdate,
   BeforeDestroy,
   BelongsTo,
   BelongsToMany,
@@ -78,6 +80,8 @@ import {
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
+import { publishToWebSubHubs } from '../../lib/websub'
+import { unCachePrefix } from '../../middlewares/cache'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
@@ -583,6 +587,35 @@ export class VideoModel extends Model<VideoModel> {
     ['separate' as any]: true
   })
   VideoCaptions: VideoCaptionModel[]
+
+  @AfterCreate
+  @AfterUpdate
+  static async syndicationUpdate (instance: VideoModel) {
+    // should invalidate cache for syndication of this comments instance
+    if (instance.isOwned()) {
+      if (!instance.VideoChannel) {
+        instance.VideoChannel = await instance.$get('VideoChannel', {
+          include: [
+            {
+              model: AccountModel,
+              include: [ ActorModel ]
+            }
+          ]
+        }) as VideoChannelModel
+
+        unCachePrefix('feeds:videos:' + instance.VideoChannel.accountId) // FIXME: VideoChannel undefined
+        unCachePrefix('feeds:videos:' + instance.channelId)
+      }
+    }
+    unCachePrefix('feeds:videos::')
+
+    // should ping the WebSub hub
+    publishToWebSubHubs([
+      `${CONFIG.WEBSERVER.URL}/feeds/videos.xml?accountId=` + instance.VideoChannel.accountId,
+      `${CONFIG.WEBSERVER.URL}/feeds/videos.xml?channelId=` + instance.channelId,
+      `${CONFIG.WEBSERVER.URL}/feeds/videos.xml`
+    ])
+  }
 
   @BeforeDestroy
   static async sendDelete (instance: VideoModel, options) {

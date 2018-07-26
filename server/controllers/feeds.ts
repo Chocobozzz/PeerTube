@@ -13,7 +13,7 @@ import { buildNSFWFilter } from '../helpers/express-utils'
 const feedsRouter = express.Router()
 
 feedsRouter.get('/feeds/video-comments.:format',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS, getVideoCommentsFeedPrefixForRedis)),
   asyncMiddleware(videoCommentsFeedsValidator),
   asyncMiddleware(generateVideoCommentsFeed)
 )
@@ -21,7 +21,7 @@ feedsRouter.get('/feeds/video-comments.:format',
 feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS, getVideoFeedPrefixForRedis)),
   asyncMiddleware(videoFeedsValidator),
   asyncMiddleware(generateVideoFeed)
 )
@@ -33,6 +33,33 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function getVideoFeedPrefixForRedis (res: express.Response): string {
+  const prefix = 'feeds:videos'
+  const account: AccountModel = res.locals.account // FIXME: use accountId
+  const videoChannel: VideoChannelModel = res.locals.videoChannel // FIXME: use videoChannelId
+
+  if (account) {
+    return [prefix, account.name].join(':')
+  }
+  if (videoChannel) {
+    return [prefix, videoChannel.Account.name, videoChannel.name].join(':')
+  } else {
+    return prefix + ':'
+  }
+}
+
+function getVideoCommentsFeedPrefixForRedis (res: express.Response): string {
+  const prefix = 'feeds:comments'
+  const video = res.locals.video as VideoModel
+  const videoId: number = video ? video.id : undefined
+
+  if (videoId) {
+    return [prefix, videoId].join(':')
+  } else {
+    return prefix + ':'
+  }
+}
 
 async function generateVideoCommentsFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
   const start = 0
@@ -46,7 +73,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   const description = video ? video.description : CONFIG.INSTANCE.DESCRIPTION
   const feed = initFeed(name, description)
 
-  // Adding video items to the feed, one at a time
+  // Adding comment items to the feed, one at a time
   comments.forEach(comment => {
     const link = CONFIG.WEBSERVER.URL + '/videos/watch/' + comment.Video.uuid + ';threadId=' + comment.getThreadId()
 
@@ -165,7 +192,8 @@ function initFeed (name: string, description: string) {
       name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
       email: CONFIG.ADMIN.EMAIL,
       link: `${webserverUrl}/about`
-    }
+    },
+    hub: CONFIG.SERVICES.WEBSUB.HUBS[0]
   })
 }
 
