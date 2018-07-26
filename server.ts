@@ -53,39 +53,8 @@ app.set('trust proxy', CONFIG.TRUST_PROXY)
 app.use(helmet({
   frameguard: {
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-  },
-  dnsPrefetchControl: {
-    allow: true
-  },
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ['*', 'data:', REMOTE_SCHEME.WS + ':', REMOTE_SCHEME.HTTP + ':'],
-      fontSrc: ["'self'", 'data:'],
-      frameSrc: ["'none'"],
-      mediaSrc: ['*', REMOTE_SCHEME.HTTP + ':'],
-      objectSrc: ["'none'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      upgradeInsecureRequests: false
-    },
-    browserSniff: false // assumes a modern browser, but allows CDN in front
-  },
-  referrerPolicy: {
-    policy: 'strict-origin-when-cross-origin'
   }
 }))
-app.use((_, res, next) => {
-  [
-    "vibrate 'none'",
-    "geolocation 'none'",
-    "camera 'none'",
-    "microphone 'none'",
-    "magnetometer 'none'",
-    "payment 'none'",
-    "accelerometer 'none'"
-  ].forEach(e => res.append('Feature-Policy', e + ';'))
-  next()
-})
 
 // ----------- Database -----------
 

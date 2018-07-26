@@ -287,7 +287,7 @@ async function createRates (actorUrls: string[], video: VideoModel, rate: VideoR
   logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
 
   // This is "likes" and "dislikes"
-  await video.increment(rate + 's', { by: rateCounts })
+  if (rateCounts !== 0) await video.increment(rate + 's', { by: rateCounts })
 
   return
 }
