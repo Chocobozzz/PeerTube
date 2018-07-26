@@ -1,7 +1,7 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
 import { VideoResolution } from '../../shared/models/videos'
-import { CONFIG, VIDEO_TRANSCODING_FPS } from '../initializers'
+import { CONFIG, VIDEO_TRANSCODING_FPS, FFMPEG_RENICE } from '../initializers'
 import { unlinkPromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -56,6 +56,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
   try {
     await new Promise<string>((res, rej) => {
       ffmpeg(fromPath)
+        .renice(FFMPEG_RENICE.THUMBNAIL)
         .on('error', rej)
         .on('end', () => res(imageName))
         .thumbnail(options)
@@ -84,6 +85,7 @@ type TranscodeOptions = {
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     let command = ffmpeg(options.inputPath)
+                    .renice(FFMPEG_RENICE.TRANSCODING)
                     .output(options.outputPath)
                     .videoCodec('libx264')
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
