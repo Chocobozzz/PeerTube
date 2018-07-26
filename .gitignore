@@ -1,29 +1,41 @@
+# NPM instalation
 /node_modules/
+*npm-debug.log
+
+# Testing
 /test1/
 /test2/
 /test3/
 /test4/
 /test5/
 /test6/
+
+# Production
 /storage/
 /config/production.yaml
 /config/local*
 /ffmpeg/
-/*.sublime-project
-/*.sublime-workspace
-/dist
-/.idea
-/PeerTube.iml
-/profiling/
-/*.zip
-/*.tar.xz
-/*.asc
 /thumbnails/
 /torrents/
 /videos/
 /previews/
 /logs/
-/server/tools/import-mediacore.ts
-/docker-volume/
+
+# IDE
+/*.sublime-project
+/*.sublime-workspace
+/.idea
+/dist
+/PeerTube.iml
+
+# Zanata
 /.zanata-cache
 /scripts/i18n/generate-iso639-target.ts
+
+# Other
+/profiling/
+/*.zip
+/*.tar.xz
+/*.asc
+/server/tools/import-mediacore.ts
+/docker-volume/
