@@ -8,9 +8,9 @@ If you don't see your locale in the platform, please [create an issue](https://g
 
 ## How to
 
- * Create an account: https://trad.framasoft.org/zanata/
- * Join a language team: https://trad.framasoft.org/zanata/languages
- * Go to the PeerTube page https://trad.framasoft.org/zanata/iteration/view/peertube/develop/languages/fr
+ * Create an account: https://trad.framasoft.org/account/register
+ * Join a language team: https://trad.framasoft.org/languages
+ * Go to the PeerTube page https://trad.framasoft.org/iteration/view/peertube/develop
  * Choose the locale and begin to translate PeerTube!
  
 
