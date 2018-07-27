@@ -199,6 +199,8 @@ type AvailableForListOptions = {
 
     // Force actorId to be a number to avoid SQL injections
     const actorIdNumber = parseInt(options.actorId.toString(), 10)
+
+    // FIXME: It would be more efficient to use a CTE so we join AFTER the filters, but sequelize does not support it...
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
@@ -215,8 +217,14 @@ type AvailableForListOptions = {
               'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
               'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
               'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-              'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-              'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + actorIdNumber +
+              'WHERE "actor"."serverId" IS NULL ' +
+              ' UNION ALL ' +
+              'SELECT "video"."id" AS "id" FROM "video" ' +
+              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
             ')'
           )
         },
