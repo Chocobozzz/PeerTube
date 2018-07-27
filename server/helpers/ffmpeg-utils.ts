@@ -87,8 +87,7 @@ function transcode (options: TranscodeOptions) {
     let command = ffmpeg(options.inputPath, { 'niceness': FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
-                    .renice(5) // we don't want to make the system unrepsonsive
-                     .preset(standard)
+                    .preset(standard)
 
     let fps = await getVideoFileFPS(options.inputPath)
     if (options.resolution !== undefined) {
