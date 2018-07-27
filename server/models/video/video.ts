@@ -215,8 +215,8 @@ type AvailableForListOptions = {
               'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
               'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
               'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-              'WHERE "actor"."serverId" IS NULL OR ' +
-              '"actor"."id" IN (SELECT "targetActorId" FROM "actorFollow" WHERE "actorId" = 1)' + // Subquery for optimization
+              'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+              'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + actorIdNumber +
             ')'
           )
         },
@@ -632,7 +632,7 @@ export class VideoModel extends Model<VideoModel> {
     // Do not wait video deletion because we could be in a transaction
     Promise.all(tasks)
       .catch(err => {
-        logger.error('Some errors when removing files of video %s in after destroy hook.', instance.uuid, { err })
+        logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err })
       })
 
     return undefined
