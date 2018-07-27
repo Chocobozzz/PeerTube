@@ -14,7 +14,7 @@ const followValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Force https if the administrator wants to make friends
     if (isTestInstance() === false && CONFIG.WEBSERVER.SCHEME === 'http') {
-      return res.status(400)
+      return res.status(500)
         .json({
           error: 'Cannot follow on a non HTTPS web server.'
         })
