@@ -343,7 +343,7 @@
     "@types/parse-torrent" "*"
     "@types/simple-peer" "*"
 
-"@videojs/http-streaming@^1.0.2":
+"@videojs/http-streaming@1.2.1", "@videojs/http-streaming@^1.0.2":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@videojs/http-streaming/-/http-streaming-1.2.1.tgz#4a221359952c28b2ded2c612e677369a647cf57d"
   dependencies:
@@ -8362,6 +8362,19 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+video.js@7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.2.0.tgz#495ceca46e0858439ba44d76557744b3c52d0323"
+  dependencies:
+    "@videojs/http-streaming" "1.2.1"
+    babel-runtime "^6.9.2"
+    global "4.3.2"
+    safe-json-parse "4.0.0"
+    tsml "1.0.1"
+    videojs-font "3.0.0"
+    videojs-vtt.js "0.14.1"
+    xhr "2.4.0"
 
 video.js@^5.19.2, "video.js@^6.8.0 || ^7.0.0", video.js@^7:
   version "7.0.5"
