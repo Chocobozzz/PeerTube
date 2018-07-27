@@ -1,7 +1,7 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
 import { VideoResolution } from '../../shared/models/videos'
-import { CONFIG, VIDEO_TRANSCODING_FPS } from '../initializers'
+import { CONFIG, VIDEO_TRANSCODING_FPS, FFMPEG_NICE } from '../initializers'
 import { unlinkPromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -56,7 +56,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 
   try {
     await new Promise<string>((res, rej) => {
-      ffmpeg(fromPath)
+      ffmpeg(fromPath, { 'niceness': FFMPEG_NICE.THUMBNAIL })
         .on('error', rej)
         .on('end', () => res(imageName))
         .thumbnail(options)
@@ -84,7 +84,7 @@ type TranscodeOptions = {
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
-    let command = ffmpeg(options.inputPath)
+    let command = ffmpeg(options.inputPath, { 'niceness': FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
                     .renice(5) // we don't want to make the system unrepsonsive
