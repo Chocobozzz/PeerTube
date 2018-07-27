@@ -301,7 +301,8 @@
       margin-bottom: 12px;
 
       .video-attribute-label {
-        width: 86px;
+        min-width: 91px;
+        padding-right: 5px;
         display: inline-block;
         color: #585858;
         font-weight: $font-bold;
