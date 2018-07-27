@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.0.0-beta.10.pre.2
+
+**See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### Bug fixes
+
+ * Fix captions/subtitles freeze in player
+ * Fix attribute label width in video watch page
+ * Fix player playback in Chrome
+ * Revert SQL optimization when listing videos: it breaks the connection pool of some instances
+
+
 ## v1.0.0-beta.10.pre.1
 
 This version is a pre release because it contains many important changes, and requires manual steps before upgrading.
