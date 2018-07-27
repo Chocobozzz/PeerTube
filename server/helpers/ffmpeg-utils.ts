@@ -56,8 +56,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 
   try {
     await new Promise<string>((res, rej) => {
-      ffmpeg(fromPath)
-        .renice(FFMPEG_RENICE.THUMBNAIL)
+      ffmpeg(fromPath, { 'niceness': FFMPEG_RENICE.THUMBNAIL})
         .on('error', rej)
         .on('end', () => res(imageName))
         .thumbnail(options)
@@ -85,11 +84,9 @@ type TranscodeOptions = {
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
-    let command = ffmpeg(options.inputPath)
-                    .renice(FFMPEG_RENICE.TRANSCODING)
+    let command = ffmpeg(options.inputPath, { 'niceness': FFMPEG_RENICE.TRANSCODING})
                     .output(options.outputPath)
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
-                    .renice(5) // we don't want to make the system unrepsonsive
                      .preset(standard)
 
     let fps = await getVideoFileFPS(options.inputPath)
