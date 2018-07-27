@@ -86,8 +86,10 @@ function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     let command = ffmpeg(options.inputPath, { 'niceness': FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
-                    .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
                     .preset(standard)
+    if (CONFIG.TRANSCODING.THREADS > 0) {
+      command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS) // if we don't set any threads ffmpeg will chose automatically
+    }
 
     let fps = await getVideoFileFPS(options.inputPath)
     if (options.resolution !== undefined) {
