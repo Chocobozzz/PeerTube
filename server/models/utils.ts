@@ -51,17 +51,6 @@ function createSimilarityAttribute (col: string, value: string) {
   )
 }
 
-function createSearchTrigramQuery (col: string, value: string) {
-  return {
-    [ Sequelize.Op.or ]: [
-      // FIXME: use word_similarity instead of just similarity?
-      Sequelize.where(searchTrigramNormalizeCol(col), ' % ', searchTrigramNormalizeValue(value)),
-
-      Sequelize.where(searchTrigramNormalizeCol(col), ' LIKE ', searchTrigramNormalizeValue(`%${value}%`))
-    ]
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -69,8 +58,7 @@ export {
   getSortOnModel,
   createSimilarityAttribute,
   throwIfNotValid,
-  buildTrigramSearchIndex,
-  createSearchTrigramQuery
+  buildTrigramSearchIndex
 }
 
 // ---------------------------------------------------------------------------

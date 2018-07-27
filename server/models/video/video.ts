@@ -83,7 +83,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { buildTrigramSearchIndex, createSearchTrigramQuery, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
@@ -883,24 +883,24 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const attributesInclude = []
+    const escapedSearch = VideoModel.sequelize.escape(options.search)
+    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
     if (options.search) {
       whereAnd.push(
         {
-          [ Sequelize.Op.or ]: [
-            createSearchTrigramQuery('VideoModel.name', options.search),
-
-            {
-              id: {
-                [ Sequelize.Op.in ]: Sequelize.literal(
-                  '(' +
-                    'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
-                    'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-                    'WHERE "tag"."name" = ' + VideoModel.sequelize.escape(options.search) +
-                  ')'
-                )
-              }
-            }
-          ]
+          id: {
+            [ Sequelize.Op.in ]: Sequelize.literal(
+              '(' +
+                'SELECT "video"."id" FROM "video" WHERE ' +
+                'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+                'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+                'UNION ALL ' +
+                'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
+                'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+                'WHERE "tag"."name" = ' + escapedSearch +
+              ')'
+            )
+          }
         }
       )
 
