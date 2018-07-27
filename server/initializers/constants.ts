@@ -316,6 +316,11 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   DISLIKE: 'dislike'
 }
 
+const FFMPEG_NICE: { [ id: string ]: number } = {
+  THUMBNAIL: 2, // 2 just for don't blocking servers
+  TRANSCODING: 15
+}
+
 const VIDEO_CATEGORIES = {
   1: 'Music',
   2: 'Films',
@@ -570,6 +575,7 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,
+  FFMPEG_NICE,
   JOB_REQUEST_TIMEOUT,
   JOB_REQUEST_TTL,
   USER_PASSWORD_RESET_LIFETIME,
