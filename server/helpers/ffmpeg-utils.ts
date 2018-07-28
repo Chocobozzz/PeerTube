@@ -56,7 +56,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 
   try {
     await new Promise<string>((res, rej) => {
-      ffmpeg(fromPath, { 'niceness': FFMPEG_NICE.THUMBNAIL })
+      ffmpeg(fromPath, { niceness: FFMPEG_NICE.THUMBNAIL })
         .on('error', rej)
         .on('end', () => res(imageName))
         .thumbnail(options)
@@ -84,11 +84,13 @@ type TranscodeOptions = {
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
-    let command = ffmpeg(options.inputPath, { 'niceness': FFMPEG_NICE.TRANSCODING })
+    let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
                     .preset(standard)
+
     if (CONFIG.TRANSCODING.THREADS > 0) {
-      command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS) // if we don't set any threads ffmpeg will chose automatically
+      // if we don't set any threads ffmpeg will chose automatically
+      command = command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
     }
 
     let fps = await getVideoFileFPS(options.inputPath)
@@ -131,7 +133,8 @@ export {
   getDurationFromVideoFile,
   generateImageFromVideoFile,
   transcode,
-  getVideoFileFPS
+  getVideoFileFPS,
+  audio
 }
 
 // ---------------------------------------------------------------------------
@@ -191,17 +194,21 @@ namespace audio {
     // without position, ffprobe considers the last input only
     // we make it consider the first input only
     // if you pass a file path to pos, then ffprobe acts on that file directly
-    return new Promise<any>((res, rej) => {
-      _ffmpeg
-        .ffprobe(pos, (err,data) => {
-          if (err) return rej(err)
+    return new Promise<{ absolutePath: string, audioStream?: any }>((res, rej) => {
+      _ffmpeg.ffprobe(pos, (err,data) => {
+        if (err) return rej(err)
 
-          if ('streams' in data) {
-            return res(data['streams'].find(stream => stream['codec_type'] === 'audio'))
-          } else {
-            rej()
+        if ('streams' in data) {
+          const audioStream = data['streams'].find(stream => stream['codec_type'] === 'audio')
+          if (audioStream) {
+            return res({
+              absolutePath: data.format.filename,
+              audioStream
+            })
           }
-        })
+        }
+        return res({ absolutePath: data.format.filename })
+      })
     })
   }
 
@@ -212,7 +219,7 @@ namespace audio {
 
     export const aac = (bitrate: number): number => {
       switch (true) {
-      case bitrate > toBits(384):
+      case bitrate > toBits(baseKbitrate):
         return baseKbitrate
       default:
         return -1 // we interpret it as a signal to copy the audio stream as is
@@ -220,6 +227,11 @@ namespace audio {
     }
 
     export const mp3 = (bitrate: number): number => {
+      /*
+      a 192kbit/sec mp3 doesn't hold as much information as a 192kbit/sec aac.
+      That's why, when using aac, we can go to lower kbit/sec. The equivalences
+      made here are not made to be accurate, especially with good mp3 encoders.
+      */
       switch (true) {
       case bitrate <= toBits(192):
         return 128
@@ -248,16 +260,16 @@ async function standard (_ffmpeg) {
     .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
     .outputOption('-map_metadata -1') // strip all metadata
     .outputOption('-movflags faststart')
-  let _audio = audio.get(localFfmpeg)
-                    .then(res => res)
-                    .catch(_ => undefined)
+  const _audio = await audio.get(localFfmpeg)
 
-  if (!_audio) return localFfmpeg.noAudio()
+  if (!_audio.audioStream) {
+    return localFfmpeg.noAudio()
+  }
 
   // we try to reduce the ceiling bitrate by making rough correspondances of bitrates
   // of course this is far from perfect, but it might save some space in the end
-  if (audio.bitrate[_audio['codec_name']]) {
-    _bitrate = audio.bitrate[_audio['codec_name']](_audio['bit_rate'])
+  if (audio.bitrate[_audio.audioStream['codec_name']]) {
+    _bitrate = audio.bitrate[_audio.audioStream['codec_name']](_audio.audioStream['bit_rate'])
     if (_bitrate === -1) {
       return localFfmpeg.audioCodec('copy')
     }

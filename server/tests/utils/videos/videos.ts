@@ -523,7 +523,7 @@ async function completeVideoCheck (
     const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
     const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
     expect(file.size,
-           'File size for resolution ' + file.resolution.label + ' outside confidence interval.')
+           'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')')
       .to.be.above(minSize).and.below(maxSize)
 
     {
