@@ -121,7 +121,10 @@ const CONFIG = {
     HOSTNAME: config.get<string>('database.hostname'),
     PORT: config.get<number>('database.port'),
     USERNAME: config.get<string>('database.username'),
-    PASSWORD: config.get<string>('database.password')
+    PASSWORD: config.get<string>('database.password'),
+    POOL: {
+      MAX: config.get<number>('database.pool.max')
+    }
   },
   REDIS: {
     HOSTNAME: config.has('redis.hostname') ? config.get<string>('redis.hostname') : null,
