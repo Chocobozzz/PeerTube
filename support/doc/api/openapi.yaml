@@ -512,25 +512,6 @@ paths:
             type: array
             items:
               type: string
-  /videos/search:
-    get:
-      tags:
-        - Video
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - $ref: "commons.yaml#/parameters/start"
-        - $ref: "commons.yaml#/parameters/count"
-        - $ref: "commons.yaml#/parameters/sort"
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Video'
   "/videos/{id}":
     put:
       security:
@@ -957,6 +938,30 @@ paths:
       responses:
         '204':
           $ref: "commons.yaml#/responses/emptySuccess"
+  /search/videos:
+    get:
+      tags:
+        - Search
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
+        - name: query
+          in: query
+          required: true
+          type: string
+          description: 'String to search'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Video'
 definitions:
   VideoConstantNumber:
     properties:
