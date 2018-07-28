@@ -22,6 +22,8 @@ database:
   suffix: '_dev'
   username: 'peertube'
   password: 'peertube'
+  pool:
+    max: 5
 
 # You can also specify a 'socket' path to a unix socket but first need to
 # comment out hostname and port

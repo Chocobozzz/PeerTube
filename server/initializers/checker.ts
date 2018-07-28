@@ -43,7 +43,7 @@ function checkMissedConfig () {
   const required = [ 'listen.port', 'listen.hostname',
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'trust_proxy',
-    'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
+    'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password', 'database.pool.max',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
     'log.level',
