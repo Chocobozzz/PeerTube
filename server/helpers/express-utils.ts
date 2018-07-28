@@ -5,13 +5,21 @@ import { logger } from './logger'
 import { User } from '../../shared/models/users'
 import { generateRandomString } from './utils'
 
-function isNSFWHidden (res: express.Response) {
+function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
+  if (paramNSFW === 'true') return true
+  if (paramNSFW === 'false') return false
+  if (paramNSFW === 'both') return undefined
+
   if (res.locals.oauth) {
     const user: User = res.locals.oauth.token.User
-    if (user) return user.nsfwPolicy === 'do_not_list'
+    // User does not want NSFW videos
+    if (user && user.nsfwPolicy === 'do_not_list') return false
   }
 
-  return CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
+  if (CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list') return false
+
+  // Display all
+  return null
 }
 
 function getHostWithPort (host: string) {
@@ -56,7 +64,7 @@ function createReqFiles (
     }
   })
 
-  const fields = []
+  let fields: { name: string, maxCount: number }[] = []
   for (const fieldName of fieldNames) {
     fields.push({
       name: fieldName,
@@ -70,7 +78,7 @@ function createReqFiles (
 // ---------------------------------------------------------------------------
 
 export {
-  isNSFWHidden,
+  buildNSFWFilter,
   getHostWithPort,
   badRequest,
   createReqFiles

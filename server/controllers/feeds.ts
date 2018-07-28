@@ -8,6 +8,7 @@ import { AccountModel } from '../models/account/account'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoCommentModel } from '../models/video/video-comment'
+import { buildNSFWFilter } from '../helpers/express-utils'
 
 const feedsRouter = express.Router()
 
@@ -73,7 +74,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
 
   const account: AccountModel = res.locals.account
   const videoChannel: VideoChannelModel = res.locals.videoChannel
-  const hideNSFW = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
+  const nsfw = buildNSFWFilter(res, req.query.nsfw)
 
   let name: string
   let description: string
@@ -95,7 +96,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
-    hideNSFW,
+    nsfw,
     filter: req.query.filter,
     withFiles: true,
     accountId: account ? account.id : null,

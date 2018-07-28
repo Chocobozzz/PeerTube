@@ -4,7 +4,7 @@
     <input
       type="file"
       [name]="inputName" [id]="inputName" [accept]="extensions"
-      (change)="fileChange($event)"
+      (change)="fileChange($event)" [(ngModel)]="fileInputValue"
     />
   </div>
 

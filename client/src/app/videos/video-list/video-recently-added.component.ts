@@ -48,10 +48,10 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideos(newPagination, this.sort, undefined, this.category)
+    return this.videoService.getVideos(newPagination, this.sort, undefined, this.categoryOneOf)
   }
 
   generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, undefined, this.category)
+    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, undefined, this.categoryOneOf)
   }
 }

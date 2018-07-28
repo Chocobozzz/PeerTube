@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { getFormattedObjects } from '../../helpers/utils'
 import {
-  asyncMiddleware,
+  asyncMiddleware, commonVideosFiltersValidator,
   listVideoAccountChannelsValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -11,7 +11,7 @@ import {
 import { accountsNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
-import { isNSFWHidden } from '../../helpers/express-utils'
+import { buildNSFWFilter } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
 
 const accountsRouter = express.Router()
@@ -36,6 +36,7 @@ accountsRouter.get('/:accountName/videos',
   setDefaultSort,
   setDefaultPagination,
   optionalAuthenticate,
+  commonVideosFiltersValidator,
   asyncMiddleware(listAccountVideos)
 )
 
@@ -77,7 +78,12 @@ async function listAccountVideos (req: express.Request, res: express.Response, n
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    hideNSFW: isNSFWHidden(res),
+    categoryOneOf: req.query.categoryOneOf,
+    licenceOneOf: req.query.licenceOneOf,
+    languageOneOf: req.query.languageOneOf,
+    tagsOneOf: req.query.tagsOneOf,
+    tagsAllOf: req.query.tagsAllOf,
+    nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
     accountId: account.id
   })

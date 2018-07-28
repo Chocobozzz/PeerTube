@@ -4,6 +4,7 @@ import { VideoEditModule } from './shared/video-edit.module'
 import { VideoUpdateRoutingModule } from './video-update-routing.module'
 import { VideoUpdateComponent } from './video-update.component'
 import { VideoUpdateResolver } from '@app/videos/+video-edit/video-update.resolver'
+import { CanDeactivateGuard } from '@app/shared/guards/can-deactivate-guard.service'
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { VideoUpdateResolver } from '@app/videos/+video-edit/video-update.resolv
   ],
 
   providers: [
-    VideoUpdateResolver
+    VideoUpdateResolver,
+    CanDeactivateGuard
   ]
 })
 export class VideoUpdateModule { }

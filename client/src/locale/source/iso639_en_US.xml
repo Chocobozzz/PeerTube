@@ -41,6 +41,10 @@
         <source>Avaric</source>
         <target>undefined</target>
       </trans-unit>
+      <trans-unit id="Kotava">
+        <source>Kotava</source>
+        <target>undefined</target>
+      </trans-unit>
       <trans-unit id="Aymara">
         <source>Aymara</source>
         <target>undefined</target>
@@ -163,6 +167,10 @@
       </trans-unit>
       <trans-unit id="English">
         <source>English</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Esperanto">
+        <source>Esperanto</source>
         <target>undefined</target>
       </trans-unit>
       <trans-unit id="Estonian">
@@ -307,6 +315,10 @@
       </trans-unit>
       <trans-unit id="Javanese">
         <source>Javanese</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Lojban">
+        <source>Lojban</source>
         <target>undefined</target>
       </trans-unit>
       <trans-unit id="Japanese">
@@ -671,6 +683,10 @@
       </trans-unit>
       <trans-unit id="Tigrinya">
         <source>Tigrinya</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Klingon">
+        <source>Klingon</source>
         <target>undefined</target>
       </trans-unit>
       <trans-unit id="Tonga (Tonga Islands)">

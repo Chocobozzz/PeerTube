@@ -75,11 +75,12 @@ class Redis {
   }
 
   setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number) {
-    const cached: CachedRoute = {
-      body: body.toString(),
-      contentType,
-      statusCode: statusCode.toString()
-    }
+    const cached: CachedRoute = Object.assign({}, {
+      body: body.toString()
+    },
+    (contentType) ? { contentType } : null,
+    (statusCode) ? { statusCode: statusCode.toString() } : null
+    )
 
     return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
   }

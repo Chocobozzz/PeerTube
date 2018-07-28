@@ -54,6 +54,17 @@
       </div>
     </div>
 
+    <div class="form-group form-group-terms">
+      <my-peertube-checkbox
+        inputName="terms" formControlName="terms"
+        i18n-labelHtml labelHtml="I have read and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
+      ></my-peertube-checkbox>
+
+      <div *ngIf="formErrors.terms" class="form-error">
+        {{ formErrors.terms }}
+      </div>
+    </div>
+
     <input type="submit" i18n-value value="Signup" [disabled]="!form.valid">
   </form>
 

@@ -80,7 +80,8 @@ enum ScopeNames {
   tableName: 'actor',
   indexes: [
     {
-      fields: [ 'url' ]
+      fields: [ 'url' ],
+      unique: true
     },
     {
       fields: [ 'preferredUsername', 'serverId' ],
@@ -88,6 +89,19 @@ enum ScopeNames {
     },
     {
       fields: [ 'inboxUrl', 'sharedInboxUrl' ]
+    },
+    {
+      fields: [ 'serverId' ]
+    },
+    {
+      fields: [ 'avatarId' ]
+    },
+    {
+      fields: [ 'uuid' ],
+      unique: true
+    },
+    {
+      fields: [ 'followersUrl' ]
     }
   ]
 })

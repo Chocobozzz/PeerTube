@@ -31,6 +31,12 @@ if [ "$branch" != "develop" ]; then
 fi
 
 version="v$1"
+github_prerelease_option=""
+if [[ "$version" = *".pre."* ]]; then
+  echo "This is a pre-release."
+  github_prerelease_option="--pre-release"
+fi
+
 directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 tar_name="peertube-$version.tar.xz"
@@ -90,7 +96,7 @@ rm "./client/dist/embed-stats.json"
 (
   git push origin --tag
 
-  github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
+  github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
@@ -98,9 +104,12 @@ rm "./client/dist/embed-stats.json"
 
   git push origin develop
 
-  # Update master branch
-  git checkout master
-  git rebase develop
-  git push origin master
-  git checkout develop
+  # Only update master if it is not a pre release
+  if [ -z "$github_prerelease_option" ]; then
+      # Update master branch
+      git checkout master
+      git rebase develop
+      git push origin master
+      git checkout develop
+  fi
 )

@@ -37,9 +37,14 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import {
   CustomConfigValidatorsService,
-  LoginValidatorsService, ReactiveFileComponent,
+  LoginValidatorsService,
+  ReactiveFileComponent,
   ResetPasswordValidatorsService,
-  UserValidatorsService, VideoAbuseValidatorsService, VideoChannelValidatorsService, VideoCommentValidatorsService, VideoValidatorsService
+  UserValidatorsService,
+  VideoAbuseValidatorsService,
+  VideoChannelValidatorsService,
+  VideoCommentValidatorsService,
+  VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'

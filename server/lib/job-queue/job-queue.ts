@@ -87,7 +87,7 @@ class JobQueue {
     const queue = this.queues[obj.type]
     if (queue === undefined) {
       logger.error('Unknown queue %s: cannot create job.', obj.type)
-      return
+      throw Error('Unknown queue, cannot create job')
     }
 
     const jobArgs: Bull.JobOptions = {

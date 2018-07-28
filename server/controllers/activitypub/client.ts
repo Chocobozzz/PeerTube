@@ -25,7 +25,6 @@ import {
   getVideoLikesActivityPubUrl,
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
-import { VideoCaption } from '../../../shared/models/videos/video-caption.model'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 
 const activityPubClientRouter = express.Router()

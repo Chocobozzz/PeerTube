@@ -18,6 +18,7 @@ import { VideosModule } from './videos'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
+import { SearchModule } from '@app/search'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -52,6 +53,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     LoginModule,
     ResetPasswordModule,
     SignupModule,
+    SearchModule,
     SharedModule,
     VideosModule,
 

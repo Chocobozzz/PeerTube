@@ -590,7 +590,7 @@ class PeerTubePlugin extends Plugin {
       this.player.options_.inactivityTimeout = 0
     }
     const enableInactivity = () => {
-      // this.player.options_.inactivityTimeout = saveInactivityTimeout
+      this.player.options_.inactivityTimeout = saveInactivityTimeout
     }
 
     const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')

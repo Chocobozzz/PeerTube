@@ -142,10 +142,33 @@
 
         <div class="form-group" *ngFor="let videoCaption of videoCaptions">
 
-          <div *ngIf="videoCaption.action !== 'REMOVE'" class="caption-entry">
-            <div class="caption-entry-label">{{ videoCaption.language.label }}</div>
+          <div class="caption-entry">
+            <ng-container *ngIf="!videoCaption.action">
+              <a
+                i18n-title title="See the subtitle file" class="caption-entry-label" target="_blank" rel="noopener noreferrer"
+                [href]="videoCaption.captionPath"
+              >{{ videoCaption.language.label }}</a>
 
-            <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
+              <div class="caption-entry-state">Already uploaded	&#10004;</div>
+
+              <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
+            </ng-container>
+
+            <ng-container *ngIf="videoCaption.action === 'CREATE'">
+              <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
+
+              <div class="caption-entry-state caption-entry-state-create">Will be created on update</div>
+
+              <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
+            </ng-container>
+
+            <ng-container *ngIf="videoCaption.action === 'REMOVE'">
+              <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
+
+              <div class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
+
+              <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
+            </ng-container>
           </div>
         </div>
 

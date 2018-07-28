@@ -10,6 +10,7 @@ export type FormReactiveValidationMessages = {
 
 export abstract class FormReactive {
   protected abstract formValidatorService: FormValidatorService
+  protected formChanged = false
 
   form: FormGroup
   formErrors: FormReactiveErrors
@@ -22,7 +23,7 @@ export abstract class FormReactive {
     this.formErrors = formErrors
     this.validationMessages = validationMessages
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(false))
+    this.form.valueChanges.subscribe(() => this.onValueChanged(false))
   }
 
   protected onValueChanged (forceCheck = false) {
@@ -30,6 +31,8 @@ export abstract class FormReactive {
       // clear previous error message (if any)
       this.formErrors[ field ] = ''
       const control = this.form.get(field)
+
+      if (control.dirty) this.formChanged = true
 
       // Don't care if dirty on force check
       const isDirty = control.dirty || forceCheck === true

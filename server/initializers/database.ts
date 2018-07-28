@@ -80,6 +80,12 @@ async function initDatabaseModels (silent: boolean) {
     ScheduleVideoUpdateModel
   ])
 
+  // Check extensions exist in the database
+  await checkPostgresExtensions()
+
+  // Create custom PostgreSQL functions
+  await createFunctions()
+
   if (!silent) logger.info('Database %s is ready.', dbname)
 
   return
@@ -90,4 +96,40 @@ async function initDatabaseModels (silent: boolean) {
 export {
   initDatabaseModels,
   sequelizeTypescript
+}
+
+// ---------------------------------------------------------------------------
+
+async function checkPostgresExtensions () {
+  const extensions = [
+    'pg_trgm',
+    'unaccent'
+  ]
+
+  for (const extension of extensions) {
+    const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
+    const [ res ] = await sequelizeTypescript.query(query, { raw: true })
+
+    if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
+      // Try to create the extension ourself
+      try {
+        await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
+
+      } catch {
+        const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
+          `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`
+        throw new Error(errorMessage)
+      }
+    }
+  }
+}
+
+async function createFunctions () {
+  const query = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
+  RETURNS text AS
+$func$
+SELECT public.unaccent('public.unaccent', $1::text)
+$func$  LANGUAGE sql IMMUTABLE;`
+
+  return sequelizeTypescript.query(query, { raw: true })
 }

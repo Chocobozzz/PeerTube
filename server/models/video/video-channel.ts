@@ -68,6 +68,9 @@ enum ScopeNames {
   indexes: [
     {
       fields: [ 'accountId' ]
+    },
+    {
+      fields: [ 'actorId' ]
     }
   ]
 })

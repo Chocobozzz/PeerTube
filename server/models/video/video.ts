@@ -83,7 +83,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
@@ -94,6 +94,33 @@ import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 
+// FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
+const indexes: Sequelize.DefineIndexesOptions[] = [
+  buildTrigramSearchIndex('video_name_trigram', 'name'),
+
+  { fields: [ 'createdAt' ] },
+  { fields: [ 'publishedAt' ] },
+  { fields: [ 'duration' ] },
+  { fields: [ 'category' ] },
+  { fields: [ 'licence' ] },
+  { fields: [ 'nsfw' ] },
+  { fields: [ 'language' ] },
+  { fields: [ 'waitTranscoding' ] },
+  { fields: [ 'state' ] },
+  { fields: [ 'remote' ] },
+  { fields: [ 'views' ] },
+  { fields: [ 'likes' ] },
+  { fields: [ 'channelId' ] },
+  {
+    fields: [ 'uuid' ],
+    unique: true
+  },
+  {
+    fields: [ 'url'],
+    unique: true
+  }
+]
+
 export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
@@ -102,16 +129,22 @@ export enum ScopeNames {
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE'
 }
 
+type AvailableForListOptions = {
+  actorId: number,
+  filter?: VideoFilter,
+  categoryOneOf?: number[],
+  nsfw?: boolean,
+  licenceOneOf?: number[],
+  languageOneOf?: string[],
+  tagsOneOf?: string[],
+  tagsAllOf?: string[],
+  withFiles?: boolean,
+  accountId?: number,
+  videoChannelId?: number
+}
+
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: {
-    actorId: number,
-    hideNSFW: boolean,
-    filter?: VideoFilter,
-    category?: number,
-    withFiles?: boolean,
-    accountId?: number,
-    videoChannelId?: number
-  }) => {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
     const accountInclude = {
       attributes: [ 'id', 'name' ],
       model: AccountModel.unscoped(),
@@ -166,6 +199,8 @@ export enum ScopeNames {
 
     // Force actorId to be a number to avoid SQL injections
     const actorIdNumber = parseInt(options.actorId.toString(), 10)
+
+    // FIXME: It would be more efficient to use a CTE so we join AFTER the filters, but sequelize does not support it...
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
@@ -174,16 +209,22 @@ export enum ScopeNames {
           ),
           [ Sequelize.Op.in ]: Sequelize.literal(
             '(' +
-            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            ' UNION ' +
-            'SELECT "video"."id" AS "id" FROM "video" ' +
-            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-            'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-            'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + actorIdNumber +
+              'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+              ' UNION ' +
+              'SELECT "video"."id" AS "id" FROM "video" ' +
+              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+              'WHERE "actor"."serverId" IS NULL ' +
+              ' UNION ALL ' +
+              'SELECT "video"."id" AS "id" FROM "video" ' +
+              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
             ')'
           )
         },
@@ -212,13 +253,55 @@ export enum ScopeNames {
       })
     }
 
-    // Hide nsfw videos?
-    if (options.hideNSFW === true) {
-      query.where['nsfw'] = false
+    // FIXME: issues with sequelize count when making a join on n:m relation, so we just make a IN()
+    if (options.tagsAllOf || options.tagsOneOf) {
+      const createTagsIn = (tags: string[]) => {
+        return tags.map(t => VideoModel.sequelize.escape(t))
+                   .join(', ')
+      }
+
+      if (options.tagsOneOf) {
+        query.where['id'][Sequelize.Op.in] = Sequelize.literal(
+          '(' +
+            'SELECT "videoId" FROM "videoTag" ' +
+            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+            'WHERE "tag"."name" IN (' + createTagsIn(options.tagsOneOf) + ')' +
+          ')'
+        )
+      }
+
+      if (options.tagsAllOf) {
+        query.where['id'][Sequelize.Op.in] = Sequelize.literal(
+            '(' +
+              'SELECT "videoId" FROM "videoTag" ' +
+              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+              'WHERE "tag"."name" IN (' + createTagsIn(options.tagsAllOf) + ')' +
+              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
+            ')'
+        )
+      }
     }
 
-    if (options.category) {
-      query.where['category'] = options.category
+    if (options.nsfw === true || options.nsfw === false) {
+      query.where['nsfw'] = options.nsfw
+    }
+
+    if (options.categoryOneOf) {
+      query.where['category'] = {
+        [Sequelize.Op.or]: options.categoryOneOf
+      }
+    }
+
+    if (options.licenceOneOf) {
+      query.where['licence'] = {
+        [Sequelize.Op.or]: options.licenceOneOf
+      }
+    }
+
+    if (options.languageOneOf) {
+      query.where['language'] = {
+        [Sequelize.Op.or]: options.languageOneOf
+      }
     }
 
     if (options.accountId) {
@@ -309,36 +392,7 @@ export enum ScopeNames {
 })
 @Table({
   tableName: 'video',
-  indexes: [
-    {
-      fields: [ 'name' ]
-    },
-    {
-      fields: [ 'createdAt' ]
-    },
-    {
-      fields: [ 'duration' ]
-    },
-    {
-      fields: [ 'views' ]
-    },
-    {
-      fields: [ 'likes' ]
-    },
-    {
-      fields: [ 'uuid' ]
-    },
-    {
-      fields: [ 'channelId' ]
-    },
-    {
-      fields: [ 'id', 'privacy', 'state', 'waitTranscoding' ]
-    },
-    {
-      fields: [ 'url'],
-      unique: true
-    }
-  ]
+  indexes
 })
 export class VideoModel extends Model<VideoModel> {
 
@@ -586,7 +640,7 @@ export class VideoModel extends Model<VideoModel> {
     // Do not wait video deletion because we could be in a transaction
     Promise.all(tasks)
       .catch(err => {
-        logger.error('Some errors when removing files of video %s in after destroy hook.', instance.uuid, { err })
+        logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err })
       })
 
     return undefined
@@ -754,9 +808,13 @@ export class VideoModel extends Model<VideoModel> {
     start: number,
     count: number,
     sort: string,
-    hideNSFW: boolean,
+    nsfw: boolean,
     withFiles: boolean,
-    category?: number,
+    categoryOneOf?: number[],
+    licenceOneOf?: number[],
+    languageOneOf?: string[],
+    tagsOneOf?: string[],
+    tagsAllOf?: string[],
     filter?: VideoFilter,
     accountId?: number,
     videoChannelId?: number
@@ -772,13 +830,17 @@ export class VideoModel extends Model<VideoModel> {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
-          hideNSFW: options.hideNSFW,
-          category: options.category,
+          nsfw: options.nsfw,
+          categoryOneOf: options.categoryOneOf,
+          licenceOneOf: options.licenceOneOf,
+          languageOneOf: options.languageOneOf,
+          tagsOneOf: options.tagsOneOf,
+          tagsAllOf: options.tagsAllOf,
           filter: options.filter,
           withFiles: options.withFiles,
           accountId: options.accountId,
           videoChannelId: options.videoChannelId
-        }
+        } as AvailableForListOptions
       ]
     }
 
@@ -792,34 +854,83 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static async searchAndPopulateAccountAndServer (value: string, start: number, count: number, sort: string, hideNSFW: boolean) {
-    const query: IFindOptions<VideoModel> = {
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      where: {
-        [Sequelize.Op.or]: [
-          {
-            name: {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            }
-          },
-          {
-            preferredUsernameChannel: Sequelize.where(Sequelize.col('VideoChannel->Actor.preferredUsername'), {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            })
-          },
-          {
-            preferredUsernameAccount: Sequelize.where(Sequelize.col('VideoChannel->Account->Actor.preferredUsername'), {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            })
-          },
-          {
-            host: Sequelize.where(Sequelize.col('VideoChannel->Account->Actor->Server.host'), {
-              [ Sequelize.Op.iLike ]: '%' + value + '%'
-            })
+  static async searchAndPopulateAccountAndServer (options: {
+    search?: string
+    start?: number
+    count?: number
+    sort?: string
+    startDate?: string // ISO 8601
+    endDate?: string // ISO 8601
+    nsfw?: boolean
+    categoryOneOf?: number[]
+    licenceOneOf?: number[]
+    languageOneOf?: string[]
+    tagsOneOf?: string[]
+    tagsAllOf?: string[]
+    durationMin?: number // seconds
+    durationMax?: number // seconds
+  }) {
+    const whereAnd = [ ]
+
+    if (options.startDate || options.endDate) {
+      const publishedAtRange = { }
+
+      if (options.startDate) publishedAtRange[Sequelize.Op.gte] = options.startDate
+      if (options.endDate) publishedAtRange[Sequelize.Op.lte] = options.endDate
+
+      whereAnd.push({ publishedAt: publishedAtRange })
+    }
+
+    if (options.durationMin || options.durationMax) {
+      const durationRange = { }
+
+      if (options.durationMin) durationRange[Sequelize.Op.gte] = options.durationMin
+      if (options.durationMax) durationRange[Sequelize.Op.lte] = options.durationMax
+
+      whereAnd.push({ duration: durationRange })
+    }
+
+    const attributesInclude = []
+    const escapedSearch = VideoModel.sequelize.escape(options.search)
+    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
+    if (options.search) {
+      whereAnd.push(
+        {
+          id: {
+            [ Sequelize.Op.in ]: Sequelize.literal(
+              '(' +
+                'SELECT "video"."id" FROM "video" WHERE ' +
+                'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+                'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+                'UNION ALL ' +
+                'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
+                'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+                'WHERE "tag"."name" = ' + escapedSearch +
+              ')'
+            )
           }
-        ]
+        }
+      )
+
+      attributesInclude.push(createSimilarityAttribute('VideoModel.name', options.search))
+    }
+
+    // Cannot search on similarity if we don't have a search
+    if (!options.search) {
+      attributesInclude.push(
+        Sequelize.literal('0 as similarity')
+      )
+    }
+
+    const query: IFindOptions<VideoModel> = {
+      attributes: {
+        include: attributesInclude
+      },
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where: {
+        [ Sequelize.Op.and ]: whereAnd
       }
     }
 
@@ -828,8 +939,13 @@ export class VideoModel extends Model<VideoModel> {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
-          hideNSFW
-        }
+          nsfw: options.nsfw,
+          categoryOneOf: options.categoryOneOf,
+          licenceOneOf: options.licenceOneOf,
+          languageOneOf: options.languageOneOf,
+          tagsOneOf: options.tagsOneOf,
+          tagsAllOf: options.tagsAllOf
+        } as AvailableForListOptions
       ]
     }
 

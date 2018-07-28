@@ -6,7 +6,7 @@ import { ResultList } from '../../../../../shared'
 import { RestExtractor, RestService } from '../rest'
 import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
 import { VideoService } from '@app/shared/video/video.service'
-import { objectToFormData } from '@app/shared/misc/utils'
+import { objectToFormData, sortBy } from '@app/shared/misc/utils'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 
 @Injectable()
@@ -19,6 +19,11 @@ export class VideoCaptionService {
 
   listCaptions (videoId: number | string): Observable<ResultList<VideoCaption>> {
     return this.authHttp.get<ResultList<VideoCaption>>(VideoService.BASE_VIDEO_URL + videoId + '/captions')
+               .pipe(map(res => {
+                 sortBy(res.data, 'language', 'label')
+
+                 return res
+               }))
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

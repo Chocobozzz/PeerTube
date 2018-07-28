@@ -3,6 +3,9 @@ language: node_js
 node_js:
   - "8"
 
+git:
+  depth: 1
+
 addons:
   apt:
     sources:
@@ -29,12 +32,6 @@ before_script:
   - cp ffmpeg-*-64bit-static/{ffmpeg,ffprobe,ffserver} $HOME/bin
   - export PATH=$HOME/bin:$PATH
   - export NODE_TEST_IMAGE=true
-  - psql -c 'create database peertube_test1;' -U postgres
-  - psql -c 'create database peertube_test2;' -U postgres
-  - psql -c 'create database peertube_test3;' -U postgres
-  - psql -c 'create database peertube_test4;' -U postgres
-  - psql -c 'create database peertube_test5;' -U postgres
-  - psql -c 'create database peertube_test6;' -U postgres
   - psql -c "create user peertube with password 'peertube';" -U postgres
 
 matrix:

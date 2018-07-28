@@ -14,15 +14,19 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 230
+const LAST_MIGRATION_VERSION = 240
 
 // ---------------------------------------------------------------------------
 
 // API version
 const API_VERSION = 'v1'
 
-// Number of results by default for the pagination
-const PAGINATION_COUNT_DEFAULT = 15
+const PAGINATION = {
+  COUNT: {
+    DEFAULT: 15,
+    MAX: 100
+  }
+}
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
@@ -35,7 +39,9 @@ const SORTABLE_COLUMNS = {
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
-  FOLLOWING: [ 'createdAt' ]
+  FOLLOWING: [ 'createdAt' ],
+
+  VIDEOS_SEARCH: [ 'match', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -44,9 +50,11 @@ const OAUTH_LIFETIME = {
 }
 
 const ROUTE_CACHE_LIFETIME = {
-  FEEDS: 1000 * 60 * 15, // 15 minutes
+  FEEDS: '15 minutes',
+  ROBOTS: '2 hours',
+  NODEINFO: '10 minutes',
   ACTIVITY_PUB: {
-    VIDEOS: 1000 // 1 second, cache concurrent requests after a broadcast for example
+    VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
   }
 }
 
@@ -535,7 +543,7 @@ export {
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
   BROADCAST_CONCURRENCY,
-  PAGINATION_COUNT_DEFAULT,
+  PAGINATION,
   ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,

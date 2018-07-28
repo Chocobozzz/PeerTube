@@ -6,6 +6,7 @@ import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
 import { createVideoChannel } from './video-channel'
 import { VideoChannelModel } from '../models/video/video-channel'
+import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 
 async function createUserAccountAndChannel (userToCreate: UserModel, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
@@ -34,9 +35,9 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
 
 async function createLocalAccountWithoutKeys (
   name: string,
-  userId: number,
-  applicationId: number,
-  t: Sequelize.Transaction,
+  userId: number | null,
+  applicationId: number | null,
+  t: Sequelize.Transaction | undefined,
   type: ActivityPubActorType= 'Person'
 ) {
   const url = getAccountActivityPubUrl(name)
@@ -49,7 +50,7 @@ async function createLocalAccountWithoutKeys (
     userId,
     applicationId,
     actorId: actorInstanceCreated.id
-  })
+  } as FilteredModelAttributes<AccountModel>)
 
   const accountInstanceCreated = await accountInstance.save({ transaction: t })
   accountInstanceCreated.Actor = actorInstanceCreated

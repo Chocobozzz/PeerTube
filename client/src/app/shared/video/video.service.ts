@@ -159,7 +159,7 @@ export class VideoService {
     videoPagination: ComponentPagination,
     sort: VideoSortField,
     filter?: VideoFilter,
-    category?: number
+    categoryOneOf?: number
   ): Observable<{ videos: Video[], totalVideos: number }> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -170,8 +170,8 @@ export class VideoService {
       params = params.set('filter', filter)
     }
 
-    if (category) {
-      params = params.set('category', category + '')
+    if (categoryOneOf) {
+      params = params.set('categoryOneOf', categoryOneOf + '')
     }
 
     return this.authHttp
@@ -207,12 +207,12 @@ export class VideoService {
     return feeds
   }
 
-  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, category?: number) {
+  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, categoryOneOf?: number) {
     let params = this.restService.addRestGetParams(new HttpParams(), undefined, sort)
 
     if (filter) params = params.set('filter', filter)
 
-    if (category) params = params.set('category', category + '')
+    if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
 
     return this.buildBaseFeedUrls(params)
   }
@@ -229,27 +229,6 @@ export class VideoService {
     params = params.set('videoChannelId', videoChannelId.toString())
 
     return this.buildBaseFeedUrls(params)
-  }
-
-  searchVideos (
-    search: string,
-    videoPagination: ComponentPagination,
-    sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
-    const url = VideoService.BASE_VIDEO_URL + 'search'
-
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-
-    let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination, sort)
-    params = params.append('search', search)
-
-    return this.authHttp
-               .get<ResultList<VideoServerModel>>(url, { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
   }
 
   removeVideo (id: number) {
@@ -289,21 +268,7 @@ export class VideoService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  private setVideoRate (id: number, rateType: VideoRateType) {
-    const url = VideoService.BASE_VIDEO_URL + id + '/rate'
-    const body: UserVideoRateUpdate = {
-      rating: rateType
-    }
-
-    return this.authHttp
-               .put(url, body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  private extractVideos (result: ResultList<VideoServerModel>) {
+  extractVideos (result: ResultList<VideoServerModel>) {
     return this.serverService.localeObservable
                .pipe(
                  map(translations => {
@@ -317,6 +282,20 @@ export class VideoService {
 
                    return { videos, totalVideos }
                  })
+               )
+  }
+
+  private setVideoRate (id: number, rateType: VideoRateType) {
+    const url = VideoService.BASE_VIDEO_URL + id + '/rate'
+    const body: UserVideoRateUpdate = {
+      rating: rateType
+    }
+
+    return this.authHttp
+               .put(url, body)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 }

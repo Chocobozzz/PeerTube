@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="Afar">
         <source>Afar</source>
-        <target>Danakil-Sprache</target>
+        <target>Afar</target>
       </trans-unit>
       <trans-unit id="Abkhazian">
         <source>Abkhazian</source>
@@ -17,7 +17,7 @@
       </trans-unit>
       <trans-unit id="Akan">
         <source>Akan</source>
-        <target>Akan-Sprache</target>
+        <target>Akan</target>
       </trans-unit>
       <trans-unit id="Amharic">
         <source>Amharic</source>
@@ -33,7 +33,7 @@
       </trans-unit>
       <trans-unit id="American Sign Language">
         <source>American Sign Language</source>
-        <target>Amerikanische Zeichensprache</target>
+        <target>Amerikanische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Assamese">
         <source>Assamese</source>
@@ -45,7 +45,7 @@
       </trans-unit>
       <trans-unit id="Aymara">
         <source>Aymara</source>
-        <target>Aymará-Sprache</target>
+        <target>Aymara</target>
       </trans-unit>
       <trans-unit id="Azerbaijani">
         <source>Azerbaijani</source>
@@ -57,7 +57,7 @@
       </trans-unit>
       <trans-unit id="Bambara">
         <source>Bambara</source>
-        <target>Bambara-Sprache</target>
+        <target>Bambara</target>
       </trans-unit>
       <trans-unit id="Belarusian">
         <source>Belarusian</source>
@@ -69,7 +69,7 @@
       </trans-unit>
       <trans-unit id="British Sign Language">
         <source>British Sign Language</source>
-        <target>Englisch Zeichensprache</target>
+        <target>Britische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Bislama">
         <source>Bislama</source>
@@ -91,6 +91,10 @@
         <source>Bulgarian</source>
         <target>Bulgarisch</target>
       </trans-unit>
+      <trans-unit id="Brazilian Sign Language">
+        <source>Brazilian Sign Language</source>
+        <target>Brasilianische Gebärdensprache</target>
+      </trans-unit>
       <trans-unit id="Catalan">
         <source>Catalan</source>
         <target>Katalanisch</target>
@@ -101,7 +105,7 @@
       </trans-unit>
       <trans-unit id="Chamorro">
         <source>Chamorro</source>
-        <target>Chamorro-Sprache</target>
+        <target>Chamorro</target>
       </trans-unit>
       <trans-unit id="Chechen">
         <source>Chechen</source>
@@ -121,11 +125,15 @@
       </trans-unit>
       <trans-unit id="Cree">
         <source>Cree</source>
-        <target>Cree-Sprache</target>
+        <target>Cree</target>
+      </trans-unit>
+      <trans-unit id="Czech Sign Language">
+        <source>Czech Sign Language</source>
+        <target>Tschechische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Chinese Sign Language">
         <source>Chinese Sign Language</source>
-        <target>Chinesiche Zeichensprache</target>
+        <target>Chinesiche Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Welsh">
         <source>Welsh</source>
@@ -142,6 +150,10 @@
       <trans-unit id="Dhivehi">
         <source>Dhivehi</source>
         <target>Maledivisch</target>
+      </trans-unit>
+      <trans-unit id="Danish Sign Language">
+        <source>Danish Sign Language</source>
+        <target>Dänische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Dzongkha">
         <source>Dzongkha</source>
@@ -165,7 +177,7 @@
       </trans-unit>
       <trans-unit id="Ewe">
         <source>Ewe</source>
-        <target>Ewe-Sprache</target>
+        <target>Ewe</target>
       </trans-unit>
       <trans-unit id="Faroese">
         <source>Faroese</source>
@@ -177,7 +189,7 @@
       </trans-unit>
       <trans-unit id="Fijian">
         <source>Fijian</source>
-        <target>Fidschi-Sprache</target>
+        <target>Fidschi</target>
       </trans-unit>
       <trans-unit id="Finnish">
         <source>Finnish</source>
@@ -193,7 +205,7 @@
       </trans-unit>
       <trans-unit id="French Sign Language">
         <source>French Sign Language</source>
-        <target>Französiche Zeichensprache</target>
+        <target>Französiche Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Fulah">
         <source>Fulah</source>
@@ -217,15 +229,15 @@
       </trans-unit>
       <trans-unit id="Guarani">
         <source>Guarani</source>
-        <target>Guaraní-Sprache</target>
+        <target>Guaraní</target>
       </trans-unit>
       <trans-unit id="German Sign Language">
         <source>German Sign Language</source>
-        <target>Deutsche Zeichensprache</target>
+        <target>Deutsche Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Gujarati">
         <source>Gujarati</source>
-        <target>Gujarati-Sprache</target>
+        <target>Gujarati</target>
       </trans-unit>
       <trans-unit id="Haitian">
         <source>Haitian</source>
@@ -233,7 +245,11 @@
       </trans-unit>
       <trans-unit id="Hausa">
         <source>Hausa</source>
-        <target>Haussa-Sprache</target>
+        <target>Hausa</target>
+      </trans-unit>
+      <trans-unit id="Serbo-Croatian">
+        <source>Serbo-Croatian</source>
+        <target>Serbokroatisch</target>
       </trans-unit>
       <trans-unit id="Hebrew">
         <source>Hebrew</source>
@@ -241,7 +257,7 @@
       </trans-unit>
       <trans-unit id="Herero">
         <source>Herero</source>
-        <target>Herero-Sprache</target>
+        <target>Otjiherero</target>
       </trans-unit>
       <trans-unit id="Hindi">
         <source>Hindi</source>
@@ -265,11 +281,11 @@
       </trans-unit>
       <trans-unit id="Igbo">
         <source>Igbo</source>
-        <target>Ibo-Sprache</target>
+        <target>Igbo</target>
       </trans-unit>
       <trans-unit id="Sichuan Yi">
         <source>Sichuan Yi</source>
-        <target>Lalo-Sprache</target>
+        <target>Yi</target>
       </trans-unit>
       <trans-unit id="Inuktitut">
         <source>Inuktitut</source>
@@ -301,7 +317,7 @@
       </trans-unit>
       <trans-unit id="Japanese Sign Language">
         <source>Japanese Sign Language</source>
-        <target>Japanische Zeichensprache</target>
+        <target>Japanische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Kalaallisut">
         <source>Kalaallisut</source>
@@ -321,7 +337,7 @@
       </trans-unit>
       <trans-unit id="Kanuri">
         <source>Kanuri</source>
-        <target>Kanuri-Sprache</target>
+        <target>Kanuri</target>
       </trans-unit>
       <trans-unit id="Kazakh">
         <source>Kazakh</source>
@@ -333,11 +349,11 @@
       </trans-unit>
       <trans-unit id="Kikuyu">
         <source>Kikuyu</source>
-        <target>Kikuyu-Sprache</target>
+        <target>Kikuyu</target>
       </trans-unit>
       <trans-unit id="Kinyarwanda">
         <source>Kinyarwanda</source>
-        <target>Rwanda-Sprache</target>
+        <target>Kinyarwanda</target>
       </trans-unit>
       <trans-unit id="Kirghiz">
         <source>Kirghiz</source>
@@ -345,11 +361,11 @@
       </trans-unit>
       <trans-unit id="Komi">
         <source>Komi</source>
-        <target>Komi-Sprache</target>
+        <target>Komi</target>
       </trans-unit>
       <trans-unit id="Kongo">
         <source>Kongo</source>
-        <target>Kongo-Sprache</target>
+        <target>Kikongo</target>
       </trans-unit>
       <trans-unit id="Korean">
         <source>Korean</source>
@@ -357,7 +373,7 @@
       </trans-unit>
       <trans-unit id="Kuanyama">
         <source>Kuanyama</source>
-        <target>Kwanyama-Sprache</target>
+        <target>Kuanyama</target>
       </trans-unit>
       <trans-unit id="Kurdish">
         <source>Kurdish</source>
@@ -389,11 +405,11 @@
       </trans-unit>
       <trans-unit id="Luba-Katanga">
         <source>Luba-Katanga</source>
-        <target>Luba-Katanga-Sprache</target>
+        <target>Kiluba</target>
       </trans-unit>
       <trans-unit id="Ganda">
         <source>Ganda</source>
-        <target>Ganda-Sprache</target>
+        <target>Luganda</target>
       </trans-unit>
       <trans-unit id="Marshallese">
         <source>Marshallese</source>
@@ -413,7 +429,7 @@
       </trans-unit>
       <trans-unit id="Malagasy">
         <source>Malagasy</source>
-        <target>Malagassi-Sprache</target>
+        <target>Malagassi</target>
       </trans-unit>
       <trans-unit id="Maltese">
         <source>Maltese</source>
@@ -425,7 +441,7 @@
       </trans-unit>
       <trans-unit id="Maori">
         <source>Maori</source>
-        <target>Maori-Sprache</target>
+        <target>Māori</target>
       </trans-unit>
       <trans-unit id="Malay (macrolanguage)">
         <source>Malay (macrolanguage)</source>
@@ -441,15 +457,15 @@
       </trans-unit>
       <trans-unit id="Navajo">
         <source>Navajo</source>
-        <target>Navajo-Sprache</target>
+        <target>Navajo</target>
       </trans-unit>
       <trans-unit id="South Ndebele">
         <source>South Ndebele</source>
-        <target>Ndebele-Sprache (Transvaal)</target>
+        <target>Süd-Ndebele</target>
       </trans-unit>
       <trans-unit id="North Ndebele">
         <source>North Ndebele</source>
-        <target>Ndebele-Sprache (Simbabwe)</target>
+        <target>Nord-Ndebele</target>
       </trans-unit>
       <trans-unit id="Ndonga">
         <source>Ndonga</source>
@@ -503,6 +519,10 @@
         <source>Panjabi</source>
         <target>Pandschabi-Sprache</target>
       </trans-unit>
+      <trans-unit id="Pakistan Sign Language">
+        <source>Pakistan Sign Language</source>
+        <target>Pakistanische Gebärdensprache</target>
+      </trans-unit>
       <trans-unit id="Polish">
         <source>Polish</source>
         <target>Polnisch</target>
@@ -529,7 +549,7 @@
       </trans-unit>
       <trans-unit id="Russian Sign Language">
         <source>Russian Sign Language</source>
-        <target>Russische Zeichensprache</target>
+        <target>Russische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Rundi">
         <source>Rundi</source>
@@ -542,6 +562,14 @@
       <trans-unit id="Sango">
         <source>Sango</source>
         <target>Sango-Sprache</target>
+      </trans-unit>
+      <trans-unit id="Saudi Arabian Sign Language">
+        <source>Saudi Arabian Sign Language</source>
+        <target>Saudi-arabische Gebärdensprache</target>
+      </trans-unit>
+      <trans-unit id="South African Sign Language">
+        <source>South African Sign Language</source>
+        <target>Südafrikanische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Sinhala">
         <source>Sinhala</source>
@@ -610,6 +638,10 @@
       <trans-unit id="Swedish">
         <source>Swedish</source>
         <target>Schwedisch</target>
+      </trans-unit>
+      <trans-unit id="Swedish Sign Language">
+        <source>Swedish Sign Language</source>
+        <target>Schwedische Gebärdensprache</target>
       </trans-unit>
       <trans-unit id="Tahitian">
         <source>Tahitian</source>

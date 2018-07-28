@@ -5,7 +5,8 @@
 
 ## Installation
 
-Please don't install PeerTube for production on a small device behind a low bandwidth connection (example: a Raspberry PI behind your ADSL link) because it could slow down the fediverse. See the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) for more information.
+Please don't install PeerTube for production on a device behind a low bandwidth connection (example: your ADSL link).
+If you want information about the appropriate hardware to run PeerTube, please see the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube).
 
 ### Dependencies
 
@@ -39,6 +40,13 @@ Create the production database and a peertube user inside PostgreSQL:
 ```
 $ sudo -u postgres createuser -P peertube
 $ sudo -u postgres createdb -O peertube peertube_prod
+```
+
+Then enable extensions PeerTube needs:
+
+```
+$ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_prod
+$ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_prod
 ```
 
 ### Prepare PeerTube directory
@@ -194,7 +202,7 @@ Now your instance is up you can:
 
 ## Upgrade
 
-### PeerTube code
+### PeerTube instance
 
 **Check the changelog (in particular BREAKING CHANGES!):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 

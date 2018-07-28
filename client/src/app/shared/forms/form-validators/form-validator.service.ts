@@ -1,7 +1,6 @@
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms'
 import { Injectable } from '@angular/core'
 import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared/forms/form-reactive'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export type BuildFormValidator = {
   VALIDATORS: ValidatorFn[],
@@ -18,8 +17,7 @@ export type BuildFormDefaultValues = {
 export class FormValidatorService {
 
   constructor (
-    private formBuilder: FormBuilder,
-    private i18n: I18n
+    private formBuilder: FormBuilder
   ) {}
 
   buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {

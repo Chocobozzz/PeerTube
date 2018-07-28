@@ -46,7 +46,19 @@ import { UserModel } from './user'
   ]
 })
 @Table({
-  tableName: 'account'
+  tableName: 'account',
+  indexes: [
+    {
+      fields: [ 'actorId' ],
+      unique: true
+    },
+    {
+      fields: [ 'applicationId' ]
+    },
+    {
+      fields: [ 'userId' ]
+    }
+  ]
 })
 export class AccountModel extends Model<AccountModel> {
 

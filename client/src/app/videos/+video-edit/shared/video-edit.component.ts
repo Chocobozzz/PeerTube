@@ -50,6 +50,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   private schedulerInterval
   private firstPatchDone = false
+  private initialVideoCaptions: string[] = []
 
   constructor (
     private formValidatorService: FormValidatorService,
@@ -127,6 +128,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoLanguages = this.serverService.getVideoLanguages()
 
     this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+
+    this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
   }
 
   ngOnDestroy () {
@@ -139,15 +142,22 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     // Replace existing caption?
     if (existingCaption) {
       Object.assign(existingCaption, caption, { action: 'CREATE' as 'CREATE' })
+    } else {
+      this.videoCaptions.push(
+        Object.assign(caption, { action: 'CREATE' as 'CREATE' })
+      )
+    }
+
+    this.sortVideoCaptions()
+  }
+
+  async deleteCaption (caption: VideoCaptionEdit) {
+    // Caption recovers his former state
+    if (caption.action && this.initialVideoCaptions.indexOf(caption.language.id) !== -1) {
+      caption.action = undefined
       return
     }
 
-    this.videoCaptions.push(
-      Object.assign(caption, { action: 'CREATE' as 'CREATE' })
-    )
-  }
-
-  deleteCaption (caption: VideoCaptionEdit) {
     // This caption is not on the server, just remove it from our array
     if (caption.action === 'CREATE') {
       removeElementFromArray(this.videoCaptions, caption)
@@ -159,6 +169,15 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   openAddCaptionModal () {
     this.videoCaptionAddModal.show()
+  }
+
+  private sortVideoCaptions () {
+    this.videoCaptions.sort((v1, v2) => {
+      if (v1.language.label < v2.language.label) return -1
+      if (v1.language.label === v2.language.label) return 0
+
+      return 1
+    })
   }
 
   private trackPrivacyChange () {

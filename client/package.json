@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "1.0.0-beta.9",
+  "version": "1.0.0-beta.10.pre.2",
   "private": true,
   "licence": "GPLv3",
   "author": {
@@ -108,7 +108,7 @@
     "tslint-config-standard": "^7.0.0",
     "typescript": "2.7",
     "uglifyjs-webpack-plugin": "^1.1.2",
-    "video.js": "^7",
+    "video.js": "7.2.0",
     "videojs-contextmenu": "^2.0.0",
     "videojs-contextmenu-ui": "^4.0.0",
     "videojs-dock": "^2.0.2",

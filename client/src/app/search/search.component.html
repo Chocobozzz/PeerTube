@@ -1,0 +1,38 @@
+<div myInfiniteScroller [autoLoading]="true" (nearOfBottom)="onNearOfBottom()" class="search-result">
+  <div class="results-header">
+    <div class="first-line">
+      <div class="results-counter" *ngIf="pagination.totalItems">
+        <span i18n>{{ pagination.totalItems | myNumberFormatter }} results</span>
+        <span *ngIf="currentSearch" i18n>
+          for <span class="search-value">{{ currentSearch }}</span>
+        </span>
+      </div>
+
+      <div
+        class="results-filter-button" (click)="isSearchFilterCollapsed = !isSearchFilterCollapsed" role="button"
+        [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="collapseBasic"
+      >
+        <span class="icon icon-filter"></span>
+        <ng-container i18n>Filters</ng-container>
+      </div>
+    </div>
+
+    <div class="results-filter" [collapse]="isSearchFilterCollapsed">
+      <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
+    </div>
+  </div>
+
+  <div i18n *ngIf="pagination.totalItems === 0" class="no-result">
+    No results found
+  </div>
+
+  <div *ngFor="let video of videos" class="entry video">
+    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+
+    <div class="video-info">
+      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+      <span i18n class="video-info-date-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+      <a class="video-info-account" [routerLink]="[ '/accounts', video.by ]">{{ video.by }}</a>
+    </div>
+  </div>
+</div>

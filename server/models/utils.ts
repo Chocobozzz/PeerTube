@@ -1,6 +1,8 @@
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
+import { Sequelize } from 'sequelize-typescript'
+
 function getSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
-  let field: string
+  let field: any
   let direction: 'ASC' | 'DESC'
 
   if (value.substring(0, 1) === '-') {
@@ -10,6 +12,9 @@ function getSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
     direction = 'ASC'
     field = value
   }
+
+  // Alias
+  if (field.toLowerCase() === 'match') field = Sequelize.col('similarity')
 
   return [ [ field, direction ], lastSort ]
 }
@@ -27,10 +32,41 @@ function throwIfNotValid (value: any, validator: (value: any) => boolean, fieldN
   }
 }
 
+function buildTrigramSearchIndex (indexName: string, attribute: string) {
+  return {
+    name: indexName,
+    fields: [ Sequelize.literal('lower(immutable_unaccent(' + attribute + '))') as any ],
+    using: 'gin',
+    operator: 'gin_trgm_ops'
+  }
+}
+
+function createSimilarityAttribute (col: string, value: string) {
+  return Sequelize.fn(
+    'similarity',
+
+    searchTrigramNormalizeCol(col),
+
+    searchTrigramNormalizeValue(value)
+  )
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getSort,
   getSortOnModel,
-  throwIfNotValid
+  createSimilarityAttribute,
+  throwIfNotValid,
+  buildTrigramSearchIndex
+}
+
+// ---------------------------------------------------------------------------
+
+function searchTrigramNormalizeValue (value: string) {
+  return Sequelize.fn('lower', Sequelize.fn('immutable_unaccent', value))
+}
+
+function searchTrigramNormalizeCol (col: string) {
+  return Sequelize.fn('lower', Sequelize.fn('immutable_unaccent', Sequelize.col(col)))
 }

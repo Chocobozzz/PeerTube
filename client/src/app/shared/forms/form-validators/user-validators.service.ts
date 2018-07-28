@@ -12,6 +12,7 @@ export class UserValidatorsService {
   readonly USER_ROLE: BuildFormValidator
   readonly USER_DISPLAY_NAME: BuildFormValidator
   readonly USER_DESCRIPTION: BuildFormValidator
+  readonly USER_TERMS: BuildFormValidator
 
   constructor (private i18n: I18n) {
 
@@ -87,6 +88,15 @@ export class UserValidatorsService {
       MESSAGES: {
         'minlength': this.i18n('Description must be at least 3 characters long.'),
         'maxlength': this.i18n('Description cannot be more than 250 characters long.')
+      }
+    }
+
+    this.USER_TERMS = {
+      VALIDATORS: [
+        Validators.requiredTrue
+      ],
+      MESSAGES: {
+        'required': this.i18n('You must to agree with the instance terms in order to registering on it.')
       }
     }
   }

@@ -5,6 +5,7 @@ import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers'
 import { asyncMiddleware } from '../middlewares'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
 import { ClientHtml } from '../lib/client-html'
+import { logger } from '../helpers/logger'
 
 const clientsRouter = express.Router()
 
@@ -66,9 +67,14 @@ clientsRouter.use('/client/*', (req: express.Request, res: express.Response, nex
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 // Try to provide the right language index.html
-clientsRouter.use('/(:language)?', function (req, res) {
+clientsRouter.use('/(:language)?', async function (req, res) {
   if (req.accepts(ACCEPT_HEADERS) === 'html') {
-    return generateHTMLPage(req, res, req.params.language)
+    try {
+      await generateHTMLPage(req, res, req.params.language)
+      return
+    } catch (err) {
+      logger.error('Cannot generate HTML page.', err)
+    }
   }
 
   return res.status(404).end()
@@ -83,7 +89,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
-  const html = await ClientHtml.getIndexHTML(req, res)
+  const html = await ClientHtml.getIndexHTML(req, res, paramLang)
 
   return sendHTML(html, res)
 }

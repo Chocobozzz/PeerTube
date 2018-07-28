@@ -52,7 +52,7 @@ async function isSignupAllowed () {
 function isSignupAllowedForCurrentIP (ip: string) {
   const addr = ipaddr.parse(ip)
   let excludeList = [ 'blacklist' ]
-  let matched: string
+  let matched = ''
 
   // if there is a valid, non-empty whitelist, we exclude all unknown adresses too
   if (CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isCidr(cidr)).length > 0) {
@@ -104,6 +104,35 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
+const timeTable = {
+  ms:           1,
+  second:       1000,
+  minute:       60000,
+  hour:         3600000,
+  day:          3600000 * 24,
+  week:         3600000 * 24 * 7,
+  month:        3600000 * 24 * 30
+}
+export function parseDuration (duration: number | string): number {
+  if (typeof duration === 'number') return duration
+
+  if (typeof duration === 'string') {
+    const split = duration.match(/^([\d\.,]+)\s?(\w+)$/)
+
+    if (split.length === 3) {
+      const len = parseFloat(split[1])
+      let unit = split[2].replace(/s$/i,'').toLowerCase()
+      if (unit === 'm') {
+        unit = 'ms'
+      }
+
+      return (len || 1) * (timeTable[unit] || 0)
+    }
+  }
+
+  throw new Error('Duration could not be properly parsed')
+}
+
 function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   Object.keys(savedFields).forEach(key => {
     const value = savedFields[key]
@@ -115,6 +144,8 @@ let serverActor: ActorModel
 async function getServerActor () {
   if (serverActor === undefined) {
     const application = await ApplicationModel.load()
+    if (!application) throw Error('Could not load Application from database.')
+
     serverActor = application.Account.Actor
   }
 

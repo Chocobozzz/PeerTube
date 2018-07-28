@@ -67,8 +67,8 @@ async function activityPubCollectionPagination (url: string, handler: ActivityPu
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
   const result = await handler(start, count)
 
-  let next: string
-  let prev: string
+  let next: string | undefined
+  let prev: string | undefined
 
   // Assert page is a number
   page = parseInt(page, 10)

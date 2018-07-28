@@ -17,6 +17,15 @@ import { ActorModel } from '../activitypub/actor'
     {
       fields: [ 'videoId', 'accountId' ],
       unique: true
+    },
+    {
+      fields: [ 'videoId' ]
+    },
+    {
+      fields: [ 'accountId' ]
+    },
+    {
+      fields: [ 'videoId', 'type' ]
     }
   ]
 })

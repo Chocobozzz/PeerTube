@@ -28,7 +28,7 @@ async function processVideoFileImport (job: Bull.Job) {
   const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
+    logger.info('Do not process job %d, video does not exist.', job.id)
     return undefined
   }
 
@@ -45,13 +45,13 @@ async function processVideoFile (job: Bull.Job) {
   const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
+    logger.info('Do not process job %d, video does not exist.', job.id)
     return undefined
   }
 
   // Transcoding in other resolution
   if (payload.resolution) {
-    await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode)
+    await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode || false)
 
     await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
   } else {

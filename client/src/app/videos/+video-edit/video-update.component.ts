@@ -29,6 +29,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
 
+  private updateDone = false
+
   constructor (
     protected formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
@@ -65,7 +67,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
           }
 
-          // FIXME: Angular does not detec
+          // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
           setTimeout(() => this.hydrateFormFromVideo())
         },
 
@@ -74,6 +76,16 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           this.notificationsService.error(this.i18n('Error'), err.message)
         }
       )
+  }
+
+  canDeactivate () {
+    if (this.updateDone === true) return { canDeactivate: true }
+
+    for (const caption of this.videoCaptions) {
+      if (caption.action) return { canDeactivate: false }
+    }
+
+    return { canDeactivate: this.formChanged === false }
   }
 
   checkForm () {
@@ -100,6 +112,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
         )
         .subscribe(
           () => {
+            this.updateDone = true
             this.isUpdatingVideo = false
             this.loadingBar.complete()
             this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))

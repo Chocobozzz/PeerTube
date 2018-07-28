@@ -41,11 +41,17 @@ function toValueOrNull (value: string) {
   return value
 }
 
+function toArray (value: string) {
+  if (value && isArray(value) === false) return [ value ]
+
+  return value
+}
+
 function isFileValid (
   files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[],
   mimeTypeRegex: string,
   field: string,
-  maxSize: number,
+  maxSize: number | null,
   optional = false
 ) {
   // Should have files
@@ -63,7 +69,7 @@ function isFileValid (
   if (!file || !file.originalname) return false
 
   // Check size
-  if (maxSize && file.size > maxSize) return false
+  if ((maxSize !== null) && file.size > maxSize) return false
 
   return new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype)
 }
@@ -80,5 +86,6 @@ export {
   toValueOrNull,
   isBooleanValid,
   toIntOrNull,
+  toArray,
   isFileValid
 }

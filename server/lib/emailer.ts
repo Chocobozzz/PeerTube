@@ -91,9 +91,10 @@ class Emailer {
 
   async addVideoAbuseReport (videoId: number) {
     const video = await VideoModel.load(videoId)
+    if (!video) throw new Error('Unknown Video id during Abuse report.')
 
     const text = `Hi,\n\n` +
-      `Your instance received an abuse for video the following video ${video.url}\n\n` +
+      `Your instance received an abuse for the following video ${video.url}\n\n` +
       `Cheers,\n` +
       `PeerTube.`
 

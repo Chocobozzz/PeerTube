@@ -40,6 +40,8 @@ export class JobsListComponent extends RestTable implements OnInit {
   }
 
   onJobStateChanged () {
+    this.pagination.start = 0
+
     this.loadData()
     this.saveJobState()
   }
