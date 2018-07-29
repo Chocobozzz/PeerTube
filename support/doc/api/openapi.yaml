@@ -950,11 +950,7 @@ paths:
         - $ref: "commons.yaml#/parameters/start"
         - $ref: "commons.yaml#/parameters/count"
         - $ref: "commons.yaml#/parameters/sort"
-<<<<<<< HEAD
         - name: search
-=======
-        - name: query
->>>>>>> fb72c19384192d57252e7cb73cdcf8d0876f37a0
           in: query
           required: true
           type: string
