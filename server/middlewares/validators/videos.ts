@@ -223,6 +223,22 @@ const videosShareValidator = [
   }
 ]
 
+const videosChangeOwnershipValidator = [
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.id, res)) return
+
+    // Check if the user who did the request is able to change the ownership of the video
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -231,6 +247,7 @@ export {
   videosGetValidator,
   videosRemoveValidator,
   videosShareValidator,
+  videosChangeOwnershipValidator,
 
   videoAbuseReportValidator,
 
