@@ -91,6 +91,30 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
       .then(({ rows, count }) => ({ total: count, data: rows }))
   }
 
+  static load (id: number) {
+    return VideoChangeOwnershipModel.find({
+      where: {
+        id: id
+      },
+      include: [
+        {
+          model: AccountModel,
+          as: 'Initiator',
+          required: true
+        },
+        {
+          model: AccountModel,
+          as: 'NextOwner',
+          required: true
+        },
+        {
+          model: VideoModel,
+          required: true
+        }
+      ]
+    })
+  }
+
   toFormattedJSON (): VideoChangeOwnership {
     return {
       id: this.id,

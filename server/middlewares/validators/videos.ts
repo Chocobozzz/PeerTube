@@ -36,6 +36,8 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
 import { cleanUpReqFiles } from '../../helpers/utils'
+import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../helpers/custom-validators/video-ownership'
+import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -239,6 +241,31 @@ const videosChangeOwnershipValidator = [
   }
 ]
 
+const videosTerminateChangeOwnershipValidator = [
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesChangeVideoOwnershipExist(req.params.id, res)) return
+
+    // Check if the user who did the request is able to change the ownership of the video
+    if (!checkUserCanTerminateOwnershipChange(res.locals.oauth.token.User, res.locals.videoChangeOwnership, res)) return
+
+    return next()
+  }
+]
+
+const videosAcceptChangeOwnershipValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const body = req.body as VideoChangeOwnershipAccept
+    if (!await isVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -248,6 +275,8 @@ export {
   videosRemoveValidator,
   videosShareValidator,
   videosChangeOwnershipValidator,
+  videosTerminateChangeOwnershipValidator,
+  videosAcceptChangeOwnershipValidator,
 
   videoAbuseReportValidator,
 
