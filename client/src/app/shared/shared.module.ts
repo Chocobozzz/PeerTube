@@ -46,7 +46,7 @@ import {
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
   VideoValidatorsService,
-  VideoChangeOwnershipValidatorsService
+  VideoChangeOwnershipValidatorsService, VideoAcceptOwnershipValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -147,6 +147,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
     VideoChangeOwnershipValidatorsService,
+    VideoAcceptOwnershipValidatorsService,
 
     I18nPrimengCalendarService,
     ScreenService,
