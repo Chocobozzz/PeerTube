@@ -15,6 +15,11 @@ ownershipVideoRouter.post('/:id/give-ownership',
   asyncRetryTransactionMiddleware(giveVideoOwnership)
 )
 
+ownershipVideoRouter.get('/ownership',
+  authenticate,
+  asyncRetryTransactionMiddleware(listVideoOwnership)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -44,4 +49,16 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
       return res.type('json').status(400).end()
     }
   })
+}
+
+async function listVideoOwnership (req: express.Request, res: express.Response) {
+  const currentAccount = res.locals.oauth.token.User.Account as AccountModel
+  const resultList = await VideoChangeOwnershipModel.listForApi(
+    currentAccount.id,
+    req.query.start || 0,
+    req.query.count || 10,
+    req.query.sort || 'createdAt'
+  )
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
