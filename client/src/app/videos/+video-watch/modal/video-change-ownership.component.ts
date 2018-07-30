@@ -49,7 +49,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
   }
 
   search (event) {
-    const query = event.query;
+    const query = event.query
     this.userService.autocomplete(query)
       .subscribe(
         (usernames) => {
