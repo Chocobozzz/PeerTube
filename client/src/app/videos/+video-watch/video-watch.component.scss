@@ -115,29 +115,34 @@
             margin: -2px 2px 0 5px;
           }
         }
-
-        my-help {
-          display: inline-block;
-        }
       }
 
-      .video-info-by a {
-        @include disable-default-a-behaviour;
+      .video-info-by {
 
-        display: inline;
-        align-items: center;
-        font-size: 13px;
-        color: #000;
+        a {
+          @include disable-default-a-behaviour;
 
-        span:hover {
-          opacity: 0.8;
+          display: inline;
+          align-items: center;
+          font-size: 13px;
+          color: #000;
+
+          span:hover {
+            opacity: 0.8;
+          }
+
+          img {
+            @include avatar(18px);
+
+            margin-top: -2px;
+            margin-left: 7px;
+          }
         }
 
-        img {
-          @include avatar(18px);
-
-          margin-top: -2px;
-          margin-left: 7px;
+        my-help {
+          position: relative;
+          top: 1px;
+          margin-left: 2px;
         }
       }
 
