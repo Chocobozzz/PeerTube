@@ -3,7 +3,6 @@ import { extname } from 'path'
 import * as Sequelize from 'sequelize'
 import {
   AllowNull,
-  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -38,8 +37,6 @@ import { ServerModel } from '../server/server'
 import { throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
-import { logger } from '../../helpers/logger'
-import { sendDeleteActor } from '../../lib/activitypub/send'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -227,27 +224,21 @@ export class ActorModel extends Model<ActorModel> {
 
   @HasOne(() => AccountModel, {
     foreignKey: {
-      allowNull: false
-    }
+      allowNull: true
+    },
+    onDelete: 'cascade',
+    hooks: true
   })
   Account: AccountModel
 
   @HasOne(() => VideoChannelModel, {
     foreignKey: {
-      allowNull: false
-    }
+      allowNull: true
+    },
+    onDelete: 'cascade',
+    hooks: true
   })
   VideoChannel: VideoChannelModel
-
-  @BeforeDestroy
-  static async sendDeleteIfOwned (instance: ActorModel, options) {
-    if (instance.isOwned()) {
-      logger.debug('Sending delete of actor %s.', instance.url)
-      return sendDeleteActor(instance, options.transaction)
-    }
-
-    return undefined
-  }
 
   static load (id: number) {
     return ActorModel.unscoped().findById(id)
