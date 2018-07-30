@@ -16,7 +16,7 @@
 
 This version is a pre release because it contains many important changes, and requires manual steps before upgrading.
 
-**Important:** Before upgrading run the following commands (no need to stop PeerTube):
+**Important:** Before upgrading run the following commands (no need to stop PeerTube) on your PeerTube database (in this example it's *peertube_prod*):
 
 ```
 $ sudo -u postgres psql peertube_prod -c 'CREATE EXTENSION IF NOT EXISTS unaccent;'

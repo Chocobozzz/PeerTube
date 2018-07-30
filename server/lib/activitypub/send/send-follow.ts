@@ -3,10 +3,13 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
+import { logger } from '../../../helpers/logger'
 
 function sendFollow (actorFollow: ActorFollowModel) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
+
+  logger.info('Creating job to send follow request to %s.', following.url)
 
   const url = getActorFollowActivityPubUrl(actorFollow)
   const data = followActivityData(url, me, following)

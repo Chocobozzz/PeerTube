@@ -64,7 +64,10 @@ class JobQueue {
     this.jobRedisPrefix = 'bull-' + CONFIG.WEBSERVER.HOST
     const queueOptions = {
       prefix: this.jobRedisPrefix,
-      redis: Redis.getRedisClient()
+      redis: Redis.getRedisClient(),
+      settings: {
+        maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
+      }
     }
 
     for (const handlerName of Object.keys(handlers)) {
@@ -80,6 +83,13 @@ class JobQueue {
       })
 
       this.queues[handlerName] = queue
+    }
+  }
+
+  terminate () {
+    for (const queueName of Object.keys(this.queues)) {
+      const queue = this.queues[queueName]
+      queue.close()
     }
   }
 

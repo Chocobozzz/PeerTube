@@ -19,7 +19,7 @@
 
 ```
 $ sudo apt update
-$ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server git
+$ sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git
 $ ffmpeg -version # Should be >= 3.x
 $ g++ -v # Should be >= 5.x
 ```
@@ -54,7 +54,7 @@ $ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip pyth
 $ sudo yum update
 $ sudo yum install epel-release centos-release-scl
 $ sudo yum update
-$ sudo yum install nginx postgresql postgresql-server openssl gcc-c++ make redis git devtoolset-7
+$ sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make redis git devtoolset-7
 ```
 
   5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-7.

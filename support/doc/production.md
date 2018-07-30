@@ -221,7 +221,7 @@ Make a SQL backup
 ```
 $ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
     cd /var/www/peertube && sudo -u peertube mkdir -p backup && \
-    sudo pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH"
+    sudo -u postgres pg_dump -F c peertube_prod | sudo -u peertube tee "$SQL_BACKUP_PATH" >/dev/null
 ```
 
 Fetch the latest tagged version of Peertube:
@@ -305,8 +305,8 @@ Change `peertube-latest` destination to the previous version and restore your SQ
 
 ```
 $ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
-    cd /var/www/peertube && unlink ./peertube-latest && \
+    cd /var/www/peertube && sudo -u peertube unlink ./peertube-latest && \
     sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
-    pg_restore -U peertube -W -h localhost -c -d peertube_prod "$SQL_BACKUP_PATH"
+    sudo -u postgres pg_restore -c -C -d postgres "$SQL_BACKUP_PATH" && \
     sudo systemctl restart peertube
 ```

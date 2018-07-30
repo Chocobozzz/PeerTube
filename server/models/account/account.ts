@@ -139,7 +139,6 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     if (instance.isOwned()) {
-      logger.debug('Sending delete of actor of account %s.', instance.Actor.url)
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 

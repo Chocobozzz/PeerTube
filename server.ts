@@ -195,4 +195,10 @@ async function startApplication () {
     logger.info('Server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
   })
+
+  process.on('exit', () => {
+    JobQueue.Instance.terminate()
+  })
+
+  process.on('SIGINT', () => process.exit(0))
 }

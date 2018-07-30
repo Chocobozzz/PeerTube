@@ -5,8 +5,11 @@ import { VideoModel } from '../../../models/video/video'
 import { getVideoLikeActivityPubUrl } from '../url'
 import { broadcastToFollowers, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience, getVideoAudience } from '../audience'
+import { logger } from '../../../helpers/logger'
 
 async function sendLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to like %s.', video.url)
+
   const url = getVideoLikeActivityPubUrl(byActor, video)
 
   const accountsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)

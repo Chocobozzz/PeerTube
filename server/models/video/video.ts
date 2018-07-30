@@ -607,8 +607,6 @@ export class VideoModel extends Model<VideoModel> {
         }) as VideoChannelModel
       }
 
-      logger.debug('Sending delete of video %s.', instance.url)
-
       return sendDeleteVideo(instance, options.transaction)
     }
 
@@ -619,7 +617,7 @@ export class VideoModel extends Model<VideoModel> {
   static async removeFiles (instance: VideoModel) {
     const tasks: Promise<any>[] = []
 
-    logger.debug('Removing files of video %s.', instance.url)
+    logger.info('Removing files of video %s.', instance.url)
 
     tasks.push(instance.removeThumbnail())
 
