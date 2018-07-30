@@ -83,6 +83,13 @@ class JobQueue {
     }
   }
 
+  terminate () {
+    for (const queueName of Object.keys(this.queues)) {
+      const queue = this.queues[queueName]
+      queue.close()
+    }
+  }
+
   createJob (obj: CreateJobArgument) {
     const queue = this.queues[obj.type]
     if (queue === undefined) {
