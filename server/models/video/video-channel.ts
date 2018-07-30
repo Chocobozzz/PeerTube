@@ -1,15 +1,27 @@
 import {
-  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Is, Model, Scopes, Table,
-  UpdatedAt, Default, DataType
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DefaultScope,
+  ForeignKey,
+  HasMany,
+  Is,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel } from '../../../shared/models/videos'
 import {
-  isVideoChannelDescriptionValid, isVideoChannelNameValid,
+  isVideoChannelDescriptionValid,
+  isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
-import { logger } from '../../helpers/logger'
-import { sendDeleteActor } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { getSort, throwIfNotValid } from '../utils'
@@ -139,13 +151,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
     }
 
-    if (instance.Actor.isOwned()) {
-      logger.debug('Sending delete of actor of video channel %s.', instance.Actor.url)
-
-      return sendDeleteActor(instance.Actor, options.transaction)
-    }
-
-    return undefined
+    return instance.Actor.destroy({ transaction: options.transaction })
   }
 
   static countByAccount (accountId: number) {

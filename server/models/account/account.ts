@@ -16,8 +16,6 @@ import {
 } from 'sequelize-typescript'
 import { Account } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
-import { logger } from '../../helpers/logger'
-import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
 import { AvatarModel } from '../avatar/avatar'
@@ -138,12 +136,7 @@ export class AccountModel extends Model<AccountModel> {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
     }
 
-    if (instance.isOwned()) {
-      logger.debug('Sending delete of actor of account %s.', instance.Actor.url)
-      return sendDeleteActor(instance.Actor, options.transaction)
-    }
-
-    return undefined
+    return instance.Actor.destroy({ transaction: options.transaction })
   }
 
   static load (id: number) {
@@ -246,12 +239,12 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return AccountModel.findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
+                       .then(({ rows, count }) => {
+                         return {
+                           data: rows,
+                           total: count
+                         }
+                       })
   }
 
   toFormattedJSON (): Account {
