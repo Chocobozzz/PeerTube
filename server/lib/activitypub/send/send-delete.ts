@@ -7,8 +7,11 @@ import { VideoShareModel } from '../../../models/video/video-share'
 import { getDeleteActivityPubUrl } from '../url'
 import { broadcastToActors, broadcastToFollowers, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
+import { logger } from '../../../helpers/logger'
 
 async function sendDeleteVideo (video: VideoModel, t: Transaction) {
+  logger.info('Creating job to broadcast delete of video %s.', video.url)
+
   const url = getDeleteActivityPubUrl(video.url)
   const byActor = video.VideoChannel.Account.Actor
 
@@ -21,6 +24,8 @@ async function sendDeleteVideo (video: VideoModel, t: Transaction) {
 }
 
 async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
+  logger.info('Creating job to broadcast delete of actor %s.', byActor.url)
+
   const url = getDeleteActivityPubUrl(byActor.url)
   const data = deleteActivityData(url, byActor.url, byActor)
 
@@ -31,6 +36,8 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
 }
 
 async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Transaction) {
+  logger.info('Creating job to send delete of comment %s.', videoComment.url)
+
   const isVideoOrigin = videoComment.Video.isOwned()
 
   const url = getDeleteActivityPubUrl(videoComment.url)

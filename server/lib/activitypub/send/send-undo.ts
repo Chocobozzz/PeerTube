@@ -18,10 +18,13 @@ import { followActivityData } from './send-follow'
 import { likeActivityData } from './send-like'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { buildVideoAnnounce } from './send-announce'
+import { logger } from '../../../helpers/logger'
 
 async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
+
+  logger.info('Creating job to send an unfollow request to %s.', following.url)
 
   const followUrl = getActorFollowActivityPubUrl(actorFollow)
   const undoUrl = getUndoActivityPubUrl(followUrl)
@@ -33,6 +36,8 @@ async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
 }
 
 async function sendUndoLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to undo a like of video %s.', video.url)
+
   const likeUrl = getVideoLikeActivityPubUrl(byActor, video)
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
@@ -55,6 +60,8 @@ async function sendUndoLike (byActor: ActorModel, video: VideoModel, t: Transact
 }
 
 async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to undo a dislike of video %s.', video.url)
+
   const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
   const undoUrl = getUndoActivityPubUrl(dislikeUrl)
 
@@ -76,6 +83,8 @@ async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Trans
 }
 
 async function sendUndoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to undo announce %s.', videoShare.url)
+
   const undoUrl = getUndoActivityPubUrl(videoShare.url)
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)

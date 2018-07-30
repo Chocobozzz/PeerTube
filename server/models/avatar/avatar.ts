@@ -3,6 +3,7 @@ import { AfterDestroy, AllowNull, Column, CreatedAt, Model, Table, UpdatedAt } f
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { unlinkPromise } from '../../helpers/core-utils'
 import { CONFIG, STATIC_PATHS } from '../../initializers'
+import { logger } from '../../helpers/logger'
 
 @Table({
   tableName: 'avatar'
@@ -21,6 +22,7 @@ export class AvatarModel extends Model<AvatarModel> {
 
   @AfterDestroy
   static removeFilesAndSendDelete (instance: AvatarModel) {
+    logger.info('Removing avatar file %s.', instance.filename)
     return instance.removeAvatar()
   }
 

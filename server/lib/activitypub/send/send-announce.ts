@@ -5,6 +5,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers } from './utils'
 import { getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from '../audience'
+import { logger } from '../../../helpers/logger'
 
 async function buildVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const announcedObject = video.url
@@ -16,6 +17,8 @@ async function buildVideoAnnounce (byActor: ActorModel, videoShare: VideoShareMo
 
 async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const data = await buildVideoAnnounce(byActor, videoShare, video, t)
+
+  logger.info('Creating job to send announce %s.', videoShare.url)
 
   return broadcastToFollowers(data, byActor, [ byActor ], t)
 }

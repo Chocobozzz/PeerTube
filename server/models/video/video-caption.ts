@@ -80,7 +80,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     }
 
     if (instance.isOwned()) {
-      logger.debug('Removing captions %s of video %s.', instance.Video.uuid, instance.language)
+      logger.info('Removing captions %s of video %s.', instance.Video.uuid, instance.language)
 
       try {
         await instance.removeCaptionFile()
