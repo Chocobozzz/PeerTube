@@ -36,8 +36,6 @@ async function inboxController (req: express.Request, res: express.Response, nex
   const rootActivity: RootActivity = req.body
   let activities: Activity[] = []
 
-  console.log(rootActivity)
-
   if ([ 'Collection', 'CollectionPage' ].indexOf(rootActivity.type) !== -1) {
     activities = (rootActivity as ActivityPubCollection).items
   } else if ([ 'OrderedCollection', 'OrderedCollectionPage' ].indexOf(rootActivity.type) !== -1) {
