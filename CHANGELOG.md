@@ -22,13 +22,15 @@ This version is a pre release because it contains many important changes, and re
 $ sudo -u postgres psql peertube_prod -c 'CREATE EXTENSION IF NOT EXISTS unaccent;'
 $ sudo -u postgres psql peertube_prod -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm;'
 ```
+
+You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/contrib.html).
   
 ### BREAKING CHANGES
 
  * Require `unaccent` and `pg_trgm` PostgreSQL extension for the PeerTube database
  * `category` filter param is replaced by `categoryOneOf`
- * Switch job queue to [Bull](https://github.com/OptimalBits/bull). PeerTube should migrate your old pending jobs in this new queue manager
- * Update nginx template
+ * Switch job queue to [Bull](https://github.com/OptimalBits/bull). **PeerTube will not migrate your old pending jobs in this new queue manager**
+ * Update nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
  * Update default cache size configurations
  
 ### Features

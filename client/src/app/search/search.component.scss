@@ -107,6 +107,10 @@
 }
 
 @media screen and (max-width: 800px) {
+  .search-result {
+    margin: 20px 10px;
+  }
+
   .results-header {
     font-size: 15px !important;
   }
@@ -123,7 +127,17 @@
       }
 
       my-video-thumbnail {
-        margin-right: 0;
+        margin-right: 0 !important;
+
+        /deep/ .video-thumbnail {
+          width: 100%;
+          height: auto;
+
+          img {
+            width: 100%;
+            height: auto;
+          }
+        }
       }
     }
   }
