@@ -41,7 +41,7 @@ async function getOrCreateActorAndServerAndModel (activityActor: string | Activi
 
   let actor = await ActorModel.loadByUrl(actorUrl)
   // Orphan actor (not associated to an account of channel) so recreate it
-  if (!actor.Account && !actor.VideoChannel) {
+  if (actor && (!actor.Account && !actor.VideoChannel)) {
     await actor.destroy()
     actor = null
   }

@@ -32,6 +32,7 @@ You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/co
  * Switch job queue to [Bull](https://github.com/OptimalBits/bull). **PeerTube will not migrate your old pending jobs in this new queue manager**
  * Update nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
  * Update default cache size configurations
+ * Update search API route: `/videos/search` becomes `/search/videos`
  
 ### Features
 
