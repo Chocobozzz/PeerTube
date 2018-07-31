@@ -10,7 +10,7 @@ import { forkJoin, Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { ResultList, UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
+import { UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -28,7 +28,6 @@ import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
-import { VideoJSCaption } from '../../../assets/player/peertube-videojs-typings'
 
 @Component({
   selector: 'my-video-watch',
