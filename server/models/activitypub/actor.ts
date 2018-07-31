@@ -91,6 +91,9 @@ enum ScopeNames {
       fields: [ 'inboxUrl', 'sharedInboxUrl' ]
     },
     {
+      fields: [ 'sharedInboxUrl' ]
+    },
+    {
       fields: [ 'serverId' ]
     },
     {
