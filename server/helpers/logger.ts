@@ -96,13 +96,13 @@ const bunyanLogger = {
   error: bunyanLogFactory('error'),
   fatal: bunyanLogFactory('error')
 }
-
 // ---------------------------------------------------------------------------
 
 export {
   timestampFormatter,
   labelFormatter,
   consoleLoggerFormat,
+  jsonLoggerFormat,
   logger,
   bunyanLogger
 }
