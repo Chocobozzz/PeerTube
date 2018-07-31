@@ -43,7 +43,7 @@ matrix:
   - env: TEST_SUITE=lint
 
 script:
-  - travis_retry npm run travis -- "$TEST_SUITE"
+  - travis_retry killall peertube ; npm run travis -- "$TEST_SUITE"
 
 after_failure:
   - cat test1/logs/all-logs.log
