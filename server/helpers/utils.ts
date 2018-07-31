@@ -6,10 +6,34 @@ import { CONFIG } from '../initializers'
 import { UserModel } from '../models/account/user'
 import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
-import { pseudoRandomBytesPromise } from './core-utils'
+import { pseudoRandomBytesPromise, unlinkPromise } from './core-utils'
 import { logger } from './logger'
+import { isArray } from './custom-validators/misc'
 
 const isCidr = require('is-cidr')
+
+function cleanUpReqFiles (req: { files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[] }) {
+  const files = req.files
+
+  if (!files) return
+
+  if (isArray(files)) {
+    (files as Express.Multer.File[]).forEach(f => deleteFileAsync(f.path))
+    return
+  }
+
+  for (const key of Object.keys(files)) {
+    const file = files[key]
+
+    if (isArray(file)) file.forEach(f => deleteFileAsync(f.path))
+    else deleteFileAsync(file.path)
+  }
+}
+
+function deleteFileAsync (path: string) {
+  unlinkPromise(path)
+    .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
+}
 
 async function generateRandomString (size: number) {
   const raw = await pseudoRandomBytesPromise(size)
@@ -162,6 +186,8 @@ type SortType = { sortModel: any, sortValue: string }
 // ---------------------------------------------------------------------------
 
 export {
+  cleanUpReqFiles,
+  deleteFileAsync,
   generateRandomString,
   getFormattedObjects,
   isSignupAllowed,

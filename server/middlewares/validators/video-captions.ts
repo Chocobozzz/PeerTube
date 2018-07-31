@@ -7,6 +7,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserRight } from '../../../shared'
 import { logger } from '../../helpers/logger'
 import { isVideoCaptionExist, isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
+import { cleanUpReqFiles } from '../../helpers/utils'
 
 const addVideoCaptionValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
@@ -20,12 +21,12 @@ const addVideoCaptionValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoCaption parameters', { parameters: req.body })
 
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (!await isVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 
     return next()
   }

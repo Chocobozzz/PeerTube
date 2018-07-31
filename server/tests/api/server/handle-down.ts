@@ -176,7 +176,7 @@ describe('Test handle downs', function () {
   })
 
   it('Should re-follow server 1', async function () {
-    this.timeout(15000)
+    this.timeout(35000)
 
     await reRunServer(servers[1])
     await reRunServer(servers[2])
