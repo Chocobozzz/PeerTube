@@ -5,7 +5,9 @@ import * as flatten from 'flat'
 import * as winston from 'winston'
 import { CONFIG } from '../initializers'
 import { jsonLoggerFormat, labelFormatter } from './logger'
-import { VideoDetails } from '../../shared'
+import { VideoDetails, User, VideoChannel, VideoAbuse } from '../../shared'
+import { VideoComment } from '../../shared/models/videos/video-comment.model'
+import { CustomConfig } from '../../shared/models/server/custom-config.model'
 
 enum AUDIT_TYPE {
   CREATE = 'create',
@@ -111,13 +113,143 @@ const videoKeysToKeep = [
   'support',
   'commentsEnabled'
 ]
-class VideoAuditView extends AuditEntity {
+class VideoAuditView extends EntityAuditView {
   constructor (private video: VideoDetails) {
     super(videoKeysToKeep, 'video', video)
   }
 }
 
+const commentKeysToKeep = [
+  'id',
+  'text',
+  'threadId',
+  'inReplyToCommentId',
+  'videoId',
+  'createdAt',
+  'updatedAt',
+  'totalReplies',
+  'account-id',
+  'account-uuid',
+  'account-name'
+]
+class CommentAuditView extends EntityAuditView {
+  constructor (private comment: VideoComment) {
+    super(commentKeysToKeep, 'comment', comment)
+  }
+}
+
+const userKeysToKeep = [
+  'id',
+  'username',
+  'email',
+  'nsfwPolicy',
+  'autoPlayVideo',
+  'role',
+  'videoQuota',
+  'createdAt',
+  'account-id',
+  'account-uuid',
+  'account-name',
+  'account-followingCount',
+  'account-followersCount',
+  'account-createdAt',
+  'account-updatedAt',
+  'account-avatar-path',
+  'account-avatar-createdAt',
+  'account-avatar-updatedAt',
+  'account-displayName',
+  'account-description',
+  'videoChannels'
+]
+class UserAuditView extends EntityAuditView {
+  constructor (private user: User) {
+    super(userKeysToKeep, 'user', user)
+  }
+}
+
+const channelKeysToKeep = [
+  'id',
+  'uuid',
+  'name',
+  'followingCount',
+  'followersCount',
+  'createdAt',
+  'updatedAt',
+  'avatar-path',
+  'avatar-createdAt',
+  'avatar-updatedAt',
+  'displayName',
+  'description',
+  'support',
+  'isLocal',
+  'ownerAccount-id',
+  'ownerAccount-uuid',
+  'ownerAccount-name',
+  'ownerAccount-displayedName'
+]
+class VideoChannelAuditView extends EntityAuditView {
+  constructor (private channel: VideoChannel) {
+    super(channelKeysToKeep, 'channel', channel)
+  }
+}
+
+const videoAbuseKeysToKeep = [
+  'id',
+  'reason',
+  'reporterAccount',
+  'video-id',
+  'video-name',
+  'video-uuid',
+  'createdAt'
+]
+class VideoAbuseAuditView extends EntityAuditView {
+  constructor (private videoAbuse: VideoAbuse) {
+    super(videoAbuseKeysToKeep, 'abuse', videoAbuse)
+  }
+}
+
+const customConfigKeysToKeep = [
+  'instance-name',
+  'instance-shortDescription',
+  'instance-description',
+  'instance-terms',
+  'instance-defaultClientRoute',
+  'instance-defaultNSFWPolicy',
+  'instance-customizations-javascript',
+  'instance-customizations-css',
+  'services-twitter-username',
+  'services-twitter-whitelisted',
+  'cache-previews-size',
+  'cache-captions-size',
+  'signup-enabled',
+  'signup-limit',
+  'admin-email',
+  'user-videoQuota',
+  'transcoding-enabled',
+  'transcoding-threads',
+  'transcoding-resolutions'
+]
+class CustomConfigAuditView extends EntityAuditView {
+  constructor (customConfig: CustomConfig) {
+    const infos: any = customConfig
+    const resolutionsDict = infos.transcoding.resolutions
+    const resolutionsArray = []
+    Object.entries(resolutionsDict).forEach(([resolution, isEnabled]) => {
+      if (isEnabled) {
+        resolutionsArray.push(resolution)
+      }
+    })
+    infos.transcoding.resolutions = resolutionsArray
+    super(customConfigKeysToKeep, 'config', infos)
+  }
+}
+
 export {
   auditLoggerFactory,
-  VideoAuditView
+  VideoChannelAuditView,
+  CommentAuditView,
+  UserAuditView,
+  VideoAuditView,
+  VideoAbuseAuditView,
+  CustomConfigAuditView
 }

@@ -454,6 +454,10 @@ export class ActorModel extends Model<ActorModel> {
     return 'acct:' + this.preferredUsername + '@' + this.getHost()
   }
 
+  getIdentifier () {
+    return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
+  }
+
   getHost () {
     return this.Server ? this.Server.host : CONFIG.WEBSERVER.HOST
   }
