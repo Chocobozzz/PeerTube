@@ -48,7 +48,7 @@ try {
   const instance = new MemoryStorage()
 
   peertubeLocalStorage = new Proxy(instance, {
-    set: function (obj, prop, value) {
+    set: function (obj, prop: string | number, value) {
       if (MemoryStorage.prototype.hasOwnProperty(prop)) {
         instance[prop] = value
       } else {
@@ -56,7 +56,7 @@ try {
       }
       return true
     },
-    get: function (target, name) {
+    get: function (target, name: string | number) {
       if (MemoryStorage.prototype.hasOwnProperty(name)) {
         return instance[name]
       }
