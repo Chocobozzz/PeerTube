@@ -18,7 +18,9 @@ import {
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
+import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
 
+const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
 
 abuseVideoRouter.get('/abuse',
@@ -64,14 +66,16 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
   await sequelizeTypescript.transaction(async t => {
     const videoAbuseInstance = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
     videoAbuseInstance.Video = videoInstance
+    videoAbuseInstance.Account = reporterAccount
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
       await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance, t)
     }
-  })
 
-  logger.info('Abuse report for video %s created.', videoInstance.name)
+    auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseInstance.toFormattedJSON()))
+    logger.info('Abuse report for video %s created.', videoInstance.name)
+  })
 
   return res.type('json').status(204).end()
 }
