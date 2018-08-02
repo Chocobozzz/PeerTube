@@ -95,7 +95,7 @@ function titleTruncation (title: string) {
 }
 
 function descriptionTruncation (description: string) {
-  if (!description) return undefined
+  if (!description || description.length < CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.min) return undefined
 
   return truncate(description, {
     'length': CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max,

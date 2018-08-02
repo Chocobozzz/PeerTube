@@ -35,7 +35,7 @@ async function processVideoImport (job: Bull.Job) {
 
     // Get information about this video
     const { videoFileResolution } = await getVideoFileResolution(tempVideoPath)
-    const fps = await getVideoFileFPS(tempVideoPath)
+    const fps = await getVideoFileFPS(tempVideoPath + 's')
     const stats = await statPromise(tempVideoPath)
     const duration = await getDurationFromVideoFile(tempVideoPath)
 

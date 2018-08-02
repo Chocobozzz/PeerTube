@@ -29,7 +29,12 @@ import {
   usersUpdateValidator,
   usersVideoRatingValidator
 } from '../../middlewares'
-import { usersAskResetPasswordValidator, usersResetPasswordValidator, videosSortValidator } from '../../middlewares/validators'
+import {
+  usersAskResetPasswordValidator,
+  usersResetPasswordValidator,
+  videoImportsSortValidator,
+  videosSortValidator
+} from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
@@ -40,6 +45,7 @@ import { UserVideoQuota } from '../../../shared/models/users/user-video-quota.mo
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../lib/avatar'
 import { auditLoggerFactory, UserAuditView } from '../../helpers/audit-logger'
+import { VideoImportModel } from '../../models/video/video-import'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -60,6 +66,16 @@ usersRouter.get('/me',
 usersRouter.get('/me/video-quota-used',
   authenticate,
   asyncMiddleware(getUserVideoQuotaUsed)
+)
+
+
+usersRouter.get('/me/videos/imports',
+  authenticate,
+  paginationValidator,
+  videoImportsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(getUserVideoImports)
 )
 
 usersRouter.get('/me/videos',
@@ -176,6 +192,18 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
     scheduledUpdate: true
   }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
+}
+
+async function getUserVideoImports (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.oauth.token.User as UserModel
+  const resultList = await VideoImportModel.listUserVideoImportsForApi(
+    user.Account.id,
+    req.query.start as number,
+    req.query.count as number,
+    req.query.sort
+  )
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function createUser (req: express.Request, res: express.Response) {
