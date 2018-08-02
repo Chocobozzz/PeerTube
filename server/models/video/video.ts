@@ -1569,21 +1569,25 @@ export class VideoModel extends Model<VideoModel> {
   removeThumbnail () {
     const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
     return unlinkPromise(thumbnailPath)
+      .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
   }
 
   removePreview () {
-    // Same name than video thumbnail
-    return unlinkPromise(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+    const previewPath = join(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+    return unlinkPromise(previewPath)
+      .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
   removeFile (videoFile: VideoFileModel) {
     const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
     return unlinkPromise(filePath)
+      .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
   removeTorrent (videoFile: VideoFileModel) {
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
     return unlinkPromise(torrentPath)
+      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
   getActivityStreamDuration () {

@@ -145,6 +145,8 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
       suffix = this.i18n('Waiting transcoding')
     } else if (video.state.id === VideoState.TO_TRANSCODE) {
       suffix = this.i18n('To transcode')
+    } else if (video.state.id === VideoState.TO_IMPORT) {
+      suffix = this.i18n('To import')
     } else {
       return ''
     }
