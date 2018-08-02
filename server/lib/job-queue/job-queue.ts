@@ -9,6 +9,7 @@ import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './
 import { EmailPayload, processEmail } from './handlers/email'
 import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
+import { processVideoImport, VideoImportPayload } from './handlers/video-import'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -17,7 +18,8 @@ type CreateJobArgument =
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
   { type: 'video-file', payload: VideoFilePayload } |
-  { type: 'email', payload: EmailPayload }
+  { type: 'email', payload: EmailPayload } |
+  { type: 'video-import', payload: VideoImportPayload }
 
 const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
@@ -26,7 +28,8 @@ const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
   'video-file': processVideoFile,
-  'email': processEmail
+  'email': processEmail,
+  'video-import': processVideoImport
 }
 
 const jobsWithRequestTimeout: { [ id in JobType ]?: boolean } = {
@@ -43,7 +46,8 @@ const jobTypes: JobType[] = [
   'activitypub-http-unicast',
   'email',
   'video-file',
-  'video-file-import'
+  'video-file-import',
+  'video-import'
 ]
 
 class JobQueue {

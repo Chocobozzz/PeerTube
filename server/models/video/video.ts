@@ -377,7 +377,7 @@ type AvailableForListOptions = {
     include: [
       {
         model: () => VideoFileModel.unscoped(),
-        required: true
+        required: false
       }
     ]
   },
