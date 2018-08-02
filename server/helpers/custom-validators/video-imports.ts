@@ -3,6 +3,9 @@ import 'multer'
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers'
 import { exists } from './misc'
+import * as express from 'express'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { VideoImportModel } from '../../models/video/video-import'
 
 function isVideoImportTargetUrlValid (url: string) {
   const isURLOptions = {
@@ -22,9 +25,25 @@ function isVideoImportStateValid (value: any) {
   return exists(value) && VIDEO_IMPORT_STATES[ value ] !== undefined
 }
 
+async function isVideoImportExist (id: number, res: express.Response) {
+  const videoImport = await VideoImportModel.loadAndPopulateVideo(id)
+
+  if (!videoImport) {
+    res.status(404)
+       .json({ error: 'Video import not found' })
+       .end()
+
+    return false
+  }
+
+  res.locals.videoImport = videoImport
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   isVideoImportStateValid,
-  isVideoImportTargetUrlValid
+  isVideoImportTargetUrlValid,
+  isVideoImportExist
 }
