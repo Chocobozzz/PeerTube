@@ -51,6 +51,7 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
+import { VideoImportService } from '@app/shared/video-import/video-import.service'
 
 @NgModule({
   imports: [
@@ -143,6 +144,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     VideoCommentValidatorsService,
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
+    VideoImportService,
 
     I18nPrimengCalendarService,
     ScreenService,

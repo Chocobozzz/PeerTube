@@ -54,6 +54,7 @@ import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { createReqFiles, buildNSFWFilter } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { videoCaptionsRouter } from './captions'
+import { videoImportsRouter } from './import'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -81,6 +82,7 @@ videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
 videosRouter.use('/', videoCaptionsRouter)
+videosRouter.use('/', videoImportsRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -160,7 +162,6 @@ async function addVideo (req: express.Request, res: express.Response) {
   const videoData = {
     name: videoInfo.name,
     remote: false,
-    extname: extname(videoPhysicalFile.filename),
     category: videoInfo.category,
     licence: videoInfo.licence,
     language: videoInfo.language,

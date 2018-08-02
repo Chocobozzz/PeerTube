@@ -16,6 +16,7 @@
     "type": "git",
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
+  "typings": "*.d.ts",
   "scripts": {
     "e2e": "scripty",
     "build": "SCRIPTY_PARALLEL=true scripty",
@@ -132,7 +133,8 @@
     "validator": "^10.2.0",
     "webfinger.js": "^2.6.6",
     "winston": "3.0.0",
-    "ws": "^5.0.0"
+    "ws": "^5.0.0",
+    "youtube-dl": "^1.12.2"
   },
   "devDependencies": {
     "@types/async": "^2.0.40",
@@ -184,8 +186,7 @@
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.5.2",
     "webtorrent": "^0.100.0",
-    "xliff": "^3.0.1",
-    "youtube-dl": "^1.12.2"
+    "xliff": "^3.0.1"
   },
   "scripty": {
     "silent": true

@@ -5,6 +5,8 @@ import { VideoEditModule } from './shared/video-edit.module'
 import { VideoAddRoutingModule } from './video-add-routing.module'
 import { VideoAddComponent } from './video-add.component'
 import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.service'
+import { VideoUploadComponent } from '@app/videos/+video-edit/video-upload.component'
+import { VideoImportComponent } from '@app/videos/+video-edit/video-import.component'
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.ser
     ProgressBarModule
   ],
   declarations: [
-    VideoAddComponent
+    VideoAddComponent,
+    VideoUploadComponent,
+    VideoImportComponent
   ],
   exports: [
     VideoAddComponent

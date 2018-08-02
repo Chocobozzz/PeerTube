@@ -23,6 +23,7 @@
     "ngx-extractor": "ngx-extractor"
   },
   "license": "GPLv3",
+  "typings": "*.d.ts",
   "resolutions": {
     "video.js": "^7",
     "webtorrent/create-torrent/junk": "^1",

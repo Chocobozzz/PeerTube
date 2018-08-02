@@ -223,36 +223,6 @@ const videosShareValidator = [
   }
 ]
 
-// ---------------------------------------------------------------------------
-
-export {
-  videosAddValidator,
-  videosUpdateValidator,
-  videosGetValidator,
-  videosRemoveValidator,
-  videosShareValidator,
-
-  videoAbuseReportValidator,
-
-  videoRateValidator
-}
-
-// ---------------------------------------------------------------------------
-
-function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
-  if (req.body.scheduleUpdate) {
-    if (!req.body.scheduleUpdate.updateAt) {
-      res.status(400)
-         .json({ error: 'Schedule update at is mandatory.' })
-         .end()
-
-      return true
-    }
-  }
-
-  return false
-}
-
 function getCommonVideoAttributes () {
   return [
     body('thumbnailfile')
@@ -318,4 +288,36 @@ function getCommonVideoAttributes () {
       .toInt()
       .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
   ] as (ValidationChain | express.Handler)[]
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  videosAddValidator,
+  videosUpdateValidator,
+  videosGetValidator,
+  videosRemoveValidator,
+  videosShareValidator,
+
+  videoAbuseReportValidator,
+
+  videoRateValidator,
+
+  getCommonVideoAttributes
+}
+
+// ---------------------------------------------------------------------------
+
+function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
+  if (req.body.scheduleUpdate) {
+    if (!req.body.scheduleUpdate.updateAt) {
+      res.status(400)
+         .json({ error: 'Schedule update at is mandatory.' })
+         .end()
+
+      return true
+    }
+  }
+
+  return false
 }

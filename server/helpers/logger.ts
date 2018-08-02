@@ -22,7 +22,7 @@ function loggerReplacer (key: string, value: any) {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  let additionalInfos = JSON.stringify(info.meta, loggerReplacer, 2)
+  let additionalInfos = JSON.stringify(info.meta || info.err, loggerReplacer, 2)
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
