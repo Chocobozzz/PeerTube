@@ -1,5 +1,5 @@
 // Thanks: https://github.com/przemyslawpluta/node-youtube-dl/blob/master/lib/downloader.js
-// Use rewrote it to avoid sync calls
+// We rewrote it to avoid sync calls
 
 import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers'

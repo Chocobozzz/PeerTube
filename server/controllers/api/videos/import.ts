@@ -41,7 +41,7 @@ videoImportsRouter.post('/imports',
 
 videoImportsRouter.delete('/imports/:id',
   authenticate,
-  videoImportDeleteValidator,
+  asyncMiddleware(videoImportDeleteValidator),
   asyncRetryTransactionMiddleware(deleteVideoImport)
 )
 
@@ -147,5 +147,13 @@ async function addVideoImport (req: express.Request, res: express.Response) {
 }
 
 async function deleteVideoImport (req: express.Request, res: express.Response) {
-  // TODO: delete video import
+  await sequelizeTypescript.transaction(async t => {
+    const videoImport = res.locals.videoImport
+    const video = videoImport.Video
+
+    await videoImport.destroy({ transaction: t })
+    await video.destroy({ transaction: t })
+  })
+
+  return res.status(204).end()
 }
