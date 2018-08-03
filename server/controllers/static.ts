@@ -1,4 +1,5 @@
 import * as cors from 'cors'
+import { createReadStream } from 'fs'
 import * as express from 'express'
 import { CONFIG, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS, ROUTE_CACHE_LIFETIME } from '../initializers'
 import { VideosPreviewCache } from '../lib/cache'
@@ -93,8 +94,24 @@ staticRouter.use('/.well-known/nodeinfo',
   }
 )
 staticRouter.use('/nodeinfo/:version.json',
-  // asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),
   asyncMiddleware(generateNodeinfo)
+)
+
+// dnt-policy.txt service (see https://www.eff.org/dnt-policy)
+staticRouter.use('/.well-known/dnt-policy.txt',
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.DNT_POLICY)),
+  (_, res: express.Response) => {
+    res.type('text/plain')
+    createReadStream('./server/static/dnt-policy/dnt-policy-1.0.txt').pipe(res)
+  }
+)
+
+// dnt service (see https://www.w3.org/TR/tracking-dnt/#status-resource)
+staticRouter.use('/.well-known/dnt/',
+  (_, res: express.Response) => {
+    res.json({ tracking: 'N' })
+  }
 )
 
 // ---------------------------------------------------------------------------
