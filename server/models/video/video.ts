@@ -1355,7 +1355,8 @@ export class VideoModel extends Model<VideoModel> {
         mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
         width: file.resolution,
-        size: file.size
+        size: file.size,
+        fps: file.fps
       })
 
       url.push({

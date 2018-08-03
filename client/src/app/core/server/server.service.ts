@@ -70,7 +70,7 @@ export class ServerService {
       videoQuota: -1
     },
     import: {
-      video: {
+      videos: {
         http: {
           enabled: false
         }

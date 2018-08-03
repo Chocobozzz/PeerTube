@@ -33,6 +33,6 @@ export class VideoAddComponent implements CanComponentDeactivate {
   }
 
   isVideoImportEnabled () {
-    return this.serverService.getConfig().import.video.http.enabled
+    return this.serverService.getConfig().import.videos.http.enabled
   }
 }

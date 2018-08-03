@@ -145,8 +145,7 @@ export class VideoImportComponent extends FormReactive implements OnInit, CanCom
             this.loadingBar.complete()
             this.notificationsService.success(this.i18n('Success'), this.i18n('Video to import updated.'))
 
-            // TODO: route to imports list
-            // this.router.navigate([ '/videos/watch', this.video.uuid ])
+            this.router.navigate([ '/my-account', 'video-imports' ])
           },
 
           err => {
