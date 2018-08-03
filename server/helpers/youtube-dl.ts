@@ -30,7 +30,7 @@ function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
 }
 
 function downloadYoutubeDLVideo (url: string) {
-  const hash = crypto.createHash('sha256').update(url).digest('base64')
+  const hash = crypto.createHash('sha256').update(url).digest('hex')
   const path = join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
 
   logger.info('Importing video %s', url)
