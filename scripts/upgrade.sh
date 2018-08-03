@@ -20,11 +20,24 @@ if [ ! -e "$PEERTUBE_PATH/versions" -o ! -e "$PEERTUBE_PATH/config/production.ya
   exit 1
 fi
 
+# read config file
+## Read the parse_yaml.sh file function
+. parse_yaml.sh
+
+## parse the config file
+eval $(parse_yaml /var/www/peertube/config/production.yaml "")
+
+## Remove unexecpted ' charaters
+hostname=$(echo ${database_hostname} | /usr/bin/sed "s/\'//g")
+
+## Display the database password (read from config file)
+
+echo "Your database password is (read from your config file): ${database_password}"
 
 # Backup database
 SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
 mkdir -p $PEERTUBE_PATH/backup
-pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH" 
+pg_dump -U peertube -W -h ${hostname} -F c peertube_prod -f "$SQL_BACKUP_PATH" 
 
 # Get and Display the Latest Version
 VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4)
