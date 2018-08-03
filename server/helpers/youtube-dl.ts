@@ -120,7 +120,7 @@ function getTags (tags: any) {
 function getLicence (licence: string) {
   if (!licence) return undefined
 
-  if (licence.indexOf('Creative Commons Attribution licence') !== -1) return 1
+  if (licence.indexOf('Creative Commons Attribution') !== -1) return 1
 
   return undefined
 }

@@ -39,8 +39,7 @@ import { TagModel } from './tag'
           ]
         },
         {
-          model: () => TagModel,
-          required: false
+          model: () => TagModel
         }
       ]
     }
@@ -106,6 +105,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
 
   static listUserVideoImportsForApi (accountId: number, start: number, count: number, sort: string) {
     const query = {
+      distinct: true,
       offset: start,
       limit: count,
       order: getSort(sort),

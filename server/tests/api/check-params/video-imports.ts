@@ -16,9 +16,11 @@ import {
   runServer,
   ServerInfo,
   setAccessTokensToServers,
+  updateCustomSubConfig,
   userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+import { getYoutubeVideoUrl } from '../../utils/videos/video-imports'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -77,7 +79,7 @@ describe('Test video imports API validator', function () {
 
     before(function () {
       baseCorrectParams = {
-        targetUrl: 'https://youtu.be/msX3jv1XdvM',
+        targetUrl: getYoutubeVideoUrl(),
         name: 'my super name',
         category: 5,
         licence: 1,
@@ -95,6 +97,17 @@ describe('Test video imports API validator', function () {
 
     it('Should fail with nothing', async function () {
       const fields = {}
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail without a target url', async function () {
+      const fields = omit(baseCorrectParams, 'targetUrl')
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 400 })
+    })
+
+    it('Should fail with a bad target url', async function () {
+      const fields = immutableAssign(baseCorrectParams, { targetUrl: 'htt://hello' })
+
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
@@ -219,20 +232,36 @@ describe('Test video imports API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       this.timeout(10000)
 
-      const fields = baseCorrectParams
-
       {
         await makePostBodyRequest({
           url: server.url,
           path,
           token: server.accessToken,
-          fields,
+          fields: baseCorrectParams,
           statusCodeExpected: 200
         })
       }
     })
 
-    it('Should forbid importing')
+    it('Should forbid to import videos', async function () {
+      await updateCustomSubConfig(server.url, server.accessToken, {
+        import: {
+          videos: {
+            http: {
+              enabled: false
+            }
+          }
+        }
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: baseCorrectParams,
+        statusCodeExpected: 409
+      })
+    })
   })
 
   after(async function () {
