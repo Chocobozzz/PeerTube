@@ -55,6 +55,7 @@ const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
   NODEINFO: '10 minutes',
+  DNT_POLICY: '1 week',
   ACTIVITY_PUB: {
     VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
   }
