@@ -98,8 +98,9 @@ async function processVideoImport (job: Bull.Job) {
       video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
       const videoUpdated = await video.save({ transaction: t })
 
-      // Now we can federate the video
-      await federateVideoIfNeeded(video, true, t)
+      // Now we can federate the video (reload from database, we need more attributes)
+      const videoForFederation = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid, t)
+      await federateVideoIfNeeded(videoForFederation, true, t)
 
       // Update video import object
       videoImport.state = VideoImportState.SUCCESS

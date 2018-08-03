@@ -62,7 +62,7 @@ async function addVideoImport (req: express.Request, res: express.Response) {
     remote: false,
     category: body.category || youtubeDLInfo.category,
     licence: body.licence || youtubeDLInfo.licence,
-    language: undefined,
+    language: body.language || undefined,
     commentsEnabled: body.commentsEnabled || true,
     waitTranscoding: body.waitTranscoding || false,
     state: VideoState.TO_IMPORT,
@@ -102,8 +102,9 @@ async function addVideoImport (req: express.Request, res: express.Response) {
     videoCreated.VideoChannel = res.locals.videoChannel
 
     // Set tags to the video
-    if (youtubeDLInfo.tags !== undefined) {
-      const tagInstances = await TagModel.findOrCreateTags(youtubeDLInfo.tags, t)
+    const tags = body.tags ? body.tags : youtubeDLInfo.tags
+    if (tags !== undefined) {
+      const tagInstances = await TagModel.findOrCreateTags(tags, t)
 
       await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
       videoCreated.Tags = tagInstances
@@ -133,5 +134,5 @@ async function addVideoImport (req: express.Request, res: express.Response) {
 
   auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
-  return res.json(videoImport.toFormattedJSON())
+  return res.json(videoImport.toFormattedJSON()).end()
 }
