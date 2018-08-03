@@ -5,7 +5,7 @@ import * as flatten from 'flat'
 import * as winston from 'winston'
 import { CONFIG } from '../initializers'
 import { jsonLoggerFormat, labelFormatter } from './logger'
-import { VideoDetails, User, VideoChannel, VideoAbuse } from '../../shared'
+import { VideoDetails, User, VideoChannel, VideoAbuse, VideoImport } from '../../shared'
 import { VideoComment } from '../../shared/models/videos/video-comment.model'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
 
@@ -116,6 +116,17 @@ const videoKeysToKeep = [
 class VideoAuditView extends EntityAuditView {
   constructor (private video: VideoDetails) {
     super(videoKeysToKeep, 'video', video)
+  }
+}
+
+const videoImportKeysToKeep = [
+  'id',
+  'targetUrl',
+  'video-name'
+]
+class VideoImportAuditView extends EntityAuditView {
+  constructor (private videoImport: VideoImport) {
+    super(videoImportKeysToKeep, 'video-import', videoImport)
   }
 }
 
@@ -246,6 +257,7 @@ class CustomConfigAuditView extends EntityAuditView {
 
 export {
   auditLoggerFactory,
+  VideoImportAuditView,
   VideoChannelAuditView,
   CommentAuditView,
   UserAuditView,

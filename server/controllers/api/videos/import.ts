@@ -1,11 +1,6 @@
 import * as express from 'express'
-import { auditLoggerFactory } from '../../../helpers/audit-logger'
-import {
-  asyncMiddleware,
-  asyncRetryTransactionMiddleware,
-  authenticate,
-  videoImportAddValidator
-} from '../../../middlewares'
+import { auditLoggerFactory, VideoImportAuditView } from '../../../helpers/audit-logger'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import { CONFIG, IMAGE_MIMETYPE_EXT, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE } from '../../../initializers'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
@@ -135,6 +130,8 @@ async function addVideoImport (req: express.Request, res: express.Response) {
     downloadPreview
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
+
+  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
   return res.json(videoImport.toFormattedJSON())
 }
