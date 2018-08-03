@@ -68,7 +68,6 @@ usersRouter.get('/me/video-quota-used',
   asyncMiddleware(getUserVideoQuotaUsed)
 )
 
-
 usersRouter.get('/me/videos/imports',
   authenticate,
   paginationValidator,

@@ -246,11 +246,9 @@ class CustomConfigAuditView extends EntityAuditView {
     const resolutionsDict = infos.transcoding.resolutions
     const resolutionsArray = []
     Object.entries(resolutionsDict).forEach(([resolution, isEnabled]) => {
-      if (isEnabled) {
-        resolutionsArray.push(resolution)
-      }
+      if (isEnabled) resolutionsArray.push(resolution)
     })
-    infos.transcoding.resolutions = resolutionsArray
+    Object.assign({}, infos, { transcoding: { resolutions: resolutionsArray } })
     super(customConfigKeysToKeep, 'config', infos)
   }
 }

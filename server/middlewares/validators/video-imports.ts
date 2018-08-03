@@ -7,6 +7,7 @@ import { getCommonVideoAttributes } from './videos'
 import { isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
 import { cleanUpReqFiles } from '../../helpers/utils'
 import { isVideoChannelOfAccountExist, isVideoNameValid } from '../../helpers/custom-validators/videos'
+import { CONFIG } from '../../initializers/constants'
 
 const videoImportAddValidator = getCommonVideoAttributes().concat([
   body('targetUrl').custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
@@ -23,6 +24,14 @@ const videoImportAddValidator = getCommonVideoAttributes().concat([
     const user = res.locals.oauth.token.User
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+
+    if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true) {
+      cleanUpReqFiles(req)
+      return res.status(409)
+        .json({ error: 'Import is not enabled on this instance.' })
+        .end()
+    }
+
     if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     return next()

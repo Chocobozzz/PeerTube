@@ -97,8 +97,11 @@ export class VideoImportComponent extends FormReactive implements OnInit, CanCom
       channelId: this.firstStepChannelId
     }
 
+    this.loadingBar.start()
+
     this.videoImportService.importVideo(this.targetUrl, videoUpdate).subscribe(
       res => {
+        this.loadingBar.complete()
         this.firstStepDone.emit(res.video.name)
         this.isImportingVideo = false
         this.hasImportedVideo = true
@@ -113,6 +116,7 @@ export class VideoImportComponent extends FormReactive implements OnInit, CanCom
       },
 
       err => {
+        this.loadingBar.complete()
         this.isImportingVideo = false
         this.notificationsService.error(this.i18n('Error'), err.message)
       }

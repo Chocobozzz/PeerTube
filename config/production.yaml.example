@@ -106,6 +106,12 @@ transcoding:
     720p: false
     1080p: false
 
+import:
+  # Add ability for your users to import remote videos (from YouTube, torrent...)
+  videos:
+    http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
+      enabled: false
+
 # Instance settings
 instance:
   name: 'PeerTube'
