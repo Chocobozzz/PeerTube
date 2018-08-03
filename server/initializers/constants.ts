@@ -100,9 +100,18 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'video-import': 1,
   'email': 5
 }
+const JOB_TTL: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 60000 * 10, // 10 minutes
+  'activitypub-http-unicast': 60000 * 10, // 10 minutes
+  'activitypub-http-fetcher': 60000 * 10, // 10 minutes
+  'activitypub-follow': 60000 * 10, // 10 minutes
+  'video-file-import': 1000 * 3600, // 1 hour
+  'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
+  'video-import': 1000 * 3600 * 5, // 5 hours
+  'email': 60000 * 10 // 10 minutes
+}
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
-const JOB_REQUEST_TTL = 60000 * 10 // 10 minutes
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 
 // 1 hour
@@ -576,6 +585,7 @@ export {
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   FEEDS,
+  JOB_TTL,
   NSFW_POLICY_TYPES,
   STATIC_MAX_AGE,
   STATIC_PATHS,
@@ -592,7 +602,6 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   JOB_REQUEST_TIMEOUT,
-  JOB_REQUEST_TTL,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVALS_MS,
