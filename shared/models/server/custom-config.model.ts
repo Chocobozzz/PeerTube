@@ -55,4 +55,12 @@ export interface CustomConfig {
       '1080p': boolean
     }
   }
+
+  import: {
+    videos: {
+      http: {
+        enabled: boolean
+      }
+    }
+  }
 }

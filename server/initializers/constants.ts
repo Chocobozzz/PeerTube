@@ -206,6 +206,13 @@ const CONFIG = {
       get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') }
     }
   },
+  IMPORT: {
+    VIDEOS: {
+      HTTP: {
+        get ENABLED () { return config.get<boolean>('import.videos.http.enabled') }
+      }
+    }
+  },
   CACHE: {
     PREVIEWS: {
       get SIZE () { return config.get<number>('cache.previews.size') }

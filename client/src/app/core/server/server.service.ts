@@ -68,6 +68,13 @@ export class ServerService {
     },
     user: {
       videoQuota: -1
+    },
+    import: {
+      video: {
+        http: {
+          enabled: false
+        }
+      }
     }
   }
   private videoCategories: Array<VideoConstant<string>> = []

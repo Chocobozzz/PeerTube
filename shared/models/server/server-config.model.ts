@@ -1,4 +1,5 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { CONFIG } from '../../../server/initializers'
 
 export interface ServerConfig {
   serverVersion: string
@@ -21,6 +22,14 @@ export interface ServerConfig {
 
   transcoding: {
     enabledResolutions: number[]
+  }
+
+  import: {
+    video: {
+      http: {
+        enabled: boolean
+      }
+    }
   }
 
   avatar: {

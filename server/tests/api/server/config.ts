@@ -44,6 +44,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.true
   expect(data.transcoding.resolutions['1080p']).to.be.true
+  expect(data.import.videos.http.enabled).to.be.true
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -70,6 +71,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.false
   expect(data.transcoding.resolutions['1080p']).to.be.false
+  expect(data.import.videos.http.enabled).to.be.false
 }
 
 describe('Test config', function () {
@@ -159,6 +161,13 @@ describe('Test config', function () {
           '480p': true,
           '720p': false,
           '1080p': false
+        }
+      },
+      import: {
+        videos: {
+          http: {
+            enabled: false
+          }
         }
       }
     }

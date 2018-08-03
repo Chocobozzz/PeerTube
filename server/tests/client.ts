@@ -164,6 +164,13 @@ describe('Test a client controllers', function () {
           '720p': false,
           '1080p': false
         }
+      },
+      import: {
+        videos: {
+          http: {
+            enabled: false
+          }
+        }
       }
     }
     await updateCustomConfig(server.url, server.accessToken, newCustomConfig)

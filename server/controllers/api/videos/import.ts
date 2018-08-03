@@ -77,7 +77,7 @@ async function addVideoImport (req: express.Request, res: express.Response) {
   video.url = getVideoActivityPubUrl(video)
 
   // Process thumbnail file?
-  const thumbnailField = req.files['thumbnailfile']
+  const thumbnailField = req.files ? req.files['thumbnailfile'] : undefined
   let downloadThumbnail = true
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[ 0 ]
@@ -86,7 +86,7 @@ async function addVideoImport (req: express.Request, res: express.Response) {
   }
 
   // Process preview file?
-  const previewField = req.files['previewfile']
+  const previewField = req.files ? req.files['previewfile'] : undefined
   let downloadPreview = true
   if (previewField) {
     const previewPhysicalFile = previewField[0]

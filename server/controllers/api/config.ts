@@ -65,6 +65,13 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     transcoding: {
       enabledResolutions
     },
+    import: {
+      video: {
+        http: {
+          enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+        }
+      }
+    },
     avatar: {
       file: {
         size: {
@@ -224,6 +231,13 @@ function customConfig (): CustomConfig {
         '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ]
+      }
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+        }
       }
     }
   }
