@@ -35,7 +35,7 @@ async function processVideoImport (job: Bull.Job) {
 
     // Get information about this video
     const { videoFileResolution } = await getVideoFileResolution(tempVideoPath)
-    const fps = await getVideoFileFPS(tempVideoPath + 's')
+    const fps = await getVideoFileFPS(tempVideoPath)
     const stats = await statPromise(tempVideoPath)
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
@@ -115,6 +115,7 @@ async function processVideoImport (job: Bull.Job) {
       logger.error('Cannot cleanup files after a video import error.', { err: errUnlink })
     }
 
+    videoImport.error = err.message
     videoImport.state = VideoImportState.FAILED
     await videoImport.save()
 

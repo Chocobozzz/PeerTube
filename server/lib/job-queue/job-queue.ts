@@ -79,7 +79,10 @@ class JobQueue {
       const handler = handlers[handlerName]
 
       queue.process(JOB_CONCURRENCY[handlerName], handler)
-        .catch(err => logger.error('Cannot execute job queue %s.', handlerName, { err }))
+
+      queue.on('failed', (job, err) => {
+        logger.error('Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
+      })
 
       queue.on('error', err => {
         logger.error('Error in job queue %s.', handlerName, { err })
