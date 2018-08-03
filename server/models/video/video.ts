@@ -957,8 +957,10 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static load (id: number) {
-    return VideoModel.findById(id)
+  static load (id: number, t?: Sequelize.Transaction) {
+    const options = t ? { transaction: t } : undefined
+
+    return VideoModel.findById(id, options)
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {

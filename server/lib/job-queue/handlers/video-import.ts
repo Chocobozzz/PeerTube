@@ -12,6 +12,7 @@ import { doRequestAndSaveToFile } from '../../../helpers/requests'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
+import { VideoModel } from '../../../models/video/video'
 
 export type VideoImportPayload = {
   type: 'youtube-dl'
@@ -26,9 +27,13 @@ async function processVideoImport (job: Bull.Job) {
   logger.info('Processing video import in job %d.', job.id)
 
   const videoImport = await VideoImportModel.loadAndPopulateVideo(payload.videoImportId)
-  if (!videoImport) throw new Error('Cannot import video %s: the video import entry does not exist anymore.')
+  if (!videoImport || !videoImport.Video) {
+    throw new Error('Cannot import video %s: the video import or video linked to this import does not exist anymore.')
+  }
 
   let tempVideoPath: string
+  let videoDestFile: string
+  let videoFile: VideoFileModel
   try {
     // Download video from youtubeDL
     tempVideoPath = await downloadYoutubeDLVideo(videoImport.targetUrl)
@@ -47,11 +52,14 @@ async function processVideoImport (job: Bull.Job) {
       fps,
       videoId: videoImport.videoId
     }
-    const videoFile = new VideoFileModel(videoFileData)
+    videoFile = new VideoFileModel(videoFileData)
+    // Import if the import fails, to clean files
+    videoImport.Video.VideoFiles = [ videoFile ]
 
     // Move file
-    const destination = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
-    await renamePromise(tempVideoPath, destination)
+    videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
+    await renamePromise(tempVideoPath, videoDestFile)
+    tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail
     if (payload.downloadThumbnail) {
@@ -77,15 +85,21 @@ async function processVideoImport (job: Bull.Job) {
     await videoImport.Video.createTorrentAndSetInfoHash(videoFile)
 
     const videoImportUpdated: VideoImportModel = await sequelizeTypescript.transaction(async t => {
-      await videoFile.save({ transaction: t })
+      // Refresh video
+      const video = await VideoModel.load(videoImport.videoId, t)
+      if (!video) throw new Error('Video linked to import ' + videoImport.videoId + ' does not exist anymore.')
+      videoImport.Video = video
+
+      const videoFileCreated = await videoFile.save({ transaction: t })
+      video.VideoFiles = [ videoFileCreated ]
 
       // Update video DB object
-      videoImport.Video.duration = duration
-      videoImport.Video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
-      const videoUpdated = await videoImport.Video.save({ transaction: t })
+      video.duration = duration
+      video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
+      const videoUpdated = await video.save({ transaction: t })
 
       // Now we can federate the video
-      await federateVideoIfNeeded(videoImport.Video, true, t)
+      await federateVideoIfNeeded(video, true, t)
 
       // Update video import object
       videoImport.state = VideoImportState.SUCCESS
@@ -112,7 +126,7 @@ async function processVideoImport (job: Bull.Job) {
     try {
       if (tempVideoPath) await unlinkPromise(tempVideoPath)
     } catch (errUnlink) {
-      logger.error('Cannot cleanup files after a video import error.', { err: errUnlink })
+      logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
     }
 
     videoImport.error = err.message

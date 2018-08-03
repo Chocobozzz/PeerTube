@@ -289,6 +289,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
+  isVideoToImport () {
+    return this.video && this.video.state.id === VideoState.TO_IMPORT
+  }
+
   hasVideoScheduledPublication () {
     return this.video && this.video.scheduledUpdate !== undefined
   }

@@ -4,8 +4,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  videoImportAddValidator,
-  videoImportDeleteValidator
+  videoImportAddValidator
 } from '../../../middlewares'
 import { CONFIG, IMAGE_MIMETYPE_EXT, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE } from '../../../initializers'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
@@ -37,12 +36,6 @@ videoImportsRouter.post('/imports',
   reqVideoFileImport,
   asyncMiddleware(videoImportAddValidator),
   asyncRetryTransactionMiddleware(addVideoImport)
-)
-
-videoImportsRouter.delete('/imports/:id',
-  authenticate,
-  asyncMiddleware(videoImportDeleteValidator),
-  asyncRetryTransactionMiddleware(deleteVideoImport)
 )
 
 // ---------------------------------------------------------------------------
@@ -144,16 +137,4 @@ async function addVideoImport (req: express.Request, res: express.Response) {
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
   return res.json(videoImport.toFormattedJSON())
-}
-
-async function deleteVideoImport (req: express.Request, res: express.Response) {
-  await sequelizeTypescript.transaction(async t => {
-    const videoImport = res.locals.videoImport
-    const video = videoImport.Video
-
-    await videoImport.destroy({ transaction: t })
-    await video.destroy({ transaction: t })
-  })
-
-  return res.status(204).end()
 }

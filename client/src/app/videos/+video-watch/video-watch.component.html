@@ -8,6 +8,10 @@
     </div>
   </div>
 
+  <div i18n class="alert alert-warning" *ngIf="isVideoToImport()">
+    The video is being imported, it will be available when the import is finished.
+  </div>
+
   <div i18n class="alert alert-warning" *ngIf="isVideoToTranscode()">
     The video is being transcoded, it may not work properly.
   </div>
