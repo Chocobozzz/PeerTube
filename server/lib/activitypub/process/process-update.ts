@@ -108,7 +108,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
       await Promise.all(videoFileDestroyTasks)
 
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoObject)
-      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f))
+      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, sequelizeOptions))
       await Promise.all(tasks)
 
       // Update Tags

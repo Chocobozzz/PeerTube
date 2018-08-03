@@ -12,6 +12,6 @@ export class MyAccountComponent {
   ) {}
 
   isVideoImportEnabled () {
-    return this.serverService.getConfig().import.video.http.enabled
+    return this.serverService.getConfig().import.videos.http.enabled
   }
 }

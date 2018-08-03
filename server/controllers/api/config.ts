@@ -66,7 +66,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       enabledResolutions
     },
     import: {
-      video: {
+      videos: {
         http: {
           enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
         }

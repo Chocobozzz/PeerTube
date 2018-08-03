@@ -24,6 +24,7 @@ function activityPubContextify <T> (data: T) {
         views: 'http://schema.org/Number',
         stats: 'http://schema.org/Number',
         size: 'http://schema.org/Number',
+        fps: 'http://schema.org/Number',
         commentsEnabled: 'http://schema.org/Boolean',
         waitTranscoding: 'http://schema.org/Boolean',
         support: 'http://schema.org/Text'

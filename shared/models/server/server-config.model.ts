@@ -1,5 +1,4 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
-import { CONFIG } from '../../../server/initializers'
 
 export interface ServerConfig {
   serverVersion: string
@@ -25,7 +24,7 @@ export interface ServerConfig {
   }
 
   import: {
-    video: {
+    videos: {
       http: {
         enabled: boolean
       }
