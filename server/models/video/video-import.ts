@@ -26,7 +26,7 @@ import { TagModel } from './tag'
   include: [
     {
       model: () => VideoModel,
-      required: true,
+      required: false,
       include: [
         {
           model: () => VideoChannelModel,
@@ -112,7 +112,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
       include: [
         {
           model: VideoModel,
-          required: true,
+          required: false,
           include: [
             {
               model: VideoChannelModel,
@@ -157,11 +157,13 @@ export class VideoImportModel extends Model<VideoImportModel> {
       : undefined
 
     return {
+      id: this.id,
       targetUrl: this.targetUrl,
       state: {
         id: this.state,
         label: VideoImportModel.getStateLabel(this.state)
       },
+      error: this.error,
       updatedAt: this.updatedAt.toISOString(),
       createdAt: this.createdAt.toISOString(),
       video
