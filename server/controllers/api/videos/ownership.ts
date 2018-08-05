@@ -11,7 +11,7 @@ import {
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
-import { VideoChangeOwnershipCreate } from '../../../../shared/models/videos'
+import { VideoChangeOwnershipCreate, VideoChangeOwnershipStatus } from '../../../../shared/models/videos'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getFormattedObjects } from '../../../helpers/utils'
 
@@ -55,12 +55,13 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
   const body: VideoChangeOwnershipCreate = req.body
 
   await sequelizeTypescript.transaction(async t => {
-    const nextOwner = await AccountModel.findOne({ where: { name: body.username } })
+    const nextOwner = await AccountModel.loadLocalByName(body.username)
     if (nextOwner) {
       const videoChangeOwnershipToCreate = {
         initiatorAccountId: initiatorAccount.id,
         nextOwnerAccountId: nextOwner.id,
-        videoId: videoInstance.id
+        videoId: videoInstance.id,
+        status: VideoChangeOwnershipStatus.WAITING
       }
       await VideoChangeOwnershipModel.create(videoChangeOwnershipToCreate, { transaction: t })
 

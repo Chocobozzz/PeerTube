@@ -1,7 +1,7 @@
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 import { VideoModel } from './video'
-import { VideoChangeOwnership } from '../../../shared/models/videos'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { getSort } from '../utils'
 
 @Table({
@@ -24,6 +24,9 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
 
   @UpdatedAt
   updatedAt: Date
+
+  @Column
+  status: VideoChangeOwnershipStatus
 
   @ForeignKey(() => AccountModel)
   @Column
@@ -118,6 +121,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
   toFormattedJSON (): VideoChangeOwnership {
     return {
       id: this.id,
+      status: this.status,
       initiatorAccount: this.Initiator.toFormattedJSON(),
       nextOwnerAccount: this.NextOwner.toFormattedJSON(),
       video: {
