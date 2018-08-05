@@ -20,6 +20,7 @@ import {
   setDefaultPagination,
   setDefaultSort,
   token,
+  userAutocompleteValidator,
   usersAddValidator,
   usersGetValidator,
   usersRegisterValidator,
@@ -78,6 +79,7 @@ usersRouter.get('/me/videos/:videoId/rating',
 )
 
 usersRouter.get('/autocomplete',
+  userAutocompleteValidator,
   asyncMiddleware(autocompleteUsers)
 )
 

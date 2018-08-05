@@ -211,6 +211,10 @@ const usersResetPasswordValidator = [
   }
 ]
 
+const userAutocompleteValidator = [
+  param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -224,7 +228,8 @@ export {
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,
   usersAskResetPasswordValidator,
-  usersResetPasswordValidator
+  usersResetPasswordValidator,
+  userAutocompleteValidator
 }
 
 // ---------------------------------------------------------------------------

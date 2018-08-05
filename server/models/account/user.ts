@@ -308,7 +308,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll({
       where: {
         username: {
-          [Sequelize.Op.like]: `%${search || ''}%`
+          [Sequelize.Op.like]: `%${search}%`
         }
       }
     })
