@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { ModalDirective } from 'ngx-bootstrap/modal'
 import { FormReactive } from '@app/shared'
@@ -16,7 +16,7 @@ import { AuthService } from '@app/core'
   templateUrl: './my-account-accept-ownership.component.html'
 })
 export class MyAccountAcceptOwnershipComponent extends FormReactive implements OnInit {
-  @Input() onAccepted: (id: number) => void
+  @Output() accepted = new EventEmitter<void>()
 
   @ViewChild('modal') modal: ModalDirective
 
@@ -68,7 +68,7 @@ export class MyAccountAcceptOwnershipComponent extends FormReactive implements O
       .subscribe(
         () => {
           this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership accepted'))
-          if (this.onAccepted) this.onAccepted(videoChangeOwnership.id)
+          if (this.accepted) this.accepted.emit()
           this.hide()
         },
 

@@ -17,7 +17,7 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
   videoChangeOwnerships: VideoChangeOwnership[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'createdAt', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   @ViewChild('myAccountAcceptOwnershipComponent') myAccountAcceptOwnershipComponent: MyAccountAcceptOwnershipComponent
@@ -30,7 +30,7 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
     super()
   }
 
-  ngOnInit = () => {
+  ngOnInit () {
     this.loadSort()
   }
 
@@ -46,27 +46,22 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
       )
   }
 
-  createByString = (account: Account) => {
+  createByString (account: Account) {
     return Account.CREATE_BY_STRING(account.name, account.host)
   }
 
-  openAcceptModal = (videoChangeOwnership: VideoChangeOwnership) => {
+  openAcceptModal (videoChangeOwnership: VideoChangeOwnership) {
     this.myAccountAcceptOwnershipComponent.show(videoChangeOwnership)
   }
 
-  accepted = (id: number) => {
-    this.videoChangeOwnerships = this.videoChangeOwnerships.filter(_ => _.id !== id)
-    this.totalRecords = this.totalRecords - 1
+  accepted () {
+    this.loadData()
   }
 
-  refuse = (videoChangeOwnership: VideoChangeOwnership) => {
+  refuse (videoChangeOwnership: VideoChangeOwnership) {
     this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
       .subscribe(
-        () => {
-          this.videoChangeOwnerships = this.videoChangeOwnerships.filter(_ => _.id !== videoChangeOwnership.id)
-          this.totalRecords = this.totalRecords - 1
-        },
-
+        () => this.loadData(),
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
