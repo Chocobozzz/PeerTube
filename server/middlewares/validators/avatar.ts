@@ -4,6 +4,7 @@ import { isAvatarFile } from '../../helpers/custom-validators/users'
 import { areValidationErrors } from './utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { logger } from '../../helpers/logger'
+import { cleanUpReqFiles } from '../../helpers/utils'
 
 const updateAvatarValidator = [
   body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(
@@ -14,7 +15,7 @@ const updateAvatarValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking updateAvatarValidator parameters', { files: req.files })
 
-    if (areValidationErrors(req, res)) return
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     return next()
   }

@@ -6,7 +6,10 @@ export const I18N_LOCALES = {
   'eu-ES': 'euskara',
   'ca-ES': 'català',
   'cs-CZ': 'čeština',
-  'eo': 'Esperanto'
+  'eo': 'Esperanto',
+  'de-DE': 'Deutsch',
+  'es-ES': 'español',
+  'zh-Hant-TW': '中文 (繁體, 台灣)'
   // 'pl-PL': 'polski'
 }
 
@@ -15,7 +18,9 @@ const I18N_LOCALE_ALIAS = {
   'fr': 'fr-FR',
   'eu': 'eu-ES',
   'ca': 'ca-ES',
-  'cs': 'cs-CZ'
+  'cs': 'cs-CZ',
+  'de': 'de-DE',
+  'es': 'es-ES'
   // 'pl': 'pl-PL'
 }
 
@@ -56,5 +61,5 @@ export function getShortLocale (locale: string) {
 export function buildFileLocale (locale: string) {
   const completeLocale = getCompleteLocale(locale)
 
-  return completeLocale.replace('-', '_')
+  return completeLocale.replace(/-/g, '_')
 }

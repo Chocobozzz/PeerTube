@@ -107,9 +107,17 @@
         <source>descriptions off</source>
         <target>关闭描述</target>
       </trans-unit>
+      <trans-unit id="Audio Track">
+        <source>Audio Track</source>
+        <target>音频轨道</target>
+      </trans-unit>
       <trans-unit id="Volume Level">
         <source>Volume Level</source>
         <target>音量</target>
+      </trans-unit>
+      <trans-unit id="A network error caused the media download to fail part-way.">
+        <source>A network error caused the media download to fail part-way.</source>
+        <target>网络错误导致媒体下载未能完成。</target>
       </trans-unit>
       <trans-unit id="The media could not be loaded, either because the server or network failed or because the format is not supported.">
         <source>The media could not be loaded, either because the server or network failed or because the format is not supported.</source>
@@ -143,13 +151,33 @@
         <source>Modal Window</source>
         <target>模式</target>
       </trans-unit>
+      <trans-unit id="This is a modal window">
+        <source>This is a modal window</source>
+        <target>这是一个模态窗口</target>
+      </trans-unit>
+      <trans-unit id="This modal can be closed by pressing the Escape key or activating the close button.">
+        <source>This modal can be closed by pressing the Escape key or activating the close button.</source>
+        <target>可通过按下退出（Esc）键或点击关闭按钮来关闭此模态窗口。</target>
+      </trans-unit>
       <trans-unit id=", opens captions settings dialog">
         <source>, opens captions settings dialog</source>
         <target>打开字幕</target>
       </trans-unit>
+      <trans-unit id=", opens subtitles settings dialog">
+        <source>, opens subtitles settings dialog</source>
+        <target>打开字幕设置对话框</target>
+      </trans-unit>
+      <trans-unit id=", opens descriptions settings dialog">
+        <source>, opens descriptions settings dialog</source>
+        <target>打开描述设置对话框</target>
+      </trans-unit>
       <trans-unit id=", selected">
         <source>, selected</source>
         <target>选中</target>
+      </trans-unit>
+      <trans-unit id="captions settings">
+        <source>captions settings</source>
+        <target>标题设置</target>
       </trans-unit>
       <trans-unit id="subtitles settings">
         <source>subititles settings</source>
@@ -246,6 +274,18 @@
       <trans-unit id="Font Family">
         <source>Font Family</source>
         <target>字体系列</target>
+      </trans-unit>
+      <trans-unit id="Monospace Sans-Serif">
+        <source>Monospace Sans-Serif</source>
+        <target>等宽无衬线体</target>
+      </trans-unit>
+      <trans-unit id="Proportional Serif">
+        <source>Proportional Serif</source>
+        <target>非等宽有衬线体</target>
+      </trans-unit>
+      <trans-unit id="Monospace Serif">
+        <source>Monospace Serif</source>
+        <target>等宽有衬线体</target>
       </trans-unit>
       <trans-unit id="Casual">
         <source>Casual</source>

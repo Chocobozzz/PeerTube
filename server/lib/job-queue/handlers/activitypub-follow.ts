@@ -58,7 +58,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
     actorFollow.ActorFollowing = targetActor
     actorFollow.ActorFollower = fromActor
 
-    // Send a notification to remote server
-    await sendFollow(actorFollow)
+    // Send a notification to remote server if our follow is not already accepted
+    if (actorFollow.state !== 'accepted') await sendFollow(actorFollow)
   })
 }

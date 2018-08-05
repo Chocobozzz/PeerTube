@@ -91,6 +91,9 @@ enum ScopeNames {
       fields: [ 'inboxUrl', 'sharedInboxUrl' ]
     },
     {
+      fields: [ 'sharedInboxUrl' ]
+    },
+    {
       fields: [ 'serverId' ]
     },
     {
@@ -452,6 +455,10 @@ export class ActorModel extends Model<ActorModel> {
 
   getWebfingerUrl () {
     return 'acct:' + this.preferredUsername + '@' + this.getHost()
+  }
+
+  getIdentifier () {
+    return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
   getHost () {

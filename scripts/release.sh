@@ -25,8 +25,8 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
 
 branch=$(git symbolic-ref --short -q HEAD)
-if [ "$branch" != "develop" ]; then
-  echo "Need to be on develop branch."
+if [ "$branch" != "develop" ] && [[ "$branch" != feature/* ]]; then
+  echo "Need to be on develop or release branch."
   exit -1
 fi
 
@@ -102,14 +102,14 @@ rm "./client/dist/embed-stats.json"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name.asc" --file "$tar_name.asc"
 
-  git push origin develop
+  git push origin "$branch"
 
   # Only update master if it is not a pre release
   if [ -z "$github_prerelease_option" ]; then
       # Update master branch
       git checkout master
-      git rebase develop
+      git merge "$branch"
       git push origin master
-      git checkout develop
+      git checkout "$branch"
   fi
 )

@@ -522,7 +522,9 @@ async function completeVideoCheck (
 
     const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
     const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
-    expect(file.size).to.be.above(minSize).and.below(maxSize)
+    expect(file.size,
+           'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')')
+      .to.be.above(minSize).and.below(maxSize)
 
     {
       await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)

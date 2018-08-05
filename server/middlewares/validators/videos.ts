@@ -35,6 +35,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
+import { cleanUpReqFiles } from '../../helpers/utils'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -50,13 +51,13 @@ const videosAddValidator = getCommonVideoAttributes().concat([
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
-    if (areValidationErrors(req, res)) return
-    if (areErrorsInScheduleUpdate(req, res)) return
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
 
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return
+    if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     const isAble = await user.isAbleToUploadVideo(videoFile)
     if (isAble === false) {
@@ -64,7 +65,7 @@ const videosAddValidator = getCommonVideoAttributes().concat([
          .json({ error: 'The user video quota is exceeded with this video.' })
          .end()
 
-      return
+      return cleanUpReqFiles(req)
     }
 
     let duration: number
@@ -77,7 +78,7 @@ const videosAddValidator = getCommonVideoAttributes().concat([
          .json({ error: 'Invalid input file.' })
          .end()
 
-      return
+      return cleanUpReqFiles(req)
     }
 
     videoFile['duration'] = duration
@@ -99,23 +100,24 @@ const videosUpdateValidator = getCommonVideoAttributes().concat([
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
-    if (areValidationErrors(req, res)) return
-    if (areErrorsInScheduleUpdate(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
+    if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
+    if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
+    if (!await isVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
     const video = res.locals.video
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 
     if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
+      cleanUpReqFiles(req)
       return res.status(409)
         .json({ error: 'Cannot set "private" a video that was not private.' })
         .end()
     }
 
-    if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return
+    if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     return next()
   }

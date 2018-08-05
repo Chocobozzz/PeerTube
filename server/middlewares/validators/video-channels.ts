@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
-import { isAccountIdExist, isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
+import { isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
@@ -13,8 +13,6 @@ import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'
-import { isAvatarFile } from '../../helpers/custom-validators/users'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 const listVideoAccountChannelsValidator = [
   param('accountName').exists().withMessage('Should have a valid account name'),

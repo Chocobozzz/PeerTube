@@ -121,7 +121,10 @@ const CONFIG = {
     HOSTNAME: config.get<string>('database.hostname'),
     PORT: config.get<number>('database.port'),
     USERNAME: config.get<string>('database.username'),
-    PASSWORD: config.get<string>('database.password')
+    PASSWORD: config.get<string>('database.password'),
+    POOL: {
+      MAX: config.get<number>('database.pool.max')
+    }
   },
   REDIS: {
     HOSTNAME: config.has('redis.hostname') ? config.get<string>('redis.hostname') : null,
@@ -311,6 +314,11 @@ const VIDEO_TRANSCODING_FPS = {
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
   DISLIKE: 'dislike'
+}
+
+const FFMPEG_NICE: { [ id: string ]: number } = {
+  THUMBNAIL: 2, // 2 just for don't blocking servers
+  TRANSCODING: 15
 }
 
 const VIDEO_CATEGORIES = {
@@ -567,6 +575,7 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,
+  FFMPEG_NICE,
   JOB_REQUEST_TIMEOUT,
   JOB_REQUEST_TTL,
   USER_PASSWORD_RESET_LIFETIME,

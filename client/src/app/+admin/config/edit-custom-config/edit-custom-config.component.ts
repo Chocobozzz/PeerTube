@@ -29,6 +29,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
   ]
   transcodingThreadOptions = [
+    { value: 0, label: 'Auto (via ffmpeg)' },
     { value: 1, label: '1' },
     { value: 2, label: '2' },
     { value: 4, label: '4' },

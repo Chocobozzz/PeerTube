@@ -1,10 +1,27 @@
 # Changelog
 
+## v1.0.0-beta.10.pre.3
+
+**See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### Bug fixes (from beta.10.pre.2)
+
+ * Try to fix the infinite creation of Delete actor jobs by deleting kue migration
+ * Cleanup SQL indexes
+ * Try to optimize SQL search query
+ * Try to optimize videos list SQL query
+ * Add more logs and fix logger when having an error
+ * Move subscription helper in the account line in video watch page
+ * Fix responsive on videos search
+ * Refresh orphan actors
+ * Don't send a follow request if the follow was already accepted 
+
+
 ## v1.0.0-beta.10.pre.2
 
 **See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
 
-### Bug fixes
+### Bug fixes (from beta.10.pre.1)
 
  * Fix captions/subtitles freeze in player
  * Fix attribute label width in video watch page
@@ -22,14 +39,17 @@ This version is a pre release because it contains many important changes, and re
 $ sudo -u postgres psql peertube_prod -c 'CREATE EXTENSION IF NOT EXISTS unaccent;'
 $ sudo -u postgres psql peertube_prod -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm;'
 ```
+
+You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/contrib.html).
   
 ### BREAKING CHANGES
 
  * Require `unaccent` and `pg_trgm` PostgreSQL extension for the PeerTube database
  * `category` filter param is replaced by `categoryOneOf`
- * Switch job queue to [Bull](https://github.com/OptimalBits/bull). PeerTube should migrate your old pending jobs in this new queue manager
- * Update nginx template
+ * Switch job queue to [Bull](https://github.com/OptimalBits/bull). **PeerTube will not migrate your old pending jobs in this new queue manager**
+ * Update nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
  * Update default cache size configurations
+ * Update search API route: `/videos/search` becomes `/search/videos`
  
 ### Features
 

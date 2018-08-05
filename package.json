@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
-  "version": "1.0.0-beta.10.pre.2",
+  "version": "1.0.0-beta.10.pre.3",
   "private": true,
   "licence": "AGPLv3",
   "engines": {
@@ -91,10 +91,12 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.1",
     "create-torrent": "^3.24.5",
+    "deep-object-diff": "^1.1.0",
     "express": "^4.12.4",
     "express-oauth-server": "^2.0.0",
     "express-rate-limit": "^2.11.0",
     "express-validator": "^5.0.0",
+    "flat": "^4.1.0",
     "fluent-ffmpeg": "^2.1.0",
     "helmet": "^3.12.1",
     "ipaddr.js": "https://github.com/whitequark/ipaddr.js.git#8e69afeb4053ee32447a101845f860848280eca5",

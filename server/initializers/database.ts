@@ -32,6 +32,7 @@ const username = CONFIG.DATABASE.USERNAME
 const password = CONFIG.DATABASE.PASSWORD
 const host = CONFIG.DATABASE.HOSTNAME
 const port = CONFIG.DATABASE.PORT
+const poolMax = CONFIG.DATABASE.POOL.MAX
 
 const sequelizeTypescript = new SequelizeTypescript({
   database: dbname,
@@ -40,6 +41,9 @@ const sequelizeTypescript = new SequelizeTypescript({
   port,
   username,
   password,
+  pool: {
+    max: poolMax
+  },
   benchmark: isTestInstance(),
   isolationLevel: SequelizeTypescript.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   operatorsAliases: false,

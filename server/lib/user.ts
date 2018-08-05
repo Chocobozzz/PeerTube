@@ -17,6 +17,7 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
 
     const userCreated = await userToCreate.save(userOptions)
     const accountCreated = await createLocalAccountWithoutKeys(userToCreate.username, userToCreate.id, null, t)
+    userCreated.Account = accountCreated
 
     const videoChannelDisplayName = `Default ${userCreated.username} channel`
     const videoChannelInfo = {

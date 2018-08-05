@@ -21,6 +21,8 @@ database:
   suffix: '_prod'
   username: 'peertube'
   password: 'peertube'
+  pool:
+    max: 5
 
 # Redis server for short time storage
 # You can also specify a 'socket' path to a unix socket but first need to

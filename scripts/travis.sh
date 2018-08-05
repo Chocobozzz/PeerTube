@@ -7,6 +7,8 @@ if [ $# -eq 0 ]; then
     exit -1
 fi
 
+killall -q peertube || true
+
 if [ "$1" = "misc" ]; then
     npm run build
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/client.ts server/tests/activitypub.ts \
