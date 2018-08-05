@@ -4,7 +4,10 @@ import { sequelizeTypescript } from '../../../initializers'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate, videosAcceptChangeOwnershipValidator,
+  authenticate,
+  paginationValidator,
+  setDefaultPagination,
+  videosAcceptChangeOwnershipValidator,
   videosChangeOwnershipValidator,
   videosTerminateChangeOwnershipValidator
 } from '../../../middlewares'
@@ -25,6 +28,8 @@ ownershipVideoRouter.post('/:id/give-ownership',
 
 ownershipVideoRouter.get('/ownership',
   authenticate,
+  paginationValidator,
+  setDefaultPagination,
   asyncRetryTransactionMiddleware(listVideoOwnership)
 )
 

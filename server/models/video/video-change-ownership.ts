@@ -1,8 +1,12 @@
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 import { VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { getSort } from '../utils'
+
+enum ScopeNames {
+  FULL = 'FULL'
+}
 
 @Table({
   tableName: 'videoChangeOwnership',
@@ -17,6 +21,26 @@ import { getSort } from '../utils'
       fields: ['nextOwnerAccountId']
     }
   ]
+})
+@Scopes({
+  [ScopeNames.FULL]: {
+    include: [
+      {
+        model: () => AccountModel,
+        as: 'Initiator',
+        required: true
+      },
+      {
+        model: () => AccountModel,
+        as: 'NextOwner',
+        required: true
+      },
+      {
+        model: () => VideoModel,
+        required: true
+      }
+    ]
+  }
 })
 export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> {
   @CreatedAt
@@ -67,54 +91,22 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
   Video: VideoModel
 
   static listForApi (nextOwnerId: number, start: number, count: number, sort: string) {
-    return VideoChangeOwnershipModel.findAndCountAll({
+    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findAndCountAll({
       offset: start,
       limit: count,
       order: getSort(sort),
       where: {
         nextOwnerAccountId: nextOwnerId
-      },
-      include: [
-        {
-          model: AccountModel,
-          as: 'Initiator',
-          required: true
-        },
-        {
-          model: AccountModel,
-          as: 'NextOwner',
-          required: true
-        },
-        {
-          model: VideoModel,
-          required: true
-        }
-      ]
+      }
     })
       .then(({ rows, count }) => ({ total: count, data: rows }))
   }
 
   static load (id: number) {
-    return VideoChangeOwnershipModel.find({
+    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).find({
       where: {
         id: id
-      },
-      include: [
-        {
-          model: AccountModel,
-          as: 'Initiator',
-          required: true
-        },
-        {
-          model: AccountModel,
-          as: 'NextOwner',
-          required: true
-        },
-        {
-          model: VideoModel,
-          required: true
-        }
-      ]
+      }
     })
   }
 
