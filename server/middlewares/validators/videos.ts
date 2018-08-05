@@ -1,7 +1,7 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param, ValidationChain } from 'express-validator/check'
-import { UserRight, VideoPrivacy } from '../../../shared'
+import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../shared'
 import {
   isBooleanValid,
   isDateValid,
@@ -38,6 +38,7 @@ import { areValidationErrors } from './utils'
 import { cleanUpReqFiles } from '../../helpers/utils'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../helpers/custom-validators/video-ownership'
 import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
+import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -254,6 +255,18 @@ const videosTerminateChangeOwnershipValidator = [
     if (!checkUserCanTerminateOwnershipChange(res.locals.oauth.token.User, res.locals.videoChangeOwnership, res)) return
 
     return next()
+  },
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+
+    if (videoChangeOwnership.status === VideoChangeOwnershipStatus.WAITING) {
+      return next()
+    } else {
+      res.status(403)
+        .json({ error: 'Ownership already accepted or refused' })
+        .end()
+      return
+    }
   }
 ]
 

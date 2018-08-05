@@ -99,7 +99,8 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
     targetVideo.set('channelId', channel.id)
 
     await targetVideo.save()
-    await videoChangeOwnership.destroy()
+    videoChangeOwnership.set('status', VideoChangeOwnershipStatus.ACCEPTED)
+    await videoChangeOwnership.save()
 
     return res.sendStatus(204)
   })
@@ -108,7 +109,8 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
 async function refuseOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
-    await videoChangeOwnership.destroy()
+    videoChangeOwnership.set('status', VideoChangeOwnershipStatus.REFUSED)
+    await videoChangeOwnership.save()
     return res.sendStatus(204)
   })
 }
