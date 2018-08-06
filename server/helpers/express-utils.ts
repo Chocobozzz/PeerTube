@@ -4,6 +4,7 @@ import { CONFIG, REMOTE_SCHEME } from '../initializers'
 import { logger } from './logger'
 import { User } from '../../shared/models/users'
 import { generateRandomString } from './utils'
+import { extname } from 'path'
 
 function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -50,7 +51,7 @@ function createReqFiles (
     },
 
     filename: async (req, file, cb) => {
-      const extension = mimeTypes[ file.mimetype ]
+      const extension = mimeTypes[ file.mimetype ] || extname(file.originalname)
       let randomString = ''
 
       try {
