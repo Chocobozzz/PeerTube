@@ -123,6 +123,12 @@ describe('Test a client controllers', function () {
   it('Should update the customized configuration and have the correct index html tags', async function () {
     await updateCustomSubConfig(server.url, server.accessToken, {
       instance: {
+        name: 'PeerTube updated',
+        shortDescription: 'my short description',
+        description: 'my super description',
+        terms: 'my super terms',
+        defaultClientRoute: '/videos/recently-added',
+        defaultNSFWPolicy: 'blur',
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'

@@ -100,7 +100,7 @@ export class VideoUploadComponent extends FormReactive implements OnInit, OnDest
 
     if (this.videoUploaded === true) {
       // FIXME: cannot concatenate strings inside i18n service :/
-      text = this.i18n('Your video was uploaded in your account and is private.') +
+      text = this.i18n('Your video was uploaded to your account and is private.') +
         this.i18n('But associated data (tags, description...) will be lost, are you sure you want to leave this page?')
     } else {
       text = this.i18n('Your video is not uploaded yet, are you sure you want to leave this page?')
