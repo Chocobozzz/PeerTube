@@ -6,11 +6,11 @@
 
   <tabset class="video-add-tabset root-tabset bootstrap" [ngClass]="{ 'hide-nav': secondStepType !== undefined }">
 
-    <tab i18n-heading heading="Upload your video">
+    <tab i18n-heading heading="Upload a file">
       <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)"></my-video-upload>
     </tab>
 
-    <tab *ngIf="isVideoImportEnabled()" i18n-heading heading="Import your video">
+    <tab *ngIf="isVideoImportEnabled()" i18n-heading heading="Import with URL">
       <my-video-import #videoImport (firstStepDone)="onFirstStepDone('import', $event)"></my-video-import>
     </tab>
   </tabset>
