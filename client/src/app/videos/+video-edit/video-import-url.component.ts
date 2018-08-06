@@ -14,14 +14,14 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoSend } from '@app/videos/+video-edit/shared/video-send'
 
 @Component({
-  selector: 'my-video-import',
-  templateUrl: './video-import.component.html',
+  selector: 'my-video-import-url',
+  templateUrl: './video-import-url.component.html',
   styleUrls: [
     './shared/video-edit.component.scss',
-    './video-import.component.scss'
+    './video-import-url.component.scss'
   ]
 })
-export class VideoImportComponent extends VideoSend implements OnInit, CanComponentDeactivate {
+export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
 
   targetUrl = ''
