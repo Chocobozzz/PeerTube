@@ -21,7 +21,10 @@ $background-color:  #F7F7F7;
       margin-bottom: -$border-width;
     }
 
-    .nav-link {
+    a.nav-link {
+      @include disable-default-a-behaviour;
+
+      color: #000;
       height: 40px !important;
       padding: 0 30px !important;
       font-size: 15px;
