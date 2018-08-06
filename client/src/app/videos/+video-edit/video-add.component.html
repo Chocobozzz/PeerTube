@@ -11,7 +11,7 @@
     </tab>
 
     <tab *ngIf="isVideoImportEnabled()" i18n-heading heading="Import with URL">
-      <my-video-import #videoImport (firstStepDone)="onFirstStepDone('import', $event)"></my-video-import>
+      <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)"></my-video-import-url>
     </tab>
   </tabset>
 </div>

@@ -6,7 +6,7 @@ import { VideoAddRoutingModule } from './video-add-routing.module'
 import { VideoAddComponent } from './video-add.component'
 import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.service'
 import { VideoUploadComponent } from '@app/videos/+video-edit/video-upload.component'
-import { VideoImportComponent } from '@app/videos/+video-edit/video-import.component'
+import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-import-url.component'
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { VideoImportComponent } from '@app/videos/+video-edit/video-import.compo
   declarations: [
     VideoAddComponent,
     VideoUploadComponent,
-    VideoImportComponent
+    VideoImportUrlComponent
   ],
   exports: [
     VideoAddComponent
