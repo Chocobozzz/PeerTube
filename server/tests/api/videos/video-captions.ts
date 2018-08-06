@@ -56,7 +56,8 @@ describe('Test video captions', function () {
       accessToken: servers[0].accessToken,
       language: 'zh',
       videoId: videoUUID,
-      fixture: 'subtitle-good2.vtt'
+      fixture: 'subtitle-good2.vtt',
+      mimeType: 'application/octet-stream'
     })
 
     await waitJobs(servers)

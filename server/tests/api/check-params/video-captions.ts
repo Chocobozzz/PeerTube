@@ -15,6 +15,7 @@ import {
   userLogin
 } from '../../utils'
 import { join } from 'path'
+import { createVideoCaption } from '../../utils/videos/video-captions'
 
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'
@@ -143,6 +144,31 @@ describe('Test video captions API validator', function () {
       })
     })
 
+    // We don't check the extension yet
+    // it('Should fail with an invalid captionfile extension and octet-stream mime type', async function () {
+    //   await createVideoCaption({
+    //     url: server.url,
+    //     accessToken: server.accessToken,
+    //     language: 'zh',
+    //     videoId: videoUUID,
+    //     fixture: 'subtitle-bad.txt',
+    //     mimeType: 'application/octet-stream',
+    //     statusCodeExpected: 400
+    //   })
+    // })
+
+    it('Should succeed with a valid captionfile extension and octet-stream mime type', async function () {
+      await createVideoCaption({
+        url: server.url,
+        accessToken: server.accessToken,
+        language: 'zh',
+        videoId: videoUUID,
+        fixture: 'subtitle-good.srt',
+        mimeType: 'application/octet-stream'
+      })
+    })
+
+    // We don't check the file validity yet
     // it('Should fail with an invalid captionfile srt', async function () {
     //   const attaches = {
     //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.srt')
