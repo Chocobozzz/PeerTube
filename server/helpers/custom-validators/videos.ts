@@ -17,6 +17,7 @@ import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
+import * as magnetUtil from 'magnet-uri'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -126,6 +127,13 @@ function isVideoFileSizeValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
 }
 
+function isVideoMagnetUriValid (value: string) {
+  if (!exists(value)) return false
+
+  const parsed = magnetUtil.decode(value)
+  return parsed && isVideoFileInfoHashValid(parsed.infoHash)
+}
+
 function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: UserRight, res: Response) {
   // Retrieve the user who did the request
   if (video.isOwned() === false) {
@@ -214,6 +222,7 @@ export {
   isScheduleVideoUpdatePrivacyValid,
   isVideoAbuseReasonValid,
   isVideoFile,
+  isVideoMagnetUriValid,
   isVideoStateValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,

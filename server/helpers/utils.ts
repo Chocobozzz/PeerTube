@@ -9,6 +9,8 @@ import { ApplicationModel } from '../models/application/application'
 import { pseudoRandomBytesPromise, unlinkPromise } from './core-utils'
 import { logger } from './logger'
 import { isArray } from './custom-validators/misc'
+import * as crypto from "crypto"
+import { join } from "path"
 
 const isCidr = require('is-cidr')
 
@@ -181,7 +183,13 @@ async function getServerActor () {
   return Promise.resolve(serverActor)
 }
 
+function generateVideoTmpPath (id: string) {
+  const hash = crypto.createHash('sha256').update(id).digest('hex')
+  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+}
+
 type SortType = { sortModel: any, sortValue: string }
+
 
 // ---------------------------------------------------------------------------
 
@@ -195,5 +203,6 @@ export {
   computeResolutionsToTranscode,
   resetSequelizeInstance,
   getServerActor,
-  SortType
+  SortType,
+  generateVideoTmpPath
 }

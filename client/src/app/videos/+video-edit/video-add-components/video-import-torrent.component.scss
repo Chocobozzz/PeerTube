@@ -7,7 +7,7 @@ $width-size: 190px;
   @include peertube-select-container($width-size);
 }
 
-.import-video-url {
+.import-video-torrent {
   display: flex;
   flex-direction: column;
   align-items: center;

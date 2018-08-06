@@ -10,8 +10,12 @@
       <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)"></my-video-upload>
     </tab>
 
-    <tab *ngIf="isVideoImportEnabled()" i18n-heading heading="Import with URL">
+    <tab *ngIf="isVideoImportHttpEnabled()" i18n-heading heading="Import with URL">
       <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)"></my-video-import-url>
+    </tab>
+
+    <tab *ngIf="isVideoImportTorrentEnabled()" i18n-heading heading="Import with torrent">
+      <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)"></my-video-import-torrent>
     </tab>
   </tabset>
 </div>
