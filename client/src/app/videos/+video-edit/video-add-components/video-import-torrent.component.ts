@@ -14,18 +14,18 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoImportService } from '@app/shared/video-import'
 
 @Component({
-  selector: 'my-video-import-url',
-  templateUrl: './video-import-url.component.html',
+  selector: 'my-video-import-torrent',
+  templateUrl: './video-import-torrent.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-import-url.component.scss'
+    './video-import-torrent.component.scss'
   ]
 })
-export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
+export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
 
-  targetUrl = ''
   videoFileName: string
+  magnetUri = ''
 
   isImportingVideo = false
   hasImportedVideo = false
@@ -58,8 +58,8 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
     return { canDeactivate: true }
   }
 
-  isTargetUrlValid () {
-    return this.targetUrl && this.targetUrl.match(/https?:\/\//)
+  isMagnetUrlValid () {
+    return !!this.magnetUri
   }
 
   importVideo () {
@@ -74,7 +74,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
 
     this.loadingBar.start()
 
-    this.videoImportService.importVideoUrl(this.targetUrl, videoUpdate).subscribe(
+    this.videoImportService.importVideoTorrent(this.magnetUri, videoUpdate).subscribe(
       res => {
         this.loadingBar.complete()
         this.firstStepDone.emit(res.video.name)

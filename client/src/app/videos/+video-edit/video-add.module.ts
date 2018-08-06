@@ -7,6 +7,7 @@ import { VideoAddComponent } from './video-add.component'
 import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.service'
 import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
 import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
+import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-components/video-import-torrent.component'
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-compo
   declarations: [
     VideoAddComponent,
     VideoUploadComponent,
-    VideoImportUrlComponent
+    VideoImportUrlComponent,
+    VideoImportTorrentComponent
   ],
   exports: [
     VideoAddComponent

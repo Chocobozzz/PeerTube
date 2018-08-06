@@ -26,34 +26,23 @@ export class VideoImportService {
     private serverService: ServerService
   ) {}
 
-  importVideo (targetUrl: string, video: VideoUpdate): Observable<VideoImport> {
+  importVideoUrl (targetUrl: string, video: VideoUpdate): Observable<VideoImport> {
     const url = VideoImportService.BASE_VIDEO_IMPORT_URL
-    const language = video.language || null
-    const licence = video.licence || null
-    const category = video.category || null
-    const description = video.description || null
-    const support = video.support || null
-    const scheduleUpdate = video.scheduleUpdate || null
 
-    const body: VideoImportCreate = {
-      targetUrl,
+    const body = this.buildImportVideoObject(video)
+    body.targetUrl = targetUrl
 
-      name: video.name,
-      category,
-      licence,
-      language,
-      support,
-      description,
-      channelId: video.channelId,
-      privacy: video.privacy,
-      tags: video.tags,
-      nsfw: video.nsfw,
-      waitTranscoding: video.waitTranscoding,
-      commentsEnabled: video.commentsEnabled,
-      thumbnailfile: video.thumbnailfile,
-      previewfile: video.previewfile,
-      scheduleUpdate
-    }
+    const data = objectToFormData(body)
+    return this.authHttp.post<VideoImport>(url, data)
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  importVideoTorrent (target: string | Blob, video: VideoUpdate): Observable<VideoImport> {
+    const url = VideoImportService.BASE_VIDEO_IMPORT_URL
+    const body: VideoImportCreate = this.buildImportVideoObject(video)
+
+    if (typeof target === 'string') body.magnetUri = target
+    else body.torrentfile = target
 
     const data = objectToFormData(body)
     return this.authHttp.post<VideoImport>(url, data)
@@ -71,6 +60,33 @@ export class VideoImportService {
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  private buildImportVideoObject (video: VideoUpdate): VideoImportCreate {
+    const language = video.language || null
+    const licence = video.licence || null
+    const category = video.category || null
+    const description = video.description || null
+    const support = video.support || null
+    const scheduleUpdate = video.scheduleUpdate || null
+
+    return {
+      name: video.name,
+      category,
+      licence,
+      language,
+      support,
+      description,
+      channelId: video.channelId,
+      privacy: video.privacy,
+      tags: video.tags,
+      nsfw: video.nsfw,
+      waitTranscoding: video.waitTranscoding,
+      commentsEnabled: video.commentsEnabled,
+      thumbnailfile: video.thumbnailfile,
+      previewfile: video.previewfile,
+      scheduleUpdate
+    }
   }
 
   private extractVideoImports (result: ResultList<VideoImport>): Observable<ResultList<VideoImport>> {

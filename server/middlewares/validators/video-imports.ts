@@ -6,14 +6,19 @@ import { areValidationErrors } from './utils'
 import { getCommonVideoAttributes } from './videos'
 import { isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
 import { cleanUpReqFiles } from '../../helpers/utils'
-import { isVideoChannelOfAccountExist, isVideoNameValid } from '../../helpers/custom-validators/videos'
+import { isVideoChannelOfAccountExist, isVideoMagnetUriValid, isVideoNameValid } from '../../helpers/custom-validators/videos'
 import { CONFIG } from '../../initializers/constants'
 
 const videoImportAddValidator = getCommonVideoAttributes().concat([
-  body('targetUrl').custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
   body('channelId')
     .toInt()
     .custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('targetUrl')
+    .optional()
+    .custom(isVideoImportTargetUrlValid).withMessage('Should have a valid video import target URL'),
+  body('magnetUri')
+    .optional()
+    .custom(isVideoMagnetUriValid).withMessage('Should have a valid video magnet URI'),
   body('name')
     .optional()
     .custom(isVideoNameValid).withMessage('Should have a valid name'),
@@ -33,6 +38,15 @@ const videoImportAddValidator = getCommonVideoAttributes().concat([
     }
 
     if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+
+    // Check we have at least 1 required param
+    if (!req.body.targetUrl && !req.body.magnetUri) {
+      cleanUpReqFiles(req)
+
+      return res.status(400)
+        .json({ error: 'Should have a magnetUri or a targetUrl.' })
+        .end()
+    }
 
     return next()
   }

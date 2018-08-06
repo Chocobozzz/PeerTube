@@ -21,6 +21,7 @@ import { VideoImport, VideoImportState } from '../../../shared'
 import { VideoChannelModel } from './video-channel'
 import { AccountModel } from '../account/account'
 import { TagModel } from './tag'
+import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 
 @DefaultScope({
   include: [
@@ -62,10 +63,22 @@ export class VideoImportModel extends Model<VideoImportModel> {
   @UpdatedAt
   updatedAt: Date
 
-  @AllowNull(false)
+  @AllowNull(true)
+  @Default(null)
   @Is('VideoImportTargetUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'targetUrl'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max))
   targetUrl: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoImportMagnetUri', value => throwIfNotValid(value, isVideoMagnetUriValid, 'magnetUri'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max)) // Use the same constraints than URLs
+  magnetUri: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_NAME.max))
+  torrentName: string
 
   @AllowNull(false)
   @Default(null)

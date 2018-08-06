@@ -1,18 +1,17 @@
 import * as youtubeDL from 'youtube-dl'
 import { truncate } from 'lodash'
-import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers'
-import { join } from 'path'
-import * as crypto from 'crypto'
+import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers'
 import { logger } from './logger'
+import { generateVideoTmpPath } from './utils'
 
 export type YoutubeDLInfo = {
-  name: string
-  description: string
-  category: number
-  licence: number
-  nsfw: boolean
-  tags: string[]
-  thumbnailUrl: string
+  name?: string
+  description?: string
+  category?: number
+  licence?: number
+  nsfw?: boolean
+  tags?: string[]
+  thumbnailUrl?: string
 }
 
 function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
@@ -30,10 +29,9 @@ function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
 }
 
 function downloadYoutubeDLVideo (url: string) {
-  const hash = crypto.createHash('sha256').update(url).digest('hex')
-  const path = join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+  const path = generateVideoTmpPath(url)
 
-  logger.info('Importing video %s', url)
+  logger.info('Importing youtubeDL video %s', url)
 
   const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
 

@@ -15,7 +15,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 240
+const LAST_MIGRATION_VERSION = 245
 
 // ---------------------------------------------------------------------------
 
@@ -270,7 +270,8 @@ const CONSTRAINTS_FIELDS = {
     }
   },
   VIDEO_IMPORTS: {
-    URL: { min: 3, max: 2000 } // Length
+    URL: { min: 3, max: 2000 }, // Length
+    TORRENT_NAME: { min: 3, max: 255 }, // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length

@@ -132,6 +132,7 @@
     "uuid": "^3.1.0",
     "validator": "^10.2.0",
     "webfinger.js": "^2.6.6",
+    "webtorrent": "^0.100.0",
     "winston": "3.0.0",
     "ws": "^5.0.0",
     "youtube-dl": "^1.12.2"
@@ -185,7 +186,6 @@
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.5.2",
-    "webtorrent": "^0.100.0",
     "xliff": "^3.0.1"
   },
   "scripty": {
