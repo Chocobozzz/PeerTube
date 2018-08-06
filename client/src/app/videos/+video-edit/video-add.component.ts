@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
-import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-import-url.component'
-import { VideoUploadComponent } from '@app/videos/+video-edit/video-upload.component'
+import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
+import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
 import { ServerService } from '@app/core'
 
 @Component({

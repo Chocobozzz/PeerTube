@@ -1,26 +1,25 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { UserService } from '@app/shared'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs'
-import { VideoPrivacy } from '../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../core'
-import { VideoEdit } from '../../shared/video/video-edit.model'
-import { VideoService } from '../../shared/video/video.service'
+import { VideoPrivacy } from '../../../../../../shared/models/videos'
+import { AuthService, ServerService } from '../../../core'
+import { VideoEdit } from '../../../shared/video/video-edit.model'
+import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-send'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { FormValidatorService, UserService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
-import { VideoSend } from '@app/videos/+video-edit/shared/video-send'
 
 @Component({
   selector: 'my-video-upload',
   templateUrl: './video-upload.component.html',
   styleUrls: [
-    './shared/video-edit.component.scss',
+    '../shared/video-edit.component.scss',
     './video-upload.component.scss'
   ]
 })

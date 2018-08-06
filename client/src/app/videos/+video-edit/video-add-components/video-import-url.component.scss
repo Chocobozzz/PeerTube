@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@import 'variables';
+@import 'mixins';
 
 $width-size: 190px;
 
@@ -17,7 +17,7 @@ $width-size: 190px;
     margin-bottom: 25px;
     cursor: default;
 
-    background-image: url('../../../assets/images/video/upload.svg');
+    background-image: url('../../../../assets/images/video/upload.svg');
   }
 
   input[type=text] {

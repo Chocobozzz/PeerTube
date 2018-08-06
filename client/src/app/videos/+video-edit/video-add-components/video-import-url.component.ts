@@ -1,23 +1,23 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoPrivacy, VideoUpdate } from '../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../core'
-import { VideoService } from '../../shared/video/video.service'
+import { VideoPrivacy, VideoUpdate } from '../../../../../../shared/models/videos'
+import { AuthService, ServerService } from '../../../core'
+import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { VideoImportService } from '@app/shared/video-import'
-import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-send'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { VideoEdit } from '@app/shared/video/video-edit.model'
+import { FormValidatorService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
-import { VideoSend } from '@app/videos/+video-edit/shared/video-send'
+import { VideoImportService } from '@app/shared/video-import'
 
 @Component({
   selector: 'my-video-import-url',
   templateUrl: './video-import-url.component.html',
   styleUrls: [
-    './shared/video-edit.component.scss',
+    '../shared/video-edit.component.scss',
     './video-import-url.component.scss'
   ]
 })
