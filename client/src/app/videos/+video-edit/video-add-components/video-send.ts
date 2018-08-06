@@ -1,16 +1,16 @@
-import { FormReactive } from '@app/shared'
-import { OnInit } from '@angular/core'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
-import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
-import { VideoConstant, VideoPrivacy } from '../../../../../../shared/models/videos'
-import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { EventEmitter, OnInit } from '@angular/core'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
+import { catchError, switchMap, tap } from 'rxjs/operators'
+import { FormReactive } from '@app/shared'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
 import { AuthService, ServerService } from '@app/core'
 import { VideoService } from '@app/shared/video/video.service'
+import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/video-caption'
-import { catchError, switchMap, tap } from 'rxjs/operators'
 import { VideoEdit } from '@app/shared/video/video-edit.model'
+import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
 
 export abstract class VideoSend extends FormReactive implements OnInit, CanComponentDeactivate {
 
@@ -21,6 +21,7 @@ export abstract class VideoSend extends FormReactive implements OnInit, CanCompo
   firstStepPrivacyId = 0
   firstStepChannelId = 0
 
+  abstract firstStepDone: EventEmitter<string>
   protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService
