@@ -23,7 +23,7 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
   <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
-  
+
   <a href="https://www.browserstack.com/automate/public-build/VXBPc0szNjUvRUNsREJQRFF6RkEvSjJBclZ4VUJBUm1hcS9RZGpUbitRST0tLWFWbjNEdVN6eEZpYTk4dGVpMkVlQWc9PQ==--644e755052bf7fe2346eb6e868be8e706718a17c%">
     <img src='https://www.browserstack.com/automate/badge.svg?badge_key=VXBPc0szNjUvRUNsREJQRFF6RkEvSjJBclZ4VUJBUm1hcS9RZGpUbitRST0tLWFWbjNEdVN6eEZpYTk4dGVpMkVlQWc9PQ==--644e755052bf7fe2346eb6e868be8e706718a17c%'/>
   </a>
@@ -89,7 +89,7 @@ enough money to pay for bandwidth and video storage of its servers.
 
 So we need to have a decentralized network of servers seeding videos (as
 [Diaspora](https://github.com/diaspora/diaspora) for example).  But it's not
-enough because one video could become famous and overload the server.  That is 
+enough because one video could become famous and overload the server.  That is
 why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus
 BitTorrent) inside the web browser, as of today.
@@ -161,17 +161,9 @@ See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation.
     [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the
     video was uploaded.
 
-Here are some simple schemes:
+#### Here is a simple scheme :
 
-<p align="center">
-
-<img src="https://lutim.cpy.re/6Qut3ure.png" alt="Decentralized" />
-
-<img src="https://lutim.cpy.re/NvRAcv6U.png" alt="Watch a video" />
-
-<img src="https://lutim.cpy.re/pqKm3Q5S.png" alt="Watch a P2P video" />
-
-</p>
+![Decentralized Network](/support/doc/README.img/decentralized-network.png)
 
 ## Supports of our crowdfunding
 
@@ -184,7 +176,7 @@ Copyright (C) 2018 PeerTube Contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or 
+by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
