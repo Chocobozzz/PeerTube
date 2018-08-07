@@ -190,7 +190,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       videoImport.state = VideoImportState.SUCCESS
       const videoImportUpdated = await videoImport.save({ transaction: t })
 
-      logger.info('Video %s imported.', videoImport.targetUrl)
+      logger.info('Video %s imported.', video.uuid)
 
       videoImportUpdated.Video = videoUpdated
       return videoImportUpdated
