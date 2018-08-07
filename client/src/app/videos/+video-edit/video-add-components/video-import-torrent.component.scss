@@ -20,6 +20,26 @@ $width-size: 190px;
     background-image: url('../../../../assets/images/video/upload.svg');
   }
 
+  .button-file {
+    @include peertube-button-file(auto);
+
+    min-width: 190px;
+  }
+
+  .button-file-extension {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .torrent-or-magnet {
+    margin: 10px 0;
+  }
+
+  .form-group-magnet-uri {
+    margin-bottom: 40px;
+  }
+
   input[type=text] {
     @include peertube-input-text($width-size);
     display: block;

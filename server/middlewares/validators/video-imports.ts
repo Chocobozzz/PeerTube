@@ -4,10 +4,11 @@ import { isIdValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { getCommonVideoAttributes } from './videos'
-import { isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
+import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../helpers/custom-validators/video-imports'
 import { cleanUpReqFiles } from '../../helpers/utils'
 import { isVideoChannelOfAccountExist, isVideoMagnetUriValid, isVideoNameValid } from '../../helpers/custom-validators/videos'
 import { CONFIG } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 const videoImportAddValidator = getCommonVideoAttributes().concat([
   body('channelId')
@@ -19,6 +20,11 @@ const videoImportAddValidator = getCommonVideoAttributes().concat([
   body('magnetUri')
     .optional()
     .custom(isVideoMagnetUriValid).withMessage('Should have a valid video magnet URI'),
+  body('torrentfile')
+    .custom((value, { req }) => isVideoImportTorrentFile(req.files)).withMessage(
+    'This torrent file is not supported or too large. Please, make sure it is of the following type: '
+    + CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.EXTNAME.join(', ')
+  ),
   body('name')
     .optional()
     .custom(isVideoNameValid).withMessage('Should have a valid name'),
@@ -40,11 +46,12 @@ const videoImportAddValidator = getCommonVideoAttributes().concat([
     if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     // Check we have at least 1 required param
-    if (!req.body.targetUrl && !req.body.magnetUri) {
+    const file = req.files['torrentfile'][0]
+    if (!req.body.targetUrl && !req.body.magnetUri && !file) {
       cleanUpReqFiles(req)
 
       return res.status(400)
-        .json({ error: 'Should have a magnetUri or a targetUrl.' })
+        .json({ error: 'Should have a magnetUri or a targetUrl or a torrent file.' })
         .end()
     }
 

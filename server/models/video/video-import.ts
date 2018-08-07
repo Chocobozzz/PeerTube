@@ -171,7 +171,11 @@ export class VideoImportModel extends Model<VideoImportModel> {
 
     return {
       id: this.id,
+
       targetUrl: this.targetUrl,
+      magnetUri: this.magnetUri,
+      torrentName: this.torrentName,
+
       state: {
         id: this.state,
         label: VideoImportModel.getStateLabel(this.state)

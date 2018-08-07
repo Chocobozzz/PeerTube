@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoPrivacy, VideoUpdate } from '../../../../../../shared/models/videos'
@@ -23,6 +23,7 @@ import { VideoImportService } from '@app/shared/video-import'
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
+  @ViewChild('torrentfileInput') torrentfileInput
 
   videoFileName: string
   magnetUri = ''
@@ -33,7 +34,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
 
   video: VideoEdit
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PRIVATE
+  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -62,7 +63,14 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
     return !!this.magnetUri
   }
 
-  importVideo () {
+  fileChange () {
+    const torrentfile = this.torrentfileInput.nativeElement.files[0] as File
+    if (!torrentfile) return
+
+    this.importVideo(torrentfile)
+  }
+
+  importVideo (torrentfile?: Blob) {
     this.isImportingVideo = true
 
     const videoUpdate: VideoUpdate = {
@@ -74,7 +82,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
 
     this.loadingBar.start()
 
-    this.videoImportService.importVideoTorrent(this.magnetUri, videoUpdate).subscribe(
+    this.videoImportService.importVideoTorrent(torrentfile || this.magnetUri, videoUpdate).subscribe(
       res => {
         this.loadingBar.complete()
         this.firstStepDone.emit(res.video.name)

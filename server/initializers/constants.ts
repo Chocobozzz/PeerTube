@@ -273,6 +273,12 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_IMPORTS: {
     URL: { min: 3, max: 2000 }, // Length
     TORRENT_NAME: { min: 3, max: 255 }, // Length
+    TORRENT_FILE: {
+      EXTNAME: [ '.torrent' ],
+      FILE_SIZE: {
+        max: 1024 * 200 // 200 KB
+      }
+    }
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -415,6 +421,10 @@ const IMAGE_MIMETYPE_EXT = {
 const VIDEO_CAPTIONS_MIMETYPE_EXT = {
   'text/vtt': '.vtt',
   'application/x-subrip': '.srt'
+}
+
+const TORRENT_MIMETYPE_EXT = {
+  'application/x-bittorrent': '.torrent'
 }
 
 // ---------------------------------------------------------------------------
@@ -596,6 +606,7 @@ export {
   FEEDS,
   JOB_TTL,
   NSFW_POLICY_TYPES,
+  TORRENT_MIMETYPE_EXT,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   ACTIVITY_PUB,
