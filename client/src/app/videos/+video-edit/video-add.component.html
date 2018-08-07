@@ -1,6 +1,6 @@
 <div class="margin-content">
   <div class="title-page title-page-single">
-    <ng-container *ngIf="secondStepType === 'import'" i18n>Import {{ videoName }}</ng-container>
+    <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>
     <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
   </div>
 
