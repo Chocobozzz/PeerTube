@@ -73,6 +73,9 @@ export class ServerService {
       videos: {
         http: {
           enabled: false
+        },
+        torrent: {
+          enabled: false
         }
       }
     }

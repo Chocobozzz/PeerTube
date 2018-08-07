@@ -40,6 +40,6 @@ export class VideoAddComponent implements CanComponentDeactivate {
   }
 
   isVideoImportTorrentEnabled () {
-    return this.serverService.getConfig().import.videos.http.enabled
+    return this.serverService.getConfig().import.videos.torrent.enabled
   }
 }

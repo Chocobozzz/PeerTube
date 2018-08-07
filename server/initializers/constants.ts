@@ -15,7 +15,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 245
+const LAST_MIGRATION_VERSION = 240
 
 // ---------------------------------------------------------------------------
 
@@ -210,6 +210,9 @@ const CONFIG = {
     VIDEOS: {
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') }
+      },
+      TORRENT: {
+        get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
       }
     }
   },

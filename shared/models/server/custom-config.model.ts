@@ -60,6 +60,9 @@ export interface CustomConfig {
     videos: {
       http: {
         enabled: boolean
+      },
+      torrent: {
+        enabled: boolean
       }
     }
   }

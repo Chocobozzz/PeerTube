@@ -114,16 +114,21 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     tempVideoPath = await downloader()
 
     // Get information about this video
+    const { size } = await statPromise(tempVideoPath)
+    const isAble = await videoImport.User.isAbleToUploadVideo({ size })
+    if (isAble === false) {
+      throw new Error('The user video quota is exceeded with this video to import.')
+    }
+
     const { videoFileResolution } = await getVideoFileResolution(tempVideoPath)
     const fps = await getVideoFileFPS(tempVideoPath)
-    const stats = await statPromise(tempVideoPath)
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
     // Create video file object in database
     const videoFileData = {
       extname: extname(tempVideoPath),
       resolution: videoFileResolution,
-      size: stats.size,
+      size,
       fps,
       videoId: videoImport.videoId
     }

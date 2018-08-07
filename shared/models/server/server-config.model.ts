@@ -28,6 +28,9 @@ export interface ServerConfig {
       http: {
         enabled: boolean
       }
+      torrent: {
+        enabled: boolean
+      }
     }
   }
 

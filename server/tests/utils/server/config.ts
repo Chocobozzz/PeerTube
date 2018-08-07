@@ -97,6 +97,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
       videos: {
         http: {
           enabled: false
+        },
+        torrent: {
+          enabled: false
         }
       }
     }

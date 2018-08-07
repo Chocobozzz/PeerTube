@@ -15,34 +15,21 @@ import {
 } from 'sequelize-typescript'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers'
 import { getSort, throwIfNotValid } from '../utils'
-import { VideoModel } from './video'
+import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
 import { VideoImport, VideoImportState } from '../../../shared'
-import { VideoChannelModel } from './video-channel'
-import { AccountModel } from '../account/account'
-import { TagModel } from './tag'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
+import { UserModel } from '../account/user'
 
 @DefaultScope({
   include: [
     {
-      model: () => VideoModel,
-      required: false,
-      include: [
-        {
-          model: () => VideoChannelModel,
-          required: true,
-          include: [
-            {
-              model: () => AccountModel,
-              required: true
-            }
-          ]
-        },
-        {
-          model: () => TagModel
-        }
-      ]
+      model: () => UserModel.unscoped(),
+      required: true
+    },
+    {
+      model: () => VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
+      required: false
     }
   ]
 })
@@ -53,6 +40,9 @@ import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
     {
       fields: [ 'videoId' ],
       unique: true
+    },
+    {
+      fields: [ 'userId' ]
     }
   ]
 })
@@ -91,6 +81,18 @@ export class VideoImportModel extends Model<VideoImportModel> {
   @Column(DataType.TEXT)
   error: string
 
+  @ForeignKey(() => UserModel)
+  @Column
+  userId: number
+
+  @BelongsTo(() => UserModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  User: UserModel
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
@@ -116,41 +118,24 @@ export class VideoImportModel extends Model<VideoImportModel> {
     return VideoImportModel.findById(id)
   }
 
-  static listUserVideoImportsForApi (accountId: number, start: number, count: number, sort: string) {
+  static listUserVideoImportsForApi (userId: number, start: number, count: number, sort: string) {
     const query = {
       distinct: true,
+      include: [
+        {
+          model: UserModel.unscoped(), // FIXME: Without this, sequelize try to COUNT(DISTINCT(*)) which is an invalid SQL query
+          required: true
+        }
+      ],
       offset: start,
       limit: count,
       order: getSort(sort),
-      include: [
-        {
-          model: VideoModel,
-          required: false,
-          include: [
-            {
-              model: VideoChannelModel,
-              required: true,
-              include: [
-                {
-                  model: AccountModel,
-                  required: true,
-                  where: {
-                    id: accountId
-                  }
-                }
-              ]
-            },
-            {
-              model: TagModel,
-              required: false
-            }
-          ]
-        }
-      ]
+      where: {
+        userId
+      }
     }
 
-    return VideoImportModel.unscoped()
-                           .findAndCountAll(query)
+    return VideoImportModel.findAndCountAll(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows,

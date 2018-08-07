@@ -65,6 +65,9 @@ describe('Test config API validators', function () {
       videos: {
         http: {
           enabled: false
+        },
+        torrent: {
+          enabled: false
         }
       }
     }
