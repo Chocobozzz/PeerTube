@@ -303,7 +303,7 @@ describe('Test video imports API validator', function () {
 
       fields = omit(fields, 'magnetUri')
       const attaches = {
-        'torrentfile': join(__dirname, '..', '..', 'fixtures', '60fps_small-240p.torrent')
+        'torrentfile': join(__dirname, '..', '..', 'fixtures', 'video-720p.torrent')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches, statusCodeExpected: 409 })

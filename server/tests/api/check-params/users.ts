@@ -627,7 +627,7 @@ describe('Test users API validators', function () {
       }
       await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() }))
       await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { magnetUri: getMagnetURI() }))
-      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { torrentfile: '60fps_small-240p.torrent' }))
+      await importVideo(server.url, server.accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' }))
 
       await waitJobs([ server ])
 

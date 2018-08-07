@@ -114,8 +114,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     tempVideoPath = await downloader()
 
     // Get information about this video
-    const { size } = await statPromise(tempVideoPath)
-    const isAble = await videoImport.User.isAbleToUploadVideo({ size })
+    const stats = await statPromise(tempVideoPath)
+    const isAble = await videoImport.User.isAbleToUploadVideo({ size: stats.size })
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
     }
@@ -128,7 +128,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     const videoFileData = {
       extname: extname(tempVideoPath),
       resolution: videoFileResolution,
-      size,
+      size: stats.size,
       fps,
       videoId: videoImport.videoId
     }
@@ -209,7 +209,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
   } catch (err) {
     try {
-      if (tempVideoPath) await unlinkPromise(tempVideoPath)
+      // if (tempVideoPath) await unlinkPromise(tempVideoPath)
     } catch (errUnlink) {
       logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
     }

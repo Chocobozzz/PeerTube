@@ -9,8 +9,7 @@ import { ApplicationModel } from '../models/application/application'
 import { pseudoRandomBytesPromise, sha256, unlinkPromise } from './core-utils'
 import { logger } from './logger'
 import { isArray } from './custom-validators/misc'
-import * as crypto from "crypto"
-import { join } from "path"
+import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 
 const isCidr = require('is-cidr')

@@ -97,7 +97,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   await processThumbnail(req, video)
   await processPreview(req, video)
 
-  const tags = null
+  const tags = body.tags || undefined
   const videoImportAttributes = {
     magnetUri,
     torrentName,
@@ -224,11 +224,13 @@ function insertIntoDB (
     videoCreated.VideoChannel = videoChannel
 
     // Set tags to the video
-    if (tags !== undefined) {
+    if (tags) {
       const tagInstances = await TagModel.findOrCreateTags(tags, t)
 
       await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
       videoCreated.Tags = tagInstances
+    } else {
+      videoCreated.Tags = []
     }
 
     // Create video import object in database
