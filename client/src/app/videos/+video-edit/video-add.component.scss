@@ -49,7 +49,7 @@ $background-color:  #F7F7F7;
     background-color: $background-color;
     border-radius: 3px;
     width: 100%;
-    height: 440px;
+    min-height: 440px;
     display: flex;
     justify-content: center;
     align-items: center;

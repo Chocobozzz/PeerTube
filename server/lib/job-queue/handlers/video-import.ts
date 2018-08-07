@@ -14,6 +14,7 @@ import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
+import { getSecureTorrentName } from '../../../helpers/utils'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -25,7 +26,7 @@ type VideoImportYoutubeDLPayload = {
 }
 
 type VideoImportTorrentPayload = {
-  type: 'magnet-uri'
+  type: 'magnet-uri' | 'torrent-file'
   videoImportId: number
 }
 
@@ -35,7 +36,7 @@ async function processVideoImport (job: Bull.Job) {
   const payload = job.data as VideoImportPayload
 
   if (payload.type === 'youtube-dl') return processYoutubeDLImport(job, payload)
-  if (payload.type === 'magnet-uri') return processTorrentImport(job, payload)
+  if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') return processTorrentImport(job, payload)
 }
 
 // ---------------------------------------------------------------------------
@@ -50,6 +51,7 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
   logger.info('Processing torrent video import in job %d.', job.id)
 
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
+
   const options = {
     videoImportId: payload.videoImportId,
 
@@ -59,7 +61,11 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
     generateThumbnail: true,
     generatePreview: true
   }
-  return processFile(() => downloadWebTorrentVideo(videoImport.magnetUri), videoImport, options)
+  const target = {
+    torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
+    magnetUri: videoImport.magnetUri
+  }
+  return processFile(() => downloadWebTorrentVideo(target), videoImport, options)
 }
 
 async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutubeDLPayload) {

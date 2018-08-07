@@ -1,8 +1,16 @@
-import * as magnetUtil from 'magnet-uri'
 import * as express from 'express'
+import * as magnetUtil from 'magnet-uri'
+import 'multer'
 import { auditLoggerFactory, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import { CONFIG, IMAGE_MIMETYPE_EXT, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE } from '../../../initializers'
+import {
+  CONFIG,
+  IMAGE_MIMETYPE_EXT,
+  PREVIEWS_SIZE,
+  sequelizeTypescript,
+  THUMBNAILS_SIZE,
+  TORRENT_MIMETYPE_EXT
+} from '../../../initializers'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -18,16 +26,20 @@ import { isArray } from '../../../helpers/custom-validators/misc'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
+import * as parseTorrent from 'parse-torrent'
+import { readFileBufferPromise, renamePromise } from '../../../helpers/core-utils'
+import { getSecureTorrentName } from '../../../helpers/utils'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
 
 const reqVideoFileImport = createReqFiles(
-  [ 'thumbnailfile', 'previewfile' ],
-  IMAGE_MIMETYPE_EXT,
+  [ 'thumbnailfile', 'previewfile', 'torrentfile' ],
+  Object.assign({}, TORRENT_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
   {
     thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+    previewfile: CONFIG.STORAGE.PREVIEWS_DIR,
+    torrentfile: CONFIG.STORAGE.TORRENTS_DIR
   }
 )
 
@@ -49,17 +61,37 @@ export {
 function addVideoImport (req: express.Request, res: express.Response) {
   if (req.body.targetUrl) return addYoutubeDLImport(req, res)
 
-  if (req.body.magnetUri) return addTorrentImport(req, res)
+  const file = req.files['torrentfile'][0]
+  if (req.body.magnetUri || file) return addTorrentImport(req, res, file)
 }
 
-async function addTorrentImport (req: express.Request, res: express.Response) {
+async function addTorrentImport (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
   const body: VideoImportCreate = req.body
-  const magnetUri = body.magnetUri
 
-  const parsed = magnetUtil.decode(magnetUri)
-  const magnetName = isArray(parsed.name) ? parsed.name[0] : parsed.name as string
+  let videoName: string
+  let torrentName: string
+  let magnetUri: string
 
-  const video = buildVideo(res.locals.videoChannel.id, body, { name: magnetName })
+  if (torrentfile) {
+    torrentName = torrentfile.originalname
+
+    // Rename the torrent to a secured name
+    const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
+    await renamePromise(torrentfile.path, newTorrentPath)
+    torrentfile.path = newTorrentPath
+
+    const buf = await readFileBufferPromise(torrentfile.path)
+    const parsedTorrent = parseTorrent(buf)
+
+    videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[ 0 ] : parsedTorrent.name as string
+  } else {
+    magnetUri = body.magnetUri
+
+    const parsed = magnetUtil.decode(magnetUri)
+    videoName = isArray(parsed.name) ? parsed.name[ 0 ] : parsed.name as string
+  }
+
+  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
 
   await processThumbnail(req, video)
   await processPreview(req, video)
@@ -67,13 +99,14 @@ async function addTorrentImport (req: express.Request, res: express.Response) {
   const tags = null
   const videoImportAttributes = {
     magnetUri,
+    torrentName,
     state: VideoImportState.PENDING
   }
   const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
 
   // Create job to import the video
   const payload = {
-    type: 'magnet-uri' as 'magnet-uri',
+    type: torrentfile ? 'torrent-file' as 'torrent-file' : 'magnet-uri' as 'magnet-uri',
     videoImportId: videoImport.id,
     magnetUri
   }

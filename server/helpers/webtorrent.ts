@@ -2,17 +2,22 @@ import { logger } from './logger'
 import { generateVideoTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
 import { createWriteStream } from 'fs'
+import { Instance as ParseTorrent } from 'parse-torrent'
+import { CONFIG } from '../initializers'
+import { join } from 'path'
 
-function downloadWebTorrentVideo (target: string) {
-  const path = generateVideoTmpPath(target)
+function downloadWebTorrentVideo (target: { magnetUri: string, torrentName: string }) {
+  const id = target.magnetUri || target.torrentName
 
-  logger.info('Importing torrent video %s', target)
+  const path = generateVideoTmpPath(id)
+  logger.info('Importing torrent video %s', id)
 
   return new Promise<string>((res, rej) => {
     const webtorrent = new WebTorrent()
 
-    const torrent = webtorrent.add(target, torrent => {
-      if (torrent.files.length !== 1) throw new Error('The number of files is not equal to 1 for ' + target)
+    const torrentId = target.magnetUri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
+    const torrent = webtorrent.add(torrentId, torrent => {
+      if (torrent.files.length !== 1) return rej(new Error('The number of files is not equal to 1 for ' + torrentId))
 
       const file = torrent.files[ 0 ]
       file.createReadStream().pipe(createWriteStream(path))

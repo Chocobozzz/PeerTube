@@ -13,6 +13,7 @@ import * as pem from 'pem'
 import * as rimraf from 'rimraf'
 import { URL } from 'url'
 import { truncate } from 'lodash'
+import * as crypto from 'crypto'
 
 function sanitizeUrl (url: string) {
   const urlObject = new URL(url)
@@ -95,6 +96,10 @@ function peertubeTruncate (str: string, maxLength: number) {
   return truncate(str, options)
 }
 
+function sha256 (str: string) {
+  return crypto.createHash('sha256').update(str).digest('hex')
+}
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -165,6 +170,7 @@ export {
   sanitizeHost,
   buildPath,
   peertubeTruncate,
+  sha256,
 
   promisify0,
   promisify1,

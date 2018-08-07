@@ -2,8 +2,16 @@
   <div class="import-video-torrent">
     <div class="icon icon-upload"></div>
 
-    <div class="form-group">
-      <label i18n for="magnetUri">Magnet URI</label>
+    <div class="button-file">
+      <span i18n>Select the torrent to import</span>
+      <input #torrentfileInput type="file" name="torrentfile" id="torrentfile" accept=".torrent" (change)="fileChange()" />
+    </div>
+    <span class="button-file-extension">(.torrent)</span>
+
+    <div class="torrent-or-magnet">Or</div>
+
+    <div class="form-group form-group-magnet-uri">
+      <label i18n for="magnetUri">Paste magnet URI</label>
       <my-help
         helpType="custom" i18n-customHtml
         customHtml="You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance."

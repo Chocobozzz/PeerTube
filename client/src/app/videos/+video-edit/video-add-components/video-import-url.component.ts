@@ -33,7 +33,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
 
   video: VideoEdit
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PRIVATE
+  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
   constructor (
     protected formValidatorService: FormValidatorService,
