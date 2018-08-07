@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.0-beta.10
+
+**See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### Bug fixes (from beta.10.pre.3)
+
+ * Fix caption upload on Mac OS
+
+
 ## v1.0.0-beta.10.pre.3
 
 **See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
