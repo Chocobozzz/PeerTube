@@ -1,5 +1,5 @@
 import { VideoImportCreate } from '../../../../shared/models/videos'
-import { makeGetRequest, makePostBodyRequest, makeUploadRequest } from '..'
+import { makeGetRequest, makeUploadRequest } from '..'
 
 function getYoutubeVideoUrl () {
   return 'https://youtu.be/msX3jv1XdvM'
@@ -7,7 +7,7 @@ function getYoutubeVideoUrl () {
 
 function getMagnetURI () {
   // tslint:disable:max-line-length
-  return 'magnet:?xs=https%3A%2F%2Fpeertube2.cpy.re%2Fstatic%2Ftorrents%2F2b8dbe74-9548-4f6f-a8da-986aed9e5e45-240.torrent&xt=urn:btih:52bf3729e5859390a8751495196b5674a55c99f3&dn=60fps_small&tr=wss%3A%2F%2Fpeertube2.cpy.re%3A443%2Ftracker%2Fsocket&tr=https%3A%2F%2Fpeertube2.cpy.re%2Ftracker%2Fannounce&ws=https%3A%2F%2Fpeertube2.cpy.re%2Fstatic%2Fwebseed%2F2b8dbe74-9548-4f6f-a8da-986aed9e5e45-240.mp4'
+  return 'magnet:?xs=https%3A%2F%2Fpeertube2.cpy.re%2Fstatic%2Ftorrents%2Fb209ca00-c8bb-4b2b-b421-1ede169f3dbc-720.torrent&xt=urn:btih:0f498834733e8057ed5c6f2ee2b4efd8d84a76ee&dn=super+peertube2+video&tr=wss%3A%2F%2Fpeertube2.cpy.re%3A443%2Ftracker%2Fsocket&tr=https%3A%2F%2Fpeertube2.cpy.re%2Ftracker%2Fannounce&ws=https%3A%2F%2Fpeertube2.cpy.re%2Fstatic%2Fwebseed%2Fb209ca00-c8bb-4b2b-b421-1ede169f3dbc-720.mp4'
 }
 
 function importVideo (url: string, token: string, attributes: VideoImportCreate) {
@@ -26,11 +26,15 @@ function importVideo (url: string, token: string, attributes: VideoImportCreate)
   })
 }
 
-function getMyVideoImports (url: string, token: string) {
+function getMyVideoImports (url: string, token: string, sort?: string) {
   const path = '/api/v1/users/me/videos/imports'
+
+  const query = {}
+  if (sort) query['sort'] = sort
 
   return makeGetRequest({
     url,
+    query,
     path,
     token,
     statusCodeExpected: 200
