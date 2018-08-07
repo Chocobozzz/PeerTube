@@ -3,17 +3,21 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
-const expect = chai.expect
-
 import {
-  ServerInfo,
   flushTests,
+  getCustomConfig,
+  getVideosList,
+  killallServers,
+  makeHTMLRequest,
   runServer,
+  ServerInfo,
   serverLogin,
-  uploadVideo,
-  getVideosList, updateCustomConfig, getCustomConfig, killallServers, makeHTMLRequest
+  updateCustomConfig,
+  updateCustomSubConfig,
+  uploadVideo
 } from './utils'
-import { CustomConfig } from '../../shared/models/server/custom-config.model'
+
+const expect = chai.expect
 
 function checkIndexTags (html: string, title: string, description: string, css: string) {
   expect(html).to.contain('<title>' + title + '</title>')
@@ -117,56 +121,20 @@ describe('Test a client controllers', function () {
   })
 
   it('Should update the customized configuration and have the correct index html tags', async function () {
-    const newCustomConfig: CustomConfig = {
+    await updateCustomSubConfig(server.url, server.accessToken, {
       instance: {
         name: 'PeerTube updated',
         shortDescription: 'my short description',
         description: 'my super description',
         terms: 'my super terms',
         defaultClientRoute: '/videos/recently-added',
-        defaultNSFWPolicy: 'blur' as 'blur',
+        defaultNSFWPolicy: 'blur',
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
         }
-      },
-      services: {
-        twitter: {
-          username: '@Kuja',
-          whitelisted: true
-        }
-      },
-      cache: {
-        previews: {
-          size: 2
-        },
-        captions: {
-          size: 3
-        }
-      },
-      signup: {
-        enabled: false,
-        limit: 5
-      },
-      admin: {
-        email: 'superadmin1@example.com'
-      },
-      user: {
-        videoQuota: 5242881
-      },
-      transcoding: {
-        enabled: true,
-        threads: 1,
-        resolutions: {
-          '240p': false,
-          '360p': true,
-          '480p': true,
-          '720p': false,
-          '1080p': false
-        }
       }
-    }
-    await updateCustomConfig(server.url, server.accessToken, newCustomConfig)
+    })
 
     const res = await makeHTMLRequest(server.url, '/videos/trending')
 

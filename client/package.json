@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "1.0.0-beta.10.pre.3",
+  "version": "1.0.0-beta.10",
   "private": true,
   "licence": "GPLv3",
   "author": {
@@ -23,6 +23,7 @@
     "ngx-extractor": "ngx-extractor"
   },
   "license": "GPLv3",
+  "typings": "*.d.ts",
   "resolutions": {
     "video.js": "^7",
     "webtorrent/create-torrent/junk": "^1",

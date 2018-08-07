@@ -23,6 +23,14 @@ export interface ServerConfig {
     enabledResolutions: number[]
   }
 
+  import: {
+    videos: {
+      http: {
+        enabled: boolean
+      }
+    }
+  }
+
   avatar: {
     file: {
       size: {

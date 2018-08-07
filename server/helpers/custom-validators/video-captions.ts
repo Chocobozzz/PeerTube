@@ -8,7 +8,9 @@ function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_LANGUAGES[ value ] !== undefined
 }
 
-const videoCaptionTypes = Object.keys(VIDEO_CAPTIONS_MIMETYPE_EXT).map(m => `(${m})`)
+const videoCaptionTypes = Object.keys(VIDEO_CAPTIONS_MIMETYPE_EXT)
+                                .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream ><
+                                .map(m => `(${m})`)
 const videoCaptionTypesRegex = videoCaptionTypes.join('|')
 function isVideoCaptionFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
   return isFileValid(files, videoCaptionTypesRegex, field, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)

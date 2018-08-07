@@ -45,7 +45,7 @@ function isActivityPubVideoDurationValid (value: string) {
 }
 
 function sanitizeAndCheckVideoTorrentObject (video: any) {
-  if (video.type !== 'Video') return false
+  if (!video || video.type !== 'Video') return false
 
   if (!setValidRemoteTags(video)) return false
   if (!setValidRemoteVideoUrls(video)) return false
@@ -153,7 +153,8 @@ function isRemoteVideoUrlValid (url: any) {
       ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.width + '', { min: 0 }) &&
-      validator.isInt(url.size + '', { min: 0 })
+      validator.isInt(url.size + '', { min: 0 }) &&
+      (!url.fps || validator.isInt(url.fps + '', { min: 0 }))
     ) ||
     (
       ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&

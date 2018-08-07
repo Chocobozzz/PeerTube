@@ -8,6 +8,7 @@ import { VideoPrivacy } from '../../shared/models/videos'
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
+import { VideoImportState } from '../../shared/models/videos/video-import-state.enum'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -36,6 +37,7 @@ const SORTABLE_COLUMNS = {
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
+  VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
@@ -85,6 +87,7 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'activitypub-follow': 5,
   'video-file-import': 1,
   'video-file': 1,
+  'video-import': 1,
   'email': 5
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
@@ -94,18 +97,29 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-follow': 3,
   'video-file-import': 1,
   'video-file': 1,
+  'video-import': 1,
   'email': 5
+}
+const JOB_TTL: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 60000 * 10, // 10 minutes
+  'activitypub-http-unicast': 60000 * 10, // 10 minutes
+  'activitypub-http-fetcher': 60000 * 10, // 10 minutes
+  'activitypub-follow': 60000 * 10, // 10 minutes
+  'video-file-import': 1000 * 3600, // 1 hour
+  'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
+  'video-import': 1000 * 3600 * 5, // 5 hours
+  'email': 60000 * 10 // 10 minutes
 }
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
-const JOB_REQUEST_TTL = 60000 * 10 // 10 minutes
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 
 // 1 hour
 let SCHEDULER_INTERVALS_MS = {
   badActorFollow: 60000 * 60, // 1 hour
   removeOldJobs: 60000 * 60, // 1 hour
-  updateVideos: 60000 // 1 minute
+  updateVideos: 60000, // 1 minute
+  youtubeDLUpdate: 60000 * 60 * 24 // 1 day
 }
 
 // ---------------------------------------------------------------------------
@@ -192,6 +206,13 @@ const CONFIG = {
       get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') }
     }
   },
+  IMPORT: {
+    VIDEOS: {
+      HTTP: {
+        get ENABLED () { return config.get<boolean>('import.videos.http.enabled') }
+      }
+    }
+  },
   CACHE: {
     PREVIEWS: {
       get SIZE () { return config.get<number>('cache.previews.size') }
@@ -248,6 +269,9 @@ const CONSTRAINTS_FIELDS = {
       }
     }
   },
+  VIDEO_IMPORTS: {
+    URL: { min: 3, max: 2000 } // Length
+  },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
     LANGUAGE: { min: 1, max: 10 }, // Length
@@ -262,7 +286,7 @@ const CONSTRAINTS_FIELDS = {
     },
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
-    DURATION: { min: 1 }, // Number
+    DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
@@ -363,7 +387,14 @@ const VIDEO_PRIVACIES = {
 
 const VIDEO_STATES = {
   [VideoState.PUBLISHED]: 'Published',
-  [VideoState.TO_TRANSCODE]: 'To transcode'
+  [VideoState.TO_TRANSCODE]: 'To transcode',
+  [VideoState.TO_IMPORT]: 'To import'
+}
+
+const VIDEO_IMPORT_STATES = {
+  [VideoImportState.FAILED]: 'Failed',
+  [VideoImportState.PENDING]: 'Pending',
+  [VideoImportState.SUCCESS]: 'Success'
 }
 
 const VIDEO_MIMETYPE_EXT = {
@@ -561,6 +592,7 @@ export {
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   FEEDS,
+  JOB_TTL,
   NSFW_POLICY_TYPES,
   STATIC_MAX_AGE,
   STATIC_PATHS,
@@ -577,7 +609,6 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   JOB_REQUEST_TIMEOUT,
-  JOB_REQUEST_TTL,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVALS_MS,
@@ -585,6 +616,7 @@ export {
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,
   JOB_COMPLETED_LIFETIME,
+  VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   buildLanguages
 }

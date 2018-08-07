@@ -1,7 +1,14 @@
 import * as jsToXliff12 from 'xliff/jsToXliff12'
 import { writeFile } from 'fs'
 import { join } from 'path'
-import { buildLanguages, VIDEO_CATEGORIES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../server/initializers/constants'
+import {
+  buildLanguages,
+  VIDEO_CATEGORIES,
+  VIDEO_IMPORT_STATES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES,
+  VIDEO_STATES
+} from '../../server/initializers/constants'
 import { values } from 'lodash'
 
 type TranslationType = {
@@ -33,6 +40,8 @@ const serverKeys: any = {}
 values(VIDEO_CATEGORIES)
   .concat(values(VIDEO_LICENCES))
   .concat(values(VIDEO_PRIVACIES))
+  .concat(values(VIDEO_STATES))
+  .concat(values(VIDEO_IMPORT_STATES))
   .forEach(v => serverKeys[v] = v)
 
 // More keys

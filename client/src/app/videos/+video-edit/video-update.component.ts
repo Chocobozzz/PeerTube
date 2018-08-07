@@ -126,7 +126,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             console.error(err)
           }
         )
-
   }
 
   private hydrateFormFromVideo () {

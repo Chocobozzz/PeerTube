@@ -377,7 +377,7 @@ type AvailableForListOptions = {
     include: [
       {
         model: () => VideoFileModel.unscoped(),
-        required: true
+        required: false
       }
     ]
   },
@@ -957,8 +957,10 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static load (id: number) {
-    return VideoModel.findById(id)
+  static load (id: number, t?: Sequelize.Transaction) {
+    const options = t ? { transaction: t } : undefined
+
+    return VideoModel.findById(id, options)
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
@@ -1353,7 +1355,8 @@ export class VideoModel extends Model<VideoModel> {
         mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
         width: file.resolution,
-        size: file.size
+        size: file.size,
+        fps: file.fps
       })
 
       url.push({
@@ -1569,21 +1572,25 @@ export class VideoModel extends Model<VideoModel> {
   removeThumbnail () {
     const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
     return unlinkPromise(thumbnailPath)
+      .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
   }
 
   removePreview () {
-    // Same name than video thumbnail
-    return unlinkPromise(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+    const previewPath = join(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+    return unlinkPromise(previewPath)
+      .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
   removeFile (videoFile: VideoFileModel) {
     const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
     return unlinkPromise(filePath)
+      .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
   removeTorrent (videoFile: VideoFileModel) {
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
     return unlinkPromise(torrentPath)
+      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
   getActivityStreamDuration () {
