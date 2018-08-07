@@ -61,12 +61,13 @@ export {
 function addVideoImport (req: express.Request, res: express.Response) {
   if (req.body.targetUrl) return addYoutubeDLImport(req, res)
 
-  const file = req.files['torrentfile'][0]
+  const file = req.files && req.files['torrentfile'] ? req.files['torrentfile'][0] : undefined
   if (req.body.magnetUri || file) return addTorrentImport(req, res, file)
 }
 
 async function addTorrentImport (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
   const body: VideoImportCreate = req.body
+  const user = res.locals.oauth.token.User
 
   let videoName: string
   let torrentName: string
@@ -100,7 +101,8 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   const videoImportAttributes = {
     magnetUri,
     torrentName,
-    state: VideoImportState.PENDING
+    state: VideoImportState.PENDING,
+    userId: user.id
   }
   const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
 
@@ -120,6 +122,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
 async function addYoutubeDLImport (req: express.Request, res: express.Response) {
   const body: VideoImportCreate = req.body
   const targetUrl = body.targetUrl
+  const user = res.locals.oauth.token.User
 
   let youtubeDLInfo: YoutubeDLInfo
   try {
@@ -140,7 +143,8 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const tags = body.tags || youtubeDLInfo.tags
   const videoImportAttributes = {
     targetUrl,
-    state: VideoImportState.PENDING
+    state: VideoImportState.PENDING,
+    userId: user.id
   }
   const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
 

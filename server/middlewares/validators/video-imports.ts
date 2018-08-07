@@ -33,21 +33,28 @@ const videoImportAddValidator = getCommonVideoAttributes().concat([
     logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })
 
     const user = res.locals.oauth.token.User
+    const torrentFile = req.files && req.files['torrentfile'] ? req.files['torrentfile'][0] : undefined
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    if (CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true) {
+    if (req.body.targetUrl && CONFIG.IMPORT.VIDEOS.HTTP.ENABLED !== true) {
       cleanUpReqFiles(req)
       return res.status(409)
-        .json({ error: 'Import is not enabled on this instance.' })
+        .json({ error: 'HTTP import is not enabled on this instance.' })
         .end()
+    }
+
+    if (CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED !== true && (req.body.magnetUri || torrentFile)) {
+      cleanUpReqFiles(req)
+      return res.status(409)
+                .json({ error: 'Torrent/magnet URI import is not enabled on this instance.' })
+                .end()
     }
 
     if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     // Check we have at least 1 required param
-    const file = req.files['torrentfile'][0]
-    if (!req.body.targetUrl && !req.body.magnetUri && !file) {
+    if (!req.body.targetUrl && !req.body.magnetUri && !torrentFile) {
       cleanUpReqFiles(req)
 
       return res.status(400)

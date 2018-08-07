@@ -196,7 +196,7 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
 async function getUserVideoImports (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.oauth.token.User as UserModel
   const resultList = await VideoImportModel.listUserVideoImportsForApi(
-    user.Account.id,
+    user.id,
     req.query.start as number,
     req.query.count as number,
     req.query.sort

@@ -9,7 +9,7 @@ import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
-import { CustomConfigAuditView, auditLoggerFactory } from '../../helpers/audit-logger'
+import { auditLoggerFactory, CustomConfigAuditView } from '../../helpers/audit-logger'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -69,6 +69,9 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       videos: {
         http: {
           enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+        },
+        torrent: {
+          enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
         }
       }
     },
@@ -237,6 +240,9 @@ function customConfig (): CustomConfig {
       videos: {
         http: {
           enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+        },
+        torrent: {
+          enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
         }
       }
     }

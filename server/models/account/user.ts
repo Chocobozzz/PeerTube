@@ -295,7 +295,7 @@ export class UserModel extends Model<UserModel> {
     return json
   }
 
-  isAbleToUploadVideo (videoFile: Express.Multer.File) {
+  isAbleToUploadVideo (videoFile: { size: number }) {
     if (this.videoQuota === -1) return Promise.resolve(true)
 
     return UserModel.getOriginalVideoFileTotalFromUser(this)

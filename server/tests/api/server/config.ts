@@ -45,6 +45,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['720p']).to.be.true
   expect(data.transcoding.resolutions['1080p']).to.be.true
   expect(data.import.videos.http.enabled).to.be.true
+  expect(data.import.videos.torrent.enabled).to.be.true
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -72,6 +73,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['720p']).to.be.false
   expect(data.transcoding.resolutions['1080p']).to.be.false
   expect(data.import.videos.http.enabled).to.be.false
+  expect(data.import.videos.torrent.enabled).to.be.false
 }
 
 describe('Test config', function () {
@@ -166,6 +168,9 @@ describe('Test config', function () {
       import: {
         videos: {
           http: {
+            enabled: false
+          },
+          torrent: {
             enabled: false
           }
         }
