@@ -7,6 +7,10 @@
         <source>Afar</source>
         <target>Afar</target>
       </trans-unit>
+      <trans-unit id="Abkhazian">
+        <source>Abkhazian</source>
+        <target>Abcaz</target>
+      </trans-unit>
       <trans-unit id="Afrikaans">
         <source>Afrikaans</source>
         <target>Afrikaans</target>
@@ -27,6 +31,10 @@
         <source>Aragonese</source>
         <target>Aragonés</target>
       </trans-unit>
+      <trans-unit id="American Sign Language">
+        <source>American Sign Language</source>
+        <target>Lenga de signes americana</target>
+      </trans-unit>
       <trans-unit id="Assamese">
         <source>Assamese</source>
         <target>Assamés</target>
@@ -34,6 +42,10 @@
       <trans-unit id="Avaric">
         <source>Avaric</source>
         <target>Avaric</target>
+      </trans-unit>
+      <trans-unit id="Kotava">
+        <source>Kotava</source>
+        <target>Kotava</target>
       </trans-unit>
       <trans-unit id="Aymara">
         <source>Aymara</source>
@@ -59,6 +71,10 @@
         <source>Bengali</source>
         <target>Bengalin</target>
       </trans-unit>
+      <trans-unit id="British Sign Language">
+        <source>British Sign Language</source>
+        <target>Lenga de signes britanica</target>
+      </trans-unit>
       <trans-unit id="Bislama">
         <source>Bislama</source>
         <target>Bislama</target>
@@ -78,6 +94,10 @@
       <trans-unit id="Bulgarian">
         <source>Bulgarian</source>
         <target>Bulgar</target>
+      </trans-unit>
+      <trans-unit id="Brazilian Sign Language">
+        <source>Brazilian Sign Language</source>
+        <target>Lenga de signes brasiliana</target>
       </trans-unit>
       <trans-unit id="Catalan">
         <source>Catalan</source>
@@ -103,13 +123,88 @@
         <source>Cornish</source>
         <target>Cornic</target>
       </trans-unit>
+      <trans-unit id="Corsican">
+        <source>Corsican</source>
+        <target>Còrs</target>
+      </trans-unit>
+      <trans-unit id="Cree">
+        <source>Cree</source>
+        <target>Cree</target>
+      </trans-unit>
+      <trans-unit id="Czech Sign Language">
+        <source>Czech Sign Language</source>
+        <target>Lenga de signes chèca</target>
+      </trans-unit>
+      <trans-unit id="Chinese Sign Language">
+        <source>Chinese Sign Language</source>
+        <target>Lenga de signes chinesa</target>
+      </trans-unit>
+      <trans-unit id="Welsh">
+        <source>Welsh</source>
+        <target>Galés</target>
+      </trans-unit>
+      <trans-unit id="Danish">
+        <source>Danish</source>
+        <target>Danés</target>
+      </trans-unit>
+      <trans-unit id="German">
+        <source>German</source>
+        <target>Alemand</target>
+      </trans-unit>
+      <trans-unit id="Dhivehi">
+        <source>Dhivehi</source>
+      </trans-unit>
+      <trans-unit id="Danish Sign Language">
+        <source>Danish Sign Language</source>
+        <target>Lenga de signes danesa</target>
+      </trans-unit>
+      <trans-unit id="Dzongkha">
+        <source>Dzongkha</source>
+        <target>Dzongkha</target>
+      </trans-unit>
+      <trans-unit id="Modern Greek (1453-)">
+        <source>Modern Greek (1453-)</source>
+        <target>Grèc</target>
+      </trans-unit>
       <trans-unit id="English">
         <source>English</source>
         <target>Anglés</target>
       </trans-unit>
+      <trans-unit id="Esperanto">
+        <source>Esperanto</source>
+        <target>Esperanto</target>
+      </trans-unit>
+      <trans-unit id="Estonian">
+        <source>Estonian</source>
+        <target>Estonian</target>
+      </trans-unit>
+      <trans-unit id="Basque">
+        <source>Basque</source>
+        <target>Basc</target>
+      </trans-unit>
+      <trans-unit id="Ewe">
+        <source>Ewe</source>
+        <target>Ewe</target>
+      </trans-unit>
+      <trans-unit id="Faroese">
+        <source>Faroese</source>
+        <target>Faroés</target>
+      </trans-unit>
+      <trans-unit id="Fijian">
+        <source>Fijian</source>
+        <target>Fijian</target>
+      </trans-unit>
+      <trans-unit id="Finnish">
+        <source>Finnish</source>
+        <target>Finés</target>
+      </trans-unit>
       <trans-unit id="French">
         <source>French</source>
         <target>Francés</target>
+      </trans-unit>
+      <trans-unit id="French Sign Language">
+        <source>French Sign Language</source>
+        <target>Lenga de signes francesa</target>
       </trans-unit>
       <trans-unit id="Fulah">
         <source>Fulah</source>
@@ -135,13 +230,25 @@
         <source>Guarani</source>
         <target>Guaraní</target>
       </trans-unit>
+      <trans-unit id="German Sign Language">
+        <source>German Sign Language</source>
+        <target>Lenga de signes alemanda</target>
+      </trans-unit>
       <trans-unit id="Gujarati">
         <source>Gujarati</source>
         <target>Gujarati</target>
       </trans-unit>
+      <trans-unit id="Haitian">
+        <source>Haitian</source>
+        <target>Haitian</target>
+      </trans-unit>
       <trans-unit id="Hausa">
         <source>Hausa</source>
         <target>Hausa</target>
+      </trans-unit>
+      <trans-unit id="Serbo-Croatian">
+        <source>Serbo-Croatian</source>
+        <target>Sèrbocroat</target>
       </trans-unit>
       <trans-unit id="Hebrew">
         <source>Hebrew</source>
@@ -155,25 +262,133 @@
         <source>Hindi</source>
         <target>Indi</target>
       </trans-unit>
+      <trans-unit id="Hiri Motu">
+        <source>Hiri Motu</source>
+        <target>Hiri Motu</target>
+      </trans-unit>
       <trans-unit id="Croatian">
         <source>Croatian</source>
         <target>Croat</target>
+      </trans-unit>
+      <trans-unit id="Armenian">
+        <source>Armenian</source>
+        <target>Armèni</target>
+      </trans-unit>
+      <trans-unit id="Igbo">
+        <source>Igbo</source>
+        <target>Igbo</target>
+      </trans-unit>
+      <trans-unit id="Sichuan Yi">
+        <source>Sichuan Yi</source>
+        <target>Nuosu</target>
+      </trans-unit>
+      <trans-unit id="Inuktitut">
+        <source>Inuktitut</source>
+        <target>Inuktitut</target>
+      </trans-unit>
+      <trans-unit id="Indonesian">
+        <source>Indonesian</source>
+        <target>Bahasa Indonesia</target>
+      </trans-unit>
+      <trans-unit id="Icelandic">
+        <source>Icelandic</source>
+        <target>Islandés</target>
       </trans-unit>
       <trans-unit id="Italian">
         <source>Italian</source>
         <target>Italian</target>
       </trans-unit>
+      <trans-unit id="Javanese">
+        <source>Javanese</source>
+        <target>Javanés</target>
+      </trans-unit>
+      <trans-unit id="Lojban">
+        <source>Lojban</source>
+        <target>Lojban</target>
+      </trans-unit>
+      <trans-unit id="Japanese">
+        <source>Japanese</source>
+        <target>Japonés</target>
+      </trans-unit>
+      <trans-unit id="Japanese Sign Language">
+        <source>Japanese Sign Language</source>
+        <target>Lenga de signes japonesa</target>
+      </trans-unit>
+      <trans-unit id="Georgian">
+        <source>Georgian</source>
+        <target>Georgian</target>
+      </trans-unit>
+      <trans-unit id="Kanuri">
+        <source>Kanuri</source>
+        <target>Kanuri</target>
+      </trans-unit>
+      <trans-unit id="Kazakh">
+        <source>Kazakh</source>
+        <target>Cazac</target>
+      </trans-unit>
       <trans-unit id="Kongo">
         <source>Kongo</source>
         <target>Kongo</target>
+      </trans-unit>
+      <trans-unit id="Malagasy">
+        <source>Malagasy</source>
+        <target>Malgash</target>
+      </trans-unit>
+      <trans-unit id="Dutch">
+        <source>Dutch</source>
+        <target>Neerlandés</target>
+      </trans-unit>
+      <trans-unit id="Norwegian">
+        <source>Norwegian</source>
+        <target>Norwegian</target>
       </trans-unit>
       <trans-unit id="Occitan (post 1500)">
         <source>Occitan (post 1500)</source>
         <target>Occitan</target>
       </trans-unit>
+      <trans-unit id="Romansh">
+        <source>Romansh</source>
+        <target>Romanch</target>
+      </trans-unit>
+      <trans-unit id="Romanian">
+        <source>Romanian</source>
+        <target>Romanés</target>
+      </trans-unit>
+      <trans-unit id="Russian Sign Language">
+        <source>Russian Sign Language</source>
+        <target>Lenga de signes russa</target>
+      </trans-unit>
+      <trans-unit id="Russian">
+        <source>Russian</source>
+        <target>Rus</target>
+      </trans-unit>
+      <trans-unit id="South African Sign Language">
+        <source>South African Sign Language</source>
+        <target>Lenga de signes d’Africa del sud</target>
+      </trans-unit>
       <trans-unit id="Spanish">
         <source>Spanish</source>
         <target>Espanhòl</target>
+      </trans-unit>
+      <trans-unit id="Swedish">
+        <source>Swedish</source>
+        <target>Suedés</target>
+      </trans-unit>
+      <trans-unit id="Swedish Sign Language">
+        <source>Swedish Sign Language</source>
+        <target>Lenga de signes suedesa</target>
+      </trans-unit>
+      <trans-unit id="Tatar">
+        <source>Tatar</source>
+        <target>Tatar</target>
+      </trans-unit>
+      <trans-unit id="Thai">
+        <source>Thai</source>
+        <target>Tailandés</target>
+      </trans-unit>
+      <trans-unit id="Klingon">
+        <source>Klingon</source>
+        <target>Klingon</target>
       </trans-unit>
       <trans-unit id="Turkish">
         <source>Turkish</source>
