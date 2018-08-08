@@ -5,6 +5,7 @@ import { ConfirmService } from '../../../core'
 import { RestPagination, RestTable, User } from '../../../shared'
 import { UserService } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 
 @Component({
   selector: 'my-user-list',
@@ -17,6 +18,7 @@ export class UserListComponent extends RestTable implements OnInit {
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  userActions: DropdownAction<User>[] = []
 
   constructor (
     private notificationsService: NotificationsService,
@@ -25,6 +27,17 @@ export class UserListComponent extends RestTable implements OnInit {
     private i18n: I18n
   ) {
     super()
+
+    this.userActions = [
+      {
+        type: 'edit',
+        linkBuilder: this.getRouterUserEditLink
+      },
+      {
+        type: 'delete',
+        handler: user => this.removeUser(user)
+      }
+    ]
   }
 
   ngOnInit () {

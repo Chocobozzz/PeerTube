@@ -21,6 +21,7 @@ import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid,
+  isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
@@ -106,6 +107,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserBlocked', value => throwIfNotValid(value, isUserBlockedValid, 'blocked boolean'))
   @Column
   blocked: boolean
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserBlockedReason', value => throwIfNotValid(value, isUserBlockedReasonValid, 'blocked reason'))
+  @Column
+  blockedReason: string
 
   @AllowNull(false)
   @Is('UserRole', value => throwIfNotValid(value, isUserRoleValid, 'role'))
@@ -284,6 +291,8 @@ export class UserModel extends Model<UserModel> {
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
       createdAt: this.createdAt,
+      blocked: this.blocked,
+      blockedReason: this.blockedReason,
       account: this.Account.toFormattedJSON(),
       videoChannels: []
     }

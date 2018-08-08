@@ -17,8 +17,8 @@ import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
-import { DeleteButtonComponent } from './misc/delete-button.component'
-import { EditButtonComponent } from './misc/edit-button.component'
+import { DeleteButtonComponent } from './buttons/delete-button.component'
+import { EditButtonComponent } from './buttons/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
 import { NumberFormatterPipe } from './misc/number-formatter.pipe'
@@ -52,6 +52,7 @@ import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validator
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
+import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 
 @NgModule({
   imports: [
@@ -78,6 +79,7 @@ import { VideoImportService } from '@app/shared/video-import/video-import.servic
     VideoFeedComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    ActionDropdownComponent,
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
@@ -110,6 +112,7 @@ import { VideoImportService } from '@app/shared/video-import/video-import.servic
     VideoFeedComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
     HelpComponent,

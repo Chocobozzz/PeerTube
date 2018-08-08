@@ -30,8 +30,9 @@
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>
       <td class="action-cell">
-        <my-edit-button [routerLink]="getRouterUserEditLink(user)"></my-edit-button>
-        <my-delete-button (click)="removeUser(user)"></my-delete-button>
+        <my-action-dropdown i18n-label label="Actions" [actions]="userActions" [entry]="user"></my-action-dropdown>
+        <!--<my-edit-button [routerLink]="getRouterUserEditLink(user)"></my-edit-button>-->
+        <!--<my-delete-button (click)="removeUser(user)"></my-delete-button>-->
       </td>
     </tr>
   </ng-template>

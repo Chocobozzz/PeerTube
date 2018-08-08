@@ -42,6 +42,10 @@ function isUserBlockedValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserBlockedReasonValid (value: any) {
+  return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.BLOCKED_REASON))
+}
+
 function isUserRoleValid (value: any) {
   return exists(value) && validator.isInt('' + value) && UserRole[value] !== undefined
 }
@@ -59,6 +63,7 @@ function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } |
 export {
   isUserBlockedValid,
   isUserPasswordValid,
+  isUserBlockedReasonValid,
   isUserRoleValid,
   isUserVideoQuotaValid,
   isUserUsernameValid,

@@ -5,7 +5,7 @@ import { body, param } from 'express-validator/check'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isUserAutoPlayVideoValid,
+  isUserAutoPlayVideoValid, isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserNSFWPolicyValid,
@@ -76,9 +76,10 @@ const usersRemoveValidator = [
 
 const usersBlockingValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('reason').optional().custom(isUserBlockedReasonValid).withMessage('Should have a valid blocking reason'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRemove parameters', { parameters: req.params })
+    logger.debug('Checking usersBlocking parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return

@@ -302,8 +302,9 @@ async function unblockUser (req: express.Request, res: express.Response, next: e
 
 async function blockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user: UserModel = res.locals.user
+  const reason = req.body.reason
 
-  await changeUserBlock(res, user, true)
+  await changeUserBlock(res, user, true, reason)
 
   return res.status(204).end()
 }
@@ -454,16 +455,19 @@ function success (req: express.Request, res: express.Response, next: express.Nex
   res.end()
 }
 
-async function changeUserBlock (res: express.Response, user: UserModel, block: boolean) {
+async function changeUserBlock (res: express.Response, user: UserModel, block: boolean, reason?: string) {
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
 
   user.blocked = block
+  user.blockedReason = reason || null
 
   await sequelizeTypescript.transaction(async t => {
     await OAuthTokenModel.deleteUserToken(user.id, t)
 
     await user.save({ transaction: t })
   })
+
+  await Emailer.Instance.addUserBlockJob(user, block, reason)
 
   auditLogger.update(
     res.locals.oauth.token.User.Account.Actor.getIdentifier(),

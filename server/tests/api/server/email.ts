@@ -2,7 +2,17 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { askResetPassword, createUser, reportVideoAbuse, resetPassword, runServer, uploadVideo, userLogin, wait } from '../../utils'
+import {
+  askResetPassword,
+  blockUser,
+  createUser,
+  reportVideoAbuse,
+  resetPassword,
+  runServer,
+  unblockUser,
+  uploadVideo,
+  userLogin
+} from '../../utils'
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { mockSmtpServer } from '../../utils/miscs/email'
 import { waitJobs } from '../../utils/server/jobs'
@@ -109,6 +119,42 @@ describe('Test emails', function () {
       expect(email['to'][0]['address']).equal('admin1@example.com')
       expect(email['subject']).contains('abuse')
       expect(email['text']).contains(videoUUID)
+    })
+  })
+
+  describe('When blocking/unblocking user', async function () {
+    it('Should send the notification email when blocking a user', async function () {
+      this.timeout(10000)
+
+      const reason = 'my super bad reason'
+      await blockUser(server.url, userId, server.accessToken, 204, reason)
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(3)
+
+      const email = emails[2]
+
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('user_1@example.com')
+      expect(email['subject']).contains(' blocked')
+      expect(email['text']).contains(' blocked')
+      expect(email['text']).contains(reason)
+    })
+
+    it('Should send the notification email when unblocking a user', async function () {
+      this.timeout(10000)
+
+      await unblockUser(server.url, userId, server.accessToken, 204)
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(4)
+
+      const email = emails[3]
+
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('user_1@example.com')
+      expect(email['subject']).contains(' unblocked')
+      expect(email['text']).contains(' unblocked')
     })
   })
 

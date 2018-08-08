@@ -1,8 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { createClient } from 'redis'
-import { CONFIG } from '../constants'
-import { JobQueue } from '../../lib/job-queue'
-import { initDatabaseModels } from '../database'
+import { CONSTRAINTS_FIELDS } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -30,6 +27,15 @@ async function up (utils: {
       defaultValue: null
     }
     await utils.queryInterface.changeColumn('user', 'blocked', data)
+  }
+
+  {
+    const data = {
+      type: Sequelize.STRING(CONSTRAINTS_FIELDS.USERS.BLOCKED_REASON.max),
+      allowNull: true,
+      defaultValue: null
+    }
+    await utils.queryInterface.addColumn('user', 'blockedReason', data)
   }
 }
 

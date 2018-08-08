@@ -57,7 +57,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
   @AfterCreate
   static sendEmailNotification (instance: VideoAbuseModel) {
-    return Emailer.Instance.addVideoAbuseReport(instance.videoId)
+    return Emailer.Instance.addVideoAbuseReportJob(instance.videoId)
   }
 
   static listForApi (start: number, count: number, sort: string) {

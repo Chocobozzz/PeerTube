@@ -254,7 +254,8 @@ const CONSTRAINTS_FIELDS = {
     DESCRIPTION: { min: 3, max: 250 }, // Length
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
-    VIDEO_QUOTA: { min: -1 }
+    VIDEO_QUOTA: { min: -1 },
+    BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
     REASON: { min: 2, max: 300 } // Length

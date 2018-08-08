@@ -134,11 +134,14 @@ function removeUser (url: string, userId: number | string, accessToken: string, 
           .expect(expectedStatus)
 }
 
-function blockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+function blockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204, reason?: string) {
   const path = '/api/v1/users'
+  let body: any
+  if (reason) body = { reason }
 
   return request(url)
     .post(path + '/' + userId + '/block')
+    .send(body)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
     .expect(expectedStatus)

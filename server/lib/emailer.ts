@@ -89,7 +89,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  async addVideoAbuseReport (videoId: number) {
+  async addVideoAbuseReportJob (videoId: number) {
     const video = await VideoModel.load(videoId)
     if (!video) throw new Error('Unknown Video id during Abuse report.')
 
@@ -102,6 +102,27 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to,
       subject: '[PeerTube] Received a video abuse',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addUserBlockJob (user: UserModel, blocked: boolean, reason?: string) {
+    const reasonString = reason ? ` for the following reason: ${reason}` : ''
+    const blockedWord = blocked ? 'blocked' : 'unblocked'
+    const blockedString = `Your account ${user.username} on ${CONFIG.WEBSERVER.HOST} has been ${blockedWord}${reasonString}.`
+
+    const text = 'Hi,\n\n' +
+      blockedString +
+      '\n\n' +
+      'Cheers,\n' +
+      `PeerTube.`
+
+    const to = user.email
+    const emailPayload: EmailPayload = {
+      to: [ to ],
+      subject: '[PeerTube] Account ' + blockedWord,
       text
     }
 
