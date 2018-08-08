@@ -74,6 +74,19 @@ const usersRemoveValidator = [
   }
 ]
 
+const deleteMeValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user: UserModel = res.locals.oauth.token.User
+    if (user.username === 'root') {
+      return res.status(400)
+                .send({ error: 'You cannot delete your root account.' })
+                .end()
+    }
+
+    return next()
+  }
+]
+
 const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
@@ -215,6 +228,7 @@ const usersResetPasswordValidator = [
 
 export {
   usersAddValidator,
+  deleteMeValidator,
   usersRegisterValidator,
   usersRemoveValidator,
   usersUpdateValidator,

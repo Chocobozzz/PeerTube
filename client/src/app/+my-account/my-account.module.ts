@@ -13,6 +13,7 @@ import { MyAccountVideoChannelCreateComponent } from '@app/+my-account/my-accoun
 import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-update.component'
 import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-info.component'
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
+import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settings/my-account-danger-zone'
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-vide
     MyAccountVideoChannelCreateComponent,
     MyAccountVideoChannelUpdateComponent,
     ActorAvatarInfoComponent,
-    MyAccountVideoImportsComponent
+    MyAccountVideoImportsComponent,
+    MyAccountDangerZoneComponent
   ],
 
   exports: [

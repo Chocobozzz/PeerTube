@@ -6,7 +6,8 @@ import { UserRole } from '../../../../shared/index'
 import {
   createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating,
   getUserInformation, getUsersList, getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo,
-  registerUser, removeUser, removeVideo, runServer, ServerInfo, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo, userLogin
+  registerUser, removeUser, removeVideo, runServer, ServerInfo, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo, userLogin,
+  deleteMe
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'
@@ -476,6 +477,20 @@ describe('Test users', function () {
     const user = res.body
 
     expect(user.videoQuota).to.equal(5 * 1024 * 1024)
+  })
+
+  it('Should remove me', async function () {
+    {
+      const res = await getUsersList(server.url, server.accessToken)
+      expect(res.body.data.find(u => u.username === 'user_15')).to.not.be.undefined
+    }
+
+    await deleteMe(server.url, accessToken)
+
+    {
+      const res = await getUsersList(server.url, server.accessToken)
+      expect(res.body.data.find(u => u.username === 'user_15')).to.be.undefined
+    }
   })
 
   after(async function () {

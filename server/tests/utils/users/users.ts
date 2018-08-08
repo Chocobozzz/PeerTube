@@ -56,6 +56,16 @@ function getMyUserInformation (url: string, accessToken: string, specialStatus =
           .expect('Content-Type', /json/)
 }
 
+function deleteMe (url: string, accessToken: string, specialStatus = 204) {
+  const path = '/api/v1/users/me'
+
+  return request(url)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(specialStatus)
+}
+
 function getMyUserVideoQuotaUsed (url: string, accessToken: string, specialStatus = 200) {
   const path = '/api/v1/users/me/video-quota-used'
 
@@ -216,6 +226,7 @@ export {
   registerUser,
   getMyUserInformation,
   getMyUserVideoRating,
+  deleteMe,
   getMyUserVideoQuotaUsed,
   getUsersList,
   getUsersListPaginationAndSort,

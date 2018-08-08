@@ -30,6 +30,7 @@ import {
   usersVideoRatingValidator
 } from '../../middlewares'
 import {
+  deleteMeValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
   videoImportsSortValidator,
@@ -61,6 +62,11 @@ const usersRouter = express.Router()
 usersRouter.get('/me',
   authenticate,
   asyncMiddleware(getUserInformation)
+)
+usersRouter.delete('/me',
+  authenticate,
+  asyncMiddleware(deleteMeValidator),
+  asyncMiddleware(deleteMe)
 )
 
 usersRouter.get('/me/video-quota-used',
@@ -296,8 +302,18 @@ async function listUsers (req: express.Request, res: express.Response, next: exp
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
+async function deleteMe (req: express.Request, res: express.Response) {
+  const user: UserModel = res.locals.oauth.token.User
+
+  await user.destroy()
+
+  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+
+  return res.sendStatus(204)
+}
+
 async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = await UserModel.loadById(req.params.id)
+  const user: UserModel = res.locals.user
 
   await user.destroy()
 

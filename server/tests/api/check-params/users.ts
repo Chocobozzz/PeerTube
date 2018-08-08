@@ -8,7 +8,7 @@ import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
   makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
-  updateUser, uploadVideo, userLogin
+  updateUser, uploadVideo, userLogin, deleteMe
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../utils/videos/video-imports'
@@ -466,6 +466,12 @@ describe('Test users API validators', function () {
 
     it('Should return 404 with a non existing id', async function () {
       await removeUser(server.url, 4545454, server.accessToken, 404)
+    })
+  })
+
+  describe('When deleting our account', function () {
+    it('Should fail with with the root account', async function () {
+      await deleteMe(server.url, server.accessToken, 400)
     })
   })
 
