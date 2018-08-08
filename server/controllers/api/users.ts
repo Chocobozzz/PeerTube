@@ -32,6 +32,7 @@ import {
 import {
   deleteMeValidator,
   usersAskResetPasswordValidator,
+  usersBlockingValidator,
   usersResetPasswordValidator,
   videoImportsSortValidator,
   videosSortValidator
@@ -106,6 +107,19 @@ usersRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listUsers)
+)
+
+usersRouter.post('/:id/block',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockingValidator),
+  asyncMiddleware(blockUser)
+)
+usersRouter.post('/:id/unblock',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockingValidator),
+  asyncMiddleware(unblockUser)
 )
 
 usersRouter.get('/:id',
@@ -278,6 +292,22 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
   return res.json(data)
 }
 
+async function unblockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+
+  await changeUserBlock(res, user, false)
+
+  return res.status(204).end()
+}
+
+async function blockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+
+  await changeUserBlock(res, user, true)
+
+  return res.status(204).end()
+}
+
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.json((res.locals.user as UserModel).toFormattedJSON())
 }
@@ -422,4 +452,22 @@ async function resetUserPassword (req: express.Request, res: express.Response, n
 
 function success (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.end()
+}
+
+async function changeUserBlock (res: express.Response, user: UserModel, block: boolean) {
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+
+  user.blocked = block
+
+  await sequelizeTypescript.transaction(async t => {
+    await OAuthTokenModel.deleteUserToken(user.id, t)
+
+    await user.save({ transaction: t })
+  })
+
+  auditLogger.update(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new UserAuditView(user.toFormattedJSON()),
+    oldUserAuditView
+  )
 }

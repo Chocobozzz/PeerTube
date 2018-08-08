@@ -7,7 +7,7 @@ import {
   createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating,
   getUserInformation, getUsersList, getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo,
   registerUser, removeUser, removeVideo, runServer, ServerInfo, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo, userLogin,
-  deleteMe
+  deleteMe, blockUser, unblockUser
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'
@@ -45,28 +45,28 @@ describe('Test users', function () {
     const client = { id: 'client', secret: server.client.secret }
     const res = await login(server.url, client, server.user, 400)
 
-    expect(res.body.error).to.equal('Authentication failed.')
+    expect(res.body.error).to.contain('client is invalid')
   })
 
   it('Should not login with an invalid client secret', async function () {
     const client = { id: server.client.id, secret: 'coucou' }
     const res = await login(server.url, client, server.user, 400)
 
-    expect(res.body.error).to.equal('Authentication failed.')
+    expect(res.body.error).to.contain('client is invalid')
   })
 
   it('Should not login with an invalid username', async function () {
     const user = { username: 'captain crochet', password: server.user.password }
     const res = await login(server.url, server.client, user, 400)
 
-    expect(res.body.error).to.equal('Authentication failed.')
+    expect(res.body.error).to.contain('credentials are invalid')
   })
 
   it('Should not login with an invalid password', async function () {
     const user = { username: server.user.username, password: 'mew_three' }
     const res = await login(server.url, server.client, user, 400)
 
-    expect(res.body.error).to.equal('Authentication failed.')
+    expect(res.body.error).to.contain('credentials are invalid')
   })
 
   it('Should not be able to upload a video', async function () {
@@ -491,6 +491,27 @@ describe('Test users', function () {
       const res = await getUsersList(server.url, server.accessToken)
       expect(res.body.data.find(u => u.username === 'user_15')).to.be.undefined
     }
+  })
+
+  it('Should block and unblock a user', async function () {
+    const user16 = {
+      username: 'user_16',
+      password: 'my super password'
+    }
+    const resUser = await createUser(server.url, server.accessToken, user16.username, user16.password)
+    const user16Id = resUser.body.user.id
+
+    accessToken = await userLogin(server, user16)
+
+    await getMyUserInformation(server.url, accessToken, 200)
+    await blockUser(server.url, user16Id, server.accessToken)
+
+    await getMyUserInformation(server.url, accessToken, 401)
+    await userLogin(server, user16, 400)
+
+    await unblockUser(server.url, user16Id, server.accessToken)
+    accessToken = await userLogin(server, user16)
+    await getMyUserInformation(server.url, accessToken, 200)
   })
 
   after(async function () {

@@ -8,7 +8,7 @@ import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
   makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
-  updateUser, uploadVideo, userLogin, deleteMe
+  updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../utils/videos/video-imports'
@@ -455,17 +455,29 @@ describe('Test users API validators', function () {
     })
   })
 
-  describe('When removing an user', function () {
+  describe('When blocking/unblocking/removing user', function () {
     it('Should fail with an incorrect id', async function () {
       await removeUser(server.url, 'blabla', server.accessToken, 400)
+      await blockUser(server.url, 'blabla', server.accessToken, 400)
+      await unblockUser(server.url, 'blabla', server.accessToken, 400)
     })
 
     it('Should fail with the root user', async function () {
       await removeUser(server.url, rootId, server.accessToken, 400)
+      await blockUser(server.url, rootId, server.accessToken, 400)
+      await unblockUser(server.url, rootId, server.accessToken, 400)
     })
 
     it('Should return 404 with a non existing id', async function () {
       await removeUser(server.url, 4545454, server.accessToken, 404)
+      await blockUser(server.url, 4545454, server.accessToken, 404)
+      await unblockUser(server.url, 4545454, server.accessToken, 404)
+    })
+
+    it('Should fail with a non admin user', async function () {
+      await removeUser(server.url, userId, userAccessToken, 403)
+      await blockUser(server.url, userId, userAccessToken, 403)
+      await unblockUser(server.url, userId, userAccessToken, 403)
     })
   })
 

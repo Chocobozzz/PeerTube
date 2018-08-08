@@ -21,6 +21,7 @@ import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid,
+  isUserBlockedValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
@@ -99,6 +100,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
+
+  @AllowNull(false)
+  @Default(false)
+  @Is('UserBlocked', value => throwIfNotValid(value, isUserBlockedValid, 'blocked boolean'))
+  @Column
+  blocked: boolean
 
   @AllowNull(false)
   @Is('UserRole', value => throwIfNotValid(value, isUserRoleValid, 'role'))

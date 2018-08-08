@@ -134,6 +134,26 @@ function removeUser (url: string, userId: number | string, accessToken: string, 
           .expect(expectedStatus)
 }
 
+function blockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+  const path = '/api/v1/users'
+
+  return request(url)
+    .post(path + '/' + userId + '/block')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+}
+
+function unblockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+  const path = '/api/v1/users'
+
+  return request(url)
+    .post(path + '/' + userId + '/unblock')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+}
+
 function updateMyUser (options: {
   url: string
   accessToken: string,
@@ -234,6 +254,8 @@ export {
   updateUser,
   updateMyUser,
   getUserInformation,
+  blockUser,
+  unblockUser,
   askResetPassword,
   resetPassword,
   updateMyAvatar

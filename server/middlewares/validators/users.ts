@@ -74,6 +74,26 @@ const usersRemoveValidator = [
   }
 ]
 
+const usersBlockingValidator = [
+  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersRemove parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    const user = res.locals.user
+    if (user.username === 'root') {
+      return res.status(400)
+                .send({ error: 'Cannot block the root user' })
+                .end()
+    }
+
+    return next()
+  }
+]
+
 const deleteMeValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user: UserModel = res.locals.oauth.token.User
@@ -230,6 +250,7 @@ export {
   usersAddValidator,
   deleteMeValidator,
   usersRegisterValidator,
+  usersBlockingValidator,
   usersRemoveValidator,
   usersUpdateValidator,
   usersUpdateMeValidator,
