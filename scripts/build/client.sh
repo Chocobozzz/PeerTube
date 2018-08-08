@@ -31,7 +31,7 @@ post_build_hook
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     # Supported languages
-    languages=("fr_FR" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES")
+    languages=("fr_FR" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES" "oc")
 
     for lang in "${languages[@]}"; do
         # TODO: remove when the project will use runtime translations

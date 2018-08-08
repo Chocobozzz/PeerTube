@@ -9,6 +9,7 @@ export const I18N_LOCALES = {
   'eo': 'Esperanto',
   'de-DE': 'Deutsch',
   'es-ES': 'español',
+  'oc': 'occitan',
   'zh-Hant-TW': '中文 (繁體, 台灣)'
   // 'pl-PL': 'polski'
 }

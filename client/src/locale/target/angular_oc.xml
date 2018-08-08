@@ -1053,6 +1053,7 @@ Seleccionatz aquesta opcion, salvatz la configuracion e ensajatz amb una URL de 
       </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
+        <target>Transcodatge dels threads</target>
         <context-group name="null">
           <context context-type="linenumber">187</context>
         </context-group>
@@ -3359,6 +3360,7 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       </trans-unit>
       <trans-unit id="1b64ea3e04ceeb512e8974eb0019dee4f211c7a0">
         <source>Sa</source>
+        <target>Sa</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3694,6 +3696,7 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       </trans-unit>
       <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
         <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
+        <target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
