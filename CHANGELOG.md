@@ -59,6 +59,7 @@ You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/co
  * Update nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
  * Update default cache size configurations
  * Update search API route: `/videos/search` becomes `/search/videos`
+ * Needs Redis >= 2.8.18
  
 ### Features
 
