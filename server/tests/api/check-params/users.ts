@@ -619,7 +619,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail to import with HTTP/Torrent/magnet', async function () {
-      this.timeout(30000)
+      this.timeout(120000)
 
       const baseAttributes = {
         channelId: 1,
