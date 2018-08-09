@@ -5,6 +5,7 @@
   background-color: #000;
   display: flex;
   justify-content: center;
+  flex-grow: 1;
 
   .remote-server-down {
     color: #fff;
@@ -68,6 +69,7 @@
 .video-bottom {
   margin-top: 40px;
   display: flex;
+  flex-grow: 1;
 
   .video-info {
     flex-grow: 1;

@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-$icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+$icon-font-path: '../../node_modules/@neos21/bootstrap3-glyphicons/assets/fonts/';
 @import '_bootstrap';
 
 @import '_fonts';
@@ -22,6 +22,7 @@ body {
   font-family: $main-fonts;
   font-weight: $font-regular;
   color: #000;
+  font-size: 14px;
 }
 
 #incompatible-browser {
@@ -62,10 +63,12 @@ label {
 
 .main-col {
   margin-left: $menu-width;
+  width: auto;
 
   .margin-content {
     margin-left: $not-expanded-horizontal-margins;
     margin-right: $not-expanded-horizontal-margins;
+    flex-grow: 1;
   }
 
   .sub-menu {
