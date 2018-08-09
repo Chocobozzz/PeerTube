@@ -177,6 +177,10 @@
             padding: 0 10px 0 10px;
             white-space: nowrap;
 
+            &::after {
+              display: none;
+            }
+
             .icon {
               @include icon(21px);
 

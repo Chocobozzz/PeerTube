@@ -42,6 +42,10 @@ input.readonly {
   background-color: #fff !important;
 }
 
+input, textarea {
+  outline: none;
+}
+
 label {
   font-weight: $font-bold;
   font-size: 15px;
@@ -174,9 +178,13 @@ label {
       @include icon(24px);
 
       position: relative;
-      right: -1px;
+      top: 3px;
       float: right;
       background-image: url('../assets/images/global/cross.svg');
+
+      margin: 0;
+      padding: 0;
+      opacity: 1;
     }
   }
 
@@ -200,47 +208,35 @@ label {
   }
 }
 
-tabset:not(.bootstrap) {
-  .nav {
-    font-size: 16px !important;
-    border: none !important;
+// Nav customizations
+.nav .nav-link {
+  display: flex !important;
+  align-items: center;
+  height: 30px !important;
+  padding: 10px 15px !important;
+}
 
-    .nav-item .nav-link {
-      margin-right: 30px;
-      padding: 0;
-      border-radius: 3px;
-      border: none !important;
+.nav.nav-pills {
+  font-size: 16px !important;
 
-      .tab-link {
-        display: flex !important;
-        align-items: center;
-        min-height: 30px !important;
-        padding: 0 15px;
-      }
+  .nav-link.active {
+    font-weight: $font-semibold !important;
+  }
 
-      &, & a {
-        color: #000 !important;
-        @include disable-default-a-behaviour;
-      }
+  a {
+    @include disable-default-a-behaviour;
 
-      &.active, &:hover {
-        background-color: #F0F0F0;
-      }
-
-      &.active {
-        font-weight: $font-semibold !important;
-      }
-    }
+    color: #000;
   }
 }
 
-tabset.bootstrap {
-  margin-left: 0;
+ngb-tabset.bootstrap {
 
-  .nav-item .nav-link {
+  .nav-link {
     &, & a {
-      color: #000;
       @include disable-default-a-behaviour;
+
+      color: #000 !important;
     }
   }
 }

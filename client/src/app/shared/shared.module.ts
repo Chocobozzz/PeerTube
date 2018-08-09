@@ -8,11 +8,6 @@ import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { MarkdownService } from '@app/videos/shared'
 
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
-import { ModalModule } from 'ngx-bootstrap/modal'
-import { PopoverModule } from 'ngx-bootstrap/popover'
-import { TabsModule } from 'ngx-bootstrap/tabs'
-import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
@@ -53,6 +48,7 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
+import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   imports: [
@@ -62,11 +58,11 @@ import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.com
     RouterModule,
     HttpClientModule,
 
-    BsDropdownModule.forRoot(),
-    ModalModule.forRoot(),
-    PopoverModule.forRoot(),
-    TabsModule.forRoot(),
-    TooltipModule.forRoot(),
+    NgbDropdownModule.forRoot(),
+    NgbModalModule.forRoot(),
+    NgbPopoverModule.forRoot(),
+    NgbTabsetModule.forRoot(),
+    NgbTooltipModule.forRoot(),
 
     PrimeSharedModule,
     NgPipesModule
@@ -97,11 +93,12 @@ import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.com
     RouterModule,
     HttpClientModule,
 
-    BsDropdownModule,
-    ModalModule,
-    PopoverModule,
-    TabsModule,
-    TooltipModule,
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTabsetModule,
+    NgbTooltipModule,
+
     PrimeSharedModule,
     BytesPipe,
     KeysPipe,

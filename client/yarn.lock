@@ -191,6 +191,10 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@neos21/bootstrap3-glyphicons/-/bootstrap3-glyphicons-1.0.1.tgz#e5eeec43e0153d4b51effd9ecb58cdf7029924d7"
 
+"@ng-bootstrap/ng-bootstrap@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-2.2.2.tgz#07c64badd48b563140eb5a6327b5516bf2226834"
+
 "@ngtools/webpack@6.1.1":
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-6.1.1.tgz#dcfea287c0c1358f3e123621c65b0e3ccaab5b70"
@@ -5349,10 +5353,6 @@ ng2-material-dropdown@0.10.1:
   resolved "https://registry.yarnpkg.com/ng2-material-dropdown/-/ng2-material-dropdown-0.10.1.tgz#0120ce1bbabfb065c62610fe3b572cd09f61b1e1"
   dependencies:
     tslib "^1.9.0"
-
-ngx-bootstrap@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-3.0.1.tgz#e98d2fc6340f32a9d358cd08e8fda7dcb23bdab3"
 
 ngx-chips@1.9.3:
   version "1.9.3"

@@ -18,9 +18,8 @@
   title="Get help"
   i18n-title
   [attr.aria-pressed]="isPopoverOpened"
-  [popover]="tooltipTemplate"
+  [ngbPopover]="tooltipTemplate"
   [placement]="tooltipPlacement"
-  [outsideClick]="true"
   (onHidden)="onPopoverHidden()"
   (onShown)="onPopoverShown()"
 ></span>

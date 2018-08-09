@@ -11,24 +11,22 @@
           <div class="logged-in-email">{{ user.username }}</div>
         </div>
 
-        <div class="logged-in-more" dropdown placement="right" container="body">
-          <span class="glyphicon glyphicon-option-vertical" dropdownToggle></span>
+        <div class="logged-in-more" ngbDropdown placement="bottom-right">
+          <span class="glyphicon glyphicon-option-vertical" ngbDropdownToggle role="button"></span>
 
-          <ul *dropdownMenu class="dropdown-menu">
-            <li>
-              <a i18n [routerLink]="[ '/accounts', user.account?.nameWithHost ]" class="dropdown-item" title="My public profile">
-               My public profile
-              </a>
+          <div ngbDropdownMenu>
+            <a *ngIf="user.account" i18n [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="dropdown-item">
+             My public profile
+            </a>
 
-              <a i18n routerLink="/my-account" class="dropdown-item" title="My account">
-                My account
-              </a>
+            <a i18n routerLink="/my-account" class="dropdown-item">
+              My account
+            </a>
 
-              <a i18n (click)="logout($event)" class="dropdown-item" title="Log out" href="#">
-                Log out
-              </a>
-            </li>
-          </ul>
+            <a i18n (click)="logout($event)" class="dropdown-item" href="#">
+              Log out
+            </a>
+          </div>
         </div>
       </div>
 

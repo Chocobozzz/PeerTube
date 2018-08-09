@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core'
-import { TabsModule } from 'ngx-bootstrap/tabs'
 import { TagInputModule } from 'ngx-chips'
 import { SharedModule } from '../../../shared/'
 import { VideoEditComponent } from './video-edit.component'
@@ -23,7 +22,6 @@ import { VideoCaptionAddModalComponent } from './video-caption-add-modal.compone
 
   exports: [
     TagInputModule,
-    TabsModule,
     CalendarModule,
 
     VideoEditComponent

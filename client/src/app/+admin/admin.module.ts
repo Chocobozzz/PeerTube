@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { ConfigComponent, EditCustomConfigComponent } from '@app/+admin/config'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { TabsModule } from 'ngx-bootstrap/tabs'
 import { TableModule } from 'primeng/table'
 import { SharedModule } from '../shared'
 import { AdminRoutingModule } from './admin-routing.module'
@@ -18,7 +17,6 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
 @NgModule({
   imports: [
     AdminRoutingModule,
-    TabsModule.forRoot(),
     TableModule,
     SharedModule
   ],

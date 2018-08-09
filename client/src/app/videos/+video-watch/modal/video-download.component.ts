@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { ModalDirective } from 'ngx-bootstrap/modal'
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-video-download',
@@ -10,12 +10,12 @@ import { VideoDetails } from '../../../shared/video/video-details.model'
 export class VideoDownloadComponent implements OnInit {
   @Input() video: VideoDetails = null
 
-  @ViewChild('modal') modal: ModalDirective
+  @ViewChild('modal') modal: ElementRef
 
   downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
   resolutionId: number | string = -1
 
-  constructor () {
+  constructor (private modalService: NgbModal) {
     // empty
   }
 
@@ -24,11 +24,7 @@ export class VideoDownloadComponent implements OnInit {
   }
 
   show () {
-    this.modal.show()
-  }
-
-  hide () {
-    this.modal.hide()
+    this.modalService.open(this.modal)
   }
 
   download () {

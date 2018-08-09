@@ -69,6 +69,10 @@ menu {
       .glyphicon {
         cursor: pointer;
         font-size: 18px;
+
+        &::after {
+          border: none;
+        }
       }
     }
   }

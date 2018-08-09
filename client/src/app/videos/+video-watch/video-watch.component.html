@@ -76,48 +76,38 @@
               <span class="icon-text" i18n>Share</span>
             </div>
 
-            <div class="action-more" dropdown dropup="true" placement="right" role="button">
-              <div class="action-button" dropdownToggle>
+            <div class="action-more" ngbDropdown placement="top" role="button">
+              <div class="action-button" ngbDropdownToggle role="button">
                 <span class="icon icon-more"></span>
               </div>
 
-              <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
-                    <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
-                  </a>
-                </li>
+              <div ngbDropdownMenu>
+                <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
+                  <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
+                </a>
 
-                <li *ngIf="isUserLoggedIn()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
-                    <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
-                  </a>
-                </li>
+                <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
+                  <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
+                </a>
 
-                <li *ngIf="isVideoBlacklistable()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-                    <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
-                  </a>
-                </li>
+                <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
+                  <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
+                </a>
 
-                <li *ngIf="isVideoUpdatable()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
-                    <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
-                  </a>
-                </li>
+                <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
+                  <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
+                </a>
 
-                <li *ngIf="isVideoRemovable()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
-                    <span class="icon icon-blacklist"></span> <ng-container i18n>Delete</ng-container>
-                  </a>
-                </li>
-              </ul>
+                <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
+                  <span class="icon icon-blacklist"></span> <ng-container i18n>Delete</ng-container>
+                </a>
+              </div>
             </div>
           </div>
 
           <div
               class="video-info-likes-dislikes-bar"
-              *ngIf="video.likes !== 0 || video.dislikes !== 0"  [tooltip]="likesBarTooltipText">
+              *ngIf="video.likes !== 0 || video.dislikes !== 0"  [ngbTooltip]="likesBarTooltipText">
             <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
           </div>
         </div>
