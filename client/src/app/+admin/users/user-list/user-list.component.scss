@@ -4,3 +4,21 @@
 .add-button {
   @include create-button('../../../../assets/images/global/add.svg');
 }
+
+my-action-dropdown /deep/ .icon {
+  &.icon-ban {
+    background-image: url('../../../../assets/images/global/edit-black.svg');
+  }
+}
+
+tr.banned {
+  color: red;
+}
+
+.banned-info {
+  font-style: italic;
+}
+
+.ban-reason-label {
+  font-weight: $font-semibold;
+}

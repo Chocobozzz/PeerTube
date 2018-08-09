@@ -1,4 +1,4 @@
-import { AccessDeniedError} from 'oauth2-server'
+import { AccessDeniedError } from 'oauth2-server'
 import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'

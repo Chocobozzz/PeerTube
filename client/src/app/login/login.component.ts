@@ -69,7 +69,7 @@ export class LoginComponent extends FormReactive implements OnInit {
   askResetPassword () {
     this.userService.askResetPassword(this.forgotPasswordEmail)
       .subscribe(
-        res => {
+        () => {
           const message = this.i18n(
             'An email with the reset password instructions will be sent to {{email}}.',
             { email: this.forgotPasswordEmail }

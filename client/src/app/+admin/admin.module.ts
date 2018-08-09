@@ -13,6 +13,7 @@ import { JobService } from './jobs/shared/job.service'
 import { UserCreateComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
 import { VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
 import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
+import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-modal.component'
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
     UserCreateComponent,
     UserUpdateComponent,
     UserListComponent,
+    UserBanModalComponent,
 
     VideoBlacklistComponent,
     VideoBlacklistListComponent,

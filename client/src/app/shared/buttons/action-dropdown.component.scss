@@ -5,17 +5,28 @@
   @include peertube-button;
   @include grey-button;
 
+  display: inline-block;
+  padding: 0 10px;
+
+  &::after {
+    display: none;
+  }
+
   &:hover, &:active, &:focus {
     background-color: $grey-color;
   }
-
-  display: inline-block;
-  padding: 0 10px;
 
   .icon-action {
     @include icon(21px);
 
     background-image: url('../../../assets/images/video/more.svg');
     top: -1px;
+  }
+}
+
+.dropdown-menu {
+  .dropdown-item {
+    cursor: pointer;
+    color: #000 !important;
   }
 }

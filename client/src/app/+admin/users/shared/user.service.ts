@@ -59,6 +59,18 @@ export class UserService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  banUser (user: User, reason?: string) {
+    const body = reason ? { reason } : {}
+
+    return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/block', body)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  unbanUser (user: User) {
+    return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/unblock', {})
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   private formatUser (user: User) {
     let videoQuota
     if (user.videoQuota === -1) {
