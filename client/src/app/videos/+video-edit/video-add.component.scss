@@ -7,7 +7,7 @@ $border-color: #EAEAEA;
 
 $background-color:  #F7F7F7;
 
-/deep/ tabset.root-tabset.video-add-tabset {
+/deep/ .root-tabset.video-add-tabset {
   &.hide-nav .nav {
     display: none !important;
   }
