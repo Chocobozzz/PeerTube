@@ -3,15 +3,15 @@ export const LOCALE_FILES = [ 'player', 'server' ]
 export const I18N_LOCALES = {
   'en-US': 'English',
   'fr-FR': 'Français',
-  'eu-ES': 'euskara',
-  'ca-ES': 'català',
-  'cs-CZ': 'čeština',
+  'eu-ES': 'Euskara',
+  'ca-ES': 'Català',
+  'cs-CZ': 'Čeština',
   'eo': 'Esperanto',
   'de-DE': 'Deutsch',
-  'es-ES': 'español',
-  'oc': 'occitan',
+  'es-ES': 'Español',
+  'oc': 'Occitan',
   'zh-Hant-TW': '中文 (繁體, 台灣)'
-  // 'pl-PL': 'polski'
+  // 'pl-PL': 'Polski'
 }
 
 const I18N_LOCALE_ALIAS = {
