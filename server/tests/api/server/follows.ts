@@ -66,7 +66,7 @@ describe('Test follows', function () {
   })
 
   it('Should have server 1 following server 2 and 3', async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     await follow(servers[0].url, [ servers[1].url, servers[2].url ], servers[0].accessToken)
 
