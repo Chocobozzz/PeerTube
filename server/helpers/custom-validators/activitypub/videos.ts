@@ -3,7 +3,6 @@ import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
 import { peertubeTruncate } from '../../core-utils'
 import { exists, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
-  isVideoAbuseReasonValid,
   isVideoDurationValid,
   isVideoNameValid,
   isVideoStateValid,
@@ -13,6 +12,7 @@ import {
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { VideoState } from '../../../../shared/models/videos'
+import { isVideoAbuseReasonValid } from '../video-abuses'
 
 function sanitizeAndCheckVideoTorrentCreateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Create') &&

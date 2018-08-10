@@ -14,7 +14,6 @@ import {
 import {
   checkUserCanManageVideo,
   isScheduleVideoUpdatePrivacyValid,
-  isVideoAbuseReasonValid,
   isVideoCategoryValid,
   isVideoChannelOfAccountExist,
   isVideoDescriptionValid,
@@ -174,20 +173,6 @@ const videosRemoveValidator = [
   }
 ]
 
-const videoAbuseReportValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('reason').custom(isVideoAbuseReasonValid).withMessage('Should have a valid reason'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
-
-    return next()
-  }
-]
-
 const videoRateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
@@ -298,8 +283,6 @@ export {
   videosGetValidator,
   videosRemoveValidator,
   videosShareValidator,
-
-  videoAbuseReportValidator,
 
   videoRateValidator,
 

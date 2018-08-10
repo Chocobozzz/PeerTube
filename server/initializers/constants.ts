@@ -3,7 +3,7 @@ import { dirname, join } from 'path'
 import { JobType, VideoRateType, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoPrivacy } from '../../shared/models/videos'
+import { VideoPrivacy, VideoAbuseState } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
@@ -15,7 +15,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 245
+const LAST_MIGRATION_VERSION = 250
 
 // ---------------------------------------------------------------------------
 
@@ -258,7 +258,8 @@ const CONSTRAINTS_FIELDS = {
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
-    REASON: { min: 2, max: 300 } // Length
+    REASON: { min: 2, max: 300 }, // Length
+    MODERATION_COMMENT: { min: 2, max: 300 } // Length
   },
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -407,6 +408,12 @@ const VIDEO_IMPORT_STATES = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
   [VideoImportState.SUCCESS]: 'Success'
+}
+
+const VIDEO_ABUSE_STATES = {
+  [VideoAbuseState.PENDING]: 'Pending',
+  [VideoAbuseState.REJECTED]: 'Rejected',
+  [VideoAbuseState.ACCEPTED]: 'Accepted'
 }
 
 const VIDEO_MIMETYPE_EXT = {
@@ -625,6 +632,7 @@ export {
   VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
+  VIDEO_ABUSE_STATES,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,

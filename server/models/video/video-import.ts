@@ -171,6 +171,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
       video
     }
   }
+
   private static getStateLabel (id: number) {
     return VIDEO_IMPORT_STATES[id] || 'Unknown'
   }

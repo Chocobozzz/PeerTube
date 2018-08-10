@@ -2,8 +2,9 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { VideoAbuse } from '../../../../shared/models/videos'
+import { VideoAbuse, VideoAbuseState } from '../../../../shared/models/videos'
 import {
+  deleteVideoAbuse,
   flushAndRunMultipleServers,
   getVideoAbusesList,
   getVideosList,
@@ -11,6 +12,7 @@ import {
   reportVideoAbuse,
   ServerInfo,
   setAccessTokensToServers,
+  updateVideoAbuse,
   uploadVideo
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
@@ -20,6 +22,7 @@ const expect = chai.expect
 
 describe('Test video abuses', function () {
   let servers: ServerInfo[] = []
+  let abuseServer2: VideoAbuse
 
   before(async function () {
     this.timeout(50000)
@@ -105,7 +108,7 @@ describe('Test video abuses', function () {
     await waitJobs(servers)
   })
 
-  it('Should have 2 video abuse on server 1 and 1 on server 2', async function () {
+  it('Should have 2 video abuses on server 1 and 1 on server 2', async function () {
     const res1 = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
     expect(res1.body.total).to.equal(2)
     expect(res1.body.data).to.be.an('array')
@@ -116,22 +119,57 @@ describe('Test video abuses', function () {
     expect(abuse1.reporterAccount.name).to.equal('root')
     expect(abuse1.reporterAccount.host).to.equal('localhost:9001')
     expect(abuse1.video.id).to.equal(servers[0].video.id)
+    expect(abuse1.state.id).to.equal(VideoAbuseState.PENDING)
+    expect(abuse1.state.label).to.equal('Pending')
+    expect(abuse1.moderationComment).to.be.null
 
     const abuse2: VideoAbuse = res1.body.data[1]
     expect(abuse2.reason).to.equal('my super bad reason 2')
     expect(abuse2.reporterAccount.name).to.equal('root')
     expect(abuse2.reporterAccount.host).to.equal('localhost:9001')
     expect(abuse2.video.id).to.equal(servers[1].video.id)
+    expect(abuse2.state.id).to.equal(VideoAbuseState.PENDING)
+    expect(abuse2.state.label).to.equal('Pending')
+    expect(abuse2.moderationComment).to.be.null
 
     const res2 = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
     expect(res2.body.total).to.equal(1)
     expect(res2.body.data).to.be.an('array')
     expect(res2.body.data.length).to.equal(1)
 
-    const abuse3: VideoAbuse = res2.body.data[0]
-    expect(abuse3.reason).to.equal('my super bad reason 2')
-    expect(abuse3.reporterAccount.name).to.equal('root')
-    expect(abuse3.reporterAccount.host).to.equal('localhost:9001')
+    abuseServer2 = res2.body.data[0]
+    expect(abuseServer2.reason).to.equal('my super bad reason 2')
+    expect(abuseServer2.reporterAccount.name).to.equal('root')
+    expect(abuseServer2.reporterAccount.host).to.equal('localhost:9001')
+    expect(abuseServer2.state.id).to.equal(VideoAbuseState.PENDING)
+    expect(abuseServer2.state.label).to.equal('Pending')
+    expect(abuseServer2.moderationComment).to.be.null
+  })
+
+  it('Should update the state of a video abuse', async function () {
+    const body = { state: VideoAbuseState.REJECTED }
+    await updateVideoAbuse(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid, abuseServer2.id, body)
+
+    const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
+    expect(res.body.data[0].state.id).to.equal(VideoAbuseState.REJECTED)
+  })
+
+  it('Should add a moderation comment', async function () {
+    const body = { state: VideoAbuseState.ACCEPTED, moderationComment: 'It is valid' }
+    await updateVideoAbuse(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid, abuseServer2.id, body)
+
+    const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
+    expect(res.body.data[0].state.id).to.equal(VideoAbuseState.ACCEPTED)
+    expect(res.body.data[0].moderationComment).to.equal('It is valid')
+  })
+
+  it('Should delete the video abuse', async function () {
+    await deleteVideoAbuse(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid, abuseServer2.id)
+
+    const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
+    expect(res.body.total).to.equal(0)
+    expect(res.body.data).to.be.an('array')
+    expect(res.body.data.length).to.equal(0)
   })
 
   after(async function () {
