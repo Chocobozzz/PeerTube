@@ -90,6 +90,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfigValidatorsService.CACHE_CAPTIONS_SIZE,
       signupEnabled: null,
       signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+      signupRequiresVerification: null,
       importVideosHttpEnabled: null,
       importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
@@ -187,7 +188,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       },
       signup: {
         enabled: this.form.value['signupEnabled'],
-        limit: this.form.value['signupLimit']
+        limit: this.form.value['signupLimit'],
+        requiresVerification: this.form.value['signupRequiresVerification']
       },
       admin: {
         email: this.form.value['adminEmail']
@@ -250,6 +252,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfig.cache.captions.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,
+      signupRequiresVerification: this.customConfig.signup.requiresVerification,
       adminEmail: this.customConfig.admin.email,
       userVideoQuota: this.customConfig.user.videoQuota,
       userVideoQuotaDaily: this.customConfig.user.videoQuotaDaily,

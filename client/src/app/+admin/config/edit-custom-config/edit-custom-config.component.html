@@ -91,6 +91,11 @@
           i18n-labelText labelText="Signup enabled"
         ></my-peertube-checkbox>
 
+        <my-peertube-checkbox *ngIf="isSignupEnabled()"
+          inputName="signupRequiresVerification" formControlName="signupRequiresVerification"
+          i18n-labelText labelText="Signup requires verification"
+        ></my-peertube-checkbox>
+
         <div *ngIf="isSignupEnabled()" class="form-group">
           <label i18n for="signupLimit">Signup limit</label>
           <input

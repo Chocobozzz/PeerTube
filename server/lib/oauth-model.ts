@@ -3,6 +3,7 @@ import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
+import { CONFIG } from '../initializers/constants'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
@@ -36,6 +37,8 @@ async function getUser (usernameOrEmail: string, password: string) {
   if (passwordMatch === false) return null
 
   if (user.blocked) throw new AccessDeniedError('User is blocked.')
+
+  if (CONFIG.SIGNUP.REQUIRES_VERIFICATION && !user.verified) throw new AccessDeniedError('User is not verified.')
 
   return user
 }

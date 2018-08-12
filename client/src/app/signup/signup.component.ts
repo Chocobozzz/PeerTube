@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { UserCreate } from '../../../../shared'
 import { FormReactive, UserService, UserValidatorsService } from '../shared'
-import { RedirectService } from '@app/core'
+import { RedirectService, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
@@ -21,6 +21,7 @@ export class SignupComponent extends FormReactive implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
+    private serverService: ServerService,
     private redirectService: RedirectService,
     private i18n: I18n
   ) {
@@ -29,6 +30,10 @@ export class SignupComponent extends FormReactive implements OnInit {
 
   get instanceHost () {
     return window.location.host
+  }
+
+  get requiresVerification () {
+    return this.serverService.getConfig().signup.requiresVerification
   }
 
   ngOnInit () {
@@ -47,10 +52,17 @@ export class SignupComponent extends FormReactive implements OnInit {
 
     this.userService.signup(userCreate).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('Registration for {{username}} complete.', { username: userCreate.username })
-        )
+        if (this.requiresVerification) {
+          this.notificationsService.alert(
+            this.i18n('Welcome'),
+            this.i18n('Please check your email to verify your account and complete signup.')
+          )
+        } else {
+          this.notificationsService.success(
+            this.i18n('Success'),
+            this.i18n('Registration for {{username}} complete.', { username: userCreate.username })
+          )
+        }
         this.redirectService.redirectToHomepage()
       },
 

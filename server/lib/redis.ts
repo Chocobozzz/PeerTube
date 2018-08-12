@@ -2,7 +2,7 @@ import * as express from 'express'
 import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
-import { CONFIG, USER_PASSWORD_RESET_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
+import { CONFIG, USER_PASSWORD_RESET_LIFETIME, USER_EMAIL_VERIFY_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
 
 type CachedRoute = {
   body: string,
@@ -60,6 +60,18 @@ class Redis {
     return this.getValue(this.generateResetPasswordKey(userId))
   }
 
+  async setVerifyEmailVerificationString (userId: number) {
+    const generatedString = await generateRandomString(32)
+
+    await this.setValue(this.generateVerifyEmailKey(userId), generatedString, USER_EMAIL_VERIFY_LIFETIME)
+
+    return generatedString
+  }
+
+  async getVerifyEmailLink (userId: number) {
+    return this.getValue(this.generateVerifyEmailKey(userId))
+  }
+
   setView (ip: string, videoUUID: string) {
     return this.setValue(this.buildViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
   }
@@ -87,6 +99,10 @@ class Redis {
 
   generateResetPasswordKey (userId: number) {
     return 'reset-password-' + userId
+  }
+
+  generateVerifyEmailKey (userId: number) {
+    return 'verify-email-' + userId
   }
 
   buildViewKey (ip: string, videoUUID: string) {

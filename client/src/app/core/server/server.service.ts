@@ -40,7 +40,8 @@ export class ServerService {
     serverVersion: 'Unknown',
     signup: {
       allowed: false,
-      allowedForCurrentIP: false
+      allowedForCurrentIP: false,
+      requiresVerification: false
     },
     transcoding: {
       enabledResolutions: []

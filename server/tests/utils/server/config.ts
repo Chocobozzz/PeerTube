@@ -74,7 +74,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
     },
     signup: {
       enabled: false,
-      limit: 5
+      limit: 5,
+      requiresVerification: false
     },
     admin: {
       email: 'superadmin1@example.com'

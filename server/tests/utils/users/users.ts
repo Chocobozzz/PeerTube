@@ -246,6 +246,28 @@ function resetPassword (url: string, userId: number, verificationString: string,
   })
 }
 
+function askVerifyEmail (url: string, email: string) {
+  const path = '/api/v1/users/ask-verify-email'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    fields: { email },
+    statusCodeExpected: 204
+  })
+}
+
+function verifyEmail (url: string, userId: number, verificationString: string, statusCodeExpected = 204) {
+  const path = '/api/v1/users/' + userId + '/verify-email'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    fields: { verificationString },
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -265,5 +287,7 @@ export {
   unblockUser,
   askResetPassword,
   resetPassword,
-  updateMyAvatar
+  updateMyAvatar,
+  askVerifyEmail,
+  verifyEmail
 }

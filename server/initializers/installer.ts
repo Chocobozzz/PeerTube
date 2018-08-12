@@ -122,6 +122,7 @@ async function createOAuthAdminIfNotExist () {
     email,
     password,
     role,
+    verified: true,
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     videoQuota: -1,
     videoQuotaDaily: -1
