@@ -61,20 +61,23 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 
   await sequelizeTypescript.transaction(async t => {
     const nextOwner = await AccountModel.loadLocalByName(body.username)
-    if (nextOwner) {
-      const videoChangeOwnershipToCreate = {
-        initiatorAccountId: initiatorAccount.id,
-        nextOwnerAccountId: nextOwner.id,
-        videoId: videoInstance.id,
-        status: VideoChangeOwnershipStatus.WAITING
-      }
-      await VideoChangeOwnershipModel.create(videoChangeOwnershipToCreate, { transaction: t })
+    if (!nextOwner) return res.type('json').status(400).end()
 
-      logger.info('Ownership change for video %s created.', videoInstance.name)
+    const existingRequest = await VideoChangeOwnershipModel.findExisting(initiatorAccount.id, nextOwner.id, videoInstance.id)
+    if (existingRequest && existingRequest.status === VideoChangeOwnershipStatus.WAITING) {
       return res.type('json').status(204).end()
     }
 
-    return res.type('json').status(400).end()
+    const videoChangeOwnershipToCreate = {
+      initiatorAccountId: initiatorAccount.id,
+      nextOwnerAccountId: nextOwner.id,
+      videoId: videoInstance.id,
+      status: VideoChangeOwnershipStatus.WAITING
+    }
+    await VideoChangeOwnershipModel.create(videoChangeOwnershipToCreate, { transaction: t })
+
+    logger.info('Ownership change for video %s created.', videoInstance.name)
+    return res.type('json').status(204).end()
   })
 }
 

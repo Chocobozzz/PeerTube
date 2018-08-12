@@ -110,6 +110,16 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
     })
   }
 
+  static findExisting(initiatorAccountId: number, nextOwnerAccountId: number, videoId: number) {
+    return VideoChangeOwnershipModel.find({
+      where: {
+        initiatorAccountId,
+        nextOwnerAccountId,
+        videoId
+      }
+    })
+  }
+
   toFormattedJSON (): VideoChangeOwnership {
     return {
       id: this.id,

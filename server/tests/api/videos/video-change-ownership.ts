@@ -105,6 +105,22 @@ describe('Test video change ownership', function () {
     lastRequestChangeOwnershipId = resSecondUser.body.data[0].id
   })
 
+  it('Should accept the same change ownership request without crashing', async function () {
+    this.timeout(10000)
+
+    await changeVideoOwnership(server.url, firstUserAccessToken, server.video.id, secondUser.username)
+  })
+
+  it('Should not create multiple change ownership requests while one is waiting', async function () {
+    this.timeout(10000)
+
+    const resSecondUser = await getVideoChangeOwnershipList(server.url, secondUserAccessToken)
+
+    expect(resSecondUser.body.total).to.equal(1)
+    expect(resSecondUser.body.data).to.be.an('array')
+    expect(resSecondUser.body.data.length).to.equal(1)
+  })
+
   it('Should not be possible to refuse the change of ownership from first user', async function () {
     this.timeout(10000)
 
