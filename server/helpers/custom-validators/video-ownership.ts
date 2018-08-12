@@ -21,9 +21,9 @@ export async function doesChangeVideoOwnershipExist (id: string, res: Response):
 async function loadVideoChangeOwnership (id: string): Promise<VideoChangeOwnershipModel | undefined> {
   if (validator.isInt(id)) {
     return VideoChangeOwnershipModel.load(parseInt(id, 10))
-  } else {
-    return undefined
   }
+
+  return undefined
 }
 
 export function checkUserCanTerminateOwnershipChange (
@@ -33,10 +33,10 @@ export function checkUserCanTerminateOwnershipChange (
 ): boolean {
   if (videoChangeOwnership.NextOwner.userId === user.Account.userId) {
     return true
-  } else {
-    res.status(403)
-      .json({ error: 'Cannot terminate an ownership change of another user' })
-      .end()
-    return false
   }
+
+  res.status(403)
+    .json({ error: 'Cannot terminate an ownership change of another user' })
+    .end()
+  return false
 }

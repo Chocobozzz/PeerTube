@@ -72,9 +72,9 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 
       logger.info('Ownership change for video %s created.', videoInstance.name)
       return res.type('json').status(204).end()
-    } else {
-      return res.type('json').status(400).end()
     }
+
+    return res.type('json').status(400).end()
   })
 }
 
