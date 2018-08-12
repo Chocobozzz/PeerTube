@@ -236,7 +236,7 @@ const videosChangeOwnershipValidator = [
     if (!await isVideoExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to change the ownership of the video
-    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
 
     return next()
   }
