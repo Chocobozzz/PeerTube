@@ -1,26 +1,24 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { ModalDirective } from 'ngx-bootstrap/modal'
-import { FormReactive, UserService } from '@app/shared'
-import { VideoDetails } from '@app/shared/video/video-details.model'
+import { FormReactive, UserService } from '../../../shared/index'
+import { Video } from '@app/shared/video/video.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { FormValidatorService, VideoChangeOwnershipValidatorsService } from '@app/shared'
 import { VideoOwnershipService } from '@app/shared/video-ownership'
-import { VideoChangeOwnershipValidatorsService } from '@app/shared/forms/form-validators/video-change-ownership-validators.service'
 
 @Component({
   selector: 'my-video-change-ownership',
-  templateUrl: './video-change-ownership.component.html',
-  styleUrls: ['./video-change-ownership.component.scss']
+  templateUrl: './video-change-ownership.component.html'
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
-  @Input() video: VideoDetails = null
-
   @ViewChild('modal') modal: ModalDirective
 
   usernamePropositions: string[]
 
   error: string = null
+
+  private video: Video | undefined = undefined
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -40,7 +38,8 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     this.usernamePropositions = []
   }
 
-  show () {
+  show (video: Video) {
+    this.video = video
     this.modal.show()
   }
 

@@ -1,6 +1,6 @@
 import { from as observableFrom, Observable } from 'rxjs'
 import { concatAll, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit, Inject, LOCALE_ID } from '@angular/core'
+import { Component, OnDestroy, OnInit, Inject, LOCALE_ID, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
@@ -14,6 +14,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPrivacy, VideoState } from '../../../../../shared/models/videos'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { VideoChangeOwnershipComponent } from './video-change-ownership/video-change-ownership.component'
 
 @Component({
   selector: 'my-account-videos',
@@ -32,6 +33,8 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
   protected baseVideoWidth = -1
   protected baseVideoHeight = 155
+
+  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
 
   constructor (
     protected router: Router,
@@ -131,6 +134,11 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
           error => this.notificationsService.error(this.i18n('Error'), error.message)
         )
+  }
+
+  changeOwnership (event: Event, video: Video) {
+    event.preventDefault()
+    this.videoChangeOwnershipModal.show(video)
   }
 
   getStateLabel (video: Video) {

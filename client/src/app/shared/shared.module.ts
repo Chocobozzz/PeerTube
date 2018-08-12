@@ -17,6 +17,7 @@ import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
+import { ButtonComponent } from './misc/button.component'
 import { DeleteButtonComponent } from './misc/delete-button.component'
 import { EditButtonComponent } from './misc/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
@@ -77,6 +78,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     VideoFeedComponent,
+    ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     NumberFormatterPipe,
@@ -109,6 +111,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     VideoFeedComponent,
+    ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     MarkdownTextareaComponent,

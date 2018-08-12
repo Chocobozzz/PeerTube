@@ -35,12 +35,6 @@
   }
 }
 
-/deep/ .action-button {
-  &.action-button-delete {
-    margin-right: 10px;
-  }
-}
-
 .video {
   display: flex;
   min-height: 130px;
@@ -87,6 +81,10 @@
 
   .video-buttons {
     min-width: 190px;
+
+    *:not(:last-child) {
+      margin-right: 10px;
+    }
   }
 }
 

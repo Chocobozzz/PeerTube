@@ -3,7 +3,6 @@ import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.ser
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { ClipboardModule } from 'ngx-clipboard'
-import { AutoCompleteModule } from 'primeng/autocomplete'
 import { SharedModule } from '../../shared'
 import { MarkdownService } from '../shared'
 import { VideoCommentAddComponent } from './comment/video-comment-add.component'
@@ -13,7 +12,6 @@ import { VideoCommentsComponent } from './comment/video-comments.component'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
-import { VideoChangeOwnershipComponent } from './modal/video-change-ownership.component'
 
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 
@@ -25,7 +23,6 @@ import { NgxQRCodeModule } from 'ngx-qrcode2'
     VideoWatchRoutingModule,
     SharedModule,
     ClipboardModule,
-    AutoCompleteModule,
     TooltipModule.forRoot(),
     NgxQRCodeModule
   ],
@@ -39,8 +36,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2'
     VideoSupportComponent,
     VideoCommentsComponent,
     VideoCommentAddComponent,
-    VideoCommentComponent,
-    VideoChangeOwnershipComponent
+    VideoCommentComponent
   ],
 
   exports: [
