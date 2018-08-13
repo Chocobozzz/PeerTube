@@ -36,7 +36,7 @@ import {
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
   UserValidatorsService,
-  VideoAbuseValidatorsService,
+  VideoAbuseValidatorsService, VideoBlacklistValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
   VideoValidatorsService
@@ -133,6 +133,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     MarkdownService,
     VideoChannelService,
     VideoCaptionService,
+    VideoImportService,
 
     FormValidatorService,
     CustomConfigValidatorsService,
@@ -144,7 +145,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoCommentValidatorsService,
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
-    VideoImportService,
+    VideoBlacklistValidatorsService,
 
     I18nPrimengCalendarService,
     ScreenService,

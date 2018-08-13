@@ -36,8 +36,10 @@ export class VideoBlacklistService {
                )
   }
 
-  blacklistVideo (videoId: number) {
-    return this.authHttp.post(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist', {})
+  blacklistVideo (videoId: number, reason?: string) {
+    const body = reason ? { reason } : {}
+
+    return this.authHttp.post(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(res => this.restExtractor.handleError(res))

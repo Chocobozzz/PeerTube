@@ -21,6 +21,7 @@ import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
+import { VideoBlacklistComponent } from './modal/video-blacklist.component'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -41,6 +42,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
+  @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
 
   otherVideosDisplayed: Video[] = []
 
@@ -156,26 +158,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  async blacklistVideo (event: Event) {
-    event.preventDefault()
-
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to blacklist this video?'), this.i18n('Blacklist'))
-    if (res === false) return
-
-    this.videoBlacklistService.blacklistVideo(this.video.id)
-        .subscribe(
-          () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Video {{videoName}} had been blacklisted.', { videoName: this.video.name })
-            )
-            this.redirectService.redirectToHomepage()
-          },
-
-          error => this.notificationsService.error(this.i18n('Error'), error.message)
-        )
-  }
-
   showMoreDescription () {
     if (this.completeVideoDescription === undefined) {
       return this.loadCompleteDescription()
@@ -228,6 +210,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   showDownloadModal (event: Event) {
     event.preventDefault()
     this.videoDownloadModal.show()
+  }
+
+  showBlacklistModal (event: Event) {
+    event.preventDefault()
+    this.videoBlacklistModal.show()
   }
 
   isUserLoggedIn () {

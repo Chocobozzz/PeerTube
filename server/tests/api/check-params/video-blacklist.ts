@@ -3,13 +3,24 @@
 import 'mocha'
 
 import {
-  createUser, flushTests, getBlacklistedVideosList, killallServers, makePostBodyRequest, removeVideoFromBlacklist, runServer,
-  ServerInfo, setAccessTokensToServers, uploadVideo, userLogin
+  createUser,
+  flushTests,
+  getBlacklistedVideosList,
+  killallServers,
+  makePostBodyRequest,
+  makePutBodyRequest,
+  removeVideoFromBlacklist,
+  runServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
 describe('Test video blacklist API validators', function () {
   let server: ServerInfo
+  let notBlacklistedVideoId: number
   let userAccessToken = ''
 
   // ---------------------------------------------------------------
@@ -28,8 +39,15 @@ describe('Test video blacklist API validators', function () {
     await createUser(server.url, server.accessToken, username, password)
     userAccessToken = await userLogin(server, { username, password })
 
-    const res = await uploadVideo(server.url, server.accessToken, {})
-    server.video = res.body.video
+    {
+      const res = await uploadVideo(server.url, server.accessToken, {})
+      server.video = res.body.video
+    }
+
+    {
+      const res = await uploadVideo(server.url, server.accessToken, {})
+      notBlacklistedVideoId = res.body.video.uuid
+    }
   })
 
   describe('When adding a video in blacklist', function () {
@@ -59,20 +77,70 @@ describe('Test video blacklist API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: 403 })
     })
 
-    it('Should fail with a local video', async function () {
-      const path = basePath + server.video.id + '/blacklist'
+    it('Should fail with an invalid reason', async function () {
+      const path = basePath + server.video.uuid + '/blacklist'
+      const fields = { reason: 'a'.repeat(305) }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const path = basePath + server.video.uuid + '/blacklist'
+      const fields = { }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
+    })
+  })
+
+  describe('When updating a video in blacklist', function () {
+    const basePath = '/api/v1/videos/'
+
+    it('Should fail with a wrong video', async function () {
+      const wrongPath = '/api/v1/videos/blabla/blacklist'
       const fields = {}
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 403 })
+      await makePutBodyRequest({ url: server.url, path: wrongPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a video not blacklisted', async function () {
+      const path = '/api/v1/videos/' + notBlacklistedVideoId + '/blacklist'
+      const fields = {}
+      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 404 })
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      const path = basePath + server.video + '/blacklist'
+      const fields = {}
+      await makePutBodyRequest({ url: server.url, path, token: 'hello', fields, statusCodeExpected: 401 })
+    })
+
+    it('Should fail with a non admin user', async function () {
+      const path = basePath + server.video + '/blacklist'
+      const fields = {}
+      await makePutBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: 403 })
+    })
+
+    it('Should fail with an invalid reason', async function () {
+      const path = basePath + server.video.uuid + '/blacklist'
+      const fields = { reason: 'a'.repeat(305) }
+
+      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const path = basePath + server.video.uuid + '/blacklist'
+      const fields = { reason: 'hello' }
+
+      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
     })
   })
 
   describe('When removing a video in blacklist', function () {
     it('Should fail with a non authenticated user', async function () {
-      await removeVideoFromBlacklist(server.url, 'fake token', server.video.id, 401)
+      await removeVideoFromBlacklist(server.url, 'fake token', server.video.uuid, 401)
     })
 
     it('Should fail with a non admin user', async function () {
-      await removeVideoFromBlacklist(server.url, userAccessToken, server.video.id, 403)
+      await removeVideoFromBlacklist(server.url, userAccessToken, server.video.uuid, 403)
     })
 
     it('Should fail with an incorrect id', async function () {
@@ -81,7 +149,11 @@ describe('Test video blacklist API validators', function () {
 
     it('Should fail with a not blacklisted video', async function () {
       // The video was not added to the blacklist so it should fail
-      await removeVideoFromBlacklist(server.url, server.accessToken, server.video.id, 404)
+      await removeVideoFromBlacklist(server.url, server.accessToken, notBlacklistedVideoId, 404)
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await removeVideoFromBlacklist(server.url, server.accessToken, server.video.uuid, 204)
     })
   })
 

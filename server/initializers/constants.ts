@@ -15,7 +15,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 250
+const LAST_MIGRATION_VERSION = 255
 
 // ---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
-  VIDEO_ABUSES: [ 'id', 'createdAt' ],
+  VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
@@ -260,6 +260,9 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_ABUSES: {
     REASON: { min: 2, max: 300 }, // Length
     MODERATION_COMMENT: { min: 2, max: 300 } // Length
+  },
+  VIDEO_BLACKLIST: {
+    REASON: { min: 2, max: 300 } // Length
   },
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length

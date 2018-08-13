@@ -3,9 +3,10 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  addVideoToBlacklist,
   askResetPassword,
   blockUser,
-  createUser,
+  createUser, removeVideoFromBlacklist,
   reportVideoAbuse,
   resetPassword,
   runServer,
@@ -22,7 +23,9 @@ const expect = chai.expect
 describe('Test emails', function () {
   let server: ServerInfo
   let userId: number
+  let userAccessToken: string
   let videoUUID: string
+  let videoUserUUID: string
   let verificationString: string
   const emails: object[] = []
   const user = {
@@ -48,6 +51,16 @@ describe('Test emails', function () {
     {
       const res = await createUser(server.url, server.accessToken, user.username, user.password)
       userId = res.body.user.id
+
+      userAccessToken = await userLogin(server, user)
+    }
+
+    {
+      const attributes = {
+        name: 'my super user video'
+      }
+      const res = await uploadVideo(server.url, userAccessToken, attributes)
+      videoUserUUID = res.body.video.uuid
     }
 
     {
@@ -155,6 +168,42 @@ describe('Test emails', function () {
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblocked')
       expect(email['text']).contains(' unblocked')
+    })
+  })
+
+  describe('When blacklisting a video', function () {
+    it('Should send the notification email', async function () {
+      this.timeout(10000)
+
+      const reason = 'my super reason'
+      await addVideoToBlacklist(server.url, server.accessToken, videoUserUUID, reason)
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(5)
+
+      const email = emails[4]
+
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('user_1@example.com')
+      expect(email['subject']).contains(' blacklisted')
+      expect(email['text']).contains('my super user video')
+      expect(email['text']).contains('my super reason')
+    })
+
+    it('Should send the notification email', async function () {
+      this.timeout(10000)
+
+      await removeVideoFromBlacklist(server.url, server.accessToken, videoUserUUID)
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(6)
+
+      const email = emails[5]
+
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('user_1@example.com')
+      expect(email['subject']).contains(' unblacklisted')
+      expect(email['text']).contains('my super user video')
     })
   })
 

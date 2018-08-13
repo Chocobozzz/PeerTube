@@ -201,14 +201,14 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
     user.Account.id,
     req.query.start as number,
     req.query.count as number,
-    req.query.sort as VideoSortField,
-    false // Display my NSFW videos
+    req.query.sort as VideoSortField
   )
 
   const additionalAttributes = {
     waitTranscoding: true,
     state: true,
-    scheduledUpdate: true
+    scheduledUpdate: true,
+    blacklistInfo: true
   }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }

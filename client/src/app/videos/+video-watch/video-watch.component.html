@@ -90,16 +90,16 @@
                   <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
                 </a>
 
-                <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-                  <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
-                </a>
-
                 <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
                   <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
                 </a>
 
+                <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
+                  <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
+                </a>
+
                 <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
-                  <span class="icon icon-blacklist"></span> <ng-container i18n>Delete</ng-container>
+                  <span class="icon icon-delete"></span> <ng-container i18n>Delete</ng-container>
                 </a>
               </div>
             </div>
@@ -205,4 +205,5 @@
   <my-video-share #videoShareModal [video]="video"></my-video-share>
   <my-video-download #videoDownloadModal [video]="video"></my-video-download>
   <my-video-report #videoReportModal [video]="video"></my-video-report>
+  <my-video-blacklist #videoBlacklistModal [video]="video"></my-video-blacklist>
 </ng-template>

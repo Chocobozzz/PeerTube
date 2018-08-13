@@ -44,7 +44,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isBlackistableBy (user: AuthUser) {
-    return user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true && this.isLocal === false
+    return user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 
   isUpdatableBy (user: AuthUser) {
