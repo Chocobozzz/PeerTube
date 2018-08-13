@@ -5,12 +5,6 @@
   @include create-button('../../../../assets/images/global/add.svg');
 }
 
-my-action-dropdown /deep/ .icon {
-  &.icon-ban {
-    background-image: url('../../../../assets/images/global/edit-black.svg');
-  }
-}
-
 tr.banned {
   color: red;
 }

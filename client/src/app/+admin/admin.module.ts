@@ -11,7 +11,7 @@ import { JobsComponent } from './jobs/job.component'
 import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
 import { JobService } from './jobs/shared/job.service'
 import { UserCreateComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
-import { VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
+import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
 import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
 import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-modal.component'
 
@@ -41,6 +41,7 @@ import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-moda
 
     VideoAbusesComponent,
     VideoAbuseListComponent,
+    ModerationCommentModalComponent,
 
     JobsComponent,
     JobsListComponent,
