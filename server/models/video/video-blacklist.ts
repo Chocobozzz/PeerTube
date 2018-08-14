@@ -4,15 +4,15 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt, DataType,
+  CreatedAt,
+  DataType,
   ForeignKey,
   Is,
   Model,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { SortType } from '../../helpers/utils'
-import { getSortOnModel, throwIfNotValid } from '../utils'
+import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoBlacklistReasonValid } from '../../helpers/custom-validators/video-blacklist'
 import { Emailer } from '../../lib/emailer'

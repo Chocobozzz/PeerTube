@@ -14,6 +14,35 @@ import * as rimraf from 'rimraf'
 import { URL } from 'url'
 import { truncate } from 'lodash'
 
+const timeTable = {
+  ms:           1,
+  second:       1000,
+  minute:       60000,
+  hour:         3600000,
+  day:          3600000 * 24,
+  week:         3600000 * 24 * 7,
+  month:        3600000 * 24 * 30
+}
+export function parseDuration (duration: number | string): number {
+  if (typeof duration === 'number') return duration
+
+  if (typeof duration === 'string') {
+    const split = duration.match(/^([\d\.,]+)\s?(\w+)$/)
+
+    if (split.length === 3) {
+      const len = parseFloat(split[1])
+      let unit = split[2].replace(/s$/i,'').toLowerCase()
+      if (unit === 'm') {
+        unit = 'ms'
+      }
+
+      return (len || 1) * (timeTable[unit] || 0)
+    }
+  }
+
+  throw new Error('Duration could not be properly parsed')
+}
+
 function sanitizeUrl (url: string) {
   const urlObject = new URL(url)
 

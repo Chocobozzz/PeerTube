@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'express-validator'
-import { SortType } from '../helpers/utils'
+import { SortType } from '../models/utils'
 
 function setDefaultSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'

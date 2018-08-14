@@ -7,6 +7,28 @@ import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker'
 
+function computeResolutionsToTranscode (videoFileHeight: number) {
+  const resolutionsEnabled: number[] = []
+  const configResolutions = CONFIG.TRANSCODING.RESOLUTIONS
+
+  // Put in the order we want to proceed jobs
+  const resolutions = [
+    VideoResolution.H_480P,
+    VideoResolution.H_360P,
+    VideoResolution.H_720P,
+    VideoResolution.H_240P,
+    VideoResolution.H_1080P
+  ]
+
+  for (const resolution of resolutions) {
+    if (configResolutions[ resolution + 'p' ] === true && videoFileHeight > resolution) {
+      resolutionsEnabled.push(resolution)
+    }
+  }
+
+  return resolutionsEnabled
+}
+
 async function getVideoFileResolution (path: string) {
   const videoStream = await getVideoFileStream(path)
 
@@ -134,6 +156,7 @@ export {
   generateImageFromVideoFile,
   transcode,
   getVideoFileFPS,
+  computeResolutionsToTranscode,
   audio
 }
 
