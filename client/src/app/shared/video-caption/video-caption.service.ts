@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core'
 import { forkJoin, Observable, of } from 'rxjs'
 import { ResultList } from '../../../../../shared'
 import { RestExtractor, RestService } from '../rest'
-import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { objectToFormData, sortBy } from '@app/shared/misc/utils'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { VideoCaption } from '../../../../../shared/models/videos/caption/video-caption.model'
 
 @Injectable()
 export class VideoCaptionService {
