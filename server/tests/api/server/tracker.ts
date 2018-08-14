@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
 import * as magnetUtil from 'magnet-uri'
-import * as chai from 'chai'
 import 'mocha'
 import { getVideo, killallServers, runServer, ServerInfo, uploadVideo } from '../../utils'
 import { flushTests, setAccessTokensToServers } from '../../utils/index'
