@@ -41,6 +41,8 @@ export class Video implements VideoServerModel {
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
+  blacklisted?: boolean
+  blacklistedReason?: string
 
   account: {
     id: number
@@ -60,6 +62,10 @@ export class Video implements VideoServerModel {
     url: string
     host: string
     avatar: Avatar
+  }
+
+  static buildClientUrl (videoUUID: string) {
+    return '/videos/watch/' + videoUUID
   }
 
   private static createDurationString (duration: number) {
@@ -116,6 +122,9 @@ export class Video implements VideoServerModel {
 
     this.scheduledUpdate = hash.scheduledUpdate
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
+
+    this.blacklisted = hash.blacklisted
+    this.blacklistedReason = hash.blacklistedReason
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

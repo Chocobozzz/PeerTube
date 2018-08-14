@@ -32,13 +32,6 @@ const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'video-import': processVideoImport
 }
 
-const jobsWithRequestTimeout: { [ id in JobType ]?: boolean } = {
-  'activitypub-http-broadcast': true,
-  'activitypub-http-unicast': true,
-  'activitypub-http-fetcher': true,
-  'activitypub-follow': true
-}
-
 const jobTypes: JobType[] = [
   'activitypub-follow',
   'activitypub-http-broadcast',

@@ -9,6 +9,7 @@ import {
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
+import * as Sequelize from 'sequelize'
 
 @Table({
   tableName: 'videoFile',
@@ -68,4 +69,18 @@ export class VideoFileModel extends Model<VideoFileModel> {
     onDelete: 'CASCADE'
   })
   Video: VideoModel
+
+  static isInfohashExists (infoHash: string) {
+    const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
+    const options = {
+      type: Sequelize.QueryTypes.SELECT,
+      bind: { infoHash },
+      raw: true
+    }
+
+    return VideoModel.sequelize.query(query, options)
+              .then(results => {
+                return results.length === 1
+              })
+  }
 }

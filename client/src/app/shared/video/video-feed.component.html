@@ -1,13 +1,10 @@
 <div class="video-feed">
-  <span *ngIf="syndicationItems.length !== 0" class="icon icon-syndication"
-    [popover]="feedsList"
-    placement="bottom"
-    [outsideClick]="true">
-  </span>
+  <span
+    *ngIf="syndicationItems.length !== 0" [ngbPopover]="feedsList" placement="bottom"
+    class="icon icon-syndication" role="button"
+  ></span>
 
   <ng-template #feedsList>
-    <div *ngFor="let item of syndicationItems">
-      <a [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
-    </div>
+    <a *ngFor="let item of syndicationItems" [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>
   </ng-template>
 </div>

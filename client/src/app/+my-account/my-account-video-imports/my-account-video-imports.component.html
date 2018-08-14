@@ -5,7 +5,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px;"></th>
-      <th i18n>URL</th>
+      <th i18n>Target</th>
       <th i18n>Video</th>
       <th i18n style="width: 150px">State</th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
@@ -22,7 +22,10 @@
       </td>
 
       <td>
-        <a [href]="videoImport.targetUrl" target="_blank" rel="noopener noreferrer">{{ videoImport.targetUrl }}</a>
+        <a *ngIf="videoImport.targetUrl; else torrent" [href]="videoImport.targetUrl" target="_blank" rel="noopener noreferrer">{{ videoImport.targetUrl }}</a>
+        <ng-template #torrent>
+          <span [title]="videoImport.torrentName || videoImport.magnetUri">{{ videoImport.torrentName || videoImport.magnetUri }}</span>
+        </ng-template>
       </td>
 
       <td *ngIf="isVideoImportPending(videoImport)">

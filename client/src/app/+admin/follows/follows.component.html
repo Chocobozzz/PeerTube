@@ -1,13 +1,15 @@
 <div class="admin-sub-header">
   <div i18n class="form-sub-title">Manage follows</div>
 
-  <tabset #followsMenuTabs>
-    <tab *ngFor="let link of links">
-      <ng-template tabHeading>
+  <ngb-tabset #followsMenuTabs type="pills">
+
+    <ngb-tab *ngFor="let link of links">
+      <ng-template ngbTabTitle>
         <a class="tab-link" [routerLink]="link.path">{{ link.title }}</a>
       </ng-template>
-    </tab>
-  </tabset>
+    </ngb-tab>
+
+  </ngb-tabset>
 </div>
 
 <router-outlet></router-outlet>

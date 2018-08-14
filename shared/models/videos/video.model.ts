@@ -43,6 +43,9 @@ export interface Video {
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
 
+  blacklisted?: boolean
+  blacklistedReason?: string
+
   account: {
     id: number
     uuid: string

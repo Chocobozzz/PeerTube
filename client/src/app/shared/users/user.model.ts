@@ -7,7 +7,6 @@ import {
   VideoChannel
 } from '../../../../../shared'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
-import { Actor } from '@app/shared/actor/actor.model'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 
@@ -22,6 +21,9 @@ export type UserConstructorHash = {
   createdAt?: Date,
   account?: AccountServerModel,
   videoChannels?: VideoChannel[]
+
+  blocked?: boolean
+  blockedReason?: string
 }
 export class User implements UserServerModel {
   id: number
@@ -35,34 +37,25 @@ export class User implements UserServerModel {
   videoChannels: VideoChannel[]
   createdAt: Date
 
+  blocked: boolean
+  blockedReason?: string
+
   constructor (hash: UserConstructorHash) {
     this.id = hash.id
     this.username = hash.username
     this.email = hash.email
     this.role = hash.role
 
+    this.videoChannels = hash.videoChannels
+    this.videoQuota = hash.videoQuota
+    this.nsfwPolicy = hash.nsfwPolicy
+    this.autoPlayVideo = hash.autoPlayVideo
+    this.createdAt = hash.createdAt
+    this.blocked = hash.blocked
+    this.blockedReason = hash.blockedReason
+
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)
-    }
-
-    if (hash.videoChannels !== undefined) {
-      this.videoChannels = hash.videoChannels
-    }
-
-    if (hash.videoQuota !== undefined) {
-      this.videoQuota = hash.videoQuota
-    }
-
-    if (hash.nsfwPolicy !== undefined) {
-      this.nsfwPolicy = hash.nsfwPolicy
-    }
-
-    if (hash.autoPlayVideo !== undefined) {
-      this.autoPlayVideo = hash.autoPlayVideo
-    }
-
-    if (hash.createdAt !== undefined) {
-      this.createdAt = hash.createdAt
     }
   }
 

@@ -111,6 +111,8 @@ import:
   videos:
     http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
       enabled: false
+    torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
+      enabled: false
 
 # Instance settings
 instance:

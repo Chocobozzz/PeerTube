@@ -1,38 +1,36 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { UserService } from '@app/shared'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs'
-import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../core'
-import { FormReactive } from '../../shared'
-import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
-import { VideoEdit } from '../../shared/video/video-edit.model'
-import { VideoService } from '../../shared/video/video.service'
+import { VideoPrivacy } from '../../../../../../shared/models/videos'
+import { AuthService, ServerService } from '../../../core'
+import { VideoEdit } from '../../../shared/video/video-edit.model'
+import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { switchMap } from 'rxjs/operators'
+import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-send'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { FormValidatorService, UserService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
-import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 
 @Component({
   selector: 'my-video-upload',
   templateUrl: './video-upload.component.html',
   styleUrls: [
-    './shared/video-edit.component.scss',
+    '../shared/video-edit.component.scss',
     './video-upload.component.scss'
   ]
 })
-export class VideoUploadComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
+export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @ViewChild('videofileInput') videofileInput
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
+
+  userVideoQuotaUsed = 0
 
   isUploadingVideo = false
   isUpdatingVideo = false
@@ -44,24 +42,19 @@ export class VideoUploadComponent extends FormReactive implements OnInit, OnDest
     uuid: ''
   }
 
-  userVideoChannels: { id: number, label: string, support: string }[] = []
-  userVideoQuotaUsed = 0
-  videoPrivacies: VideoConstant<string>[] = []
-  firstStepPrivacyId = 0
-  firstStepChannelId = 0
-  videoCaptions: VideoCaptionEdit[] = []
+  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private router: Router,
-    private notificationsService: NotificationsService,
-    private authService: AuthService,
+    protected loadingBar: LoadingBarService,
+    protected notificationsService: NotificationsService,
+    protected authService: AuthService,
+    protected serverService: ServerService,
+    protected videoService: VideoService,
+    protected videoCaptionService: VideoCaptionService,
     private userService: UserService,
-    private serverService: ServerService,
-    private videoService: VideoService,
-    private loadingBar: LoadingBarService,
-    private i18n: I18n,
-    private videoCaptionService: VideoCaptionService
+    private router: Router,
+    private i18n: I18n
   ) {
     super()
   }
@@ -71,28 +64,14 @@ export class VideoUploadComponent extends FormReactive implements OnInit, OnDest
   }
 
   ngOnInit () {
-    this.buildForm({})
-
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-      .then(() => this.firstStepChannelId = this.userVideoChannels[0].id)
+    super.ngOnInit()
 
     this.userService.getMyVideoQuotaUsed()
       .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
-
-    this.serverService.videoPrivaciesLoaded
-      .subscribe(
-        () => {
-          this.videoPrivacies = this.serverService.getVideoPrivacies()
-
-          // Public by default
-          this.firstStepPrivacyId = VideoPrivacy.PUBLIC
-        })
   }
 
   ngOnDestroy () {
-    if (this.videoUploadObservable) {
-      this.videoUploadObservable.unsubscribe()
-    }
+    if (this.videoUploadObservable) this.videoUploadObservable.unsubscribe()
   }
 
   canDeactivate () {
@@ -114,12 +93,6 @@ export class VideoUploadComponent extends FormReactive implements OnInit, OnDest
 
   fileChange () {
     this.uploadFirstStep()
-  }
-
-  checkForm () {
-    this.forceCheck()
-
-    return this.form.valid
   }
 
   cancelUpload () {
@@ -225,17 +198,12 @@ export class VideoUploadComponent extends FormReactive implements OnInit, OnDest
     video.uuid = this.videoUploadedIds.uuid
 
     this.isUpdatingVideo = true
-    this.loadingBar.start()
-    this.videoService.updateVideo(video)
-        .pipe(
-          // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(video.id, this.videoCaptions))
-        )
+
+    this.updateVideoAndCaptions(video)
         .subscribe(
           () => {
             this.isUpdatingVideo = false
             this.isUploadingVideo = false
-            this.loadingBar.complete()
 
             this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
             this.router.navigate([ '/videos/watch', video.uuid ])

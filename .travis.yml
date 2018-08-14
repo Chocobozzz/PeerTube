@@ -26,12 +26,11 @@ install:
   - CC=gcc-4.9 CXX=g++-4.9 yarn install
 
 before_script:
-  - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
-  - tar xf ffmpeg-release-3.0.2-64bit-static.tar.xz
+  - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.0.2-64bit-static.tar.xz"
+  - tar xf ffmpeg-release-4.0.2-64bit-static.tar.xz
   - mkdir -p $HOME/bin
-  - cp ffmpeg-*-64bit-static/{ffmpeg,ffprobe,ffserver} $HOME/bin
+  - cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
   - export PATH=$HOME/bin:$PATH
-  - export NODE_TEST_IMAGE=true
   - psql -c "create user peertube with password 'peertube';" -U postgres
 
 matrix:

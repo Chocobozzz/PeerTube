@@ -5,8 +5,13 @@
     id="description" name="description">
   </textarea>
 
-  <tabset *ngIf="arePreviewsDisplayed()" class="previews">
-    <tab *ngIf="truncate !== undefined" i18n-heading heading="Truncated preview" [innerHTML]="truncatedPreviewHTML"></tab>
-    <tab i18n-heading heading="Complete preview" [innerHTML]="previewHTML"></tab>
-  </tabset>
+  <ngb-tabset *ngIf="arePreviewsDisplayed()" class="previews" type="pills">
+    <ngb-tab *ngIf="truncate !== undefined" i18n-title title="Truncated preview">
+      <ng-template ngbTabContent><div [innerHTML]="truncatedPreviewHTML"></div></ng-template>
+    </ngb-tab>
+
+    <ngb-tab i18n-title title="Complete preview">
+      <ng-template ngbTabContent><div [innerHTML]="previewHTML"></div></ng-template>
+    </ngb-tab>
+  </ngb-tabset>
 </div>

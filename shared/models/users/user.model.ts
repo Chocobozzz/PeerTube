@@ -14,4 +14,7 @@ export interface User {
   createdAt: Date
   account: Account
   videoChannels?: VideoChannel[]
+
+  blocked: boolean
+  blockedReason?: string
 }

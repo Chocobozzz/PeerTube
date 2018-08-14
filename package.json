@@ -78,6 +78,7 @@
     "@types/bluebird": "3.5.21"
   },
   "dependencies": {
+    "@types/oauth2-server": "^3.0.8",
     "async": "^2.0.0",
     "async-lock": "^1.1.2",
     "async-lru": "^1.1.1",
@@ -100,6 +101,7 @@
     "flat": "^4.1.0",
     "fluent-ffmpeg": "^2.1.0",
     "helmet": "^3.12.1",
+    "ip-anonymize": "^0.0.6",
     "ipaddr.js": "https://github.com/whitequark/ipaddr.js.git#8e69afeb4053ee32447a101845f860848280eca5",
     "is-cidr": "^2.0.5",
     "iso-639-3": "^1.0.1",
@@ -112,6 +114,7 @@
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "nodemailer": "^4.4.2",
+    "oauth2-server": "^3.0.0",
     "parse-torrent": "^6.0.0",
     "password-generator": "^2.0.2",
     "pem": "^1.12.3",
@@ -129,9 +132,11 @@
     "sequelize-typescript": "0.6.6-beta.1",
     "sharp": "^0.20.0",
     "srt-to-vtt": "^1.1.2",
+    "useragent": "^2.3.0",
     "uuid": "^3.1.0",
     "validator": "^10.2.0",
     "webfinger.js": "^2.6.6",
+    "webtorrent": "^0.100.0",
     "winston": "3.0.0",
     "ws": "^5.0.0",
     "youtube-dl": "^1.12.2"
@@ -185,7 +190,6 @@
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.5.2",
-    "webtorrent": "^0.100.0",
     "xliff": "^3.0.1"
   },
   "scripty": {

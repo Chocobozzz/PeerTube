@@ -50,35 +50,28 @@
   </form>
 </div>
 
-<div bsModal #forgotPasswordModal="bs-modal" (onShown)="onForgotPasswordModalShown()" class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<ng-template #forgotPasswordModal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Forgot your password</h4>
+    <span class="close" aria-hidden="true" (click)="hideForgotPasswordModal()"></span>
+  </div>
 
-      <div class="modal-header">
-        <span class="close" aria-hidden="true" (click)="hideForgotPasswordModal()"></span>
-        <h4 i18n class="modal-title">Forgot your password</h4>
-      </div>
-
-      <div class="modal-body">
-        <div class="form-group">
-          <label i18n for="forgot-password-email">Email</label>
-          <input
-            type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required
-            [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
-          >
-        </div>
-
-        <div class="form-group inputs">
-          <span i18n class="action-button action-button-cancel" (click)="hideForgotPasswordModal()">
-            Cancel
-          </span>
-
-          <input
-            type="submit" i18n-value value="Send me an email to reset my password" class="action-button-submit"
-            (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
-          >
-        </div>
-      </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label i18n for="forgot-password-email">Email</label>
+      <input
+        type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required
+        [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
+      >
     </div>
   </div>
-</div>
+
+  <div class="modal-footer inputs">
+    <span i18n class="action-button action-button-cancel" (click)="hideForgotPasswordModal()">Cancel</span>
+
+    <input
+      type="submit" i18n-value value="Send me an email to reset my password" class="action-button-submit"
+      (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
+    >
+  </div>
+</ng-template>

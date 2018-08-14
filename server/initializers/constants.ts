@@ -3,7 +3,7 @@ import { dirname, join } from 'path'
 import { JobType, VideoRateType, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoPrivacy } from '../../shared/models/videos'
+import { VideoPrivacy, VideoAbuseState } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
@@ -15,7 +15,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 240
+const LAST_MIGRATION_VERSION = 255
 
 // ---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
-  VIDEO_ABUSES: [ 'id', 'createdAt' ],
+  VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
@@ -55,6 +55,7 @@ const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
   NODEINFO: '10 minutes',
+  DNT_POLICY: '1 week',
   ACTIVITY_PUB: {
     VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
   }
@@ -210,6 +211,9 @@ const CONFIG = {
     VIDEOS: {
       HTTP: {
         get ENABLED () { return config.get<boolean>('import.videos.http.enabled') }
+      },
+      TORRENT: {
+        get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
       }
     }
   },
@@ -250,9 +254,14 @@ const CONSTRAINTS_FIELDS = {
     DESCRIPTION: { min: 3, max: 250 }, // Length
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
-    VIDEO_QUOTA: { min: -1 }
+    VIDEO_QUOTA: { min: -1 },
+    BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
+    REASON: { min: 2, max: 300 }, // Length
+    MODERATION_COMMENT: { min: 2, max: 300 } // Length
+  },
+  VIDEO_BLACKLIST: {
     REASON: { min: 2, max: 300 } // Length
   },
   VIDEO_CHANNELS: {
@@ -270,7 +279,14 @@ const CONSTRAINTS_FIELDS = {
     }
   },
   VIDEO_IMPORTS: {
-    URL: { min: 3, max: 2000 } // Length
+    URL: { min: 3, max: 2000 }, // Length
+    TORRENT_NAME: { min: 3, max: 255 }, // Length
+    TORRENT_FILE: {
+      EXTNAME: [ '.torrent' ],
+      FILE_SIZE: {
+        max: 1024 * 200 // 200 KB
+      }
+    }
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -397,6 +413,12 @@ const VIDEO_IMPORT_STATES = {
   [VideoImportState.SUCCESS]: 'Success'
 }
 
+const VIDEO_ABUSE_STATES = {
+  [VideoAbuseState.PENDING]: 'Pending',
+  [VideoAbuseState.REJECTED]: 'Rejected',
+  [VideoAbuseState.ACCEPTED]: 'Accepted'
+}
+
 const VIDEO_MIMETYPE_EXT = {
   'video/webm': '.webm',
   'video/ogg': '.ogv',
@@ -413,6 +435,10 @@ const IMAGE_MIMETYPE_EXT = {
 const VIDEO_CAPTIONS_MIMETYPE_EXT = {
   'text/vtt': '.vtt',
   'application/x-subrip': '.srt'
+}
+
+const TORRENT_MIMETYPE_EXT = {
+  'application/x-bittorrent': '.torrent'
 }
 
 // ---------------------------------------------------------------------------
@@ -594,6 +620,7 @@ export {
   FEEDS,
   JOB_TTL,
   NSFW_POLICY_TYPES,
+  TORRENT_MIMETYPE_EXT,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   ACTIVITY_PUB,
@@ -608,6 +635,7 @@ export {
   VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
+  VIDEO_ABUSE_STATES,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,

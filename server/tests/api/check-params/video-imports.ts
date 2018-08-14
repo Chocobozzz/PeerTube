@@ -20,7 +20,7 @@ import {
   userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getYoutubeVideoUrl } from '../../utils/videos/video-imports'
+import { getMagnetURI, getYoutubeVideoUrl } from '../../utils/videos/video-imports'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -229,8 +229,24 @@ describe('Test video imports API validator', function () {
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
     })
 
+    it('Should fail with an invalid torrent file', async function () {
+      const fields = omit(baseCorrectParams, 'targetUrl')
+      const attaches = {
+        'torrentfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+      }
+
+      await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with an invalid magnet URI', async function () {
+      let fields = omit(baseCorrectParams, 'targetUrl')
+      fields = immutableAssign(fields, { magnetUri: 'blabla' })
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
     it('Should succeed with the correct parameters', async function () {
-      this.timeout(10000)
+      this.timeout(30000)
 
       {
         await makePostBodyRequest({
@@ -243,12 +259,15 @@ describe('Test video imports API validator', function () {
       }
     })
 
-    it('Should forbid to import videos', async function () {
+    it('Should forbid to import http videos', async function () {
       await updateCustomSubConfig(server.url, server.accessToken, {
         import: {
           videos: {
             http: {
               enabled: false
+            },
+            torrent: {
+              enabled: true
             }
           }
         }
@@ -261,6 +280,33 @@ describe('Test video imports API validator', function () {
         fields: baseCorrectParams,
         statusCodeExpected: 409
       })
+    })
+
+    it('Should forbid to import torrent videos', async function () {
+      await updateCustomSubConfig(server.url, server.accessToken, {
+        import: {
+          videos: {
+            http: {
+              enabled: true
+            },
+            torrent: {
+              enabled: false
+            }
+          }
+        }
+      })
+
+      let fields = omit(baseCorrectParams, 'targetUrl')
+      fields = immutableAssign(fields, { magnetUri: getMagnetURI() })
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
+
+      fields = omit(fields, 'magnetUri')
+      const attaches = {
+        'torrentfile': join(__dirname, '..', '..', 'fixtures', 'video-720p.torrent')
+      }
+
+      await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches, statusCodeExpected: 409 })
     })
   })
 

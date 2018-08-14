@@ -1,14 +1,18 @@
-export interface BlacklistedVideo {
+export interface VideoBlacklist {
   id: number
-  videoId: number
   createdAt: Date
   updatedAt: Date
-  name: string
-  uuid: string
-  description: string
-  duration: number
-  views: number
-  likes: number
-  dislikes: number
-  nsfw: boolean
+  reason?: string
+
+  video: {
+    id: number
+    name: string
+    uuid: string
+    description: string
+    duration: number
+    views: number
+    likes: number
+    dislikes: number
+    nsfw: boolean
+  }
 }

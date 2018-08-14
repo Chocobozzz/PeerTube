@@ -4,7 +4,11 @@ import { VideoImportState } from './video-import-state.enum'
 
 export interface VideoImport {
   id: number
+
   targetUrl: string
+  magnetUri: string
+  torrentName: string
+
   createdAt: string
   updatedAt: string
   state: VideoConstant<VideoImportState>

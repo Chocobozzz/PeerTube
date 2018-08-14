@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core'
 })
 
 export class DeleteButtonComponent {
-  @Input() label = 'Delete'
+  @Input() label: string
 }

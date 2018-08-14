@@ -5,7 +5,7 @@
 
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
-import { pseudoRandomBytes } from 'crypto'
+import { createHash, pseudoRandomBytes } from 'crypto'
 import { copyFile, readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { isAbsolute, join } from 'path'
@@ -95,6 +95,10 @@ function peertubeTruncate (str: string, maxLength: number) {
   return truncate(str, options)
 }
 
+function sha256 (str: string) {
+  return createHash('sha256').update(str).digest('hex')
+}
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -165,6 +169,7 @@ export {
   sanitizeHost,
   buildPath,
   peertubeTruncate,
+  sha256,
 
   promisify0,
   promisify1,

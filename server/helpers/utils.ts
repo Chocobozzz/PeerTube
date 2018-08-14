@@ -6,9 +6,11 @@ import { CONFIG } from '../initializers'
 import { UserModel } from '../models/account/user'
 import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
-import { pseudoRandomBytesPromise, unlinkPromise } from './core-utils'
+import { pseudoRandomBytesPromise, sha256, unlinkPromise } from './core-utils'
 import { logger } from './logger'
 import { isArray } from './custom-validators/misc'
+import { join } from 'path'
+import { Instance as ParseTorrent } from 'parse-torrent'
 
 const isCidr = require('is-cidr')
 
@@ -181,6 +183,17 @@ async function getServerActor () {
   return Promise.resolve(serverActor)
 }
 
+function generateVideoTmpPath (target: string | ParseTorrent) {
+  const id = typeof target === 'string' ? target : target.infoHash
+
+  const hash = sha256(id)
+  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+}
+
+function getSecureTorrentName (originalName: string) {
+  return sha256(originalName) + '.torrent'
+}
+
 type SortType = { sortModel: any, sortValue: string }
 
 // ---------------------------------------------------------------------------
@@ -191,9 +204,11 @@ export {
   generateRandomString,
   getFormattedObjects,
   isSignupAllowed,
+  getSecureTorrentName,
   isSignupAllowedForCurrentIP,
   computeResolutionsToTranscode,
   resetSequelizeInstance,
   getServerActor,
-  SortType
+  SortType,
+  generateVideoTmpPath
 }

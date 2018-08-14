@@ -30,7 +30,9 @@ import {
   usersVideoRatingValidator
 } from '../../middlewares'
 import {
+  deleteMeValidator,
   usersAskResetPasswordValidator,
+  usersBlockingValidator,
   usersResetPasswordValidator,
   videoImportsSortValidator,
   videosSortValidator
@@ -61,6 +63,11 @@ const usersRouter = express.Router()
 usersRouter.get('/me',
   authenticate,
   asyncMiddleware(getUserInformation)
+)
+usersRouter.delete('/me',
+  authenticate,
+  asyncMiddleware(deleteMeValidator),
+  asyncMiddleware(deleteMe)
 )
 
 usersRouter.get('/me/video-quota-used',
@@ -100,6 +107,19 @@ usersRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listUsers)
+)
+
+usersRouter.post('/:id/block',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockingValidator),
+  asyncMiddleware(blockUser)
+)
+usersRouter.post('/:id/unblock',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockingValidator),
+  asyncMiddleware(unblockUser)
 )
 
 usersRouter.get('/:id',
@@ -181,14 +201,14 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
     user.Account.id,
     req.query.start as number,
     req.query.count as number,
-    req.query.sort as VideoSortField,
-    false // Display my NSFW videos
+    req.query.sort as VideoSortField
   )
 
   const additionalAttributes = {
     waitTranscoding: true,
     state: true,
-    scheduledUpdate: true
+    scheduledUpdate: true,
+    blacklistInfo: true
   }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }
@@ -196,7 +216,7 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
 async function getUserVideoImports (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.oauth.token.User as UserModel
   const resultList = await VideoImportModel.listUserVideoImportsForApi(
-    user.Account.id,
+    user.id,
     req.query.start as number,
     req.query.count as number,
     req.query.sort
@@ -272,6 +292,23 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
   return res.json(data)
 }
 
+async function unblockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+
+  await changeUserBlock(res, user, false)
+
+  return res.status(204).end()
+}
+
+async function blockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+  const reason = req.body.reason
+
+  await changeUserBlock(res, user, true, reason)
+
+  return res.status(204).end()
+}
+
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.json((res.locals.user as UserModel).toFormattedJSON())
 }
@@ -296,8 +333,18 @@ async function listUsers (req: express.Request, res: express.Response, next: exp
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
+async function deleteMe (req: express.Request, res: express.Response) {
+  const user: UserModel = res.locals.oauth.token.User
+
+  await user.destroy()
+
+  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+
+  return res.sendStatus(204)
+}
+
 async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = await UserModel.loadById(req.params.id)
+  const user: UserModel = res.locals.user
 
   await user.destroy()
 
@@ -406,4 +453,25 @@ async function resetUserPassword (req: express.Request, res: express.Response, n
 
 function success (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.end()
+}
+
+async function changeUserBlock (res: express.Response, user: UserModel, block: boolean, reason?: string) {
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+
+  user.blocked = block
+  user.blockedReason = reason || null
+
+  await sequelizeTypescript.transaction(async t => {
+    await OAuthTokenModel.deleteUserToken(user.id, t)
+
+    await user.save({ transaction: t })
+  })
+
+  await Emailer.Instance.addUserBlockJob(user, block, reason)
+
+  auditLogger.update(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new UserAuditView(user.toFormattedJSON()),
+    oldUserAuditView
+  )
 }

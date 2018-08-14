@@ -5,7 +5,7 @@ import { body, param } from 'express-validator/check'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isUserAutoPlayVideoValid,
+  isUserAutoPlayVideoValid, isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserNSFWPolicyValid,
@@ -67,6 +67,40 @@ const usersRemoveValidator = [
     if (user.username === 'root') {
       return res.status(400)
                 .send({ error: 'Cannot remove the root user' })
+                .end()
+    }
+
+    return next()
+  }
+]
+
+const usersBlockingValidator = [
+  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('reason').optional().custom(isUserBlockedReasonValid).withMessage('Should have a valid blocking reason'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersBlocking parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    const user = res.locals.user
+    if (user.username === 'root') {
+      return res.status(400)
+                .send({ error: 'Cannot block the root user' })
+                .end()
+    }
+
+    return next()
+  }
+]
+
+const deleteMeValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user: UserModel = res.locals.oauth.token.User
+    if (user.username === 'root') {
+      return res.status(400)
+                .send({ error: 'You cannot delete your root account.' })
                 .end()
     }
 
@@ -215,7 +249,9 @@ const usersResetPasswordValidator = [
 
 export {
   usersAddValidator,
+  deleteMeValidator,
   usersRegisterValidator,
+  usersBlockingValidator,
   usersRemoveValidator,
   usersUpdateValidator,
   usersUpdateMeValidator,

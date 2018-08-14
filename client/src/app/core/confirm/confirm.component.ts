@@ -1,9 +1,8 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
-
-import { ModalDirective } from 'ngx-bootstrap/modal'
-
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core'
 import { ConfirmService } from './confirm.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 
 @Component({
   selector: 'my-confirm',
@@ -11,7 +10,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './confirm.component.scss' ]
 })
 export class ConfirmComponent implements OnInit {
-  @ViewChild('confirmModal') confirmModal: ModalDirective
+  @ViewChild('confirmModal') confirmModal: ElementRef
 
   title = ''
   message = ''
@@ -21,7 +20,10 @@ export class ConfirmComponent implements OnInit {
   inputValue = ''
   confirmButtonText = ''
 
+  private openedModal: NgbModalRef
+
   constructor (
+    private modalService: NgbModal,
     private confirmService: ConfirmService,
     private i18n: I18n
   ) {
@@ -29,11 +31,6 @@ export class ConfirmComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.confirmModal.config = {
-      backdrop: 'static',
-      keyboard: false
-    }
-
     this.confirmService.showConfirm.subscribe(
       ({ title, message, expectedInputValue, inputLabel, confirmButtonText }) => {
         this.title = title
@@ -49,16 +46,9 @@ export class ConfirmComponent implements OnInit {
     )
   }
 
-  @HostListener('keydown.enter')
+  @HostListener('document:keydown.enter')
   confirm () {
-    this.confirmService.confirmResponse.next(true)
-    this.hideModal()
-  }
-
-  @HostListener('keydown.esc')
-  cancel () {
-    this.confirmService.confirmResponse.next(false)
-    this.hideModal()
+    if (this.openedModal) this.openedModal.close()
   }
 
   isConfirmationDisabled () {
@@ -70,10 +60,11 @@ export class ConfirmComponent implements OnInit {
 
   showModal () {
     this.inputValue = ''
-    this.confirmModal.show()
-  }
 
-  hideModal () {
-    this.confirmModal.hide()
+    this.openedModal = this.modalService.open(this.confirmModal)
+
+    this.openedModal.result
+        .then(() => this.confirmService.confirmResponse.next(true))
+        .catch(() => this.confirmService.confirmResponse.next(false))
   }
 }

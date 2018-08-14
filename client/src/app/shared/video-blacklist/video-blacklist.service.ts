@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { Observable } from 'rxjs'
-import { BlacklistedVideo, ResultList } from '../../../../../shared'
+import { VideoBlacklist, ResultList } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 
@@ -17,11 +17,11 @@ export class VideoBlacklistService {
     private restExtractor: RestExtractor
   ) {}
 
-  listBlacklist (pagination: RestPagination, sort: SortMeta): Observable<ResultList<BlacklistedVideo>> {
+  listBlacklist (pagination: RestPagination, sort: SortMeta): Observable<ResultList<VideoBlacklist>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<BlacklistedVideo>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
+    return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))
@@ -36,8 +36,10 @@ export class VideoBlacklistService {
                )
   }
 
-  blacklistVideo (videoId: number) {
-    return this.authHttp.post(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist', {})
+  blacklistVideo (videoId: number, reason?: string) {
+    const body = reason ? { reason } : {}
+
+    return this.authHttp.post(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(res => this.restExtractor.handleError(res))

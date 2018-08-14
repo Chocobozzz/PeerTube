@@ -6,6 +6,7 @@ import * as validator from 'validator'
 import { UserRight, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
+  VIDEO_ABUSE_STATES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_MIMETYPE_EXT,
@@ -17,6 +18,8 @@ import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
+import * as magnetUtil from 'magnet-uri'
+import { VideoAbuseModel } from '../../models/video/video-abuse'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -70,10 +73,6 @@ function isVideoTagsValid (tags: string[]) {
   )
 }
 
-function isVideoAbuseReasonValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
-}
-
 function isVideoViewsValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
@@ -124,6 +123,13 @@ function isVideoFPSResolutionValid (value: string) {
 
 function isVideoFileSizeValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
+}
+
+function isVideoMagnetUriValid (value: string) {
+  if (!exists(value)) return false
+
+  const parsed = magnetUtil.decode(value)
+  return parsed && isVideoFileInfoHashValid(parsed.infoHash)
 }
 
 function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: UserRight, res: Response) {
@@ -212,8 +218,8 @@ export {
   isVideoTagsValid,
   isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
-  isVideoAbuseReasonValid,
   isVideoFile,
+  isVideoMagnetUriValid,
   isVideoStateValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,

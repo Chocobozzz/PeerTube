@@ -113,6 +113,30 @@
         <source>Private</source>
         <target>undefined</target>
       </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>undefined</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
         <target>undefined</target>

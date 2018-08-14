@@ -1,13 +1,25 @@
 import * as request from 'supertest'
 
-function addVideoToBlacklist (url: string, token: string, videoId: number, specialStatus = 204) {
+function addVideoToBlacklist (url: string, token: string, videoId: number | string, reason?: string, specialStatus = 204) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)
           .post(path)
+          .send({ reason })
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + token)
           .expect(specialStatus)
+}
+
+function updateVideoBlacklist (url: string, token: string, videoId: number, reason?: string, specialStatus = 204) {
+  const path = '/api/v1/videos/' + videoId + '/blacklist'
+
+  return request(url)
+    .put(path)
+    .send({ reason })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + token)
+    .expect(specialStatus)
 }
 
 function removeVideoFromBlacklist (url: string, token: string, videoId: number | string, specialStatus = 204) {
@@ -50,5 +62,6 @@ export {
   addVideoToBlacklist,
   removeVideoFromBlacklist,
   getBlacklistedVideosList,
-  getSortedBlacklistedVideosList
+  getSortedBlacklistedVideosList,
+  updateVideoBlacklist
 }

@@ -2,12 +2,12 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { RedirectService, ServerService } from '@app/core'
 import { UserService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
-import { ModalDirective } from 'ngx-bootstrap/modal'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-validators.service'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-login',
@@ -16,14 +16,17 @@ import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-
 })
 
 export class LoginComponent extends FormReactive implements OnInit {
-  @ViewChild('forgotPasswordModal') forgotPasswordModal: ModalDirective
+  @ViewChild('forgotPasswordModal') forgotPasswordModal: ElementRef
   @ViewChild('forgotPasswordEmailInput') forgotPasswordEmailInput: ElementRef
 
   error: string = null
   forgotPasswordEmail = ''
 
+  private openedForgotPasswordModal: NgbModalRef
+
   constructor (
     protected formValidatorService: FormValidatorService,
+    private modalService: NgbModal,
     private loginValidatorsService: LoginValidatorsService,
     private authService: AuthService,
     private userService: UserService,
@@ -55,14 +58,18 @@ export class LoginComponent extends FormReactive implements OnInit {
       .subscribe(
         () => this.redirectService.redirectToHomepage(),
 
-        err => this.error = err.message
+        err => {
+          if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
+          else if (err.message.indexOf('blocked') !== -1) this.error = this.i18n('You account is blocked.')
+          else this.error = err.message
+        }
       )
   }
 
   askResetPassword () {
     this.userService.askResetPassword(this.forgotPasswordEmail)
       .subscribe(
-        res => {
+        () => {
           const message = this.i18n(
             'An email with the reset password instructions will be sent to {{email}}.',
             { email: this.forgotPasswordEmail }
@@ -80,10 +87,10 @@ export class LoginComponent extends FormReactive implements OnInit {
   }
 
   openForgotPasswordModal () {
-    this.forgotPasswordModal.show()
+    this.openedForgotPasswordModal = this.modalService.open(this.forgotPasswordModal)
   }
 
   hideForgotPasswordModal () {
-    this.forgotPasswordModal.hide()
+    this.openedForgotPasswordModal.close()
   }
 }

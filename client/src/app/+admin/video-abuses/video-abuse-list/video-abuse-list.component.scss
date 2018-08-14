@@ -1,6 +1,6 @@
-/deep/ a {
+@import '_variables';
+@import '_mixins';
 
-  &, &:hover, &:active, &:focus {
-    color: #000;
-  }
+.moderation-comment-label {
+  font-weight: $font-semibold;
 }

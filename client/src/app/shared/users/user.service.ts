@@ -39,6 +39,16 @@ export class UserService {
                )
   }
 
+  deleteMe () {
+    const url = UserService.BASE_USERS_URL + 'me'
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
   changeAvatar (avatarForm: FormData) {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 

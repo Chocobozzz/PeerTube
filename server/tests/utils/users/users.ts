@@ -56,6 +56,16 @@ function getMyUserInformation (url: string, accessToken: string, specialStatus =
           .expect('Content-Type', /json/)
 }
 
+function deleteMe (url: string, accessToken: string, specialStatus = 204) {
+  const path = '/api/v1/users/me'
+
+  return request(url)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(specialStatus)
+}
+
 function getMyUserVideoQuotaUsed (url: string, accessToken: string, specialStatus = 200) {
   const path = '/api/v1/users/me/video-quota-used'
 
@@ -122,6 +132,29 @@ function removeUser (url: string, userId: number | string, accessToken: string, 
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
           .expect(expectedStatus)
+}
+
+function blockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204, reason?: string) {
+  const path = '/api/v1/users'
+  let body: any
+  if (reason) body = { reason }
+
+  return request(url)
+    .post(path + '/' + userId + '/block')
+    .send(body)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+}
+
+function unblockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+  const path = '/api/v1/users'
+
+  return request(url)
+    .post(path + '/' + userId + '/unblock')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
 }
 
 function updateMyUser (options: {
@@ -216,6 +249,7 @@ export {
   registerUser,
   getMyUserInformation,
   getMyUserVideoRating,
+  deleteMe,
   getMyUserVideoQuotaUsed,
   getUsersList,
   getUsersListPaginationAndSort,
@@ -223,6 +257,8 @@ export {
   updateUser,
   updateMyUser,
   getUserInformation,
+  blockUser,
+  unblockUser,
   askResetPassword,
   resetPassword,
   updateMyAvatar

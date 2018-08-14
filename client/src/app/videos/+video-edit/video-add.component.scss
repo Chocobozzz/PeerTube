@@ -7,7 +7,7 @@ $border-color: #EAEAEA;
 
 $background-color:  #F7F7F7;
 
-/deep/ tabset.root-tabset.video-add-tabset {
+/deep/ .root-tabset.video-add-tabset {
   &.hide-nav .nav {
     display: none !important;
   }
@@ -21,7 +21,10 @@ $background-color:  #F7F7F7;
       margin-bottom: -$border-width;
     }
 
-    .nav-link {
+    a.nav-link {
+      @include disable-default-a-behaviour;
+
+      color: #000;
       height: 40px !important;
       padding: 0 30px !important;
       font-size: 15px;
@@ -46,7 +49,8 @@ $background-color:  #F7F7F7;
     background-color: $background-color;
     border-radius: 3px;
     width: 100%;
-    height: 440px;
+    min-height: 440px;
+    padding-bottom: 20px;
     display: flex;
     justify-content: center;
     align-items: center;

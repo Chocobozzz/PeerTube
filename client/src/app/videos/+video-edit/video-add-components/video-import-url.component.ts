@@ -1,30 +1,27 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoConstant, VideoPrivacy, VideoUpdate } from '../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../core'
-import { FormReactive } from '../../shared'
-import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
-import { VideoService } from '../../shared/video/video.service'
+import { VideoPrivacy, VideoUpdate } from '../../../../../../shared/models/videos'
+import { AuthService, ServerService } from '../../../core'
+import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
-import { VideoImportService } from '@app/shared/video-import'
-import { VideoEdit } from '@app/shared/video/video-edit.model'
-import { switchMap } from 'rxjs/operators'
 import { LoadingBarService } from '@ngx-loading-bar/core'
+import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-send'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { VideoEdit } from '@app/shared/video/video-edit.model'
+import { FormValidatorService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
+import { VideoImportService } from '@app/shared/video-import'
 
 @Component({
-  selector: 'my-video-import',
-  templateUrl: './video-import.component.html',
+  selector: 'my-video-import-url',
+  templateUrl: './video-import-url.component.html',
   styleUrls: [
-    './shared/video-edit.component.scss',
-    './video-import.component.scss'
+    '../shared/video-edit.component.scss',
+    './video-import-url.component.scss'
   ]
 })
-export class VideoImportComponent extends FormReactive implements OnInit, CanComponentDeactivate {
+export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
 
   targetUrl = ''
@@ -34,53 +31,31 @@ export class VideoImportComponent extends FormReactive implements OnInit, CanCom
   hasImportedVideo = false
   isUpdatingVideo = false
 
-  userVideoChannels: { id: number, label: string, support: string }[] = []
-  videoPrivacies: VideoConstant<string>[] = []
-  videoCaptions: VideoCaptionEdit[] = []
-
-  firstStepPrivacyId = 0
-  firstStepChannelId = 0
   video: VideoEdit
+
+  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    protected loadingBar: LoadingBarService,
+    protected notificationsService: NotificationsService,
+    protected authService: AuthService,
+    protected serverService: ServerService,
+    protected videoService: VideoService,
+    protected videoCaptionService: VideoCaptionService,
     private router: Router,
-    private loadingBar: LoadingBarService,
-    private notificationsService: NotificationsService,
-    private authService: AuthService,
-    private serverService: ServerService,
-    private videoService: VideoService,
     private videoImportService: VideoImportService,
-    private videoCaptionService: VideoCaptionService,
     private i18n: I18n
   ) {
     super()
   }
 
   ngOnInit () {
-    this.buildForm({})
-
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-      .then(() => this.firstStepChannelId = this.userVideoChannels[ 0 ].id)
-
-    this.serverService.videoPrivaciesLoaded
-        .subscribe(
-          () => {
-            this.videoPrivacies = this.serverService.getVideoPrivacies()
-
-            // Private by default
-            this.firstStepPrivacyId = VideoPrivacy.PRIVATE
-          })
+    super.ngOnInit()
   }
 
   canDeactivate () {
     return { canDeactivate: true }
-  }
-
-  checkForm () {
-    this.forceCheck()
-
-    return this.form.valid
   }
 
   isTargetUrlValid () {
@@ -99,7 +74,7 @@ export class VideoImportComponent extends FormReactive implements OnInit, CanCom
 
     this.loadingBar.start()
 
-    this.videoImportService.importVideo(this.targetUrl, videoUpdate).subscribe(
+    this.videoImportService.importVideoUrl(this.targetUrl, videoUpdate).subscribe(
       res => {
         this.loadingBar.complete()
         this.firstStepDone.emit(res.video.name)
@@ -130,26 +105,19 @@ export class VideoImportComponent extends FormReactive implements OnInit, CanCom
 
     this.video.patch(this.form.value)
 
-    this.loadingBar.start()
     this.isUpdatingVideo = true
 
     // Update the video
-    this.videoService.updateVideo(this.video)
-        .pipe(
-          // Then update captions
-          switchMap(() => this.videoCaptionService.updateCaptions(this.video.id, this.videoCaptions))
-        )
+    this.updateVideoAndCaptions(this.video)
         .subscribe(
           () => {
             this.isUpdatingVideo = false
-            this.loadingBar.complete()
             this.notificationsService.success(this.i18n('Success'), this.i18n('Video to import updated.'))
 
             this.router.navigate([ '/my-account', 'video-imports' ])
           },
 
           err => {
-            this.loadingBar.complete()
             this.isUpdatingVideo = false
             this.notificationsService.error(this.i18n('Error'), err.message)
             console.error(err)

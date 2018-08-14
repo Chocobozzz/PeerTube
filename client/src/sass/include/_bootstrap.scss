@@ -1,50 +1,51 @@
-// Core variables and mixins
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+$dropdown-link-active-bg: inherit;
 
-// Reset and dependencies
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/normalize";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/print";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/glyphicons";
+$zindex-modal: 10005;
+$modal-footer-border-width: 0;
+$modal-md: 600px;
 
-// Core CSS
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/type";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/code";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/grid";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/tables";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/forms";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+$input-btn-focus-width: 0;
+$input-btn-focus-color: inherit;
+$input-focus-border-color: #ced4da;
 
-// Components
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/navs";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/navbar";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/pagination";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/pager";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/labels";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/badges";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/alerts";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/media";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/list-group";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/panels";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/wells";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/close";
+$nav-pills-link-active-bg: #F0F0F0;
+$nav-pills-link-active-color: #000;
 
-// Components w/ JavaScript
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/modals";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/popovers";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/carousel";
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
-//// Utility classes
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/utilities";
-//@import "~bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/type';
+//@import '~bootstrap/scss/images';
+//@import '~bootstrap/scss/code';
+@import '~bootstrap/scss/grid';
+//@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/forms';
+@import '~bootstrap/scss/buttons';
+//@import '~bootstrap/scss/transitions';
+@import '~bootstrap/scss/dropdown';
+//@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/input-group';
+//@import '~bootstrap/scss/custom-forms';
+@import '~bootstrap/scss/nav';
+//@import '~bootstrap/scss/navbar';
+//@import '~bootstrap/scss/card';
+//@import '~bootstrap/scss/breadcrumb';
+//@import '~bootstrap/scss/pagination';
+//@import '~bootstrap/scss/badge';
+//@import '~bootstrap/scss/jumbotron';
+@import '~bootstrap/scss/alert';
+//@import '~bootstrap/scss/progress';
+//@import '~bootstrap/scss/media';
+//@import '~bootstrap/scss/list-group';
+@import '~bootstrap/scss/close';
+@import '~bootstrap/scss/modal';
+@import '~bootstrap/scss/tooltip';
+@import '~bootstrap/scss/popover';
+//@import '~bootstrap/scss/carousel';
+@import '~bootstrap/scss/utilities';
+//@import '~bootstrap/scss/print';
+
+@import '~@neos21/bootstrap3-glyphicons/assets/stylesheets/bootstrap3-glyphicons';

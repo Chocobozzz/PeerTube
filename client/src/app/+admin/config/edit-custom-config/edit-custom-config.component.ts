@@ -72,6 +72,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       signupEnabled: null,
       signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
       importVideosHttpEnabled: null,
+      importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
@@ -189,6 +190,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         videos: {
           http: {
             enabled: this.form.value['importVideosHttpEnabled']
+          },
+          torrent: {
+            enabled: this.form.value['importVideosTorrentEnabled']
           }
         }
       }
@@ -231,7 +235,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       transcodingEnabled: this.customConfig.transcoding.enabled,
       customizationJavascript: this.customConfig.instance.customizations.javascript,
       customizationCSS: this.customConfig.instance.customizations.css,
-      importVideosHttpEnabled: this.customConfig.import.videos.http.enabled
+      importVideosHttpEnabled: this.customConfig.import.videos.http.enabled,
+      importVideosTorrentEnabled: this.customConfig.import.videos.torrent.enabled
     }
 
     for (const resolution of this.resolutions) {

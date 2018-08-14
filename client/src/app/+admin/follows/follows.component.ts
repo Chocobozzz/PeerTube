@@ -1,14 +1,14 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
-import { TabsetComponent } from 'ngx-bootstrap/tabs'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { NgbTabset } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   templateUrl: './follows.component.html',
   styleUrls: [ './follows.component.scss' ]
 })
 export class FollowsComponent implements OnInit, AfterViewInit {
-  @ViewChild('followsMenuTabs') followsMenuTabs: TabsetComponent
+  @ViewChild('followsMenuTabs') followsMenuTabs: NgbTabset
 
   links: { path: string, title: string }[] = []
 
@@ -53,8 +53,8 @@ export class FollowsComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < this.links.length; i++) {
       const path = this.links[i].path
 
-      if (url.endsWith(path) === true && this.followsMenuTabs.tabs[i]) {
-        this.followsMenuTabs.tabs[i].active = true
+      if (url.endsWith(path) === true) {
+        this.followsMenuTabs.select(path)
         return
       }
     }

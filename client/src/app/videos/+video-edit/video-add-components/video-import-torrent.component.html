@@ -1,15 +1,23 @@
 <div *ngIf="!hasImportedVideo" class="upload-video-container">
-  <div class="import-video">
+  <div class="import-video-torrent">
     <div class="icon icon-upload"></div>
 
-    <div class="form-group">
-      <label i18n for="targetUrl">URL</label>
+    <div class="button-file">
+      <span i18n>Select the torrent to import</span>
+      <input #torrentfileInput type="file" name="torrentfile" id="torrentfile" accept=".torrent" (change)="fileChange()" />
+    </div>
+    <span class="button-file-extension">(.torrent)</span>
+
+    <div class="torrent-or-magnet">Or</div>
+
+    <div class="form-group form-group-magnet-uri">
+      <label i18n for="magnetUri">Paste magnet URI</label>
       <my-help
         helpType="custom" i18n-customHtml
-        customHtml="You can import any URL <a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'>supported by youtube-dl</a> or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance."
+        customHtml="You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance."
       ></my-help>
 
-      <input type="text" id="targetUrl" [(ngModel)]="targetUrl" />
+      <input type="text" id="magnetUri" [(ngModel)]="magnetUri" />
     </div>
 
     <div class="form-group">
@@ -32,13 +40,13 @@
 
     <input
       type="button" i18n-value value="Import"
-      [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
+      [disabled]="!isMagnetUrlValid() || isImportingVideo" (click)="importVideo()"
     />
   </div>
 </div>
 
 <div *ngIf="hasImportedVideo" class="alert alert-info" i18n>
-  Congratulations, the video behind {{ targetUrl }} will be imported! You can already add information about this video.
+  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
 </div>
 
 <!-- Hidden because we want to load the component -->

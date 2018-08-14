@@ -37,25 +37,18 @@ function root () {
 }
 
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
-  // Don't test images if the node env is not set
-  // Because we need a special ffmpeg version for this test
-  if (process.env[ 'NODE_TEST_IMAGE' ]) {
-    const res = await request(url)
-      .get(imagePath)
-      .expect(200)
+  const res = await request(url)
+    .get(imagePath)
+    .expect(200)
 
-    const body = res.body
+  const body = res.body
 
-    const data = await readFileBufferPromise(join(__dirname, '..', '..', 'fixtures', imageName + extension))
-    const minLength = body.length - ((20 * body.length) / 100)
-    const maxLength = body.length + ((20 * body.length) / 100)
+  const data = await readFileBufferPromise(join(__dirname, '..', '..', 'fixtures', imageName + extension))
+  const minLength = body.length - ((20 * body.length) / 100)
+  const maxLength = body.length + ((20 * body.length) / 100)
 
-    expect(data.length).to.be.above(minLength)
-    expect(data.length).to.be.below(maxLength)
-  } else {
-    console.log('Do not test images. Enable it by setting NODE_TEST_IMAGE env variable.')
-    return true
-  }
+  expect(data.length).to.be.above(minLength)
+  expect(data.length).to.be.below(maxLength)
 }
 
 function buildAbsoluteFixturePath (path: string) {
