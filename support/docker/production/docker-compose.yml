@@ -21,6 +21,8 @@ services:
     #   context: .
     #   dockerfile: ./support/docker/production/Dockerfile.stretch
     image: chocobozzz/peertube:production-stretch
+    env_file:
+      - .env
     # Traefik labels are suggested as an example for people using Traefik,
     # remove them if you are using another reverse proxy.
     labels:
@@ -41,8 +43,8 @@ services:
   postgres:
     image: postgres:10-alpine
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${PEERTUBE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PEERTUBE_DB_PASSWORD}
       POSTGRES_DB: peertube
     volumes:
       - ./docker-volume/db:/var/lib/postgresql/data
