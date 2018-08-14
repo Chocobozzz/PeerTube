@@ -5,6 +5,7 @@ import * as bitTorrentTracker from 'bittorrent-tracker'
 import * as proxyAddr from 'proxy-addr'
 import { Server as WebSocketServer } from 'ws'
 import { CONFIG, TRACKER_RATE_LIMITS } from '../initializers/constants'
+import { VideoFileModel } from '../models/video/video-file'
 
 const TrackerServer = bitTorrentTracker.Server
 
@@ -37,7 +38,12 @@ const trackerServer = new TrackerServer({
       return cb(new Error(`Too many requests (${peersIpInfoHash[ key ]} of ip ${ip} for torrent ${infoHash}`))
     }
 
-    return cb()
+    VideoFileModel.isInfohashExists(infoHash)
+      .then(exists => {
+        if (exists === false) return cb(new Error(`Unknown infoHash ${infoHash}`))
+
+        return cb()
+      })
   }
 })
 
