@@ -138,6 +138,8 @@ class Emailer {
   async addVideoUnblacklistReportJob (videoId: number) {
     const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
     if (!video) throw new Error('Unknown Video id during Blacklist report.')
+    // It's not our user
+    if (video.remote === true) return
 
     const user = await UserModel.loadById(video.VideoChannel.Account.userId)
 
