@@ -4,7 +4,7 @@ import { FormReactive, VideoAbuseService, VideoAbuseValidatorsService } from '..
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { FormValidatorService } from '../../../shared/forms/form-validators/form-validator.service'
 import { VideoAbuse } from '../../../../../../shared/models/videos'
 
 @Component({

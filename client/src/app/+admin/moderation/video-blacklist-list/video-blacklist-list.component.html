@@ -1,7 +1,3 @@
-<div class="admin-sub-header">
-  <div i18n class="form-sub-title">Blacklisted videos</div>
-</div>
-
 <p-table
   [value]="blacklist" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
@@ -41,7 +37,7 @@
 
   <ng-template pTemplate="rowexpansion" let-videoBlacklist>
     <tr class="blacklist-reason">
-      <td colspan="6">
+      <td colspan="7">
         <span i18n class="blacklist-reason-label">Blacklist reason:</span>
         {{ videoBlacklist.reason }}
       </td>

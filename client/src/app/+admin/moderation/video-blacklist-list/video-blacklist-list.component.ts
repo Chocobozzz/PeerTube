@@ -5,8 +5,8 @@ import { ConfirmService } from '../../../core'
 import { RestPagination, RestTable, VideoBlacklistService } from '../../../shared'
 import { VideoBlacklist } from '../../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
-import { Video } from '@app/shared/video/video.model'
+import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
+import { Video } from '../../../shared/video/video.model'
 
 @Component({
   selector: 'my-video-blacklist-list',
