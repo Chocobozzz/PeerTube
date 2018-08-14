@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { ConfirmService } from '../../../core'
-import { RestPagination, RestTable, User } from '../../../shared'
+import { RestPagination, RestTable } from '../../../shared'
 import { UserService } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-modal.component'
+import { User } from '../../../../../../shared'
 
 @Component({
   selector: 'my-user-list',
