@@ -17,4 +17,6 @@ export interface User {
 
   blocked: boolean
   blockedReason?: string
+
+  videoQuotaUsed?: number
 }

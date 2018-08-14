@@ -36,7 +36,7 @@
         <span *ngIf="user.blocked" class="banned-info">(banned)</span>
       </td>
       <td>{{ user.email }}</td>
-      <td>{{ user.videoQuota }}</td>
+      <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>
       <td class="action-cell">
