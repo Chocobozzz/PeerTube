@@ -1,4 +1,4 @@
-export interface BlacklistedVideo {
+export interface VideoBlacklist {
   id: number
   createdAt: Date
   updatedAt: Date

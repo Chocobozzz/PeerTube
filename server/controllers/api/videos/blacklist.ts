@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { BlacklistedVideo, UserRight, VideoBlacklistCreate } from '../../../../shared'
+import { VideoBlacklist, UserRight, VideoBlacklistCreate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import {
@@ -87,7 +87,7 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
 async function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
   const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
-  return res.json(getFormattedObjects<BlacklistedVideo, VideoBlacklistModel>(resultList.data, resultList.total))
+  return res.json(getFormattedObjects<VideoBlacklist, VideoBlacklistModel>(resultList.data, resultList.total))
 }
 
 async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {

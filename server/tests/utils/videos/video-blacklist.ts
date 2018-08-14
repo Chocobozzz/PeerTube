@@ -19,7 +19,8 @@ function updateVideoBlacklist (url: string, token: string, videoId: number, reas
     .send({ reason })
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + token)
-    .expect(specialStatus)}
+    .expect(specialStatus)
+}
 
 function removeVideoFromBlacklist (url: string, token: string, videoId: number | string, specialStatus = 204) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'

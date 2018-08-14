@@ -76,11 +76,24 @@
       font-weight: $font-semibold;
     }
 
-    .video-info-date-views, .video-info-private {
+    .video-info-date-views,
+    .video-info-private,
+    .video-info-blacklisted {
       font-size: 13px;
 
-      &.video-info-private {
+      &.video-info-private,
+      &.video-info-blacklisted .blacklisted-label {
         font-weight: $font-semibold;
+      }
+
+      &.video-info-blacklisted {
+        color: red;
+
+        .blacklisted-reason {
+          &::before {
+            content: ' - ';
+          }
+        }
       }
     }
   }

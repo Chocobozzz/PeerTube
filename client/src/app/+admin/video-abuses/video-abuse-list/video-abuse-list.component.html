@@ -42,7 +42,7 @@
       <td>{{ videoAbuse.createdAt }}</td>
 
       <td>
-        <a [href]="videoAbuse.video.url" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
+        <a [href]="getVideoUrl(videoAbuse)" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
           {{ videoAbuse.video.name }}
         </a>
       </td>

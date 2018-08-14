@@ -14,7 +14,6 @@ export interface VideoAbuse {
     id: number
     name: string
     uuid: string
-    url: string
   }
 
   createdAt: Date

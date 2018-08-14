@@ -18,6 +18,10 @@
         <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
         <span i18n class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
         <div class="video-info-private">{{ video.privacy.label }}{{ getStateLabel(video) }}</div>
+        <div *ngIf="video.blacklisted" class="video-info-blacklisted">
+          <span class="blacklisted-label" i18n>Blacklisted</span>
+          <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+        </div>
       </div>
 
       <!-- Display only once -->

@@ -35,6 +35,8 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
 import { cleanUpReqFiles } from '../../helpers/utils'
+import { VideoModel } from '../../models/video/video'
+import { UserModel } from '../../models/account/user'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -131,7 +133,25 @@ const videosGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
-    const video = res.locals.video
+    const video: VideoModel = res.locals.video
+
+    // Video private or blacklisted
+    if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
+      authenticate(req, res, () => {
+        const user: UserModel = res.locals.oauth.token.User
+
+        // Only the owner or a user that have blacklist rights can see the video
+        if (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
+          return res.status(403)
+                    .json({ error: 'Cannot get this private or blacklisted video.' })
+                    .end()
+        }
+
+        return next()
+      })
+
+      return
+    }
 
     // Video is public, anyone can access it
     if (video.privacy === VideoPrivacy.PUBLIC) return next()
@@ -143,17 +163,6 @@ const videosGetValidator = [
       // Don't leak this unlisted video
       return res.status(404).end()
     }
-
-    // Video is private, check the user
-    authenticate(req, res, () => {
-      if (video.VideoChannel.Account.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403)
-          .json({ error: 'Cannot get this private video of another user' })
-          .end()
-      }
-
-      return next()
-    })
   }
 ]
 

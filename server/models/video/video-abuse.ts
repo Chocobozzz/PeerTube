@@ -137,7 +137,6 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       video: {
         id: this.Video.id,
         uuid: this.Video.uuid,
-        url: this.Video.url,
         name: this.Video.name
       },
       createdAt: this.createdAt

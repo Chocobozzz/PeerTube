@@ -1,4 +1,4 @@
-<div class="row">
+<div class="root-row row">
   <!-- We need the video container for videojs so we just hide it -->
   <div id="video-element-wrapper">
     <div *ngIf="remoteServerDown" class="remote-server-down">
@@ -17,7 +17,12 @@
   </div>
 
   <div i18n class="alert alert-info" *ngIf="hasVideoScheduledPublication()">
-    This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}
+    This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
+  </div>
+
+  <div class="alert alert-danger" *ngIf="video?.blacklisted">
+    <div class="blacklisted-label" i18n>This video is blacklisted.</div>
+    {{ video.blacklistedReason }}
   </div>
 
   <!-- Video information -->
@@ -96,6 +101,10 @@
 
                 <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
                   <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
+                </a>
+
+                <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
+                  <span class="icon icon-unblacklist"></span> <ng-container i18n>Unblacklist</ng-container>
                 </a>
 
                 <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">

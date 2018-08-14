@@ -127,7 +127,8 @@ export enum ScopeNames {
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
-  WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE'
+  WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
+  WITH_BLACKLISTED = 'WITH_BLACKLISTED'
 }
 
 type AvailableForListOptions = {
@@ -373,6 +374,15 @@ type AvailableForListOptions = {
   },
   [ScopeNames.WITH_TAGS]: {
     include: [ () => TagModel ]
+  },
+  [ScopeNames.WITH_BLACKLISTED]: {
+    include: [
+      {
+        attributes: [ 'id', 'reason' ],
+        model: () => VideoBlacklistModel,
+        required: false
+      }
+    ]
   },
   [ScopeNames.WITH_FILES]: {
     include: [
@@ -1004,7 +1014,13 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_SCHEDULED_UPDATE ])
+      .scope([
+        ScopeNames.WITH_TAGS,
+        ScopeNames.WITH_BLACKLISTED,
+        ScopeNames.WITH_FILES,
+        ScopeNames.WITH_ACCOUNT_DETAILS,
+        ScopeNames.WITH_SCHEDULED_UPDATE
+      ])
       .findById(id, options)
   }
 
@@ -1030,7 +1046,13 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_SCHEDULED_UPDATE ])
+      .scope([
+        ScopeNames.WITH_TAGS,
+        ScopeNames.WITH_BLACKLISTED,
+        ScopeNames.WITH_FILES,
+        ScopeNames.WITH_ACCOUNT_DETAILS,
+        ScopeNames.WITH_SCHEDULED_UPDATE
+      ])
       .findOne(options)
   }
 
@@ -1276,7 +1298,8 @@ export class VideoModel extends Model<VideoModel> {
   toFormattedDetailsJSON (): VideoDetails {
     const formattedJson = this.toFormattedJSON({
       additionalAttributes: {
-        scheduledUpdate: true
+        scheduledUpdate: true,
+        blacklistInfo: true
       }
     })
 

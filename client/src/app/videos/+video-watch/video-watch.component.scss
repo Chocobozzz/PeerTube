@@ -1,6 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
+.root-row {
+  flex-direction: column;
+}
+
+.blacklisted-label {
+  font-weight: $font-semibold;
+}
+
 #video-element-wrapper {
   background-color: #000;
   display: flex;
@@ -257,6 +265,10 @@
 
                 &.icon-blacklist {
                   background-image: url('../../../assets/images/video/blacklist.svg');
+                }
+
+                &.icon-unblacklist {
+                  background-image: url('../../../assets/images/global/undo.svg');
                 }
 
                 &.icon-delete {

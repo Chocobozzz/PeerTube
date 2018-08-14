@@ -16,7 +16,7 @@ import { getSortOnModel, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoBlacklistReasonValid } from '../../helpers/custom-validators/video-blacklist'
 import { Emailer } from '../../lib/emailer'
-import { BlacklistedVideo } from '../../../shared/models/videos'
+import { VideoBlacklist } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 @Table({
@@ -68,7 +68,12 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       offset: start,
       limit: count,
       order: getSortOnModel(sort.sortModel, sort.sortValue),
-      include: [ { model: VideoModel } ]
+      include: [
+        {
+          model: VideoModel,
+          required: true
+        }
+      ]
     }
 
     return VideoBlacklistModel.findAndCountAll(query)
@@ -90,7 +95,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     return VideoBlacklistModel.findOne(query)
   }
 
-  toFormattedJSON (): BlacklistedVideo {
+  toFormattedJSON (): VideoBlacklist {
     const video = this.Video
 
     return {

@@ -8,6 +8,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { ConfirmService } from '@app/core'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -77,6 +78,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
   isVideoAbuseRejected (videoAbuse: VideoAbuse) {
     return videoAbuse.state.id === VideoAbuseState.REJECTED
+  }
+
+  getVideoUrl (videoAbuse: VideoAbuse) {
+    return Video.buildClientUrl(videoAbuse.video.uuid)
   }
 
   async removeVideoAbuse (videoAbuse: VideoAbuse) {
