@@ -1,4 +1,4 @@
-import { VideoUpdate } from './video-update.model'
+import { VideoUpdate } from '../video-update.model'
 
 export interface VideoImportCreate extends VideoUpdate {
   targetUrl?: string

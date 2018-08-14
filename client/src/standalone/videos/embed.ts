@@ -24,7 +24,7 @@ import { ResultList, VideoDetails } from '../../../../shared'
 import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
 import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
-import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
+import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 /**
  * Embed API exposes control of the embed player to the outside world via

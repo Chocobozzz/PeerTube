@@ -1,4 +1,4 @@
-import { VideoConstant } from './video-constant.model'
+import { VideoConstant } from '../video-constant.model'
 
 export interface VideoCaption {
   language: VideoConstant<string>

@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { VideoAbuseUpdate } from '../../../../shared/models/videos/video-abuse-update.model'
+import { VideoAbuseUpdate } from '../../../../shared/models/videos/abuse/video-abuse-update.model'
 import { makeDeleteRequest, makePutBodyRequest } from '..'
 
 function reportVideoAbuse (url: string, token: string, videoId: number | string, reason: string, specialStatus = 200) {

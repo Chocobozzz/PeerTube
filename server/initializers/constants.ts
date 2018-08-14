@@ -3,12 +3,11 @@ import { dirname, join } from 'path'
 import { JobType, VideoRateType, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoPrivacy, VideoAbuseState } from '../../shared/models/videos'
+import { VideoPrivacy, VideoAbuseState, VideoImportState } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
-import { VideoImportState } from '../../shared/models/videos/video-import-state.enum'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
