@@ -1,0 +1,10 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Change the language</h4>
+    <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+  </div>
+
+  <div class="modal-body">
+    <a *ngFor="let lang of languages" [href]="buildLanguageLink(lang)">{{ lang.label }}</a>
+  </div>
+</ng-template>

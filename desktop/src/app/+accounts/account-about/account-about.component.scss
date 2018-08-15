@@ -1,0 +1,12 @@
+@import '_variables';
+@import '_mixins';
+
+.block {
+  margin-bottom: 40px;
+
+  .small-title {
+    @include in-content-small-title;
+
+    margin-bottom: 20px;
+  }
+}

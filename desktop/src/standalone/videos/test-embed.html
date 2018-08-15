@@ -1,0 +1,51 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="icon">
+        <img src="../../assets/images/logo.svg">
+      </div>
+      <div>
+        PeerTube
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <h1>Embed Playground</h1>
+  </header>
+  <main>
+    <aside>
+      <div id="host"></div>
+    </aside>
+    <div id="controls">
+      <div>
+        <button onclick="player.play()">Play</button>
+        <button onclick="player.pause()">Pause</button>
+        <button onclick="player.seek(parseInt(prompt('Enter position to seek to (in seconds)')))">Seek</button>
+      </div>
+      <br/>
+
+      <div id="options">
+        <fieldset>
+          <legend>Resolutions:</legend>
+          <div id="resolution-list"></div>
+          <br/>
+        </fieldset>
+
+        <fieldset>
+          <legend>Rates:</legend>
+          <div id="rate-list"></div>
+        </fieldset>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- iframes are used dynamically -->
+  <iframe hidden></iframe>
+  <a hidden></a>
+</body>
+</html>

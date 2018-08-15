@@ -1,0 +1,19 @@
+<my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
+
+<div class="user-quota">
+  <span i18n class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
+</div>
+
+<ng-template [ngIf]="user && user.account">
+  <div i18n class="account-title">Profile</div>
+  <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
+</ng-template>
+
+<div i18n class="account-title">Password</div>
+<my-account-change-password></my-account-change-password>
+
+<div i18n class="account-title">Video settings</div>
+<my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>
+
+<div i18n class="account-title">Danger zone</div>
+<my-account-danger-zone [user]="user"></my-account-danger-zone>

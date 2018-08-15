@@ -1,0 +1,150 @@
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="namespace1" datatype="plaintext" source-language="undefined" target-language="undefined">
+    <body>
+      <trans-unit id="Music">
+        <source>Music</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Films">
+        <source>Films</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Vehicles">
+        <source>Vehicles</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Art">
+        <source>Art</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Sports">
+        <source>Sports</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Travels">
+        <source>Travels</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Gaming">
+        <source>Gaming</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="People">
+        <source>People</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Comedy">
+        <source>Comedy</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Entertainment">
+        <source>Entertainment</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="News">
+        <source>News</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="How To">
+        <source>How To</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Education">
+        <source>Education</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Activism">
+        <source>Activism</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Science &amp; Technology">
+        <source>Science &amp; Technology</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Animals">
+        <source>Animals</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Kids">
+        <source>Kids</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Food">
+        <source>Food</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution">
+        <source>Attribution</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Share Alike">
+        <source>Attribution - Share Alike</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - No Derivatives">
+        <source>Attribution - No Derivatives</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial">
+        <source>Attribution - Non Commercial</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial - Share Alike">
+        <source>Attribution - Non Commercial - Share Alike</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial - No Derivatives">
+        <source>Attribution - Non Commercial - No Derivatives</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Public Domain Dedication">
+        <source>Public Domain Dedication</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Public">
+        <source>Public</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Unlisted">
+        <source>Unlisted</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Private">
+        <source>Private</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Misc">
+        <source>Misc</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Unknown">
+        <source>Unknown</source>
+        <target>undefined</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

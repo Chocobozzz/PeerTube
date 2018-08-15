@@ -1,0 +1,17 @@
+<div class="dropdown-root" ngbDropdown [placement]="placement">
+  <div class="action-button" ngbDropdownToggle role="button">
+    <span class="icon icon-action"></span>
+  </div>
+
+  <div ngbDropdownMenu class="dropdown-menu">
+    <ng-container *ngFor="let action of actions">
+      <div class="dropdown-item" *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
+        <a *ngIf="action.linkBuilder" class="dropdown-item" [routerLink]="action.linkBuilder(entry)">{{ action.label }}</a>
+
+        <span *ngIf="!action.linkBuilder" class="custom-action" class="dropdown-item" (click)="action.handler(entry)" role="button">
+          {{ action.label }}
+        </span>
+      </div>
+    </ng-container>
+  </div>
+</div>

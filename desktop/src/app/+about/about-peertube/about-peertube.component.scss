@@ -1,0 +1,22 @@
+@import '_variables';
+@import '_mixins';
+
+.about-peertube-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-weight: $font-semibold;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.description {
+  margin-bottom: 30px;
+}
+
+.p2p-privacy-title {
+  margin-top: 15px;
+}

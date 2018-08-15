@@ -1,0 +1,37 @@
+@import '_variables';
+@import '_mixins';
+
+form {
+  margin-bottom: 30px;
+}
+
+.avatar-and-textarea {
+  display: flex;
+  margin-bottom: 10px;
+
+  img {
+    @include avatar(36px);
+
+    vertical-align: top;
+    margin-right: 20px;
+  }
+
+  .form-group {
+    flex-grow: 1;
+    margin: 0;
+
+    textarea {
+      @include peertube-textarea(100%, 60px);
+    }
+  }
+}
+
+.submit-comment {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    @include peertube-button;
+    @include orange-button
+  }
+}

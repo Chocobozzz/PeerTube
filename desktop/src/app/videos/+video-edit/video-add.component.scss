@@ -1,0 +1,58 @@
+@import '_variables';
+@import '_mixins';
+
+$border-width: 3px;
+$border-type: solid;
+$border-color: #EAEAEA;
+
+$background-color:  #F7F7F7;
+
+/deep/ .root-tabset.video-add-tabset {
+  &.hide-nav .nav {
+    display: none !important;
+  }
+
+  & > .nav {
+
+    border-bottom: $border-width $border-type $border-color;
+    margin: 0 !important;
+
+    & > li {
+      margin-bottom: -$border-width;
+    }
+
+    a.nav-link {
+      @include disable-default-a-behaviour;
+
+      color: #000;
+      height: 40px !important;
+      padding: 0 30px !important;
+      font-size: 15px;
+
+      &.active {
+        border: $border-width $border-type $border-color;
+        border-bottom: none;
+        background-color: $background-color !important;
+
+        span {
+          border-bottom: 2px solid #F1680D;
+          font-weight: $font-bold;
+        }
+      }
+    }
+  }
+
+  .upload-video-container {
+    border: $border-width $border-type $border-color;
+    border-top: none;
+
+    background-color: $background-color;
+    border-radius: 3px;
+    width: 100%;
+    min-height: 440px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

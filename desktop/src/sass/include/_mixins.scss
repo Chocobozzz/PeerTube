@@ -1,0 +1,421 @@
+@import '_variables';
+
+@mixin disable-default-a-behaviour {
+  &:hover, &:focus, &:active {
+    text-decoration: none !important;
+    outline: none !important;
+  }
+}
+
+@mixin disable-outline {
+  outline: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0
+  }
+}
+
+@mixin peertube-word-wrap {
+  word-break: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+  text-align: justify;
+}
+
+@mixin peertube-input-text($width) {
+  display: inline-block;
+  height: $button-height;
+  width: $width;
+  background: #fff;
+  border: 1px solid #C6C6C6;
+  border-radius: 3px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  &::placeholder {
+    color: #585858;
+  }
+}
+
+@mixin peertube-textarea ($width, $height) {
+  @include peertube-input-text($width);
+
+  height: $height;
+  padding: 5px 15px;
+  font-size: 15px;
+}
+
+@mixin orange-button {
+  &, &:active, &:focus {
+    color: #fff;
+    background-color: $orange-color;
+  }
+
+  &:hover {
+    color: #fff;
+    background-color: $orange-hoover-color;
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
+    color: #fff;
+    background-color: #C6C6C6;
+  }
+}
+
+@mixin grey-button {
+  &, &:active, &:focus {
+    background-color: $grey-color;
+    color: #585858;
+  }
+
+  &:hover, &:active, &:focus, &[disabled], &.disabled {
+    color: #585858;
+    background-color: $grey-hoover-color;
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
+  }
+}
+
+@mixin peertube-button {
+  border: none;
+  font-weight: $font-semibold;
+  font-size: 15px;
+  height: $button-height;
+  line-height: $button-height;
+  border-radius: 3px;
+  text-align: center;
+  padding: 0 17px 0 13px;
+  cursor: pointer;
+  outline: 0;
+}
+
+@mixin peertube-button-link {
+  display: inline-block;
+
+  @include disable-default-a-behaviour;
+  @include peertube-button;
+}
+
+@mixin peertube-button-file ($width) {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: $width;
+
+  @include peertube-button;
+  @include orange-button;
+
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+  }
+}
+
+@mixin icon ($size) {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: $size;
+  height: $size;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+@mixin peertube-select-container ($width) {
+  padding: 0;
+  margin: 0;
+  border: 1px solid #C6C6C6;
+  width: $width;
+  border-radius: 3px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  font-size: 15px;
+
+  &:after {
+    top: 50%;
+    right: calc(0% + 15px);
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border: 5px solid rgba(0, 0, 0, 0);
+    border-top-color: #000;
+    margin-top: -2px;
+    z-index: 100;
+  }
+
+  select {
+    padding: 0 35px 0 12px;
+    width: calc(100% + 2px);
+    position: relative;
+    left: 1px;
+    border: none;
+    box-shadow: none;
+    background: transparent none;
+    appearance: none;
+    cursor: pointer;
+    height: $button-height;
+    text-overflow: ellipsis;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:-moz-focusring {
+      color: transparent;
+      text-shadow: 0 0 0 #000;
+    }
+  }
+}
+
+@mixin peertube-select-disabled-container ($width) {
+  @include peertube-select-container($width);
+
+  background-color: #E5E5E5;
+
+  select {
+    cursor: default;
+  }
+}
+
+// Thanks: https://codepen.io/triss90/pen/XNEdRe/
+@mixin peertube-radio-container {
+  input[type="radio"] {
+    display: none;
+
+    & + label {
+      font-weight: $font-regular;
+      cursor: pointer;
+
+      &:before {
+        position: relative;
+        top: -2px;
+        content: '';
+        background: #fff;
+        border-radius: 100%;
+        border: 1px solid #000;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        vertical-align: middle;
+        cursor: pointer;
+        text-align: center;
+        margin-right: 10px;
+      }
+    }
+
+    &:checked + label:before {
+      background-color: #000;
+      box-shadow: inset 0 0 0 4px #fff;
+    }
+
+    &:focus + label:before {
+      outline: none;
+      border-color: #000;
+    }
+  }
+}
+
+@mixin peertube-checkbox ($border-width) {
+  display: none;
+
+  & + span {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border: $border-width solid #000;
+    border-radius: 3px;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: calc(2px - #{$border-width});
+      left: 5px;
+      width: 5px;
+      height: 12px;
+      opacity: 0;
+      transform: rotate(45deg) scale(0);
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+    }
+  }
+
+  &:checked + span {
+    border-color: transparent;
+    background: $orange-color;
+    animation: jelly 0.6s ease;
+
+    &:after {
+      opacity: 1;
+      transform: rotate(45deg) scale(1);
+    }
+  }
+
+  & + span + span {
+    font-size: 15px;
+    font-weight: $font-regular;
+    margin-left: 5px;
+    cursor: pointer;
+    display: inline;
+  }
+
+  &[disabled] + span,
+  &[disabled] + span + span{
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+
+@mixin avatar ($size) {
+  object-fit: cover;
+  border-radius: 50%;
+  width: $size;
+  height: $size;
+}
+
+@mixin chevron ($size, $border-width) {
+  border-style: solid;
+  border-width: $border-width $border-width 0 0;
+  content: '';
+  display: inline-block;
+  transform: rotate(-45deg);
+  height: $size;
+  width: $size;
+}
+
+@mixin chevron-right ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  left: 0;
+  transform: rotate(45deg);
+}
+
+@mixin chevron-left ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  left: 0.25em;
+  transform: rotate(-135deg);
+}
+
+@mixin in-content-small-title {
+  text-transform: uppercase;
+  color: $orange-color;
+  font-weight: $font-bold;
+  font-size: 13px;
+}
+
+@mixin sub-menu-with-actor {
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+  .actor {
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    img {
+      @include avatar(80px);
+
+      margin-right: 20px;
+    }
+
+    .actor-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .actor-names {
+        display: flex;
+        align-items: center;
+
+        .actor-display-name {
+          font-size: 23px;
+          font-weight: $font-bold;
+        }
+
+        .actor-name {
+          margin-left: 7px;
+          position: relative;
+          top: 3px;
+          font-size: 14px;
+          color: #777272;
+        }
+      }
+
+      .actor-followers {
+        font-size: 15px;
+      }
+
+      .actor-owner {
+        @include disable-default-a-behaviour;
+
+        display: block;
+        font-size: 13px;
+        margin-top: 4px;
+        color: #000;
+
+        span:hover {
+          opacity: 0.8;
+        }
+
+        img {
+          @include avatar(18px);
+
+          margin-left: 7px;
+          position: relative;
+          top: -2px;
+        }
+      }
+    }
+  }
+
+  .links {
+    margin-top: 0;
+    margin-bottom: 10px;
+
+    a {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+
+@mixin create-button ($imageUrl) {
+  @include peertube-button-link;
+  @include orange-button;
+
+  .icon.icon-add {
+    @include icon(20px);
+
+    position: relative;
+    top: -1px;
+    margin-right: 5px;
+    background-image: url($imageUrl);
+  }
+}

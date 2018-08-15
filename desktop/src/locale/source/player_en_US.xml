@@ -1,0 +1,382 @@
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="namespace1" datatype="plaintext" source-language="undefined" target-language="undefined">
+    <body>
+      <trans-unit id="Audio Player">
+        <source>Audio Player</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Video Player">
+        <source>Video Player</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Play">
+        <source>Play</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Pause">
+        <source>Pause</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Replay">
+        <source>Replay</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Current Time">
+        <source>Current Time</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Duration">
+        <source>Duration</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Remaining Time">
+        <source>Remaining Time</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Stream Type">
+        <source>Stream Type</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="LIVE">
+        <source>LIVE</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Loaded">
+        <source>Loaded</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Progress">
+        <source>Progress</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Progress Bar">
+        <source>Progress Bar</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="progress bar timing: currentTime={1} duration={2}">
+        <source>{1} of {2}</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Fullscreen">
+        <source>Fullscreen</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Non-Fullscreen">
+        <source>Non-Fullscreen</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Mute">
+        <source>Mute</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Unmute">
+        <source>Unmute</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Playback Rate">
+        <source>Playback Rate</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Subtitles">
+        <source>Subtitles</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="subtitles off">
+        <source>subtitles off</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Captions">
+        <source>Captions</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="captions off">
+        <source>captions off</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Chapters">
+        <source>Chapters</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Descriptions">
+        <source>Descriptions</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="descriptions off">
+        <source>descriptions off</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Audio Track">
+        <source>Audio Track</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Volume Level">
+        <source>Volume Level</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="You aborted the media playback">
+        <source>You aborted the media playback</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="A network error caused the media download to fail part-way.">
+        <source>A network error caused the media download to fail part-way.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="The media could not be loaded, either because the server or network failed or because the format is not supported.">
+        <source>The media could not be loaded, either because the server or network failed or because the format is not supported.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="The media playback was aborted due to a corruption problem or because the media used features your browser did not support.">
+        <source>The media playback was aborted due to a corruption problem or because the media used features your browser did not support.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="No compatible source was found for this media.">
+        <source>No compatible source was found for this media.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="The media is encrypted and we do not have the keys to decrypt it.">
+        <source>The media is encrypted and we do not have the keys to decrypt it.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Play Video">
+        <source>Play Video</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Close">
+        <source>Close</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Close Modal Dialog">
+        <source>Close Modal Dialog</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Modal Window">
+        <source>Modal Window</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="This is a modal window">
+        <source>This is a modal window</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="This modal can be closed by pressing the Escape key or activating the close button.">
+        <source>This modal can be closed by pressing the Escape key or activating the close button.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", opens captions settings dialog">
+        <source>, opens captions settings dialog</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", opens subtitles settings dialog">
+        <source>, opens subtitles settings dialog</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", opens descriptions settings dialog">
+        <source>, opens descriptions settings dialog</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", selected">
+        <source>, selected</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="captions settings">
+        <source>captions settings</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="subtitles settings">
+        <source>subititles settings</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="descriptions settings">
+        <source>descriptions settings</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Text">
+        <source>Text</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="White">
+        <source>White</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Black">
+        <source>Black</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Red">
+        <source>Red</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Green">
+        <source>Green</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Blue">
+        <source>Blue</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Yellow">
+        <source>Yellow</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Magenta">
+        <source>Magenta</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Cyan">
+        <source>Cyan</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Background">
+        <source>Background</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Window">
+        <source>Window</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Transparent">
+        <source>Transparent</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Semi-Transparent">
+        <source>Semi-Transparent</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Opaque">
+        <source>Opaque</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Font Size">
+        <source>Font Size</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Text Edge Style">
+        <source>Text Edge Style</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="None">
+        <source>None</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Raised">
+        <source>Raised</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Depressed">
+        <source>Depressed</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Uniform">
+        <source>Uniform</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Dropshadow">
+        <source>Dropshadow</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Font Family">
+        <source>Font Family</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Proportional Sans-Serif">
+        <source>Proportional Sans-Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Monospace Sans-Serif">
+        <source>Monospace Sans-Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Proportional Serif">
+        <source>Proportional Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Monospace Serif">
+        <source>Monospace Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Casual">
+        <source>Casual</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Script">
+        <source>Script</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Small Caps">
+        <source>Small Caps</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Reset">
+        <source>Reset</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="restore all settings to the default values">
+        <source>restore all settings to the default values</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Caption Settings Dialog">
+        <source>Caption Settings Dialog</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Beginning of dialog window. Escape will cancel and close the window.">
+        <source>Beginning of dialog window. Escape will cancel and close the window.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="End of dialog window.">
+        <source>End of dialog window.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="{1} is loading.">
+        <source>{1} is loading.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Quality">
+        <source>Quality</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Auto">
+        <source>Auto</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Speed">
+        <source>Speed</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Subtitles/CC">
+        <source>Subtitles/CC</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="peers">
+        <source>peers</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Go to the video page">
+        <source>Go to the video page</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Settings">
+        <source>Settings</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Uses P2P, others may know you are watching this video.">
+        <source>Uses P2P, others may know you are watching this video.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL">
+        <source>Copy the video URL</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL at the current time">
+        <source>Copy the video URL at the current time</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Copy embed code">
+        <source>Copy embed code</source>
+        <target>undefined</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

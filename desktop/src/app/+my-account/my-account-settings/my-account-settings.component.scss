@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+.user-quota {
+  font-size: 15px;
+  margin-top: 20px;
+
+  .user-quota-label {
+    font-weight: $font-semibold;
+  }
+}
+
+.account-title {
+  @include in-content-small-title;
+
+  margin-top: 55px;
+  margin-bottom: 30px;
+}

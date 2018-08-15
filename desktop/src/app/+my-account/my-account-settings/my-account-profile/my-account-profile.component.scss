@@ -1,0 +1,26 @@
+@import '_variables';
+@import '_mixins';
+
+.form-group:first-child {
+  margin-bottom: 15px;
+}
+
+input[type=text] {
+  @include peertube-input-text(340px);
+
+  display: block;
+}
+
+textarea {
+  @include peertube-textarea(500px, 150px);
+
+  display: block;
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+
+  margin-top: 15px;
+}
+

@@ -1,0 +1,327 @@
+@import '_variables';
+@import '_mixins';
+
+$icon-font-path: '../../node_modules/@neos21/bootstrap3-glyphicons/assets/fonts/';
+@import '_bootstrap';
+
+@import '_fonts';
+
+@import '~video.js/dist/video-js.css';
+
+$assets-path: '../assets/';
+@import './player/player';
+@import './loading-bar';
+
+@import './primeng-custom';
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: $main-fonts;
+  font-weight: $font-regular;
+  color: #000;
+  font-size: 14px;
+}
+
+#incompatible-browser {
+  display: none;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 45%;
+}
+
+strong {
+  font-weight: $font-semibold;
+}
+
+input.readonly {
+  /* Force blank on readonly inputs */
+  background-color: #fff !important;
+}
+
+input, textarea {
+  outline: none;
+}
+
+label {
+  font-weight: $font-bold;
+  font-size: 15px;
+}
+
+.form-error {
+  display: block;
+  color: $red-error;
+  margin-top: 5px;
+}
+
+.input-error {
+  border-color: $red-error !important;
+}
+
+.glyphicon-black {
+  color: black;
+}
+
+.main-col {
+  margin-left: $menu-width;
+  width: auto;
+
+  .margin-content {
+    margin-left: $not-expanded-horizontal-margins;
+    margin-right: $not-expanded-horizontal-margins;
+    flex-grow: 1;
+  }
+
+  .sub-menu {
+    background-color: #F7F7F7;
+    width: 100%;
+    height: 81px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    padding-left: $not-expanded-horizontal-margins;
+  }
+
+  // Override some properties if the main content is expanded (no menu on the left)
+  &.expanded {
+    margin-left: 0;
+
+    .margin-content {
+      margin-left: $expanded-horizontal-margins;
+      margin-right: $expanded-horizontal-margins;
+    }
+
+    .sub-menu {
+      padding-left: $expanded-horizontal-margins;
+    }
+  }
+}
+
+.title-page {
+  color: #000;
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 55px;
+  font-weight: $font-semibold;
+  @include disable-default-a-behaviour;
+
+  &.active, &.title-page-single {
+    border-bottom: 2px solid $orange-color;
+    font-weight: $font-bold;
+    margin-top: 30px;
+    margin-bottom: 25px;
+  }
+
+  &:hover, &:active, &:focus {
+    color: #000;
+  }
+
+  @media screen and (max-width: 500px) {
+    margin-right: 20px;
+  }
+}
+
+.admin-sub-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .form-sub-title {
+    flex-grow: 1;
+  }
+
+  .admin-sub-nav a {
+    @include disable-default-a-behaviour;
+
+    font-size: 16px;
+    color: #000;
+    padding: 5px 15px;
+    border-radius: 0.25rem;
+
+    &.active {
+      font-weight: $font-semibold;
+      background-color: #f0f0f0;
+    }
+  }
+}
+
+.form-sub-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+// Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
+.glyphicon-refresh-animate {
+  animation: spin .7s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: scale(1) rotate(0deg);}
+  to { transform: scale(1) rotate(360deg);}
+}
+
+// Bootstrap customizations
+.dropdown-menu {
+  border-radius: 3px;
+  box-shadow: 0 3px 6px;
+  font-size: 15px;
+
+  .dropdown-item {
+    padding: 3px 15px;
+  }
+
+  a {
+    color: #000 !important;
+  }
+}
+
+.modal {
+  .modal-header {
+    border-bottom: none;
+    margin-bottom: 5px;
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: $font-semibold;
+    }
+
+    .close {
+      @include icon(24px);
+
+      position: relative;
+      top: 3px;
+      float: right;
+      background-image: url('../assets/images/global/cross.svg');
+
+      margin: 0;
+      padding: 0;
+      opacity: 1;
+    }
+  }
+
+  .inputs {
+    margin-top: 40px;
+    margin-bottom: 0;
+    text-align: right;
+
+    .action-button-cancel {
+      @include peertube-button;
+      @include grey-button;
+
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .action-button-submit {
+      @include peertube-button;
+      @include orange-button;
+    }
+  }
+}
+
+// Nav customizations
+.nav .nav-link {
+  display: flex !important;
+  align-items: center;
+  height: 30px !important;
+  padding: 10px 15px !important;
+}
+
+.nav.nav-pills {
+  font-size: 16px !important;
+
+  .nav-link.active {
+    font-weight: $font-semibold !important;
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: #000;
+  }
+}
+
+ngb-tabset.bootstrap {
+
+  .nav-link {
+    &, & a {
+      @include disable-default-a-behaviour;
+
+      color: #000 !important;
+    }
+  }
+}
+
+.orange-button {
+  @include peertube-button;
+  @include orange-button;
+}
+
+.orange-button-link {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
+.grey-button {
+  @include peertube-button;
+  @include grey-button;
+}
+
+.grey-button-link {
+  @include peertube-button-link;
+  @include grey-button;
+}
+
+// In tables, don't have a hover different background
+table {
+  .action-button-edit, .action-button-delete {
+    &:hover, &:active, &:focus, &[disabled], &.disabled {
+      background-color: $grey-color !important;
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .main-col {
+    &, &.expanded {
+      .margin-content {
+        margin-left: 50px;
+        margin-right: 50px;
+      }
+
+      .sub-menu {
+        padding-left: 50px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .menu-wrapper {
+    width: 100% !important;
+    z-index: 10000;
+  }
+
+  .main-col {
+    margin-left: 0;
+
+    &, &.expanded {
+      .margin-content {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+
+      .sub-menu {
+        padding-left: 15px;
+        margin-bottom: 10px;
+      }
+
+      input[type=text], input[type=password] {
+        width: 100% !important;
+      }
+    }
+  }
+}

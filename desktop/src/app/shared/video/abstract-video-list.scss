@@ -1,0 +1,48 @@
+@import '_mixins';
+
+.videos {
+  text-align: center;
+
+  my-video-miniature {
+    text-align: left;
+  }
+}
+
+.title-page.title-page-single {
+  margin-right: 5px;
+}
+
+my-video-feed {
+  display: inline-block;
+}
+
+@media screen and (max-width: 500px) {
+  .videos {
+    text-align: center;
+
+    /deep/ .video-miniature {
+      padding-right: 0;
+      height: auto;
+      width: 100%;
+      margin-bottom: 20px;
+
+      .video-miniature-information {
+        width: 100% !important;
+
+        span {
+          width: 100%;
+        }
+      }
+
+      .video-thumbnail {
+        width: 100%;
+        height: auto;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}

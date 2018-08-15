@@ -1,0 +1,205 @@
+@import '_variables';
+@import '_mixins';
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
+.video-edit {
+  height: 100%;
+  min-height: 300px;
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  input {
+    @include peertube-input-text(100%);
+    display: block;
+  }
+
+  input, select {
+    font-size: 15px
+  }
+
+  .label-tags + span {
+    font-size: 15px;
+  }
+
+  .advanced-settings .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+.captions {
+
+  .captions-header {
+    text-align: right;
+
+    .create-caption {
+      @include create-button('../../../../assets/images/global/add.svg');
+    }
+  }
+
+  .caption-entry {
+    display: flex;
+    height: 40px;
+    align-items: center;
+
+    a.caption-entry-label {
+      @include disable-default-a-behaviour;
+
+      color: #000;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .caption-entry-label {
+      font-size: 15px;
+      font-weight: bold;
+
+      margin-right: 20px;
+      width: 150px;
+    }
+
+    .caption-entry-state {
+      width: 200px;
+
+      &.caption-entry-state-create {
+        color: #39CC0B;
+      }
+
+      &.caption-entry-state-delete {
+        color: #FF0000;
+      }
+    }
+
+    .caption-entry-delete {
+      @include peertube-button;
+      @include grey-button;
+    }
+  }
+
+  .no-caption {
+    text-align: center;
+    font-size: 15px;
+  }
+}
+
+.submit-container {
+  text-align: right;
+
+  .message-submit {
+    display: inline-block;
+    margin-right: 25px;
+
+    color: #585858;
+    font-size: 15px;
+  }
+
+  .submit-button {
+    @include peertube-button;
+    @include orange-button;
+
+    display: inline-block;
+
+    input {
+      cursor: inherit;
+      background-color: inherit;
+      border: none;
+      padding: 0;
+      outline: 0;
+      color: inherit;
+      font-weight: $font-semibold;
+    }
+
+    .icon.icon-validate {
+      @include icon(20px);
+
+      cursor: inherit;
+      position: relative;
+      top: -1px;
+      margin-right: 4px;
+      background-image: url('../../../../assets/images/global/validate.svg');
+    }
+  }
+}
+
+p-calendar {
+  display: block;
+
+  /deep/ {
+    input,
+    .ui-calendar {
+      width: 100%;
+    }
+
+    input {
+      @include peertube-input-text(100%);
+      color: #000;
+    }
+  }
+}
+
+/deep/ {
+  .root-tabset > .nav {
+    margin-bottom: 15px;
+  }
+
+  .ng2-tag-input {
+    border: none !important;
+  }
+
+  .ng2-tags-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #C6C6C6;
+    border-radius: 3px;
+    padding: 5px !important;
+    height: 40px;
+  }
+
+  tag-input-form {
+    input {
+      height: 30px !important;
+      background-color: #fff !important;
+    }
+  }
+
+  tag {
+    background-color: #E5E5E5 !important;
+    border-radius: 3px !important;
+    font-size: 15px !important;
+    color: #000 !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    margin: 0 5px 0 0 !important;
+    cursor: default !important;
+    padding: 0 8px 0 10px !important;
+
+    div {
+      height: 100% !important;
+    }
+  }
+
+  delete-icon {
+    cursor: pointer !important;
+    height: auto !important;
+    vertical-align: middle !important;
+    padding-left: 6px !important;
+
+    svg {
+      position: relative;
+      top: -1px;
+      height: auto !important;
+      vertical-align: middle !important;
+      fill: #585858 !important;
+    }
+
+    &:hover {
+      transform: none !important;
+    }
+  }
+}

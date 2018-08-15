@@ -1,0 +1,30 @@
+<div *ngIf="videoChannel" class="row">
+  <div class="sub-menu">
+
+    <div class="actor">
+      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+
+      <div class="actor-info">
+        <div class="actor-names">
+          <div class="actor-display-name">{{ videoChannel.displayName }}</div>
+        </div>
+        <div i18n class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
+
+        <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
+          <span i18n>Created by {{ videoChannel.ownerBy }}</span>
+          <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
+        </a>
+      </div>
+    </div>
+
+    <div class="links">
+      <a i18n routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
+
+      <a i18n routerLink="about" routerLinkActive="active" class="title-page">About</a>
+    </div>
+  </div>
+
+  <div class="margin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

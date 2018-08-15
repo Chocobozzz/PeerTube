@@ -1,0 +1,525 @@
+@import '_variables';
+@import '_mixins';
+
+.root-row {
+  flex-direction: column;
+}
+
+.blacklisted-label {
+  font-weight: $font-semibold;
+}
+
+#video-element-wrapper {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+
+  .remote-server-down {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background-color: #141313;
+    width: 100%;
+    font-size: 24px;
+    height: 500px;
+
+    @media screen and (max-width: 1000px) {
+      font-size: 20px;
+    }
+
+    @media screen and (max-width: 600px) {
+      font-size: 16px;
+    }
+  }
+
+  /deep/ .video-js {
+    width: 888px;
+    height: 500px;
+
+    &.vjs-theater-enabled {
+      height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+      width: 100%;
+    }
+
+    // VideoJS create an inner video player
+    video {
+      outline: 0;
+      position: relative !important;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    .remote-server-down,
+    /deep/ .video-js {
+      width: 100vw;
+      height: calc(100vw / 1.7); // 16/9
+    }
+  }
+}
+
+.alert {
+  text-align: center;
+}
+
+#video-not-found {
+  height: 300px;
+  line-height: 300px;
+  margin-top: 50px;
+  text-align: center;
+  font-weight: $font-semibold;
+  font-size: 15px;
+}
+
+.video-bottom {
+  margin-top: 40px;
+  display: flex;
+  flex-grow: 1;
+
+  .video-info {
+    flex-grow: 1;
+    margin-right: 40px;
+    // Set min width for flex item
+    min-width: 1px;
+
+    .video-info-first-row {
+      display: flex;
+
+      & > div:first-child {
+        flex-grow: 1;
+      }
+
+      .video-info-name {
+        margin-right: 30px;
+        min-height: 40px; // Align with the action buttons
+        font-size: 27px;
+        font-weight: $font-semibold;
+        flex-grow: 1;
+      }
+
+      .video-info-date-views {
+        font-size: 16px;
+        margin-bottom: 10px;
+        flex-grow: 1;
+      }
+
+      .video-info-channel {
+        font-weight: $font-semibold;
+        font-size: 15px;
+
+        a {
+          @include disable-default-a-behaviour;
+
+          color: #000;
+
+          &:hover {
+            opacity: 0.8;
+          }
+
+          img {
+            @include avatar(18px);
+
+            margin: -2px 2px 0 5px;
+          }
+        }
+      }
+
+      .video-info-by {
+
+        a {
+          @include disable-default-a-behaviour;
+
+          display: inline;
+          align-items: center;
+          font-size: 13px;
+          color: #000;
+
+          span:hover {
+            opacity: 0.8;
+          }
+
+          img {
+            @include avatar(18px);
+
+            margin-top: -2px;
+            margin-left: 7px;
+          }
+        }
+
+        my-help {
+          position: relative;
+          top: 1px;
+          margin-left: 2px;
+        }
+      }
+
+      my-video-feed {
+        margin-left: 5px;
+        margin-top: 1px;
+      }
+
+      .video-actions-rates {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        .video-actions {
+          height: 40px; // Align with the title
+          display: flex;
+          align-items: center;
+
+          .action-button:not(:first-child), .action-more {
+            margin-left: 10px;
+          }
+
+          .action-button {
+            @include peertube-button;
+            @include grey-button;
+
+            font-size: 15px;
+            font-weight: $font-semibold;
+            display: inline-block;
+            padding: 0 10px 0 10px;
+            white-space: nowrap;
+
+            &::after {
+              display: none;
+            }
+
+            .icon {
+              @include icon(21px);
+
+              position: relative;
+              top: -2px;
+
+              &.icon-like {
+                background-image: url('../../../assets/images/video/like-grey.svg');
+              }
+
+              &.icon-dislike {
+                background-image: url('../../../assets/images/video/dislike-grey.svg');
+              }
+
+              &.icon-support {
+                background-image: url('../../../assets/images/video/heart.svg');
+              }
+
+              &.icon-share {
+                background-image: url('../../../assets/images/video/share.svg');
+              }
+
+              &.icon-more {
+                background-image: url('../../../assets/images/video/more.svg');
+                top: -1px;
+              }
+            }
+
+            .icon-text {
+              margin-left: 3px;
+            }
+
+            &.action-button-like.activated {
+              background-color: #39CC0B;
+
+              .icon-like {
+                background-image: url('../../../assets/images/video/like-white.svg');
+              }
+            }
+
+            &.action-button-dislike.activated {
+              background-color: #FF0000;
+
+              .icon-dislike {
+                background-image: url('../../../assets/images/video/dislike-white.svg');
+              }
+            }
+          }
+
+          .action-more {
+            display: inline-block;
+
+            .dropdown-menu .dropdown-item {
+              padding: 6px 24px;
+
+              .icon {
+                @include icon(24px);
+
+                margin-right: 10px;
+                position: relative;
+                top: -1px;
+
+                &.icon-download {
+                  background-image: url('../../../assets/images/video/download-black.svg');
+                }
+
+                &.icon-edit {
+                  background-image: url('../../../assets/images/global/edit-black.svg');
+                }
+
+                &.icon-alert {
+                  background-image: url('../../../assets/images/video/alert.svg');
+                }
+
+                &.icon-blacklist {
+                  background-image: url('../../../assets/images/video/blacklist.svg');
+                }
+
+                &.icon-unblacklist {
+                  background-image: url('../../../assets/images/global/undo.svg');
+                }
+
+                &.icon-delete {
+                  background-image: url('../../../assets/images/global/delete-black.svg');
+                }
+              }
+            }
+          }
+        }
+
+        .video-info-likes-dislikes-bar {
+          height: 5px;
+          width: 186px;
+          background-color: #E5E5E5;
+          margin-top: 25px;
+
+          .likes-bar {
+            height: 100%;
+            background-color: #39CC0B;
+          }
+        }
+      }
+    }
+
+    .video-info-description {
+      margin: 20px 0;
+      font-size: 15px;
+
+      .video-info-description-html {
+        @include peertube-word-wrap;
+      }
+
+      .glyphicon, .description-loading {
+        margin-left: 3px;
+      }
+
+      .description-loading {
+        display: inline-block;
+      }
+
+      .video-info-description-more {
+        cursor: pointer;
+        font-weight: $font-semibold;
+        color: #585858;
+        font-size: 14px;
+
+        .glyphicon {
+          position: relative;
+          top: 2px;
+        }
+      }
+    }
+
+    .video-attributes .video-attribute {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 12px;
+
+      .video-attribute-label {
+        min-width: 91px;
+        padding-right: 5px;
+        display: inline-block;
+        color: #585858;
+        font-weight: $font-bold;
+      }
+
+      a.video-attribute-value {
+        @include disable-default-a-behaviour;
+        color: #000;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+
+      &.video-attribute-tags {
+        .video-attribute-value:not(:nth-child(2)) {
+          &::before {
+            content: ', '
+          }
+        }
+      }
+    }
+  }
+
+  .other-videos {
+    padding-left: 1em;
+
+    .title-page {
+      margin-top: 0;
+    }
+
+    /deep/ .video-miniature {
+      display: flex;
+      height: 100%;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+
+      .video-miniature-information {
+        flex-grow: 1;
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+// If the view is not expanded, take into account the menu
+.privacy-concerns {
+  width: calc(100% - #{$menu-width});
+}
+
+:host-context(.expanded) {
+  .privacy-concerns {
+    width: 100%;
+  }
+}
+
+.privacy-concerns {
+  position: fixed;
+  bottom: 0;
+
+  padding: 5px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+
+  .privacy-concerns-text {
+    margin: 0 5px;
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: $orange-color;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .privacy-concerns-okay {
+    background-color: $orange-color;
+    padding: 5px 8px 5px 7px;
+    margin-left: auto;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: $font-semibold;
+
+    &:hover {
+      background-color: #000;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1600px) {
+  .video-bottom {
+    .video-info {
+      margin-right: 20px;
+
+      .video-info-first-row {
+        flex-direction: column;
+        margin-bottom: 30px;
+
+        .video-actions-rates {
+          margin-top: 20px;
+          align-items: start;
+
+          .video-info-likes-dislikes-bar {
+            margin-top: 10px;
+          }
+        }
+      }
+
+      .video-info-date-views {
+        flex-direction: column;
+        margin-bottom: 30px;
+
+        .video-info-likes-dislikes-bar {
+          margin-top: 0;
+        }
+      }
+
+      .video-attributes .video-attribute {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .video-bottom {
+    flex-direction: column;
+  }
+
+  .other-videos {
+    padding-left: 0 !important;
+  }
+
+  .privacy-concerns {
+    font-size: 12px;
+    padding: 2px 5px;
+
+    .privacy-concerns-text {
+      margin: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .video-bottom {
+    margin: 20px 0 0 0;
+
+    .video-info {
+
+      .video-info-first-row {
+
+        .video-info-name {
+          font-size: 20px;
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .other-videos {
+    /deep/ .video-miniature  {
+      flex-direction: column;
+
+      .video-miniature-information {
+        margin-left: 0 !important;
+      }
+    }
+  }
+
+  .privacy-concerns {
+    width: 100%;
+
+    strong {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .video-bottom  .action-button .icon-text {
+    display: none !important;
+  }
+}

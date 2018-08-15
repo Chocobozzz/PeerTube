@@ -1,0 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
+.sub-menu {
+  @include sub-menu-with-actor;
+}

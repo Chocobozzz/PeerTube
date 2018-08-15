@@ -1,0 +1,16 @@
+@import '_variables';
+@import '_mixins';
+
+/* Special mobile style */
+
+.video-js.vjs-peertube-skin.vjs-is-mobile {
+  .vjs-control-bar {
+    .vjs-progress-control .vjs-slider .vjs-play-progress {
+      // Always display the circle on mobile
+      &::before {
+        margin-top: -1px;
+        opacity: 1;
+      }
+    }
+  }
+}

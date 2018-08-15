@@ -1,0 +1,25 @@
+@import '_variables';
+@import '_mixins';
+
+.initial-user-quota {
+  font-size: 15px;
+  margin-bottom: 20px;
+
+  .initial-user-quota-label {
+    font-weight: $font-semibold;
+  }
+}
+
+.form-group-terms {
+  margin: 30px 0;
+}
+
+input:not([type=submit]) {
+  @include peertube-input-text(340px);
+  display: block;
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+}

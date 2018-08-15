@@ -1,0 +1,207 @@
+@import '_variables';
+@import '_mixins';
+
+.menu-wrapper {
+  position: fixed;
+  height: calc(100vh - #{$header-height});
+  padding: 0;
+  width: $menu-width;
+}
+
+menu {
+  background-color: $black-background;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  z-index: 1000;
+  color: $menu-color;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  .top-menu {
+    flex-grow: 1;
+  }
+
+  .logged-in-block {
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 35px;
+
+    img {
+      @include avatar(34px);
+
+      margin-left: 20px;
+      margin-right: 10px;
+    }
+
+    .logged-in-info {
+      flex-grow: 1;
+
+      .logged-in-username {
+        font-size: 16px;
+        font-weight: $font-semibold;
+        color: $menu-color;
+        cursor: pointer;
+
+        @include disable-default-a-behaviour;
+      }
+
+      .logged-in-email {
+        font-size: 13px;
+        color: #C6C6C6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 140px;
+      }
+    }
+
+    .logged-in-more {
+      margin-right: 20px;
+
+      .glyphicon {
+        cursor: pointer;
+        font-size: 18px;
+
+        &::after {
+          border: none;
+        }
+      }
+    }
+  }
+
+  .button-block {
+    margin: 30px 25px 35px 25px;
+
+    .login-button {
+      @include peertube-button-link;
+      @include orange-button;
+
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .create-account-button {
+      @include peertube-button-link;
+
+      display: block;
+      width: 100%;
+
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.25);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.28);
+      }
+    }
+  }
+
+  .block-title {
+    text-transform: uppercase;
+    font-weight: $font-bold; // Bold
+    font-size: 13px;
+    margin-bottom: 25px;
+    margin-left: 26px;
+  }
+
+  .panel-block {
+    margin-bottom: 45px;
+
+    a {
+      display: flex;
+      align-items: center;
+      padding-left: $menu-left-padding;
+      color: $menu-color;
+      cursor: pointer;
+      height: 40px;
+      font-size: 16px;
+      transition: background-color .1s ease-in-out;
+      @include disable-default-a-behaviour;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .icon {
+        @include icon(22px);
+
+        margin-right: 18px;
+
+        &.icon-videos-trending {
+          position: relative;
+          top: -2px;
+          background-image: url('../../assets/images/menu/trending.svg');
+        }
+
+        &.icon-videos-recently-added {
+          width: 23px;
+          height: 23px;
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/images/menu/recently-added.svg');
+        }
+
+        &.icon-videos-local {
+          width: 23px;
+          height: 23px;
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/images/menu/home.svg');
+        }
+
+        &.icon-administration {
+          width: 23px;
+          height: 23px;
+
+          background-image: url('../../assets/images/menu/administration.svg');
+        }
+
+        &.icon-about  {
+          width: 23px;
+          height: 23px;
+
+          background-image: url('../../assets/images/menu/about.svg');
+        }
+      }
+    }
+  }
+
+  .footer {
+    margin-bottom: 15px;
+    padding-left: $menu-left-padding;
+
+    .language {
+      display: inline-block;
+      color: $menu-bottom-color;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: $font-semibold;
+
+      .icon {
+        @include icon(28px);
+        opacity: 0.9;
+
+        &.icon-language  {
+          position: relative;
+          top: -1px;
+          width: 28px;
+          height: 24px;
+
+          background-image: url('../../assets/images/menu/language.png');
+        }
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
