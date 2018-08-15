@@ -1,0 +1,11 @@
+<div class="admin-sub-header">
+  <div i18n class="form-sub-title">Moderation</div>
+
+  <div class="admin-sub-nav">
+    <a *ngIf="hasVideoAbusesRight()" i18n routerLink="video-abuses/list" routerLinkActive="active">Video abuses</a>
+
+    <a *ngIf="hasVideoBlacklistRight()" i18n routerLink="video-blacklist/list" routerLinkActive="active">Blacklisted videos</a>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

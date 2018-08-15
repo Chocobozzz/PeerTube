@@ -1,0 +1,611 @@
+@import '_variables';
+@import '_mixins';
+@import './_player-variables';
+
+@mixin big-play-button-triangle-size($triangle-size) {
+  width: $triangle-size;
+  height: $triangle-size;
+  top: calc(50% - #{$triangle-size / 2});
+  left: calc(53% - #{($triangle-size / 2)});
+}
+
+.video-js.vjs-peertube-skin {
+
+  font-size: $font-size;
+  color: $primary-foreground-color;
+
+  .vjs-dock-text {
+    padding-right: 10px;
+  }
+
+  .vjs-dock-description {
+    font-size: 11px;
+
+    &::before, &::after {
+      display: inline-block;
+      content: '\1F308';
+    }
+
+    &::before {
+      margin-right: 4px;
+    }
+
+    &::after {
+      margin-left: 4px;
+      transform: scale(-1, 1);
+    }
+  }
+
+  .vjs-button > .vjs-icon-placeholder::before {
+    line-height: $control-bar-height;
+  }
+
+  .vjs-volume-level::before {
+    content: ''; /* Remove Circle From Progress Bar */
+  }
+
+  .vjs-audio-button {
+    display: none;
+  }
+
+  .vjs-big-play-button {
+    outline: 0;
+    font-size: 6em;
+
+    $big-play-width: 1.2em;
+    $big-play-height: 1.2em;
+
+    border: 6px solid #fff;
+    border-radius: 100%;
+
+    left: 50%;
+    top: 50%;
+    width: $big-play-width;
+    height: $big-play-height;
+    line-height: $big-play-height;
+    margin-left: -($big-play-width / 2);
+    margin-top: -($big-play-height / 2);
+    transition: 0.4s opacity;
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0
+    }
+
+    .vjs-icon-placeholder::before {
+      @include big-play-button-triangle-size(45px);
+
+      content: '';
+      background-image: url('#{$assets-path}/player/images/big-play-button.svg');
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  // Small effect when we click on the play button
+  &.vjs-has-big-play-button-clicked {
+
+    .vjs-big-play-button, .vjs-poster {
+      display: block;
+      visibility: hidden;
+
+      &.vjs-big-play-button, &.vjs-big-play-button::before {
+        opacity: 0;
+        transition: visibility 0.2s, opacity 0.2s;
+      }
+
+      &.vjs-poster, &.vjs-poster::before {
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s;
+        transition-delay: 0.05s;
+      }
+    }
+  }
+
+  // Hide the big play button on autoplay
+  &.vjs-has-autoplay {
+    .vjs-big-play-button {
+      display: none !important;
+    }
+  }
+
+  .vjs-control-bar,
+  .vjs-big-play-button,
+  .vjs-settings-dialog {
+    background-color: rgba($primary-background-color, 0.5);
+  }
+
+  .vjs-poster {
+    outline: none; /* Remove Blue Outline on Click*/
+    outline: 0;
+  }
+
+  .vjs-control-bar {
+    height: $control-bar-height;
+    background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+    box-shadow: 0 -15px 40px 10px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+
+    .vjs-progress-control,
+    .vjs-play-control,
+    .vjs-playback-rate,
+    .vjs-mute-control,
+    .vjs-volume-control,
+    .vjs-resolution-control,
+    .vjs-fullscreen-control,
+    .vjs-peertube-link,
+    .vjs-theater-control,
+    .vjs-settings
+    {
+      color: $primary-foreground-color !important;
+      opacity: $primary-foreground-opacity;
+      transition: opacity .1s;
+
+      &:hover {
+        opacity: $primary-foreground-opacity-hover;
+      }
+    }
+
+    .vjs-current-time,
+    .vjs-duration,
+    .vjs-peertube {
+      color: $primary-foreground-color;
+      opacity: $primary-foreground-opacity;
+    }
+
+    .vjs-progress-control {
+      position: absolute;
+      z-index: 100; // On top of the progress bar
+      bottom: 29px;
+      width: calc(100% - (2 * #{$progress-margin}));
+      margin-left: $progress-margin;
+      height: 14px;
+
+      .vjs-slider {
+        margin: 0;
+        border-radius: 0;
+        background-color: rgba(255, 255, 255, .2);
+        height: 3px;
+        transition: none;
+
+        .vjs-play-progress {
+          background: $primary-foreground-color;
+
+          // Not display the circle if the progress is not hovered
+          &::before {
+            opacity: 0;
+            transition: opacity 0.1s ease;
+            font-size: 14px;
+
+            top: -0.3em;
+          }
+
+          .vjs-time-tooltip {
+            display: none;
+          }
+        }
+
+        .vjs-load-progress {
+          &, & div {
+            background: rgba(255, 255, 255, .2);
+          }
+        }
+      }
+    }
+
+    .vjs-progress-control:hover .vjs-slider,
+    .vjs-progress-control .vjs-slider.vjs-sliding {
+      height: 5px;
+
+      .vjs-play-progress::before {
+        opacity: 1;
+      }
+    }
+
+
+    .vjs-play-control {
+      @include disable-outline;
+
+      cursor: pointer;
+      font-size: $font-size;
+      margin-right: 5px;
+    }
+
+    .vjs-time-control {
+      line-height: inherit;
+
+      &.vjs-current-time {
+        font-size: $font-size;
+        display: inline-block;
+        padding: 0;
+
+        .vjs-current-time-display {
+          line-height: calc(#{$control-bar-height} + 1px);
+
+          &::after {
+            content: "/";
+            margin: 0 1px 0 2px;
+          }
+        }
+      }
+
+      &.vjs-duration {
+        font-size: $font-size;
+        display: inline-block;
+        padding: 0;
+        .vjs-duration-display {
+          line-height: calc(#{$control-bar-height} + 1px);
+        }
+      }
+
+      &.vjs-remaining-time {
+        display: none;
+      }
+    }
+
+    .vjs-peertube {
+      width: 100%;
+      line-height: $control-bar-height;
+      text-align: right;
+
+      .vjs-peertube-displayed {
+        display: block;
+      }
+
+      .vjs-peertube-hidden {
+        display: none;
+      }
+
+      .download-speed-number, .upload-speed-number, .peers-number, .http-fallback {
+        font-weight: $font-semibold;
+      }
+
+      .download-speed-text, .upload-speed-text, .peers-text, .http-fallback {
+        margin-right: 15px;
+      }
+
+      .icon {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        background-size: contain;
+        vertical-align: middle;
+        background-repeat: no-repeat;
+        margin-right: 6px;
+        position: relative;
+        top: -1px;
+
+        &.icon-download {
+          background-image: url('#{$assets-path}/player/images/arrow-down.svg');
+        }
+
+        &.icon-upload {
+          background-image: url('#{$assets-path}/player/images/arrow-up.svg');
+        }
+      }
+    }
+
+    .vjs-playback-rate {
+      font-size: 10px;
+      width: 37px !important;
+
+      .vjs-playback-rate-value {
+        font-size: 13px;
+        line-height: $control-bar-height;
+      }
+
+      .vjs-menu .vjs-menu-content {
+        width: 37px !important;
+      }
+    }
+
+    .vjs-mute-control {
+      @include disable-outline;
+
+      line-height: $control-bar-height;
+      padding: 0;
+      width: 30px;
+
+      .vjs-icon-placeholder {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+        background: url('#{$assets-path}/player/images/volume.svg') no-repeat;
+        background-size: contain;
+
+        &::before {
+          content: '';
+        }
+      }
+
+      &.vjs-vol-0 .vjs-icon-placeholder {
+        background: url('#{$assets-path}/player/images/volume-mute.svg') no-repeat;
+        background-size: contain;
+      }
+    }
+
+    .vjs-volume-control {
+      width: 30px;
+      margin: 0 5px 0 0;
+    }
+
+    .vjs-volume-bar {
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcCAQAAACw95UnAAAAMElEQVRIx2NgoBL4n4YKGUYNHkEG4zJg1OCRYDCpBowaPJwMppbLRg0eNXjUYBLEAXWNUA6QNm1lAAAAAElFTkSuQmCC) no-repeat;
+      background-size: 22px 14px;
+      height: 100%;
+      width: 100%;
+      max-width: 22px;
+      max-height: 14px;
+      margin: 7px 4px;
+      border-radius: 0;
+      top: 3px;
+
+      .vjs-volume-level {
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAcAQAAAAAyhWABAAAAAnRSTlMAAHaTzTgAAAAZSURBVHgBYwAB/g9EUv+JokCqiaT+U4MCAPKPS7WUUOc1AAAAAElFTkSuQmCC) no-repeat;
+        background-size: 22px 14px;
+        max-width: 22px;
+        max-height: 14px;
+        height: 100%;
+      }
+
+      &:focus {
+        text-shadow: none;
+        box-shadow: none;
+      }
+    }
+
+    .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-slider-active,
+    .vjs-volume-panel.vjs-volume-panel-horizontal:active,
+    .vjs-volume-panel.vjs-volume-panel-horizontal:focus,
+    .vjs-volume-panel.vjs-volume-panel-horizontal:hover {
+      width: 6em;
+      transition-property: none;
+    }
+
+    .vjs-volume-panel .vjs-mute-control:hover ~ .vjs-volume-control.vjs-volume-horizontal {
+      width: 3em;
+      height: auto;
+    }
+
+    .vjs-volume-panel .vjs-mute-control:hover ~ .vjs-volume-control {
+      transition-property: none;
+    }
+
+    .vjs-volume-panel {
+      .vjs-mute-control {
+        width: 2em;
+        z-index: 1;
+        padding: 0;
+      }
+
+      .vjs-volume-control {
+        display: inline-block;
+        position: relative;
+        left: 5px;
+        opacity: 1;
+        width: 3em;
+        height: auto;
+      }
+    }
+
+    .vjs-peertube-link {
+      @include disable-outline;
+      @include disable-default-a-behaviour;
+
+      text-decoration: none;
+      line-height: $control-bar-height;
+      font-weight: $font-semibold;
+      padding: 0 5px;
+    }
+
+    .vjs-theater-control {
+      @include disable-outline;
+
+      width: 37px;
+      margin-right: 1px;
+
+      .vjs-icon-placeholder {
+        transition: transform 0.2s ease;
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+        background: url('#{$assets-path}/player/images/theater.svg') no-repeat;
+        background-size: contain;
+
+        &::before {
+          content: '';
+        }
+      }
+    }
+
+    .vjs-fullscreen-control {
+      @include disable-outline;
+
+      width: 37px;
+      margin-right: 11px;
+
+      .vjs-icon-placeholder {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        vertical-align: middle;
+        background: url('#{$assets-path}/player/images/fullscreen.svg') no-repeat;
+        background-size: contain;
+
+        &::before {
+          content: '';
+        }
+      }
+    }
+
+    .vjs-menu-button-popup {
+      font-weight: $font-semibold;
+      width: 50px;
+
+      .vjs-resolution-button {
+        @include disable-outline;
+      }
+
+      .vjs-menu {
+        top: 20px;
+        left: 0;
+
+        .vjs-menu-content {
+          width: 50px;
+          bottom: 20px;
+        }
+
+        li {
+          text-transform: none;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 750px) {
+    .vjs-theater-control {
+      display: none;
+    }
+
+    .vjs-dock-text {
+      font-size: 16px;
+    }
+
+    .vjs-dock-description {
+      font-size: 9px;
+    }
+
+    .vjs-big-play-button {
+      font-size: 5em;
+      border-width: 5px;
+
+      .vjs-icon-placeholder::before {
+        @include big-play-button-triangle-size(32px);
+      }
+    }
+  }
+
+  @media screen and (max-width: 570px) {
+    .vjs-dock-text {
+      font-size: 14px;
+    }
+
+    .vjs-big-play-button {
+      font-size: 4.5em;
+      border-width: 4.5px;
+
+      .vjs-icon-placeholder::before {
+        @include big-play-button-triangle-size(27px);
+      }
+    }
+
+    .vjs-playback-rate {
+      display: none;
+    }
+
+    .vjs-peertube {
+      padding: 0 !important;
+
+      .vjs-peertube-displayed {
+        display: none !important;
+      }
+    }
+  }
+
+  @media screen and (max-width: 300px) {
+    .vjs-dock-text {
+      font-size: 13px;
+    }
+
+    .vjs-big-play-button {
+      font-size: 3em;
+      border-width: 3px;
+
+      .vjs-icon-placeholder::before {
+        @include big-play-button-triangle-size(20px);
+      }
+    }
+
+    .vjs-volume-control {
+      display: none !important;
+    }
+
+    .vjs-peertube-link {
+      padding: 0 !important;
+    }
+
+    .vjs-settings {
+      width: 33px;
+    }
+  }
+
+  // Theater mode is enabled
+  &.vjs-theater-enabled {
+    .vjs-theater-control {
+      width: 30px;
+
+      .vjs-icon-placeholder {
+        transform: scale(0.8);
+      }
+    }
+  }
+
+  // On fullscreen, hide theater control
+  &.vjs-fullscreen {
+    .vjs-theater-control {
+      display: none;
+    }
+  }
+}
+
+// Play/pause animations
+.vjs-has-started .vjs-play-control {
+  &.vjs-playing {
+    animation: remove-pause-button 0.25s ease;
+  }
+
+  &.vjs-paused {
+    animation: add-play-button 0.25s ease;
+  }
+
+  @keyframes remove-pause-button {
+    0% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes add-play-button {
+    0% {
+      transform: rotate(-90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+// Error display disabled
+.vjs-error:not(.vjs-error-display-enabled) {
+  .vjs-error-display {
+    display: none;
+  }
+
+  .vjs-loading-spinner {
+    display: block;
+  }
+}
+
+// Error display enabled
+.vjs-error.vjs-error-display-enabled {
+  .vjs-error-display {
+    display: block;
+  }
+}

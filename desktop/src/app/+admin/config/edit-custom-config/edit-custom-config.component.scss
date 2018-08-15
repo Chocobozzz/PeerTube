@@ -1,0 +1,46 @@
+@import '_variables';
+@import '_mixins';
+
+input[type=text] {
+  @include peertube-input-text(340px);
+  display: block;
+}
+
+input[type=checkbox] {
+  @include peertube-checkbox(1px);
+}
+
+.peertube-select-container {
+  @include peertube-select-container(340px);
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+
+  margin-top: 20px;
+
+  & + .form-error {
+    display: inline;
+    margin-left: 5px;
+  }
+}
+
+.inner-form-title {
+  text-transform: uppercase;
+  color: $orange-color;
+  font-weight: $font-bold;
+  font-size: 13px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+textarea {
+  @include peertube-textarea(500px, 150px);
+
+  display: block;
+
+  &#instanceShortDescription {
+    height: 100px;
+  }
+}

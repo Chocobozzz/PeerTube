@@ -1,0 +1,200 @@
+@import '_variables';
+@import '_mixins';
+@import './_player-variables';
+
+$setting-transition-duration: 0.15s;
+$setting-transition-easing: ease-out;
+
+/* Sass for videojs-settings-menu */
+
+.video-js {
+
+  .vjs-settings {
+    @include disable-outline;
+
+    cursor: pointer;
+    width: 33px;
+
+    .vjs-icon-placeholder {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      vertical-align: middle;
+      background: url('#{$assets-path}/player/images/settings.svg') no-repeat;
+      background-size: contain;
+
+      &::before {
+        content: '';
+      }
+    }
+  }
+
+  .vjs-settings-sub-menu-title {
+    width: 4em;
+    text-transform: initial;
+  }
+
+  .vjs-settings-dialog {
+    position: absolute;
+    right: .5em;
+    bottom: 3.5em;
+    color: $primary-foreground-color;
+    opacity: $primary-foreground-opacity;
+    margin: 0 auto;
+    font-size: $font-size !important;
+
+    width: auto;
+    overflow: hidden;
+
+    transition: width $setting-transition-duration $setting-transition-easing,  height $setting-transition-duration $setting-transition-easing;
+
+    .vjs-settings-sub-menu-value,
+    .vjs-settings-sub-menu-title {
+      display: table-cell;
+      padding: 0 5px;
+      text-transform: capitalize;
+    }
+
+    .vjs-settings-sub-menu-title {
+      text-align: left;
+      font-weight: $font-semibold;
+    }
+
+    .vjs-settings-sub-menu-value {
+      width: 100%;
+      text-align: right;
+
+      small {
+        font-size: 0.85em;
+        opacity: 0.8;
+      }
+    }
+
+    .vjs-settings-panel {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-radius: 1px;
+    }
+
+    .vjs-settings-panel-child {
+      display: flex;
+
+      align-items: flex-end;
+      white-space: nowrap;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      > .vjs-menu {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      > .vjs-menu,
+      > .vjs-settings-sub-menu {
+        transition: all $setting-transition-duration $setting-transition-easing;
+
+        .vjs-menu-item {
+          font-size: 1em;
+          text-transform: initial;
+
+          &:hover {
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+
+          &:first-child {
+            margin-top: 5px;
+          }
+
+          &:last-child {
+            margin-bottom: 5px;
+          }
+
+          &.disabled {
+            opacity: 0.5;
+            cursor: default !important;
+            background-color: inherit !important;
+          }
+        }
+      }
+
+      > .vjs-menu {
+        .vjs-menu-item {
+          padding: 8px 16px;
+        }
+
+        .vjs-settings-sub-menu-value::after {
+          @include chevron-right(9px, 2px);
+
+          margin-left: 5px;
+        }
+      }
+
+      > .vjs-settings-sub-menu {
+        width: 80px;
+
+        .vjs-menu-item {
+          outline: 0;
+          font-weight: $font-semibold;
+          text-align: right;
+          padding: 5px 8px;
+
+          &.vjs-back-button {
+            background-color: inherit;
+            padding: 8px 8px 13px 12px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid grey;
+            text-align: left;
+
+            &::before {
+              @include chevron-left(9px, 2px);
+
+              margin-right: 5px;
+            }
+          }
+
+          &.vjs-selected {
+            background-color: inherit;
+            color: inherit;
+            position: relative;
+
+            &::before {
+              @include icon(15px);
+
+              position: absolute;
+              left: 8px;
+              content: ' ';
+              margin-top: 1px;
+              background-image: url('#{$assets-path}/player/images/tick.svg');
+            }
+          }
+        }
+
+        // Special captions case
+        // Bigger caption button
+        &.vjs-captions-button {
+          width: 200px;
+
+          .vjs-menu-item {
+            text-align: left;
+
+            .vjs-menu-item-text {
+              margin-left: 25px;
+              text-transform: capitalize;
+            }
+          }
+        }
+
+        .vjs-menu {
+          width: inherit;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+@import '_variables';
+@import '_mixins';
+
+.row {
+  text-align: center;
+}
+
+a.video-channel {
+  @include disable-default-a-behaviour;
+
+  display: inline-block;
+  text-align: center;
+  color: #000;
+  margin: 10px 30px;
+
+  img {
+    @include avatar(80px);
+
+    margin-bottom: 10px;
+  }
+
+  .video-channel-display-name {
+    font-size: 20px;
+    font-weight: $font-bold;
+  }
+
+  .video-channel-followers {
+    font-size: 15px;
+  }
+}

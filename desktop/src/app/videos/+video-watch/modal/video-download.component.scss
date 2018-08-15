@@ -1,0 +1,17 @@
+@import 'variables';
+@import 'mixins';
+
+.peertube-select-container {
+  @include peertube-select-container(130px);
+}
+
+.download-type {
+  margin-top: 30px;
+
+  .peertube-radio-container {
+    @include peertube-radio-container;
+
+    display: inline-block;
+    margin-right: 30px;
+  }
+}

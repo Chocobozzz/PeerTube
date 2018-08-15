@@ -1,0 +1,17 @@
+<div class="root" [ngStyle]="{ 'flex-direction': flexDirection }">
+  <textarea
+    [(ngModel)]="content" (ngModelChange)="onModelChange()"
+    [ngClass]="classes" [ngStyle]="{ width: textareaWidth, height: textareaHeight, 'margin-right': textareaMarginRight }"
+    id="description" name="description">
+  </textarea>
+
+  <ngb-tabset *ngIf="arePreviewsDisplayed()" class="previews" type="pills">
+    <ngb-tab *ngIf="truncate !== undefined" i18n-title title="Truncated preview">
+      <ng-template ngbTabContent><div [innerHTML]="truncatedPreviewHTML"></div></ng-template>
+    </ngb-tab>
+
+    <ngb-tab i18n-title title="Complete preview">
+      <ng-template ngbTabContent><div [innerHTML]="previewHTML"></div></ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

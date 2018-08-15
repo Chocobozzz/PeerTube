@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="sub-menu">
+    <a i18n *ngIf="hasUsersRight()" routerLink="/admin/users" routerLinkActive="active" class="title-page">
+      Users
+    </a>
+
+    <a i18n *ngIf="hasServerFollowRight()" routerLink="/admin/follows" routerLinkActive="active" class="title-page">
+      Manage follows
+    </a>
+
+    <a i18n *ngIf="hasVideoAbusesRight() || hasVideoBlacklistRight()" routerLink="/admin/moderation" routerLinkActive="active" class="title-page">
+      Moderation
+    </a>
+
+    <a i18n *ngIf="hasJobsRight()" routerLink="/admin/jobs" routerLinkActive="active" class="title-page">
+      Jobs
+    </a>
+
+    <a i18n *ngIf="hasConfigRight()" routerLink="/admin/config" routerLinkActive="active" class="title-page">
+      Configuration
+    </a>
+  </div>
+
+  <div class="margin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

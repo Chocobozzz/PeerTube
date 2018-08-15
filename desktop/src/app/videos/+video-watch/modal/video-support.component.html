@@ -1,0 +1,12 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Support</h4>
+    <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+  </div>
+
+  <div class="modal-body" [innerHTML]="videoHTMLSupport"></div>
+
+  <div class="modal-footer inputs">
+    <span i18n class="action-button action-button-cancel" (click)="hide()">Cancel</span>
+  </div>
+</ng-template>

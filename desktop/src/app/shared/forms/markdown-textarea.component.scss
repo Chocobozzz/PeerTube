@@ -1,0 +1,34 @@
+@import '_variables';
+@import '_mixins';
+
+.root {
+  display: flex;
+
+  textarea {
+    @include peertube-textarea(100%, 150px);
+
+    margin-bottom: 15px;
+  }
+
+  .previews {
+    max-height: 150px;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  /deep/ {
+    .nav-link {
+      display: flex !important;
+      align-items: center;
+      height: 30px !important;
+      padding: 0 15px !important;
+    }
+
+    .tab-content {
+      min-height: 75px;
+      padding: 15px;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+  }
+}

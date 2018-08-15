@@ -1,0 +1,213 @@
+@import '_variables';
+@import '_mixins';
+
+@import '~primeng/resources/primeng.css';
+@import '~primeng/resources/themes/bootstrap/theme.css';
+
+@mixin glyphicon-light {
+  font-family: 'Glyphicons Halflings';
+  text-decoration: none !important;
+  color: #000 !important;
+}
+
+// data table customizations
+p-table {
+  font-size: 15px !important;
+
+  td {
+    border: 1px solid #E5E5E5 !important;
+    padding-left: 15px !important;
+
+    &:not(.action-cell) {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+  }
+
+  tr {
+    background-color: #fff !important;
+    height: 46px;
+  }
+
+  .ui-table-tbody {
+    tr {
+      &:hover {
+        background-color: #f0f0f0 !important;
+      }
+
+      &:not(:hover) {
+        .action-cell * {
+          display: none !important;
+        }
+      }
+
+      &:first-child td {
+        border-top: none !important;
+      }
+
+      &:last-child td {
+        border-bottom: none !important;
+      }
+    }
+
+    .expander {
+      cursor: pointer;
+      position: relative;
+      top: 1px;
+    }
+  }
+
+  th {
+    border: none !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    text-align: left !important;
+    padding: 5px 0 5px 15px !important;
+    font-weight: $font-semibold !important;
+    color: #000 !important;
+
+    &.ui-sortable-column:hover {
+      background-color: #f0f0f0 !important;
+      border: 1px solid #f0f0f0 !important;
+      border-width: 0 1px !important;
+
+      &:first-child {
+        border-width: 0 1px 0 0 !important;
+      }
+    }
+
+    &.ui-state-highlight {
+      background-color: #fff !important;
+
+      .pi {
+        @extend .glyphicon;
+
+        color: #000;
+        font-size: 11px;
+
+        &.pi-sort-up {
+          @extend .glyphicon-triangle-top;
+        }
+
+        &.pi-sort-down {
+          @extend .glyphicon-triangle-bottom;
+        }
+      }
+    }
+  }
+
+  .action-cell {
+    width: 250px !important;
+    padding: 0 !important;
+    text-align: center;
+
+    my-edit-button + my-delete-button {
+      margin-left: 5px;
+    }
+  }
+
+  p-paginator {
+    .ui-paginator-bottom {
+      position: relative;
+      border: 1px solid #f0f0f0 !important;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .ui-paginator-first,
+      .ui-paginator-prev,
+      .ui-paginator-next,
+      .ui-paginator-last {
+        @include glyphicon-light;
+        padding: 5px 2px;
+        height: auto;
+        outline: none;
+        font-size: 13px;
+        top: -1px;
+
+        &.ui-state-disabled:hover {
+          background-color: #fff !important;
+        }
+
+        &.ui-paginator-first {
+          @extend .glyphicon-step-backward;
+        }
+
+        &.ui-paginator-prev {
+          @extend .glyphicon-chevron-left;
+
+          margin-right: 10px;
+        }
+
+        &.ui-paginator-next {
+          @extend .glyphicon-chevron-right;
+
+          margin-left: 10px;
+        }
+
+        &.ui-paginator-last {
+          @extend .glyphicon-step-forward;
+        }
+      }
+
+      .ui-paginator-pages {
+        height: auto !important;
+
+        a {
+          color: #000 !important;
+          font-weight: $font-semibold !important;
+          margin-right: 0 10px !important;
+          outline: 0 !important;
+          border-radius: 3px !important;
+          padding: 5px 2px !important;
+          height: auto !important;
+
+          &.ui-state-active {
+            &, &:hover, &:active, &:focus {
+              color: #fff !important;
+              background-color: $orange-color !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// PrimeNG calendar tweaks
+p-calendar .ui-datepicker {
+  a {
+    @include disable-default-a-behaviour;
+  }
+
+  .ui-datepicker-header {
+
+    .ui-datepicker-year {
+      margin-left: 5px;
+    }
+
+    .ui-datepicker-next {
+      @extend .glyphicon-chevron-right;
+      @include glyphicon-light;
+    }
+
+    .ui-datepicker-prev {
+      @extend .glyphicon-chevron-left;
+      @include glyphicon-light;
+    }
+  }
+
+  .ui-timepicker {
+
+    .pi.pi-chevron-up {
+      @extend .glyphicon-chevron-up;
+      @include glyphicon-light;
+    }
+
+    .pi.pi-chevron-down {
+      @extend .glyphicon-chevron-down;
+      @include glyphicon-light;
+    }
+  }
+}

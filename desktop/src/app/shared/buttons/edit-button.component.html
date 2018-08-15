@@ -1,0 +1,6 @@
+<a class="action-button action-button-edit" [routerLink]="routerLink" title="Edit">
+  <span class="icon icon-edit"></span>
+
+  <span class="button-label" *ngIf="label">{{ label }}</span>
+  <span i18n class="button-label" *ngIf="!label">Edit</span>
+</a>
