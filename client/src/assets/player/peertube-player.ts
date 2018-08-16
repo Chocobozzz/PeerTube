@@ -35,6 +35,7 @@ function getVideojsOptions (options: {
   startTime: number | string
   theaterMode: boolean,
   videoCaptions: VideoJSCaption[],
+  language?: string,
   controls?: boolean,
   muted?: boolean,
   loop?: boolean
@@ -72,6 +73,10 @@ function getVideojsOptions (options: {
         enableModifiersForNumbers: false
       }
     })
+  }
+
+  if (options.language && !isDefaultLocale(options.language)) {
+    Object.assign(videojsOptions, { language: options.language })
   }
 
   return videojsOptions

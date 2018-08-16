@@ -16,6 +16,12 @@ post_build_hook () {
   rmdir "./src/locale/pending_target/"
 }
 
+# Previous build failed
+if [ ! -f client/src/locale/target/angular_fr_FR.xml ]; then
+    git checkout -- client/src/locale/target/
+    rm -r client/src/locale/pending_target/
+fi
+
 cd client
 
 rm -rf ./dist ./compiled

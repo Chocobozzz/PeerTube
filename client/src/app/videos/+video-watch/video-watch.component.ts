@@ -407,7 +407,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       peertubeLink: false,
       poster: this.video.previewUrl,
       startTime,
-      theaterMode: true
+      theaterMode: true,
+      language: this.localeId
     })
 
     if (this.videojsLocaleLoaded === false) {
