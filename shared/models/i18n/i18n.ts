@@ -36,6 +36,10 @@ export function isDefaultLocale (locale: string) {
   return getCompleteLocale(locale) === getCompleteLocale(getDefaultLocale())
 }
 
+export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
+  return translations && translations[str] ? translations[str] : str
+}
+
 const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)
 export function is18nPath (path: string) {
   return possiblePaths.indexOf(path) !== -1

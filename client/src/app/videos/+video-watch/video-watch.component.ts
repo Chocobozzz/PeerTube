@@ -22,7 +22,7 @@ import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { VideoBlacklistComponent } from './modal/video-blacklist.component'
-import { addContextMenu, getVideojsOptions, loadLocale } from '../../../assets/player/peertube-player'
+import { addContextMenu, getVideojsOptions, loadLocaleInVideoJS } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
@@ -411,7 +411,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
 
     if (this.videojsLocaleLoaded === false) {
-      await loadLocale(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
+      await loadLocaleInVideoJS(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
       this.videojsLocaleLoaded = true
     }
 

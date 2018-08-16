@@ -2,7 +2,7 @@ import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { VideoImport } from '../../../../../shared'
+import { peertubeTranslate, VideoImport } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestService } from '../rest'
 import { VideoImportCreate, VideoUpdate } from '../../../../../shared/models/videos'
@@ -12,7 +12,6 @@ import { UserService } from '@app/shared/users/user.service'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { RestPagination } from '@app/shared/rest'
 import { ServerService } from '@app/core'
-import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
 
 @Injectable()
 export class VideoImportService {
