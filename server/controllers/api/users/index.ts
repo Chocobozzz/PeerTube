@@ -1,14 +1,12 @@
 import * as express from 'express'
-import 'multer'
 import * as RateLimit from 'express-rate-limit'
-import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { logger } from '../../helpers/logger'
-import { getFormattedObjects } from '../../helpers/utils'
-import { CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
-import { sendUpdateActor } from '../../lib/activitypub/send'
-import { Emailer } from '../../lib/emailer'
-import { Redis } from '../../lib/redis'
-import { createUserAccountAndChannel } from '../../lib/user'
+import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
+import { logger } from '../../../helpers/logger'
+import { getFormattedObjects } from '../../../helpers/utils'
+import { CONFIG, RATES_LIMIT, sequelizeTypescript } from '../../../initializers'
+import { Emailer } from '../../../lib/emailer'
+import { Redis } from '../../../lib/redis'
+import { createUserAccountAndChannel } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -25,33 +23,17 @@ import {
   usersRegisterValidator,
   usersRemoveValidator,
   usersSortValidator,
-  usersUpdateMeValidator,
-  usersUpdateValidator,
-  usersVideoRatingValidator
-} from '../../middlewares'
-import {
-  deleteMeValidator,
-  usersAskResetPasswordValidator,
-  usersBlockingValidator,
-  usersResetPasswordValidator,
-  videoImportsSortValidator,
-  videosSortValidator
-} from '../../middlewares/validators'
-import { AccountVideoRateModel } from '../../models/account/account-video-rate'
-import { UserModel } from '../../models/account/user'
-import { OAuthTokenModel } from '../../models/oauth/oauth-token'
-import { VideoModel } from '../../models/video/video'
-import { VideoSortField } from '../../../client/src/app/shared/video/sort-field.type'
-import { createReqFiles } from '../../helpers/express-utils'
-import { UserVideoQuota } from '../../../shared/models/users/user-video-quota.model'
-import { updateAvatarValidator } from '../../middlewares/validators/avatar'
-import { updateActorAvatarFile } from '../../lib/avatar'
-import { auditLoggerFactory, UserAuditView } from '../../helpers/audit-logger'
-import { VideoImportModel } from '../../models/video/video-import'
+  usersUpdateValidator
+} from '../../../middlewares'
+import { usersAskResetPasswordValidator, usersBlockingValidator, usersResetPasswordValidator } from '../../../middlewares/validators'
+import { UserModel } from '../../../models/account/user'
+import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
+import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
+import { videosRouter } from '../videos'
+import { meRouter } from './me'
 
 const auditLogger = auditLoggerFactory('users')
 
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 const loginRateLimiter = new RateLimit({
   windowMs: RATES_LIMIT.LOGIN.WINDOW_MS,
   max: RATES_LIMIT.LOGIN.MAX,
@@ -59,45 +41,7 @@ const loginRateLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
-
-usersRouter.get('/me',
-  authenticate,
-  asyncMiddleware(getUserInformation)
-)
-usersRouter.delete('/me',
-  authenticate,
-  asyncMiddleware(deleteMeValidator),
-  asyncMiddleware(deleteMe)
-)
-
-usersRouter.get('/me/video-quota-used',
-  authenticate,
-  asyncMiddleware(getUserVideoQuotaUsed)
-)
-
-usersRouter.get('/me/videos/imports',
-  authenticate,
-  paginationValidator,
-  videoImportsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  asyncMiddleware(getUserVideoImports)
-)
-
-usersRouter.get('/me/videos',
-  authenticate,
-  paginationValidator,
-  videosSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  asyncMiddleware(getUserVideos)
-)
-
-usersRouter.get('/me/videos/:videoId/rating',
-  authenticate,
-  asyncMiddleware(usersVideoRatingValidator),
-  asyncMiddleware(getUserVideoRating)
-)
+videosRouter.use('/', meRouter)
 
 usersRouter.get('/',
   authenticate,
@@ -143,19 +87,6 @@ usersRouter.post('/register',
   asyncRetryTransactionMiddleware(registerUser)
 )
 
-usersRouter.put('/me',
-  authenticate,
-  usersUpdateMeValidator,
-  asyncMiddleware(updateMe)
-)
-
-usersRouter.post('/me/avatar/pick',
-  authenticate,
-  reqAvatarFile,
-  updateAvatarValidator,
-  asyncMiddleware(updateMyAvatar)
-)
-
 usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
@@ -194,36 +125,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
-async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.User as UserModel
-  const resultList = await VideoModel.listUserVideosForApi(
-    user.Account.id,
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort as VideoSortField
-  )
-
-  const additionalAttributes = {
-    waitTranscoding: true,
-    state: true,
-    scheduledUpdate: true,
-    blacklistInfo: true
-  }
-  return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
-}
-
-async function getUserVideoImports (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.User as UserModel
-  const resultList = await VideoImportModel.listUserVideoImportsForApi(
-    user.id,
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort
-  )
-
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
-}
 
 async function createUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
@@ -274,24 +175,6 @@ async function registerUser (req: express.Request, res: express.Response) {
   return res.type('json').status(204).end()
 }
 
-async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
-  // We did not load channels in res.locals.user
-  const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
-
-  return res.json(user.toFormattedJSON())
-}
-
-async function getUserVideoQuotaUsed (req: express.Request, res: express.Response, next: express.NextFunction) {
-  // We did not load channels in res.locals.user
-  const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
-  const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
-
-  const data: UserVideoQuota = {
-    videoQuotaUsed
-  }
-  return res.json(data)
-}
-
 async function unblockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user: UserModel = res.locals.user
 
@@ -313,34 +196,10 @@ function getUser (req: express.Request, res: express.Response, next: express.Nex
   return res.json((res.locals.user as UserModel).toFormattedJSON())
 }
 
-async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoId = +req.params.videoId
-  const accountId = +res.locals.oauth.token.User.Account.id
-
-  const ratingObj = await AccountVideoRateModel.load(accountId, videoId, null)
-  const rating = ratingObj ? ratingObj.type : 'none'
-
-  const json: FormattedUserVideoRate = {
-    videoId,
-    rating
-  }
-  res.json(json)
-}
-
 async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
   const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
-}
-
-async function deleteMe (req: express.Request, res: express.Response) {
-  const user: UserModel = res.locals.oauth.token.User
-
-  await user.destroy()
-
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
-
-  return res.sendStatus(204)
 }
 
 async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -351,57 +210,6 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
   auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
 
   return res.sendStatus(204)
-}
-
-async function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const body: UserUpdateMe = req.body
-
-  const user: UserModel = res.locals.oauth.token.user
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
-
-  if (body.password !== undefined) user.password = body.password
-  if (body.email !== undefined) user.email = body.email
-  if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
-  if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
-
-  await sequelizeTypescript.transaction(async t => {
-    await user.save({ transaction: t })
-
-    if (body.displayName !== undefined) user.Account.name = body.displayName
-    if (body.description !== undefined) user.Account.description = body.description
-    await user.Account.save({ transaction: t })
-
-    await sendUpdateActor(user.Account, t)
-
-    auditLogger.update(
-      res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-      new UserAuditView(user.toFormattedJSON()),
-      oldUserAuditView
-    )
-  })
-
-  return res.sendStatus(204)
-}
-
-async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
-  const user: UserModel = res.locals.oauth.token.user
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
-  const account = user.Account
-
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, account.Actor, account)
-
-  auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
-
-  return res
-    .json({
-      avatar: avatar.toFormattedJSON()
-    })
-    .end()
 }
 
 async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
