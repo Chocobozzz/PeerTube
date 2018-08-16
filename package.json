@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/Chocobozzz/PeerTube.git"
+    "url": "git+https://github.com/Chocobozzz/PeerTube.git"
   },
   "typings": "*.d.ts",
   "scripts": {
