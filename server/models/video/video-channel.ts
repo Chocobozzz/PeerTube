@@ -1,14 +1,27 @@
 import {
-  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Is, Model, Scopes, Table,
-  UpdatedAt, Default, DataType
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DefaultScope,
+  ForeignKey,
+  HasMany,
+  Is,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel } from '../../../shared/models/videos'
 import {
-  isVideoChannelDescriptionValid, isVideoChannelNameValid,
+  isVideoChannelDescriptionValid,
+  isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
-import { logger } from '../../helpers/logger'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
@@ -241,6 +254,23 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findById(id, options)
   }
 
+  static loadLocalByName (name: string) {
+    const query = {
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            preferredUsername: name,
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return VideoChannelModel.findOne(query)
+  }
+
   toFormattedJSON (): VideoChannel {
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
@@ -251,8 +281,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       isLocal: this.Actor.isOwned(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      ownerAccount: undefined,
-      videos: undefined
+      ownerAccount: undefined
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()

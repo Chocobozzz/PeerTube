@@ -10,6 +10,11 @@ async function sendAccept (actorFollow: ActorFollowModel) {
   const follower = actorFollow.ActorFollower
   const me = actorFollow.ActorFollowing
 
+  if (!follower.serverId) { // This should never happen
+    logger.warn('Do not sending accept to local follower.')
+    return
+  }
+
   logger.info('Creating job to accept follower %s.', follower.url)
 
   const followUrl = getActorFollowActivityPubUrl(actorFollow)

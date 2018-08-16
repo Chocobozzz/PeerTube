@@ -96,6 +96,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
     start,
     count: FEEDS.COUNT,
     sort: req.query.sort,
+    includeLocalVideos: true,
     nsfw,
     filter: req.query.filter,
     withFiles: true,

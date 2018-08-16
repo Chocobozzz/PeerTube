@@ -133,6 +133,7 @@ export enum ScopeNames {
 
 type AvailableForListOptions = {
   actorId: number,
+  includeLocalVideos: boolean,
   filter?: VideoFilter,
   categoryOneOf?: number[],
   nsfw?: boolean,
@@ -201,6 +202,15 @@ type AvailableForListOptions = {
 
     // Force actorId to be a number to avoid SQL injections
     const actorIdNumber = parseInt(options.actorId.toString(), 10)
+    let localVideosReq = ''
+    if (options.includeLocalVideos === true) {
+      localVideosReq = ' UNION ALL ' +
+      'SELECT "video"."id" AS "id" FROM "video" ' +
+      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+      'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+      'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+      'WHERE "actor"."serverId" IS NULL'
+    }
 
     // FIXME: It would be more efficient to use a CTE so we join AFTER the filters, but sequelize does not support it...
     const query: IFindOptions<VideoModel> = {
@@ -214,12 +224,6 @@ type AvailableForListOptions = {
               'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
               'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
               'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-              ' UNION ' +
-              'SELECT "video"."id" AS "id" FROM "video" ' +
-              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-              'WHERE "actor"."serverId" IS NULL ' +
               ' UNION ALL ' +
               'SELECT "video"."id" AS "id" FROM "video" ' +
               'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
@@ -227,6 +231,7 @@ type AvailableForListOptions = {
               'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
               'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
               'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+              localVideosReq +
             ')'
           )
         },
@@ -825,6 +830,7 @@ export class VideoModel extends Model<VideoModel> {
     count: number,
     sort: string,
     nsfw: boolean,
+    includeLocalVideos: boolean,
     withFiles: boolean,
     categoryOneOf?: number[],
     licenceOneOf?: number[],
@@ -833,7 +839,8 @@ export class VideoModel extends Model<VideoModel> {
     tagsAllOf?: string[],
     filter?: VideoFilter,
     accountId?: number,
-    videoChannelId?: number
+    videoChannelId?: number,
+    actorId?: number
   }) {
     const query = {
       offset: options.start,
@@ -841,11 +848,12 @@ export class VideoModel extends Model<VideoModel> {
       order: getSort(options.sort)
     }
 
-    const serverActor = await getServerActor()
+    const actorId = options.actorId || (await getServerActor()).id
+
     const scopes = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
-          actorId: serverActor.id,
+          actorId,
           nsfw: options.nsfw,
           categoryOneOf: options.categoryOneOf,
           licenceOneOf: options.licenceOneOf,
@@ -855,7 +863,8 @@ export class VideoModel extends Model<VideoModel> {
           filter: options.filter,
           withFiles: options.withFiles,
           accountId: options.accountId,
-          videoChannelId: options.videoChannelId
+          videoChannelId: options.videoChannelId,
+          includeLocalVideos: options.includeLocalVideos
         } as AvailableForListOptions
       ]
     }
@@ -871,6 +880,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static async searchAndPopulateAccountAndServer (options: {
+    includeLocalVideos: boolean
     search?: string
     start?: number
     count?: number
@@ -955,6 +965,7 @@ export class VideoModel extends Model<VideoModel> {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
+          includeLocalVideos: options.includeLocalVideos,
           nsfw: options.nsfw,
           categoryOneOf: options.categoryOneOf,
           licenceOneOf: options.licenceOneOf,

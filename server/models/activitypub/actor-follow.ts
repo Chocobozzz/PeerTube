@@ -2,8 +2,21 @@ import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import {
-  AfterCreate, AfterDestroy, AfterUpdate, AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, IsInt, Max, Model,
-  Table, UpdatedAt
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  IsInt,
+  Max,
+  Model,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
 import { AccountFollow } from '../../../shared/models/actors/follow.model'
@@ -14,6 +27,7 @@ import { FOLLOW_STATES } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
 import { ActorModel } from './actor'
+import { VideoChannelModel } from '../video/video-channel'
 
 @Table({
   tableName: 'actorFollow',
@@ -151,7 +165,32 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetHost (actorId: number, targetHost: string, t?: Sequelize.Transaction) {
+  static loadByActorAndTargetNameAndHost (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
+    const actorFollowingPartInclude = {
+      model: ActorModel,
+      required: true,
+      as: 'ActorFollowing',
+      where: {
+        preferredUsername: targetName
+      }
+    }
+
+    if (targetHost === null) {
+      actorFollowingPartInclude.where['serverId'] = null
+    } else {
+      Object.assign(actorFollowingPartInclude, {
+        include: [
+          {
+            model: ServerModel,
+            required: true,
+            where: {
+              host: targetHost
+            }
+          }
+        ]
+      })
+    }
+
     const query = {
       where: {
         actorId
@@ -162,20 +201,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           required: true,
           as: 'ActorFollower'
         },
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollowing',
-          include: [
-            {
-              model: ServerModel,
-              required: true,
-              where: {
-                host: targetHost
-              }
-            }
-          ]
-        }
+        actorFollowingPartInclude
       ],
       transaction: t
     }
@@ -214,6 +240,39 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           total: count
         }
       })
+  }
+
+  static listSubscriptionsForApi (id: number, start: number, count: number, sort: string) {
+    const query = {
+      distinct: true,
+      offset: start,
+      limit: count,
+      order: getSort(sort),
+      where: {
+        actorId: id
+      },
+      include: [
+        {
+          model: ActorModel,
+          as: 'ActorFollowing',
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel,
+              required: true
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAndCountAll(query)
+                           .then(({ rows, count }) => {
+                             return {
+                               data: rows.map(r => r.ActorFollowing.VideoChannel),
+                               total: count
+                             }
+                           })
   }
 
   static listFollowersForApi (id: number, start: number, count: number, sort: string) {

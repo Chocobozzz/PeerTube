@@ -3,6 +3,7 @@ import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { exists } from '../misc'
 import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
+import { isHostValid } from '../servers'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
   return isActivityPubUrlValid(endpointObject.sharedInbox)
@@ -109,6 +110,15 @@ function normalizeActor (actor: any) {
   return
 }
 
+function isValidActorHandle (handle: string) {
+  if (!exists(handle)) return false
+
+  const parts = handle.split('@')
+  if (parts.length !== 2) return false
+
+  return isHostValid(parts[1])
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -126,5 +136,6 @@ export {
   isActorAcceptActivityValid,
   isActorRejectActivityValid,
   isActorDeleteActivityValid,
-  isActorUpdateActivityValid
+  isActorUpdateActivityValid,
+  isValidActorHandle
 }

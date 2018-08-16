@@ -11,15 +11,17 @@ const webfinger = new WebFinger({
   request_timeout: 3000
 })
 
-async function loadActorUrlOrGetFromWebfinger (name: string, host: string) {
+async function loadActorUrlOrGetFromWebfinger (uri: string) {
+  const [ name, host ] = uri.split('@')
+
   const actor = await ActorModel.loadByNameAndHost(name, host)
   if (actor) return actor.url
 
-  return getUrlFromWebfinger(name, host)
+  return getUrlFromWebfinger(uri)
 }
 
-async function getUrlFromWebfinger (name: string, host: string) {
-  const webfingerData: WebFingerData = await webfingerLookup(name + '@' + host)
+async function getUrlFromWebfinger (uri: string) {
+  const webfingerData: WebFingerData = await webfingerLookup(uri)
   return getLinkOrThrow(webfingerData)
 }
 

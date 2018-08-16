@@ -4,6 +4,7 @@ import { UserRight } from '../../../shared'
 import { isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
+  isLocalVideoChannelNameExist,
   isVideoChannelDescriptionValid,
   isVideoChannelExist,
   isVideoChannelNameValid,
@@ -100,6 +101,19 @@ const videoChannelsGetValidator = [
   }
 ]
 
+const localVideoChannelValidator = [
+  param('name').custom(isVideoChannelNameValid).withMessage('Should have a valid video channel name'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking localVideoChannelValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isLocalVideoChannelNameExist(req.params.name, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -107,7 +121,8 @@ export {
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
-  videoChannelsGetValidator
+  videoChannelsGetValidator,
+  localVideoChannelValidator
 }
 
 // ---------------------------------------------------------------------------

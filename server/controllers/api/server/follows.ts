@@ -2,7 +2,7 @@ import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
-import { sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
 import { sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
@@ -74,9 +74,16 @@ async function listFollowers (req: express.Request, res: express.Response, next:
 
 async function followInstance (req: express.Request, res: express.Response, next: express.NextFunction) {
   const hosts = req.body.hosts as string[]
+  const follower = await getServerActor()
 
   for (const host of hosts) {
-    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload: { host } })
+    const payload = {
+      host,
+      name: SERVER_ACTOR_NAME,
+      followerActorId: follower.id
+    }
+
+    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
       .catch(err => logger.error('Cannot create follow job for %s.', host, err))
   }
 
@@ -91,12 +98,6 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
 
     await follow.destroy({ transaction: t })
   })
-
-  // Destroy the actor that will destroy video channels, videos and video files too
-  // This could be long so don't wait this task
-  const following = follow.ActorFollowing
-  following.destroy()
-    .catch(err => logger.error('Cannot destroy actor that we do not follow anymore %s.', following.url, { err }))
 
   return res.status(204).end()
 }
