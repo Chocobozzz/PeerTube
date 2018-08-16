@@ -5,7 +5,7 @@ function isOnDevLocale () {
 }
 
 function getDevLocale () {
-  return 'fr'
+  return 'fr-FR'
 }
 
 export {
