@@ -71,7 +71,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
       useFactory: (locale) => {
         // On dev mode, test localization
         if (isOnDevLocale()) {
-          locale = getDevLocale()
+          locale = buildFileLocale(getDevLocale())
           return require(`raw-loader!../locale/target/angular_${locale}.xml`)
         }
 
