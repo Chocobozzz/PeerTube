@@ -29,7 +29,6 @@ import { usersAskResetPasswordValidator, usersBlockingValidator, usersResetPassw
 import { UserModel } from '../../../models/account/user'
 import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
 import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
-import { videosRouter } from '../videos'
 import { meRouter } from './me'
 
 const auditLogger = auditLoggerFactory('users')
@@ -41,7 +40,7 @@ const loginRateLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
-videosRouter.use('/', meRouter)
+usersRouter.use('/', meRouter)
 
 usersRouter.get('/',
   authenticate,

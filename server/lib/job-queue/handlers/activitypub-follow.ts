@@ -1,7 +1,7 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { getServerActor } from '../../../helpers/utils'
-import { REMOTE_SCHEME, sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
+import { REMOTE_SCHEME, sequelizeTypescript } from '../../../initializers'
 import { sendFollow } from '../../activitypub/send'
 import { sanitizeHost } from '../../../helpers/core-utils'
 import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
@@ -11,6 +11,8 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 
 export type ActivitypubFollowPayload = {
+  followerActorId: number
+  name: string
   host: string
 }
 
@@ -22,10 +24,10 @@ async function processActivityPubFollow (job: Bull.Job) {
 
   const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
 
-  const actorUrl = await loadActorUrlOrGetFromWebfinger(SERVER_ACTOR_NAME, sanitizedHost)
+  const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
   const targetActor = await getOrCreateActorAndServerAndModel(actorUrl)
 
-  const fromActor = await getServerActor()
+  const fromActor = await ActorModel.load(payload.followerActorId)
 
   return retryTransactionWrapper(follow, fromActor, targetActor)
 }
@@ -42,6 +44,9 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
     throw new Error('Follower is the same than target actor.')
   }
 
+  // Same server, direct accept
+  const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
+
   return sequelizeTypescript.transaction(async t => {
     const [ actorFollow ] = await ActorFollowModel.findOrCreate({
       where: {
@@ -49,7 +54,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
         targetActorId: targetActor.id
       },
       defaults: {
-        state: 'pending',
+        state,
         actorId: fromActor.id,
         targetActorId: targetActor.id
       },

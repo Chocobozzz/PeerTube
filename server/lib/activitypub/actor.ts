@@ -352,7 +352,7 @@ async function refreshActorIfNeeded (actor: ActorModel): Promise<ActorModel> {
   if (!actor.isOutdated()) return actor
 
   try {
-    const actorUrl = await getUrlFromWebfinger(actor.preferredUsername, actor.getHost())
+    const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
     const result = await fetchRemoteActor(actorUrl)
     if (result === undefined) {
       logger.warn('Cannot fetch remote actor in refresh actor.')

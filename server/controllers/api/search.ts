@@ -36,7 +36,10 @@ export { searchRouter }
 async function searchVideos (req: express.Request, res: express.Response) {
   const query: VideosSearchQuery = req.query
 
-  const options = Object.assign(query, { nsfw: buildNSFWFilter(res, query.nsfw) })
+  const options = Object.assign(query, {
+    includeLocalVideos: true,
+    nsfw: buildNSFWFilter(res, query.nsfw)
+  })
   const resultList = await VideoModel.searchAndPopulateAccountAndServer(options)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
