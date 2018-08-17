@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
-import { VideoChannel } from '../../../../../shared/models/videos'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { flatMap, map, tap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
+import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 
 @Component({
   selector: 'my-account-video-channels',

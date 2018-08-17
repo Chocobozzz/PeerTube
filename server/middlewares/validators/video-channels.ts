@@ -2,18 +2,18 @@ import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
 import { isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isLocalVideoChannelNameExist,
   isVideoChannelDescriptionValid,
-  isVideoChannelExist,
   isVideoChannelNameValid,
+  isVideoChannelNameWithHostExist,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'
+import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 
 const listVideoAccountChannelsValidator = [
   param('accountName').exists().withMessage('Should have a valid account name'),
@@ -29,6 +29,7 @@ const listVideoAccountChannelsValidator = [
 ]
 
 const videoChannelsAddValidator = [
+  body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
   body('displayName').custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
@@ -43,7 +44,7 @@ const videoChannelsAddValidator = [
 ]
 
 const videoChannelsUpdateValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
   body('displayName').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
@@ -52,7 +53,7 @@ const videoChannelsUpdateValidator = [
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoChannelExist(req.params.id, res)) return
+    if (!await isVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
 
     // We need to make additional checks
     if (res.locals.videoChannel.Actor.isOwned() === false) {
@@ -72,13 +73,13 @@ const videoChannelsUpdateValidator = [
 ]
 
 const videoChannelsRemoveValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoChannelExist(req.params.id, res)) return
+    if (!await isVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
 
     if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
     if (!await checkVideoChannelIsNotTheLastOne(res)) return
@@ -87,15 +88,15 @@ const videoChannelsRemoveValidator = [
   }
 ]
 
-const videoChannelsGetValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+const videoChannelsNameWithHostValidator = [
+  param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelsGet parameters', { parameters: req.params })
+    logger.debug('Checking videoChannelsNameWithHostValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
-    if (!await isVideoChannelExist(req.params.id, res)) return
+    if (!await isVideoChannelNameWithHostExist(req.params.nameWithHost, res)) return
 
     return next()
   }
@@ -121,7 +122,7 @@ export {
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
-  videoChannelsGetValidator,
+  videoChannelsNameWithHostValidator,
   localVideoChannelValidator
 }
 

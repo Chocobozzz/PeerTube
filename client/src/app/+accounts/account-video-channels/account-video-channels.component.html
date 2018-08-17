@@ -1,6 +1,6 @@
 <div *ngIf="account" class="row">
   <a
-    *ngFor="let videoChannel of videoChannels" [routerLink]="[ '/video-channels', videoChannel.uuid ]"
+    *ngFor="let videoChannel of videoChannels" [routerLink]="[ '/video-channels', videoChannel.name ]"
     class="video-channel" i18n-title title="See this video channel"
   >
     <img [src]="videoChannel.avatarUrl" alt="Avatar" />

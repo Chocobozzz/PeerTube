@@ -199,13 +199,13 @@ function getAccountVideos (
 function getVideoChannelVideos (
   url: string,
   accessToken: string,
-  videoChannelId: number | string,
+  videoChannelName: string,
   start: number,
   count: number,
   sort?: string,
   query: { nsfw?: boolean } = {}
 ) {
-  const path = '/api/v1/video-channels/' + videoChannelId + '/videos'
+  const path = '/api/v1/video-channels/' + videoChannelName + '/videos'
 
   return makeGetRequest({
     url,

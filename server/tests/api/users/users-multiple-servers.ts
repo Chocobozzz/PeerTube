@@ -12,10 +12,9 @@ import {
   getVideoChannelsList,
   removeUser,
   updateMyUser,
-  userLogin,
-  wait
+  userLogin
 } from '../../utils'
-import { flushTests, getMyUserInformation, killallServers, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../utils/index'
+import { getMyUserInformation, killallServers, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../utils/index'
 import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../utils/users/accounts'
 import { setAccessTokensToServers } from '../../utils/users/login'
 import { User } from '../../../../shared/models/users'
@@ -172,7 +171,7 @@ describe('Test users with multiple servers', function () {
 
       const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
       const videoChannelDeleted = resVideoChannels.body.data.find(a => {
-        return a.displayName === 'Default user1 channel' && a.host === 'localhost:9001'
+        return a.displayName === 'Main user1 channel' && a.host === 'localhost:9001'
       }) as VideoChannel
       expect(videoChannelDeleted).not.to.be.undefined
     }
@@ -189,7 +188,7 @@ describe('Test users with multiple servers', function () {
 
       const resVideoChannels = await getVideoChannelsList(server.url, 0, 10)
       const videoChannelDeleted = resVideoChannels.body.data.find(a => {
-        return a.name === 'Default user1 channel' && a.host === 'localhost:9001'
+        return a.name === 'Main user1 channel' && a.host === 'localhost:9001'
       }) as VideoChannel
       expect(videoChannelDeleted).to.be.undefined
     }

@@ -54,6 +54,7 @@ describe('Test update host scripts', function () {
 
     // Create channel
     const videoChannel = {
+      name: 'second_channel',
       displayName: 'second video channel',
       description: 'super video channel description'
     }

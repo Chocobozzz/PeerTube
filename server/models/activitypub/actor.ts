@@ -260,12 +260,13 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string) {
+  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction) {
     const query = {
       where: {
         preferredUsername,
         serverId: null
-      }
+      },
+      transaction
     }
 
     return ActorModel.scope(ScopeNames.FULL).findOne(query)

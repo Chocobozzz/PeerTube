@@ -31,7 +31,6 @@ describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
   let server: ServerInfo
   let accessTokenUser: string
-  let videoChannelUUID: string
 
   // ---------------------------------------------------------------
 
@@ -52,12 +51,6 @@ describe('Test video channels API validator', function () {
     {
       await createUser(server.url, server.accessToken, user.username, user.password)
       accessTokenUser = await userLogin(server, user)
-    }
-
-    {
-      const res = await getMyUserInformation(server.url, server.accessToken)
-      const user: User = res.body
-      videoChannelUUID = user.videoChannels[0].uuid
     }
   })
 
@@ -83,6 +76,7 @@ describe('Test video channels API validator', function () {
 
   describe('When adding a video channel', function () {
     const baseCorrectParams = {
+      name: 'super_channel',
       displayName: 'hello',
       description: 'super description',
       support: 'super support text'
@@ -100,6 +94,16 @@ describe('Test video channels API validator', function () {
 
     it('Should fail with nothing', async function () {
       const fields = {}
+      await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail without a name', async function () {
+      const fields = omit(baseCorrectParams, 'name')
+      await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { name: 'super name' })
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -142,7 +146,7 @@ describe('Test video channels API validator', function () {
     let path: string
 
     before(async function () {
-      path = videoChannelPath + '/' + videoChannelUUID
+      path = videoChannelPath + '/super_channel'
     })
 
     it('Should fail with a non authenticated user', async function () {
@@ -195,7 +199,7 @@ describe('Test video channels API validator', function () {
     let path: string
 
     before(async function () {
-      path = videoChannelPath + '/' + videoChannelUUID
+      path = videoChannelPath + '/super_channel'
     })
 
     it('Should fail with an incorrect input file', async function () {
@@ -255,18 +259,10 @@ describe('Test video channels API validator', function () {
       expect(res.body.data).to.be.an('array')
     })
 
-    it('Should fail without a correct uuid', async function () {
-      await makeGetRequest({
-        url: server.url,
-        path: videoChannelPath + '/coucou',
-        statusCodeExpected: 400
-      })
-    })
-
     it('Should return 404 with an incorrect video channel', async function () {
       await makeGetRequest({
         url: server.url,
-        path: videoChannelPath + '/4da6fde3-88f7-4d16-b119-108df5630b06',
+        path: videoChannelPath + '/super_channel2',
         statusCodeExpected: 404
       })
     })
@@ -274,7 +270,7 @@ describe('Test video channels API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
-        path: videoChannelPath + '/' + videoChannelUUID,
+        path: videoChannelPath + '/super_channel',
         statusCodeExpected: 200
       })
     })
@@ -282,26 +278,23 @@ describe('Test video channels API validator', function () {
 
   describe('When deleting a video channel', function () {
     it('Should fail with a non authenticated user', async function () {
-      await deleteVideoChannel(server.url, 'coucou', videoChannelUUID, 401)
+      await deleteVideoChannel(server.url, 'coucou', 'super_channel', 401)
     })
 
     it('Should fail with another authenticated user', async function () {
-      await deleteVideoChannel(server.url, accessTokenUser, videoChannelUUID, 403)
+      await deleteVideoChannel(server.url, accessTokenUser, 'super_channel', 403)
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      await deleteVideoChannel(server.url, server.accessToken,454554, 404)
+      await deleteVideoChannel(server.url, server.accessToken,'super_channel2', 404)
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await deleteVideoChannel(server.url, server.accessToken, videoChannelUUID)
+      await deleteVideoChannel(server.url, server.accessToken, 'super_channel')
     })
 
     it('Should fail to delete the last user video channel', async function () {
-      const res = await getVideoChannelsList(server.url, 0, 1)
-      const lastVideoChannelUUID = res.body.data[0].uuid
-
-      await deleteVideoChannel(server.url, server.accessToken, lastVideoChannelUUID, 409)
+      await deleteVideoChannel(server.url, server.accessToken, 'root_channel', 409)
     })
   })
 

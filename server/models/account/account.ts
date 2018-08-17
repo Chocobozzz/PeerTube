@@ -194,7 +194,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadLocalByNameAndHost (name: string, host: string) {
+  static loadByNameAndHost (name: string, host: string) {
     const query = {
       include: [
         {

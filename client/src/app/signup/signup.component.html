@@ -23,10 +23,17 @@
   <form role="form" (ngSubmit)="signup()" [formGroup]="form">
     <div class="form-group">
       <label for="username" i18n>Username</label>
-      <input
-        type="text" id="username" i18n-placeholder placeholder="Username"
-        formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
-      >
+
+      <div class="input-group">
+        <input
+          type="text" id="username" i18n-placeholder placeholder="Example: neil_amstrong"
+          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+        >
+        <div class="input-group-append">
+          <span class="input-group-text">@{{ instanceHost }}</span>
+        </div>
+      </div>
+
       <div *ngIf="formErrors.username" class="form-error">
         {{ formErrors.username }}
       </div>

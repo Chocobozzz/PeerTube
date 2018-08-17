@@ -150,7 +150,7 @@ export class VideoService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.uuid + '/videos', { params })
+               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.name + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))
