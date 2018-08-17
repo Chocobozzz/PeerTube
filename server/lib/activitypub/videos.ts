@@ -11,7 +11,7 @@ import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, STATIC_PATHS, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
@@ -147,7 +147,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
-      return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.width === fileUrl.width
+      return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.height === fileUrl.height
     })
 
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
@@ -160,7 +160,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
     const attribute = {
       extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],
       infoHash: parsed.infoHash,
-      resolution: fileUrl.width,
+      resolution: fileUrl.height,
       size: fileUrl.size,
       videoId: videoCreated.id,
       fps: fileUrl.fps
