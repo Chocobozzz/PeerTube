@@ -1402,7 +1402,7 @@ export class VideoModel extends Model<VideoModel> {
         type: 'Link',
         mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
-        width: file.resolution,
+        height: file.resolution,
         size: file.size,
         fps: file.fps
       })
@@ -1411,14 +1411,14 @@ export class VideoModel extends Model<VideoModel> {
         type: 'Link',
         mimeType: 'application/x-bittorrent',
         href: this.getTorrentUrl(file, baseUrlHttp),
-        width: file.resolution
+        height: file.resolution
       })
 
       url.push({
         type: 'Link',
         mimeType: 'application/x-bittorrent;x-scheme-handler/magnet',
         href: this.generateMagnetUri(file, baseUrlHttp, baseUrlWs),
-        width: file.resolution
+        height: file.resolution
       })
     }
 
