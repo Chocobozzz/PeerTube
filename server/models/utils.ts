@@ -1,6 +1,8 @@
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
 import { Sequelize } from 'sequelize-typescript'
 
+type SortType = { sortModel: any, sortValue: string }
+
 function getSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
   let field: any
   let direction: 'ASC' | 'DESC'
@@ -54,6 +56,7 @@ function createSimilarityAttribute (col: string, value: string) {
 // ---------------------------------------------------------------------------
 
 export {
+  SortType,
   getSort,
   getSortOnModel,
   createSimilarityAttribute,

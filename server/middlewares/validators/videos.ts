@@ -34,7 +34,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
-import { cleanUpReqFiles } from '../../helpers/utils'
+import { cleanUpReqFiles } from '../../helpers/express-utils'
 import { VideoModel } from '../../models/video/video'
 import { UserModel } from '../../models/account/user'
 

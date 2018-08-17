@@ -1,5 +1,5 @@
-import { Account } from '../actors'
-import { VideoConstant } from './video-constant.model'
+import { Account } from '../../actors/index'
+import { VideoConstant } from '../video-constant.model'
 import { VideoAbuseState } from './video-abuse-state.model'
 
 export interface VideoAbuse {

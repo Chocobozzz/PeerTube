@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { UserRole } from '../../../../shared/index'
+import { User, UserRole } from '../../../../shared/index'
 import {
   createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating,
   getUserInformation, getUsersList, getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo,
@@ -192,6 +192,12 @@ describe('Test users', function () {
     const data = res.body
 
     expect(data.videoQuotaUsed).to.equal(218910)
+
+    const resUsers = await getUsersList(server.url, server.accessToken)
+
+    const users: User[] = resUsers.body.data
+    const tmpUser = users.find(u => u.username === user.username)
+    expect(tmpUser.videoQuotaUsed).to.equal(218910)
   })
 
   it('Should be able to list my videos', async function () {

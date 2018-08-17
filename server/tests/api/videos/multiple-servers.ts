@@ -209,19 +209,19 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 240,
-              size: 342000
+              size: 187000
             },
             {
               resolution: 360,
-              size: 433000
+              size: 278000
             },
             {
               resolution: 480,
-              size: 538000
+              size: 383000
             },
             {
               resolution: 720,
-              size: 861000
+              size: 706000
             }
           ],
           thumbnailfile: 'thumbnail',

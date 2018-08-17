@@ -3,8 +3,9 @@ import * as multer from 'multer'
 import { CONFIG, REMOTE_SCHEME } from '../initializers'
 import { logger } from './logger'
 import { User } from '../../shared/models/users'
-import { generateRandomString } from './utils'
+import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
+import { isArray } from './custom-validators/misc'
 
 function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -21,6 +22,24 @@ function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
 
   // Display all
   return null
+}
+
+function cleanUpReqFiles (req: { files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[] }) {
+  const files = req.files
+
+  if (!files) return
+
+  if (isArray(files)) {
+    (files as Express.Multer.File[]).forEach(f => deleteFileAsync(f.path))
+    return
+  }
+
+  for (const key of Object.keys(files)) {
+    const file = files[ key ]
+
+    if (isArray(file)) file.forEach(f => deleteFileAsync(f.path))
+    else deleteFileAsync(file.path)
+  }
 }
 
 function getHostWithPort (host: string) {
@@ -82,5 +101,6 @@ export {
   buildNSFWFilter,
   getHostWithPort,
   badRequest,
-  createReqFiles
+  createReqFiles,
+  cleanUpReqFiles
 }

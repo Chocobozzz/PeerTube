@@ -1,6 +1,6 @@
-import { Actor } from '../actors/actor.model'
-import { Video } from './video.model'
-import { Account } from '../actors'
+import { Actor } from '../../actors/actor.model'
+import { Video } from '../video.model'
+import { Account } from '../../actors/index'
 
 export interface VideoChannel extends Actor {
   displayName: string

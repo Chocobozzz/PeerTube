@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core'
 import { BytesPipe } from 'ngx-pipes'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { Observable } from 'rxjs'
-import { ResultList, UserCreate, UserUpdate } from '../../../../../../shared'
+import { ResultList, UserCreate, UserUpdate, User } from '../../../../../../shared'
 import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestPagination, RestService, User } from '../../../shared'
+import { RestExtractor, RestPagination, RestService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Injectable()
@@ -79,8 +79,11 @@ export class UserService {
       videoQuota = this.bytesPipe.transform(user.videoQuota, 0)
     }
 
+    const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
+
     return Object.assign(user, {
-      videoQuota
+      videoQuota,
+      videoQuotaUsed
     })
   }
 }

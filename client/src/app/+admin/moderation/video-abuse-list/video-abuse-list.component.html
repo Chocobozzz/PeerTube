@@ -1,7 +1,3 @@
-<div class="admin-sub-header">
-  <div i18n class="form-sub-title">Video abuses list</div>
-</div>
-
 <p-table
   [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"

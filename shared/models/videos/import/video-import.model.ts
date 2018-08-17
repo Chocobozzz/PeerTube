@@ -1,5 +1,5 @@
-import { Video } from './video.model'
-import { VideoConstant } from './video-constant.model'
+import { Video } from '../video.model'
+import { VideoConstant } from '../video-constant.model'
 import { VideoImportState } from './video-import-state.enum'
 
 export interface VideoImport {

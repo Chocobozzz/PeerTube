@@ -4,12 +4,15 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } from '../../../../../shared'
 import { ResultList } from '../../../../../shared/models/result-list.model'
-import { UserVideoRateUpdate } from '../../../../../shared/models/videos/user-video-rate-update.model'
-import { UserVideoRate } from '../../../../../shared/models/videos/user-video-rate.model'
-import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
+import {
+  UserVideoRate,
+  UserVideoRateUpdate,
+  VideoChannel,
+  VideoFilter,
+  VideoRateType,
+  VideoUpdate
+} from '../../../../../shared/models/videos'
 import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
-import { VideoRateType } from '../../../../../shared/models/videos/video-rate.type'
-import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
 import { environment } from '../../../environments/environment'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { RestExtractor } from '../rest/rest-extractor.service'
@@ -22,7 +25,6 @@ import { Video } from './video.model'
 import { objectToFormData } from '@app/shared/misc/utils'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
-import { VideoChannel } from '../../../../../shared/models/videos'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { ServerService } from '@app/core'
 

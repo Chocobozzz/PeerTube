@@ -10,7 +10,7 @@ import { forkJoin, Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
+import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -22,13 +22,12 @@ import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { VideoBlacklistComponent } from './modal/video-blacklist.component'
-import { addContextMenu, getVideojsOptions, loadLocale } from '../../../assets/player/peertube-player'
+import { addContextMenu, getVideojsOptions, loadLocaleInVideoJS } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { VideoCaptionService } from '@app/shared/video-caption'
-import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
 
 @Component({
   selector: 'my-video-watch',
@@ -408,11 +407,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       peertubeLink: false,
       poster: this.video.previewUrl,
       startTime,
-      theaterMode: true
+      theaterMode: true,
+      language: this.localeId
     })
 
     if (this.videojsLocaleLoaded === false) {
-      await loadLocale(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
+      await loadLocaleInVideoJS(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
       this.videojsLocaleLoaded = true
     }
 

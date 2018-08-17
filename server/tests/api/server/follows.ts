@@ -27,7 +27,7 @@ import {
 import { rateVideo } from '../../utils/videos/videos'
 import { waitJobs } from '../../utils/server/jobs'
 import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
-import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
+import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect
 

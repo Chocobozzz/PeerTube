@@ -6,7 +6,7 @@ import { checkVideoFilesWereRemoved, doubleFollow, flushAndRunMultipleServers, r
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { waitJobs } from '../../utils/server/jobs'
 import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
-import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
+import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect
 

@@ -16,6 +16,12 @@ post_build_hook () {
   rmdir "./src/locale/pending_target/"
 }
 
+# Previous build failed
+if [ ! -f client/src/locale/target/angular_fr_FR.xml ]; then
+    git checkout -- client/src/locale/target/
+    rm -r client/src/locale/pending_target/
+fi
+
 cd client
 
 rm -rf ./dist ./compiled
@@ -30,8 +36,12 @@ post_build_hook
 
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
-    # Supported languages
-    languages=("fr_FR" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES" "oc")
+    if [ ! -z ${1+x} ] && [ "$1" == "--light-fr" ]; then
+        languages=("fr_FR")
+    else
+        # Supported languages
+        languages=("fr_FR" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES" "oc")
+    fi
 
     for lang in "${languages[@]}"; do
         # TODO: remove when the project will use runtime translations

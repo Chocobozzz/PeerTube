@@ -15,7 +15,7 @@ import {
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
-import { VideoCaption } from '../../../shared/models/videos/video-caption.model'
+import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
 import { CONFIG, STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'

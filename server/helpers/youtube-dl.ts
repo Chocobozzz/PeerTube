@@ -1,8 +1,8 @@
-import * as youtubeDL from 'youtube-dl'
 import { truncate } from 'lodash'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers'
 import { logger } from './logger'
 import { generateVideoTmpPath } from './utils'
+import { YoutubeDlUpdateScheduler } from '../lib/schedulers/youtube-dl-update-scheduler'
 
 export type YoutubeDLInfo = {
   name?: string
@@ -15,9 +15,10 @@ export type YoutubeDLInfo = {
 }
 
 function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
-  return new Promise<YoutubeDLInfo>((res, rej) => {
+  return new Promise<YoutubeDLInfo>(async (res, rej) => {
     const options = [ '-j', '--flat-playlist' ]
 
+    const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.getInfo(url, options, (err, info) => {
       if (err) return rej(err)
 
@@ -35,7 +36,8 @@ function downloadYoutubeDLVideo (url: string) {
 
   const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
 
-  return new Promise<string>((res, rej) => {
+  return new Promise<string>(async (res, rej) => {
+    const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.exec(url, options, async (err, output) => {
       if (err) return rej(err)
 
@@ -52,6 +54,20 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function safeGetYoutubeDL () {
+  let youtubeDL
+
+  try {
+    youtubeDL = require('youtube-dl')
+  } catch (e) {
+    // Download binary
+    await YoutubeDlUpdateScheduler.Instance.execute()
+    youtubeDL = require('youtube-dl')
+  }
+
+  return youtubeDL
+}
 
 function normalizeObject (obj: any) {
   const newObj: any = {}

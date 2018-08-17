@@ -35,6 +35,7 @@ function getVideojsOptions (options: {
   startTime: number | string
   theaterMode: boolean,
   videoCaptions: VideoJSCaption[],
+  language?: string,
   controls?: boolean,
   muted?: boolean,
   loop?: boolean
@@ -72,6 +73,10 @@ function getVideojsOptions (options: {
         enableModifiersForNumbers: false
       }
     })
+  }
+
+  if (options.language && !isDefaultLocale(options.language)) {
+    Object.assign(videojsOptions, { language: options.language })
   }
 
   return videojsOptions
@@ -174,18 +179,42 @@ function addContextMenu (player: any, videoEmbedUrl: string) {
   })
 }
 
-function loadLocale (serverUrl: string, videojs: any, locale: string) {
+function loadLocaleInVideoJS (serverUrl: string, videojs: any, locale: string) {
+  const path = getLocalePath(serverUrl, locale)
+  // It is the default locale, nothing to translate
+  if (!path) return Promise.resolve(undefined)
+
   const completeLocale = getCompleteLocale(locale)
 
-  if (!is18nLocale(completeLocale) || isDefaultLocale(completeLocale)) return Promise.resolve(undefined)
-
-  return fetch(serverUrl + '/client/locales/' + completeLocale + '/player.json')
+  return fetch(path + '/player.json')
     .then(res => res.json())
     .then(json => videojs.addLanguage(getShortLocale(completeLocale), json))
 }
 
+function getServerTranslations (serverUrl: string, locale: string) {
+  const path = getLocalePath(serverUrl, locale)
+  // It is the default locale, nothing to translate
+  if (!path) return Promise.resolve(undefined)
+
+  return fetch(path + '/server.json')
+    .then(res => res.json())
+}
+
+// ############################################################################
+
 export {
-  loadLocale,
+  getServerTranslations,
+  loadLocaleInVideoJS,
   getVideojsOptions,
   addContextMenu
+}
+
+// ############################################################################
+
+function getLocalePath (serverUrl: string, locale: string) {
+  const completeLocale = getCompleteLocale(locale)
+
+  if (!is18nLocale(completeLocale) || isDefaultLocale(completeLocale)) return undefined
+
+  return serverUrl + '/client/locales/' + completeLocale
 }

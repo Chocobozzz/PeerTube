@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { Account } from '@app/shared/account/account.model'
+import { Account } from '../../../shared/account/account.model'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { VideoAbuse, VideoAbuseState } from '../../../../../../shared'
 import { RestPagination, RestTable, VideoAbuseService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
-import { ConfirmService } from '@app/core'
+import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
+import { ConfirmService } from '../../../core/index'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
-import { Video } from '@app/shared/video/video.model'
+import { Video } from '../../../shared/video/video.model'
 
 @Component({
   selector: 'my-video-abuse-list',
