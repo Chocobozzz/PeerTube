@@ -8,6 +8,22 @@
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
 <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+  <div class="form-group" *ngIf="isCreation() === true">
+    <label i18n for="name">Name</label>
+    <div class="input-group">
+      <input
+        type="text" id="name" i18n-placeholder placeholder="Example: my_channel"
+        formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
+      >
+      <div class="input-group-append">
+        <span class="input-group-text">@{{ instanceHost }}</span>
+      </div>
+    </div>
+    <div *ngIf="formErrors['name']" class="form-error">
+      {{ formErrors['name'] }}
+    </div>
+  </div>
+
   <div class="form-group">
     <label i18n for="display-name">Display name</label>
     <input

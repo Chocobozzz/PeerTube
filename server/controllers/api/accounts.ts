@@ -78,7 +78,7 @@ async function listAccountVideos (req: express.Request, res: express.Response, n
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    includeLocalVideos: false,
+    includeLocalVideos: true,
     categoryOneOf: req.query.categoryOneOf,
     licenceOneOf: req.query.licenceOneOf,
     languageOneOf: req.query.languageOneOf,

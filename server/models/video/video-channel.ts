@@ -29,6 +29,7 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { AvatarModel } from '../avatar/avatar'
+import { ServerModel } from '../server/server'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -206,7 +207,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   static loadByIdAndAccount (id: number, accountId: number) {
-    const options = {
+    const query = {
       where: {
         id,
         accountId
@@ -215,7 +216,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return VideoChannelModel
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findOne(options)
+      .findOne(query)
   }
 
   static loadAndPopulateAccount (id: number) {
@@ -225,7 +226,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   static loadByUUIDAndPopulateAccount (uuid: string) {
-    const options = {
+    const query = {
       include: [
         {
           model: ActorModel,
@@ -239,22 +240,10 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return VideoChannelModel
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findOne(options)
+      .findOne(query)
   }
 
-  static loadAndPopulateAccountAndVideos (id: number) {
-    const options = {
-      include: [
-        VideoModel
-      ]
-    }
-
-    return VideoChannelModel
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findById(id, options)
-  }
-
-  static loadLocalByName (name: string) {
+  static loadLocalByNameAndPopulateAccount (name: string) {
     const query = {
       include: [
         {
@@ -268,7 +257,46 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       ]
     }
 
-    return VideoChannelModel.findOne(query)
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findOne(query)
+  }
+
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string) {
+    const query = {
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            preferredUsername: name
+          },
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: { host }
+            }
+          ]
+        }
+      ]
+    }
+
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findOne(query)
+  }
+
+  static loadAndPopulateAccountAndVideos (id: number) {
+    const options = {
+      include: [
+        VideoModel
+      ]
+    }
+
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
+      .findById(id, options)
   }
 
   toFormattedJSON (): VideoChannel {

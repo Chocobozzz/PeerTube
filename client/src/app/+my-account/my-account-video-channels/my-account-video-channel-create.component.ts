@@ -29,8 +29,13 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
     super()
   }
 
+  get instanceHost () {
+    return window.location.host
+  }
+
   ngOnInit () {
     this.buildForm({
+      name: this.videoChannelValidatorsService.VIDEO_CHANNEL_NAME,
       'display-name': this.videoChannelValidatorsService.VIDEO_CHANNEL_DISPLAY_NAME,
       description: this.videoChannelValidatorsService.VIDEO_CHANNEL_DESCRIPTION,
       support: this.videoChannelValidatorsService.VIDEO_CHANNEL_SUPPORT
@@ -42,6 +47,7 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
 
     const body = this.form.value
     const videoChannelCreate: VideoChannelCreate = {
+      name: body.name,
       displayName: body['display-name'],
       description: body.description || null,
       support: body.support || null

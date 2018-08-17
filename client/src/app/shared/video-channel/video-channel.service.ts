@@ -22,8 +22,8 @@ export class VideoChannelService {
     private restExtractor: RestExtractor
   ) {}
 
-  getVideoChannel (videoChannelUUID: string) {
-    return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID)
+  getVideoChannel (videoChannelName: string) {
+    return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName)
                .pipe(
                  map(videoChannelHash => new VideoChannel(videoChannelHash)),
                  tap(videoChannel => this.videoChannelLoaded.next(videoChannel)),

@@ -36,9 +36,16 @@
   border-radius: 3px;
   padding-left: 15px;
   padding-right: 15px;
+}
 
-  &::placeholder {
-    color: #585858;
+@mixin peertube-input-group($width) {
+  width: $width;
+  height: $button-height;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  .input-group-text{
+    font-size: 14px;
   }
 }
 

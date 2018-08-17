@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import { createUser, doubleFollow, flushAndRunMultipleServers, follow, getVideosList, unfollow, userLogin } from '../../utils'
-import { getMyUserInformation, killallServers, ServerInfo, uploadVideo } from '../../utils/index'
+import { killallServers, ServerInfo, uploadVideo } from '../../utils/index'
 import { setAccessTokensToServers } from '../../utils/users/login'
 import { Video, VideoChannel } from '../../../../shared/models/videos'
 import { waitJobs } from '../../utils/server/jobs'
@@ -18,8 +18,7 @@ const expect = chai.expect
 
 describe('Test users subscriptions', function () {
   let servers: ServerInfo[] = []
-  const users: { accessToken: string, videoChannelName: string }[] = []
-  let rootChannelNameServer1: string
+  const users: { accessToken: string }[] = []
 
   before(async function () {
     this.timeout(120000)
@@ -32,19 +31,13 @@ describe('Test users subscriptions', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    rootChannelNameServer1 = res.body.videoChannels[0].name
-
     {
       for (const server of servers) {
         const user = { username: 'user' + server.serverNumber, password: 'password' }
         await createUser(server.url, server.accessToken, user.username, user.password)
 
         const accessToken = await userLogin(server, user)
-        const res = await getMyUserInformation(server.url, accessToken)
-        const videoChannels: VideoChannel[] = res.body.videoChannels
-
-        users.push({ accessToken, videoChannelName: videoChannels[0].name })
+        users.push({ accessToken })
 
         const videoName1 = 'video 1-' + server.serverNumber
         await uploadVideo(server.url, accessToken, { name: videoName1 })
@@ -64,10 +57,10 @@ describe('Test users subscriptions', function () {
   })
 
   it('User of server 1 should follow user of server 3 and root of server 1', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
-    await addUserSubscription(servers[0].url, users[0].accessToken, users[2].videoChannelName + '@localhost:9003')
-    await addUserSubscription(servers[0].url, users[0].accessToken, rootChannelNameServer1 + '@localhost:9001')
+    await addUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:9003')
+    await addUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:9001')
 
     await waitJobs(servers)
 
@@ -103,8 +96,8 @@ describe('Test users subscriptions', function () {
       expect(subscriptions).to.be.an('array')
       expect(subscriptions).to.have.lengthOf(2)
 
-      expect(subscriptions[0].name).to.equal(users[2].videoChannelName)
-      expect(subscriptions[1].name).to.equal(rootChannelNameServer1)
+      expect(subscriptions[0].name).to.equal('user3_channel')
+      expect(subscriptions[1].name).to.equal('root_channel')
     }
   })
 
@@ -131,7 +124,7 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should upload a video by root on server 1 and see it in the subscription videos', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     const videoName = 'video server 1 added after follow'
     await uploadVideo(servers[0].url, servers[0].accessToken, { name: videoName })
@@ -172,7 +165,7 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should have server 1 follow server 3 and display server 3 videos', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     await follow(servers[0].url, [ servers[2].url ], servers[0].accessToken)
 
@@ -190,7 +183,7 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should remove follow server 1 -> server 3 and hide server 3 videos', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     await unfollow(servers[0].url, servers[0].accessToken, servers[2])
 
@@ -230,7 +223,7 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should remove user of server 3 subscription', async function () {
-    await removeUserSubscription(servers[0].url, users[0].accessToken, users[2].videoChannelName + '@localhost:9003')
+    await removeUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:9003')
 
     await waitJobs(servers)
   })
@@ -249,7 +242,7 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should remove the root subscription and not display the videos anymore', async function () {
-    await removeUserSubscription(servers[0].url, users[0].accessToken, rootChannelNameServer1 + '@localhost:9001')
+    await removeUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:9001')
 
     await waitJobs(servers)
 
@@ -275,9 +268,9 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should follow user of server 3 again', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
-    await addUserSubscription(servers[0].url, users[0].accessToken, users[2].videoChannelName + '@localhost:9003')
+    await addUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:9003')
 
     await waitJobs(servers)
 

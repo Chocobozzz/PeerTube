@@ -5,7 +5,6 @@ import 'mocha'
 import {
   createUser,
   flushTests,
-  getMyUserInformation,
   killallServers,
   makeDeleteRequest,
   makeGetRequest,
@@ -21,7 +20,6 @@ describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
   let server: ServerInfo
   let userAccessToken = ''
-  let userChannelUUID: string
 
   // ---------------------------------------------------------------
 
@@ -40,11 +38,6 @@ describe('Test user subscriptions API validators', function () {
     }
     await createUser(server.url, server.accessToken, user.username, user.password)
     userAccessToken = await userLogin(server, user)
-
-    {
-      const res = await getMyUserInformation(server.url, server.accessToken)
-      userChannelUUID = res.body.videoChannels[ 0 ].uuid
-    }
   })
 
   describe('When listing my subscriptions', function () {
@@ -69,7 +62,7 @@ describe('Test user subscriptions API validators', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await await makeGetRequest({
+      await makeGetRequest({
         url: server.url,
         path,
         token: userAccessToken,
@@ -102,7 +95,7 @@ describe('Test user subscriptions API validators', function () {
     })
 
     it('Should success with the correct parameters', async function () {
-      await await makeGetRequest({
+      await makeGetRequest({
         url: server.url,
         path,
         token: userAccessToken,
@@ -116,7 +109,7 @@ describe('Test user subscriptions API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: { uri: userChannelUUID + '@localhost:9001' },
+        fields: { uri: 'user1_channel@localhost:9001' },
         statusCodeExpected: 401
       })
     })
@@ -152,7 +145,7 @@ describe('Test user subscriptions API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        fields: { uri: userChannelUUID + '@localhost:9001' },
+        fields: { uri: 'user1_channel@localhost:9001' },
         statusCodeExpected: 204
       })
     })
@@ -162,7 +155,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with a non authenticated user', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/' + userChannelUUID + '@localhost:9001',
+        path: path + '/user1_channel@localhost:9001',
         statusCodeExpected: 401
       })
     })
@@ -202,7 +195,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should success with the correct parameters', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/' + userChannelUUID + '@localhost:9001',
+        path: path + '/user1_channel@localhost:9001',
         token: server.accessToken,
         statusCodeExpected: 204
       })

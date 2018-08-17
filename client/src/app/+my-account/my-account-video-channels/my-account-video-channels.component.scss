@@ -30,7 +30,9 @@
     a.video-channel-names {
       @include disable-default-a-behaviour;
 
+      width: fit-content;
       display: flex;
+      align-items: baseline;
       color: #000;
 
       .video-channel-display-name {
@@ -41,6 +43,7 @@
       .video-channel-name {
         font-size: 14px;
         color: #777272;
+        margin-left: 5px;
       }
     }
   }

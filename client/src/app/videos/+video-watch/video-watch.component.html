@@ -37,7 +37,7 @@
           </div>
 
           <div class="video-info-channel">
-            <a [routerLink]="[ '/video-channels', video.channel.uuid ]" i18n-title title="Go the channel page">
+            <a [routerLink]="[ '/video-channels', video.channel.name ]" i18n-title title="Go the channel page">
               {{ video.channel.displayName }}
 
               <img [src]="video.videoChannelAvatarUrl" alt="Video channel avatar" />

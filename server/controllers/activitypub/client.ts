@@ -6,8 +6,8 @@ import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
 import { buildVideoAnnounce } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { createActivityData } from '../../lib/activitypub/send/send-create'
-import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
-import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
+import { asyncMiddleware, executeIfActivityPub, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
+import { videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
@@ -80,16 +80,16 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
   executeIfActivityPub(asyncMiddleware(videoCommentController))
 )
 
-activityPubClientRouter.get('/video-channels/:id',
-  executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
+activityPubClientRouter.get('/video-channels/:name',
+  executeIfActivityPub(asyncMiddleware(localVideoChannelValidator)),
   executeIfActivityPub(asyncMiddleware(videoChannelController))
 )
-activityPubClientRouter.get('/video-channels/:id/followers',
-  executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
+activityPubClientRouter.get('/video-channels/:name/followers',
+  executeIfActivityPub(asyncMiddleware(localVideoChannelValidator)),
   executeIfActivityPub(asyncMiddleware(videoChannelFollowersController))
 )
-activityPubClientRouter.get('/video-channels/:id/following',
-  executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
+activityPubClientRouter.get('/video-channels/:name/following',
+  executeIfActivityPub(asyncMiddleware(localVideoChannelValidator)),
   executeIfActivityPub(asyncMiddleware(videoChannelFollowingController))
 )
 

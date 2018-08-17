@@ -10,13 +10,12 @@ import {
   setDefaultPagination,
   setDefaultSort,
   videoChannelsAddValidator,
-  videoChannelsGetValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../middlewares'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { videosSortValidator } from '../../middlewares/validators'
+import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
@@ -50,7 +49,7 @@ videoChannelRouter.post('/',
   asyncRetryTransactionMiddleware(addVideoChannel)
 )
 
-videoChannelRouter.post('/:id/avatar/pick',
+videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
   // Check the rights
@@ -59,25 +58,25 @@ videoChannelRouter.post('/:id/avatar/pick',
   asyncMiddleware(updateVideoChannelAvatar)
 )
 
-videoChannelRouter.put('/:id',
+videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsUpdateValidator),
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
-videoChannelRouter.delete('/:id',
+videoChannelRouter.delete('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
-videoChannelRouter.get('/:id',
-  asyncMiddleware(videoChannelsGetValidator),
+videoChannelRouter.get('/:nameWithHost',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   asyncMiddleware(getVideoChannel)
 )
 
-videoChannelRouter.get('/:id/videos',
-  asyncMiddleware(videoChannelsGetValidator),
+videoChannelRouter.get('/:nameWithHost/videos',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
@@ -215,7 +214,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    includeLocalVideos: false,
+    includeLocalVideos: true,
     categoryOneOf: req.query.categoryOneOf,
     licenceOneOf: req.query.licenceOneOf,
     languageOneOf: req.query.languageOneOf,

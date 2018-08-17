@@ -56,7 +56,7 @@ describe('Test a single server', function () {
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
     channel: {
-      name: 'Default root channel',
+      name: 'Main root channel',
       description: '',
       isLocal: true
     },
@@ -87,7 +87,7 @@ describe('Test a single server', function () {
     duration: 5,
     commentsEnabled: false,
     channel: {
-      name: 'Default root channel',
+      name: 'Main root channel',
       description: '',
       isLocal: true
     },

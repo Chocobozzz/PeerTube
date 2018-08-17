@@ -6,7 +6,6 @@ import { join } from 'path'
 import * as request from 'supertest'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-
 import {
   addVideoChannel,
   checkVideoFilesWereRemoved,
@@ -60,6 +59,7 @@ describe('Test multiple servers', function () {
 
     {
       const videoChannel = {
+        name: 'super_channel_name',
         displayName: 'my channel',
         description: 'super channel'
       }
@@ -201,7 +201,7 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default user1 channel',
+            name: 'Main user1 channel',
             description: 'super channel',
             isLocal
           },
@@ -307,7 +307,7 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            name: 'Main root channel',
             description: '',
             isLocal
           },
@@ -339,7 +339,7 @@ describe('Test multiple servers', function () {
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            name: 'Main root channel',
             description: '',
             isLocal
           },
@@ -647,7 +647,7 @@ describe('Test multiple servers', function () {
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            name: 'Main root channel',
             description: '',
             isLocal
           },
@@ -967,7 +967,7 @@ describe('Test multiple servers', function () {
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            name: 'Main root channel',
             description: '',
             isLocal
           },

@@ -7,9 +7,8 @@ import { buildActorInstance, getVideoChannelActivityPubUrl } from './activitypub
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountModel, t: Sequelize.Transaction) {
   const uuid = uuidv4()
-  const url = getVideoChannelActivityPubUrl(uuid)
-  // We use the name as uuid
-  const actorInstance = buildActorInstance('Group', url, uuid, uuid)
+  const url = getVideoChannelActivityPubUrl(videoChannelInfo.name)
+  const actorInstance = buildActorInstance('Group', url, videoChannelInfo.name, uuid)
 
   const actorInstanceCreated = await actorInstance.save({ transaction: t })
 

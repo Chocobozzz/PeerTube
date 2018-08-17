@@ -97,10 +97,10 @@ function updateVideoChannelAvatar (options: {
   url: string,
   accessToken: string,
   fixture: string,
-  videoChannelId: string | number
+  videoChannelName: string | number
 }) {
 
-  const path = '/api/v1/video-channels/' + options.videoChannelId + '/avatar/pick'
+  const path = '/api/v1/video-channels/' + options.videoChannelName + '/avatar/pick'
 
   return updateAvatarRequest(Object.assign(options, { path }))
 }
