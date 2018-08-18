@@ -15,6 +15,10 @@ function isUserVideoQuotaValid (value: string) {
   return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA)
 }
 
+function isUserVideoQuotaDailyValid (value: string) {
+  return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA_DAILY)
+}
+
 function isUserUsernameValid (value: string) {
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
@@ -66,6 +70,7 @@ export {
   isUserBlockedReasonValid,
   isUserRoleValid,
   isUserVideoQuotaValid,
+  isUserVideoQuotaDailyValid,
   isUserUsernameValid,
   isUserNSFWPolicyValid,
   isUserAutoPlayVideoValid,

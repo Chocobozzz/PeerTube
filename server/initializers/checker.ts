@@ -47,7 +47,7 @@ function checkMissedConfig () {
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
     'log.level',
-    'user.video_quota',
+    'user.video_quota', 'user.video_quota_daily',
     'cache.previews.size', 'admin.email',
     'signup.enabled', 'signup.limit', 'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
     'transcoding.enabled', 'transcoding.threads',

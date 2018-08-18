@@ -283,9 +283,11 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
   // We did not load channels in res.locals.user
   const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
   const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
+  const videoQuotaUsedDaily = await UserModel.getOriginalVideoFileTotalDailyFromUser(user)
 
   const data: UserVideoQuota = {
-    videoQuotaUsed
+    videoQuotaUsed,
+    videoQuotaUsedDaily
   }
   return res.json(data)
 }

@@ -152,7 +152,8 @@ describe('Test config', function () {
         email: 'superadmin1@example.com'
       },
       user: {
-        videoQuota: 5242881
+        videoQuota: 5242881,
+        videoQuotaDaily: -1
       },
       transcoding: {
         enabled: true,

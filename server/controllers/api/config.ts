@@ -103,7 +103,8 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       }
     },
     user: {
-      videoQuota: CONFIG.USER.VIDEO_QUOTA
+      videoQuota: CONFIG.USER.VIDEO_QUOTA,
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     }
   }
 
@@ -154,6 +155,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdate.cache.captions.size = parseInt('' + toUpdate.cache.captions.size, 10)
   toUpdate.signup.limit = parseInt('' + toUpdate.signup.limit, 10)
   toUpdate.user.videoQuota = parseInt('' + toUpdate.user.videoQuota, 10)
+  toUpdate.user.videoQuotaDaily = parseInt('' + toUpdate.user.videoQuotaDaily, 10)
   toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
 
   // camelCase to snake_case key
@@ -223,7 +225,8 @@ function customConfig (): CustomConfig {
       email: CONFIG.ADMIN.EMAIL
     },
     user: {
-      videoQuota: CONFIG.USER.VIDEO_QUOTA
+      videoQuota: CONFIG.USER.VIDEO_QUOTA,
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,

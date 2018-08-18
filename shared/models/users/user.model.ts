@@ -11,6 +11,7 @@ export interface User {
   autoPlayVideo: boolean
   role: UserRole
   videoQuota: number
+  videoQuotaDaily: number
   createdAt: Date
   account: Account
   videoChannels?: VideoChannel[]

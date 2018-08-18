@@ -3,6 +3,8 @@ import { FormReactive } from '../../../shared'
 import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
 
 export abstract class UserEdit extends FormReactive {
+    
+  // These are used by a HTML select, so convert key into strings
   videoQuotaOptions = [
     { value: -1, label: 'Unlimited' },
     { value: 0, label: '0' },
@@ -12,7 +14,17 @@ export abstract class UserEdit extends FormReactive {
     { value: 5 * 1024 * 1024 * 1024, label: '5GB' },
     { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
-  ].map(q => ({ value: q.value.toString(), label: q.label })) // Used by a HTML select, so convert key into strings
+  ].map(q => ({ value: q.value.toString(), label: q.label }))
+  videoQuotaDailyOptions = [
+    { value: -1, label: 'Unlimited' },
+    { value: 0, label: '0' },
+    { value: 10 * 1024 * 1024, label: '10MB' },
+    { value: 50 * 1024 * 1024, label: '50MB' },
+    { value: 100 * 1024 * 1024, label: '100MB' },
+    { value: 500 * 1024 * 1024, label: '500MB' },
+    { value: 2 * 1024 * 1024 * 1024, label: '2GB' },
+    { value: 5 * 1024 * 1024 * 1024, label: '5GB' }
+  ].map(q => ({ value: q.value.toString(), label: q.label }))
 
   roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
 

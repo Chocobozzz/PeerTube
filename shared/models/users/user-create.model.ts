@@ -5,5 +5,6 @@ export interface UserCreate {
   password: string
   email: string
   videoQuota: number
+  videoQuotaDaily: number
   role: UserRole
 }

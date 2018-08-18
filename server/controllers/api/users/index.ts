@@ -134,7 +134,8 @@ async function createUser (req: express.Request, res: express.Response) {
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     autoPlayVideo: true,
     role: body.role,
-    videoQuota: body.videoQuota
+    videoQuota: body.videoQuota,
+    videoQuotaDaily: body.videoQuotaDaily
   })
 
   const { user, account } = await createUserAccountAndChannel(userToCreate)
@@ -163,7 +164,8 @@ async function registerUser (req: express.Request, res: express.Response) {
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     autoPlayVideo: true,
     role: UserRole.USER,
-    videoQuota: CONFIG.USER.VIDEO_QUOTA
+    videoQuota: CONFIG.USER.VIDEO_QUOTA,
+    videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
   })
 
   const { user } = await createUserAccountAndChannel(userToCreate)
@@ -219,6 +221,7 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
 
   if (body.email !== undefined) userToUpdate.email = body.email
   if (body.videoQuota !== undefined) userToUpdate.videoQuota = body.videoQuota
+  if (body.videoQuotaDaily !== undefined) userToUpdate.videoQuotaDaily = body.videoQuotaDaily
   if (body.role !== undefined) userToUpdate.role = body.role
 
   const user = await userToUpdate.save()

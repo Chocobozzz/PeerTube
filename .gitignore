@@ -40,3 +40,4 @@
 /*.asc
 /server/tools/import-mediacore.ts
 /docker-volume/
+/nbproject/private/

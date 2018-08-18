@@ -36,11 +36,12 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    const defaultValues = { videoQuota: '-1' }
+    const defaultValues = { videoQuota: '-1', videoQuotaDaily: '-1' }
     this.buildForm({
       email: this.userValidatorsService.USER_EMAIL,
       role: this.userValidatorsService.USER_ROLE,
-      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY
     }, defaultValues)
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -64,6 +65,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     // A select in HTML is always mapped as a string, we convert it to number
     userUpdate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
+    userUpdate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
     this.userService.updateUser(this.userId, userUpdate).subscribe(
       () => {
@@ -93,7 +95,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     this.form.patchValue({
       email: userJson.email,
       role: userJson.role,
-      videoQuota: userJson.videoQuota
+      videoQuota: userJson.videoQuota,
+      videoQuotaDaily: userJson.videoQuotaDaily
     })
   }
 }
