@@ -168,9 +168,8 @@ $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
 ```
 
-### FreeBSD
-
-If you're using FreeBSD, copy the startup script and update rc.conf:
+**FreeBSD**
+On FreeBSD, copy the startup script and update rc.conf:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
