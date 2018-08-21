@@ -42,16 +42,17 @@
 
               <img [src]="video.videoChannelAvatarUrl" alt="Video channel avatar" />
             </a>
-            <!-- Here will be the subscribe button -->
+
+            <my-subscribe-button [videoChannel]="video.channel"></my-subscribe-button>
           </div>
 
           <div class="video-info-by">
-            <a [routerLink]="[ '/accounts', video.by ]" i18n-title title="Go to the account page">
-              <span i18n>By {{ video.by }}</span>
+            <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Go to the account page">
+              <span i18n>By {{ video.byAccount }}</span>
               <img [src]="video.accountAvatarUrl" alt="Account avatar" />
             </a>
 
-            <my-help helpType="custom" i18n-customHtml customHtml="You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.name}}@{{video.account.host}}</strong> and subscribe there. Subscription as a PeerTube user is being worked on in <a href='https://github.com/Chocobozzz/PeerTube/issues/470'>#470</a>."></my-help>
+            <my-help helpType="custom" i18n-customHtml customHtml="You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.name}}@{{video.account.host}}</strong> and subscribe there."></my-help>
           </div>
         </div>
 

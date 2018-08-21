@@ -135,6 +135,12 @@ menu {
 
         margin-right: 18px;
 
+        &.icon-videos-subscriptions {
+          position: relative;
+          top: -2px;
+          background-image: url('../../assets/images/menu/subscriptions.svg');
+        }
+
         &.icon-videos-trending {
           position: relative;
           top: -2px;

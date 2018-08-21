@@ -3,4 +3,19 @@
 
 .sub-menu {
   @include sub-menu-with-actor;
+
+  .actor, .actor-info {
+    width: 100%;
+  }
+
+  .actor-name {
+    flex-grow: 1;
+  }
+
+  my-subscribe-button {
+    /deep/ span[role=button] {
+      padding: 7px 12px;
+      font-size: 16px;
+    }
+  }
 }
