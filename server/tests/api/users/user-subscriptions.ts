@@ -11,7 +11,8 @@ import {
   addUserSubscription,
   listUserSubscriptions,
   listUserSubscriptionVideos,
-  removeUserSubscription
+  removeUserSubscription,
+  getUserSubscription
 } from '../../utils/users/user-subscriptions'
 
 const expect = chai.expect
@@ -98,6 +99,30 @@ describe('Test users subscriptions', function () {
 
       expect(subscriptions[0].name).to.equal('user3_channel')
       expect(subscriptions[1].name).to.equal('root_channel')
+    }
+  })
+
+  it('Should get subscription', async function () {
+    {
+      const res = await getUserSubscription(servers[ 0 ].url, users[ 0 ].accessToken, 'user3_channel@localhost:9003')
+      const videoChannel: VideoChannel = res.body
+
+      expect(videoChannel.name).to.equal('user3_channel')
+      expect(videoChannel.host).to.equal('localhost:9003')
+      expect(videoChannel.displayName).to.equal('Main user3 channel')
+      expect(videoChannel.followingCount).to.equal(0)
+      expect(videoChannel.followersCount).to.equal(1)
+    }
+
+    {
+      const res = await getUserSubscription(servers[ 0 ].url, users[ 0 ].accessToken, 'root_channel@localhost:9001')
+      const videoChannel: VideoChannel = res.body
+
+      expect(videoChannel.name).to.equal('root_channel')
+      expect(videoChannel.host).to.equal('localhost:9001')
+      expect(videoChannel.displayName).to.equal('Main root channel')
+      expect(videoChannel.followingCount).to.equal(0)
+      expect(videoChannel.followersCount).to.equal(1)
     }
   })
 

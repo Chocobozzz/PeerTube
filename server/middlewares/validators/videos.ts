@@ -137,7 +137,7 @@ const videosGetValidator = [
 
     // Video private or blacklisted
     if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
-      authenticate(req, res, () => {
+      return authenticate(req, res, () => {
         const user: UserModel = res.locals.oauth.token.User
 
         // Only the owner or a user that have blacklist rights can see the video

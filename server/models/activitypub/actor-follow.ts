@@ -28,6 +28,7 @@ import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
 import { ActorModel } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
+import { IIncludeOptions } from '../../../node_modules/sequelize-typescript/lib/interfaces/IIncludeOptions'
 
 @Table({
   tableName: 'actorFollow',
@@ -166,28 +167,30 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   }
 
   static loadByActorAndTargetNameAndHost (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
-    const actorFollowingPartInclude = {
+    const actorFollowingPartInclude: IIncludeOptions = {
       model: ActorModel,
       required: true,
       as: 'ActorFollowing',
       where: {
         preferredUsername: targetName
-      }
+      },
+      include: [
+        {
+          model: VideoChannelModel,
+          required: false
+        }
+      ]
     }
 
     if (targetHost === null) {
       actorFollowingPartInclude.where['serverId'] = null
     } else {
-      Object.assign(actorFollowingPartInclude, {
-        include: [
-          {
-            model: ServerModel,
-            required: true,
-            where: {
-              host: targetHost
-            }
-          }
-        ]
+      actorFollowingPartInclude.include.push({
+        model: ServerModel,
+        required: true,
+        where: {
+          host: targetHost
+        }
       })
     }
 

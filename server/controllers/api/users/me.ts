@@ -12,7 +12,7 @@ import {
   setDefaultPagination,
   setDefaultSort,
   userSubscriptionAddValidator,
-  userSubscriptionRemoveValidator,
+  userSubscriptionGetValidator,
   usersUpdateMeValidator,
   usersVideoRatingValidator
 } from '../../../middlewares'
@@ -97,6 +97,17 @@ meRouter.post('/me/avatar/pick',
 
 // ##### Subscriptions part #####
 
+meRouter.get('/me/subscriptions/videos',
+  authenticate,
+  authenticate,
+  paginationValidator,
+  videosSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  commonVideosFiltersValidator,
+  asyncMiddleware(getUserSubscriptionVideos)
+)
+
 meRouter.get('/me/subscriptions',
   authenticate,
   paginationValidator,
@@ -112,21 +123,16 @@ meRouter.post('/me/subscriptions',
   asyncMiddleware(addUserSubscription)
 )
 
-meRouter.delete('/me/subscriptions/:uri',
+meRouter.get('/me/subscriptions/:uri',
   authenticate,
-  userSubscriptionRemoveValidator,
-  asyncMiddleware(deleteUserSubscription)
+  userSubscriptionGetValidator,
+  getUserSubscription
 )
 
-meRouter.get('/me/subscriptions/videos',
+meRouter.delete('/me/subscriptions/:uri',
   authenticate,
-  authenticate,
-  paginationValidator,
-  videosSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  commonVideosFiltersValidator,
-  asyncMiddleware(getUserSubscriptionVideos)
+  userSubscriptionGetValidator,
+  asyncMiddleware(deleteUserSubscription)
 )
 
 // ---------------------------------------------------------------------------
@@ -151,6 +157,12 @@ async function addUserSubscription (req: express.Request, res: express.Response)
           .catch(err => logger.error('Cannot create follow job for subscription %s.', req.body.uri, err))
 
   return res.status(204).end()
+}
+
+function getUserSubscription (req: express.Request, res: express.Response) {
+  const subscription: ActorFollowModel = res.locals.subscription
+
+  return res.json(subscription.ActorFollowing.VideoChannel.toFormattedJSON())
 }
 
 async function deleteUserSubscription (req: express.Request, res: express.Response) {
