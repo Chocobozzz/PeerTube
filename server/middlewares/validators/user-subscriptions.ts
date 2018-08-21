@@ -20,11 +20,11 @@ const userSubscriptionAddValidator = [
   }
 ]
 
-const userSubscriptionRemoveValidator = [
+const userSubscriptionGetValidator = [
   param('uri').custom(isValidActorHandle).withMessage('Should have a valid URI to unfollow'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking unfollow parameters', { parameters: req.params })
+    logger.debug('Checking userSubscriptionGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
@@ -34,7 +34,7 @@ const userSubscriptionRemoveValidator = [
     const user: UserModel = res.locals.oauth.token.User
     const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHost(user.Account.Actor.id, name, host)
 
-    if (!subscription) {
+    if (!subscription || !subscription.ActorFollowing.VideoChannel) {
       return res
         .status(404)
         .json({
@@ -52,7 +52,7 @@ const userSubscriptionRemoveValidator = [
 
 export {
   userSubscriptionAddValidator,
-  userSubscriptionRemoveValidator
+  userSubscriptionGetValidator
 }
 
 // ---------------------------------------------------------------------------

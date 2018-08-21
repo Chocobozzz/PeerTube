@@ -61,7 +61,7 @@ describe('Test user subscriptions API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,
@@ -94,7 +94,7 @@ describe('Test user subscriptions API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
         path,
@@ -140,13 +140,64 @@ describe('Test user subscriptions API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makePostBodyRequest({
         url: server.url,
         path,
         token: server.accessToken,
         fields: { uri: 'user1_channel@localhost:9001' },
         statusCodeExpected: 204
+      })
+    })
+  })
+
+  describe('When getting a subscription', function () {
+    it('Should fail with a non authenticated user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + '/user1_channel@localhost:9001',
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should fail with bad URIs', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + '/root',
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path: path + '/root@',
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path: path + '/root@hello@',
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+    })
+
+    it('Should fail with an unknown subscription', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + '/root1@localhost:9001',
+        token: server.accessToken,
+        statusCodeExpected: 404
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: path + '/user1_channel@localhost:9001',
+        token: server.accessToken,
+        statusCodeExpected: 200
       })
     })
   })
@@ -192,7 +243,7 @@ describe('Test user subscriptions API validators', function () {
       })
     })
 
-    it('Should success with the correct parameters', async function () {
+    it('Should succeed with the correct parameters', async function () {
       await makeDeleteRequest({
         url: server.url,
         path: path + '/user1_channel@localhost:9001',

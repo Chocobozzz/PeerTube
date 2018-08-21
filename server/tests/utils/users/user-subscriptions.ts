@@ -36,6 +36,17 @@ function listUserSubscriptionVideos (url: string, token: string, sort = '-create
   })
 }
 
+function getUserSubscription (url: string, token: string, uri: string, statusCodeExpected = 200) {
+  const path = '/api/v1/users/me/subscriptions/' + uri
+
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
+
 function removeUserSubscription (url: string, token: string, uri: string, statusCodeExpected = 204) {
   const path = '/api/v1/users/me/subscriptions/' + uri
 
@@ -52,6 +63,7 @@ function removeUserSubscription (url: string, token: string, uri: string, status
 export {
   addUserSubscription,
   listUserSubscriptions,
+  getUserSubscription,
   listUserSubscriptionVideos,
   removeUserSubscription
 }
