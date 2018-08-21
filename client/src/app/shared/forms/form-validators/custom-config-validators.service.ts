@@ -72,10 +72,10 @@ export class CustomConfigValidatorsService {
     }
 
     this.TRANSCODING_THREADS = {
-      VALIDATORS: [ Validators.required, Validators.min(1) ],
+      VALIDATORS: [ Validators.required, Validators.min(0) ],
       MESSAGES: {
         'required': this.i18n('Transcoding threads is required.'),
-        'min': this.i18n('Transcoding threads must be greater than 1.')
+        'min': this.i18n('Transcoding threads must be greater or equal to 0.')
       }
     }
   }
