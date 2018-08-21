@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.0.0-beta.11
+
+**If you have not updated to v1.0.0-beta.10, see the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### Features
+
+ * Add ability to import videos from a URL (YouTube, Dailymotion, Vimeo, raw file etc) or torrent file/magnet. 
+ Should be explicitly enabled by the administrator in the configuration file
+ * Add german, spanish, taiwan (traditional chinese) and occitan languages
+ * Add ability to delete our account
+ * Add ability to ban a user
+ * Add ability to set a moderation comment to an abuse
+ * Add state (pending, accepted, rejected) attribute to an abuse
+ * Add ability to set a reason when blacklisting a video
+ * Add ability to blacklist local videos
+ * Improve abuse and blacklist tables
+ * Add user quota used in users list
+ * Tracker only accept known infohash (avoid people to use your tracker for files unrelated to PeerTube)
+ * Add database pool configuration ([@rigelk](https://github.com/rigelk))
+ * Add audit log ([@Nautigsam](https://github.com/Nautigsam))
+ * Add ffmpeg auto thread ([@jorropo](https://github.com/jorropo))
+ * Upgrade to bootstrap 4
+ * DNT support
+
+### Bug fixes
+ 
+ * Fix videos FPS federation
+ * Cleanup request files on bad request
+ * Handle truncated markdown links
+ * Fix dropdown position in menu
+ * Translate subtitle languages in player
+ * Translate player according the language of the interface
+ * Fix reset my password button ([@joshmorel](https://github.com/joshmorel))
+
+
 ## v1.0.0-beta.10
 
 **See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
