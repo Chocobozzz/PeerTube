@@ -38,6 +38,11 @@
       <div class="panel-block">
         <div i18n class="block-title">Videos</div>
 
+        <a *ngIf="isLoggedIn" routerLink="/videos/subscriptions" routerLinkActive="active">
+          <span class="icon icon-videos-subscriptions"></span>
+          <ng-container i18n>Subscriptions</ng-container>
+        </a>
+
         <a routerLink="/videos/trending" routerLinkActive="active">
           <span class="icon icon-videos-trending"></span>
           <ng-container i18n>Trending</ng-container>

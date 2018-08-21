@@ -8,9 +8,12 @@ import { Actor } from '@app/shared/actor/actor.model'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
-  by: string
+  byVideoChannel: string
+  byAccount: string
+
   accountAvatarUrl: string
   videoChannelAvatarUrl: string
+
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
@@ -110,7 +113,8 @@ export class Video implements VideoServerModel {
     this.account = hash.account
     this.channel = hash.channel
 
-    this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
+    this.byAccount = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
+    this.byVideoChannel = Actor.CREATE_BY_STRING(hash.channel.name, hash.channel.host)
     this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
     this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.channel)
 

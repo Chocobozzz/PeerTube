@@ -29,6 +29,7 @@ import { getSort } from '../utils'
 import { ActorModel } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { IIncludeOptions } from '../../../node_modules/sequelize-typescript/lib/interfaces/IIncludeOptions'
+import { AccountModel } from '../account/account'
 
 @Table({
   tableName: 'actorFollow',
@@ -262,7 +263,13 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           include: [
             {
               model: VideoChannelModel,
-              required: true
+              required: true,
+              include: [
+                {
+                  model: AccountModel,
+                  required: true
+                }
+              ]
             }
           ]
         }

@@ -14,6 +14,7 @@ import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-accoun
 import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-info.component'
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settings/my-account-danger-zone'
+import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settin
     MyAccountVideoChannelUpdateComponent,
     ActorAvatarInfoComponent,
     MyAccountVideoImportsComponent,
-    MyAccountDangerZoneComponent
+    MyAccountDangerZoneComponent,
+    MyAccountSubscriptionsComponent
   ],
 
   exports: [

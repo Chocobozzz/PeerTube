@@ -38,7 +38,8 @@
       font-size: 13px;
     }
 
-    .video-miniature-account {
+    .video-miniature-account,
+    .video-miniature-channel {
       @include disable-default-a-behaviour;
 
       display: block;

@@ -1,16 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-.create-button {
-  @include create-button('../../../assets/images/global/add.svg');
-}
-
-/deep/ .action-button {
-  &.action-button-delete {
-    margin-right: 10px;
-  }
-}
-
 .video-channel {
   @include row-blocks;
 
@@ -44,33 +34,16 @@
     }
   }
 
-  .video-channel-buttons {
-    min-width: 190px;
-  }
-}
-
-.video-channels-header {
-  text-align: right;
-  margin: 20px 0 50px;
-}
-
-@media screen and (max-width: 800px) {
-  .video-channels-header {
-    text-align: center;
+  .actor-owner {
+    @include actor-owner;
   }
 
-  .video-channel {
-    .video-channel-names {
-      flex-direction: column;
-      align-items: center !important;
-    }
-
-    img {
-      margin-right: 0;
-    }
-
-    .video-channel-buttons {
-      margin-top: 10px;
+  my-subscribe-button {
+    /deep/ span[role=button] {
+      padding: 7px 12px;
+      font-size: 16px;
     }
   }
 }
+
+

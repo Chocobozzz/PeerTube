@@ -125,6 +125,14 @@
             margin: -2px 2px 0 5px;
           }
         }
+
+        my-subscribe-button {
+          /deep/ span[role=button] {
+            font-size: 13px !important;
+          }
+
+          margin-left: 5px;
+        }
       }
 
       .video-info-by {
@@ -369,7 +377,10 @@
 
       .video-miniature-information {
         flex-grow: 1;
-        margin-left: 10px;
+      }
+
+      .video-thumbnail {
+        margin-right: 10px
       }
     }
   }
@@ -502,10 +513,6 @@
   .other-videos {
     /deep/ .video-miniature  {
       flex-direction: column;
-
-      .video-miniature-information {
-        margin-left: 0 !important;
-      }
     }
   }
 

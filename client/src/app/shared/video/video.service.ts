@@ -27,6 +27,7 @@ import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { ServerService } from '@app/core'
+import { UserSubscriptionService } from '@app/shared/user-subscription'
 
 @Injectable()
 export class VideoService {
@@ -151,6 +152,23 @@ export class VideoService {
 
     return this.authHttp
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.name + '/videos', { params })
+               .pipe(
+                 switchMap(res => this.extractVideos(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getUserSubscriptionVideos (
+    videoPagination: ComponentPagination,
+    sort: VideoSortField
+  ): Observable<{ videos: Video[], totalVideos: number }> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp
+               .get<ResultList<Video>>(UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))
