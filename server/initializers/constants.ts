@@ -112,6 +112,7 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'email': 60000 * 10 // 10 minutes
 }
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const CRAWL_REQUEST_CONCURRENCY = 5 // How many requests in parallel to fetch remote data (likes, shares...)
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 
@@ -643,6 +644,7 @@ export {
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,
+  CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,

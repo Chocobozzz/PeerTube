@@ -438,18 +438,19 @@ async function completeVideoCheck (
       name: string
       host: string
     }
-    isLocal: boolean,
-    tags: string[],
-    privacy: number,
-    likes?: number,
-    dislikes?: number,
-    duration: number,
+    isLocal: boolean
+    tags: string[]
+    privacy: number
+    likes?: number
+    dislikes?: number
+    duration: number
     channel: {
-      name: string,
+      displayName: string
+      name: string
       description
       isLocal: boolean
     }
-    fixture: string,
+    fixture: string
     files: {
       resolution: number
       size: number
@@ -476,8 +477,8 @@ async function completeVideoCheck (
   expect(video.account.uuid).to.be.a('string')
   expect(video.account.host).to.equal(attributes.account.host)
   expect(video.account.name).to.equal(attributes.account.name)
-  expect(video.channel.displayName).to.equal(attributes.channel.name)
-  expect(video.channel.name).to.have.lengthOf(36)
+  expect(video.channel.displayName).to.equal(attributes.channel.displayName)
+  expect(video.channel.name).to.equal(attributes.channel.name)
   expect(video.likes).to.equal(attributes.likes)
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
@@ -497,8 +498,8 @@ async function completeVideoCheck (
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
   expect(videoDetails.account.name).to.equal(attributes.account.name)
   expect(videoDetails.account.host).to.equal(attributes.account.host)
-  expect(videoDetails.channel.displayName).to.equal(attributes.channel.name)
-  expect(videoDetails.channel.name).to.have.lengthOf(36)
+  expect(video.channel.displayName).to.equal(attributes.channel.displayName)
+  expect(video.channel.name).to.equal(attributes.channel.name)
   expect(videoDetails.channel.host).to.equal(attributes.account.host)
   expect(videoDetails.channel.isLocal).to.equal(attributes.channel.isLocal)
   expect(dateIsValid(videoDetails.channel.createdAt.toString())).to.be.true

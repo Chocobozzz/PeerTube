@@ -23,7 +23,7 @@ async function processCreateActivity (activity: ActivityCreate) {
   } else if (activityType === 'Dislike') {
     return retryTransactionWrapper(processCreateDislike, actor, activity)
   } else if (activityType === 'Video') {
-    return processCreateVideo(actor, activity)
+    return processCreateVideo(activity)
   } else if (activityType === 'Flag') {
     return retryTransactionWrapper(processCreateVideoAbuse, actor, activityObject as VideoAbuseObject)
   } else if (activityType === 'Note') {
@@ -42,13 +42,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateVideo (
-  actor: ActorModel,
-  activity: ActivityCreate
-) {
+async function processCreateVideo (activity: ActivityCreate) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(videoToCreateData, actor)
+  const { video } = await getOrCreateAccountAndVideoAndChannel(videoToCreateData)
 
   return video
 }
