@@ -181,6 +181,12 @@ const CONFIG = {
   LOG: {
     LEVEL: config.get<string>('log.level')
   },
+  SEARCH: {
+    REMOTE_URI: {
+      USERS: config.get<boolean>('search.remote_uri.users'),
+      ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -462,7 +468,8 @@ const ACTIVITY_PUB = {
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
   MAX_RECURSION_COMMENTS: 100,
-  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
+  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000, // 1 day
+  VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
 }
 
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
@@ -574,6 +581,7 @@ if (isTestInstance() === true) {
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+  ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 

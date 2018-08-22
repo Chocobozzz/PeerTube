@@ -5,29 +5,30 @@ import { join } from 'path'
 import * as request from 'request'
 import { ActivityIconObject, VideoState } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
+import { VideoPrivacy } from '../../../shared/models/videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
+import { resetSequelizeInstance, retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, CRAWL_REQUEST_CONCURRENCY, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
-import { AccountVideoRateModel } from '../../models/account/account-video-rate'
+import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoFileModel } from '../../models/video/video-file'
-import { VideoShareModel } from '../../models/video/video-share'
-import { getOrCreateActorAndServerAndModel } from './actor'
+import { getOrCreateActorAndServerAndModel, updateActorAvatarInstance } from './actor'
 import { addVideoComments } from './video-comments'
 import { crawlCollectionPage } from './crawl'
 import { sendCreateVideo, sendUpdateVideo } from './send'
-import { shareVideoByServerAndChannel } from './index'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { JobQueue } from '../job-queue'
 import { ActivitypubHttpFetcherPayload } from '../job-queue/handlers/activitypub-http-fetcher'
+import { getUrlFromWebfinger } from '../../helpers/webfinger'
+import { createRates } from './video-rates'
+import { addVideoShares, shareVideoByServerAndChannel } from './share'
+import { AccountModel } from '../../models/account/account'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -180,15 +181,11 @@ function getOrCreateVideoChannel (videoObject: VideoTorrentObject) {
   return getOrCreateActorAndServerAndModel(channel.id)
 }
 
-async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
+async function createVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
   const videoCreated: VideoModel = await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = {
-      transaction: t
-    }
-    const videoFromDatabase = await VideoModel.loadByUUIDOrURLAndPopulateAccount(videoObject.uuid, videoObject.id, t)
-    if (videoFromDatabase) return videoFromDatabase
+    const sequelizeOptions = { transaction: t }
 
     const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
     const video = VideoModel.build(videoData)
@@ -230,26 +227,32 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
 }
 
 type SyncParam = {
-  likes: boolean,
-  dislikes: boolean,
-  shares: boolean,
-  comments: boolean,
+  likes: boolean
+  dislikes: boolean
+  shares: boolean
+  comments: boolean
   thumbnail: boolean
+  refreshVideo: boolean
 }
-async function getOrCreateAccountAndVideoAndChannel (
+async function getOrCreateVideoAndAccountAndChannel (
   videoObject: VideoTorrentObject | string,
-  syncParam: SyncParam = { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true }
+  syncParam: SyncParam = { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
 ) {
   const videoUrl = typeof videoObject === 'string' ? videoObject : videoObject.id
 
-  const videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
-  if (videoFromDatabase) return { video: videoFromDatabase }
+  let videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
+  if (videoFromDatabase) {
+    const p = retryTransactionWrapper(refreshVideoIfNeeded, videoFromDatabase)
+    if (syncParam.refreshVideo === true) videoFromDatabase = await p
 
-  const fetchedVideo = await fetchRemoteVideo(videoUrl)
+    return { video: videoFromDatabase }
+  }
+
+  const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
   if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
   const channelActor = await getOrCreateVideoChannel(fetchedVideo)
-  const video = await retryTransactionWrapper(getOrCreateVideo, fetchedVideo, channelActor, syncParam.thumbnail)
+  const video = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
 
   // Process outside the transaction because we could fetch remote data
 
@@ -290,72 +293,7 @@ async function getOrCreateAccountAndVideoAndChannel (
   return { video }
 }
 
-async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
-  let rateCounts = 0
-
-  await Bluebird.map(actorUrls, async actorUrl => {
-    try {
-      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-      const [ , created ] = await AccountVideoRateModel
-        .findOrCreate({
-          where: {
-            videoId: video.id,
-            accountId: actor.Account.id
-          },
-          defaults: {
-            videoId: video.id,
-            accountId: actor.Account.id,
-            type: rate
-          }
-        })
-
-      if (created) rateCounts += 1
-    } catch (err) {
-      logger.warn('Cannot add rate %s for actor %s.', rate, actorUrl, { err })
-    }
-  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
-
-  logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
-
-  // This is "likes" and "dislikes"
-  if (rateCounts !== 0) await video.increment(rate + 's', { by: rateCounts })
-
-  return
-}
-
-async function addVideoShares (shareUrls: string[], instance: VideoModel) {
-  await Bluebird.map(shareUrls, async shareUrl => {
-    try {
-      // Fetch url
-      const { body } = await doRequest({
-        uri: shareUrl,
-        json: true,
-        activityPub: true
-      })
-      if (!body || !body.actor) throw new Error('Body of body actor is invalid')
-
-      const actorUrl = body.actor
-      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-
-      const entry = {
-        actorId: actor.id,
-        videoId: instance.id,
-        url: shareUrl
-      }
-
-      await VideoShareModel.findOrCreate({
-        where: {
-          url: shareUrl
-        },
-        defaults: entry
-      })
-    } catch (err) {
-      logger.warn('Cannot add share %s.', shareUrl, { err })
-    }
-  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
-}
-
-async function fetchRemoteVideo (videoUrl: string): Promise<VideoTorrentObject> {
+async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoTorrentObject }> {
   const options = {
     uri: videoUrl,
     method: 'GET',
@@ -365,26 +303,143 @@ async function fetchRemoteVideo (videoUrl: string): Promise<VideoTorrentObject> 
 
   logger.info('Fetching remote video %s.', videoUrl)
 
-  const { body } = await doRequest(options)
+  const { response, body } = await doRequest(options)
 
   if (sanitizeAndCheckVideoTorrentObject(body) === false) {
     logger.debug('Remote video JSON is not valid.', { body })
-    return undefined
+    return { response, videoObject: undefined }
   }
 
-  return body
+  return { response, videoObject: body }
+}
+
+async function refreshVideoIfNeeded (video: VideoModel): Promise<VideoModel> {
+  if (!video.isOutdated()) return video
+
+  try {
+    const { response, videoObject } = await fetchRemoteVideo(video.url)
+    if (response.statusCode === 404) {
+      // Video does not exist anymore
+      await video.destroy()
+      return undefined
+    }
+
+    if (videoObject === undefined) {
+      logger.warn('Cannot refresh remote video: invalid body.')
+      return video
+    }
+
+    const channelActor = await getOrCreateVideoChannel(videoObject)
+    const account = await AccountModel.load(channelActor.VideoChannel.accountId)
+    return updateVideoFromAP(video, videoObject, account.Actor, channelActor)
+
+  } catch (err) {
+    logger.warn('Cannot refresh video.', { err })
+    return video
+  }
+}
+
+async function updateVideoFromAP (
+  video: VideoModel,
+  videoObject: VideoTorrentObject,
+  accountActor: ActorModel,
+  channelActor: ActorModel,
+  overrideTo?: string[]
+) {
+  logger.debug('Updating remote video "%s".', videoObject.uuid)
+  let videoFieldsSave: any
+
+  try {
+    const updatedVideo: VideoModel = await sequelizeTypescript.transaction(async t => {
+      const sequelizeOptions = {
+        transaction: t
+      }
+
+      videoFieldsSave = video.toJSON()
+
+      // Check actor has the right to update the video
+      const videoChannel = video.VideoChannel
+      if (videoChannel.Account.Actor.id !== accountActor.id) {
+        throw new Error('Account ' + accountActor.url + ' does not own video channel ' + videoChannel.Actor.url)
+      }
+
+      const to = overrideTo ? overrideTo : videoObject.to
+      const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, to)
+      video.set('name', videoData.name)
+      video.set('uuid', videoData.uuid)
+      video.set('url', videoData.url)
+      video.set('category', videoData.category)
+      video.set('licence', videoData.licence)
+      video.set('language', videoData.language)
+      video.set('description', videoData.description)
+      video.set('support', videoData.support)
+      video.set('nsfw', videoData.nsfw)
+      video.set('commentsEnabled', videoData.commentsEnabled)
+      video.set('waitTranscoding', videoData.waitTranscoding)
+      video.set('state', videoData.state)
+      video.set('duration', videoData.duration)
+      video.set('createdAt', videoData.createdAt)
+      video.set('publishedAt', videoData.publishedAt)
+      video.set('views', videoData.views)
+      video.set('privacy', videoData.privacy)
+      video.set('channelId', videoData.channelId)
+
+      await video.save(sequelizeOptions)
+
+      // Don't block on request
+      generateThumbnailFromUrl(video, videoObject.icon)
+        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
+
+      // Remove old video files
+      const videoFileDestroyTasks: Bluebird<void>[] = []
+      for (const videoFile of video.VideoFiles) {
+        videoFileDestroyTasks.push(videoFile.destroy(sequelizeOptions))
+      }
+      await Promise.all(videoFileDestroyTasks)
+
+      const videoFileAttributes = videoFileActivityUrlToDBAttributes(video, videoObject)
+      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, sequelizeOptions))
+      await Promise.all(tasks)
+
+      // Update Tags
+      const tags = videoObject.tag.map(tag => tag.name)
+      const tagInstances = await TagModel.findOrCreateTags(tags, t)
+      await video.$set('Tags', tagInstances, sequelizeOptions)
+
+      // Update captions
+      await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(video.id, t)
+
+      const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
+        return VideoCaptionModel.insertOrReplaceLanguage(video.id, c.identifier, t)
+      })
+      await Promise.all(videoCaptionsPromises)
+    })
+
+    logger.info('Remote video with uuid %s updated', videoObject.uuid)
+
+    return updatedVideo
+  } catch (err) {
+    if (video !== undefined && videoFieldsSave !== undefined) {
+      resetSequelizeInstance(video, videoFieldsSave)
+    }
+
+    // This is just a debug because we will retry the insert
+    logger.debug('Cannot update the remote video.', { err })
+    throw err
+  }
 }
 
 export {
+  updateVideoFromAP,
   federateVideoIfNeeded,
   fetchRemoteVideo,
-  getOrCreateAccountAndVideoAndChannel,
+  getOrCreateVideoAndAccountAndChannel,
   fetchRemoteVideoStaticFile,
   fetchRemoteVideoDescription,
   generateThumbnailFromUrl,
   videoActivityObjectToDBAttributes,
   videoFileActivityUrlToDBAttributes,
-  getOrCreateVideo,
+  createVideo,
   getOrCreateVideoChannel,
   addVideoShares,
   createRates
