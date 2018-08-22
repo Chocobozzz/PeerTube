@@ -7,7 +7,7 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from './actor'
-import { getOrCreateAccountAndVideoAndChannel } from './videos'
+import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
 
 async function videoCommentActivityObjectToDBAttributes (video: VideoModel, actor: ActorModel, comment: VideoCommentObject) {
@@ -91,7 +91,7 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
   try {
     // Maybe it's a reply to a video?
-    const { video } = await getOrCreateAccountAndVideoAndChannel(url)
+    const { video } = await getOrCreateVideoAndAccountAndChannel(url)
 
     if (comments.length !== 0) {
       const firstReply = comments[ comments.length - 1 ]

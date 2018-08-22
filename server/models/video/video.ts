@@ -56,6 +56,7 @@ import { generateImageFromVideoFile, getVideoFileFPS, getVideoFileResolution, tr
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
+  ACTIVITY_PUB,
   API_VERSION,
   CONFIG,
   CONSTRAINTS_FIELDS,
@@ -1004,21 +1005,6 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
-  static loadByUUIDOrURLAndPopulateAccount (uuid: string, url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoModel> = {
-      where: {
-        [Sequelize.Op.or]: [
-          { uuid },
-          { url }
-        ]
-      }
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
-  }
-
   static loadAndPopulateAccountAndServerAndTags (id: number) {
     const options = {
       order: [ [ 'Tags', 'name', 'ASC' ] ]
@@ -1644,6 +1630,17 @@ export class VideoModel extends Model<VideoModel> {
   getActivityStreamDuration () {
     // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
     return 'PT' + this.duration + 'S'
+  }
+
+  isOutdated () {
+    if (this.isOwned()) return false
+
+    const now = Date.now()
+    const createdAtTime = this.createdAt.getTime()
+    const updatedAtTime = this.updatedAt.getTime()
+
+    return (now - createdAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL &&
+      (now - updatedAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL
   }
 
   private getBaseUrls () {

@@ -13,8 +13,10 @@ import {
   videosSearchSortValidator
 } from '../../middlewares'
 import { VideosSearchQuery } from '../../../shared/models/search'
-import { getOrCreateAccountAndVideoAndChannel } from '../../lib/activitypub'
+import { getOrCreateVideoAndAccountAndChannel } from '../../lib/activitypub'
 import { logger } from '../../helpers/logger'
+import { User } from '../../../shared/models/users'
+import { CONFIG } from '../../initializers/constants'
 
 const searchRouter = express.Router()
 
@@ -56,20 +58,30 @@ async function searchVideosDB (query: VideosSearchQuery, res: express.Response) 
 
 async function searchVideoUrl (url: string, res: express.Response) {
   let video: VideoModel
+  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
-  try {
-    const syncParam = {
-      likes: false,
-      dislikes: false,
-      shares: false,
-      comments: false,
-      thumbnail: true
+  // Check if we can fetch a remote video with the URL
+  if (
+    CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
+    (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
+  ) {
+    try {
+      const syncParam = {
+        likes: false,
+        dislikes: false,
+        shares: false,
+        comments: false,
+        thumbnail: true,
+        refreshVideo: false
+      }
+
+      const res = await getOrCreateVideoAndAccountAndChannel(url, syncParam)
+      video = res ? res.video : undefined
+    } catch (err) {
+      logger.info('Cannot search remote video %s.', url)
     }
-
-    const res = await getOrCreateAccountAndVideoAndChannel(url, syncParam)
-    video = res ? res.video : undefined
-  } catch (err) {
-    logger.info('Cannot search remote video %s.', url)
+  } else {
+    video = await VideoModel.loadByUrlAndPopulateAccount(url)
   }
 
   return res.json({

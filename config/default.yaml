@@ -57,6 +57,11 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
 
+search:
+  remote_uri: # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
+    users: true
+    anonymous: false
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

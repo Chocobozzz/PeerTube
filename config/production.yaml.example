@@ -58,6 +58,10 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
 
+search:
+  remote_uri: # Add ability to search remote videos/actors by URI, that may not be federated with your instance
+    users: true
+    anonymous: false
 
 ###############################################################################
 #

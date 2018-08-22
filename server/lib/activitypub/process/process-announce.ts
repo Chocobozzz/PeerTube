@@ -6,7 +6,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
   const actorAnnouncer = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -25,7 +25,7 @@ export {
 async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(objectUri)
+  const { video } = await getOrCreateVideoAndAccountAndChannel(objectUri)
 
   return sequelizeTypescript.transaction(async t => {
     // Add share entry
