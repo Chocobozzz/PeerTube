@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { createUser, doubleFollow, flushAndRunMultipleServers, follow, getVideosList, unfollow, userLogin } from '../../utils'
+import { createUser, doubleFollow, flushAndRunMultipleServers, follow, getVideosList, unfollow, updateVideo, userLogin } from '../../utils'
 import { killallServers, ServerInfo, uploadVideo } from '../../utils/index'
 import { setAccessTokensToServers } from '../../utils/users/login'
 import { Video, VideoChannel } from '../../../../shared/models/videos'
@@ -20,6 +20,7 @@ const expect = chai.expect
 describe('Test users subscriptions', function () {
   let servers: ServerInfo[] = []
   const users: { accessToken: string }[] = []
+  let video3UUID: string
 
   before(async function () {
     this.timeout(120000)
@@ -65,7 +66,8 @@ describe('Test users subscriptions', function () {
 
     await waitJobs(servers)
 
-    await uploadVideo(servers[2].url, users[2].accessToken, { name: 'video server 3 added after follow' })
+    const res = await uploadVideo(servers[2].url, users[2].accessToken, { name: 'video server 3 added after follow' })
+    video3UUID = res.body.video.uuid
 
     await waitJobs(servers)
   })
@@ -247,7 +249,21 @@ describe('Test users subscriptions', function () {
     }
   })
 
+  it('Should update a video of server 3 and see the updated video on server 1', async function () {
+    this.timeout(30000)
+
+    await updateVideo(servers[2].url, users[2].accessToken, video3UUID, { name: 'video server 3 added after follow updated' })
+
+    await waitJobs(servers)
+
+    const res = await listUserSubscriptionVideos(servers[0].url, users[0].accessToken, 'createdAt')
+    const videos: Video[] = res.body.data
+    expect(videos[2].name).to.equal('video server 3 added after follow updated')
+  })
+
   it('Should remove user of server 3 subscription', async function () {
+    this.timeout(30000)
+
     await removeUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:9003')
 
     await waitJobs(servers)
@@ -267,6 +283,8 @@ describe('Test users subscriptions', function () {
   })
 
   it('Should remove the root subscription and not display the videos anymore', async function () {
+    this.timeout(30000)
+
     await removeUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:9001')
 
     await waitJobs(servers)
@@ -288,7 +306,7 @@ describe('Test users subscriptions', function () {
     for (const video of res.body.data) {
       expect(video.name).to.not.contain('1-3')
       expect(video.name).to.not.contain('2-3')
-      expect(video.name).to.not.contain('video server 3 added after follow')
+      expect(video.name).to.not.contain('video server 3 added after follow updated')
     }
   })
 
@@ -309,7 +327,7 @@ describe('Test users subscriptions', function () {
 
       expect(videos[0].name).to.equal('video 1-3')
       expect(videos[1].name).to.equal('video 2-3')
-      expect(videos[2].name).to.equal('video server 3 added after follow')
+      expect(videos[2].name).to.equal('video server 3 added after follow updated')
     }
 
     {
@@ -319,7 +337,7 @@ describe('Test users subscriptions', function () {
       for (const video of res.body.data) {
         expect(video.name).to.not.contain('1-3')
         expect(video.name).to.not.contain('2-3')
-        expect(video.name).to.not.contain('video server 3 added after follow')
+        expect(video.name).to.not.contain('video server 3 added after follow updated')
       }
     }
   })

@@ -24,10 +24,8 @@ export {
 
 async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
-  let video: VideoModel
 
-  const res = await getOrCreateAccountAndVideoAndChannel(objectUri)
-  video = res.video
+  const { video } = await getOrCreateAccountAndVideoAndChannel(objectUri)
 
   return sequelizeTypescript.transaction(async t => {
     // Add share entry

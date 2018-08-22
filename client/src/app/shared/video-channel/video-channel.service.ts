@@ -17,11 +17,6 @@ export class VideoChannelService {
 
   videoChannelLoaded = new ReplaySubject<VideoChannel>(1)
 
-  constructor (
-    private authHttp: HttpClient,
-    private restExtractor: RestExtractor
-  ) {}
-
   static extractVideoChannels (result: ResultList<VideoChannelServer>) {
     const videoChannels: VideoChannel[] = []
 
@@ -31,6 +26,11 @@ export class VideoChannelService {
 
     return { data: videoChannels, total: result.total }
   }
+
+  constructor (
+    private authHttp: HttpClient,
+    private restExtractor: RestExtractor
+  ) { }
 
   getVideoChannel (videoChannelName: string) {
     return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName)

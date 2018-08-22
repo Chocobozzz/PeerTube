@@ -11,7 +11,7 @@ import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { ACTIVITY_PUB, CONFIG, CRAWL_REQUEST_CONCURRENCY, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
@@ -26,6 +26,8 @@ import { sendCreateVideo, sendUpdateVideo } from './send'
 import { shareVideoByServerAndChannel } from './index'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoCaptionModel } from '../../models/video/video-caption'
+import { JobQueue } from '../job-queue'
+import { ActivitypubHttpFetcherPayload } from '../job-queue/handlers/activitypub-http-fetcher'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -178,10 +180,10 @@ function getOrCreateVideoChannel (videoObject: VideoTorrentObject) {
   return getOrCreateActorAndServerAndModel(channel.id)
 }
 
-async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: ActorModel) {
+async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
-  return sequelizeTypescript.transaction(async t => {
+  const videoCreated: VideoModel = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = {
       transaction: t
     }
@@ -190,10 +192,6 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
 
     const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
     const video = VideoModel.build(videoData)
-
-    // Don't block on remote HTTP request (we are in a transaction!)
-    generateThumbnailFromUrl(video, videoObject.icon)
-      .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
 
     const videoCreated = await video.save(sequelizeOptions)
 
@@ -222,68 +220,100 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
     videoCreated.VideoChannel = channelActor.VideoChannel
     return videoCreated
   })
+
+  const p = generateThumbnailFromUrl(videoCreated, videoObject.icon)
+    .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
+
+  if (waitThumbnail === true) await p
+
+  return videoCreated
 }
 
-async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentObject | string, actor?: ActorModel) {
+type SyncParam = {
+  likes: boolean,
+  dislikes: boolean,
+  shares: boolean,
+  comments: boolean,
+  thumbnail: boolean
+}
+async function getOrCreateAccountAndVideoAndChannel (
+  videoObject: VideoTorrentObject | string,
+  syncParam: SyncParam = { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true }
+) {
   const videoUrl = typeof videoObject === 'string' ? videoObject : videoObject.id
 
   const videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
-  if (videoFromDatabase) {
-    return {
-      video: videoFromDatabase,
-      actor: videoFromDatabase.VideoChannel.Account.Actor,
-      channelActor: videoFromDatabase.VideoChannel.Actor
-    }
-  }
+  if (videoFromDatabase) return { video: videoFromDatabase }
 
-  videoObject = await fetchRemoteVideo(videoUrl)
-  if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
+  const fetchedVideo = await fetchRemoteVideo(videoUrl)
+  if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
-  if (!actor) {
-    const actorObj = videoObject.attributedTo.find(a => a.type === 'Person')
-    if (!actorObj) throw new Error('Cannot find associated actor to video ' + videoObject.url)
-
-    actor = await getOrCreateActorAndServerAndModel(actorObj.id)
-  }
-
-  const channelActor = await getOrCreateVideoChannel(videoObject)
-
-  const video = await retryTransactionWrapper(getOrCreateVideo, videoObject, channelActor)
+  const channelActor = await getOrCreateVideoChannel(fetchedVideo)
+  const video = await retryTransactionWrapper(getOrCreateVideo, fetchedVideo, channelActor, syncParam.thumbnail)
 
   // Process outside the transaction because we could fetch remote data
-  logger.info('Adding likes of video %s.', video.uuid)
-  await crawlCollectionPage<string>(videoObject.likes, (items) => createRates(items, video, 'like'))
 
-  logger.info('Adding dislikes of video %s.', video.uuid)
-  await crawlCollectionPage<string>(videoObject.dislikes, (items) => createRates(items, video, 'dislike'))
+  logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
-  logger.info('Adding shares of video %s.', video.uuid)
-  await crawlCollectionPage<string>(videoObject.shares, (items) => addVideoShares(items, video))
+  const jobPayloads: ActivitypubHttpFetcherPayload[] = []
 
-  logger.info('Adding comments of video %s.', video.uuid)
-  await crawlCollectionPage<string>(videoObject.comments, (items) => addVideoComments(items, video))
+  if (syncParam.likes === true) {
+    await crawlCollectionPage<string>(fetchedVideo.likes, items => createRates(items, video, 'like'))
+      .catch(err => logger.error('Cannot add likes of video %s.', video.uuid, { err }))
+  } else {
+    jobPayloads.push({ uri: fetchedVideo.likes, videoId: video.id, type: 'video-likes' as 'video-likes' })
+  }
 
-  return { actor, channelActor, video }
+  if (syncParam.dislikes === true) {
+    await crawlCollectionPage<string>(fetchedVideo.dislikes, items => createRates(items, video, 'dislike'))
+      .catch(err => logger.error('Cannot add dislikes of video %s.', video.uuid, { err }))
+  } else {
+    jobPayloads.push({ uri: fetchedVideo.dislikes, videoId: video.id, type: 'video-dislikes' as 'video-dislikes' })
+  }
+
+  if (syncParam.shares === true) {
+    await crawlCollectionPage<string>(fetchedVideo.shares, items => addVideoShares(items, video))
+      .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err }))
+  } else {
+    jobPayloads.push({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' as 'video-shares' })
+  }
+
+  if (syncParam.comments === true) {
+    await crawlCollectionPage<string>(fetchedVideo.comments, items => addVideoComments(items, video))
+      .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err }))
+  } else {
+    jobPayloads.push({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' as 'video-shares' })
+  }
+
+  await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload }))
+
+  return { video }
 }
 
 async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
   let rateCounts = 0
-  const tasks: Bluebird<number>[] = []
 
-  for (const actorUrl of actorUrls) {
-    const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-    const p = AccountVideoRateModel
-      .create({
-        videoId: video.id,
-        accountId: actor.Account.id,
-        type: rate
-      })
-      .then(() => rateCounts += 1)
+  await Bluebird.map(actorUrls, async actorUrl => {
+    try {
+      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+      const [ , created ] = await AccountVideoRateModel
+        .findOrCreate({
+          where: {
+            videoId: video.id,
+            accountId: actor.Account.id
+          },
+          defaults: {
+            videoId: video.id,
+            accountId: actor.Account.id,
+            type: rate
+          }
+        })
 
-    tasks.push(p)
-  }
-
-  await Promise.all(tasks)
+      if (created) rateCounts += 1
+    } catch (err) {
+      logger.warn('Cannot add rate %s for actor %s.', rate, actorUrl, { err })
+    }
+  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 
   logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
 
@@ -294,34 +324,35 @@ async function createRates (actorUrls: string[], video: VideoModel, rate: VideoR
 }
 
 async function addVideoShares (shareUrls: string[], instance: VideoModel) {
-  for (const shareUrl of shareUrls) {
-    // Fetch url
-    const { body } = await doRequest({
-      uri: shareUrl,
-      json: true,
-      activityPub: true
-    })
-    if (!body || !body.actor) {
-      logger.warn('Cannot add remote share with url: %s, skipping...', shareUrl)
-      continue
-    }
+  await Bluebird.map(shareUrls, async shareUrl => {
+    try {
+      // Fetch url
+      const { body } = await doRequest({
+        uri: shareUrl,
+        json: true,
+        activityPub: true
+      })
+      if (!body || !body.actor) throw new Error('Body of body actor is invalid')
 
-    const actorUrl = body.actor
-    const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+      const actorUrl = body.actor
+      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
 
-    const entry = {
-      actorId: actor.id,
-      videoId: instance.id,
-      url: shareUrl
-    }
-
-    await VideoShareModel.findOrCreate({
-      where: {
+      const entry = {
+        actorId: actor.id,
+        videoId: instance.id,
         url: shareUrl
-      },
-      defaults: entry
-    })
-  }
+      }
+
+      await VideoShareModel.findOrCreate({
+        where: {
+          url: shareUrl
+        },
+        defaults: entry
+      })
+    } catch (err) {
+      logger.warn('Cannot add share %s.', shareUrl, { err })
+    }
+  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
 async function fetchRemoteVideo (videoUrl: string): Promise<VideoTorrentObject> {
@@ -355,5 +386,6 @@ export {
   videoFileActivityUrlToDBAttributes,
   getOrCreateVideo,
   getOrCreateVideoChannel,
-  addVideoShares
+  addVideoShares,
+  createRates
 }

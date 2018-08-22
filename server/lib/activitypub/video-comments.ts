@@ -2,12 +2,13 @@ import { VideoCommentObject } from '../../../shared/models/activitypub/objects/v
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
 import { logger } from '../../helpers/logger'
 import { doRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB } from '../../initializers'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { getOrCreateAccountAndVideoAndChannel } from './videos'
+import * as Bluebird from 'bluebird'
 
 async function videoCommentActivityObjectToDBAttributes (video: VideoModel, actor: ActorModel, comment: VideoCommentObject) {
   let originCommentId: number = null
@@ -38,9 +39,9 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
 }
 
 async function addVideoComments (commentUrls: string[], instance: VideoModel) {
-  for (const commentUrl of commentUrls) {
-    await addVideoComment(instance, commentUrl)
-  }
+  return Bluebird.map(commentUrls, commentUrl => {
+    return addVideoComment(instance, commentUrl)
+  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
 async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {

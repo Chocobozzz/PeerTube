@@ -4,7 +4,7 @@
 #search-video {
   @include peertube-input-text($search-input-width);
   margin-right: 15px;
-  padding-right: 25px; // For the search icon
+  padding-right: 40px; // For the search icon
 
   &::placeholder {
     color: #000;

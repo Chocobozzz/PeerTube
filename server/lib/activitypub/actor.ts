@@ -177,7 +177,8 @@ async function addFetchOutboxJob (actor: ActorModel) {
   }
 
   const payload = {
-    uris: [ actor.outboxUrl ]
+    uri: actor.outboxUrl,
+    type: 'activity' as 'activity'
   }
 
   return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
@@ -248,6 +249,7 @@ function saveActorAndServerAndModelIfNotExist (
     } else if (actorCreated.type === 'Group') { // Video channel
       actorCreated.VideoChannel = await saveVideoChannel(actorCreated, result, ownerActor, t)
       actorCreated.VideoChannel.Actor = actorCreated
+      actorCreated.VideoChannel.Account = ownerActor.Account
     }
 
     return actorCreated

@@ -128,7 +128,8 @@ describe('Test multiple servers', function () {
           privacy: VideoPrivacy.PUBLIC,
           commentsEnabled: true,
           channel: {
-            name: 'my channel',
+            displayName: 'my channel',
+            name: 'super_channel_name',
             description: 'super channel',
             isLocal
           },
@@ -201,7 +202,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Main user1 channel',
+            displayName: 'Main user1 channel',
+            name: 'user1_channel',
             description: 'super channel',
             isLocal
           },
@@ -307,7 +309,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Main root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
@@ -339,7 +342,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Main root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
@@ -647,7 +651,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Main root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
@@ -967,7 +972,8 @@ describe('Test multiple servers', function () {
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Main root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
