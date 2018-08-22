@@ -9,7 +9,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { resolveThread } from '../video-comments'
+import { addVideoComment, resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
 
@@ -120,48 +120,19 @@ async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateDat
 }
 
 async function processCreateVideoComment (byActor: ActorModel, activity: ActivityCreate) {
-  const comment = activity.object as VideoCommentObject
+  const commentObject = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
-  const { video, parents } = await resolveThread(comment.inReplyTo)
+  const { video } = await resolveThread(commentObject.inReplyTo)
 
-  return sequelizeTypescript.transaction(async t => {
-    let originCommentId = null
-    let inReplyToCommentId = null
+  const { created } = await addVideoComment(video, commentObject.id)
 
-    if (parents.length !== 0) {
-      const parent = parents[0]
+  if (video.isOwned() && created === true) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
 
-      originCommentId = parent.getThreadId()
-      inReplyToCommentId = parent.id
-    }
-
-    // This is a new thread
-    const objectToCreate = {
-      url: comment.id,
-      text: comment.content,
-      originCommentId,
-      inReplyToCommentId,
-      videoId: video.id,
-      accountId: byAccount.id
-    }
-
-    const options = {
-      where: {
-        url: objectToCreate.url
-      },
-      defaults: objectToCreate,
-      transaction: t
-    }
-    const [ ,created ] = await VideoCommentModel.findOrCreate(options)
-
-    if (video.isOwned() && created === true) {
-      // Don't resend the activity to the sender
-      const exceptions = [ byActor ]
-
-      await forwardVideoRelatedActivity(activity, t, exceptions, video)
-    }
-  })
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+  }
 }

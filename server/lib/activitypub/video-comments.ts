@@ -16,7 +16,7 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
 
   // If this is not a reply to the video (thread), create or get the parent comment
   if (video.url !== comment.inReplyTo) {
-    const [ parent ] = await addVideoComment(video, comment.inReplyTo)
+    const { comment: parent } = await addVideoComment(video, comment.inReplyTo)
     if (!parent) {
       logger.warn('Cannot fetch or get parent comment %s of comment %s.', comment.inReplyTo, comment.id)
       return undefined
@@ -55,22 +55,24 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
     logger.debug('Remote video comment JSON is not valid.', { body })
-    return undefined
+    return { created: false }
   }
 
   const actorUrl = body.attributedTo
-  if (!actorUrl) return []
+  if (!actorUrl) return { created: false }
 
   const actor = await getOrCreateActorAndServerAndModel(actorUrl)
   const entry = await videoCommentActivityObjectToDBAttributes(videoInstance, actor, body)
-  if (!entry) return []
+  if (!entry) return { created: false }
 
-  return VideoCommentModel.findOrCreate({
+  const [ comment, created ] = await VideoCommentModel.findOrCreate({
     where: {
       url: body.id
     },
     defaults: entry
   })
+
+  return { comment, created }
 }
 
 async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
@@ -91,6 +93,7 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
   try {
     // Maybe it's a reply to a video?
+    // If yes, it's done: we resolved all the thread
     const { video } = await getOrCreateVideoAndAccountAndChannel(url)
 
     if (comments.length !== 0) {
