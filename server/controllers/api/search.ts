@@ -1,22 +1,26 @@
 import * as express from 'express'
 import { buildNSFWFilter } from '../../helpers/express-utils'
-import { getFormattedObjects } from '../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
-  searchValidator,
   setDefaultPagination,
   setDefaultSearchSort,
-  videosSearchSortValidator
+  videoChannelsSearchSortValidator,
+  videoChannelsSearchValidator,
+  videosSearchSortValidator,
+  videosSearchValidator
 } from '../../middlewares'
-import { VideosSearchQuery } from '../../../shared/models/search'
-import { getOrCreateVideoAndAccountAndChannel } from '../../lib/activitypub'
+import { VideoChannelsSearchQuery, VideosSearchQuery } from '../../../shared/models/search'
+import { getOrCreateActorAndServerAndModel, getOrCreateVideoAndAccountAndChannel } from '../../lib/activitypub'
 import { logger } from '../../helpers/logger'
 import { User } from '../../../shared/models/users'
 import { CONFIG } from '../../initializers/constants'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 
 const searchRouter = express.Router()
 
@@ -27,8 +31,19 @@ searchRouter.get('/videos',
   setDefaultSearchSort,
   optionalAuthenticate,
   commonVideosFiltersValidator,
-  searchValidator,
+  videosSearchValidator,
   asyncMiddleware(searchVideos)
+)
+
+searchRouter.get('/video-channels',
+  paginationValidator,
+  setDefaultPagination,
+  videoChannelsSearchSortValidator,
+  setDefaultSearchSort,
+  optionalAuthenticate,
+  commonVideosFiltersValidator,
+  videoChannelsSearchValidator,
+  asyncMiddleware(searchVideoChannels)
 )
 
 // ---------------------------------------------------------------------------
@@ -37,11 +52,59 @@ export { searchRouter }
 
 // ---------------------------------------------------------------------------
 
+function searchVideoChannels (req: express.Request, res: express.Response) {
+  const query: VideoChannelsSearchQuery = req.query
+  const search = query.search
+
+  const isURISearch = search.startsWith('http://') || search.startsWith('https://')
+
+  const parts = search.split('@')
+  const isHandleSearch = parts.length === 2 && parts.every(p => p.indexOf(' ') === -1)
+
+  if (isURISearch || isHandleSearch) return searchVideoChannelURI(search, isHandleSearch, res)
+
+  return searchVideoChannelsDB(query, res)
+}
+
+async function searchVideoChannelsDB (query: VideoChannelsSearchQuery, res: express.Response) {
+  const serverActor = await getServerActor()
+
+  const options = {
+    actorId: serverActor.id,
+    search: query.search,
+    start: query.start,
+    count: query.count,
+    sort: query.sort
+  }
+  const resultList = await VideoChannelModel.searchForApi(options)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function searchVideoChannelURI (search: string, isHandleSearch: boolean, res: express.Response) {
+  let videoChannel: VideoChannelModel
+
+  if (isUserAbleToSearchRemoteURI(res)) {
+    let uri = search
+    if (isHandleSearch) uri = await loadActorUrlOrGetFromWebfinger(search)
+
+    const actor = await getOrCreateActorAndServerAndModel(uri)
+    videoChannel = actor.VideoChannel
+  } else {
+    videoChannel = await VideoChannelModel.loadByUrlAndPopulateAccount(search)
+  }
+
+  return res.json({
+    total: videoChannel ? 1 : 0,
+    data: videoChannel ? [ videoChannel.toFormattedJSON() ] : []
+  })
+}
+
 function searchVideos (req: express.Request, res: express.Response) {
   const query: VideosSearchQuery = req.query
   const search = query.search
   if (search && (search.startsWith('http://') || search.startsWith('https://'))) {
-    return searchVideoUrl(search, res)
+    return searchVideoURI(search, res)
   }
 
   return searchVideosDB(query, res)
@@ -57,15 +120,11 @@ async function searchVideosDB (query: VideosSearchQuery, res: express.Response) 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function searchVideoUrl (url: string, res: express.Response) {
+async function searchVideoURI (url: string, res: express.Response) {
   let video: VideoModel
-  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   // Check if we can fetch a remote video with the URL
-  if (
-    CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
-    (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
-  ) {
+  if (isUserAbleToSearchRemoteURI(res)) {
     try {
       const syncParam = {
         likes: false,
@@ -76,8 +135,8 @@ async function searchVideoUrl (url: string, res: express.Response) {
         refreshVideo: false
       }
 
-      const res = await getOrCreateVideoAndAccountAndChannel(url, syncParam)
-      video = res ? res.video : undefined
+      const result = await getOrCreateVideoAndAccountAndChannel(url, syncParam)
+      video = result ? result.video : undefined
     } catch (err) {
       logger.info('Cannot search remote video %s.', url)
     }
@@ -89,4 +148,11 @@ async function searchVideoUrl (url: string, res: express.Response) {
     total: video ? 1 : 0,
     data: video ? [ video.toFormattedJSON() ] : []
   })
+}
+
+function isUserAbleToSearchRemoteURI (res: express.Response) {
+  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
+
+  return CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
+    (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
 }

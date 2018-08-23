@@ -1,6 +1,6 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { exists } from '../misc'
+import { exists, isArray } from '../misc'
 import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { isHostValid } from '../servers'
@@ -119,10 +119,15 @@ function isValidActorHandle (handle: string) {
   return isHostValid(parts[1])
 }
 
+function areValidActorHandles (handles: string[]) {
+  return isArray(handles) && handles.every(h => isValidActorHandle(h))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   normalizeActor,
+  areValidActorHandles,
   isActorEndpointsObjectValid,
   isActorPublicKeyObjectValid,
   isActorTypeValid,

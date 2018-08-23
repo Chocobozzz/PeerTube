@@ -21,7 +21,7 @@ export class MyAccountSubscriptionsComponent implements OnInit {
   ngOnInit () {
     this.userSubscriptionService.listSubscriptions()
       .subscribe(
-        res => { console.log(res); this.videoChannels = res.data },
+        res => this.videoChannels = res.data,
 
         error => this.notificationsService.error(this.i18n('Error'), error.message)
       )

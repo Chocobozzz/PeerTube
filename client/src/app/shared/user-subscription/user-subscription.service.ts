@@ -1,22 +1,36 @@
-import { catchError, map } from 'rxjs/operators'
-import { HttpClient } from '@angular/common/http'
+import { bufferTime, catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ResultList } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
-import { RestExtractor } from '../rest'
-import { Observable, of } from 'rxjs'
+import { RestExtractor, RestService } from '../rest'
+import { Observable, ReplaySubject, Subject } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel as VideoChannelServer } from '../../../../../shared/models/videos'
+
+type SubscriptionExistResult = { [ uri: string ]: boolean }
 
 @Injectable()
 export class UserSubscriptionService {
   static BASE_USER_SUBSCRIPTIONS_URL = environment.apiUrl + '/api/v1/users/me/subscriptions'
 
+  // Use a replay subject because we "next" a value before subscribing
+  private existsSubject: Subject<string> = new ReplaySubject(1)
+  private existsObservable: Observable<SubscriptionExistResult>
+
   constructor (
     private authHttp: HttpClient,
-    private restExtractor: RestExtractor
+    private restExtractor: RestExtractor,
+    private restService: RestService
   ) {
+    this.existsObservable = this.existsSubject.pipe(
+      tap(u => console.log(u)),
+      bufferTime(500),
+      filter(uris => uris.length !== 0),
+      switchMap(uris => this.areSubscriptionExist(uris)),
+      share()
+    )
   }
 
   deleteSubscription (nameWithHost: string) {
@@ -50,17 +64,20 @@ export class UserSubscriptionService {
                )
   }
 
-  isSubscriptionExists (nameWithHost: string): Observable<boolean> {
-    const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/' + nameWithHost
+  isSubscriptionExists (nameWithHost: string) {
+    this.existsSubject.next(nameWithHost)
 
-    return this.authHttp.get(url)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => {
-                   if (err.status === 404) return of(false)
+    return this.existsObservable
+  }
 
-                   return this.restExtractor.handleError(err)
-                 })
-               )
+  private areSubscriptionExist (uris: string[]): Observable<SubscriptionExistResult> {
+    console.log(uris)
+    const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/exist'
+    let params = new HttpParams()
+
+    params = this.restService.addObjectParams(params, { uris })
+
+    return this.authHttp.get<SubscriptionExistResult>(url, { params })
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

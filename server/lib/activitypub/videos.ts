@@ -174,7 +174,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
   return attributes
 }
 
-function getOrCreateVideoChannel (videoObject: VideoTorrentObject) {
+function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
   const channel = videoObject.attributedTo.find(a => a.type === 'Group')
   if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
 
@@ -251,7 +251,7 @@ async function getOrCreateVideoAndAccountAndChannel (
   const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
   if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
-  const channelActor = await getOrCreateVideoChannel(fetchedVideo)
+  const channelActor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
   const video = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
 
   // Process outside the transaction because we could fetch remote data
@@ -329,7 +329,7 @@ async function refreshVideoIfNeeded (video: VideoModel): Promise<VideoModel> {
       return video
     }
 
-    const channelActor = await getOrCreateVideoChannel(videoObject)
+    const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
     const account = await AccountModel.load(channelActor.VideoChannel.accountId)
     return updateVideoFromAP(video, videoObject, account.Actor, channelActor)
 
@@ -440,7 +440,7 @@ export {
   videoActivityObjectToDBAttributes,
   videoFileActivityUrlToDBAttributes,
   createVideo,
-  getOrCreateVideoChannel,
+  getOrCreateVideoChannelFromVideoObject,
   addVideoShares,
   createRates
 }

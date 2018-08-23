@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { getFormattedObjects } from '../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -95,7 +95,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoChannelModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const serverActor = await getServerActor()
+  const resultList = await VideoChannelModel.listForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

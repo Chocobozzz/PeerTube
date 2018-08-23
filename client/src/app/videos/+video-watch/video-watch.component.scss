@@ -127,10 +127,6 @@
         }
 
         my-subscribe-button {
-          /deep/ span[role=button] {
-            font-size: 13px !important;
-          }
-
           margin-left: 5px;
         }
       }

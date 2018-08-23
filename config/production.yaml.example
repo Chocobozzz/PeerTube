@@ -2,7 +2,7 @@ listen:
   hostname: 'localhost'
   port: 9000
 
-# Correspond to your reverse proxy "listen" configuration
+# Correspond to your reverse proxy server_name/listen configuration
 webserver:
   https: true
   hostname: 'example.com'

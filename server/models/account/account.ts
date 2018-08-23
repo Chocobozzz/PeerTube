@@ -29,18 +29,8 @@ import { UserModel } from './user'
 @DefaultScope({
   include: [
     {
-      model: () => ActorModel,
-      required: true,
-      include: [
-        {
-          model: () => ServerModel,
-          required: false
-        },
-        {
-          model: () => AvatarModel,
-          required: false
-        }
-      ]
+      model: () => ActorModel, // Default scope includes avatar and server
+      required: true
     }
   ]
 })

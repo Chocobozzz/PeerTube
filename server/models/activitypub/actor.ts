@@ -42,6 +42,16 @@ enum ScopeNames {
   FULL = 'FULL'
 }
 
+export const unusedActorAttributesForAPI = [
+  'publicKey',
+  'privateKey',
+  'inboxUrl',
+  'outboxUrl',
+  'sharedInboxUrl',
+  'followersUrl',
+  'followingUrl'
+]
+
 @DefaultScope({
   include: [
     {

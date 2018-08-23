@@ -58,9 +58,22 @@ function removeUserSubscription (url: string, token: string, uri: string, status
   })
 }
 
+function areSubscriptionsExist (url: string, token: string, uris: string[], statusCodeExpected = 200) {
+  const path = '/api/v1/users/me/subscriptions/exist'
+
+  return makeGetRequest({
+    url,
+    path,
+    query: { 'uris[]': uris },
+    token,
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  areSubscriptionsExist,
   addUserSubscription,
   listUserSubscriptions,
   getUserSubscription,

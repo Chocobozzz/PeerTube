@@ -20,7 +20,8 @@ import {
   deleteMeValidator,
   userSubscriptionsSortValidator,
   videoImportsSortValidator,
-  videosSortValidator
+  videosSortValidator,
+  areSubscriptionsExistValidator
 } from '../../../middlewares/validators'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/account/user'
@@ -99,13 +100,18 @@ meRouter.post('/me/avatar/pick',
 
 meRouter.get('/me/subscriptions/videos',
   authenticate,
-  authenticate,
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
   setDefaultPagination,
   commonVideosFiltersValidator,
   asyncMiddleware(getUserSubscriptionVideos)
+)
+
+meRouter.get('/me/subscriptions/exist',
+  authenticate,
+  areSubscriptionsExistValidator,
+  asyncMiddleware(areSubscriptionsExist)
 )
 
 meRouter.get('/me/subscriptions',
@@ -142,6 +148,37 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function areSubscriptionsExist (req: express.Request, res: express.Response) {
+  const uris = req.query.uris as string[]
+  const user = res.locals.oauth.token.User as UserModel
+
+  const handles = uris.map(u => {
+    let [ name, host ] = u.split('@')
+    if (host === CONFIG.WEBSERVER.HOST) host = null
+
+    return { name, host, uri: u }
+  })
+
+  const results = await ActorFollowModel.listSubscribedIn(user.Account.Actor.id, handles)
+
+  const existObject: { [id: string ]: boolean } = {}
+  for (const handle of handles) {
+    const obj = results.find(r => {
+      const server = r.ActorFollowing.Server
+
+      return r.ActorFollowing.preferredUsername === handle.name &&
+        (
+          (!server && !handle.host) ||
+          (server.host === handle.host)
+        )
+    })
+
+    existObject[handle.uri] = obj !== undefined
+  }
+
+  return res.json(existObject)
+}
 
 async function addUserSubscription (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User as UserModel
