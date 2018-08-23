@@ -27,6 +27,7 @@ describe('Test users with multiple servers', function () {
   let servers: ServerInfo[] = []
   let user: User
   let userAccountName: string
+  let userAccountUUID: string
   let userVideoChannelUUID: string
   let userId: number
   let videoUUID: string
@@ -62,7 +63,9 @@ describe('Test users with multiple servers', function () {
 
     {
       const res = await getMyUserInformation(servers[0].url, userAccessToken)
-      userAccountName = res.body.account.name + '@' + res.body.account.host
+      const account: Account = res.body.account
+      userAccountName = account.name + '@' + account.host
+      userAccountUUID = account.uuid
     }
 
     {
@@ -196,7 +199,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should not have actor files', async () => {
     for (const server of servers) {
-      await checkActorFilesWereRemoved(userAccountName, server.serverNumber)
+      await checkActorFilesWereRemoved(userAccountUUID, server.serverNumber)
       await checkActorFilesWereRemoved(userVideoChannelUUID, server.serverNumber)
     }
   })

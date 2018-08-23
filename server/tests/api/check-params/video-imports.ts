@@ -28,7 +28,6 @@ describe('Test video imports API validator', function () {
   let userAccessToken = ''
   let accountName: string
   let channelId: number
-  let channelUUID: string
 
   // ---------------------------------------------------------------
 
@@ -49,7 +48,6 @@ describe('Test video imports API validator', function () {
     {
       const res = await getMyUserInformation(server.url, server.accessToken)
       channelId = res.body.videoChannels[ 0 ].id
-      channelUUID = res.body.videoChannels[ 0 ].uuid
       accountName = res.body.account.name + '@' + res.body.account.host
     }
   })

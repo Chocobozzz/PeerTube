@@ -39,8 +39,9 @@ export { searchRouter }
 
 function searchVideos (req: express.Request, res: express.Response) {
   const query: VideosSearchQuery = req.query
-  if (query.search.startsWith('http://') || query.search.startsWith('https://')) {
-    return searchVideoUrl(query.search, res)
+  const search = query.search
+  if (search && (search.startsWith('http://') || search.startsWith('https://'))) {
+    return searchVideoUrl(search, res)
   }
 
   return searchVideosDB(query, res)
