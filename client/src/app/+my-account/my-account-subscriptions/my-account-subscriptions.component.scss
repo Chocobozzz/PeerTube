@@ -37,13 +37,6 @@
   .actor-owner {
     @include actor-owner;
   }
-
-  my-subscribe-button {
-    /deep/ span[role=button] {
-      padding: 7px 12px;
-      font-size: 16px;
-    }
-  }
 }
 
 

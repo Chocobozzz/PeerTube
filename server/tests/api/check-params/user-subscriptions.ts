@@ -202,6 +202,46 @@ describe('Test user subscriptions API validators', function () {
     })
   })
 
+  describe('When checking if subscriptions exist', async function () {
+    const existPath = path + '/exist'
+
+    it('Should fail with a non authenticated user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: existPath,
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should fail with bad URIs', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: existPath,
+        query: { uris: 'toto' },
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path: existPath,
+        query: { 'uris[]': 1 },
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: existPath,
+        query: { 'uris[]': 'coucou@localhost:9001' },
+        token: server.accessToken,
+        statusCodeExpected: 200
+      })
+    })
+  })
+
   describe('When removing a subscription', function () {
     it('Should fail with a non authenticated user', async function () {
       await makeDeleteRequest({

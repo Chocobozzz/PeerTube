@@ -12,7 +12,7 @@ import {
   listUserSubscriptions,
   listUserSubscriptionVideos,
   removeUserSubscription,
-  getUserSubscription
+  getUserSubscription, areSubscriptionsExist
 } from '../../utils/users/user-subscriptions'
 
 const expect = chai.expect
@@ -126,6 +126,23 @@ describe('Test users subscriptions', function () {
       expect(videoChannel.followingCount).to.equal(0)
       expect(videoChannel.followersCount).to.equal(1)
     }
+  })
+
+  it('Should return the existing subscriptions', async function () {
+    const uris = [
+      'user3_channel@localhost:9003',
+      'root2_channel@localhost:9001',
+      'root_channel@localhost:9001',
+      'user3_channel@localhost:9001'
+    ]
+
+    const res = await areSubscriptionsExist(servers[ 0 ].url, users[ 0 ].accessToken, uris)
+    const body = res.body
+
+    expect(body['user3_channel@localhost:9003']).to.be.true
+    expect(body['root2_channel@localhost:9001']).to.be.false
+    expect(body['root_channel@localhost:9001']).to.be.true
+    expect(body['user3_channel@localhost:9001']).to.be.false
   })
 
   it('Should list subscription videos', async function () {

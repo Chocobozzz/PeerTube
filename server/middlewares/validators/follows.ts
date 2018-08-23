@@ -38,7 +38,7 @@ const removeFollowingValidator = [
     if (areValidationErrors(req, res)) return
 
     const serverActor = await getServerActor()
-    const follow = await ActorFollowModel.loadByActorAndTargetNameAndHost(serverActor.id, SERVER_ACTOR_NAME, req.params.host)
+    const follow = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(serverActor.id, SERVER_ACTOR_NAME, req.params.host)
 
     if (!follow) {
       return res

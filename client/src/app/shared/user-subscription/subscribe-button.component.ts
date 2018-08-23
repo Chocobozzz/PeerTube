@@ -15,6 +15,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class SubscribeButtonComponent implements OnInit {
   @Input() videoChannel: VideoChannel
   @Input() displayFollowers = false
+  @Input() size: 'small' | 'normal' = 'normal'
 
   subscribed: boolean
 
@@ -34,7 +35,7 @@ export class SubscribeButtonComponent implements OnInit {
   ngOnInit () {
     this.userSubscriptionService.isSubscriptionExists(this.uri)
       .subscribe(
-        exists => this.subscribed = exists,
+        res => this.subscribed = res[this.uri],
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )

@@ -12,6 +12,7 @@ import {
   Is,
   Model,
   Scopes,
+  Sequelize,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -24,17 +25,34 @@ import {
 } from '../../helpers/custom-validators/video-channels'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
-import { ActorModel } from '../activitypub/actor'
-import { getSort, throwIfNotValid } from '../utils'
+import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
+import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
+import { DefineIndexesOptions } from 'sequelize'
+
+// FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
+const indexes: DefineIndexesOptions[] = [
+  buildTrigramSearchIndex('video_channel_name_trigram', 'name'),
+
+  {
+    fields: [ 'accountId' ]
+  },
+  {
+    fields: [ 'actorId' ]
+  }
+]
 
 enum ScopeNames {
+  AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
   WITH_VIDEOS = 'WITH_VIDEOS'
+}
+
+type AvailableForListOptions = {
+  actorId: number
 }
 
 @DefaultScope({
@@ -46,23 +64,57 @@ enum ScopeNames {
   ]
 })
 @Scopes({
-  [ScopeNames.WITH_ACCOUNT]: {
-    include: [
-      {
-        model: () => AccountModel.unscoped(),
-        required: true,
-        include: [
-          {
-            model: () => ActorModel.unscoped(),
-            required: true,
-            include: [
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
+    const actorIdNumber = parseInt(options.actorId + '', 10)
+
+    // Only list local channels OR channels that are on an instance followed by actorId
+    const inQueryInstanceFollow = '(' +
+      'SELECT "actor"."serverId" FROM "actor" ' +
+      'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = actor.id ' +
+      'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+    ')'
+
+    return {
+      include: [
+        {
+          attributes: {
+            exclude: unusedActorAttributesForAPI
+          },
+          model: ActorModel,
+          where: {
+            [Sequelize.Op.or]: [
               {
-                model: () => AvatarModel.unscoped(),
-                required: false
+                serverId: null
+              },
+              {
+                serverId: {
+                  [ Sequelize.Op.in ]: Sequelize.literal(inQueryInstanceFollow)
+                }
               }
             ]
           }
-        ]
+        },
+        {
+          model: AccountModel,
+          required: true,
+          include: [
+            {
+              attributes: {
+                exclude: unusedActorAttributesForAPI
+              },
+              model: ActorModel, // Default scope includes avatar and server
+              required: true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  [ScopeNames.WITH_ACCOUNT]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
       }
     ]
   },
@@ -79,14 +131,7 @@ enum ScopeNames {
 })
 @Table({
   tableName: 'videoChannel',
-  indexes: [
-    {
-      fields: [ 'accountId' ]
-    },
-    {
-      fields: [ 'actorId' ]
-    }
-  ]
+  indexes
 })
 export class VideoChannelModel extends Model<VideoChannelModel> {
 
@@ -170,15 +215,61 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.count(query)
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static listForApi (actorId: number, start: number, count: number, sort: string) {
     const query = {
       offset: start,
       limit: count,
       order: getSort(sort)
     }
 
+    const scopes = {
+      method: [ ScopeNames.AVAILABLE_FOR_LIST, { actorId } as AvailableForListOptions ]
+    }
     return VideoChannelModel
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope(scopes)
+      .findAndCountAll(query)
+      .then(({ rows, count }) => {
+        return { total: count, data: rows }
+      })
+  }
+
+  static searchForApi (options: {
+    actorId: number
+    search: string
+    start: number
+    count: number
+    sort: string
+  }) {
+    const attributesInclude = []
+    const escapedSearch = VideoModel.sequelize.escape(options.search)
+    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
+    attributesInclude.push(createSimilarityAttribute('VideoChannelModel.name', options.search))
+
+    const query = {
+      attributes: {
+        include: attributesInclude
+      },
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where: {
+        id: {
+          [ Sequelize.Op.in ]: Sequelize.literal(
+            '(' +
+              'SELECT id FROM "videoChannel" WHERE ' +
+              'lower(immutable_unaccent("name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+              'lower(immutable_unaccent("name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+            ')'
+          )
+        }
+      }
+    }
+
+    const scopes = {
+      method: [ ScopeNames.AVAILABLE_FOR_LIST, { actorId: options.actorId } as AvailableForListOptions ]
+    }
+    return VideoChannelModel
+      .scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -239,7 +330,25 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     }
 
     return VideoChannelModel
-      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
+      .findOne(query)
+  }
+
+  static loadByUrlAndPopulateAccount (url: string) {
+    const query = {
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            url
+          }
+        }
+      ]
+    }
+
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
 

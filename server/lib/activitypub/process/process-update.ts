@@ -7,7 +7,7 @@ import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
-import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannel, updateVideoFromAP } from '../videos'
+import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
@@ -40,7 +40,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
   }
 
   const { video } = await getOrCreateVideoAndAccountAndChannel(videoObject.id)
-  const channelActor = await getOrCreateVideoChannel(videoObject)
+  const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
 
   return updateVideoFromAP(video, videoObject, actor, channelActor, activity.to)
 }

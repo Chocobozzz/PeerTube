@@ -26,7 +26,7 @@ import { ACTOR_FOLLOW_SCORE } from '../../initializers'
 import { FOLLOW_STATES } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
-import { ActorModel } from './actor'
+import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { IIncludeOptions } from '../../../node_modules/sequelize-typescript/lib/interfaces/IIncludeOptions'
 import { AccountModel } from '../account/account'
@@ -167,8 +167,11 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHost (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
+  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
     const actorFollowingPartInclude: IIncludeOptions = {
+      attributes: {
+        exclude: unusedActorAttributesForAPI
+      },
       model: ActorModel,
       required: true,
       as: 'ActorFollowing',
@@ -177,7 +180,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       },
       include: [
         {
-          model: VideoChannelModel,
+          model: VideoChannelModel.unscoped(),
           required: false
         }
       ]
@@ -200,17 +203,79 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
         actorId
       },
       include: [
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollower'
-        },
         actorFollowingPartInclude
       ],
       transaction: t
     }
 
     return ActorFollowModel.findOne(query)
+      .then(result => {
+        if (result && result.ActorFollowing.VideoChannel) {
+          result.ActorFollowing.VideoChannel.Actor = result.ActorFollowing
+        }
+
+        return result
+      })
+  }
+
+  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]) {
+    const whereTab = targets
+      .map(t => {
+        if (t.host) {
+          return {
+            [ Sequelize.Op.and ]: [
+              {
+                '$preferredUsername$': t.name
+              },
+              {
+                '$host$': t.host
+              }
+            ]
+          }
+        }
+
+        return {
+          [ Sequelize.Op.and ]: [
+            {
+              '$preferredUsername$': t.name
+            },
+            {
+              '$serverId$': null
+            }
+          ]
+        }
+      })
+
+    const query = {
+      attributes: [],
+      where: {
+        [ Sequelize.Op.and ]: [
+          {
+            [ Sequelize.Op.or ]: whereTab
+          },
+          {
+            actorId
+          }
+        ]
+      },
+      include: [
+        {
+          attributes: [ 'preferredUsername' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAll(query)
   }
 
   static listFollowingForApi (id: number, start: number, count: number, sort: string) {
@@ -248,6 +313,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
   static listSubscriptionsForApi (id: number, start: number, count: number, sort: string) {
     const query = {
+      attributes: [],
       distinct: true,
       offset: start,
       limit: count,
@@ -257,6 +323,9 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       },
       include: [
         {
+          attributes: {
+            exclude: unusedActorAttributesForAPI
+          },
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
@@ -266,8 +335,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
               required: true,
               include: [
                 {
-                  model: AccountModel,
+                  attributes: {
+                    exclude: unusedActorAttributesForAPI
+                  },
+                  model: ActorModel,
                   required: true
+                },
+                {
+                  model: AccountModel,
+                  required: true,
+                  include: [
+                    {
+                      attributes: {
+                        exclude: unusedActorAttributesForAPI
+                      },
+                      model: ActorModel,
+                      required: true
+                    }
+                  ]
                 }
               ]
             }
