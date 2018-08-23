@@ -94,9 +94,9 @@ describe('Test update host scripts', function () {
     expect(res.body.total).to.equal(3)
 
     for (const channel of res.body.data) {
-      const { body } = await makeActivityPubGetRequest(server.url, '/video-channels/' + channel.uuid)
+      const { body } = await makeActivityPubGetRequest(server.url, '/video-channels/' + channel.name)
 
-      expect(body.id).to.equal('http://localhost:9002/video-channels/' + channel.uuid)
+      expect(body.id).to.equal('http://localhost:9002/video-channels/' + channel.name)
     }
   })
 
