@@ -18,7 +18,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   customConfig: CustomConfig
   resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
 
-  videoQuotaOptions = [
+  static videoQuotaOptions = [
     { value: -1, label: 'Unlimited' },
     { value: 0, label: '0' },
     { value: 100 * 1024 * 1024, label: '100MB' },
@@ -28,8 +28,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
   ]
-
-  videoQuotaDailyOptions = [
+  static videoQuotaDailyOptions = [
     { value: -1, label: 'Unlimited' },
     { value: 0, label: '0' },
     { value: 10 * 1024 * 1024, label: '10MB' },
