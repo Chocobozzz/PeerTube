@@ -13,7 +13,7 @@ import { Video } from '../../../shared/video/video.model'
 @Component({
   selector: 'my-video-abuse-list',
   templateUrl: './video-abuse-list.component.html',
-  styleUrls: [ './video-abuse-list.component.scss']
+  styleUrls: [ '../moderation.component.scss']
 })
 export class VideoAbuseListComponent extends RestTable implements OnInit {
   @ViewChild('moderationCommentModal') moderationCommentModal: ModerationCommentModalComponent
