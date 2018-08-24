@@ -36,8 +36,13 @@ function setAsyncActorKeys (actor: ActorModel) {
     })
 }
 
-async function getOrCreateActorAndServerAndModel (activityActor: string | ActivityPubActor, recurseIfNeeded = true) {
+async function getOrCreateActorAndServerAndModel (
+  activityActor: string | ActivityPubActor,
+  recurseIfNeeded = true,
+  updateCollections = false
+) {
   const actorUrl = getActorUrl(activityActor)
+  let created = false
 
   let actor = await ActorModel.loadByUrl(actorUrl)
   // Orphan actor (not associated to an account of channel) so recreate it
@@ -68,15 +73,21 @@ async function getOrCreateActorAndServerAndModel (activityActor: string | Activi
     }
 
     actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, result, ownerActor)
+    created = true
   }
 
   if (actor.Account) actor.Account.Actor = actor
   if (actor.VideoChannel) actor.VideoChannel.Actor = actor
 
-  actor = await retryTransactionWrapper(refreshActorIfNeeded, actor)
-  if (!actor) throw new Error('Actor ' + actor.url + ' does not exist anymore.')
+  const { actor: actorRefreshed, refreshed } = await retryTransactionWrapper(refreshActorIfNeeded, actor)
+  if (!actorRefreshed) throw new Error('Actor ' + actorRefreshed.url + ' does not exist anymore.')
 
-  return actor
+  if ((created === true || refreshed === true) && updateCollections === true) {
+    const payload = { uri: actor.outboxUrl, type: 'activity' as 'activity' }
+    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+  }
+
+  return actorRefreshed
 }
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
@@ -359,8 +370,8 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
   return videoChannelCreated
 }
 
-async function refreshActorIfNeeded (actor: ActorModel): Promise<ActorModel> {
-  if (!actor.isOutdated()) return actor
+async function refreshActorIfNeeded (actor: ActorModel): Promise<{ actor: ActorModel, refreshed: boolean }> {
+  if (!actor.isOutdated()) return { actor, refreshed: false }
 
   try {
     const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
@@ -369,12 +380,12 @@ async function refreshActorIfNeeded (actor: ActorModel): Promise<ActorModel> {
     if (statusCode === 404) {
       logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
       actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
-      return undefined
+      return { actor: undefined, refreshed: false }
     }
 
     if (result === undefined) {
       logger.warn('Cannot fetch remote actor in refresh actor.')
-      return actor
+      return { actor, refreshed: false }
     }
 
     return sequelizeTypescript.transaction(async t => {
@@ -403,10 +414,10 @@ async function refreshActorIfNeeded (actor: ActorModel): Promise<ActorModel> {
         await actor.VideoChannel.save({ transaction: t })
       }
 
-      return actor
+      return { refreshed: true, actor }
     })
   } catch (err) {
     logger.warn('Cannot refresh actor.', { err })
-    return actor
+    return { actor, refreshed: false }
   }
 }

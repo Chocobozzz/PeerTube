@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { buildNSFWFilter } from '../../helpers/express-utils'
+import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import {
@@ -88,7 +88,7 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const actor = await getOrCreateActorAndServerAndModel(uri)
+      const actor = await getOrCreateActorAndServerAndModel(uri, true, true)
       videoChannel = actor.VideoChannel
     } catch (err) {
       logger.info('Cannot search remote video channel %s.', uri, { err })
@@ -151,11 +151,4 @@ async function searchVideoURI (url: string, res: express.Response) {
     total: video ? 1 : 0,
     data: video ? [ video.toFormattedJSON() ] : []
   })
-}
-
-function isUserAbleToSearchRemoteURI (res: express.Response) {
-  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
-
-  return CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
-    (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
 }

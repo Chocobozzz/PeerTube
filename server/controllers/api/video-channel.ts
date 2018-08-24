@@ -19,7 +19,7 @@ import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../m
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
@@ -210,8 +210,10 @@ async function getVideoChannel (req: express.Request, res: express.Response, nex
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
+  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
+    actorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
