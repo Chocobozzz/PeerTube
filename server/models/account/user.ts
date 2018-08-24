@@ -373,17 +373,15 @@ export class UserModel extends Model<UserModel> {
     return json
   }
 
-  isAbleToUploadVideo (videoFile: { size: number }) {
-      if (this.videoQuota === -1 && this.videoQuotaDaily === -1) 
-        return Promise.resolve(true)
+  async isAbleToUploadVideo (videoFile: { size: number }) {
+    if (this.videoQuota === -1 && this.videoQuotaDaily === -1) return Promise.resolve(true)
 
-    return UserModel.getOriginalVideoFileTotalFromUser(this)
-      .then(totalBytes => {
-          UserModel.getOriginalVideoFileTotalDailyFromUser(this)
-          .then(totalBytesDaily => {
-            return ((videoFile.size + totalBytes) < this.videoQuota) &&
-                ((videoFile.size + totalBytesDaily) < this.videoQuotaDaily)
-          })
-      })
+    const [ totalBytes, totalBytesDaily ] = await Promise.all([
+      UserModel.getOriginalVideoFileTotalFromUser(this),
+      UserModel.getOriginalVideoFileTotalDailyFromUser(this)
+    ])
+
+    return ((videoFile.size + totalBytes) < this.videoQuota) &&
+        ((videoFile.size + totalBytesDaily) < this.videoQuotaDaily)
   }
 }

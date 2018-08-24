@@ -153,7 +153,7 @@ describe('Test config', function () {
       },
       user: {
         videoQuota: 5242881,
-        videoQuotaDaily: -1
+        videoQuotaDaily: 318742
       },
       transcoding: {
         enabled: true,

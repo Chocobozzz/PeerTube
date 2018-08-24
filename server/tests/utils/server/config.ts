@@ -81,7 +81,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
     },
     user: {
       videoQuota: 5242881,
-      videoQuotaDaily: -1
+      videoQuotaDaily: 318742
     },
     transcoding: {
       enabled: true,
