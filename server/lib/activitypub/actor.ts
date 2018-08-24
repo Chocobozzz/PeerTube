@@ -48,7 +48,7 @@ async function getOrCreateActorAndServerAndModel (activityActor: string | Activi
 
   // We don't have this actor in our database, fetch it on remote
   if (!actor) {
-    const result = await fetchRemoteActor(actorUrl)
+    const { result } = await fetchRemoteActor(actorUrl)
     if (result === undefined) throw new Error('Cannot fetch remote actor.')
 
     // Create the attributed to actor
@@ -70,7 +70,13 @@ async function getOrCreateActorAndServerAndModel (activityActor: string | Activi
     actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, result, ownerActor)
   }
 
-  return retryTransactionWrapper(refreshActorIfNeeded, actor)
+  if (actor.Account) actor.Account.Actor = actor
+  if (actor.VideoChannel) actor.VideoChannel.Actor = actor
+
+  actor = await retryTransactionWrapper(refreshActorIfNeeded, actor)
+  if (!actor) throw new Error('Actor ' + actor.url + ' does not exist anymore.')
+
+  return actor
 }
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
@@ -264,7 +270,7 @@ type FetchRemoteActorResult = {
   avatarName?: string
   attributedTo: ActivityPubAttributedTo[]
 }
-async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResult> {
+async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: number, result: FetchRemoteActorResult }> {
   const options = {
     uri: actorUrl,
     method: 'GET',
@@ -281,7 +287,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
 
   if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
-    return undefined
+    return { result: undefined, statusCode: requestResult.response.statusCode }
   }
 
   const followersCount = await fetchActorTotalItems(actorJSON.followers)
@@ -307,12 +313,15 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
 
   const name = actorJSON.name || actorJSON.preferredUsername
   return {
-    actor,
-    name,
-    avatarName,
-    summary: actorJSON.summary,
-    support: actorJSON.support,
-    attributedTo: actorJSON.attributedTo
+    statusCode: requestResult.response.statusCode,
+    result: {
+      actor,
+      name,
+      avatarName,
+      summary: actorJSON.summary,
+      support: actorJSON.support,
+      attributedTo: actorJSON.attributedTo
+    }
   }
 }
 
@@ -355,7 +364,14 @@ async function refreshActorIfNeeded (actor: ActorModel): Promise<ActorModel> {
 
   try {
     const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
-    const result = await fetchRemoteActor(actorUrl)
+    const { result, statusCode } = await fetchRemoteActor(actorUrl)
+
+    if (statusCode === 404) {
+      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
+      actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
+      return undefined
+    }
+
     if (result === undefined) {
       logger.warn('Cannot fetch remote actor in refresh actor.')
       return actor

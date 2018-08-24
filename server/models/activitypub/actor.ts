@@ -50,7 +50,9 @@ export const unusedActorAttributesForAPI = [
   'sharedInboxUrl',
   'followersUrl',
   'followingUrl',
-  'url'
+  'url',
+  'createdAt',
+  'updatedAt'
 ]
 
 @DefaultScope({

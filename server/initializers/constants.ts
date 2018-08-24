@@ -44,7 +44,7 @@ const SORTABLE_COLUMNS = {
   FOLLOWING: [ 'createdAt' ],
 
   VIDEOS_SEARCH: [ 'match', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
-  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName' ]
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {

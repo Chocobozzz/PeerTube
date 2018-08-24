@@ -325,15 +325,13 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       },
       include: [
         {
-          attributes: {
-            exclude: unusedActorAttributesForAPI
-          },
-          model: ActorModel,
+          attributes: [ 'id' ],
+          model: ActorModel.unscoped(),
           as: 'ActorFollowing',
           required: true,
           include: [
             {
-              model: VideoChannelModel,
+              model: VideoChannelModel.unscoped(),
               required: true,
               include: [
                 {
@@ -344,7 +342,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                   required: true
                 },
                 {
-                  model: AccountModel,
+                  model: AccountModel.unscoped(),
                   required: true,
                   include: [
                     {

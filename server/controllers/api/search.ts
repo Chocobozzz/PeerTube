@@ -41,7 +41,6 @@ searchRouter.get('/video-channels',
   videoChannelsSearchSortValidator,
   setDefaultSearchSort,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
   videoChannelsSearchValidator,
   asyncMiddleware(searchVideoChannels)
 )
@@ -59,9 +58,9 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   const isURISearch = search.startsWith('http://') || search.startsWith('https://')
 
   const parts = search.split('@')
-  const isHandleSearch = parts.length === 2 && parts.every(p => p.indexOf(' ') === -1)
+  const isWebfingerSearch = parts.length === 2 && parts.every(p => p.indexOf(' ') === -1)
 
-  if (isURISearch || isHandleSearch) return searchVideoChannelURI(search, isHandleSearch, res)
+  if (isURISearch || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
 
   return searchVideoChannelsDB(query, res)
 }
@@ -81,17 +80,21 @@ async function searchVideoChannelsDB (query: VideoChannelsSearchQuery, res: expr
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function searchVideoChannelURI (search: string, isHandleSearch: boolean, res: express.Response) {
+async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean, res: express.Response) {
   let videoChannel: VideoChannelModel
+  let uri = search
+
+  if (isWebfingerSearch) uri = await loadActorUrlOrGetFromWebfinger(search)
 
   if (isUserAbleToSearchRemoteURI(res)) {
-    let uri = search
-    if (isHandleSearch) uri = await loadActorUrlOrGetFromWebfinger(search)
-
-    const actor = await getOrCreateActorAndServerAndModel(uri)
-    videoChannel = actor.VideoChannel
+    try {
+      const actor = await getOrCreateActorAndServerAndModel(uri)
+      videoChannel = actor.VideoChannel
+    } catch (err) {
+      logger.info('Cannot search remote video channel %s.', uri, { err })
+    }
   } else {
-    videoChannel = await VideoChannelModel.loadByUrlAndPopulateAccount(search)
+    videoChannel = await VideoChannelModel.loadByUrlAndPopulateAccount(uri)
   }
 
   return res.json({
@@ -138,7 +141,7 @@ async function searchVideoURI (url: string, res: express.Response) {
       const result = await getOrCreateVideoAndAccountAndChannel(url, syncParam)
       video = result ? result.video : undefined
     } catch (err) {
-      logger.info('Cannot search remote video %s.', url)
+      logger.info('Cannot search remote video %s.', url, { err })
     }
   } else {
     video = await VideoModel.loadByUrlAndPopulateAccount(url)
