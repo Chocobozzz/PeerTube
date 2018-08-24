@@ -27,7 +27,7 @@
         <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
       </td>
 
-      <td>{{ videoAbuse.reason }}</td>
+      <td class="cell-multi-line">{{ videoAbuse.reason }}</td>
 
       <td>
         <a [href]="videoAbuse.reporterAccount.url" i18n-title title="Go to the account" target="_blank" rel="noopener noreferrer">
