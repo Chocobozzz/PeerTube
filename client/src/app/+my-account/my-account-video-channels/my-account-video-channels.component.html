@@ -7,14 +7,14 @@
 
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels" class="video-channel">
-    <a [routerLink]="[ '/video-channels', videoChannel.name ]">
+    <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
       <img [src]="videoChannel.avatarUrl" alt="Avatar" />
     </a>
 
     <div class="video-channel-info">
-      <a [routerLink]="[ '/video-channels', videoChannel.name ]" class="video-channel-names" i18n-title title="Go to the channel">
+      <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Go to the channel">
         <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
-        <div class="video-channel-name">{{ videoChannel.name }}</div>
+        <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
       </a>
 
       <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
@@ -23,7 +23,7 @@
     <div class="video-channel-buttons">
       <my-delete-button (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
 
-      <my-edit-button [routerLink]="[ 'update', videoChannel.name ]"></my-edit-button>
+      <my-edit-button [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
     </div>
   </div>
 </div>

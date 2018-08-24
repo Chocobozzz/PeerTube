@@ -4,14 +4,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } from '../../../../../shared'
 import { ResultList } from '../../../../../shared/models/result-list.model'
-import {
-  UserVideoRate,
-  UserVideoRateUpdate,
-  VideoChannel,
-  VideoFilter,
-  VideoRateType,
-  VideoUpdate
-} from '../../../../../shared/models/videos'
+import { UserVideoRate, UserVideoRateUpdate, VideoFilter, VideoRateType, VideoUpdate } from '../../../../../shared/models/videos'
 import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
 import { environment } from '../../../environments/environment'
 import { ComponentPagination } from '../rest/component-pagination.model'
@@ -28,6 +21,7 @@ import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription'
+import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 
 @Injectable()
 export class VideoService {
@@ -151,7 +145,7 @@ export class VideoService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.name + '/videos', { params })
+               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))

@@ -59,6 +59,7 @@ describe('Test a ActivityPub videos search', function () {
     }
 
     {
+      // Without token
       const res = await searchVideo(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID)
 
       expect(res.body.total).to.equal(0)

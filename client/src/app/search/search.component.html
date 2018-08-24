@@ -27,14 +27,14 @@
   </div>
 
   <div *ngFor="let videoChannel of videoChannels" class="entry video-channel">
-    <a [routerLink]="[ '/video-channels', videoChannel.name ]">
+    <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
       <img [src]="videoChannel.avatarUrl" alt="Avatar" />
     </a>
 
     <div class="video-channel-info">
-      <a [routerLink]="[ '/video-channels', videoChannel.name ]" class="video-channel-names">
+      <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" class="video-channel-names">
         <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
-        <div class="video-channel-name">{{ videoChannel.name }}</div>
+        <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
       </a>
 
       <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>

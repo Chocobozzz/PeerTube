@@ -6,7 +6,6 @@ import { flushTests, immutableAssign, killallServers, makeGetRequest, runServer,
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
 describe('Test videos API validator', function () {
-  const path = '/api/v1/search/videos/'
   let server: ServerInfo
 
   // ---------------------------------------------------------------
@@ -20,6 +19,8 @@ describe('Test videos API validator', function () {
   })
 
   describe('When searching videos', function () {
+    const path = '/api/v1/search/videos/'
+
     const query = {
       search: 'coucou'
     }
@@ -108,6 +109,30 @@ describe('Test videos API validator', function () {
 
       const customQuery2 = immutableAssign(query, { endDate: 'hello' })
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: 400 })
+    })
+  })
+
+  describe('When searching video channels', function () {
+    const path = '/api/v1/search/video-channels/'
+
+    const query = {
+      search: 'coucou'
+    }
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, null, query)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, null, query)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, null, query)
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, path, query, statusCodeExpected: 200 })
     })
   })
 
