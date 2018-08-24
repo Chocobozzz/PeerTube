@@ -1,4 +1,4 @@
-<div class="video-channels">
+<div class="video-channels" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()">
   <div *ngFor="let videoChannel of videoChannels" class="video-channel">
     <a [routerLink]="[ '/video-channels', videoChannel.name ]">
       <img [src]="videoChannel.avatarUrl" alt="Avatar" />

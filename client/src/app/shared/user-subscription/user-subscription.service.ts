@@ -1,4 +1,4 @@
-import { bufferTime, catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
+import { bufferTime, catchError, filter, first, map, share, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ResultList } from '../../../../../shared'
@@ -8,6 +8,7 @@ import { Observable, ReplaySubject, Subject } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel as VideoChannelServer } from '../../../../../shared/models/videos'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 
 type SubscriptionExistResult = { [ uri: string ]: boolean }
 
@@ -17,7 +18,7 @@ export class UserSubscriptionService {
 
   // Use a replay subject because we "next" a value before subscribing
   private existsSubject: Subject<string> = new ReplaySubject(1)
-  private existsObservable: Observable<SubscriptionExistResult>
+  private readonly existsObservable: Observable<SubscriptionExistResult>
 
   constructor (
     private authHttp: HttpClient,
@@ -25,7 +26,6 @@ export class UserSubscriptionService {
     private restService: RestService
   ) {
     this.existsObservable = this.existsSubject.pipe(
-      tap(u => console.log(u)),
       bufferTime(500),
       filter(uris => uris.length !== 0),
       switchMap(uris => this.areSubscriptionExist(uris)),
@@ -54,10 +54,15 @@ export class UserSubscriptionService {
                )
   }
 
-  listSubscriptions (): Observable<ResultList<VideoChannel>> {
+  listSubscriptions (componentPagination: ComponentPagination): Observable<ResultList<VideoChannel>> {
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL
 
-    return this.authHttp.get<ResultList<VideoChannelServer>>(url)
+    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    return this.authHttp.get<ResultList<VideoChannelServer>>(url, { params })
                .pipe(
                  map(res => VideoChannelService.extractVideoChannels(res)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -67,11 +72,10 @@ export class UserSubscriptionService {
   isSubscriptionExists (nameWithHost: string) {
     this.existsSubject.next(nameWithHost)
 
-    return this.existsObservable
+    return this.existsObservable.pipe(first())
   }
 
   private areSubscriptionExist (uris: string[]): Observable<SubscriptionExistResult> {
-    console.log(uris)
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/exist'
     let params = new HttpParams()
 

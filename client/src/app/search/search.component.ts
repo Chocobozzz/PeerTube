@@ -87,9 +87,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe(
         ([ videosResult, videoChannelsResult ]) => {
           this.videos = this.videos.concat(videosResult.videos)
-          this.pagination.totalItems = videosResult.totalVideos
+          this.pagination.totalItems = videosResult.totalVideos + videoChannelsResult.total
 
-          this.videoChannels = videoChannelsResult.data
+          this.videoChannels = this.videoChannels.concat(videoChannelsResult.data)
+
+          // Focus on channels
+          if (this.channelsPerPage !== 10 && this.videos.length < this.pagination.itemsPerPage) {
+            this.resetPagination()
+
+            this.channelsPerPage = 10
+            this.search()
+          }
         },
 
         error => {
@@ -116,8 +124,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   private resetPagination () {
     this.pagination.currentPage = 1
     this.pagination.totalItems = null
+    this.channelsPerPage = 2
 
     this.videos = []
+    this.videoChannels = []
   }
 
   private updateTitle () {

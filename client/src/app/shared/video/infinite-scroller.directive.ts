@@ -11,7 +11,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   @Input() containerHeight: number
   @Input() pageHeight: number
   @Input() percentLimit = 70
-  @Input() autoLoading = false
+  @Input() autoInit = false
 
   @Output() nearOfBottom = new EventEmitter<void>()
   @Output() nearOfTop = new EventEmitter<void>()
@@ -29,7 +29,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    if (this.autoLoading === true) return this.initialize()
+    if (this.autoInit === true) return this.initialize()
   }
 
   ngOnDestroy () {
