@@ -201,39 +201,12 @@ type AvailableForListOptions = {
       ]
     }
 
-    // Force actorId to be a number to avoid SQL injections
-    const actorIdNumber = parseInt(options.actorId.toString(), 10)
-    let localVideosReq = ''
-    if (options.includeLocalVideos === true) {
-      localVideosReq = ' UNION ALL ' +
-      'SELECT "video"."id" AS "id" FROM "video" ' +
-      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-      'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-      'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-      'WHERE "actor"."serverId" IS NULL'
-    }
-
     // FIXME: It would be more efficient to use a CTE so we join AFTER the filters, but sequelize does not support it...
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
           [Sequelize.Op.notIn]: Sequelize.literal(
             '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-          ),
-          [ Sequelize.Op.in ]: Sequelize.literal(
-            '(' +
-              'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-              ' UNION ALL ' +
-              'SELECT "video"."id" AS "id" FROM "video" ' +
-              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-              localVideosReq +
-            ')'
           )
         },
         // Always list public videos
@@ -252,6 +225,36 @@ type AvailableForListOptions = {
         ]
       },
       include: [ videoChannelInclude ]
+    }
+
+    if (options.actorId) {
+      let localVideosReq = ''
+      if (options.includeLocalVideos === true) {
+        localVideosReq = ' UNION ALL ' +
+          'SELECT "video"."id" AS "id" FROM "video" ' +
+          'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+          'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+          'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+          'WHERE "actor"."serverId" IS NULL'
+      }
+
+      // Force actorId to be a number to avoid SQL injections
+      const actorIdNumber = parseInt(options.actorId.toString(), 10)
+      query.where['id'][ Sequelize.Op.in ] = Sequelize.literal(
+        '(' +
+        'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+        'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+        'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+        ' UNION ALL ' +
+        'SELECT "video"."id" AS "id" FROM "video" ' +
+        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+        'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+        'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+        'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+        'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+        localVideosReq +
+        ')'
+      )
     }
 
     if (options.withFiles === true) {
@@ -849,7 +852,8 @@ export class VideoModel extends Model<VideoModel> {
       order: getSort(options.sort)
     }
 
-    const actorId = options.actorId || (await getServerActor()).id
+    // actorId === null has a meaning, so just check undefined
+    const actorId = options.actorId !== undefined ? options.actorId : (await getServerActor()).id
 
     const scopes = {
       method: [
@@ -926,7 +930,8 @@ export class VideoModel extends Model<VideoModel> {
           id: {
             [ Sequelize.Op.in ]: Sequelize.literal(
               '(' +
-                'SELECT "video"."id" FROM "video" WHERE ' +
+                'SELECT "video"."id" FROM "video" ' +
+                'WHERE ' +
                 'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
                 'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
                 'UNION ALL ' +
