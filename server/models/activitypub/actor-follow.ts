@@ -169,9 +169,6 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
   static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
     const actorFollowingPartInclude: IIncludeOptions = {
-      attributes: {
-        exclude: unusedActorAttributesForAPI
-      },
       model: ActorModel,
       required: true,
       as: 'ActorFollowing',
@@ -203,7 +200,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
         actorId
       },
       include: [
-        actorFollowingPartInclude
+        actorFollowingPartInclude,
+        {
+          model: ActorModel,
+          required: true,
+          as: 'ActorFollower'
+        }
       ],
       transaction: t
     }
