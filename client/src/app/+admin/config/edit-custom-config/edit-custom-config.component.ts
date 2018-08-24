@@ -15,9 +15,6 @@ import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
-  customConfig: CustomConfig
-  resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
-
   static videoQuotaOptions = [
     { value: -1, label: 'Unlimited' },
     { value: 0, label: '0' },
@@ -38,6 +35,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 2 * 1024 * 1024 * 1024, label: '2GB' },
     { value: 5 * 1024 * 1024 * 1024, label: '5GB' }
   ]
+
+  customConfig: CustomConfig
+  resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
+
   transcodingThreadOptions = [
     { value: 0, label: 'Auto (via ffmpeg)' },
     { value: 1, label: '1' },

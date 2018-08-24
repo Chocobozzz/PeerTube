@@ -133,14 +133,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.notificationsService.error(this.i18n('Error'), msg)
       return
     }
-    
-    // TODO: need to add a preference for this
-    // TODO: first hardcode some limit and test with that
-    const videoQuotaDaily = 100 * 1024 * 1024 // 10 MB
-    //this.authService.getUser().videoQuotaDaily
+
+    const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
     if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
       const msg = this.i18n(
-        'Your daily video quota is exceeded with this video (video size: {{ videoSize }}, used: {{ videoQuotaUsedDaily }}, quota: {{ videoQuotaDaily }})',
+        'Your daily video quota is exceeded with this video (video size: {{ videoSize }}, ' +
+            'used: {{ videoQuotaUsedDaily }}, quota: {{ videoQuotaDaily }})',
         {
           videoSize: bytePipes.transform(videofile.size, 0),
           videoQuotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),

@@ -4,7 +4,7 @@ import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
 import { EditCustomConfigComponent } from '../../../+admin/config/edit-custom-config/'
 
 export abstract class UserEdit extends FormReactive {
-    
+
   // These are used by a HTML select, so convert key into strings
   videoQuotaOptions = EditCustomConfigComponent.videoQuotaOptions
     .map(q => ({ value: q.value.toString(), label: q.label }))

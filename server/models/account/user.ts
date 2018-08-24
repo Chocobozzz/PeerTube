@@ -301,7 +301,7 @@ export class UserModel extends Model<UserModel> {
       'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
       'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
       'WHERE "account"."userId" = $userId ' +
-      'AND "video"."createdAt" > now() - interval \'24 hours\'' + 
+      'AND "video"."createdAt" > now() - interval \'24 hours\'' +
       'GROUP BY "video"."id") t'
 
     const options = {
@@ -351,11 +351,11 @@ export class UserModel extends Model<UserModel> {
       blockedReason: this.blockedReason,
       account: this.Account.toFormattedJSON(),
       videoChannels: [],
-      videoQuotaUsed: videoQuotaUsed !== undefined 
-            ? parseInt(videoQuotaUsed, 10) 
+      videoQuotaUsed: videoQuotaUsed !== undefined
+            ? parseInt(videoQuotaUsed, 10)
             : undefined,
-      videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined 
-            ? parseInt(videoQuotaUsedDaily, 10) 
+      videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
+            ? parseInt(videoQuotaUsedDaily, 10)
             : undefined
     }
 
