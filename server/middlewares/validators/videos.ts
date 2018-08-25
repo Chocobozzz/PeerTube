@@ -275,6 +275,16 @@ const videosAcceptChangeOwnershipValidator = [
     const body = req.body as VideoChangeOwnershipAccept
     if (!await isVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
 
+    const user = res.locals.oauth.token.User
+    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+    const isAble = await user.isAbleToUploadVideo(videoChangeOwnership.Video.getOriginalFile())
+    if (isAble === false) {
+      res.status(403)
+        .json({ error: 'The user video quota is exceeded with this video.' })
+        .end()
+      return
+    }
+
     return next()
   }
 ]

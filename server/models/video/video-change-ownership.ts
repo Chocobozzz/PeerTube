@@ -3,6 +3,7 @@ import { AccountModel } from '../account/account'
 import { VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { getSort } from '../utils'
+import { VideoFileModel } from './video-file'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -37,7 +38,8 @@ enum ScopeNames {
       },
       {
         model: () => VideoModel,
-        required: true
+        required: true,
+        include: [{ model: () => VideoFileModel }]
       }
     ]
   }

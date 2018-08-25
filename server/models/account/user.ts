@@ -35,6 +35,7 @@ import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
 import { NSFW_POLICY_TYPES } from '../../initializers'
+import { VideoFileModel } from '../video/video-file'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -295,7 +296,7 @@ export class UserModel extends Model<UserModel> {
     return json
   }
 
-  isAbleToUploadVideo (videoFile: Express.Multer.File) {
+  isAbleToUploadVideo (videoFile: Express.Multer.File | VideoFileModel) {
     if (this.videoQuota === -1) return Promise.resolve(true)
 
     return UserModel.getOriginalVideoFileTotalFromUser(this)
