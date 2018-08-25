@@ -3,15 +3,43 @@ import * as multer from 'multer'
 import { CONFIG, REMOTE_SCHEME } from '../initializers'
 import { logger } from './logger'
 import { User } from '../../shared/models/users'
-import { generateRandomString } from './utils'
+import { deleteFileAsync, generateRandomString } from './utils'
+import { extname } from 'path'
+import { isArray } from './custom-validators/misc'
 
-function isNSFWHidden (res: express.Response) {
+function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
+  if (paramNSFW === 'true') return true
+  if (paramNSFW === 'false') return false
+  if (paramNSFW === 'both') return undefined
+
   if (res.locals.oauth) {
     const user: User = res.locals.oauth.token.User
-    if (user) return user.nsfwPolicy === 'do_not_list'
+    // User does not want NSFW videos
+    if (user && user.nsfwPolicy === 'do_not_list') return false
   }
 
-  return CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
+  if (CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list') return false
+
+  // Display all
+  return null
+}
+
+function cleanUpReqFiles (req: { files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[] }) {
+  const files = req.files
+
+  if (!files) return
+
+  if (isArray(files)) {
+    (files as Express.Multer.File[]).forEach(f => deleteFileAsync(f.path))
+    return
+  }
+
+  for (const key of Object.keys(files)) {
+    const file = files[ key ]
+
+    if (isArray(file)) file.forEach(f => deleteFileAsync(f.path))
+    else deleteFileAsync(file.path)
+  }
 }
 
 function getHostWithPort (host: string) {
@@ -42,7 +70,7 @@ function createReqFiles (
     },
 
     filename: async (req, file, cb) => {
-      const extension = mimeTypes[ file.mimetype ]
+      const extension = mimeTypes[ file.mimetype ] || extname(file.originalname)
       let randomString = ''
 
       try {
@@ -56,7 +84,7 @@ function createReqFiles (
     }
   })
 
-  const fields = []
+  let fields: { name: string, maxCount: number }[] = []
   for (const fieldName of fieldNames) {
     fields.push({
       name: fieldName,
@@ -70,8 +98,9 @@ function createReqFiles (
 // ---------------------------------------------------------------------------
 
 export {
-  isNSFWHidden,
+  buildNSFWFilter,
   getHostWithPort,
   badRequest,
-  createReqFiles
+  createReqFiles,
+  cleanUpReqFiles
 }

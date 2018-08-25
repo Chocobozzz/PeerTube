@@ -1,16 +1,16 @@
 import { User } from '../'
 import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
-import { VideoConstant } from '../../../../../shared/models/videos/video.model'
+import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
-import { ServerConfig } from '../../../../../shared/models'
+import { peertubeTranslate, ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
-import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
   by: string
   accountAvatarUrl: string
+  videoChannelAvatarUrl: string
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
@@ -40,6 +40,8 @@ export class Video implements VideoServerModel {
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
+  blacklisted?: boolean
+  blacklistedReason?: string
 
   account: {
     id: number
@@ -59,6 +61,10 @@ export class Video implements VideoServerModel {
     url: string
     host: string
     avatar: Avatar
+  }
+
+  static buildClientUrl (videoUUID: string) {
+    return '/videos/watch/' + videoUUID
   }
 
   private static createDurationString (duration: number) {
@@ -102,9 +108,11 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
     this.account = hash.account
+    this.channel = hash.channel
 
     this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
     this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+    this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.channel)
 
     this.category.label = peertubeTranslate(this.category.label, translations)
     this.licence.label = peertubeTranslate(this.licence.label, translations)
@@ -113,6 +121,9 @@ export class Video implements VideoServerModel {
 
     this.scheduledUpdate = hash.scheduledUpdate
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
+
+    this.blacklisted = hash.blacklisted
+    this.blacklistedReason = hash.blacklistedReason
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

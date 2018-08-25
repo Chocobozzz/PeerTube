@@ -1019,7 +1019,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle #sidebar a {
       display: block;
       margin: 0 0 0.25rem;
-      color: #46483e;
+      color: #4a5055;
       white-space: nowrap;
       overflow: hidden;
       -o-text-overflow: ellipsis;
@@ -1053,7 +1053,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     @media print, screen and (min-width: 64em) {
       #spectacle #docs .example-box {
         display: block;
-        background-color: #23241f;
+        background-color: #2d3134;
         position: absolute;
         right: 0;
         top: 0;
@@ -1063,7 +1063,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle article .no-description {
       color: #8a8a8a; }
     #spectacle article dt {
-      color: #23241f; }
+      color: #2d3134; }
     #spectacle article table.table {
       width: 100%; }
     #spectacle article code {
@@ -1087,7 +1087,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       font-weight: bold;
       background: transparent;
       border: none;
-      color: #515448; }
+      color: #535b60; }
       #spectacle article h1.doc-title span {
         display: none;
         opacity: 0.65;
@@ -1123,6 +1123,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         border-top: 1px solid #ddd; }
       #spectacle article .prop-row .prop-title {
         font-weight: bold; }
+      #spectacle article .prop-row .prop-type {
+        font-weight: 400; }
       #spectacle article .prop-row .prop-subtitle {
         font-weight: 400;
         font-size: 80%; }
@@ -1153,7 +1155,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       padding-left: 2.25rem !important;
       padding-right: 2.25rem !important;
       color: #fefefe;
-      background-color: #23241f; }
+      background-color: #2d3134; }
       #spectacle article .doc-examples h5 {
         color: #fefefe;
         font-size: 1rem;
@@ -1169,7 +1171,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         display: block;
         margin-bottom: 1.5rem;
         padding: 1.5rem;
-        font-family: Consolas,"Liberation Mono",Courier,monospace;
+        font-family: Consolas, "Liberation Mono", Courier, monospace;
         font-weight: inherit;
         color: inherit;
         background-color: transparent;
@@ -1181,6 +1183,15 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         word-spacing: normal;
         white-space: pre-wrap;
         word-break: normal; }
+      #spectacle article .doc-examples tbody tr:nth-child(even) {
+        border-bottom: 0;
+        background-color: #353a3d; }
+      #spectacle article .doc-examples tbody, #spectacle article .doc-examples tfoot, #spectacle article .doc-examples thead {
+        color: #FFFFFF;
+        background-color: #2d3134;
+        border: 0px; }
+      #spectacle article .doc-examples thead {
+        background-color: #2d3134; }
       #spectacle article .doc-examples .swagger-response-headers {
         background-color: transparent;
         border: none;
@@ -1235,7 +1246,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     #spectacle article .definition dl dt {
       font-weight: normal; }
     #spectacle article .definition dl dd {
-      font-weight: lighter; }
+      font-style: italic; }
     #spectacle article .definition .json-property-name {
       font-weight: bold; }
     #spectacle article .hljs {
@@ -1245,7 +1256,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       margin-bottom: 1rem;
       border: none; }
   #spectacle .drawer-layout .drawer {
-    box-shadow: 0 0 10px rgba(35, 36, 31, 0.5);
+    box-shadow: 0 0 10px rgba(45, 49, 52, 0.5);
     transition: transform 0.5s ease;
     backface-visibility: hidden; }
     #spectacle .drawer-layout .drawer.slide-left {
@@ -1283,7 +1294,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     position: fixed;
     top: 0.75rem;
     right: 0.75rem;
-    background-color: rgba(35, 36, 31, 0.75);
+    background-color: rgba(45, 49, 52, 0.75);
     padding: 0.65rem;
     z-index: 1;
     border-radius: 5px;

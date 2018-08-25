@@ -5,7 +5,7 @@
 
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
-import { pseudoRandomBytes } from 'crypto'
+import { createHash, pseudoRandomBytes } from 'crypto'
 import { copyFile, readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
 import * as mkdirp from 'mkdirp'
 import { isAbsolute, join } from 'path'
@@ -13,6 +13,35 @@ import * as pem from 'pem'
 import * as rimraf from 'rimraf'
 import { URL } from 'url'
 import { truncate } from 'lodash'
+
+const timeTable = {
+  ms:           1,
+  second:       1000,
+  minute:       60000,
+  hour:         3600000,
+  day:          3600000 * 24,
+  week:         3600000 * 24 * 7,
+  month:        3600000 * 24 * 30
+}
+export function parseDuration (duration: number | string): number {
+  if (typeof duration === 'number') return duration
+
+  if (typeof duration === 'string') {
+    const split = duration.match(/^([\d\.,]+)\s?(\w+)$/)
+
+    if (split.length === 3) {
+      const len = parseFloat(split[1])
+      let unit = split[2].replace(/s$/i,'').toLowerCase()
+      if (unit === 'm') {
+        unit = 'ms'
+      }
+
+      return (len || 1) * (timeTable[unit] || 0)
+    }
+  }
+
+  throw new Error('Duration could not be properly parsed')
+}
 
 function sanitizeUrl (url: string) {
   const urlObject = new URL(url)
@@ -42,7 +71,7 @@ function root () {
   const paths = [ __dirname, '..', '..' ]
 
   // We are under /dist directory
-  if (process.mainModule.filename.endsWith('.ts') === false) {
+  if (process.mainModule && process.mainModule.filename.endsWith('.ts') === false) {
     paths.push('..')
   }
 
@@ -58,7 +87,7 @@ function escapeHTML (stringParam) {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#39;',
+    '\'': '&#39;',
     '/': '&#x2F;',
     '`': '&#x60;',
     '=': '&#x3D;'
@@ -93,6 +122,10 @@ function peertubeTruncate (str: string, maxLength: number) {
   // We always use the .length so we need to truncate more if needed
   options.length -= truncatedStr.length - maxLength
   return truncate(str, options)
+}
+
+function sha256 (str: string) {
+  return createHash('sha256').update(str).digest('hex')
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
@@ -143,6 +176,7 @@ const renamePromise = promisify2WithVoid<string, string>(rename)
 const writeFilePromise = promisify2WithVoid<string, any>(writeFile)
 const readdirPromise = promisify1<string, string[]>(readdir)
 const mkdirpPromise = promisify1<string, string>(mkdirp)
+// we cannot modify the Promise types, so we should make the promisify instance check mkdirp
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
@@ -164,6 +198,7 @@ export {
   sanitizeHost,
   buildPath,
   peertubeTruncate,
+  sha256,
 
   promisify0,
   promisify1,

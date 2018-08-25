@@ -21,8 +21,12 @@ database:
   suffix: '_prod'
   username: 'peertube'
   password: 'peertube'
+  pool:
+    max: 5
 
 # Redis server for short time storage
+# You can also specify a 'socket' path to a unix socket but first need to
+# comment out hostname and port
 redis:
   hostname: 'localhost'
   port: 6379
@@ -48,6 +52,7 @@ storage:
   previews: '/var/www/peertube/storage/previews/'
   thumbnails: '/var/www/peertube/storage/thumbnails/'
   torrents: '/var/www/peertube/storage/torrents/'
+  captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
 
 log:
@@ -68,7 +73,9 @@ log:
 
 cache:
   previews:
-    size: 100 # Max number of previews you want to cache
+    size: 500 # Max number of previews you want to cache
+  captions:
+    size: 500 # Max number of video captions/subtitles you want to cache
 
 admin:
   email: 'admin@example.com'
@@ -98,6 +105,14 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+
+import:
+  # Add ability for your users to import remote videos (from YouTube, torrent...)
+  videos:
+    http: # Classic HTTP or all sites supported by youtube-dl https://rg3.github.io/youtube-dl/supportedsites.html
+      enabled: false
+    torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
+      enabled: false
 
 # Instance settings
 instance:

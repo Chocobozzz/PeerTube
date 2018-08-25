@@ -136,9 +136,6 @@
                 <a href="#operation--videos-privacies-get"> GET /videos/privacies </a>
               </li>
               <li>
-                <a href="#operation--videos-search-get"> GET /videos/search </a>
-              </li>
-              <li>
                 <a href="#operation--videos--id--put"> PUT /videos/{id} </a>
               </li>
               <li>
@@ -173,10 +170,10 @@
             <a href="#tag-VideoBlacklist">VideoBlacklist</a>
             <ul>
               <li>
-                <a href="#operation--videos--videoId--blacklist-post"> POST /videos/{videoId}/blacklist </a>
+                <a href="#operation--videos--id--blacklist-post"> POST /videos/{id}/blacklist </a>
               </li>
               <li>
-                <a href="#operation--videos--videoId--blacklist-delete"> DELETE /videos/{videoId}/blacklist </a>
+                <a href="#operation--videos--id--blacklist-delete"> DELETE /videos/{id}/blacklist </a>
               </li>
               <li>
                 <a href="#operation--videos-blacklist-get"> GET /videos/blacklist </a>
@@ -213,19 +210,19 @@
             <a href="#tag-VideoComment">VideoComment</a>
             <ul>
               <li>
-                <a href="#operation--videos--videoId--comment-threads-get"> GET /videos/{videoId}/comment-threads </a>
+                <a href="#operation--videos--id--comment-threads-get"> GET /videos/{id}/comment-threads </a>
               </li>
               <li>
-                <a href="#operation--videos--videoId--comment-threads-post"> POST /videos/{videoId}/comment-threads </a>
+                <a href="#operation--videos--id--comment-threads-post"> POST /videos/{id}/comment-threads </a>
               </li>
               <li>
-                <a href="#operation--videos--videoId--comment-threads--threadId--get"> GET /videos/{videoId}/comment-threads/{threadId} </a>
+                <a href="#operation--videos--id--comment-threads--threadId--get"> GET /videos/{id}/comment-threads/{threadId} </a>
               </li>
               <li>
-                <a href="#operation--videos--videoId--comments--commentId--post"> POST /videos/{videoId}/comments/{commentId} </a>
+                <a href="#operation--videos--id--comments--commentId--post"> POST /videos/{id}/comments/{commentId} </a>
               </li>
               <li>
-                <a href="#operation--videos--videoId--comments--commentId--delete"> DELETE /videos/{videoId}/comments/{commentId} </a>
+                <a href="#operation--videos--id--comments--commentId--delete"> DELETE /videos/{id}/comments/{commentId} </a>
               </li>
             </ul>
           </section>
@@ -234,6 +231,14 @@
             <ul>
               <li>
                 <a href="#operation--videos--id--rate-put"> PUT /videos/{id}/rate </a>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <a href="#tag-Search">Search</a>
+            <ul>
+              <li>
+                <a href="#operation--search-videos-get"> GET /search/videos </a>
               </li>
             </ul>
           </section>
@@ -264,7 +269,6 @@
           <a href="#definition-GetMeVideoRating"> GetMeVideoRating </a>
           <a href="#definition-RegisterUser"> RegisterUser </a>
           <a href="#definition-VideoChannelInput"> VideoChannelInput </a>
-          <a href="#definition-ScheduleVideoUpdate"> ScheduleVideoUpdate </a>
         </nav>
       </div>
       <div id="docs" class="row collapse expanded drawer" data-drawer>
@@ -354,13 +358,14 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">name</div>
+                      <div class="prop-title">name:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>The name of the account (chocobozzz or
@@ -369,41 +374,44 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -480,13 +488,14 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">name</div>
+                      <div class="prop-title">name:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>The name of the account (chocobozzz or
@@ -755,19 +764,20 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">format</div>
+                      <div class="prop-title">format:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-enum" title="Possible values">
+                            <span class="json-property-enum-item json-property-enum-default-value">xml</span>,
+                            <span class="json-property-enum-item">atom</span>,
+                            <span class="json-property-enum-item">json</span>
+                          </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                          <span class="json-property-default-value" title="Default value">xml</span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-enum" title="Possible values">
-                          <span class="json-property-enum-item json-property-enum-default-value">xml</span>,
-                          <span class="json-property-enum-item">atom</span>,
-                          <span class="json-property-enum-item">json</span>
-                        </span>
-                        <span class="json-property-range" title="Value limits"></span>
-                        <span class="json-property-default-value" title="Default value">xml</span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>The format expected (xml defaults to RSS 2.0, atom to ATOM 1.0 and json to JSON FEED 1.0</p>
@@ -775,12 +785,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">accountId</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">accountId:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
                       <p>The id of the local account to filter to (beware, users IDs and not actors IDs which will return empty feeds</p>
@@ -788,12 +799,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">accountName</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">accountName:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
                       <p>The name of the local account to filter to</p>
@@ -844,55 +856,59 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">state</div>
+                      <div class="prop-title">state:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The id of the account</p>
+                      <p>The state of the job</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">count</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p class="no-description">(no description)</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -997,13 +1013,14 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">host</div>
+                      <div class="prop-title">host:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>The host to unfollow </p>
@@ -1075,41 +1092,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -1221,41 +1241,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -1439,7 +1462,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -1605,41 +1628,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -1772,16 +1798,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The user id </p>
+                      <p>The user id</p>
                     </div>
                   </div>
                 </section>
@@ -1796,7 +1823,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -1850,16 +1877,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The user id </p>
+                      <p>The user id</p>
                     </div>
                   </div>
                 </section>
@@ -1995,16 +2023,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The user id </p>
+                      <p>The user id</p>
                     </div>
                   </div>
                 </section>
@@ -2034,7 +2063,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -2252,7 +2281,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -2311,7 +2340,7 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">200 OK</div>
-                      <div class="prop-ref"></div>
+                      <div class="prop-ref"> </div>
                       <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                     </div>
                     <div class="prop-value">
@@ -2384,13 +2413,14 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">videoId:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>The video id </p>
@@ -2479,41 +2509,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -2688,7 +2721,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -2720,12 +2753,13 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">avatarfile</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">file</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">avatarfile:
+                        <span class="prop-type">
+                          <span class="json-property-type">file</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>The file to upload.</p>
@@ -2816,41 +2850,58 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">category:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>category id of the video</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Number of items</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in query </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -2970,7 +3021,7 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">200 OK</div>
-                      <div class="prop-ref"></div>
+                      <div class="prop-ref"> </div>
                       <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                     </div>
                     <div class="prop-value">
@@ -3028,7 +3079,7 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">200 OK</div>
-                      <div class="prop-ref"></div>
+                      <div class="prop-ref"> </div>
                       <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                     </div>
                     <div class="prop-value">
@@ -3086,7 +3137,7 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">200 OK</div>
-                      <div class="prop-ref"></div>
+                      <div class="prop-ref"> </div>
                       <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                     </div>
                     <div class="prop-value">
@@ -3144,7 +3195,7 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">200 OK</div>
-                      <div class="prop-ref"></div>
+                      <div class="prop-ref"> </div>
                       <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                     </div>
                     <div class="prop-value">
@@ -3177,155 +3228,6 @@
               </div>
             </div>
           </div>
-          <div id="operation--videos-search-get" class="operation panel" data-traverse-target="operation--videos-search-get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-Video">Video</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-name">
-                <span class="operation-name">GET</span>
-                <span class="operation-path">/videos/search</span>
-              </span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>starting page</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>stopping page</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>sorting</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                      <div class="prop-ref">
-                        <span class="json-schema-ref-array">
-                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
-                        </span>
-                      </div>
-                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-inner">
-                    <div class="prop-name">type</div>
-                    <div class="prop-value">
-                      <span class="json-property-type">
-                        <span class="json-schema-ref-array">
-                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
-                        </span>
-                      </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">[
-  {
-    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;category&quot;</span>: {
-      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-    },
-    <span class="hljs-attr">&quot;licence&quot;</span>: {
-      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-    },
-    <span class="hljs-attr">&quot;language&quot;</span>: {
-      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-    },
-    <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-    <span class="hljs-attr">&quot;account&quot;</span>: {
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;avatar&quot;</span>: {
-        <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      }
-    }
-  }
-]
-</code></pre>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
           <div id="operation--videos--id--put" class="operation panel" data-traverse-target="operation--videos--id--put">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
@@ -3346,26 +3248,28 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id</p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">thumbnailfile</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">file</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">thumbnailfile:
+                        <span class="prop-type">
+                          <span class="json-property-type">file</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video thumbnail file</p>
@@ -3373,12 +3277,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">previewfile</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">file</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">previewfile:
+                        <span class="prop-type">
+                          <span class="json-property-type">file</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video preview file</p>
@@ -3386,12 +3291,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">category</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">category:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video category</p>
@@ -3399,12 +3305,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">licence</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">licence:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video licence</p>
@@ -3412,12 +3319,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">language</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">language:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video language</p>
@@ -3425,12 +3333,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">description</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">description:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video description</p>
@@ -3438,12 +3347,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">waitTranscoding</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">boolean</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">waitTranscoding:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Whether or not we wait transcoding before publish the video</p>
@@ -3451,12 +3361,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">support</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">support:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Text describing how to support the video uploader</p>
@@ -3464,12 +3375,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">nsfw</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">boolean</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">nsfw:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Whether or not this video contains sensitive content</p>
@@ -3477,12 +3389,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">name</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">name:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video name</p>
@@ -3490,12 +3403,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">tags</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string[]</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[]</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video tags</p>
@@ -3503,12 +3417,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">commentsEnabled</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">boolean</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">commentsEnabled:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Enable or disable comments for this video</p>
@@ -3516,16 +3431,17 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">privacy</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-enum" title="Possible values">
-                          <span class="json-property-enum-item">Public</span>,
-                          <span class="json-property-enum-item">Unlisted</span>
+                      <div class="prop-title">privacy:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-enum" title="Possible values">
+                            <span class="json-property-enum-item">Public</span>,
+                            <span class="json-property-enum-item">Unlisted</span>
+                          </span>
+                          <span class="json-property-range" title="Value limits"></span>
                         </span>
-                        <span class="json-property-range" title="Value limits"></span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video privacy</p>
@@ -3533,15 +3449,16 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">scheduleUpdate</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">[object Object]</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">scheduleUpdate:
+                        <span class="prop-type">
+                          <span class="json-property-type">object</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
-                      <p class="no-description">(no description)</p>
+                      <p>Schedule an update at a specific datetime</p>
                     </div>
                   </div>
                 </section>
@@ -3665,16 +3582,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -3776,16 +3694,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -3800,7 +3719,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -3854,16 +3773,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -3876,7 +3796,7 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">200 OK</div>
-                      <div class="prop-ref"></div>
+                      <div class="prop-ref"> </div>
                       <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
                     </div>
                     <div class="prop-value">
@@ -3927,16 +3847,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -3951,7 +3872,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -3983,13 +3904,14 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videofile</div>
+                      <div class="prop-title">videofile:
+                        <span class="prop-type">
+                          <span class="json-property-type">file</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">file</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>Video file</p>
@@ -3997,119 +3919,14 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">thumbnailfile</div>
+                      <div class="prop-title">channelId:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">file</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Video thumbnail file</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">previewfile</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">file</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Video preview file</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">category</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Video category</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">waitTranscoding</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">boolean</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Whether or not we wait transcoding before publish the video</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">licence</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Video licence</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">language</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Video language</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">description</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Video description</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">support</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>Text describing how to support the video uploader</p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">channelId</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>Channel id that will contain this video</p>
@@ -4117,13 +3934,125 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">nsfw</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">boolean</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">thumbnailfile:
+                        <span class="prop-type">
+                          <span class="json-property-type">file</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video thumbnail file</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">previewfile:
+                        <span class="prop-type">
+                          <span class="json-property-type">file</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video preview file</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">category:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video category</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">licence:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video licence</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">language:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video language</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">description:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video description</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">waitTranscoding:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Whether or not we wait transcoding before publish the video</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">support:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Text describing how to support the video uploader</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">nsfw:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Whether or not this video contains sensitive content</p>
@@ -4131,13 +4060,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">name</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">name:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video name</p>
@@ -4145,12 +4074,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">tags</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string[]</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">tags:
+                        <span class="prop-type">
+                          <span class="json-property-type">string[]</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video tags</p>
@@ -4158,12 +4088,13 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">commentsEnabled</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">boolean</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">commentsEnabled:
+                        <span class="prop-type">
+                          <span class="json-property-type">boolean</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Enable or disable comments for this video</p>
@@ -4171,13 +4102,17 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">privacy</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">[object Object]</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">privacy:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-enum" title="Possible values">
+                            <span class="json-property-enum-item">Public</span>,
+                            <span class="json-property-enum-item">Unlisted</span>
+                          </span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
                       <p>Video privacy</p>
@@ -4185,15 +4120,16 @@
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">scheduleUpdate</div>
-                      <div class="prop-subtitle"> in formData </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">[object Object]</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">scheduleUpdate:
+                        <span class="prop-type">
+                          <span class="json-property-type">object</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in formData </div>
                     </div>
                     <div class="prop-value">
-                      <p class="no-description">(no description)</p>
+                      <p>Schedule an update at a specific datetime</p>
                     </div>
                   </div>
                 </section>
@@ -4282,41 +4218,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -4439,16 +4378,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -4463,7 +4403,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -4498,7 +4438,7 @@
             </div>
           </div>
           <h1 id="tag-VideoBlacklist" class="swagger-summary-tag" data-traverse-target="tag-VideoBlacklist">VideoBlacklist</h1>
-          <div id="operation--videos--videoId--blacklist-post" class="operation panel" data-traverse-target="operation--videos--videoId--blacklist-post">
+          <div id="operation--videos--id--blacklist-post" class="operation panel" data-traverse-target="operation--videos--id--blacklist-post">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -4510,7 +4450,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">POST</span>
-                <span class="operation-path">/videos/{videoId}/blacklist</span>
+                <span class="operation-path">/videos/{id}/blacklist</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -4518,16 +4458,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -4542,7 +4483,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -4576,7 +4517,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--videos--videoId--blacklist-delete" class="operation panel" data-traverse-target="operation--videos--videoId--blacklist-delete">
+          <div id="operation--videos--id--blacklist-delete" class="operation panel" data-traverse-target="operation--videos--id--blacklist-delete">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -4588,7 +4529,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">DELETE</span>
-                <span class="operation-path">/videos/{videoId}/blacklist</span>
+                <span class="operation-path">/videos/{id}/blacklist</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -4596,16 +4537,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -4620,7 +4562,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -4674,41 +4616,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -4818,41 +4763,44 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -4971,7 +4919,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -5025,16 +4973,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video channel id </p>
+                      <p>The video channel id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -5119,16 +5068,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video channel id </p>
+                      <p>The video channel id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -5156,7 +5106,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -5210,16 +5160,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video channel id </p>
+                      <p>The video channel id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -5234,7 +5185,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -5288,16 +5239,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video channel id </p>
+                      <p>The video channel id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -5399,13 +5351,14 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">name</div>
+                      <div class="prop-title">name:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
                       <p>The name of the account (chocobozzz or
@@ -5472,7 +5425,7 @@
             </div>
           </div>
           <h1 id="tag-VideoComment" class="swagger-summary-tag" data-traverse-target="tag-VideoComment">VideoComment</h1>
-          <div id="operation--videos--videoId--comment-threads-get" class="operation panel" data-traverse-target="operation--videos--videoId--comment-threads-get">
+          <div id="operation--videos--id--comment-threads-get" class="operation panel" data-traverse-target="operation--videos--id--comment-threads-get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -5484,7 +5437,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">GET</span>
-                <span class="operation-path">/videos/{videoId}/comment-threads</span>
+                <span class="operation-path">/videos/{id}/comment-threads</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -5492,55 +5445,59 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">start</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>starting page</p>
+                      <p>Offset</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">stop</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>stopping page</p>
+                      <p>Number of items</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">sort</div>
-                      <div class="prop-subtitle"> in query </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">number</span>
-                        <span class="json-property-range" title="Value limits"></span>
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
                       </div>
+                      <div class="prop-subtitle"> in query </div>
                     </div>
                     <div class="prop-value">
-                      <p>sorting</p>
+                      <p>Sort column (-createdAt for example)</p>
                     </div>
                   </div>
                 </section>
@@ -5613,7 +5570,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--videos--videoId--comment-threads-post" class="operation panel" data-traverse-target="operation--videos--videoId--comment-threads-post">
+          <div id="operation--videos--id--comment-threads-post" class="operation panel" data-traverse-target="operation--videos--id--comment-threads-post">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -5625,7 +5582,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">POST</span>
-                <span class="operation-path">/videos/{videoId}/comment-threads</span>
+                <span class="operation-path">/videos/{id}/comment-threads</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -5633,16 +5590,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -5734,7 +5692,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--videos--videoId--comment-threads--threadId--get" class="operation panel" data-traverse-target="operation--videos--videoId--comment-threads--threadId--get">
+          <div id="operation--videos--id--comment-threads--threadId--get" class="operation panel" data-traverse-target="operation--videos--id--comment-threads--threadId--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -5746,7 +5704,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">GET</span>
-                <span class="operation-path">/videos/{videoId}/comment-threads/{threadId}</span>
+                <span class="operation-path">/videos/{id}/comment-threads/{threadId}</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -5754,30 +5712,32 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">threadId</div>
+                      <div class="prop-title">threadId:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The thread id </p>
+                      <p>The thread id (root comment id)</p>
                     </div>
                   </div>
                 </section>
@@ -5910,7 +5870,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--videos--videoId--comments--commentId--post" class="operation panel" data-traverse-target="operation--videos--videoId--comments--commentId--post">
+          <div id="operation--videos--id--comments--commentId--post" class="operation panel" data-traverse-target="operation--videos--id--comments--commentId--post">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -5922,7 +5882,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">POST</span>
-                <span class="operation-path">/videos/{videoId}/comments/{commentId}</span>
+                <span class="operation-path">/videos/{id}/comments/{commentId}</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -5930,30 +5890,32 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">commentId</div>
+                      <div class="prop-title">threadId:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The comment id </p>
+                      <p>The comment id</p>
                     </div>
                   </div>
                 </section>
@@ -6045,7 +6007,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--videos--videoId--comments--commentId--delete" class="operation panel" data-traverse-target="operation--videos--videoId--comments--commentId--delete">
+          <div id="operation--videos--id--comments--commentId--delete" class="operation panel" data-traverse-target="operation--videos--id--comments--commentId--delete">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -6057,7 +6019,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">DELETE</span>
-                <span class="operation-path">/videos/{videoId}/comments/{commentId}</span>
+                <span class="operation-path">/videos/{id}/comments/{commentId}</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -6065,30 +6027,32 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">videoId</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">commentId</div>
+                      <div class="prop-title">threadId:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The comment id </p>
+                      <p>The comment id</p>
                     </div>
                   </div>
                 </section>
@@ -6103,7 +6067,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -6158,16 +6122,17 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">id:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id or uuid</p>
                     </div>
                   </div>
                 </section>
@@ -6182,7 +6147,7 @@
                       <div class="prop-title">204 No Content</div>
                     </div>
                     <div class="prop-value">
-                      <p>successful operation</p>
+                      <p>Successful operation</p>
                     </div>
                   </div>
                 </section>
@@ -6216,11 +6181,180 @@
               </div>
             </div>
           </div>
+          <h1 id="tag-Search" class="swagger-summary-tag" data-traverse-target="tag-Search">Search</h1>
+          <div id="operation--search-videos-get" class="operation panel" data-traverse-target="operation--search-videos-get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Search">Search</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/search/videos</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">start:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in query </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Offset</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">count:
+                        <span class="prop-type">
+                          <span class="json-property-type">number</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in query </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Number of items</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">sort:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <div class="prop-subtitle"> in query </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Sort column (-createdAt for example)</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">search:
+                        <span class="prop-type">
+                          <span class="json-property-type">string</span>
+                          <span class="json-property-range" title="Value limits"></span>
+                        </span>
+                      </div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in query </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>String to search</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                      <div class="prop-ref">
+                        <span class="json-schema-ref-array">
+                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
+                        </span>
+                      </div>
+                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">
+                        <span class="json-schema-ref-array">
+                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
+                        </span>
+                      </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">[
+  {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;category&quot;</span>: {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+      <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    },
+    <span class="hljs-attr">&quot;licence&quot;</span>: {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+      <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    },
+    <span class="hljs-attr">&quot;language&quot;</span>: {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    },
+    <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+    <span class="hljs-attr">&quot;account&quot;</span>: {
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;avatar&quot;</span>: {
+        <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+      }
+    }
+  }
+]
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
           <h1>Schema Definitions</h1>
           <div id="definition-VideoConstantNumber" class="definition panel" data-traverse-target="definition-VideoConstantNumber">
             <h2 class="panel-title">
               <a name="/definitions/VideoConstantNumber"></a>VideoConstantNumber:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6259,7 +6393,8 @@
           <div id="definition-VideoConstantString" class="definition panel" data-traverse-target="definition-VideoConstantString">
             <h2 class="panel-title">
               <a name="/definitions/VideoConstantString"></a>VideoConstantString:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6298,7 +6433,8 @@
           <div id="definition-VideoPrivacy" class="definition panel" data-traverse-target="definition-VideoPrivacy">
             <h2 class="panel-title">
               <a name="/definitions/VideoPrivacy"></a>VideoPrivacy: string
-              <!-- <span class="json-property-type"><span class="json-property-type">string</span>  <span class="json-property-enum" title="Possible values">
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">string</span>  <span class="json-property-enum" title="Possible values">
                       <span class="json-property-enum-item">Public</span>,
                       <span class="json-property-enum-item">Unlisted</span>,
                       <span class="json-property-enum-item">Private</span>
@@ -6323,7 +6459,8 @@
           <div id="definition-Video" class="definition panel" data-traverse-target="definition-Video">
             <h2 class="panel-title">
               <a name="/definitions/Video"></a>Video:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6546,7 +6683,8 @@
           <div id="definition-VideoAbuse" class="definition panel" data-traverse-target="definition-VideoAbuse">
             <h2 class="panel-title">
               <a name="/definitions/VideoAbuse"></a>VideoAbuse:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6654,7 +6792,8 @@
           <div id="definition-VideoBlacklist" class="definition panel" data-traverse-target="definition-VideoBlacklist">
             <h2 class="panel-title">
               <a name="/definitions/VideoBlacklist"></a>VideoBlacklist:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6753,7 +6892,8 @@
           <div id="definition-VideoChannel" class="definition panel" data-traverse-target="definition-VideoChannel">
             <h2 class="panel-title">
               <a name="/definitions/VideoChannel"></a>VideoChannel:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6823,7 +6963,8 @@
           <div id="definition-VideoComment" class="definition panel" data-traverse-target="definition-VideoComment">
             <h2 class="panel-title">
               <a name="/definitions/VideoComment"></a>VideoComment:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -6930,7 +7071,8 @@
           <div id="definition-VideoCommentThreadTree" class="definition panel" data-traverse-target="definition-VideoCommentThreadTree">
             <h2 class="panel-title">
               <a name="/definitions/VideoCommentThreadTree"></a>VideoCommentThreadTree:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7078,7 +7220,8 @@
           <div id="definition-Avatar" class="definition panel" data-traverse-target="definition-Avatar">
             <h2 class="panel-title">
               <a name="/definitions/Avatar"></a>Avatar:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7123,7 +7266,8 @@
           <div id="definition-Actor" class="definition panel" data-traverse-target="definition-Actor">
             <h2 class="panel-title">
               <a name="/definitions/Actor"></a>Actor:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7218,7 +7362,8 @@
           <div id="definition-Account" class="definition panel" data-traverse-target="definition-Account">
             <h2 class="panel-title">
               <a name="/definitions/Account"></a>Account:
-              <!-- <span class="json-property-type"><span class="json-property-type"></span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type"></span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7276,7 +7421,8 @@
           <div id="definition-User" class="definition panel" data-traverse-target="definition-User">
             <h2 class="panel-title">
               <a name="/definitions/User"></a>User:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7413,7 +7559,8 @@
           <div id="definition-ServerConfig" class="definition panel" data-traverse-target="definition-ServerConfig">
             <h2 class="panel-title">
               <a name="/definitions/ServerConfig"></a>ServerConfig:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7588,7 +7735,8 @@
           <div id="definition-Follow" class="definition panel" data-traverse-target="definition-Follow">
             <h2 class="panel-title">
               <a name="/definitions/Follow"></a>Follow:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7699,7 +7847,8 @@
           <div id="definition-Job" class="definition panel" data-traverse-target="definition-Job">
             <h2 class="panel-title">
               <a name="/definitions/Job"></a>Job:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7778,7 +7927,8 @@
           <div id="definition-AddUserResponse" class="definition panel" data-traverse-target="definition-AddUserResponse">
             <h2 class="panel-title">
               <a name="/definitions/AddUserResponse"></a>AddUserResponse:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7817,7 +7967,8 @@
           <div id="definition-VideoUploadResponse" class="definition panel" data-traverse-target="definition-VideoUploadResponse">
             <h2 class="panel-title">
               <a name="/definitions/VideoUploadResponse"></a>VideoUploadResponse:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7869,7 +8020,8 @@
           <div id="definition-CommentThreadResponse" class="definition panel" data-traverse-target="definition-CommentThreadResponse">
             <h2 class="panel-title">
               <a name="/definitions/CommentThreadResponse"></a>CommentThreadResponse:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -7952,7 +8104,8 @@
           <div id="definition-CommentThreadPostResponse" class="definition panel" data-traverse-target="definition-CommentThreadPostResponse">
             <h2 class="panel-title">
               <a name="/definitions/CommentThreadPostResponse"></a>CommentThreadPostResponse:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8016,7 +8169,8 @@
           <div id="definition-AddUser" class="definition panel" data-traverse-target="definition-AddUser">
             <h2 class="panel-title">
               <a name="/definitions/AddUser"></a>AddUser:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8093,7 +8247,8 @@
           <div id="definition-UpdateUser" class="definition panel" data-traverse-target="definition-UpdateUser">
             <h2 class="panel-title">
               <a name="/definitions/UpdateUser"></a>UpdateUser:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8160,7 +8315,8 @@
           <div id="definition-UpdateMe" class="definition panel" data-traverse-target="definition-UpdateMe">
             <h2 class="panel-title">
               <a name="/definitions/UpdateMe"></a>UpdateMe:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8227,7 +8383,8 @@
           <div id="definition-GetMeVideoRating" class="definition panel" data-traverse-target="definition-GetMeVideoRating">
             <h2 class="panel-title">
               <a name="/definitions/GetMeVideoRating"></a>GetMeVideoRating:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8274,7 +8431,8 @@
           <div id="definition-RegisterUser" class="definition panel" data-traverse-target="definition-RegisterUser">
             <h2 class="panel-title">
               <a name="/definitions/RegisterUser"></a>RegisterUser:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8331,7 +8489,8 @@
           <div id="definition-VideoChannelInput" class="definition panel" data-traverse-target="definition-VideoChannelInput">
             <h2 class="panel-title">
               <a name="/definitions/VideoChannelInput"></a>VideoChannelInput:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
+              <!-- <span class="json-property-type">
+              <span class="json-property-type">object</span>
               <span class="json-property-range" title="Value limits"></span>
               
               
@@ -8360,52 +8519,6 @@
                   <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
   <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-}
-</code></pre>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="definition-ScheduleVideoUpdate" class="definition panel" data-traverse-target="definition-ScheduleVideoUpdate">
-            <h2 class="panel-title">
-              <a name="/definitions/ScheduleVideoUpdate"></a>ScheduleVideoUpdate:
-              <!-- <span class="json-property-type"><span class="json-property-type">object</span>
-              <span class="json-property-range" title="Value limits"></span>
-              
-              
-              </span> -->
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="json-schema-properties">
-                  <dl>
-                    <dt data-property-name="updateAt" class="has-description">
-                      <span class="json-property-name">updateAt:</span>
-                      <span class="json-property-type">dateTime</span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dd>
-                      <p>When to update the video</p>
-                    </dd>
-                    <dt data-property-name="privacy">
-                      <span class="json-property-name">privacy:</span>
-                      <span class="json-property-type">
-                        <span class="">
-                          <a class="json-schema-ref" href="#/definitions/VideoPrivacy">VideoPrivacy</a>
-                        </span>
-                      </span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                  </dl>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <section>
-                  <h5>Example</h5>
-                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
-  <span class="hljs-attr">&quot;updateAt&quot;</span>: <span class="hljs-string">&quot;dateTime&quot;</span>,
-  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
 }
 </code></pre>
                   <!-- </div> -->

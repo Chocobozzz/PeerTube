@@ -45,6 +45,16 @@ export abstract class Actor implements ActorServer {
     this.updatedAt = new Date(hash.updatedAt.toString())
     this.avatar = hash.avatar
 
+    this.updateComputedAttributes()
+  }
+
+  updateAvatar (newAvatar: Avatar) {
+    this.avatar = newAvatar
+
+    this.updateComputedAttributes()
+  }
+
+  private updateComputedAttributes () {
     this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this)
   }
 }

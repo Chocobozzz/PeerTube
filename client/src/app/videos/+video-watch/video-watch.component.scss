@@ -1,18 +1,48 @@
 @import '_variables';
 @import '_mixins';
 
+.root-row {
+  flex-direction: column;
+}
+
+.blacklisted-label {
+  font-weight: $font-semibold;
+}
+
 #video-element-wrapper {
   background-color: #000;
   display: flex;
   justify-content: center;
+  flex-grow: 1;
+
+  .remote-server-down {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    background-color: #141313;
+    width: 100%;
+    font-size: 24px;
+    height: 500px;
+
+    @media screen and (max-width: 1000px) {
+      font-size: 20px;
+    }
+
+    @media screen and (max-width: 600px) {
+      font-size: 16px;
+    }
+  }
 
   /deep/ .video-js {
     width: 888px;
     height: 500px;
 
-    @media screen and (max-width: 600px) {
-      width: 100vw;
-      height: calc(100vw / 1.7); // 16/9
+    &.vjs-theater-enabled {
+      height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+      width: 100%;
     }
 
     // VideoJS create an inner video player
@@ -22,9 +52,12 @@
     }
   }
 
-  /deep/ .video-js.vjs-theater-enabled {
-    width: 100%;
-    height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
+  @media screen and (max-width: 600px) {
+    .remote-server-down,
+    /deep/ .video-js {
+      width: 100vw;
+      height: calc(100vw / 1.7); // 16/9
+    }
   }
 }
 
@@ -44,6 +77,7 @@
 .video-bottom {
   margin-top: 40px;
   display: flex;
+  flex-grow: 1;
 
   .video-info {
     flex-grow: 1;
@@ -84,29 +118,41 @@
           &:hover {
             opacity: 0.8;
           }
-        }
 
-        my-help {
-          display: inline-block;
+          img {
+            @include avatar(18px);
+
+            margin: -2px 2px 0 5px;
+          }
         }
       }
 
-      .video-info-by a {
-        @include disable-default-a-behaviour;
+      .video-info-by {
 
-        display: inline;
-        align-items: center;
-        font-size: 13px;
-        color: #000;
+        a {
+          @include disable-default-a-behaviour;
 
-        span:hover {
-          opacity: 0.8;
+          display: inline;
+          align-items: center;
+          font-size: 13px;
+          color: #000;
+
+          span:hover {
+            opacity: 0.8;
+          }
+
+          img {
+            @include avatar(18px);
+
+            margin-top: -2px;
+            margin-left: 7px;
+          }
         }
 
-        img {
-          @include avatar(18px);
-
-          margin-left: 7px;
+        my-help {
+          position: relative;
+          top: 1px;
+          margin-left: 2px;
         }
       }
 
@@ -138,6 +184,10 @@
             display: inline-block;
             padding: 0 10px 0 10px;
             white-space: nowrap;
+
+            &::after {
+              display: none;
+            }
 
             .icon {
               @include icon(21px);
@@ -216,6 +266,14 @@
                 &.icon-blacklist {
                   background-image: url('../../../assets/images/video/blacklist.svg');
                 }
+
+                &.icon-unblacklist {
+                  background-image: url('../../../assets/images/global/undo.svg');
+                }
+
+                &.icon-delete {
+                  background-image: url('../../../assets/images/global/delete-black.svg');
+                }
               }
             }
           }
@@ -270,10 +328,28 @@
       margin-bottom: 12px;
 
       .video-attribute-label {
-        width: 86px;
+        min-width: 91px;
+        padding-right: 5px;
         display: inline-block;
         color: #585858;
         font-weight: $font-bold;
+      }
+
+      a.video-attribute-value {
+        @include disable-default-a-behaviour;
+        color: #000;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+
+      &.video-attribute-tags {
+        .video-attribute-value:not(:nth-child(2)) {
+          &::before {
+            content: ', '
+          }
+        }
       }
     }
   }
@@ -289,8 +365,10 @@
       display: flex;
       height: 100%;
       margin-bottom: 20px;
+      flex-wrap: wrap;
 
       .video-miniature-information {
+        flex-grow: 1;
         margin-left: 10px;
       }
     }
@@ -387,8 +465,12 @@
 }
 
 @media screen and (max-width: 1300px) {
+  .video-bottom {
+    flex-direction: column;
+  }
+
   .other-videos {
-    display: none;
+    padding-left: 0 !important;
   }
 
   .privacy-concerns {
@@ -413,6 +495,16 @@
           font-size: 20px;
           height: auto;
         }
+      }
+    }
+  }
+
+  .other-videos {
+    /deep/ .video-miniature  {
+      flex-direction: column;
+
+      .video-miniature-information {
+        margin-left: 0 !important;
       }
     }
   }

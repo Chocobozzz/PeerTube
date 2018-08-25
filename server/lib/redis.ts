@@ -24,11 +24,7 @@ class Redis {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.client = createClient({
-      host: CONFIG.REDIS.HOSTNAME,
-      port: CONFIG.REDIS.PORT,
-      db: CONFIG.REDIS.DB
-    })
+    this.client = createClient(Redis.getRedisClient())
 
     this.client.on('error', err => {
       logger.error('Error in Redis client.', { err })
@@ -40,6 +36,16 @@ class Redis {
     }
 
     this.prefix = 'redis-' + CONFIG.WEBSERVER.HOST + '-'
+  }
+
+  static getRedisClient () {
+    return Object.assign({},
+      (CONFIG.REDIS.AUTH && CONFIG.REDIS.AUTH != null) ? { password: CONFIG.REDIS.AUTH } : {},
+      (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
+      (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) ?
+      { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT } :
+      { path: CONFIG.REDIS.SOCKET }
+    )
   }
 
   async setResetPasswordVerificationString (userId: number) {
@@ -69,23 +75,14 @@ class Redis {
   }
 
   setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number) {
-    const cached: CachedRoute = {
-      body: body.toString(),
-      contentType,
-      statusCode: statusCode.toString()
-    }
+    const cached: CachedRoute = Object.assign({}, {
+      body: body.toString()
+    },
+    (contentType) ? { contentType } : null,
+    (statusCode) ? { statusCode: statusCode.toString() } : null
+    )
 
     return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
-  }
-
-  listJobs (jobsPrefix: string, state: string, mode: 'alpha', order: 'ASC' | 'DESC', offset: number, count: number) {
-    return new Promise<string[]>((res, rej) => {
-      this.client.sort(jobsPrefix + ':jobs:' + state, 'by', mode, order, 'LIMIT', offset.toString(), count.toString(), (err, values) => {
-        if (err) return rej(err)
-
-        return res(values)
-      })
-    })
   }
 
   generateResetPasswordKey (userId: number) {

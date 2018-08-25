@@ -55,5 +55,8 @@ export {
   login,
   serverLogin,
   userLogin,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  Server,
+  Client,
+  User
 }

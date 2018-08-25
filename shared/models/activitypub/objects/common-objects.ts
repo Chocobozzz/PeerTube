@@ -22,7 +22,9 @@ export interface ActivityUrlObject {
   mimeType: 'video/mp4' | 'video/webm' | 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
   href: string
   width: number
+
   size?: number
+  fps?: number
 }
 
 export interface ActivityPubAttributedTo {

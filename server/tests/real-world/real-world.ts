@@ -347,7 +347,7 @@ function goodbye () {
 }
 
 async function isTherePendingRequests (servers: ServerInfo[]) {
-  const states: JobState[] = [ 'inactive', 'active', 'delayed' ]
+  const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
   const tasks: Promise<any>[] = []
   let pendingRequests = false
 

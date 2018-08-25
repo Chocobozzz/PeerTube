@@ -1,0 +1,96 @@
+<form role="form" (ngSubmit)="formUpdated()">
+
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-xs-12">
+      <div class="form-group">
+        <div i18n class="radio-label">Sort</div>
+
+        <div class="peertube-radio-container" *ngFor="let sort of sorts">
+          <input type="radio" name="sort" [id]="sort.id" [value]="sort.id" [(ngModel)]="advancedSearch.sort">
+          <label [for]="sort.id" class="radio">{{ sort.label }}</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div i18n class="radio-label">Published date</div>
+
+        <div class="peertube-radio-container" *ngFor="let date of publishedDateRanges">
+          <input type="radio" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
+          <label [for]="date.id" class="radio">{{ date.label }}</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div i18n class="radio-label">Duration</div>
+
+        <div class="peertube-radio-container" *ngFor="let duration of durationRanges">
+          <input type="radio" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
+          <label [for]="duration.id" class="radio">{{ duration.label }}</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div i18n class="radio-label">Display sensitive content</div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="sensitiveContent" id="sensitiveContentYes" value="both" [(ngModel)]="advancedSearch.nsfw">
+          <label i18n for="sensitiveContentYes" class="radio">Yes</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="sensitiveContent" id="sensitiveContentNo" value="false" [(ngModel)]="advancedSearch.nsfw">
+          <label i18n for="sensitiveContentNo" class="radio">No</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-xs-12">
+      <div class="form-group">
+        <label i18n for="category">Category</label>
+        <div class="peertube-select-container">
+          <select id="category" name="category" [(ngModel)]="advancedSearch.categoryOneOf">
+            <option></option>
+            <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="licence">Licence</label>
+        <div class="peertube-select-container">
+          <select id="licence" name="licence" [(ngModel)]="advancedSearch.licenceOneOf">
+            <option></option>
+            <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="language">Language</label>
+        <div class="peertube-select-container">
+          <select id="language" name="language" [(ngModel)]="advancedSearch.languageOneOf">
+            <option></option>
+            <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-xs-12">
+      <div class="form-group">
+        <label i18n for="tagsAllOf">All of these tags</label>
+        <input type="text" name="tagsAllOf" id="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf" />
+      </div>
+
+      <div class="form-group">
+        <label i18n for="tagsOneOf">One of these tags</label>
+        <input type="text" name="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf" />
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-button">
+    <input type="submit" i18n-value value="Filter">
+  </div>
+</form>

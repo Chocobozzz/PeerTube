@@ -1,3 +1,14 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 .action-button-cancel {
   margin-right: 0 !important;
+}
+
+.btn-outline-secondary {
+  border-color: $input-border-color;
+}
+
+.qr-code-group {
+  text-align: center;
 }

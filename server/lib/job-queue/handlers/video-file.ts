@@ -1,12 +1,13 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { VideoResolution, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { computeResolutionsToTranscode } from '../../../helpers/utils'
 import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
+import * as Bluebird from 'bluebird'
+import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -20,14 +21,14 @@ export type VideoFileImportPayload = {
   filePath: string
 }
 
-async function processVideoFileImport (job: kue.Job) {
+async function processVideoFileImport (job: Bull.Job) {
   const payload = job.data as VideoFileImportPayload
   logger.info('Processing video file import in job %d.', job.id)
 
   const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
+    logger.info('Do not process job %d, video does not exist.', job.id)
     return undefined
   }
 
@@ -37,20 +38,20 @@ async function processVideoFileImport (job: kue.Job) {
   return video
 }
 
-async function processVideoFile (job: kue.Job) {
+async function processVideoFile (job: Bull.Job) {
   const payload = job.data as VideoFilePayload
   logger.info('Processing video file in job %d.', job.id)
 
   const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
+    logger.info('Do not process job %d, video does not exist.', job.id)
     return undefined
   }
 
   // Transcoding in other resolution
   if (payload.resolution) {
-    await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode)
+    await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode || false)
 
     await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
   } else {
@@ -71,13 +72,18 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
+    let isNewVideo = false
+
     // We transcoded the video file in another format, now we can publish it
-    const oldState = videoDatabase.state
-    videoDatabase.state = VideoState.PUBLISHED
-    videoDatabase = await videoDatabase.save({ transaction: t })
+    if (videoDatabase.state !== VideoState.PUBLISHED) {
+      isNewVideo = true
+
+      videoDatabase.state = VideoState.PUBLISHED
+      videoDatabase.publishedAt = new Date()
+      videoDatabase = await videoDatabase.save({ transaction: t })
+    }
 
     // If the video was not published, we consider it is a new one for other instances
-    const isNewVideo = oldState !== VideoState.PUBLISHED
     await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
 
     return undefined
@@ -104,7 +110,7 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
     )
 
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Promise<any>[] = []
+      const tasks: Bluebird<any>[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {

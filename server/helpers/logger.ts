@@ -9,41 +9,28 @@ const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 // Create the directory if it does not exist
 mkdirp.sync(CONFIG.STORAGE.LOG_DIR)
 
-// Use object for better performances (~ O(1))
-const excludedKeys = {
-  level: true,
-  message: true,
-  splat: true,
-  timestamp: true,
-  label: true
-}
-function keysExcluder (key, value) {
-  if (excludedKeys[key] === true) return undefined
+function loggerReplacer (key: string, value: any) {
+  if (value instanceof Error) {
+    const error = {}
 
-  if (key === 'err') return value.stack
+    Object.getOwnPropertyNames(value).forEach(key => error[ key ] = value[ key ])
+
+    return error
+  }
 
   return value
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  let additionalInfos = JSON.stringify(info, keysExcluder, 2)
-  if (additionalInfos === '{}') additionalInfos = ''
+  let additionalInfos = JSON.stringify(info.meta || info.err, loggerReplacer, 2)
+  if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  if (info.message && info.message.stack !== undefined) info.message = info.message.stack
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const jsonLoggerFormat = winston.format.printf(infoArg => {
-  let info = infoArg.err
-    ? Object.assign({}, infoArg, { err: infoArg.err.stack })
-    : infoArg
-
-  if (infoArg.message && infoArg.message.stack !== undefined) {
-    info = Object.assign({}, info, { message: infoArg.message.stack })
-  }
-
-  return JSON.stringify(info)
+const jsonLoggerFormat = winston.format.printf(info => {
+  return JSON.stringify(info, loggerReplacer)
 })
 
 const timestampFormatter = winston.format.timestamp({
@@ -53,28 +40,27 @@ const labelFormatter = winston.format.label({
   label
 })
 
-const logger = new winston.createLogger({
+const logger = winston.createLogger({
   level: CONFIG.LOG.LEVEL,
+  format: winston.format.combine(
+    labelFormatter,
+    winston.format.splat()
+  ),
   transports: [
     new winston.transports.File({
       filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
       handleExceptions: true,
-      maxsize: 5242880,
+      maxsize: 1024 * 1024 * 30,
       maxFiles: 5,
       format: winston.format.combine(
         winston.format.timestamp(),
-        labelFormatter,
-        winston.format.splat(),
         jsonLoggerFormat
       )
     }),
     new winston.transports.Console({
       handleExceptions: true,
-      humanReadableUnhandledException: true,
       format: winston.format.combine(
         timestampFormatter,
-        winston.format.splat(),
-        labelFormatter,
         winston.format.colorize(),
         consoleLoggerFormat
       )
@@ -86,7 +72,8 @@ const logger = new winston.createLogger({
 function bunyanLogFactory (level: string) {
   return function () {
     let meta = null
-    let args = [].concat(arguments)
+    let args: any[] = []
+    args.concat(arguments)
 
     if (arguments[ 0 ] instanceof Error) {
       meta = arguments[ 0 ].toString()
@@ -109,13 +96,13 @@ const bunyanLogger = {
   error: bunyanLogFactory('error'),
   fatal: bunyanLogFactory('error')
 }
-
 // ---------------------------------------------------------------------------
 
 export {
   timestampFormatter,
   labelFormatter,
   consoleLoggerFormat,
+  jsonLoggerFormat,
   logger,
   bunyanLogger
 }

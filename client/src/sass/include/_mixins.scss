@@ -240,7 +240,7 @@
 @mixin peertube-checkbox ($border-width) {
   display: none;
 
-  & + label {
+  & + span {
     position: relative;
     width: 18px;
     height: 18px;
@@ -263,7 +263,7 @@
     }
   }
 
-  &:checked + label {
+  &:checked + span {
     border-color: transparent;
     background: $orange-color;
     animation: jelly 0.6s ease;
@@ -274,7 +274,7 @@
     }
   }
 
-  & + label + label {
+  & + span + span {
     font-size: 15px;
     font-weight: $font-regular;
     margin-left: 5px;
@@ -282,8 +282,8 @@
     display: inline;
   }
 
-  &[disabled] + label,
-  &[disabled] + label + label{
+  &[disabled] + span,
+  &[disabled] + span + span{
     opacity: 0.5;
     cursor: default;
   }
@@ -411,9 +411,11 @@
   @include orange-button;
 
   .icon.icon-add {
-    @include icon(22px);
+    @include icon(20px);
 
-    margin-right: 3px;
+    position: relative;
+    top: -1px;
+    margin-right: 5px;
     background-image: url($imageUrl);
   }
 }

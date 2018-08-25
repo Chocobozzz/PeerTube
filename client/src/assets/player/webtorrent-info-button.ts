@@ -80,7 +80,7 @@ class WebtorrentInfoButton extends Button {
       const totalUploaded = bytes(data.uploaded)
       const numPeers = data.numPeers
 
-      subDivWebtorrent.title = this.player_.localize('Total Downloaded: ') + totalDownloaded.join(' ') + '\n' +
+      subDivWebtorrent.title = this.player_.localize('Total downloaded: ') + totalDownloaded.join(' ') + '\n' +
         this.player_.localize('Total uploaded: ' + totalUploaded.join(' '))
 
       downloadSpeedNumber.textContent = downloadSpeed[ 0 ]

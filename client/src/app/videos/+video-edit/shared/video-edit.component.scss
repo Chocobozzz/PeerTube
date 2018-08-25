@@ -7,6 +7,7 @@
 
 .video-edit {
   height: 100%;
+  min-height: 300px;
 
   .form-group {
     margin-bottom: 25px;
@@ -15,29 +16,10 @@
   input {
     @include peertube-input-text(100%);
     display: block;
-
-    &[type=checkbox] {
-      @include peertube-checkbox(1px);
-    }
   }
 
   input, select {
     font-size: 15px
-  }
-
-  .form-group-checkbox {
-    display: flex;
-    align-items: center;
-
-    label {
-      font-weight: $font-regular;
-      margin: 0;
-    }
-
-    input {
-      width: 10px;
-      margin-right: 10px;
-    }
   }
 
   .label-tags + span {
@@ -46,6 +28,63 @@
 
   .advanced-settings .form-group {
     margin-bottom: 20px;
+  }
+}
+
+.captions {
+
+  .captions-header {
+    text-align: right;
+
+    .create-caption {
+      @include create-button('../../../../assets/images/global/add.svg');
+    }
+  }
+
+  .caption-entry {
+    display: flex;
+    height: 40px;
+    align-items: center;
+
+    a.caption-entry-label {
+      @include disable-default-a-behaviour;
+
+      color: #000;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .caption-entry-label {
+      font-size: 15px;
+      font-weight: bold;
+
+      margin-right: 20px;
+      width: 150px;
+    }
+
+    .caption-entry-state {
+      width: 200px;
+
+      &.caption-entry-state-create {
+        color: #39CC0B;
+      }
+
+      &.caption-entry-state-delete {
+        color: #FF0000;
+      }
+    }
+
+    .caption-entry-delete {
+      @include peertube-button;
+      @include grey-button;
+    }
+  }
+
+  .no-caption {
+    text-align: center;
+    font-size: 15px;
   }
 }
 
@@ -72,6 +111,8 @@
       border: none;
       padding: 0;
       outline: 0;
+      color: inherit;
+      font-weight: $font-semibold;
     }
 
     .icon.icon-validate {
@@ -104,15 +145,7 @@ p-calendar {
 
 /deep/ {
   .root-tabset > .nav {
-    margin-left: 15px;
     margin-bottom: 15px;
-
-    .nav-link {
-      display: flex !important;
-      align-items: center;
-      height: 30px !important;
-      padding: 0 15px !important;
-    }
   }
 
   .ng2-tag-input {

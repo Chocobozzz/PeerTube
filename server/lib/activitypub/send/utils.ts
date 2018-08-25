@@ -26,6 +26,8 @@ async function forwardActivity (
   followersException: ActorModel[] = [],
   additionalFollowerUrls: string[] = []
 ) {
+  logger.info('Forwarding activity %s.', activity.id)
+
   const to = activity.to || []
   const cc = activity.cc || []
 

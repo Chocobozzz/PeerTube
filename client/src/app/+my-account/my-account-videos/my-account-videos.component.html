@@ -9,8 +9,7 @@
   <div *ngFor="let videos of videoPages; let i = index" class="videos-page">
     <div class="video" *ngFor="let video of videos; let j = index">
       <div class="checkbox-container">
-        <input [id]="'video-check-' + video.id" type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
-        <label [for]="'video-check-' + video.id"></label>
+        <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
       </div>
 
       <my-video-thumbnail [video]="video"></my-video-thumbnail>
@@ -19,6 +18,10 @@
         <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
         <span i18n class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
         <div class="video-info-private">{{ video.privacy.label }}{{ getStateLabel(video) }}</div>
+        <div *ngIf="video.blacklisted" class="video-info-blacklisted">
+          <span class="blacklisted-label" i18n>Blacklisted</span>
+          <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+        </div>
       </div>
 
       <!-- Display only once -->

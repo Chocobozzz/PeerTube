@@ -1,0 +1,149 @@
+
+* {
+  font-family: sans-serif;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+iframe {
+  border: none;
+  border-radius: 8px;
+  min-width: 200px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+aside {
+  width: 33vw;
+  margin: 0 .5em .5em 0;
+  height: calc(33vw * 0.5625);
+}
+
+.logo {
+  font-size: 150%;
+  height: 100%;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 0.5em;
+
+  .icon {
+    height: 100%;
+    padding: 0 18px 0 32px;
+    background: white;
+    display: flex;
+    align-items: center;
+    margin-right: 0.5em;
+  }
+}
+
+main {
+  padding: 0 1em;
+  display: flex;
+  align-items: flex-start;
+}
+
+.spacer {
+  flex: 1;
+}
+
+header {
+  width: 100%;
+  height: 3.2em;
+  background-color: #F1680D;
+  color: white;
+  //background-image: url(../../assets/images/backdrop/network-o.png);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1em;
+  box-shadow: 1px 0px 10px rgba(0,0,0,0.6);
+  background-size: 50%;
+  background-position: top left;
+  padding-right: 1em;
+
+  h1 {
+    margin: 0;
+    padding: 0 1em 0 0;
+    font-size: inherit;
+    font-weight: 100;
+    position: relative;
+    top: 2px;
+  }
+}
+
+#options {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > * {
+    flex-grow: 0;
+  }
+}
+
+fieldset {
+  border: none;
+  min-width: 8em;
+  legend {
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+  }
+}
+
+button {
+  background: #F1680D;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  margin: 0;
+  padding: 1em 1.25em;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &, &:hover, &:focus, &:visited, &:active {
+    color: #F44336;
+  }
+}
+
+@media (max-width: 900px) {
+  aside {
+    width: 50vw;
+    height: calc(50vw * 0.5625);
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    flex-direction: column;
+  }
+
+  aside {
+    width: calc(100vw - 2em);
+    height: calc(56.25vw - 2em * 0.5625);
+  }
+}
+
+@media (min-width: 1800px) {
+  aside {
+    width: 50vw;
+    height: calc(50vw * 0.5625);
+  }
+}

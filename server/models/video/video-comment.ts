@@ -108,6 +108,9 @@ enum ScopeNames {
     {
       fields: [ 'url' ],
       unique: true
+    },
+    {
+      fields: [ 'accountId' ]
     }
   ]
 })
@@ -153,7 +156,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     as: 'InReplyToVideoComment',
     onDelete: 'CASCADE'
   })
-  InReplyToVideoComment: VideoCommentModel
+  InReplyToVideoComment: VideoCommentModel | null
 
   @ForeignKey(() => VideoModel)
   @Column

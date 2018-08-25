@@ -25,6 +25,10 @@ export interface CustomConfig {
     previews: {
       size: number
     }
+
+    captions: {
+      size: number
+    }
   }
 
   signup: {
@@ -49,6 +53,17 @@ export interface CustomConfig {
       '480p': boolean
       '720p': boolean
       '1080p': boolean
+    }
+  }
+
+  import: {
+    videos: {
+      http: {
+        enabled: boolean
+      },
+      torrent: {
+        enabled: boolean
+      }
     }
   }
 }

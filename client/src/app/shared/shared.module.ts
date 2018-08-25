@@ -8,17 +8,12 @@ import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { MarkdownService } from '@app/videos/shared'
 
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
-import { ModalModule } from 'ngx-bootstrap/modal'
-import { PopoverModule } from 'ngx-bootstrap/popover'
-import { TabsModule } from 'ngx-bootstrap/tabs'
-import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
-import { DeleteButtonComponent } from './misc/delete-button.component'
-import { EditButtonComponent } from './misc/edit-button.component'
+import { DeleteButtonComponent } from './buttons/delete-button.component'
+import { EditButtonComponent } from './buttons/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
 import { NumberFormatterPipe } from './misc/number-formatter.pipe'
@@ -38,11 +33,22 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import {
   CustomConfigValidatorsService,
   LoginValidatorsService,
+  ReactiveFileComponent,
   ResetPasswordValidatorsService,
-  UserValidatorsService, VideoAbuseValidatorsService, VideoChannelValidatorsService, VideoCommentValidatorsService, VideoValidatorsService
+  UserValidatorsService,
+  VideoAbuseValidatorsService, VideoBlacklistValidatorsService,
+  VideoChannelValidatorsService,
+  VideoCommentValidatorsService,
+  VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
+import { VideoCaptionService } from '@app/shared/video-caption'
+import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
+import { VideoImportService } from '@app/shared/video-import/video-import.service'
+import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
+import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   imports: [
@@ -52,11 +58,11 @@ import { ScreenService } from '@app/shared/misc/screen.service'
     RouterModule,
     HttpClientModule,
 
-    BsDropdownModule.forRoot(),
-    ModalModule.forRoot(),
-    PopoverModule.forRoot(),
-    TabsModule.forRoot(),
-    TooltipModule.forRoot(),
+    NgbDropdownModule.forRoot(),
+    NgbModalModule.forRoot(),
+    NgbPopoverModule.forRoot(),
+    NgbTabsetModule.forRoot(),
+    NgbTooltipModule.forRoot(),
 
     PrimeSharedModule,
     NgPipesModule
@@ -69,12 +75,15 @@ import { ScreenService } from '@app/shared/misc/screen.service'
     VideoFeedComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    ActionDropdownComponent,
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
-    HelpComponent
+    HelpComponent,
+    ReactiveFileComponent,
+    PeertubeCheckboxComponent
   ],
 
   exports: [
@@ -84,11 +93,12 @@ import { ScreenService } from '@app/shared/misc/screen.service'
     RouterModule,
     HttpClientModule,
 
-    BsDropdownModule,
-    ModalModule,
-    PopoverModule,
-    TabsModule,
-    TooltipModule,
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTabsetModule,
+    NgbTooltipModule,
+
     PrimeSharedModule,
     BytesPipe,
     KeysPipe,
@@ -99,9 +109,12 @@ import { ScreenService } from '@app/shared/misc/screen.service'
     VideoFeedComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
     HelpComponent,
+    ReactiveFileComponent,
+    PeertubeCheckboxComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -119,6 +132,8 @@ import { ScreenService } from '@app/shared/misc/screen.service'
     AccountService,
     MarkdownService,
     VideoChannelService,
+    VideoCaptionService,
+    VideoImportService,
 
     FormValidatorService,
     CustomConfigValidatorsService,
@@ -129,6 +144,8 @@ import { ScreenService } from '@app/shared/misc/screen.service'
     VideoChannelValidatorsService,
     VideoCommentValidatorsService,
     VideoValidatorsService,
+    VideoCaptionsValidatorsService,
+    VideoBlacklistValidatorsService,
 
     I18nPrimengCalendarService,
     ScreenService,

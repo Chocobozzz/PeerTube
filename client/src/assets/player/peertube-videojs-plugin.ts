@@ -3,8 +3,8 @@ import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
-import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { isMobile, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
+import { PeertubePluginOptions, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import { isMobile, videoFileMaxByResolution, videoFileMinByResolution, timeToInt } from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
@@ -54,6 +54,7 @@ class PeerTubePlugin extends Plugin {
   private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
+  private videoCaptions: VideoJSCaption[]
   private renderer
   private fakeRenderer
   private autoResolution = true
@@ -75,10 +76,11 @@ class PeerTubePlugin extends Plugin {
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false
 
-    this.startTime = options.startTime
+    this.startTime = timeToInt(options.startTime)
     this.videoFiles = options.videoFiles
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
+    this.videoCaptions = options.videoCaptions
 
     this.savePlayerSrcFunction = this.player.src
     // Hack to "simulate" src link in video.js >= 6
@@ -134,7 +136,10 @@ class PeerTubePlugin extends Plugin {
   }
 
   getCurrentResolutionLabel () {
-    return this.currentVideoFile ? this.currentVideoFile.resolution.label : ''
+    if (!this.currentVideoFile) return ''
+
+    const fps = this.currentVideoFile.fps >= 50 ? this.currentVideoFile.fps : ''
+    return this.currentVideoFile.resolution.label + fps
   }
 
   updateVideoFile (
@@ -237,6 +242,8 @@ class PeerTubePlugin extends Plugin {
 
             if (options.seek) this.seek(options.seek)
             if (options.forcePlay === false && paused === true) this.player.pause()
+
+            return done(err)
           })
         })
       }, options.delay || 0)
@@ -257,11 +264,16 @@ class PeerTubePlugin extends Plugin {
       // Magnet hash is not up to date with the torrent file, add directly the torrent file
       if (err.message.indexOf('incorrect info hash') !== -1) {
         console.error('Incorrect info hash detected, falling back to torrent file.')
-        const options = { forcePlay: true }
-        return this.addTorrent(this.torrent['xs'], previousVideoFile, options, done)
+        const newOptions = { forcePlay: true, seek: options.seek }
+        return this.addTorrent(this.torrent['xs'], previousVideoFile, newOptions, done)
       }
 
-      return console.warn(err)
+      // Remote instance is down
+      if (err.message.indexOf('from xs param') !== -1) {
+        this.handleError(err)
+      }
+
+      console.warn(err)
     })
   }
 
@@ -331,6 +343,10 @@ class PeerTubePlugin extends Plugin {
     if (playPromise !== undefined) {
       return playPromise.then(done)
                         .catch(err => {
+                          if (err.message.indexOf('The play() request was interrupted by a call to pause()') !== -1) {
+                            return
+                          }
+
                           console.error(err)
                           this.player.pause()
                           this.player.posterImage.show()
@@ -358,18 +374,34 @@ class PeerTubePlugin extends Plugin {
 
     if (!averageDownloadSpeed) averageDownloadSpeed = this.getAndSaveActualDownloadSpeed()
 
-    // Filter videos we can play according to our bandwidth
-    const filteredFiles = this.videoFiles.filter(f => {
-      const fileBitrate = (f.size / this.videoDuration)
-      let threshold = fileBitrate
+    // Limit resolution according to player height
+    const playerHeight = this.playerElement.offsetHeight as number
 
-      // If this is for a higher resolution or an initial load: add a margin
-      if (!this.currentVideoFile || f.resolution.id > this.currentVideoFile.resolution.id) {
-        threshold += ((fileBitrate * this.CONSTANTS.AUTO_QUALITY_THRESHOLD_PERCENT) / 100)
+    // We take the first resolution just above the player height
+    // Example: player height is 530px, we want the 720p file instead of 480p
+    let maxResolution = this.videoFiles[0].resolution.id
+    for (let i = this.videoFiles.length - 1; i >= 0; i--) {
+      const resolutionId = this.videoFiles[i].resolution.id
+      if (resolutionId >= playerHeight) {
+        maxResolution = resolutionId
+        break
       }
+    }
 
-      return averageDownloadSpeed > threshold
-    })
+    // Filter videos we can play according to our screen resolution and bandwidth
+    const filteredFiles = this.videoFiles
+                              .filter(f => f.resolution.id <= maxResolution)
+                              .filter(f => {
+                                const fileBitrate = (f.size / this.videoDuration)
+                                let threshold = fileBitrate
+
+                                // If this is for a higher resolution or an initial load: add a margin
+                                if (!this.currentVideoFile || f.resolution.id > this.currentVideoFile.resolution.id) {
+                                  threshold += ((fileBitrate * this.CONSTANTS.AUTO_QUALITY_THRESHOLD_PERCENT) / 100)
+                                }
+
+                                return averageDownloadSpeed > threshold
+                              })
 
     // If the download speed is too bad, return the lowest resolution we have
     if (filteredFiles.length === 0) return videoFileMinByResolution(this.videoFiles)
@@ -395,6 +427,8 @@ class PeerTubePlugin extends Plugin {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
 
     this.initSmoothProgressBar()
+
+    this.initCaptions()
 
     this.alterInactivity()
 
@@ -583,6 +617,18 @@ class PeerTubePlugin extends Plugin {
         }
       }
       this.fakeRenderer = undefined
+    }
+  }
+
+  private initCaptions () {
+    for (const caption of this.videoCaptions) {
+      this.player.addRemoteTextTrack({
+        kind: 'captions',
+        label: caption.label,
+        language: caption.language,
+        id: caption.language,
+        src: caption.src
+      }, false)
     }
   }
 

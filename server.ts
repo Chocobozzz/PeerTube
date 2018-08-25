@@ -1,4 +1,6 @@
 // FIXME: https://github.com/nodejs/node/pull/16853
+import { VideosCaptionCache } from './server/lib/cache/videos-caption-cache'
+
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
@@ -10,13 +12,12 @@ if (isTestInstance()) {
 // ----------- Node modules -----------
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
-import * as http from 'http'
 import * as morgan from 'morgan'
-import * as bitTorrentTracker from 'bittorrent-tracker'
 import * as cors from 'cors'
-import { Server as WebSocketServer } from 'ws'
-
-const TrackerServer = bitTorrentTracker.Server
+import * as cookieParser from 'cookie-parser'
+import * as helmet from 'helmet'
+import * as useragent from 'useragent'
+import * as anonymise from 'ip-anonymize'
 
 process.title = 'peertube'
 
@@ -28,7 +29,7 @@ import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } fro
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+import { API_VERSION, CONFIG, CACHE } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -49,6 +50,13 @@ if (errorMessage !== null) {
 
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)
+
+// Security middleware
+app.use(helmet({
+  frameguard: {
+    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
+  }
+}))
 
 // ----------- Database -----------
 
@@ -75,12 +83,16 @@ import {
   feedsRouter,
   staticRouter,
   servicesRouter,
-  webfingerRouter
+  webfingerRouter,
+  trackerRouter,
+  createWebsocketServer
 } from './server/controllers'
+import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
+import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
 
 // ----------- Command line -----------
 
@@ -88,24 +100,23 @@ import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-sch
 
 // Enable CORS for develop
 if (isTestInstance()) {
-  app.use((req, res, next) => {
-    // These routes have already cors
-    if (
-      req.path.indexOf(STATIC_PATHS.TORRENTS) === -1 &&
-      req.path.indexOf(STATIC_PATHS.WEBSEED) === -1
-    ) {
-      return (cors({
-        origin: '*',
-        exposedHeaders: 'Retry-After',
-        credentials: true
-      }))(req, res, next)
-    }
-
-    return next()
-  })
+  app.use(cors({
+    origin: '*',
+    exposedHeaders: 'Retry-After',
+    credentials: true
+  }))
 }
-
 // For the logger
+morgan.token('remote-addr', req => {
+  return (req.get('DNT') === '1') ?
+    anonymise(req.ip || (req.connection && req.connection.remoteAddress) || undefined,
+    16, // bitmask for IPv4
+    16  // bitmask for IPv6
+    ) :
+    req.ip
+})
+morgan.token('user-agent', req => (req.get('DNT') === '1') ?
+  useragent.parse(req.get('user-agent')).family : req.get('user-agent'))
 app.use(morgan('combined', {
   stream: { write: logger.info.bind(logger) }
 }))
@@ -115,33 +126,10 @@ app.use(bodyParser.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb'
 }))
-
-// ----------- Tracker -----------
-
-const trackerServer = new TrackerServer({
-  http: false,
-  udp: false,
-  ws: false,
-  dht: false
-})
-
-trackerServer.on('error', function (err) {
-  logger.error('Error in websocket tracker.', err)
-})
-
-trackerServer.on('warning', function (err) {
-  logger.error('Warning in websocket tracker.', err)
-})
-
-const server = http.createServer(app)
-const wss = new WebSocketServer({ server: server, path: '/tracker/socket' })
-wss.on('connection', function (ws) {
-  trackerServer.onWebSocketConnection(ws)
-})
-
-const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
-app.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
-app.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
+// Cookies
+app.use(cookieParser())
+// W3C DNT Tracking Status
+app.use(advertiseDoNotTrack)
 
 // ----------- Views, routes and static files -----------
 
@@ -155,6 +143,7 @@ app.use('/services', servicesRouter)
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', webfingerRouter)
+app.use('/', trackerRouter)
 
 // Static files
 app.use('/', staticRouter)
@@ -177,9 +166,11 @@ app.use(function (err, req, res, next) {
     error = err.stack || err.message || err
   }
 
-  logger.error('Error in controller.', { error })
+  logger.error('Error in controller.', { err: error })
   return res.status(err.status || 500).end()
 })
+
+const server = createWebsocketServer(app)
 
 // ----------- Run -----------
 
@@ -203,12 +194,14 @@ async function startApplication () {
   await JobQueue.Instance.init()
 
   // Caches initializations
-  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, CACHE.PREVIEWS.MAX_AGE)
+  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, CACHE.VIDEO_CAPTIONS.MAX_AGE)
 
   // Enable Schedulers
   BadActorFollowScheduler.Instance.enable()
   RemoveOldJobsScheduler.Instance.enable()
   UpdateVideosScheduler.Instance.enable()
+  YoutubeDlUpdateScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()
@@ -218,4 +211,10 @@ async function startApplication () {
     logger.info('Server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
   })
+
+  process.on('exit', () => {
+    JobQueue.Instance.terminate()
+  })
+
+  process.on('SIGINT', () => process.exit(0))
 }

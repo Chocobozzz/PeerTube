@@ -29,6 +29,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
   ]
   transcodingThreadOptions = [
+    { value: 0, label: 'Auto (via ffmpeg)' },
     { value: 1, label: '1' },
     { value: 2, label: '2' },
     { value: 4, label: '4' },
@@ -67,8 +68,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       servicesTwitterUsername: this.customConfigValidatorsService.SERVICES_TWITTER_USERNAME,
       servicesTwitterWhitelisted: null,
       cachePreviewsSize: this.customConfigValidatorsService.CACHE_PREVIEWS_SIZE,
+      cacheCaptionsSize: this.customConfigValidatorsService.CACHE_CAPTIONS_SIZE,
       signupEnabled: null,
       signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+      importVideosHttpEnabled: null,
+      importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
@@ -156,6 +160,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cache: {
         previews: {
           size: this.form.value['cachePreviewsSize']
+        },
+        captions: {
+          size: this.form.value['cacheCaptionsSize']
         }
       },
       signup: {
@@ -177,6 +184,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           '480p': this.form.value[this.getResolutionKey('480p')],
           '720p': this.form.value[this.getResolutionKey('720p')],
           '1080p': this.form.value[this.getResolutionKey('1080p')]
+        }
+      },
+      import: {
+        videos: {
+          http: {
+            enabled: this.form.value['importVideosHttpEnabled']
+          },
+          torrent: {
+            enabled: this.form.value['importVideosTorrentEnabled']
+          }
         }
       }
     }
@@ -209,6 +226,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       servicesTwitterUsername: this.customConfig.services.twitter.username,
       servicesTwitterWhitelisted: this.customConfig.services.twitter.whitelisted,
       cachePreviewsSize: this.customConfig.cache.previews.size,
+      cacheCaptionsSize: this.customConfig.cache.captions.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,
       adminEmail: this.customConfig.admin.email,
@@ -216,7 +234,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       transcodingThreads: this.customConfig.transcoding.threads,
       transcodingEnabled: this.customConfig.transcoding.enabled,
       customizationJavascript: this.customConfig.instance.customizations.javascript,
-      customizationCSS: this.customConfig.instance.customizations.css
+      customizationCSS: this.customConfig.instance.customizations.css,
+      importVideosHttpEnabled: this.customConfig.import.videos.http.enabled,
+      importVideosTorrentEnabled: this.customConfig.import.videos.torrent.enabled
     }
 
     for (const resolution of this.resolutions) {

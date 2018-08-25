@@ -1,0 +1,24 @@
+@import '_variables';
+@import '_mixins';
+
+.root {
+  height: auto;
+  display: flex;
+  align-items: center;
+
+  .button-file {
+    @include peertube-button-file(auto);
+
+    min-width: 190px;
+  }
+
+  .file-constraints {
+    margin-left: 5px;
+    font-size: 13px;
+  }
+
+  .filename {
+    font-weight: $font-semibold;
+    margin-left: 5px;
+  }
+}

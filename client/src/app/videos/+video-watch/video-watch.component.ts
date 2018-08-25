@@ -1,16 +1,16 @@
 import { catchError } from 'rxjs/operators'
-import { Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { UserVideoRateType, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
+import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -21,11 +21,13 @@ import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
-import { addContextMenu, getVideojsOptions, loadLocale } from '../../../assets/player/peertube-player'
+import { VideoBlacklistComponent } from './modal/video-blacklist.component'
+import { addContextMenu, getVideojsOptions, loadLocaleInVideoJS } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { VideoCaptionService } from '@app/shared/video-caption'
 
 @Component({
   selector: 'my-video-watch',
@@ -39,6 +41,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
+  @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
 
   otherVideosDisplayed: Video[] = []
 
@@ -54,6 +57,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   videoHTMLDescription = ''
   likesBarTooltipText = ''
   hasAlreadyAcceptedPrivacyConcern = false
+  remoteServerDown = false
 
   private videojsLocaleLoaded = false
   private otherVideos: Video[] = []
@@ -61,6 +65,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   constructor (
     private elementRef: ElementRef,
+    private changeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
     private videoService: VideoService,
@@ -74,6 +79,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
+    private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
@@ -109,14 +115,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (this.player) this.player.pause()
 
       // Video did change
-      this.videoService
-          .getVideo(uuid)
-          .pipe(catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ])))
-          .subscribe(video => {
-            const startTime = this.route.snapshot.queryParams.start
-            this.onVideoFetched(video, startTime)
-                .catch(err => this.handleError(err))
-          })
+      forkJoin(
+        this.videoService.getVideo(uuid),
+        this.videoCaptionService.listCaptions(uuid)
+      )
+        .pipe(
+          // If 401, the video is private or blacklisted so redirect to 404
+          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 404 ]))
+        )
+        .subscribe(([ video, captionsResult ]) => {
+          const startTime = this.route.snapshot.queryParams.start
+          this.onVideoFetched(video, captionsResult.data, startTime)
+              .catch(err => this.handleError(err))
+        })
     })
   }
 
@@ -145,26 +156,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     } else {
       this.setRating('dislike')
     }
-  }
-
-  async blacklistVideo (event: Event) {
-    event.preventDefault()
-
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to blacklist this video?'), this.i18n('Blacklist'))
-    if (res === false) return
-
-    this.videoBlacklistService.blacklistVideo(this.video.id)
-        .subscribe(
-          () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Video {{videoName}} had been blacklisted.', { videoName: this.video.name })
-            )
-            this.redirectService.redirectToHomepage()
-          },
-
-          error => this.notificationsService.error(this.i18n('Error'), error.message)
-        )
   }
 
   showMoreDescription () {
@@ -221,6 +212,36 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoDownloadModal.show()
   }
 
+  showBlacklistModal (event: Event) {
+    event.preventDefault()
+    this.videoBlacklistModal.show()
+  }
+
+  async unblacklistVideo (event: Event) {
+    event.preventDefault()
+
+    const confirmMessage = this.i18n(
+      'Do you really want to remove this video from the blacklist? It will be available again in the videos list.'
+    )
+
+    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Unblacklist'))
+    if (res === false) return
+
+    this.videoBlacklistService.removeVideoFromBlacklist(this.video.id).subscribe(
+      () => {
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('Video {{name}} removed from the blacklist.', { name: this.video.name })
+        )
+
+        this.video.blacklisted = false
+        this.video.blacklistedReason = null
+      },
+
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
+    )
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
@@ -233,6 +254,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.isBlackistableBy(this.user)
   }
 
+  isVideoUnblacklistable () {
+    return this.video.isUnblacklistableBy(this.user)
+  }
+
   getVideoPoster () {
     if (!this.video) return ''
 
@@ -242,7 +267,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
-    return this.video.tags.join(', ')
+    return this.video.tags
   }
 
   isVideoRemovable () {
@@ -280,6 +305,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
+  isVideoToImport () {
+    return this.video && this.video.state.id === VideoState.TO_IMPORT
+  }
+
   hasVideoScheduledPublication () {
     return this.video && this.video.scheduledUpdate !== undefined
   }
@@ -304,15 +333,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const errorMessage: string = typeof err === 'string' ? err : err.message
     if (!errorMessage) return
 
-    let message = ''
+    // Display a message in the video player instead of a notification
+    if (errorMessage.indexOf('from xs param') !== -1) {
+      this.flushPlayer()
+      this.remoteServerDown = true
+      this.changeDetector.detectChanges()
 
-    if (errorMessage.indexOf('http error') !== -1) {
-      message = this.i18n('Cannot fetch video from server, maybe down.')
-    } else {
-      message = errorMessage
+      return
     }
 
-    this.notificationsService.error(this.i18n('Error'), message)
+    this.notificationsService.error(this.i18n('Error'), errorMessage)
   }
 
   private checkUserRating () {
@@ -331,12 +361,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
   }
 
-  private async onVideoFetched (video: VideoDetails, startTime = 0) {
+  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], startTime = 0) {
     this.video = video
 
     // Re init attributes
     this.descriptionLoading = false
     this.completeDescriptionShown = false
+    this.remoteServerDown = false
 
     this.updateOtherVideosDisplayed()
 
@@ -358,10 +389,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.playerElement.setAttribute('playsinline', 'true')
     playerElementWrapper.appendChild(this.playerElement)
 
+    const playerCaptions = videoCaptions.map(c => ({
+      label: c.language.label,
+      language: c.language.id,
+      src: environment.apiUrl + c.captionPath
+    }))
+
     const videojsOptions = getVideojsOptions({
       autoplay: this.isAutoplay(),
       inactivityTimeout: 2500,
       videoFiles: this.video.files,
+      videoCaptions: playerCaptions,
       playerElement: this.playerElement,
       videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
       videoDuration: this.video.duration,
@@ -369,11 +407,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       peertubeLink: false,
       poster: this.video.previewUrl,
       startTime,
-      theaterMode: true
+      theaterMode: true,
+      language: this.localeId
     })
 
     if (this.videojsLocaleLoaded === false) {
-      await loadLocale(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
+      await loadLocaleInVideoJS(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
       this.videojsLocaleLoaded = true
     }
 

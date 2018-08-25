@@ -21,24 +21,8 @@ services:
     #   context: .
     #   dockerfile: ./support/docker/production/Dockerfile.stretch
     image: chocobozzz/peertube:production-stretch
-    environment:
-      PEERTUBE_WEBSERVER_HOSTNAME: ${PEERTUBE_WEBSERVER_HOSTNAME}
-      PEERTUBE_WEBSERVER_PORT: ${PEERTUBE_WEBSERVER_PORT}
-      PEERTUBE_WEBSERVER_HTTPS: ${PEERTUBE_WEBSERVER_HTTPS}
-      PEERTUBE_DB_HOSTNAME: postgres
-      PEERTUBE_DB_USERNAME: ${DB_USERNAME}
-      PEERTUBE_DB_PASSWORD: ${DB_PASSWORD}
-      PEERTUBE_REDIS_HOSTNAME: redis
-      PEERTUBE_SMTP_USERNAME: ${PEERTUBE_SMTP_USERNAME}
-      PEERTUBE_SMTP_PASSWORD: ${PEERTUBE_SMTP_PASSWORD}
-      PEERTUBE_SMTP_HOSTNAME: ${PEERTUBE_SMTP_HOSTNAME}
-      PEERTUBE_SMTP_PORT: ${PEERTUBE_SMTP_PORT}
-      PEERTUBE_SMTP_FROM: ${PEERTUBE_SMTP_FROM}
-      PEERTUBE_SMTP_TLS: ${PEERTUBE_SMTP_TLS}
-      PEERTUBE_ADMIN_EMAIL: ${PEERTUBE_ADMIN_EMAIL}
-      # /!\ Prefer to use the PeerTube admin interface to set the following configurations /!\
-      # PEERTUBE_SIGNUP_ENABLED: ${PEERTUBE_SIGNUP_ENABLED}
-      # PEERTUBE_TRANSCODING_ENABLED: ${PEERTUBE_TRANSCODING_ENABLED}
+    env_file:
+      - .env
     # Traefik labels are suggested as an example for people using Traefik,
     # remove them if you are using another reverse proxy.
     labels:
@@ -59,8 +43,8 @@ services:
   postgres:
     image: postgres:10-alpine
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${PEERTUBE_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PEERTUBE_DB_PASSWORD}
       POSTGRES_DB: peertube
     volumes:
       - ./docker-volume/db:/var/lib/postgresql/data

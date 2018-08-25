@@ -1,14 +1,15 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
-import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_REQUEST_TTL } from '../../initializers'
 import { Redis } from '../redis'
+import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL } from '../../initializers'
 import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { EmailPayload, processEmail } from './handlers/email'
-import { processVideoFile, processVideoFileImport, VideoFilePayload, VideoFileImportPayload } from './handlers/video-file'
+import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
+import { processVideoImport, VideoImportPayload } from './handlers/video-import'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -17,30 +18,36 @@ type CreateJobArgument =
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
   { type: 'video-file', payload: VideoFilePayload } |
-  { type: 'email', payload: EmailPayload }
+  { type: 'email', payload: EmailPayload } |
+  { type: 'video-import', payload: VideoImportPayload }
 
-const handlers: { [ id in JobType ]: (job: kue.Job) => Promise<any>} = {
+const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
   'video-file': processVideoFile,
-  'email': processEmail
+  'email': processEmail,
+  'video-import': processVideoImport
 }
 
-const jobsWithTLL: JobType[] = [
+const jobTypes: JobType[] = [
+  'activitypub-follow',
   'activitypub-http-broadcast',
-  'activitypub-http-unicast',
   'activitypub-http-fetcher',
-  'activitypub-follow'
+  'activitypub-http-unicast',
+  'email',
+  'video-file',
+  'video-file-import',
+  'video-import'
 ]
 
 class JobQueue {
 
   private static instance: JobQueue
 
-  private jobQueue: kue.Queue
+  private queues: { [ id in JobType ]?: Bull.Queue } = {}
   private initialized = false
   private jobRedisPrefix: string
 
@@ -51,130 +58,109 @@ class JobQueue {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.jobRedisPrefix = 'q-' + CONFIG.WEBSERVER.HOST
-
-    this.jobQueue = kue.createQueue({
+    this.jobRedisPrefix = 'bull-' + CONFIG.WEBSERVER.HOST
+    const queueOptions = {
       prefix: this.jobRedisPrefix,
-      redis: {
-        host: CONFIG.REDIS.HOSTNAME,
-        port: CONFIG.REDIS.PORT,
-        auth: CONFIG.REDIS.AUTH,
-        db: CONFIG.REDIS.DB
+      redis: Redis.getRedisClient(),
+      settings: {
+        maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
       }
-    })
-
-    this.jobQueue.setMaxListeners(20)
-
-    this.jobQueue.on('error', err => {
-      logger.error('Error in job queue.', { err })
-      process.exit(-1)
-    })
-    this.jobQueue.watchStuckJobs(5000)
-
-    await this.reactiveStuckJobs()
+    }
 
     for (const handlerName of Object.keys(handlers)) {
-      this.jobQueue.process(handlerName, JOB_CONCURRENCY[handlerName], async (job, done) => {
-        try {
-          const res = await handlers[ handlerName ](job)
-          return done(null, res)
-        } catch (err) {
-          logger.error('Cannot execute job %d.', job.id, { err })
-          return done(err)
-        }
+      const queue = new Bull(handlerName, queueOptions)
+      const handler = handlers[handlerName]
+
+      queue.process(JOB_CONCURRENCY[handlerName], handler)
+           .catch(err => logger.error('Error in job queue processor %s.', handlerName, { err }))
+
+      queue.on('failed', (job, err) => {
+        logger.error('Cannot execute job %d in queue %s.', job.id, handlerName, { payload: job.data, err })
       })
+
+      queue.on('error', err => {
+        logger.error('Error in job queue %s.', handlerName, { err })
+        process.exit(-1)
+      })
+
+      this.queues[handlerName] = queue
     }
   }
 
-  createJob (obj: CreateJobArgument, priority = 'normal') {
-    return new Promise((res, rej) => {
-      let job = this.jobQueue
-        .create(obj.type, obj.payload)
-        .priority(priority)
-        .attempts(JOB_ATTEMPTS[obj.type])
-        .backoff({ delay: 60 * 1000, type: 'exponential' })
+  terminate () {
+    for (const queueName of Object.keys(this.queues)) {
+      const queue = this.queues[queueName]
+      queue.close()
+    }
+  }
 
-      if (jobsWithTLL.indexOf(obj.type) !== -1) {
-        job = job.ttl(JOB_REQUEST_TTL)
+  createJob (obj: CreateJobArgument) {
+    const queue = this.queues[obj.type]
+    if (queue === undefined) {
+      logger.error('Unknown queue %s: cannot create job.', obj.type)
+      throw Error('Unknown queue, cannot create job')
+    }
+
+    const jobArgs: Bull.JobOptions = {
+      backoff: { delay: 60 * 1000, type: 'exponential' },
+      attempts: JOB_ATTEMPTS[obj.type],
+      timeout: JOB_TTL[obj.type]
+    }
+
+    return queue.add(obj.payload, jobArgs)
+  }
+
+  async listForApi (state: JobState, start: number, count: number, asc?: boolean): Promise<Bull.Job[]> {
+    let results: Bull.Job[] = []
+
+    // TODO: optimize
+    for (const jobType of jobTypes) {
+      const queue = this.queues[ jobType ]
+      if (queue === undefined) {
+        logger.error('Unknown queue %s to list jobs.', jobType)
+        continue
       }
 
-      return job.save(err => {
-        if (err) return rej(err)
+      // FIXME: Bull queue typings does not have getJobs method
+      const jobs = await (queue as any).getJobs(state, 0, start + count, asc)
+      results = results.concat(jobs)
+    }
 
-        return res()
-      })
+    results.sort((j1: any, j2: any) => {
+      if (j1.timestamp < j2.timestamp) return -1
+      else if (j1.timestamp === j2.timestamp) return 0
+
+      return 1
     })
+
+    if (asc === false) results.reverse()
+
+    return results.slice(start, start + count)
   }
 
-  async listForApi (state: JobState, start: number, count: number, sort: 'ASC' | 'DESC'): Promise<kue.Job[]> {
-    const jobStrings = await Redis.Instance.listJobs(this.jobRedisPrefix, state, 'alpha', sort, start, count)
+  async count (state: JobState): Promise<number> {
+    let total = 0
 
-    const jobPromises = jobStrings
-      .map(s => s.split('|'))
-      .map(([ , jobId ]) => this.getJob(parseInt(jobId, 10)))
+    for (const type of jobTypes) {
+      const queue = this.queues[ type ]
+      if (queue === undefined) {
+        logger.error('Unknown queue %s to count jobs.', type)
+        continue
+      }
 
-    return Promise.all(jobPromises)
-  }
+      const counts = await queue.getJobCounts()
 
-  count (state: JobState) {
-    return new Promise<number>((res, rej) => {
-      this.jobQueue[state + 'Count']((err, total) => {
-        if (err) return rej(err)
+      total += counts[ state ]
+    }
 
-        return res(total)
-      })
-    })
+    return total
   }
 
   removeOldJobs () {
-    const now = new Date().getTime()
-    kue.Job.rangeByState('complete', 0, -1, 'asc', (err, jobs) => {
-      if (err) {
-        logger.error('Cannot get jobs when removing old jobs.', { err })
-        return
-      }
-
-      for (const job of jobs) {
-        if (now - job.created_at > JOB_COMPLETED_LIFETIME) {
-          job.remove()
-        }
-      }
-    })
-  }
-
-  private reactiveStuckJobs () {
-    const promises: Promise<any>[] = []
-
-    this.jobQueue.active((err, ids) => {
-      if (err) throw err
-
-      for (const id of ids) {
-        kue.Job.get(id, (err, job) => {
-          if (err) throw err
-
-          const p = new Promise((res, rej) => {
-            job.inactive(err => {
-              if (err) return rej(err)
-              return res()
-            })
-          })
-
-          promises.push(p)
-        })
-      }
-    })
-
-    return Promise.all(promises)
-  }
-
-  private getJob (id: number) {
-    return new Promise<kue.Job>((res, rej) => {
-      kue.Job.get(id, (err, job) => {
-        if (err) return rej(err)
-
-        return res(job)
-      })
-    })
+    for (const key of Object.keys(this.queues)) {
+      const queue = this.queues[key]
+      queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
+    }
   }
 
   static get Instance () {

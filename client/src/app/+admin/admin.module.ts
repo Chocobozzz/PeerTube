@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { ConfigComponent, EditCustomConfigComponent } from '@app/+admin/config'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { TabsModule } from 'ngx-bootstrap/tabs'
 import { TableModule } from 'primeng/table'
 import { SharedModule } from '../shared'
 import { AdminRoutingModule } from './admin-routing.module'
@@ -12,13 +11,13 @@ import { JobsComponent } from './jobs/job.component'
 import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
 import { JobService } from './jobs/shared/job.service'
 import { UserCreateComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
-import { VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
-import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
+import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoBlacklistListComponent } from './moderation'
+import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-modal.component'
+import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 
 @NgModule({
   imports: [
     AdminRoutingModule,
-    TabsModule.forRoot(),
     TableModule,
     SharedModule
   ],
@@ -35,12 +34,12 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
     UserCreateComponent,
     UserUpdateComponent,
     UserListComponent,
+    UserBanModalComponent,
 
-    VideoBlacklistComponent,
+    ModerationComponent,
     VideoBlacklistListComponent,
-
-    VideoAbusesComponent,
     VideoAbuseListComponent,
+    ModerationCommentModalComponent,
 
     JobsComponent,
     JobsListComponent,

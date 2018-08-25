@@ -1,6 +1,13 @@
 @import '_variables';
 @import '_mixins';
 
+.menu-wrapper {
+  position: fixed;
+  height: calc(100vh - #{$header-height});
+  padding: 0;
+  width: $menu-width;
+}
+
 menu {
   background-color: $black-background;
   margin: 0;
@@ -11,6 +18,13 @@ menu {
   overflow: hidden;
   z-index: 1000;
   color: $menu-color;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+
+  .top-menu {
+    flex-grow: 1;
+  }
 
   .logged-in-block {
     height: 100px;
@@ -55,6 +69,10 @@ menu {
       .glyphicon {
         cursor: pointer;
         font-size: 18px;
+
+        &::after {
+          border: none;
+        }
       }
     }
   }
@@ -100,7 +118,7 @@ menu {
     a {
       display: flex;
       align-items: center;
-      padding-left: 26px;
+      padding-left: $menu-left-padding;
       color: $menu-color;
       cursor: pointer;
       height: 40px;
@@ -151,6 +169,37 @@ menu {
           height: 23px;
 
           background-image: url('../../assets/images/menu/about.svg');
+        }
+      }
+    }
+  }
+
+  .footer {
+    margin-bottom: 15px;
+    padding-left: $menu-left-padding;
+
+    .language {
+      display: inline-block;
+      color: $menu-bottom-color;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: $font-semibold;
+
+      .icon {
+        @include icon(28px);
+        opacity: 0.9;
+
+        &.icon-language  {
+          position: relative;
+          top: -1px;
+          width: 28px;
+          height: 24px;
+
+          background-image: url('../../assets/images/menu/language.png');
+        }
+
+        &:hover {
+          opacity: 1;
         }
       }
     }

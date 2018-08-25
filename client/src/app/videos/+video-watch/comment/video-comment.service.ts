@@ -31,8 +31,8 @@ export class VideoCommentService {
 
     return this.authHttp.post(url, normalizedComment)
                .pipe(
-      map(data => this.extractVideoComment(data['comment'])),
-      catchError(this.restExtractor.handleError)
+                  map(data => this.extractVideoComment(data['comment'])),
+                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -43,7 +43,7 @@ export class VideoCommentService {
     return this.authHttp.post(url, normalizedComment)
                .pipe(
                  map(data => this.extractVideoComment(data[ 'comment' ])),
-                 catchError(this.restExtractor.handleError)
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -62,7 +62,7 @@ export class VideoCommentService {
                .get(url, { params })
                .pipe(
                  map(this.extractVideoComments),
-                 catchError((res) => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -73,7 +73,7 @@ export class VideoCommentService {
                .get(url)
                .pipe(
                  map(tree => this.extractVideoCommentTree(tree as VideoCommentThreadTree)),
-                 catchError((res) => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -84,7 +84,7 @@ export class VideoCommentService {
                .delete(url)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError((res) => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 

@@ -1,0 +1,39 @@
+<div i18n class="about-instance-title">
+  About {{ instanceName }} instance
+</div>
+
+<div class="short-description">
+  <div>{{ shortDescription }}</div>
+</div>
+
+<div class="description">
+  <div i18n class="section-title">Description</div>
+
+  <div [innerHTML]="descriptionHTML"></div>
+</div>
+
+<div class="terms" id="terms-section">
+  <div i18n class="section-title">Terms</div>
+
+  <div [innerHTML]="termsHTML"></div>
+</div>
+
+<div class="signup">
+  <div i18n class="section-title">Signup</div>
+
+  <div *ngIf="isSignupAllowed">
+    <ng-container i18n>User registration is allowed and</ng-container>
+
+    <ng-container i18n *ngIf="userVideoQuota !== -1">
+      this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
+    </ng-container>
+
+    <ng-container i18n *ngIf="userVideoQuota === -1">
+      this instance provides unlimited space for the videos of its users.
+    </ng-container>
+  </div>
+
+  <div i18n *ngIf="isSignupAllowed === false">
+    User registration is currently not allowed.
+  </div>
+</div>

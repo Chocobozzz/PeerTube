@@ -38,7 +38,8 @@ export class SignupComponent extends FormReactive implements OnInit {
     this.buildForm({
       username: this.userValidatorsService.USER_USERNAME,
       password: this.userValidatorsService.USER_PASSWORD,
-      email: this.userValidatorsService.USER_EMAIL
+      email: this.userValidatorsService.USER_EMAIL,
+      terms: this.userValidatorsService.USER_TERMS
     })
 
     this.serverService.configLoaded

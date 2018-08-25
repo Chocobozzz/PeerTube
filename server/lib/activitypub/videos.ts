@@ -24,11 +24,21 @@ import { addVideoComments } from './video-comments'
 import { crawlCollectionPage } from './crawl'
 import { sendCreateVideo, sendUpdateVideo } from './send'
 import { shareVideoByServerAndChannel } from './index'
+import { isArray } from '../../helpers/custom-validators/misc'
+import { VideoCaptionModel } from '../../models/video/video-caption'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
   if (video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
-    if (isNewVideo === true) {
+    // Fetch more attributes that we will need to serialize in AP object
+    if (isArray(video.VideoCaptions) === false) {
+      video.VideoCaptions = await video.$get('VideoCaptions', {
+        attributes: [ 'language' ],
+        transaction
+      }) as VideoCaptionModel[]
+    }
+
+    if (isNewVideo) {
       // Now we'll add the video's meta data to our followers
       await sendCreateVideo(video, transaction)
       await shareVideoByServerAndChannel(video, transaction)
@@ -38,9 +48,8 @@ async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, tr
   }
 }
 
-function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
+function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Function) {
   const host = video.VideoChannel.Account.Actor.Server.host
-  const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
   // We need to provide a callback, if no we could have an uncaught exception
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
@@ -79,17 +88,17 @@ async function videoActivityObjectToDBAttributes (
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
   const duration = videoObject.duration.replace(/[^\d]+/, '')
 
-  let language: string = null
+  let language: string | undefined
   if (videoObject.language) {
     language = videoObject.language.identifier
   }
 
-  let category: number = null
+  let category: number | undefined
   if (videoObject.category) {
     category = parseInt(videoObject.category.identifier, 10)
   }
 
-  let licence: number = null
+  let licence: number | undefined
   if (videoObject.licence) {
     licence = parseInt(videoObject.licence.identifier, 10)
   }
@@ -134,7 +143,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
     throw new Error('Cannot find video files for ' + videoCreated.url)
   }
 
-  const attributes = []
+  const attributes: VideoFileModel[] = []
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
@@ -144,15 +153,18 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
     const parsed = magnetUtil.decode(magnet.href)
-    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) throw new Error('Cannot parse magnet URI ' + magnet.href)
+    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
+      throw new Error('Cannot parse magnet URI ' + magnet.href)
+    }
 
     const attribute = {
       extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],
       infoHash: parsed.infoHash,
       resolution: fileUrl.width,
       size: fileUrl.size,
-      videoId: videoCreated.id
-    }
+      videoId: videoCreated.id,
+      fps: fileUrl.fps
+    } as VideoFileModel
     attributes.push(attribute)
   }
 
@@ -179,23 +191,31 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
     const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
     const video = VideoModel.build(videoData)
 
-    // Don't block on request
+    // Don't block on remote HTTP request (we are in a transaction!)
     generateThumbnailFromUrl(video, videoObject.icon)
       .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
 
     const videoCreated = await video.save(sequelizeOptions)
 
+    // Process files
     const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
     if (videoFileAttributes.length === 0) {
       throw new Error('Cannot find valid files for video %s ' + videoObject.url)
     }
 
-    const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
-    await Promise.all(tasks)
+    const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
+    await Promise.all(videoFilePromises)
 
+    // Process tags
     const tags = videoObject.tag.map(t => t.name)
     const tagInstances = await TagModel.findOrCreateTags(tags, t)
     await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
+
+    // Process captions
+    const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
+      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
+    })
+    await Promise.all(videoCaptionsPromises)
 
     logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
 
@@ -268,7 +288,7 @@ async function createRates (actorUrls: string[], video: VideoModel, rate: VideoR
   logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
 
   // This is "likes" and "dislikes"
-  await video.increment(rate + 's', { by: rateCounts })
+  if (rateCounts !== 0) await video.increment(rate + 's', { by: rateCounts })
 
   return
 }
@@ -328,7 +348,7 @@ export {
   federateVideoIfNeeded,
   fetchRemoteVideo,
   getOrCreateAccountAndVideoAndChannel,
-  fetchRemoteVideoPreview,
+  fetchRemoteVideoStaticFile,
   fetchRemoteVideoDescription,
   generateThumbnailFromUrl,
   videoActivityObjectToDBAttributes,

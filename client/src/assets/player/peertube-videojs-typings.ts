@@ -16,13 +16,20 @@ interface VideoJSComponentInterface {
   registerComponent (name: string, obj: any)
 }
 
+type VideoJSCaption = {
+  label: string
+  language: string
+  src: string
+}
+
 type PeertubePluginOptions = {
   videoFiles: VideoFile[]
   playerElement: HTMLVideoElement
   videoViewUrl: string
   videoDuration: number
-  startTime: number
-  autoplay: boolean
+  startTime: number | string
+  autoplay: boolean,
+  videoCaptions: VideoJSCaption[]
 }
 
 // videojs typings don't have some method we need
@@ -31,5 +38,6 @@ const videojsUntyped = videojs as any
 export {
   VideoJSComponentInterface,
   PeertubePluginOptions,
-  videojsUntyped
+  videojsUntyped,
+  VideoJSCaption
 }

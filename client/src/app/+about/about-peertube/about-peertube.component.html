@@ -1,0 +1,97 @@
+<div i18n class="about-peertube-title">
+  About PeerTube
+</div>
+
+<div class="description">
+  <p i18n>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</p>
+
+  <p i18n>
+    It is a free and open-source software, under the <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE">AGPLv3 licence</a>.
+  </p>
+
+  <p i18n>
+    For more information, please visit <a target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org">joinpeertube.org</a>.
+  </p>
+</div>
+
+<div id="p2p-privacy">
+  <div i18n class="section-title">P2P & Privacy</div>
+
+  <p i18n>
+    PeerTube uses the BitTorrent protocol to share bandwidth between users.
+    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+  </p>
+
+  <h4 i18n class="p2p-privacy-title">What are the consequences?</h4>
+
+  <p i18n>
+    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
+    In practice, this is much more difficult because:
+  </p>
+
+  <ul>
+    <li i18n>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </li>
+
+    <li i18n>
+      For each request sent, the tracker returns random peers at a limited number.
+      For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
+    </li>
+
+    <li i18n>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </li>
+
+    <li i18n>
+      If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video
+    </li>
+
+    <li i18n>
+      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
+    </li>
+
+    <li i18n>
+      Web peers are not publicly accessible: because we use WebRTC inside the web browser (<a href="https://webtorrent.io/">with the WebTorrent library</a>), the protocol is different from classic BitTorrent.
+      When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
+      See <a href="https://github.com/yciabaud/webtorrent/blob/beps/bep_webrtc.rst">this document</a> for more information
+    </li>
+  </ul>
+
+  <p i18n>
+    The worst-case scenario of an average person spying on their friends is quite unlikely.
+    There are much more effective ways to get that kind of information.
+  </p>
+
+  <h4 i18n class="p2p-privacy-title">How does PeerTube compare with YouTube?</h4>
+
+  <p i18n>
+    The threats to privacy in YouTube are different from PeerTube's.
+    In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
+    Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
+  </p>
+
+  <h4 i18n class="p2p-privacy-title">What can I do to limit the exposure of my IP address?</h4>
+
+  <p i18n>
+    Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more.
+    PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
+    Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
+  </p>
+
+  <h4 i18n class="p2p-privacy-title">What will be done to mitigate this problem?</h4>
+
+  <p i18n>
+    PeerTube is only in beta, and want to deliver the best countermeasures possible by the time the stable is released.
+    In the meantime, we want to test different ideas related to this issue:
+  </p>
+
+  <ul>
+    <li i18n>Set a limit to the number of peers sent by the tracker</li>
+    <li i18n>Set a limit on the request frequency received by the tracker (being tested)</li>
+    <li i18n>Ring a bell if there are unusual requests (being tested)</li>
+    <li i18n>Disable P2P from the administration interface</li>
+    <li i18n>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</li>
+  </ul>
+</div>

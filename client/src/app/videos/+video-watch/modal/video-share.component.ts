@@ -1,11 +1,9 @@
-import { Component, Input, ViewChild } from '@angular/core'
-
+import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-
-import { ModalDirective } from 'ngx-bootstrap/modal'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { buildVideoEmbed } from '../../../../assets/player/utils'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-video-share',
@@ -15,9 +13,10 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class VideoShareComponent {
   @Input() video: VideoDetails = null
 
-  @ViewChild('modal') modal: ModalDirective
+  @ViewChild('modal') modal: ElementRef
 
   constructor (
+    private modalService: NgbModal,
     private notificationsService: NotificationsService,
     private i18n: I18n
   ) {
@@ -25,11 +24,7 @@ export class VideoShareComponent {
   }
 
   show () {
-    this.modal.show()
-  }
-
-  hide () {
-    this.modal.hide()
+    this.modalService.open(this.modal)
   }
 
   getVideoIframeCode () {

@@ -2,13 +2,14 @@ import { map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
-import { Observable, ReplaySubject, of } from 'rxjs'
+import { Observable, of, ReplaySubject } from 'rxjs'
 import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
-import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
-import { isDefaultLocale } from '../../../../../shared/models/i18n'
-import { getDevLocale, isOnDevLocale, peertubeTranslate } from '@app/shared/i18n/i18n-utils'
+import { VideoConstant } from '../../../../../shared/models/videos'
+import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
+import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { sortBy } from '@app/shared/misc/utils'
 
 @Injectable()
 export class ServerService {
@@ -59,14 +60,30 @@ export class ServerService {
         extensions: []
       }
     },
+    videoCaption: {
+      file: {
+        size: { max: 0 },
+        extensions: []
+      }
+    },
     user: {
       videoQuota: -1
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: false
+        },
+        torrent: {
+          enabled: false
+        }
+      }
     }
   }
-  private videoCategories: Array<VideoConstant<number>> = []
-  private videoLicences: Array<VideoConstant<number>> = []
+  private videoCategories: Array<VideoConstant<string>> = []
+  private videoLicences: Array<VideoConstant<string>> = []
   private videoLanguages: Array<VideoConstant<string>> = []
-  private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
+  private videoPrivacies: Array<VideoConstant<string>> = []
 
   constructor (
     private http: HttpClient,
@@ -128,7 +145,7 @@ export class ServerService {
 
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    hashToPopulate: VideoConstant<number | string>[],
+    hashToPopulate: VideoConstant<string>[],
     notifier: ReplaySubject<boolean>,
     sort = false
   ) {
@@ -150,13 +167,7 @@ export class ServerService {
                   })
                 })
 
-          if (sort === true) {
-            hashToPopulate.sort((a, b) => {
-              if (a.label < b.label) return -1
-              if (a.label === b.label) return 0
-              return 1
-            })
-          }
+          if (sort === true) sortBy(hashToPopulate, 'label')
 
           notifier.next(true)
         })

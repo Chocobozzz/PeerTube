@@ -1,14 +1,10 @@
 import * as express from 'express'
 import 'multer'
-import { extname, join } from 'path'
-import * as uuidv4 from 'uuid/v4'
 import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { processImage } from '../../helpers/image-utils'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
-import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
-import { updateActorAvatarInstance } from '../../lib/activitypub'
+import { CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { Emailer } from '../../lib/emailer'
 import { Redis } from '../../lib/redis'
@@ -34,9 +30,11 @@ import {
   usersVideoRatingValidator
 } from '../../middlewares'
 import {
+  deleteMeValidator,
   usersAskResetPasswordValidator,
+  usersBlockingValidator,
   usersResetPasswordValidator,
-  usersUpdateMyAvatarValidator,
+  videoImportsSortValidator,
   videosSortValidator
 } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
@@ -46,6 +44,12 @@ import { VideoModel } from '../../models/video/video'
 import { VideoSortField } from '../../../client/src/app/shared/video/sort-field.type'
 import { createReqFiles } from '../../helpers/express-utils'
 import { UserVideoQuota } from '../../../shared/models/users/user-video-quota.model'
+import { updateAvatarValidator } from '../../middlewares/validators/avatar'
+import { updateActorAvatarFile } from '../../lib/avatar'
+import { auditLoggerFactory, UserAuditView } from '../../helpers/audit-logger'
+import { VideoImportModel } from '../../models/video/video-import'
+
+const auditLogger = auditLoggerFactory('users')
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 const loginRateLimiter = new RateLimit({
@@ -60,10 +64,24 @@ usersRouter.get('/me',
   authenticate,
   asyncMiddleware(getUserInformation)
 )
+usersRouter.delete('/me',
+  authenticate,
+  asyncMiddleware(deleteMeValidator),
+  asyncMiddleware(deleteMe)
+)
 
 usersRouter.get('/me/video-quota-used',
   authenticate,
   asyncMiddleware(getUserVideoQuotaUsed)
+)
+
+usersRouter.get('/me/videos/imports',
+  authenticate,
+  paginationValidator,
+  videoImportsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(getUserVideoImports)
 )
 
 usersRouter.get('/me/videos',
@@ -89,6 +107,19 @@ usersRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listUsers)
+)
+
+usersRouter.post('/:id/block',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockingValidator),
+  asyncMiddleware(blockUser)
+)
+usersRouter.post('/:id/unblock',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockingValidator),
+  asyncMiddleware(unblockUser)
 )
 
 usersRouter.get('/:id',
@@ -121,7 +152,7 @@ usersRouter.put('/me',
 usersRouter.post('/me/avatar/pick',
   authenticate,
   reqAvatarFile,
-  usersUpdateMyAvatarValidator,
+  updateAvatarValidator,
   asyncMiddleware(updateMyAvatar)
 )
 
@@ -170,16 +201,28 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
     user.Account.id,
     req.query.start as number,
     req.query.count as number,
-    req.query.sort as VideoSortField,
-    false // Display my NSFW videos
+    req.query.sort as VideoSortField
   )
 
   const additionalAttributes = {
     waitTranscoding: true,
     state: true,
-    scheduledUpdate: true
+    scheduledUpdate: true,
+    blacklistInfo: true
   }
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
+}
+
+async function getUserVideoImports (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.oauth.token.User as UserModel
+  const resultList = await VideoImportModel.listUserVideoImportsForApi(
+    user.id,
+    req.query.start as number,
+    req.query.count as number,
+    req.query.sort
+  )
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function createUser (req: express.Request, res: express.Response) {
@@ -196,6 +239,7 @@ async function createUser (req: express.Request, res: express.Response) {
 
   const { user, account } = await createUserAccountAndChannel(userToCreate)
 
+  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
 
   return res.json({
@@ -212,7 +256,7 @@ async function createUser (req: express.Request, res: express.Response) {
 async function registerUser (req: express.Request, res: express.Response) {
   const body: UserCreate = req.body
 
-  const user = new UserModel({
+  const userToCreate = new UserModel({
     username: body.username,
     password: body.password,
     email: body.email,
@@ -222,8 +266,9 @@ async function registerUser (req: express.Request, res: express.Response) {
     videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
 
-  await createUserAccountAndChannel(user)
+  const { user } = await createUserAccountAndChannel(userToCreate)
 
+  auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account registered.', body.username)
 
   return res.type('json').status(204).end()
@@ -245,6 +290,23 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
     videoQuotaUsed
   }
   return res.json(data)
+}
+
+async function unblockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+
+  await changeUserBlock(res, user, false)
+
+  return res.status(204).end()
+}
+
+async function blockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+  const reason = req.body.reason
+
+  await changeUserBlock(res, user, true, reason)
+
+  return res.status(204).end()
 }
 
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -271,10 +333,22 @@ async function listUsers (req: express.Request, res: express.Response, next: exp
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = await UserModel.loadById(req.params.id)
+async function deleteMe (req: express.Request, res: express.Response) {
+  const user: UserModel = res.locals.oauth.token.User
 
   await user.destroy()
+
+  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+
+  return res.sendStatus(204)
+}
+
+async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user: UserModel = res.locals.user
+
+  await user.destroy()
+
+  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
 
   return res.sendStatus(204)
 }
@@ -283,6 +357,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   const body: UserUpdateMe = req.body
 
   const user: UserModel = res.locals.oauth.token.user
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
 
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
@@ -297,6 +372,12 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
     await user.Account.save({ transaction: t })
 
     await sendUpdateActor(user.Account, t)
+
+    auditLogger.update(
+      res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+      new UserAuditView(user.toFormattedJSON()),
+      oldUserAuditView
+    )
   })
 
   return res.sendStatus(204)
@@ -304,22 +385,17 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
 
 async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
-  const user = res.locals.oauth.token.user
-  const actor = user.Account.Actor
+  const user: UserModel = res.locals.oauth.token.user
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+  const account = user.Account
 
-  const extension = extname(avatarPhysicalFile.filename)
-  const avatarName = uuidv4() + extension
-  const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-  await processImage(avatarPhysicalFile, destination, AVATARS_SIZE)
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, account.Actor, account)
 
-  const avatar = await sequelizeTypescript.transaction(async t => {
-    const updatedActor = await updateActorAvatarInstance(actor, avatarName, t)
-    await updatedActor.save({ transaction: t })
-
-    await sendUpdateActor(user.Account, t)
-
-    return updatedActor.Avatar
-  })
+  auditLogger.update(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new UserAuditView(user.toFormattedJSON()),
+    oldUserAuditView
+  )
 
   return res
     .json({
@@ -330,19 +406,26 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
 
 async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdate = req.body
-  const user = res.locals.user as UserModel
-  const roleChanged = body.role !== undefined && body.role !== user.role
+  const userToUpdate = res.locals.user as UserModel
+  const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
+  const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
-  if (body.email !== undefined) user.email = body.email
-  if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
-  if (body.role !== undefined) user.role = body.role
+  if (body.email !== undefined) userToUpdate.email = body.email
+  if (body.videoQuota !== undefined) userToUpdate.videoQuota = body.videoQuota
+  if (body.role !== undefined) userToUpdate.role = body.role
 
-  await user.save()
+  const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
   if (roleChanged) {
-    await OAuthTokenModel.deleteUserToken(user.id)
+    await OAuthTokenModel.deleteUserToken(userToUpdate.id)
   }
+
+  auditLogger.update(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new UserAuditView(user.toFormattedJSON()),
+    oldUserAuditView
+  )
 
   // Don't need to send this update to followers, these attributes are not propagated
 
@@ -370,4 +453,25 @@ async function resetUserPassword (req: express.Request, res: express.Response, n
 
 function success (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.end()
+}
+
+async function changeUserBlock (res: express.Response, user: UserModel, block: boolean, reason?: string) {
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+
+  user.blocked = block
+  user.blockedReason = reason || null
+
+  await sequelizeTypescript.transaction(async t => {
+    await OAuthTokenModel.deleteUserToken(user.id, t)
+
+    await user.save({ transaction: t })
+  })
+
+  await Emailer.Instance.addUserBlockJob(user, block, reason)
+
+  auditLogger.update(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new UserAuditView(user.toFormattedJSON()),
+    oldUserAuditView
+  )
 }

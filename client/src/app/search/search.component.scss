@@ -1,0 +1,144 @@
+@import '_variables';
+@import '_mixins';
+
+.no-result {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: $font-semibold;
+}
+
+.search-result {
+  padding: 40px;
+
+  .results-header {
+    font-size: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #DADADA;
+
+    .first-line {
+      display: flex;
+      flex-direction: row;
+
+      .results-counter {
+        flex-grow: 1;
+
+        .search-value {
+          font-weight: $font-semibold;
+        }
+      }
+
+      .results-filter-button {
+
+        .icon.icon-filter {
+          @include icon(20px);
+
+          position: relative;
+          top: -1px;
+          margin-right: 5px;
+          background-image: url('../../assets/images/search/filter.svg');
+        }
+      }
+    }
+
+    .results-filter {
+      // Animation when we show/hide the filters
+      transition: max-height 0.3s;
+      display: block !important;
+      overflow: hidden !important;
+      max-height: 0;
+
+      &.show {
+        max-height: 1500px;
+      }
+    }
+  }
+
+  .entry {
+    display: flex;
+    min-height: 130px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+
+    &.video {
+
+      my-video-thumbnail {
+        margin-right: 10px;
+      }
+
+      .video-info {
+        flex-grow: 1;
+
+        .video-info-name {
+          @include disable-default-a-behaviour;
+
+          color: #000;
+          display: block;
+          width: fit-content;
+          font-size: 18px;
+          font-weight: $font-semibold;
+        }
+
+        .video-info-date-views {
+          font-size: 14px;
+        }
+
+        .video-info-account {
+          @include disable-default-a-behaviour;
+
+          display: block;
+          width: fit-content;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 14px;
+          color: #585858;
+
+          &:hover {
+            color: #303030;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .search-result {
+    margin: 20px 10px;
+  }
+
+  .results-header {
+    font-size: 15px !important;
+  }
+
+  .entry {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+
+    &.video {
+      .video-info-name,
+      .video-info-account {
+        margin: auto;
+      }
+
+      my-video-thumbnail {
+        margin-right: 0 !important;
+
+        /deep/ .video-thumbnail {
+          width: 100%;
+          height: auto;
+
+          img {
+            width: 100%;
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+}

@@ -17,8 +17,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class JobsListComponent extends RestTable implements OnInit {
   private static JOB_STATE_LOCAL_STORAGE_STATE = 'jobs-list-state'
 
-  jobState: JobState = 'inactive'
-  jobStates: JobState[] = [ 'active', 'complete', 'failed', 'inactive', 'delayed' ]
+  jobState: JobState = 'waiting'
+  jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
   jobs: Job[] = []
   totalRecords: number
   rowsPerPage = 10
@@ -40,6 +40,8 @@ export class JobsListComponent extends RestTable implements OnInit {
   }
 
   onJobStateChanged () {
+    this.pagination.start = 0
+
     this.loadData()
     this.saveJobState()
   }

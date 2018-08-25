@@ -16,9 +16,12 @@ import {
   getVideoAudience,
   getVideoCommentAudience
 } from '../audience'
+import { logger } from '../../../helpers/logger'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+
+  logger.info('Creating job to send video creation of %s.', video.url)
 
   const byActor = video.VideoChannel.Account.Actor
   const videoObject = video.toActivityPubObject()
@@ -32,6 +35,8 @@ async function sendCreateVideo (video: VideoModel, t: Transaction) {
 async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel, t: Transaction) {
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
 
+  logger.info('Creating job to send video abuse %s.', url)
+
   const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
   const data = createActivityData(url, byActor, videoAbuse.toActivityPubObject(), audience)
 
@@ -39,6 +44,8 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
 }
 
 async function sendCreateVideoComment (comment: VideoCommentModel, t: Transaction) {
+  logger.info('Creating job to send comment %s.', comment.url)
+
   const isOrigin = comment.Video.isOwned()
 
   const byActor = comment.Account.Actor
@@ -74,6 +81,8 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
 }
 
 async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to send view of %s.', video.url)
+
   const url = getVideoViewActivityPubUrl(byActor, video)
   const viewActivityData = createViewActivityData(byActor, video)
 
@@ -98,6 +107,8 @@ async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transa
 }
 
 async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to dislike %s.', video.url)
+
   const url = getVideoDislikeActivityPubUrl(byActor, video)
   const dislikeActivityData = createDislikeActivityData(byActor, video)
 

@@ -7,6 +7,8 @@ const SORTABLE_ACCOUNTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.ACCOUNT
 const SORTABLE_JOBS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.JOBS)
 const SORTABLE_VIDEO_ABUSES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_ABUSES)
 const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS)
+const SORTABLE_VIDEOS_SEARCH_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS_SEARCH)
+const SORTABLE_VIDEO_IMPORTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_IMPORTS)
 const SORTABLE_VIDEO_COMMENT_THREADS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
 const SORTABLE_BLACKLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.BLACKLISTS)
 const SORTABLE_VIDEO_CHANNELS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_CHANNELS)
@@ -18,6 +20,8 @@ const accountsSortValidator = checkSort(SORTABLE_ACCOUNTS_COLUMNS)
 const jobsSortValidator = checkSort(SORTABLE_JOBS_COLUMNS)
 const videoAbusesSortValidator = checkSort(SORTABLE_VIDEO_ABUSES_COLUMNS)
 const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
+const videoImportsSortValidator = checkSort(SORTABLE_VIDEO_IMPORTS_COLUMNS)
+const videosSearchSortValidator = checkSort(SORTABLE_VIDEOS_SEARCH_COLUMNS)
 const videoCommentThreadsSortValidator = checkSort(SORTABLE_VIDEO_COMMENT_THREADS_COLUMNS)
 const blacklistSortValidator = checkSort(SORTABLE_BLACKLISTS_COLUMNS)
 const videoChannelsSortValidator = checkSort(SORTABLE_VIDEO_CHANNELS_COLUMNS)
@@ -30,6 +34,8 @@ export {
   usersSortValidator,
   videoAbusesSortValidator,
   videoChannelsSortValidator,
+  videoImportsSortValidator,
+  videosSearchSortValidator,
   videosSortValidator,
   blacklistSortValidator,
   accountsSortValidator,

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
 import { PreloadSelectedModulesList } from './core'
+import { AppComponent } from '@app/app.component'
 
 const routes: Routes = [
   {
@@ -19,6 +20,14 @@ const routes: Routes = [
   {
     path: 'video-channels',
     loadChildren: './+video-channels/video-channels.module#VideoChannelsModule'
+  },
+  {
+    path: 'about',
+    loadChildren: './+about/about.module#AboutModule'
+  },
+  {
+    path: '',
+    component: AppComponent // Avoid 404, app component will redirect dynamically
   },
   {
     path: '**',

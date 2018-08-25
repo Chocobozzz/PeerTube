@@ -1,0 +1,32 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Moderation comment</h4>
+    <span class="close" aria-hidden="true" (click)="hideModerationCommentModal()"></span>
+  </div>
+
+  <div class="modal-body">
+    <form novalidate [formGroup]="form" (ngSubmit)="banUser()">
+      <div class="form-group">
+        <textarea formControlName="moderationComment" [ngClass]="{ 'input-error': formErrors['moderationComment'] }">
+        </textarea>
+        <div *ngIf="formErrors.moderationComment" class="form-error">
+          {{ formErrors.moderationComment }}
+        </div>
+      </div>
+
+      <div i18n>
+        This comment can only be seen by you or the other moderators.
+      </div>
+
+      <div class="form-group inputs">
+        <span i18n class="action-button action-button-cancel" (click)="hideModerationCommentModal()">Cancel</span>
+
+        <input
+          type="submit" i18n-value value="Update this comment" class="action-button-submit"
+          [disabled]="!form.valid"
+        >
+      </div>
+    </form>
+  </div>
+
+</ng-template>

@@ -14,6 +14,7 @@
 - [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
+- [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
 - [Are you going to use the Steem blockchain?](#are-you-going-to-use-the-steem-blockchain)
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
@@ -23,8 +24,9 @@
 ## I don't like the name "PeerTube"
 
 PeerTube is just the name of the software. You can install it on your
-server, and choose the name you want. For example, [this instance](https://framatube.org/)
+server, and choose a name you want. For example, [this instance](https://framatube.org/)
 is named "Framatube".
+
 
 ## If nobody watches a video, is it seeded?
 
@@ -59,7 +61,7 @@ WEBM, MP4 or OGV videos.
 
 ## I want to change my domain name, how can I do that?
 
-You can't. You'll need to re install an instance and reupload your videos.
+You can't. You'll need to reinstall an instance and reupload your videos.
 
 
 ## Should I have a big server to run PeerTube?
@@ -79,6 +81,11 @@ So you would need:
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
 The reason is they connects to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
 We hope to see compatibility with WebRTC in popular BitTorrent client in the future. See this issue for more information: https://github.com/webtorrent/webtorrent/issues/369
+
+
+## Why host on GitHub and Framagit?
+
+The project has initially been hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/chocobozzz/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
 
 
 ## Are you going to use the Steem blockchain?
@@ -106,7 +113,7 @@ Moreover, don't forget that advertisers already pay considering YouTube's large 
 ## What is "creation dynamic" and why not modify it?
 
 We define creation dynamic as the way any original content, regardless of its monetary value, is created and incentivized.
-We want to limit as much as possible the influence our platform could have on authors in order to stay neutral. We are not curators, and want to limit the scope of PeerTube instance owners and administrators' responsibilities to moderation tasks only.
+We want to stay neutral by limiting the influence of our platform on authors as much as possible. We are not curators, and want to limit the scope of PeerTube instance owners and administrators' responsibilities to moderation tasks only.
 
 If you still want to use a functionality potentially altering that state of things, then you could interface with our upcoming plug-in system, which will be the place to integrate such features in the near future.
 

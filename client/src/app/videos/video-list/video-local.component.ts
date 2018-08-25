@@ -50,10 +50,10 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideos(newPagination, this.sort, this.filter)
+    return this.videoService.getVideos(newPagination, this.sort, this.filter, this.categoryOneOf)
   }
 
   generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, this.filter)
+    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, this.filter, this.categoryOneOf)
   }
 }

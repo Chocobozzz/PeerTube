@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <config xmlns="http://zanata.org/namespace/config/">
-  <url>https://trad.framasoft.org/zanata/</url>
+  <url>https://trad.framasoft.org/</url>
   <project>peertube</project>
   <project-version>develop</project-version>
   <project-type>xliff</project-type>

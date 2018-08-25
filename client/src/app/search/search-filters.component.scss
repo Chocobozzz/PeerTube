@@ -1,0 +1,40 @@
+@import '_variables';
+@import '_mixins';
+
+form {
+  margin-top: 40px;
+}
+
+.radio-label {
+  font-size: 15px;
+  font-weight: $font-bold;
+}
+
+.peertube-radio-container {
+  @include peertube-radio-container;
+
+  display: inline-block;
+  margin-right: 30px;
+}
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+input[type=text] {
+  @include peertube-input-text(100%);
+  display: block;
+}
+
+input[type=submit] {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
+.submit-button {
+  text-align: right;
+}

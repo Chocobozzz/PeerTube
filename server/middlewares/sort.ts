@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'express-validator'
-import { SortType } from '../helpers/utils'
+import { SortType } from '../models/utils'
 
 function setDefaultSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
@@ -8,8 +8,14 @@ function setDefaultSort (req: express.Request, res: express.Response, next: expr
   return next()
 }
 
+function setDefaultSearchSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = '-match'
+
+  return next()
+}
+
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  let newSort: SortType = { sortModel: undefined, sortValue: undefined }
+  let newSort: SortType = { sortModel: undefined, sortValue: '' }
 
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -33,5 +39,6 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 
 export {
   setDefaultSort,
+  setDefaultSearchSort,
   setBlacklistSort
 }

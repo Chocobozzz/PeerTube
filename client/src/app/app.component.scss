@@ -9,17 +9,6 @@
   margin-top: $header-height;
 }
 
-.title-menu-left {
-  position: fixed;
-  height: calc(100vh - #{$header-height});
-  padding: 0;
-  width: $menu-width;
-
-  .title-menu-left-block.menu {
-    height: 100%;
-  }
-}
-
 .header {
   height: $header-height;
   position: fixed;
@@ -96,10 +85,10 @@
 footer {
   border-top: 1px solid $footer-border-color;
   padding: 10px 0;
-  text-align: center;
   font-size: 11px;
   margin-top: $footer-margin;
   height: $footer-height;
+  justify-content: center;
 }
 
 simple-notifications {

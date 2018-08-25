@@ -7,7 +7,6 @@ import {
   VideoChannel
 } from '../../../../../shared'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
-import { Actor } from '@app/shared/actor/actor.model'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 
@@ -22,6 +21,9 @@ export type UserConstructorHash = {
   createdAt?: Date,
   account?: AccountServerModel,
   videoChannels?: VideoChannel[]
+
+  blocked?: boolean
+  blockedReason?: string
 }
 export class User implements UserServerModel {
   id: number
@@ -34,7 +36,9 @@ export class User implements UserServerModel {
   account: Account
   videoChannels: VideoChannel[]
   createdAt: Date
-  accountAvatarUrl: string
+
+  blocked: boolean
+  blockedReason?: string
 
   constructor (hash: UserConstructorHash) {
     this.id = hash.id
@@ -42,31 +46,23 @@ export class User implements UserServerModel {
     this.email = hash.email
     this.role = hash.role
 
+    this.videoChannels = hash.videoChannels
+    this.videoQuota = hash.videoQuota
+    this.nsfwPolicy = hash.nsfwPolicy
+    this.autoPlayVideo = hash.autoPlayVideo
+    this.createdAt = hash.createdAt
+    this.blocked = hash.blocked
+    this.blockedReason = hash.blockedReason
+
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)
     }
+  }
 
-    if (hash.videoChannels !== undefined) {
-      this.videoChannels = hash.videoChannels
-    }
+  get accountAvatarUrl () {
+    if (!this.account) return ''
 
-    if (hash.videoQuota !== undefined) {
-      this.videoQuota = hash.videoQuota
-    }
-
-    if (hash.nsfwPolicy !== undefined) {
-      this.nsfwPolicy = hash.nsfwPolicy
-    }
-
-    if (hash.autoPlayVideo !== undefined) {
-      this.autoPlayVideo = hash.autoPlayVideo
-    }
-
-    if (hash.createdAt !== undefined) {
-      this.createdAt = hash.createdAt
-    }
-
-    this.updateComputedAttributes()
+    return this.account.avatarUrl
   }
 
   hasRight (right: UserRight) {
@@ -81,17 +77,9 @@ export class User implements UserServerModel {
     if (obj.account !== undefined) {
       this.account = new Account(obj.account)
     }
-
-    this.updateComputedAttributes()
   }
 
   updateAccountAvatar (newAccountAvatar: Avatar) {
-    this.account.avatar = newAccountAvatar
-
-    this.updateComputedAttributes()
-  }
-
-  private updateComputedAttributes () {
-    this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+    this.account.updateAvatar(newAccountAvatar)
   }
 }

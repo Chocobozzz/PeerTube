@@ -1,4 +1,4 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { getServerActor } from '../../../helpers/utils'
 import { REMOTE_SCHEME, sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
@@ -14,7 +14,7 @@ export type ActivitypubFollowPayload = {
   host: string
 }
 
-async function processActivityPubFollow (job: kue.Job) {
+async function processActivityPubFollow (job: Bull.Job) {
   const payload = job.data as ActivitypubFollowPayload
   const host = payload.host
 
@@ -58,7 +58,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
     actorFollow.ActorFollowing = targetActor
     actorFollow.ActorFollower = fromActor
 
-    // Send a notification to remote server
-    await sendFollow(actorFollow)
+    // Send a notification to remote server if our follow is not already accepted
+    if (actorFollow.state !== 'accepted') await sendFollow(actorFollow)
   })
 }

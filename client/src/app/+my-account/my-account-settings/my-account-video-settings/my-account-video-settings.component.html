@@ -15,14 +15,10 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <input
-      type="checkbox" id="autoPlayVideo"
-      formControlName="autoPlayVideo"
-    >
-    <label for="autoPlayVideo"></label>
-    <label i18n for="autoPlayVideo">Automatically plays video</label>
-  </div>
+  <my-peertube-checkbox
+    inputName="autoPlayVideo" formControlName="autoPlayVideo"
+    i18n-labelText labelText="Automatically plays video"
+  ></my-peertube-checkbox>
 
   <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
 </form>

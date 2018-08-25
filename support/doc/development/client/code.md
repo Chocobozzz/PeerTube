@@ -60,7 +60,7 @@ If you are not familiar with Angular I recommend you to read the [quickstart gui
 
 ## Components tree
 
-![Components tree](/support/doc/development/client/components-tree.png)
+![Components tree](/support/doc/development/client/components-tree.svg)
 
 ## Newcomers
 

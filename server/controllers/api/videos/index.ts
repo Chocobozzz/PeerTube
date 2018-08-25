@@ -2,10 +2,11 @@ import * as express from 'express'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
-import { getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
-import { getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
+import { auditLoggerFactory, VideoAuditView } from '../../../helpers/audit-logger'
+import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import {
   CONFIG,
   IMAGE_MIMETYPE_EXT,
@@ -31,6 +32,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -38,7 +40,6 @@ import {
   videosAddValidator,
   videosGetValidator,
   videosRemoveValidator,
-  videosSearchValidator,
   videosSortValidator,
   videosUpdateValidator
 } from '../../../middlewares'
@@ -50,10 +51,13 @@ import { blacklistRouter } from './blacklist'
 import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
-import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
-import { createReqFiles, isNSFWHidden } from '../../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
+import { videoCaptionsRouter } from './captions'
+import { videoImportsRouter } from './import'
+import { resetSequelizeInstance } from '../../../helpers/database-utils'
 
+const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
 
 const reqVideoFileAdd = createReqFiles(
@@ -78,6 +82,8 @@ videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
+videosRouter.use('/', videoCaptionsRouter)
+videosRouter.use('/', videoImportsRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -90,16 +96,8 @@ videosRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   optionalAuthenticate,
+  commonVideosFiltersValidator,
   asyncMiddleware(listVideos)
-)
-videosRouter.get('/search',
-  videosSearchValidator,
-  paginationValidator,
-  videosSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  optionalAuthenticate,
-  asyncMiddleware(searchVideos)
 )
 videosRouter.put('/:id',
   authenticate,
@@ -165,7 +163,6 @@ async function addVideo (req: express.Request, res: express.Response) {
   const videoData = {
     name: videoInfo.name,
     remote: false,
-    extname: extname(videoPhysicalFile.filename),
     category: videoInfo.category,
     licence: videoInfo.licence,
     language: videoInfo.language,
@@ -184,10 +181,13 @@ async function addVideo (req: express.Request, res: express.Response) {
 
   // Build the file object
   const { videoFileResolution } = await getVideoFileResolution(videoPhysicalFile.path)
+  const fps = await getVideoFileFPS(videoPhysicalFile.path)
+
   const videoFileData = {
     extname: extname(videoPhysicalFile.filename),
     resolution: videoFileResolution,
-    size: videoPhysicalFile.size
+    size: videoPhysicalFile.size,
+    fps
   }
   const videoFile = new VideoFileModel(videoFileData)
 
@@ -251,6 +251,7 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     await federateVideoIfNeeded(video, true, t)
 
+    auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
     return videoCreated
@@ -277,6 +278,7 @@ async function addVideo (req: express.Request, res: express.Response) {
 async function updateVideo (req: express.Request, res: express.Response) {
   const videoInstance: VideoModel = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
+  const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
   const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
 
@@ -348,9 +350,14 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
       await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
-    })
 
-    logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
+      auditLogger.update(
+        res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+        new VideoAuditView(videoInstanceUpdated.toFormattedDetailsJSON()),
+        oldVideoAuditView
+      )
+      logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
+    })
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
@@ -407,7 +414,12 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    hideNSFW: isNSFWHidden(res),
+    categoryOneOf: req.query.categoryOneOf,
+    licenceOneOf: req.query.licenceOneOf,
+    languageOneOf: req.query.languageOneOf,
+    tagsOneOf: req.query.tagsOneOf,
+    tagsAllOf: req.query.tagsAllOf,
+    nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false
   })
@@ -422,19 +434,8 @@ async function removeVideo (req: express.Request, res: express.Response) {
     await videoInstance.destroy({ transaction: t })
   })
 
+  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 
   return res.type('json').status(204).end()
-}
-
-async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoModel.searchAndPopulateAccountAndServer(
-    req.query.search as string,
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort as VideoSortField,
-    isNSFWHidden(res)
-  )
-
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

@@ -15,6 +15,7 @@ export class HelpComponent implements OnInit, OnChanges {
   @Input() helpType: 'custom' | 'markdownText' | 'markdownEnhanced' = 'custom'
   @Input() tooltipPlacement = 'right'
 
+  isPopoverOpened = false
   mainHtml = ''
 
   constructor (private i18n: I18n) { }
@@ -25,6 +26,14 @@ export class HelpComponent implements OnInit, OnChanges {
 
   ngOnChanges () {
     this.init()
+  }
+
+  onPopoverHidden () {
+    this.isPopoverOpened = false
+  }
+
+  onPopoverShown () {
+    this.isPopoverOpened = true
   }
 
   private init () {

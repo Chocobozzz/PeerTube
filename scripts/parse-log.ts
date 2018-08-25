@@ -1,5 +1,5 @@
 import * as program from 'commander'
-import { createReadStream } from 'fs'
+import { createReadStream, readdirSync, statSync } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
@@ -29,7 +29,7 @@ const loggerFormat = winston.format.printf((info) => {
   return `[${info.label}] ${toTimeFormat(info.timestamp)} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const logger = new winston.createLogger({
+const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({
       level: program['level'] || 'debug',
@@ -52,7 +52,10 @@ const logLevels = {
   debug: logger.debug.bind(logger)
 }
 
-const path = join(CONFIG.STORAGE.LOG_DIR, 'peertube.log')
+const logFiles = readdirSync(CONFIG.STORAGE.LOG_DIR)
+const lastLogFile = getNewestFile(logFiles, CONFIG.STORAGE.LOG_DIR)
+
+const path = join(CONFIG.STORAGE.LOG_DIR, lastLogFile)
 console.log('Opening %s.', path)
 
 const rl = createInterface({
@@ -73,4 +76,18 @@ function toTimeFormat (time: string) {
   if (isNaN(timestamp) === true) return 'Unknown date'
 
   return new Date(timestamp).toISOString()
+}
+
+// Thanks: https://stackoverflow.com/a/37014317
+function getNewestFile (files: string[], basePath: string) {
+  const out = []
+
+  files.forEach(file => {
+    const stats = statSync(basePath + '/' + file)
+    if (stats.isFile()) out.push({ file, mtime: stats.mtime.getTime() })
+  })
+
+  out.sort((a, b) => b.mtime - a.mtime)
+
+  return (out.length > 0) ? out[ 0 ].file : ''
 }

@@ -25,7 +25,7 @@ export class UserService {
     return this.authHttp.put(url, body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -35,7 +35,17 @@ export class UserService {
     return this.authHttp.put(url, profile)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  deleteMe () {
+    const url = UserService.BASE_USERS_URL + 'me'
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -43,14 +53,14 @@ export class UserService {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 
     return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
-               .pipe(catchError(this.restExtractor.handleError))
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   signup (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 
@@ -58,7 +68,7 @@ export class UserService {
     const url = UserService.BASE_USERS_URL + '/me/video-quota-used'
 
     return this.authHttp.get<UserVideoQuota>(url)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   askResetPassword (email: string) {
@@ -67,7 +77,7 @@ export class UserService {
     return this.authHttp.post(url, { email })
                .pipe(
                  map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
+                 catchError(err => this.restExtractor.handleError(err))
                )
   }
 

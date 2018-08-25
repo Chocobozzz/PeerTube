@@ -16,7 +16,6 @@ import {
 } from 'sequelize-typescript'
 import { Account } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
-import { logger } from '../../helpers/logger'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
@@ -46,7 +45,19 @@ import { UserModel } from './user'
   ]
 })
 @Table({
-  tableName: 'account'
+  tableName: 'account',
+  indexes: [
+    {
+      fields: [ 'actorId' ],
+      unique: true
+    },
+    {
+      fields: [ 'applicationId' ]
+    },
+    {
+      fields: [ 'userId' ]
+    }
+  ]
 })
 export class AccountModel extends Model<AccountModel> {
 
@@ -127,7 +138,6 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     if (instance.isOwned()) {
-      logger.debug('Sending delete of actor of account %s.', instance.Actor.url)
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 

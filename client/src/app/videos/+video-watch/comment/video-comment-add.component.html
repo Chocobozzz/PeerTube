@@ -14,7 +14,7 @@
   </div>
 
   <div class="submit-comment">
-    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid }" i18n>
+    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid || addingComment }" i18n>
       Post comment
     </button>
   </div>

@@ -1,0 +1,31 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Blacklist video</h4>
+    <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+  </div>
+
+  <div class="modal-body">
+
+    <form novalidate [formGroup]="form" (ngSubmit)="blacklist()">
+      <div class="form-group">
+        <textarea i18n-placeholder placeholder="Reason..." formControlName="reason" [ngClass]="{ 'input-error': formErrors['reason'] }">
+        </textarea>
+        <div *ngIf="formErrors.reason" class="form-error">
+          {{ formErrors.reason }}
+        </div>
+      </div>
+
+      <div class="form-group inputs">
+        <span i18n class="action-button action-button-cancel" (click)="hide()">
+          Cancel
+        </span>
+
+        <input
+          type="submit" i18n-value value="Submit" class="action-button-submit"
+          [disabled]="!form.valid"
+        >
+      </div>
+    </form>
+
+  </div>
+</ng-template>

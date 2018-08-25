@@ -18,11 +18,13 @@ function activityPubContextify <T> (data: T) {
         uuid: 'http://schema.org/identifier',
         category: 'http://schema.org/category',
         licence: 'http://schema.org/license',
+        subtitleLanguage: 'http://schema.org/subtitleLanguage',
         sensitive: 'as:sensitive',
         language: 'http://schema.org/inLanguage',
         views: 'http://schema.org/Number',
         stats: 'http://schema.org/Number',
         size: 'http://schema.org/Number',
+        fps: 'http://schema.org/Number',
         commentsEnabled: 'http://schema.org/Boolean',
         waitTranscoding: 'http://schema.org/Boolean',
         support: 'http://schema.org/Text'
@@ -66,8 +68,8 @@ async function activityPubCollectionPagination (url: string, handler: ActivityPu
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
   const result = await handler(start, count)
 
-  let next: string
-  let prev: string
+  let next: string | undefined
+  let prev: string | undefined
 
   // Assert page is a number
   page = parseInt(page, 10)

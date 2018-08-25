@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
@@ -6,7 +6,7 @@ import { VideoChannelUpdate } from '../../../../../shared/models/videos'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { Subscription } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { AuthService } from '@app/core'
+import { AuthService, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators/video-channel-validators.service'
@@ -17,9 +17,11 @@ import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators
   styleUrls: [ './my-account-video-channel-edit.component.scss' ]
 })
 export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelEdit implements OnInit, OnDestroy {
+  @ViewChild('avatarfileInput') avatarfileInput
+
   error: string
 
-  private videoChannelToUpdate: VideoChannel
+  videoChannelToUpdate: VideoChannel
   private paramsSub: Subscription
 
   constructor (
@@ -30,7 +32,8 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     private router: Router,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
-    private i18n: I18n
+    private i18n: I18n,
+    private serverService: ServerService
   ) {
     super()
   }
@@ -87,6 +90,27 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
 
       err => this.error = err.message
     )
+  }
+
+  onAvatarChange (formData: FormData) {
+    this.videoChannelService.changeVideoChannelAvatar(this.videoChannelToUpdate.uuid, formData)
+        .subscribe(
+          data => {
+            this.notificationsService.success(this.i18n('Success'), this.i18n('Avatar changed.'))
+
+            this.videoChannelToUpdate.updateAvatar(data.avatar)
+          },
+
+          err => this.notificationsService.error(this.i18n('Error'), err.message)
+        )
+  }
+
+  get maxAvatarSize () {
+    return this.serverService.getConfig().avatar.file.size.max
+  }
+
+  get avatarExtensions () {
+    return this.serverService.getConfig().avatar.file.extensions.join(',')
   }
 
   isCreation () {

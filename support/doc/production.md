@@ -5,7 +5,8 @@
 
 ## Installation
 
-Please don't install PeerTube for production on a small device behind a low bandwidth connection (example: a Raspberry PI behind your ADSL link) because it could slow down the fediverse. See the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) for more information.
+Please don't install PeerTube for production on a device behind a low bandwidth connection (example: your ADSL link).
+If you want information about the appropriate hardware to run PeerTube, please see the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube).
 
 ### Dependencies
 
@@ -41,6 +42,13 @@ $ sudo -u postgres createuser -P peertube
 $ sudo -u postgres createdb -O peertube peertube_prod
 ```
 
+Then enable extensions PeerTube needs:
+
+```
+$ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_prod
+$ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_prod
+```
+
 ### Prepare PeerTube directory
 
 Fetch the latest tagged version of Peertube
@@ -57,12 +65,6 @@ Download the latest version of the Peertube client, unzip it and remove the zip
 ```
 $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
 $ sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
-```
-
-*If you're using CentOS7, do not forget to activate the devtoolset-7 software collection.
-And after that, follow the step as usual. Do not forget to exit the environment after installing Peertube:*
-```
-$ sudo scl enable devtoolset-7 bash
 ```
 
 Install Peertube:
@@ -166,9 +168,8 @@ $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
 ```
 
-### FreeBSD
-
-If you're using FreeBSD, copy the startup script and update rc.conf:
+**FreeBSD**
+On FreeBSD, copy the startup script and update rc.conf:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
@@ -200,7 +201,7 @@ Now your instance is up you can:
 
 ## Upgrade
 
-### PeerTube code
+### PeerTube instance
 
 **Check the changelog (in particular BREAKING CHANGES!):** https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md
 
@@ -219,7 +220,7 @@ Make a SQL backup
 ```
 $ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
     cd /var/www/peertube && sudo -u peertube mkdir -p backup && \
-    sudo pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH"
+    sudo -u postgres pg_dump -F c peertube_prod | sudo -u peertube tee "$SQL_BACKUP_PATH" >/dev/null
 ```
 
 Fetch the latest tagged version of Peertube:
@@ -303,8 +304,8 @@ Change `peertube-latest` destination to the previous version and restore your SQ
 
 ```
 $ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
-    cd /var/www/peertube && unlink ./peertube-latest && \
+    cd /var/www/peertube && sudo -u peertube unlink ./peertube-latest && \
     sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
-    pg_restore -U peertube -W -h localhost -c -d peertube_prod "$SQL_BACKUP_PATH"
+    sudo -u postgres pg_restore -c -C -d postgres "$SQL_BACKUP_PATH" && \
     sudo systemctl restart peertube
 ```

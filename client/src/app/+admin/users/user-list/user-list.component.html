@@ -9,30 +9,50 @@
 
 <p-table
   [value]="users" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 40px"></th>
       <th i18n pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
       <th i18n>Email</th>
       <th i18n>Video quota</th>
       <th i18n>Role</th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th></th>
+      <th style="width: 50px;"></th>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-user>
-    <tr>
-      <td>{{ user.username }}</td>
+  <ng-template pTemplate="body" let-expanded="expanded" let-user>
+
+    <tr [ngClass]="{ banned: user.blocked }">
+      <td>
+        <span *ngIf="user.blockedReason" class="expander" [pRowToggler]="user">
+          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
+        </span>
+      </td>
+      <td>
+        {{ user.username }}
+        <span *ngIf="user.blocked" class="banned-info">(banned)</span>
+      </td>
       <td>{{ user.email }}</td>
-      <td>{{ user.videoQuota }}</td>
+      <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>
       <td class="action-cell">
-        <my-edit-button [routerLink]="getRouterUserEditLink(user)"></my-edit-button>
-        <my-delete-button (click)="removeUser(user)"></my-delete-button>
+        <my-action-dropdown i18n-label label="Actions" [actions]="userActions" [entry]="user"></my-action-dropdown>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-user>
+    <tr class="user-blocked-reason">
+      <td colspan="7">
+        <span i18n class="ban-reason-label">Ban reason:</span>
+        {{ user.blockedReason }}
       </td>
     </tr>
   </ng-template>
 </p-table>
+
+<my-user-ban-modal #userBanModal (userBanned)="onUserBanned()"></my-user-ban-modal>

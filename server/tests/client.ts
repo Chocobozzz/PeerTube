@@ -3,16 +3,27 @@
 import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
+import {
+  flushTests,
+  getCustomConfig,
+  getVideosList,
+  killallServers,
+  makeHTMLRequest,
+  runServer,
+  ServerInfo,
+  serverLogin,
+  updateCustomConfig,
+  updateCustomSubConfig,
+  uploadVideo
+} from './utils'
+
 const expect = chai.expect
 
-import {
-  ServerInfo,
-  flushTests,
-  runServer,
-  serverLogin,
-  uploadVideo,
-  getVideosList, updateCustomConfig, getCustomConfig, killallServers
-} from './utils'
+function checkIndexTags (html: string, title: string, description: string, css: string) {
+  expect(html).to.contain('<title>' + title + '</title>')
+  expect(html).to.contain('<meta name="description" content="' + description + '" />')
+  expect(html).to.contain('<style class="custom-css-style">' + css + '</style>')
+}
 
 describe('Test a client controllers', function () {
   let server: ServerInfo
@@ -99,6 +110,41 @@ describe('Test a client controllers', function () {
 
     expect(res.text).to.contain('<meta property="twitter:card" content="player" />')
     expect(res.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
+  })
+
+  it('Should have valid index html tags (title, description...)', async function () {
+    const res = await makeHTMLRequest(server.url, '/videos/trending')
+
+    const description = 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
+      'with WebTorrent and Angular.'
+    checkIndexTags(res.text, 'PeerTube', description, '')
+  })
+
+  it('Should update the customized configuration and have the correct index html tags', async function () {
+    await updateCustomSubConfig(server.url, server.accessToken, {
+      instance: {
+        name: 'PeerTube updated',
+        shortDescription: 'my short description',
+        description: 'my super description',
+        terms: 'my super terms',
+        defaultClientRoute: '/videos/recently-added',
+        defaultNSFWPolicy: 'blur',
+        customizations: {
+          javascript: 'alert("coucou")',
+          css: 'body { background-color: red; }'
+        }
+      }
+    })
+
+    const res = await makeHTMLRequest(server.url, '/videos/trending')
+
+    checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
+  })
+
+  it('Should have valid index html updated tags (title, description...)', async function () {
+    const res = await makeHTMLRequest(server.url, '/videos/trending')
+
+    checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
   })
 
   after(async function () {

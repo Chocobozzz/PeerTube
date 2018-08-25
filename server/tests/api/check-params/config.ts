@@ -35,6 +35,9 @@ describe('Test config API validators', function () {
     cache: {
       previews: {
         size: 2
+      },
+      captions: {
+        size: 3
       }
     },
     signup: {
@@ -56,6 +59,16 @@ describe('Test config API validators', function () {
         '480p': true,
         '720p': false,
         '1080p': false
+      }
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: false
+        },
+        torrent: {
+          enabled: false
+        }
       }
     }
   }

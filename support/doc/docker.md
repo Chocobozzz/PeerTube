@@ -8,6 +8,8 @@ You can quickly get a server running using Docker. You need to have
 
 ### Install
 
+**PeerTube does not support webserver host change**. Keep in mind your domain name is definitive after your first PeerTube start.
+
 PeerTube needs a PostgreSQL and a Redis instance to work correctly. If you want
 to quickly set up a full environment, either for trying the service or in
 production, you can use a `docker-compose` setup.
@@ -29,7 +31,7 @@ $ vim ./docker-volume/traefik/traefik.toml
 Tweak the `docker-compose.yml` file there according to your needs:
 
 ```shell
-$ vim ./docker-compose.yaml
+$ vim ./docker-compose.yml
 ```
 
 Then tweak the `.env` file to change the enviromnent variables:
@@ -50,6 +52,10 @@ $ docker-compose up
 
 **Important**: note that you'll get the initial `root` user password from the
 program output, so check out your logs to find them.
+
+### What now?
+
+See the production guide ["What now" section](/support/doc/production.md#what-now). 
 
 ### Upgrade
 

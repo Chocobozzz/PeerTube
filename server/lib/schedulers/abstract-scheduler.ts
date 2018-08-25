@@ -14,5 +14,5 @@ export abstract class AbstractScheduler {
     clearInterval(this.interval)
   }
 
-  protected abstract execute ()
+  abstract execute ()
 }

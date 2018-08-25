@@ -68,6 +68,9 @@ enum ScopeNames {
   indexes: [
     {
       fields: [ 'accountId' ]
+    },
+    {
+      fields: [ 'actorId' ]
     }
   ]
 })
@@ -137,8 +140,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     }
 
     if (instance.Actor.isOwned()) {
-      logger.debug('Sending delete of actor of video channel %s.', instance.Actor.url)
-
       return sendDeleteActor(instance.Actor, options.transaction)
     }
 

@@ -1,4 +1,4 @@
-import * as kue from 'kue'
+import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
@@ -11,7 +11,7 @@ export type ActivitypubHttpUnicastPayload = {
   body: any
 }
 
-async function processActivityPubHttpUnicast (job: kue.Job) {
+async function processActivityPubHttpUnicast (job: Bull.Job) {
   logger.info('Processing ActivityPub unicast in job %d.', job.id)
 
   const payload = job.data as ActivitypubHttpUnicastPayload

@@ -1,0 +1,12 @@
+@import '_variables';
+@import '_mixins';
+
+.modal-body {
+  text-align: center;
+
+  a {
+    display: block;
+    font-size: 16px;
+    margin: 15px;
+  }
+}

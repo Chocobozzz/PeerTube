@@ -38,10 +38,10 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     protected route: ActivatedRoute,
     protected authService: AuthService,
     protected notificationsService: NotificationsService,
-    protected confirmService: ConfirmService,
     protected location: Location,
     protected screenService: ScreenService,
     protected i18n: I18n,
+    private confirmService: ConfirmService,
     private videoService: VideoService,
     @Inject(LOCALE_ID) private localeId: string
   ) {
@@ -145,6 +145,8 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
       suffix = this.i18n('Waiting transcoding')
     } else if (video.state.id === VideoState.TO_TRANSCODE) {
       suffix = this.i18n('To transcode')
+    } else if (video.state.id === VideoState.TO_IMPORT) {
+      suffix = this.i18n('To import')
     } else {
       return ''
     }

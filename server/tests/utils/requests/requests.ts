@@ -1,5 +1,6 @@
 import * as request from 'supertest'
 import { buildAbsoluteFixturePath } from '../miscs/miscs'
+import { isAbsolute, join } from 'path'
 
 function makeGetRequest (options: {
   url: string,
@@ -45,9 +46,9 @@ function makeUploadRequest (options: {
   url: string,
   method?: 'POST' | 'PUT',
   path: string,
-  token: string,
+  token?: string,
   fields: { [ fieldName: string ]: any },
-  attaches: { [ attachName: string ]: any },
+  attaches: { [ attachName: string ]: any | any[] },
   statusCodeExpected?: number
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
@@ -77,7 +78,11 @@ function makeUploadRequest (options: {
 
   Object.keys(options.attaches).forEach(attach => {
     const value = options.attaches[attach]
-    req.attach(attach, buildAbsoluteFixturePath(value))
+    if (Array.isArray(value)) {
+      req.attach(attach, buildAbsoluteFixturePath(value[0]), value[1])
+    } else {
+      req.attach(attach, buildAbsoluteFixturePath(value))
+    }
   })
 
   return req.expect(options.statusCodeExpected)
@@ -122,12 +127,44 @@ function makePutBodyRequest (options: {
             .expect(options.statusCodeExpected)
 }
 
+function makeHTMLRequest (url: string, path: string) {
+  return request(url)
+    .get(path)
+    .set('Accept', 'text/html')
+    .expect(200)
+}
+
+function updateAvatarRequest (options: {
+  url: string,
+  path: string,
+  accessToken: string,
+  fixture: string
+}) {
+  let filePath = ''
+  if (isAbsolute(options.fixture)) {
+    filePath = options.fixture
+  } else {
+    filePath = join(__dirname, '..', '..', 'fixtures', options.fixture)
+  }
+
+  return makeUploadRequest({
+    url: options.url,
+    path: options.path,
+    token: options.accessToken,
+    fields: {},
+    attaches: { avatarfile: filePath },
+    statusCodeExpected: 200
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  makeHTMLRequest,
   makeGetRequest,
   makeUploadRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  makeDeleteRequest
+  makeDeleteRequest,
+  updateAvatarRequest
 }

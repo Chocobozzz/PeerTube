@@ -15,6 +15,7 @@ import {
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
+  makeUploadRequest,
   runServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -22,6 +23,7 @@ import {
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { User } from '../../../../shared/models/users'
+import { join } from 'path'
 
 const expect = chai.expect
 
@@ -185,6 +187,59 @@ describe('Test video channels API validator', function () {
         token: server.accessToken,
         fields: baseCorrectParams,
         statusCodeExpected: 204
+      })
+    })
+  })
+
+  describe('When updating video channel avatar', function () {
+    let path: string
+
+    before(async function () {
+      path = videoChannelPath + '/' + videoChannelUUID
+    })
+
+    it('Should fail with an incorrect input file', async function () {
+      const fields = {}
+      const attaches = {
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+      }
+      await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a big file', async function () {
+      const fields = {}
+      const attaches = {
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+      }
+      await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with an unauthenticated user', async function () {
+      const fields = {}
+      const attaches = {
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      }
+      await makeUploadRequest({
+        url: server.url,
+        path: path + '/avatar/pick',
+        fields,
+        attaches,
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const fields = {}
+      const attaches = {
+        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+      }
+      await makeUploadRequest({
+        url: server.url,
+        path: path + '/avatar/pick',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: 200
       })
     })
   })

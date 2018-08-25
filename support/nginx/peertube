@@ -37,11 +37,15 @@ server {
   # resolver $DNS-IP-1 $DNS-IP-2 valid=300s;
   # resolver_timeout 5s;
 
+  # Enable compression for JS/CSS/HTML bundle, for improved client load times.
+  # It might be nice to compress JSON, but leaving that out to protect against potential
+  # compression+encryption information leak attacks like BREACH.
+  gzip on;
+  gzip_types text/css text/html application/javascript;
+  gzip_vary on;
+
   add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
-  add_header X-Content-Type-Options nosniff;
-  add_header X-XSS-Protection "1; mode=block";
-  add_header X-Robots-Tag none;
-  
+
   access_log /var/log/nginx/peertube.example.com.access.log;
   error_log /var/log/nginx/peertube.example.com.error.log;
 
@@ -56,10 +60,28 @@ server {
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
-  location ~ ^/static/(thumbnails|avatars)/(.*)$ {
-    add_header Cache-Control "public, max-age=31536000, immutable";
+  location ~ ^/static/(thumbnails|avatars)/ {
+    if ($request_method = 'OPTIONS') {
+      add_header 'Access-Control-Allow-Origin' '*';
+      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+      add_header 'Access-Control-Max-Age' 1728000;
+      add_header 'Content-Type' 'text/plain charset=UTF-8';
+      add_header 'Content-Length' 0;
+      return 204;
+    }
 
-    alias /var/www/peertube/storage/$1/$2;
+    add_header 'Access-Control-Allow-Origin' '*';
+    add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+    add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
+    # Cache 2 hours
+    add_header Cache-Control "public, max-age=7200";
+
+    root /var/www/peertube/storage;
+
+    rewrite ^/static/(thumbnails|avatars)/(.*)$ /$1/$2 break;
+    try_files $uri /;
   }
 
   location / {
@@ -68,8 +90,8 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    # Hard limit, PeerTube does not support videos > 4GB
-    client_max_body_size 4G;
+    # Hard limit, PeerTube does not support videos > 8GB
+    client_max_body_size 8G;
     proxy_connect_timeout       600;
     proxy_send_timeout          600;
     proxy_read_timeout          600;

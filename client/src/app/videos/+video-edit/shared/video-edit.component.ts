@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { FormGroup, ValidatorFn, Validators } from '@angular/forms'
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
@@ -8,27 +8,34 @@ import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { map } from 'rxjs/operators'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
+import { VideoCaptionService } from '@app/shared/video-caption'
+import { VideoCaptionAddModalComponent } from '@app/videos/+video-edit/shared/video-caption-add-modal.component'
+import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { removeElementFromArray } from '@app/shared/misc/utils'
+import { VideoConstant } from '../../../../../../shared'
 
 @Component({
   selector: 'my-video-edit',
   styleUrls: [ './video-edit.component.scss' ],
   templateUrl: './video-edit.component.html'
 })
-
-export class VideoEditComponent implements OnInit {
+export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
-  @Input() videoPrivacies = []
+  @Input() videoPrivacies: { id: number, label: string }[] = []
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
+  @Input() videoCaptions: VideoCaptionEdit[] = []
+
+  @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
-  videoCategories = []
-  videoLicences = []
-  videoLanguages = []
+  videoCategories: VideoConstant<string>[] = []
+  videoLicences: VideoConstant<string>[] = []
+  videoLanguages: VideoConstant<string>[] = []
 
   tagValidators: ValidatorFn[]
   tagValidatorsMessages: { [ name: string ]: string }
@@ -41,9 +48,14 @@ export class VideoEditComponent implements OnInit {
   calendarTimezone: string
   calendarDateFormat: string
 
+  private schedulerInterval
+  private firstPatchDone = false
+  private initialVideoCaptions: string[] = []
+
   constructor (
     private formValidatorService: FormValidatorService,
     private videoValidatorsService: VideoValidatorsService,
+    private videoCaptionService: VideoCaptionService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -56,6 +68,12 @@ export class VideoEditComponent implements OnInit {
     this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
+  }
+
+  get existingCaptions () {
+    return this.videoCaptions
+               .filter(c => c.action !== 'REMOVE')
+               .map(c => c.language.id)
   }
 
   updateForm () {
@@ -91,6 +109,13 @@ export class VideoEditComponent implements OnInit {
       defaultValues
     )
 
+    this.form.addControl('captions', new FormArray([
+      new FormGroup({
+        language: new FormControl(),
+        captionfile: new FormControl()
+      })
+    ]))
+
     this.trackChannelChange()
     this.trackPrivacyChange()
   }
@@ -102,7 +127,57 @@ export class VideoEditComponent implements OnInit {
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
 
-    setTimeout(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+    this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+
+    this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
+  }
+
+  ngOnDestroy () {
+    if (this.schedulerInterval) clearInterval(this.schedulerInterval)
+  }
+
+  onCaptionAdded (caption: VideoCaptionEdit) {
+    const existingCaption = this.videoCaptions.find(c => c.language.id === caption.language.id)
+
+    // Replace existing caption?
+    if (existingCaption) {
+      Object.assign(existingCaption, caption, { action: 'CREATE' as 'CREATE' })
+    } else {
+      this.videoCaptions.push(
+        Object.assign(caption, { action: 'CREATE' as 'CREATE' })
+      )
+    }
+
+    this.sortVideoCaptions()
+  }
+
+  async deleteCaption (caption: VideoCaptionEdit) {
+    // Caption recovers his former state
+    if (caption.action && this.initialVideoCaptions.indexOf(caption.language.id) !== -1) {
+      caption.action = undefined
+      return
+    }
+
+    // This caption is not on the server, just remove it from our array
+    if (caption.action === 'CREATE') {
+      removeElementFromArray(this.videoCaptions, caption)
+      return
+    }
+
+    caption.action = 'REMOVE' as 'REMOVE'
+  }
+
+  openAddCaptionModal () {
+    this.videoCaptionAddModal.show()
+  }
+
+  private sortVideoCaptions () {
+    this.videoCaptions.sort((v1, v2) => {
+      if (v1.language.label < v2.language.label) return -1
+      if (v1.language.label === v2.language.label) return 0
+
+      return 1
+    })
   }
 
   private trackPrivacyChange () {
@@ -112,6 +187,7 @@ export class VideoEditComponent implements OnInit {
       .pipe(map(res => parseInt(res.toString(), 10)))
       .subscribe(
         newPrivacyId => {
+
           this.schedulePublicationEnabled = newPrivacyId === this.SPECIAL_SCHEDULED_PRIVACY
 
           // Value changed
@@ -127,11 +203,18 @@ export class VideoEditComponent implements OnInit {
             scheduleControl.clearValidators()
 
             waitTranscodingControl.enable()
-            waitTranscodingControl.setValue(true)
+
+            // Do not update the control value on first patch (values come from the server)
+            if (this.firstPatchDone === true) {
+              waitTranscodingControl.setValue(true)
+            }
           }
 
           scheduleControl.updateValueAndValidity()
           waitTranscodingControl.updateValueAndValidity()
+
+          this.firstPatchDone = true
+
         }
       )
   }

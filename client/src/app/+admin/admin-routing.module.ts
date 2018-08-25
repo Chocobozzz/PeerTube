@@ -8,8 +8,7 @@ import { AdminComponent } from './admin.component'
 import { FollowsRoutes } from './follows'
 import { JobsRoutes } from './jobs/job.routes'
 import { UsersRoutes } from './users'
-import { VideoAbusesRoutes } from './video-abuses'
-import { VideoBlacklistRoutes } from './video-blacklist'
+import { ModerationRoutes } from '@app/+admin/moderation/moderation.routes'
 
 const adminRoutes: Routes = [
   {
@@ -25,8 +24,7 @@ const adminRoutes: Routes = [
       },
       ...FollowsRoutes,
       ...UsersRoutes,
-      ...VideoAbusesRoutes,
-      ...VideoBlacklistRoutes,
+      ...ModerationRoutes,
       ...JobsRoutes,
       ...ConfigRoutes
     ]

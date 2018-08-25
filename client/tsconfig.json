@@ -20,7 +20,19 @@
     "baseUrl": "src",
     "paths": {
       "@app/*": [ "app/*" ],
-      "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ]
+      "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ],
+      "fs": [ "./shims/noop" ],
+      "http": [ "./shims/http" ],
+      "https": [ "./shims/https" ],
+      "path": [ "./shims/path" ],
+      "stream": [ "./shims/noop" ],
+      "crypto": [ "./shims/noop" ]
     }
-  }
+  },
+  "exclude": [
+    "../node_modules",
+    "node_modules",
+    "dist",
+    "../server"
+  ]
 }

@@ -1,0 +1,45 @@
+<ng-template #modal>
+  <ng-container [formGroup]="form">
+
+    <div class="modal-header">
+      <h4 i18n class="modal-title">Add caption</h4>
+      <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+    </div>
+
+    <div class="modal-body">
+      <label i18n for="language">Language</label>
+      <div class="peertube-select-container">
+        <select id="language" formControlName="language">
+          <option></option>
+          <option *ngFor="let language of videoCaptionLanguages" [value]="language.id">{{ language.label }}</option>
+        </select>
+      </div>
+
+      <div *ngIf="formErrors.language" class="form-error">
+        {{ formErrors.language }}
+      </div>
+
+      <div class="caption-file">
+        <my-reactive-file
+          formControlName="captionfile" inputName="captionfile" i18n-inputLabel inputLabel="Select the caption file"
+          [extensions]="videoCaptionExtensions" [maxFileSize]="videoCaptionMaxSize" [displayFilename]="true"
+        ></my-reactive-file>
+      </div>
+
+      <div *ngIf="isReplacingExistingCaption()" class="warning-replace-caption" i18n>
+        This will replace an existing caption!
+      </div>
+    </div>
+
+    <div class="modal-footer inputs">
+      <span i18n class="action-button action-button-cancel" (click)="hide()">
+        Cancel
+      </span>
+
+      <input
+        type="submit" i18n-value value="Add this caption" class="action-button-submit"
+        [disabled]="!form.valid" (click)="addCaption()"
+      >
+    </div>
+  </ng-container>
+</ng-template>

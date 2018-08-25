@@ -1,70 +1,80 @@
-<menu>
-  <div *ngIf="isLoggedIn" class="logged-in-block">
-    <a routerLink="/my-account/settings">
-      <img [src]="user.accountAvatarUrl" alt="Avatar" />
-    </a>
+<div class="menu-wrapper">
+  <menu>
+    <div class="top-menu">
+      <div *ngIf="isLoggedIn" class="logged-in-block">
+        <a routerLink="/my-account/settings">
+          <img [src]="user.accountAvatarUrl" alt="Avatar" />
+        </a>
 
-    <div class="logged-in-info">
-      <a routerLink="/my-account/settings" class="logged-in-username">{{ user.account?.displayName }}</a>
-      <div class="logged-in-email">{{ user.email }}</div>
+        <div class="logged-in-info">
+          <a routerLink="/my-account/settings" class="logged-in-username">{{ user.account?.displayName }}</a>
+          <div class="logged-in-email">{{ user.username }}</div>
+        </div>
+
+        <div class="logged-in-more" ngbDropdown placement="bottom-right">
+          <span class="glyphicon glyphicon-option-vertical" ngbDropdownToggle role="button"></span>
+
+          <div ngbDropdownMenu>
+            <a *ngIf="user.account" i18n [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="dropdown-item">
+             My public profile
+            </a>
+
+            <a i18n routerLink="/my-account" class="dropdown-item">
+              My account
+            </a>
+
+            <a i18n (click)="logout($event)" class="dropdown-item" href="#">
+              Log out
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoggedIn" class="button-block">
+        <a i18n routerLink="/login" class="login-button">Login</a>
+        <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="create-account-button">Create an account</a>
+      </div>
+
+      <div class="panel-block">
+        <div i18n class="block-title">Videos</div>
+
+        <a routerLink="/videos/trending" routerLinkActive="active">
+          <span class="icon icon-videos-trending"></span>
+          <ng-container i18n>Trending</ng-container>
+        </a>
+
+        <a routerLink="/videos/recently-added" routerLinkActive="active">
+          <span class="icon icon-videos-recently-added"></span>
+          <ng-container i18n>Recently added</ng-container>
+        </a>
+
+        <a routerLink="/videos/local" routerLinkActive="active">
+          <span class="icon icon-videos-local"></span>
+          <ng-container i18n>Local</ng-container>
+        </a>
+      </div>
+
+      <div class="panel-block">
+        <div class="block-title" i18n>More</div>
+
+        <a *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
+          <span class="icon icon-administration"></span>
+          <ng-container i18n>Administration</ng-container>
+        </a>
+
+        <a routerLink="/about" routerLinkActive="active">
+          <span class="icon icon-about"></span>
+          <ng-container i18n>About</ng-container>
+        </a>
+      </div>
     </div>
 
-    <div class="logged-in-more" dropdown placement="right" container="body">
-      <span class="glyphicon glyphicon-option-vertical" dropdownToggle></span>
-
-      <ul *dropdownMenu class="dropdown-menu">
-        <li>
-          <a i18n [routerLink]="[ '/accounts', user.account?.nameWithHost ]" class="dropdown-item" title="My public profile">
-           My public profile
-          </a>
-
-          <a i18n routerLink="/my-account" class="dropdown-item" title="My account">
-            My account
-          </a>
-
-          <a i18n (click)="logout($event)" class="dropdown-item" title="Log out" href="#">
-            Log out
-          </a>
-        </li>
-      </ul>
+    <div class="footer">
+      <span class="language">
+        <span (click)="openLanguageChooser()" i18n-title title="Change the language" class="icon icon-language"></span>
+      </span>
     </div>
-  </div>
+  </menu>
+</div>
 
-  <div *ngIf="!isLoggedIn" class="button-block">
-    <a i18n routerLink="/login" class="login-button">Login</a>
-    <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="create-account-button">Create an account</a>
-  </div>
-
-  <div class="panel-block">
-    <div i18n class="block-title">Videos</div>
-
-    <a routerLink="/videos/trending" routerLinkActive="active">
-      <span class="icon icon-videos-trending"></span>
-      <ng-container i18n>Trending</ng-container>
-    </a>
-
-    <a routerLink="/videos/recently-added" routerLinkActive="active">
-      <span class="icon icon-videos-recently-added"></span>
-      <ng-container i18n>Recently added</ng-container>
-    </a>
-
-    <a routerLink="/videos/local" routerLinkActive="active">
-      <span class="icon icon-videos-local"></span>
-      <ng-container i18n>Local</ng-container>
-    </a>
-  </div>
-
-  <div class="panel-block">
-    <div class="block-title">More</div>
-
-    <a *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
-      <span class="icon icon-administration"></span>
-      <ng-container i18n>Administration</ng-container>
-    </a>
-
-    <a routerLink="/about" routerLinkActive="active">
-      <span class="icon icon-about"></span>
-      <ng-container i18n>About</ng-container>
-    </a>
-  </div>
-</menu>
+<my-language-chooser #languageChooserModal></my-language-chooser>

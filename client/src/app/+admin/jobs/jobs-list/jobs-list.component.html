@@ -9,8 +9,8 @@
 </div>
 
 <p-table
-  [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="id"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+  [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="uniqId"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [first]="pagination.start"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -19,7 +19,8 @@
       <th i18n style="width: 210px">Type</th>
       <th i18n style="width: 130px">State</th>
       <th i18n style="width: 250px" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th i18n style="width: 250px">Updated</th>
+      <th i18n style="width: 250px">Processed on</th>
+      <th i18n style="width: 250px">Finished on</th>
     </tr>
   </ng-template>
 
@@ -34,18 +35,19 @@
       <td>{{ job.type }}</td>
       <td>{{ job.state }}</td>
       <td>{{ job.createdAt }}</td>
-      <td>{{ job.updatedAt }}</td>
+      <td>{{ job.processedOn }}</td>
+      <td>{{ job.finishedOn }}</td>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-job>
     <tr>
-      <td colspan="6">
+      <td colspan="7">
         <pre>{{ job.data }}</pre>
       </td>
     </tr>
     <tr class="job-error" *ngIf="job.error">
-      <td colspan="6">
+      <td colspan="7">
         <pre>{{ job.error }}</pre>
       </td>
     </tr>

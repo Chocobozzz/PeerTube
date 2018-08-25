@@ -9,14 +9,14 @@ import { sendCreateVideoComment } from './activitypub/send'
 
 async function createVideoComment (obj: {
   text: string,
-  inReplyToComment: VideoCommentModel,
+  inReplyToComment: VideoCommentModel | null,
   video: VideoModel
   account: AccountModel
 }, t: Sequelize.Transaction) {
-  let originCommentId: number = null
-  let inReplyToCommentId: number = null
+  let originCommentId: number | null = null
+  let inReplyToCommentId: number | null = null
 
-  if (obj.inReplyToComment) {
+  if (obj.inReplyToComment && obj.inReplyToComment !== null) {
     originCommentId = obj.inReplyToComment.originCommentId || obj.inReplyToComment.id
     inReplyToCommentId = obj.inReplyToComment.id
   }

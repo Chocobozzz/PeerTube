@@ -3,7 +3,14 @@
 import * as chai from 'chai'
 import 'mocha'
 import { User, Video } from '../../../../shared/index'
-import { doubleFollow, flushAndRunMultipleServers, getVideoChannelVideos, updateVideo, uploadVideo } from '../../utils'
+import {
+  doubleFollow,
+  flushAndRunMultipleServers,
+  getVideoChannelVideos, testImage,
+  updateVideo,
+  updateVideoChannelAvatar,
+  uploadVideo, wait
+} from '../../utils'
 import {
   addVideoChannel,
   deleteVideoChannel,
@@ -156,6 +163,31 @@ describe('Test video channels', function () {
       expect(res.body.data[0].displayName).to.equal('video channel updated')
       expect(res.body.data[0].description).to.equal('video channel description updated')
       expect(res.body.data[0].support).to.equal('video channel support text updated')
+    }
+  })
+
+  it('Should update video channel avatar', async function () {
+    this.timeout(5000)
+
+    const fixture = 'avatar.png'
+
+    await updateVideoChannelAvatar({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      videoChannelId: secondVideoChannelId,
+      fixture
+    })
+
+    await waitJobs(servers)
+  })
+
+  it('Should have video channel avatar updated', async function () {
+    for (const server of servers) {
+      const res = await getVideoChannelsList(server.url, 0, 1, '-name')
+
+      const videoChannel = res.body.data.find(c => c.id === secondVideoChannelId)
+
+      await testImage(server.url, 'avatar-resized', videoChannel.avatar.path, '.png')
     }
   })
 

@@ -1,0 +1,13 @@
+parameters:
+  threadId:
+    name: threadId
+    in: path
+    required: true
+    type: number
+    description: 'The thread id (root comment id)'
+  commentId:
+    name: threadId
+    in: path
+    required: true
+    type: number
+    description: 'The comment id'

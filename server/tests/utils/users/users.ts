@@ -1,6 +1,5 @@
-import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { makePostBodyRequest, makeUploadRequest, makePutBodyRequest } from '../'
+import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../'
 
 import { UserRole } from '../../../../shared/index'
 import { NSFWPolicyType } from '../../../../shared/models/videos/nsfw-policy.type'
@@ -55,6 +54,16 @@ function getMyUserInformation (url: string, accessToken: string, specialStatus =
           .set('Authorization', 'Bearer ' + accessToken)
           .expect(specialStatus)
           .expect('Content-Type', /json/)
+}
+
+function deleteMe (url: string, accessToken: string, specialStatus = 204) {
+  const path = '/api/v1/users/me'
+
+  return request(url)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(specialStatus)
 }
 
 function getMyUserVideoQuotaUsed (url: string, accessToken: string, specialStatus = 200) {
@@ -125,6 +134,29 @@ function removeUser (url: string, userId: number | string, accessToken: string, 
           .expect(expectedStatus)
 }
 
+function blockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204, reason?: string) {
+  const path = '/api/v1/users'
+  let body: any
+  if (reason) body = { reason }
+
+  return request(url)
+    .post(path + '/' + userId + '/block')
+    .send(body)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+}
+
+function unblockUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
+  const path = '/api/v1/users'
+
+  return request(url)
+    .post(path + '/' + userId + '/unblock')
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+}
+
 function updateMyUser (options: {
   url: string
   accessToken: string,
@@ -160,21 +192,8 @@ function updateMyAvatar (options: {
   fixture: string
 }) {
   const path = '/api/v1/users/me/avatar/pick'
-  let filePath = ''
-  if (isAbsolute(options.fixture)) {
-    filePath = options.fixture
-  } else {
-    filePath = join(__dirname, '..', '..', 'fixtures', options.fixture)
-  }
 
-  return makeUploadRequest({
-    url: options.url,
-    path,
-    token: options.accessToken,
-    fields: {},
-    attaches: { avatarfile: filePath },
-    statusCodeExpected: 200
-  })
+  return updateAvatarRequest(Object.assign(options, { path }))
 }
 
 function updateUser (options: {
@@ -230,6 +249,7 @@ export {
   registerUser,
   getMyUserInformation,
   getMyUserVideoRating,
+  deleteMe,
   getMyUserVideoQuotaUsed,
   getUsersList,
   getUsersListPaginationAndSort,
@@ -237,6 +257,8 @@ export {
   updateUser,
   updateMyUser,
   getUserInformation,
+  blockUser,
+  unblockUser,
   askResetPassword,
   resetPassword,
   updateMyAvatar

@@ -5,6 +5,11 @@
   margin-bottom: 20px;
 }
 
+my-actor-avatar-info {
+  display: block;
+  margin-bottom: 20px;
+}
+
 input[type=text] {
   @include peertube-input-text(340px);
 

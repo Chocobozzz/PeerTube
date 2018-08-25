@@ -9,8 +9,11 @@ import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
 import { broadcastToFollowers } from './utils'
 import { audiencify, getAudience } from '../audience'
+import { logger } from '../../../helpers/logger'
 
 async function sendUpdateVideo (video: VideoModel, t: Transaction) {
+  logger.info('Creating job to update video %s.', video.url)
+
   const byActor = video.VideoChannel.Account.Actor
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
@@ -27,6 +30,8 @@ async function sendUpdateVideo (video: VideoModel, t: Transaction) {
 
 async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelModel, t: Transaction) {
   const byActor = accountOrChannel.Actor
+
+  logger.info('Creating job to update actor %s.', byActor.url)
 
   const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
   const accountOrChannelObject = accountOrChannel.toActivityPubObject()

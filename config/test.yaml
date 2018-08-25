@@ -21,6 +21,12 @@ smtp:
 log:
   level: 'debug'
 
+cache:
+  previews:
+    size: 1
+  captions:
+    size: 1
+
 signup:
   enabled: true
 
@@ -33,6 +39,13 @@ transcoding:
     480p: true
     720p: true
     1080p: true
+
+import:
+  videos:
+    http:
+      enabled: true
+    torrent:
+      enabled: true
 
 instance:
   default_nsfw_policy: 'display'

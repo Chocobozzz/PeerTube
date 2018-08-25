@@ -1,3 +1,4 @@
+import { AccessDeniedError } from 'oauth2-server'
 import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
@@ -34,6 +35,8 @@ async function getUser (usernameOrEmail: string, password: string) {
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch === false) return null
 
+  if (user.blocked) throw new AccessDeniedError('User is blocked.')
+
   return user
 }
 
@@ -67,9 +70,7 @@ async function saveToken (token: TokenInfo, client: OAuthClientModel, user: User
   }
 
   const tokenCreated = await OAuthTokenModel.create(tokenToCreate)
-  const tokenToReturn = Object.assign(tokenCreated, { client, user })
-
-  return tokenToReturn
+  return Object.assign(tokenCreated, { client, user })
 }
 
 // ---------------------------------------------------------------------------

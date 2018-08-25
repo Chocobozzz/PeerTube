@@ -5,6 +5,8 @@
     <a i18n routerLink="/my-account/video-channels" routerLinkActive="active" class="title-page">My video channels</a>
 
     <a i18n routerLink="/my-account/videos" routerLinkActive="active" class="title-page">My videos</a>
+
+    <a *ngIf="isVideoImportEnabled()" i18n routerLink="/my-account/video-imports" routerLinkActive="active" class="title-page">My video imports</a>
   </div>
 
   <div class="margin-content">

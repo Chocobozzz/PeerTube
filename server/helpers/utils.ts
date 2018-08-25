@@ -1,15 +1,16 @@
-import { Model } from 'sequelize-typescript'
-import * as ipaddr from 'ipaddr.js'
 import { ResultList } from '../../shared'
-import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers'
-import { UserModel } from '../models/account/user'
 import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
-import { pseudoRandomBytesPromise } from './core-utils'
+import { pseudoRandomBytesPromise, sha256, unlinkPromise } from './core-utils'
 import { logger } from './logger'
+import { join } from 'path'
+import { Instance as ParseTorrent } from 'parse-torrent'
 
-const isCidr = require('is-cidr')
+function deleteFileAsync (path: string) {
+  unlinkPromise(path)
+    .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
+}
 
 async function generateRandomString (size: number) {
   const raw = await pseudoRandomBytesPromise(size)
@@ -34,109 +35,43 @@ function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], obje
   } as ResultList<U>
 }
 
-async function isSignupAllowed () {
-  if (CONFIG.SIGNUP.ENABLED === false) {
-    return false
-  }
-
-  // No limit and signup is enabled
-  if (CONFIG.SIGNUP.LIMIT === -1) {
-    return true
-  }
-
-  const totalUsers = await UserModel.countTotal()
-
-  return totalUsers < CONFIG.SIGNUP.LIMIT
-}
-
-function isSignupAllowedForCurrentIP (ip: string) {
-  const addr = ipaddr.parse(ip)
-  let excludeList = [ 'blacklist' ]
-  let matched: string
-
-  // if there is a valid, non-empty whitelist, we exclude all unknown adresses too
-  if (CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isCidr(cidr)).length > 0) {
-    excludeList.push('unknown')
-  }
-
-  if (addr.kind() === 'ipv4') {
-    const addrV4 = ipaddr.IPv4.parse(ip)
-    const rangeList = {
-      whitelist: CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isCidr.v4(cidr))
-                                                .map(cidr => ipaddr.IPv4.parseCIDR(cidr)),
-      blacklist: CONFIG.SIGNUP.FILTERS.CIDR.BLACKLIST.filter(cidr => isCidr.v4(cidr))
-                                                .map(cidr => ipaddr.IPv4.parseCIDR(cidr))
-    }
-    matched = ipaddr.subnetMatch(addrV4, rangeList, 'unknown')
-  } else if (addr.kind() === 'ipv6') {
-    const addrV6 = ipaddr.IPv6.parse(ip)
-    const rangeList = {
-      whitelist: CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isCidr.v6(cidr))
-                                                .map(cidr => ipaddr.IPv6.parseCIDR(cidr)),
-      blacklist: CONFIG.SIGNUP.FILTERS.CIDR.BLACKLIST.filter(cidr => isCidr.v6(cidr))
-                                                .map(cidr => ipaddr.IPv6.parseCIDR(cidr))
-    }
-    matched = ipaddr.subnetMatch(addrV6, rangeList, 'unknown')
-  }
-
-  return !excludeList.includes(matched)
-}
-
-function computeResolutionsToTranscode (videoFileHeight: number) {
-  const resolutionsEnabled: number[] = []
-  const configResolutions = CONFIG.TRANSCODING.RESOLUTIONS
-
-  // Put in the order we want to proceed jobs
-  const resolutions = [
-    VideoResolution.H_480P,
-    VideoResolution.H_360P,
-    VideoResolution.H_720P,
-    VideoResolution.H_240P,
-    VideoResolution.H_1080P
-  ]
-
-  for (const resolution of resolutions) {
-    if (configResolutions[ resolution + 'p' ] === true && videoFileHeight > resolution) {
-      resolutionsEnabled.push(resolution)
-    }
-  }
-
-  return resolutionsEnabled
-}
-
-function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
-  Object.keys(savedFields).forEach(key => {
-    const value = savedFields[key]
-    instance.set(key, value)
-  })
-}
-
-let serverActor: ActorModel
 async function getServerActor () {
-  if (serverActor === undefined) {
+  if (getServerActor.serverActor === undefined) {
     const application = await ApplicationModel.load()
-    serverActor = application.Account.Actor
+    if (!application) throw Error('Could not load Application from database.')
+
+    getServerActor.serverActor = application.Account.Actor
   }
 
-  if (!serverActor) {
+  if (!getServerActor.serverActor) {
     logger.error('Cannot load server actor.')
     process.exit(0)
   }
 
-  return Promise.resolve(serverActor)
+  return Promise.resolve(getServerActor.serverActor)
+}
+namespace getServerActor {
+  export let serverActor: ActorModel
 }
 
-type SortType = { sortModel: any, sortValue: string }
+function generateVideoTmpPath (target: string | ParseTorrent) {
+  const id = typeof target === 'string' ? target : target.infoHash
+
+  const hash = sha256(id)
+  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+}
+
+function getSecureTorrentName (originalName: string) {
+  return sha256(originalName) + '.torrent'
+}
 
 // ---------------------------------------------------------------------------
 
 export {
+  deleteFileAsync,
   generateRandomString,
   getFormattedObjects,
-  isSignupAllowed,
-  isSignupAllowedForCurrentIP,
-  computeResolutionsToTranscode,
-  resetSequelizeInstance,
+  getSecureTorrentName,
   getServerActor,
-  SortType
+  generateVideoTmpPath
 }

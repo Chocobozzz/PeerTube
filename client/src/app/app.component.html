@@ -18,9 +18,7 @@
   </div>
 
   <div class="sub-header-container">
-    <div *ngIf="isMenuDisplayed" class="title-menu-left">
-        <my-menu></my-menu>
-    </div>
+    <my-menu *ngIf="isMenuDisplayed"></my-menu>
 
     <div class="main-col container-fluid" [ngClass]="{ expanded: isMenuDisplayed === false }">
 

@@ -3,6 +3,7 @@ import { logger } from '../../helpers/logger'
 import { AccountModel } from '../account/account'
 import { UserModel } from '../account/user'
 import { OAuthClientModel } from './oauth-client'
+import { Transaction } from 'sequelize'
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -125,7 +126,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
         } as OAuthTokenInfo
       })
       .catch(err => {
-        logger.info('getRefreshToken error.', { err })
+        logger.error('getRefreshToken error.', { err })
         throw err
       })
   }
@@ -154,17 +155,21 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     return OAuthTokenModel.scope(ScopeNames.WITH_ACCOUNT)
       .findOne(query)
       .then(token => {
-        token['user'] = token.User
-
-        return token
+        if (token) {
+          token['user'] = token.User
+          return token
+        } else {
+          return new OAuthTokenModel()
+        }
       })
   }
 
-  static deleteUserToken (userId: number) {
+  static deleteUserToken (userId: number, t?: Transaction) {
     const query = {
       where: {
         userId
-      }
+      },
+      transaction: t
     }
 
     return OAuthTokenModel.destroy(query)

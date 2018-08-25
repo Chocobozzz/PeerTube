@@ -1,10 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-input[type=checkbox] {
-  @include peertube-checkbox(1px);
-}
-
 input[type=submit] {
   @include peertube-button;
   @include orange-button;

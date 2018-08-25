@@ -2,7 +2,10 @@ import * as program from 'commander'
 
 import {
   getClient,
-  serverLogin
+  serverLogin,
+  Server,
+  Client,
+  User
 } from '../tests/utils/index'
 
 program
@@ -19,22 +22,19 @@ if (
   throw new Error('All arguments are required.')
 }
 
-const server = {
-  url: program['url'],
-  user: {
-    username: program['username'],
-    password: program['password']
-  },
-  client: {
-    id: null,
-    secret: null
-  }
-}
-
 getClient(program.url)
   .then(res => {
-    server.client.id = res.body.client_id
-    server.client.secret = res.body.client_secret
+    const server = {
+      url: program['url'],
+      user: {
+        username: program['username'],
+        password: program['password']
+      } as User,
+      client: {
+        id: res.body.client_id as string,
+        secret: res.body.client_secret as string
+      } as Client
+    } as Server
 
     return serverLogin(server)
   })

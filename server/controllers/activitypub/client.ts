@@ -25,6 +25,7 @@ import {
   getVideoLikesActivityPubUrl,
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
+import { VideoCaptionModel } from '../../models/video/video-caption'
 
 const activityPubClientRouter = express.Router()
 
@@ -122,6 +123,9 @@ async function accountFollowingController (req: express.Request, res: express.Re
 
 async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
+
+  // We need captions to render AP object
+  video.VideoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
 
   const audience = getAudience(video.VideoChannel.Account.Actor, video.privacy === VideoPrivacy.PUBLIC)
   const videoObject = audiencify(video.toActivityPubObject(), audience)

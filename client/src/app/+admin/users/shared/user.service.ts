@@ -4,9 +4,9 @@ import { Injectable } from '@angular/core'
 import { BytesPipe } from 'ngx-pipes'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { Observable } from 'rxjs'
-import { ResultList, UserCreate, UserUpdate } from '../../../../../../shared'
+import { ResultList, UserCreate, UserUpdate, User } from '../../../../../../shared'
 import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestPagination, RestService, User } from '../../../shared'
+import { RestExtractor, RestPagination, RestService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Injectable()
@@ -59,6 +59,18 @@ export class UserService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
+  banUser (user: User, reason?: string) {
+    const body = reason ? { reason } : {}
+
+    return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/block', body)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  unbanUser (user: User) {
+    return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/unblock', {})
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   private formatUser (user: User) {
     let videoQuota
     if (user.videoQuota === -1) {
@@ -67,8 +79,11 @@ export class UserService {
       videoQuota = this.bytesPipe.transform(user.videoQuota, 0)
     }
 
+    const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
+
     return Object.assign(user, {
-      videoQuota
+      videoQuota,
+      videoQuotaUsed
     })
   }
 }

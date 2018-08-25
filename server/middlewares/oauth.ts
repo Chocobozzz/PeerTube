@@ -39,7 +39,7 @@ function token (req: express.Request, res: express.Response, next: express.NextF
     if (err) {
       return res.status(err.status)
         .json({
-          error: 'Authentication failed.',
+          error: err.message,
           code: err.name
         })
         .end()

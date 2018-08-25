@@ -25,26 +25,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: name
-          in: path
-          required: true
-          type: string
-          description: 'The name of the account (chocobozzz or chocobozzz@peertube.cpy.re for example)'
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "accounts.yaml#/parameters/name"
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -59,11 +43,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: name
-          in: path
-          required: true
-          type: string
-          description: 'The name of the account (chocobozzz or chocobozzz@peertube.cpy.re for example)'
+        - $ref: "accounts.yaml#/parameters/name"
       responses:
         '200':
           description: successful operation
@@ -141,22 +121,10 @@ paths:
           in: path
           required: true
           type: string
-          description: 'The id of the account'
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: count
-          in: query
-          required: false
-          type: number
-          description: ''
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+          description: 'The state of the job'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -192,21 +160,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -223,21 +179,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -261,7 +205,7 @@ paths:
             $ref: '#/definitions/Follow'
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   /users:
     post:
       security:
@@ -294,21 +238,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -327,14 +259,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The user id '
+        - $ref: "users.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
     get:
       security:
         - OAuth2: [ ]
@@ -345,11 +273,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The user id '
+        - $ref: "users.yaml#/parameters/id"
       responses:
         '200':
           description: successful operation
@@ -365,11 +289,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The user id '
+        - $ref: "users.yaml#/parameters/id"
         - in: body
           name: body
           required: true
@@ -377,7 +297,7 @@ paths:
             $ref: '#/definitions/UpdateUser'
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   /users/me:
     get:
       security:
@@ -412,7 +332,7 @@ paths:
             $ref: '#/definitions/UpdateMe'
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   /users/me/video-quota-used:
     get:
       security:
@@ -461,21 +381,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -499,7 +407,7 @@ paths:
             $ref: '#/definitions/RegisterUser'
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   /users/me/avatar/pick:
     post:
       security:
@@ -529,21 +437,14 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
+        - name: category
           in: query
           required: false
           type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+          description: category id of the video
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -611,37 +512,6 @@ paths:
             type: array
             items:
               type: string
-  /videos/search:
-    get:
-      tags:
-        - Video
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Video'
   "/videos/{id}":
     put:
       security:
@@ -653,70 +523,21 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id'
-        - name: thumbnailfile
-          in: formData
-          type: file
-          description: 'Video thumbnail file'
-        - name: previewfile
-          in: formData
-          type: file
-          description: 'Video preview file'
-        - name: category
-          in: formData
-          type: number
-          description: 'Video category'
-        - name: licence
-          in: formData
-          type: number
-          description: 'Video licence'
-        - name: language
-          in: formData
-          type: string
-          description: 'Video language'
-        - name: description
-          in: formData
-          type: string
-          description: 'Video description'
-        - name: waitTranscoding
-          in: formData
-          type: boolean
-          description: 'Whether or not we wait transcoding before publish the video'
-        - name: support
-          in: formData
-          type: string
-          description: 'Text describing how to support the video uploader'
-        - name: nsfw
-          in: formData
-          type: boolean
-          description: 'Whether or not this video contains sensitive content'
-        - name: name
-          in: formData
-          type: string
-          description: 'Video name'
-        - name: tags
-          in: formData
-          type: string[]
-          description: 'Video tags'
-        - name: commentsEnabled
-          in: formData
-          type: boolean
-          description: 'Enable or disable comments for this video'
-        - name: privacy
-          in: formData
-          type: string
-          enum: [Public, Unlisted]
-          description: 'Video privacy'
-        - name: scheduleUpdate
-          in: formData
-          required: false
-          description: 'Schedule an update at a specific datetime'
-          type:
-            $ref: '#/definitions/ScheduleVideoUpdate'
+        - $ref: "videos.yaml#/parameters/id"
+        - $ref: "videos.yaml#/parameters/thumbnailfile"
+        - $ref: "videos.yaml#/parameters/previewfile"
+        - $ref: "videos.yaml#/parameters/category"
+        - $ref: "videos.yaml#/parameters/licence"
+        - $ref: "videos.yaml#/parameters/language"
+        - $ref: "videos.yaml#/parameters/description"
+        - $ref: "videos.yaml#/parameters/waitTranscoding"
+        - $ref: "videos.yaml#/parameters/support"
+        - $ref: "videos.yaml#/parameters/nsfw"
+        - $ref: "videos.yaml#/parameters/name"
+        - $ref: "videos.yaml#/parameters/tags"
+        - $ref: "videos.yaml#/parameters/commentsEnabled"
+        - $ref: "videos.yaml#/parameters/privacy"
+        - $ref: "videos.yaml#/parameters/scheduleUpdate"
       responses:
         '200':
           description: successful operation
@@ -730,11 +551,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '200':
           description: successful operation
@@ -750,14 +567,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   "/videos/{id}/description":
     get:
       tags:
@@ -767,11 +580,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '200':
           description: successful operation
@@ -786,14 +595,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   /videos/upload:
     post:
       security:
@@ -810,75 +615,25 @@ paths:
           type: file
           required: true
           description: 'Video file'
-        - name: thumbnailfile
-          in: formData
-          type: file
-          required: true
-          description: 'Video thumbnail file'
-        - name: previewfile
-          in: formData
-          type: file
-          required: true
-          description: 'Video preview file'
-        - name: category
-          in: formData
-          type: number
-          description: 'Video category'
-        - name: waitTranscoding
-          in: formData
-          type: boolean
-          description: 'Whether or not we wait transcoding before publish the video'
-        - name: licence
-          in: formData
-          type: number
-          description: 'Video licence'
-        - name: language
-          in: formData
-          type: string
-          description: 'Video language'
-        - name: description
-          in: formData
-          type: string
-          description: 'Video description'
-        - name: support
-          in: formData
-          type: string
-          description: 'Text describing how to support the video uploader'
         - name: channelId
           in: formData
           required: true
           type: number
           description: 'Channel id that will contain this video'
-        - name: nsfw
-          in: formData
-          required: true
-          type: boolean
-          description: 'Whether or not this video contains sensitive content'
-        - name: name
-          in: formData
-          required: true
-          type: string
-          description: 'Video name'
-        - name: tags
-          in: formData
-          type: string[]
-          description: 'Video tags'
-        - name: commentsEnabled
-          in: formData
-          type: boolean
-          description: 'Enable or disable comments for this video'
-        - name: privacy
-          in: formData
-          required: true
-          type:
-            $ref: '#/definitions/VideoPrivacy'
-          description: 'Video privacy'
-        - name: scheduleUpdate
-          in: formData
-          required: false
-          description: 'Schedule an update at a specific datetime'
-          type:
-            $ref: '#/definitions/ScheduleVideoUpdate'
+        - $ref: "videos.yaml#/parameters/thumbnailfile"
+        - $ref: "videos.yaml#/parameters/previewfile"
+        - $ref: "videos.yaml#/parameters/category"
+        - $ref: "videos.yaml#/parameters/licence"
+        - $ref: "videos.yaml#/parameters/language"
+        - $ref: "videos.yaml#/parameters/description"
+        - $ref: "videos.yaml#/parameters/waitTranscoding"
+        - $ref: "videos.yaml#/parameters/support"
+        - $ref: "videos.yaml#/parameters/nsfw"
+        - $ref: "videos.yaml#/parameters/name"
+        - $ref: "videos.yaml#/parameters/tags"
+        - $ref: "videos.yaml#/parameters/commentsEnabled"
+        - $ref: "videos.yaml#/parameters/privacy"
+        - $ref: "videos.yaml#/parameters/scheduleUpdate"
       responses:
         '200':
           description: successful operation
@@ -895,21 +650,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -928,15 +671,11 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
-  "/videos/{videoId}/blacklist":
+          $ref: "commons.yaml#/responses/emptySuccess"
+  "/videos/{id}/blacklist":
     post:
       security:
         - OAuth2: [ ]
@@ -947,14 +686,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
     delete:
       security:
         - OAuth2: [ ]
@@ -965,14 +700,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   /videos/blacklist:
     get:
       security:
@@ -984,21 +715,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -1015,21 +734,9 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -1053,7 +760,7 @@ paths:
             $ref: '#/definitions/VideoChannelInput'
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   "/video-channels/{id}":
     get:
       tags:
@@ -1063,11 +770,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video channel id '
+        - $ref: "video-channels.yaml#/parameters/id"
       responses:
         '200':
           description: successful operation
@@ -1083,18 +786,14 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video channel id '
+        - $ref: "video-channels.yaml#/parameters/id"
         - in: body
           name: body
           schema:
             $ref: '#/definitions/VideoChannelInput'
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
     delete:
       security:
         - OAuth2: [ ]
@@ -1105,14 +804,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video channel id '
+        - $ref: "video-channels.yaml#/parameters/id"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   "/video-channels/{id}/videos":
     get:
       tags:
@@ -1122,11 +817,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video channel id '
+        - $ref: "video-channels.yaml#/parameters/id"
       responses:
         '200':
           description: successful operation
@@ -1141,11 +832,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: name
-          in: path
-          required: true
-          type: string
-          description: 'The name of the account (chocobozzz or chocobozzz@peertube.cpy.re for example)'
+        - $ref: "accounts.yaml#/parameters/name"
       responses:
         '200':
           description: successful operation
@@ -1153,7 +840,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoChannel'
-  "/videos/{videoId}/comment-threads":
+  "/videos/{id}/comment-threads":
     get:
       tags:
         - VideoComment
@@ -1162,26 +849,10 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-        - name: start
-          in: query
-          required: false
-          type: number
-          description: 'starting page'
-        - name: stop
-          in: query
-          required: false
-          type: number
-          description: 'stopping page'
-        - name: sort
-          in: query
-          required: false
-          type: number
-          description: 'sorting'
+        - $ref: "videos.yaml#/parameters/id"
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
       responses:
         '200':
           description: successful operation
@@ -1197,17 +868,13 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/CommentThreadPostResponse'
-  "/videos/{videoId}/comment-threads/{threadId}":
+  "/videos/{id}/comment-threads/{threadId}":
     get:
       tags:
         - VideoComment
@@ -1216,22 +883,14 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-        - name: threadId
-          in: path
-          required: true
-          type: string
-          description: 'The thread id '
+        - $ref: "videos.yaml#/parameters/id"
+        - $ref: "video-comments.yaml#/parameters/threadId"
       responses:
         '200':
           description: successful operation
           schema:
             $ref: '#/definitions/VideoCommentThreadTree'
-  "/videos/{videoId}/comments/{commentId}":
+  "/videos/{id}/comments/{commentId}":
     post:
       security:
         - OAuth2: [ ]
@@ -1242,16 +901,8 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-        - name: commentId
-          in: path
-          required: true
-          type: string
-          description: 'The comment id '
+        - $ref: "videos.yaml#/parameters/id"
+        - $ref: "video-comments.yaml#/parameters/commentId"
       responses:
         '200':
           description: successful operation
@@ -1267,19 +918,11 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-        - name: commentId
-          in: path
-          required: true
-          type: string
-          description: 'The comment id '
+        - $ref: "videos.yaml#/parameters/id"
+        - $ref: "video-comments.yaml#/parameters/commentId"
       responses:
         '204':
-          description: successful operation
+          $ref: "commons.yaml#/responses/emptySuccess"
   "/videos/{id}/rate":
     put:
       security:
@@ -1291,14 +934,34 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
+        - $ref: "videos.yaml#/parameters/id"
       responses:
         '204':
+          $ref: "commons.yaml#/responses/emptySuccess"
+  /search/videos:
+    get:
+      tags:
+        - Search
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: "commons.yaml#/parameters/start"
+        - $ref: "commons.yaml#/parameters/count"
+        - $ref: "commons.yaml#/parameters/sort"
+        - name: search
+          in: query
+          required: true
+          type: string
+          description: 'String to search'
+      responses:
+        '200':
           description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Video'
 definitions:
   VideoConstantNumber:
     properties:
@@ -1721,12 +1384,3 @@ definitions:
         type: string
       description:
         type: string
-  ScheduleVideoUpdate:
-    properties:
-      updateAt:
-        type: dateTime
-        description: 'When to update the video'
-        required: true
-      privacy:
-        $ref: '#/definitions/VideoPrivacy'
-        required: false

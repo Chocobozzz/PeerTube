@@ -57,10 +57,6 @@
     align-items: center;
     margin-right: 20px;
     margin-left: 12px;
-
-    input[type=checkbox] {
-      @include peertube-checkbox(2px);
-    }
   }
 
   my-video-thumbnail {
@@ -80,11 +76,24 @@
       font-weight: $font-semibold;
     }
 
-    .video-info-date-views, .video-info-private {
+    .video-info-date-views,
+    .video-info-private,
+    .video-info-blacklisted {
       font-size: 13px;
 
-      &.video-info-private {
+      &.video-info-private,
+      &.video-info-blacklisted .blacklisted-label {
         font-weight: $font-semibold;
+      }
+
+      &.video-info-blacklisted {
+        color: red;
+
+        .blacklisted-reason {
+          &::before {
+            content: ' - ';
+          }
+        }
       }
     }
   }
@@ -99,6 +108,10 @@
     flex-direction: column;
     height: auto;
     text-align: center;
+
+    .video-info-name {
+      margin: auto;
+    }
 
     input[type=checkbox] {
       display: none;

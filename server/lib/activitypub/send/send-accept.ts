@@ -4,10 +4,13 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { followActivityData } from './send-follow'
+import { logger } from '../../../helpers/logger'
 
 async function sendAccept (actorFollow: ActorFollowModel) {
   const follower = actorFollow.ActorFollower
   const me = actorFollow.ActorFollowing
+
+  logger.info('Creating job to accept follower %s.', follower.url)
 
   const followUrl = getActorFollowActivityPubUrl(actorFollow)
   const followData = followActivityData(followUrl, follower, me)

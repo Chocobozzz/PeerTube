@@ -47,10 +47,10 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
-    return this.videoService.getVideos(newPagination, this.sort)
+    return this.videoService.getVideos(newPagination, this.sort, undefined, this.categoryOneOf)
   }
 
   generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort)
+    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, undefined, this.categoryOneOf)
   }
 }

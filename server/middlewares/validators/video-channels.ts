@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
-import { isAccountIdExist, isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
+import { isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,

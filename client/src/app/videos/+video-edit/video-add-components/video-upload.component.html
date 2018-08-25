@@ -1,0 +1,58 @@
+<div *ngIf="!isUploadingVideo" class="upload-video-container">
+  <div class="upload-video">
+    <div class="icon icon-upload"></div>
+
+    <div class="button-file">
+      <span i18n>Select the file to upload</span>
+      <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" />
+    </div>
+    <span class="button-file-extension">(.mp4, .webm, .ogv)</span>
+
+    <div class="form-group form-group-channel">
+      <label i18n for="first-step-channel">Channel</label>
+      <div class="peertube-select-container">
+        <select id="first-step-channel" [(ngModel)]="firstStepChannelId">
+          <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label i18n for="first-step-privacy">Privacy</label>
+      <div class="peertube-select-container">
+        <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
+          <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+          <option [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isUploadingVideo" class="upload-progress-cancel">
+  <p-progressBar
+    [value]="videoUploadPercents"
+    [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
+  ></p-progressBar>
+  <input *ngIf="videoUploaded === false" type="button" value="Cancel" (click)="cancelUpload()" />
+</div>
+
+<!-- Hidden because we want to load the component -->
+<form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
+  <my-video-edit
+    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
+    [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
+  ></my-video-edit>
+
+  <div class="submit-container">
+    <div i18n *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
+
+    <div class="submit-button"
+       (click)="updateSecondStep()"
+       [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true || videoUploaded !== true }"
+    >
+      <span class="icon icon-validate"></span>
+      <input type="button" i18n-value value="Publish" />
+    </div>
+  </div>
+</form>

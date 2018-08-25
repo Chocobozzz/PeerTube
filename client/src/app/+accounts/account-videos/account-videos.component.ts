@@ -25,7 +25,7 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   marginContent = false // Disable margin
-  currentRoute = '/account/videos'
+  currentRoute = '/accounts/videos'
   loadOnInit = false
 
   private account: Account
@@ -55,7 +55,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     this.accountSub = this.accountService.accountLoaded
       .subscribe(account => {
         this.account = account
-        this.currentRoute = '/account/' + this.account.nameWithHost + '/videos'
+        this.currentRoute = '/accounts/' + this.account.nameWithHost + '/videos'
 
         this.reloadVideos()
         this.generateSyndicationList()

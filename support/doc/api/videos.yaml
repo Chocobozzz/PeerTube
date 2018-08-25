@@ -1,0 +1,87 @@
+parameters:
+  id:
+    name: id
+    in: path
+    required: true
+    type: string
+    description: 'The video id or uuid'
+  thumbnailfile:
+    name: thumbnailfile
+    in: formData
+    type: file
+    description: 'Video thumbnail file'
+  previewfile:
+    name: previewfile
+    in: formData
+    type: file
+    description: 'Video preview file'
+  category:
+    name: category
+    in: formData
+    type: number
+    description: 'Video category'
+  licence:
+    name: licence
+    in: formData
+    type: number
+    description: 'Video licence'
+  language:
+    name: language
+    in: formData
+    type: string
+    description: 'Video language'
+  description:
+    name: description
+    in: formData
+    type: string
+    description: 'Video description'
+  waitTranscoding:
+    name: waitTranscoding
+    in: formData
+    type: boolean
+    description: 'Whether or not we wait transcoding before publish the video'
+  support:
+    name: support
+    in: formData
+    type: string
+    description: 'Text describing how to support the video uploader'
+  nsfw:
+    name: nsfw
+    in: formData
+    type: boolean
+    description: 'Whether or not this video contains sensitive content'
+  name:
+    name: name
+    in: formData
+    type: string
+    description: 'Video name'
+  tags:
+    name: tags
+    in: formData
+    type: string[]
+    description: 'Video tags'
+  commentsEnabled:
+    name: commentsEnabled
+    in: formData
+    type: boolean
+    description: 'Enable or disable comments for this video'
+  privacy:
+    name: privacy
+    in: formData
+    type: string
+    enum: [Public, Unlisted]
+    description: 'Video privacy'
+  scheduleUpdate:
+    name: scheduleUpdate
+    in: formData
+    required: false
+    description: 'Schedule an update at a specific datetime'
+    properties:
+      updateAt:
+        type: dateTime
+        description: 'When to update the video'
+        required: true
+      privacy:
+        type: string
+        enum: [Public, Unlisted]
+        description: 'Video privacy target'

@@ -25,12 +25,18 @@ if [ -z "$GITHUB_TOKEN" ]; then
 fi
 
 branch=$(git symbolic-ref --short -q HEAD)
-if [ "$branch" != "develop" ]; then
-  echo "Need to be on develop branch."
+if [ "$branch" != "develop" ] && [[ "$branch" != feature/* ]]; then
+  echo "Need to be on develop or release branch."
   exit -1
 fi
 
 version="v$1"
+github_prerelease_option=""
+if [[ "$version" = *".pre."* ]]; then
+  echo "This is a pre-release."
+  github_prerelease_option="--pre-release"
+fi
+
 directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 tar_name="peertube-$version.tar.xz"
@@ -41,8 +47,7 @@ printf "Changelog will be:\\n%s\\n" "$changelog"
 
 read -p "Are you sure to release? " -n 1 -r
 echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 0
 fi
 
@@ -90,17 +95,25 @@ rm "./client/dist/embed-stats.json"
 (
   git push origin --tag
 
-  github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
+  if [ -z "$github_prerelease_option" ]; then
+    github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
+  else
+    github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
+  fi
+
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name.asc" --file "$tar_name.asc"
 
-  git push origin develop
+  git push origin "$branch"
 
-  # Update master branch
-  git checkout master
-  git rebase develop
-  git push origin master
-  git checkout develop
+  # Only update master if it is not a pre release
+  if [ -z "$github_prerelease_option" ]; then
+      # Update master branch
+      git checkout master
+      git merge "$branch"
+      git push origin master
+      git checkout "$branch"
+  fi
 )
