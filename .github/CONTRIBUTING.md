@@ -56,6 +56,10 @@ $ cd PeerTube
 $ yarn install --pure-lockfile
 ```
 
+Note that development is done on the `develop` branch. If you want to hack on
+Peertube, you should switch to that branch. Also note that you have to repeat
+the `yarn install --pure-lockfile` command.
+
 Then, create a postgres database and user with the values set in the
 `config/default.yaml` file. For instance, if you do not change the values
 there, the following commands would create a new database called `peertube_dev`
@@ -65,6 +69,13 @@ and a postgres user called `peertube` with password `peertube`:
 # sudo -u postgres createuser -P peertube
 Enter password for new role: peertube
 # sudo -u postgres createdb -O peertube peertube_dev
+```
+
+Then enable extensions PeerTube needs:
+
+```
+$ sudo -u postgres psql -c "CREATE EXTENSION pg_trgm;" peertube_dev
+$ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
 In dev mode, administrator username is **root** and password is **test**.

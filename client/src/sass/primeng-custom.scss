@@ -17,9 +17,12 @@ p-table {
   td {
     border: 1px solid #E5E5E5 !important;
     padding-left: 15px !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
+
+    &:not(.action-cell) {
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
   }
 
   tr {

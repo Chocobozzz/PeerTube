@@ -8,18 +8,13 @@ import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { MarkdownService } from '@app/videos/shared'
 
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
-import { ModalModule } from 'ngx-bootstrap/modal'
-import { PopoverModule } from 'ngx-bootstrap/popover'
-import { TabsModule } from 'ngx-bootstrap/tabs'
-import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ButtonComponent } from './misc/button.component'
-import { DeleteButtonComponent } from './misc/delete-button.component'
-import { EditButtonComponent } from './misc/edit-button.component'
+import { DeleteButtonComponent } from './buttons/delete-button.component'
+import { EditButtonComponent } from './buttons/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
 import { NumberFormatterPipe } from './misc/number-formatter.pipe'
@@ -43,7 +38,7 @@ import {
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
   UserValidatorsService,
-  VideoAbuseValidatorsService,
+  VideoAbuseValidatorsService, VideoBlacklistValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
   VideoValidatorsService,
@@ -54,6 +49,9 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
+import { VideoImportService } from '@app/shared/video-import/video-import.service'
+import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
+import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   imports: [
@@ -63,11 +61,11 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     RouterModule,
     HttpClientModule,
 
-    BsDropdownModule.forRoot(),
-    ModalModule.forRoot(),
-    PopoverModule.forRoot(),
-    TabsModule.forRoot(),
-    TooltipModule.forRoot(),
+    NgbDropdownModule.forRoot(),
+    NgbModalModule.forRoot(),
+    NgbPopoverModule.forRoot(),
+    NgbTabsetModule.forRoot(),
+    NgbTooltipModule.forRoot(),
 
     PrimeSharedModule,
     NgPipesModule
@@ -81,6 +79,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    ActionDropdownComponent,
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
@@ -98,11 +97,12 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     RouterModule,
     HttpClientModule,
 
-    BsDropdownModule,
-    ModalModule,
-    PopoverModule,
-    TabsModule,
-    TooltipModule,
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTabsetModule,
+    NgbTooltipModule,
+
     PrimeSharedModule,
     BytesPipe,
     KeysPipe,
@@ -114,6 +114,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
     HelpComponent,
@@ -138,6 +139,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     MarkdownService,
     VideoChannelService,
     VideoCaptionService,
+    VideoImportService,
 
     FormValidatorService,
     CustomConfigValidatorsService,
@@ -149,6 +151,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
     VideoCommentValidatorsService,
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
+    VideoBlacklistValidatorsService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
 

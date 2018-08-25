@@ -1,0 +1,6 @@
+<span class="action-button action-button-delete" [title]="label" role="button">
+  <span class="icon icon-delete-grey"></span>
+
+  <span class="button-label" *ngIf="label">{{ label }}</span>
+  <span class="button-label" i18n *ngIf="!label">Delete</span>
+</span>

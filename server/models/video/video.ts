@@ -93,6 +93,7 @@ import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
+import { VideoBlacklistModel } from './video-blacklist'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -126,7 +127,8 @@ export enum ScopeNames {
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
-  WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE'
+  WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
+  WITH_BLACKLISTED = 'WITH_BLACKLISTED'
 }
 
 type AvailableForListOptions = {
@@ -373,11 +375,20 @@ type AvailableForListOptions = {
   [ScopeNames.WITH_TAGS]: {
     include: [ () => TagModel ]
   },
+  [ScopeNames.WITH_BLACKLISTED]: {
+    include: [
+      {
+        attributes: [ 'id', 'reason' ],
+        model: () => VideoBlacklistModel,
+        required: false
+      }
+    ]
+  },
   [ScopeNames.WITH_FILES]: {
     include: [
       {
         model: () => VideoFileModel.unscoped(),
-        required: true
+        required: false
       }
     ]
   },
@@ -581,6 +592,15 @@ export class VideoModel extends Model<VideoModel> {
   })
   ScheduleVideoUpdate: ScheduleVideoUpdateModel
 
+  @HasOne(() => VideoBlacklistModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoBlacklist: VideoBlacklistModel
+
   @HasMany(() => VideoCaptionModel, {
     foreignKey: {
       name: 'videoId',
@@ -755,7 +775,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listUserVideosForApi (accountId: number, start: number, count: number, sort: string, hideNSFW: boolean, withFiles = false) {
+  static listUserVideosForApi (accountId: number, start: number, count: number, sort: string, withFiles = false) {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
@@ -777,6 +797,10 @@ export class VideoModel extends Model<VideoModel> {
         {
           model: ScheduleVideoUpdateModel,
           required: false
+        },
+        {
+          model: VideoBlacklistModel,
+          required: false
         }
       ]
     }
@@ -786,12 +810,6 @@ export class VideoModel extends Model<VideoModel> {
         model: VideoFileModel.unscoped(),
         required: true
       })
-    }
-
-    if (hideNSFW === true) {
-      query.where = {
-        nsfw: false
-      }
     }
 
     return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
@@ -957,8 +975,10 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static load (id: number) {
-    return VideoModel.findById(id)
+  static load (id: number, t?: Sequelize.Transaction) {
+    const options = t ? { transaction: t } : undefined
+
+    return VideoModel.findById(id, options)
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
@@ -994,7 +1014,13 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_SCHEDULED_UPDATE ])
+      .scope([
+        ScopeNames.WITH_TAGS,
+        ScopeNames.WITH_BLACKLISTED,
+        ScopeNames.WITH_FILES,
+        ScopeNames.WITH_ACCOUNT_DETAILS,
+        ScopeNames.WITH_SCHEDULED_UPDATE
+      ])
       .findById(id, options)
   }
 
@@ -1020,7 +1046,13 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_SCHEDULED_UPDATE ])
+      .scope([
+        ScopeNames.WITH_TAGS,
+        ScopeNames.WITH_BLACKLISTED,
+        ScopeNames.WITH_FILES,
+        ScopeNames.WITH_ACCOUNT_DETAILS,
+        ScopeNames.WITH_SCHEDULED_UPDATE
+      ])
       .findOne(options)
   }
 
@@ -1175,7 +1207,8 @@ export class VideoModel extends Model<VideoModel> {
     additionalAttributes: {
       state?: boolean,
       waitTranscoding?: boolean,
-      scheduledUpdate?: boolean
+      scheduledUpdate?: boolean,
+      blacklistInfo?: boolean
     }
   }): Video {
     const formattedAccount = this.VideoChannel.Account.toFormattedJSON()
@@ -1252,6 +1285,11 @@ export class VideoModel extends Model<VideoModel> {
           privacy: this.ScheduleVideoUpdate.privacy || undefined
         }
       }
+
+      if (options.additionalAttributes.blacklistInfo === true) {
+        videoObject.blacklisted = !!this.VideoBlacklist
+        videoObject.blacklistedReason = this.VideoBlacklist ? this.VideoBlacklist.reason : null
+      }
     }
 
     return videoObject
@@ -1260,7 +1298,8 @@ export class VideoModel extends Model<VideoModel> {
   toFormattedDetailsJSON (): VideoDetails {
     const formattedJson = this.toFormattedJSON({
       additionalAttributes: {
-        scheduledUpdate: true
+        scheduledUpdate: true,
+        blacklistInfo: true
       }
     })
 
@@ -1353,7 +1392,8 @@ export class VideoModel extends Model<VideoModel> {
         mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
         width: file.resolution,
-        size: file.size
+        size: file.size,
+        fps: file.fps
       })
 
       url.push({
@@ -1569,21 +1609,25 @@ export class VideoModel extends Model<VideoModel> {
   removeThumbnail () {
     const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
     return unlinkPromise(thumbnailPath)
+      .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
   }
 
   removePreview () {
-    // Same name than video thumbnail
-    return unlinkPromise(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+    const previewPath = join(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+    return unlinkPromise(previewPath)
+      .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
   removeFile (videoFile: VideoFileModel) {
     const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
     return unlinkPromise(filePath)
+      .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
   removeTorrent (videoFile: VideoFileModel) {
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
     return unlinkPromise(torrentPath)
+      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
   getActivityStreamDuration () {

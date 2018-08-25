@@ -1,0 +1,62 @@
+<p-table
+  [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 40px"></th>
+      <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th i18n>Reason</th>
+      <th i18n>Reporter</th>
+      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n>Video</th>
+      <th style="width: 50px;"></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-expanded="expanded" let-videoAbuse>
+    <tr>
+      <td>
+        <span *ngIf="videoAbuse.moderationComment" class="expander" [pRowToggler]="videoAbuse">
+          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
+        </span>
+      </td>
+
+      <td>
+        <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
+        <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
+      </td>
+
+      <td>{{ videoAbuse.reason }}</td>
+
+      <td>
+        <a [href]="videoAbuse.reporterAccount.url" i18n-title title="Go to the account" target="_blank" rel="noopener noreferrer">
+          {{ createByString(videoAbuse.reporterAccount) }}
+        </a>
+      </td>
+
+      <td>{{ videoAbuse.createdAt }}</td>
+
+      <td>
+        <a [href]="getVideoUrl(videoAbuse)" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
+          {{ videoAbuse.video.name }}
+        </a>
+      </td>
+
+      <td class="action-cell">
+        <my-action-dropdown i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-videoAbuse>
+    <tr class="moderation-comment">
+      <td colspan="7">
+        <span i18n class="moderation-comment-label">Moderation comment:</span>
+        {{ videoAbuse.moderationComment }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<my-moderation-comment-modal #moderationCommentModal (commentUpdated)="onModerationCommentUpdated()"></my-moderation-comment-modal>

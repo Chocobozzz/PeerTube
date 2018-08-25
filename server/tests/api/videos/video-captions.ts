@@ -6,7 +6,7 @@ import { checkVideoFilesWereRemoved, doubleFollow, flushAndRunMultipleServers, r
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { waitJobs } from '../../utils/server/jobs'
 import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
-import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
+import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect
 
@@ -56,7 +56,8 @@ describe('Test video captions', function () {
       accessToken: servers[0].accessToken,
       language: 'zh',
       videoId: videoUUID,
-      fixture: 'subtitle-good2.vtt'
+      fixture: 'subtitle-good2.vtt',
+      mimeType: 'application/octet-stream'
     })
 
     await waitJobs(servers)

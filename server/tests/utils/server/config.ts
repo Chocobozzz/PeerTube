@@ -44,6 +44,72 @@ function updateCustomConfig (url: string, token: string, newCustomConfig: Custom
   })
 }
 
+function updateCustomSubConfig (url: string, token: string, newConfig: any) {
+  const updateParams: CustomConfig = {
+    instance: {
+      name: 'PeerTube updated',
+      shortDescription: 'my short description',
+      description: 'my super description',
+      terms: 'my super terms',
+      defaultClientRoute: '/videos/recently-added',
+      defaultNSFWPolicy: 'blur',
+      customizations: {
+        javascript: 'alert("coucou")',
+        css: 'body { background-color: red; }'
+      }
+    },
+    services: {
+      twitter: {
+        username: '@MySuperUsername',
+        whitelisted: true
+      }
+    },
+    cache: {
+      previews: {
+        size: 2
+      },
+      captions: {
+        size: 3
+      }
+    },
+    signup: {
+      enabled: false,
+      limit: 5
+    },
+    admin: {
+      email: 'superadmin1@example.com'
+    },
+    user: {
+      videoQuota: 5242881
+    },
+    transcoding: {
+      enabled: true,
+      threads: 1,
+      resolutions: {
+        '240p': false,
+        '360p': true,
+        '480p': true,
+        '720p': false,
+        '1080p': false
+      }
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: false
+        },
+        torrent: {
+          enabled: false
+        }
+      }
+    }
+  }
+
+  Object.assign(updateParams, newConfig)
+
+  return updateCustomConfig(url, token, updateParams)
+}
+
 function deleteCustomConfig (url: string, token: string, statusCodeExpected = 200) {
   const path = '/api/v1/config/custom'
 
@@ -62,5 +128,6 @@ export {
   getCustomConfig,
   updateCustomConfig,
   getAbout,
-  deleteCustomConfig
+  deleteCustomConfig,
+  updateCustomSubConfig
 }

@@ -7,8 +7,8 @@ import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
 import { VideoConstant } from '../../../../../shared/models/videos'
-import { isDefaultLocale } from '../../../../../shared/models/i18n'
-import { getDevLocale, isOnDevLocale, peertubeTranslate } from '@app/shared/i18n/i18n-utils'
+import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
+import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { sortBy } from '@app/shared/misc/utils'
 
 @Injectable()
@@ -68,6 +68,16 @@ export class ServerService {
     },
     user: {
       videoQuota: -1
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: false
+        },
+        torrent: {
+          enabled: false
+        }
+      }
     }
   }
   private videoCategories: Array<VideoConstant<string>> = []

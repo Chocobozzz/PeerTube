@@ -6,7 +6,7 @@ import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, VideoAuditView } from '../../../helpers/audit-logger'
-import { getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import {
   CONFIG,
   IMAGE_MIMETYPE_EXT,
@@ -52,9 +52,11 @@ import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 import { ownershipVideoRouter } from './ownership'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
-import { createReqFiles, buildNSFWFilter } from '../../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { videoCaptionsRouter } from './captions'
+import { videoImportsRouter } from './import'
+import { resetSequelizeInstance } from '../../../helpers/database-utils'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -82,6 +84,7 @@ videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
 videosRouter.use('/', videoCaptionsRouter)
+videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
 
 videosRouter.get('/categories', listVideoCategories)
@@ -162,7 +165,6 @@ async function addVideo (req: express.Request, res: express.Response) {
   const videoData = {
     name: videoInfo.name,
     remote: false,
-    extname: extname(videoPhysicalFile.filename),
     category: videoInfo.category,
     licence: videoInfo.licence,
     language: videoInfo.language,

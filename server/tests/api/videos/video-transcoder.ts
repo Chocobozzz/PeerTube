@@ -35,6 +35,8 @@ describe('Test video transcoding', function () {
     servers = await flushAndRunMultipleServers(2)
 
     await setAccessTokensToServers(servers)
+
+    await doubleFollow(servers[0], servers[1])
   })
 
   it('Should not transcode video on server 1', async function () {
@@ -49,20 +51,22 @@ describe('Test video transcoding', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[0].url)
-    const video = res.body.data[0]
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+      const video = res.body.data[ 0 ]
 
-    const res2 = await getVideo(servers[0].url, video.id)
-    const videoDetails = res2.body
-    expect(videoDetails.files).to.have.lengthOf(1)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails = res2.body
+      expect(videoDetails.files).to.have.lengthOf(1)
 
-    const magnetUri = videoDetails.files[0].magnetUri
-    expect(magnetUri).to.match(/\.webm/)
+      const magnetUri = videoDetails.files[ 0 ].magnetUri
+      expect(magnetUri).to.match(/\.webm/)
 
-    const torrent = await webtorrentAdd(magnetUri)
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).match(/\.webm$/)
+      const torrent = await webtorrentAdd(magnetUri, true)
+      expect(torrent.files).to.be.an('array')
+      expect(torrent.files.length).to.equal(1)
+      expect(torrent.files[ 0 ].path).match(/\.webm$/)
+    }
   })
 
   it('Should transcode video on server 2', async function () {
@@ -77,21 +81,23 @@ describe('Test video transcoding', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[1].url)
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
 
-    const video = res.body.data[0]
-    const res2 = await getVideo(servers[1].url, video.id)
-    const videoDetails = res2.body
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails = res2.body
 
-    expect(videoDetails.files).to.have.lengthOf(4)
+      expect(videoDetails.files).to.have.lengthOf(4)
 
-    const magnetUri = videoDetails.files[0].magnetUri
-    expect(magnetUri).to.match(/\.mp4/)
+      const magnetUri = videoDetails.files[ 0 ].magnetUri
+      expect(magnetUri).to.match(/\.mp4/)
 
-    const torrent = await webtorrentAdd(magnetUri)
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).match(/\.mp4$/)
+      const torrent = await webtorrentAdd(magnetUri, true)
+      expect(torrent.files).to.be.an('array')
+      expect(torrent.files.length).to.equal(1)
+      expect(torrent.files[ 0 ].path).match(/\.mp4$/)
+    }
   })
 
   it('Should transcode high bit rate mp3 to proper bit rate', async function () {
@@ -105,22 +111,24 @@ describe('Test video transcoding', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[1].url)
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
 
-    const video = res.body.data.find(v => v.name === videoAttributes.name)
-    const res2 = await getVideo(servers[1].url, video.id)
-    const videoDetails: VideoDetails = res2.body
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails: VideoDetails = res2.body
 
-    expect(videoDetails.files).to.have.lengthOf(4)
+      expect(videoDetails.files).to.have.lengthOf(4)
 
-    const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-    const probe = await audio.get(ffmpeg, path)
+      const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
+      const probe = await audio.get(ffmpeg, path)
 
-    if (probe.audioStream) {
-      expect(probe.audioStream['codec_name']).to.be.equal('aac')
-      expect(probe.audioStream['bit_rate']).to.be.at.most(384 * 8000)
-    } else {
-      this.fail('Could not retrieve the audio stream on ' + probe.absolutePath)
+      if (probe.audioStream) {
+        expect(probe.audioStream[ 'codec_name' ]).to.be.equal('aac')
+        expect(probe.audioStream[ 'bit_rate' ]).to.be.at.most(384 * 8000)
+      } else {
+        this.fail('Could not retrieve the audio stream on ' + probe.absolutePath)
+      }
     }
   })
 
@@ -135,16 +143,18 @@ describe('Test video transcoding', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[1].url)
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
 
-    const video = res.body.data.find(v => v.name === videoAttributes.name)
-    const res2 = await getVideo(servers[1].url, video.id)
-    const videoDetails: VideoDetails = res2.body
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails: VideoDetails = res2.body
 
-    expect(videoDetails.files).to.have.lengthOf(4)
-    const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-    const probe = await audio.get(ffmpeg, path)
-    expect(probe).to.not.have.property('audioStream')
+      expect(videoDetails.files).to.have.lengthOf(4)
+      const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
+      const probe = await audio.get(ffmpeg, path)
+      expect(probe).to.not.have.property('audioStream')
+    }
   })
 
   it('Should leave the audio untouched, but properly transcode the video', async function () {
@@ -158,22 +168,24 @@ describe('Test video transcoding', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[1].url)
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
 
-    const video = res.body.data.find(v => v.name === videoAttributes.name)
-    const res2 = await getVideo(servers[1].url, video.id)
-    const videoDetails: VideoDetails = res2.body
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails: VideoDetails = res2.body
 
-    expect(videoDetails.files).to.have.lengthOf(4)
-    const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
-    const fixtureVideoProbe = await audio.get(ffmpeg, fixturePath)
-    const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-    const videoProbe = await audio.get(ffmpeg, path)
-    if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
-      const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
-      expect(omit(videoProbe.audioStream, toOmit)).to.be.deep.equal(omit(fixtureVideoProbe.audioStream, toOmit))
-    } else {
-      this.fail('Could not retrieve the audio stream on ' + videoProbe.absolutePath)
+      expect(videoDetails.files).to.have.lengthOf(4)
+      const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
+      const fixtureVideoProbe = await audio.get(ffmpeg, fixturePath)
+      const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
+      const videoProbe = await audio.get(ffmpeg, path)
+      if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
+        const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
+        expect(omit(videoProbe.audioStream, toOmit)).to.be.deep.equal(omit(fixtureVideoProbe.audioStream, toOmit))
+      } else {
+        this.fail('Could not retrieve the audio stream on ' + videoProbe.absolutePath)
+      }
     }
   })
 
@@ -189,37 +201,35 @@ describe('Test video transcoding', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideosList(servers[1].url)
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
 
-    const video = res.body.data.find(v => v.name === videoAttributes.name)
-    const res2 = await getVideo(servers[1].url, video.id)
-    const videoDetails: VideoDetails = res2.body
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails: VideoDetails = res2.body
 
-    expect(videoDetails.files).to.have.lengthOf(4)
-    expect(videoDetails.files[0].fps).to.be.above(58).and.below(62)
-    expect(videoDetails.files[1].fps).to.be.below(31)
-    expect(videoDetails.files[2].fps).to.be.below(31)
-    expect(videoDetails.files[3].fps).to.be.below(31)
+      expect(videoDetails.files).to.have.lengthOf(4)
+      expect(videoDetails.files[ 0 ].fps).to.be.above(58).and.below(62)
+      expect(videoDetails.files[ 1 ].fps).to.be.below(31)
+      expect(videoDetails.files[ 2 ].fps).to.be.below(31)
+      expect(videoDetails.files[ 3 ].fps).to.be.below(31)
 
-    for (const resolution of [ '240', '360', '480' ]) {
-      const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+      for (const resolution of [ '240', '360', '480' ]) {
+        const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+        const fps = await getVideoFileFPS(path)
+
+        expect(fps).to.be.below(31)
+      }
+
+      const path = join(root(), 'test2', 'videos', video.uuid + '-720.mp4')
       const fps = await getVideoFileFPS(path)
 
-      expect(fps).to.be.below(31)
+      expect(fps).to.be.above(58).and.below(62)
     }
-
-    const path = join(root(), 'test2', 'videos', video.uuid + '-720.mp4')
-    const fps = await getVideoFileFPS(path)
-
-    expect(fps).to.be.above(58).and.below(62)
   })
 
   it('Should wait transcoding before publishing the video', async function () {
     this.timeout(80000)
-
-    await doubleFollow(servers[0], servers[1])
-
-    await waitJobs(servers)
 
     {
       // Upload the video, but wait transcoding

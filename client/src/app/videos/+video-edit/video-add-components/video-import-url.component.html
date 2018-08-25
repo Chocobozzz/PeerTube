@@ -1,0 +1,60 @@
+<div *ngIf="!hasImportedVideo" class="upload-video-container">
+  <div class="import-video-url">
+    <div class="icon icon-upload"></div>
+
+    <div class="form-group">
+      <label i18n for="targetUrl">URL</label>
+      <my-help
+        helpType="custom" i18n-customHtml
+        customHtml="You can import any URL <a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'>supported by youtube-dl</a> or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance."
+      ></my-help>
+
+      <input type="text" id="targetUrl" [(ngModel)]="targetUrl" />
+    </div>
+
+    <div class="form-group">
+      <label i18n for="first-step-channel">Channel</label>
+      <div class="peertube-select-container">
+        <select id="first-step-channel" [(ngModel)]="firstStepChannelId">
+          <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label i18n for="first-step-privacy">Privacy</label>
+      <div class="peertube-select-container">
+        <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
+          <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <input
+      type="button" i18n-value value="Import"
+      [disabled]="!isTargetUrlValid() || isImportingVideo" (click)="importVideo()"
+    />
+  </div>
+</div>
+
+<div *ngIf="hasImportedVideo" class="alert alert-info" i18n>
+  Congratulations, the video behind {{ targetUrl }} will be imported! You can already add information about this video.
+</div>
+
+<!-- Hidden because we want to load the component -->
+<form [hidden]="!hasImportedVideo" novalidate [formGroup]="form">
+  <my-video-edit
+    [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [schedulePublicationPossible]="false"
+    [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
+  ></my-video-edit>
+
+  <div class="submit-container">
+    <div class="submit-button"
+       (click)="updateSecondStep()"
+       [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true }"
+    >
+      <span class="icon icon-validate"></span>
+      <input type="button" i18n-value value="Update" />
+    </div>
+  </div>
+</form>

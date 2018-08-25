@@ -1,4 +1,4 @@
-import { VideoChannel as ServerVideoChannel } from '../../../../../shared/models/videos/video-channel.model'
+import { VideoChannel as ServerVideoChannel } from '../../../../../shared/models/videos'
 import { Actor } from '../actor/actor.model'
 import { Account } from '../../../../../shared/models/actors'
 

@@ -3,9 +3,8 @@ import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../..
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
-import { ServerConfig } from '../../../../../shared/models'
+import { peertubeTranslate, ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
-import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
@@ -41,6 +40,8 @@ export class Video implements VideoServerModel {
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
+  blacklisted?: boolean
+  blacklistedReason?: string
 
   account: {
     id: number
@@ -60,6 +61,10 @@ export class Video implements VideoServerModel {
     url: string
     host: string
     avatar: Avatar
+  }
+
+  static buildClientUrl (videoUUID: string) {
+    return '/videos/watch/' + videoUUID
   }
 
   private static createDurationString (duration: number) {
@@ -116,6 +121,9 @@ export class Video implements VideoServerModel {
 
     this.scheduledUpdate = hash.scheduledUpdate
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
+
+    this.blacklisted = hash.blacklisted
+    this.blacklistedReason = hash.blacklistedReason
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

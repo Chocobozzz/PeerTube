@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as AsyncLock from 'async-lock'
-import { parseDuration } from '../helpers/utils'
+import { parseDuration } from '../helpers/core-utils'
 import { Redis } from '../lib/redis'
 import { logger } from '../helpers/logger'
 

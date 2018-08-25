@@ -1,0 +1,11 @@
+@import '_variables';
+@import '_mixins';
+
+.delete-me {
+  font-size: 15px;
+
+  button {
+    @include peertube-button;
+    @include grey-button;
+  }
+}

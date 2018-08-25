@@ -1,31 +1,25 @@
-<div bsModal #confirmModal="bs-modal" [config]="{ animated: false }" class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<ng-template #confirmModal let-close="close" let-dismiss="dismiss">
 
-      <div class="modal-header">
-        <span class="close" aria-hidden="true" (click)="cancel()"></span>
-        <h4 class="modal-title">{{ title }}</h4>
-      </div>
+  <div class="modal-header">
+    <h4 class="modal-title">{{ title }}</h4>
+    <span class="close" aria-label="Close" role="button" (click)="dismiss()"></span>
+  </div>
 
-      <div class="modal-body" >
-        <div [innerHtml]="message"></div>
+  <div class="modal-body" >
+    <div [innerHtml]="message"></div>
 
-        <div *ngIf="inputLabel && expectedInputValue" class="form-group">
-          <label for="confirmInput">{{ inputLabel }}</label>
-          <input type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" />
-        </div>
-
-        <div class="form-group inputs">
-          <span i18n class="action-button action-button-cancel" (click)="cancel()">
-            Cancel
-          </span>
-
-          <input
-            type="submit" [value]="confirmButtonText" class="action-button-submit" [disabled]="isConfirmationDisabled()"
-            (click)="confirm()"
-          >
-        </div>
-      </div>
+    <div *ngIf="inputLabel && expectedInputValue" class="form-group">
+      <label for="confirmInput">{{ inputLabel }}</label>
+      <input type="text" id="confirmInput" name="confirmInput" [(ngModel)]="inputValue" />
     </div>
   </div>
-</div>
+
+  <div class="modal-footer inputs">
+    <span i18n class="action-button action-button-cancel" (click)="dismiss()" role="button">Cancel</span>
+
+    <input
+      type="submit" [value]="confirmButtonText" class="action-button-submit" [disabled]="isConfirmationDisabled()"
+      (click)="close()"
+    >
+  </div>
+</ng-template>

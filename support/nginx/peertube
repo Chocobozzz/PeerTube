@@ -37,6 +37,13 @@ server {
   # resolver $DNS-IP-1 $DNS-IP-2 valid=300s;
   # resolver_timeout 5s;
 
+  # Enable compression for JS/CSS/HTML bundle, for improved client load times.
+  # It might be nice to compress JSON, but leaving that out to protect against potential
+  # compression+encryption information leak attacks like BREACH.
+  gzip on;
+  gzip_types text/css text/html application/javascript;
+  gzip_vary on;
+
   add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
 
   access_log /var/log/nginx/peertube.example.com.access.log;

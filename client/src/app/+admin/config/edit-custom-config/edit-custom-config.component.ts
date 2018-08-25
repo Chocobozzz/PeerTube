@@ -71,6 +71,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfigValidatorsService.CACHE_CAPTIONS_SIZE,
       signupEnabled: null,
       signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+      importVideosHttpEnabled: null,
+      importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
@@ -183,6 +185,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           '720p': this.form.value[this.getResolutionKey('720p')],
           '1080p': this.form.value[this.getResolutionKey('1080p')]
         }
+      },
+      import: {
+        videos: {
+          http: {
+            enabled: this.form.value['importVideosHttpEnabled']
+          },
+          torrent: {
+            enabled: this.form.value['importVideosTorrentEnabled']
+          }
+        }
       }
     }
 
@@ -222,7 +234,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       transcodingThreads: this.customConfig.transcoding.threads,
       transcodingEnabled: this.customConfig.transcoding.enabled,
       customizationJavascript: this.customConfig.instance.customizations.javascript,
-      customizationCSS: this.customConfig.instance.customizations.css
+      customizationCSS: this.customConfig.instance.customizations.css,
+      importVideosHttpEnabled: this.customConfig.import.videos.http.enabled,
+      importVideosTorrentEnabled: this.customConfig.import.videos.torrent.enabled
     }
 
     for (const resolution of this.resolutions) {

@@ -1,215 +1,223 @@
-<div class="video-edit row" [formGroup]="form">
-  <tabset class="root-tabset bootstrap">
+<div class="video-edit" [formGroup]="form">
+  <ngb-tabset class="root-tabset bootstrap">
 
-    <tab i18n-heading heading="Basic info">
-      <div class="col-md-8">
-        <div class="form-group">
-          <label i18n for="name">Title</label>
-          <input type="text" id="name" formControlName="name" />
-          <div *ngIf="formErrors.name" class="form-error">
-            {{ formErrors.name }}
-          </div>
-        </div>
+    <ngb-tab i18n-title title="Basic info">
+      <ng-template ngbTabContent>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="form-group">
+              <label i18n for="name">Title</label>
+              <input type="text" id="name" formControlName="name" />
+              <div *ngIf="formErrors.name" class="form-error">
+                {{ formErrors.name }}
+              </div>
+            </div>
 
-        <div class="form-group">
-          <label i18n class="label-tags">Tags</label> <span i18n>(press Enter to add)</span>
-          <tag-input
-            [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
-            formControlName="tags" maxItems="5" modelAsStrings="true"
-          ></tag-input>
-        </div>
+            <div class="form-group">
+              <label i18n class="label-tags">Tags</label> <span i18n>(press Enter to add)</span>
+              <tag-input
+                [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
+                formControlName="tags" maxItems="5" modelAsStrings="true"
+              ></tag-input>
+            </div>
 
-        <div class="form-group">
-          <label i18n for="description">Description</label>
-          <my-help helpType="markdownText" i18n-preHtml preHtml="Video descriptions are truncated by default and require manual action to expand them."></my-help>
-          <my-markdown-textarea truncate="250" formControlName="description"></my-markdown-textarea>
+            <div class="form-group">
+              <label i18n for="description">Description</label>
+              <my-help helpType="markdownText" i18n-preHtml preHtml="Video descriptions are truncated by default and require manual action to expand them."></my-help>
+              <my-markdown-textarea truncate="250" formControlName="description"></my-markdown-textarea>
 
-          <div *ngIf="formErrors.description" class="form-error">
-            {{ formErrors.description }}
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="form-group">
-          <label i18n>Channel</label>
-          <div class="peertube-select-container">
-            <select formControlName="channelId">
-              <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label i18n for="category">Category</label>
-          <div class="peertube-select-container">
-            <select id="category" formControlName="category">
-              <option></option>
-              <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
-            </select>
+              <div *ngIf="formErrors.description" class="form-error">
+                {{ formErrors.description }}
+              </div>
+            </div>
           </div>
 
-          <div *ngIf="formErrors.category" class="form-error">
-            {{ formErrors.category }}
+          <div class="col-md-4">
+            <div class="form-group">
+              <label i18n>Channel</label>
+              <div class="peertube-select-container">
+                <select formControlName="channelId">
+                  <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label i18n for="category">Category</label>
+              <div class="peertube-select-container">
+                <select id="category" formControlName="category">
+                  <option></option>
+                  <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
+                </select>
+              </div>
+
+              <div *ngIf="formErrors.category" class="form-error">
+                {{ formErrors.category }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label i18n for="licence">Licence</label>
+              <div class="peertube-select-container">
+                <select id="licence" formControlName="licence">
+                  <option></option>
+                  <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
+                </select>
+              </div>
+
+              <div *ngIf="formErrors.licence" class="form-error">
+                {{ formErrors.licence }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label i18n for="language">Language</label>
+              <div class="peertube-select-container">
+                <select id="language" formControlName="language">
+                  <option></option>
+                  <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
+                </select>
+              </div>
+
+              <div *ngIf="formErrors.language" class="form-error">
+                {{ formErrors.language }}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label i18n for="privacy">Privacy</label>
+              <div class="peertube-select-container">
+                <select id="privacy" formControlName="privacy">
+                  <option></option>
+                  <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+                  <option *ngIf="schedulePublicationPossible" [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
+                </select>
+              </div>
+
+              <div *ngIf="formErrors.privacy" class="form-error">
+                {{ formErrors.privacy }}
+              </div>
+            </div>
+
+            <div *ngIf="schedulePublicationEnabled" class="form-group">
+              <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
+              <p-calendar
+                id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
+                [locale]="calendarLocale" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
+              >
+              </p-calendar>
+
+              <div *ngIf="formErrors.schedulePublicationAt" class="form-error">
+                {{ formErrors.schedulePublicationAt }}
+              </div>
+            </div>
+
+            <my-peertube-checkbox
+              inputName="nsfw" formControlName="nsfw"
+              i18n-labelText labelText="This video contains mature or explicit content"
+              i18n-helpHtml helpHtml="Some instances do not list videos containing mature or explicit content by default."
+            ></my-peertube-checkbox>
+
+            <my-peertube-checkbox
+              inputName="commentsEnabled" formControlName="commentsEnabled"
+              i18n-labelText labelText="Enable video comments"
+            ></my-peertube-checkbox>
+
+            <my-peertube-checkbox
+              inputName="waitTranscoding" formControlName="waitTranscoding"
+              i18n-labelText labelText="Wait transcoding before publishing the video"
+              i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
+            ></my-peertube-checkbox>
+
           </div>
         </div>
+      </ng-template>
+    </ngb-tab>
 
-        <div class="form-group">
-          <label i18n for="licence">Licence</label>
-          <div class="peertube-select-container">
-            <select id="licence" formControlName="licence">
-              <option></option>
-              <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
-            </select>
+    <ngb-tab i18n-title title="Captions">
+      <ng-template ngbTabContent>
+        <div class="captions">
+
+          <div class="captions-header">
+            <a (click)="openAddCaptionModal()" class="create-caption">
+              <span class="icon icon-add"></span>
+              <ng-container i18n>Add another caption</ng-container>
+            </a>
           </div>
 
-          <div *ngIf="formErrors.licence" class="form-error">
-            {{ formErrors.licence }}
+          <div class="form-group" *ngFor="let videoCaption of videoCaptions">
+
+            <div class="caption-entry">
+              <ng-container *ngIf="!videoCaption.action">
+                <a
+                  i18n-title title="See the subtitle file" class="caption-entry-label" target="_blank" rel="noopener noreferrer"
+                  [href]="videoCaption.captionPath"
+                >{{ videoCaption.language.label }}</a>
+
+                <div class="caption-entry-state">Already uploaded	&#10004;</div>
+
+                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
+              </ng-container>
+
+              <ng-container *ngIf="videoCaption.action === 'CREATE'">
+                <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
+
+                <div class="caption-entry-state caption-entry-state-create">Will be created on update</div>
+
+                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
+              </ng-container>
+
+              <ng-container *ngIf="videoCaption.action === 'REMOVE'">
+                <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
+
+                <div class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
+
+                <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="no-caption" *ngIf="videoCaptions?.length === 0">
+            No captions for now.
+          </div>
+
+        </div>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab i18n-title title="Advanced settings">
+      <ng-template ngbTabContent>
+        <div class="advanced-settings">
+          <div class="form-group">
+            <my-video-image
+              i18n-inputLabel inputLabel="Upload thumbnail" inputName="thumbnailfile" formControlName="thumbnailfile"
+              previewWidth="200px" previewHeight="110px"
+            ></my-video-image>
+          </div>
+
+          <div class="form-group">
+            <my-video-image
+              i18n-inputLabel inputLabel="Upload preview" inputName="previewfile" formControlName="previewfile"
+              previewWidth="360px" previewHeight="200px"
+            ></my-video-image>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="support">Support</label>
+            <my-help helpType="markdownEnhanced" i18n-preHtml preHtml="Short text to tell people how they can support you (membership platform...)."></my-help>
+            <my-markdown-textarea
+              id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
+              [classes]="{ 'input-error': formErrors['support'] }"
+            ></my-markdown-textarea>
+            <div *ngIf="formErrors.support" class="form-error">
+              {{ formErrors.support }}
+            </div>
           </div>
         </div>
+      </ng-template>
+    </ngb-tab>
 
-        <div class="form-group">
-          <label i18n for="language">Language</label>
-          <div class="peertube-select-container">
-            <select id="language" formControlName="language">
-              <option></option>
-              <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
-            </select>
-          </div>
-
-          <div *ngIf="formErrors.language" class="form-error">
-            {{ formErrors.language }}
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label i18n for="privacy">Privacy</label>
-          <div class="peertube-select-container">
-            <select id="privacy" formControlName="privacy">
-              <option></option>
-              <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
-              <option *ngIf="schedulePublicationPossible" [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
-            </select>
-          </div>
-
-          <div *ngIf="formErrors.privacy" class="form-error">
-            {{ formErrors.privacy }}
-          </div>
-        </div>
-
-        <div *ngIf="schedulePublicationEnabled" class="form-group">
-          <label i18n for="schedulePublicationAt">Schedule publication ({{ calendarTimezone }})</label>
-          <p-calendar
-            id="schedulePublicationAt" formControlName="schedulePublicationAt" [dateFormat]="calendarDateFormat"
-            [locale]="calendarLocale" [minDate]="minScheduledDate" [showTime]="true" [hideOnDateTimeSelect]="true"
-          >
-          </p-calendar>
-
-          <div *ngIf="formErrors.schedulePublicationAt" class="form-error">
-            {{ formErrors.schedulePublicationAt }}
-          </div>
-        </div>
-
-        <my-peertube-checkbox
-          inputName="nsfw" formControlName="nsfw"
-          i18n-labelText labelText="This video contains mature or explicit content"
-          i18n-helpHtml helpHtml="Some instances do not list videos containing mature or explicit content by default."
-        ></my-peertube-checkbox>
-
-        <my-peertube-checkbox
-          inputName="commentsEnabled" formControlName="commentsEnabled"
-          i18n-labelText labelText="Enable video comments"
-        ></my-peertube-checkbox>
-
-        <my-peertube-checkbox
-          inputName="waitTranscoding" formControlName="waitTranscoding"
-          i18n-labelText labelText="Wait transcoding before publishing the video"
-          i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
-        ></my-peertube-checkbox>
-
-      </div>
-    </tab>
-
-    <tab i18n-heading heading="Captions">
-      <div class="col-md-12 captions">
-
-        <div class="captions-header">
-          <a (click)="openAddCaptionModal()" class="create-caption">
-            <span class="icon icon-add"></span>
-            <ng-container i18n>Add another caption</ng-container>
-          </a>
-        </div>
-
-        <div class="form-group" *ngFor="let videoCaption of videoCaptions">
-
-          <div class="caption-entry">
-            <ng-container *ngIf="!videoCaption.action">
-              <a
-                i18n-title title="See the subtitle file" class="caption-entry-label" target="_blank" rel="noopener noreferrer"
-                [href]="videoCaption.captionPath"
-              >{{ videoCaption.language.label }}</a>
-
-              <div class="caption-entry-state">Already uploaded	&#10004;</div>
-
-              <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
-            </ng-container>
-
-            <ng-container *ngIf="videoCaption.action === 'CREATE'">
-              <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
-
-              <div class="caption-entry-state caption-entry-state-create">Will be created on update</div>
-
-              <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
-            </ng-container>
-
-            <ng-container *ngIf="videoCaption.action === 'REMOVE'">
-              <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
-
-              <div class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
-
-              <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
-            </ng-container>
-          </div>
-        </div>
-
-        <div class="no-caption" *ngIf="videoCaptions?.length === 0">
-          No captions for now.
-        </div>
-
-      </div>
-    </tab>
-
-    <tab i18n-heading heading="Advanced settings">
-      <div class="col-md-12 advanced-settings">
-        <div class="form-group">
-          <my-video-image
-            i18n-inputLabel inputLabel="Upload thumbnail" inputName="thumbnailfile" formControlName="thumbnailfile"
-            previewWidth="200px" previewHeight="110px"
-          ></my-video-image>
-        </div>
-
-        <div class="form-group">
-          <my-video-image
-            i18n-inputLabel inputLabel="Upload preview" inputName="previewfile" formControlName="previewfile"
-            previewWidth="360px" previewHeight="200px"
-          ></my-video-image>
-        </div>
-
-        <div class="form-group">
-          <label i18n for="support">Support</label>
-          <my-help helpType="markdownEnhanced" i18n-preHtml preHtml="Short text to tell people how they can support you (membership platform...)."></my-help>
-          <my-markdown-textarea
-            id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
-            [classes]="{ 'input-error': formErrors['support'] }"
-          ></my-markdown-textarea>
-          <div *ngIf="formErrors.support" class="form-error">
-            {{ formErrors.support }}
-          </div>
-        </div>
-      </div>
-    </tab>
-
-  </tabset>
+  </ngb-tabset>
 
 </div>
 

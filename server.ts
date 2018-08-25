@@ -16,6 +16,8 @@ import * as morgan from 'morgan'
 import * as cors from 'cors'
 import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
+import * as useragent from 'useragent'
+import * as anonymise from 'ip-anonymize'
 
 process.title = 'peertube'
 
@@ -27,7 +29,7 @@ import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } fro
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, STATIC_PATHS, CACHE, REMOTE_SCHEME } from './server/initializers/constants'
+import { API_VERSION, CONFIG, CACHE } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -85,10 +87,12 @@ import {
   trackerRouter,
   createWebsocketServer
 } from './server/controllers'
+import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
+import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
 
 // ----------- Command line -----------
 
@@ -102,8 +106,17 @@ if (isTestInstance()) {
     credentials: true
   }))
 }
-
 // For the logger
+morgan.token('remote-addr', req => {
+  return (req.get('DNT') === '1') ?
+    anonymise(req.ip || (req.connection && req.connection.remoteAddress) || undefined,
+    16, // bitmask for IPv4
+    16  // bitmask for IPv6
+    ) :
+    req.ip
+})
+morgan.token('user-agent', req => (req.get('DNT') === '1') ?
+  useragent.parse(req.get('user-agent')).family : req.get('user-agent'))
 app.use(morgan('combined', {
   stream: { write: logger.info.bind(logger) }
 }))
@@ -115,6 +128,8 @@ app.use(bodyParser.json({
 }))
 // Cookies
 app.use(cookieParser())
+// W3C DNT Tracking Status
+app.use(advertiseDoNotTrack)
 
 // ----------- Views, routes and static files -----------
 
@@ -151,7 +166,7 @@ app.use(function (err, req, res, next) {
     error = err.stack || err.message || err
   }
 
-  logger.error('Error in controller.', { error })
+  logger.error('Error in controller.', { err: error })
   return res.status(err.status || 500).end()
 })
 
@@ -186,6 +201,7 @@ async function startApplication () {
   BadActorFollowScheduler.Instance.enable()
   RemoveOldJobsScheduler.Instance.enable()
   UpdateVideosScheduler.Instance.enable()
+  YoutubeDlUpdateScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

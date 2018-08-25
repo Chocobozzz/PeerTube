@@ -1,9 +1,10 @@
 import * as express from 'express'
-import { getFormattedObjects, resetSequelizeInstance } from '../../helpers/utils'
+import { getFormattedObjects } from '../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate, commonVideosFiltersValidator,
+  authenticate,
+  commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
@@ -19,7 +20,7 @@ import { videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
-import { createReqFiles, buildNSFWFilter } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
@@ -28,6 +29,7 @@ import { VideoModel } from '../../models/video/video'
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../lib/avatar'
 import { auditLoggerFactory, VideoChannelAuditView } from '../../helpers/audit-logger'
+import { resetSequelizeInstance } from '../../helpers/database-utils'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })

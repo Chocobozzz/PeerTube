@@ -1,101 +1,58 @@
 @import '_variables';
 @import '_mixins';
 
-.upload-video-container {
-  border-radius: 3px;
-  background-color: #F7F7F7;
-  border: 3px solid #EAEAEA;
-  width: 100%;
-  height: 440px;
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+$border-width: 3px;
+$border-type: solid;
+$border-color: #EAEAEA;
 
-  .peertube-select-container {
-    @include peertube-select-container(190px);
+$background-color:  #F7F7F7;
+
+/deep/ .root-tabset.video-add-tabset {
+  &.hide-nav .nav {
+    display: none !important;
   }
 
-  .upload-video {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  & > .nav {
 
-    .form-group-channel {
-      margin-bottom: 20px;
+    border-bottom: $border-width $border-type $border-color;
+    margin: 0 !important;
+
+    & > li {
+      margin-bottom: -$border-width;
     }
 
-    .icon.icon-upload {
-      @include icon(90px);
-      margin-bottom: 25px;
-      cursor: default;
+    a.nav-link {
+      @include disable-default-a-behaviour;
 
-      background-image: url('../../../assets/images/video/upload.svg');
-    }
+      color: #000;
+      height: 40px !important;
+      padding: 0 30px !important;
+      font-size: 15px;
 
-    .button-file {
-      @include peertube-button-file(auto);
+      &.active {
+        border: $border-width $border-type $border-color;
+        border-bottom: none;
+        background-color: $background-color !important;
 
-      min-width: 190px;
-    }
-
-    .button-file-extension {
-      display: block;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-  }
-
-  .form-group-channel {
-    margin-top: 35px;
-  }
-}
-
-.upload-progress-cancel {
-  display: flex;
-  margin-top: 25px;
-  margin-bottom: 40px;
-
-  p-progressBar {
-    flex-grow: 1;
-
-    /deep/ .ui-progressbar {
-      font-size: 15px !important;
-      color: #fff !important;
-      height: 30px !important;
-      line-height: 30px !important;
-      border-radius: 3px !important;
-      background-color: rgba(11, 204, 41, 0.16) !important;
-
-      .ui-progressbar-value {
-        background-color: #0BCC29 !important;
-      }
-
-      .ui-progressbar-label {
-        text-align: left;
-        padding-left: 18px;
-        margin-top: 0 !important;
-      }
-    }
-
-    &.processing {
-      /deep/ .ui-progressbar-label {
-        // Same color as background to hide "100%"
-        color: rgba(11, 204, 41, 0.16) !important;
-
-        &::before {
-          content: 'Processing...';
-          color: #fff;
+        span {
+          border-bottom: 2px solid #F1680D;
+          font-weight: $font-bold;
         }
       }
     }
   }
 
-  input {
-    @include peertube-button;
-    @include grey-button;
+  .upload-video-container {
+    border: $border-width $border-type $border-color;
+    border-top: none;
 
-    margin-left: 10px;
+    background-color: $background-color;
+    border-radius: 3px;
+    width: 100%;
+    min-height: 440px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
-

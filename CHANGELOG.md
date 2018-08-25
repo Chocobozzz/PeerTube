@@ -1,5 +1,49 @@
 # Changelog
 
+## v1.0.0-beta.11
+
+**If you have not updated to v1.0.0-beta.10, see the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### Features
+
+ * Add ability to import videos from a URL (YouTube, Dailymotion, Vimeo, raw file etc) or torrent file/magnet.
+ Should be explicitly enabled by the administrator in the configuration file
+ * Add german, spanish, taiwan (traditional chinese) and occitan languages
+ * Add ability to delete our account
+ * Add ability to ban a user
+ * Add ability to set a moderation comment to an abuse
+ * Add state (pending, accepted, rejected) attribute to an abuse
+ * Add ability to set a reason when blacklisting a video
+ * Add ability to blacklist local videos
+ * Improve abuse and blacklist tables
+ * Add user quota used in users list
+ * Tracker only accept known infohash (avoid people to use your tracker for files unrelated to PeerTube)
+ * Add database pool configuration ([@rigelk](https://github.com/rigelk))
+ * Add audit log ([@Nautigsam](https://github.com/Nautigsam))
+ * Add ffmpeg nice and auto thread ([@jorropo](https://github.com/jorropo))
+ * Upgrade to bootstrap 4
+ * DNT support
+
+### Bug fixes
+
+ * Fix videos FPS federation
+ * Cleanup request files on bad request
+ * Handle truncated markdown links
+ * Fix dropdown position in menu
+ * Translate subtitle languages in player
+ * Translate player according the language of the interface
+ * Fix reset my password button ([@joshmorel](https://github.com/joshmorel))
+
+
+## v1.0.0-beta.10
+
+**See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### Bug fixes (from beta.10.pre.3)
+
+ * Fix caption upload on Mac OS
+
+
 ## v1.0.0-beta.10.pre.3
 
 **See the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
@@ -14,7 +58,7 @@
  * Move subscription helper in the account line in video watch page
  * Fix responsive on videos search
  * Refresh orphan actors
- * Don't send a follow request if the follow was already accepted 
+ * Don't send a follow request if the follow was already accepted
 
 
 ## v1.0.0-beta.10.pre.2
@@ -41,7 +85,7 @@ $ sudo -u postgres psql peertube_prod -c 'CREATE EXTENSION IF NOT EXISTS pg_trgm
 ```
 
 You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/contrib.html).
-  
+
 ### BREAKING CHANGES
 
  * Require `unaccent` and `pg_trgm` PostgreSQL extension for the PeerTube database
@@ -50,7 +94,8 @@ You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/co
  * Update nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
  * Update default cache size configurations
  * Update search API route: `/videos/search` becomes `/search/videos`
- 
+ * Needs Redis >= 2.8.18
+
 ### Features
 
  * Add ability to change the language of the interface (currently available: english, french, basque, catalan, czech and esperanto)
@@ -103,7 +148,7 @@ You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/co
 ### Docker
 
  * Add PEERTUBE_SMTP_DISABLE_STARTTLS config env
- 
+
 
 ## v1.0.0-beta.9
 
@@ -355,7 +400,7 @@ You will need [PostgreSQL Contrib](https://www.postgresql.org/docs/9.6/static/co
 
 ## v1.0.0-beta.1
 
-Nothing new here, but PeerTube is stable enough for being in beta now. 
+Nothing new here, but PeerTube is stable enough for being in beta now.
 
 
 ## v1.0.0-alpha.9
@@ -393,7 +438,7 @@ Nothing new here, but PeerTube is stable enough for being in beta now.
 
 ### Features
 
- * Add ability to set a short instance description 
+ * Add ability to set a short instance description
 
 
 ## v1.0.0-alpha.7
@@ -505,7 +550,7 @@ Nothing new here, but PeerTube is stable enough for being in beta now.
 
 ### Features
 
- * Add ability to link a specific comment 
+ * Add ability to link a specific comment
 
 ### Bug fixes
 

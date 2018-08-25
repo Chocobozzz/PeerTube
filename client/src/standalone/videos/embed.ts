@@ -20,11 +20,11 @@ import 'whatwg-fetch'
 import * as vjs from 'video.js'
 import * as Channel from 'jschannel'
 
-import { ResultList, VideoDetails } from '../../../../shared'
-import { addContextMenu, getVideojsOptions, loadLocale } from '../../assets/player/peertube-player'
+import { peertubeTranslate, ResultList, VideoDetails } from '../../../../shared'
+import { addContextMenu, getServerTranslations, getVideojsOptions, loadLocaleInVideoJS } from '../../assets/player/peertube-player'
 import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
-import { VideoCaption } from '../../../../shared/models/videos/video-caption.model'
+import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 /**
  * Embed API exposes control of the embed player to the outside world via
@@ -257,8 +257,9 @@ class PeerTubeEmbed {
     const lastPart = urlParts[ urlParts.length - 1 ]
     const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
 
-    await loadLocale(window.location.origin, vjs, navigator.language)
-    const [ videoResponse, captionsResponse ] = await Promise.all([
+    const [ , serverTranslations, videoResponse, captionsResponse ] = await Promise.all([
+      loadLocaleInVideoJS(window.location.origin, vjs, navigator.language),
+      getServerTranslations(window.location.origin, navigator.language),
       this.loadVideoInfo(videoId),
       this.loadVideoCaptions(videoId)
     ])
@@ -274,7 +275,7 @@ class PeerTubeEmbed {
     if (captionsResponse.ok) {
       const { data } = (await captionsResponse.json()) as ResultList<VideoCaption>
       videoCaptions = data.map(c => ({
-        label: c.language.label,
+        label: peertubeTranslate(c.language.label, serverTranslations),
         language: c.language.id,
         src: window.location.origin + c.captionPath
       }))

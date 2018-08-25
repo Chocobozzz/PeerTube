@@ -7,6 +7,28 @@ import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker'
 
+function computeResolutionsToTranscode (videoFileHeight: number) {
+  const resolutionsEnabled: number[] = []
+  const configResolutions = CONFIG.TRANSCODING.RESOLUTIONS
+
+  // Put in the order we want to proceed jobs
+  const resolutions = [
+    VideoResolution.H_480P,
+    VideoResolution.H_360P,
+    VideoResolution.H_720P,
+    VideoResolution.H_240P,
+    VideoResolution.H_1080P
+  ]
+
+  for (const resolution of resolutions) {
+    if (configResolutions[ resolution + 'p' ] === true && videoFileHeight > resolution) {
+      resolutionsEnabled.push(resolution)
+    }
+  }
+
+  return resolutionsEnabled
+}
+
 async function getVideoFileResolution (path: string) {
   const videoStream = await getVideoFileStream(path)
 
@@ -134,6 +156,7 @@ export {
   generateImageFromVideoFile,
   transcode,
   getVideoFileFPS,
+  computeResolutionsToTranscode,
   audio
 }
 
@@ -213,7 +236,7 @@ namespace audio {
   }
 
   export namespace bitrate {
-    export const baseKbitrate = 384
+    const baseKbitrate = 384
 
     const toBits = (kbits: number): number => { return kbits * 8000 }
 
@@ -251,7 +274,6 @@ namespace audio {
  * See https://trac.ffmpeg.org/wiki/Encode/AAC#fdk_vbr
  */
 async function standard (_ffmpeg) {
-  let _bitrate = audio.bitrate.baseKbitrate
   let localFfmpeg = _ffmpeg
     .format('mp4')
     .videoCodec('libx264')
@@ -266,15 +288,6 @@ async function standard (_ffmpeg) {
     return localFfmpeg.noAudio()
   }
 
-  // we try to reduce the ceiling bitrate by making rough correspondances of bitrates
-  // of course this is far from perfect, but it might save some space in the end
-  if (audio.bitrate[_audio.audioStream['codec_name']]) {
-    _bitrate = audio.bitrate[_audio.audioStream['codec_name']](_audio.audioStream['bit_rate'])
-    if (_bitrate === -1) {
-      return localFfmpeg.audioCodec('copy')
-    }
-  }
-
   // we favor VBR, if a good AAC encoder is available
   if ((await checkFFmpegEncoders()).get('libfdk_aac')) {
     return localFfmpeg
@@ -282,5 +295,17 @@ async function standard (_ffmpeg) {
       .audioQuality(5)
   }
 
-  return localFfmpeg.audioBitrate(_bitrate)
+  // we try to reduce the ceiling bitrate by making rough correspondances of bitrates
+  // of course this is far from perfect, but it might save some space in the end
+  const audioCodecName = _audio.audioStream['codec_name']
+  let bitrate: number
+  if (audio.bitrate[audioCodecName]) {
+    bitrate = audio.bitrate[audioCodecName](_audio.audioStream['bit_rate'])
+
+    if (bitrate === -1) return localFfmpeg.audioCodec('copy')
+  }
+
+  if (bitrate !== undefined) return localFfmpeg.audioBitrate(bitrate)
+
+  return localFfmpeg
 }

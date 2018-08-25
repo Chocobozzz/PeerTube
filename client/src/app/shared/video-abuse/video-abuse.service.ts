@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { Observable } from 'rxjs'
-import { ResultList, VideoAbuse } from '../../../../../shared'
+import { ResultList, VideoAbuse, VideoAbuseUpdate } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 
@@ -42,4 +42,23 @@ export class VideoAbuseService {
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
-}
+
+  updateVideoAbuse (videoAbuse: VideoAbuse, abuseUpdate: VideoAbuseUpdate) {
+    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + videoAbuse.video.uuid + '/abuse/' + videoAbuse.id
+
+    return this.authHttp.put(url, abuseUpdate)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }
+
+  removeVideoAbuse (videoAbuse: VideoAbuse) {
+    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + videoAbuse.video.uuid + '/abuse/' + videoAbuse.id
+
+    return this.authHttp.delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }}

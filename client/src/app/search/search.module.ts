@@ -4,14 +4,14 @@ import { SearchComponent } from '@app/search/search.component'
 import { SearchService } from '@app/search/search.service'
 import { SearchRoutingModule } from '@app/search/search-routing.module'
 import { SearchFiltersComponent } from '@app/search/search-filters.component'
-import { CollapseModule } from 'ngx-bootstrap/collapse'
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   imports: [
     SearchRoutingModule,
     SharedModule,
 
-    CollapseModule.forRoot()
+    NgbCollapseModule.forRoot()
   ],
 
   declarations: [

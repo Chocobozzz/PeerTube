@@ -1,4 +1,4 @@
-import { ActivityCreate, VideoTorrentObject } from '../../../../shared'
+import { ActivityCreate, VideoAbuseState, VideoTorrentObject } from '../../../../shared'
 import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -112,7 +112,8 @@ async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateDat
     const videoAbuseData = {
       reporterAccountId: account.id,
       reason: videoAbuseToCreateData.content,
-      videoId: video.id
+      videoId: video.id,
+      state: VideoAbuseState.PENDING
     }
 
     await VideoAbuseModel.create(videoAbuseData)

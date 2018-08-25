@@ -4,7 +4,7 @@ import { isAvatarFile } from '../../helpers/custom-validators/users'
 import { areValidationErrors } from './utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { logger } from '../../helpers/logger'
-import { cleanUpReqFiles } from '../../helpers/utils'
+import { cleanUpReqFiles } from '../../helpers/express-utils'
 
 const updateAvatarValidator = [
   body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(

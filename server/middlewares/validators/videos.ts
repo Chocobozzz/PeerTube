@@ -14,7 +14,6 @@ import {
 import {
   checkUserCanManageVideo,
   isScheduleVideoUpdatePrivacyValid,
-  isVideoAbuseReasonValid,
   isVideoCategoryValid,
   isVideoChannelOfAccountExist,
   isVideoDescriptionValid,
@@ -35,7 +34,9 @@ import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
-import { cleanUpReqFiles } from '../../helpers/utils'
+import { cleanUpReqFiles } from '../../helpers/express-utils'
+import { VideoModel } from '../../models/video/video'
+import { UserModel } from '../../models/account/user'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../helpers/custom-validators/video-ownership'
 import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
 import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
@@ -135,7 +136,25 @@ const videosGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
-    const video = res.locals.video
+    const video: VideoModel = res.locals.video
+
+    // Video private or blacklisted
+    if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
+      authenticate(req, res, () => {
+        const user: UserModel = res.locals.oauth.token.User
+
+        // Only the owner or a user that have blacklist rights can see the video
+        if (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
+          return res.status(403)
+                    .json({ error: 'Cannot get this private or blacklisted video.' })
+                    .end()
+        }
+
+        return next()
+      })
+
+      return
+    }
 
     // Video is public, anyone can access it
     if (video.privacy === VideoPrivacy.PUBLIC) return next()
@@ -147,17 +166,6 @@ const videosGetValidator = [
       // Don't leak this unlisted video
       return res.status(404).end()
     }
-
-    // Video is private, check the user
-    authenticate(req, res, () => {
-      if (video.VideoChannel.Account.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403)
-          .json({ error: 'Cannot get this private video of another user' })
-          .end()
-      }
-
-      return next()
-    })
   }
 ]
 
@@ -172,20 +180,6 @@ const videosRemoveValidator = [
 
     // Check if the user who did the request is able to delete the video
     if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.REMOVE_ANY_VIDEO, res)) return
-
-    return next()
-  }
-]
-
-const videoAbuseReportValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('reason').custom(isVideoAbuseReasonValid).withMessage('Should have a valid reason'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
 
     return next()
   }
@@ -289,39 +283,6 @@ const videosAcceptChangeOwnershipValidator = [
   }
 ]
 
-// ---------------------------------------------------------------------------
-
-export {
-  videosAddValidator,
-  videosUpdateValidator,
-  videosGetValidator,
-  videosRemoveValidator,
-  videosShareValidator,
-  videosChangeOwnershipValidator,
-  videosTerminateChangeOwnershipValidator,
-  videosAcceptChangeOwnershipValidator,
-
-  videoAbuseReportValidator,
-
-  videoRateValidator
-}
-
-// ---------------------------------------------------------------------------
-
-function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
-  if (req.body.scheduleUpdate) {
-    if (!req.body.scheduleUpdate.updateAt) {
-      res.status(400)
-         .json({ error: 'Schedule update at is mandatory.' })
-         .end()
-
-      return true
-    }
-  }
-
-  return false
-}
-
 function getCommonVideoAttributes () {
   return [
     body('thumbnailfile')
@@ -387,4 +348,38 @@ function getCommonVideoAttributes () {
       .toInt()
       .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
   ] as (ValidationChain | express.Handler)[]
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  videosAddValidator,
+  videosUpdateValidator,
+  videosGetValidator,
+  videosRemoveValidator,
+  videosShareValidator,
+
+  videoRateValidator,
+
+  videosChangeOwnershipValidator,
+  videosTerminateChangeOwnershipValidator,
+  videosAcceptChangeOwnershipValidator,
+
+  getCommonVideoAttributes
+}
+
+// ---------------------------------------------------------------------------
+
+function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
+  if (req.body.scheduleUpdate) {
+    if (!req.body.scheduleUpdate.updateAt) {
+      res.status(400)
+         .json({ error: 'Schedule update at is mandatory.' })
+         .end()
+
+      return true
+    }
+  }
+
+  return false
 }

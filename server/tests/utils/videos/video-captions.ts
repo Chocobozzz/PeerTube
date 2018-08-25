@@ -10,9 +10,14 @@ function createVideoCaption (args: {
   accessToken: string
   videoId: string | number
   language: string
-  fixture: string
+  fixture: string,
+  mimeType?: string,
+  statusCodeExpected?: number
 }) {
   const path = '/api/v1/videos/' + args.videoId + '/captions/' + args.language
+
+  const captionfile = buildAbsoluteFixturePath(args.fixture)
+  const captionfileAttach = args.mimeType ? [ captionfile, { contentType: args.mimeType } ] : captionfile
 
   return makeUploadRequest({
     method: 'PUT',
@@ -21,9 +26,9 @@ function createVideoCaption (args: {
     token: args.accessToken,
     fields: {},
     attaches: {
-      captionfile: buildAbsoluteFixturePath(args.fixture)
+      captionfile: captionfileAttach
     },
-    statusCodeExpected: 204
+    statusCodeExpected: args.statusCodeExpected || 204
   })
 }
 

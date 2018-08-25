@@ -21,6 +21,8 @@ import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid,
+  isUserBlockedReasonValid,
+  isUserBlockedValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
@@ -102,6 +104,18 @@ export class UserModel extends Model<UserModel> {
   autoPlayVideo: boolean
 
   @AllowNull(false)
+  @Default(false)
+  @Is('UserBlocked', value => throwIfNotValid(value, isUserBlockedValid, 'blocked boolean'))
+  @Column
+  blocked: boolean
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserBlockedReason', value => throwIfNotValid(value, isUserBlockedReasonValid, 'blocked reason'))
+  @Column
+  blockedReason: string
+
+  @AllowNull(false)
   @Is('UserRole', value => throwIfNotValid(value, isUserRoleValid, 'role'))
   @Column
   role: number
@@ -148,6 +162,25 @@ export class UserModel extends Model<UserModel> {
 
   static listForApi (start: number, count: number, sort: string) {
     const query = {
+      attributes: {
+        include: [
+          [
+            Sequelize.literal(
+              '(' +
+                'SELECT COALESCE(SUM("size"), 0) FROM ' +
+                '(' +
+                  'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+                  'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+                  'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+                  'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+                  'WHERE "account"."userId" = "UserModel"."id" GROUP BY "video"."id"' +
+                ') t' +
+              ')'
+            ),
+            'videoQuotaUsed'
+          ] as any // FIXME: typings
+        ]
+      },
       offset: start,
       limit: count,
       order: getSort(sort)
@@ -155,6 +188,9 @@ export class UserModel extends Model<UserModel> {
 
     return UserModel.findAndCountAll(query)
       .then(({ rows, count }) => {
+        console.log(rows[0])
+        console.log(rows[0]['videoQuotaUsed'])
+        console.log(rows[0].get('videoQuotaUsed'))
         return {
           data: rows,
           total: count
@@ -236,8 +272,7 @@ export class UserModel extends Model<UserModel> {
       'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
       'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
       'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      'INNER JOIN "user" ON "account"."userId" = "user"."id" ' +
-      'WHERE "user"."id" = $userId GROUP BY "video"."id") t'
+      'WHERE "account"."userId" = $userId GROUP BY "video"."id") t'
 
     const options = {
       bind: { userId: user.id },
@@ -268,6 +303,8 @@ export class UserModel extends Model<UserModel> {
   }
 
   toFormattedJSON (): User {
+    const videoQuotaUsed = this.get('videoQuotaUsed')
+
     const json = {
       id: this.id,
       username: this.username,
@@ -278,8 +315,11 @@ export class UserModel extends Model<UserModel> {
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
       createdAt: this.createdAt,
+      blocked: this.blocked,
+      blockedReason: this.blockedReason,
       account: this.Account.toFormattedJSON(),
-      videoChannels: []
+      videoChannels: [],
+      videoQuotaUsed: videoQuotaUsed !== undefined ? parseInt(videoQuotaUsed, 10) : undefined
     }
 
     if (Array.isArray(this.Account.VideoChannels) === true) {
@@ -296,7 +336,7 @@ export class UserModel extends Model<UserModel> {
     return json
   }
 
-  isAbleToUploadVideo (videoFile: Express.Multer.File | VideoFileModel) {
+  isAbleToUploadVideo (videoFile: { size: number }) {
     if (this.videoQuota === -1) return Promise.resolve(true)
 
     return UserModel.getOriginalVideoFileTotalFromUser(this)

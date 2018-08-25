@@ -4,12 +4,12 @@ import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/utils'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
-import { CustomConfigAuditView, auditLoggerFactory } from '../../helpers/audit-logger'
+import { auditLoggerFactory, CustomConfigAuditView } from '../../helpers/audit-logger'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -64,6 +64,16 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     },
     transcoding: {
       enabledResolutions
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+        },
+        torrent: {
+          enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
+        }
+      }
     },
     avatar: {
       file: {
@@ -224,6 +234,16 @@ function customConfig (): CustomConfig {
         '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ]
+      }
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+        },
+        torrent: {
+          enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
+        }
       }
     }
   }

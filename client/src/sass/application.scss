@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-$icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+$icon-font-path: '../../node_modules/@neos21/bootstrap3-glyphicons/assets/fonts/';
 @import '_bootstrap';
 
 @import '_fonts';
@@ -22,6 +22,7 @@ body {
   font-family: $main-fonts;
   font-weight: $font-regular;
   color: #000;
+  font-size: 14px;
 }
 
 #incompatible-browser {
@@ -39,6 +40,10 @@ strong {
 input.readonly {
   /* Force blank on readonly inputs */
   background-color: #fff !important;
+}
+
+input, textarea {
+  outline: none;
 }
 
 label {
@@ -62,10 +67,12 @@ label {
 
 .main-col {
   margin-left: $menu-width;
+  width: auto;
 
   .margin-content {
     margin-left: $not-expanded-horizontal-margins;
     margin-right: $not-expanded-horizontal-margins;
+    flex-grow: 1;
   }
 
   .sub-menu {
@@ -125,6 +132,20 @@ label {
   .form-sub-title {
     flex-grow: 1;
   }
+
+  .admin-sub-nav a {
+    @include disable-default-a-behaviour;
+
+    font-size: 16px;
+    color: #000;
+    padding: 5px 15px;
+    border-radius: 0.25rem;
+
+    &.active {
+      font-weight: $font-semibold;
+      background-color: #f0f0f0;
+    }
+  }
 }
 
 .form-sub-title {
@@ -171,9 +192,13 @@ label {
       @include icon(24px);
 
       position: relative;
-      right: -1px;
+      top: 3px;
       float: right;
       background-image: url('../assets/images/global/cross.svg');
+
+      margin: 0;
+      padding: 0;
+      opacity: 1;
     }
   }
 
@@ -197,47 +222,35 @@ label {
   }
 }
 
-tabset:not(.bootstrap) {
-  .nav {
-    font-size: 16px !important;
-    border: none !important;
+// Nav customizations
+.nav .nav-link {
+  display: flex !important;
+  align-items: center;
+  height: 30px !important;
+  padding: 10px 15px !important;
+}
 
-    .nav-item .nav-link {
-      margin-right: 30px;
-      padding: 0;
-      border-radius: 3px;
-      border: none !important;
+.nav.nav-pills {
+  font-size: 16px !important;
 
-      .tab-link {
-        display: flex !important;
-        align-items: center;
-        min-height: 30px !important;
-        padding: 0 15px;
-      }
+  .nav-link.active {
+    font-weight: $font-semibold !important;
+  }
 
-      &, & a {
-        color: #000 !important;
-        @include disable-default-a-behaviour;
-      }
+  a {
+    @include disable-default-a-behaviour;
 
-      &.active, &:hover {
-        background-color: #F0F0F0;
-      }
-
-      &.active {
-        font-weight: $font-semibold !important;
-      }
-    }
+    color: #000;
   }
 }
 
-tabset.bootstrap {
-  margin-left: 0;
+ngb-tabset.bootstrap {
 
-  .nav-item .nav-link {
+  .nav-link {
     &, & a {
-      color: #000;
       @include disable-default-a-behaviour;
+
+      color: #000 !important;
     }
   }
 }
@@ -310,9 +323,5 @@ table {
         width: 100% !important;
       }
     }
-  }
-
-  bs-dropdown-container {
-    z-index: 10000;
   }
 }

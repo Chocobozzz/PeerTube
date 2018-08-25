@@ -1,29 +1,44 @@
-import { catchError, map } from 'rxjs/operators'
+import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { forkJoin, Observable, of } from 'rxjs'
-import { ResultList } from '../../../../../shared'
+import { peertubeTranslate, ResultList } from '../../../../../shared'
 import { RestExtractor, RestService } from '../rest'
-import { VideoCaption } from '../../../../../shared/models/videos/video-caption.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { objectToFormData, sortBy } from '@app/shared/misc/utils'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { VideoCaption } from '../../../../../shared/models/videos/caption/video-caption.model'
+import { ServerService } from '@app/core'
 
 @Injectable()
 export class VideoCaptionService {
   constructor (
     private authHttp: HttpClient,
+    private serverService: ServerService,
     private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 
   listCaptions (videoId: number | string): Observable<ResultList<VideoCaption>> {
     return this.authHttp.get<ResultList<VideoCaption>>(VideoService.BASE_VIDEO_URL + videoId + '/captions')
-               .pipe(map(res => {
-                 sortBy(res.data, 'language', 'label')
+               .pipe(
+                 switchMap(captionsResult => {
+                   return this.serverService.localeObservable
+                     .pipe(map(translations => ({ captionsResult, translations })))
+                 }),
+                 map(({ captionsResult, translations }) => {
+                   for (const c of captionsResult.data) {
+                     c.language.label = peertubeTranslate(c.language.label, translations)
+                   }
 
-                 return res
-               }))
+                   return captionsResult
+                 }),
+                 map(captionsResult => {
+                   sortBy(captionsResult.data, 'language', 'label')
+
+                   return captionsResult
+                 })
+               )
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

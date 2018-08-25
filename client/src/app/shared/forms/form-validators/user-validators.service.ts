@@ -14,6 +14,8 @@ export class UserValidatorsService {
   readonly USER_DESCRIPTION: BuildFormValidator
   readonly USER_TERMS: BuildFormValidator
 
+  readonly USER_BAN_REASON: BuildFormValidator
+
   constructor (private i18n: I18n) {
 
     this.USER_USERNAME = {
@@ -97,6 +99,17 @@ export class UserValidatorsService {
       ],
       MESSAGES: {
         'required': this.i18n('You must to agree with the instance terms in order to registering on it.')
+      }
+    }
+
+    this.USER_BAN_REASON = {
+      VALIDATORS: [
+        Validators.minLength(3),
+        Validators.maxLength(250)
+      ],
+      MESSAGES: {
+        'minlength': this.i18n('Ban reason must be at least 3 characters long.'),
+        'maxlength': this.i18n('Ban reason cannot be more than 250 characters long.')
       }
     }
   }

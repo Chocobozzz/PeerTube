@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { ModalDirective } from 'ngx-bootstrap/modal'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { FormReactive } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { ServerService } from '@app/core'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-video-caption-add-modal',
@@ -17,14 +17,16 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
   @Output() captionAdded = new EventEmitter<VideoCaptionEdit>()
 
-  @ViewChild('modal') modal: ModalDirective
+  @ViewChild('modal') modal: ElementRef
 
   videoCaptionLanguages = []
 
+  private openedModal: NgbModalRef
   private closingModal = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private modalService: NgbModal,
     private serverService: ServerService,
     private videoCaptionsValidatorsService: VideoCaptionsValidatorsService
   ) {
@@ -51,13 +53,12 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   show () {
     this.closingModal = false
 
-    this.modal.show()
+    this.openedModal = this.modalService.open(this.modal, { keyboard: false })
   }
 
   hide () {
     this.closingModal = true
-
-    this.modal.hide()
+    this.openedModal.close()
   }
 
   isReplacingExistingCaption () {

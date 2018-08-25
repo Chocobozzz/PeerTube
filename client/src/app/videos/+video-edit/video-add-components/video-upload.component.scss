@@ -1,0 +1,85 @@
+@import 'variables';
+@import 'mixins';
+
+.peertube-select-container {
+  @include peertube-select-container(190px);
+}
+
+.upload-video {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .form-group-channel {
+    margin-bottom: 20px;
+    margin-top: 35px;
+  }
+
+  .icon.icon-upload {
+    @include icon(90px);
+    margin-bottom: 25px;
+    cursor: default;
+
+    background-image: url('../../../../assets/images/video/upload.svg');
+  }
+
+  .button-file {
+    @include peertube-button-file(auto);
+
+    min-width: 190px;
+  }
+
+  .button-file-extension {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+}
+
+.upload-progress-cancel {
+  display: flex;
+  margin-top: 25px;
+  margin-bottom: 40px;
+
+  p-progressBar {
+    flex-grow: 1;
+
+    /deep/ .ui-progressbar {
+      font-size: 15px !important;
+      color: #fff !important;
+      height: 30px !important;
+      line-height: 30px !important;
+      border-radius: 3px !important;
+      background-color: rgba(11, 204, 41, 0.16) !important;
+
+      .ui-progressbar-value {
+        background-color: #0BCC29 !important;
+      }
+
+      .ui-progressbar-label {
+        text-align: left;
+        padding-left: 18px;
+        margin-top: 0 !important;
+      }
+    }
+
+    &.processing {
+      /deep/ .ui-progressbar-label {
+        // Same color as background to hide "100%"
+        color: rgba(11, 204, 41, 0.16) !important;
+
+        &::before {
+          content: 'Processing...';
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  input {
+    @include peertube-button;
+    @include grey-button;
+
+    margin-left: 10px;
+  }
+}

@@ -1,0 +1,55 @@
+<p-table
+  [value]="videoImports" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 40px;"></th>
+      <th i18n>Target</th>
+      <th i18n>Video</th>
+      <th i18n style="width: 150px">State</th>
+      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
+    <tr>
+      <td>
+        <span *ngIf="videoImport.error" class="expander" [pRowToggler]="videoImport">
+          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
+        </span>
+      </td>
+
+      <td>
+        <a *ngIf="videoImport.targetUrl; else torrent" [href]="videoImport.targetUrl" target="_blank" rel="noopener noreferrer">{{ videoImport.targetUrl }}</a>
+        <ng-template #torrent>
+          <span [title]="videoImport.torrentName || videoImport.magnetUri">{{ videoImport.torrentName || videoImport.magnetUri }}</span>
+        </ng-template>
+      </td>
+
+      <td *ngIf="isVideoImportPending(videoImport)">
+        {{ videoImport.video.name }}
+      </td>
+      <td *ngIf="isVideoImportSuccess(videoImport)">
+        <a [href]="getVideoUrl(videoImport.video)" target="_blank" rel="noopener noreferrer">{{ videoImport.video.name }}</a>
+      </td>
+      <td *ngIf="isVideoImportFailed(videoImport)"></td>
+
+      <td>{{ videoImport.state.label }}</td>
+      <td>{{ videoImport.createdAt }}</td>
+
+      <td class="action-cell">
+        <my-edit-button *ngIf="isVideoImportSuccess(videoImport)" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-videoImport>
+    <tr class="video-import-error" *ngIf="videoImport.error">
+      <td colspan="6">
+        <pre>{{ videoImport.error }}</pre>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

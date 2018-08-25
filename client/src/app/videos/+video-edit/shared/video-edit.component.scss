@@ -111,6 +111,8 @@
       border: none;
       padding: 0;
       outline: 0;
+      color: inherit;
+      font-weight: $font-semibold;
     }
 
     .icon.icon-validate {
@@ -143,15 +145,7 @@ p-calendar {
 
 /deep/ {
   .root-tabset > .nav {
-    margin-left: 15px;
     margin-bottom: 15px;
-
-    .nav-link {
-      display: flex !important;
-      align-items: center;
-      height: 30px !important;
-      padding: 0 15px !important;
-    }
   }
 
   .ng2-tag-input {

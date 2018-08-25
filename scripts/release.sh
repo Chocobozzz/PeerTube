@@ -47,8 +47,7 @@ printf "Changelog will be:\\n%s\\n" "$changelog"
 
 read -p "Are you sure to release? " -n 1 -r
 echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
   exit 0
 fi
 
@@ -96,7 +95,12 @@ rm "./client/dist/embed-stats.json"
 (
   git push origin --tag
 
-  github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
+  if [ -z "$github_prerelease_option" ]; then
+    github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
+  else
+    github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog" "$github_prerelease_option"
+  fi
+
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
   github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"

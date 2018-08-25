@@ -1,7 +1,7 @@
-import { VideoDetails } from './video-details.model'
 import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
 import { VideoUpdate } from '../../../../../shared/models/videos'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
+import { Video } from '../../../../../shared/models/videos/video.model'
 
 export class VideoEdit implements VideoUpdate {
   static readonly SPECIAL_SCHEDULED_PRIVACY = -1
@@ -26,26 +26,26 @@ export class VideoEdit implements VideoUpdate {
   id?: number
   scheduleUpdate?: VideoScheduleUpdate
 
-  constructor (videoDetails?: VideoDetails) {
-    if (videoDetails) {
-      this.id = videoDetails.id
-      this.uuid = videoDetails.uuid
-      this.category = videoDetails.category.id
-      this.licence = videoDetails.licence.id
-      this.language = videoDetails.language.id
-      this.description = videoDetails.description
-      this.name = videoDetails.name
-      this.tags = videoDetails.tags
-      this.nsfw = videoDetails.nsfw
-      this.commentsEnabled = videoDetails.commentsEnabled
-      this.waitTranscoding = videoDetails.waitTranscoding
-      this.channelId = videoDetails.channel.id
-      this.privacy = videoDetails.privacy.id
-      this.support = videoDetails.support
-      this.thumbnailUrl = videoDetails.thumbnailUrl
-      this.previewUrl = videoDetails.previewUrl
+  constructor (video?: Video & { tags: string[], commentsEnabled: boolean, support: string, thumbnailUrl: string, previewUrl: string }) {
+    if (video) {
+      this.id = video.id
+      this.uuid = video.uuid
+      this.category = video.category.id
+      this.licence = video.licence.id
+      this.language = video.language.id
+      this.description = video.description
+      this.name = video.name
+      this.tags = video.tags
+      this.nsfw = video.nsfw
+      this.commentsEnabled = video.commentsEnabled
+      this.waitTranscoding = video.waitTranscoding
+      this.channelId = video.channel.id
+      this.privacy = video.privacy.id
+      this.support = video.support
+      this.thumbnailUrl = video.thumbnailUrl
+      this.previewUrl = video.previewUrl
 
-      this.scheduleUpdate = videoDetails.scheduledUpdate
+      this.scheduleUpdate = video.scheduledUpdate
     }
   }
 

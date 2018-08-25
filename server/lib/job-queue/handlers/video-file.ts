@@ -1,13 +1,13 @@
 import * as Bull from 'bull'
 import { VideoResolution, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { computeResolutionsToTranscode } from '../../../helpers/utils'
 import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
+import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 
 export type VideoFilePayload = {
   videoUUID: string

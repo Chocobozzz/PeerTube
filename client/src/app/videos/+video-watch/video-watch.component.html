@@ -1,4 +1,4 @@
-<div class="row">
+<div class="root-row row">
   <!-- We need the video container for videojs so we just hide it -->
   <div id="video-element-wrapper">
     <div *ngIf="remoteServerDown" class="remote-server-down">
@@ -8,12 +8,21 @@
     </div>
   </div>
 
+  <div i18n class="alert alert-warning" *ngIf="isVideoToImport()">
+    The video is being imported, it will be available when the import is finished.
+  </div>
+
   <div i18n class="alert alert-warning" *ngIf="isVideoToTranscode()">
     The video is being transcoded, it may not work properly.
   </div>
 
   <div i18n class="alert alert-info" *ngIf="hasVideoScheduledPublication()">
-    This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}
+    This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
+  </div>
+
+  <div class="alert alert-danger" *ngIf="video?.blacklisted">
+    <div class="blacklisted-label" i18n>This video is blacklisted.</div>
+    {{ video.blacklistedReason }}
   </div>
 
   <!-- Video information -->
@@ -72,48 +81,42 @@
               <span class="icon-text" i18n>Share</span>
             </div>
 
-            <div class="action-more" dropdown dropup="true" placement="right" role="button">
-              <div class="action-button" dropdownToggle>
+            <div class="action-more" ngbDropdown placement="top" role="button">
+              <div class="action-button" ngbDropdownToggle role="button">
                 <span class="icon icon-more"></span>
               </div>
 
-              <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
-                <li role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
-                    <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
-                  </a>
-                </li>
+              <div ngbDropdownMenu>
+                <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
+                  <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
+                </a>
 
-                <li *ngIf="isUserLoggedIn()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
-                    <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
-                  </a>
-                </li>
+                <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
+                  <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
+                </a>
 
-                <li *ngIf="isVideoBlacklistable()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-                    <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
-                  </a>
-                </li>
+                <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
+                  <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
+                </a>
 
-                <li *ngIf="isVideoUpdatable()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
-                    <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
-                  </a>
-                </li>
+                <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
+                  <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
+                </a>
 
-                <li *ngIf="isVideoRemovable()" role="menuitem">
-                  <a class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
-                    <span class="icon icon-blacklist"></span> <ng-container i18n>Delete</ng-container>
-                  </a>
-                </li>
-              </ul>
+                <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
+                  <span class="icon icon-unblacklist"></span> <ng-container i18n>Unblacklist</ng-container>
+                </a>
+
+                <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
+                  <span class="icon icon-delete"></span> <ng-container i18n>Delete</ng-container>
+                </a>
+              </div>
             </div>
           </div>
 
           <div
               class="video-info-likes-dislikes-bar"
-              *ngIf="video.likes !== 0 || video.dislikes !== 0"  [tooltip]="likesBarTooltipText">
+              *ngIf="video.likes !== 0 || video.dislikes !== 0"  [ngbTooltip]="likesBarTooltipText">
             <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
           </div>
         </div>
@@ -211,4 +214,5 @@
   <my-video-share #videoShareModal [video]="video"></my-video-share>
   <my-video-download #videoDownloadModal [video]="video"></my-video-download>
   <my-video-report #videoReportModal [video]="video"></my-video-report>
+  <my-video-blacklist #videoBlacklistModal [video]="video"></my-video-blacklist>
 </ng-template>

@@ -6,7 +6,8 @@ export type JobType = 'activitypub-http-unicast' |
   'activitypub-follow' |
   'video-file-import' |
   'video-file' |
-  'email'
+  'email' |
+  'video-import'
 
 export interface Job {
   id: number

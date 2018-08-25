@@ -8,7 +8,6 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 
 import { SimpleNotificationsModule } from 'angular2-notifications'
-import { ModalModule } from 'ngx-bootstrap/modal'
 
 import { AuthService } from './auth'
 import { ConfirmComponent, ConfirmService } from './confirm'
@@ -23,7 +22,6 @@ import { ServerService } from './server'
     FormsModule,
     BrowserAnimationsModule,
 
-    ModalModule,
     SimpleNotificationsModule.forRoot(),
 
     LoadingBarHttpClientModule,

@@ -60,6 +60,16 @@ describe('Test config API validators', function () {
         '720p': false,
         '1080p': false
       }
+    },
+    import: {
+      videos: {
+        http: {
+          enabled: false
+        },
+        torrent: {
+          enabled: false
+        }
+      }
     }
   }
 

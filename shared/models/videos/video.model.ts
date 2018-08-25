@@ -1,7 +1,7 @@
 import { VideoResolution, VideoState } from '../../index'
 import { Account } from '../actors'
 import { Avatar } from '../avatars/avatar.model'
-import { VideoChannel } from './video-channel.model'
+import { VideoChannel } from './channel/video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoConstant } from './video-constant.model'
@@ -42,6 +42,9 @@ export interface Video {
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
+
+  blacklisted?: boolean
+  blacklistedReason?: string
 
   account: {
     id: number

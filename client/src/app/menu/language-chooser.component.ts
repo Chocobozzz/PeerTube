@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core'
-import { ModalDirective } from 'ngx-bootstrap/modal'
+import { Component, ElementRef, ViewChild } from '@angular/core'
 import { I18N_LOCALES } from '../../../../shared'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-language-chooser',
@@ -8,21 +8,17 @@ import { I18N_LOCALES } from '../../../../shared'
   styleUrls: [ './language-chooser.component.scss' ]
 })
 export class LanguageChooserComponent {
-  @ViewChild('modal') modal: ModalDirective
+  @ViewChild('modal') modal: ElementRef
 
-  languages: { [ id: string ]: string }[] = []
+  languages: { id: string, label: string }[] = []
 
-  constructor () {
+  constructor (private modalService: NgbModal) {
     this.languages = Object.keys(I18N_LOCALES)
       .map(k => ({ id: k, label: I18N_LOCALES[k] }))
   }
 
   show () {
-    this.modal.show()
-  }
-
-  hide () {
-    this.modal.hide()
+    this.modalService.open(this.modal)
   }
 
   buildLanguageLink (lang: { id: string }) {

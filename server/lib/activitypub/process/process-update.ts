@@ -1,9 +1,8 @@
 import * as Bluebird from 'bluebird'
 import { ActivityUpdate, VideoTorrentObject } from '../../../../shared/models/activitypub'
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { resetSequelizeInstance } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -108,7 +107,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
       await Promise.all(videoFileDestroyTasks)
 
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoObject)
-      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f))
+      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, sequelizeOptions))
       await Promise.all(tasks)
 
       // Update Tags

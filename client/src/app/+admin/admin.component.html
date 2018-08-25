@@ -8,12 +8,8 @@
       Manage follows
     </a>
 
-    <a i18n *ngIf="hasVideoAbusesRight()" routerLink="/admin/video-abuses" routerLinkActive="active" class="title-page">
-      Video abuses
-    </a>
-
-    <a i18n *ngIf="hasVideoBlacklistRight()" routerLink="/admin/video-blacklist" routerLinkActive="active" class="title-page">
-      Video blacklist
+    <a i18n *ngIf="hasVideoAbusesRight() || hasVideoBlacklistRight()" routerLink="/admin/moderation" routerLinkActive="active" class="title-page">
+      Moderation
     </a>
 
     <a i18n *ngIf="hasJobsRight()" routerLink="/admin/jobs" routerLinkActive="active" class="title-page">

@@ -1,65 +1,30 @@
 <div class="margin-content">
   <div class="title-page title-page-single">
-    <ng-container *ngIf="!videoFileName" i18n>Upload your video</ng-container>
-    <ng-container *ngIf="videoFileName" i18n>Upload {{ videoFileName }}</ng-container>
+    <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>
+    <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
   </div>
 
-  <div *ngIf="!isUploadingVideo" class="upload-video-container">
-    <div class="upload-video">
-      <div class="icon icon-upload"></div>
+  <ngb-tabset class="video-add-tabset root-tabset bootstrap" [ngClass]="{ 'hide-nav': secondStepType !== undefined }">
 
-      <div class="button-file">
-        <span i18n>Select the file to upload</span>
-        <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" />
-      </div>
-      <span class="button-file-extension">(.mp4, .webm, .ogv)</span>
+    <ngb-tab i18n-title title="">
+      <ng-template ngbTabTitle><span i18n>Upload a file</span></ng-template>
+      <ng-template ngbTabContent>
+        <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)"></my-video-upload>
+      </ng-template>
+    </ngb-tab>
 
-      <div class="form-group form-group-channel">
-        <label i18n for="first-step-channel">Channel</label>
-        <div class="peertube-select-container">
-          <select id="first-step-channel" [(ngModel)]="firstStepChannelId">
-            <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
-          </select>
-        </div>
-      </div>
+    <ngb-tab *ngIf="isVideoImportHttpEnabled()">
+      <ng-template ngbTabTitle><span i18n>Import with URL</span></ng-template>
+      <ng-template ngbTabContent>
+        <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)"></my-video-import-url>
+      </ng-template>
+    </ngb-tab>
 
-      <div class="form-group">
-        <label i18n for="first-step-privacy">Privacy</label>
-        <div class="peertube-select-container">
-          <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
-            <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
-            <option [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="isUploadingVideo" class="upload-progress-cancel">
-    <p-progressBar
-      [value]="videoUploadPercents"
-      [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
-    ></p-progressBar>
-    <input *ngIf="videoUploaded === false" type="button" value="Cancel" (click)="cancelUpload()" />
-  </div>
-
-  <!-- Hidden because we want to load the component -->
-  <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
-    <my-video-edit
-      [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
-      [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
-    ></my-video-edit>
-
-    <div class="submit-container">
-      <div i18n *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
-
-      <div class="submit-button"
-         (click)="updateSecondStep()"
-         [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true || videoUploaded !== true }"
-      >
-        <span class="icon icon-validate"></span>
-        <input type="button" i18n-value value="Publish" />
-      </div>
-    </div>
-  </form>
+    <ngb-tab *ngIf="isVideoImportTorrentEnabled()">
+      <ng-template ngbTabTitle><span i18n>Import with torrent</span></ng-template>
+      <ng-template ngbTabContent>
+        <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)"></my-video-import-torrent>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
 </div>
