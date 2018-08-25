@@ -281,6 +281,12 @@ async function standard (_ffmpeg) {
     .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorythm, 16 is optimal B-frames for it
     .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
     .outputOption('-map_metadata -1') // strip all metadata
+    // will pad the audio with silence or trim audio with negative PTS
+    // timestamps if the audio does not actually start at the beginning
+    // of the video
+    // ref: aresample: https://ffmpeg.org/ffmpeg-filters.html#aresample-1
+    // ref: async, min_hard_comp, and first_pts: https://ffmpeg.org/ffmpeg-resampler.html#Resampler-Options
+    .audioFilters('aresample=async=1:min_hard_comp=0.100000:first_pts=0')
     .outputOption('-movflags faststart')
   const _audio = await audio.get(localFfmpeg)
 
