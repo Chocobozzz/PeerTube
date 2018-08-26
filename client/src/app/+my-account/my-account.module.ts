@@ -1,6 +1,5 @@
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
-import { TableModule } from 'primeng/table'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { SharedModule } from '../shared'
 import { MyAccountRoutingModule } from './my-account-routing.module'

@@ -1,35 +1,31 @@
-<div bsModal #modal="bs-modal" class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<ng-template #modal let-close="close" let-dismiss="dismiss">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Change ownership</h4>
+    <span class="close" aria-label="Close" role="button" (click)="dismiss()"></span>
+  </div>
 
-      <div class="modal-header">
-        <span class="close" aria-hidden="true" (click)="hide()"></span>
-        <h4 i18n class="modal-title">Change ownership</h4>
-      </div>
-
-      <div class="modal-body">
-
-        <form novalidate [formGroup]="form" (ngSubmit)="changeOwnership()">
-          <div class="form-group">
-            <p-autoComplete formControlName="username" [suggestions]="usernamePropositions" (completeMethod)="search($event)"></p-autoComplete>
-            <div *ngIf="formErrors.username" class="form-error">
-              {{ formErrors.username }}
-            </div>
-          </div>
-
-          <div class="form-group inputs">
-            <span i18n class="action-button action-button-cancel" (click)="hide()">
-              Cancel
-            </span>
-
-            <input
-              type="submit" i18n-value value="Submit" class="action-button-submit"
-              [disabled]="!form.valid"
-            >
-          </div>
-        </form>
-
+  <div class="modal-body" [formGroup]="form">
+    <div class="form-group">
+      <label i18n for="next-ownership-username">Select the next owner</label>
+      <p-autoComplete formControlName="username" [suggestions]="usernamePropositions"
+                      (completeMethod)="search($event)" id="next-ownership-username"></p-autoComplete>
+      <div *ngIf="formErrors.username" class="form-error">
+        {{ formErrors.username }}
       </div>
     </div>
   </div>
-</div>
+
+  <div class="modal-footer inputs">
+    <div class="form-group inputs">
+      <span i18n class="action-button action-button-cancel" (click)="dismiss()">
+        Cancel
+      </span>
+
+      <input
+          type="submit" i18n-value value="Submit" class="action-button-submit"
+          [disabled]="!form.valid"
+          (click)="close()"
+      />
+    </div>
+  </div>
+</ng-template>

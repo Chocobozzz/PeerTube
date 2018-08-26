@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-import { ModalDirective } from 'ngx-bootstrap/modal'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { FormReactive, UserService } from '../../../shared/index'
 import { Video } from '@app/shared/video/video.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -9,10 +9,11 @@ import { VideoOwnershipService } from '@app/shared/video-ownership'
 
 @Component({
   selector: 'my-video-change-ownership',
-  templateUrl: './video-change-ownership.component.html'
+  templateUrl: './video-change-ownership.component.html',
+  styleUrls: [ './video-change-ownership.component.scss' ]
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
-  @ViewChild('modal') modal: ModalDirective
+  @ViewChild('modal') modal: ElementRef
 
   usernamePropositions: string[]
 
@@ -26,6 +27,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     private videoOwnershipService: VideoOwnershipService,
     private notificationsService: NotificationsService,
     private userService: UserService,
+    private modalService: NgbModal,
     private i18n: I18n
   ) {
     super()
@@ -40,11 +42,11 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
 
   show (video: Video) {
     this.video = video
-    this.modal.show()
-  }
-
-  hide () {
-    this.modal.hide()
+    this.modalService
+      .open(this.modal)
+      .result
+      .then(() => this.changeOwnership())
+      .catch((_) => _)
   }
 
   search (event) {
@@ -65,10 +67,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     this.videoOwnershipService
       .changeOwnership(this.video.id, username)
       .subscribe(
-        () => {
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership changed.'))
-          this.hide()
-        },
+        () => this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership changed.')),
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
