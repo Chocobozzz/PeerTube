@@ -38,6 +38,11 @@ smtp:
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
 
+user:
+  video_quota:
+    __name: "PEERTUBE_USER_VIDEO_QUOTA"
+    __format: "json"
+
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"
 
