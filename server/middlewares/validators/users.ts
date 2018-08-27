@@ -286,7 +286,7 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   const actor = await ActorModel.loadLocalByName(username)
   if (actor) {
     res.status(409)
-       .send({ error: 'Another actor (account/channel) with this name already exists.' })
+       .send({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
        .end()
     return false
   }
