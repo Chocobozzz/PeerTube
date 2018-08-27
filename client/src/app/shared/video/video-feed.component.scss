@@ -2,8 +2,6 @@
 
 .video-feed {
   a {
-    @include disable-default-a-behaviour;
-
     color: black;
     display: block;
   }
