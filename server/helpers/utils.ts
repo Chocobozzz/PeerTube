@@ -2,13 +2,14 @@ import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
-import { pseudoRandomBytesPromise, sha256, unlinkPromise } from './core-utils'
+import { pseudoRandomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
+import { remove } from 'fs-extra'
 
 function deleteFileAsync (path: string) {
-  unlinkPromise(path)
+  remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
 }
 

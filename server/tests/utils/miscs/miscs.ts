@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
-import { readFileBufferPromise } from '../../../helpers/core-utils'
+import { readFile } from 'fs-extra'
 
 const expect = chai.expect
 let webtorrent = new WebTorrent()
@@ -43,7 +43,7 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
 
   const body = res.body
 
-  const data = await readFileBufferPromise(join(__dirname, '..', '..', 'fixtures', imageName + extension))
+  const data = await readFile(join(__dirname, '..', '..', 'fixtures', imageName + extension))
   const minLength = body.length - ((20 * body.length) / 100)
   const maxLength = body.length + ((20 * body.length) / 100)
 

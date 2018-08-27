@@ -13,7 +13,6 @@ import {
   setAccessTokensToServers,
   uploadVideo
 } from '../utils'
-import { join } from 'path'
 import * as libxmljs from 'libxmljs'
 import { addVideoCommentThread } from '../utils/videos/video-comments'
 import { waitJobs } from '../utils/server/jobs'

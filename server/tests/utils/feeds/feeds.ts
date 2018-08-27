@@ -1,5 +1,4 @@
 import * as request from 'supertest'
-import { readFileBufferPromise } from '../../../helpers/core-utils'
 
 type FeedType = 'videos' | 'video-comments'
 

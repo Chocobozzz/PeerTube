@@ -1,13 +1,14 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { existsSync, readFile } from 'fs-extra'
+import { existsSync, readdir, readFile } from 'fs-extra'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'
 import {
   buildAbsoluteFixturePath,
-  getMyUserInformation, immutableAssign,
+  getMyUserInformation,
+  immutableAssign,
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
@@ -16,7 +17,6 @@ import {
   testImage
 } from '../'
 import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
-import { readdirPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
 
@@ -276,7 +276,7 @@ async function checkVideoFilesWereRemoved (videoUUID: string, serverNumber: numb
     const directoryExists = existsSync(directoryPath)
     expect(directoryExists).to.be.true
 
-    const files = await readdirPromise(directoryPath)
+    const files = await readdir(directoryPath)
     for (const file of files) {
       expect(file).to.not.contain(videoUUID)
     }

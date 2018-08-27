@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
-import { renamePromise } from '../../../helpers/core-utils'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
@@ -56,6 +55,7 @@ import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-u
 import { videoCaptionsRouter } from './captions'
 import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
+import { rename } from 'fs-extra'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -194,7 +194,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Move physical file
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
   const destination = join(videoDir, video.getVideoFilename(videoFile))
-  await renamePromise(videoPhysicalFile.path, destination)
+  await rename(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
   videoPhysicalFile.filename = video.getVideoFilename(videoFile)
   videoPhysicalFile.path = destination

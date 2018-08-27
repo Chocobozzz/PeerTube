@@ -30,15 +30,7 @@ import { VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
-import {
-  copyFilePromise,
-  createTorrentPromise,
-  peertubeTruncate,
-  renamePromise,
-  statPromise,
-  unlinkPromise,
-  writeFilePromise
-} from '../../helpers/core-utils'
+import { createTorrentPromise, peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
@@ -95,6 +87,7 @@ import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
+import { copy, remove, rename, stat, writeFile } from 'fs-extra'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -1187,7 +1180,7 @@ export class VideoModel extends Model<VideoModel> {
     const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
     logger.info('Creating torrent %s.', filePath)
 
-    await writeFilePromise(filePath, torrent)
+    await writeFile(filePath, torrent)
 
     const parsedTorrent = parseTorrent(torrent)
     videoFile.infoHash = parsedTorrent.infoHash
@@ -1497,14 +1490,14 @@ export class VideoModel extends Model<VideoModel> {
     await transcode(transcodeOptions)
 
     try {
-      await unlinkPromise(videoInputPath)
+      await remove(videoInputPath)
 
       // Important to do this before getVideoFilename() to take in account the new file extension
       inputVideoFile.set('extname', newExtname)
 
       const videoOutputPath = this.getVideoFilePath(inputVideoFile)
-      await renamePromise(videoTranscodedPath, videoOutputPath)
-      const stats = await statPromise(videoOutputPath)
+      await rename(videoTranscodedPath, videoOutputPath)
+      const stats = await stat(videoOutputPath)
       const fps = await getVideoFileFPS(videoOutputPath)
 
       inputVideoFile.set('size', stats.size)
@@ -1545,7 +1538,7 @@ export class VideoModel extends Model<VideoModel> {
 
     await transcode(transcodeOptions)
 
-    const stats = await statPromise(videoOutputPath)
+    const stats = await stat(videoOutputPath)
     const fps = await getVideoFileFPS(videoOutputPath)
 
     newVideoFile.set('size', stats.size)
@@ -1560,7 +1553,7 @@ export class VideoModel extends Model<VideoModel> {
 
   async importVideoFile (inputFilePath: string) {
     const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
-    const { size } = await statPromise(inputFilePath)
+    const { size } = await stat(inputFilePath)
     const fps = await getVideoFileFPS(inputFilePath)
 
     let updatedVideoFile = new VideoFileModel({
@@ -1589,7 +1582,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const outputPath = this.getVideoFilePath(updatedVideoFile)
-    await copyFilePromise(inputFilePath, outputPath)
+    await copy(inputFilePath, outputPath)
 
     await this.createTorrentAndSetInfoHash(updatedVideoFile)
 
@@ -1610,25 +1603,25 @@ export class VideoModel extends Model<VideoModel> {
 
   removeThumbnail () {
     const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
-    return unlinkPromise(thumbnailPath)
+    return remove(thumbnailPath)
       .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
   }
 
   removePreview () {
     const previewPath = join(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
-    return unlinkPromise(previewPath)
+    return remove(previewPath)
       .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
   removeFile (videoFile: VideoFileModel) {
     const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
-    return unlinkPromise(filePath)
+    return remove(filePath)
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
   removeTorrent (videoFile: VideoFileModel) {
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
-    return unlinkPromise(torrentPath)
+    return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
