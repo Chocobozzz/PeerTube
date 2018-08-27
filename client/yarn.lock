@@ -305,6 +305,10 @@
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-0.0.5.tgz#5cdcbe08e81075d5dbf15466b311359b02a30c2b"
 
+"@types/mousetrap@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@types/mousetrap/-/mousetrap-1.6.0.tgz#c3951ab98b88ff6093cd0b1e4f8591af439141b8"
+
 "@types/node@*":
   version "10.5.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.4.tgz#6eccc158504357d1da91434d75e86acde94bb10b"
@@ -765,6 +769,13 @@ align-text@^0.1.1, align-text@^0.1.3:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular2-hotkeys@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/angular2-hotkeys/-/angular2-hotkeys-2.1.2.tgz#6693ecc2fbbf6f3874fb6715804e88ba6a584c0a"
+  dependencies:
+    "@types/mousetrap" "^1.6.0"
+    mousetrap "^1.6.0"
 
 angular2-notifications@^1.0.2:
   version "1.0.2"
@@ -4957,6 +4968,10 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+mousetrap@^1.6.0:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/mousetrap/-/mousetrap-1.6.2.tgz#caadd9cf886db0986fb2fee59a82f6bd37527587"
 
 move-concurrently@^1.0.1:
   version "1.0.1"

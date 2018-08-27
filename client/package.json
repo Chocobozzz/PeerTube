@@ -62,6 +62,7 @@
     "@types/sanitize-html": "^1.14.0",
     "@types/video.js": "6.2.7",
     "@types/webtorrent": "^0.98.4",
+    "angular2-hotkeys": "^2.1.2",
     "angular2-notifications": "^1.0.2",
     "awesome-typescript-loader": "5.2.0",
     "bootstrap": "^4.1.3",
