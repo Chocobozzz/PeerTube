@@ -51,11 +51,11 @@
         <td class="moderation-expanded" colspan="6">
           <div>
             <span i18n class="moderation-expanded-label">Reason:</span>
-            {{ videoAbuse.reason }}
+            <span class="moderation-expanded-text">{{ videoAbuse.reason }}</span>
           </div>
           <div *ngIf="videoAbuse.moderationComment">
             <span i18n class="moderation-expanded-label">Moderation comment:</span>
-            {{ videoAbuse.moderationComment }}
+            <span class="moderation-expanded-text">{{ videoAbuse.moderationComment }}</span>
           </div>
         </td>
       </tr>

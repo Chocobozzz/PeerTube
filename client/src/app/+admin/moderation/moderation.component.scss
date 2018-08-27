@@ -8,10 +8,15 @@
 
 .moderation-expanded-label {
   font-weight: $font-semibold;
+  min-width: 200px;
+  display: inline-block;
+}
+
+.moderation-expanded-text {
+  display: inline-block;
 }
 
 .moderation-expanded {
-    text-wrap: normal;
     word-wrap: break-word;
     overflow: visible !important;
     text-overflow: unset !important;
