@@ -14,6 +14,13 @@
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
+        <target>(luzapenak: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, tamaina maximoa: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9d5f16f0233b39fa2cd843321407a7358c323ad8">
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> ikustaldi</target>
@@ -213,11 +220,54 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2ac776627e18565d7ae85cd7f4cd033bc5d0c88b">
+        <source>I have read and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
+        <target>Instantzia honetako &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Baldintzak&lt;/a&gt; irakurri ditut eta ados nago</target>
+        <context-group name="null">
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>Eman izena</target>
         <context-group name="null">
           <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9167c6d3c4c3b74373cf1e90997e4966844ded1a">
+        <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> results</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> emaitza</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc">
+        <source>
+          for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </source>
+        <target>
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> bilaketarako
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
+        <source>Filters</source>
+        <target>Iragazkiak</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
+        <source>
+    No results found
+  </source>
+        <target>
+    Ez da emaitzarik aurkitu
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -302,6 +352,13 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ac0f81713a84217c9bd1d9bb460245d8190b073f">
+        <source>More</source>
+        <target>Gehiago</target>
+        <context-group name="null">
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>Administrazioa</target>
@@ -330,6 +387,48 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5d43539fc358c3a548b9d487be821db73e2702ff">
+        <source>Sort</source>
+        <target>Ordenatu</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98acac685fc4b2d35e5d0cf3cd224d247a756c3e">
+        <source>Published date</source>
+        <target>Argitaratze data</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a02ea1d4e7424ca989929da5e598f379940fdbf2">
+        <source>Duration</source>
+        <target>Iraupena</target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dc67060f94f0f2b58549f54a5c07925dffd20238">
+        <source>Display sensitive content</source>
+        <target>Erakutsi eduki hunkigarria</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f20f2d5a6882190892e58b85f6ccbedfa737952">
+        <source>Yes</source>
+        <target>Bai</target>
+        <context-group name="null">
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd">
+        <source>No</source>
+        <target>Ez</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="607de17c2a755f65775881c19e276e7c933bcf94">
         <source>Category</source>
         <target>Kategoria</target>
@@ -349,6 +448,27 @@
         <target>Hizkuntza</target>
         <context-group name="null">
           <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
+        <source>All of these tags</source>
+        <target>Etiketa guzti hauek</target>
+        <context-group name="null">
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="492d2bd18db0cba03f6d9e3b0c42b8639fbe51ab">
+        <source>One of these tags</source>
+        <target>Etiketa hauetako bat</target>
+        <context-group name="null">
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
+        <source>Filter</source>
+        <target>Iragazkia</target>
+        <context-group name="null">
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -572,6 +692,21 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b4c2ef0143270626106b26196d40baf3439aa7b0">
+        <source>
+      Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the WebTorrent library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent.
+      When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to.
+      See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
+    </source>
+        <target>
+      Web bidezko berdinak ez dira publikoki eskuragarriak web nabigatzailean WebRTC erabiltzen dugulako (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>WebTorrent liburutegiarekin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), protokoloa BitTorrent klasikotik aldentzen da.
+      Web nabigatzailean zaudenean, zure IP helbidea daraman seinale bat igortzen diozu tracker bati, eta honek ausaz aukeratuko ditu bestelako berdinak informazioa igortzeko.
+      Ikusi <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>dokumentu hau<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> informazio gehiagorako
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="50d8e8388f5ceab292850ed828f306c9f2cab389">
         <source>
     The worst-case scenario of an average person spying on their friends is quite unlikely.
@@ -583,6 +718,13 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
   </target>
         <context-group name="null">
           <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
+        <source>How does PeerTube compare with YouTube?</source>
+        <target>Zein da PeerTube eta YouTube-ren arteko aldea?</target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2432705cbabcb92a8677338901dd5d655383ef4c">
@@ -810,6 +952,27 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>Inportatu</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
+        <source>Video import with HTTP enabled</source>
+        <target>Bideoa HTTP bidez inportatzea gaituta</target>
+        <context-group name="null">
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
+        <source>Video import with a torrent file or a magnet URI enabled</source>
+        <target>Bideoa torrent fitxategia edo magnet URL bidez inportatzea gaituta</target>
+        <context-group name="null">
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Administratzailea</target>
@@ -919,11 +1082,47 @@ Markatu kutxa hau, gorde konfigurazioa eta probatu zure instantziako bideo URL b
           <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5afc7e831e59c325e8fb3e208ec108ff53fb3500">
+        <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution}}"/> enabled</source>
+        <target><x id="INTERPOLATION" equiv-text="{{resolution}}"/> bereizmena gaituta</target>
+        <context-group name="null">
+          <context context-type="linenumber">203</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f86acfe567b75b7ea85af6f1cb3efb88085dfb9a">
+        <source>
+        Cache
+
+        <x id="START_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;my-help&gt;"/><x id="CLOSE_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;/my-help&gt;"/>
+      </source>
+        <target>
+        Cachea
+
+        <x id="START_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;my-help&gt;"/><x id="CLOSE_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;/my-help&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
+        <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
+        <target>Fitxategi batzuk ez dira federatzen (aurrebistak, azpitituluak). Zuzenean jatorrizko instantziatik jasotzen ditugu eta cachean gorde.</target>
+        <context-group name="null">
+          <context context-type="linenumber">214</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>Aurrebisten cachearen tamaina</target>
         <context-group name="null">
           <context context-type="linenumber">219</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
+        <source>Video captions cache size</source>
+        <target>Bideoaren azpitituluen cachearen tamaina</target>
+        <context-group name="null">
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
@@ -1150,6 +1349,20 @@ Markatu kutxa hau, gorde konfigurazioa eta probatu zure instantziako bideo URL b
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="74c8f69ec23f41a429e241126ab4d25b9d12348e">
+        <source>Processed on</source>
+        <target>Prozesatze data</target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4fa08915c99629d38c9da8a08b1985a7f4e38e40">
+        <source>Finished on</source>
+        <target>Bukatze data</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">
         <source>Create user</source>
         <target>Sortu erabiltzailea</target>
@@ -1324,6 +1537,13 @@ Markatu kutxa hau, gorde konfigurazioa eta probatu zure instantziako bideo URL b
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0bb0c57c6d12635d26996c124248e748b666e5ad">
+        <source>My video imports</source>
+        <target>Nire bideo inportazioak</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
         <source>Video quota:</source>
         <target>Bideo-kuota:</target>
@@ -1343,6 +1563,13 @@ Markatu kutxa hau, gorde konfigurazioa eta probatu zure instantziako bideo URL b
         <target>Bideo ezarpenak</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
+        <source>Danger zone</source>
+        <target>Eremu arriskutsua</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8057bddbed23d6cd911df8cc3a4ec24d1f258b79">
@@ -1396,6 +1623,13 @@ Kanal honetara bideo bat igotzen duzunean, bideoa babesteko eremua testu honekin
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
+        <source>Target</source>
+        <target>Helburua</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
         <source>Change password</source>
         <target>Aldatu pasahitza</target>
@@ -1443,6 +1677,20 @@ Kanal honetara bideo bat igotzen duzunean, bideoa babesteko eremua testu honekin
         <target>Eguneratu nire profila</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503">
+        <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> harpidedun</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c4a959fc6349bd0793e1ad571d492052a07bdab5">
+        <source>Change the avatar</source>
+        <target>Aldatu abatarra</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c860c88df9ad58b1187084251340b232cdf0a7f9">
@@ -1498,6 +1746,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bfe7f34fbd4c3afa5f84a5580e0fae942cad2333">
+        <source>You can import any URL &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;supported by youtube-dl&lt;/a&gt; or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>&lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;youtube-dl aplikazioak onartutako&lt;/a&gt; edozein URL inportatu dezakezu edo MP4 fitxategi gordin batera daraman URL bat. Zuk egiaztatu behar duzu edukia banatzeko eskubidea duzula, egin ezean arazoak sor ditzakezu bai zuretzat bai zure instantziarentzat.</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>Kanala</target>
@@ -1510,6 +1765,17 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         <target>Pribatutasuna</target>
         <context-group name="null">
           <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
+        <source>
+  Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
+</source>
+        <target>
+  Zorionak, <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> helbideko bideoa inportatuko da! Bideoaren informazioa gehitzen hasi zaitezke jada.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1538,6 +1804,105 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         <target>Argitaratu</target>
         <context-group name="null">
           <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
+        <source>Select the torrent to import</source>
+        <target>Hautatu torrenta inportatzeko</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
+        <source>Paste magnet URI</source>
+        <target>Itsatsi magnet URLa</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1ce18c12c809a738f05f2290f46df0677f27ed70">
+        <source>You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>mp4 fitxategi batera daraman edozein torrent fitxategi inportatu dezakezu. Zuk egiaztatu behar duzu edukia banatzeko eskubidea duzula, egin ezean arazoak sor ditzakezu bai zuretzat bai zure instantziarentzat.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
+        <source>
+  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
+</source>
+        <target>
+  Zorionak, bideoa BitTorrent bidez inportatuko da! Bideoaren informazioa gehitzen hasi zaitezke.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
+        <source>Import <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Inportatu <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
+        <source>Upload <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Igo <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
+        <source>Upload a file</source>
+        <target>Igo fitxategi bat</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470">
+        <source>Import with URL</source>
+        <target>Inportatu URLa erabilita</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="752c401d7dcd708944eef60e411187f71d882340">
+        <source>Import with torrent</source>
+        <target>Inportatu torrenta erabilita</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
+        <source>Add caption</source>
+        <target>Gehitu azpitituluak</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8">
+        <source>Select the caption file</source>
+        <target>Hautatu azpitituluen fitxategia</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a40a8a9f8359eda00c6a79809e9499100fde3ffd">
+        <source>
+          This will replace an existing caption!
+        </source>
+        <target>
+          Honek aurretik dagoen azpititulua ordeztuko du!
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c">
+        <source>Add this caption</source>
+        <target>Gehitu azpititulu hau</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e">
@@ -1603,11 +1968,53 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
+        <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
+        <target>Bideoa argitaratu aurretik ez baduzu transkodetzea bukatu arte itxaroten, bideoa transkodetzea bukatu arte ezin ikustea gerta daiteke.</target>
+        <context-group name="null">
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
         <source>Basic info</source>
         <target>Oinarrizko informazioa</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="92bcfd1d237a2bfe48dc9f46d074ed26abc8df22">
+        <source>Add another caption</source>
+        <target>Gehitu beste azpititulu bat</target>
+        <context-group name="null">
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
+        <source>See the subtitle file</source>
+        <target>Ikusi azpitituluen fitxategia</target>
+        <context-group name="null">
+          <context context-type="linenumber">148</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
+        <source>Cancel create</source>
+        <target>Ezeztatu sorkuntza</target>
+        <context-group name="null">
+          <context context-type="linenumber">162</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
+        <source>Cancel deletion</source>
+        <target>Ezeztatu ezabaketa</target>
+        <context-group name="null">
+          <context context-type="linenumber">170</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
+        <source>Captions</source>
+        <target>Azpitituluak</target>
+        <context-group name="null">
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
@@ -1668,6 +2075,20 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         <target>Deskarga zuzena</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d">
+        <source>Torrent (.torrent file)</source>
+        <target>Torrent (.torrent fitxategia)</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2db8d7cf6a3071f4c1519ef2b5e2713d9ff4e87f">
+        <source>Torrent (magnet link)</source>
+        <target>Torrent (magnet esteka)</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -1732,6 +2153,24 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         </target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
+        <source>QR-Code</source>
+        <target>QR-kodea</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7584313e33a66811eb10646627914a01fff0347d">
+        <source>
+    The video is being imported, it will be available when the import is finished.
+  </source>
+        <target>
+    Bideoa inportatzen ari da, inportazioa bukatzean eskuragarri egongo da.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9ed65ae88f6c982bc44d6fed2796e55f47dbf304">
@@ -1888,6 +2327,17 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         <target>Oroigarria:</target>
         <context-group name="null">
           <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="329900dd14bc4ca33cec3775d25c246e4cde7867">
+        <source>
+        The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
+      </source>
+        <target>
+        Bideo honekl erabilitako partekatze sistema dela eta, zure sistemako informazio teknikoa (IP helbide publikoa esaterako) beste berdinei igorriko zaie.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
@@ -2235,6 +2685,41 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca8e8cf0f1686604db3b6a2ebadab7f7b426a047">
+        <source>Are you sure you want to delete your account? This will delete all you data, including channels, videos etc.</source>
+        <target>Ziur kontua ezabatu nahi duzula? Honek zure datu guztiak ezabatuko ditu, kanalak, bideoak eta abar barne.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
+        <source>Type your username to confirm</source>
+        <target>Idatzi zure erabiltzaile izena berresteko</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>Ezabatu zure kontua</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8a8a7f7160939fb55e82bc01fe9f876f5f2e065">
+        <source>Delete my account</source>
+        <target>Ezabatu nire kontua</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
+        <source>Your account is deleted.</source>
+        <target>Zure kontua ezabatu da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
         <source>Profile updated.</source>
         <target>Profila eguneratuta.</target>
@@ -2354,6 +2839,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392">
+        <source>To import</source>
+        <target>Inportatzeko</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7">
         <source>Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>.
 </source>
@@ -2384,6 +2876,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7701e3762dc4a2b2e302c24f17820bc8dd7cacc1">
+        <source>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
+        <target>APasahitza berrezartzeko argibideak dituen e-mail bat bidaliko da <x id="INTERPOLATION" equiv-text="{{email}}"/> helbidera.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
         <source>Unable to find user id or verification string.</source>
         <target>Ezin izan da erabiltzailearen id-a edo berreste katea aurkitu.</target>
@@ -2401,6 +2900,69 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="7fb1099e29660162f9154d5b2feee7743a423df6">
         <source>Today</source>
         <target>Gaur</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="02e0243b60007368f87dc01e083f232dd025096d">
+        <source>Last 7 days</source>
+        <target>Azken 7 egunak</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7668986b9f753fcd72ad4a00b1a0c4861d1f7fb8">
+        <source>Last 30 days</source>
+        <target>Azken 30 egunak</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a77b663fd9b94c38bc9c6493a51b5f3acacb9bca">
+        <source>Last 365 days</source>
+        <target>Azken 365 egunak</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2f3bf121699ff08a25fa4859bfdf3996bf821cc">
+        <source>Short (&lt; 4 min)</source>
+        <target>Laburra (&lt; 4 min)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac0fa1039f09ec0d917303658c5bb1ee813a4225">
+        <source>Long (&gt; 10 min)</source>
+        <target>Luzea (&gt; 10 min)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f24d368d6be0fee70fb4503d2ad37a612e1b0889">
+        <source>Medium (4-10 min)</source>
+        <target>Ertaina (4-10 min)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca">
+        <source>Relevance</source>
+        <target>Egokitasuna</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1aee80ab35aa99508802cdec6306e110b2feaf9e">
+        <source>Publish date</source>
+        <target>Argitaratze data</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7641aed03492978b4ec6843b1e53f30464294d9">
+        <source>Views</source>
+        <target>Ikustaldiak</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2450,6 +3012,27 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="e7393dc4a4aa12d005582eb9e1ddc7e5ca5bebd3">
         <source>Previews cache size must be a number.</source>
         <target>Aurrebisten cachearen tamaina zenbaki bat izan behar da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="545f5dea553b2d7c4a65920ccdcb1e9dbdc7f4d8">
+        <source>Captions cache size is required.</source>
+        <target>Azpitituluen cachearen tamaina beharrezkoa da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a8d7131c0ca1eefe7b058e6081236ca1be364e2c">
+        <source>Captions cache size must be greater than 1.</source>
+        <target>Azpitituluen cachearen tamaina 1 baino handiagoa izan behar da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c3decd47b03cf542df091c1a2fb25b756e59074e">
+        <source>Captions cache size must be a number.</source>
+        <target>Azpitituluen cachearen tamaina zenbaki bat izan behar da.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2629,6 +3212,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4a3ebc6ddb6b6677aed7b04eb503f9ddd0cfe561">
+        <source>You must to agree with the instance terms in order to registering on it.</source>
+        <target>Instantziaren baldintzak onartu behar dituzu bertan izena emateko.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6">
         <source>Report reason is required.</source>
         <target>Salatzeko arrazoia behar da.</target>
@@ -2646,6 +3236,20 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="7de2178ed1036844fb1c3ad8b7899a039fcdcdb9">
         <source>Report reason cannot be more than 300 characters long.</source>
         <target>Salatzeko arrazoia ezin da 300 karaktere baino luzeagoa izan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e">
+        <source>Video caption language is required.</source>
+        <target>Bideoen azpitituluen hizkuntza beharrezkoa da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963">
+        <source>Video caption file is required.</source>
+        <target>Bideoaren azpitituluen fitxategia beharrezkoa da.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2772,6 +3376,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
         <source>A date is required to schedule video update.</source>
         <target>Data bat behar da bideoaren eguneraketa programatzeko.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3b7ed22d0730d03b38c254332829d855ee7256c4">
+        <source>This file is too large.</source>
+        <target>Fitxategi hau handiegia da.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3301,6 +3912,20 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
+        <source>Video to import updated.</source>
+        <target>Inportatzeko bideoa eguneratuta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
+        <source>Your video was uploaded to your account and is private.</source>
+        <target>Zure bideoa zure kontura igo da eta pribatua da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="24840228f2826b66252cfcaab9820b1c7e0da264">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target>Baina dagozkion datuak (etiketak, deskripzioa...) galduko dira, ziur orri hau utzi nahi duzula?</target>
@@ -3325,6 +3950,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
         <source>Upload cancelled</source>
         <target>Igoera ezeztatuta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c55f41189ac6ad3003cce813245f4508284ed0aa">
+        <source>We are sorry but PeerTube cannot handle videos &gt; 8GB</source>
+        <target>Sentitzen dugu, PeerTubek ezin du 8GB baino gehiagoko bideorik kudeatu</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

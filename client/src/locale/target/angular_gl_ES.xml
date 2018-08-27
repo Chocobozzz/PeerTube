@@ -14,6 +14,20 @@
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
+        <target>(extensións: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, tamaño máx.: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d5f16f0233b39fa2cd843321407a7358c323ad8">
+        <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visionados</target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
         <target>Editar</target>
@@ -588,6 +602,98 @@
         <target>P2P &amp; Intimidade</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6">
+        <source>
+    PeerTube uses the BitTorrent protocol to share bandwidth between users.
+    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+  </source>
+        <target>
+    PeerTube utiliza o protocolo BitTorrent para compartir o ancho de banda entre usuarias.
+    Esto implica que o seu enderezo IP gárdase no rastrexador da instancia BitTorrent mentras descarga ou visualiza o vídeo.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
+        <source>What are the consequences?</source>
+        <target>Qué implica isto?</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a">
+        <source>
+    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
+    In practice, this is much more difficult because:
+  </source>
+        <target>
+    En teoría, alguén técnicamente cualificado podería crear un script que rastrexase o IP que descarga determinado vídeo.
+    Na práctica, esto é bastante complicado xa que:
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64f96be62df4a95a0615b6f630ad25d6348a29d3">
+        <source>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </source>
+        <target>
+      Para poder espiar deberíase enviar unha petición HTTP a cada rastrexador para cada vídeo.
+      Si queremos espiar todos os vídeos de PeerTube, temos que enviar tantas peticións como vídeos existan (potencialmente moitos)
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dd9a7a4ee66b0ff3fbb43ba8691ffcd042531611">
+        <source>
+      For each request sent, the tracker returns random peers at a limited number.
+      For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
+    </source>
+        <target>
+      Para cada petición enviada, o rastrexador devolve un número limitado de pares aleatorios.
+      Por exemplo, si hai 1000 pares na lista e o rastrexador envía só 20 pares por petición, debería haber polo menos 50 peticións para coñecer todos os pares da lista.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="694cf53adfc2afe8afabf713ab00fa114d5d2f8e">
+        <source>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </source>
+        <target>
+      Esas peticións deberán enviarse de xeito regular para saber que inicia/para un vídeo. É doado detectar ese tipo de comportamento.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="44bbecddbdf2aad1f4bad97cb806560553fb2ab3">
+        <source>
+      If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video
+    </source>
+        <target>
+      Si un enderezo IP é gardado no rastrexador, non significa que a persoa detrás do IP (si existise tal) tivera visto o vídeo
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fec3239a860de66c718e3442df836b692b8568c3">
+        <source>
+      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
+    </source>
+        <target>
+      O enderezo IP é información feble: normalmente vai cambiando e pode representar a moitas persoas ou entidades
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
     </body>
