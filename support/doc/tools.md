@@ -4,6 +4,7 @@
    - [import-videos.js](#import-videosjs)
    - [upload.js](#uploadjs)
  - [Server tools](#server-tools)
+   - [parse-log](#parse-log)
    - [create-transcoding-job.js](#create-transcoding-jobjs)
    - [create-import-video-file-job.js](#create-import-video-file-jobjs)
    - [prune-storage.js](#prune-storagejs)
