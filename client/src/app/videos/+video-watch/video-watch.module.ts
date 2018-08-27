@@ -22,7 +22,7 @@ import { VideoBlacklistComponent } from '@app/videos/+video-watch/modal/video-bl
     VideoWatchRoutingModule,
     SharedModule,
     ClipboardModule,
-    NgbTooltipModule.forRoot(),
+    NgbTooltipModule,
     NgxQRCodeModule
   ],
 

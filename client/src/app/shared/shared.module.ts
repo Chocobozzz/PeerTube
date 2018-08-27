@@ -60,11 +60,11 @@ import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/u
     RouterModule,
     HttpClientModule,
 
-    NgbDropdownModule.forRoot(),
-    NgbModalModule.forRoot(),
-    NgbPopoverModule.forRoot(),
-    NgbTabsetModule.forRoot(),
-    NgbTooltipModule.forRoot(),
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTabsetModule,
+    NgbTooltipModule,
 
     PrimeSharedModule,
     NgPipesModule

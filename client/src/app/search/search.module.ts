@@ -11,7 +11,7 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap'
     SearchRoutingModule,
     SharedModule,
 
-    NgbCollapseModule.forRoot()
+    NgbCollapseModule
   ],
 
   declarations: [
