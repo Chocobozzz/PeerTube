@@ -5,7 +5,7 @@ import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import * as request from 'request'
-import { createWriteStream, writeFile } from 'fs'
+import { createWriteStream, writeFile } from 'fs-extra'
 import { join } from 'path'
 import { mkdirpPromise, root } from '../../helpers/core-utils'
 

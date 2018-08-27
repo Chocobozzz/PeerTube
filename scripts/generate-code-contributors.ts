@@ -1,5 +1,5 @@
 import { doRequest } from '../server/helpers/requests'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'fs-extra'
 
 run()
   .then(() => process.exit(0))

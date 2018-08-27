@@ -1,5 +1,5 @@
 import * as AsyncLRU from 'async-lru'
-import { createWriteStream } from 'fs'
+import { createWriteStream } from 'fs-extra'
 import { unlinkPromise } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'

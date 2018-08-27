@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { existsSync } from 'fs'
+import { existsSync } from 'fs-extra'
 import { join } from 'path'
 import { Account } from '../../../../shared/models/actors'
 import { readdirPromise } from '../../../helpers/core-utils'

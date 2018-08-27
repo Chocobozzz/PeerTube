@@ -3,7 +3,7 @@ import { join } from 'path'
 import { CONFIG } from '../initializers'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import * as srt2vtt from 'srt-to-vtt'
-import { createReadStream, createWriteStream } from 'fs'
+import { createReadStream, createWriteStream } from 'fs-extra'
 
 async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: VideoCaptionModel) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR

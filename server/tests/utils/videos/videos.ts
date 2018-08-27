@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { existsSync, readFile } from 'fs'
+import { existsSync, readFile } from 'fs-extra'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'

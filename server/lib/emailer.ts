@@ -7,7 +7,7 @@ import { UserModel } from '../models/account/user'
 import { VideoModel } from '../models/video/video'
 import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'fs-extra'
 
 class Emailer {
 
