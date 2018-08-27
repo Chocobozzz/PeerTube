@@ -197,19 +197,10 @@
           </div>
         </div>
 
-        <my-video-comments [video]="video" [user]="user"></my-video-comments>
-      </div>
-
-      <div class="ml-3 ml-sm-0 col-12 col-md-3 other-videos">
-        <div i18n class="title-page title-page-single">
-          Other videos
-        </div>
-
-        <div *ngFor="let video of otherVideosDisplayed">
-          <my-video-miniature [video]="video" [user]="user"></my-video-miniature>
-        </div>
-      </div>
+      <my-video-comments [video]="video" [user]="user"></my-video-comments>
     </div>
+    <my-recommended-videos class="ml-3 ml-sm-0 col-12 col-md-3"
+                           [inputVideo]="video" [user]="user"></my-recommended-videos>
   </div>
 
 
