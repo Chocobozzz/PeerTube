@@ -1,5 +1,5 @@
 import * as program from 'commander'
-import { access, constants } from 'fs'
+import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
 import { promisify } from 'util'
 import { getClient, login } from '../tests/utils'

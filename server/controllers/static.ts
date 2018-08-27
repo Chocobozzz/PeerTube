@@ -1,5 +1,5 @@
 import * as cors from 'cors'
-import { createReadStream } from 'fs'
+import { createReadStream } from 'fs-extra'
 import * as express from 'express'
 import { CONFIG, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS, ROUTE_CACHE_LIFETIME } from '../initializers'
 import { VideosPreviewCache } from '../lib/cache'

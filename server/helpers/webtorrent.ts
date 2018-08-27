@@ -1,7 +1,7 @@
 import { logger } from './logger'
 import { generateVideoTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
-import { createWriteStream } from 'fs'
+import { createWriteStream } from 'fs-extra'
 import { CONFIG } from '../initializers'
 import { join } from 'path'
 import { unlinkPromise } from './core-utils'
