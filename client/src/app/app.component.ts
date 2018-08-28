@@ -5,6 +5,7 @@ import { AuthService, RedirectService, ServerService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { skip } from 'rxjs/operators'
+import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
 @Component({
   selector: 'my-app',
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit {
     private serverService: ServerService,
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService,
-    private screenService: ScreenService
+    private screenService: ScreenService,
+    private hotkeysService: HotkeysService
   ) { }
 
   get serverVersion () {
@@ -120,6 +122,33 @@ export class AppComponent implements OnInit {
             this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
           }
         })
+
+    this.hotkeysService.add([
+      new Hotkey('/', (event: KeyboardEvent): boolean => {
+        document.getElementById('search-video').focus()
+        return false // Prevent bubbling
+      }, undefined, 'Focus the search bar'),
+      new Hotkey('g+s', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/subscriptions' ])
+        return false
+      }, undefined, 'Go to the subscriptions videos page'),
+      new Hotkey('g+t', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/trending' ])
+        return false
+      }, undefined, 'Go to the trending videos page'),
+      new Hotkey('g+r', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/recently-added' ])
+        return false
+      }, undefined, 'Go to the recently added videos page'),
+      new Hotkey('g+l', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/local' ])
+        return false
+      }, undefined, 'Go to the local videos page'),
+      new Hotkey('g+u', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/upload' ])
+        return false
+      }, undefined, 'Go to the videos upload page')
+    ])
   }
 
   isUserLoggedIn () {
