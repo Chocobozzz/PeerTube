@@ -23,7 +23,6 @@ function getClient (clientId: string, clientSecret: string) {
 function getRefreshToken (refreshToken: string) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
-
   return OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 

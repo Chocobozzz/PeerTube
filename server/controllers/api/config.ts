@@ -161,6 +161,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   // camelCase to snake_case key
   const toUpdateJSON = omit(toUpdate, 'user.videoQuota', 'instance.defaultClientRoute', 'instance.shortDescription', 'cache.videoCaptions')
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
+  toUpdateJSON.user['video_quota_daily'] = toUpdate.user.videoQuotaDaily
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy

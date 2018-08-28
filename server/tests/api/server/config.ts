@@ -37,7 +37,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.signup.limit).to.equal(4)
   expect(data.admin.email).to.equal('admin1@example.com')
   expect(data.user.videoQuota).to.equal(5242880)
-  expect(data.user.videoQuotaDaily).to.equal(318742)
+  expect(data.user.videoQuotaDaily).to.equal(-1)
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.resolutions['240p']).to.be.true
