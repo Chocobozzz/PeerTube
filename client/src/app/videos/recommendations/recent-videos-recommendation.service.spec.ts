@@ -21,7 +21,7 @@ describe('"Recent Videos" Recommender', () => {
         { uuid: 'uuid2' }
       ]
       getVideosMock.mockReturnValueOnce(of({ videos: vids }))
-      const result = await service.getRecommendations('uuid1')
+      const result = await service.getRecommendations('uuid1').toPromise()
       const uuids = result.map(v => v.uuid)
       expect(uuids).toEqual(['uuid2'])
       done()
@@ -35,7 +35,7 @@ describe('"Recent Videos" Recommender', () => {
         { uuid: 'uuid6' }
       ]
       getVideosMock.mockReturnValueOnce(of({ videos: vids }))
-      const result = await service.getRecommendations('uuid1')
+      const result = await service.getRecommendations('uuid1').toPromise()
       expect(result.length).toEqual(5)
       done()
     })
@@ -57,7 +57,7 @@ describe('"Recent Videos" Recommender', () => {
       getVideosMock
         .mockReturnValueOnce(of({ videos: vids })) // First call
         .mockReturnValueOnce(of({ videos: vids2 })) // 2nd call
-      const result = await service.getRecommendations('uuid1')
+      const result = await service.getRecommendations('uuid1').toPromise()
       expect(result.length).toEqual(5)
       done()
     })

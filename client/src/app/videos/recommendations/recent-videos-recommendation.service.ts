@@ -18,7 +18,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
   ) {
   }
 
-  getRecommendations (uuid: string): Promise<Video[]> {
+  getRecommendations (uuid: string): Observable<Video[]> {
     return this.fetchPage(1)
       .pipe(
         switchMap(vids => {
@@ -28,7 +28,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
           }
           return of(otherVideos)
         })
-      ).toPromise()
+      )
   }
 
   private addMoreVids (alreadyFetched: Video[]): Observable<Video[]> {
