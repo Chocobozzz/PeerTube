@@ -681,6 +681,45 @@ describe('Test users API validators', function () {
     })
   })
 
+  describe('When having a daily video quota', function () {
+    it('Should fail with a user having too many videos', async function () {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
+        videoQuotaDaily: 42
+      })
+
+      await uploadVideo(server.url, server.accessToken, {}, 403)
+    })
+  })
+
+  describe('When having an absolute and daily video quota', function () {
+    it('Should fail if exceeding total quota', async function () {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
+        videoQuota: 42,
+        videoQuotaDaily: 1024 * 1024 * 1024
+      })
+
+      await uploadVideo(server.url, server.accessToken, {}, 403)
+    })
+
+    it('Should fail if exceeding daily quota', async function () {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
+        videoQuota: 1024 * 1024 * 1024,
+        videoQuotaDaily: 42
+      })
+
+      await uploadVideo(server.url, server.accessToken, {}, 403)
+    })
+  })
+
   describe('When asking a password reset', function () {
     const path = '/api/v1/users/ask-reset-password'
 
