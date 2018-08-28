@@ -7,12 +7,20 @@ my-instance-features-table {
   margin-bottom: 40px;
 }
 
+form {
+  margin: 0 60px 40px 0;
+}
+
 .form-group-terms {
   margin: 30px 0;
 }
 
 .input-group {
   @include peertube-input-group(400px);
+}
+
+.input-group-append {
+  height: 30px;
 }
 
 input:not([type=submit]) {
