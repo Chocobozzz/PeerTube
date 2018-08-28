@@ -34,6 +34,10 @@ export class SignupComponent extends FormReactive implements OnInit {
     return this.serverService.getConfig().user.videoQuota
   }
 
+  get instanceHost () {
+    return window.location.host
+  }
+
   ngOnInit () {
     this.buildForm({
       username: this.userValidatorsService.USER_USERNAME,

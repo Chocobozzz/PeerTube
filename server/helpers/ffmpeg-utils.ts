@@ -1,11 +1,11 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
 import { VideoResolution } from '../../shared/models/videos'
-import { CONFIG, VIDEO_TRANSCODING_FPS, FFMPEG_NICE } from '../initializers'
-import { unlinkPromise } from './core-utils'
+import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker'
+import { remove } from 'fs-extra'
 
 function computeResolutionsToTranscode (videoFileHeight: number) {
   const resolutionsEnabled: number[] = []
@@ -90,7 +90,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     logger.error('Cannot generate image from video %s.', fromPath, { err })
 
     try {
-      await unlinkPromise(pendingImagePath)
+      await remove(pendingImagePath)
     } catch (err) {
       logger.debug('Cannot remove pending image path after generation error.', { err })
     }

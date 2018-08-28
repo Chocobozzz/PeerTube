@@ -204,7 +204,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showShareModal () {
-    this.videoShareModal.show()
+    const currentTime = this.player ? this.player.currentTime() : undefined
+
+    this.videoShareModal.show(currentTime)
   }
 
   showDownloadModal (event: Event) {
@@ -256,12 +258,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoUnblacklistable () {
     return this.video.isUnblacklistableBy(this.user)
-  }
-
-  getVideoPoster () {
-    if (!this.video) return ''
-
-    return this.video.previewUrl
   }
 
   getVideoTags () {

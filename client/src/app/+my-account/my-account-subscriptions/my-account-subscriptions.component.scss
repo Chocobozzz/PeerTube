@@ -1,0 +1,42 @@
+@import '_variables';
+@import '_mixins';
+
+.video-channel {
+  @include row-blocks;
+
+  img {
+    @include avatar(80px);
+
+    margin-right: 10px;
+  }
+
+  .video-channel-info {
+    flex-grow: 1;
+
+    a.video-channel-names {
+      @include disable-default-a-behaviour;
+
+      width: fit-content;
+      display: flex;
+      align-items: baseline;
+      color: #000;
+
+      .video-channel-display-name {
+        font-weight: $font-semibold;
+        font-size: 18px;
+      }
+
+      .video-channel-name {
+        font-size: 14px;
+        color: $grey-actor-name;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  .actor-owner {
+    @include actor-owner;
+  }
+}
+
+

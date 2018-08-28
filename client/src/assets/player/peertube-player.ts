@@ -184,11 +184,24 @@ function loadLocaleInVideoJS (serverUrl: string, videojs: any, locale: string) {
   // It is the default locale, nothing to translate
   if (!path) return Promise.resolve(undefined)
 
-  const completeLocale = getCompleteLocale(locale)
+  let p: Promise<any>
 
-  return fetch(path + '/player.json')
-    .then(res => res.json())
-    .then(json => videojs.addLanguage(getShortLocale(completeLocale), json))
+  if (loadLocaleInVideoJS.cache[path]) {
+    p = Promise.resolve(loadLocaleInVideoJS.cache[path])
+  } else {
+    p = fetch(path + '/player.json')
+      .then(res => res.json())
+      .then(json => {
+        loadLocaleInVideoJS.cache[path] = json
+        return json
+      })
+  }
+
+  const completeLocale = getCompleteLocale(locale)
+  return p.then(json => videojs.addLanguage(getShortLocale(completeLocale), json))
+}
+namespace loadLocaleInVideoJS {
+  export const cache: { [ path: string ]: any } = {}
 }
 
 function getServerTranslations (serverUrl: string, locale: string) {

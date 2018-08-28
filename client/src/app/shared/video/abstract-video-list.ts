@@ -11,6 +11,7 @@ import { VideoSortField } from './sort-field.type'
 import { Video } from './video.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private static LINES_PER_PAGE = 4
@@ -34,6 +35,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   videoWidth: number
   videoHeight: number
   videoPages: Video[][] = []
+  ownerDisplayType: OwnerDisplayType = 'account'
 
   protected baseVideoWidth = 215
   protected baseVideoHeight = 230

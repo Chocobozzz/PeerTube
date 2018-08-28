@@ -1,10 +1,9 @@
 import { logger } from './logger'
 import { generateVideoTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
-import { createWriteStream } from 'fs'
+import { createWriteStream, remove } from 'fs-extra'
 import { CONFIG } from '../initializers'
 import { join } from 'path'
-import { unlinkPromise } from './core-utils'
 
 function downloadWebTorrentVideo (target: { magnetUri: string, torrentName: string }) {
   const id = target.magnetUri || target.torrentName
@@ -29,11 +28,11 @@ function downloadWebTorrentVideo (target: { magnetUri: string, torrentName: stri
           if (err) return rej(err)
 
           if (target.torrentName) {
-            unlinkPromise(torrentId)
+            remove(torrentId)
               .catch(err => logger.error('Cannot remove torrent %s in webtorrent download.', torrentId, { err }))
           }
 
-          unlinkPromise(join(CONFIG.STORAGE.VIDEOS_DIR, file.name))
+          remove(join(CONFIG.STORAGE.VIDEOS_DIR, file.name))
             .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', file.name, { err }))
 
           res(path)

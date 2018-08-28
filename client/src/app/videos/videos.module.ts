@@ -5,6 +5,7 @@ import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.c
 import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'
+import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { VideosComponent } from './videos.component'
 
     VideoTrendingComponent,
     VideoRecentlyAddedComponent,
-    VideoLocalComponent
+    VideoLocalComponent,
+    VideoUserSubscriptionsComponent
   ],
 
   exports: [

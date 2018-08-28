@@ -5,9 +5,9 @@ import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import * as request from 'request'
-import { createWriteStream, writeFile } from 'fs'
+import { createWriteStream, ensureDir, writeFile } from 'fs-extra'
 import { join } from 'path'
-import { mkdirpPromise, root } from '../../helpers/core-utils'
+import { root } from '../../helpers/core-utils'
 
 export class YoutubeDlUpdateScheduler extends AbstractScheduler {
 
@@ -27,7 +27,7 @@ export class YoutubeDlUpdateScheduler extends AbstractScheduler {
     const detailsPath = join(binDirectory, 'details')
     const url = 'https://yt-dl.org/downloads/latest/youtube-dl'
 
-    await mkdirpPromise(binDirectory)
+    await ensureDir(binDirectory)
 
     return new Promise(res => {
       request.get(url, { followRedirect: false }, (err, result) => {

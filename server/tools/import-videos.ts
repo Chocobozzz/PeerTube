@@ -5,12 +5,12 @@ import * as program from 'commander'
 import { join } from 'path'
 import * as youtubeDL from 'youtube-dl'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { unlinkPromise } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
 import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
+import { remove } from 'fs-extra'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -204,10 +204,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
     }
   }
 
-  await unlinkPromise(videoPath)
-  if (thumbnailfile) {
-    await unlinkPromise(thumbnailfile)
-  }
+  await remove(videoPath)
+  if (thumbnailfile) await remove(thumbnailfile)
 
   console.log('Uploaded video "%s"!\n', videoAttributes.name)
 }

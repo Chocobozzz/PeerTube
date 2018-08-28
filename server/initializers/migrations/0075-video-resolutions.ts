@@ -1,9 +1,8 @@
 import * as Sequelize from 'sequelize'
 import { join } from 'path'
-
-import { readdirPromise, renamePromise } from '../../helpers/core-utils'
 import { CONFIG } from '../../initializers/constants'
 import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
+import { readdir, rename } from 'fs-extra'
 
 function up (utils: {
   transaction: Sequelize.Transaction,
@@ -14,7 +13,7 @@ function up (utils: {
   const torrentDir = CONFIG.STORAGE.TORRENTS_DIR
   const videoFileDir = CONFIG.STORAGE.VIDEOS_DIR
 
-  return readdirPromise(videoFileDir)
+  return readdir(videoFileDir)
     .then(videoFiles => {
       const tasks: Promise<any>[] = []
       for (const videoFile of videoFiles) {
@@ -31,11 +30,11 @@ function up (utils: {
           .then(height => {
             const oldTorrentName = uuid + '.torrent'
             const newTorrentName = uuid + '-' + height + '.torrent'
-            return renamePromise(join(torrentDir, oldTorrentName), join(torrentDir, newTorrentName)).then(() => height)
+            return rename(join(torrentDir, oldTorrentName), join(torrentDir, newTorrentName)).then(() => height)
           })
           .then(height => {
             const newVideoFileName = uuid + '-' + height + '.' + ext
-            return renamePromise(join(videoFileDir, videoFile), join(videoFileDir, newVideoFileName)).then(() => height)
+            return rename(join(videoFileDir, videoFile), join(videoFileDir, newVideoFileName)).then(() => height)
           })
           .then(height => {
             const query = 'UPDATE "VideoFiles" SET "resolution" = ' + height +

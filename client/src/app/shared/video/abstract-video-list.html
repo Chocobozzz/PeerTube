@@ -14,7 +14,7 @@
     <div *ngFor="let videos of videoPages" class="videos-page">
       <my-video-miniature
         class="ng-animate"
-        *ngFor="let video of videos" [video]="video" [user]="user"
+        *ngFor="let video of videos" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
       >
       </my-video-miniature>
     </div>

@@ -1,9 +1,9 @@
 import * as prompt from 'prompt'
 import { join } from 'path'
-import { readdirPromise, unlinkPromise } from '../server/helpers/core-utils'
 import { CONFIG } from '../server/initializers/constants'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
+import { remove, readdir } from 'fs-extra'
 
 run()
   .then(() => process.exit(0))
@@ -39,7 +39,7 @@ async function run () {
     console.log('Processing delete...\n')
 
     for (const path of toDelete) {
-      await unlinkPromise(path)
+      await remove(path)
     }
 
     console.log('Done!')
@@ -49,7 +49,7 @@ async function run () {
 }
 
 async function pruneDirectory (directory: string) {
-  const files = await readdirPromise(directory)
+  const files = await readdir(directory)
 
   const toDelete: string[] = []
   for (const file of files) {

@@ -3,13 +3,13 @@ import { omit } from 'lodash'
 import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
-import { unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView } from '../../helpers/audit-logger'
+import { remove, writeJSON } from 'fs-extra'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -130,7 +130,7 @@ async function getCustomConfig (req: express.Request, res: express.Response, nex
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
-  await unlinkPromise(CONFIG.CUSTOM_FILE)
+  await remove(CONFIG.CUSTOM_FILE)
 
   auditLogger.delete(
     res.locals.oauth.token.User.Account.Actor.getIdentifier(),
@@ -163,7 +163,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
 
-  await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON, undefined, 2))
+  await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
   reloadConfig()
   ClientHtml.invalidCache()

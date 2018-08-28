@@ -5,7 +5,7 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { ActorModel } from '../../../models/activitypub/actor'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 
 async function processLikeActivity (activity: ActivityLike) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -27,7 +27,7 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(videoUrl)
+  const { video } = await getOrCreateVideoAndAccountAndChannel(videoUrl)
 
   return sequelizeTypescript.transaction(async t => {
     const rate = {

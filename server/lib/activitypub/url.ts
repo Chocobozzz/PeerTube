@@ -13,8 +13,8 @@ function getVideoCommentActivityPubUrl (video: VideoModel, videoComment: VideoCo
   return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid + '/comments/' + videoComment.id
 }
 
-function getVideoChannelActivityPubUrl (videoChannelUUID: string) {
-  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannelUUID
+function getVideoChannelActivityPubUrl (videoChannelName: string) {
+  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannelName
 }
 
 function getAccountActivityPubUrl (accountName: string) {

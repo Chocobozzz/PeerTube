@@ -222,7 +222,7 @@ Konto erstellen</target>
       </trans-unit>
       <trans-unit id="2ac776627e18565d7ae85cd7f4cd033bc5d0c88b">
         <source>I have read and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
-        <target>Ich habe die &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Bestimmungen&lt;/a&gt; dieser Instanz gelesen und und stimme ihnen zu.</target>
+        <target>Ich habe die &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Bestimmungen&lt;/a&gt; dieser Instanz gelesen und stimme ihnen zu.</target>
         <context-group name="null">
           <context context-type="linenumber">60</context>
         </context-group>
@@ -580,7 +580,7 @@ Konto erstellen</target>
     It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </source>
         <target>
-    Es ist eine freie Open Source Software unter der <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+    Es ist eine freie Open Source Software unter der <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 Lizenz<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
@@ -717,7 +717,7 @@ Konto erstellen</target>
     There are much more effective ways to get that kind of information.
   </source>
         <target>
-    Das Worst-Case-Szenario einer durchschnittlichen Person, die ihre Freunde ausspäht ist relativ unwahrscheinlich.
+    Das Schlimmstfall-Szenario einer durchschnittlichen Person, die ihre Freunde ausspäht ist relativ unwahrscheinlich.
     Es gibt viel effektivere Möglichkeiten, um an diese Art von Informationen zu gelangen.
   </target>
         <context-group name="null">
@@ -739,7 +739,7 @@ Konto erstellen</target>
   </source>
         <target>
     Die Gefahren für die Privatsphäre sind bei YouTube anderer Art als bei PeerTube.
-    YouTube speichert eine große Menge persönlicher Daten (nicht nur die IP) um sie dann zu analysieren und dich zu tracken.
+    YouTube speichert eine große Menge persönlicher Daten (nicht nur die IP), um sie dann zu analysieren und dich zu tracken.
     Außerdem ist YouTube Teil von Google/Alphabet, einer Firma, die dich über mehrere Webseiten hinweg verfolgt (mit AdSense oder Google Analytics).
   </target>
         <context-group name="null">
@@ -810,7 +810,7 @@ P2P ist nicht der Grund für die fehlende Anonymität.</target>
       </trans-unit>
       <trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18">
         <source>Disable P2P from the administration interface</source>
-        <target>P2P in den Administrations-Einstellungen abschalten</target>
+        <target>P2P in den Administrationseinstellungen abschalten</target>
         <context-group name="null">
           <context context-type="linenumber">94</context>
         </context-group>
@@ -915,7 +915,7 @@ P2P ist nicht der Grund für die fehlende Anonymität.</target>
       </trans-unit>
       <trans-unit id="aa3ef567a1ea22c1e4d0acfdc8f80bc636bf12df">
         <source>With &lt;strong&gt;Do not list&lt;/strong&gt; or &lt;strong&gt;Blur thumbnails&lt;/strong&gt;, a confirmation will be requested to watch the video.</source>
-        <target>Mit &lt;strong&gt;Nicht listen&lt;/strong&gt; oder &lt;strong&gt;Thumbnails verschwommen machen&lt;/strong&gt;, muss zum Ansehen des Videos eine Bestätigung angefragt werden.</target>
+        <target>Mit &lt;strong&gt;Nicht listen&lt;/strong&gt; oder &lt;strong&gt;Thumbnails verschwommen machen&lt;/strong&gt; muss zum Ansehen des Videos eine Bestätigung angefragt werden.</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -955,6 +955,27 @@ P2P ist nicht der Grund für die fehlende Anonymität.</target>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>Import</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
+        <source>Video import with HTTP enabled</source>
+        <target>Videoimport mit HTTP aktiviert</target>
+        <context-group name="null">
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
+        <source>Video import with a torrent file or a magnet URI enabled</source>
+        <target>Videoimport mit einem Torrent oder ein Magnet URI aktiviert</target>
+        <context-group name="null">
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Administrator</target>
@@ -978,7 +999,7 @@ P2P ist nicht der Grund für die fehlende Anonymität.</target>
       </trans-unit>
       <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
         <source>User default video quota</source>
-        <target>Standard-Kontingent für die Videos eines Nutzers</target>
+        <target>Standardkontingent für die Videos eines Nutzers</target>
         <context-group name="null">
           <context context-type="linenumber">132</context>
         </context-group>
@@ -1006,7 +1027,7 @@ P2P ist nicht der Grund für die fehlende Anonymität.</target>
       </trans-unit>
       <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c">
         <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
-        <target>zeigt den Twitter-Account für die Webseite, auf der der Inhalt veröffentlicht wurde.</target>
+        <target>Zeigt den Twitter-Account für die Webseite, auf der der Inhalt veröffentlicht wurde.</target>
         <context-group name="null">
           <context context-type="linenumber">154</context>
         </context-group>
@@ -1038,21 +1059,21 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="fe22d2c0020e913ee4b75ec22a3abc8814810490">
         <source>Transcoding</source>
-        <target>Transcodierung</target>
+        <target>Transkodierung</target>
         <context-group name="null">
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
         <source>Transcoding enabled</source>
-        <target>Transcodierung an</target>
+        <target>Transkodierung an</target>
         <context-group name="null">
           <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
         <source>If you disable transcoding, many videos from your users will not work!</source>
-        <target>Wenn du das Transcoding abschaltest, werden viele Videos nicht laufen!</target>
+        <target>Wenn du die Transkodierung abschaltest, werden viele Videos nicht laufen!</target>
         <context-group name="null">
           <context context-type="linenumber">181</context>
         </context-group>
@@ -1088,7 +1109,7 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
-        <target>Einige Dateien (Vorschau, Untertitel) werden nicht verteilt gespeichert, stattdessen werden sie direkt von der Ursprungs-Instanz geladen und gecacht.</target>
+        <target>Einige Dateien (Vorschau, Untertitel) werden nicht verteilt gespeichert. Wir laden sie direkt von der Ursprungsinstanz und speichern sie zwischen.</target>
         <context-group name="null">
           <context context-type="linenumber">214</context>
         </context-group>
@@ -1381,7 +1402,7 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
-        <target>Video-Kontingent</target>
+        <target>Videokontingent</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -1392,7 +1413,7 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
     </source>
         <target>
-      Das Transcodieren ist auf diesem Server eingeschaltet. Das Video-Kontingent berücksichtigt nur das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ursprüngliche<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      Das Transkodieren ist auf diesem Server eingeschaltet. Das Videokontingent berücksichtigt nur das <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ursprüngliche<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> Video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
       Dieser Nutzer kann maximal ca. <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/> nutzen.</target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
@@ -1505,7 +1526,7 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="520d68b2c9f7dacaf2a5073716cad9bd328ea7e7">
         <source>My video channels</source>
-        <target>Meine Video-Kanäle</target>
+        <target>Meine Videokanäle</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -1517,9 +1538,16 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0bb0c57c6d12635d26996c124248e748b666e5ad">
+        <source>My video imports</source>
+        <target>Meine Videoimporte</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
         <source>Video quota:</source>
-        <target>Video-Kontingent:</target>
+        <target>Videokontingent:</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -1533,9 +1561,16 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925">
         <source>Video settings</source>
-        <target>Video-Einstellungen</target>
+        <target>Videoeinstellungen</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
+        <source>Danger zone</source>
+        <target>Gefahrenzone</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8057bddbed23d6cd911df8cc3a4ec24d1f258b79">
@@ -1554,7 +1589,7 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="73c1cefc348a6f361497210dea1ed79499fd1260">
         <source>Create another video channel</source>
-        <target>Einen weiteren Video-Kanal erstellen</target>
+        <target>Einen weiteren Videokanal erstellen</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -1568,7 +1603,7 @@ Setze hier deinen Haken, speichere die Einstellungen und teste die Adresse eines
       </trans-unit>
       <trans-unit id="9dbe4718a5611fbc611fc6b5e0b27df813372c68">
         <source>Create a video channel</source>
-        <target>Einen Video-Kanal erstellen</target>
+        <target>Einen Videokanal erstellen</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -1587,6 +1622,13 @@ When you will upload a video in this channel, the video support field will be au
 Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automatisch mit diesem Text gefüllt.</target>
         <context-group name="null">
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
+        <source>Target</source>
+        <target>Ziel</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
@@ -1619,7 +1661,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="fb17c44abac2d1ed2a54cdd28bae289dc0b9a1c2">
         <source>Automatically plays video</source>
-        <target>Spiel das Video automatisch ab.</target>
+        <target>Spiel das Video automatisch ab</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
         </context-group>
@@ -1705,6 +1747,13 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bfe7f34fbd4c3afa5f84a5580e0fae942cad2333">
+        <source>You can import any URL &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;supported by youtube-dl&lt;/a&gt; or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Du kannst jede URL importieren, &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;die von youtube-dl unterstützt wird&lt;/a&gt; oder jede URL, die auf eine MP4-Datei zeigt. Du solltest sicherstellen, dass du die Verbreitungsrechte für den Inhalt hast, ansonsten könnte es legale Schwierigkeiten für dich und deine Instanz verursachen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>Kanal</target>
@@ -1717,6 +1766,17 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
         <target>Privatsphäre</target>
         <context-group name="null">
           <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
+        <source>
+  Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
+</source>
+        <target>
+  Gückwunsch, das Video unter <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> wird importiert. Du kannst bereits Informationen über dieses Video hinzufügen.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1745,6 +1805,73 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
         <target>Veröffentlichen</target>
         <context-group name="null">
           <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
+        <source>Select the torrent to import</source>
+        <target>Wähle den zu importierenden Torrent</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
+        <source>Paste magnet URI</source>
+        <target>Füge die Magnet URI ein</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1ce18c12c809a738f05f2290f46df0677f27ed70">
+        <source>You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Du kannst jedes Torrent, das auf eine MP4-Datei zeigt, importieren. Du solltest sicherstellen, dass du die Verbreitungsrechte für den Inhalt hast, ansonsten könnte es legale Schwierigkeiten für dich und deine Instanz verursachen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
+        <source>
+  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
+</source>
+        <target>
+  Glückwunsch, dieses Video wird mittels BitTorrent importiert! Du kannst bereits Informationen über dieses Video hinzufügen.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
+        <source>Import <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Importiere <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
+        <source>Upload <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Lade <x id="INTERPOLATION" equiv-text="{{ videoName }}"/> hoch</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
+        <source>Upload a file</source>
+        <target>Lade eine Datei hoch</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470">
+        <source>Import with URL</source>
+        <target>Importiere mit einer URL</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="752c401d7dcd708944eef60e411187f71d882340">
+        <source>Import with torrent</source>
+        <target>Importiere einen Torrent</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
@@ -1802,7 +1929,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target>Video-Beschreibungen sind standardmäßig gekürzt und müssen manuell aufgeklappt werden.</target>
+        <target>Videobeschreibungen sind standardmäßig gekürzt und müssen manuell aufgeklappt werden.</target>
         <context-group name="null">
           <context context-type="linenumber">24</context>
         </context-group>
@@ -1830,21 +1957,21 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
-        <target>Video-Kommentare zulassen</target>
+        <target>Videokommentare zulassen</target>
         <context-group name="null">
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
-        <target>Warte das Transcodieren ab, bevor du das Video veröffentlichst</target>
+        <target>Warte das Transkodieren ab, bevor du das Video veröffentlichst</target>
         <context-group name="null">
           <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
-        <target>Wenn du dich entschließt, dass Transcodieren nicht abzuwarten, kann das Video unabspielbar sein, bis das Transcodieren beendet ist.</target>
+        <target>Wenn du dich entschließt, dass Transkodieren nicht abzuwarten, kann das Video unabspielbar sein, bis das Transkodieren beendet ist.</target>
         <context-group name="null">
           <context context-type="linenumber">127</context>
         </context-group>
@@ -1865,7 +1992,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
         <source>See the subtitle file</source>
-        <target>Siehe in der Untertitel-Datei</target>
+        <target>Siehe in der Untertiteldatei</target>
         <context-group name="null">
           <context context-type="linenumber">148</context>
         </context-group>
@@ -1960,7 +2087,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="2db8d7cf6a3071f4c1519ef2b5e2713d9ff4e87f">
         <source>Torrent (magnet link)</source>
-        <target>Torrent (Magnet-Datei)</target>
+        <target>Torrent (Magnet-Link)</target>
         <context-group name="null">
           <context context-type="linenumber">30</context>
         </context-group>
@@ -2023,7 +2150,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
           The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
         </source>
         <target>
-          Diese URL ist nicht sicher (kein HTTPS), das Video kann als nicht in Webseiten eingebettet werden, die über HTTPS ausgeliefert werden (Web-Browser blockieren unsichere HTTP-Verbindungen auf sicheren HTTPS-Webseiten).
+          Diese URL ist nicht sicher (kein HTTPS), das Video kann also nicht in Webseiten eingebettet werden, die über HTTPS ausgeliefert werden (Web-Browser blockieren unsichere HTTP-Verbindungen auf sicheren HTTPS-Webseiten).
         </target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
@@ -2036,12 +2163,23 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7584313e33a66811eb10646627914a01fff0347d">
+        <source>
+    The video is being imported, it will be available when the import is finished.
+  </source>
+        <target>
+    Das Video wird importiert, es ist verfügbar sobald der Import abgeschlossen ist.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9ed65ae88f6c982bc44d6fed2796e55f47dbf304">
         <source>
     The video is being transcoded, it may not work properly.
   </source>
         <target>
-    Dieses Video wird transcodiert, es funktioniert daher möglicherweise nicht ganz.
+    Dieses Video wird transkodiert, es funktioniert daher möglicherweise nicht ganz.
   </target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
@@ -2085,7 +2223,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
         <source>Go to the account page</source>
-        <target>Zur Konto-Seite gehen</target>
+        <target>Gehe zur Kontoseite</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
         </context-group>
@@ -2368,7 +2506,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="75f4bb68ee4c6b282abfd9d8d32be22c6202794d">
         <source>to confirm.</source>
-        <target>zur Bestätigung</target>
+        <target>zur Bestätigung.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2410,7 +2548,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="a6718d6aaf5bcd1692eed48daa61d2bed62c1f50">
         <source>If you confirm, you will send a follow request to:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> - </source>
-        <target>Bei Bestätigung wird eine Abonnement-Anfrage gesendet an:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> - </target>
+        <target>Bei Bestätigung wird eine Abonnementanfrage gesendet an:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> - </target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2548,6 +2686,41 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca8e8cf0f1686604db3b6a2ebadab7f7b426a047">
+        <source>Are you sure you want to delete your account? This will delete all you data, including channels, videos etc.</source>
+        <target>Bist du sicher, dass du dein Konto löschen möchtest? Das wird all deine Daten löschen, inkl. aller Kanäle, Videos etc.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
+        <source>Type your username to confirm</source>
+        <target>Tippe deine Benutzernamen ein, um zu bestätigen</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>Lösche dein Konto</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8a8a7f7160939fb55e82bc01fe9f876f5f2e065">
+        <source>Delete my account</source>
+        <target>Lösche mein Konto</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
+        <source>Your account is deleted.</source>
+        <target>Dein Konto ist gelöscht.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
         <source>Profile updated.</source>
         <target>Profil aktualisiert.</target>
@@ -2571,7 +2744,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
-        <target>Kanal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> erstellt.</target>
+        <target>Videokanal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> erstellt.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2585,7 +2758,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
-        <target>Kanal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> aktualisiert.</target>
+        <target>Videokanal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> aktualisiert.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2599,14 +2772,14 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="703dee7f3e693f9c77ef17c46f9fa71999609f8e">
         <source>Please type the name of the video channel to confirm</source>
-        <target>Bitte gib zur Bestätigung den Namen des Kanals ein</target>
+        <target>Bitte gib zur Bestätigung den Namen des Videokanals ein</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
-        <target>Kanal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> entfernt.</target>
+        <target>Videokanal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> entfernt.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2655,14 +2828,21 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="4a7e91ebe1cf184db5f2bfecf9c16ff81c9e2c02">
         <source>Waiting transcoding</source>
-        <target>Warte auf Transcodierung</target>
+        <target>Warte auf Transkodierung</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a">
         <source>To transcode</source>
-        <target>Zur Transcodierung</target>
+        <target>Zur Transkodierung</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392">
+        <source>To import</source>
+        <target>Zu importieren</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2678,7 +2858,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="8d9b4f4b69108c3c9aa0f3b0dbde87786ba9b319">
         <source>Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target>Stelle sicher, dass du PeerTube (config/directory) korrekt eingestellt hast, insbesondere die Webserver-Sektion</target>
+        <target>Stelle sicher, dass du PeerTube (config/directory) korrekt eingestellt hast, insbesondere die Webserver-Sektion.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2706,7 +2886,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
         <source>Unable to find user id or verification string.</source>
-        <target>Benutzer-ID oder Verification String nicht gefunden.</target>
+        <target>Benutzer-ID oder Verifizierungscode nicht gefunden.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2762,7 +2942,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="f24d368d6be0fee70fb4503d2ad37a612e1b0889">
         <source>Medium (4-10 min)</source>
-        <target>Mittel (4–10 min)</target>
+        <target>Mittel (4-10 min)</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2895,7 +3075,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="f15f2e02b1f6a96553e98ea4a969045d17ec1400">
         <source>Transcoding threads is required.</source>
-        <target>Bitte gib eine Anzahl für die Transcodierungsthreads an.</target>
+        <target>Bitte gib eine Anzahl für die Trankcodierungsthreads an.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3035,7 +3215,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="4a3ebc6ddb6b6677aed7b04eb503f9ddd0cfe561">
         <source>You must to agree with the instance terms in order to registering on it.</source>
-        <target>Um dich auf dieser Instanz zu registrieren musst du den Bestimmungen zustimmen.</target>
+        <target>Um dich auf dieser Instanz zu registrieren, musst du den Bestimmungen zustimmen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3063,14 +3243,14 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e">
         <source>Video caption language is required.</source>
-        <target>Eine Untertitel-Sprache muss angegeben werden.</target>
+        <target>Eine Untertitelsprache muss angegeben werden.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963">
         <source>Video caption file is required.</source>
-        <target>Eine Untertitel-Datei für das Video muss angegeben werden.</target>
+        <target>Eine Untertiteldatei für das Video muss angegeben werden.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3091,7 +3271,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="3fe80c71378e127dda2dda9dbcd66b059d362813">
         <source>Support text cannot be more than 500 characters long.</source>
-        <target>Die Beschreibung zur Unterstützung darf nicht mehr als 500 Zeichen umfassen</target>
+        <target>Die Beschreibung zur Unterstützung darf nicht mehr als 500 Zeichen umfassen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3511,7 +3691,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="6607cacb987a588530a13de7018d959240d19153">
         <source>Oct</source>
-        <target>Oct</target>
+        <target>Okt</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3525,7 +3705,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e">
         <source>Dec</source>
-        <target>Dec</target>
+        <target>Dez</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3539,7 +3719,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5">
         <source>yy-mm-dd </source>
-        <target>JJ-MM-TT</target>
+        <target>yy-mm-dd </target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3588,7 +3768,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
-        <target>Gestern</target>
+        <target>Vor <x id="INTERPOLATION" equiv-text="{{interval}}"/> Tag</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3729,6 +3909,20 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
         <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> Videos mit durchschnittlicher Qualität</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
+        <source>Video to import updated.</source>
+        <target>Videoimport wurde aktualisiert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
+        <source>Your video was uploaded to your account and is private.</source>
+        <target>Das Video wurde in dein Konto hochgeladen und ist privat.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

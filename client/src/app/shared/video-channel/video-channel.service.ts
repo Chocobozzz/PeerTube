@@ -17,13 +17,23 @@ export class VideoChannelService {
 
   videoChannelLoaded = new ReplaySubject<VideoChannel>(1)
 
+  static extractVideoChannels (result: ResultList<VideoChannelServer>) {
+    const videoChannels: VideoChannel[] = []
+
+    for (const videoChannelJSON of result.data) {
+      videoChannels.push(new VideoChannel(videoChannelJSON))
+    }
+
+    return { data: videoChannels, total: result.total }
+  }
+
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor
-  ) {}
+  ) { }
 
-  getVideoChannel (videoChannelUUID: string) {
-    return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID)
+  getVideoChannel (videoChannelName: string) {
+    return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName)
                .pipe(
                  map(videoChannelHash => new VideoChannel(videoChannelHash)),
                  tap(videoChannel => this.videoChannelLoaded.next(videoChannel)),
@@ -34,7 +44,7 @@ export class VideoChannelService {
   listAccountVideoChannels (account: Account): Observable<ResultList<VideoChannel>> {
     return this.authHttp.get<ResultList<VideoChannelServer>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels')
                .pipe(
-                 map(res => this.extractVideoChannels(res)),
+                 map(res => VideoChannelService.extractVideoChannels(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -47,16 +57,16 @@ export class VideoChannelService {
                )
   }
 
-  updateVideoChannel (videoChannelUUID: string, videoChannel: VideoChannelUpdate) {
-    return this.authHttp.put(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID, videoChannel)
+  updateVideoChannel (videoChannelName: string, videoChannel: VideoChannelUpdate) {
+    return this.authHttp.put(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName, videoChannel)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  changeVideoChannelAvatar (videoChannelUUID: string, avatarForm: FormData) {
-    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID + '/avatar/pick'
+  changeVideoChannelAvatar (videoChannelName: string, avatarForm: FormData) {
+    const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelName + '/avatar/pick'
 
     return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
@@ -68,15 +78,5 @@ export class VideoChannelService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
-  }
-
-  private extractVideoChannels (result: ResultList<VideoChannelServer>) {
-    const videoChannels: VideoChannel[] = []
-
-    for (const videoChannelJSON of result.data) {
-      videoChannels.push(new VideoChannel(videoChannelJSON))
-    }
-
-    return { data: videoChannels, total: result.total }
   }
 }

@@ -31,6 +31,7 @@ const PAGINATION = {
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
+  USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
@@ -42,7 +43,8 @@ const SORTABLE_COLUMNS = {
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ],
 
-  VIDEOS_SEARCH: [ 'match', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ]
+  VIDEOS_SEARCH: [ 'match', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -111,6 +113,7 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'email': 60000 * 10 // 10 minutes
 }
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 
@@ -178,6 +181,12 @@ const CONFIG = {
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level')
+  },
+  SEARCH: {
+    REMOTE_URI: {
+      USERS: config.get<boolean>('search.remote_uri.users'),
+      ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
+    }
   },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
@@ -460,7 +469,8 @@ const ACTIVITY_PUB = {
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
   MAX_RECURSION_COMMENTS: 100,
-  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
+  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000, // 1 day
+  VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
 }
 
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
@@ -572,6 +582,7 @@ if (isTestInstance() === true) {
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+  ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 
@@ -642,6 +653,7 @@ export {
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,
+  CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,

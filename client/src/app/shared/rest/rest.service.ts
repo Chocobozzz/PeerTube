@@ -32,6 +32,21 @@ export class RestService {
     return newParams
   }
 
+  addObjectParams (params: HttpParams, object: object) {
+    for (const name of Object.keys(object)) {
+      const value = object[name]
+      if (!value) continue
+
+      if (Array.isArray(value) && value.length !== 0) {
+        for (const v of value) params = params.append(name, v)
+      } else {
+        params = params.append(name, value)
+      }
+    }
+
+    return params
+  }
+
   componentPaginationToRestPagination (componentPagination: ComponentPagination): RestPagination {
     const start: number = (componentPagination.currentPage - 1) * componentPagination.itemsPerPage
     const count: number = componentPagination.itemsPerPage

@@ -1,6 +1,5 @@
 import * as AsyncLRU from 'async-lru'
-import { createWriteStream } from 'fs'
-import { unlinkPromise } from '../../helpers/core-utils'
+import { createWriteStream, remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { fetchRemoteVideoStaticFile } from '../activitypub'
@@ -26,7 +25,7 @@ export abstract class AbstractVideoStaticFileCache <T> {
     })
 
     this.lru.on('evict', (obj: { key: string, value: string }) => {
-      unlinkPromise(obj.value)
+      remove(obj.value)
         .then(() => logger.debug('%s evicted from %s', obj.value, this.constructor.name))
     })
   }

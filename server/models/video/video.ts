@@ -30,15 +30,7 @@ import { VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
-import {
-  copyFilePromise,
-  createTorrentPromise,
-  peertubeTruncate,
-  renamePromise,
-  statPromise,
-  unlinkPromise,
-  writeFilePromise
-} from '../../helpers/core-utils'
+import { createTorrentPromise, peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
@@ -56,6 +48,7 @@ import { generateImageFromVideoFile, getVideoFileFPS, getVideoFileResolution, tr
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
+  ACTIVITY_PUB,
   API_VERSION,
   CONFIG,
   CONSTRAINTS_FIELDS,
@@ -94,6 +87,7 @@ import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
+import { copy, remove, rename, stat, writeFile } from 'fs-extra'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -133,6 +127,7 @@ export enum ScopeNames {
 
 type AvailableForListOptions = {
   actorId: number,
+  includeLocalVideos: boolean,
   filter?: VideoFilter,
   categoryOneOf?: number[],
   nsfw?: boolean,
@@ -199,35 +194,12 @@ type AvailableForListOptions = {
       ]
     }
 
-    // Force actorId to be a number to avoid SQL injections
-    const actorIdNumber = parseInt(options.actorId.toString(), 10)
-
     // FIXME: It would be more efficient to use a CTE so we join AFTER the filters, but sequelize does not support it...
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
           [Sequelize.Op.notIn]: Sequelize.literal(
             '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-          ),
-          [ Sequelize.Op.in ]: Sequelize.literal(
-            '(' +
-              'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-              ' UNION ' +
-              'SELECT "video"."id" AS "id" FROM "video" ' +
-              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-              'WHERE "actor"."serverId" IS NULL ' +
-              ' UNION ALL ' +
-              'SELECT "video"."id" AS "id" FROM "video" ' +
-              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-              'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-              'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-              'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            ')'
           )
         },
         // Always list public videos
@@ -246,6 +218,36 @@ type AvailableForListOptions = {
         ]
       },
       include: [ videoChannelInclude ]
+    }
+
+    if (options.actorId) {
+      let localVideosReq = ''
+      if (options.includeLocalVideos === true) {
+        localVideosReq = ' UNION ALL ' +
+          'SELECT "video"."id" AS "id" FROM "video" ' +
+          'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+          'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+          'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+          'WHERE "actor"."serverId" IS NULL'
+      }
+
+      // Force actorId to be a number to avoid SQL injections
+      const actorIdNumber = parseInt(options.actorId.toString(), 10)
+      query.where['id'][ Sequelize.Op.in ] = Sequelize.literal(
+        '(' +
+        'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+        'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+        'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+        ' UNION ALL ' +
+        'SELECT "video"."id" AS "id" FROM "video" ' +
+        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+        'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+        'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+        'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+        'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+        localVideosReq +
+        ')'
+      )
     }
 
     if (options.withFiles === true) {
@@ -825,6 +827,7 @@ export class VideoModel extends Model<VideoModel> {
     count: number,
     sort: string,
     nsfw: boolean,
+    includeLocalVideos: boolean,
     withFiles: boolean,
     categoryOneOf?: number[],
     licenceOneOf?: number[],
@@ -833,7 +836,8 @@ export class VideoModel extends Model<VideoModel> {
     tagsAllOf?: string[],
     filter?: VideoFilter,
     accountId?: number,
-    videoChannelId?: number
+    videoChannelId?: number,
+    actorId?: number
   }) {
     const query = {
       offset: options.start,
@@ -841,11 +845,13 @@ export class VideoModel extends Model<VideoModel> {
       order: getSort(options.sort)
     }
 
-    const serverActor = await getServerActor()
+    // actorId === null has a meaning, so just check undefined
+    const actorId = options.actorId !== undefined ? options.actorId : (await getServerActor()).id
+
     const scopes = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
-          actorId: serverActor.id,
+          actorId,
           nsfw: options.nsfw,
           categoryOneOf: options.categoryOneOf,
           licenceOneOf: options.licenceOneOf,
@@ -855,7 +861,8 @@ export class VideoModel extends Model<VideoModel> {
           filter: options.filter,
           withFiles: options.withFiles,
           accountId: options.accountId,
-          videoChannelId: options.videoChannelId
+          videoChannelId: options.videoChannelId,
+          includeLocalVideos: options.includeLocalVideos
         } as AvailableForListOptions
       ]
     }
@@ -871,6 +878,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static async searchAndPopulateAccountAndServer (options: {
+    includeLocalVideos: boolean
     search?: string
     start?: number
     count?: number
@@ -915,7 +923,8 @@ export class VideoModel extends Model<VideoModel> {
           id: {
             [ Sequelize.Op.in ]: Sequelize.literal(
               '(' +
-                'SELECT "video"."id" FROM "video" WHERE ' +
+                'SELECT "video"."id" FROM "video" ' +
+                'WHERE ' +
                 'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
                 'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
                 'UNION ALL ' +
@@ -955,6 +964,7 @@ export class VideoModel extends Model<VideoModel> {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST, {
           actorId: serverActor.id,
+          includeLocalVideos: options.includeLocalVideos,
           nsfw: options.nsfw,
           categoryOneOf: options.categoryOneOf,
           licenceOneOf: options.licenceOneOf,
@@ -985,21 +995,6 @@ export class VideoModel extends Model<VideoModel> {
     const query: IFindOptions<VideoModel> = {
       where: {
         url
-      }
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
-  }
-
-  static loadByUUIDOrURLAndPopulateAccount (uuid: string, url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoModel> = {
-      where: {
-        [Sequelize.Op.or]: [
-          { uuid },
-          { url }
-        ]
       }
     }
 
@@ -1185,7 +1180,7 @@ export class VideoModel extends Model<VideoModel> {
     const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
     logger.info('Creating torrent %s.', filePath)
 
-    await writeFilePromise(filePath, torrent)
+    await writeFile(filePath, torrent)
 
     const parsedTorrent = parseTorrent(torrent)
     videoFile.infoHash = parsedTorrent.infoHash
@@ -1391,7 +1386,7 @@ export class VideoModel extends Model<VideoModel> {
         type: 'Link',
         mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
-        width: file.resolution,
+        height: file.resolution,
         size: file.size,
         fps: file.fps
       })
@@ -1400,14 +1395,14 @@ export class VideoModel extends Model<VideoModel> {
         type: 'Link',
         mimeType: 'application/x-bittorrent',
         href: this.getTorrentUrl(file, baseUrlHttp),
-        width: file.resolution
+        height: file.resolution
       })
 
       url.push({
         type: 'Link',
         mimeType: 'application/x-bittorrent;x-scheme-handler/magnet',
         href: this.generateMagnetUri(file, baseUrlHttp, baseUrlWs),
-        width: file.resolution
+        height: file.resolution
       })
     }
 
@@ -1495,14 +1490,14 @@ export class VideoModel extends Model<VideoModel> {
     await transcode(transcodeOptions)
 
     try {
-      await unlinkPromise(videoInputPath)
+      await remove(videoInputPath)
 
       // Important to do this before getVideoFilename() to take in account the new file extension
       inputVideoFile.set('extname', newExtname)
 
       const videoOutputPath = this.getVideoFilePath(inputVideoFile)
-      await renamePromise(videoTranscodedPath, videoOutputPath)
-      const stats = await statPromise(videoOutputPath)
+      await rename(videoTranscodedPath, videoOutputPath)
+      const stats = await stat(videoOutputPath)
       const fps = await getVideoFileFPS(videoOutputPath)
 
       inputVideoFile.set('size', stats.size)
@@ -1543,7 +1538,7 @@ export class VideoModel extends Model<VideoModel> {
 
     await transcode(transcodeOptions)
 
-    const stats = await statPromise(videoOutputPath)
+    const stats = await stat(videoOutputPath)
     const fps = await getVideoFileFPS(videoOutputPath)
 
     newVideoFile.set('size', stats.size)
@@ -1558,7 +1553,7 @@ export class VideoModel extends Model<VideoModel> {
 
   async importVideoFile (inputFilePath: string) {
     const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
-    const { size } = await statPromise(inputFilePath)
+    const { size } = await stat(inputFilePath)
     const fps = await getVideoFileFPS(inputFilePath)
 
     let updatedVideoFile = new VideoFileModel({
@@ -1587,7 +1582,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const outputPath = this.getVideoFilePath(updatedVideoFile)
-    await copyFilePromise(inputFilePath, outputPath)
+    await copy(inputFilePath, outputPath)
 
     await this.createTorrentAndSetInfoHash(updatedVideoFile)
 
@@ -1608,31 +1603,42 @@ export class VideoModel extends Model<VideoModel> {
 
   removeThumbnail () {
     const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
-    return unlinkPromise(thumbnailPath)
+    return remove(thumbnailPath)
       .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
   }
 
   removePreview () {
     const previewPath = join(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
-    return unlinkPromise(previewPath)
+    return remove(previewPath)
       .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
   removeFile (videoFile: VideoFileModel) {
     const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
-    return unlinkPromise(filePath)
+    return remove(filePath)
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
   removeTorrent (videoFile: VideoFileModel) {
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
-    return unlinkPromise(torrentPath)
+    return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
   getActivityStreamDuration () {
     // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
     return 'PT' + this.duration + 'S'
+  }
+
+  isOutdated () {
+    if (this.isOwned()) return false
+
+    const now = Date.now()
+    const createdAtTime = this.createdAt.getTime()
+    const updatedAtTime = this.updatedAt.getTime()
+
+    return (now - createdAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL &&
+      (now - updatedAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL
   }
 
   private getBaseUrls () {

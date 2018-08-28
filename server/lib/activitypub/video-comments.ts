@@ -2,12 +2,13 @@ import { VideoCommentObject } from '../../../shared/models/activitypub/objects/v
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
 import { logger } from '../../helpers/logger'
 import { doRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB } from '../../initializers'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from './actor'
-import { getOrCreateAccountAndVideoAndChannel } from './videos'
+import { getOrCreateVideoAndAccountAndChannel } from './videos'
+import * as Bluebird from 'bluebird'
 
 async function videoCommentActivityObjectToDBAttributes (video: VideoModel, actor: ActorModel, comment: VideoCommentObject) {
   let originCommentId: number = null
@@ -15,7 +16,7 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
 
   // If this is not a reply to the video (thread), create or get the parent comment
   if (video.url !== comment.inReplyTo) {
-    const [ parent ] = await addVideoComment(video, comment.inReplyTo)
+    const { comment: parent } = await addVideoComment(video, comment.inReplyTo)
     if (!parent) {
       logger.warn('Cannot fetch or get parent comment %s of comment %s.', comment.inReplyTo, comment.id)
       return undefined
@@ -38,9 +39,9 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
 }
 
 async function addVideoComments (commentUrls: string[], instance: VideoModel) {
-  for (const commentUrl of commentUrls) {
-    await addVideoComment(instance, commentUrl)
-  }
+  return Bluebird.map(commentUrls, commentUrl => {
+    return addVideoComment(instance, commentUrl)
+  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
 async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
@@ -54,22 +55,24 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
     logger.debug('Remote video comment JSON is not valid.', { body })
-    return undefined
+    return { created: false }
   }
 
   const actorUrl = body.attributedTo
-  if (!actorUrl) return []
+  if (!actorUrl) return { created: false }
 
   const actor = await getOrCreateActorAndServerAndModel(actorUrl)
   const entry = await videoCommentActivityObjectToDBAttributes(videoInstance, actor, body)
-  if (!entry) return []
+  if (!entry) return { created: false }
 
-  return VideoCommentModel.findOrCreate({
+  const [ comment, created ] = await VideoCommentModel.findOrCreate({
     where: {
       url: body.id
     },
     defaults: entry
   })
+
+  return { comment, created }
 }
 
 async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
@@ -90,7 +93,8 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
   try {
     // Maybe it's a reply to a video?
-    const { video } = await getOrCreateAccountAndVideoAndChannel(url)
+    // If yes, it's done: we resolved all the thread
+    const { video } = await getOrCreateVideoAndAccountAndChannel(url)
 
     if (comments.length !== 0) {
       const firstReply = comments[ comments.length - 1 ]

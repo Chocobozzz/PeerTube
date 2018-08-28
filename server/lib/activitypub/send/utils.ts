@@ -6,6 +6,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../job-queue'
 import { VideoModel } from '../../../models/video/video'
 import { getActorsInvolvedInVideo } from '../audience'
+import { getServerActor } from '../../../helpers/utils'
 
 async function forwardVideoRelatedActivity (
   activity: Activity,
@@ -118,14 +119,28 @@ async function computeFollowerUris (toActorFollower: ActorModel[], actorsExcepti
   const toActorFollowerIds = toActorFollower.map(a => a.id)
 
   const result = await ActorFollowModel.listAcceptedFollowerSharedInboxUrls(toActorFollowerIds, t)
-  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl || f.inboxUrl)
+  const sharedInboxesException = await buildSharedInboxesException(actorsException)
+
   return result.data.filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
 }
 
 async function computeUris (toActors: ActorModel[], actorsException: ActorModel[] = []) {
-  const toActorSharedInboxesSet = new Set(toActors.map(a => a.sharedInboxUrl || a.inboxUrl))
+  const serverActor = await getServerActor()
+  const targetUrls = toActors
+    .filter(a => a.id !== serverActor.id) // Don't send to ourselves
+    .map(a => a.sharedInboxUrl || a.inboxUrl)
 
-  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl || f.inboxUrl)
+  const toActorSharedInboxesSet = new Set(targetUrls)
+
+  const sharedInboxesException = await buildSharedInboxesException(actorsException)
   return Array.from(toActorSharedInboxesSet)
               .filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
+}
+
+async function buildSharedInboxesException (actorsException: ActorModel[]) {
+  const serverActor = await getServerActor()
+
+  return actorsException
+    .map(f => f.sharedInboxUrl || f.inboxUrl)
+    .concat([ serverActor.sharedInboxUrl ])
 }

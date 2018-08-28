@@ -29,18 +29,8 @@ import { UserModel } from './user'
 @DefaultScope({
   include: [
     {
-      model: () => ActorModel,
-      required: true,
-      include: [
-        {
-          model: () => ServerModel,
-          required: false
-        },
-        {
-          model: () => AvatarModel,
-          required: false
-        }
-      ]
+      model: () => ActorModel, // Default scope includes avatar and server
+      required: true
     }
   ]
 })
@@ -194,7 +184,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadLocalByNameAndHost (name: string, host: string) {
+  static loadByNameAndHost (name: string, host: string) {
     const query = {
       include: [
         {
