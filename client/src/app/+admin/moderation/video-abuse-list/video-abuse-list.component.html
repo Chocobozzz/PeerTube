@@ -5,10 +5,10 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
-      <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th i18n>Reporter</th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n>Video</th>
+      <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 50px;"></th>
     </tr>
   </ng-template>
@@ -19,11 +19,6 @@
         <span class="expander" [pRowToggler]="videoAbuse">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
-      </td>
-
-      <td>
-        <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
-        <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
       </td>
 
       <td>
@@ -38,6 +33,11 @@
         <a [href]="getVideoUrl(videoAbuse)" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
           {{ videoAbuse.video.name }}
         </a>
+      </td>
+
+      <td>
+        <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
+        <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
       </td>
 
       <td class="action-cell">
