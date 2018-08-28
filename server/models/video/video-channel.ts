@@ -71,7 +71,7 @@ type AvailableForListOptions = {
     const inQueryInstanceFollow = '(' +
       'SELECT "actor"."serverId" FROM "actorFollow" ' +
       'INNER JOIN "actor" ON actor.id=  "actorFollow"."targetActorId" ' +
-      'WHERE "actor"."id" = ' + actorIdNumber +
+      'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
     ')'
 
     return {
