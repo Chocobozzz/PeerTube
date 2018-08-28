@@ -10,6 +10,7 @@ function createUser (
   username: string,
   password: string,
   videoQuota = 1000000,
+  videoQuotaDaily = -1,
   role: UserRole = UserRole.USER,
   specialStatus = 200
 ) {
@@ -19,7 +20,8 @@ function createUser (
     password,
     role,
     email: username + '@example.com',
-    videoQuota
+    videoQuota,
+    videoQuotaDaily
   }
 
   return request(url)

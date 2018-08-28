@@ -60,6 +60,7 @@ const videosAddValidator = getCommonVideoAttributes().concat([
 
     if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
+    // TODO: this is not triggered
     const isAble = await user.isAbleToUploadVideo(videoFile)
     if (isAble === false) {
       res.status(403)

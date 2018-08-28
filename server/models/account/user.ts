@@ -381,7 +381,16 @@ export class UserModel extends Model<UserModel> {
       UserModel.getOriginalVideoFileTotalDailyFromUser(this)
     ])
 
-    return ((videoFile.size + totalBytes) < this.videoQuota) &&
-        ((videoFile.size + totalBytesDaily) < this.videoQuotaDaily)
+    const uploadedTotal = videoFile.size + totalBytes
+    const uploadedDaily = videoFile.size + totalBytesDaily
+    if (this.videoQuotaDaily === -1) {
+      return uploadedTotal < this.videoQuota
+    }
+    if (this.videoQuota === -1) {
+      return uploadedDaily < this.videoQuotaDaily
+    }
+
+    return (uploadedTotal < this.videoQuota) &&
+        (uploadedDaily < this.videoQuotaDaily)
   }
 }
