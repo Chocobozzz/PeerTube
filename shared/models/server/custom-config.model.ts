@@ -42,6 +42,7 @@ export interface CustomConfig {
 
   user: {
     videoQuota: number
+    videoQuotaDaily: number
   }
 
   transcoding: {

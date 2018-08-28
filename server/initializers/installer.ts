@@ -123,7 +123,8 @@ async function createOAuthAdminIfNotExist () {
     password,
     role,
     nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-    videoQuota: -1
+    videoQuota: -1,
+    videoQuotaDaily: -1
   }
   const user = new UserModel(userData)
 

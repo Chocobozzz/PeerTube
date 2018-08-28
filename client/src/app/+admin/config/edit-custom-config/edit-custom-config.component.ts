@@ -15,10 +15,7 @@ import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
-  customConfig: CustomConfig
-  resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
-
-  videoQuotaOptions = [
+  static videoQuotaOptions = [
     { value: -1, label: 'Unlimited' },
     { value: 0, label: '0' },
     { value: 100 * 1024 * 1024, label: '100MB' },
@@ -28,6 +25,20 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
   ]
+  static videoQuotaDailyOptions = [
+    { value: -1, label: 'Unlimited' },
+    { value: 0, label: '0' },
+    { value: 10 * 1024 * 1024, label: '10MB' },
+    { value: 50 * 1024 * 1024, label: '50MB' },
+    { value: 100 * 1024 * 1024, label: '100MB' },
+    { value: 500 * 1024 * 1024, label: '500MB' },
+    { value: 2 * 1024 * 1024 * 1024, label: '2GB' },
+    { value: 5 * 1024 * 1024 * 1024, label: '5GB' }
+  ]
+
+  customConfig: CustomConfig
+  resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
+
   transcodingThreadOptions = [
     { value: 0, label: 'Auto (via ffmpeg)' },
     { value: 1, label: '1' },
@@ -75,6 +86,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      userVideoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
       transcodingEnabled: null,
       customizationJavascript: null,
@@ -173,7 +185,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         email: this.form.value['adminEmail']
       },
       user: {
-        videoQuota: this.form.value['userVideoQuota']
+        videoQuota: this.form.value['userVideoQuota'],
+        videoQuotaDaily: this.form.value['userVideoQuotaDaily']
       },
       transcoding: {
         enabled: this.form.value['transcodingEnabled'],
@@ -231,6 +244,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       signupLimit: this.customConfig.signup.limit,
       adminEmail: this.customConfig.admin.email,
       userVideoQuota: this.customConfig.user.videoQuota,
+      userVideoQuotaDaily: this.customConfig.user.videoQuotaDaily,
       transcodingThreads: this.customConfig.transcoding.threads,
       transcodingEnabled: this.customConfig.transcoding.enabled,
       customizationJavascript: this.customConfig.instance.customizations.javascript,

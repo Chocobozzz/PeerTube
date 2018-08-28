@@ -202,7 +202,8 @@ const CONFIG = {
     }
   },
   USER: {
-    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') }
+    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') },
+    get VIDEO_QUOTA_DAILY () { return config.get<number>('user.video_quota_daily') }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
@@ -263,6 +264,7 @@ const CONSTRAINTS_FIELDS = {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
+    VIDEO_QUOTA_DAILY: { min: -1 },
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {

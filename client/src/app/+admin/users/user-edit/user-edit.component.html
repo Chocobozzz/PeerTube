@@ -61,6 +61,15 @@
         </option>
       </select>
     </div>
+    
+    <label i18n for="videoQuotaDaily">Daily video quota</label>
+    <div class="peertube-select-container">
+      <select id="videoQuotaDaily" formControlName="videoQuotaDaily">
+        <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
+          {{ videoQuotaDailyOption.label }}
+        </option>
+      </select>
+    </div>
 
     <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
       Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />

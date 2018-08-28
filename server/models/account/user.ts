@@ -27,7 +27,8 @@ import {
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserVideoQuotaDailyValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -123,6 +124,11 @@ export class UserModel extends Model<UserModel> {
   @Is('UserVideoQuota', value => throwIfNotValid(value, isUserVideoQuotaValid, 'video quota'))
   @Column(DataType.BIGINT)
   videoQuota: number
+
+  @AllowNull(false)
+  @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
+  @Column(DataType.BIGINT)
+  videoQuotaDaily: number
 
   @CreatedAt
   createdAt: Date
@@ -271,7 +277,32 @@ export class UserModel extends Model<UserModel> {
       'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
       'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
       'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      'WHERE "account"."userId" = $userId GROUP BY "video"."id") t'
+      'WHERE "account"."userId" = $userId ' +
+      'GROUP BY "video"."id") t'
+
+    const options = {
+      bind: { userId: user.id },
+      type: Sequelize.QueryTypes.SELECT
+    }
+    return UserModel.sequelize.query(query, options)
+      .then(([ { total } ]) => {
+        if (total === null) return 0
+
+        return parseInt(total, 10)
+      })
+  }
+
+  // Returns comulative size of all video files uploaded in the last 24 hours.
+  static getOriginalVideoFileTotalDailyFromUser (user: UserModel) {
+    // Don't use sequelize because we need to use a sub query
+    const query = 'SELECT SUM("size") AS "total" FROM ' +
+      '(SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+      'WHERE "account"."userId" = $userId ' +
+      'AND "video"."createdAt" > now() - interval \'24 hours\'' +
+      'GROUP BY "video"."id") t'
 
     const options = {
       bind: { userId: user.id },
@@ -303,6 +334,7 @@ export class UserModel extends Model<UserModel> {
 
   toFormattedJSON (): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
+    const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
 
     const json = {
       id: this.id,
@@ -313,12 +345,18 @@ export class UserModel extends Model<UserModel> {
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
+      videoQuotaDaily: this.videoQuotaDaily,
       createdAt: this.createdAt,
       blocked: this.blocked,
       blockedReason: this.blockedReason,
       account: this.Account.toFormattedJSON(),
       videoChannels: [],
-      videoQuotaUsed: videoQuotaUsed !== undefined ? parseInt(videoQuotaUsed, 10) : undefined
+      videoQuotaUsed: videoQuotaUsed !== undefined
+            ? parseInt(videoQuotaUsed, 10)
+            : undefined,
+      videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
+            ? parseInt(videoQuotaUsedDaily, 10)
+            : undefined
     }
 
     if (Array.isArray(this.Account.VideoChannels) === true) {
@@ -335,12 +373,24 @@ export class UserModel extends Model<UserModel> {
     return json
   }
 
-  isAbleToUploadVideo (videoFile: { size: number }) {
-    if (this.videoQuota === -1) return Promise.resolve(true)
+  async isAbleToUploadVideo (videoFile: { size: number }) {
+    if (this.videoQuota === -1 && this.videoQuotaDaily === -1) return Promise.resolve(true)
 
-    return UserModel.getOriginalVideoFileTotalFromUser(this)
-      .then(totalBytes => {
-        return (videoFile.size + totalBytes) < this.videoQuota
-      })
+    const [ totalBytes, totalBytesDaily ] = await Promise.all([
+      UserModel.getOriginalVideoFileTotalFromUser(this),
+      UserModel.getOriginalVideoFileTotalDailyFromUser(this)
+    ])
+
+    const uploadedTotal = videoFile.size + totalBytes
+    const uploadedDaily = videoFile.size + totalBytesDaily
+    if (this.videoQuotaDaily === -1) {
+      return uploadedTotal < this.videoQuota
+    }
+    if (this.videoQuota === -1) {
+      return uploadedDaily < this.videoQuotaDaily
+    }
+
+    return (uploadedTotal < this.videoQuota) &&
+        (uploadedDaily < this.videoQuotaDaily)
   }
 }

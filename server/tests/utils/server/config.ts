@@ -80,7 +80,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
       email: 'superadmin1@example.com'
     },
     user: {
-      videoQuota: 5242881
+      videoQuota: 5242881,
+      videoQuotaDaily: 318742
     },
     transcoding: {
       enabled: true,

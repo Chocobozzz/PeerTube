@@ -31,6 +31,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
   userVideoQuotaUsed = 0
+  userVideoQuotaUsedDaily = 0
 
   isUploadingVideo = false
   isUpdatingVideo = false
@@ -68,6 +69,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     this.userService.getMyVideoQuotaUsed()
       .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
+
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(data => this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily)
   }
 
   ngOnDestroy () {
@@ -115,16 +119,30 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       return
     }
 
+    const bytePipes = new BytesPipe()
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
-      const bytePipes = new BytesPipe()
-
       const msg = this.i18n(
         'Your video quota is exceeded with this video (video size: {{ videoSize }}, used: {{ videoQuotaUsed }}, quota: {{ videoQuota }})',
         {
           videoSize: bytePipes.transform(videofile.size, 0),
           videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
           videoQuota: bytePipes.transform(videoQuota, 0)
+        }
+      )
+      this.notificationsService.error(this.i18n('Error'), msg)
+      return
+    }
+
+    const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
+    if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
+      const msg = this.i18n(
+        'Your daily video quota is exceeded with this video (video size: {{ videoSize }}, ' +
+            'used: {{ videoQuotaUsedDaily }}, quota: {{ videoQuotaDaily }})',
+        {
+          videoSize: bytePipes.transform(videofile.size, 0),
+          videoQuotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
+          videoQuotaDaily: bytePipes.transform(videoQuotaDaily, 0)
         }
       )
       this.notificationsService.error(this.i18n('Error'), msg)

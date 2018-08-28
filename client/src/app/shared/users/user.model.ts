@@ -16,6 +16,7 @@ export type UserConstructorHash = {
   email: string,
   role: UserRole,
   videoQuota?: number,
+  videoQuotaDaily?: number,
   nsfwPolicy?: NSFWPolicyType,
   autoPlayVideo?: boolean,
   createdAt?: Date,
@@ -33,6 +34,7 @@ export class User implements UserServerModel {
   nsfwPolicy: NSFWPolicyType
   autoPlayVideo: boolean
   videoQuota: number
+  videoQuotaDaily: number
   account: Account
   videoChannels: VideoChannel[]
   createdAt: Date
@@ -48,6 +50,7 @@ export class User implements UserServerModel {
 
     this.videoChannels = hash.videoChannels
     this.videoQuota = hash.videoQuota
+    this.videoQuotaDaily = hash.videoQuotaDaily
     this.nsfwPolicy = hash.nsfwPolicy
     this.autoPlayVideo = hash.autoPlayVideo
     this.createdAt = hash.createdAt

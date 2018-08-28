@@ -12,7 +12,8 @@ import {
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserVideoQuotaDailyValid
 } from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
@@ -27,6 +28,7 @@ const usersAddValidator = [
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -112,6 +114,7 @@ const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

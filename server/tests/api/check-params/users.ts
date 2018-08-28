@@ -94,6 +94,7 @@ describe('Test users API validators', function () {
       email: 'test@example.com',
       password: 'my super password',
       videoQuota: -1,
+      videoQuotaDaily: -1,
       role: UserRole.USER
     }
 
@@ -173,8 +174,20 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail without a videoQuotaDaily', async function () {
+      const fields = omit(baseCorrectParams, 'videoQuotaDaily')
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
     it('Should fail with an invalid videoQuota', async function () {
       const fields = immutableAssign(baseCorrectParams, { videoQuota: -5 })
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an invalid videoQuotaDaily', async function () {
+      const fields = immutableAssign(baseCorrectParams, { videoQuotaDaily: -7 })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -607,7 +620,7 @@ describe('Test users API validators', function () {
   })
 
   describe('When having a video quota', function () {
-    it('Should fail with a user having too many video', async function () {
+    it('Should fail with a user having too many videos', async function () {
       await updateUser({
         url: server.url,
         userId: rootId,
@@ -618,7 +631,7 @@ describe('Test users API validators', function () {
       await uploadVideo(server.url, server.accessToken, {}, 403)
     })
 
-    it('Should fail with a registered user having too many video', async function () {
+    it('Should fail with a registered user having too many videos', async function () {
       this.timeout(30000)
 
       const user = {
@@ -660,6 +673,45 @@ describe('Test users API validators', function () {
         expect(videoImport.error).not.to.be.undefined
         expect(videoImport.error).to.contain('user video quota is exceeded')
       }
+    })
+  })
+
+  describe('When having a daily video quota', function () {
+    it('Should fail with a user having too many videos', async function () {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
+        videoQuotaDaily: 42
+      })
+
+      await uploadVideo(server.url, server.accessToken, {}, 403)
+    })
+  })
+
+  describe('When having an absolute and daily video quota', function () {
+    it('Should fail if exceeding total quota', async function () {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
+        videoQuota: 42,
+        videoQuotaDaily: 1024 * 1024 * 1024
+      })
+
+      await uploadVideo(server.url, server.accessToken, {}, 403)
+    })
+
+    it('Should fail if exceeding daily quota', async function () {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
+        videoQuota: 1024 * 1024 * 1024,
+        videoQuotaDaily: 42
+      })
+
+      await uploadVideo(server.url, server.accessToken, {}, 403)
     })
   })
 

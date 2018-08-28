@@ -67,7 +67,8 @@ export class ServerService {
       }
     },
     user: {
-      videoQuota: -1
+      videoQuota: -1,
+      videoQuotaDaily: -1
     },
     import: {
       videos: {
