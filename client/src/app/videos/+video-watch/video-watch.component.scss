@@ -226,7 +226,7 @@
             }
 
             &.action-button-like.activated {
-              background-color: #39CC0B;
+              background-color: $green;
 
               .icon-like {
                 background-image: url('../../../assets/images/video/like-white.svg');
@@ -234,7 +234,7 @@
             }
 
             &.action-button-dislike.activated {
-              background-color: #FF0000;
+              background-color: $red;
 
               .icon-dislike {
                 background-image: url('../../../assets/images/video/dislike-white.svg');

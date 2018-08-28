@@ -4,19 +4,7 @@
     Create an account
   </div>
 
-  <div class="initial-user-quota">
-    <span i18n class="initial-user-quota-label">Initial video quota:</span>
-
-    <span *ngIf="initialUserVideoQuota !== -1">
-      {{ initialUserVideoQuota | bytes: 0 }}
-
-      <my-help helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
-    </span>
-
-    <ng-container i18n *ngIf="initialUserVideoQuota === -1">
-      Unlimited
-    </ng-container>
-  </div>
+  <my-instance-features-table></my-instance-features-table>
 
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 

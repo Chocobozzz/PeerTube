@@ -64,6 +64,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     super()
   }
 
+  get videoQuotaOptions () {
+    return EditCustomConfigComponent.videoQuotaOptions
+  }
+
+  get videoQuotaDailyOptions () {
+    return EditCustomConfigComponent.videoQuotaDailyOptions
+  }
+
   getResolutionKey (resolution: string) {
     return 'transcodingResolution' + resolution
   }
