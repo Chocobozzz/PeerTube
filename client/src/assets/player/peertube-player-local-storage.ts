@@ -52,7 +52,6 @@ function getAverageBandwidthInStore () {
   return undefined
 }
 
-
 // ---------------------------------------------------------------------------
 
 export {

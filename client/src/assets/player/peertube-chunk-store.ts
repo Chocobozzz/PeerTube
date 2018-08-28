@@ -118,7 +118,13 @@ export class PeertubeChunkStore extends EventEmitter {
 
     // IndexDB could be slow, use our memory index first
     const memoryChunk = this.memoryChunks[index]
-    if (memoryChunk === undefined) return cb(null, new Buffer(0))
+    if (memoryChunk === undefined) {
+      const err = new Error('Chunk not found')
+      err['notFound'] = true
+
+      return process.nextTick(() => cb(err))
+    }
+
     // Chunk in memory
     if (memoryChunk !== true) return cb(null, memoryChunk)
 
