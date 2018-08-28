@@ -193,9 +193,6 @@ export class UserModel extends Model<UserModel> {
 
     return UserModel.findAndCountAll(query)
       .then(({ rows, count }) => {
-        console.log(rows[0])
-        console.log(rows[0]['videoQuotaUsed'])
-        console.log(rows[0].get('videoQuotaUsed'))
         return {
           data: rows,
           total: count
@@ -207,8 +204,6 @@ export class UserModel extends Model<UserModel> {
     const roles = Object.keys(USER_ROLE_LABELS)
       .map(k => parseInt(k, 10) as UserRole)
       .filter(role => hasUserRight(role, right))
-
-    console.log(roles)
 
     const query = {
       attribute: [ 'email' ],

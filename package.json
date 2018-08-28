@@ -113,7 +113,6 @@
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "nodemailer": "^4.4.2",
-    "oauth2-server": "^3.0.0",
     "parse-torrent": "^6.0.0",
     "password-generator": "^2.0.2",
     "pem": "^1.12.3",

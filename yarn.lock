@@ -646,7 +646,7 @@ basic-auth@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-1.1.0.tgz#45221ee429f7ee1e5035be3f51533f1cdfd29884"
 
-basic-auth@^2.0.0, basic-auth@~2.0.0:
+basic-auth@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.0.tgz#015db3f353e02e56377755f962742e8981e7bbba"
   dependencies:
@@ -816,7 +816,7 @@ bluebird@^2.10.0:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
 
-bluebird@^3.0.5, bluebird@^3.3.4, bluebird@^3.4.6, bluebird@^3.4.7, bluebird@^3.5.0, bluebird@^3.5.1:
+bluebird@^3.0.5, bluebird@^3.3.4, bluebird@^3.4.6, bluebird@^3.4.7, bluebird@^3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
@@ -5154,17 +5154,6 @@ oauth2-server@3.0.0:
     statuses "1.3.1"
     type-is "1.6.15"
 
-oauth2-server@^3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/oauth2-server/-/oauth2-server-3.0.1.tgz#8fdb7eb78f107832f75c554cb42e59a3f37e41ea"
-  dependencies:
-    basic-auth "^2.0.0"
-    bluebird "^3.5.1"
-    lodash "^4.17.10"
-    promisify-any "^2.0.1"
-    statuses "^1.5.0"
-    type-is "^1.6.16"
-
 object-assign@4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.0.tgz#7a3b3d0e98063d43f4c03f2e8ae6cd51a86883a0"
@@ -5703,7 +5692,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-promisify-any@2.0.1, promisify-any@^2.0.1:
+promisify-any@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/promisify-any/-/promisify-any-2.0.1.tgz#403e00a8813f175242ab50fe33a69f8eece47305"
   dependencies:
@@ -6849,7 +6838,7 @@ static-extend@^0.1.1:
     define-property "^0.2.5"
     object-copy "^0.1.0"
 
-statuses@1, "statuses@>= 1.3.1 < 2", "statuses@>= 1.4.0 < 2", statuses@^1.5.0:
+statuses@1, "statuses@>= 1.3.1 < 2", "statuses@>= 1.4.0 < 2":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
 
@@ -7439,7 +7428,7 @@ type-is@1.6.15:
     media-typer "0.3.0"
     mime-types "~2.1.15"
 
-type-is@^1.6.16, type-is@^1.6.4, type-is@~1.6.15, type-is@~1.6.16, type-is@~1.6.6:
+type-is@^1.6.4, type-is@~1.6.15, type-is@~1.6.16, type-is@~1.6.6:
   version "1.6.16"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.16.tgz#f89ce341541c672b25ee7ae3c73dee3b2be50194"
   dependencies:

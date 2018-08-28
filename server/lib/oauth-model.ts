@@ -23,6 +23,7 @@ function getClient (clientId: string, clientSecret: string) {
 function getRefreshToken (refreshToken: string) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
+
   return OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
@@ -42,7 +43,10 @@ async function getUser (usernameOrEmail: string, password: string) {
 
 async function revokeToken (tokenInfo: TokenInfo) {
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
-  if (token) token.destroy()
+  if (token) {
+    token.destroy()
+         .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+  }
 
   /*
     * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
