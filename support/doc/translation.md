@@ -33,3 +33,5 @@ For example:
 
 should be in french 
 ```<x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> vues```
+
+Please also do not translate the string `yy-mm-dd`, which is going to be replaced with numbers in the application.
