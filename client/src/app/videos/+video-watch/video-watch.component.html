@@ -30,13 +30,84 @@
     <div class="video-info">
       <div class="video-info-first-row">
         <div>
-          <div class="video-info-name">{{ video.name }}</div>
+          <div class="d-flex justify-content-between">
+            <div>
+              <div class="video-info-name">{{ video.name }}</div>
 
-          <div i18n class="video-info-date-views">
-            {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
+              <div i18n class="video-info-date-views">
+                Published {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
+              </div>
+            </div>  
+
+            <div class="video-actions-rates">
+              <div class="video-actions">
+                <div
+                  *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+                  class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
+                >
+                  <span class="icon icon-like" i18n-title title="Like this video" ></span>
+                </div>
+    
+                <div
+                  *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+                  class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
+                >
+                  <span class="icon icon-dislike" i18n-title title="Dislike this video"></span>
+                </div>
+    
+                <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
+                  <span class="icon icon-support"></span>
+                  <span class="icon-text" i18n>Support</span>
+                </div>
+    
+                <div (click)="showShareModal()" class="action-button action-button-share" role="button">
+                  <span class="icon icon-share"></span>
+                  <span class="icon-text" i18n>Share</span>
+                </div>
+    
+                <div class="action-more" ngbDropdown placement="top" role="button">
+                  <div class="action-button" ngbDropdownToggle role="button">
+                    <span class="icon icon-more"></span>
+                  </div>
+    
+                  <div ngbDropdownMenu>
+                    <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
+                      <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
+                    </a>
+    
+                    <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
+                      <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
+                    </a>
+    
+                    <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
+                      <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
+                    </a>
+    
+                    <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
+                      <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
+                    </a>
+    
+                    <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
+                      <span class="icon icon-unblacklist"></span> <ng-container i18n>Unblacklist</ng-container>
+                    </a>
+    
+                    <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
+                      <span class="icon icon-delete"></span> <ng-container i18n>Delete</ng-container>
+                    </a>
+                  </div>
+                </div>
+              </div>
+    
+              <div
+                class="video-info-likes-dislikes-bar"
+                *ngIf="video.likes !== 0 || video.dislikes !== 0"  [ngbTooltip]="likesBarTooltipText">
+                <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+              </div>
+            </div>
           </div>
 
-          <div class="video-info-channel">
+
+          <div class="pt-3 border-top video-info-channel">
             <a [routerLink]="[ '/video-channels', video.channel.name ]" i18n-title title="Go the channel page">
               {{ video.channel.displayName }}
 
@@ -56,71 +127,6 @@
           </div>
         </div>
 
-        <div class="video-actions-rates">
-          <div class="video-actions">
-            <div
-              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
-              class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
-            >
-              <span class="icon icon-like" i18n-title title="Like this video" ></span>
-            </div>
-
-            <div
-              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
-              class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
-            >
-              <span class="icon icon-dislike" i18n-title title="Dislike this video"></span>
-            </div>
-
-            <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
-              <span class="icon icon-support"></span>
-              <span class="icon-text" i18n>Support</span>
-            </div>
-
-            <div (click)="showShareModal()" class="action-button action-button-share" role="button">
-              <span class="icon icon-share"></span>
-              <span class="icon-text" i18n>Share</span>
-            </div>
-
-            <div class="action-more" ngbDropdown placement="top" role="button">
-              <div class="action-button" ngbDropdownToggle role="button">
-                <span class="icon icon-more"></span>
-              </div>
-
-              <div ngbDropdownMenu>
-                <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
-                  <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
-                </a>
-
-                <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
-                  <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
-                </a>
-
-                <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
-                  <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
-                </a>
-
-                <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
-                  <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
-                </a>
-
-                <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
-                  <span class="icon icon-unblacklist"></span> <ng-container i18n>Unblacklist</ng-container>
-                </a>
-
-                <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
-                  <span class="icon icon-delete"></span> <ng-container i18n>Delete</ng-container>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div
-              class="video-info-likes-dislikes-bar"
-              *ngIf="video.likes !== 0 || video.dislikes !== 0"  [ngbTooltip]="likesBarTooltipText">
-            <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
-          </div>
-        </div>
       </div>
 
       <div class="video-info-description">
@@ -196,10 +202,10 @@
 
 
   <div class="privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
-    <strong i18n>Friendly Reminder:</strong>
     <div class="privacy-concerns-text">
+      <strong i18n>Friendly Reminder: </strong>
       <ng-container i18n>
-        The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
+        the sharing system used by this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
       </ng-container>
       <a i18n i18n-title title="Get more information" target="_blank" rel="noopener noreferrer" href="/about/peertube">More information</a>
     </div>
