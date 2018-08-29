@@ -1,6 +1,6 @@
 import { RecentVideosRecommendationService } from '@app/videos/recommendations/recent-videos-recommendation.service'
 import { VideosProvider } from '@app/shared/video/video.service'
-import { of } from 'rxjs'
+import { EMPTY, of } from 'rxjs'
 import Mock = jest.Mock
 
 describe('"Recent Videos" Recommender', () => {
@@ -9,7 +9,7 @@ describe('"Recent Videos" Recommender', () => {
     let service: RecentVideosRecommendationService
     let getVideosMock: Mock<any>
     beforeEach(() => {
-      getVideosMock = jest.fn()
+      getVideosMock = jest.fn(() => EMPTY)
       videosService = {
         getVideos: getVideosMock
       }
@@ -32,7 +32,8 @@ describe('"Recent Videos" Recommender', () => {
         { uuid: 'uuid3' },
         { uuid: 'uuid4' },
         { uuid: 'uuid5' },
-        { uuid: 'uuid6' }
+        { uuid: 'uuid6' },
+        { uuid: 'uuid7' }
       ]
       getVideosMock.mockReturnValueOnce(of({ videos: vids }))
       const result = await service.getRecommendations('uuid1').toPromise()
@@ -45,20 +46,20 @@ describe('"Recent Videos" Recommender', () => {
         { uuid: 'uuid2' },
         { uuid: 'uuid3' },
         { uuid: 'uuid4' },
-        { uuid: 'uuid5' }
-      ]
-      const vids2 = [
-        { uuid: 'uuid6' },
-        { uuid: 'uuid7' },
-        { uuid: 'uuid8' },
-        { uuid: 'uuid9' },
-        { uuid: 'uuid10' }
+        { uuid: 'uuid5' },
+        { uuid: 'uuid6' }
       ]
       getVideosMock
-        .mockReturnValueOnce(of({ videos: vids })) // First call
-        .mockReturnValueOnce(of({ videos: vids2 })) // 2nd call
+        .mockReturnValueOnce(of({ videos: vids }))
       const result = await service.getRecommendations('uuid1').toPromise()
       expect(result.length).toEqual(5)
+      done()
+    })
+    it('should fetch an extra result in case the given UUID is in the list', async (done) => {
+      await service.getRecommendations('uuid1').toPromise()
+      let expectedSize = service.pageSize + 1
+      let params = { currentPage: jasmine.anything(), itemsPerPage: expectedSize }
+      expect(getVideosMock).toHaveBeenCalledWith(params, jasmine.anything())
       done()
     })
   })

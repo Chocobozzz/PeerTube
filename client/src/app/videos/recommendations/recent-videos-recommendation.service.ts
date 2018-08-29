@@ -11,7 +11,7 @@ import { Observable, of } from 'rxjs'
 @Injectable()
 export class RecentVideosRecommendationService implements RecommendationService {
 
-  private readonly pageSize = 5
+  readonly pageSize = 5
 
   constructor (
     @Inject(VideoService) private videos: VideosProvider
@@ -23,25 +23,14 @@ export class RecentVideosRecommendationService implements RecommendationService 
       .pipe(
         switchMap(vids => {
           const otherVideos = vids.filter(v => v.uuid !== uuid)
-          if (vids.length === 5 && vids.length !== otherVideos.length) {
-            return this.addMoreVids(otherVideos)
-          }
-          return of(otherVideos)
+          let firstFive = otherVideos.slice(0, this.pageSize)
+          return of(firstFive)
         })
       )
   }
 
-  private addMoreVids (alreadyFetched: Video[]): Observable<Video[]> {
-    return this.fetchPage(2).pipe(
-      map(moreVids => {
-        alreadyFetched.push(moreVids[0])
-        return alreadyFetched
-      })
-    )
-  }
-
   private fetchPage (page: number): Observable<Video[]> {
-    let pagination = { currentPage: page, itemsPerPage: this.pageSize }
+    let pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
     return this.videos.getVideos(pagination, '-createdAt')
       .pipe(
         map(v => v.videos)
