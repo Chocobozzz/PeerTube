@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { Redis } from '../redis'
-import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL } from '../../initializers'
+import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS } from '../../initializers'
 import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
@@ -10,6 +10,7 @@ import { EmailPayload, processEmail } from './handlers/email'
 import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 import { processVideoImport, VideoImportPayload } from './handlers/video-import'
+import { processVideosViewsViews } from './handlers/video-views'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -19,7 +20,8 @@ type CreateJobArgument =
   { type: 'video-file-import', payload: VideoFileImportPayload } |
   { type: 'video-file', payload: VideoFilePayload } |
   { type: 'email', payload: EmailPayload } |
-  { type: 'video-import', payload: VideoImportPayload }
+  { type: 'video-import', payload: VideoImportPayload } |
+  { type: 'videos-views', payload: {} }
 
 const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
@@ -29,7 +31,8 @@ const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'video-file-import': processVideoFileImport,
   'video-file': processVideoFile,
   'email': processEmail,
-  'video-import': processVideoImport
+  'video-import': processVideoImport,
+  'videos-views': processVideosViewsViews
 }
 
 const jobTypes: JobType[] = [
@@ -40,7 +43,8 @@ const jobTypes: JobType[] = [
   'email',
   'video-file',
   'video-file-import',
-  'video-import'
+  'video-import',
+  'videos-views'
 ]
 
 class JobQueue {
@@ -85,6 +89,8 @@ class JobQueue {
 
       this.queues[handlerName] = queue
     }
+
+    this.addRepeatableJobs()
   }
 
   terminate () {
@@ -161,6 +167,12 @@ class JobQueue {
       const queue = this.queues[key]
       queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
     }
+  }
+
+  private addRepeatableJobs () {
+    this.queues['videos-views'].add({}, {
+      repeat: REPEAT_JOBS['videos-views']
+    })
   }
 
   static get Instance () {

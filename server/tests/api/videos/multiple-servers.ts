@@ -492,7 +492,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on owned servers', async function () {
-      this.timeout(15000)
+      this.timeout(30000)
 
       const tasks: Promise<any>[] = []
       await viewVideo(servers[2].url, localVideosServer3[0])
@@ -511,6 +511,9 @@ describe('Test multiple servers', function () {
 
       await waitJobs(servers)
 
+      // Wait the repeatable job
+      await wait(6000)
+
       for (const server of servers) {
         const res = await getVideosList(server.url)
 
@@ -524,7 +527,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on each servers', async function () {
-      this.timeout(15000)
+      this.timeout(30000)
 
       const tasks: Promise<any>[] = []
       tasks.push(viewVideo(servers[0].url, remoteVideosServer1[0]))
@@ -541,6 +544,9 @@ describe('Test multiple servers', function () {
       await Promise.all(tasks)
 
       await waitJobs(servers)
+
+      // Wait the repeatable job
+      await wait(8000)
 
       let baseVideos = null
 
