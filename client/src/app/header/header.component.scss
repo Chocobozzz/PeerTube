@@ -11,6 +11,10 @@
     color: #000;
   }
 
+  &:focus::placeholder {
+    opacity: 0 !important;
+  }
+
   @media screen and (max-width: 800px) {
     width: calc(100% - 150px);
   }

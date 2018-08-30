@@ -281,8 +281,9 @@
         }
 
         .video-info-likes-dislikes-bar {
-          height: 5px;
-          margin-top: -5px;
+          $likes-bar-height: 2px;
+          height: $likes-bar-height;
+          margin-top: -$likes-bar-height;
           width: 186px;
           background-color: #E5E5E5;
           position: relative;

@@ -26,6 +26,10 @@ form {
       border: none;
       resize: none;
       padding-left: 0px;
+
+      &:focus::placeholder {
+        opacity: 0;
+      }
     }
   }
 }
