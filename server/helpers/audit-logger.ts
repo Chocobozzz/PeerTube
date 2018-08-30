@@ -234,7 +234,7 @@ const customConfigKeysToKeep = [
   'cache-captions-size',
   'signup-enabled',
   'signup-limit',
-  'signup-requiresVerification',
+  'signup-requiresEmailVerification',
   'admin-email',
   'user-videoQuota',
   'transcoding-enabled',

@@ -27,7 +27,7 @@ import {
 } from '../../../middlewares'
 import {
   usersAskResetPasswordValidator, usersBlockingValidator, usersResetPasswordValidator,
-  usersAskVerifyEmailValidator, usersVerifyEmailValidator
+  usersAskSendVerifyEmailValidator, usersVerifyEmailValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
 import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
@@ -113,9 +113,10 @@ usersRouter.post('/:id/reset-password',
   asyncMiddleware(resetUserPassword)
 )
 
-usersRouter.post('/ask-verify-email',
-  asyncMiddleware(usersAskVerifyEmailValidator),
-  asyncMiddleware(askVerifyUserEmail)
+usersRouter.post('/ask-send-verify-email',
+  loginRateLimiter,
+  asyncMiddleware(usersAskSendVerifyEmailValidator),
+  asyncMiddleware(askSendVerifyUserEmail)
 )
 
 usersRouter.post('/:id/verify-email',
@@ -179,7 +180,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     role: UserRole.USER,
     videoQuota: CONFIG.USER.VIDEO_QUOTA,
     videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
-    verified: CONFIG.SIGNUP.REQUIRES_VERIFICATION ? false : null
+    emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
   const { user } = await createUserAccountAndChannel(userToCreate)
@@ -187,7 +188,7 @@ async function registerUser (req: express.Request, res: express.Response) {
   auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account registered.', body.username)
 
-  if (CONFIG.SIGNUP.REQUIRES_VERIFICATION) {
+  if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
     await sendVerifyUserEmail(user)
   }
 
@@ -286,7 +287,7 @@ async function sendVerifyUserEmail (user: UserModel) {
   return
 }
 
-async function askVerifyUserEmail (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function askSendVerifyUserEmail (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.user as UserModel
 
   await sendVerifyUserEmail(user)
@@ -296,7 +297,7 @@ async function askVerifyUserEmail (req: express.Request, res: express.Response, 
 
 async function verifyUserEmail (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.user as UserModel
-  user.verified = true
+  user.emailVerified = true
 
   await user.save()
 

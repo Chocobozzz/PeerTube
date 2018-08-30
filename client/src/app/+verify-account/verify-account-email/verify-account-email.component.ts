@@ -40,7 +40,6 @@ export class VerifyAccountEmailComponent implements OnInit {
     this.userService.verifyEmail(this.userId, this.verificationString)
       .subscribe(
         () => {
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Your email and account have been successfully verified!'))
           this.success = true
           setTimeout(() => {
             this.router.navigate([ '/login' ])

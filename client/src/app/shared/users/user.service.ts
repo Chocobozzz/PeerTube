@@ -108,8 +108,8 @@ export class UserService {
                )
   }
 
-  askVerifyEmail (email: string) {
-    const url = UserService.BASE_USERS_URL + '/ask-verify-email'
+  askSendVerifyEmail (email: string) {
+    const url = UserService.BASE_USERS_URL + '/ask-send-verify-email'
 
     return this.authHttp.post(url, { email })
                .pipe(

@@ -10,7 +10,7 @@ database:
   port: 5432
 
 smtp:
-  hostname: null
+  hostname: 'localhost'
   port: 1025
   tls: false
   disable_starttls: true
@@ -29,7 +29,7 @@ cache:
 
 signup:
   enabled: true
-  requires_verification: false
+  requires_email_verification: false
 
 transcoding:
   enabled: true

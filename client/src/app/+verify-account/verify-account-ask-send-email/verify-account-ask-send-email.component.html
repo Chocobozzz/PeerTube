@@ -3,7 +3,7 @@
     Request email for account verification
   </div>
 
-  <form *ngIf="requiresVerification; else verificationNotRequired" role="form" (ngSubmit)="askVerifyEmail()" [formGroup]="form">
+  <form *ngIf="requiresEmailVerification; else emailVerificationNotRequired" role="form" (ngSubmit)="askSendVerifyEmail()" [formGroup]="form">
     <div class="form-group">
       <label i18n for="verify-email-email">Email</label>
       <input
@@ -16,7 +16,7 @@
     </div>
     <input type="submit" i18n-value value="Send verification email" [disabled]="!form.valid">
   </form>
-  <ng-template #verificationNotRequired>
-    <div i18n>This instance does not require verification.</div>
+  <ng-template #emailVerificationNotRequired>
+    <div i18n>This instance does not require email verification.</div>
   </ng-template>
 </div>

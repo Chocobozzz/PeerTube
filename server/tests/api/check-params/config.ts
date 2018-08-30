@@ -43,7 +43,7 @@ describe('Test config API validators', function () {
     signup: {
       enabled: false,
       limit: 5,
-      requiresVerification: false
+      requiresEmailVerification: false
     },
     admin: {
       email: 'superadmin1@example.com'

@@ -246,8 +246,8 @@ function resetPassword (url: string, userId: number, verificationString: string,
   })
 }
 
-function askVerifyEmail (url: string, email: string) {
-  const path = '/api/v1/users/ask-verify-email'
+function askSendVerifyEmail (url: string, email: string) {
+  const path = '/api/v1/users/ask-send-verify-email'
 
   return makePostBodyRequest({
     url,
@@ -288,6 +288,6 @@ export {
   askResetPassword,
   resetPassword,
   updateMyAvatar,
-  askVerifyEmail,
+  askSendVerifyEmail,
   verifyEmail
 }

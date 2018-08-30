@@ -49,7 +49,7 @@ describe('Test users account verification', function () {
     await updateCustomSubConfig(server.url, server.accessToken, {
       signup: {
         enabled: true,
-        requiresVerification: true,
+        requiresEmailVerification: true,
         limit: 10
       }
     })
@@ -74,27 +74,27 @@ describe('Test users account verification', function () {
     userId = parseInt(userIdMatches[1], 10)
 
     const resUserInfo = await getUserInformation(server.url, server.accessToken, userId)
-    expect(resUserInfo.body.verified).to.be.false
+    expect(resUserInfo.body.emailVerified).to.be.false
   })
 
-  it('Should not allow login for unverified user', async function () {
+  it('Should not allow login for user with unverified email', async function () {
     const resLogin = await login(server.url, server.client, user1, 400)
-    expect(resLogin.body.error).to.contain('User is not verified.')
+    expect(resLogin.body.error).to.contain('User email is not verified.')
   })
 
   it('Should verify the user via email and allow login', async function () {
     await verifyEmail(server.url, userId, verificationString)
     await login(server.url, server.client, user1)
     const resUserVerified = await getUserInformation(server.url, server.accessToken, userId)
-    expect(resUserVerified.body.verified).to.be.true
+    expect(resUserVerified.body.emailVerified).to.be.true
   })
 
-  it('Should register user not requiring verification if verification not required', async function () {
+  it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
     await updateCustomSubConfig(server.url, server.accessToken, {
       signup: {
         enabled: true,
-        requiresVerification: false,
+        requiresEmailVerification: false,
         limit: 10
       }
     })
@@ -107,14 +107,14 @@ describe('Test users account verification', function () {
     const accessToken = await userLogin(server, user2)
 
     const resMyUserInfo = await getMyUserInformation(server.url, accessToken)
-    expect(resMyUserInfo.body.verified).to.be.null
+    expect(resMyUserInfo.body.emailVerified).to.be.null
   })
 
-  it('Should allow login for user registered when verification required if later enabled', async function () {
+  it('Should allow login for user with unverified email when setting later enabled', async function () {
     await updateCustomSubConfig(server.url, server.accessToken, {
       signup: {
         enabled: true,
-        requiresVerification: true,
+        requiresEmailVerification: true,
         limit: 10
       }
     })

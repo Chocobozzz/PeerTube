@@ -4,7 +4,9 @@ import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
 
 import { VerifyAccountEmailComponent } from '@app/+verify-account/verify-account-email/verify-account-email.component'
-import { VerifyAccountAskEmailComponent } from '@app/+verify-account/verify-account-ask-email/verify-account-ask-email.component'
+import {
+  VerifyAccountAskSendEmailComponent
+} from '@app/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component'
 
 const verifyAccountRoutes: Routes = [
   {
@@ -21,11 +23,11 @@ const verifyAccountRoutes: Routes = [
         }
       },
       {
-        path: 'ask-email',
-        component: VerifyAccountAskEmailComponent,
+        path: 'ask-send-email',
+        component: VerifyAccountAskSendEmailComponent,
         data: {
           meta: {
-            title: 'Verify account ask email'
+            title: 'Verify account ask send email'
           }
         }
       }

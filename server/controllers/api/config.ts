@@ -17,17 +17,26 @@ const configRouter = express.Router()
 const auditLogger = auditLoggerFactory('config')
 
 configRouter.get('/about', getAbout)
-configRouter.get('/', asyncMiddleware(getConfig))
+configRouter.get('/',
+  asyncMiddleware(getConfig)
+)
 
-configRouter.get('/custom', authenticate, ensureUserHasRight(UserRight.MANAGE_CONFIGURATION), asyncMiddleware(getCustomConfig))
-configRouter.put(
-  '/custom',
+configRouter.get('/custom',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(getCustomConfig)
+)
+configRouter.put('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   asyncMiddleware(customConfigUpdateValidator),
   asyncMiddleware(updateCustomConfig)
 )
-configRouter.delete('/custom', authenticate, ensureUserHasRight(UserRight.MANAGE_CONFIGURATION), asyncMiddleware(deleteCustomConfig))
+configRouter.delete('/custom',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteCustomConfig)
+)
 
 async function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   const allowed = await isSignupAllowed()
@@ -52,7 +61,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     signup: {
       allowed,
       allowedForCurrentIP,
-      requiresVerification: CONFIG.SIGNUP.REQUIRES_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     transcoding: {
       enabledResolutions
@@ -125,7 +134,10 @@ async function getCustomConfig (req: express.Request, res: express.Response, nex
 async function deleteCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   await remove(CONFIG.CUSTOM_FILE)
 
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new CustomConfigAuditView(customConfig()))
+  auditLogger.delete(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new CustomConfigAuditView(customConfig())
+  )
 
   reloadConfig()
   ClientHtml.invalidCache()
@@ -154,14 +166,14 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
     'instance.defaultClientRoute',
     'instance.shortDescription',
     'cache.videoCaptions',
-    'signup.requiresVerification'
+    'signup.requiresEmailVerification'
   )
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   toUpdateJSON.user['video_quota_daily'] = toUpdate.user.videoQuotaDaily
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
-  toUpdateJSON.signup['requires_verification'] = toUpdate.signup.requiresVerification
+  toUpdateJSON.signup['requires_email_verification'] = toUpdate.signup.requiresEmailVerification
 
   await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
@@ -170,14 +182,20 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
 
   const data = customConfig()
 
-  auditLogger.update(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new CustomConfigAuditView(data), oldCustomConfigAuditKeys)
+  auditLogger.update(
+    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    new CustomConfigAuditView(data),
+    oldCustomConfigAuditKeys
+  )
 
   return res.json(data).end()
 }
 
 // ---------------------------------------------------------------------------
 
-export { configRouter }
+export {
+  configRouter
+}
 
 // ---------------------------------------------------------------------------
 
@@ -212,7 +230,7 @@ function customConfig (): CustomConfig {
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
       limit: CONFIG.SIGNUP.LIMIT,
-      requiresVerification: CONFIG.SIGNUP.REQUIRES_VERIFICATION
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL
@@ -225,11 +243,11 @@ function customConfig (): CustomConfig {
       enabled: CONFIG.TRANSCODING.ENABLED,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
-        '240p': CONFIG.TRANSCODING.RESOLUTIONS['240p'],
-        '360p': CONFIG.TRANSCODING.RESOLUTIONS['360p'],
-        '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
-        '720p': CONFIG.TRANSCODING.RESOLUTIONS['720p'],
-        '1080p': CONFIG.TRANSCODING.RESOLUTIONS['1080p']
+        '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
+        '360p': CONFIG.TRANSCODING.RESOLUTIONS[ '360p' ],
+        '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
+        '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
+        '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ]
       }
     },
     import: {

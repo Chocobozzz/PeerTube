@@ -17,7 +17,7 @@ export interface ServerConfig {
   signup: {
     allowed: boolean,
     allowedForCurrentIP: boolean,
-    requiresVerification: boolean
+    requiresEmailVerification: boolean
   }
 
   transcoding: {

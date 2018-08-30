@@ -32,8 +32,8 @@ export class SignupComponent extends FormReactive implements OnInit {
     return window.location.host
   }
 
-  get requiresVerification () {
-    return this.serverService.getConfig().signup.requiresVerification
+  get requiresEmailVerification () {
+    return this.serverService.getConfig().signup.requiresEmailVerification
   }
 
   ngOnInit () {
@@ -52,7 +52,7 @@ export class SignupComponent extends FormReactive implements OnInit {
 
     this.userService.signup(userCreate).subscribe(
       () => {
-        if (this.requiresVerification) {
+        if (this.requiresEmailVerification) {
           this.notificationsService.alert(
             this.i18n('Welcome'),
             this.i18n('Please check your email to verify your account and complete signup.')

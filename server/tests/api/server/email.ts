@@ -5,7 +5,7 @@ import 'mocha'
 import {
   addVideoToBlacklist,
   askResetPassword,
-  askVerifyEmail,
+  askSendVerifyEmail,
   blockUser,
   createUser, removeVideoFromBlacklist,
   reportVideoAbuse,
@@ -214,7 +214,7 @@ describe('Test emails', function () {
     it('Should ask to send the verification email', async function () {
       this.timeout(10000)
 
-      await askVerifyEmail(server.url, 'user_1@example.com')
+      await askSendVerifyEmail(server.url, 'user_1@example.com')
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(7)

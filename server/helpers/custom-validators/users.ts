@@ -33,7 +33,7 @@ function isUserDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION))
 }
 
-function isUserVerifiedValid (value: any) {
+function isUserEmailVerifiedValid (value: any) {
   return isBooleanValid(value)
 }
 
@@ -76,7 +76,7 @@ export {
   isUserVideoQuotaValid,
   isUserVideoQuotaDailyValid,
   isUserUsernameValid,
-  isUserVerifiedValid,
+  isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
   isUserAutoPlayVideoValid,
   isUserDisplayNameValid,

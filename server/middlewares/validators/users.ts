@@ -248,11 +248,11 @@ const usersResetPasswordValidator = [
   }
 ]
 
-const usersAskVerifyEmailValidator = [
+const usersAskSendVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking askUsersVerifyEmail parameters', { parameters: req.body })
+    logger.debug('Checking askUsersSendVerifyEmail parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
     const exists = await checkUserEmailExist(req.body.email, res, false)
@@ -306,7 +306,7 @@ export {
   usersGetValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
-  usersAskVerifyEmailValidator,
+  usersAskSendVerifyEmailValidator,
   usersVerifyEmailValidator
 }
 

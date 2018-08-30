@@ -12,7 +12,7 @@ async function up (utils: {
       defaultValue: null
     }
 
-    await utils.queryInterface.addColumn('user', 'verified', data)
+    await utils.queryInterface.addColumn('user', 'emailVerified', data)
   }
 
 }

@@ -738,7 +738,7 @@ describe('Test users API validators', function () {
   })
 
   describe('When asking for an account verification email', function () {
-    const path = '/api/v1/users/ask-verify-email'
+    const path = '/api/v1/users/ask-send-verify-email'
 
     it('Should fail with a missing email', async function () {
       const fields = {}

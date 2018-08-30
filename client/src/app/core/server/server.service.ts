@@ -41,7 +41,7 @@ export class ServerService {
     signup: {
       allowed: false,
       allowedForCurrentIP: false,
-      requiresVerification: false
+      requiresEmailVerification: false
     },
     transcoding: {
       enabledResolutions: []

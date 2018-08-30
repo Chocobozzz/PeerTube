@@ -194,7 +194,7 @@ const CONFIG = {
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
     get LIMIT () { return config.get<number>('signup.limit') },
-    get REQUIRES_VERIFICATION () { return config.get<boolean>('signup.requires_verification') },
+    get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
     FILTERS: {
       CIDR: {
         get WHITELIST () { return config.get<string[]>('signup.filters.cidr.whitelist') },

@@ -34,7 +34,7 @@ export interface CustomConfig {
   signup: {
     enabled: boolean
     limit: number
-    requiresVerification: boolean
+    requiresEmailVerification: boolean
   }
 
   admin: {
