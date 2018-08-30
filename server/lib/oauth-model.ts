@@ -38,7 +38,9 @@ async function getUser (usernameOrEmail: string, password: string) {
 
   if (user.blocked) throw new AccessDeniedError('User is blocked.')
 
-  if (CONFIG.SIGNUP.REQUIRES_VERIFICATION && !user.verified) throw new AccessDeniedError('User is not verified.')
+  if (CONFIG.SIGNUP.REQUIRES_VERIFICATION && user.verified === false) {
+    throw new AccessDeniedError('User is not verified.')
+  }
 
   return user
 }

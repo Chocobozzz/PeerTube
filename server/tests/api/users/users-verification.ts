@@ -3,8 +3,8 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  registerUser, flushTests, getUserInformation, killallServers, login,
-  runServer, ServerInfo, verifyEmail, updateCustomSubConfig
+  registerUser, flushTests, getUserInformation, getMyUserInformation, killallServers,
+  userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig
 } from '../../utils'
 import { setAccessTokensToServers } from '../../utils/users/login'
 import { mockSmtpServer } from '../../utils/miscs/email'
@@ -16,8 +16,13 @@ describe('Test users account verification', function () {
   let server: ServerInfo
   let userId: number
   let verificationString: string
-  const user = {
+  let expectedEmailsLength = 0
+  const user1 = {
     username: 'user_1',
+    password: 'super password'
+  }
+  const user2 = {
+    username: 'user_2',
     password: 'super password'
   }
   const emails: object[] = []
@@ -49,12 +54,13 @@ describe('Test users account verification', function () {
       }
     })
 
-    await registerUser(server.url, user.username, user.password)
+    await registerUser(server.url, user1.username, user1.password)
 
     await waitJobs(server)
-    expect(emails).to.have.lengthOf(1)
+    expectedEmailsLength++
+    expect(emails).to.have.lengthOf(expectedEmailsLength)
 
-    const email = emails[0]
+    const email = emails[expectedEmailsLength - 1]
 
     const verificationStringMatches = /verificationString=([a-z0-9]+)/.exec(email['text'])
     expect(verificationStringMatches).not.to.be.null
@@ -72,15 +78,48 @@ describe('Test users account verification', function () {
   })
 
   it('Should not allow login for unverified user', async function () {
-    const resLogin = await login(server.url, server.client, user, 400)
+    const resLogin = await login(server.url, server.client, user1, 400)
     expect(resLogin.body.error).to.contain('User is not verified.')
   })
 
   it('Should verify the user via email and allow login', async function () {
     await verifyEmail(server.url, userId, verificationString)
-    await login(server.url, server.client, user)
+    await login(server.url, server.client, user1)
     const resUserVerified = await getUserInformation(server.url, server.accessToken, userId)
     expect(resUserVerified.body.verified).to.be.true
+  })
+
+  it('Should register user not requiring verification if verification not required', async function () {
+    this.timeout(5000)
+    await updateCustomSubConfig(server.url, server.accessToken, {
+      signup: {
+        enabled: true,
+        requiresVerification: false,
+        limit: 10
+      }
+    })
+
+    await registerUser(server.url, user2.username, user2.password)
+
+    await waitJobs(server)
+    expect(emails).to.have.lengthOf(expectedEmailsLength)
+
+    const accessToken = await userLogin(server, user2)
+
+    const resMyUserInfo = await getMyUserInformation(server.url, accessToken)
+    expect(resMyUserInfo.body.verified).to.be.null
+  })
+
+  it('Should allow login for user registered when verification required if later enabled', async function () {
+    await updateCustomSubConfig(server.url, server.accessToken, {
+      signup: {
+        enabled: true,
+        requiresVerification: true,
+        limit: 10
+      }
+    })
+
+    await userLogin(server, user2)
   })
 
   after(async function () {

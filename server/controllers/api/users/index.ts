@@ -179,7 +179,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     role: UserRole.USER,
     videoQuota: CONFIG.USER.VIDEO_QUOTA,
     videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
-    verified: false
+    verified: CONFIG.SIGNUP.REQUIRES_VERIFICATION ? false : null
   })
 
   const { user } = await createUserAccountAndChannel(userToCreate)

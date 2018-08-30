@@ -8,21 +8,11 @@ async function up (utils: {
   {
     const data = {
       type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: true // make all existing users verified
+      allowNull: true,
+      defaultValue: null
     }
 
     await utils.queryInterface.addColumn('user', 'verified', data)
-  }
-
-  {
-    const data = {
-      type: Sequelize.BOOLEAN,
-      allowNull: false,
-      defaultValue: false // new users must verify
-    }
-
-    await utils.queryInterface.changeColumn('user', 'verified', data)
   }
 
 }

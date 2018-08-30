@@ -93,8 +93,8 @@ export class UserModel extends Model<UserModel> {
   @Column(DataType.STRING(400))
   email: string
 
-  @AllowNull(false)
-  @Default(false)
+  @AllowNull(true)
+  @Default(null)
   @Is('UserVerified', value => throwIfNotValid(value, isUserVerifiedValid, 'verified boolean'))
   @Column
   verified: boolean
