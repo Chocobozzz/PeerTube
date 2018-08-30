@@ -16,6 +16,7 @@ import { VideoWatchComponent } from './video-watch.component'
 import { NgxQRCodeModule } from 'ngx-qrcode2'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { VideoBlacklistComponent } from '@app/videos/+video-watch/modal/video-blacklist.component'
+import { TextareaAutosizeModule } from 'ngx-textarea-autosize'
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { VideoBlacklistComponent } from '@app/videos/+video-watch/modal/video-bl
     SharedModule,
     ClipboardModule,
     NgbTooltipModule,
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    TextareaAutosizeModule
   ],
 
   declarations: [

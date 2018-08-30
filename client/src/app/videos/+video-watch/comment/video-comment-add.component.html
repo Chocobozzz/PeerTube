@@ -3,7 +3,8 @@
     <img [src]="user.accountAvatarUrl" alt="Avatar" />
 
     <div class="form-group">
-      <textarea i18n-placeholder placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
+      <textarea i18n-placeholder placeholder="Add comment..." autosize
+                formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
                 (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
 
       </textarea>
