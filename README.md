@@ -165,11 +165,11 @@ Here are some simple schemes:
 
 <p align="center">
 
-<img src="https://lutim.cpy.re/6Qut3ure.png" alt="Decentralized" />
+<img src="support/doc/user/decentralized.png" alt="Decentralized" />
 
-<img src="https://lutim.cpy.re/NvRAcv6U.png" alt="Watch a video" />
+<img src="support/doc/user/watch-video.png" alt="Watch a video" />
 
-<img src="https://lutim.cpy.re/pqKm3Q5S.png" alt="Watch a P2P video" />
+<img src="support/doc/user/watch-p2p.png" alt="Watch a P2P video" />
 
 </p>
 
