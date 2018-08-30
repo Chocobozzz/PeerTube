@@ -5,6 +5,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { RestExtractor } from '@app/shared'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
+import { AuthService } from '@app/core'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -17,6 +18,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   constructor (
     private route: ActivatedRoute,
+    private authService: AuthService,
     private videoChannelService: VideoChannelService,
     private restExtractor: RestExtractor
   ) { }
@@ -35,5 +37,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     if (this.routeSub) this.routeSub.unsubscribe()
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
   }
 }

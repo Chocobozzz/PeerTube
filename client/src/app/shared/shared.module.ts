@@ -52,6 +52,7 @@ import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.com
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
+import { OverviewService } from '@app/shared/overview'
 
 @NgModule({
   imports: [
@@ -154,6 +155,7 @@ import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-fe
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
     VideoBlacklistValidatorsService,
+    OverviewService,
 
     I18nPrimengCalendarService,
     ScreenService,

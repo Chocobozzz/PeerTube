@@ -4,7 +4,7 @@
   </div>
   <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>
 
-  <div i18n *ngIf="pagination.totalItems === 0">No results.</div>
+  <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div
     myInfiniteScroller
     [pageHeight]="pageHeight"
@@ -12,11 +12,7 @@
     class="videos" #videosElement
   >
     <div *ngFor="let videos of videoPages" class="videos-page">
-      <my-video-miniature
-        class="ng-animate"
-        *ngFor="let video of videos" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
-      >
-      </my-video-miniature>
+      <my-video-miniature *ngFor="let video of videos" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"></my-video-miniature>
     </div>
   </div>
 </div>

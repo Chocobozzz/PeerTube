@@ -1,15 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-.no-result {
-  height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: $font-semibold;
-}
-
 .search-result {
   padding: 40px;
 
