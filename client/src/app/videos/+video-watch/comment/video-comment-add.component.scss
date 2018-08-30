@@ -22,10 +22,6 @@ form {
 
     textarea {
       @include peertube-textarea(100%, 60px);
-      
-      border: none;
-      resize: none;
-      padding-left: 0px;
 
       &:focus::placeholder {
         opacity: 0;
