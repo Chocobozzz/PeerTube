@@ -58,6 +58,9 @@ const ROUTE_CACHE_LIFETIME = {
   ROBOTS: '2 hours',
   NODEINFO: '10 minutes',
   DNT_POLICY: '1 week',
+  OVERVIEWS: {
+    VIDEOS: '1 hour'
+  },
   ACTIVITY_PUB: {
     VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
   }
@@ -464,6 +467,15 @@ const TORRENT_MIMETYPE_EXT = {
 
 // ---------------------------------------------------------------------------
 
+const OVERVIEWS = {
+  VIDEOS: {
+    SAMPLE_THRESHOLD: 4,
+    SAMPLES_COUNT: 2
+  }
+}
+
+// ---------------------------------------------------------------------------
+
 const SERVER_ACTOR_NAME = 'peertube'
 
 const ACTIVITY_PUB = {
@@ -666,6 +678,7 @@ export {
   USER_PASSWORD_RESET_LIFETIME,
   USER_EMAIL_VERIFY_LIFETIME,
   IMAGE_MIMETYPE_EXT,
+  OVERVIEWS,
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,
   STATIC_DOWNLOAD_PATHS,

@@ -1083,6 +1083,29 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
+  // threshold corresponds to how many video the field should have to be returned
+  static getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
+    const query: IFindOptions<VideoModel> = {
+      attributes: [ field ],
+      limit: count,
+      group: field,
+      having: Sequelize.where(Sequelize.fn('COUNT', Sequelize.col(field)), {
+        [Sequelize.Op.gte]: threshold
+      }) as any, // FIXME: typings
+      where: {
+        [field]: {
+          [Sequelize.Op.not]: null,
+        },
+        privacy: VideoPrivacy.PUBLIC,
+        state: VideoState.PUBLISHED
+      },
+      order: [ this.sequelize.random() ]
+    }
+
+    return VideoModel.findAll(query)
+      .then(rows => rows.map(r => r[field]))
+  }
+
   private static buildActorWhereWithFilter (filter?: VideoFilter) {
     if (filter && filter === 'local') {
       return {

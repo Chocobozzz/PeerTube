@@ -293,6 +293,15 @@ table {
   }
 }
 
+.no-results {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: $font-semibold;
+}
+
 @media screen and (max-width: 900px) {
   .main-col {
     &, &.expanded {

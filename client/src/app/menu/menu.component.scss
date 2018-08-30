@@ -141,6 +141,11 @@ menu {
           background-image: url('../../assets/images/menu/subscriptions.svg');
         }
 
+        &.icon-videos-overview {
+          position: relative;
+          background-image: url('../../assets/images/menu/globe.svg');
+        }
+
         &.icon-videos-trending {
           position: relative;
           top: -2px;

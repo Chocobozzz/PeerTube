@@ -51,14 +51,6 @@ export class VideoService {
                )
   }
 
-  viewVideo (uuid: string): Observable<boolean> {
-    return this.authHttp.post(this.getVideoViewUrl(uuid), {})
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
   updateVideo (video: VideoEdit) {
     const language = video.language || null
     const licence = video.licence || null

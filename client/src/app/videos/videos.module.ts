@@ -6,6 +6,7 @@ import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'
 import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
+import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-us
     VideoTrendingComponent,
     VideoRecentlyAddedComponent,
     VideoLocalComponent,
-    VideoUserSubscriptionsComponent
+    VideoUserSubscriptionsComponent,
+    VideoOverviewComponent
   ],
 
   exports: [

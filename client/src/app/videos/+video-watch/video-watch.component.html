@@ -38,7 +38,7 @@
                 Published {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
               </div>
             </div>
-            
+
             <div class="d-flex justify-content-between align-items-sm-end">
               <div class="d-none d-sm-block">
                 <div class="video-info-name">{{ video.name }}</div>
@@ -46,7 +46,7 @@
                 <div i18n class="video-info-date-views">
                   Published {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
                 </div>
-              </div>  
+              </div>
 
               <div class="video-actions-rates">
                 <div class="video-actions fullWidth justify-content-end">
@@ -56,57 +56,57 @@
                   >
                     <span class="icon icon-like" i18n-title title="Like this video" ></span>
                   </div>
-      
+
                   <div
                     *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
                     class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
                   >
                     <span class="icon icon-dislike" i18n-title title="Dislike this video"></span>
                   </div>
-      
+
                   <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
                     <span class="icon icon-support"></span>
                     <span class="icon-text" i18n>Support</span>
                   </div>
-      
+
                   <div (click)="showShareModal()" class="action-button action-button-share" role="button">
                     <span class="icon icon-share"></span>
                     <span class="icon-text" i18n>Share</span>
                   </div>
-      
+
                   <div class="action-more" ngbDropdown placement="top" role="button">
                     <div class="action-button" ngbDropdownToggle role="button">
                       <span class="icon icon-more"></span>
                     </div>
-      
+
                     <div ngbDropdownMenu>
                       <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
                         <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
                       </a>
-      
+
                       <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
                         <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
                       </a>
-      
+
                       <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
                         <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
                       </a>
-      
+
                       <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
                         <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
                       </a>
-      
+
                       <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
                         <span class="icon icon-unblacklist"></span> <ng-container i18n>Unblacklist</ng-container>
                       </a>
-      
+
                       <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
                         <span class="icon icon-delete"></span> <ng-container i18n>Delete</ng-container>
                       </a>
                     </div>
                   </div>
                 </div>
-      
+
                 <div
                   class="video-info-likes-dislikes-bar"
                   *ngIf="video.likes !== 0 || video.dislikes !== 0"
@@ -125,7 +125,7 @@
                 <img [src]="video.videoChannelAvatarUrl" alt="Video channel avatar" />
               </a>
 
-              <my-subscribe-button [videoChannel]="video.channel" size="small"></my-subscribe-button>
+              <my-subscribe-button *ngIf="isUserLoggedIn()" [videoChannel]="video.channel" size="small"></my-subscribe-button>
             </div>
 
             <div class="video-info-by">

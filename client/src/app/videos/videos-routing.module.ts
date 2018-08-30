@@ -6,6 +6,7 @@ import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.c
 import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosComponent } from './videos.component'
 import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
+import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
 
 const videosRoutes: Routes = [
   {
@@ -13,6 +14,15 @@ const videosRoutes: Routes = [
     component: VideosComponent,
     canActivateChild: [ MetaGuard ],
     children: [
+      {
+        path: 'overview',
+        component: VideoOverviewComponent,
+        data: {
+          meta: {
+            title: 'Videos overview'
+          }
+        }
+      },
       {
         path: 'trending',
         component: VideoTrendingComponent,
