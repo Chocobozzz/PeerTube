@@ -62,6 +62,10 @@ search:
     users: true
     anonymous: false
 
+trending:
+  videos:
+    interval_days: 7 # Compute trending videos for the last x days
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

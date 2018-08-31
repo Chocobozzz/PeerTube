@@ -30,8 +30,10 @@ describe('Test a videos overview', function () {
     expect(overview.channels).to.have.lengthOf(0)
   })
 
-  it('Should upload 3 videos in a specific category, tag and channel but not include them in overview', async function () {
-    for (let i = 0; i < 3; i++) {
+  it('Should upload 5 videos in a specific category, tag and channel but not include them in overview', async function () {
+    this.timeout(15000)
+
+    for (let i = 0; i < 5; i++) {
       await uploadVideo(server.url, server.accessToken, {
         name: 'video ' + i,
         category: 3,
@@ -49,7 +51,7 @@ describe('Test a videos overview', function () {
 
   it('Should upload another video and include all videos in the overview', async function () {
     await uploadVideo(server.url, server.accessToken, {
-      name: 'video 3',
+      name: 'video 5',
       category: 3,
       tags: [ 'coucou1', 'coucou2' ]
     })
@@ -70,11 +72,13 @@ describe('Test a videos overview', function () {
     for (const attr of [ 'tags', 'categories', 'channels' ]) {
       const obj = overview[attr][0]
 
-      expect(obj.videos).to.have.lengthOf(4)
-      expect(obj.videos[0].name).to.equal('video 3')
-      expect(obj.videos[1].name).to.equal('video 2')
-      expect(obj.videos[2].name).to.equal('video 1')
-      expect(obj.videos[3].name).to.equal('video 0')
+      expect(obj.videos).to.have.lengthOf(6)
+      expect(obj.videos[0].name).to.equal('video 5')
+      expect(obj.videos[1].name).to.equal('video 4')
+      expect(obj.videos[2].name).to.equal('video 3')
+      expect(obj.videos[3].name).to.equal('video 2')
+      expect(obj.videos[4].name).to.equal('video 1')
+      expect(obj.videos[5].name).to.equal('video 0')
     }
 
     expect(overview.tags.find(t => t.tag === 'coucou1')).to.not.be.undefined

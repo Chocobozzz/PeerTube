@@ -17,6 +17,7 @@ import {
   HasMany,
   HasOne,
   IFindOptions,
+  IIncludeOptions,
   Is,
   IsInt,
   IsUUID,
@@ -24,8 +25,7 @@ import {
   Model,
   Scopes,
   Table,
-  UpdatedAt,
-  IIncludeOptions
+  UpdatedAt
 } from 'sequelize-typescript'
 import { VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -77,7 +77,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import { buildTrigramSearchIndex, createSimilarityAttribute, getVideoSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
@@ -89,7 +89,7 @@ import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
 import { copy, remove, rename, stat, writeFile } from 'fs-extra'
-import { immutableAssign } from '../../tests/utils'
+import { VideoViewModel } from './video-views'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -146,6 +146,7 @@ type AvailableForListIDsOptions = {
   withFiles?: boolean
   accountId?: number
   videoChannelId?: number
+  trendingDays?: number
 }
 
 @Scopes({
@@ -382,6 +383,21 @@ type AvailableForListIDsOptions = {
       query.where['language'] = {
         [Sequelize.Op.or]: options.languageOneOf
       }
+    }
+
+    if (options.trendingDays) {
+      query.include.push({
+        attributes: [],
+        model: VideoViewModel,
+        required: false,
+        where: {
+          startDate: {
+            [ Sequelize.Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * options.trendingDays)
+          }
+        }
+      })
+
+      query.subQuery = false
     }
 
     return query
@@ -649,6 +665,16 @@ export class VideoModel extends Model<VideoModel> {
   })
   VideoComments: VideoCommentModel[]
 
+  @HasMany(() => VideoViewModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoViews: VideoViewModel[]
+
   @HasOne(() => ScheduleVideoUpdateModel, {
     foreignKey: {
       name: 'videoId',
@@ -754,7 +780,7 @@ export class VideoModel extends Model<VideoModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: getSort('createdAt', [ 'Tags', 'name', 'ASC' ]),
+      order: getVideoSort('createdAt', [ 'Tags', 'name', 'ASC' ]),
       where: {
         id: {
           [Sequelize.Op.in]: Sequelize.literal('(' + rawQuery + ')')
@@ -845,7 +871,7 @@ export class VideoModel extends Model<VideoModel> {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getVideoSort(sort),
       include: [
         {
           model: VideoChannelModel,
@@ -902,11 +928,19 @@ export class VideoModel extends Model<VideoModel> {
     accountId?: number,
     videoChannelId?: number,
     actorId?: number
+    trendingDays?: number
   }) {
-    const query = {
+    const query: IFindOptions<VideoModel> = {
       offset: options.start,
       limit: options.count,
-      order: getSort(options.sort)
+      order: getVideoSort(options.sort)
+    }
+
+    let trendingDays: number
+    if (options.sort.endsWith('trending')) {
+      trendingDays = CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+
+      query.group = 'VideoModel.id'
     }
 
     // actorId === null has a meaning, so just check undefined
@@ -924,7 +958,8 @@ export class VideoModel extends Model<VideoModel> {
       withFiles: options.withFiles,
       accountId: options.accountId,
       videoChannelId: options.videoChannelId,
-      includeLocalVideos: options.includeLocalVideos
+      includeLocalVideos: options.includeLocalVideos,
+      trendingDays
     }
 
     return VideoModel.getAvailableForApi(query, queryOptions)
@@ -1006,7 +1041,7 @@ export class VideoModel extends Model<VideoModel> {
       },
       offset: options.start,
       limit: options.count,
-      order: getSort(options.sort),
+      order: getVideoSort(options.sort),
       where: {
         [ Sequelize.Op.and ]: whereAnd
       }
@@ -1177,8 +1212,12 @@ export class VideoModel extends Model<VideoModel> {
     const secondQuery = {
       offset: 0,
       limit: query.limit,
-      order: query.order,
-      attributes: query.attributes
+      attributes: query.attributes,
+      order: [ // Keep original order
+        Sequelize.literal(
+          ids.map(id => `"VideoModel".id = ${id} DESC`).join(', ')
+        )
+      ]
     }
     const rows = await VideoModel.scope(apiScope).findAll(secondQuery)
 

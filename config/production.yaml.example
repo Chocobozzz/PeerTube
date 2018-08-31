@@ -63,6 +63,10 @@ search:
     users: true
     anonymous: false
 
+trending:
+  videos:
+    interval_days: 7 # Compute trending videos for the last x days
+
 ###############################################################################
 #
 # From this point, all the following keys can be overridden by the web interface

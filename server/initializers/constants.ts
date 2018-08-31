@@ -37,14 +37,15 @@ const SORTABLE_COLUMNS = {
   JOBS: [ 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ],
 
-  VIDEOS_SEARCH: [ 'match', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
+
+  VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
 }
 
@@ -199,6 +200,11 @@ const CONFIG = {
     REMOTE_URI: {
       USERS: config.get<boolean>('search.remote_uri.users'),
       ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
+    }
+  },
+  TRENDING: {
+    VIDEOS: {
+      INTERVAL_DAYS: config.get<number>('trending.videos.interval_days')
     }
   },
   ADMIN: {
