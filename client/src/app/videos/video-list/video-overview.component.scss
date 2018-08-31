@@ -20,3 +20,17 @@
     color: #000;
   }
 }
+
+.channel {
+  .section-title a {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+
+    img {
+      @include avatar(30px);
+
+      margin-right: 10px;
+    }
+  }
+}

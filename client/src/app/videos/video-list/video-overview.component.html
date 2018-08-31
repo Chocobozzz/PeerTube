@@ -22,9 +22,13 @@
     </div>
   </div>
 
-  <div class="section" *ngFor="let object of overview.channels">
+  <div class="section channel" *ngFor="let object of overview.channels">
     <div class="section-title" i18n>
-      <a [routerLink]="[ '/video-channels', buildVideoChannelBy(object) ]">Channel {{ object.channel.displayName }}</a>
+      <a [routerLink]="[ '/video-channels', buildVideoChannelBy(object) ]">
+        <img [src]="buildVideoChannelAvatarUrl(object)" alt="Avatar" />
+
+        <div>{{ object.channel.displayName }}</div>
+      </a>
     </div>
 
     <div>

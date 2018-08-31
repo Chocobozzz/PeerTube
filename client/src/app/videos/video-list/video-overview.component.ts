@@ -53,4 +53,8 @@ export class VideoOverviewComponent implements OnInit {
   buildVideoChannelBy (object: { videos: Video[] }) {
     return object.videos[0].byVideoChannel
   }
+
+  buildVideoChannelAvatarUrl (object: { videos: Video[] }) {
+    return object.videos[0].videoChannelAvatarUrl
+  }
 }
