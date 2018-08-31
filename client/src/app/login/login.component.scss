@@ -20,4 +20,8 @@ input[type=submit] {
 .create-an-account, .forgot-password-button {
   color: #000;
   cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline !important;
+  }
 }

@@ -3,11 +3,12 @@ import { dirname, join } from 'path'
 import { JobType, VideoRateType, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoPrivacy, VideoAbuseState, VideoImportState } from '../../shared/models/videos'
+import { VideoAbuseState, VideoImportState, VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
+import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -90,7 +91,8 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'video-file-import': 1,
   'video-file': 1,
   'video-import': 1,
-  'email': 5
+  'email': 5,
+  'videos-views': 1
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
@@ -100,7 +102,8 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'video-file-import': 1,
   'video-file': 1,
   'video-import': 1,
-  'email': 5
+  'email': 5,
+  'videos-views': 1
 }
 const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -110,8 +113,15 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 5, // 5 hours
-  'email': 60000 * 10 // 10 minutes
+  'email': 60000 * 10, // 10 minutes
+  'videos-views': undefined // Unlimited
 }
+const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
+  'videos-views': {
+    cron: '1 * * * *' // At 1 minutes past the hour
+  }
+}
+
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
@@ -594,6 +604,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.badActorFollow = 10000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
+  REPEAT_JOBS['videos-views'] = { every: 5000 }
 
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
 
@@ -656,6 +667,7 @@ export {
   USER_EMAIL_VERIFY_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVALS_MS,
+  REPEAT_JOBS,
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,

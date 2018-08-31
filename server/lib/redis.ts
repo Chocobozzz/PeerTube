@@ -72,11 +72,11 @@ class Redis {
     return this.getValue(this.generateVerifyEmailKey(userId))
   }
 
-  setView (ip: string, videoUUID: string) {
+  setIPVideoView (ip: string, videoUUID: string) {
     return this.setValue(this.buildViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
   }
 
-  async isViewExists (ip: string, videoUUID: string) {
+  async isVideoIPViewExists (ip: string, videoUUID: string) {
     return this.exists(this.buildViewKey(ip, videoUUID))
   }
 
@@ -95,6 +95,52 @@ class Redis {
     )
 
     return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
+  }
+
+  addVideoView (videoId: number) {
+    const keyIncr = this.generateVideoViewKey(videoId)
+    const keySet = this.generateVideosViewKey()
+
+    return Promise.all([
+      this.addToSet(keySet, videoId.toString()),
+      this.increment(keyIncr)
+    ])
+  }
+
+  async getVideoViews (videoId: number, hour: number) {
+    const key = this.generateVideoViewKey(videoId, hour)
+
+    const valueString = await this.getValue(key)
+    return parseInt(valueString, 10)
+  }
+
+  async getVideosIdViewed (hour: number) {
+    const key = this.generateVideosViewKey(hour)
+
+    const stringIds = await this.getSet(key)
+    return stringIds.map(s => parseInt(s, 10))
+  }
+
+  deleteVideoViews (videoId: number, hour: number) {
+    const keySet = this.generateVideosViewKey(hour)
+    const keyIncr = this.generateVideoViewKey(videoId, hour)
+
+    return Promise.all([
+      this.deleteFromSet(keySet, videoId.toString()),
+      this.deleteKey(keyIncr)
+    ])
+  }
+
+  generateVideosViewKey (hour?: number) {
+    if (!hour) hour = new Date().getHours()
+
+    return `videos-view-h${hour}`
+  }
+
+  generateVideoViewKey (videoId: number, hour?: number) {
+    if (!hour) hour = new Date().getHours()
+
+    return `video-view-${videoId}-h${hour}`
   }
 
   generateResetPasswordKey (userId: number) {
@@ -120,6 +166,34 @@ class Redis {
 
         return res(value)
       })
+    })
+  }
+
+  private getSet (key: string) {
+    return new Promise<string[]>((res, rej) => {
+      this.client.smembers(this.prefix + key, (err, value) => {
+        if (err) return rej(err)
+
+        return res(value)
+      })
+    })
+  }
+
+  private addToSet (key: string, value: string) {
+    return new Promise<string[]>((res, rej) => {
+      this.client.sadd(this.prefix + key, value, err => err ? rej(err) : res())
+    })
+  }
+
+  private deleteFromSet (key: string, value: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.srem(this.prefix + key, value, err => err ? rej(err) : res())
+    })
+  }
+
+  private deleteKey (key: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.del(this.prefix + key, err => err ? rej(err) : res())
     })
   }
 
@@ -154,6 +228,16 @@ class Redis {
   private getObject (key: string) {
     return new Promise<{ [ id: string ]: string }>((res, rej) => {
       this.client.hgetall(this.prefix + key, (err, value) => {
+        if (err) return rej(err)
+
+        return res(value)
+      })
+    })
+  }
+
+  private increment (key: string) {
+    return new Promise<number>((res, rej) => {
+      this.client.incr(this.prefix + key, (err, value) => {
         if (err) return rej(err)
 
         return res(value)

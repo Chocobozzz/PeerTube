@@ -48,7 +48,7 @@ describe('Test jobs', function () {
     const job = res.body.data[0]
 
     expect(job.state).to.equal('completed')
-    expect(job.type).to.equal('activitypub-http-unicast')
+    expect(job.type).to.equal('activitypub-follow')
     expect(dateIsValid(job.createdAt)).to.be.true
     expect(dateIsValid(job.processedOn)).to.be.true
     expect(dateIsValid(job.finishedOn)).to.be.true

@@ -1074,6 +1074,15 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
+  static incrementViews (id: number, views: number) {
+    return VideoModel.increment('views', {
+      by: views,
+      where: {
+        id
+      }
+    })
+  }
+
   private static buildActorWhereWithFilter (filter?: VideoFilter) {
     if (filter && filter === 'local') {
       return {

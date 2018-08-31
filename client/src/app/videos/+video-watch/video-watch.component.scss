@@ -76,12 +76,9 @@
 
 .video-bottom {
   margin-top: 40px;
-  display: flex;
-  flex-grow: 1;
 
   .video-info {
     flex-grow: 1;
-    margin-right: 40px;
     // Set min width for flex item
     min-width: 1px;
 
@@ -284,10 +281,13 @@
         }
 
         .video-info-likes-dislikes-bar {
-          height: 5px;
+          $likes-bar-height: 2px;
+          height: $likes-bar-height;
+          margin-top: -$likes-bar-height;
           width: 186px;
           background-color: #E5E5E5;
-          margin-top: 25px;
+          position: relative;
+          top: 10px;
 
           .likes-bar {
             height: 100%;
@@ -439,19 +439,14 @@
 @media screen and (max-width: 1600px) {
   .video-bottom {
     .video-info {
-      margin-right: 20px;
-
       .video-info-first-row {
         flex-direction: column;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
 
         .video-actions-rates {
           margin-top: 20px;
+          margin-bottom: 10px;
           align-items: start;
-
-          .video-info-likes-dislikes-bar {
-            margin-top: 10px;
-          }
         }
       }
 
