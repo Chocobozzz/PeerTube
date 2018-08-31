@@ -24,7 +24,8 @@ import {
   Model,
   Scopes,
   Table,
-  UpdatedAt
+  UpdatedAt,
+  IIncludeOptions
 } from 'sequelize-typescript'
 import { VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -88,6 +89,7 @@ import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
 import { copy, remove, rename, stat, writeFile } from 'fs-extra'
+import { immutableAssign } from '../../tests/utils'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -117,7 +119,8 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
 ]
 
 export enum ScopeNames {
-  AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
+  AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
+  FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
@@ -125,34 +128,37 @@ export enum ScopeNames {
   WITH_BLACKLISTED = 'WITH_BLACKLISTED'
 }
 
-type AvailableForListOptions = {
-  actorId: number,
-  includeLocalVideos: boolean,
-  filter?: VideoFilter,
-  categoryOneOf?: number[],
-  nsfw?: boolean,
-  licenceOneOf?: number[],
-  languageOneOf?: string[],
-  tagsOneOf?: string[],
-  tagsAllOf?: string[],
-  withFiles?: boolean,
-  accountId?: number,
+type ForAPIOptions = {
+  ids: number[]
+  withFiles?: boolean
+}
+
+type AvailableForListIDsOptions = {
+  actorId: number
+  includeLocalVideos: boolean
+  filter?: VideoFilter
+  categoryOneOf?: number[]
+  nsfw?: boolean
+  licenceOneOf?: number[]
+  languageOneOf?: string[]
+  tagsOneOf?: string[]
+  tagsAllOf?: string[]
+  withFiles?: boolean
+  accountId?: number
   videoChannelId?: number
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
+  [ScopeNames.FOR_API]: (options: ForAPIOptions) => {
     const accountInclude = {
       attributes: [ 'id', 'name' ],
       model: AccountModel.unscoped(),
       required: true,
-      where: {},
       include: [
         {
           attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
-          where: VideoModel.buildActorWhereWithFilter(options.filter),
           include: [
             {
               attributes: [ 'host' ],
@@ -172,7 +178,6 @@ type AvailableForListOptions = {
       attributes: [ 'name', 'description', 'id' ],
       model: VideoChannelModel.unscoped(),
       required: true,
-      where: {},
       include: [
         {
           attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
@@ -194,8 +199,27 @@ type AvailableForListOptions = {
       ]
     }
 
-    // FIXME: It would be more efficient to use a CTE so we join AFTER the filters, but sequelize does not support it...
     const query: IFindOptions<VideoModel> = {
+      where: {
+        id: {
+          [Sequelize.Op.any]: options.ids
+        }
+      },
+      include: [ videoChannelInclude ]
+    }
+
+    if (options.withFiles === true) {
+      query.include.push({
+        model: VideoFileModel.unscoped(),
+        required: true
+      })
+    }
+
+    return query
+  },
+  [ScopeNames.AVAILABLE_FOR_LIST_IDS]: (options: AvailableForListIDsOptions) => {
+    const query: IFindOptions<VideoModel> = {
+      attributes: [ 'id' ],
       where: {
         id: {
           [Sequelize.Op.notIn]: Sequelize.literal(
@@ -217,7 +241,48 @@ type AvailableForListOptions = {
           }
         ]
       },
-      include: [ videoChannelInclude ]
+      include: [ ]
+    }
+
+    if (options.filter || options.accountId || options.videoChannelId) {
+      const videoChannelInclude: IIncludeOptions = {
+        attributes: [],
+        model: VideoChannelModel.unscoped(),
+        required: true
+      }
+
+      if (options.videoChannelId) {
+        videoChannelInclude.where = {
+          id: options.videoChannelId
+        }
+      }
+
+      if (options.filter || options.accountId) {
+        const accountInclude: IIncludeOptions = {
+          attributes: [],
+          model: AccountModel.unscoped(),
+          required: true
+        }
+
+        if (options.filter) {
+          accountInclude.include = [
+            {
+              attributes: [],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: VideoModel.buildActorWhereWithFilter(options.filter)
+            }
+          ]
+        }
+
+        if (options.accountId) {
+          accountInclude.where = { id: options.accountId }
+        }
+
+        videoChannelInclude.include = [ accountInclude ]
+      }
+
+      query.include.push(videoChannelInclude)
     }
 
     if (options.actorId) {
@@ -235,17 +300,17 @@ type AvailableForListOptions = {
       const actorIdNumber = parseInt(options.actorId.toString(), 10)
       query.where['id'][ Sequelize.Op.in ] = Sequelize.literal(
         '(' +
-        'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-        'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-        'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-        ' UNION ALL ' +
-        'SELECT "video"."id" AS "id" FROM "video" ' +
-        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-        'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-        'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-        'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-        'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-        localVideosReq +
+          'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+          'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+          'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+          ' UNION ALL ' +
+          'SELECT "video"."id" AS "id" FROM "video" ' +
+          'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+          'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+          'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+          'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+          'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+          localVideosReq +
         ')'
       )
     }
@@ -305,18 +370,6 @@ type AvailableForListOptions = {
     if (options.languageOneOf) {
       query.where['language'] = {
         [Sequelize.Op.or]: options.languageOneOf
-      }
-    }
-
-    if (options.accountId) {
-      accountInclude.where = {
-        id: options.accountId
-      }
-    }
-
-    if (options.videoChannelId) {
-      videoChannelInclude.where = {
-        id: options.videoChannelId
       }
     }
 
@@ -848,33 +901,22 @@ export class VideoModel extends Model<VideoModel> {
     // actorId === null has a meaning, so just check undefined
     const actorId = options.actorId !== undefined ? options.actorId : (await getServerActor()).id
 
-    const scopes = {
-      method: [
-        ScopeNames.AVAILABLE_FOR_LIST, {
-          actorId,
-          nsfw: options.nsfw,
-          categoryOneOf: options.categoryOneOf,
-          licenceOneOf: options.licenceOneOf,
-          languageOneOf: options.languageOneOf,
-          tagsOneOf: options.tagsOneOf,
-          tagsAllOf: options.tagsAllOf,
-          filter: options.filter,
-          withFiles: options.withFiles,
-          accountId: options.accountId,
-          videoChannelId: options.videoChannelId,
-          includeLocalVideos: options.includeLocalVideos
-        } as AvailableForListOptions
-      ]
+    const queryOptions = {
+      actorId,
+      nsfw: options.nsfw,
+      categoryOneOf: options.categoryOneOf,
+      licenceOneOf: options.licenceOneOf,
+      languageOneOf: options.languageOneOf,
+      tagsOneOf: options.tagsOneOf,
+      tagsAllOf: options.tagsAllOf,
+      filter: options.filter,
+      withFiles: options.withFiles,
+      accountId: options.accountId,
+      videoChannelId: options.videoChannelId,
+      includeLocalVideos: options.includeLocalVideos
     }
 
-    return VideoModel.scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
+    return VideoModel.getAvailableForApi(query, queryOptions)
   }
 
   static async searchAndPopulateAccountAndServer (options: {
@@ -960,29 +1002,18 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const serverActor = await getServerActor()
-    const scopes = {
-      method: [
-        ScopeNames.AVAILABLE_FOR_LIST, {
-          actorId: serverActor.id,
-          includeLocalVideos: options.includeLocalVideos,
-          nsfw: options.nsfw,
-          categoryOneOf: options.categoryOneOf,
-          licenceOneOf: options.licenceOneOf,
-          languageOneOf: options.languageOneOf,
-          tagsOneOf: options.tagsOneOf,
-          tagsAllOf: options.tagsAllOf
-        } as AvailableForListOptions
-      ]
+    const queryOptions = {
+      actorId: serverActor.id,
+      includeLocalVideos: options.includeLocalVideos,
+      nsfw: options.nsfw,
+      categoryOneOf: options.categoryOneOf,
+      licenceOneOf: options.licenceOneOf,
+      languageOneOf: options.languageOneOf,
+      tagsOneOf: options.tagsOneOf,
+      tagsAllOf: options.tagsAllOf
     }
 
-    return VideoModel.scope(scopes)
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
+    return VideoModel.getAvailableForApi(query, queryOptions)
   }
 
   static load (id: number, t?: Sequelize.Transaction) {
@@ -1094,7 +1125,7 @@ export class VideoModel extends Model<VideoModel> {
       }) as any, // FIXME: typings
       where: {
         [field]: {
-          [Sequelize.Op.not]: null,
+          [Sequelize.Op.not]: null
         },
         privacy: VideoPrivacy.PUBLIC,
         state: VideoState.PUBLISHED
@@ -1114,6 +1145,29 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return {}
+  }
+
+  private static async getAvailableForApi (query: IFindOptions<VideoModel>, options: AvailableForListIDsOptions) {
+    const idsScope = {
+      method: [
+        ScopeNames.AVAILABLE_FOR_LIST_IDS, options
+      ]
+    }
+
+    const { count, rows: rowsId } = await VideoModel.scope(idsScope).findAndCountAll(query)
+    const ids = rowsId.map(r => r.id)
+
+    if (ids.length === 0) return { data: [], total: count }
+
+    const apiScope = {
+      method: [ ScopeNames.FOR_API, { ids, withFiles: options.withFiles } as ForAPIOptions ]
+    }
+    const rows = await VideoModel.scope(apiScope).findAll(immutableAssign(query, { offset: 0 }))
+
+    return {
+      data: rows,
+      total: count
+    }
   }
 
   private static getCategoryLabel (id: number) {
