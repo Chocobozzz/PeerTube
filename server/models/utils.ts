@@ -4,7 +4,11 @@ type SortType = { sortModel: any, sortValue: string }
 
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
 function getSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
-  const { direction, field } = buildDirectionAndField(value)
+  let { direction, field } = buildDirectionAndField(value)
+
+  if (field.toLowerCase() === 'match') { // Search
+    field = Sequelize.col('similarity')
+  }
 
   return [ [ field, direction ], lastSort ]
 }
@@ -13,10 +17,9 @@ function getVideoSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
   let { direction, field } = buildDirectionAndField(value)
 
   // Alias
-  if (field.toLowerCase() === 'match') field = Sequelize.col('similarity')
-
-  // Sort by aggregation
-  if (field.toLowerCase() === 'trending') {
+  if (field.toLowerCase() === 'match') { // Search
+    field = Sequelize.col('similarity')
+  } else if (field.toLowerCase() === 'trending') { // Sort by aggregation
     return [
       [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoViews.views')), '0'), direction ],
 

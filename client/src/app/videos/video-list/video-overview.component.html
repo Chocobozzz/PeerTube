@@ -4,7 +4,7 @@
 
   <div class="section" *ngFor="let object of overview.categories">
     <div class="section-title" i18n>
-      <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">Category {{ object.category.label }}</a>
+      <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
     </div>
 
     <div>
@@ -14,7 +14,7 @@
 
   <div class="section" *ngFor="let object of overview.tags">
     <div class="section-title" i18n>
-      <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">Tag {{ object.tag }}</a>
+      <a routerLink="/search" [queryParams]="{ tagOneOf: [ object.tag ] }">{{ object.tag }}</a>
     </div>
 
     <div>
