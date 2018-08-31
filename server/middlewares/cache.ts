@@ -31,6 +31,8 @@ function cacheRoute (lifetimeArg: string | number) {
                      logger.error('Cannot cache route.', { err })
                      return done(err)
                    })
+            } else {
+              done()
             }
 
             return sendSave(body)
@@ -52,7 +54,7 @@ function cacheRoute (lifetimeArg: string | number) {
         return done()
       })
     } catch (err) {
-      logger.error('Cannot serve cached route.', err)
+      logger.error('Cannot serve cached route.', { err })
       return next()
     }
   }
