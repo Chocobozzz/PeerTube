@@ -10,7 +10,7 @@ database:
   port: 5432
 
 smtp:
-  hostname: 'localhost'
+  hostname: null
   port: 1025
   tls: false
   disable_starttls: true
