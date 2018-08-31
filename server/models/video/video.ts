@@ -222,9 +222,13 @@ type AvailableForListIDsOptions = {
       attributes: [ 'id' ],
       where: {
         id: {
-          [Sequelize.Op.notIn]: Sequelize.literal(
-            '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-          )
+          [Sequelize.Op.and]: [
+            {
+              [ Sequelize.Op.notIn ]: Sequelize.literal(
+                '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
+              )
+            }
+          ]
         },
         // Always list public videos
         privacy: VideoPrivacy.PUBLIC,
@@ -298,27 +302,30 @@ type AvailableForListIDsOptions = {
 
       // Force actorId to be a number to avoid SQL injections
       const actorIdNumber = parseInt(options.actorId.toString(), 10)
-      query.where['id'][ Sequelize.Op.in ] = Sequelize.literal(
-        '(' +
-          'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-          'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-          'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-          ' UNION ALL ' +
-          'SELECT "video"."id" AS "id" FROM "video" ' +
-          'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-          'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-          'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-          'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-          'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-          localVideosReq +
-        ')'
-      )
+      query.where['id'][Sequelize.Op.and].push({
+        [ Sequelize.Op.in ]: Sequelize.literal(
+          '(' +
+            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+            ' UNION ALL ' +
+            'SELECT "video"."id" AS "id" FROM "video" ' +
+            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+            localVideosReq +
+          ')'
+        )
+      })
     }
 
     if (options.withFiles === true) {
-      query.include.push({
-        model: VideoFileModel.unscoped(),
-        required: true
+      query.where['id'][Sequelize.Op.and].push({
+        [ Sequelize.Op.in ]: Sequelize.literal(
+          '(SELECT "videoId" FROM "videoFile")'
+        )
       })
     }
 
@@ -330,24 +337,28 @@ type AvailableForListIDsOptions = {
       }
 
       if (options.tagsOneOf) {
-        query.where['id'][Sequelize.Op.in] = Sequelize.literal(
-          '(' +
+        query.where['id'][Sequelize.Op.and].push({
+          [Sequelize.Op.in]: Sequelize.literal(
+            '(' +
             'SELECT "videoId" FROM "videoTag" ' +
             'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
             'WHERE "tag"."name" IN (' + createTagsIn(options.tagsOneOf) + ')' +
-          ')'
-        )
+            ')'
+          )
+        })
       }
 
       if (options.tagsAllOf) {
-        query.where['id'][Sequelize.Op.in] = Sequelize.literal(
+        query.where['id'][Sequelize.Op.and].push({
+          [Sequelize.Op.in]: Sequelize.literal(
             '(' +
-              'SELECT "videoId" FROM "videoTag" ' +
-              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE "tag"."name" IN (' + createTagsIn(options.tagsAllOf) + ')' +
-              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
+            'SELECT "videoId" FROM "videoTag" ' +
+            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+            'WHERE "tag"."name" IN (' + createTagsIn(options.tagsAllOf) + ')' +
+            'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
             ')'
-        )
+          )
+        })
       }
     }
 
@@ -1162,7 +1173,14 @@ export class VideoModel extends Model<VideoModel> {
     const apiScope = {
       method: [ ScopeNames.FOR_API, { ids, withFiles: options.withFiles } as ForAPIOptions ]
     }
-    const rows = await VideoModel.scope(apiScope).findAll(immutableAssign(query, { offset: 0 }))
+
+    const secondQuery = {
+      offset: 0,
+      limit: query.limit,
+      order: query.order,
+      attributes: query.attributes
+    }
+    const rows = await VideoModel.scope(apiScope).findAll(secondQuery)
 
     return {
       data: rows,
