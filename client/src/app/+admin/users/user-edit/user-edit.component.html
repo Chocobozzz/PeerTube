@@ -61,7 +61,14 @@
         </option>
       </select>
     </div>
-    
+
+    <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
+      Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
+      At most, this user could use ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
+    </div>
+  </div>
+
+  <div class="form-group">
     <label i18n for="videoQuotaDaily">Daily video quota</label>
     <div class="peertube-select-container">
       <select id="videoQuotaDaily" formControlName="videoQuotaDaily">
@@ -69,11 +76,6 @@
           {{ videoQuotaDailyOption.label }}
         </option>
       </select>
-    </div>
-
-    <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
-      Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
-      At most, this user could use ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
     </div>
   </div>
 

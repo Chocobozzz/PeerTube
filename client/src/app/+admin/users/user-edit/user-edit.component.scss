@@ -17,6 +17,8 @@ input:not([type=submit]) {
 input[type=submit] {
   @include peertube-button;
   @include orange-button;
+
+  margin-top: 10px;
 }
 
 .transcoding-information {
