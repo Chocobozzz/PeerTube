@@ -148,6 +148,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           // Delete the thread
           this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
           this.componentPagination.totalItems--
+
+          if (this.highlightedThread.id === commentToDelete.id) this.highlightedThread = undefined
         },
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)
