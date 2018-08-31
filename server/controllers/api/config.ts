@@ -60,7 +60,8 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     serverVersion: packageJSON.version,
     signup: {
       allowed,
-      allowedForCurrentIP
+      allowedForCurrentIP,
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     transcoding: {
       enabledResolutions
@@ -159,12 +160,20 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
 
   // camelCase to snake_case key
-  const toUpdateJSON = omit(toUpdate, 'user.videoQuota', 'instance.defaultClientRoute', 'instance.shortDescription', 'cache.videoCaptions')
+  const toUpdateJSON = omit(
+    toUpdate,
+    'user.videoQuota',
+    'instance.defaultClientRoute',
+    'instance.shortDescription',
+    'cache.videoCaptions',
+    'signup.requiresEmailVerification'
+  )
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   toUpdateJSON.user['video_quota_daily'] = toUpdate.user.videoQuotaDaily
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
+  toUpdateJSON.signup['requires_email_verification'] = toUpdate.signup.requiresEmailVerification
 
   await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
@@ -220,7 +229,8 @@ function customConfig (): CustomConfig {
     },
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
-      limit: CONFIG.SIGNUP.LIMIT
+      limit: CONFIG.SIGNUP.LIMIT,
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL

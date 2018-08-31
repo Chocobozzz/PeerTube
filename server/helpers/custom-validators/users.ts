@@ -33,6 +33,10 @@ function isUserDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION))
 }
 
+function isUserEmailVerifiedValid (value: any) {
+  return isBooleanValid(value)
+}
+
 const nsfwPolicies = values(NSFW_POLICY_TYPES)
 function isUserNSFWPolicyValid (value: any) {
   return exists(value) && nsfwPolicies.indexOf(value) !== -1
@@ -72,6 +76,7 @@ export {
   isUserVideoQuotaValid,
   isUserVideoQuotaDailyValid,
   isUserUsernameValid,
+  isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
   isUserAutoPlayVideoValid,
   isUserDisplayNameValid,

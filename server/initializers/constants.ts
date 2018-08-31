@@ -15,7 +15,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 260
+const LAST_MIGRATION_VERSION = 265
 
 // ---------------------------------------------------------------------------
 
@@ -204,6 +204,7 @@ const CONFIG = {
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
     get LIMIT () { return config.get<number>('signup.limit') },
+    get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
     FILTERS: {
       CIDR: {
         get WHITELIST () { return config.get<string[]>('signup.filters.cidr.whitelist') },
@@ -500,6 +501,8 @@ const BCRYPT_SALT_SIZE = 10
 
 const USER_PASSWORD_RESET_LIFETIME = 60000 * 5 // 5 minutes
 
+const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
+
 const NSFW_POLICY_TYPES: { [ id: string]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
   BLUR: 'blur',
@@ -661,6 +664,7 @@ export {
   VIDEO_ABUSE_STATES,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
+  USER_EMAIL_VERIFY_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,

@@ -35,6 +35,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.cache.captions.size).to.equal(1)
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
+  expect(data.signup.requiresEmailVerification).to.be.false
   expect(data.admin.email).to.equal('admin1@example.com')
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
@@ -64,6 +65,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.cache.captions.size).to.equal(3)
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
+  expect(data.signup.requiresEmailVerification).to.be.true
   expect(data.admin.email).to.equal('superadmin1@example.com')
   expect(data.user.videoQuota).to.equal(5242881)
   expect(data.user.videoQuotaDaily).to.equal(318742)
@@ -148,7 +150,8 @@ describe('Test config', function () {
       },
       signup: {
         enabled: false,
-        limit: 5
+        limit: 5,
+        requiresEmailVerification: true
       },
       admin: {
         email: 'superadmin1@example.com'

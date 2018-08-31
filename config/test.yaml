@@ -29,6 +29,7 @@ cache:
 
 signup:
   enabled: true
+  requires_email_verification: false
 
 transcoding:
   enabled: true

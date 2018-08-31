@@ -24,6 +24,7 @@ import {
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserNSFWPolicyValid,
+  isUserEmailVerifiedValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
@@ -91,6 +92,12 @@ export class UserModel extends Model<UserModel> {
   @IsEmail
   @Column(DataType.STRING(400))
   email: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean'))
+  @Column
+  emailVerified: boolean
 
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
@@ -304,6 +311,7 @@ export class UserModel extends Model<UserModel> {
       id: this.id,
       username: this.username,
       email: this.email,
+      emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,

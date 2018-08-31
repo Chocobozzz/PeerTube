@@ -14,6 +14,10 @@ const routes: Routes = [
     loadChildren: './+my-account/my-account.module#MyAccountModule'
   },
   {
+    path: 'verify-account',
+    loadChildren: './+verify-account/verify-account.module#VerifyAccountModule'
+  },
+  {
     path: 'accounts',
     loadChildren: './+accounts/accounts.module#AccountsModule'
   },
