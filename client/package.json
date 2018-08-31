@@ -20,7 +20,8 @@
     "postinstall": "npm rebuild node-sass",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
     "webdriver-manager": "webdriver-manager",
-    "ngx-extractor": "ngx-extractor"
+    "ngx-extractor": "ngx-extractor",
+    "test": "jest"
   },
   "license": "GPLv3",
   "typings": "*.d.ts",
@@ -28,6 +29,23 @@
     "video.js": "^7",
     "webtorrent/create-torrent/junk": "^1",
     "simple-get": "^2.8.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^@app/(.*)": "<rootDir>/src/app/$1"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.7.5",
@@ -55,6 +73,7 @@
     "@types/core-js": "^2.5.0",
     "@types/jasmine": "^2.8.7",
     "@types/jasminewd2": "^2.0.3",
+    "@types/jest": "^23.3.1",
     "@types/jschannel": "^1.0.0",
     "@types/lodash-es": "^4.17.0",
     "@types/markdown-it": "^0.0.5",
@@ -79,6 +98,7 @@
     "https-browserify": "^1.0.0",
     "jasmine-core": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
+    "jest": "^23.5.0",
     "jschannel": "^1.0.2",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -108,6 +128,7 @@
     "sass-loader": "^7.1.0",
     "sass-resources-loader": "^1.2.1",
     "stream-http": "^2.8.3",
+    "ts-jest": "^23.1.4",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "2.9",

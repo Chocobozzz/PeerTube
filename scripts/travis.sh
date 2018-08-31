@@ -32,6 +32,10 @@ elif [ "$1" = "lint" ]; then
     ( cd client
       npm run lint
     )
+elif [ "$1" = "jest" ]; then 
+    ( cd client
+      npm run test
+    )
 
     npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
 fi
