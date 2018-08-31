@@ -364,6 +364,10 @@ const RATES_LIMIT = {
   LOGIN: {
     WINDOW_MS: 5 * 60 * 1000, // 5 minutes
     MAX: 15 // 15 attempts
+  },
+  ASK_SEND_EMAIL: {
+    WINDOW_MS: 5 * 60 * 1000, // 5 minutes
+    MAX: 3 // 3 attempts
   }
 }
 

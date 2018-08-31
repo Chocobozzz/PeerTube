@@ -42,6 +42,12 @@ const loginRateLimiter = new RateLimit({
   delayMs: 0
 })
 
+const askSendEmailLimiter = new RateLimit({
+  windowMs: RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
+  max: RATES_LIMIT.ASK_SEND_EMAIL.MAX,
+  delayMs: 0
+})
+
 const usersRouter = express.Router()
 usersRouter.use('/', meRouter)
 
@@ -114,7 +120,7 @@ usersRouter.post('/:id/reset-password',
 )
 
 usersRouter.post('/ask-send-verify-email',
-  loginRateLimiter,
+  askSendEmailLimiter,
   asyncMiddleware(usersAskSendVerifyEmailValidator),
   asyncMiddleware(askSendVerifyUserEmail)
 )
