@@ -358,11 +358,11 @@
     }
   }
 
-  .other-videos {
+  /deep/ .other-videos {
     padding-left: 1em;
 
     .title-page {
-      margin-top: 0;
+      margin-top: 0 !important;
     }
 
     /deep/ .video-miniature {
