@@ -62,7 +62,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
 
   private videojsLocaleLoaded = false
-  private otherVideos: Video[] = []
+  public otherVideos: Video[] = []
   private paramsSub: Subscription
 
   constructor (
