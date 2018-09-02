@@ -28,6 +28,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { VideoCaptionService } from '@app/shared/video-caption'
+import { SearchService } from '@app/search/search.service'
+import { AdvancedSearch } from '@app/search/advanced-search.model'
 
 @Component({
   selector: 'my-video-watch',
@@ -81,6 +83,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private redirectService: RedirectService,
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
+    private searchService: SearchService,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -95,16 +98,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     ) {
       this.hasAlreadyAcceptedPrivacyConcern = true
     }
-
-    this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
-        .subscribe(
-          data => {
-            this.otherVideos = data.videos
-            this.updateOtherVideosDisplayed()
-          },
-
-          err => console.error(err)
-        )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const uuid = routeParams[ 'uuid' ]
@@ -359,6 +352,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], startTime = 0) {
     this.video = video
+
+    this.searchService.searchVideos('',
+      { currentPage: 1, itemsPerPage: 5 },
+      new AdvancedSearch({ tagsOneOf: this.video.tags.join(','), sort: '-createdAt' })
+    ).subscribe(
+          data => {
+            this.otherVideos = data.videos
+            this.updateOtherVideosDisplayed()
+          },
+
+          err => console.error(err)
+        )
 
     // Re init attributes
     this.descriptionLoading = false
