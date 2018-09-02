@@ -21,6 +21,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
     return this.serverService.getConfig().user.videoQuota
   }
 
+  get dailyUserVideoQuota () {
+    return this.serverService.getConfig().user.videoQuotaDaily
+  }
+
   ngOnInit () {
     this.serverService.configLoaded
         .subscribe(() => {
