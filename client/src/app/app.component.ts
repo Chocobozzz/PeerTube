@@ -124,10 +124,14 @@ export class AppComponent implements OnInit {
         })
 
     this.hotkeysService.add([
-      new Hotkey('/', (event: KeyboardEvent): boolean => {
+      new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
         document.getElementById('search-video').focus()
-        return false // Prevent bubbling
+        return false
       }, undefined, 'Focus the search bar'),
+      new Hotkey('b', (event: KeyboardEvent): boolean => {
+        this.toggleMenu()
+        return false
+      }, undefined, 'Toggle the left menu'),
       new Hotkey('g s', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/subscriptions' ])
         return false
