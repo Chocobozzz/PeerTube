@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { JobState } from '../../../../shared/models'
+import { Job, JobState } from '../../../../shared/models'
 import { ServerInfo, wait } from '../index'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {
@@ -44,8 +44,10 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
     for (const server of servers) {
       for (const state of states) {
         const p = getJobsListPaginationAndSort(server.url, server.accessToken, state, 0, 10, '-createdAt')
-          .then(res => {
-            if (res.body.total > 0) pendingRequests = true
+          .then(res => res.body.data)
+          .then((jobs: Job[]) => jobs.filter(j => j.type !== 'videos-views'))
+          .then(jobs => {
+            if (jobs.length !== 0) pendingRequests = true
           })
         tasks.push(p)
       }

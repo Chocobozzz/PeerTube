@@ -41,6 +41,7 @@ matrix:
   - env: TEST_SUITE=api-3
   - env: TEST_SUITE=cli
   - env: TEST_SUITE=lint
+  - env: TEST_SUITE=jest
 
 script:
   - travis_retry npm run travis -- "$TEST_SUITE"

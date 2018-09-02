@@ -1,0 +1,36 @@
+@import '_variables';
+@import '_mixins';
+
+.section {
+  padding-top: 10px;
+
+  &:first-child {
+    padding-top: 30px;
+  }
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: $font-semibold;
+  margin-bottom: 20px;
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: #000;
+  }
+}
+
+.channel {
+  .section-title a {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+
+    img {
+      @include avatar(30px);
+
+      margin-right: 10px;
+    }
+  }
+}

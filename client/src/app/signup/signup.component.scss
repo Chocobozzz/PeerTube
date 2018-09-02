@@ -1,13 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
-.initial-user-quota {
-  font-size: 15px;
-  margin-bottom: 20px;
+my-instance-features-table {
+  display: block;
 
-  .initial-user-quota-label {
-    font-weight: $font-semibold;
-  }
+  margin-bottom: 40px;
+}
+
+form {
+  margin: 0 60px 40px 0;
 }
 
 .form-group-terms {
@@ -15,11 +16,15 @@
 }
 
 .input-group {
-  @include peertube-input-group(340px);
+  @include peertube-input-group(400px);
+}
+
+.input-group-append {
+  height: 30px;
 }
 
 input:not([type=submit]) {
-  @include peertube-input-text(340px);
+  @include peertube-input-text(400px);
   display: block;
 
   &#username {

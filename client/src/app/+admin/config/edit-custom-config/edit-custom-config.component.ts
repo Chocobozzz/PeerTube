@@ -64,6 +64,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     super()
   }
 
+  get videoQuotaOptions () {
+    return EditCustomConfigComponent.videoQuotaOptions
+  }
+
+  get videoQuotaDailyOptions () {
+    return EditCustomConfigComponent.videoQuotaDailyOptions
+  }
+
   getResolutionKey (resolution: string) {
     return 'transcodingResolution' + resolution
   }
@@ -82,6 +90,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfigValidatorsService.CACHE_CAPTIONS_SIZE,
       signupEnabled: null,
       signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+      signupRequiresEmailVerification: null,
       importVideosHttpEnabled: null,
       importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
@@ -179,7 +188,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       },
       signup: {
         enabled: this.form.value['signupEnabled'],
-        limit: this.form.value['signupLimit']
+        limit: this.form.value['signupLimit'],
+        requiresEmailVerification: this.form.value['signupRequiresEmailVerification']
       },
       admin: {
         email: this.form.value['adminEmail']
@@ -242,6 +252,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfig.cache.captions.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,
+      signupRequiresEmailVerification: this.customConfig.signup.requiresEmailVerification,
       adminEmail: this.customConfig.admin.email,
       userVideoQuota: this.customConfig.user.videoQuota,
       userVideoQuotaDaily: this.customConfig.user.videoQuotaDaily,

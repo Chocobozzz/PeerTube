@@ -94,4 +94,27 @@ export class UserService {
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
+
+  verifyEmail (userId: number, verificationString: string) {
+    const url = `${UserService.BASE_USERS_URL}/${userId}/verify-email`
+    const body = {
+      verificationString
+    }
+
+    return this.authHttp.post(url, body)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }
+
+  askSendVerifyEmail (email: string) {
+    const url = UserService.BASE_USERS_URL + '/ask-send-verify-email'
+
+    return this.authHttp.post(url, { email })
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
 }

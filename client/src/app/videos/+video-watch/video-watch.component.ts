@@ -15,7 +15,6 @@ import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
-import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
 import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
@@ -44,8 +43,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
   @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
-
-  otherVideosDisplayed: Video[] = []
 
   player: videojs.Player
   playerElement: HTMLVideoElement
@@ -370,8 +367,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.completeDescriptionShown = false
     this.remoteServerDown = false
 
-    this.updateOtherVideosDisplayed()
-
     if (this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())) {
       const res = await this.confirmService.confirm(
         this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
@@ -477,12 +472,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video.buildLikeAndDislikePercents()
     this.setVideoLikesBarTooltipText()
-  }
-
-  private updateOtherVideosDisplayed () {
-    if (this.video && this.otherVideos && this.otherVideos.length > 0) {
-      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
-    }
   }
 
   private setOpenGraphTags () {

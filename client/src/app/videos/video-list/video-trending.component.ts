@@ -18,7 +18,7 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 export class VideoTrendingComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   currentRoute = '/videos/trending'
-  defaultSort: VideoSortField = '-views'
+  defaultSort: VideoSortField = '-trending'
 
   constructor (
     protected router: Router,

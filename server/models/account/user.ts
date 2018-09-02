@@ -24,6 +24,7 @@ import {
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserNSFWPolicyValid,
+  isUserEmailVerifiedValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
@@ -91,6 +92,12 @@ export class UserModel extends Model<UserModel> {
   @IsEmail
   @Column(DataType.STRING(400))
   email: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean'))
+  @Column
+  emailVerified: boolean
 
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
@@ -172,8 +179,8 @@ export class UserModel extends Model<UserModel> {
           [
             Sequelize.literal(
               '(' +
-                'SELECT COALESCE(SUM("size"), 0) FROM ' +
-                '(' +
+                'SELECT COALESCE(SUM("size"), 0) ' +
+                'FROM (' +
                   'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
                   'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
                   'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
@@ -193,9 +200,6 @@ export class UserModel extends Model<UserModel> {
 
     return UserModel.findAndCountAll(query)
       .then(({ rows, count }) => {
-        console.log(rows[0])
-        console.log(rows[0]['videoQuotaUsed'])
-        console.log(rows[0].get('videoQuotaUsed'))
         return {
           data: rows,
           total: count
@@ -207,8 +211,6 @@ export class UserModel extends Model<UserModel> {
     const roles = Object.keys(USER_ROLE_LABELS)
       .map(k => parseInt(k, 10) as UserRole)
       .filter(role => hasUserRight(role, right))
-
-    console.log(roles)
 
     const query = {
       attribute: [ 'email' ],
@@ -272,48 +274,17 @@ export class UserModel extends Model<UserModel> {
 
   static getOriginalVideoFileTotalFromUser (user: UserModel) {
     // Don't use sequelize because we need to use a sub query
-    const query = 'SELECT SUM("size") AS "total" FROM ' +
-      '(SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      'WHERE "account"."userId" = $userId ' +
-      'GROUP BY "video"."id") t'
+    const query = UserModel.generateUserQuotaBaseSQL()
 
-    const options = {
-      bind: { userId: user.id },
-      type: Sequelize.QueryTypes.SELECT
-    }
-    return UserModel.sequelize.query(query, options)
-      .then(([ { total } ]) => {
-        if (total === null) return 0
-
-        return parseInt(total, 10)
-      })
+    return UserModel.getTotalRawQuery(query, user.id)
   }
 
-  // Returns comulative size of all video files uploaded in the last 24 hours.
+  // Returns cumulative size of all video files uploaded in the last 24 hours.
   static getOriginalVideoFileTotalDailyFromUser (user: UserModel) {
     // Don't use sequelize because we need to use a sub query
-    const query = 'SELECT SUM("size") AS "total" FROM ' +
-      '(SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      'WHERE "account"."userId" = $userId ' +
-      'AND "video"."createdAt" > now() - interval \'24 hours\'' +
-      'GROUP BY "video"."id") t'
+    const query = UserModel.generateUserQuotaBaseSQL('"video"."createdAt" > now() - interval \'24 hours\'')
 
-    const options = {
-      bind: { userId: user.id },
-      type: Sequelize.QueryTypes.SELECT
-    }
-    return UserModel.sequelize.query(query, options)
-      .then(([ { total } ]) => {
-        if (total === null) return 0
-
-        return parseInt(total, 10)
-      })
+    return UserModel.getTotalRawQuery(query, user.id)
   }
 
   static async getStats () {
@@ -340,6 +311,7 @@ export class UserModel extends Model<UserModel> {
       id: this.id,
       username: this.username,
       email: this.email,
+      emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
@@ -392,5 +364,33 @@ export class UserModel extends Model<UserModel> {
 
     return (uploadedTotal < this.videoQuota) &&
         (uploadedDaily < this.videoQuotaDaily)
+  }
+
+  private static generateUserQuotaBaseSQL (where?: string) {
+    const andWhere = where ? 'AND ' + where : ''
+
+    return 'SELECT SUM("size") AS "total" ' +
+      'FROM (' +
+        'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+        'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+        'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+        'WHERE "account"."userId" = $userId ' + andWhere +
+        'GROUP BY "video"."id"' +
+      ') t'
+  }
+
+  private static getTotalRawQuery (query: string, userId: number) {
+    const options = {
+      bind: { userId },
+      type: Sequelize.QueryTypes.SELECT
+    }
+
+    return UserModel.sequelize.query(query, options)
+                    .then(([ { total } ]) => {
+                      if (total === null) return 0
+
+                      return parseInt(total, 10)
+                    })
   }
 }

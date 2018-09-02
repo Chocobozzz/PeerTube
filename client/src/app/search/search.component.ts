@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { RedirectService } from '@app/core'
+import { AuthService, RedirectService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
 import { forkJoin, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Video } from '../../../../shared'
 import { MetaService } from '@ngx-meta/core'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { immutableAssign } from '@app/shared/misc/utils'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-search',
@@ -18,8 +18,7 @@ import { immutableAssign } from '@app/shared/misc/utils'
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit, OnDestroy {
-  videos: Video[] = []
-  videoChannels: VideoChannel[] = []
+  results: (Video | VideoChannel)[] = []
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -42,7 +41,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private metaService: MetaService,
     private redirectService: RedirectService,
     private notificationsService: NotificationsService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private authService: AuthService
   ) { }
 
   ngOnInit () {
@@ -79,6 +79,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     if (this.subActivatedRoute) this.subActivatedRoute.unsubscribe()
   }
 
+  isVideoChannel (d: VideoChannel | Video): d is VideoChannel {
+    return d instanceof VideoChannel
+  }
+
+  isVideo (v: VideoChannel | Video): v is Video {
+    return v instanceof Video
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
+  }
+
   search () {
     forkJoin([
       this.searchService.searchVideos(this.currentSearch, this.pagination, this.advancedSearch),
@@ -86,13 +98,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     ])
       .subscribe(
         ([ videosResult, videoChannelsResult ]) => {
-          this.videos = this.videos.concat(videosResult.videos)
+          this.results = this.results
+                             .concat(videoChannelsResult.data)
+                             .concat(videosResult.videos)
           this.pagination.totalItems = videosResult.totalVideos + videoChannelsResult.total
 
-          this.videoChannels = this.videoChannels.concat(videoChannelsResult.data)
-
           // Focus on channels
-          if (this.channelsPerPage !== 10 && this.videos.length < this.pagination.itemsPerPage) {
+          if (this.channelsPerPage !== 10 && videosResult.videos.length < this.pagination.itemsPerPage) {
             this.resetPagination()
 
             this.channelsPerPage = 10
@@ -126,8 +138,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.pagination.totalItems = null
     this.channelsPerPage = 2
 
-    this.videos = []
-    this.videoChannels = []
+    this.results = []
   }
 
   private updateTitle () {

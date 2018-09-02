@@ -4,75 +4,68 @@
     Create an account
   </div>
 
-  <div class="initial-user-quota">
-    <span i18n class="initial-user-quota-label">Initial video quota:</span>
-
-    <span *ngIf="initialUserVideoQuota !== -1">
-      {{ initialUserVideoQuota | bytes: 0 }}
-
-      <my-help helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
-    </span>
-
-    <ng-container i18n *ngIf="initialUserVideoQuota === -1">
-      Unlimited
-    </ng-container>
-  </div>
-
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-  <form role="form" (ngSubmit)="signup()" [formGroup]="form">
-    <div class="form-group">
-      <label for="username" i18n>Username</label>
+  <div class="d-flex justify-content-left flex-wrap">
+    <form role="form" (ngSubmit)="signup()" [formGroup]="form">
+      <div class="form-group">
+        <label for="username" i18n>Username</label>
 
-      <div class="input-group">
-        <input
-          type="text" id="username" i18n-placeholder placeholder="Example: neil_amstrong"
-          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
-        >
-        <div class="input-group-append">
-          <span class="input-group-text">@{{ instanceHost }}</span>
+        <div class="input-group">
+          <input
+            type="text" id="username" i18n-placeholder placeholder="Example: jane_doe"
+            formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+          >
+          <div class="input-group-append">
+            <span class="input-group-text">@{{ instanceHost }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="formErrors.username" class="form-error">
+          {{ formErrors.username }}
         </div>
       </div>
 
-      <div *ngIf="formErrors.username" class="form-error">
-        {{ formErrors.username }}
+      <div class="form-group">
+        <label for="email" i18n>Email</label>
+        <input
+          type="text" id="email" i18n-placeholder placeholder="Email"
+          formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
+        >
+        <div *ngIf="formErrors.email" class="form-error">
+          {{ formErrors.email }}
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="email" i18n>Email</label>
-      <input
-        type="text" id="email" i18n-placeholder placeholder="Email"
-        formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
-      >
-      <div *ngIf="formErrors.email" class="form-error">
-        {{ formErrors.email }}
+      <div class="form-group">
+        <label for="password" i18n>Password</label>
+        <input
+          type="password" id="password" i18n-placeholder placeholder="Password"
+          formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+        >
+        <div *ngIf="formErrors.password" class="form-error">
+          {{ formErrors.password }}
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="password" i18n>Password</label>
-      <input
-        type="password" id="password" i18n-placeholder placeholder="Password"
-        formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
-      >
-      <div *ngIf="formErrors.password" class="form-error">
-        {{ formErrors.password }}
+      <div class="form-group form-group-terms">
+        <my-peertube-checkbox
+          inputName="terms" formControlName="terms"
+          i18n-labelHtml labelHtml="I have read and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
+        ></my-peertube-checkbox>
+
+        <div *ngIf="formErrors.terms" class="form-error">
+          {{ formErrors.terms }}
+        </div>
       </div>
+
+      <input type="submit" i18n-value value="Signup" [disabled]="!form.valid">
+    </form>
+
+    <div>
+      <label for="email" i18n>Features found on this instance</label>
+      <my-instance-features-table></my-instance-features-table>
     </div>
-
-    <div class="form-group form-group-terms">
-      <my-peertube-checkbox
-        inputName="terms" formControlName="terms"
-        i18n-labelHtml labelHtml="I have read and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
-      ></my-peertube-checkbox>
-
-      <div *ngIf="formErrors.terms" class="form-error">
-        {{ formErrors.terms }}
-      </div>
-    </div>
-
-    <input type="submit" i18n-value value="Signup" [disabled]="!form.valid">
-  </form>
+  </div>
 
 </div>

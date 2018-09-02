@@ -11,6 +11,6 @@
 * **What do you see instead?**
 
 
-* **Browser console log if useful (Gist/Pastebin...):**
-* **Server log if useful (Gist/Pastebin...):**
+* **Browser console log if useful:**
+* **Server log if useful (journalctl or /var/www/peertube/storage/logs):**
 

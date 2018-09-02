@@ -3,11 +3,16 @@
 
 #search-video {
   @include peertube-input-text($search-input-width);
+  padding-left: 10px;
   margin-right: 15px;
   padding-right: 40px; // For the search icon
 
   &::placeholder {
     color: #000;
+  }
+
+  &:focus::placeholder {
+    opacity: 0 !important;
   }
 
   @media screen and (max-width: 800px) {

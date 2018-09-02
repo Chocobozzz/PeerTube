@@ -6,7 +6,6 @@ import * as validator from 'validator'
 import { UserRight, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
-  VIDEO_ABUSE_STATES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_MIMETYPE_EXT,
@@ -19,10 +18,8 @@ import { exists, isArray, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
 import * as magnetUtil from 'magnet-uri'
-import { VideoAbuseModel } from '../../models/video/video-abuse'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
-const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
 function isVideoCategoryValid (value: any) {
   return value === null || VIDEO_CATEGORIES[ value ] !== undefined

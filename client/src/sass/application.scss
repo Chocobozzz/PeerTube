@@ -53,12 +53,19 @@ label {
 
 .form-error {
   display: block;
-  color: $red-error;
+  color: $red;
   margin-top: 5px;
 }
 
 .input-error {
-  border-color: $red-error !important;
+  border-color: $red !important;
+}
+
+.fullWidth {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: initial;
 }
 
 .glyphicon-black {
@@ -284,6 +291,15 @@ table {
       background-color: $grey-color !important;
     }
   }
+}
+
+.no-results {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: $font-semibold;
 }
 
 @media screen and (max-width: 900px) {

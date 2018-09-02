@@ -89,6 +89,23 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
+  addVerifyEmailJob (to: string, verifyEmailUrl: string) {
+    const text = `Welcome to PeerTube,\n\n` +
+      `To start using PeerTube on ${CONFIG.WEBSERVER.HOST} you must  verify your email! ` +
+      `Please follow this link to verify this email belongs to you: ${verifyEmailUrl}\n\n` +
+      `If you are not the person who initiated this request, please ignore this email.\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to: [ to ],
+      subject: 'Verify your PeerTube email',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
   async addVideoAbuseReportJob (videoId: number) {
     const video = await VideoModel.load(videoId)
     if (!video) throw new Error('Unknown Video id during Abuse report.')

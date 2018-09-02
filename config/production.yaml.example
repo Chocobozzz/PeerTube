@@ -63,6 +63,10 @@ search:
     users: true
     anonymous: false
 
+trending:
+  videos:
+    interval_days: 7 # Compute trending videos for the last x days
+
 ###############################################################################
 #
 # From this point, all the following keys can be overridden by the web interface
@@ -87,6 +91,7 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  requires_email_verification: false
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []

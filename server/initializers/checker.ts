@@ -49,9 +49,10 @@ function checkMissedConfig () {
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
     'cache.previews.size', 'admin.email',
-    'signup.enabled', 'signup.limit', 'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
+    'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
+    'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
     'transcoding.enabled', 'transcoding.threads',
-    'import.videos.http.enabled',
+    'import.videos.http.enabled', 'import.videos.torrent.enabled',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
     'instance.default_nsfw_policy', 'instance.robots',
     'services.twitter.username', 'services.twitter.whitelisted'

@@ -46,6 +46,9 @@ describe('Test stats', function () {
 
     await viewVideo(servers[0].url, videoUUID)
 
+    // Wait the video views repeatable job
+    await wait(8000)
+
     await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
     await waitJobs(servers)
   })

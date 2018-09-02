@@ -51,6 +51,8 @@ import { VideoImportService } from '@app/shared/video-import/video-import.servic
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
+import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
+import { OverviewService } from '@app/shared/overview'
 
 @NgModule({
   imports: [
@@ -86,7 +88,8 @@ import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/u
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
-    SubscribeButtonComponent
+    SubscribeButtonComponent,
+    InstanceFeaturesTableComponent
   ],
 
   exports: [
@@ -119,6 +122,7 @@ import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/u
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
     SubscribeButtonComponent,
+    InstanceFeaturesTableComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -151,6 +155,7 @@ import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/u
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
     VideoBlacklistValidatorsService,
+    OverviewService,
 
     I18nPrimengCalendarService,
     ScreenService,

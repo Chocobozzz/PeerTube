@@ -137,29 +137,34 @@ menu {
 
         &.icon-videos-subscriptions {
           position: relative;
-          top: -2px;
+          top: -1px;
           background-image: url('../../assets/images/menu/subscriptions.svg');
+        }
+
+        &.icon-videos-overview {
+          position: relative;
+          background-image: url('../../assets/images/menu/globe.svg');
         }
 
         &.icon-videos-trending {
           position: relative;
-          top: -2px;
+          top: -1px;
           background-image: url('../../assets/images/menu/trending.svg');
         }
 
         &.icon-videos-recently-added {
           width: 23px;
           height: 23px;
-          position: relative;
-          top: -1px;
           background-image: url('../../assets/images/menu/recently-added.svg');
         }
 
         &.icon-videos-local {
           width: 23px;
           height: 23px;
+
           position: relative;
           top: -1px;
+
           background-image: url('../../assets/images/menu/home.svg');
         }
 

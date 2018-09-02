@@ -7,11 +7,11 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { addVideoComment, resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
+import { Redis } from '../../redis'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -88,7 +88,7 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
   const actor = await ActorModel.loadByUrl(view.actor)
   if (!actor) throw new Error('Unknown actor ' + view.actor)
 
-  await video.increment('views')
+  await Redis.Instance.addVideoView(video.id)
 
   if (video.isOwned()) {
     // Don't resend the activity to the sender

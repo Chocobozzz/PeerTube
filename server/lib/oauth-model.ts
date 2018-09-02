@@ -3,6 +3,7 @@ import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
+import { CONFIG } from '../initializers/constants'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
@@ -37,12 +38,19 @@ async function getUser (usernameOrEmail: string, password: string) {
 
   if (user.blocked) throw new AccessDeniedError('User is blocked.')
 
+  if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
+    throw new AccessDeniedError('User email is not verified.')
+  }
+
   return user
 }
 
 async function revokeToken (tokenInfo: TokenInfo) {
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
-  if (token) token.destroy()
+  if (token) {
+    token.destroy()
+         .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+  }
 
   /*
     * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js

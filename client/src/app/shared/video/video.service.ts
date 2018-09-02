@@ -23,8 +23,17 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 
+export interface VideosProvider {
+  getVideos (
+    videoPagination: ComponentPagination,
+    sort: VideoSortField,
+    filter?: VideoFilter,
+    categoryOneOf?: number
+  ): Observable<{ videos: Video[], totalVideos: number }>
+}
+
 @Injectable()
-export class VideoService {
+export class VideoService implements VideosProvider {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
 
@@ -47,14 +56,6 @@ export class VideoService {
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  viewVideo (uuid: string): Observable<boolean> {
-    return this.authHttp.post(this.getVideoViewUrl(uuid), {})
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

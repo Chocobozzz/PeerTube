@@ -69,8 +69,8 @@ type AvailableForListOptions = {
 
     // Only list local channels OR channels that are on an instance followed by actorId
     const inQueryInstanceFollow = '(' +
-      'SELECT "actor"."serverId" FROM "actor" ' +
-      'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = actor.id ' +
+      'SELECT "actor"."serverId" FROM "actorFollow" ' +
+      'INNER JOIN "actor" ON actor.id=  "actorFollow"."targetActorId" ' +
       'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
     ')'
 
@@ -253,15 +253,14 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       limit: options.count,
       order: getSort(options.sort),
       where: {
-        id: {
-          [ Sequelize.Op.in ]: Sequelize.literal(
-            '(' +
-              'SELECT id FROM "videoChannel" WHERE ' +
-              'lower(immutable_unaccent("name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
-              'lower(immutable_unaccent("name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-            ')'
+        [Sequelize.Op.or]: [
+          Sequelize.literal(
+            'lower(immutable_unaccent("VideoChannelModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
+          ),
+          Sequelize.literal(
+            'lower(immutable_unaccent("VideoChannelModel"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))'
           )
-        }
+        ]
       }
     }
 
