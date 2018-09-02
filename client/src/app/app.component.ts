@@ -128,27 +128,27 @@ export class AppComponent implements OnInit {
         document.getElementById('search-video').focus()
         return false // Prevent bubbling
       }, undefined, 'Focus the search bar'),
-      new Hotkey('g+s', (event: KeyboardEvent): boolean => {
+      new Hotkey('g s', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/subscriptions' ])
         return false
       }, undefined, 'Go to the subscriptions videos page'),
-      new Hotkey('g+o', (event: KeyboardEvent): boolean => {
+      new Hotkey('g o', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/overview' ])
         return false
       }, undefined, 'Go to the videos overview page'),
-      new Hotkey('g+t', (event: KeyboardEvent): boolean => {
+      new Hotkey('g t', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/trending' ])
         return false
       }, undefined, 'Go to the trending videos page'),
-      new Hotkey('g+r', (event: KeyboardEvent): boolean => {
+      new Hotkey('g r', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/recently-added' ])
         return false
       }, undefined, 'Go to the recently added videos page'),
-      new Hotkey('g+l', (event: KeyboardEvent): boolean => {
+      new Hotkey('g l', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/local' ])
         return false
       }, undefined, 'Go to the local videos page'),
-      new Hotkey('g+u', (event: KeyboardEvent): boolean => {
+      new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false
       }, undefined, 'Go to the videos upload page')
