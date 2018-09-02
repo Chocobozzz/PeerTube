@@ -18,12 +18,16 @@ menu {
   overflow: hidden;
   z-index: 1000;
   color: $menu-color;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
 
+  &:focus, &:hover {
+    overflow-y: auto;
+  }
+
   .top-menu {
     flex-grow: 1;
+    width: $menu-width;
   }
 
   .logged-in-block {

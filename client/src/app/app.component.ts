@@ -132,6 +132,10 @@ export class AppComponent implements OnInit {
         this.router.navigate([ '/videos/subscriptions' ])
         return false
       }, undefined, 'Go to the subscriptions videos page'),
+      new Hotkey('g+o', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/overview' ])
+        return false
+      }, undefined, 'Go to the videos overview page'),
       new Hotkey('g+t', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/trending' ])
         return false
