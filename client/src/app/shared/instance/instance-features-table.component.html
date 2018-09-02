@@ -6,13 +6,13 @@
 
       <td class="value">
         <ng-container *ngIf="initialUserVideoQuota !== -1">
-          {{ initialUserVideoQuota | bytes: 0 }}
+          {{ initialUserVideoQuota | bytes: 0 }} <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
 
           <my-help helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
         </ng-container>
 
         <ng-container i18n *ngIf="initialUserVideoQuota === -1">
-          Unlimited
+          Unlimited <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
         </ng-container>
       </td>
     </tr>
