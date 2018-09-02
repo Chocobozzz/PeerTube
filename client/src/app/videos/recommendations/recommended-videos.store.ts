@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core'
 import { Observable, ReplaySubject } from 'rxjs'
 import { Video } from '@app/shared/video/video.model'
+import { VideoDetails } from '@app/shared/video/video-details.model'
 import { RecentVideosRecommendationService } from '@app/videos/recommendations/recent-videos-recommendation.service'
 import { RecommendationService, UUID } from '@app/videos/recommendations/recommendations.service'
 import { map, switchMap, take } from 'rxjs/operators'
@@ -12,13 +13,13 @@ import { map, switchMap, take } from 'rxjs/operators'
 export class RecommendedVideosStore {
   public readonly recommendations$: Observable<Video[]>
   public readonly hasRecommendations$: Observable<boolean>
-  private readonly requestsForLoad$$ = new ReplaySubject<UUID>(1)
+  private readonly requestsForLoad$$ = new ReplaySubject<VideoDetails>(1)
 
   constructor (
     @Inject(RecentVideosRecommendationService) private recommendations: RecommendationService
   ) {
     this.recommendations$ = this.requestsForLoad$$.pipe(
-      switchMap(requestedUUID => recommendations.getRecommendations(requestedUUID)
+      switchMap(requestedVideo => recommendations.getRecommendations(requestedVideo)
         .pipe(take(1))
       ))
     this.hasRecommendations$ = this.recommendations$.pipe(
@@ -26,7 +27,7 @@ export class RecommendedVideosStore {
     )
   }
 
-  requestNewRecommendations (videoUUID: string) {
-    this.requestsForLoad$$.next(videoUUID)
+  requestNewRecommendations (video: VideoDetails) {
+    this.requestsForLoad$$.next(video)
   }
 }

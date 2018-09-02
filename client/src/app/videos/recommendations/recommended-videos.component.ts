@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Video } from '@app/shared/video/video.model'
+import { VideoDetails } from '@app/shared/video/video-details.model'
 import { RecommendedVideosStore } from '@app/videos/recommendations/recommended-videos.store'
 import { User } from '@app/shared'
 
@@ -9,7 +10,7 @@ import { User } from '@app/shared'
   templateUrl: './recommended-videos.component.html'
 })
 export class RecommendedVideosComponent implements OnChanges {
-  @Input() inputVideo: Video
+  @Input() inputVideo: VideoDetails
   @Input() user: User
 
   readonly hasVideos$: Observable<boolean>
@@ -24,7 +25,7 @@ export class RecommendedVideosComponent implements OnChanges {
 
   public ngOnChanges (): void {
     if (this.inputVideo) {
-      this.store.requestNewRecommendations(this.inputVideo.uuid)
+      this.store.requestNewRecommendations(this.inputVideo)
     }
   }
 
