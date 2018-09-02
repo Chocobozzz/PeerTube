@@ -26,7 +26,7 @@
   </div>
 
   <!-- Video information -->
-  <div *ngIf="video" class="container video-bottom">
+  <div *ngIf="video" class="container-fluid video-bottom">
     <div class="row fullWidth">
       <div class="col-12 col-md-9 video-info">
         <div class="video-info-first-row">
@@ -201,8 +201,8 @@
     </div>
     <my-recommended-videos class="ml-3 ml-sm-0 col-12 col-md-3"
                            [inputVideo]="video" [user]="user"></my-recommended-videos>
+    </div>
   </div>
-
 
   <div class="privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
     <div class="privacy-concerns-text">
@@ -217,7 +217,6 @@
       OK
     </div>
   </div>
-</div>
 
 <ng-template [ngIf]="video !== null">
   <my-video-support #videoSupportModal [video]="video"></my-video-support>
