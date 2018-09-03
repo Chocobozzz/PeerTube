@@ -46,7 +46,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
       .open(this.modal)
       .result
       .then(() => this.changeOwnership())
-      .catch((_) => _)
+      .catch((_) => _) // Called when closing (cancel) the modal without validating, do nothing
   }
 
   search (event) {

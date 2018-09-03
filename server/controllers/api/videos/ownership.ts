@@ -14,13 +14,13 @@ import {
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
-import { VideoChangeOwnershipCreate, VideoChangeOwnershipStatus } from '../../../../shared/models/videos'
+import { VideoChangeOwnershipStatus } from '../../../../shared/models/videos'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getFormattedObjects } from '../../../helpers/utils'
 
 const ownershipVideoRouter = express.Router()
 
-ownershipVideoRouter.post('/:id/give-ownership',
+ownershipVideoRouter.post('/:videoId/give-ownership',
   authenticate,
   asyncMiddleware(videosChangeOwnershipValidator),
   asyncRetryTransactionMiddleware(giveVideoOwnership)
@@ -57,25 +57,23 @@ export {
 async function giveVideoOwnership (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video as VideoModel
   const initiatorAccount = res.locals.oauth.token.User.Account as AccountModel
-  const body: VideoChangeOwnershipCreate = req.body
+  const nextOwner = res.locals.nextOwner as AccountModel
 
   await sequelizeTypescript.transaction(async t => {
-    const nextOwner = await AccountModel.loadLocalByName(body.username)
-    if (!nextOwner) return res.type('json').status(400).end()
-
-    const existingRequest = await VideoChangeOwnershipModel.findExisting(initiatorAccount.id, nextOwner.id, videoInstance.id)
-    if (existingRequest && existingRequest.status === VideoChangeOwnershipStatus.WAITING) {
-      return res.type('json').status(204).end()
-    }
-
-    const videoChangeOwnershipToCreate = {
-      initiatorAccountId: initiatorAccount.id,
-      nextOwnerAccountId: nextOwner.id,
-      videoId: videoInstance.id,
-      status: VideoChangeOwnershipStatus.WAITING
-    }
-    await VideoChangeOwnershipModel.create(videoChangeOwnershipToCreate, { transaction: t })
-
+    await VideoChangeOwnershipModel.findOrCreate({
+      where: {
+        initiatorAccountId: initiatorAccount.id,
+        nextOwnerAccountId: nextOwner.id,
+        videoId: videoInstance.id,
+        status: VideoChangeOwnershipStatus.WAITING
+      },
+      defaults: {
+        initiatorAccountId: initiatorAccount.id,
+        nextOwnerAccountId: nextOwner.id,
+        videoId: videoInstance.id,
+        status: VideoChangeOwnershipStatus.WAITING
+      }
+    })
     logger.info('Ownership change for video %s created.', videoInstance.name)
     return res.type('json').status(204).end()
   })

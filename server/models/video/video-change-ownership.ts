@@ -1,4 +1,4 @@
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 import { VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
@@ -51,6 +51,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
   @UpdatedAt
   updatedAt: Date
 
+  @AllowNull(false)
   @Column
   status: VideoChangeOwnershipStatus
 
@@ -105,21 +106,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
   }
 
   static load (id: number) {
-    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).find({
-      where: {
-        id: id
-      }
-    })
-  }
-
-  static findExisting(initiatorAccountId: number, nextOwnerAccountId: number, videoId: number) {
-    return VideoChangeOwnershipModel.find({
-      where: {
-        initiatorAccountId,
-        nextOwnerAccountId,
-        videoId
-      }
-    })
+    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findById(id)
   }
 
   toFormattedJSON (): VideoChangeOwnership {

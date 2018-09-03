@@ -7,7 +7,7 @@
   <div class="modal-body" [formGroup]="form">
     <div class="form-group">
       <label i18n for="channel">Select the target channel</label>
-      <select formControlName="channel" id="channel">
+      <select formControlName="channel" id="channel" class="peertube-select-container">
         <option></option>
         <option *ngFor="let channel of videoChannels" [value]="channel.id">{{ channel.displayName }}
         </option>
