@@ -26,9 +26,9 @@
   </div>
 
   <!-- Video information -->
-  <div *ngIf="video" class="container-fluid video-bottom">
+  <div *ngIf="video" class="margin-content video-bottom">
     <div class="row fullWidth">
-      <div class="col-12 col-md-9 video-info">
+      <div class="col-12 col-lg-9 video-info">
         <div class="video-info-first-row">
           <div>
             <div class="d-block d-sm-none"> <!-- only shown on small devices, has its conterpart for larger viewports below -->
@@ -199,7 +199,7 @@
 
       <my-video-comments [video]="video" [user]="user"></my-video-comments>
     </div>
-    <my-recommended-videos class="ml-3 ml-sm-0 col-12 col-md-3"
+    <my-recommended-videos class="col-12 col-lg-3"
                            [inputVideo]="video" [user]="user"></my-recommended-videos>
     </div>
   </div>

@@ -163,9 +163,9 @@
       }
 
       .video-actions-rates {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        align-items: start;
 
         .video-actions {
           height: 40px; // Align with the title
@@ -442,12 +442,6 @@
       .video-info-first-row {
         flex-direction: column;
         margin-bottom: 20px;
-
-        .video-actions-rates {
-          margin-top: 20px;
-          margin-bottom: 10px;
-          align-items: start;
-        }
       }
 
       .video-info-date-views {
@@ -471,7 +465,7 @@
     flex-direction: column;
   }
 
-  .other-videos {
+  /deep/ .other-videos {
     padding-left: 0 !important;
   }
 
@@ -501,7 +495,7 @@
     }
   }
 
-  .other-videos {
+  /deep/ .other-videos {
     /deep/ .video-miniature  {
       flex-direction: column;
     }

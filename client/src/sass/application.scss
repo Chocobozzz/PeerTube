@@ -302,12 +302,23 @@ table {
   font-weight: $font-semibold;
 }
 
+@media screen and (max-width: 1000px) {
+  .main-col {
+    &.expanded {
+      .margin-content {
+        margin-left: $expanded-horizontal-margins/2;
+        margin-right: $expanded-horizontal-margins/2;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 900px) {
   .main-col {
-    &, &.expanded {
+    &.expanded {
       .margin-content {
-        margin-left: 50px;
-        margin-right: 50px;
+        margin-left: $expanded-horizontal-margins/3;
+        margin-right: $expanded-horizontal-margins/3;
       }
 
       .sub-menu {
@@ -325,6 +336,10 @@ table {
   .menu-wrapper {
     width: 100% !important;
     z-index: 10000;
+  }
+
+  menu {
+    width: $menu-width;
   }
 
   .main-col {
