@@ -68,10 +68,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     super.ngOnInit()
 
     this.userService.getMyVideoQuotaUsed()
-      .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
-
-    this.userService.getMyVideoQuotaUsed()
-      .subscribe(data => this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily)
+        .subscribe(data => {
+          this.userVideoQuotaUsed = data.videoQuotaUsed
+          this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
+        })
   }
 
   ngOnDestroy () {
