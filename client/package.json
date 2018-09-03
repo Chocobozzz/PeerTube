@@ -32,7 +32,8 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.js$": "babel-jest"
     },
     "moduleNameMapper": {
       "^@app/(.*)": "<rootDir>/src/app/$1"
@@ -45,6 +46,9 @@
       "jsx",
       "json",
       "node"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!lodash-es/)"
     ]
   },
   "devDependencies": {
