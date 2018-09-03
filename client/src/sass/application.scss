@@ -21,7 +21,7 @@ $assets-path: '../assets/';
 body {
   font-family: $main-fonts;
   font-weight: $font-regular;
-  color: #000;
+  color: var(--mainForegroundColor);
   font-size: 14px;
 }
 
@@ -83,7 +83,7 @@ label {
   }
 
   .sub-menu {
-    background-color: #F7F7F7;
+    background-color: var(--submenuColor);
     width: 100%;
     height: 81px;
     margin-bottom: 30px;
@@ -110,7 +110,7 @@ label {
 }
 
 .title-page {
-  color: #000;
+  color: var(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
   margin-right: 55px;
@@ -118,14 +118,14 @@ label {
   @include disable-default-a-behaviour;
 
   &.active, &.title-page-single {
-    border-bottom: 2px solid $orange-color;
+    border-bottom: 2px solid var(--mainColor);
     font-weight: $font-bold;
     margin-top: 30px;
     margin-bottom: 25px;
   }
 
   &:hover, &:active, &:focus {
-    color: #000;
+    color: var(--mainForegroundColor);
   }
 
   @media screen and (max-width: 500px) {
@@ -146,13 +146,14 @@ label {
     @include disable-default-a-behaviour;
 
     font-size: 16px;
-    color: #000;
+    color: var(--mainForegroundColor);
     padding: 5px 15px;
     border-radius: 0.25rem;
 
     &.active {
       font-weight: $font-semibold;
       background-color: #f0f0f0;
+      color: #000;
     }
   }
 }
@@ -188,6 +189,10 @@ label {
 }
 
 .modal {
+  .modal-content {
+    background-color: var(--mainBackgroundColor);
+  }
+
   .modal-header {
     border-bottom: none;
     margin-bottom: 5px;
@@ -249,7 +254,7 @@ label {
   a {
     @include disable-default-a-behaviour;
 
-    color: #000;
+    color: var(--mainForegroundColor);
   }
 }
 
@@ -259,7 +264,7 @@ ngb-tabset.bootstrap {
     &, & a {
       @include disable-default-a-behaviour;
 
-      color: #000 !important;
+      color: var(--mainForegroundColor) !important;
     }
   }
 }

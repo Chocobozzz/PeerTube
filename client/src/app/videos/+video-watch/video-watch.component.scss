@@ -110,7 +110,7 @@
         a {
           @include disable-default-a-behaviour;
 
-          color: #000;
+          color: var(--mainForegroundColor);
 
           &:hover {
             opacity: 0.8;
@@ -136,7 +136,7 @@
           display: inline;
           align-items: center;
           font-size: 13px;
-          color: #000;
+          color: var(--mainForegroundColor);
 
           span:hover {
             opacity: 0.8;
@@ -341,7 +341,7 @@
 
       a.video-attribute-value {
         @include disable-default-a-behaviour;
-        color: #000;
+        color: var(--mainForegroundColor);
 
         &:hover {
           opacity: 0.9;
@@ -412,7 +412,7 @@
   a {
     @include disable-default-a-behaviour;
 
-    color: $orange-color;
+    color: var(--mainColor);
     transition: color 0.3s;
 
     &:hover {
@@ -421,7 +421,7 @@
   }
 
   .privacy-concerns-okay {
-    background-color: $orange-color;
+    background-color: var(--mainColor);
     padding: 5px 8px 5px 7px;
     margin-left: auto;
     border-radius: 3px;

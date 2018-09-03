@@ -65,7 +65,7 @@
     .video-info-name {
       @include disable-default-a-behaviour;
 
-      color: #000;
+      color: var(--mainForegroundColor);
       display: block;
       width: fit-content;
       font-size: 16px;

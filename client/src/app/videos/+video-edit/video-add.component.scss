@@ -5,8 +5,6 @@ $border-width: 3px;
 $border-type: solid;
 $border-color: #EAEAEA;
 
-$background-color:  #F7F7F7;
-
 /deep/ .root-tabset.video-add-tabset {
   &.hide-nav .nav {
     display: none !important;
@@ -24,7 +22,6 @@ $background-color:  #F7F7F7;
     a.nav-link {
       @include disable-default-a-behaviour;
 
-      color: #000;
       height: 40px !important;
       padding: 0 30px !important;
       font-size: 15px;
@@ -32,10 +29,10 @@ $background-color:  #F7F7F7;
       &.active {
         border: $border-width $border-type $border-color;
         border-bottom: none;
-        background-color: $background-color !important;
+        background-color: var(--mainBackgroundColor) !important;
 
         span {
-          border-bottom: 2px solid #F1680D;
+          border-bottom: 2px solid var(--mainColor);
           font-weight: $font-bold;
         }
       }
@@ -46,7 +43,7 @@ $background-color:  #F7F7F7;
     border: $border-width $border-type $border-color;
     border-top: none;
 
-    background-color: $background-color;
+    background-color: var(--mainBackgroundColor);
     border-radius: 3px;
     width: 100%;
     min-height: 440px;
