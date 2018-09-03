@@ -22,6 +22,8 @@ export class MenuComponent implements OnInit {
     [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/video-abuses',
     [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/video-blacklist'
   }
+  private theme = document.querySelector('body')
+  private previousTheme = { }
 
   constructor (
     private authService: AuthService,
@@ -51,6 +53,13 @@ export class MenuComponent implements OnInit {
         }
       }
     )
+
+    // initialise the alternative theme with dark theme colors
+    this.previousTheme['mainBackgroundColor'] = '#111111'
+    this.previousTheme['mainForegroundColor'] = '#fff'
+    this.previousTheme['submenuColor'] = 'rgb(32,32,32)'
+    this.previousTheme['inputColor'] = 'gray'
+    this.previousTheme['inputPlaceholderColor'] = '#fff'
   }
 
   isRegistrationAllowed () {
@@ -94,6 +103,21 @@ export class MenuComponent implements OnInit {
 
   openLanguageChooser () {
     this.languageChooserModal.show()
+  }
+
+  toggleDarkTheme () {
+    // switch properties
+    this.switchProperty('mainBackgroundColor')
+    this.switchProperty('mainForegroundColor')
+    this.switchProperty('submenuColor')
+    this.switchProperty('inputColor')
+    this.switchProperty('inputPlaceholderColor')
+  }
+
+  private switchProperty (property, newValue?) {
+    const propertyOldvalue = window.getComputedStyle(this.theme).getPropertyValue('--' + property)
+    this.theme.style.setProperty('--' + property, (newValue) ? newValue : this.previousTheme[property])
+    this.previousTheme[property] = propertyOldvalue
   }
 
   private computeIsUserHasAdminAccess () {

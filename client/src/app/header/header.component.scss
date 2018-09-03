@@ -8,7 +8,7 @@
   padding-right: 40px; // For the search icon
 
   &::placeholder {
-    color: #000;
+    color: var(--inputPlaceholderColor);
   }
 
   &:focus::placeholder {
@@ -28,7 +28,8 @@
   @include icon(25px);
   height: 21px;
 
-  background-image: url('../../assets/images/header/search.svg');
+  background-color: var(--mainForegroundColor);
+  mask: url('../../assets/images/header/search.svg') no-repeat 50% 50%;
 
   // yolo
   position: absolute;

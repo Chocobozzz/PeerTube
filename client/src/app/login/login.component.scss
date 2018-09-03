@@ -18,7 +18,7 @@ input[type=submit] {
 }
 
 .create-an-account, .forgot-password-button {
-  color: #000;
+  color: var(--mainForegroundColor);
   cursor: pointer;
   
   &:hover {

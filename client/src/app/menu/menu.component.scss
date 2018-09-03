@@ -9,7 +9,7 @@
 }
 
 menu {
-  background-color: $black-background;
+  background-color: $menu-background;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -190,10 +190,10 @@ menu {
   }
 
   .footer {
-    margin-bottom: 15px;
+    padding-bottom: 15px;
     padding-left: $menu-left-padding;
 
-    .language {
+    .language, .color-palette {
       display: inline-block;
       color: $menu-bottom-color;
       cursor: pointer;
@@ -211,6 +211,16 @@ menu {
           height: 24px;
 
           background-image: url('../../assets/images/menu/language.png');
+        }
+
+        &.icon-moonsun  {
+          margin-left: 10px;
+          position: relative;
+          top: -1px;
+          width: 24px;
+          height: 24px;
+
+          background-image: url('../../assets/images/menu/moonsun.svg');
         }
 
         &:hover {

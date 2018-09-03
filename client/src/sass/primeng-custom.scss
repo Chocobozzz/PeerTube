@@ -167,7 +167,7 @@ p-table {
           &.ui-state-active {
             &, &:hover, &:active, &:focus {
               color: #fff !important;
-              background-color: $orange-color !important;
+              background-color: var(--mainColor) !important;
             }
           }
         }

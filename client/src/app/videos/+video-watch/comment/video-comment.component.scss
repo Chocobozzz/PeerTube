@@ -35,7 +35,7 @@
       .comment-account {
         @include disable-default-a-behaviour;
 
-        color: #000;
+        color: var(--mainForegroundColor);
         font-weight: $font-bold;
       }
 

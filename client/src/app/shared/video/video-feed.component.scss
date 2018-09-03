@@ -12,7 +12,8 @@
     &.icon-syndication {
       position: relative;
       top: -2px;
-      background-image: url('../../../assets/images/global/syndication.svg');
+      background-color: var(--mainForegroundColor);
+      mask-image: url('../../../assets/images/global/syndication.svg');
     }
   }
 }
