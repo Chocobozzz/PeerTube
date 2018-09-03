@@ -79,8 +79,8 @@ async function run () {
     tags: program['tags'],
     commentsEnabled: program['commentsEnabled'],
     fixture: program['file'],
-    thumbnailfile: program['thumbnailPath'],
-    previewfile: program['previewPath'],
+    thumbnailfile: program['thumbnail'],
+    previewfile: program['preview'],
     waitTranscoding: true,
     privacy: program['privacy'],
     support: undefined
