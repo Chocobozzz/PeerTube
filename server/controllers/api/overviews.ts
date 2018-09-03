@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { buildNSFWFilter } from '../../helpers/express-utils'
 import { VideoModel } from '../../models/video/video'
-import { asyncMiddleware, executeIfActivityPub } from '../../middlewares'
+import { asyncMiddleware } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
 import { VideosOverview } from '../../../shared/models/overviews'
 import { OVERVIEWS, ROUTE_CACHE_LIFETIME } from '../../initializers'
@@ -10,7 +10,7 @@ import { cacheRoute } from '../../middlewares/cache'
 const overviewsRouter = express.Router()
 
 overviewsRouter.get('/videos',
-  executeIfActivityPub(asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS))),
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS)),
   asyncMiddleware(getVideosOverview)
 )
 
