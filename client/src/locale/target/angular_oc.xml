@@ -565,7 +565,7 @@
       </trans-unit>
       <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
         <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>PeerTube es una plataforma de difusion de vidèos federada (ActivityPub) qu’emplega lo P2P (WebTorrent) dirèctament dins los navigador web.</target>
+        <target>PeerTube es una plataforma de difusion de vidèos federada (ActivityPub) qu’emplega lo P2P (WebTorrent) dirèctament dins los navigadors web.</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -947,6 +947,27 @@
         <target>Limit d’inscripcions</target>
         <context-group name="null">
           <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>Importar</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
+        <source>Video import with HTTP enabled</source>
+        <target>Import vidèo amb HTTP activat</target>
+        <context-group name="null">
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
+        <source>Video import with a torrent file or a magnet URI enabled</source>
+        <target>Import de vidèos via un fichièr torretn o un magnet URI activat</target>
+        <context-group name="null">
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
@@ -1513,6 +1534,13 @@ Seleccionatz aquesta opcion, salvatz la configuracion e ensajatz amb una URL de 
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0bb0c57c6d12635d26996c124248e748b666e5ad">
+        <source>My video imports</source>
+        <target>Mos imports de vidèos</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
         <source>Video quota:</source>
         <target>Quòta vidèo :</target>
@@ -1532,6 +1560,13 @@ Seleccionatz aquesta opcion, salvatz la configuracion e ensajatz amb una URL de 
         <target>Paramètres vidèo</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
+        <source>Danger zone</source>
+        <target>Zòna perilhosa</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8057bddbed23d6cd911df8cc3a4ec24d1f258b79">
@@ -1583,6 +1618,13 @@ When you will upload a video in this channel, the video support field will be au
 Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà automaticament emplenat amb aqueste tèxte.</target>
         <context-group name="null">
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
+        <source>Target</source>
+        <target>Cibla</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
@@ -1701,6 +1743,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bfe7f34fbd4c3afa5f84a5580e0fae942cad2333">
+        <source>You can import any URL &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;supported by youtube-dl&lt;/a&gt; or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Podètz importar quina que siá URL &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;que son compatiblas amb youtube-dl&lt;/a&gt; o d’URL que menan a un fichièr MP4 brut. Vos cal vos assegurar qu’avètz los dreches de difusion, autrament aquò poiriá vos crear de problèmas legals a vos e vòstra instància.</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>Cadena</target>
@@ -1713,6 +1762,17 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
         <target>Confidencialitat</target>
         <context-group name="null">
           <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
+        <source>
+  Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
+</source>
+        <target>
+  Felicitacions, la vidèo darrièr <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> serà importada ! Podètz ja ajustar las informacions tocant aquesta vidèo.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1741,6 +1801,73 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
         <target>Publicar</target>
         <context-group name="null">
           <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
+        <source>Select the torrent to import</source>
+        <target>Seleccionar lo torrent d’importar</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
+        <source>Paste magnet URI</source>
+        <target>Pegar lo magnet URI</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1ce18c12c809a738f05f2290f46df0677f27ed70">
+        <source>You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Podètz importar quin que siá fichièr torrent que mena a un fichièr mp4. Vos cal vos assegurar qu’avètz los dreches de difusion, autrament aquò poiriá vos crear de problèmas legals a vos e vòstra instància.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
+        <source>
+  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
+</source>
+        <target>
+  Felicitacions, la vidèo serà importada via BitTorrent ! Podètz ja ajustar las informacions tocant aquesta vidèo.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
+        <source>Import <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Importar <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
+        <source>Upload <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Actualizar <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
+        <source>Upload a file</source>
+        <target>Actualizar un fichièr</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470">
+        <source>Import with URL</source>
+        <target>Importar via una URL</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="752c401d7dcd708944eef60e411187f71d882340">
+        <source>Import with torrent</source>
+        <target>Importar via un torrent</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
@@ -2032,6 +2159,17 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7584313e33a66811eb10646627914a01fff0347d">
+        <source>
+    The video is being imported, it will be available when the import is finished.
+  </source>
+        <target>
+    La vidèo es en cors d’import, serà disponibla un còp acabat.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9ed65ae88f6c982bc44d6fed2796e55f47dbf304">
         <source>
     The video is being transcoded, it may not work properly.
@@ -2251,7 +2389,7 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       </trans-unit>
       <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
         <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
-        <target>Veire totas las <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> responsas</target>
+        <target>Veire las <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> autras responsas</target>
         <context-group name="null">
           <context context-type="linenumber">56</context>
         </context-group>
@@ -2544,6 +2682,41 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca8e8cf0f1686604db3b6a2ebadab7f7b426a047">
+        <source>Are you sure you want to delete your account? This will delete all you data, including channels, videos etc.</source>
+        <target>Volètz vertadièrament suprimir lo compte ? Aquò suprimirà totas las donadas, e tanben las cadenas, vidèos, etc.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
+        <source>Type your username to confirm</source>
+        <target>Picatz vòstre nom d’utilizaire per confirmar</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>Suprimir vòstre compte</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8a8a7f7160939fb55e82bc01fe9f876f5f2e065">
+        <source>Delete my account</source>
+        <target>Suprimir vòstre compte</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
+        <source>Your account is deleted.</source>
+        <target>Vòstre compte es suprimit.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
         <source>Profile updated.</source>
         <target>Perfil actualizat</target>
@@ -2659,6 +2832,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a">
         <source>To transcode</source>
         <target>De transcodar</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392">
+        <source>To import</source>
+        <target>D’importar</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3556,7 +3736,7 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       </trans-unit>
       <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
-        <target>Fa <x id="INTERPOLATION" equiv-text="{{interval}}"/> un mes</target>
+        <target>Fa <x id="INTERPOLATION" equiv-text="{{interval}}"/> mes</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3725,6 +3905,20 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
         <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vidèo de qualitat mejana</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
+        <source>Video to import updated.</source>
+        <target>Vidèo d’importar actualizada</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
+        <source>Your video was uploaded to your account and is private.</source>
+        <target>La vidèo es estada enviada a vòstre compte e es privada.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

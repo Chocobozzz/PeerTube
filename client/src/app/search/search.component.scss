@@ -1,15 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-.no-result {
-  height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: $font-semibold;
-}
-
 .search-result {
   padding: 40px;
 
@@ -99,6 +90,40 @@
 
           &:hover {
             color: #303030;
+          }
+        }
+      }
+    }
+
+    &.video-channel {
+
+      img {
+        @include avatar(120px);
+
+        margin: 0 50px 0 40px;
+      }
+
+      .video-channel-info {
+        flex-grow: 1;
+        width: fit-content;
+
+        .video-channel-names {
+          @include disable-default-a-behaviour;
+
+          display: flex;
+          align-items: baseline;
+          color: #000;
+          width: fit-content;
+
+          .video-channel-display-name {
+            font-weight: $font-semibold;
+            font-size: 18px;
+          }
+
+          .video-channel-name {
+            font-size: 14px;
+            color: $grey-actor-name;
+            margin-left: 5px;
           }
         }
       }

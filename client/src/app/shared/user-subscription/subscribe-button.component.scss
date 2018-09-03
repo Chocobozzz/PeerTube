@@ -1,0 +1,51 @@
+@import '_variables';
+@import '_mixins';
+
+.subscribe-button {
+  @include peertube-button;
+  @include orange-button;
+}
+
+.unsubscribe-button {
+  @include peertube-button;
+  @include grey-button
+}
+
+.subscribe-button,
+.unsubscribe-button {
+  display: inline-block;
+
+  &.small {
+    min-width: 75px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 13px;
+  }
+
+  &.normal {
+    min-width: 120px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+  }
+}
+
+.unsubscribe-button {
+  .subscribed {
+    display: inline;
+  }
+
+  .unsubscribe {
+    display: none;
+  }
+
+  &:hover {
+    .subscribed {
+      display: none;
+    }
+
+    .unsubscribe {
+      display: inline;
+    }
+  }
+}

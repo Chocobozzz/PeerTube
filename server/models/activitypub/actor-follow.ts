@@ -2,8 +2,21 @@ import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import {
-  AfterCreate, AfterDestroy, AfterUpdate, AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, IsInt, Max, Model,
-  Table, UpdatedAt
+  AfterCreate,
+  AfterDestroy,
+  AfterUpdate,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  IsInt,
+  Max,
+  Model,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
 import { AccountFollow } from '../../../shared/models/actors/follow.model'
@@ -13,7 +26,10 @@ import { ACTOR_FOLLOW_SCORE } from '../../initializers'
 import { FOLLOW_STATES } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
-import { ActorModel } from './actor'
+import { ActorModel, unusedActorAttributesForAPI } from './actor'
+import { VideoChannelModel } from '../video/video-channel'
+import { IIncludeOptions } from '../../../node_modules/sequelize-typescript/lib/interfaces/IIncludeOptions'
+import { AccountModel } from '../account/account'
 
 @Table({
   tableName: 'actorFollow',
@@ -151,36 +167,117 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetHost (actorId: number, targetHost: string, t?: Sequelize.Transaction) {
+  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
+    const actorFollowingPartInclude: IIncludeOptions = {
+      model: ActorModel,
+      required: true,
+      as: 'ActorFollowing',
+      where: {
+        preferredUsername: targetName
+      },
+      include: [
+        {
+          model: VideoChannelModel.unscoped(),
+          required: false
+        }
+      ]
+    }
+
+    if (targetHost === null) {
+      actorFollowingPartInclude.where['serverId'] = null
+    } else {
+      actorFollowingPartInclude.include.push({
+        model: ServerModel,
+        required: true,
+        where: {
+          host: targetHost
+        }
+      })
+    }
+
     const query = {
       where: {
         actorId
       },
       include: [
+        actorFollowingPartInclude,
         {
           model: ActorModel,
           required: true,
           as: 'ActorFollower'
-        },
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollowing',
-          include: [
-            {
-              model: ServerModel,
-              required: true,
-              where: {
-                host: targetHost
-              }
-            }
-          ]
         }
       ],
       transaction: t
     }
 
     return ActorFollowModel.findOne(query)
+      .then(result => {
+        if (result && result.ActorFollowing.VideoChannel) {
+          result.ActorFollowing.VideoChannel.Actor = result.ActorFollowing
+        }
+
+        return result
+      })
+  }
+
+  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]) {
+    const whereTab = targets
+      .map(t => {
+        if (t.host) {
+          return {
+            [ Sequelize.Op.and ]: [
+              {
+                '$preferredUsername$': t.name
+              },
+              {
+                '$host$': t.host
+              }
+            ]
+          }
+        }
+
+        return {
+          [ Sequelize.Op.and ]: [
+            {
+              '$preferredUsername$': t.name
+            },
+            {
+              '$serverId$': null
+            }
+          ]
+        }
+      })
+
+    const query = {
+      attributes: [],
+      where: {
+        [ Sequelize.Op.and ]: [
+          {
+            [ Sequelize.Op.or ]: whereTab
+          },
+          {
+            actorId
+          }
+        ]
+      },
+      include: [
+        {
+          attributes: [ 'preferredUsername' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAll(query)
   }
 
   static listFollowingForApi (id: number, start: number, count: number, sort: string) {
@@ -214,6 +311,63 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           total: count
         }
       })
+  }
+
+  static listSubscriptionsForApi (id: number, start: number, count: number, sort: string) {
+    const query = {
+      attributes: [],
+      distinct: true,
+      offset: start,
+      limit: count,
+      order: getSort(sort),
+      where: {
+        actorId: id
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: ActorModel.unscoped(),
+          as: 'ActorFollowing',
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: {
+                    exclude: unusedActorAttributesForAPI
+                  },
+                  model: ActorModel,
+                  required: true
+                },
+                {
+                  model: AccountModel.unscoped(),
+                  required: true,
+                  include: [
+                    {
+                      attributes: {
+                        exclude: unusedActorAttributesForAPI
+                      },
+                      model: ActorModel,
+                      required: true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAndCountAll(query)
+                           .then(({ rows, count }) => {
+                             return {
+                               data: rows.map(r => r.ActorFollowing.VideoChannel),
+                               total: count
+                             }
+                           })
   }
 
   static listFollowersForApi (id: number, start: number, count: number, sort: string) {

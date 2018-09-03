@@ -9,7 +9,7 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { forwardVideoRelatedActivity } from '../send/utils'
-import { getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
 
 async function processUndoActivity (activity: ActivityUndo) {
@@ -43,7 +43,7 @@ export {
 async function processUndoLike (actorUrl: string, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(likeActivity.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel(likeActivity.object)
 
   return sequelizeTypescript.transaction(async t => {
     const byAccount = await AccountModel.loadByUrl(actorUrl, t)
@@ -67,7 +67,7 @@ async function processUndoLike (actorUrl: string, activity: ActivityUndo) {
 async function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
   const dislike = activity.object.object as DislikeObject
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(dislike.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel(dislike.object)
 
   return sequelizeTypescript.transaction(async t => {
     const byAccount = await AccountModel.loadByUrl(actorUrl, t)

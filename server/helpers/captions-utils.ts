@@ -1,9 +1,8 @@
-import { renamePromise, unlinkPromise } from './core-utils'
 import { join } from 'path'
 import { CONFIG } from '../initializers'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import * as srt2vtt from 'srt-to-vtt'
-import { createReadStream, createWriteStream } from 'fs'
+import { createReadStream, createWriteStream, remove, rename } from 'fs-extra'
 
 async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: VideoCaptionModel) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
@@ -12,9 +11,9 @@ async function moveAndProcessCaptionFile (physicalFile: { filename: string, path
   // Convert this srt file to vtt
   if (physicalFile.path.endsWith('.srt')) {
     await convertSrtToVtt(physicalFile.path, destination)
-    await unlinkPromise(physicalFile.path)
+    await remove(physicalFile.path)
   } else { // Just move the vtt file
-    await renamePromise(physicalFile.path, destination)
+    await rename(physicalFile.path, destination)
   }
 
   // This is important in case if there is another attempt in the retry process

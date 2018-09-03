@@ -18,12 +18,16 @@ menu {
   overflow: hidden;
   z-index: 1000;
   color: $menu-color;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
 
+  &:focus, &:hover {
+    overflow-y: auto;
+  }
+
   .top-menu {
     flex-grow: 1;
+    width: $menu-width;
   }
 
   .logged-in-block {
@@ -135,25 +139,36 @@ menu {
 
         margin-right: 18px;
 
+        &.icon-videos-subscriptions {
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/images/menu/subscriptions.svg');
+        }
+
+        &.icon-videos-overview {
+          position: relative;
+          background-image: url('../../assets/images/menu/globe.svg');
+        }
+
         &.icon-videos-trending {
           position: relative;
-          top: -2px;
+          top: -1px;
           background-image: url('../../assets/images/menu/trending.svg');
         }
 
         &.icon-videos-recently-added {
           width: 23px;
           height: 23px;
-          position: relative;
-          top: -1px;
           background-image: url('../../assets/images/menu/recently-added.svg');
         }
 
         &.icon-videos-local {
           width: 23px;
           height: 23px;
+
           position: relative;
           top: -1px;
+
           background-image: url('../../assets/images/menu/home.svg');
         }
 

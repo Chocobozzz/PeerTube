@@ -17,6 +17,9 @@
       "es2015",
       "dom"
     ],
+    "types": [
+      "jasmine"
+    ],
     "baseUrl": "src",
     "paths": {
       "@app/*": [ "app/*" ],
@@ -33,6 +36,7 @@
     "../node_modules",
     "node_modules",
     "dist",
-    "../server"
+    "../server",
+    "src/**/*.spec.ts"
   ]
 }

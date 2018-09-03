@@ -95,11 +95,19 @@ function createReqFiles (
   return multer({ storage }).fields(fields)
 }
 
+function isUserAbleToSearchRemoteURI (res: express.Response) {
+  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
+
+  return CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
+    (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildNSFWFilter,
   getHostWithPort,
+  isUserAbleToSearchRemoteURI,
   badRequest,
   createReqFiles,
   cleanUpReqFiles

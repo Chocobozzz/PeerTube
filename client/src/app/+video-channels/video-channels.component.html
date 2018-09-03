@@ -7,6 +7,9 @@
       <div class="actor-info">
         <div class="actor-names">
           <div class="actor-display-name">{{ videoChannel.displayName }}</div>
+          <div class="actor-name">{{ videoChannel.nameWithHost }}</div>
+
+          <my-subscribe-button #subscribeButton *ngIf="isUserLoggedIn()" [videoChannel]="videoChannel"></my-subscribe-button>
         </div>
         <div i18n class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
 
@@ -19,7 +22,6 @@
 
     <div class="links">
       <a i18n routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
-
       <a i18n routerLink="about" routerLinkActive="active" class="title-page">About</a>
     </div>
   </div>

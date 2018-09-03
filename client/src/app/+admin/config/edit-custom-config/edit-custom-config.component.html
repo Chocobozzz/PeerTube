@@ -91,6 +91,11 @@
           i18n-labelText labelText="Signup enabled"
         ></my-peertube-checkbox>
 
+        <my-peertube-checkbox *ngIf="isSignupEnabled()"
+          inputName="signupRequiresEmailVerification" formControlName="signupRequiresEmailVerification"
+          i18n-labelText labelText="Signup requires email verification"
+        ></my-peertube-checkbox>
+
         <div *ngIf="isSignupEnabled()" class="form-group">
           <label i18n for="signupLimit">Signup limit</label>
           <input
@@ -140,6 +145,20 @@
           </div>
           <div *ngIf="formErrors.userVideoQuota" class="form-error">
             {{ formErrors.userVideoQuota }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label i18n for="userVideoQuotaDaily">User default daily upload limit</label>
+          <div class="peertube-select-container">
+            <select id="userVideoQuotaDaily" formControlName="userVideoQuotaDaily">
+              <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
+                {{ videoQuotaDailyOption.label }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="formErrors.userVideoQuotaDaily" class="form-error">
+            {{ formErrors.userVideoQuotaDaily }}
           </div>
         </div>
       </ng-template>

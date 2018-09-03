@@ -1,8 +1,9 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { exists } from '../misc'
+import { exists, isArray } from '../misc'
 import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
+import { isHostValid } from '../servers'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
   return isActivityPubUrlValid(endpointObject.sharedInbox)
@@ -26,7 +27,7 @@ function isActorPublicKeyValid (publicKey: string) {
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
-const actorNameRegExp = new RegExp('[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_]+')
+const actorNameRegExp = new RegExp('^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_]+$')
 function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
 }
@@ -109,10 +110,24 @@ function normalizeActor (actor: any) {
   return
 }
 
+function isValidActorHandle (handle: string) {
+  if (!exists(handle)) return false
+
+  const parts = handle.split('@')
+  if (parts.length !== 2) return false
+
+  return isHostValid(parts[1])
+}
+
+function areValidActorHandles (handles: string[]) {
+  return isArray(handles) && handles.every(h => isValidActorHandle(h))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   normalizeActor,
+  areValidActorHandles,
   isActorEndpointsObjectValid,
   isActorPublicKeyObjectValid,
   isActorTypeValid,
@@ -126,5 +141,6 @@ export {
   isActorAcceptActivityValid,
   isActorRejectActivityValid,
   isActorDeleteActivityValid,
-  isActorUpdateActivityValid
+  isActorUpdateActivityValid,
+  isValidActorHandle
 }

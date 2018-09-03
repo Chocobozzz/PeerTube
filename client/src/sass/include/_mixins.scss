@@ -16,6 +16,33 @@
   }
 }
 
+/**
+ *  This mixin will crop text in block for needed amount of lines and put ellipsis at the end
+ *
+ *  @param $font-size font-size property
+ *  @param $line-height line-height property
+ *  @param $lines-to-show amount of lines to show
+ */
+@mixin ellipsis-multiline($font-size: 1rem, $line-height: 1, $lines-to-show: 2) {
+  display: block;
+  /* Fallback for non-webkit */
+  display: -webkit-box;
+  max-height: $font-size*$line-height*$lines-to-show;
+  /* Fallback for non-webkit */
+  font-size: $font-size;
+  line-height: $line-height;
+  -webkit-line-clamp: $lines-to-show;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin prefix($property, $parameters...) {
+  @each $prefix in -webkit-, -moz-, -ms-, -o-, "" {
+    #{$prefix}#{$property}: $parameters;
+  }
+}
+
 @mixin peertube-word-wrap {
   word-break: normal;
   word-wrap: break-word;
@@ -36,9 +63,16 @@
   border-radius: 3px;
   padding-left: 15px;
   padding-right: 15px;
+}
 
-  &::placeholder {
-    color: #585858;
+@mixin peertube-input-group($width) {
+  width: $width;
+  height: $button-height;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  .input-group-text{
+    font-size: 14px;
   }
 }
 
@@ -328,6 +362,27 @@
   font-size: 13px;
 }
 
+@mixin actor-owner {
+  @include disable-default-a-behaviour;
+
+  display: block;
+  font-size: 13px;
+  margin-top: 4px;
+  color: #000;
+
+  span:hover {
+    opacity: 0.8;
+  }
+
+  img {
+    @include avatar(18px);
+
+    margin-left: 7px;
+    position: relative;
+    top: -2px;
+  }
+}
+
 @mixin sub-menu-with-actor {
   height: 160px;
   display: flex;
@@ -364,7 +419,7 @@
           position: relative;
           top: 3px;
           font-size: 14px;
-          color: #777272;
+          color: $grey-actor-name;
         }
       }
 
@@ -373,24 +428,7 @@
       }
 
       .actor-owner {
-        @include disable-default-a-behaviour;
-
-        display: block;
-        font-size: 13px;
-        margin-top: 4px;
-        color: #000;
-
-        span:hover {
-          opacity: 0.8;
-        }
-
-        img {
-          @include avatar(18px);
-
-          margin-left: 7px;
-          position: relative;
-          top: -2px;
-        }
+        @include actor-owner;
       }
     }
   }
@@ -417,5 +455,20 @@
     top: -1px;
     margin-right: 5px;
     background-image: url($imageUrl);
+  }
+}
+
+@mixin row-blocks {
+  display: flex;
+  min-height: 130px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C6C6C6;
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+    align-items: center;
   }
 }

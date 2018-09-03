@@ -6,7 +6,6 @@ import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { renamePromise, statPromise, unlinkPromise } from '../../../helpers/core-utils'
 import { CONFIG, sequelizeTypescript } from '../../../initializers'
 import { doRequestAndSaveToFile } from '../../../helpers/requests'
 import { VideoState } from '../../../../shared'
@@ -15,6 +14,7 @@ import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
+import { rename, stat } from 'fs-extra'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -114,7 +114,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     tempVideoPath = await downloader()
 
     // Get information about this video
-    const stats = await statPromise(tempVideoPath)
+    const stats = await stat(tempVideoPath)
     const isAble = await videoImport.User.isAbleToUploadVideo({ size: stats.size })
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
@@ -138,7 +138,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
     // Move file
     videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
-    await renamePromise(tempVideoPath, videoDestFile)
+    await rename(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail

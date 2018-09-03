@@ -1,4 +1,4 @@
-<div myInfiniteScroller [autoLoading]="true" (nearOfBottom)="onNearOfBottom()" class="search-result">
+<div myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" class="search-result">
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
@@ -22,17 +22,37 @@
     </div>
   </div>
 
-  <div i18n *ngIf="pagination.totalItems === 0" class="no-result">
+  <div i18n *ngIf="pagination.totalItems === 0 && results.length === 0" class="no-results">
     No results found
   </div>
 
-  <div *ngFor="let video of videos" class="entry video">
-    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+  <ng-container *ngFor="let result of results">
+    <div *ngIf="isVideoChannel(result)" class="entry video-channel">
+      <a [routerLink]="[ '/video-channels', result.nameWithHost ]">
+        <img [src]="result.avatarUrl" alt="Avatar" />
+      </a>
 
-    <div class="video-info">
-      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-      <span i18n class="video-info-date-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
-      <a class="video-info-account" [routerLink]="[ '/accounts', video.by ]">{{ video.by }}</a>
+      <div class="video-channel-info">
+        <a [routerLink]="[ '/video-channels', result.nameWithHost ]" class="video-channel-names">
+          <div class="video-channel-display-name">{{ result.displayName }}</div>
+          <div class="video-channel-name">{{ result.nameWithHost }}</div>
+        </a>
+
+        <div i18n class="video-channel-followers">{{ result.followersCount }} subscribers</div>
+      </div>
+
+      <my-subscribe-button *ngIf="isUserLoggedIn()" [videoChannel]="result"></my-subscribe-button>
     </div>
-  </div>
+
+    <div *ngIf="isVideo(result)" class="entry video">
+      <my-video-thumbnail [video]="result"></my-video-thumbnail>
+
+      <div class="video-info">
+        <a class="video-info-name" [routerLink]="['/videos/watch', result.uuid]" [attr.title]="result.name">{{ result.name }}</a>
+        <span i18n class="video-info-date-views">{{ result.publishedAt | myFromNow }} - {{ result.views | myNumberFormatter }} views</span>
+        <a class="video-info-account" [routerLink]="[ '/accounts', result.by ]">{{ result.by }}</a>
+      </div>
+    </div>
+  </ng-container>
+
 </div>

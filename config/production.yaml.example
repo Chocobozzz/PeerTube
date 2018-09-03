@@ -2,7 +2,7 @@ listen:
   hostname: 'localhost'
   port: 9000
 
-# Correspond to your reverse proxy "listen" configuration
+# Correspond to your reverse proxy server_name/listen configuration
 webserver:
   https: true
   hostname: 'example.com'
@@ -58,6 +58,14 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
 
+search:
+  remote_uri: # Add ability to search remote videos/actors by URI, that may not be federated with your instance
+    users: true
+    anonymous: false
+
+trending:
+  videos:
+    interval_days: 7 # Compute trending videos for the last x days
 
 ###############################################################################
 #
@@ -83,6 +91,7 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  requires_email_verification: false
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []
@@ -92,6 +101,7 @@ user:
   # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
   # -1 == unlimited
   video_quota: -1
+  video_quota_daily: -1
 
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.

@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
-import { renamePromise } from '../../../helpers/core-utils'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
@@ -57,6 +56,7 @@ import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-u
 import { videoCaptionsRouter } from './captions'
 import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
+import { rename } from 'fs-extra'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -196,7 +196,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Move physical file
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
   const destination = join(videoDir, video.getVideoFilename(videoFile))
-  await renamePromise(videoPhysicalFile.path, destination)
+  await rename(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
   videoPhysicalFile.filename = video.getVideoFilename(videoFile)
   videoPhysicalFile.path = destination
@@ -382,14 +382,16 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
   const ip = req.ip
-  const exists = await Redis.Instance.isViewExists(ip, videoInstance.uuid)
+  const exists = await Redis.Instance.isVideoIPViewExists(ip, videoInstance.uuid)
   if (exists) {
     logger.debug('View for ip %s and video %s already exists.', ip, videoInstance.uuid)
     return res.status(204).end()
   }
 
-  await videoInstance.increment('views')
-  await Redis.Instance.setView(ip, videoInstance.uuid)
+  await Promise.all([
+    Redis.Instance.addVideoView(videoInstance.id),
+    Redis.Instance.setIPVideoView(ip, videoInstance.uuid)
+  ])
 
   const serverAccount = await getServerActor()
 
@@ -416,6 +418,7 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    includeLocalVideos: true,
     categoryOneOf: req.query.categoryOneOf,
     licenceOneOf: req.query.licenceOneOf,
     languageOneOf: req.query.languageOneOf,

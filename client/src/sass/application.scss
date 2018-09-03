@@ -53,12 +53,19 @@ label {
 
 .form-error {
   display: block;
-  color: $red-error;
+  color: $red;
   margin-top: 5px;
 }
 
 .input-error {
-  border-color: $red-error !important;
+  border-color: $red !important;
+}
+
+.fullWidth {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: initial;
 }
 
 .glyphicon-black {
@@ -83,6 +90,7 @@ label {
     display: flex;
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
+    padding-right: $not-expanded-horizontal-margins;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
@@ -96,6 +104,7 @@ label {
 
     .sub-menu {
       padding-left: $expanded-horizontal-margins;
+      padding-right: $expanded-horizontal-margins;
     }
   }
 }
@@ -284,6 +293,15 @@ table {
   }
 }
 
+.no-results {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: $font-semibold;
+}
+
 @media screen and (max-width: 900px) {
   .main-col {
     &, &.expanded {
@@ -294,6 +312,10 @@ table {
 
       .sub-menu {
         padding-left: 50px;
+
+        .title-page {
+          font-size: 15px;
+        }
       }
     }
   }
@@ -316,6 +338,7 @@ table {
 
       .sub-menu {
         padding-left: 15px;
+        padding-right: 15px;
         margin-bottom: 10px;
       }
 

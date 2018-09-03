@@ -2,15 +2,18 @@ import { User } from '../'
 import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
-import { getAbsoluteAPIUrl } from '../misc/utils'
+import { durationToString, getAbsoluteAPIUrl } from '../misc/utils'
 import { peertubeTranslate, ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 
 export class Video implements VideoServerModel {
-  by: string
+  byVideoChannel: string
+  byAccount: string
+
   accountAvatarUrl: string
   videoChannelAvatarUrl: string
+
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
@@ -67,18 +70,6 @@ export class Video implements VideoServerModel {
     return '/videos/watch/' + videoUUID
   }
 
-  private static createDurationString (duration: number) {
-    const hours = Math.floor(duration / 3600)
-    const minutes = Math.floor((duration % 3600) / 60)
-    const seconds = duration % 60
-
-    const minutesPadding = minutes >= 10 ? '' : '0'
-    const secondsPadding = seconds >= 10 ? '' : '0'
-    const displayedHours = hours > 0 ? hours.toString() + ':' : ''
-
-    return displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
-  }
-
   constructor (hash: VideoServerModel, translations = {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
@@ -92,7 +83,7 @@ export class Video implements VideoServerModel {
     this.state = hash.state
     this.description = hash.description
     this.duration = hash.duration
-    this.durationLabel = Video.createDurationString(hash.duration)
+    this.durationLabel = durationToString(hash.duration)
     this.id = hash.id
     this.uuid = hash.uuid
     this.isLocal = hash.isLocal
@@ -110,7 +101,8 @@ export class Video implements VideoServerModel {
     this.account = hash.account
     this.channel = hash.channel
 
-    this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
+    this.byAccount = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
+    this.byVideoChannel = Actor.CREATE_BY_STRING(hash.channel.name, hash.channel.host)
     this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
     this.videoChannelAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.channel)
 

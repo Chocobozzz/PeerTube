@@ -7,7 +7,7 @@ import {
   createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating,
   getUserInformation, getUsersList, getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo,
   registerUser, removeUser, removeVideo, runServer, ServerInfo, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo, userLogin,
-  deleteMe, blockUser, unblockUser
+  deleteMe, blockUser, unblockUser, updateCustomSubConfig
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'

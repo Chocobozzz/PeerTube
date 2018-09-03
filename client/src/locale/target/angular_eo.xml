@@ -241,6 +241,17 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4c3960fb1d9b07d1db3b5bda3ee40019211830dc">
+        <source>
+          for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </source>
+        <target>
+          por <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
         <source>Filters</source>
         <target>Filtriloj</target>
@@ -945,6 +956,27 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>Enporti</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
+        <source>Video import with HTTP enabled</source>
+        <target>Enporto de filmoj per HTTP ŝaltita</target>
+        <context-group name="null">
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
+        <source>Video import with a torrent file or a magnet URI enabled</source>
+        <target>Enporto de filmoj per torenta dosiero aŭ magneta ligilo ŝaltita</target>
+        <context-group name="null">
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Administranto</target>
@@ -1509,6 +1541,13 @@ Marku ĉi tiun markbutonon, konservu la agordon, kaj provu ĝin kun ligilo al fi
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0bb0c57c6d12635d26996c124248e748b666e5ad">
+        <source>My video imports</source>
+        <target>Miaj filmaj enportoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
         <source>Video quota:</source>
         <target>Datumlimo por filmoj:</target>
@@ -1528,6 +1567,13 @@ Marku ĉi tiun markbutonon, konservu la agordon, kaj provu ĝin kun ligilo al fi
         <target>Filmaj agordoj:</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
+        <source>Danger zone</source>
+        <target>Danĝera areo</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8057bddbed23d6cd911df8cc3a4ec24d1f258b79">
@@ -1579,6 +1625,13 @@ When you will upload a video in this channel, the video support field will be au
 Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos tiun ĉi tekston.</target>
         <context-group name="null">
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
+        <source>Target</source>
+        <target>Celo</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
@@ -1697,6 +1750,13 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bfe7f34fbd4c3afa5f84a5580e0fae942cad2333">
+        <source>You can import any URL &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;supported by youtube-dl&lt;/a&gt; or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Vi povas enporti iun ajn ligilon &lt;a href='https://rg3.github.io/youtube-dl/supportedsites.html' target='_blank' rel='noopener noreferrer'&gt;trakteblan de youtube-dl&lt;/a&gt; aŭ ligilon al kruda MP4-dosiero. Vi certiĝu, ke vi havas havigajn rajtojn pri la ligata enhavo, ĉar alie ĝi eble kaŭzus leĝajn problemojn al vi kaj via nodo.</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>Kanalo</target>
@@ -1709,6 +1769,17 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
         <target>Privateco</target>
         <context-group name="null">
           <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
+        <source>
+  Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
+</source>
+        <target>
+  Gratulon; la filmo <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> enportiĝos! Vi jam povas aldoni informojn pri ĝi.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1737,6 +1808,73 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
         <target>Eldoni</target>
         <context-group name="null">
           <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
+        <source>Select the torrent to import</source>
+        <target>Elektu la enportotan torenton</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
+        <source>Paste magnet URI</source>
+        <target>Algluu magnetan ligilon</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1ce18c12c809a738f05f2290f46df0677f27ed70">
+        <source>You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Vi povas enporti iun ajn torentan dosieron, kiu ligas al MP4-dosiero. Vi certiĝu, ke vi havas havigajn rajtojn pri la ligata enhavo, ĉar alie ĝi eble kaŭzus leĝajn problemojn al vi kaj via nodo.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
+        <source>
+  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
+</source>
+        <target>
+  Gratulon; la filmo enportiĝos per « BitTorrent »! Vi jam povas aldoni informojn pri ĝi.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
+        <source>Import <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Enporti <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
+        <source>Upload <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Alŝuti <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
+        <source>Upload a file</source>
+        <target>Alŝuti dosieron</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470">
+        <source>Import with URL</source>
+        <target>Enporti per ligilo</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="752c401d7dcd708944eef60e411187f71d882340">
+        <source>Import with torrent</source>
+        <target>Enporti per torento</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
@@ -2019,6 +2157,24 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
         </target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
+        <source>QR-Code</source>
+        <target>Rapidresponda kodo</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7584313e33a66811eb10646627914a01fff0347d">
+        <source>
+    The video is being imported, it will be available when the import is finished.
+  </source>
+        <target>
+    La filmo estas enportata, kaj disponeblos post kiam la enporto finiĝos.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9ed65ae88f6c982bc44d6fed2796e55f47dbf304">
@@ -2533,6 +2689,41 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca8e8cf0f1686604db3b6a2ebadab7f7b426a047">
+        <source>Are you sure you want to delete your account? This will delete all you data, including channels, videos etc.</source>
+        <target>Ĉu vi certe volas forigi vian konton? Tio forigos ĉiujn viajn datumojn, inkluzive kanalojn, filmojn, ktp.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
+        <source>Type your username to confirm</source>
+        <target>Entajpi vian salutnomon por konfirmi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>Forigi vian konton</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8a8a7f7160939fb55e82bc01fe9f876f5f2e065">
+        <source>Delete my account</source>
+        <target>Forigi mian konton</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
+        <source>Your account is deleted.</source>
+        <target>Via konto foriĝis.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
         <source>Profile updated.</source>
         <target>Profilo ĝisdatigita.</target>
@@ -2755,6 +2946,13 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
       <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca">
         <source>Relevance</source>
         <target>Rilateco</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1aee80ab35aa99508802cdec6306e110b2feaf9e">
+        <source>Publish date</source>
+        <target>Dato de publikigo</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3707,6 +3905,13 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
       <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
         <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> da filmoj mezkvalitaj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
+        <source>Your video was uploaded to your account and is private.</source>
+        <target>Via filmo alŝutiĝis al via konto kaj estas privata.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

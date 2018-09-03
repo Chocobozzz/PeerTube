@@ -1,5 +1,4 @@
 import 'multer'
-import * as uuidv4 from 'uuid'
 import { sendUpdateActor } from './activitypub/send'
 import { AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../initializers'
 import { updateActorAvatarInstance } from './activitypub'
@@ -15,7 +14,7 @@ async function updateActorAvatarFile (
   accountOrChannel: AccountModel | VideoChannelModel
 ) {
   const extension = extname(avatarPhysicalFile.filename)
-  const avatarName = uuidv4() + extension
+  const avatarName = actor.uuid + extension
   const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
   await processImage(avatarPhysicalFile, destination, AVATARS_SIZE)
 

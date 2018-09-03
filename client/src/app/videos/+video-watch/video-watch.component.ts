@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/operators'
+import { catchError, subscribeOn } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
@@ -9,19 +9,20 @@ import { NotificationsService } from 'angular2-notifications'
 import { forkJoin, Subscription } from 'rxjs'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
+import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import * as WebTorrent from 'webtorrent'
 import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
-import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
 import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { VideoBlacklistComponent } from './modal/video-blacklist.component'
+import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
 import { addContextMenu, getVideojsOptions, loadLocaleInVideoJS } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -42,8 +43,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
   @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
-
-  otherVideosDisplayed: Video[] = []
+  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
   player: videojs.Player
   playerElement: HTMLVideoElement
@@ -58,9 +58,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   likesBarTooltipText = ''
   hasAlreadyAcceptedPrivacyConcern = false
   remoteServerDown = false
+  hotkeys: Hotkey[]
 
   private videojsLocaleLoaded = false
-  private otherVideos: Video[] = []
   private paramsSub: Subscription
 
   constructor (
@@ -81,6 +81,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private redirectService: RedirectService,
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
+    private hotkeysService: HotkeysService,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -95,16 +96,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     ) {
       this.hasAlreadyAcceptedPrivacyConcern = true
     }
-
-    this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
-        .subscribe(
-          data => {
-            this.otherVideos = data.videos
-            this.updateOtherVideosDisplayed()
-          },
-
-          err => console.error(err)
-        )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const uuid = routeParams[ 'uuid' ]
@@ -129,6 +120,24 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               .catch(err => this.handleError(err))
         })
     })
+
+    this.hotkeys = [
+      new Hotkey('L', (event: KeyboardEvent): boolean => {
+        this.setLike()
+        return false
+      }, undefined, 'Like the video'),
+      new Hotkey('D', (event: KeyboardEvent): boolean => {
+        this.setDislike()
+        return false
+      }, undefined, 'Dislike the video'),
+      new Hotkey('S', (event: KeyboardEvent): boolean => {
+        this.subscribeButton.subscribed ?
+          this.subscribeButton.unsubscribe() :
+          this.subscribeButton.subscribe()
+        return false
+      }, undefined, 'Subscribe to the account')
+    ]
+    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
   }
 
   ngOnDestroy () {
@@ -136,6 +145,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Unsubscribe subscriptions
     this.paramsSub.unsubscribe()
+
+    // Unbind hotkeys
+    if (this.isUserLoggedIn()) this.hotkeysService.remove(this.hotkeys)
   }
 
   setLike () {
@@ -204,7 +216,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showShareModal () {
-    this.videoShareModal.show()
+    const currentTime = this.player ? this.player.currentTime() : undefined
+
+    this.videoShareModal.show(currentTime)
   }
 
   showDownloadModal (event: Event) {
@@ -256,12 +270,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoUnblacklistable () {
     return this.video.isUnblacklistableBy(this.user)
-  }
-
-  getVideoPoster () {
-    if (!this.video) return ''
-
-    return this.video.previewUrl
   }
 
   getVideoTags () {
@@ -369,8 +377,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.completeDescriptionShown = false
     this.remoteServerDown = false
 
-    this.updateOtherVideosDisplayed()
-
     if (this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())) {
       const res = await this.confirmService.confirm(
         this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
@@ -476,12 +482,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video.buildLikeAndDislikePercents()
     this.setVideoLikesBarTooltipText()
-  }
-
-  private updateOtherVideosDisplayed () {
-    if (this.video && this.otherVideos && this.otherVideos.length > 0) {
-      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
-    }
   }
 
   private setOpenGraphTags () {

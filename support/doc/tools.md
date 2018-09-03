@@ -4,6 +4,7 @@
    - [import-videos.js](#import-videosjs)
    - [upload.js](#uploadjs)
  - [Server tools](#server-tools)
+   - [parse-log](#parse-log)
    - [create-transcoding-job.js](#create-transcoding-jobjs)
    - [create-import-video-file-job.js](#create-import-video-file-jobjs)
    - [prune-storage.js](#prune-storagejs)
@@ -84,6 +85,16 @@ $ node dist/server/tools/upload.js --help
 ## Server tools
 
 These scripts should be run on the server, in `peertube-latest` directory.
+
+### parse-log
+
+To parse PeerTube last log file:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run parse-log -- --level info
+```
+
+`--level` is optional and could be `info`/`warn`/`error`
 
 ### create-transcoding-job.js
 

@@ -1,12 +1,9 @@
 import * as program from 'commander'
-import { access, constants } from 'fs'
+import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
-import { promisify } from 'util'
 import { getClient, login } from '../tests/utils'
 import { uploadVideo } from '../tests/utils/index'
 import { VideoPrivacy } from '../../shared/models/videos'
-
-const accessPromise = promisify(access)
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -68,7 +65,7 @@ async function run () {
   const res2 = await login(program[ 'url' ], client, user)
   const accessToken = res2.body.access_token
 
-  await accessPromise(program[ 'file' ], constants.F_OK)
+  await access(program[ 'file' ], constants.F_OK)
 
   console.log('Uploading %s video...', program[ 'videoName' ])
 
@@ -82,8 +79,8 @@ async function run () {
     tags: program['tags'],
     commentsEnabled: program['commentsEnabled'],
     fixture: program['file'],
-    thumbnailfile: program['thumbnailPath'],
-    previewfile: program['previewPath'],
+    thumbnailfile: program['thumbnail'],
+    previewfile: program['preview'],
     waitTranscoding: true,
     privacy: program['privacy'],
     support: undefined

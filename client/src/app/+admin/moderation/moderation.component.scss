@@ -1,4 +1,24 @@
+@import 'variables';
+@import 'mixins';
+
 .form-sub-title {
   flex-grow: 0;
   margin-right: 30px;
+}
+
+.moderation-expanded-label {
+  font-weight: $font-semibold;
+  min-width: 200px;
+  display: inline-block;
+}
+
+.moderation-expanded-text {
+  display: inline-block;
+}
+
+.moderation-expanded {
+  word-wrap: break-word;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: unset !important;
 }

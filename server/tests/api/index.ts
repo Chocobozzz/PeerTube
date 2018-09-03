@@ -1,3 +1,4 @@
 // Order of the tests we want to execute
-import './index-fast'
-import './index-slow'
+import './index-1'
+import './index-2'
+import './index-3'

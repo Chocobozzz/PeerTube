@@ -24,10 +24,12 @@ import {
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserNSFWPolicyValid,
+  isUserEmailVerifiedValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserVideoQuotaDailyValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -92,6 +94,12 @@ export class UserModel extends Model<UserModel> {
   @Column(DataType.STRING(400))
   email: string
 
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean'))
+  @Column
+  emailVerified: boolean
+
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
   @Column(DataType.ENUM(values(NSFW_POLICY_TYPES)))
@@ -124,6 +132,11 @@ export class UserModel extends Model<UserModel> {
   @Is('UserVideoQuota', value => throwIfNotValid(value, isUserVideoQuotaValid, 'video quota'))
   @Column(DataType.BIGINT)
   videoQuota: number
+
+  @AllowNull(false)
+  @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
+  @Column(DataType.BIGINT)
+  videoQuotaDaily: number
 
   @CreatedAt
   createdAt: Date
@@ -167,8 +180,8 @@ export class UserModel extends Model<UserModel> {
           [
             Sequelize.literal(
               '(' +
-                'SELECT COALESCE(SUM("size"), 0) FROM ' +
-                '(' +
+                'SELECT COALESCE(SUM("size"), 0) ' +
+                'FROM (' +
                   'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
                   'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
                   'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
@@ -188,9 +201,6 @@ export class UserModel extends Model<UserModel> {
 
     return UserModel.findAndCountAll(query)
       .then(({ rows, count }) => {
-        console.log(rows[0])
-        console.log(rows[0]['videoQuotaUsed'])
-        console.log(rows[0].get('videoQuotaUsed'))
         return {
           data: rows,
           total: count
@@ -202,8 +212,6 @@ export class UserModel extends Model<UserModel> {
     const roles = Object.keys(USER_ROLE_LABELS)
       .map(k => parseInt(k, 10) as UserRole)
       .filter(role => hasUserRight(role, right))
-
-    console.log(roles)
 
     const query = {
       attribute: [ 'email' ],
@@ -267,23 +275,17 @@ export class UserModel extends Model<UserModel> {
 
   static getOriginalVideoFileTotalFromUser (user: UserModel) {
     // Don't use sequelize because we need to use a sub query
-    const query = 'SELECT SUM("size") AS "total" FROM ' +
-      '(SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      'WHERE "account"."userId" = $userId GROUP BY "video"."id") t'
+    const query = UserModel.generateUserQuotaBaseSQL()
 
-    const options = {
-      bind: { userId: user.id },
-      type: Sequelize.QueryTypes.SELECT
-    }
-    return UserModel.sequelize.query(query, options)
-      .then(([ { total } ]) => {
-        if (total === null) return 0
+    return UserModel.getTotalRawQuery(query, user.id)
+  }
 
-        return parseInt(total, 10)
-      })
+  // Returns cumulative size of all video files uploaded in the last 24 hours.
+  static getOriginalVideoFileTotalDailyFromUser (user: UserModel) {
+    // Don't use sequelize because we need to use a sub query
+    const query = UserModel.generateUserQuotaBaseSQL('"video"."createdAt" > now() - interval \'24 hours\'')
+
+    return UserModel.getTotalRawQuery(query, user.id)
   }
 
   static async getStats () {
@@ -304,22 +306,30 @@ export class UserModel extends Model<UserModel> {
 
   toFormattedJSON (): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
+    const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
 
     const json = {
       id: this.id,
       username: this.username,
       email: this.email,
+      emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
+      videoQuotaDaily: this.videoQuotaDaily,
       createdAt: this.createdAt,
       blocked: this.blocked,
       blockedReason: this.blockedReason,
       account: this.Account.toFormattedJSON(),
       videoChannels: [],
-      videoQuotaUsed: videoQuotaUsed !== undefined ? parseInt(videoQuotaUsed, 10) : undefined
+      videoQuotaUsed: videoQuotaUsed !== undefined
+            ? parseInt(videoQuotaUsed, 10)
+            : undefined,
+      videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
+            ? parseInt(videoQuotaUsedDaily, 10)
+            : undefined
     }
 
     if (Array.isArray(this.Account.VideoChannels) === true) {
@@ -336,13 +346,53 @@ export class UserModel extends Model<UserModel> {
     return json
   }
 
-  isAbleToUploadVideo (videoFile: { size: number }) {
-    if (this.videoQuota === -1) return Promise.resolve(true)
+  async isAbleToUploadVideo (videoFile: { size: number }) {
+    if (this.videoQuota === -1 && this.videoQuotaDaily === -1) return Promise.resolve(true)
 
-    return UserModel.getOriginalVideoFileTotalFromUser(this)
-      .then(totalBytes => {
-        return (videoFile.size + totalBytes) < this.videoQuota
-      })
+    const [ totalBytes, totalBytesDaily ] = await Promise.all([
+      UserModel.getOriginalVideoFileTotalFromUser(this),
+      UserModel.getOriginalVideoFileTotalDailyFromUser(this)
+    ])
+
+    const uploadedTotal = videoFile.size + totalBytes
+    const uploadedDaily = videoFile.size + totalBytesDaily
+    if (this.videoQuotaDaily === -1) {
+      return uploadedTotal < this.videoQuota
+    }
+    if (this.videoQuota === -1) {
+      return uploadedDaily < this.videoQuotaDaily
+    }
+
+    return (uploadedTotal < this.videoQuota) &&
+        (uploadedDaily < this.videoQuotaDaily)
+  }
+
+  private static generateUserQuotaBaseSQL (where?: string) {
+    const andWhere = where ? 'AND ' + where : ''
+
+    return 'SELECT SUM("size") AS "total" ' +
+      'FROM (' +
+        'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+        'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+        'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+        'WHERE "account"."userId" = $userId ' + andWhere +
+        'GROUP BY "video"."id"' +
+      ') t'
+  }
+
+  private static getTotalRawQuery (query: string, userId: number) {
+    const options = {
+      bind: { userId },
+      type: Sequelize.QueryTypes.SELECT
+    }
+
+    return UserModel.sequelize.query(query, options)
+                    .then(([ { total } ]) => {
+                      if (total === null) return 0
+
+                      return parseInt(total, 10)
+                    })
   }
 
   static autocomplete (search: string) {

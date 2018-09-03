@@ -1,0 +1,15 @@
+<span i18n *ngIf="subscribed === false" class="subscribe-button" [ngClass]="size" role="button" (click)="subscribe()">
+  <span>Subscribe</span>
+  <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
+    {{ videoChannel.followersCount | myNumberFormatter }}
+  </span>
+</span>
+
+<span *ngIf="subscribed === true" class="unsubscribe-button" [ngClass]="size" role="button" (click)="unsubscribe()">
+  <span class="subscribed" i18n>Subscribed</span>
+  <span class="unsubscribe" i18n>Unsubscribe</span>
+
+  <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
+    {{ videoChannel.followersCount | myNumberFormatter }}
+  </span>
+</span>

@@ -23,9 +23,8 @@ function isMobile () {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
-function buildVideoLink (time?: number) {
-  const baseEmbedPath = window.location.pathname.replace('/embed/', '/watch/')
-  const baseEmbedURL = window.location.origin + baseEmbedPath
+function buildVideoLink (time?: number, url?: string) {
+  if (!url) url = window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
 
   if (time) {
     const timeInt = Math.floor(time)
@@ -33,10 +32,10 @@ function buildVideoLink (time?: number) {
     const params = new URLSearchParams(window.location.search)
     params.set('start', secondsToTime(timeInt))
 
-    return baseEmbedURL + '?' + params.toString()
+    return url + '?' + params.toString()
   }
 
-  return baseEmbedURL
+  return url
 }
 
 function timeToInt (time: number | string) {

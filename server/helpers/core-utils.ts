@@ -6,8 +6,6 @@
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
 import { createHash, pseudoRandomBytes } from 'crypto'
-import { copyFile, readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
-import * as mkdirp from 'mkdirp'
 import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
 import * as rimraf from 'rimraf'
@@ -169,14 +167,6 @@ function promisify2WithVoid<T, U> (func: (arg1: T, arg2: U, cb: (err: any) => vo
   }
 }
 
-const copyFilePromise = promisify2WithVoid<string, string>(copyFile)
-const readFileBufferPromise = promisify1<string, Buffer>(readFile)
-const unlinkPromise = promisify1WithVoid<string>(unlink)
-const renamePromise = promisify2WithVoid<string, string>(rename)
-const writeFilePromise = promisify2WithVoid<string, any>(writeFile)
-const readdirPromise = promisify1<string, string[]>(readdir)
-const mkdirpPromise = promisify1<string, string>(mkdirp)
-// we cannot modify the Promise types, so we should make the promisify instance check mkdirp
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
@@ -184,8 +174,6 @@ const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
 const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
 const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
-const rimrafPromise = promisify1WithVoid<string>(rimraf)
-const statPromise = promisify1<string, Stats>(stat)
 
 // ---------------------------------------------------------------------------
 
@@ -203,20 +191,11 @@ export {
   promisify0,
   promisify1,
 
-  copyFilePromise,
-  readdirPromise,
-  readFileBufferPromise,
-  unlinkPromise,
-  renamePromise,
-  writeFilePromise,
-  mkdirpPromise,
   pseudoRandomBytesPromise,
   createPrivateKey,
   getPublicKey,
   bcryptComparePromise,
   bcryptGenSaltPromise,
   bcryptHashPromise,
-  createTorrentPromise,
-  rimrafPromise,
-  statPromise
+  createTorrentPromise
 }

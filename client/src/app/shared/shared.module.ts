@@ -38,7 +38,8 @@ import {
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
   UserValidatorsService,
-  VideoAbuseValidatorsService, VideoBlacklistValidatorsService,
+  VideoAbuseValidatorsService,
+  VideoBlacklistValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
   VideoValidatorsService,
@@ -52,6 +53,9 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
+import { SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
+import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
+import { OverviewService } from '@app/shared/overview'
 
 @NgModule({
   imports: [
@@ -61,11 +65,11 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     RouterModule,
     HttpClientModule,
 
-    NgbDropdownModule.forRoot(),
-    NgbModalModule.forRoot(),
-    NgbPopoverModule.forRoot(),
-    NgbTabsetModule.forRoot(),
-    NgbTooltipModule.forRoot(),
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTabsetModule,
+    NgbTooltipModule,
 
     PrimeSharedModule,
     NgPipesModule
@@ -87,7 +91,9 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     InfiniteScrollerDirective,
     HelpComponent,
     ReactiveFileComponent,
-    PeertubeCheckboxComponent
+    PeertubeCheckboxComponent,
+    SubscribeButtonComponent,
+    InstanceFeaturesTableComponent
   ],
 
   exports: [
@@ -120,6 +126,8 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
+    SubscribeButtonComponent,
+    InstanceFeaturesTableComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -140,6 +148,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoChannelService,
     VideoCaptionService,
     VideoImportService,
+    UserSubscriptionService,
 
     FormValidatorService,
     CustomConfigValidatorsService,
@@ -152,6 +161,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
     VideoBlacklistValidatorsService,
+    OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
 

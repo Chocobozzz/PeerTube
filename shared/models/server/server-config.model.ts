@@ -16,7 +16,8 @@ export interface ServerConfig {
 
   signup: {
     allowed: boolean,
-    allowedForCurrentIP: boolean
+    allowedForCurrentIP: boolean,
+    requiresEmailVerification: boolean
   }
 
   transcoding: {
@@ -66,5 +67,6 @@ export interface ServerConfig {
 
   user: {
     videoQuota: number
+    videoQuotaDaily: number
   }
 }

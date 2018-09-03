@@ -3,7 +3,9 @@
     Login
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}
+    <span *ngIf="error === 'User email is not verified.'"> <a i18n routerLink="/verify-account/ask-send-email">Request new verification email.</a></span>
+  </div>
 
   <form role="form" (ngSubmit)="login()" [formGroup]="form">
     <div class="form-group">

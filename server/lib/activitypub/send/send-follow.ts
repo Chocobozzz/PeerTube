@@ -9,6 +9,9 @@ function sendFollow (actorFollow: ActorFollowModel) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
 
+  // Same server as ours
+  if (!following.serverId) return
+
   logger.info('Creating job to send follow request to %s.', following.url)
 
   const url = getActorFollowActivityPubUrl(actorFollow)

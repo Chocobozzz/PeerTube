@@ -1,0 +1,23 @@
+<div class="video-channels" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()">
+  <div *ngFor="let videoChannel of videoChannels" class="video-channel">
+    <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
+      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+    </a>
+
+    <div class="video-channel-info">
+      <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" class="video-channel-names" i18n-title title="Go to the channel">
+        <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
+        <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
+      </a>
+
+      <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
+
+      <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
+        <span i18n>Created by {{ videoChannel.ownerBy }}</span>
+        <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
+      </a>
+    </div>
+
+    <my-subscribe-button [videoChannel]="videoChannel"></my-subscribe-button>
+  </div>
+</div>

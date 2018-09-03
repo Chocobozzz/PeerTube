@@ -166,7 +166,10 @@ app.use(function (err, req, res, next) {
     error = err.stack || err.message || err
   }
 
-  logger.error('Error in controller.', { err: error })
+  // Sequelize error
+  const sql = err.parent ? err.parent.sql : undefined
+
+  logger.error('Error in controller.', { err: error, sql })
   return res.status(err.status || 500).end()
 })
 

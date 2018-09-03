@@ -1,8 +1,8 @@
 import * as path from 'path'
-import { readdirPromise } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
+import { readdir } from 'fs-extra'
 
 async function migrate () {
   const tables = await sequelizeTypescript.getQueryInterface().showAllTables()
@@ -52,7 +52,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getMigrationScripts () {
-  const files = await readdirPromise(path.join(__dirname, 'migrations'))
+  const files = await readdir(path.join(__dirname, 'migrations'))
   const filesToMigrate: {
     version: string,
     script: string

@@ -84,6 +84,7 @@ p-table {
 
         color: #000;
         font-size: 11px;
+        top: 0;
 
         &.pi-sort-up {
           @extend .glyphicon-triangle-top;

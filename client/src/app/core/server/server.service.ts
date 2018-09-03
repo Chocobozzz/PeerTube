@@ -1,4 +1,4 @@
-import { map, share, switchMap, tap } from 'rxjs/operators'
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
@@ -40,7 +40,8 @@ export class ServerService {
     serverVersion: 'Unknown',
     signup: {
       allowed: false,
-      allowedForCurrentIP: false
+      allowedForCurrentIP: false,
+      requiresEmailVerification: false
     },
     transcoding: {
       enabledResolutions: []
@@ -67,7 +68,8 @@ export class ServerService {
       }
     },
     user: {
-      videoQuota: -1
+      videoQuota: -1,
+      videoQuotaDaily: -1
     },
     import: {
       videos: {
@@ -178,13 +180,13 @@ export class ServerService {
 
     // Default locale, nothing to translate
     if (isDefaultLocale(completeLocale)) {
-      this.localeObservable = of({}).pipe(share())
+      this.localeObservable = of({}).pipe(shareReplay())
       return
     }
 
     this.localeObservable = this.http
                                   .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
-                                  .pipe(share())
+                                  .pipe(shareReplay())
   }
 
   private saveConfigLocally (config: ServerConfig) {

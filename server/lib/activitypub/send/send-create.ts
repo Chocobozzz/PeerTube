@@ -33,6 +33,8 @@ async function sendCreateVideo (video: VideoModel, t: Transaction) {
 }
 
 async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel, t: Transaction) {
+  if (!video.VideoChannel.Account.Actor.serverId) return // Local
+
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
 
   logger.info('Creating job to send video abuse %s.', url)

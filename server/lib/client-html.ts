@@ -1,12 +1,13 @@
 import * as express from 'express'
 import * as Bluebird from 'bluebird'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CONFIG, EMBED_SIZE, CUSTOM_HTML_TAG_COMMENTS, STATIC_PATHS } from '../initializers'
+import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, STATIC_PATHS } from '../initializers'
 import { join } from 'path'
-import { escapeHTML, readFileBufferPromise } from '../helpers/core-utils'
+import { escapeHTML } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
 import * as validator from 'validator'
 import { VideoPrivacy } from '../../shared/models/videos'
+import { readFile } from 'fs-extra'
 
 export class ClientHtml {
 
@@ -20,7 +21,7 @@ export class ClientHtml {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
     if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
-    const buffer = await readFileBufferPromise(path)
+    const buffer = await readFile(path)
 
     let html = buffer.toString()
 

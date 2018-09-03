@@ -5,7 +5,7 @@ import { query } from 'express-validator/check'
 import { isNumberArray, isStringArray, isNSFWQueryValid } from '../../helpers/custom-validators/search'
 import { isBooleanValid, isDateValid, toArray } from '../../helpers/custom-validators/misc'
 
-const searchValidator = [
+const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
 
   query('startDate').optional().custom(isDateValid).withMessage('Should have a valid start date'),
@@ -15,7 +15,19 @@ const searchValidator = [
   query('durationMax').optional().isInt().withMessage('Should have a valid max duration'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking search query', { parameters: req.query })
+    logger.debug('Checking videos search query', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+const videoChannelsSearchValidator = [
+  query('search').not().isEmpty().withMessage('Should have a valid search'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking video channels search query', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return
 
@@ -61,5 +73,6 @@ const commonVideosFiltersValidator = [
 
 export {
   commonVideosFiltersValidator,
-  searchValidator
+  videoChannelsSearchValidator,
+  videosSearchValidator
 }

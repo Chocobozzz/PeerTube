@@ -10,6 +10,7 @@ function createUser (
   username: string,
   password: string,
   videoQuota = 1000000,
+  videoQuotaDaily = -1,
   role: UserRole = UserRole.USER,
   specialStatus = 200
 ) {
@@ -19,7 +20,8 @@ function createUser (
     password,
     role,
     email: username + '@example.com',
-    videoQuota
+    videoQuota,
+    videoQuotaDaily
   }
 
   return request(url)
@@ -202,6 +204,7 @@ function updateUser (options: {
   accessToken: string,
   email?: string,
   videoQuota?: number,
+  videoQuotaDaily?: number,
   role?: UserRole
 }) {
   const path = '/api/v1/users/' + options.userId
@@ -209,6 +212,7 @@ function updateUser (options: {
   const toSend = {}
   if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
   if (options.videoQuota !== undefined && options.videoQuota !== null) toSend['videoQuota'] = options.videoQuota
+  if (options.videoQuotaDaily !== undefined && options.videoQuotaDaily !== null) toSend['videoQuotaDaily'] = options.videoQuotaDaily
   if (options.role !== undefined && options.role !== null) toSend['role'] = options.role
 
   return makePutBodyRequest({
@@ -242,6 +246,28 @@ function resetPassword (url: string, userId: number, verificationString: string,
   })
 }
 
+function askSendVerifyEmail (url: string, email: string) {
+  const path = '/api/v1/users/ask-send-verify-email'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    fields: { email },
+    statusCodeExpected: 204
+  })
+}
+
+function verifyEmail (url: string, userId: number, verificationString: string, statusCodeExpected = 204) {
+  const path = '/api/v1/users/' + userId + '/verify-email'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    fields: { verificationString },
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -261,5 +287,7 @@ export {
   unblockUser,
   askResetPassword,
   resetPassword,
-  updateMyAvatar
+  updateMyAvatar,
+  askSendVerifyEmail,
+  verifyEmail
 }

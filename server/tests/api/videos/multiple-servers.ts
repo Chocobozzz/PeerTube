@@ -6,7 +6,6 @@ import { join } from 'path'
 import * as request from 'supertest'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-
 import {
   addVideoChannel,
   checkVideoFilesWereRemoved,
@@ -60,6 +59,7 @@ describe('Test multiple servers', function () {
 
     {
       const videoChannel = {
+        name: 'super_channel_name',
         displayName: 'my channel',
         description: 'super channel'
       }
@@ -128,7 +128,8 @@ describe('Test multiple servers', function () {
           privacy: VideoPrivacy.PUBLIC,
           commentsEnabled: true,
           channel: {
-            name: 'my channel',
+            displayName: 'my channel',
+            name: 'super_channel_name',
             description: 'super channel',
             isLocal
           },
@@ -201,7 +202,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default user1 channel',
+            displayName: 'Main user1 channel',
+            name: 'user1_channel',
             description: 'super channel',
             isLocal
           },
@@ -307,7 +309,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
@@ -339,7 +342,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
@@ -488,7 +492,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on owned servers', async function () {
-      this.timeout(15000)
+      this.timeout(30000)
 
       const tasks: Promise<any>[] = []
       await viewVideo(servers[2].url, localVideosServer3[0])
@@ -507,6 +511,9 @@ describe('Test multiple servers', function () {
 
       await waitJobs(servers)
 
+      // Wait the repeatable job
+      await wait(6000)
+
       for (const server of servers) {
         const res = await getVideosList(server.url)
 
@@ -520,7 +527,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on each servers', async function () {
-      this.timeout(15000)
+      this.timeout(30000)
 
       const tasks: Promise<any>[] = []
       tasks.push(viewVideo(servers[0].url, remoteVideosServer1[0]))
@@ -537,6 +544,9 @@ describe('Test multiple servers', function () {
       await Promise.all(tasks)
 
       await waitJobs(servers)
+
+      // Wait the repeatable job
+      await wait(8000)
 
       let baseVideos = null
 
@@ -647,7 +657,8 @@ describe('Test multiple servers', function () {
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },
@@ -967,7 +978,8 @@ describe('Test multiple servers', function () {
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
-            name: 'Default root channel',
+            displayName: 'Main root channel',
+            name: 'root_channel',
             description: '',
             isLocal
           },

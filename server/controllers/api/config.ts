@@ -3,13 +3,13 @@ import { omit } from 'lodash'
 import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
-import { unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView } from '../../helpers/audit-logger'
+import { remove, writeJSON } from 'fs-extra'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -43,7 +43,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
   const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
 
   const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-   .filter(key => CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
+   .filter(key => CONFIG.TRANSCODING.ENABLED === CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
    .map(r => parseInt(r, 10))
 
   const json: ServerConfig = {
@@ -60,7 +60,8 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     serverVersion: packageJSON.version,
     signup: {
       allowed,
-      allowedForCurrentIP
+      allowedForCurrentIP,
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     transcoding: {
       enabledResolutions
@@ -103,7 +104,8 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       }
     },
     user: {
-      videoQuota: CONFIG.USER.VIDEO_QUOTA
+      videoQuota: CONFIG.USER.VIDEO_QUOTA,
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     }
   }
 
@@ -130,7 +132,7 @@ async function getCustomConfig (req: express.Request, res: express.Response, nex
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
-  await unlinkPromise(CONFIG.CUSTOM_FILE)
+  await remove(CONFIG.CUSTOM_FILE)
 
   auditLogger.delete(
     res.locals.oauth.token.User.Account.Actor.getIdentifier(),
@@ -154,16 +156,26 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdate.cache.captions.size = parseInt('' + toUpdate.cache.captions.size, 10)
   toUpdate.signup.limit = parseInt('' + toUpdate.signup.limit, 10)
   toUpdate.user.videoQuota = parseInt('' + toUpdate.user.videoQuota, 10)
+  toUpdate.user.videoQuotaDaily = parseInt('' + toUpdate.user.videoQuotaDaily, 10)
   toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
 
   // camelCase to snake_case key
-  const toUpdateJSON = omit(toUpdate, 'user.videoQuota', 'instance.defaultClientRoute', 'instance.shortDescription', 'cache.videoCaptions')
+  const toUpdateJSON = omit(
+    toUpdate,
+    'user.videoQuota',
+    'instance.defaultClientRoute',
+    'instance.shortDescription',
+    'cache.videoCaptions',
+    'signup.requiresEmailVerification'
+  )
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
+  toUpdateJSON.user['video_quota_daily'] = toUpdate.user.videoQuotaDaily
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
+  toUpdateJSON.signup['requires_email_verification'] = toUpdate.signup.requiresEmailVerification
 
-  await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON, undefined, 2))
+  await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
   reloadConfig()
   ClientHtml.invalidCache()
@@ -217,13 +229,15 @@ function customConfig (): CustomConfig {
     },
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED,
-      limit: CONFIG.SIGNUP.LIMIT
+      limit: CONFIG.SIGNUP.LIMIT,
+      requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     admin: {
       email: CONFIG.ADMIN.EMAIL
     },
     user: {
-      videoQuota: CONFIG.USER.VIDEO_QUOTA
+      videoQuota: CONFIG.USER.VIDEO_QUOTA,
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,

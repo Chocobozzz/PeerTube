@@ -32,7 +32,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   ngOnInit () {
     const defaultValues = {
       role: UserRole.USER.toString(),
-      videoQuota: '-1'
+      videoQuota: '-1',
+      videoQuotaDaily: '-1'
     }
 
     this.buildForm({
@@ -40,7 +41,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       email: this.userValidatorsService.USER_EMAIL,
       password: this.userValidatorsService.USER_PASSWORD,
       role: this.userValidatorsService.USER_ROLE,
-      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY
     }, defaultValues)
   }
 

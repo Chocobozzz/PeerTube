@@ -12,7 +12,8 @@ import {
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserVideoQuotaDailyValid
 } from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
@@ -27,6 +28,7 @@ const usersAddValidator = [
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -112,6 +114,7 @@ const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -245,6 +248,48 @@ const usersResetPasswordValidator = [
   }
 ]
 
+const usersAskSendVerifyEmailValidator = [
+  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking askUsersSendVerifyEmail parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return
+    const exists = await checkUserEmailExist(req.body.email, res, false)
+    if (!exists) {
+      logger.debug('User with email %s does not exist (asking verify email).', req.body.email)
+      // Do not leak our emails
+      return res.status(204).end()
+    }
+
+    return next()
+  }
+]
+
+const usersVerifyEmailValidator = [
+  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersVerifyEmail parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    const user = res.locals.user as UserModel
+    const redisVerificationString = await Redis.Instance.getVerifyEmailLink(user.id)
+
+    if (redisVerificationString !== req.body.verificationString) {
+      return res
+        .status(403)
+        .send({ error: 'Invalid verification string.' })
+        .end()
+    }
+
+    return next()
+  }
+]
+
 const userAutocompleteValidator = [
   param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
 ]
@@ -265,6 +310,8 @@ export {
   usersGetValidator,
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
+  usersAskSendVerifyEmailValidator,
+  usersVerifyEmailValidator,
   userAutocompleteValidator
 }
 
@@ -291,7 +338,7 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   const actor = await ActorModel.loadLocalByName(username)
   if (actor) {
     res.status(409)
-       .send({ error: 'Another actor (account/channel) with this name already exists.' })
+       .send({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
        .end()
     return false
   }

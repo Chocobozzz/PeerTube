@@ -1,5 +1,5 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-import * as mkdirp from 'mkdirp'
+import { mkdirpSync } from 'fs-extra'
 import * as path from 'path'
 import * as winston from 'winston'
 import { CONFIG } from '../initializers'
@@ -7,7 +7,7 @@ import { CONFIG } from '../initializers'
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 // Create the directory if it does not exist
-mkdirp.sync(CONFIG.STORAGE.LOG_DIR)
+mkdirpSync(CONFIG.STORAGE.LOG_DIR)
 
 function loggerReplacer (key: string, value: any) {
   if (value instanceof Error) {
@@ -22,7 +22,13 @@ function loggerReplacer (key: string, value: any) {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  let additionalInfos = JSON.stringify(info.meta || info.err, loggerReplacer, 2)
+  const obj = {
+    meta: info.meta,
+    err: info.err,
+    sql: info.sql
+  }
+
+  let additionalInfos = JSON.stringify(obj, loggerReplacer, 2)
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 

@@ -1,13 +1,13 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
-import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
+import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
 import { logger } from '../../helpers/logger'
 import { ActorModel } from '../../models/activitypub/actor'
 import { areValidationErrors } from './utils'
 import { getHostWithPort } from '../../helpers/express-utils'
 
 const webfingerValidator = [
-  query('resource').custom(isWebfingerResourceValid).withMessage('Should have a valid webfinger resource'),
+  query('resource').custom(isWebfingerLocalResourceValid).withMessage('Should have a valid webfinger resource'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking webfinger parameters', { parameters: req.query })

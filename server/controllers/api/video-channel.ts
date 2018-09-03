@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { getFormattedObjects } from '../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -10,17 +10,16 @@ import {
   setDefaultPagination,
   setDefaultSort,
   videoChannelsAddValidator,
-  videoChannelsGetValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../middlewares'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { videosSortValidator } from '../../middlewares/validators'
+import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
@@ -50,7 +49,7 @@ videoChannelRouter.post('/',
   asyncRetryTransactionMiddleware(addVideoChannel)
 )
 
-videoChannelRouter.post('/:id/avatar/pick',
+videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
   // Check the rights
@@ -59,25 +58,25 @@ videoChannelRouter.post('/:id/avatar/pick',
   asyncMiddleware(updateVideoChannelAvatar)
 )
 
-videoChannelRouter.put('/:id',
+videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsUpdateValidator),
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
-videoChannelRouter.delete('/:id',
+videoChannelRouter.delete('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
-videoChannelRouter.get('/:id',
-  asyncMiddleware(videoChannelsGetValidator),
+videoChannelRouter.get('/:nameWithHost',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   asyncMiddleware(getVideoChannel)
 )
 
-videoChannelRouter.get('/:id/videos',
-  asyncMiddleware(videoChannelsGetValidator),
+videoChannelRouter.get('/:nameWithHost/videos',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
@@ -96,7 +95,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoChannelModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const serverActor = await getServerActor()
+  const resultList = await VideoChannelModel.listForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -210,11 +210,14 @@ async function getVideoChannel (req: express.Request, res: express.Response, nex
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
+  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
+    actorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    includeLocalVideos: true,
     categoryOneOf: req.query.categoryOneOf,
     licenceOneOf: req.query.licenceOneOf,
     languageOneOf: req.query.languageOneOf,
