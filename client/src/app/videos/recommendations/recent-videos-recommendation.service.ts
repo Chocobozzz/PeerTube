@@ -34,13 +34,17 @@ export class RecentVideosRecommendationService implements RecommendationService 
 
   private fetchPage (page: number, recommendation: RecommendationInfo): Observable<Video[]> {
     let pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
-    if (recommendation.tags) {
-      if (recommendation.tags.length == 0) {
-        return this.videos.getVideos(pagination, '-createdAt')
-          .pipe(
-            map(v => v.videos)
-          )
-      }
+    if (!recommendation.tags) {
+      return this.videos.getVideos(pagination, '-createdAt')
+        .pipe(
+          map(v => v.videos)
+        )
+    }
+    if (recommendation.tags.length === 0) {
+      return this.videos.getVideos(pagination, '-createdAt')
+        .pipe(
+          map(v => v.videos)
+        )
     }
     return this.searchService.searchVideos('',
       pagination,
