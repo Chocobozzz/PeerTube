@@ -7,6 +7,9 @@ import * as Sequelize from 'sequelize'
   indexes: [
     {
       fields: [ 'videoId' ]
+    },
+    {
+      fields: [ 'startDate' ]
     }
   ]
 })
