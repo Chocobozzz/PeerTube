@@ -10,13 +10,19 @@ import { getUpdateActivityPubUrl } from '../url'
 import { broadcastToFollowers } from './utils'
 import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
+import { videoFeedsValidator } from '../../../middlewares/validators'
+import { VideoCaptionModel } from '../../../models/video/video-caption'
 
-async function sendUpdateVideo (video: VideoModel, t: Transaction) {
+async function sendUpdateVideo (video: VideoModel, t: Transaction, overrodeByActor?: ActorModel) {
   logger.info('Creating job to update video %s.', video.url)
 
-  const byActor = video.VideoChannel.Account.Actor
+  const byActor = overrodeByActor ? overrodeByActor : video.VideoChannel.Account.Actor
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
+
+  // Needed to build the AP object
+  if (!video.VideoCaptions) video.VideoCaptions = await video.$get('VideoCaptions') as VideoCaptionModel[]
+
   const videoObject = video.toActivityPubObject()
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
 

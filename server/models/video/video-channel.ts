@@ -296,6 +296,12 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
+  static loadByIdAndPopulateAccount (id: number) {
+    return VideoChannelModel.unscoped()
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findById(id)
+  }
+
   static loadByIdAndAccount (id: number, accountId: number) {
     const query = {
       where: {
@@ -304,13 +310,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       }
     }
 
-    return VideoChannelModel
+    return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
 
   static loadAndPopulateAccount (id: number) {
-    return VideoChannelModel
+    return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findById(id)
   }
@@ -365,7 +371,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       ]
     }
 
-    return VideoChannelModel
+    return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
@@ -390,7 +396,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       ]
     }
 
-    return VideoChannelModel
+    return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
   }
@@ -402,7 +408,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       ]
     }
 
-    return VideoChannelModel
+    return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
       .findById(id, options)
   }

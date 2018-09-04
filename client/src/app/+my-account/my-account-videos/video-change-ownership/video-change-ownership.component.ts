@@ -53,7 +53,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     const query = event.query
     this.userService.autocomplete(query)
       .subscribe(
-        (usernames) => {
+        usernames => {
           this.usernamePropositions = usernames
         },
 
@@ -67,7 +67,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     this.videoOwnershipService
       .changeOwnership(this.video.id, username)
       .subscribe(
-        () => this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership changed.')),
+        () => this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership change request sent.')),
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )

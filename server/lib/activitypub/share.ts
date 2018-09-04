@@ -22,6 +22,8 @@ async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) 
 }
 
 async function changeVideoChannelShare (video: VideoModel, oldVideoChannel: VideoChannelModel, t: Transaction) {
+  logger.info('Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name)
+
   await undoShareByVideoChannel(video, oldVideoChannel, t)
 
   await shareByVideoChannel(video, t)

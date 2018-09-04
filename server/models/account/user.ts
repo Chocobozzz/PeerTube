@@ -23,13 +23,13 @@ import {
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
-  isUserNSFWPolicyValid,
   isUserEmailVerifiedValid,
+  isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid,
-  isUserVideoQuotaDailyValid
+  isUserVideoQuotaDailyValid,
+  isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -39,7 +39,6 @@ import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
 import { NSFW_POLICY_TYPES } from '../../initializers'
-import { VideoFileModel } from '../video/video-file'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -296,6 +295,20 @@ export class UserModel extends Model<UserModel> {
     }
   }
 
+  static autoComplete (search: string) {
+    const query = {
+      where: {
+        username: {
+          [ Sequelize.Op.like ]: `%${search}%`
+        }
+      },
+      limit: 10
+    }
+
+    return UserModel.findAll(query)
+                    .then(u => u.map(u => u.username))
+  }
+
   hasRight (right: UserRight) {
     return hasUserRight(this.role, right)
   }
@@ -393,16 +406,5 @@ export class UserModel extends Model<UserModel> {
 
                       return parseInt(total, 10)
                     })
-  }
-
-  static autocomplete (search: string) {
-    return UserModel.findAll({
-      where: {
-        username: {
-          [Sequelize.Op.like]: `%${search}%`
-        }
-      }
-    })
-      .then(u => u.map(u => u.username))
   }
 }

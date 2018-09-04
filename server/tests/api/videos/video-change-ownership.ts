@@ -5,7 +5,7 @@ import 'mocha'
 import {
   acceptChangeOwnership,
   changeVideoOwnership,
-  createUser,
+  createUser, doubleFollow, flushAndRunMultipleServers,
   flushTests,
   getMyUserInformation,
   getVideoChangeOwnershipList,
@@ -16,15 +16,17 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin
+  userLogin,
+  getVideo
 } from '../../utils'
 import { waitJobs } from '../../utils/server/jobs'
 import { User } from '../../../../shared/models/users'
+import { VideoDetails } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
 describe('Test video change ownership - nominal', function () {
-  let server: ServerInfo = undefined
+  let servers: ServerInfo[] = []
   const firstUser = {
     username: 'first',
     password: 'My great password'
@@ -40,43 +42,44 @@ describe('Test video change ownership - nominal', function () {
   before(async function () {
     this.timeout(50000)
 
-    // Run one server
-    await flushTests()
-    server = await runServer(1)
-    await setAccessTokensToServers([server])
+    servers = await flushAndRunMultipleServers(2)
+    await setAccessTokensToServers(servers)
 
     const videoQuota = 42000000
-    await createUser(server.url, server.accessToken, firstUser.username, firstUser.password, videoQuota)
-    await createUser(server.url, server.accessToken, secondUser.username, secondUser.password, videoQuota)
+    await createUser(servers[0].url, servers[0].accessToken, firstUser.username, firstUser.password, videoQuota)
+    await createUser(servers[0].url, servers[0].accessToken, secondUser.username, secondUser.password, videoQuota)
 
-    firstUserAccessToken = await userLogin(server, firstUser)
-    secondUserAccessToken = await userLogin(server, secondUser)
+    firstUserAccessToken = await userLogin(servers[0], firstUser)
+    secondUserAccessToken = await userLogin(servers[0], secondUser)
 
-    // Upload some videos on the server
-    const video1Attributes = {
+    const videoAttributes = {
       name: 'my super name',
       description: 'my super description'
     }
-    await uploadVideo(server.url, firstUserAccessToken, video1Attributes)
+    await uploadVideo(servers[0].url, firstUserAccessToken, videoAttributes)
 
-    await waitJobs(server)
+    await waitJobs(servers)
 
-    const res = await getVideosList(server.url)
+    const res = await getVideosList(servers[0].url)
     const videos = res.body.data
 
     expect(videos.length).to.equal(1)
 
-    server.video = videos.find(video => video.name === 'my super name')
+    const video = videos.find(video => video.name === 'my super name')
+    expect(video.channel.name).to.equal('first_channel')
+    servers[0].video = video
+
+    await doubleFollow(servers[0], servers[1])
   })
 
   it('Should not have video change ownership', async function () {
-    const resFirstUser = await getVideoChangeOwnershipList(server.url, firstUserAccessToken)
+    const resFirstUser = await getVideoChangeOwnershipList(servers[0].url, firstUserAccessToken)
 
     expect(resFirstUser.body.total).to.equal(0)
     expect(resFirstUser.body.data).to.be.an('array')
     expect(resFirstUser.body.data.length).to.equal(0)
 
-    const resSecondUser = await getVideoChangeOwnershipList(server.url, secondUserAccessToken)
+    const resSecondUser = await getVideoChangeOwnershipList(servers[0].url, secondUserAccessToken)
 
     expect(resSecondUser.body.total).to.equal(0)
     expect(resSecondUser.body.data).to.be.an('array')
@@ -86,17 +89,17 @@ describe('Test video change ownership - nominal', function () {
   it('Should send a request to change ownership of a video', async function () {
     this.timeout(15000)
 
-    await changeVideoOwnership(server.url, firstUserAccessToken, server.video.id, secondUser.username)
+    await changeVideoOwnership(servers[0].url, firstUserAccessToken, servers[0].video.id, secondUser.username)
   })
 
   it('Should only return a request to change ownership for the second user', async function () {
-    const resFirstUser = await getVideoChangeOwnershipList(server.url, firstUserAccessToken)
+    const resFirstUser = await getVideoChangeOwnershipList(servers[0].url, firstUserAccessToken)
 
     expect(resFirstUser.body.total).to.equal(0)
     expect(resFirstUser.body.data).to.be.an('array')
     expect(resFirstUser.body.data.length).to.equal(0)
 
-    const resSecondUser = await getVideoChangeOwnershipList(server.url, secondUserAccessToken)
+    const resSecondUser = await getVideoChangeOwnershipList(servers[0].url, secondUserAccessToken)
 
     expect(resSecondUser.body.total).to.equal(1)
     expect(resSecondUser.body.data).to.be.an('array')
@@ -108,13 +111,13 @@ describe('Test video change ownership - nominal', function () {
   it('Should accept the same change ownership request without crashing', async function () {
     this.timeout(10000)
 
-    await changeVideoOwnership(server.url, firstUserAccessToken, server.video.id, secondUser.username)
+    await changeVideoOwnership(servers[0].url, firstUserAccessToken, servers[0].video.id, secondUser.username)
   })
 
   it('Should not create multiple change ownership requests while one is waiting', async function () {
     this.timeout(10000)
 
-    const resSecondUser = await getVideoChangeOwnershipList(server.url, secondUserAccessToken)
+    const resSecondUser = await getVideoChangeOwnershipList(servers[0].url, secondUserAccessToken)
 
     expect(resSecondUser.body.total).to.equal(1)
     expect(resSecondUser.body.data).to.be.an('array')
@@ -124,29 +127,29 @@ describe('Test video change ownership - nominal', function () {
   it('Should not be possible to refuse the change of ownership from first user', async function () {
     this.timeout(10000)
 
-    await refuseChangeOwnership(server.url, firstUserAccessToken, lastRequestChangeOwnershipId, 403)
+    await refuseChangeOwnership(servers[0].url, firstUserAccessToken, lastRequestChangeOwnershipId, 403)
   })
 
   it('Should be possible to refuse the change of ownership from second user', async function () {
     this.timeout(10000)
 
-    await refuseChangeOwnership(server.url, secondUserAccessToken, lastRequestChangeOwnershipId)
+    await refuseChangeOwnership(servers[0].url, secondUserAccessToken, lastRequestChangeOwnershipId)
   })
 
   it('Should send a new request to change ownership of a video', async function () {
     this.timeout(15000)
 
-    await changeVideoOwnership(server.url, firstUserAccessToken, server.video.id, secondUser.username)
+    await changeVideoOwnership(servers[0].url, firstUserAccessToken, servers[0].video.id, secondUser.username)
   })
 
   it('Should return two requests to change ownership for the second user', async function () {
-    const resFirstUser = await getVideoChangeOwnershipList(server.url, firstUserAccessToken)
+    const resFirstUser = await getVideoChangeOwnershipList(servers[0].url, firstUserAccessToken)
 
     expect(resFirstUser.body.total).to.equal(0)
     expect(resFirstUser.body.data).to.be.an('array')
     expect(resFirstUser.body.data.length).to.equal(0)
 
-    const resSecondUser = await getVideoChangeOwnershipList(server.url, secondUserAccessToken)
+    const resSecondUser = await getVideoChangeOwnershipList(servers[0].url, secondUserAccessToken)
 
     expect(resSecondUser.body.total).to.equal(2)
     expect(resSecondUser.body.data).to.be.an('array')
@@ -158,23 +161,37 @@ describe('Test video change ownership - nominal', function () {
   it('Should not be possible to accept the change of ownership from first user', async function () {
     this.timeout(10000)
 
-    const secondUserInformationResponse = await getMyUserInformation(server.url, secondUserAccessToken)
+    const secondUserInformationResponse = await getMyUserInformation(servers[0].url, secondUserAccessToken)
     const secondUserInformation: User = secondUserInformationResponse.body
     const channelId = secondUserInformation.videoChannels[0].id
-    await acceptChangeOwnership(server.url, firstUserAccessToken, lastRequestChangeOwnershipId, channelId, 403)
+    await acceptChangeOwnership(servers[0].url, firstUserAccessToken, lastRequestChangeOwnershipId, channelId, 403)
   })
 
   it('Should be possible to accept the change of ownership from second user', async function () {
     this.timeout(10000)
 
-    const secondUserInformationResponse = await getMyUserInformation(server.url, secondUserAccessToken)
+    const secondUserInformationResponse = await getMyUserInformation(servers[0].url, secondUserAccessToken)
     const secondUserInformation: User = secondUserInformationResponse.body
     const channelId = secondUserInformation.videoChannels[0].id
-    await acceptChangeOwnership(server.url, secondUserAccessToken, lastRequestChangeOwnershipId, channelId)
+    await acceptChangeOwnership(servers[0].url, secondUserAccessToken, lastRequestChangeOwnershipId, channelId)
+
+    await waitJobs(servers)
+  })
+
+  it('Should have video channel updated', async function () {
+    for (const server of servers) {
+      const res = await getVideo(server.url, servers[0].video.uuid)
+
+      const video: VideoDetails = res.body
+
+      expect(video.name).to.equal('my super name')
+      expect(video.channel.displayName).to.equal('Main second channel')
+      expect(video.channel.name).to.equal('second_channel')
+    }
   })
 
   after(async function () {
-    killallServers([server])
+    killallServers(servers)
   })
 })
 

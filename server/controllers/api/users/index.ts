@@ -229,7 +229,7 @@ function getUser (req: express.Request, res: express.Response, next: express.Nex
 }
 
 async function autocompleteUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await UserModel.autocomplete(req.query.search as string)
+  const resultList = await UserModel.autoComplete(req.query.search as string)
 
   return res.json(resultList)
 }

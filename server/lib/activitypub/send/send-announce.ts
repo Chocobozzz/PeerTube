@@ -20,7 +20,10 @@ async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareMod
 
   logger.info('Creating job to send announce %s.', videoShare.url)
 
-  return broadcastToFollowers(data, byActor, [ byActor ], t)
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
+  const followersException = [ byActor ]
+
+  return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
 function announceActivityData (url: string, byActor: ActorModel, object: string, audience?: ActivityAudience): ActivityAnnounce {

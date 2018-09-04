@@ -39,7 +39,9 @@ enum ScopeNames {
       {
         model: () => VideoModel,
         required: true,
-        include: [{ model: () => VideoFileModel }]
+        include: [
+          { model: () => VideoFileModel }
+        ]
       }
     ]
   }
@@ -94,15 +96,17 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
   Video: VideoModel
 
   static listForApi (nextOwnerId: number, start: number, count: number, sort: string) {
-    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findAndCountAll({
+    const query = {
       offset: start,
       limit: count,
       order: getSort(sort),
       where: {
         nextOwnerAccountId: nextOwnerId
       }
-    })
-      .then(({ rows, count }) => ({ total: count, data: rows }))
+    }
+
+    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findAndCountAll(query)
+                                    .then(({ rows, count }) => ({ total: count, data: rows }))
   }
 
   static load (id: number) {

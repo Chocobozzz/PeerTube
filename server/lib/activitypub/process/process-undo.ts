@@ -104,17 +104,19 @@ function processUndoFollow (actorUrl: string, followActivity: ActivityFollow) {
 
 function processUndoAnnounce (actorUrl: string, announceActivity: ActivityAnnounce) {
   return sequelizeTypescript.transaction(async t => {
-    const byAccount = await AccountModel.loadByUrl(actorUrl, t)
-    if (!byAccount) throw new Error('Unknown account ' + actorUrl)
+    const byActor = await ActorModel.loadByUrl(actorUrl, t)
+    if (!byActor) throw new Error('Unknown actor ' + actorUrl)
 
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
-    if (!share) throw new Error(`'Unknown video share ${announceActivity.id}.`)
+    if (!share) throw new Error(`Unknown video share ${announceActivity.id}.`)
+
+    if (share.actorId !== byActor.id) throw new Error(`${share.url} is not shared by ${byActor.url}.`)
 
     await share.destroy({ transaction: t })
 
     if (share.Video.isOwned()) {
       // Don't resend the activity to the sender
-      const exceptions = [ byAccount.Actor ]
+      const exceptions = [ byActor ]
 
       await forwardVideoRelatedActivity(announceActivity, t, exceptions, share.Video)
     }
