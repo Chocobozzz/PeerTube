@@ -18,8 +18,8 @@ export class SearchFiltersComponent implements OnInit {
 
   @Output() filtered = new EventEmitter<AdvancedSearch>()
 
-  videoCategories: VideoConstant<string>[] = []
-  videoLicences: VideoConstant<string>[] = []
+  videoCategories: VideoConstant<number>[] = []
+  videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoConstant<string>[] = []
 
   publishedDateRanges: { id: string, label: string }[] = []

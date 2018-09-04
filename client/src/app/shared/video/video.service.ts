@@ -4,7 +4,15 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } from '../../../../../shared'
 import { ResultList } from '../../../../../shared/models/result-list.model'
-import { UserVideoRate, UserVideoRateUpdate, VideoFilter, VideoRateType, VideoUpdate } from '../../../../../shared/models/videos'
+import {
+  UserVideoRate,
+  UserVideoRateUpdate,
+  VideoConstant,
+  VideoFilter,
+  VideoPrivacy,
+  VideoRateType,
+  VideoUpdate
+} from '../../../../../shared/models/videos'
 import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
 import { environment } from '../../../environments/environment'
 import { ComponentPagination } from '../rest/component-pagination.model'
@@ -22,6 +30,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export interface VideosProvider {
   getVideos (
@@ -41,7 +50,8 @@ export class VideoService implements VideosProvider {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private i18n: I18n
   ) {}
 
   getVideoViewUrl (uuid: string) {
@@ -298,6 +308,21 @@ export class VideoService implements VideosProvider {
                    return { videos, totalVideos }
                  })
                )
+  }
+
+  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
+    const newPrivacies = privacies.slice()
+
+    const privatePrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PRIVATE)
+    if (privatePrivacy) privatePrivacy.label = this.i18n('Only I can see this video')
+
+    const unlistedPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.UNLISTED)
+    if (unlistedPrivacy) unlistedPrivacy.label = this.i18n('Only people with the private link can see this video')
+
+    const publicPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PUBLIC)
+    if (publicPrivacy) publicPrivacy.label = this.i18n('Anyone can see this video')
+
+    return privacies
   }
 
   private setVideoRate (id: number, rateType: VideoRateType) {

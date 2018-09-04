@@ -6,7 +6,7 @@ import { Observable, of, ReplaySubject } from 'rxjs'
 import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
-import { VideoConstant } from '../../../../../shared/models/videos'
+import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { sortBy } from '@app/shared/misc/utils'
@@ -82,10 +82,10 @@ export class ServerService {
       }
     }
   }
-  private videoCategories: Array<VideoConstant<string>> = []
-  private videoLicences: Array<VideoConstant<string>> = []
+  private videoCategories: Array<VideoConstant<number>> = []
+  private videoLicences: Array<VideoConstant<number>> = []
   private videoLanguages: Array<VideoConstant<string>> = []
-  private videoPrivacies: Array<VideoConstant<string>> = []
+  private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
 
   constructor (
     private http: HttpClient,
@@ -147,7 +147,7 @@ export class ServerService {
 
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    hashToPopulate: VideoConstant<string>[],
+    hashToPopulate: VideoConstant<string | number>[],
     notifier: ReplaySubject<boolean>,
     sort = false
   ) {
@@ -164,7 +164,7 @@ export class ServerService {
                   const label = data[ dataKey ]
 
                   hashToPopulate.push({
-                    id: dataKey,
+                    id: attributeName === 'languages' ? dataKey : parseInt(dataKey, 10),
                     label: peertubeTranslate(label, translations)
                   })
                 })
