@@ -13,7 +13,7 @@
 
 You need at least 512MB RAM to run the script.
 Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
-You need to follow all the following steps even if you are on a PeerTube server.
+You need to follow all the following steps even if you are on a PeerTube server (including cloning the git repository in a different directory than your production installation).
 
 ### Dependencies
 
