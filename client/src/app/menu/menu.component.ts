@@ -3,6 +3,7 @@ import { UserRight } from '../../../../shared/models/users/user-right.enum'
 import { AuthService, AuthStatus, RedirectService, ServerService } from '../core'
 import { User } from '../shared/users/user.model'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
+import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 
 @Component({
   selector: 'my-menu',
@@ -15,6 +16,7 @@ export class MenuComponent implements OnInit {
   user: User
   isLoggedIn: boolean
   userHasAdminAccess = false
+  hotkeys: Hotkey[]
 
   private routesPerRight = {
     [UserRight.MANAGE_USERS]: '/admin/users',
@@ -28,7 +30,8 @@ export class MenuComponent implements OnInit {
   constructor (
     private authService: AuthService,
     private serverService: ServerService,
-    private redirectService: RedirectService
+    private redirectService: RedirectService,
+    private hotkeysService: HotkeysService
   ) {}
 
   ngOnInit () {
@@ -60,6 +63,14 @@ export class MenuComponent implements OnInit {
     this.previousTheme['submenuColor'] = 'rgb(32,32,32)'
     this.previousTheme['inputColor'] = 'gray'
     this.previousTheme['inputPlaceholderColor'] = '#fff'
+
+    this.hotkeys = [
+      new Hotkey('T', (event: KeyboardEvent): boolean => {
+        this.toggleDarkTheme()
+        return false
+      }, undefined, 'Toggle Dark theme')
+    ]
+    this.hotkeysService.add(this.hotkeys)
   }
 
   isRegistrationAllowed () {
