@@ -14,8 +14,12 @@ function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
 
   if (res.locals.oauth) {
     const user: User = res.locals.oauth.token.User
+
     // User does not want NSFW videos
-    if (user && user.nsfwPolicy === 'do_not_list') return false
+    if (user.nsfwPolicy === 'do_not_list') return false
+
+    // Both
+    return undefined
   }
 
   if (CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list') return false

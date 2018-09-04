@@ -148,6 +148,9 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should display NSFW videos with blur user NSFW policy', async function () {
+      customConfig.instance.defaultNSFWPolicy = 'do_not_list'
+      await updateCustomConfig(server.url, server.accessToken, customConfig)
+
       for (const res of await getVideosFunctions(userAccessToken)) {
         expect(res.body.total).to.equal(2)
 
