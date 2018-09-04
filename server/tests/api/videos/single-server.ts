@@ -339,6 +339,14 @@ describe('Test a single server', function () {
     videoId = videos[3].uuid
   })
 
+  it('Should list and sort by trending in descending order', async function () {
+    const res = await getVideosListPagination(server.url, 0, 2, '-trending')
+
+    const videos = res.body.data
+    expect(res.body.total).to.equal(6)
+    expect(videos.length).to.equal(2)
+  })
+
   it('Should update a video', async function () {
     const attributes = {
       name: 'my super video updated',
