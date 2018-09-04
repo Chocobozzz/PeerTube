@@ -7,6 +7,10 @@
   &:first-child {
     padding-top: 30px;
   }
+
+  my-video-miniature {
+    text-align: left;
+  }
 }
 
 .section-title {
@@ -32,5 +36,11 @@
 
       margin-right: 10px;
     }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .section {
+    @include video-miniature-small-screen;
   }
 }
