@@ -22,9 +22,10 @@ function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
     youtubeDL.getInfo(url, options, (err, info) => {
       if (err) return rej(err)
 
-      const obj = normalizeObject(info)
+      const obj = buildVideoInfo(normalizeObject(info))
+      if (obj.name && obj.name.length < CONSTRAINTS_FIELDS.VIDEOS.NAME.min) obj.name += ' video'
 
-      return res(buildVideoInfo(obj))
+      return res(obj)
     })
   })
 }
