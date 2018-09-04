@@ -12,6 +12,7 @@ import { UserValidatorsService } from '@app/shared/forms/form-validators/user-va
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string = null
+  unsendable = true // default to true to not have to not the if in change password
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -30,18 +31,31 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     })
   }
 
-  changePassword () {
-    const newPassword = this.form.value['new-password']
-    const newConfirmedPassword = this.form.value['new-confirmed-password']
+  validateNewPassword () {
+    if (this.form.value['new-password'] && this.form.value['new-confirmed-password']) {
+      if (this.form.value['new-password'] === this.form.value['new-confirmed-password']) {
+        this.error = null
+        this.unsendable = false
+        return
+      }
+    }
+    this.unsendable = true
+  }
 
-    this.error = null
-
-    if (newPassword !== newConfirmedPassword) {
+  printAnError () {
+    console.log(this.unsendable)
+    this.validateNewPassword()
+    if (this.unsendable) {
       this.error = this.i18n('The new password and the confirmed password do not correspond.')
+    }
+  }
+
+  changePassword () {
+    if (this.unsendable) {
       return
     }
 
-    this.userService.changePassword(newPassword).subscribe(
+    this.userService.changePassword(this.form.value['new-password']).subscribe(
       () => this.notificationsService.success(this.i18n('Success'), this.i18n('Password updated.')),
 
       err => this.error = err.message
