@@ -21,7 +21,7 @@
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
     "webdriver-manager": "webdriver-manager",
     "ngx-extractor": "ngx-extractor",
-    "test": "jest"
+    "test": "jest --no-cache"
   },
   "license": "GPLv3",
   "typings": "*.d.ts",
@@ -31,13 +31,23 @@
     "simple-get": "^2.8.1"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "<rootDir>/src/tsconfig.spec.json"
+      },
+      "__TRANSFORM_HTML__": true
+    },
     "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+      "^.+\\.(ts|js|html)$": "<rootDir>/node_modules/jest-preset-angular/preprocessor.js"
     },
     "moduleNameMapper": {
-      "^@app/(.*)": "<rootDir>/src/app/$1"
+      "^@app/(.*)": "<rootDir>/src/app/$1",
+      "environments/(.*)": "<rootDir>/src/environments/$1"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testMatch": [
+      "**/__tests__/**/*.+(ts|js)?(x)",
+      "**/+(*.)+(spec|test).+(ts|js)?(x)"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -45,7 +55,12 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!lodash-es/)"
+    ],
+    "preset": "jest-preset-angular",
+    "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.7.5",
@@ -99,6 +114,7 @@
     "jasmine-core": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
     "jest": "^23.5.0",
+    "jest-preset-angular": "^6.0.0",
     "jschannel": "^1.0.2",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",

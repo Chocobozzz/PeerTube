@@ -14,7 +14,8 @@
             </div>
 
             <div class="form-group">
-              <label i18n class="label-tags">Tags</label> <span i18n>(press Enter to add)</span>
+              <label i18n class="label-tags">Tags</label>
+              <my-help i18n-preHtml preHtml="Tags could be used to suggest relevant recommendations.</br>Press Enter to add a new tag."></my-help>
               <tag-input
                 [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
                 formControlName="tags" maxItems="5" modelAsStrings="true"

@@ -200,8 +200,7 @@
       <my-video-comments [video]="video" [user]="user"></my-video-comments>
     </div>
     <my-recommended-videos class="col-12 col-lg-3"
-                           [inputVideo]="video" [user]="user"></my-recommended-videos>
-    </div>
+      [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }" [user]="user"></my-recommended-videos>
   </div>
 
   <div class="privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">

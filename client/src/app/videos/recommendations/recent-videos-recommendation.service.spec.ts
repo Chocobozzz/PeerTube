@@ -21,7 +21,7 @@ describe('"Recent Videos" Recommender', () => {
         { uuid: 'uuid2' }
       ]
       getVideosMock.mockReturnValueOnce(of({ videos: vids }))
-      const result = await service.getRecommendations('uuid1').toPromise()
+      const result = await service.getRecommendations({ uuid: 'uuid1' }).toPromise()
       const uuids = result.map(v => v.uuid)
       expect(uuids).toEqual(['uuid2'])
       done()
@@ -36,7 +36,7 @@ describe('"Recent Videos" Recommender', () => {
         { uuid: 'uuid7' }
       ]
       getVideosMock.mockReturnValueOnce(of({ videos: vids }))
-      const result = await service.getRecommendations('uuid1').toPromise()
+      const result = await service.getRecommendations({ uuid: 'uuid1' }).toPromise()
       expect(result.length).toEqual(5)
       done()
     })
@@ -51,12 +51,12 @@ describe('"Recent Videos" Recommender', () => {
       ]
       getVideosMock
         .mockReturnValueOnce(of({ videos: vids }))
-      const result = await service.getRecommendations('uuid1').toPromise()
+      const result = await service.getRecommendations({ uuid: 'uuid1' }).toPromise()
       expect(result.length).toEqual(5)
       done()
     })
     it('should fetch an extra result in case the given UUID is in the list', async (done) => {
-      await service.getRecommendations('uuid1').toPromise()
+      await service.getRecommendations({ uuid: 'uuid1' }).toPromise()
       let expectedSize = service.pageSize + 1
       let params = { currentPage: jasmine.anything(), itemsPerPage: expectedSize }
       expect(getVideosMock).toHaveBeenCalledWith(params, jasmine.anything())
