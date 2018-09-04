@@ -21,6 +21,7 @@ function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
     const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.getInfo(url, options, (err, info) => {
       if (err) return rej(err)
+      if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
 
       const obj = buildVideoInfo(normalizeObject(info))
       if (obj.name && obj.name.length < CONSTRAINTS_FIELDS.VIDEOS.NAME.min) obj.name += ' video'
