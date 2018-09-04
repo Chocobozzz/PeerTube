@@ -7,7 +7,7 @@ import * as youtubeDL from 'youtube-dl'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
-import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
+import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../tests/utils'
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
@@ -113,7 +113,7 @@ function processVideo (info: any, languageCode: string) {
     const videoInfo = await fetchObject(info)
     if (program['verbose']) console.log('Fetched object.', videoInfo)
 
-    const result = await searchVideo(program['url'], videoInfo.title)
+    const result = await searchVideoWithSort(program['url'], videoInfo.title, '-match')
 
     console.log('############################################################\n')
 
