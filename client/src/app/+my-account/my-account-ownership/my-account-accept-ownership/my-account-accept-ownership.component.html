@@ -1,0 +1,34 @@
+<ng-template #modal let-close="close" let-dismiss="dismiss">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Accept ownership</h4>
+    <span class="close" aria-label="Close" role="button" (click)="dismiss()"></span>
+  </div>
+
+  <div class="modal-body" [formGroup]="form">
+    <div class="form-group">
+      <label i18n for="channel">Select the target channel</label>
+      <select formControlName="channel" id="channel" class="peertube-select-container">
+        <option></option>
+        <option *ngFor="let channel of videoChannels" [value]="channel.id">{{ channel.displayName }}
+        </option>
+      </select>
+      <div *ngIf="formErrors.channel" class="form-error">
+        {{ formErrors.channel }}
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer inputs">
+    <div class="form-group inputs">
+      <span i18n class="action-button action-button-cancel" (click)="dismiss()">
+        Cancel
+      </span>
+
+      <input
+          type="submit" i18n-value value="Submit" class="action-button-submit"
+          [disabled]="!form.valid"
+          (click)="close()"
+      >
+    </div>
+  </div>
+</ng-template>

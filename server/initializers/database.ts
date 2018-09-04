@@ -26,6 +26,7 @@ import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoImportModel } from '../models/video/video-import'
 import { VideoViewModel } from '../models/video/video-views'
+import { VideoChangeOwnershipModel } from '../models/video/video-change-ownership'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -75,6 +76,7 @@ async function initDatabaseModels (silent: boolean) {
     AccountVideoRateModel,
     UserModel,
     VideoAbuseModel,
+    VideoChangeOwnershipModel,
     VideoChannelModel,
     VideoShareModel,
     VideoFileModel,

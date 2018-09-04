@@ -10,6 +10,7 @@ import { MyAccountVideoChannelCreateComponent } from '@app/+my-account/my-accoun
 import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-update.component'
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
+import { MyAccountOwnershipComponent } from '@app/+my-account/my-account-ownership/my-account-ownership.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -82,6 +83,15 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Account subscriptions'
+          }
+        }
+      },
+      {
+        path: 'ownership',
+        component: MyAccountOwnershipComponent,
+        data: {
+          meta: {
+            title: 'Ownership changes'
           }
         }
       }

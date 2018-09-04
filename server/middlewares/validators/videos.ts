@@ -1,7 +1,7 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param, ValidationChain } from 'express-validator/check'
-import { UserRight, VideoPrivacy } from '../../../shared'
+import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../shared'
 import {
   isBooleanValid,
   isDateValid,
@@ -37,6 +37,10 @@ import { areValidationErrors } from './utils'
 import { cleanUpReqFiles } from '../../helpers/express-utils'
 import { VideoModel } from '../../models/video/video'
 import { UserModel } from '../../models/account/user'
+import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../helpers/custom-validators/video-ownership'
+import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
+import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
+import { AccountModel } from '../../models/account/account'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -217,6 +221,78 @@ const videosShareValidator = [
   }
 ]
 
+const videosChangeOwnershipValidator = [
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
+
+    // Check if the user who did the request is able to change the ownership of the video
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
+
+    const nextOwner = await AccountModel.loadLocalByName(req.body.username)
+    if (!nextOwner) {
+      res.status(400)
+        .type('json')
+        .end()
+      return
+    }
+    res.locals.nextOwner = nextOwner
+
+    return next()
+  }
+]
+
+const videosTerminateChangeOwnershipValidator = [
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking changeOwnership parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesChangeVideoOwnershipExist(req.params.id, res)) return
+
+    // Check if the user who did the request is able to change the ownership of the video
+    if (!checkUserCanTerminateOwnershipChange(res.locals.oauth.token.User, res.locals.videoChangeOwnership, res)) return
+
+    return next()
+  },
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+
+    if (videoChangeOwnership.status === VideoChangeOwnershipStatus.WAITING) {
+      return next()
+    } else {
+      res.status(403)
+        .json({ error: 'Ownership already accepted or refused' })
+        .end()
+      return
+    }
+  }
+]
+
+const videosAcceptChangeOwnershipValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const body = req.body as VideoChangeOwnershipAccept
+    if (!await isVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
+
+    const user = res.locals.oauth.token.User
+    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+    const isAble = await user.isAbleToUploadVideo(videoChangeOwnership.Video.getOriginalFile())
+    if (isAble === false) {
+      res.status(403)
+        .json({ error: 'The user video quota is exceeded with this video.' })
+        .end()
+      return
+    }
+
+    return next()
+  }
+]
+
 function getCommonVideoAttributes () {
   return [
     body('thumbnailfile')
@@ -294,6 +370,10 @@ export {
   videosShareValidator,
 
   videoRateValidator,
+
+  videosChangeOwnershipValidator,
+  videosTerminateChangeOwnershipValidator,
+  videosAcceptChangeOwnershipValidator,
 
   getCommonVideoAttributes
 }

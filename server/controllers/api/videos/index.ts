@@ -49,6 +49,7 @@ import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
+import { ownershipVideoRouter } from './ownership'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { buildNSFWFilter, createReqFiles } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
@@ -84,6 +85,7 @@ videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
 videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
+videosRouter.use('/', ownershipVideoRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)

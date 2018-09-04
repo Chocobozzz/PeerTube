@@ -290,6 +290,10 @@ const usersVerifyEmailValidator = [
   }
 ]
 
+const userAutocompleteValidator = [
+  param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -307,7 +311,8 @@ export {
   usersAskResetPasswordValidator,
   usersResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
-  usersVerifyEmailValidator
+  usersVerifyEmailValidator,
+  userAutocompleteValidator
 }
 
 // ---------------------------------------------------------------------------

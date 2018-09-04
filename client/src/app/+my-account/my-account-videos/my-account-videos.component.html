@@ -42,7 +42,15 @@
         <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
         <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
+
+        <my-button i18n label="Change ownership"
+                   className="action-button-change-ownership"
+                   icon="icon-im-with-her"
+                   (click)="changeOwnership($event, video)"
+        ></my-button>
       </div>
     </div>
   </div>
 </div>
+
+<my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>

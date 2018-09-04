@@ -18,6 +18,7 @@ import {
   setDefaultPagination,
   setDefaultSort,
   token,
+  userAutocompleteValidator,
   usersAddValidator,
   usersGetValidator,
   usersRegisterValidator,
@@ -50,6 +51,11 @@ const askSendEmailLimiter = new RateLimit({
 
 const usersRouter = express.Router()
 usersRouter.use('/', meRouter)
+
+usersRouter.get('/autocomplete',
+  userAutocompleteValidator,
+  asyncMiddleware(autocompleteUsers)
+)
 
 usersRouter.get('/',
   authenticate,
@@ -220,6 +226,12 @@ async function blockUser (req: express.Request, res: express.Response, next: exp
 
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.json((res.locals.user as UserModel).toFormattedJSON())
+}
+
+async function autocompleteUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await UserModel.autocomplete(req.query.search as string)
+
+  return res.json(resultList)
 }
 
 async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
