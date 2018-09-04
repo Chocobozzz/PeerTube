@@ -22,7 +22,7 @@
   <div class="sub-header-container">
     <my-menu *ngIf="isMenuDisplayed"></my-menu>
 
-    <div class="main-col container-fluid" [ngClass]="{ expanded: isMenuDisplayed === false }">
+    <div id="right-container" class="main-col container-fluid" [ngClass]="{ expanded: isMenuDisplayed === false }">
 
       <div class="main-row">
         <router-outlet></router-outlet>

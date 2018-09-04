@@ -37,8 +37,9 @@
   }
 
   /deep/ .video-js {
-    width: 888px;
-    height: 500px;
+    width: calc(100vw - 240px);
+    height: auto;
+    max-height: 500px;
 
     &.vjs-theater-enabled {
       height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
@@ -477,6 +478,10 @@
       margin: 0;
     }
   }
+}
+
+@media (max-width: 1150px) {
+  .w-100-until-1150px { width: 100% !important }
 }
 
 @media screen and (max-width: 600px) {
