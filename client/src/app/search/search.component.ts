@@ -31,6 +31,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private subActivatedRoute: Subscription
   private isInitialLoad = true
+  private firstSearch = true
 
   private channelsPerPage = 2
 
@@ -103,13 +104,16 @@ export class SearchComponent implements OnInit, OnDestroy {
                              .concat(videosResult.videos)
           this.pagination.totalItems = videosResult.totalVideos + videoChannelsResult.total
 
-          // Focus on channels
-          if (this.channelsPerPage !== 10 && videosResult.videos.length < this.pagination.itemsPerPage) {
+          // Focus on channels if there are no enough videos
+          if (this.firstSearch === true && videosResult.videos.length < this.pagination.itemsPerPage) {
             this.resetPagination()
+            this.firstSearch = false
 
             this.channelsPerPage = 10
             this.search()
           }
+
+          this.firstSearch = false
         },
 
         error => {
