@@ -8,6 +8,7 @@ export class UserValidatorsService {
   readonly USER_USERNAME: BuildFormValidator
   readonly USER_EMAIL: BuildFormValidator
   readonly USER_PASSWORD: BuildFormValidator
+  readonly USER_CONFIRM_PASSWORD: BuildFormValidator
   readonly USER_VIDEO_QUOTA: BuildFormValidator
   readonly USER_VIDEO_QUOTA_DAILY: BuildFormValidator
   readonly USER_ROLE: BuildFormValidator
@@ -52,6 +53,13 @@ export class UserValidatorsService {
         'required': this.i18n('Password is required.'),
         'minlength': this.i18n('Password must be at least 6 characters long.'),
         'maxlength': this.i18n('Password cannot be more than 255 characters long.')
+      }
+    }
+
+    this.USER_CONFIRM_PASSWORD = {
+      VALIDATORS: [],
+      MESSAGES: {
+        'matchPassword': this.i18n('The new password and the confirmed password do not correspond.')
       }
     }
 

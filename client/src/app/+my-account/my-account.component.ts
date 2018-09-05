@@ -20,7 +20,6 @@ export class MyAccountComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    console.log(this.router.url)
     this.updateLibraryLabel(this.router.url)
 
     this.router.events
@@ -29,7 +28,9 @@ export class MyAccountComponent implements OnInit {
   }
 
   isVideoImportEnabled () {
-    return this.serverService.getConfig().import.videos.http.enabled
+    const importConfig = this.serverService.getConfig().import.videos
+
+    return importConfig.http.enabled || importConfig.torrent.enabled
   }
 
   private updateLibraryLabel (url: string) {
