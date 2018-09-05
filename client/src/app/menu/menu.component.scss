@@ -26,6 +26,10 @@ menu {
     overflow-y: auto;
   }
 
+  .top-menu {
+    flex-grow: 1;
+  }
+
   .logged-in-block {
     height: 100px;
     background-color: rgba(255, 255, 255, 0.15);

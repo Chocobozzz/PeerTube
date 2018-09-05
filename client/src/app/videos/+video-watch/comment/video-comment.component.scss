@@ -54,7 +54,7 @@
         &:not(.linkified-url) {
           @include disable-default-a-behaviour;
 
-          color: #000;
+          color: var(--mainForegroundColor);
 
           font-weight: $font-semibold;
         }
@@ -73,7 +73,7 @@
         margin-right: 10px;
 
         &:hover {
-          color: #000;
+          color: var(--mainForegroundColor);
         }
       }
     }
