@@ -317,10 +317,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
   }
 
-  isMenuExpanded () {
-    return document.getElementById('right-container').classList.contains('expanded')
-  }
-
   hasVideoScheduledPublication () {
     return this.video && this.video.scheduledUpdate !== undefined
   }

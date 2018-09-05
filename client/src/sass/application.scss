@@ -307,7 +307,7 @@ table {
   font-weight: $font-semibold;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
   .main-col {
     &.expanded {
       .margin-content {
@@ -337,7 +337,7 @@ table {
   }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: $small-view) {
   .main-col {
     margin-left: 0;
 

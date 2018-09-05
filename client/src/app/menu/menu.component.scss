@@ -6,6 +6,7 @@
   height: calc(100vh - #{$header-height});
   padding: 0;
   width: $menu-width;
+  z-index: 10000;
 }
 
 menu {
@@ -16,7 +17,6 @@ menu {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  z-index: 1000;
   color: $menu-color;
   display: flex;
   flex-direction: column;
@@ -230,7 +230,6 @@ menu {
 @media screen and (max-width: 400px) {
   .menu-wrapper {
     width: 100% !important;
-    z-index: 10000;
   }
 
   .top-menu {

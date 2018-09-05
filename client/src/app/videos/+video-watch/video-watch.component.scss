@@ -99,9 +99,10 @@
       }
 
       .video-info-date-views {
-        font-size: 16px;
-        margin-bottom: 10px;
         flex-grow: 1;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        font-size: 16px;
       }
 
       .video-info-channel {
@@ -164,8 +165,7 @@
       }
 
       .video-actions-rates {
-        margin-top: 20px;
-        margin-bottom: 10px;
+        margin: 20px 0 10px 0;
         align-items: start;
 
         .video-actions {
@@ -361,12 +361,13 @@
 
   /deep/ .other-videos {
     padding-left: 1em;
+    width: 260px;
 
     .title-page {
       margin-top: 0 !important;
     }
 
-    /deep/ .video-miniature {
+    .video-miniature {
       display: flex;
       height: 100%;
       margin-bottom: 20px;
@@ -388,9 +389,16 @@
   width: calc(100% - #{$menu-width});
 }
 
+@media screen and (max-width: $small-view) {
+  .privacy-concerns {
+    margin-left: $menu-width;
+  }
+}
+
 :host-context(.expanded) {
   .privacy-concerns {
     width: 100%;
+    margin-left: 0;
   }
 }
 
@@ -438,34 +446,12 @@
 
 
 @media screen and (max-width: 1600px) {
-  .video-bottom {
-    .video-info {
-      .video-info-first-row {
-        flex-direction: column;
-        margin-bottom: 20px;
-      }
-
-      .video-info-date-views {
-        flex-direction: column;
-        margin-bottom: 30px;
-
-        .video-info-likes-dislikes-bar {
-          margin-top: 0;
-        }
-      }
-
-      .video-attributes .video-attribute {
-        margin-bottom: 5px;
-      }
-    }
+  .video-bottom .video-info .video-attributes .video-attribute {
+    margin-bottom: 5px;
   }
 }
 
 @media screen and (max-width: 1300px) {
-  .video-bottom {
-    flex-direction: column;
-  }
-
   /deep/ .other-videos {
     padding-left: 0 !important;
   }
@@ -478,10 +464,6 @@
       margin: 0;
     }
   }
-}
-
-@media (max-width: 1150px) {
-  .w-100-until-1150px { width: 100% !important }
 }
 
 @media screen and (max-width: 600px) {
