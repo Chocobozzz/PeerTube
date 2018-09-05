@@ -338,15 +338,6 @@ table {
 }
 
 @media screen and (max-width: 600px) {
-  .menu-wrapper {
-    width: 100% !important;
-    z-index: 10000;
-  }
-
-  menu {
-    width: $menu-width;
-  }
-
   .main-col {
     margin-left: 0;
 
@@ -366,11 +357,5 @@ table {
         width: 100% !important;
       }
     }
-  }
-}
-
-@media screen and (max-width: 400px) {
-  menu {
-    width: 100%;
   }
 }

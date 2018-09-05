@@ -20,14 +20,10 @@ menu {
   color: $menu-color;
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   &:focus, &:hover {
     overflow-y: auto;
-  }
-
-  .top-menu {
-    flex-grow: 1;
-    width: $menu-width;
   }
 
   .logged-in-block {
@@ -228,5 +224,16 @@ menu {
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .menu-wrapper {
+    width: 100% !important;
+    z-index: 10000;
+  }
+
+  .top-menu {
+    width: 100%;
   }
 }
