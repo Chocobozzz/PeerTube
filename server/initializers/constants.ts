@@ -755,6 +755,9 @@ function buildLanguages () {
     })
     .forEach(l => languages[l.iso6391 || l.iso6393] = l.name)
 
+  // Override Occitan label
+  languages['oc'] = 'Occitan'
+
   return languages
 }
 

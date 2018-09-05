@@ -27,7 +27,7 @@ body {
   --mainBackgroundColor: #{$bg-color};
   --mainForegroundColor: #{$fg-color};
   --submenuColor: #{$sub-menu-color};
-  --inputColor: #{$input-color};
+  --inputColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
 
   font-family: $main-fonts;
