@@ -60,4 +60,12 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
+
+  actorWithHost (): string {
+    if (this.videoChannel.isLocal) {
+      return this.videoChannel.ownerBy
+    }
+    let nameSplited = this.videoChannel.nameWithHost.split('@')
+    return this.videoChannel.ownerBy + '@' + nameSplited[nameSplited.length - 1]
+  }
 }

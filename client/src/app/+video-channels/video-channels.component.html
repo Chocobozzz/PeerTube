@@ -13,7 +13,7 @@
         </div>
         <div i18n class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
 
-        <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
+        <a [routerLink]="[ '/accounts', actorWithHost() ]" i18n-title title="Go the owner account page" class="actor-owner">
           <span i18n>Created by {{ videoChannel.ownerBy }}</span>
           <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
         </a>
