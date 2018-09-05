@@ -1,17 +1,20 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { NavigationStart, Router } from '@angular/router'
 import { filter } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-my-account',
   templateUrl: './my-account.component.html',
   styleUrls: [ './my-account.component.scss' ]
 })
-export class MyAccountComponent implements OnInit {
+export class MyAccountComponent implements OnInit, OnDestroy {
 
   libraryLabel = ''
+
+  private routeSub: Subscription
 
   constructor (
     private serverService: ServerService,
@@ -22,9 +25,13 @@ export class MyAccountComponent implements OnInit {
   ngOnInit () {
     this.updateLibraryLabel(this.router.url)
 
-    this.router.events
+    this.routeSub = this.router.events
         .pipe(filter(event => event instanceof NavigationStart))
         .subscribe((event: NavigationStart) => this.updateLibraryLabel(event.url))
+  }
+
+  ngOnDestroy () {
+    if (this.routeSub) this.routeSub.unsubscribe()
   }
 
   isVideoImportEnabled () {
