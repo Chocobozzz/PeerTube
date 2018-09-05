@@ -29,7 +29,7 @@ $border-color: #EAEAEA;
       &.active {
         border: $border-width $border-type $border-color;
         border-bottom: none;
-        background-color: var(--mainBackgroundColor) !important;
+        background-color: var(--submenuColor) !important;
 
         span {
           border-bottom: 2px solid var(--mainColor);
@@ -43,7 +43,7 @@ $border-color: #EAEAEA;
     border: $border-width $border-type $border-color;
     border-top: none;
 
-    background-color: var(--mainBackgroundColor);
+    background-color: var(--submenuColor);
     border-radius: 3px;
     width: 100%;
     min-height: 440px;
