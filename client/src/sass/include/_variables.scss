@@ -46,22 +46,8 @@ $video-thumbnail-width: 200px;
 
 $theater-bottom-space: 85px;
 
-$input-color: $bg-color;
+$input-color: inherit;
 $input-placeholder-color: #898989;
-
-/*** theme ***/
-
-body {
-  // now beware node-sass requires interpolation
-  // for css custom properties #{$var}
-  --mainColor: #{$orange-color};
-  --mainHoverColor: #{$orange-hoover-color};
-  --mainBackgroundColor: #{$bg-color};
-  --mainForegroundColor: #{$fg-color};
-  --submenuColor: #{$sub-menu-color};
-  --inputColor: #{$input-color};
-  --inputPlaceholderColor: #{$input-placeholder-color};
-}
 
 /*** map theme ***/
 

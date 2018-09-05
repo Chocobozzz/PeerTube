@@ -1,8 +1,8 @@
-@import '_variables';
-@import '_mixins';
-
 $icon-font-path: '../../node_modules/@neos21/bootstrap3-glyphicons/assets/fonts/';
 @import '_bootstrap';
+
+@import '_variables';
+@import '_mixins';
 
 @import '_fonts';
 
@@ -19,6 +19,17 @@ $assets-path: '../assets/';
 }
 
 body {
+  /*** theme ***/
+  // now beware node-sass requires interpolation
+  // for css custom properties #{$var}
+  --mainColor: #{$orange-color};
+  --mainHoverColor: #{$orange-hoover-color};
+  --mainBackgroundColor: #{$bg-color};
+  --mainForegroundColor: #{$fg-color};
+  --submenuColor: #{$sub-menu-color};
+  --inputColor: #{$input-color};
+  --inputPlaceholderColor: #{$input-placeholder-color};
+
   font-family: $main-fonts;
   font-weight: $font-regular;
   color: var(--mainForegroundColor);

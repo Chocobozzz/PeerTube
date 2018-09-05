@@ -5,6 +5,14 @@
   </div>
 
   <div class="modal-body">
+
+    <div *ngIf="currentVideoTimestampString" class="start-at">
+      <my-peertube-checkbox
+        inputName="startAt" [(ngModel)]="startAtCheckbox"
+        i18n-labelText [labelText]="getStartCheckboxLabel()"
+      ></my-peertube-checkbox>
+    </div>
+
     <div class="form-group">
       <label i18n>URL</label>
       <div class="input-group input-group-sm">
@@ -37,13 +45,6 @@
     <div i18n *ngIf="notSecure()" class="alert alert-warning">
       The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
     </div>
-  </div>
-
-  <div *ngIf="currentVideoTimestampString" class="start-at">
-    <my-peertube-checkbox
-      inputName="startAt" [(ngModel)]="startAtCheckbox"
-      i18n-labelText [labelText]="getStartCheckboxLabel()"
-    ></my-peertube-checkbox>
   </div>
 
   <div class="modal-footer inputs">
