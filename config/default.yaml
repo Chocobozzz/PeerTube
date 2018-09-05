@@ -127,7 +127,7 @@ instance:
   robots: |
     User-agent: *
     Disallow: ''
-  # Security.txt rules. To discourge researchers from testing your instance and disasble security.txt integration, set this to an empty string.
+  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
   securitytxt:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube\nContact: "
 
