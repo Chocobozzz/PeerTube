@@ -37,9 +37,8 @@
   }
 
   /deep/ .video-js {
-    width: calc(100vw - 240px);
-    height: auto;
-    max-height: 500px;
+    width: 888px;
+    height: 500px;
 
     &.vjs-theater-enabled {
       height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
