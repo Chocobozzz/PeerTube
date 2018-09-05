@@ -286,13 +286,13 @@
           height: $likes-bar-height;
           margin-top: -$likes-bar-height;
           width: 186px;
-          background-color: #E5E5E5;
+          background-color: $red;
           position: relative;
           top: 10px;
 
           .likes-bar {
             height: 100%;
-            background-color: #39CC0B;
+            background-color: $green;
           }
         }
       }
@@ -382,6 +382,11 @@
       }
     }
   }
+}
+
+my-video-comments {
+  display: inline-block;
+  margin-bottom: 20px;
 }
 
 // If the view is not expanded, take into account the menu
