@@ -79,6 +79,21 @@ staticRouter.get('/robots.txt',
   }
 )
 
+// security.txt service
+staticRouter.get('/security.txt',
+  (_, res: express.Response) => {
+    return res.redirect(301, '/.well-known/security.txt')
+  }
+)
+
+staticRouter.get('/.well-known/security.txt',
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT)),
+  (_, res: express.Response) => {
+    res.type('text/plain')
+    return res.send(CONFIG.INSTANCE.SECURITYTXT + CONFIG.INSTANCE.SECURITYTXT_CONTACT)
+  }
+)
+
 // nodeinfo service
 staticRouter.use('/.well-known/nodeinfo',
   asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),

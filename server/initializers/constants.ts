@@ -57,6 +57,7 @@ const OAUTH_LIFETIME = {
 const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
+  SECURITYTXT: '2 hours',
   NODEINFO: '10 minutes',
   DNT_POLICY: '1 week',
   OVERVIEWS: {
@@ -265,7 +266,9 @@ const CONFIG = {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }
     },
-    get ROBOTS () { return config.get<string>('instance.robots') }
+    get ROBOTS () { return config.get<string>('instance.robots') },
+    get SECURITYTXT () { return config.get<string>('instance.securitytxt') },
+    get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') }
   },
   SERVICES: {
     TWITTER: {
