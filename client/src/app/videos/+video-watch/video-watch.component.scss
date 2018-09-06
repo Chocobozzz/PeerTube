@@ -359,7 +359,7 @@
   }
 
   /deep/ .other-videos {
-    padding-left: 1em;
+    padding-left: 15px;
     width: 260px;
 
     .title-page {
@@ -457,10 +457,6 @@ my-video-comments {
 }
 
 @media screen and (max-width: 1300px) {
-  /deep/ .other-videos {
-    padding-left: 0 !important;
-  }
-
   .privacy-concerns {
     font-size: 12px;
     padding: 2px 5px;
