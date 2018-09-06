@@ -122,7 +122,7 @@ menu {
     a {
       display: flex;
       align-items: center;
-      padding-left: $menu-left-padding;
+      padding-left: $menu-lateral-padding;
       color: $menu-color;
       cursor: pointer;
       height: 40px;
@@ -191,7 +191,8 @@ menu {
 
   .footer {
     padding-bottom: 15px;
-    padding-left: $menu-left-padding;
+    padding-left: $menu-lateral-padding;
+    padding-right: $menu-lateral-padding;
 
     .language, .color-palette {
       display: inline-block;
