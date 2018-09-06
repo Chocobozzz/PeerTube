@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
-import { AuthService, RedirectService, ServerService } from '@app/core'
+import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { skip } from 'rxjs/operators'
@@ -37,7 +37,8 @@ export class AppComponent implements OnInit {
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService,
     private screenService: ScreenService,
-    private hotkeysService: HotkeysService
+    private hotkeysService: HotkeysService,
+    private themeService: ThemeService
   ) { }
 
   get serverVersion () {
@@ -155,7 +156,11 @@ export class AppComponent implements OnInit {
       new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, undefined, 'Go to the videos upload page')
+      }, undefined, 'Go to the videos upload page'),
+      new Hotkey('T', (event: KeyboardEvent): boolean => {
+        this.themeService.toggleDarkTheme()
+        return false
+      }, undefined, 'Toggle Dark theme')
     ])
   }
 

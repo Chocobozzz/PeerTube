@@ -14,6 +14,7 @@ import { ConfirmComponent, ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
+import { ThemeService } from './theme'
 
 @NgModule({
   imports: [
@@ -45,6 +46,7 @@ import { ServerService } from './server'
     AuthService,
     ConfirmService,
     ServerService,
+    ThemeService,
     LoginGuard,
     UserRightGuard,
     RedirectService

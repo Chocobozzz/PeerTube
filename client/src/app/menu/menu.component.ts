@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { UserRight } from '../../../../shared/models/users/user-right.enum'
-import { AuthService, AuthStatus, RedirectService, ServerService } from '../core'
+import { AuthService, AuthStatus, RedirectService, ServerService, ThemeService } from '../core'
 import { User } from '../shared/users/user.model'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
-import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 
 @Component({
   selector: 'my-menu',
@@ -16,7 +15,6 @@ export class MenuComponent implements OnInit {
   user: User
   isLoggedIn: boolean
   userHasAdminAccess = false
-  hotkeys: Hotkey[]
 
   private routesPerRight = {
     [UserRight.MANAGE_USERS]: '/admin/users',
@@ -24,14 +22,12 @@ export class MenuComponent implements OnInit {
     [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/video-abuses',
     [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/video-blacklist'
   }
-  private theme = document.querySelector('body')
-  private previousTheme = { }
 
   constructor (
     private authService: AuthService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private hotkeysService: HotkeysService
+    private themeService: ThemeService
   ) {}
 
   ngOnInit () {
@@ -56,21 +52,6 @@ export class MenuComponent implements OnInit {
         }
       }
     )
-
-    // initialise the alternative theme with dark theme colors
-    this.previousTheme['mainBackgroundColor'] = '#111111'
-    this.previousTheme['mainForegroundColor'] = '#fff'
-    this.previousTheme['submenuColor'] = 'rgb(32,32,32)'
-    this.previousTheme['inputColor'] = 'gray'
-    this.previousTheme['inputPlaceholderColor'] = '#fff'
-
-    this.hotkeys = [
-      new Hotkey('T', (event: KeyboardEvent): boolean => {
-        this.toggleDarkTheme()
-        return false
-      }, undefined, 'Toggle Dark theme')
-    ]
-    this.hotkeysService.add(this.hotkeys)
   }
 
   isRegistrationAllowed () {
@@ -117,18 +98,7 @@ export class MenuComponent implements OnInit {
   }
 
   toggleDarkTheme () {
-    // switch properties
-    this.switchProperty('mainBackgroundColor')
-    this.switchProperty('mainForegroundColor')
-    this.switchProperty('submenuColor')
-    this.switchProperty('inputColor')
-    this.switchProperty('inputPlaceholderColor')
-  }
-
-  private switchProperty (property, newValue?) {
-    const propertyOldvalue = window.getComputedStyle(this.theme).getPropertyValue('--' + property)
-    this.theme.style.setProperty('--' + property, (newValue) ? newValue : this.previousTheme[property])
-    this.previousTheme[property] = propertyOldvalue
+    this.themeService.toggleDarkTheme()
   }
 
   private computeIsUserHasAdminAccess () {
