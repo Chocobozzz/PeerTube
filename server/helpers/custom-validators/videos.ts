@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import 'express-validator'
 import { values } from 'lodash'
+import * as sw from 'stopword'
 import 'multer'
 import * as validator from 'validator'
 import { UserRight, VideoPrivacy, VideoRateType } from '../../../shared'
@@ -14,7 +15,7 @@ import {
   VIDEO_STATES
 } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
-import { exists, isArray, isFileValid } from './misc'
+import { exists, isArray, isFileValid, isStopWord } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
 import * as magnetUtil from 'magnet-uri'
@@ -60,6 +61,7 @@ function isVideoNameValid (value: string) {
 
 function isVideoTagValid (tag: string) {
   return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
+                     && !isStopWord(tag)
 }
 
 function isVideoTagsValid (tags: string[]) {

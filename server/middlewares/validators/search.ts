@@ -3,7 +3,7 @@ import { areValidationErrors } from './utils'
 import { logger } from '../../helpers/logger'
 import { query } from 'express-validator/check'
 import { isNumberArray, isStringArray, isNSFWQueryValid } from '../../helpers/custom-validators/search'
-import { isBooleanValid, isDateValid, toArray } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isDateValid, toArray, toTagsWithoutStopWords } from '../../helpers/custom-validators/misc'
 
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
@@ -50,11 +50,11 @@ const commonVideosFiltersValidator = [
     .custom(isStringArray).withMessage('Should have a valid one of language array'),
   query('tagsOneOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(toTagsWithoutStopWords)
     .custom(isStringArray).withMessage('Should have a valid one of tags array'),
   query('tagsAllOf')
     .optional()
-    .customSanitizer(toArray)
+    .customSanitizer(toTagsWithoutStopWords)
     .custom(isStringArray).withMessage('Should have a valid all of tags array'),
   query('nsfw')
     .optional()
