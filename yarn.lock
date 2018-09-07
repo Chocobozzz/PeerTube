@@ -6860,6 +6860,10 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
+stopword@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/stopword/-/stopword-0.1.10.tgz#22bc2ffbbe387ee1d9773ca093da189fc78a643a"
+
 stream-combiner@~0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/stream-combiner/-/stream-combiner-0.0.4.tgz#4d5e433c185261dde623ca3f44c586bcf5c4ad14"

@@ -1,5 +1,6 @@
 import 'multer'
 import * as validator from 'validator'
+import * as stopwords from 'stopword'
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -27,6 +28,16 @@ function isIdOrUUIDValid (value: string) {
 
 function isBooleanValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
+}
+
+function isStopWord (value: string) {
+  return stopwords.all.indexOf(value.toLowerCase()) !== -1
+}
+
+function toTagsWithoutStopWords (value: string) {
+  if (value && isArray(value) === false) return [ value ]
+
+  return stopwords.removeStopwords(value, 'all')
 }
 
 function toIntOrNull (value: string) {
@@ -85,7 +96,9 @@ export {
   isDateValid,
   toValueOrNull,
   isBooleanValid,
+  isStopWord,
   toIntOrNull,
   toArray,
+  toTagsWithoutStopWords,
   isFileValid
 }
