@@ -3,17 +3,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.1" xmlns:xyz="urn:appInfo:Items" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.1 http://www.oasis-open.org/committees/xliff/documents/xliff-core-1.1.xsd" version="1.1">
   <file source-language="en-US" datatype="plaintext" original="" target-language="pt-BR">
     <body>
-      <trans-unit id="17a9d3860d9ad593dd09a9f934e03999d9e76a7a">
-        <source>
-            Cancel
-          </source>
-        <target>
-            Cancelar
-          </target>
-        <context-group name="null">
-          <context context-type="linenumber">45</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
         <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
         <target>(extensões: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, tamanho máximo: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
@@ -25,14 +14,21 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizações</target>
         <context-group name="null">
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
+        <source>Delete</source>
+        <target>Excluir</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
         <target>Editar</target>
         <context-group name="null">
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -46,7 +42,7 @@
         <source>Complete preview</source>
         <target>Pré-visualização completa</target>
         <context-group name="null">
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f">
@@ -54,6 +50,13 @@
         <target>Obter ajuda</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
+        <source>Video quota</source>
+        <target>Cota de vídeo</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -71,14 +74,14 @@
         <source>User</source>
         <target>Usuário</target>
         <context-group name="null">
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478">
         <source>Username or email address</source>
         <target>Nome de usuário ou endereço de e-mail</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="02c4360c2d956e74ed6bb1f71e86812af0e19b87">
@@ -89,7 +92,7 @@
           ou crie uma conta
         </target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d6290381021b16febc426d3e3a52dda83991ce0b">
@@ -100,14 +103,14 @@
           ou crie uma conta em outra instância
         </target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="76e1f485e6ead4c84b606f46d413878881d66ad3">
         <source>User registration is not allowed on this instance, but you can register on many others!</source>
         <target>Registro de novos usuários não está permitida nesta instância, porém você pode registrar em muitas outras!</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407">
@@ -121,35 +124,35 @@
         <source>I forgot my password</source>
         <target>Esqueci minha senha</target>
         <context-group name="null">
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
         <source>Forgot your password</source>
         <target>Esqueceu sua senha</target>
         <context-group name="null">
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
         <source>Email</source>
         <target>E-mail</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529">
         <source>Email address</source>
         <target>Endereço de e-mail</target>
         <context-group name="null">
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55">
         <source>Send me an email to reset my password</source>
         <target>Me envie um e-mail para redefinir minha senha</target>
         <context-group name="null">
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -195,24 +198,6 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a6807b834e01ce165aa61fad157b0ff4288b6bf1">
-        <source>Initial video quota:</source>
-        <target>Cota de vídeo inicial:</target>
-        <context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="87b6b2c26215c5e712d3bfe4cc86ba53bc23451c">
-        <source>
-      Unlimited
-    </source>
-        <target>
-      Ilimitada
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
         <source>Username</source>
         <target>Nome de usuário</target>
@@ -224,14 +209,14 @@
         <source>I have read and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
         <target>Eu li e concordo com os &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Termos&lt;/a&gt; desta instância</target>
         <context-group name="null">
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>Inscrever-se</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9167c6d3c4c3b74373cf1e90997e4966844ded1a">
@@ -274,103 +259,70 @@
         <source>Change the language</source>
         <target>Alterar o idioma</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="b8ccc4f1b3f839fca9bd59e072f715fd487d540f">
-        <source>
-               My public profile
-              </source>
-        <target>
-               Meu perfil público
-              </target>
-        <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c84b721e9325c9cce20d92f4dbd66898ab5ec947">
-        <source>
-                My account
-              </source>
-        <target>
-                Minha conta
-              </target>
-        <context-group name="null">
-          <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ba7378cdaaa60b4fee17a551b232ad3512dac17d">
-        <source>
-                Log out
-              </source>
-        <target>
-                Sair
-              </target>
-        <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
         <target>Entrar</target>
         <context-group name="null">
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>Criar uma conta</target>
         <context-group name="null">
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238">
         <source>Videos</source>
         <target>Vídeos</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
         <source>Trending</source>
         <target>Tendências</target>
         <context-group name="null">
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
         <source>Recently added</source>
         <target>Adicionado recentemente</target>
         <context-group name="null">
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
         <source>Local</source>
         <target>Local</target>
         <context-group name="null">
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac0f81713a84217c9bd1d9bb460245d8190b073f">
         <source>More</source>
         <target>Mais</target>
         <context-group name="null">
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>Administração</target>
         <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
         <source>About</source>
         <target>Sobre</target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -433,21 +385,21 @@
         <source>Category</source>
         <target>Categoria</target>
         <context-group name="null">
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>Licença</target>
         <context-group name="null">
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>Idioma</target>
         <context-group name="null">
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -482,7 +434,7 @@
         <source>Instance</source>
         <target>Instância</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -507,14 +459,14 @@
         <source>Description</source>
         <target>Descrição</target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
         <source>Terms</source>
         <target>Termos</target>
         <context-group name="null">
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9c6e6db693ab265457c6578df179c65694141d27">
@@ -855,7 +807,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> inscritos</target>
         <context-group name="null">
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f36bd6a1570cb9b0a5023870f35160957cad2a8f">
@@ -869,49 +821,49 @@
         <source>Name</source>
         <target>Nome</target>
         <context-group name="null">
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="512b045163a7187b2fc5d554e5f59fb3e49e174b">
         <source>Short description</source>
         <target>Descrição curta</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="554488d11165f38b27b8fe230aba8a2e30d57003">
         <source>Default client route</source>
         <target>Rota padrão do cliente</target>
         <context-group name="null">
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
         <source>Videos Trending</source>
         <target>Vídeos em Tendência</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1861c96217213992e02dcb77e15ea69e718c9883">
         <source>Videos Recently Added</source>
         <target>Vídeos Adicionados Recentemente</target>
         <context-group name="null">
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>Vídeos locais</target>
         <context-group name="null">
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
         <source>Policy on videos containing sensitive content</source>
         <target>Política sobre vídeos que possuem conteúdo sensível</target>
         <context-group name="null">
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aa3ef567a1ea22c1e4d0acfdc8f80bc636bf12df">
@@ -946,14 +898,14 @@
         <source>Signup enabled</source>
         <target>Inscrição permitida</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="68bda70e0dd4f7f91549462e55f1b2a1602d8402">
         <source>Signup limit</source>
         <target>Limite de inscrições</target>
         <context-group name="null">
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -967,42 +919,42 @@
         <source>Video import with HTTP enabled</source>
         <target>Importação de vídeo com HTTP habilitada</target>
         <context-group name="null">
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
         <source>Video import with a torrent file or a magnet URI enabled</source>
         <target>Importação de vídeo com um arquivo torrent ou URI magnética habilitada</target>
         <context-group name="null">
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Administrador</target>
         <context-group name="null">
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
       <trans-unit id="55a0f51e38679d3141841e8333da5779d349c587">
         <source>Admin email</source>
         <target>Email de administrador</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
         <source>Users</source>
         <target>Usuários</target>
         <context-group name="null">
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
         <source>User default video quota</source>
         <target>Cota padrão de vídeos do usuário</target>
         <context-group name="null">
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5">
@@ -1016,194 +968,133 @@
         <source>Twitter</source>
         <target>Twitter</target>
         <context-group name="null">
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>Seu nome de usuário no Twitter</target>
         <context-group name="null">
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c">
         <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
         <target>Indica a conta Twitter do sítio web ou plataforma em que o conteúdo foi publicado.</target>
         <context-group name="null">
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c0716c28b9d4c9e0b2fd6031334394214e5f9605">
         <source>Instance whitelisted by Twitter</source>
         <target>Instância listada como permitida pelo Twitter</target>
         <context-group name="null">
-          <context context-type="linenumber">167</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3f008a1a07ca42c6ad258fde1bbd80ed74ada19b">
-        <source>If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.&lt;br /&gt;
-If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.&lt;br /&gt;&lt;br /&gt;
-Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; to see if you instance is whitelisted.</source>
-        <target>Se a sua instância está listada como permitida pelo Twitter, um player de vídeo será embutido no feed do Twitter no compartilhador do vídeo do PeerTube.&lt;br /&gt;
-Se a instância não está listada como permitida, nós utilizamos um cartão de imagem com link que redirecionará à sua instância PeerTube.&lt;br /&gt;&lt;br /&gt;
-Marque esta opção, salve as configurações e teste com uma URL de vídeo da sua instância (https://example.com/videos/watch/blabla) em &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; para ver se sua instância está listada como permitida.</target>
-        <context-group name="null">
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
         <source>Services</source>
         <target>Serviços</target>
         <context-group name="null">
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22d2c0020e913ee4b75ec22a3abc8814810490">
         <source>Transcoding</source>
         <target>Transcodificação</target>
         <context-group name="null">
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
         <source>Transcoding enabled</source>
         <target>Transcodificação ativada</target>
         <context-group name="null">
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
         <source>If you disable transcoding, many videos from your users will not work!</source>
         <target>Se você desativar a transcodificação, muitos vídeos dos seus usuários não funcionarão!</target>
         <context-group name="null">
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
         <target>Threads de transcodificação</target>
         <context-group name="null">
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5afc7e831e59c325e8fb3e208ec108ff53fb3500">
         <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution}}"/> enabled</source>
         <target>Resolução <x id="INTERPOLATION" equiv-text="{{resolution}}"/> habilitada</target>
         <context-group name="null">
-          <context context-type="linenumber">203</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f86acfe567b75b7ea85af6f1cb3efb88085dfb9a">
-        <source>
-        Cache
-
-        <x id="START_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;my-help&gt;"/><x id="CLOSE_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;/my-help&gt;"/>
-      </source>
-        <target>
-        Cache
-
-        <x id="START_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;my-help&gt;"/><x id="CLOSE_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;/my-help&gt;"/>
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
         <target>Alguns arquivos não são federados (pré-visualizações, legendas ocultas). Nós as obtivemos diretamente da instância de origem e a colocamos em cache.</target>
         <context-group name="null">
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>Tamanho do cache de pré-visualizações</target>
         <context-group name="null">
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
         <source>Video captions cache size</source>
         <target>Tamanho do cache de legendas ocultas de vídeos</target>
         <context-group name="null">
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>Personalizações</target>
         <context-group name="null">
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">243</context>
+          <context context-type="linenumber">267</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fda2339a6e6ba017ee43b560caf660ed4022333c">
         <source>Write directly JavaScript code.&lt;br /&gt;Example: &lt;pre&gt;console.log('my instance is amazing');&lt;/pre&gt;</source>
         <target>Escreva diretamente código JavaScript.&lt;br /&gt;Exemplo: &lt;pre&gt;console.log('minha instância é demais');&lt;/pre&gt;</target>
         <context-group name="null">
-          <context context-type="linenumber">246</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f133b08d6519081bfb8ef51cff4bf2b3af23dde6">
-        <source>
-              Write directly CSS code. Example:&lt;br /&gt;
-              &lt;pre&gt;
-    body <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-      background-color: red;
-    <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-              &lt;/pre&gt;
-
-              Prepend with &lt;em&gt;#custom-css&lt;/em&gt; to override styles. Example:
-              &lt;pre&gt;
-    #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-      color: red;
-    <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-              &lt;/pre&gt;
-            </source>
-        <target>
-              Escreva código CSS diretamente. Exemplo:&lt;br /&gt;
-              &lt;pre&gt;
-    body <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-      background-color: red;
-    <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-              &lt;/pre&gt;
-
-              Prefixe com &lt;em&gt;#custom-css&lt;/em&gt; para sobrescrever estilos. Exemplo:
-              &lt;pre&gt;
-    #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-      color: red;
-    <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-              &lt;/pre&gt;
-            </target>
-        <context-group name="null">
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">270</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
         <source>Advanced configuration</source>
         <target>Configurações avançadas</target>
         <context-group name="null">
-          <context context-type="linenumber">174</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8">
         <source>Update configuration</source>
         <target>Atualizar configuração</target>
         <context-group name="null">
-          <context context-type="linenumber">289</context>
+          <context context-type="linenumber">314</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
         <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
         <target>Aparentemente a configuração está valida. Por favor procure potenciais erros nas diferentes abas.</target>
         <context-group name="null">
-          <context context-type="linenumber">290</context>
+          <context context-type="linenumber">315</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1228,28 +1119,6 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1c9406213cf05033eda4d3df678217b5eb822315">
-        <source>
-      Video abuses
-    </source>
-        <target>
-      Abusos de vídeos
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="96ccede058f0022f34230c3adc09e60076b6d037">
-        <source>
-      Video blacklist
-    </source>
-        <target>
-      Lista de bloqueio de vídeos
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7bea88c54fdccfdc9f687b0ffe9bf6a653d19368">
         <source>
       Jobs
@@ -1258,7 +1127,7 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
       Empregos
     </target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9c6ce37623b626a102002901ca12c37e7a3a7f13">
@@ -1269,7 +1138,7 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
       Configurações
     </target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
@@ -1339,6 +1208,27 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f995df052a1dfc675c2a21926420a707d9601936">
+        <source>Following</source>
+        <target>Seguindo</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
+        <source>Follow</source>
+        <target>Seguir</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
+        <source>Followers</source>
+        <target>Seguidores</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a9f2501fcb2ff71f1376c2d2fbbbd49f200e6c8f">
         <source>Jobs list</source>
         <target>Lista de trabalhos</target>
@@ -1399,14 +1289,7 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
         <source>Role</source>
         <target>Papel</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
-        <source>Video quota</source>
-        <target>Cota de vídeo</target>
-        <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
@@ -1422,6 +1305,13 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>Motivo...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
         <source>Users list</source>
         <target>Lista de usuários</target>
@@ -1433,91 +1323,42 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
         <target>Nome de usuário <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0c7e8870481f1287af6a142f538391d8c16c2408">
-        <source>Video abuses list</source>
-        <target>Lista de abusos de vídeo</target>
-        <context-group name="null">
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4ba250869daa372b54d24fafc0ea934769ee4076">
-        <source>Reason</source>
-        <target>Motivo</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2">
         <source>Reporter</source>
         <target>Denunciante</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
         <source>Video</source>
         <target>Vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c6ab75e099e131d7a4f94e1732e7436d8fc386c7">
         <source>Go to the account</source>
         <target>Ir para a conta</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
         <source>Go to the video</source>
         <target>Ir para o vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="00ecde6001106fe7406a34cc3459cc5b88e4aec1">
         <source>Blacklisted videos</source>
         <target>Vídeos na lista negra</target>
         <context-group name="null">
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7c02d113e9b7884037834cddecf2a32a5538b35b">
-        <source>Name <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>Nome <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cd5ca5da9e2fa21571e9f86a24a5c3b45a3ddc51">
-        <source>Views <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>Visualizações <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d4717113115ca7106a354a5aac54d1c0126261d9">
-        <source>NSFW</source>
-        <target>NSFW</target>
-        <context-group name="null">
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8c87d9527af7ff2ada84c911516a9e43a352e401">
-        <source>UUID</source>
-        <target>UUID</target>
-        <context-group name="null">
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="86f26b106c67be3c2e98b82766656e5d9da86dff">
-        <source>Unblacklist</source>
-        <target>Retirar da lista negra</target>
-        <context-group name="null">
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
@@ -1527,25 +1368,11 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="520d68b2c9f7dacaf2a5073716cad9bd328ea7e7">
-        <source>My video channels</source>
-        <target>Meus canais de vídeo</target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
         <source>My videos</source>
         <target>Meus vídeos</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0bb0c57c6d12635d26996c124248e748b666e5ad">
-        <source>My video imports</source>
-        <target>Minhas importações de vídeo</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -1576,6 +1403,13 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
+        <source>Submit</source>
+        <target>Enviar</target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8057bddbed23d6cd911df8cc3a4ec24d1f258b79">
         <source><x id="INTERPOLATION" equiv-text="{{ video.createdAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.createdAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizações</target>
@@ -1583,11 +1417,15 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
-        <source>Delete</source>
-        <target>Excluir</target>
+      <trans-unit id="17a9d3860d9ad593dd09a9f934e03999d9e76a7a">
+        <source>
+            Cancel
+          </source>
+        <target>
+            Cancelar
+          </target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="73c1cefc348a6f361497210dea1ed79499fd1260">
@@ -1601,7 +1439,7 @@ Marque esta opção, salve as configurações e teste com uma URL de vídeo da s
         <source>Go to the channel</source>
         <target>Ir para o canal</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9dbe4718a5611fbc611fc6b5e0b27df813372c68">
@@ -1624,7 +1462,7 @@ When you will upload a video in this channel, the video support field will be au
         <target>Texto curto para dizer às pessoas como elas podem apoiar o seu canal (plataforma de membros, etc.).&lt;br /&gt;&lt;br /&gt;
 Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preenchido automaticamente com esse texto.</target>
         <context-group name="null">
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
@@ -1634,11 +1472,25 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
+        <target>Criado por <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e006ed166ce188cab168e1ca90435b33d042d913">
+        <source>Go the owner account page</source>
+        <target>Ir para a página da conta do dono</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
         <source>Change password</source>
         <target>Alterar senha</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229">
@@ -1715,20 +1567,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
-        <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
-        <target>Criado por <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e006ed166ce188cab168e1ca90435b33d042d913">
-        <source>Go the owner account page</source>
-        <target>Ir para a página da conta do dono</target>
-        <context-group name="null">
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1380539d91f77f565de6e21ce210da891e6644b8">
         <source>Support this channel</source>
         <target>Apoie esse canal</target>
@@ -1747,7 +1585,7 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>URL</source>
         <target>URL</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bfe7f34fbd4c3afa5f84a5580e0fae942cad2333">
@@ -1761,14 +1599,14 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>Channel</source>
         <target>Canal</target>
         <context-group name="null">
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
         <target>Privacidade</target>
         <context-group name="null">
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
@@ -1786,7 +1624,7 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>Update</source>
         <target>Atualizar</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
@@ -1860,46 +1698,35 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>Upload a file</source>
         <target>Enviar um arquivo</target>
         <context-group name="null">
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470">
         <source>Import with URL</source>
         <target>Importar com URL</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="752c401d7dcd708944eef60e411187f71d882340">
         <source>Import with torrent</source>
         <target>Importar com torrent</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
         <source>Add caption</source>
         <target>Adicionar legenda oculta</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8">
         <source>Select the caption file</source>
         <target>Selecionar um arquivo de legenda oculta</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a40a8a9f8359eda00c6a79809e9499100fde3ffd">
-        <source>
-          This will replace an existing caption!
-        </source>
-        <target>
-          Isso vai substituir uma legenda oculta existente!
-        </target>
-        <context-group name="null">
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c">
@@ -1913,70 +1740,63 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>Title</source>
         <target>Título</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cafc87479686947e2590b9f588a88040aeaf660b">
         <source>Tags</source>
         <target>Tags</target>
         <context-group name="null">
-          <context context-type="linenumber">175</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="935e7146fe6c12169abfda18536c5856935cfd82">
-        <source>(press Enter to add)</source>
-        <target>(pressione Enter para adicionar)</target>
-        <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
         <target>Descrições de vídeo são truncadas por padrão e exigem ação manual para expandi-las.</target>
         <context-group name="null">
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
         <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
         <target>Agendar publicação (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
         <context-group name="null">
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>Esse vídeo contém conteúdo adulto e explícito</target>
         <context-group name="null">
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
         <target>Algumas instâncias não listam vídeos contendo conteúdo adulto e explícito por padrão.</target>
         <context-group name="null">
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>Habilitar comentários de vídeos</target>
         <context-group name="null">
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
         <target>Aguarde a transcodificação antes de publicar o vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
         <target>Se você decidir não aguardar a transcodificação antes de publicar o vídeo, ele poderá não ser reproduzido até que a transcodificação termine.</target>
         <context-group name="null">
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1990,70 +1810,70 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>Add another caption</source>
         <target>Adicionar outra legenda oculta</target>
         <context-group name="null">
-          <context context-type="linenumber">139</context>
+          <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
         <source>See the subtitle file</source>
         <target>Veja o arquivo de legenda</target>
         <context-group name="null">
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>Cancelar criação</target>
         <context-group name="null">
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>Cancelar exclusão</target>
         <context-group name="null">
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
         <source>Captions</source>
         <target>Legendas ocultas</target>
         <context-group name="null">
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
         <source>Upload thumbnail</source>
         <target>Enviar miniatura</target>
         <context-group name="null">
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">194</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639">
         <source>Upload preview</source>
         <target>Enviar pré-visualização</target>
         <context-group name="null">
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
         <source>Support</source>
         <target>Apoiar</target>
         <context-group name="null">
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0">
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <target>Texto curto para dizer às pessoas como elas podem apoiar você (plataforma de membros, etc.).</target>
         <context-group name="null">
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>Configurações avançadas</target>
         <context-group name="null">
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2335f0bd17c63d835b50cfbbcea6c459cb1314c0">
@@ -2071,99 +1891,63 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
         <source>Download video</source>
         <target>Baixar vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
         <source>Direct download</source>
         <target>Download direto</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d">
         <source>Torrent (.torrent file)</source>
         <target>Torrent (arquivo .torrent)</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2db8d7cf6a3071f4c1519ef2b5e2713d9ff4e87f">
         <source>Torrent (magnet link)</source>
         <target>Torrent (link magnético)</target>
         <context-group name="null">
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
         <source>Download</source>
         <target>Download</target>
         <context-group name="null">
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b">
         <source>Report video</source>
         <target>Denunciar vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>Motivo...</target>
-        <context-group name="null">
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0e6b8229bd65f93bc8040d0fb598967f220740c7">
-        <source>
-              Cancel
-            </source>
-        <target>
-              Cancelar
-            </target>
-        <context-group name="null">
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
-        <source>Submit</source>
-        <target>Enviar</target>
-        <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
         <source>Share</source>
         <target>Compartilhar</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
-        <source>Embed</source>
-        <target>Embutir</target>
-        <context-group name="null">
-          <context context-type="linenumber">24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="239fe0316cfe91aa6e1e7bf1ef19e3b7772131f8">
-        <source>
-          The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
-        </source>
-        <target>
-          A URL não é segura (sem HTTPS), portanto, o vídeo incorporado não funcionará em sites HTTPS (os navegadores da qeb bloqueiam solicitações HTTP não seguras em sites HTTPS).
-        </target>
-        <context-group name="null">
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
         <source>QR-Code</source>
         <target>Código QR</target>
         <context-group name="null">
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
+        <source>Embed</source>
+        <target>Embutir</target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7584313e33a66811eb10646627914a01fff0347d">
@@ -2188,174 +1972,116 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fbc205ea3d06fa8f65973fa3b490ae172f71c087">
-        <source>
-    This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>
-  </source>
-        <target>
-    Esse vídeo será publicado em <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="643ab402461b1169eebbe2ed790e12a9a83551aa">
-        <source>
-            <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
-          </source>
-        <target>
-            <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizações
-          </target>
-        <context-group name="null">
-          <context context-type="linenumber">30</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33">
-        <source>Go the channel page</source>
-        <target>Ir para a página do canal</target>
-        <context-group name="null">
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ccc07df383b7a32be3e2e105faa5488caf261c1c">
-        <source>By <x id="INTERPOLATION" equiv-text="{{ video.by }}"/></source>
-        <target>Por <x id="INTERPOLATION" equiv-text="{{ video.by }}"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">45</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
-        <source>Go to the account page</source>
-        <target>Ir para a página da conta</target>
-        <context-group name="null">
-          <context context-type="linenumber">44</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="57075c778cf28b81272df4eb17da944366c98e51">
-        <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and subscribe there. Subscription as a PeerTube user is being worked on in &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/470'&gt;#470&lt;/a&gt;.</source>
-        <target>Você pode se inscrever nesta conta através de qualquer instância fediverse com capacidade para ActivityPub. Por exemplo, com Mastodon ou Pleroma, você pode digitar na caixa de pesquisa &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; e se inscrever lá. A assinatura como um usuário do PeerTube está sendo trabalhada em &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/470'&gt;#470&lt;/a&gt;.</target>
-        <context-group name="null">
-          <context context-type="linenumber">49</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced">
         <source>Like this video</source>
         <target>Curtir esse vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509">
         <source>Dislike this video</source>
         <target>Descurtir esse vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="144fff5c40b85414d59e644d8dee7cfefba925a2">
         <source>Download the video</source>
         <target>Baixar o vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
         <source>Report</source>
         <target>Denunciar</target>
         <context-group name="null">
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f4894617d9c44010f87473e583bd4604b7d6ecf">
         <source>Report this video</source>
         <target>Denuncie esse vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">92</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
-        <source>Blacklist</source>
-        <target>Lista negra</target>
-        <context-group name="null">
-          <context context-type="linenumber">99</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037">
-        <source>Blacklist this video</source>
-        <target>Coloque esse vídeo na lista negra</target>
-        <context-group name="null">
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cd27f761b923a5bdb16ba9844da632edd878f1b1">
         <source>Update this video</source>
         <target>Atualizar esse vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
+        <source>Blacklist</source>
+        <target>Lista negra</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037">
+        <source>Blacklist this video</source>
+        <target>Coloque esse vídeo na lista negra</target>
+        <context-group name="null">
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86f26b106c67be3c2e98b82766656e5d9da86dff">
+        <source>Unblacklist</source>
+        <target>Retirar da lista negra</target>
+        <context-group name="null">
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3dbfdc68f83d91cb360172eb65578cae94e7cbe5">
         <source>Delete this video</source>
         <target>Excluir esse vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33">
+        <source>Go the channel page</source>
+        <target>Ir para a página do canal</target>
+        <context-group name="null">
+          <context context-type="linenumber">123</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
+        <source>Go to the account page</source>
+        <target>Ir para a página da conta</target>
+        <context-group name="null">
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>Mostrar mais</target>
         <context-group name="null">
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
         <source>Show less</source>
         <target>Mostrar menos</target>
         <context-group name="null">
-          <context context-type="linenumber">136</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1">
-        <source>
-        Other videos
-      </source>
-        <target>
-        Outros vídeos
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">187</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="fb779d2b25c4d0ffa7d52c823a240717e8c1fe6c">
-        <source>Friendly Reminder:</source>
-        <target>Lembrete amigável:</target>
-        <context-group name="null">
-          <context context-type="linenumber">199</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="329900dd14bc4ca33cec3775d25c246e4cde7867">
-        <source>
-        The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
-      </source>
-        <target>
-        O sistema de compartilhamento usado por este vídeo implica que algumas informações técnicas sobre o seu sistema (como um endereço IP público) podem ser enviadas para outros usuários.
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
         <source>More information</source>
         <target>Mais informações</target>
         <context-group name="null">
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
         <target>Obtenha mais informações</target>
         <context-group name="null">
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
@@ -2366,7 +2092,7 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
       OK
     </target>
         <context-group name="null">
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7">
@@ -2427,7 +2153,7 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
       Publicar comentário
     </target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
@@ -2591,23 +2317,9 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f995df052a1dfc675c2a21926420a707d9601936">
-        <source>Following</source>
-        <target>Seguindo</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
-        <source>Follow</source>
-        <target>Seguir</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
-        <source>Followers</source>
-        <target>Seguidores</target>
+      <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
+        <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
+        <target>Vídeo <x id="INTERPOLATION" equiv-text="{{name}}"/> removido da lista negra.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2657,27 +2369,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
       <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
         <target>Usuário <x id="INTERPOLATION" equiv-text="{{username}}"/> excluído.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4733ad1d7e63960438c0203b9a64f165b5fc84f2">
-        <source>Do you really want to remove this video from the blacklist ? It will be available again in the videos list.</source>
-        <target>Você realmente quer remover este vídeo da lista negra? Ele estará disponível novamente na lista de vídeos.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
-        <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
-        <target>Vídeo <x id="INTERPOLATION" equiv-text="{{name}}"/> removido da lista negra.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2db8f1f93a5485c32267762a3bf4da499832e732">
-        <source>The new password and the confirmed password do not correspond.</source>
-        <target>A nova senha e a senha confirmada não são iguais.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2850,6 +2541,13 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
+        <source>Unable to find user id or verification string.</source>
+        <target>Não foi possível localizar o id de usuário ou string de verificação.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7">
         <source>Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>.
 </source>
@@ -2883,13 +2581,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
       <trans-unit id="7701e3762dc4a2b2e302c24f17820bc8dd7cacc1">
         <source>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
         <target>Um e-amil com as instruções de redefinição de senha serão enviadas para <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
-        <source>Unable to find user id or verification string.</source>
-        <target>Não foi possível localizar o id de usuário ou string de verificação.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3083,13 +2774,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ba88636d27c1a6a7e1f75ff57ec182b30b851c2e">
-        <source>Transcoding threads must be greater than 1.</source>
-        <target>Threads de transcodificação deve ser maior que 1.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5db300f6fba918a35597160183205ede13e8e149">
         <source>Username is required.</source>
         <target>Nome de usuário é necessário.</target>
@@ -3156,6 +2840,13 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
       <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e">
         <source>Password cannot be more than 255 characters long.</source>
         <target>Senha não pode ter mais que 255 caracteres.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2db8f1f93a5485c32267762a3bf4da499832e732">
+        <source>The new password and the confirmed password do not correspond.</source>
+        <target>A nova senha e a senha confirmada não são iguais.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3727,6 +3418,41 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
+        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
+        <target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24">
+        <source>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</source>
+        <target>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vídeos em FullHD</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vídeo em HD</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vídeos de qualidade média</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
         <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> anos atrás</target>
@@ -3881,41 +3607,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
-        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
-        <target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24">
-        <source>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</source>
-        <target>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86">
-        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
-        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vídeos em FullHD</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8">
-        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
-        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vídeo em HD</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
-        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
-        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> de vídeos de qualidade média</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
         <source>Video to import updated.</source>
         <target>Vídeo para importar atualizado.</target>
@@ -3965,13 +3656,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="d31d39e8ee9b2f20bffb3468ee062eaa5409c59f">
-        <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{ videoSize }}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{ videoQuotaUsed }}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{ videoQuota }}"/>)</source>
-        <target>Sua cota de vídeo é excedida com esse vídeo (tamanho do vídeo: <x id="INTERPOLATION" equiv-text="{{ videoSize }}"/>, usado: <x id="INTERPOLATION_1" equiv-text="{{ videoQuotaUsed }}"/>, cota: <x id="INTERPOLATION_2" equiv-text="{{ videoQuota }}"/>)</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
         <source>Video published.</source>
         <target>Vídeo publicado.</target>
@@ -4003,20 +3687,6 @@ Quando você enviar um vídeo neste canal, o campo de apoio a vídeo será preen
       <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
         <source>Copied</source>
         <target>Copiado</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="23b2c2f4dd69e29c3bff00469e259dcb01de5633">
-        <source>Do you really want to blacklist this video?</source>
-        <target>Você realmente deseja acrescentar esse vídeo à lista negra?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cafd8ec6020e69f241a107b1cb7081bd9e773d4e">
-        <source>Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> had been blacklisted.</source>
-        <target>Vídeo <x id="INTERPOLATION" equiv-text="{{videoName}}"/> foi incluído à lista negra.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

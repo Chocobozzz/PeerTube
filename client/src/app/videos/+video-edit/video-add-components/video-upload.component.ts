@@ -123,7 +123,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
       const msg = this.i18n(
-        'Your video quota is exceeded with this video (video size: {{ videoSize }}, used: {{ videoQuotaUsed }}, quota: {{ videoQuota }})',
+        'Your video quota is exceeded with this video (video size: {{videoSize}}, used: {{videoQuotaUsed}}, quota: {{videoQuota}})',
         {
           videoSize: bytePipes.transform(videofile.size, 0),
           videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
@@ -137,12 +137,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
     if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
       const msg = this.i18n(
-        'Your daily video quota is exceeded with this video (video size: {{ videoSize }}, ' +
-            'used: {{ videoQuotaUsedDaily }}, quota: {{ videoQuotaDaily }})',
+        'Your daily video quota is exceeded with this video (video size: {{videoSize}}, used: {{quotaUsedDaily}}, quota: {{quotaDaily}})',
         {
           videoSize: bytePipes.transform(videofile.size, 0),
-          videoQuotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
-          videoQuotaDaily: bytePipes.transform(videoQuotaDaily, 0)
+          quotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
+          quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
         }
       )
       this.notificationsService.error(this.i18n('Error'), msg)
