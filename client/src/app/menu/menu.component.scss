@@ -28,6 +28,7 @@ menu {
 
   .top-menu {
     flex-grow: 1;
+    width: $menu-width;
   }
 
   .logged-in-block {
@@ -193,6 +194,7 @@ menu {
     padding-bottom: 15px;
     padding-left: $menu-lateral-padding;
     padding-right: $menu-lateral-padding;
+    width: $menu-width;
 
     .language, .color-palette {
       display: inline-block;
@@ -238,7 +240,7 @@ menu {
     width: 100% !important;
   }
 
-  .top-menu {
-    width: 100%;
+  .top-menu, .footer {
+    width: 100% !important;
   }
 }

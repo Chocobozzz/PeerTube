@@ -14,6 +14,7 @@ import { AuthUser } from './auth-user.model'
 import { objectToUrlEncoded } from '@app/shared/misc/utils'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -36,6 +37,7 @@ export class AuthService {
 
   loginChangedSource: Observable<AuthStatus>
   userInformationLoaded = new ReplaySubject<boolean>(1)
+  hotkeys: Hotkey[]
 
   private clientId: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
   private clientSecret: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
@@ -46,6 +48,7 @@ export class AuthService {
   constructor (
     private http: HttpClient,
     private notificationsService: NotificationsService,
+    private hotkeysService: HotkeysService,
     private restExtractor: RestExtractor,
     private router: Router,
     private i18n: I18n
@@ -55,6 +58,26 @@ export class AuthService {
 
     // Return null if there is nothing to load
     this.user = AuthUser.load()
+
+    // Set HotKeys
+    this.hotkeys = [
+      new Hotkey('m s', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/videos/subscriptions' ])
+        return false
+      }, undefined, 'Go to my subscriptions'),
+      new Hotkey('m v', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/my-account/videos' ])
+        return false
+      }, undefined, 'Go to my videos'),
+      new Hotkey('m i', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/my-account/video-imports' ])
+        return false
+      }, undefined, 'Go to my imports'),
+      new Hotkey('m c', (event: KeyboardEvent): boolean => {
+        this.router.navigate([ '/my-account/video-channels' ])
+        return false
+      }, undefined, 'Go to my channels')
+    ]
   }
 
   loadClientCredentials () {
@@ -152,6 +175,8 @@ export class AuthService {
     AuthUser.flush()
 
     this.setStatus(AuthStatus.LoggedOut)
+
+    this.hotkeysService.remove(this.hotkeys)
   }
 
   refreshAccessToken () {
@@ -231,6 +256,8 @@ export class AuthService {
 
     this.setStatus(AuthStatus.LoggedIn)
     this.userInformationLoaded.next(true)
+
+    this.hotkeysService.add(this.hotkeys)
   }
 
   private handleRefreshToken (obj: UserRefreshToken) {
