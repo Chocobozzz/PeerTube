@@ -8,7 +8,9 @@
 }
 
 @mixin disable-outline {
-  outline: none;
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
 
   &::-moz-focus-inner {
     border: 0;

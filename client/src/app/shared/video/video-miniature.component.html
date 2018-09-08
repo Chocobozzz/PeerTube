@@ -3,6 +3,7 @@
 
   <div class="video-miniature-information">
     <a
+      tabindex="-1"
       class="video-miniature-name"
       [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur() }"
     >
@@ -11,10 +12,10 @@
 
     <span i18n class="video-miniature-created-at-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
 
-    <a *ngIf="displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
+    <a tabindex="-1" *ngIf="displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
       {{ video.byAccount }}
     </a>
-    <a *ngIf="displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
+    <a tabindex="-1" *ngIf="displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
       {{ video.byVideoChannel }}
     </a>
   </div>

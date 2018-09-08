@@ -48,9 +48,9 @@
       <my-video-thumbnail [video]="result"></my-video-thumbnail>
 
       <div class="video-info">
-        <a class="video-info-name" [routerLink]="['/videos/watch', result.uuid]" [attr.title]="result.name">{{ result.name }}</a>
+        <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', result.uuid]" [attr.title]="result.name">{{ result.name }}</a>
         <span i18n class="video-info-date-views">{{ result.publishedAt | myFromNow }} - {{ result.views | myNumberFormatter }} views</span>
-        <a class="video-info-account" [routerLink]="[ '/accounts', result.byAccount ]">{{ result.byAccount }}</a>
+        <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', result.byAccount ]">{{ result.byAccount }}</a>
       </div>
     </div>
   </ng-container>

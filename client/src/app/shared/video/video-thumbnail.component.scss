@@ -14,6 +14,11 @@
     text-decoration: none !important;
   }
 
+  @include disable-outline;
+  &.focus-visible {
+    box-shadow: 0 0 0 2px var(--mainColor);
+  }
+
   img {
     width: $video-thumbnail-width;
     height: $video-thumbnail-height;

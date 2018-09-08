@@ -6,6 +6,7 @@ import { ResetPasswordModule } from '@app/reset-password'
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
 import { ClipboardModule } from 'ngx-clipboard'
 import { HotkeyModule, IHotkeyOptions } from 'angular2-hotkeys'
+import 'focus-visible'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'

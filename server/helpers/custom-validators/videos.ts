@@ -178,7 +178,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
     const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
     if (videoChannel === null) {
       res.status(400)
-         .json({ error: 'Unknown video video channel on this instance.' })
+         .json({ error: 'Unknown video `video channel` on this instance.' })
          .end()
 
       return false
@@ -191,7 +191,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
   const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, user.Account.id)
   if (videoChannel === null) {
     res.status(400)
-       .json({ error: 'Unknown video video channel for this account.' })
+       .json({ error: 'Unknown video `video channel` for this account.' })
        .end()
 
     return false
