@@ -130,7 +130,7 @@ menu {
       transition: background-color .1s ease-in-out;
       @include disable-default-a-behaviour;
 
-      &:hover {
+      &:hover, &.focus-visible {
         background-color: rgba(255, 255, 255, 0.15);
       }
 
@@ -202,6 +202,7 @@ menu {
       font-weight: $font-semibold;
 
       .icon {
+        @include disable-outline;
         @include icon(28px);
         opacity: 0.9;
 

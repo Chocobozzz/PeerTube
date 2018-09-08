@@ -19,7 +19,10 @@
   margin-bottom: 20px;
 
   a {
-    @include disable-default-a-behaviour;
+    &:hover, &:focus:not(.focus-visible), &:active {
+      text-decoration: none;
+      outline: none;
+    }
 
     color: var(--mainForegroundColor);
   }
