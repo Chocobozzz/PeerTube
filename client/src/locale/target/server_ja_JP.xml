@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+ <file source-language="en-US" datatype="plaintext" original="" target-language="ja-JP">
+    <body>
+      <trans-unit id="Music">
+        <source>音楽</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Films">
+        <source>映画</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Vehicles">
+        <source>乗り物</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Art">
+        <source>芸術</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Sports">
+        <source>スポーツ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Travels">
+        <source>旅行</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Gaming">
+        <source>ゲーム</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="People">
+        <source>人々</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Comedy">
+        <source>お笑い</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Entertainment">
+        <source>エンターテインメント</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="News">
+        <source>ニュース</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="How To">
+        <source>How To</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Education">
+        <source>教育</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Activism">
+        <source>活動主義</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Science &amp; Technology">
+        <source>科学 &amp; 技術</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Animals">
+        <source>動物</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Kids">
+        <source>子ども</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Food">
+        <source>食べ物</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution">
+        <source>CC BY (表示)</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Share Alike">
+        <source>CC BY-SA (表示 - 継承)</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - No Derivatives">
+        <source>CC BY-ND (表示 - 改変禁止)</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial">
+        <source>CC BY-NC (表示 - 非営利)</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial - Share Alike">
+        <source>CC BY-NC-SA (表示 - 非営利 - 継承)</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial - No Derivatives">
+        <source>CC BY-NC-ND (表示 - 非営利 - 改変禁止)</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Public Domain Dedication">
+        <source>パブリックドメイン</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Public">
+        <source>公開</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Unlisted">
+        <source>未収載</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Private">
+        <source>非公開</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Published">
+        <source>公開済</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>再エンコードする</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>インポートする</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>保留中</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>完了</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>失敗</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Misc">
+        <source>その他</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Unknown">
+        <source>不明</source>
+        <target>undefined</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
