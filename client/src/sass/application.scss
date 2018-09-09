@@ -50,11 +50,12 @@ strong {
 
 input.readonly {
   /* Force blank on readonly inputs */
-  background-color: #fff !important;
+  background-color: var(--inputColor) !important;
 }
 
 input, textarea {
   outline: none;
+  color: var(--mainForegroundColor);
 }
 
 label {
