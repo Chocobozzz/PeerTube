@@ -55,7 +55,8 @@ app.set('trust proxy', CONFIG.TRUST_PROXY)
 app.use(helmet({
   frameguard: {
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-  }
+  },
+  hsts: false
 }))
 
 // ----------- Database -----------
