@@ -931,7 +931,7 @@
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
-        <target>Administratörs</target>
+        <target>Administratör</target>
         <context-group name="null">
           <context context-type="linenumber">123</context>
         </context-group>
@@ -1092,7 +1092,7 @@
       </trans-unit>
       <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
         <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
-        <target>Det verkar som att konfigurationen inte stämmer. Sök efter tänkbara fel i de olika flikarna.</target>
+        <target>Det verkar som att konfigurationen inte stämmer. Sök efter eventuella fel i de olika flikarna.</target>
         <context-group name="null">
           <context context-type="linenumber">315</context>
         </context-group>

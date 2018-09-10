@@ -1463,6 +1463,7 @@ Cuando subas un vídeo a este canal, el campo de soporte del vídeo se rellenar�
       </trans-unit>
       <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
         <source>Target</source>
+        <target>Objetivo</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -1652,12 +1653,14 @@ Cuando subas un vídeo a este canal, el campo de soporte del vídeo se rellenar�
       </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
         <source>Paste magnet URI</source>
+        <target>Pegar el enlace magnético</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1ce18c12c809a738f05f2290f46df0677f27ed70">
         <source>You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
+        <target>Puedes importar cualquier torrent que apunta a un archivo mp4. Debes asegurarte de que tienes los derechos de difusión del contenido al que apunta, en caso contrario puedes causar perjuicios legales a ti y a tu instancia.</target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
         </context-group>
@@ -1947,6 +1950,9 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
         <source>
     The video is being imported, it will be available when the import is finished.
   </source>
+        <target>
+    El vídeo está siendo importado, estará disponible cuando la importación finalice.
+  </target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
