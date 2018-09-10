@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" datatype="plaintext" original="" target-language="ja-JP">
+    <body>
+      <trans-unit id="Audio Player">
+        <source>音楽プレーヤー</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Video Player">
+        <source>動画プレーヤー</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Play">
+        <source>再生</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Pause">
+        <source>一時停止</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Replay">
+        <source>リプレイ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Current Time">
+        <source>現在時間</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Duration">
+        <source>期間</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Remaining Time">
+        <source>残り時間</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Stream Type">
+        <source>ストリームの種類</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="LIVE">
+        <source>LIVE</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Loaded">
+        <source>読込済</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Progress">
+        <source>進捗</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Progress Bar">
+        <source>進捗バー</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="progress bar timing: currentTime={1} duration={2}">
+        <source>{1} の {2}</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Fullscreen">
+        <source>フルスクリーン</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Non-Fullscreen">
+        <source>非フルスクリーン</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Mute">
+        <source>ミュート</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Unmute">
+        <source>非ミュート</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Playback Rate">
+        <source>再生レート</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Subtitles">
+        <source>字幕</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="subtitles off">
+        <source>字幕オフ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Captions">
+        <source>キャプション</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="captions off">
+        <source>キャプションオフ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Chapters">
+        <source>チャプター</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Descriptions">
+        <source>説明</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="descriptions off">
+        <source>説明オフ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Audio Track">
+        <source>Audio Track</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Volume Level">
+        <source>音量レベル</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="You aborted the media playback">
+        <source>メディアの再生を中止しました</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="A network error caused the media download to fail part-way.">
+        <source>ネットワークエラーにより、メディアのダウンロードが途中で失敗しました。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="The media could not be loaded, either because the server or network failed or because the format is not supported.">
+        <source>サーバーまたはネットワークに障害が発生したか、フォーマットがサポートされていないために、メディアをロード出来ませんでした。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="The media playback was aborted due to a corruption problem or because the media used features your browser did not support.">
+        <source>破損の問題や、ブラウザがサポートしていない機能を使用しているメディアが原因で、メディアの再生が中止されました。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="No compatible source was found for this media.">
+        <source>このメディアに対応するソースは見つかりませんでした。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="The media is encrypted and we do not have the keys to decrypt it.">
+        <source>メディアは暗号化されており、復号する鍵はありません。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Play Video">
+        <source>動画を再生</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Close">
+        <source>閉じる</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Close Modal Dialog">
+        <source>モーダルダイアログを閉じる</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Modal Window">
+        <source>モーダルウィンドウ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="This is a modal window">
+        <source>これはモーダルウィンドウです。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="This modal can be closed by pressing the Escape key or activating the close button.">
+        <source>モーダルは、Escキーを押すか閉じるボタンを押すことで閉じることが出来ます。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", opens captions settings dialog">
+        <source>, キャプションの設定ダイアログを開く</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", opens subtitles settings dialog">
+        <source>, 字幕の設定ダイアログを開く</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", opens descriptions settings dialog">
+        <source>, 説明の設定ダイアログを開く</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id=", selected">
+        <source>, 選択済</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="captions settings">
+        <source>キャプションの設定</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="subtitles settings">
+        <source>字幕の設定</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="descriptions settings">
+        <source>説明の設定</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Text">
+        <source>テキスト</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="White">
+        <source>白</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Black">
+        <source>黒</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Red">
+        <source>赤</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Green">
+        <source>緑</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Blue">
+        <source>青</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Yellow">
+        <source>黄</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Magenta">
+        <source>マゼンタ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Cyan">
+        <source>シアン</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Background">
+        <source>バックグラウンド</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Window">
+        <source>ウィンドウ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Transparent">
+        <source>透明</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Semi-Transparent">
+        <source>半透明</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Opaque">
+        <source>不透明</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Font Size">
+        <source>フォントサイズ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Text Edge Style">
+        <source>文字の縁のスタイル</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="None">
+        <source>無し</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Raised">
+        <source>盛り上げる</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Depressed">
+        <source>押し下げる</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Uniform">
+        <source>揃える</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Dropshadow">
+        <source>影を落とす</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Font Family">
+        <source>Font-Family</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Proportional Sans-Serif">
+        <source>Proportional Sans-Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Monospace Sans-Serif">
+        <source>Monospace Sans-Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Proportional Serif">
+        <source>Proportional Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Monospace Serif">
+        <source>Monospace Serif</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Casual">
+        <source>Casual</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Script">
+        <source>Script</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Small Caps">
+        <source>Small Caps</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Reset">
+        <source>初期化</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="restore all settings to the default values">
+        <source>すべての設定をデフォルト値に戻す</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Done">
+        <source>完了</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Caption Settings Dialog">
+        <source>キャプション設定ダイアログ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Beginning of dialog window. Escape will cancel and close the window.">
+        <source>最初のダイアログウィンドウ エスケープをキャンセルしてウィンドウを閉じます。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="End of dialog window.">
+        <source>最後のダイアログウィンドウ</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="{1} is loading.">
+        <source>{1} を読込中…</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Quality">
+        <source>品質</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Auto">
+        <source>自動</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Speed">
+        <source>速度</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Subtitles/CC">
+        <source>字幕/CC</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="peers">
+        <source>ピア</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Go to the video page">
+        <source>動画ページへ移動</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Settings">
+        <source>設定</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Uses P2P, others may know you are watching this video.">
+        <source>P2Pを使用し、他の人があなたがこの動画を見ていることを知るかもしれません。</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL">
+        <source>動画のURLをコピーする</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL at the current time">
+        <source>現時点の動画のURLをコピーする</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Copy embed code">
+        <source>埋め込みコードをコピーする</source>
+        <target>undefined</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
