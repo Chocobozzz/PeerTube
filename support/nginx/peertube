@@ -48,7 +48,7 @@ server {
   # Tells browsers to stick with HTTPS and never visit the insecure HTTP
   # version. Once a browser sees this header, it will only visit the site over
   # HTTPS for the next 2 years: (read more on hstspreload.org)
-  #add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+  #add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
 
   access_log /var/log/nginx/peertube.example.com.access.log;
   error_log /var/log/nginx/peertube.example.com.error.log;
