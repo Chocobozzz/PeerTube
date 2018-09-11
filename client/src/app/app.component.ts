@@ -157,7 +157,7 @@ export class AppComponent implements OnInit {
         this.router.navigate([ '/videos/upload' ])
         return false
       }, undefined, 'Go to the videos upload page'),
-      new Hotkey('T', (event: KeyboardEvent): boolean => {
+      new Hotkey('shift+t', (event: KeyboardEvent): boolean => {
         this.themeService.toggleDarkTheme()
         return false
       }, undefined, 'Toggle Dark theme')
