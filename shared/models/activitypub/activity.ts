@@ -1,6 +1,6 @@
 import { ActivityPubActor } from './activitypub-actor'
 import { ActivityPubSignature } from './activitypub-signature'
-import { VideoTorrentObject } from './objects'
+import { CacheFileObject, VideoTorrentObject } from './objects'
 import { DislikeObject } from './objects/dislike-object'
 import { VideoAbuseObject } from './objects/video-abuse-object'
 import { VideoCommentObject } from './objects/video-comment-object'
@@ -29,12 +29,12 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject | VideoCommentObject
+  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject | VideoCommentObject | CacheFileObject
 }
 
 export interface ActivityUpdate extends BaseActivity {
   type: 'Update'
-  object: VideoTorrentObject | ActivityPubActor
+  object: VideoTorrentObject | ActivityPubActor | CacheFileObject
 }
 
 export interface ActivityDelete extends BaseActivity {

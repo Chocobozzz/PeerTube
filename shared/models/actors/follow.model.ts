@@ -2,10 +2,10 @@ import { Actor } from './actor.model'
 
 export type FollowState = 'pending' | 'accepted'
 
-export interface AccountFollow {
+export interface ActorFollow {
   id: number
-  follower: Actor
-  following: Actor
+  follower: Actor & { hostRedundancyAllowed: boolean }
+  following: Actor & { hostRedundancyAllowed: boolean }
   score: number
   state: FollowState
   createdAt: Date

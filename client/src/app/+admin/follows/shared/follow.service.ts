@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/primeng'
 import { Observable } from 'rxjs'
-import { AccountFollow, ResultList } from '../../../../../../shared'
+import { ActorFollow, ResultList } from '../../../../../../shared'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../../../shared'
 
@@ -18,22 +18,22 @@ export class FollowService {
   ) {
   }
 
-  getFollowing (pagination: RestPagination, sort: SortMeta): Observable<ResultList<AccountFollow>> {
+  getFollowing (pagination: RestPagination, sort: SortMeta): Observable<ResultList<ActorFollow>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<AccountFollow>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
+    return this.authHttp.get<ResultList<ActorFollow>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
 
-  getFollowers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<AccountFollow>> {
+  getFollowers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<ActorFollow>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<AccountFollow>>(FollowService.BASE_APPLICATION_URL + '/followers', { params })
+    return this.authHttp.get<ResultList<ActorFollow>>(FollowService.BASE_APPLICATION_URL + '/followers', { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))
@@ -52,7 +52,7 @@ export class FollowService {
                )
   }
 
-  unfollow (follow: AccountFollow) {
+  unfollow (follow: ActorFollow) {
     return this.authHttp.delete(FollowService.BASE_APPLICATION_URL + '/following/' + follow.following.host)
                .pipe(
                  map(this.restExtractor.extractDataBool),

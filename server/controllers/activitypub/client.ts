@@ -3,9 +3,9 @@ import * as express from 'express'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
-import { buildVideoAnnounce } from '../../lib/activitypub/send'
+import { buildAnnounceWithVideoAudience } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
-import { createActivityData } from '../../lib/activitypub/send/send-create'
+import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
 import { videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
@@ -26,6 +26,8 @@ import {
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
 import { VideoCaptionModel } from '../../models/video/video-caption'
+import { videoRedundancyGetValidator } from '../../middlewares/validators/redundancy'
+import { getServerActor } from '../../helpers/utils'
 
 const activityPubClientRouter = express.Router()
 
@@ -93,6 +95,11 @@ activityPubClientRouter.get('/video-channels/:name/following',
   executeIfActivityPub(asyncMiddleware(videoChannelFollowingController))
 )
 
+activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
+  executeIfActivityPub(asyncMiddleware(videoRedundancyGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoRedundancyController))
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -131,7 +138,7 @@ async function videoController (req: express.Request, res: express.Response, nex
   const videoObject = audiencify(video.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
-    const data = createActivityData(video.url, video.VideoChannel.Account.Actor, videoObject, audience)
+    const data = buildCreateActivity(video.url, video.VideoChannel.Account.Actor, videoObject, audience)
     return activityPubResponse(activityPubContextify(data), res)
   }
 
@@ -140,9 +147,9 @@ async function videoController (req: express.Request, res: express.Response, nex
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
-  const object = await buildVideoAnnounce(share.Actor, share, res.locals.video, undefined)
+  const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.video, undefined)
 
-  return activityPubResponse(activityPubContextify(object), res)
+  return activityPubResponse(activityPubContextify(activity), res)
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -219,11 +226,26 @@ async function videoCommentController (req: express.Request, res: express.Respon
   const videoCommentObject = audiencify(videoComment.toActivityPubObject(threadParentComments), audience)
 
   if (req.path.endsWith('/activity')) {
-    const data = createActivityData(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
+    const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
     return activityPubResponse(activityPubContextify(data), res)
   }
 
   return activityPubResponse(activityPubContextify(videoCommentObject), res)
+}
+
+async function videoRedundancyController (req: express.Request, res: express.Response) {
+  const videoRedundancy = res.locals.videoRedundancy
+  const serverActor = await getServerActor()
+
+  const audience = getAudience(serverActor)
+  const object = audiencify(videoRedundancy.toActivityPubObject(), audience)
+
+  if (req.path.endsWith('/activity')) {
+    const data = buildCreateActivity(videoRedundancy.url, serverActor, object, audience)
+    return activityPubResponse(activityPubContextify(data), res)
+  }
+
+  return activityPubResponse(activityPubContextify(object), res)
 }
 
 // ---------------------------------------------------------------------------

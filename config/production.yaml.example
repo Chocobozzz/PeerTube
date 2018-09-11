@@ -67,6 +67,15 @@ trending:
   videos:
     interval_days: 7 # Compute trending videos for the last x days
 
+# Cache remote videos on your server, to help other instances to broadcast the video
+# You can define multiple caches using different sizes/strategies
+# Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following
+redundancy:
+  videos:
+#    -
+#      size: '10GB'
+#      strategy: 'most-views' # Cache videos that have the most views
+
 ###############################################################################
 #
 # From this point, all the following keys can be overridden by the web interface

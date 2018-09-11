@@ -17,15 +17,30 @@ export interface ActivityIconObject {
   height: number
 }
 
-export interface ActivityUrlObject {
+export type ActivityVideoUrlObject = {
   type: 'Link'
-  mimeType: 'video/mp4' | 'video/webm' | 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
+  mimeType: 'video/mp4' | 'video/webm' | 'video/ogg'
   href: string
   height: number
-
-  size?: number
-  fps?: number
+  size: number
+  fps: number
 }
+
+export type ActivityUrlObject =
+  ActivityVideoUrlObject
+  |
+  {
+    type: 'Link'
+    mimeType: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
+    href: string
+    height: number
+  }
+  |
+  {
+    type: 'Link'
+    mimeType: 'text/html'
+    href: string
+  }
 
 export interface ActivityPubAttributedTo {
   type: 'Group' | 'Person'

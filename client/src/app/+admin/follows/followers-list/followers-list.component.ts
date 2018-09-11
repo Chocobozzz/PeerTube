@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
-import { AccountFollow } from '../../../../../../shared/models/actors/follow.model'
+import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
 import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -13,7 +13,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './followers-list.component.scss' ]
 })
 export class FollowersListComponent extends RestTable implements OnInit {
-  followers: AccountFollow[] = []
+  followers: ActorFollow[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }

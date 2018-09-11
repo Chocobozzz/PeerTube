@@ -400,17 +400,15 @@ async function refreshActorIfNeeded (actor: ActorModel): Promise<{ actor: ActorM
       await actor.save({ transaction: t })
 
       if (actor.Account) {
-        await actor.save({ transaction: t })
-
         actor.Account.set('name', result.name)
         actor.Account.set('description', result.summary)
+
         await actor.Account.save({ transaction: t })
       } else if (actor.VideoChannel) {
-        await actor.save({ transaction: t })
-
         actor.VideoChannel.set('name', result.name)
         actor.VideoChannel.set('description', result.summary)
         actor.VideoChannel.set('support', result.support)
+
         await actor.VideoChannel.save({ transaction: t })
       }
 

@@ -76,7 +76,13 @@ export const unusedActorAttributesForAPI = [
       },
       {
         model: () => VideoChannelModel.unscoped(),
-        required: false
+        required: false,
+        include: [
+          {
+            model: () => AccountModel,
+            required: true
+          }
+        ]
       },
       {
         model: () => ServerModel,
@@ -337,6 +343,7 @@ export class ActorModel extends Model<ActorModel> {
       uuid: this.uuid,
       name: this.preferredUsername,
       host: this.getHost(),
+      hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
       avatar,
@@ -438,6 +445,10 @@ export class ActorModel extends Model<ActorModel> {
 
   getHost () {
     return this.Server ? this.Server.host : CONFIG.WEBSERVER.HOST
+  }
+
+  getRedundancyAllowed () {
+    return this.Server ? this.Server.redundancyAllowed : false
   }
 
   getAvatarUrl () {

@@ -8,6 +8,7 @@
       <th i18n>Host</th>
       <th i18n>State</th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n>Redundancy allowed</th>
       <th></th>
     </tr>
   </ng-template>
@@ -18,6 +19,11 @@
       <td>{{ follow.following.host }}</td>
       <td>{{ follow.state }}</td>
       <td>{{ follow.createdAt }}</td>
+      <td>
+        <my-redundancy-checkbox
+          [host]="follow.following.host" [redundancyAllowed]="follow.following.hostRedundancyAllowed"
+        ></my-redundancy-checkbox>
+      </td>
       <td class="action-cell">
         <my-delete-button (click)="removeFollowing(follow)"></my-delete-button>
       </td>

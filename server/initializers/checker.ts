@@ -7,6 +7,9 @@ import { parse } from 'url'
 import { CONFIG } from './constants'
 import { logger } from '../helpers/logger'
 import { getServerActor } from '../helpers/utils'
+import { VideosRedundancy } from '../../shared/models/redundancy'
+import { isArray } from '../helpers/custom-validators/misc'
+import { uniq } from 'lodash'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -33,6 +36,20 @@ function checkConfig () {
 
   if ([ 'do_not_list', 'blur', 'display' ].indexOf(defaultNSFWPolicy) === -1) {
     return 'NSFW policy setting should be "do_not_list" or "blur" or "display" instead of ' + defaultNSFWPolicy
+  }
+
+  const redundancyVideos = config.get<VideosRedundancy[]>('redundancy.videos')
+  if (isArray(redundancyVideos)) {
+    for (const r of redundancyVideos) {
+      if ([ 'most-views' ].indexOf(r.strategy) === -1) {
+        return 'Redundancy video entries should have "most-views" strategy instead of ' + r.strategy
+      }
+    }
+
+    const filtered = uniq(redundancyVideos.map(r => r.strategy))
+    if (filtered.length !== redundancyVideos.length) {
+      return 'Redundancy video entries should have uniq strategies'
+    }
   }
 
   return null
