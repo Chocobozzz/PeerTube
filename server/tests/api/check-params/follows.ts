@@ -169,15 +169,6 @@ describe('Test server follows API validators', function () {
           statusCodeExpected: 404
         })
       })
-
-      it('Should succeed with the correct parameters', async function () {
-        await makeDeleteRequest({
-          url: server.url,
-          path: path + '/localhost:9002',
-          token: server.accessToken,
-          statusCodeExpected: 404
-        })
-      })
     })
   })
 

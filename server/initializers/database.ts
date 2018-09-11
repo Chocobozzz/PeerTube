@@ -27,6 +27,7 @@ import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoImportModel } from '../models/video/video-import'
 import { VideoViewModel } from '../models/video/video-views'
 import { VideoChangeOwnershipModel } from '../models/video/video-change-ownership'
+import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -87,7 +88,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoCommentModel,
     ScheduleVideoUpdateModel,
     VideoImportModel,
-    VideoViewModel
+    VideoViewModel,
+    VideoRedundancyModel
   ])
 
   // Check extensions exist in the database

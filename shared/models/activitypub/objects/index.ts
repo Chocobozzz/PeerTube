@@ -1,3 +1,4 @@
+export * from './cache-file-object'
 export * from './common-objects'
 export * from './video-abuse-object'
 export * from './video-torrent-object'

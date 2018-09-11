@@ -1,5 +1,4 @@
 import * as request from 'supertest'
-import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
 

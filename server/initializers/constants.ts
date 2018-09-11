@@ -1,6 +1,6 @@
 import { IConfig } from 'config'
 import { dirname, join } from 'path'
-import { JobType, VideoRateType, VideoState } from '../../shared/models'
+import { JobType, VideoRateType, VideoRedundancyStrategy, VideoState, VideosRedundancy } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy } from '../../shared/models/videos'
@@ -9,13 +9,14 @@ import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../h
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
+import * as bytes from 'bytes'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 265
+const LAST_MIGRATION_VERSION = 270
 
 // ---------------------------------------------------------------------------
 
@@ -137,7 +138,8 @@ let SCHEDULER_INTERVALS_MS = {
   badActorFollow: 60000 * 60, // 1 hour
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
-  youtubeDLUpdate: 60000 * 60 * 24 // 1 day
+  youtubeDLUpdate: 60000 * 60 * 24, // 1 day
+  videosRedundancy: 60000 * 2 // 2 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -207,6 +209,9 @@ const CONFIG = {
     VIDEOS: {
       INTERVAL_DAYS: config.get<number>('trending.videos.interval_days')
     }
+  },
+  REDUNDANCY: {
+    VIDEOS: buildVideosRedundancy(config.get<any[]>('redundancy.videos'))
   },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
@@ -320,6 +325,9 @@ const CONSTRAINTS_FIELDS = {
         max: 1024 * 200 // 200 KB
       }
     }
+  },
+  VIDEOS_REDUNDANCY: {
+    URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -584,6 +592,13 @@ const CACHE = {
   }
 }
 
+const REDUNDANCY = {
+  VIDEOS: {
+    EXPIRES_AFTER_MS: 48 * 3600 * 1000, // 2 days
+    RANDOMIZED_FACTOR: 5
+  }
+}
+
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 // ---------------------------------------------------------------------------
@@ -629,7 +644,10 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.badActorFollow = 10000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
+  SCHEDULER_INTERVALS_MS.videosRedundancy = 5000
   REPEAT_JOBS['videos-views'] = { every: 5000 }
+
+  REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
 
@@ -653,6 +671,7 @@ export {
   CONFIG,
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
+  REDUNDANCY,
   JOB_CONCURRENCY,
   JOB_ATTEMPTS,
   LAST_MIGRATION_VERSION,
@@ -720,6 +739,17 @@ function getLocalConfigFilePath () {
 function updateWebserverConfig () {
   CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
   CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+}
+
+function buildVideosRedundancy (objs: { strategy: VideoRedundancyStrategy, size: string }[]): VideosRedundancy[] {
+  if (!objs) return []
+
+  return objs.map(obj => {
+    return {
+      strategy: obj.strategy,
+      size: bytes.parse(obj.size)
+    }
+  })
 }
 
 function buildLanguages () {

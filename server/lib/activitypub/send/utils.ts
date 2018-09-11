@@ -59,11 +59,11 @@ async function forwardActivity (
 async function broadcastToFollowers (
   data: any,
   byActor: ActorModel,
-  toActorFollowers: ActorModel[],
+  toFollowersOf: ActorModel[],
   t: Transaction,
   actorsException: ActorModel[] = []
 ) {
-  const uris = await computeFollowerUris(toActorFollowers, actorsException, t)
+  const uris = await computeFollowerUris(toFollowersOf, actorsException, t)
   return broadcastTo(uris, data, byActor)
 }
 
@@ -115,8 +115,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function computeFollowerUris (toActorFollower: ActorModel[], actorsException: ActorModel[], t: Transaction) {
-  const toActorFollowerIds = toActorFollower.map(a => a.id)
+async function computeFollowerUris (toFollowersOf: ActorModel[], actorsException: ActorModel[], t: Transaction) {
+  const toActorFollowerIds = toFollowersOf.map(a => a.id)
 
   const result = await ActorFollowModel.listAcceptedFollowerSharedInboxUrls(toActorFollowerIds, t)
   const sharedInboxesException = await buildSharedInboxesException(actorsException)

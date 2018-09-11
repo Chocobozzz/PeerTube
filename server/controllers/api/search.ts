@@ -17,8 +17,6 @@ import {
 import { VideoChannelsSearchQuery, VideosSearchQuery } from '../../../shared/models/search'
 import { getOrCreateActorAndServerAndModel, getOrCreateVideoAndAccountAndChannel } from '../../lib/activitypub'
 import { logger } from '../../helpers/logger'
-import { User } from '../../../shared/models/users'
-import { CONFIG } from '../../initializers/constants'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 

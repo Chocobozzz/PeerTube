@@ -96,6 +96,11 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
   await sequelizeTypescript.transaction(async t => {
     if (follow.state === 'accepted') await sendUndoFollow(follow, t)
 
+    // Disable redundancy on unfollowed instances
+    const server = follow.ActorFollowing.Server
+    server.redundancyAllowed = false
+    await server.save({ transaction: t })
+
     await follow.destroy({ transaction: t })
   })
 

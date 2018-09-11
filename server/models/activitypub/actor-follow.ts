@@ -19,7 +19,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
-import { AccountFollow } from '../../../shared/models/actors/follow.model'
+import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import { ACTOR_FOLLOW_SCORE } from '../../initializers'
@@ -529,7 +529,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  toFormattedJSON (): AccountFollow {
+  toFormattedJSON (): ActorFollow {
     const follower = this.ActorFollower.toFormattedJSON()
     const following = this.ActorFollowing.toFormattedJSON()
 
