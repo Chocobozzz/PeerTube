@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 
 @Injectable()
 export class ThemeService {
   private theme = document.querySelector('body')
+  private darkTheme = false
   private previousTheme = {}
 
   constructor () {
@@ -12,15 +14,24 @@ export class ThemeService {
     this.previousTheme['submenuColor'] = 'rgb(32,32,32)'
     this.previousTheme['inputColor'] = 'gray'
     this.previousTheme['inputPlaceholderColor'] = '#fff'
+
+    this.darkTheme = (peertubeLocalStorage.getItem('theme') === 'dark')
+    console.log(this.darkTheme)
+    if (this.darkTheme) this.toggleDarkTheme(false)
   }
 
-  toggleDarkTheme () {
+  toggleDarkTheme (setLocalStorage = true) {
     // switch properties
     this.switchProperty('mainBackgroundColor')
     this.switchProperty('mainForegroundColor')
     this.switchProperty('submenuColor')
     this.switchProperty('inputColor')
     this.switchProperty('inputPlaceholderColor')
+
+    if (setLocalStorage) {
+      this.darkTheme = !this.darkTheme
+      peertubeLocalStorage.setItem('theme', (this.darkTheme) ? 'dark' : 'default')
+    }
   }
 
   private switchProperty (property, newValue?) {
