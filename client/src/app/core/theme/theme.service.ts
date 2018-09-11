@@ -16,7 +16,6 @@ export class ThemeService {
     this.previousTheme['inputPlaceholderColor'] = '#fff'
 
     this.darkTheme = (peertubeLocalStorage.getItem('theme') === 'dark')
-    console.log(this.darkTheme)
     if (this.darkTheme) this.toggleDarkTheme(false)
   }
 
