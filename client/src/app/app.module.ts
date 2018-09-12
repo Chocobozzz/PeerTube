@@ -5,8 +5,6 @@ import { ResetPasswordModule } from '@app/reset-password'
 
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
 import { ClipboardModule } from 'ngx-clipboard'
-import { HotkeyModule } from '@app/core/hotkeys'
-import { IHotkeyOptions } from 'angular2-hotkeys'
 import 'focus-visible'
 
 import { AppRoutingModule } from './app-routing.module'
@@ -48,9 +46,6 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     BrowserModule,
     // FIXME: https://github.com/maxisam/ngx-clipboard/issues/133
     ClipboardModule,
-    HotkeyModule.forRoot({
-      cheatSheetCloseEsc: true
-    } as IHotkeyOptions),
 
     CoreModule,
     SharedModule,

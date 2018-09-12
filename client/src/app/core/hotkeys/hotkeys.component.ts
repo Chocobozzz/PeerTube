@@ -9,8 +9,8 @@ import { HotkeysService, Hotkey } from 'angular2-hotkeys'
   styleUrls: [ './hotkeys.component.scss' ]
 })
 export class CheatSheetComponent implements OnInit, OnDestroy {
-  helpVisible = false
   @Input() title = this.i18n('Keyboard Shortcuts:')
+  helpVisible = false
   subscription: Subscription
 
   hotkeys: Hotkey[]
