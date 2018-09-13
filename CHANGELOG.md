@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.0.0-beta.13
+
+### Features
+
+ * Improve keyboard navigation ([@rigelk](https://github.com/rigelk))
+ * Remember theme in local storage ([@rigelk](https://github.com/rigelk))
+ 
+### Bug fixes
+
+  * Fix upgrade/installation on node 8.12 (bcrypt issue)
+  * Fix video channel deletion
+  * Fix video channel RSS
+  * Fix video views increment
+ 
+
 ## v1.0.0-beta.12
 
 **If you have not updated to v1.0.0-beta.10, see the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
