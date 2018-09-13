@@ -73,7 +73,7 @@ export class VideoChannelService {
   }
 
   removeVideoChannel (videoChannel: VideoChannel) {
-    return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.uuid)
+    return this.authHttp.delete(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
