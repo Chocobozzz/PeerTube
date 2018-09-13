@@ -5,7 +5,7 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../../initializers'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware,
+  asyncMiddleware, asyncRetryTransactionMiddleware,
   authenticate,
   commonVideosFiltersValidator,
   paginationValidator,
@@ -86,14 +86,14 @@ meRouter.get('/me/videos/:videoId/rating',
 meRouter.put('/me',
   authenticate,
   usersUpdateMeValidator,
-  asyncMiddleware(updateMe)
+  asyncRetryTransactionMiddleware(updateMe)
 )
 
 meRouter.post('/me/avatar/pick',
   authenticate,
   reqAvatarFile,
   updateAvatarValidator,
-  asyncMiddleware(updateMyAvatar)
+  asyncRetryTransactionMiddleware(updateMyAvatar)
 )
 
 // ##### Subscriptions part #####
@@ -138,7 +138,7 @@ meRouter.get('/me/subscriptions/:uri',
 meRouter.delete('/me/subscriptions/:uri',
   authenticate,
   userSubscriptionGetValidator,
-  asyncMiddleware(deleteUserSubscription)
+  asyncRetryTransactionMiddleware(deleteUserSubscription)
 )
 
 // ---------------------------------------------------------------------------
