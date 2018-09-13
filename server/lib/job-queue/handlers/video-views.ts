@@ -2,11 +2,17 @@ import { Redis } from '../../redis'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoViewModel } from '../../../models/video/video-views'
+import { isTestInstance } from '../../../helpers/core-utils'
 
 async function processVideosViewsViews () {
-  const hour = new Date().getHours()
-  const startDate = new Date().setMinutes(0, 0, 0)
-  const endDate = new Date().setMinutes(59, 59, 999)
+  const lastHour = new Date()
+
+  // In test mode, we run this function multiple times per hour, so we don't want the values of the previous hour
+  if (!isTestInstance()) lastHour.setHours(lastHour.getHours() - 1)
+
+  const hour = lastHour.getHours()
+  const startDate = lastHour.setMinutes(0, 0, 0)
+  const endDate = lastHour.setMinutes(59, 59, 999)
 
   const videoIds = await Redis.Instance.getVideosIdViewed(hour)
   if (videoIds.length === 0) return
