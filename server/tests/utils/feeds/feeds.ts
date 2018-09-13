@@ -13,11 +13,12 @@ function getXMLfeed (url: string, feed: FeedType, format?: string) {
           .expect('Content-Type', /xml/)
 }
 
-function getJSONfeed (url: string, feed: FeedType) {
+function getJSONfeed (url: string, feed: FeedType, query: any = {}) {
   const path = '/feeds/' + feed + '.json'
 
   return request(url)
           .get(path)
+          .query(query)
           .set('Accept', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)

@@ -23,7 +23,7 @@ const videoFeedsValidator = [
     if (areValidationErrors(req, res)) return
 
     if (req.query.accountId && !await isAccountIdExist(req.query.accountId, res)) return
-    if (req.query.videoChannelName && !await isVideoChannelIdExist(req.query.videoChannelName, res)) return
+    if (req.query.videoChannelId && !await isVideoChannelIdExist(req.query.videoChannelId, res)) return
     if (req.query.accountName && !await isAccountNameWithHostExist(req.query.accountName, res)) return
     if (req.query.videoChannelName && !await isVideoChannelNameWithHostExist(req.query.videoChannelName, res)) return
 
