@@ -19,7 +19,10 @@ if (
   !program['username'] ||
   !program['password']
 ) {
-  throw new Error('All arguments are required.')
+  if (!program['url']) console.error('--url field is required.')
+  if (!program['username']) console.error('--username field is required.')
+  if (!program['password']) console.error('--password field is required.')
+  process.exit(-1)
 }
 
 getClient(program.url)

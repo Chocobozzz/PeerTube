@@ -3,7 +3,6 @@ require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import * as program from 'commander'
 import { join } from 'path'
-import * as youtubeDL from 'youtube-dl'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
@@ -11,31 +10,8 @@ import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo 
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
-
-program
-  .option('-u, --url <url>', 'Server url')
-  .option('-U, --username <username>', 'Username')
-  .option('-p, --password <token>', 'Password')
-  .option('-t, --target-url <targetUrl>', 'Video target URL')
-  .option('-l, --language <languageCode>', 'Language ISO 639 code (fr or en...)')
-  .option('-v, --verbose', 'Verbose mode')
-  .parse(process.argv)
-
-if (
-  !program['url'] ||
-  !program['username'] ||
-  !program['targetUrl']
-) {
-  console.error('All arguments are required.')
-  process.exit(-1)
-}
-
-const user = {
-  username: program['username'],
-  password: program['password']
-}
-
-run().catch(err => console.error(err))
+import { safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { getSettings, netrc } from './cli'
 
 let accessToken: string
 let client: { id: string, secret: string }
@@ -44,6 +20,61 @@ const processOptions = {
   cwd: __dirname,
   maxBuffer: Infinity
 }
+
+program
+  .name('import-videos')
+  .option('-u, --url <url>', 'Server url')
+  .option('-U, --username <username>', 'Username')
+  .option('-p, --password <token>', 'Password')
+  .option('-t, --target-url <targetUrl>', 'Video target URL')
+  .option('-l, --language <languageCode>', 'Language ISO 639 code (fr or en...)')
+  .option('-v, --verbose', 'Verbose mode')
+  .parse(process.argv)
+
+getSettings()
+.then(settings => {
+  if (
+    (!program['url'] ||
+    !program['username'] ||
+    !program['password']) &&
+    (settings.remotes.length === 0)
+  ) {
+    if (!program['url']) console.error('--url field is required.')
+    if (!program['username']) console.error('--username field is required.')
+    if (!program['password']) console.error('--password field is required.')
+    if (!program['targetUrl']) console.error('--targetUrl field is required.')
+    process.exit(-1)
+  }
+
+  if (
+    (!program['url'] ||
+    !program['username'] ||
+    !program['password']) &&
+    (settings.remotes.length > 0)
+  ) {
+    if (!program['url']) {
+      program['url'] = (settings.default !== -1) ?
+        settings.remotes[settings.default] :
+        settings.remotes[0]
+    }
+    if (!program['username']) program['username'] = netrc.machines[program['url']].login
+    if (!program['password']) program['password'] = netrc.machines[program['url']].password
+  }
+
+  if (
+    !program['targetUrl']
+  ) {
+    if (!program['targetUrl']) console.error('--targetUrl field is required.')
+    process.exit(-1)
+  }
+
+  const user = {
+    username: program['username'],
+    password: program['password']
+  }
+
+  run(user, program['url']).catch(err => console.error(err))
+})
 
 async function promptPassword () {
   return new Promise((res, rej) => {
@@ -65,19 +96,21 @@ async function promptPassword () {
   })
 }
 
-async function run () {
+async function run (user, url: string) {
   if (!user.password) {
     user.password = await promptPassword()
   }
 
-  const res = await getClient(program['url'])
+  const res = await getClient(url)
   client = {
     id: res.body.client_id,
     secret: res.body.client_secret
   }
 
-  const res2 = await login(program['url'], client, user)
+  const res2 = await login(url, client, user)
   accessToken = res2.body.access_token
+
+  const youtubeDL = await safeGetYoutubeDL()
 
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
@@ -97,7 +130,7 @@ async function run () {
     console.log('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
-      await processVideo(info, program['language'])
+      await processVideo(info, program['language'], processOptions.cwd, url, user)
     }
 
     // https://www.youtube.com/watch?v=2Upx39TBc1s
@@ -106,14 +139,14 @@ async function run () {
   })
 }
 
-function processVideo (info: any, languageCode: string) {
+function processVideo (info: any, languageCode: string, cwd: string, url: string, user) {
   return new Promise(async res => {
     if (program['verbose']) console.log('Fetching object.', info)
 
     const videoInfo = await fetchObject(info)
     if (program['verbose']) console.log('Fetched object.', videoInfo)
 
-    const result = await searchVideoWithSort(program['url'], videoInfo.title, '-match')
+    const result = await searchVideoWithSort(url, videoInfo.title, '-match')
 
     console.log('############################################################\n')
 
@@ -122,12 +155,13 @@ function processVideo (info: any, languageCode: string) {
       return res()
     }
 
-    const path = join(__dirname, new Date().getTime() + '.mp4')
+    const path = join(cwd, new Date().getTime() + '.mp4')
 
     console.log('Downloading video "%s"...', videoInfo.title)
 
     const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
     try {
+      const youtubeDL = await safeGetYoutubeDL()
       youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
         if (err) {
           console.error(err)
@@ -135,7 +169,7 @@ function processVideo (info: any, languageCode: string) {
         }
 
         console.log(output.join('\n'))
-        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, cwd, url, user, languageCode)
         return res()
       })
     } catch (err) {
@@ -145,8 +179,8 @@ function processVideo (info: any, languageCode: string) {
   })
 }
 
-async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, language?: string) {
-  const category = await getCategory(videoInfo.categories)
+async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: string, url: string, user, language?: string) {
+  const category = await getCategory(videoInfo.categories, url)
   const licence = getLicence(videoInfo.license)
   let tags = []
   if (Array.isArray(videoInfo.tags)) {
@@ -158,7 +192,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
 
   let thumbnailfile
   if (videoInfo.thumbnail) {
-    thumbnailfile = join(__dirname, 'thumbnail.jpg')
+    thumbnailfile = join(cwd, 'thumbnail.jpg')
 
     await doRequestAndSaveToFile({
       method: 'GET',
@@ -189,15 +223,15 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
   try {
-    await uploadVideo(program['url'], accessToken, videoAttributes)
+    await uploadVideo(url, accessToken, videoAttributes)
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
       console.log('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
-      const res = await login(program['url'], client, user)
+      const res = await login(url, client, user)
       accessToken = res.body.access_token
 
-      await uploadVideo(program['url'], accessToken, videoAttributes)
+      await uploadVideo(url, accessToken, videoAttributes)
     } else {
       console.log(err.message)
       process.exit(1)
@@ -210,14 +244,14 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   console.log('Uploaded video "%s"!\n', videoAttributes.name)
 }
 
-async function getCategory (categories: string[]) {
+async function getCategory (categories: string[], url: string) {
   if (!categories) return undefined
 
   const categoryString = categories[0]
 
   if (categoryString === 'News & Politics') return 11
 
-  const res = await getVideoCategories(program['url'])
+  const res = await getVideoCategories(url)
   const categoriesServer = res.body
 
   for (const key of Object.keys(categoriesServer)) {
@@ -227,6 +261,8 @@ async function getCategory (categories: string[]) {
 
   return undefined
 }
+
+/* ---------------------------------------------------------- */
 
 function getLicence (licence: string) {
   if (!licence) return undefined
@@ -259,6 +295,7 @@ function fetchObject (info: any) {
   const url = buildUrl(info)
 
   return new Promise<any>(async (res, rej) => {
+    const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.getInfo(url, undefined, processOptions, async (err, videoInfo) => {
       if (err) return rej(err)
 

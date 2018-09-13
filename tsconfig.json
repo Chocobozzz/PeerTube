@@ -6,6 +6,7 @@
     "sourceMap": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "removeComments": true,
     "outDir": "./dist",
     "lib": [
       "dom",

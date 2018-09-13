@@ -4,18 +4,20 @@ import { isAbsolute } from 'path'
 import { getClient, login } from '../tests/utils'
 import { uploadVideo } from '../tests/utils/index'
 import { VideoPrivacy } from '../../shared/models/videos'
+import { netrc, getSettings } from './cli'
 
 program
+  .name('upload')
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-n, --video-name <name>', 'Video name')
-  .option('-P, --privacy <privacy number>', 'Privacy')
+  .option('-P, --privacy <privacy_number>', 'Privacy')
   .option('-N, --nsfw', 'Video is Not Safe For Work')
-  .option('-c, --category <category number>', 'Category number')
+  .option('-c, --category <category_number>', 'Category number')
   .option('-m, --comments-enabled', 'Enable comments')
-  .option('-l, --licence <licence number>', 'Licence number')
-  .option('-L, --language <language code>', 'Language ISO 639 code (fr or en...)')
+  .option('-l, --licence <licence_number>', 'Licence number')
+  .option('-L, --language <language_code>', 'Language ISO 639 code (fr or en...)')
   .option('-d, --video-description <description>', 'Video description')
   .option('-t, --tags <tags>', 'Video tags', list)
   .option('-b, --thumbnail <thumbnailPath>', 'Thumbnail path')
@@ -28,27 +30,53 @@ if (!program['nsfw']) program['nsfw'] = false
 if (!program['privacy']) program['privacy'] = VideoPrivacy.PUBLIC
 if (!program['commentsEnabled']) program['commentsEnabled'] = false
 
-if (
-  !program['url'] ||
-  !program['username'] ||
-  !program['password'] ||
-  !program['videoName'] ||
-  !program['file']
-) {
-  if (!program['url']) console.error('--url field is required.')
-  if (!program['username']) console.error('--username field is required.')
-  if (!program['password']) console.error('--password field is required.')
-  if (!program['videoName']) console.error('--video-name field is required.')
-  if (!program['file']) console.error('--file field is required.')
-  process.exit(-1)
-}
+getSettings()
+  .then(settings => {
+    if (
+      (!program['url'] ||
+      !program['username'] ||
+      !program['password']) &&
+      (settings.remotes.length === 0)
+    ) {
+      if (!program['url']) console.error('--url field is required.')
+      if (!program['username']) console.error('--username field is required.')
+      if (!program['password']) console.error('--password field is required.')
+      if (!program['videoName']) console.error('--video-name field is required.')
+      if (!program['file']) console.error('--file field is required.')
+      process.exit(-1)
+    }
 
-if (isAbsolute(program['file']) === false) {
-  console.error('File path should be absolute.')
-  process.exit(-1)
-}
+    if (
+      (!program['url'] ||
+      !program['username'] ||
+      !program['password']) &&
+      (settings.remotes.length > 0)
+    ) {
+      if (!program['url']) {
+        program['url'] = (settings.default !== -1) ?
+          settings.remotes[settings.default] :
+          settings.remotes[0]
+      }
+      if (!program['username']) program['username'] = netrc.machines[program['url']].login
+      if (!program['password']) program['password'] = netrc.machines[program['url']].password
+    }
 
-run().catch(err => console.error(err))
+    if (
+      !program['videoName'] ||
+      !program['file']
+    ) {
+      if (!program['videoName']) console.error('--video-name field is required.')
+      if (!program['file']) console.error('--file field is required.')
+      process.exit(-1)
+    }
+
+    if (isAbsolute(program['file']) === false) {
+      console.error('File path should be absolute.')
+      process.exit(-1)
+    }
+
+    run().catch(err => console.error(err))
+  })
 
 async function run () {
   const res = await getClient(program[ 'url' ])
