@@ -14,22 +14,31 @@ async function processVideosViewsViews () {
   logger.info('Processing videos views in job for hour %d.', hour)
 
   for (const videoId of videoIds) {
-    const views = await Redis.Instance.getVideoViews(videoId, hour)
-    if (isNaN(views)) {
-      logger.error('Cannot process videos views of video %s in hour %d: views number is NaN.', videoId, hour)
-    } else {
-      logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
+    try {
+      const views = await Redis.Instance.getVideoViews(videoId, hour)
+      if (isNaN(views)) {
+        logger.error('Cannot process videos views of video %d in hour %d: views number is NaN.', videoId, hour)
+      } else {
+        logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
 
-      await VideoModel.incrementViews(videoId, views)
-      await VideoViewModel.create({
-        startDate,
-        endDate,
-        views,
-        videoId
-      })
+        await VideoModel.incrementViews(videoId, views)
+
+        try {
+          await VideoViewModel.create({
+            startDate,
+            endDate,
+            views,
+            videoId
+          })
+        } catch (err) {
+          logger.debug('Cannot create video views for video %d in hour %d. Maybe the video does not exist anymore?', videoId, hour)
+        }
+      }
+
+      await Redis.Instance.deleteVideoViews(videoId, hour)
+    } catch (err) {
+      logger.error('Cannot update video views of video %d in hour %d.', videoId, hour)
     }
-
-    await Redis.Instance.deleteVideoViews(videoId, hour)
   }
 }
 
