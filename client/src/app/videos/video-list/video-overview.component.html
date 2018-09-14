@@ -12,7 +12,7 @@
 
   <div class="section" *ngFor="let object of overview.tags">
     <div class="section-title" i18n>
-      <a routerLink="/search" [queryParams]="{ tagOneOf: [ object.tag ] }">{{ object.tag }}</a>
+      <a routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">{{ object.tag }}</a>
     </div>
 
     <my-video-miniature *ngFor="let video of object.videos" [video]="video" [user]="user"></my-video-miniature>
