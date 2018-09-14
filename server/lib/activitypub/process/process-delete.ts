@@ -41,6 +41,8 @@ async function processDeleteActivity (activity: ActivityDelete) {
   {
     const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoInstance) {
+      if (videoInstance.isOwned()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
+
       return retryTransactionWrapper(processDeleteVideo, actor, videoInstance)
     }
   }

@@ -393,9 +393,9 @@ async function viewVideo (req: express.Request, res: express.Response) {
     Redis.Instance.setIPVideoView(ip, videoInstance.uuid)
   ])
 
-  const serverAccount = await getServerActor()
+  const serverActor = await getServerActor()
 
-  await sendCreateView(serverAccount, videoInstance, undefined)
+  await sendCreateView(serverActor, videoInstance, undefined)
 
   return res.status(204).end()
 }

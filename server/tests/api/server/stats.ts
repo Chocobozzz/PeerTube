@@ -65,7 +65,6 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(2)
     expect(data.totalInstanceFollowing).to.equal(1)
-    expect(data.videosRedundancy).to.have.lengthOf(0)
   })
 
   it('Should have the correct stats on instance 2', async function () {
@@ -80,7 +79,6 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
-    expect(data.videosRedundancy).to.have.lengthOf(0)
   })
 
   it('Should have the correct stats on instance 3', async function () {
@@ -95,7 +93,6 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(0)
-    expect(data.videosRedundancy).to.have.lengthOf(0)
   })
 
   after(async function () {

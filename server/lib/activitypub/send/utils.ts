@@ -1,12 +1,35 @@
 import { Transaction } from 'sequelize'
-import { Activity } from '../../../../shared/models/activitypub'
+import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../job-queue'
 import { VideoModel } from '../../../models/video/video'
-import { getActorsInvolvedInVideo } from '../audience'
+import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 import { getServerActor } from '../../../helpers/utils'
+
+async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
+  byActor: ActorModel,
+  video: VideoModel,
+  transaction?: Transaction
+}) {
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(options.video, options.transaction)
+
+  // Send to origin
+  if (options.video.isOwned() === false) {
+    const audience = getRemoteVideoAudience(options.video, actorsInvolvedInVideo)
+    const activity = activityBuilder(audience)
+
+    return unicastTo(activity, options.byActor, options.video.VideoChannel.Account.Actor.sharedInboxUrl)
+  }
+
+  // Send to followers
+  const audience = getAudienceFromFollowersOf(actorsInvolvedInVideo)
+  const activity = activityBuilder(audience)
+
+  const actorsException = [ options.byActor ]
+  return broadcastToFollowers(activity, options.byActor, actorsInvolvedInVideo, options.transaction, actorsException)
+}
 
 async function forwardVideoRelatedActivity (
   activity: Activity,
@@ -110,7 +133,8 @@ export {
   unicastTo,
   forwardActivity,
   broadcastToActors,
-  forwardVideoRelatedActivity
+  forwardVideoRelatedActivity,
+  sendVideoRelatedActivity
 }
 
 // ---------------------------------------------------------------------------
