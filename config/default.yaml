@@ -74,6 +74,9 @@ redundancy:
 #    -
 #      size: '10GB'
 #      strategy: 'most-views' # Cache videos that have the most views
+#    -
+#      size: '10GB'
+#      strategy: 'trending' # Cache trending videos
 
 cache:
   previews:

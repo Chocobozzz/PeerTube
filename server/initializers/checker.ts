@@ -41,7 +41,7 @@ function checkConfig () {
   const redundancyVideos = config.get<VideosRedundancy[]>('redundancy.videos')
   if (isArray(redundancyVideos)) {
     for (const r of redundancyVideos) {
-      if ([ 'most-views' ].indexOf(r.strategy) === -1) {
+      if ([ 'most-views', 'trending' ].indexOf(r.strategy) === -1) {
         return 'Redundancy video entries should have "most-views" strategy instead of ' + r.strategy
       }
     }

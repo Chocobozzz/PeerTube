@@ -14,11 +14,10 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid } from '../utils'
+import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
 import { VideoFileModel } from '../video/video-file'
-import { isDateValid } from '../../helpers/custom-validators/misc'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
 import { VideoRedundancyStrategy } from '../../../shared/models/redundancy'
@@ -145,50 +144,51 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.findOne(query)
   }
 
+  static getVideoSample (rows: { id: number }[]) {
+    const ids = rows.map(r => r.id)
+    const id = sample(ids)
+
+    return VideoModel.loadWithFile(id, undefined, !isTestInstance())
+  }
+
   static async findMostViewToDuplicate (randomizedFactor: number) {
     // On VideoModel!
     const query = {
+      attributes: [ 'id', 'views' ],
       logging: !isTestInstance(),
       limit: randomizedFactor,
-      order: [ [ 'views', 'DESC' ] ],
+      order: getVideoSort('-views'),
       include: [
-        {
-          model: VideoFileModel.unscoped(),
-          required: true,
-          where: {
-            id: {
-              [ Sequelize.Op.notIn ]: await VideoRedundancyModel.buildExcludeIn()
-            }
-          }
-        },
-        {
-          attributes: [],
-          model: VideoChannelModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: ActorModel.unscoped(),
-              required: true,
-              include: [
-                {
-                  attributes: [],
-                  model: ServerModel.unscoped(),
-                  required: true,
-                  where: {
-                    redundancyAllowed: true
-                  }
-                }
-              ]
-            }
-          ]
-        }
+        await VideoRedundancyModel.buildVideoFileForDuplication(),
+        VideoRedundancyModel.buildServerRedundancyInclude()
       ]
     }
 
     const rows = await VideoModel.unscoped().findAll(query)
 
-    return sample(rows)
+    return VideoRedundancyModel.getVideoSample(rows as { id: number }[])
+  }
+
+  static async findTrendingToDuplicate (randomizedFactor: number) {
+    // On VideoModel!
+    const query = {
+      attributes: [ 'id', 'views' ],
+      subQuery: false,
+      logging: !isTestInstance(),
+      group: 'VideoModel.id',
+      limit: randomizedFactor,
+      order: getVideoSort('-trending'),
+      include: [
+        await VideoRedundancyModel.buildVideoFileForDuplication(),
+        VideoRedundancyModel.buildServerRedundancyInclude(),
+
+        VideoModel.buildTrendingQuery(CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS)
+      ]
+    }
+
+    const rows = await VideoModel.unscoped().findAll(query)
+
+    return VideoRedundancyModel.getVideoSample(rows as { id: number }[])
   }
 
   static async getVideoFiles (strategy: VideoRedundancyStrategy) {
@@ -211,7 +211,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       logging: !isTestInstance(),
       where: {
         expiresOn: {
-          [Sequelize.Op.lt]: new Date()
+          [ Sequelize.Op.lt ]: new Date()
         }
       }
     }
@@ -237,13 +237,50 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
   }
 
-  private static async buildExcludeIn () {
+  // Don't include video files we already duplicated
+  private static async buildVideoFileForDuplication () {
     const actor = await getServerActor()
 
-    return Sequelize.literal(
+    const notIn = Sequelize.literal(
       '(' +
         `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "expiresOn" >= NOW()` +
       ')'
     )
+
+    return {
+      attributes: [],
+      model: VideoFileModel.unscoped(),
+      required: true,
+      where: {
+        id: {
+          [ Sequelize.Op.notIn ]: notIn
+        }
+      }
+    }
+  }
+
+  private static buildServerRedundancyInclude () {
+    return {
+      attributes: [],
+      model: VideoChannelModel.unscoped(),
+      required: true,
+      include: [
+        {
+          attributes: [],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: {
+                redundancyAllowed: true
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
 }

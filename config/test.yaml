@@ -26,6 +26,9 @@ redundancy:
     -
       size: '100KB'
       strategy: 'most-views'
+    -
+      size: '100KB'
+      strategy: 'trending'
 
 cache:
   previews:

@@ -1,4 +1,4 @@
-export type VideoRedundancyStrategy = 'most-views'
+export type VideoRedundancyStrategy = 'most-views' | 'trending'
 
 export interface VideosRedundancy {
   strategy: VideoRedundancyStrategy

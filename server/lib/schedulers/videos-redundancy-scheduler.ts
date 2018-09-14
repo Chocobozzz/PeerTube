@@ -75,6 +75,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
   private findVideoToDuplicate (strategy: VideoRedundancyStrategy) {
     if (strategy === 'most-views') return VideoRedundancyModel.findMostViewToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
+
+    if (strategy === 'trending') return VideoRedundancyModel.findTrendingToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
   }
 
   private async createVideoRedundancy (strategy: VideoRedundancyStrategy, filesToDuplicate: VideoFileModel[]) {

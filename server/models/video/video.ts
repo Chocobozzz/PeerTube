@@ -387,16 +387,7 @@ type AvailableForListIDsOptions = {
     }
 
     if (options.trendingDays) {
-      query.include.push({
-        attributes: [],
-        model: VideoViewModel,
-        required: false,
-        where: {
-          startDate: {
-            [ Sequelize.Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * options.trendingDays)
-          }
-        }
-      })
+      query.include.push(VideoModel.buildTrendingQuery(options.trendingDays))
 
       query.subQuery = false
     }
@@ -1071,9 +1062,12 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static load (id: number, t?: Sequelize.Transaction) {
-    const options = t ? { transaction: t } : undefined
+    return VideoModel.findById(id, { transaction: t })
+  }
 
-    return VideoModel.findById(id, options)
+  static loadWithFile (id: number, t?: Sequelize.Transaction, logging?: boolean) {
+    return VideoModel.scope(ScopeNames.WITH_FILES)
+                     .findById(id, { transaction: t, logging })
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
@@ -1189,6 +1183,20 @@ export class VideoModel extends Model<VideoModel> {
 
     return VideoModel.findAll(query)
                      .then(rows => rows.map(r => r[ field ]))
+  }
+
+  static buildTrendingQuery (trendingDays: number) {
+    return {
+      attributes: [],
+      subQuery: false,
+      model: VideoViewModel,
+      required: false,
+      where: {
+        startDate: {
+          [ Sequelize.Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
+        }
+      }
+    }
   }
 
   private static buildActorWhereWithFilter (filter?: VideoFilter) {
