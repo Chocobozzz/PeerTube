@@ -1,7 +1,7 @@
 import { AbstractScheduler } from './abstract-scheduler'
 import { CONFIG, JOB_TTL, REDUNDANCY, SCHEDULER_INTERVALS_MS } from '../../initializers'
 import { logger } from '../../helpers/logger'
-import { VideoRedundancyStrategy } from '../../../shared/models/redundancy'
+import { RecentlyAddedStrategy, VideoRedundancyStrategy, VideosRedundancy } from '../../../shared/models/redundancy'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { VideoFileModel } from '../../models/video/video-file'
 import { sortBy } from 'lodash'
@@ -32,16 +32,14 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     this.executing = true
 
     for (const obj of CONFIG.REDUNDANCY.VIDEOS) {
-
       try {
-        const videoToDuplicate = await this.findVideoToDuplicate(obj.strategy)
+        const videoToDuplicate = await this.findVideoToDuplicate(obj)
         if (!videoToDuplicate) continue
 
         const videoFiles = videoToDuplicate.VideoFiles
         videoFiles.forEach(f => f.Video = videoToDuplicate)
 
-        const videosRedundancy = await VideoRedundancyModel.getVideoFiles(obj.strategy)
-        if (this.isTooHeavy(videosRedundancy, videoFiles, obj.size)) {
+        if (await this.isTooHeavy(obj.strategy, videoFiles, obj.size)) {
           if (!isTestInstance()) logger.info('Video %s is too big for our cache, skipping.', videoToDuplicate.url)
           continue
         }
@@ -73,10 +71,19 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     return this.instance || (this.instance = new this())
   }
 
-  private findVideoToDuplicate (strategy: VideoRedundancyStrategy) {
-    if (strategy === 'most-views') return VideoRedundancyModel.findMostViewToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
+  private findVideoToDuplicate (cache: VideosRedundancy) {
+    if (cache.strategy === 'most-views') {
+      return VideoRedundancyModel.findMostViewToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
+    }
 
-    if (strategy === 'trending') return VideoRedundancyModel.findTrendingToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
+    if (cache.strategy === 'trending') {
+      return VideoRedundancyModel.findTrendingToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
+    }
+
+    if (cache.strategy === 'recently-added') {
+      const minViews = (cache as RecentlyAddedStrategy).minViews
+      return VideoRedundancyModel.findRecentlyAddedToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR, minViews)
+    }
   }
 
   private async createVideoRedundancy (strategy: VideoRedundancyStrategy, filesToDuplicate: VideoFileModel[]) {
@@ -122,27 +129,10 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
   }
 
-  // Unused, but could be useful in the future, with a custom strategy
-  private async purgeVideosIfNeeded (videosRedundancy: VideoRedundancyModel[], filesToDuplicate: VideoFileModel[], maxSize: number) {
-    const sortedVideosRedundancy = sortBy(videosRedundancy, 'createdAt')
-
-    while (this.isTooHeavy(sortedVideosRedundancy, filesToDuplicate, maxSize)) {
-      const toDelete = sortedVideosRedundancy.shift()
-
-      const videoFile = toDelete.VideoFile
-      logger.info('Purging video %s (resolution %d) from our redundancy system.', videoFile.Video.url, videoFile.resolution)
-
-      await removeVideoRedundancy(toDelete, undefined)
-    }
-
-    return sortedVideosRedundancy
-  }
-
-  private isTooHeavy (videosRedundancy: VideoRedundancyModel[], filesToDuplicate: VideoFileModel[], maxSizeArg: number) {
+  private async isTooHeavy (strategy: VideoRedundancyStrategy, filesToDuplicate: VideoFileModel[], maxSizeArg: number) {
     const maxSize = maxSizeArg - this.getTotalFileSizes(filesToDuplicate)
 
-    const redundancyReducer = (previous: number, current: VideoRedundancyModel) => previous + current.VideoFile.size
-    const totalDuplicated = videosRedundancy.reduce(redundancyReducer, 0)
+    const totalDuplicated = await VideoRedundancyModel.getTotalDuplicated(strategy)
 
     return totalDuplicated > maxSize
   }

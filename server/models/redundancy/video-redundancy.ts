@@ -27,6 +27,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { ServerModel } from '../server/server'
 import { sample } from 'lodash'
 import { isTestInstance } from '../../helpers/core-utils'
+import * as Bluebird from 'bluebird'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -144,7 +145,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.findOne(query)
   }
 
-  static getVideoSample (rows: { id: number }[]) {
+  static async getVideoSample (p: Bluebird<VideoModel[]>) {
+    const rows = await p
     const ids = rows.map(r => r.id)
     const id = sample(ids)
 
@@ -164,9 +166,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    const rows = await VideoModel.unscoped().findAll(query)
-
-    return VideoRedundancyModel.getVideoSample(rows as { id: number }[])
+    return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
   }
 
   static async findTrendingToDuplicate (randomizedFactor: number) {
@@ -186,24 +186,49 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    const rows = await VideoModel.unscoped().findAll(query)
-
-    return VideoRedundancyModel.getVideoSample(rows as { id: number }[])
+    return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
   }
 
-  static async getVideoFiles (strategy: VideoRedundancyStrategy) {
-    const actor = await getServerActor()
-
-    const queryVideoFiles = {
-      logging: !isTestInstance(),
+  static async findRecentlyAddedToDuplicate (randomizedFactor: number, minViews: number) {
+    // On VideoModel!
+    const query = {
+      attributes: [ 'id', 'publishedAt' ],
+      // logging: !isTestInstance(),
+      limit: randomizedFactor,
+      order: getVideoSort('-publishedAt'),
       where: {
-        actorId: actor.id,
-        strategy
-      }
+        views: {
+          [ Sequelize.Op.gte ]: minViews
+        }
+      },
+      include: [
+        await VideoRedundancyModel.buildVideoFileForDuplication(),
+        VideoRedundancyModel.buildServerRedundancyInclude()
+      ]
     }
 
-    return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO)
-                               .findAll(queryVideoFiles)
+    return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
+  }
+
+  static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
+    const actor = await getServerActor()
+
+    const options = {
+      logging: !isTestInstance(),
+      include: [
+        {
+          attributes: [],
+          model: VideoRedundancyModel,
+          required: true,
+          where: {
+            actorId: actor.id,
+            strategy
+          }
+        }
+      ]
+    }
+
+    return VideoFileModel.sum('size', options)
   }
 
   static listAllExpired () {

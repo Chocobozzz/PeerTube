@@ -1,6 +1,6 @@
 import { IConfig } from 'config'
 import { dirname, join } from 'path'
-import { JobType, VideoRateType, VideoRedundancyStrategy, VideoState, VideosRedundancy } from '../../shared/models'
+import { JobType, VideoRateType, VideoState, VideosRedundancy } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy } from '../../shared/models/videos'
@@ -741,15 +741,10 @@ function updateWebserverConfig () {
   CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
 }
 
-function buildVideosRedundancy (objs: { strategy: VideoRedundancyStrategy, size: string }[]): VideosRedundancy[] {
+function buildVideosRedundancy (objs: VideosRedundancy[]): VideosRedundancy[] {
   if (!objs) return []
 
-  return objs.map(obj => {
-    return {
-      strategy: obj.strategy,
-      size: bytes.parse(obj.size)
-    }
-  })
+  return objs.map(obj => Object.assign(obj, { size: bytes.parse(obj.size) }))
 }
 
 function buildLanguages () {

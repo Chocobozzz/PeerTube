@@ -14,7 +14,7 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   wait,
-  root, viewVideo
+  root, viewVideo, immutableAssign
 } from '../../utils'
 import { waitJobs } from '../../utils/server/jobs'
 import * as magnetUtil from 'magnet-uri'
@@ -39,14 +39,14 @@ function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: numbe
   }
 }
 
-async function runServers (strategy: VideoRedundancyStrategy) {
+async function runServers (strategy: VideoRedundancyStrategy, additionalParams: any = {}) {
   const config = {
     redundancy: {
       videos: [
-        {
+        immutableAssign({
           strategy: strategy,
           size: '100KB'
-        }
+        }, additionalParams)
       ]
     }
   }
@@ -153,11 +153,11 @@ describe('Test videos redundancy', function () {
       return check1WebSeed()
     })
 
-    it('Should enable redundancy on server 1', async function () {
+    it('Should enable redundancy on server 1', function () {
       return enableRedundancy()
     })
 
-    it('Should have 2 webseed on the first video', async function () {
+    it('Should have 2 webseed on the first video', function () {
       this.timeout(40000)
 
       return check2Webseeds()
@@ -180,11 +180,58 @@ describe('Test videos redundancy', function () {
       return check1WebSeed()
     })
 
-    it('Should enable redundancy on server 1', async function () {
+    it('Should enable redundancy on server 1', function () {
       return enableRedundancy()
     })
 
-    it('Should have 2 webseed on the first video', async function () {
+    it('Should have 2 webseed on the first video', function () {
+      this.timeout(40000)
+
+      return check2Webseeds()
+    })
+
+    after(function () {
+      return cleanServers()
+    })
+  })
+
+  describe('With recently added strategy', function () {
+
+    before(function () {
+      this.timeout(120000)
+
+      return runServers('recently-added', { minViews: 3 })
+    })
+
+    it('Should have 1 webseed on the first video', function () {
+      return check1WebSeed()
+    })
+
+    it('Should enable redundancy on server 1', function () {
+      return enableRedundancy()
+    })
+
+    it('Should still have 1 webseed on the first video', async function () {
+      this.timeout(40000)
+
+      await waitJobs(servers)
+      await wait(15000)
+      await waitJobs(servers)
+
+      return check1WebSeed()
+    })
+
+    it('Should view 2 times the first video', async function () {
+      this.timeout(40000)
+
+      await viewVideo(servers[ 0 ].url, video1Server2UUID)
+      await viewVideo(servers[ 2 ].url, video1Server2UUID)
+
+      await wait(10000)
+      await waitJobs(servers)
+    })
+
+    it('Should have 2 webseed on the first video', function () {
       this.timeout(40000)
 
       return check2Webseeds()

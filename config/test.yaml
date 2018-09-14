@@ -29,6 +29,10 @@ redundancy:
     -
       size: '100KB'
       strategy: 'trending'
+    -
+      size: '100KB'
+      strategy: 'recently-added'
+      minViews: 10
 
 cache:
   previews:

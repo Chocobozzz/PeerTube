@@ -77,6 +77,10 @@ redundancy:
 #    -
 #      size: '10GB'
 #      strategy: 'trending' # Cache trending videos
+#    -
+#      size: '10GB'
+#      strategy: 'recently-added' # Cache recently added videos
+#      minViews: 10 # Having at least x views
 
 cache:
   previews:

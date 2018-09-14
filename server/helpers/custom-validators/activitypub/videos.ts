@@ -171,5 +171,3 @@ function setRemoteVideoTruncatedContent (video: any) {
 
   return true
 }
-
-
