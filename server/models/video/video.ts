@@ -221,6 +221,7 @@ type AvailableForListIDsOptions = {
   },
   [ ScopeNames.AVAILABLE_FOR_LIST_IDS ]: (options: AvailableForListIDsOptions) => {
     const query: IFindOptions<VideoModel> = {
+      raw: true,
       attributes: [ 'id' ],
       where: {
         id: {
