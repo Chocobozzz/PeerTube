@@ -51,10 +51,7 @@ function flushAndRunMultipleServers (totalServers: number, configOverride?: Obje
     flushTests()
       .then(() => {
         for (let j = 1; j <= totalServers; j++) {
-          // For the virtual buffer
-          setTimeout(() => {
-            runServer(j, configOverride).then(app => anotherServerDone(j, app))
-          }, 1000 * (j - 1))
+          runServer(j, configOverride).then(app => anotherServerDone(j, app))
         }
       })
   })
