@@ -81,7 +81,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
 
     if (cache.strategy === 'recently-added') {
-      const minViews = (cache as RecentlyAddedStrategy).minViews
+      const minViews = cache.minViews
       return VideoRedundancyModel.findRecentlyAddedToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR, minViews)
     }
   }

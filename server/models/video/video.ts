@@ -929,7 +929,7 @@ export class VideoModel extends Model<VideoModel> {
     videoChannelId?: number,
     actorId?: number
     trendingDays?: number
-  }) {
+  }, countVideos = true) {
     const query: IFindOptions<VideoModel> = {
       offset: options.start,
       limit: options.count,
@@ -962,7 +962,7 @@ export class VideoModel extends Model<VideoModel> {
       trendingDays
     }
 
-    return VideoModel.getAvailableForApi(query, queryOptions)
+    return VideoModel.getAvailableForApi(query, queryOptions, countVideos)
   }
 
   static async searchAndPopulateAccountAndServer (options: {
@@ -1164,7 +1164,14 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   // threshold corresponds to how many video the field should have to be returned
-  static getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
+  static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
+    const actorId = (await getServerActor()).id
+
+    const scopeOptions = {
+      actorId,
+      includeLocalVideos: true
+    }
+
     const query: IFindOptions<VideoModel> = {
       attributes: [ field ],
       limit: count,
@@ -1172,17 +1179,11 @@ export class VideoModel extends Model<VideoModel> {
       having: Sequelize.where(Sequelize.fn('COUNT', Sequelize.col(field)), {
         [ Sequelize.Op.gte ]: threshold
       }) as any, // FIXME: typings
-      where: {
-        [ field ]: {
-          [ Sequelize.Op.not ]: null
-        },
-        privacy: VideoPrivacy.PUBLIC,
-        state: VideoState.PUBLISHED
-      },
       order: [ this.sequelize.random() ]
     }
 
-    return VideoModel.findAll(query)
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST_IDS, scopeOptions ] })
+                     .findAll(query)
                      .then(rows => rows.map(r => r[ field ]))
   }
 
@@ -1210,7 +1211,7 @@ export class VideoModel extends Model<VideoModel> {
     return {}
   }
 
-  private static async getAvailableForApi (query: IFindOptions<VideoModel>, options: AvailableForListIDsOptions) {
+  private static async getAvailableForApi (query: IFindOptions<VideoModel>, options: AvailableForListIDsOptions, countVideos = true) {
     const idsScope = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST_IDS, options
@@ -1227,7 +1228,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const [ count, rowsId ] = await Promise.all([
-      VideoModel.scope(countScope).count(countQuery),
+      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve(undefined),
       VideoModel.scope(idsScope).findAll(query)
     ])
     const ids = rowsId.map(r => r.id)
