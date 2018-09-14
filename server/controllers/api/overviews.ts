@@ -21,6 +21,16 @@ export { overviewsRouter }
 
 // ---------------------------------------------------------------------------
 
+const buildSamples = memoizee(async function () {
+  const [ categories, channels, tags ] = await Promise.all([
+    VideoModel.getRandomFieldSamples('category', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT),
+    VideoModel.getRandomFieldSamples('channelId', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD ,OVERVIEWS.VIDEOS.SAMPLES_COUNT),
+    TagModel.getRandomSamples(OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT)
+  ])
+
+  return { categories, channels, tags }
+}, { maxAge: MEMOIZE_TTL.OVERVIEWS_SAMPLE })
+
 // This endpoint could be quite long, but we cache it
 async function getVideosOverview (req: express.Request, res: express.Response) {
   const attributes = await buildSamples()
@@ -44,16 +54,6 @@ async function getVideosOverview (req: express.Request, res: express.Response) {
 
   return res.json(result)
 }
-
-const buildSamples = memoizee(async function () {
-  const [ categories, channels, tags ] = await Promise.all([
-    VideoModel.getRandomFieldSamples('category', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT),
-    VideoModel.getRandomFieldSamples('channelId', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD ,OVERVIEWS.VIDEOS.SAMPLES_COUNT),
-    TagModel.getRandomSamples(OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT)
-  ])
-
-  return { categories, channels, tags }
-}, { maxAge: MEMOIZE_TTL.OVERVIEWS_SAMPLE })
 
 async function getVideosByTag (tag: string, res: express.Response) {
   const videos = await getVideos(res, { tagsOneOf: [ tag ] })

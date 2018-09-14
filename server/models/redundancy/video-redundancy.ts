@@ -245,6 +245,37 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
                                .findAll(query)
   }
 
+  static async getStats (strategy: VideoRedundancyStrategy) {
+    const actor = await getServerActor()
+
+    const query = {
+      raw: true,
+      attributes: [
+        [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoFile.size')), '0'), 'totalUsed' ],
+        [ Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', 'videoId')), 'totalVideos' ],
+        [ Sequelize.fn('COUNT', 'videoFileId'), 'totalVideoFiles' ]
+      ],
+      where: {
+        strategy,
+        actorId: actor.id
+      },
+      include: [
+        {
+          attributes: [],
+          model: VideoFileModel,
+          required: true
+        }
+      ]
+    }
+
+    return VideoRedundancyModel.find(query as any) // FIXME: typings
+      .then((r: any) => ({
+        totalUsed: parseInt(r.totalUsed.toString(), 10),
+        totalVideos: r.totalVideos,
+        totalVideoFiles: r.totalVideoFiles
+      }))
+  }
+
   toActivityPubObject (): CacheFileObject {
     return {
       id: this.url,

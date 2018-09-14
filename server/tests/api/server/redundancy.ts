@@ -23,6 +23,8 @@ import { ActorFollow } from '../../../../shared/models/actors'
 import { readdir } from 'fs-extra'
 import { join } from 'path'
 import { VideoRedundancyStrategy } from '../../../../shared/models/redundancy'
+import { getStats } from '../../utils/server/stats'
+import { ServerStats } from '../../../../shared/models/server/server-stats.model'
 
 const expect = chai.expect
 
@@ -79,16 +81,32 @@ async function runServers (strategy: VideoRedundancyStrategy, additionalParams: 
   await waitJobs(servers)
 }
 
-async function check1WebSeed () {
+async function check1WebSeed (strategy: VideoRedundancyStrategy) {
   const webseeds = [
     'http://localhost:9002/static/webseed/' + video1Server2UUID
   ]
 
   for (const server of servers) {
-    const res = await getVideo(server.url, video1Server2UUID)
+    {
+      const res = await getVideo(server.url, video1Server2UUID)
 
-    const video: VideoDetails = res.body
-    video.files.forEach(f => checkMagnetWebseeds(f, webseeds))
+      const video: VideoDetails = res.body
+      video.files.forEach(f => checkMagnetWebseeds(f, webseeds))
+    }
+
+    {
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+
+      expect(data.videosRedundancy).to.have.lengthOf(1)
+
+      const stat = data.videosRedundancy[0]
+      expect(stat.strategy).to.equal(strategy)
+      expect(stat.totalSize).to.equal(102400)
+      expect(stat.totalUsed).to.equal(0)
+      expect(stat.totalVideoFiles).to.equal(0)
+      expect(stat.totalVideos).to.equal(0)
+    }
   }
 }
 
@@ -107,7 +125,7 @@ async function enableRedundancy () {
   expect(server2.following.hostRedundancyAllowed).to.be.true
 }
 
-async function check2Webseeds () {
+async function check2Webseeds (strategy: VideoRedundancyStrategy) {
   await waitJobs(servers)
   await wait(15000)
   await waitJobs(servers)
@@ -118,12 +136,14 @@ async function check2Webseeds () {
   ]
 
   for (const server of servers) {
-    const res = await getVideo(server.url, video1Server2UUID)
+    {
+      const res = await getVideo(server.url, video1Server2UUID)
 
-    const video: VideoDetails = res.body
+      const video: VideoDetails = res.body
 
-    for (const file of video.files) {
-      checkMagnetWebseeds(file, webseeds)
+      for (const file of video.files) {
+        checkMagnetWebseeds(file, webseeds)
+      }
     }
   }
 
@@ -132,6 +152,20 @@ async function check2Webseeds () {
 
   for (const resolution of [ 240, 360, 480, 720 ]) {
     expect(files.find(f => f === `${video1Server2UUID}-${resolution}.mp4`)).to.not.be.undefined
+  }
+
+  {
+    const res = await getStats(servers[0].url)
+    const data: ServerStats = res.body
+
+    expect(data.videosRedundancy).to.have.lengthOf(1)
+    const stat = data.videosRedundancy[0]
+
+    expect(stat.strategy).to.equal(strategy)
+    expect(stat.totalSize).to.equal(102400)
+    expect(stat.totalUsed).to.be.at.least(1).and.below(102401)
+    expect(stat.totalVideoFiles).to.equal(4)
+    expect(stat.totalVideos).to.equal(1)
   }
 }
 
@@ -142,15 +176,16 @@ async function cleanServers () {
 describe('Test videos redundancy', function () {
 
   describe('With most-views strategy', function () {
+    const strategy = 'most-views'
 
     before(function () {
       this.timeout(120000)
 
-      return runServers('most-views')
+      return runServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', function () {
-      return check1WebSeed()
+      return check1WebSeed(strategy)
     })
 
     it('Should enable redundancy on server 1', function () {
@@ -160,7 +195,7 @@ describe('Test videos redundancy', function () {
     it('Should have 2 webseed on the first video', function () {
       this.timeout(40000)
 
-      return check2Webseeds()
+      return check2Webseeds(strategy)
     })
 
     after(function () {
@@ -169,15 +204,16 @@ describe('Test videos redundancy', function () {
   })
 
   describe('With trending strategy', function () {
+    const strategy = 'trending'
 
     before(function () {
       this.timeout(120000)
 
-      return runServers('trending')
+      return runServers(strategy)
     })
 
     it('Should have 1 webseed on the first video', function () {
-      return check1WebSeed()
+      return check1WebSeed(strategy)
     })
 
     it('Should enable redundancy on server 1', function () {
@@ -187,7 +223,7 @@ describe('Test videos redundancy', function () {
     it('Should have 2 webseed on the first video', function () {
       this.timeout(40000)
 
-      return check2Webseeds()
+      return check2Webseeds(strategy)
     })
 
     after(function () {
@@ -196,15 +232,16 @@ describe('Test videos redundancy', function () {
   })
 
   describe('With recently added strategy', function () {
+    const strategy = 'recently-added'
 
     before(function () {
       this.timeout(120000)
 
-      return runServers('recently-added', { minViews: 3 })
+      return runServers(strategy, { minViews: 3 })
     })
 
     it('Should have 1 webseed on the first video', function () {
-      return check1WebSeed()
+      return check1WebSeed(strategy)
     })
 
     it('Should enable redundancy on server 1', function () {
@@ -218,7 +255,7 @@ describe('Test videos redundancy', function () {
       await wait(15000)
       await waitJobs(servers)
 
-      return check1WebSeed()
+      return check1WebSeed(strategy)
     })
 
     it('Should view 2 times the first video', async function () {
@@ -234,7 +271,7 @@ describe('Test videos redundancy', function () {
     it('Should have 2 webseed on the first video', function () {
       this.timeout(40000)
 
-      return check2Webseeds()
+      return check2Webseeds(strategy)
     })
 
     after(function () {
