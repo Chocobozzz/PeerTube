@@ -7,6 +7,8 @@ webserver:
     __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
+trust_proxy: "PEERTUBE_TRUST_PROXY"
+
 database:
   hostname: "PEERTUBE_DB_HOSTNAME"
   port:
