@@ -81,6 +81,7 @@
     flex-grow: 1;
     // Set min width for flex item
     min-width: 1px;
+    max-width: 100%;
 
     .video-info-first-row {
       display: flex;
