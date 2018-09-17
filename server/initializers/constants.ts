@@ -659,6 +659,7 @@ if (isTestInstance() === true) {
   JOB_ATTEMPTS['email'] = 1
 
   CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
+  MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
 }
 
 updateWebserverConfig()
