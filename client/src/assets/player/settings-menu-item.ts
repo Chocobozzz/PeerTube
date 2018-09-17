@@ -38,8 +38,11 @@ class SettingsMenuItem extends MenuItem {
     this.eventHandlers()
 
     player.ready(() => {
-      this.build()
-      this.reset()
+      // Voodoo magic for IOS
+      setTimeout(() => {
+        this.build()
+        this.reset()
+      }, 0)
     })
   }
 
