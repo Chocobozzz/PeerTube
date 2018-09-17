@@ -56,6 +56,9 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   const isURISearch = search.startsWith('http://') || search.startsWith('https://')
 
   const parts = search.split('@')
+
+  // Handle strings like @toto@example.com
+  if (parts.length === 3 && parts[0].length === 0) parts.shift()
   const isWebfingerSearch = parts.length === 2 && parts.every(p => p.indexOf(' ') === -1)
 
   if (isURISearch || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
