@@ -660,6 +660,7 @@ if (isTestInstance() === true) {
 
   CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
   MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
+  ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0'
 }
 
 updateWebserverConfig()
