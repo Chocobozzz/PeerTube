@@ -52,11 +52,11 @@ function checkConfig () {
     if (filtered.length !== redundancyVideos.length) {
       return 'Redundancy video entries should have unique strategies'
     }
-  }
 
-  const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
-  if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
-    return 'Min views in recently added strategy is not a number'
+    const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
+    if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
+      return 'Min views in recently added strategy is not a number'
+    }
   }
 
   return null

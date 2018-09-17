@@ -24,13 +24,13 @@ log:
 redundancy:
   videos:
     -
-      size: '100KB'
+      size: '10MB'
       strategy: 'most-views'
     -
-      size: '100KB'
+      size: '10MB'
       strategy: 'trending'
     -
-      size: '100KB'
+      size: '10MB'
       strategy: 'recently-added'
       minViews: 10
 
