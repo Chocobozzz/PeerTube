@@ -22,7 +22,7 @@
       <div class="peertube-select-container">
         <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
           <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
-          <option [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
+          <option i18n [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
         </select>
       </div>
     </div>
