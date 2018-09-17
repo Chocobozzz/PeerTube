@@ -97,11 +97,10 @@ BitTorrent) inside the web browser, as of today.
 ## Dependencies
 
   * nginx
-  * PostgreSQL
+  * **PostgreSQL >= 9.6**
   * **Redis >= 2.8.18**
   * **NodeJS >= 8.x**
   * yarn
-  * OpenSSL (cli)
   * **FFmpeg >= 3.x**
 
 ## Run in production
