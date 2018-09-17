@@ -24,7 +24,7 @@ function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: str
         if (timer) clearTimeout(timer)
 
         return safeWebtorrentDestroy(webtorrent, torrentId, file.name, target.torrentName)
-          .then(() => rej(new Error('The number of files is not equal to 1 for ' + torrentId)))
+          .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
       file = torrent.files[ 0 ]
