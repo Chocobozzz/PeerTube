@@ -36,6 +36,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   videoHeight: number
   videoPages: Video[][] = []
   ownerDisplayType: OwnerDisplayType = 'account'
+  firstLoadedPage: number
 
   protected baseVideoWidth = 215
   protected baseVideoHeight = 205
@@ -55,7 +56,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected otherRouteParams = {}
 
   private resizeSubscription: Subscription
-  private firstLoadedPage: number
 
   abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number}>
   abstract generateSyndicationList ()
