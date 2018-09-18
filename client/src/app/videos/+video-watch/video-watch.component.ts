@@ -1,4 +1,4 @@
-import { catchError, subscribeOn } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'

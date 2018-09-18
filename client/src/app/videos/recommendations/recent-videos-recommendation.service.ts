@@ -25,8 +25,8 @@ export class RecentVideosRecommendationService implements RecommendationService 
   getRecommendations (recommendation: RecommendationInfo): Observable<Video[]> {
     return this.fetchPage(1, recommendation)
       .pipe(
-        map(vids => {
-          const otherVideos = vids.filter(v => v.uuid !== recommendation.uuid)
+        map(videos => {
+          const otherVideos = videos.filter(v => v.uuid !== recommendation.uuid)
           return otherVideos.slice(0, this.pageSize)
         })
       )
