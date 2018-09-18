@@ -91,6 +91,7 @@ import {
   videoModelToFormattedDetailsJSON,
   videoModelToFormattedJSON
 } from './video-format-utils'
+import * as validator from 'validator'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -466,6 +467,7 @@ type AvailableForListIDsOptions = {
         required: false,
         include: [
           {
+            attributes: [ 'fileUrl' ],
             model: () => VideoRedundancyModel.unscoped(),
             required: false
           }
@@ -1062,13 +1064,43 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.getAvailableForApi(query, queryOptions)
   }
 
-  static load (id: number, t?: Sequelize.Transaction) {
-    return VideoModel.findById(id, { transaction: t })
+  static load (id: number | string, t?: Sequelize.Transaction) {
+    const where = VideoModel.buildWhereIdOrUUID(id)
+    const options = {
+      where,
+      transaction: t
+    }
+
+    return VideoModel.findOne(options)
+  }
+
+  static loadOnlyId (id: number | string, t?: Sequelize.Transaction) {
+    const where = VideoModel.buildWhereIdOrUUID(id)
+
+    const options = {
+      attributes: [ 'id' ],
+      where,
+      transaction: t
+    }
+
+    return VideoModel.findOne(options)
   }
 
   static loadWithFile (id: number, t?: Sequelize.Transaction, logging?: boolean) {
     return VideoModel.scope(ScopeNames.WITH_FILES)
                      .findById(id, { transaction: t, logging })
+  }
+
+  static loadByUUIDWithFile (uuid: string) {
+    const options = {
+      where: {
+        uuid
+      }
+    }
+
+    return VideoModel
+      .scope([ ScopeNames.WITH_FILES ])
+      .findOne(options)
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
@@ -1083,40 +1115,12 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
-  static loadAndPopulateAccountAndServerAndTags (id: number) {
-    const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ]
-    }
+  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Sequelize.Transaction) {
+    const where = VideoModel.buildWhereIdOrUUID(id)
 
-    return VideoModel
-      .scope([
-        ScopeNames.WITH_TAGS,
-        ScopeNames.WITH_BLACKLISTED,
-        ScopeNames.WITH_FILES,
-        ScopeNames.WITH_ACCOUNT_DETAILS,
-        ScopeNames.WITH_SCHEDULED_UPDATE
-      ])
-      .findById(id, options)
-  }
-
-  static loadByUUID (uuid: string) {
-    const options = {
-      where: {
-        uuid
-      }
-    }
-
-    return VideoModel
-      .scope([ ScopeNames.WITH_FILES ])
-      .findOne(options)
-  }
-
-  static loadByUUIDAndPopulateAccountAndServerAndTags (uuid: string, t?: Sequelize.Transaction) {
     const options = {
       order: [ [ 'Tags', 'name', 'ASC' ] ],
-      where: {
-        uuid
-      },
+      where,
       transaction: t
     }
 
@@ -1275,6 +1279,10 @@ export class VideoModel extends Model<VideoModel> {
 
   static getStateLabel (id: number) {
     return VIDEO_STATES[ id ] || 'Unknown'
+  }
+
+  static buildWhereIdOrUUID (id: number | string) {
+    return validator.isInt('' + id) ? { id } : { uuid: id }
   }
 
   getOriginalFile () {

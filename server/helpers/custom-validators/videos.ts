@@ -152,13 +152,15 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   return true
 }
 
-async function isVideoExist (id: string, res: Response) {
+async function isVideoExist (id: string, res: Response, fetchType: 'all' | 'only-video' | 'id' | 'none' = 'all') {
   let video: VideoModel | null
 
-  if (validator.isInt(id)) {
-    video = await VideoModel.loadAndPopulateAccountAndServerAndTags(+id)
-  } else { // UUID
-    video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(id)
+  if (fetchType === 'all') {
+    video = await VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+  } else if (fetchType === 'only-video') {
+    video = await VideoModel.load(id)
+  } else if (fetchType === 'id' || fetchType === 'none') {
+    video = await VideoModel.loadOnlyId(id)
   }
 
   if (video === null) {
@@ -169,7 +171,7 @@ async function isVideoExist (id: string, res: Response) {
     return false
   }
 
-  res.locals.video = video
+  if (fetchType !== 'none') res.locals.video = video
   return true
 }
 

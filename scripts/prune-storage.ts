@@ -56,7 +56,7 @@ async function pruneDirectory (directory: string) {
     const uuid = getUUIDFromFilename(file)
     let video: VideoModel
 
-    if (uuid) video = await VideoModel.loadByUUID(uuid)
+    if (uuid) video = await VideoModel.loadByUUIDWithFile(uuid)
 
     if (!uuid || !video) toDelete.push(join(directory, file))
   }

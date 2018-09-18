@@ -183,7 +183,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       const videoUpdated = await video.save({ transaction: t })
 
       // Now we can federate the video (reload from database, we need more attributes)
-      const videoForFederation = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid, t)
+      const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
       await federateVideoIfNeeded(videoForFederation, true, t)
 
       // Update video import object

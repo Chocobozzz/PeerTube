@@ -86,7 +86,7 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   let resultList: ResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
-    resultList = await VideoCommentModel.listThreadCommentsForApi(res.locals.video.id, res.locals.videoCommentThread.id)
+    resultList = await VideoCommentModel.listThreadCommentsForApi(video.id, res.locals.videoCommentThread.id)
   } else {
     resultList = {
       total: 0,

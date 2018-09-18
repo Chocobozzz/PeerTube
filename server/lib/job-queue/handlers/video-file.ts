@@ -26,7 +26,7 @@ async function processVideoFileImport (job: Bull.Job) {
   const payload = job.data as VideoFileImportPayload
   logger.info('Processing video file import in job %d.', job.id)
 
-  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', job.id)
@@ -43,7 +43,7 @@ async function processVideoFile (job: Bull.Job) {
   const payload = job.data as VideoFilePayload
   logger.info('Processing video file in job %d.', job.id)
 
-  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', job.id)
@@ -69,7 +69,7 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
 
   return sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    let videoDatabase = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid, t)
+    let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
@@ -99,7 +99,7 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
 
   return sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid, t)
+    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 

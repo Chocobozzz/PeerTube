@@ -17,7 +17,7 @@ const listVideoCommentThreadsValidator = [
     logger.debug('Checking listVideoCommentThreads parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await isVideoExist(req.params.videoId, res, 'only-video')) return
 
     return next()
   }
@@ -31,7 +31,7 @@ const listVideoThreadCommentsValidator = [
     logger.debug('Checking listVideoThreadComments parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await isVideoExist(req.params.videoId, res, 'only-video')) return
     if (!await isVideoCommentThreadExist(req.params.threadId, res.locals.video, res)) return
 
     return next()

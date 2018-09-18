@@ -39,10 +39,8 @@ export class ClientHtml {
     let videoPromise: Bluebird<VideoModel>
 
     // Let Angular application handle errors
-    if (validator.isUUID(videoId, 4)) {
-      videoPromise = VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(videoId)
-    } else if (validator.isInt(videoId)) {
-      videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(+videoId)
+    if (validator.isInt(videoId) || validator.isUUID(videoId, 4)) {
+      videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
     } else {
       return ClientHtml.getIndexHTML(req, res)
     }
