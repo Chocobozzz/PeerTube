@@ -27,13 +27,13 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
+import { ActivityUrlObject, VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { createTorrentPromise, peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { isBooleanValid } from '../../helpers/custom-validators/misc'
+import { isArray, isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoCategoryValid,
   isVideoDescriptionValid,
@@ -90,6 +90,7 @@ import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
 import { copy, remove, rename, stat, writeFile } from 'fs-extra'
 import { VideoViewModel } from './video-views'
+import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -220,6 +221,7 @@ type AvailableForListIDsOptions = {
   },
   [ ScopeNames.AVAILABLE_FOR_LIST_IDS ]: (options: AvailableForListIDsOptions) => {
     const query: IFindOptions<VideoModel> = {
+      raw: true,
       attributes: [ 'id' ],
       where: {
         id: {
@@ -386,16 +388,7 @@ type AvailableForListIDsOptions = {
     }
 
     if (options.trendingDays) {
-      query.include.push({
-        attributes: [],
-        model: VideoViewModel,
-        required: false,
-        where: {
-          startDate: {
-            [ Sequelize.Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * options.trendingDays)
-          }
-        }
-      })
+      query.include.push(VideoModel.buildTrendingQuery(options.trendingDays))
 
       query.subQuery = false
     }
@@ -470,7 +463,13 @@ type AvailableForListIDsOptions = {
     include: [
       {
         model: () => VideoFileModel.unscoped(),
-        required: false
+        required: false,
+        include: [
+          {
+            model: () => VideoRedundancyModel.unscoped(),
+            required: false
+          }
+        ]
       }
     ]
   },
@@ -633,6 +632,7 @@ export class VideoModel extends Model<VideoModel> {
       name: 'videoId',
       allowNull: false
     },
+    hooks: true,
     onDelete: 'cascade'
   })
   VideoFiles: VideoFileModel[]
@@ -929,7 +929,7 @@ export class VideoModel extends Model<VideoModel> {
     videoChannelId?: number,
     actorId?: number
     trendingDays?: number
-  }) {
+  }, countVideos = true) {
     const query: IFindOptions<VideoModel> = {
       offset: options.start,
       limit: options.count,
@@ -962,7 +962,7 @@ export class VideoModel extends Model<VideoModel> {
       trendingDays
     }
 
-    return VideoModel.getAvailableForApi(query, queryOptions)
+    return VideoModel.getAvailableForApi(query, queryOptions, countVideos)
   }
 
   static async searchAndPopulateAccountAndServer (options: {
@@ -1063,9 +1063,12 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static load (id: number, t?: Sequelize.Transaction) {
-    const options = t ? { transaction: t } : undefined
+    return VideoModel.findById(id, { transaction: t })
+  }
 
-    return VideoModel.findById(id, options)
+  static loadWithFile (id: number, t?: Sequelize.Transaction, logging?: boolean) {
+    return VideoModel.scope(ScopeNames.WITH_FILES)
+                     .findById(id, { transaction: t, logging })
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
@@ -1161,7 +1164,14 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   // threshold corresponds to how many video the field should have to be returned
-  static getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
+  static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
+    const actorId = (await getServerActor()).id
+
+    const scopeOptions = {
+      actorId,
+      includeLocalVideos: true
+    }
+
     const query: IFindOptions<VideoModel> = {
       attributes: [ field ],
       limit: count,
@@ -1169,18 +1179,26 @@ export class VideoModel extends Model<VideoModel> {
       having: Sequelize.where(Sequelize.fn('COUNT', Sequelize.col(field)), {
         [ Sequelize.Op.gte ]: threshold
       }) as any, // FIXME: typings
-      where: {
-        [ field ]: {
-          [ Sequelize.Op.not ]: null
-        },
-        privacy: VideoPrivacy.PUBLIC,
-        state: VideoState.PUBLISHED
-      },
       order: [ this.sequelize.random() ]
     }
 
-    return VideoModel.findAll(query)
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST_IDS, scopeOptions ] })
+                     .findAll(query)
                      .then(rows => rows.map(r => r[ field ]))
+  }
+
+  static buildTrendingQuery (trendingDays: number) {
+    return {
+      attributes: [],
+      subQuery: false,
+      model: VideoViewModel,
+      required: false,
+      where: {
+        startDate: {
+          [ Sequelize.Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
+        }
+      }
+    }
   }
 
   private static buildActorWhereWithFilter (filter?: VideoFilter) {
@@ -1193,7 +1211,7 @@ export class VideoModel extends Model<VideoModel> {
     return {}
   }
 
-  private static async getAvailableForApi (query: IFindOptions<VideoModel>, options: AvailableForListIDsOptions) {
+  private static async getAvailableForApi (query: IFindOptions<VideoModel>, options: AvailableForListIDsOptions, countVideos = true) {
     const idsScope = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST_IDS, options
@@ -1210,7 +1228,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const [ count, rowsId ] = await Promise.all([
-      VideoModel.scope(countScope).count(countQuery),
+      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve(undefined),
       VideoModel.scope(idsScope).findAll(query)
     ])
     const ids = rowsId.map(r => r.id)
@@ -1325,9 +1343,7 @@ export class VideoModel extends Model<VideoModel> {
         [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ],
         [ CONFIG.WEBSERVER.URL + '/tracker/announce' ]
       ],
-      urlList: [
-        CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
-      ]
+      urlList: [ CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
     }
 
     const torrent = await createTorrentPromise(this.getVideoFilePath(videoFile), options)
@@ -1535,11 +1551,11 @@ export class VideoModel extends Model<VideoModel> {
       }
     }
 
-    const url = []
+    const url: ActivityUrlObject[] = []
     for (const file of this.VideoFiles) {
       url.push({
         type: 'Link',
-        mimeType: VIDEO_EXT_MIMETYPE[ file.extname ],
+        mimeType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
         href: this.getVideoFileUrl(file, baseUrlHttp),
         height: file.resolution,
         size: file.size,
@@ -1548,14 +1564,14 @@ export class VideoModel extends Model<VideoModel> {
 
       url.push({
         type: 'Link',
-        mimeType: 'application/x-bittorrent',
+        mimeType: 'application/x-bittorrent' as 'application/x-bittorrent',
         href: this.getTorrentUrl(file, baseUrlHttp),
         height: file.resolution
       })
 
       url.push({
         type: 'Link',
-        mimeType: 'application/x-bittorrent;x-scheme-handler/magnet',
+        mimeType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
         href: this.generateMagnetUri(file, baseUrlHttp, baseUrlWs),
         height: file.resolution
       })
@@ -1796,7 +1812,7 @@ export class VideoModel extends Model<VideoModel> {
       (now - updatedAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL
   }
 
-  private getBaseUrls () {
+  getBaseUrls () {
     let baseUrlHttp
     let baseUrlWs
 
@@ -1811,30 +1827,13 @@ export class VideoModel extends Model<VideoModel> {
     return { baseUrlHttp, baseUrlWs }
   }
 
-  private getThumbnailUrl (baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.THUMBNAILS + this.getThumbnailName()
-  }
-
-  private getTorrentUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
-  }
-
-  private getTorrentDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
-  }
-
-  private getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
-  }
-
-  private getVideoFileDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + this.getVideoFilename(videoFile)
-  }
-
-  private generateMagnetUri (videoFile: VideoFileModel, baseUrlHttp: string, baseUrlWs: string) {
+  generateMagnetUri (videoFile: VideoFileModel, baseUrlHttp: string, baseUrlWs: string) {
     const xs = this.getTorrentUrl(videoFile, baseUrlHttp)
     const announce = [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
-    const urlList = [ this.getVideoFileUrl(videoFile, baseUrlHttp) ]
+    let urlList = [ this.getVideoFileUrl(videoFile, baseUrlHttp) ]
+
+    const redundancies = videoFile.RedundancyVideos
+    if (isArray(redundancies)) urlList = urlList.concat(redundancies.map(r => r.fileUrl))
 
     const magnetHash = {
       xs,
@@ -1845,5 +1844,25 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return magnetUtil.encode(magnetHash)
+  }
+
+  getThumbnailUrl (baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_PATHS.THUMBNAILS + this.getThumbnailName()
+  }
+
+  getTorrentUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+  }
+
+  getTorrentDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+  }
+
+  getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+  }
+
+  getVideoFileDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + this.getVideoFilename(videoFile)
   }
 }

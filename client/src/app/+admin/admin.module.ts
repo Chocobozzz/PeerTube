@@ -14,6 +14,8 @@ import { UserCreateComponent, UserListComponent, UsersComponent, UserService, Us
 import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoBlacklistListComponent } from './moderation'
 import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-modal.component'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
+import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
+import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service'
 
 @NgModule({
   imports: [
@@ -29,6 +31,7 @@ import { ModerationComponent } from '@app/+admin/moderation/moderation.component
     FollowingAddComponent,
     FollowersListComponent,
     FollowingListComponent,
+    RedundancyCheckboxComponent,
 
     UsersComponent,
     UserCreateComponent,
@@ -54,6 +57,7 @@ import { ModerationComponent } from '@app/+admin/moderation/moderation.component
 
   providers: [
     FollowService,
+    RedundancyService,
     UserService,
     JobService,
     ConfigService

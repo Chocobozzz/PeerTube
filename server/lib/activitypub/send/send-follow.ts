@@ -15,12 +15,12 @@ function sendFollow (actorFollow: ActorFollowModel) {
   logger.info('Creating job to send follow request to %s.', following.url)
 
   const url = getActorFollowActivityPubUrl(actorFollow)
-  const data = followActivityData(url, me, following)
+  const data = buildFollowActivity(url, me, following)
 
   return unicastTo(data, me, following.inboxUrl)
 }
 
-function followActivityData (url: string, byActor: ActorModel, targetActor: ActorModel): ActivityFollow {
+function buildFollowActivity (url: string, byActor: ActorModel, targetActor: ActorModel): ActivityFollow {
   return {
     type: 'Follow',
     id: url,
@@ -33,5 +33,5 @@ function followActivityData (url: string, byActor: ActorModel, targetActor: Acto
 
 export {
   sendFollow,
-  followActivityData
+  buildFollowActivity
 }

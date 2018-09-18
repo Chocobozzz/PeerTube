@@ -7,7 +7,7 @@
   <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div
     myInfiniteScroller
-    [pageHeight]="pageHeight"
+    [pageHeight]="pageHeight" [firstLoadedPage]="firstLoadedPage"
     (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
     class="videos" #videosElement
   >

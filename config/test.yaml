@@ -21,6 +21,19 @@ smtp:
 log:
   level: 'debug'
 
+redundancy:
+  videos:
+    -
+      size: '10MB'
+      strategy: 'most-views'
+    -
+      size: '10MB'
+      strategy: 'trending'
+    -
+      size: '10MB'
+      strategy: 'recently-added'
+      minViews: 10
+
 cache:
   previews:
     size: 1

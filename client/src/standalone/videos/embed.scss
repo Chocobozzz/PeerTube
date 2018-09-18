@@ -4,7 +4,7 @@
 @import '~videojs-dock/dist/videojs-dock.css';
 
 $assets-path: '../../assets/';
-@import '../../sass/player/player';
+@import '../../sass/player/index';
 
 [hidden] {
   display: none !important;

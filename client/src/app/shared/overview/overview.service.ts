@@ -56,6 +56,8 @@ export class OverviewService {
       }
     }
 
+    if (observables.length === 0) return of(videosOverviewResult)
+
     return forkJoin(observables)
       .pipe(
         // Translate categories

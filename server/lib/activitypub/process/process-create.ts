@@ -1,4 +1,4 @@
-import { ActivityCreate, VideoAbuseState, VideoTorrentObject } from '../../../../shared'
+import { ActivityCreate, CacheFileObject, VideoAbuseState, VideoTorrentObject } from '../../../../shared'
 import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -12,6 +12,7 @@ import { addVideoComment, resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
+import { createCacheFile } from '../cache-file'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -28,6 +29,8 @@ async function processCreateActivity (activity: ActivityCreate) {
     return retryTransactionWrapper(processCreateVideoAbuse, actor, activityObject as VideoAbuseObject)
   } else if (activityType === 'Note') {
     return retryTransactionWrapper(processCreateVideoComment, actor, activity)
+  } else if (activityType === 'CacheFile') {
+    return retryTransactionWrapper(processCacheFile, actor, activity)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -97,6 +100,20 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
   }
 }
 
+async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) {
+  const cacheFile = activity.object as CacheFileObject
+
+  const { video } = await getOrCreateVideoAndAccountAndChannel(cacheFile.object)
+
+  await createCacheFile(cacheFile, video, byActor)
+
+  if (video.isOwned()) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
+    await forwardActivity(activity, undefined, exceptions)
+  }
+}
+
 async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
@@ -113,7 +130,7 @@ async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateDat
       state: VideoAbuseState.PENDING
     }
 
-    await VideoAbuseModel.create(videoAbuseData)
+    await VideoAbuseModel.create(videoAbuseData, { transaction: t })
 
     logger.info('Remote abuse for video uuid %s created', videoAbuseToCreateData.object)
   })

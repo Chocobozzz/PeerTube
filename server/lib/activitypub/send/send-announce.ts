@@ -4,45 +4,44 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers } from './utils'
-import { getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from '../audience'
+import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
 import { logger } from '../../../helpers/logger'
 
-async function buildVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+async function buildAnnounceWithVideoAudience (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const announcedObject = video.url
 
-  const accountsToForwardView = await getActorsInvolvedInVideo(video, t)
-  const audience = getObjectFollowersAudience(accountsToForwardView)
-  return announceActivityData(videoShare.url, byActor, announcedObject, audience)
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
+  const audience = getAudienceFromFollowersOf(actorsInvolvedInVideo)
+
+  const activity = buildAnnounceActivity(videoShare.url, byActor, announcedObject, audience)
+
+  return { activity, actorsInvolvedInVideo }
 }
 
 async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
-  const data = await buildVideoAnnounce(byActor, videoShare, video, t)
+  const { activity, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, t)
 
   logger.info('Creating job to send announce %s.', videoShare.url)
 
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
   const followersException = [ byActor ]
-
-  return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, followersException)
+  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
-function announceActivityData (url: string, byActor: ActorModel, object: string, audience?: ActivityAudience): ActivityAnnounce {
+function buildAnnounceActivity (url: string, byActor: ActorModel, object: string, audience?: ActivityAudience): ActivityAnnounce {
   if (!audience) audience = getAudience(byActor)
 
-  return {
-    type: 'Announce',
-    to: audience.to,
-    cc: audience.cc,
+  return audiencify({
+    type: 'Announce' as 'Announce',
     id: url,
     actor: byActor.url,
     object
-  }
+  }, audience)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   sendVideoAnnounce,
-  announceActivityData,
-  buildVideoAnnounce
+  buildAnnounceActivity,
+  buildAnnounceWithVideoAudience
 }

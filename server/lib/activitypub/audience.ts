@@ -6,7 +6,7 @@ import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
 
-function getVideoAudience (video: VideoModel, actorsInvolvedInVideo: ActorModel[]) {
+function getRemoteVideoAudience (video: VideoModel, actorsInvolvedInVideo: ActorModel[]): ActivityAudience {
   return {
     to: [ video.VideoChannel.Account.Actor.url ],
     cc: actorsInvolvedInVideo.map(a => a.followersUrl)
@@ -18,7 +18,7 @@ function getVideoCommentAudience (
   threadParentComments: VideoCommentModel[],
   actorsInvolvedInVideo: ActorModel[],
   isOrigin = false
-) {
+): ActivityAudience {
   const to = [ ACTIVITY_PUB.PUBLIC ]
   const cc: string[] = []
 
@@ -41,7 +41,7 @@ function getVideoCommentAudience (
   }
 }
 
-function getObjectFollowersAudience (actorsInvolvedInObject: ActorModel[]) {
+function getAudienceFromFollowersOf (actorsInvolvedInObject: ActorModel[]): ActivityAudience {
   return {
     to: [ ACTIVITY_PUB.PUBLIC ].concat(actorsInvolvedInObject.map(a => a.followersUrl)),
     cc: []
@@ -83,9 +83,9 @@ function audiencify<T> (object: T, audience: ActivityAudience) {
 export {
   buildAudience,
   getAudience,
-  getVideoAudience,
+  getRemoteVideoAudience,
   getActorsInvolvedInVideo,
-  getObjectFollowersAudience,
+  getAudienceFromFollowersOf,
   audiencify,
   getVideoCommentAudience
 }

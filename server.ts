@@ -94,6 +94,7 @@ import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follo
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
+import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 
 // ----------- Command line -----------
 
@@ -206,6 +207,7 @@ async function startApplication () {
   RemoveOldJobsScheduler.Instance.enable()
   UpdateVideosScheduler.Instance.enable()
   YoutubeDlUpdateScheduler.Instance.enable()
+  VideosRedundancyScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

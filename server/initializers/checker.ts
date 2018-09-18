@@ -7,6 +7,9 @@ import { parse } from 'url'
 import { CONFIG } from './constants'
 import { logger } from '../helpers/logger'
 import { getServerActor } from '../helpers/utils'
+import { RecentlyAddedStrategy, VideosRedundancy } from '../../shared/models/redundancy'
+import { isArray } from '../helpers/custom-validators/misc'
+import { uniq } from 'lodash'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -31,8 +34,29 @@ async function checkActivityPubUrls () {
 function checkConfig () {
   const defaultNSFWPolicy = config.get<string>('instance.default_nsfw_policy')
 
+  // NSFW policy
   if ([ 'do_not_list', 'blur', 'display' ].indexOf(defaultNSFWPolicy) === -1) {
     return 'NSFW policy setting should be "do_not_list" or "blur" or "display" instead of ' + defaultNSFWPolicy
+  }
+
+  // Redundancies
+  const redundancyVideos = config.get<VideosRedundancy[]>('redundancy.videos')
+  if (isArray(redundancyVideos)) {
+    for (const r of redundancyVideos) {
+      if ([ 'most-views', 'trending', 'recently-added' ].indexOf(r.strategy) === -1) {
+        return 'Redundancy video entries should have "most-views" strategy instead of ' + r.strategy
+      }
+    }
+
+    const filtered = uniq(redundancyVideos.map(r => r.strategy))
+    if (filtered.length !== redundancyVideos.length) {
+      return 'Redundancy video entries should have unique strategies'
+    }
+
+    const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
+    if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
+      return 'Min views in recently added strategy is not a number'
+    }
   }
 
   return null

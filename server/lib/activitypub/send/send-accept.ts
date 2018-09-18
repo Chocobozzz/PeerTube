@@ -3,7 +3,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
-import { followActivityData } from './send-follow'
+import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
 
 async function sendAccept (actorFollow: ActorFollowModel) {
@@ -18,10 +18,10 @@ async function sendAccept (actorFollow: ActorFollowModel) {
   logger.info('Creating job to accept follower %s.', follower.url)
 
   const followUrl = getActorFollowActivityPubUrl(actorFollow)
-  const followData = followActivityData(followUrl, follower, me)
+  const followData = buildFollowActivity(followUrl, follower, me)
 
   const url = getActorFollowAcceptActivityPubUrl(actorFollow)
-  const data = acceptActivityData(url, me, followData)
+  const data = buildAcceptActivity(url, me, followData)
 
   return unicastTo(data, me, follower.inboxUrl)
 }
@@ -34,7 +34,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function acceptActivityData (url: string, byActor: ActorModel, followActivityData: ActivityFollow): ActivityAccept {
+function buildAcceptActivity (url: string, byActor: ActorModel, followActivityData: ActivityFollow): ActivityAccept {
   return {
     type: 'Accept',
     id: url,

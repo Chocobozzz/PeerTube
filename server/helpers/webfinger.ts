@@ -12,7 +12,10 @@ const webfinger = new WebFinger({
   request_timeout: 3000
 })
 
-async function loadActorUrlOrGetFromWebfinger (uri: string) {
+async function loadActorUrlOrGetFromWebfinger (uriArg: string) {
+  // Handle strings like @toto@example.com
+  const uri = uriArg.startsWith('@') ? uriArg.slice(1) : uriArg
+
   const [ name, host ] = uri.split('@')
   let actor: ActorModel
 

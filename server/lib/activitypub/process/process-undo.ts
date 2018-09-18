@@ -1,4 +1,4 @@
-import { ActivityAnnounce, ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
+import { ActivityAnnounce, ActivityFollow, ActivityLike, ActivityUndo, CacheFileObject } from '../../../../shared/models/activitypub'
 import { DislikeObject } from '../../../../shared/models/activitypub/objects'
 import { getActorUrl } from '../../../helpers/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -11,6 +11,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
+import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 
 async function processUndoActivity (activity: ActivityUndo) {
   const activityToUndo = activity.object
@@ -19,11 +20,21 @@ async function processUndoActivity (activity: ActivityUndo) {
 
   if (activityToUndo.type === 'Like') {
     return retryTransactionWrapper(processUndoLike, actorUrl, activity)
-  } else if (activityToUndo.type === 'Create' && activityToUndo.object.type === 'Dislike') {
-    return retryTransactionWrapper(processUndoDislike, actorUrl, activity)
-  } else if (activityToUndo.type === 'Follow') {
+  }
+
+  if (activityToUndo.type === 'Create') {
+    if (activityToUndo.object.type === 'Dislike') {
+      return retryTransactionWrapper(processUndoDislike, actorUrl, activity)
+    } else if (activityToUndo.object.type === 'CacheFile') {
+      return retryTransactionWrapper(processUndoCacheFile, actorUrl, activity)
+    }
+  }
+
+  if (activityToUndo.type === 'Follow') {
     return retryTransactionWrapper(processUndoFollow, actorUrl, activityToUndo)
-  } else if (activityToUndo.type === 'Announce') {
+  }
+
+  if (activityToUndo.type === 'Announce') {
     return retryTransactionWrapper(processUndoAnnounce, actorUrl, activityToUndo)
   }
 
@@ -82,6 +93,29 @@ async function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
     if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byAccount.Actor ]
+
+      await forwardVideoRelatedActivity(activity, t, exceptions, video)
+    }
+  })
+}
+
+async function processUndoCacheFile (actorUrl: string, activity: ActivityUndo) {
+  const cacheFileObject = activity.object.object as CacheFileObject
+
+  const { video } = await getOrCreateVideoAndAccountAndChannel(cacheFileObject.object)
+
+  return sequelizeTypescript.transaction(async t => {
+    const byActor = await ActorModel.loadByUrl(actorUrl)
+    if (!byActor) throw new Error('Unknown actor ' + actorUrl)
+
+    const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
+    if (!cacheFile) throw new Error('Unknown video cache ' + cacheFile.url)
+
+    await cacheFile.destroy()
+
+    if (video.isOwned()) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byActor ]
 
       await forwardVideoRelatedActivity(activity, t, exceptions, video)
     }

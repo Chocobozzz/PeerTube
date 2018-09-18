@@ -70,7 +70,7 @@
   },
   "lint-staged": {
     "*.scss": [
-      "sass-lint -c .sass-lint.yml",
+      "sass-lint -c client/.sass-lint.yml",
       "git add"
     ]
   },
@@ -86,6 +86,7 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.12.4",
     "bull": "^3.4.2",
+    "bytes": "^3.0.0",
     "commander": "^2.13.0",
     "concurrently": "^4.0.1",
     "config": "^2.0.1",
@@ -110,6 +111,7 @@
     "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",
     "lodash": "^4.17.10",
     "magnet-uri": "^5.1.4",
+    "memoizee": "^0.4.14",
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "nodemailer": "^4.4.2",
@@ -145,6 +147,7 @@
     "@types/bluebird": "3.5.21",
     "@types/body-parser": "^1.16.3",
     "@types/bull": "^3.3.12",
+    "@types/bytes": "^3.0.0",
     "@types/chai": "^4.0.4",
     "@types/chai-json-schema": "^1.4.3",
     "@types/chai-xml": "^0.3.1",
@@ -156,6 +159,7 @@
     "@types/lodash": "^4.14.64",
     "@types/magnet-uri": "^5.1.1",
     "@types/maildev": "^0.0.1",
+    "@types/memoizee": "^0.4.2",
     "@types/mkdirp": "^0.5.1",
     "@types/mocha": "^5.0.0",
     "@types/morgan": "^1.7.32",

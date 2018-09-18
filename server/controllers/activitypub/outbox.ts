@@ -3,7 +3,7 @@ import { Activity } from '../../../shared/models/activitypub/activity'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
-import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
+import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/audience'
 import { asyncMiddleware, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
@@ -60,12 +60,12 @@ async function buildActivities (actor: ActorModel, start: number, count: number)
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
       const videoShare = video.VideoShares[0]
-      const announceActivity = announceActivityData(videoShare.url, actor, video.url, createActivityAudience)
+      const announceActivity = buildAnnounceActivity(videoShare.url, actor, video.url, createActivityAudience)
 
       activities.push(announceActivity)
     } else {
       const videoObject = video.toActivityPubObject()
-      const createActivity = createActivityData(video.url, byActor, videoObject, createActivityAudience)
+      const createActivity = buildCreateActivity(video.url, byActor, videoObject, createActivityAudience)
 
       activities.push(createActivity)
     }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
-import { AccountFollow } from '../../../../../../shared/models/actors/follow.model'
+import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
 import { ConfirmService } from '../../../core/confirm/confirm.service'
 import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
@@ -9,10 +9,11 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-followers-list',
-  templateUrl: './following-list.component.html'
+  templateUrl: './following-list.component.html',
+  styleUrls: [ './following-list.component.scss' ]
 })
 export class FollowingListComponent extends RestTable implements OnInit {
-  following: AccountFollow[] = []
+  following: ActorFollow[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -31,7 +32,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
     this.loadSort()
   }
 
-  async removeFollowing (follow: AccountFollow) {
+  async removeFollowing (follow: ActorFollow) {
     const res = await this.confirmService.confirm(
       this.i18n('Do you really want to unfollow {{host}}?', { host: follow.following.host }),
       this.i18n('Unfollow')

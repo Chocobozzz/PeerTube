@@ -75,6 +75,30 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     video.attributedTo.length !== 0
 }
 
+function isRemoteVideoUrlValid (url: any) {
+  // FIXME: Old bug, we used the width to represent the resolution. Remove it in a few release (currently beta.11)
+  if (url.width && !url.height) url.height = url.width
+
+  return url.type === 'Link' &&
+    (
+      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
+      isActivityPubUrlValid(url.href) &&
+      validator.isInt(url.height + '', { min: 0 }) &&
+      validator.isInt(url.size + '', { min: 0 }) &&
+      (!url.fps || validator.isInt(url.fps + '', { min: 0 }))
+    ) ||
+    (
+      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
+      isActivityPubUrlValid(url.href) &&
+      validator.isInt(url.height + '', { min: 0 })
+    ) ||
+    (
+      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mimeType) !== -1 &&
+      validator.isLength(url.href, { min: 5 }) &&
+      validator.isInt(url.height + '', { min: 0 })
+    )
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -83,7 +107,8 @@ export {
   isVideoTorrentDeleteActivityValid,
   isRemoteStringIdentifierValid,
   isVideoFlagValid,
-  sanitizeAndCheckVideoTorrentObject
+  sanitizeAndCheckVideoTorrentObject,
+  isRemoteVideoUrlValid
 }
 
 // ---------------------------------------------------------------------------
@@ -145,28 +170,4 @@ function setRemoteVideoTruncatedContent (video: any) {
   }
 
   return true
-}
-
-function isRemoteVideoUrlValid (url: any) {
-  // FIXME: Old bug, we used the width to represent the resolution. Remove it in a few realease (currently beta.11)
-  if (url.width && !url.height) url.height = url.width
-
-  return url.type === 'Link' &&
-    (
-      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
-      isActivityPubUrlValid(url.href) &&
-      validator.isInt(url.height + '', { min: 0 }) &&
-      validator.isInt(url.size + '', { min: 0 }) &&
-      (!url.fps || validator.isInt(url.fps + '', { min: 0 }))
-    ) ||
-    (
-      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
-      isActivityPubUrlValid(url.href) &&
-      validator.isInt(url.height + '', { min: 0 })
-    ) ||
-    (
-      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mimeType) !== -1 &&
-      validator.isLength(url.href, { min: 5 }) &&
-      validator.isInt(url.height + '', { min: 0 })
-    )
 }
