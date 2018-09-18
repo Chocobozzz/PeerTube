@@ -193,7 +193,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     // On VideoModel!
     const query = {
       attributes: [ 'id', 'publishedAt' ],
-      // logging: !isTestInstance(),
+      logging: !isTestInstance(),
       limit: randomizedFactor,
       order: getVideoSort('-publishedAt'),
       where: {

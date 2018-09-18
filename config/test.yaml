@@ -32,7 +32,7 @@ redundancy:
     -
       size: '10MB'
       strategy: 'recently-added'
-      minViews: 10
+      minViews: 1
 
 cache:
   previews:

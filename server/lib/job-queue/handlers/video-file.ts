@@ -8,6 +8,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
+import { importVideoFile, transcodeOriginalVideofile, optimizeOriginalVideofile } from '../../video-transcoding'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -32,7 +33,7 @@ async function processVideoFileImport (job: Bull.Job) {
     return undefined
   }
 
-  await video.importVideoFile(payload.filePath)
+  await importVideoFile(video, payload.filePath)
 
   await onVideoFileTranscoderOrImportSuccess(video)
   return video
@@ -51,11 +52,11 @@ async function processVideoFile (job: Bull.Job) {
 
   // Transcoding in other resolution
   if (payload.resolution) {
-    await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode || false)
+    await transcodeOriginalVideofile(video, payload.resolution, payload.isPortraitMode || false)
 
     await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
   } else {
-    await video.optimizeOriginalVideofile()
+    await optimizeOriginalVideofile(video)
 
     await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload.isNewVideo)
   }
