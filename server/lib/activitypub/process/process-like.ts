@@ -27,7 +27,7 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(videoUrl)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoUrl })
 
   return sequelizeTypescript.transaction(async t => {
     const rate = {

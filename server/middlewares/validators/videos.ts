@@ -26,8 +26,7 @@ import {
   isVideoPrivacyValid,
   isVideoRatingTypeValid,
   isVideoSupportValid,
-  isVideoTagsValid,
-  VideoFetchType
+  isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
@@ -42,6 +41,7 @@ import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } f
 import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
 import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
 import { AccountModel } from '../../models/account/account'
+import { VideoFetchType } from '../../helpers/video'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')

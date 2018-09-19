@@ -48,7 +48,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
     return undefined
   }
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(videoObject.id)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id })
   const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
 
   return updateVideoFromAP(video, videoObject, actor.Account, channelActor.VideoChannel, activity.to)
@@ -64,7 +64,7 @@ async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUp
 
   const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
   if (!redundancyModel) {
-    const { video } = await getOrCreateVideoAndAccountAndChannel(cacheFileObject.id)
+    const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.id })
     return createCacheFile(cacheFileObject, video, byActor)
   }
 

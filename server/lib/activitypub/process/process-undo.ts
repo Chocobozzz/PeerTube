@@ -54,7 +54,7 @@ export {
 async function processUndoLike (actorUrl: string, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(likeActivity.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: likeActivity.object })
 
   return sequelizeTypescript.transaction(async t => {
     const byAccount = await AccountModel.loadByUrl(actorUrl, t)
@@ -78,7 +78,7 @@ async function processUndoLike (actorUrl: string, activity: ActivityUndo) {
 async function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
   const dislike = activity.object.object as DislikeObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(dislike.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislike.object })
 
   return sequelizeTypescript.transaction(async t => {
     const byAccount = await AccountModel.loadByUrl(actorUrl, t)
@@ -102,7 +102,7 @@ async function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
 async function processUndoCacheFile (actorUrl: string, activity: ActivityUndo) {
   const cacheFileObject = activity.object.object as CacheFileObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(cacheFileObject.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
 
   return sequelizeTypescript.transaction(async t => {
     const byActor = await ActorModel.loadByUrl(actorUrl)

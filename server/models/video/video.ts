@@ -1103,14 +1103,24 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
+  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
     const query: IFindOptions<VideoModel> = {
       where: {
         url
-      }
+      },
+      transaction
     }
 
-    if (t !== undefined) query.transaction = t
+    return VideoModel.findOne(query)
+  }
+
+  static loadByUrlAndPopulateAccount (url: string, transaction?: Sequelize.Transaction) {
+    const query: IFindOptions<VideoModel> = {
+      where: {
+        url
+      },
+      transaction
+    }
 
     return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }

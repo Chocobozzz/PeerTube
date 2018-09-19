@@ -48,7 +48,7 @@ export {
 async function processCreateVideo (activity: ActivityCreate) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(videoToCreateData)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
 
   return video
 }
@@ -59,7 +59,7 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(dislike.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislike.object })
 
   return sequelizeTypescript.transaction(async t => {
     const rate = {
@@ -86,7 +86,7 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(view.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: view.object })
 
   const actor = await ActorModel.loadByUrl(view.actor)
   if (!actor) throw new Error('Unknown actor ' + view.actor)
@@ -103,7 +103,7 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
 async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) {
   const cacheFile = activity.object as CacheFileObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(cacheFile.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
 
   await createCacheFile(cacheFile, video, byActor)
 
@@ -120,7 +120,7 @@ async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateDat
   const account = actor.Account
   if (!account) throw new Error('Cannot create dislike with the non account actor ' + actor.url)
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(videoAbuseToCreateData.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoAbuseToCreateData.object })
 
   return sequelizeTypescript.transaction(async t => {
     const videoAbuseData = {

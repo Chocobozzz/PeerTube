@@ -3,7 +3,7 @@ import * as sequelize from 'sequelize'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
 import * as request from 'request'
-import { ActivityIconObject, ActivityVideoUrlObject, VideoState, ActivityUrlObject } from '../../../shared/index'
+import { ActivityIconObject, ActivityUrlObject, ActivityVideoUrlObject, VideoState } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
@@ -28,6 +28,7 @@ import { ActivitypubHttpFetcherPayload } from '../job-queue/handlers/activitypub
 import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
+import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -50,13 +51,24 @@ async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, tr
   }
 }
 
-function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Function) {
-  const host = video.VideoChannel.Account.Actor.Server.host
+async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoTorrentObject }> {
+  const options = {
+    uri: videoUrl,
+    method: 'GET',
+    json: true,
+    activityPub: true
+  }
 
-  // We need to provide a callback, if no we could have an uncaught exception
-  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
-    if (err) reject(err)
-  })
+  logger.info('Fetching remote video %s.', videoUrl)
+
+  const { response, body } = await doRequest(options)
+
+  if (sanitizeAndCheckVideoTorrentObject(body) === false) {
+    logger.debug('Remote video JSON is not valid.', { body })
+    return { response, videoObject: undefined }
+  }
+
+  return { response, videoObject: body }
 }
 
 async function fetchRemoteVideoDescription (video: VideoModel) {
@@ -71,6 +83,15 @@ async function fetchRemoteVideoDescription (video: VideoModel) {
   return body.description ? body.description : ''
 }
 
+function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Function) {
+  const host = video.VideoChannel.Account.Actor.Server.host
+
+  // We need to provide a callback, if no we could have an uncaught exception
+  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
+    if (err) reject(err)
+  })
+}
+
 function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
@@ -82,144 +103,11 @@ function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) 
   return doRequestAndSaveToFile(options, thumbnailPath)
 }
 
-async function videoActivityObjectToDBAttributes (
-  videoChannel: VideoChannelModel,
-  videoObject: VideoTorrentObject,
-  to: string[] = []
-) {
-  const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
-  const duration = videoObject.duration.replace(/[^\d]+/, '')
-
-  let language: string | undefined
-  if (videoObject.language) {
-    language = videoObject.language.identifier
-  }
-
-  let category: number | undefined
-  if (videoObject.category) {
-    category = parseInt(videoObject.category.identifier, 10)
-  }
-
-  let licence: number | undefined
-  if (videoObject.licence) {
-    licence = parseInt(videoObject.licence.identifier, 10)
-  }
-
-  const description = videoObject.content || null
-  const support = videoObject.support || null
-
-  return {
-    name: videoObject.name,
-    uuid: videoObject.uuid,
-    url: videoObject.id,
-    category,
-    licence,
-    language,
-    description,
-    support,
-    nsfw: videoObject.sensitive,
-    commentsEnabled: videoObject.commentsEnabled,
-    waitTranscoding: videoObject.waitTranscoding,
-    state: videoObject.state,
-    channelId: videoChannel.id,
-    duration: parseInt(duration, 10),
-    createdAt: new Date(videoObject.published),
-    publishedAt: new Date(videoObject.published),
-    // FIXME: updatedAt does not seems to be considered by Sequelize
-    updatedAt: new Date(videoObject.updated),
-    views: videoObject.views,
-    likes: 0,
-    dislikes: 0,
-    remote: true,
-    privacy
-  }
-}
-
-function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObject: VideoTorrentObject) {
-  const fileUrls = videoObject.url.filter(u => isActivityVideoUrlObject(u)) as ActivityVideoUrlObject[]
-
-  if (fileUrls.length === 0) {
-    throw new Error('Cannot find video files for ' + videoCreated.url)
-  }
-
-  const attributes: VideoFileModel[] = []
-  for (const fileUrl of fileUrls) {
-    // Fetch associated magnet uri
-    const magnet = videoObject.url.find(u => {
-      return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.height === fileUrl.height
-    })
-
-    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
-
-    const parsed = magnetUtil.decode(magnet.href)
-    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
-      throw new Error('Cannot parse magnet URI ' + magnet.href)
-    }
-
-    const attribute = {
-      extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],
-      infoHash: parsed.infoHash,
-      resolution: fileUrl.height,
-      size: fileUrl.size,
-      videoId: videoCreated.id,
-      fps: fileUrl.fps
-    } as VideoFileModel
-    attributes.push(attribute)
-  }
-
-  return attributes
-}
-
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
   const channel = videoObject.attributedTo.find(a => a.type === 'Group')
   if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
 
   return getOrCreateActorAndServerAndModel(channel.id)
-}
-
-async function createVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
-  logger.debug('Adding remote video %s.', videoObject.id)
-
-  const videoCreated: VideoModel = await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = { transaction: t }
-
-    const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
-    const video = VideoModel.build(videoData)
-
-    const videoCreated = await video.save(sequelizeOptions)
-
-    // Process files
-    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
-    if (videoFileAttributes.length === 0) {
-      throw new Error('Cannot find valid files for video %s ' + videoObject.url)
-    }
-
-    const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
-    await Promise.all(videoFilePromises)
-
-    // Process tags
-    const tags = videoObject.tag.map(t => t.name)
-    const tagInstances = await TagModel.findOrCreateTags(tags, t)
-    await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
-
-    // Process captions
-    const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
-    })
-    await Promise.all(videoCaptionsPromises)
-
-    logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
-
-    videoCreated.VideoChannel = channelActor.VideoChannel
-    return videoCreated
-  })
-
-  const p = generateThumbnailFromUrl(videoCreated, videoObject.icon)
-    .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
-
-  if (waitThumbnail === true) await p
-
-  return videoCreated
 }
 
 type SyncParam = {
@@ -230,28 +118,7 @@ type SyncParam = {
   thumbnail: boolean
   refreshVideo: boolean
 }
-async function getOrCreateVideoAndAccountAndChannel (
-  videoObject: VideoTorrentObject | string,
-  syncParam: SyncParam = { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
-) {
-  const videoUrl = typeof videoObject === 'string' ? videoObject : videoObject.id
-
-  let videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
-  if (videoFromDatabase) {
-    const p = retryTransactionWrapper(refreshVideoIfNeeded, videoFromDatabase)
-    if (syncParam.refreshVideo === true) videoFromDatabase = await p
-
-    return { video: videoFromDatabase }
-  }
-
-  const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
-  if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
-
-  const channelActor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
-  const video = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
-
-  // Process outside the transaction because we could fetch remote data
-
+async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: VideoTorrentObject, syncParam: SyncParam) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
   const jobPayloads: ActivitypubHttpFetcherPayload[] = []
@@ -285,54 +152,37 @@ async function getOrCreateVideoAndAccountAndChannel (
   }
 
   await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload }))
+}
+
+async function getOrCreateVideoAndAccountAndChannel (options: {
+  videoObject: VideoTorrentObject | string,
+  syncParam?: SyncParam,
+  fetchType?: VideoFetchByUrlType
+}) {
+  // Default params
+  const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
+  const fetchType = options.fetchType || 'all'
+
+  // Get video url
+  const videoUrl = typeof options.videoObject === 'string' ? options.videoObject : options.videoObject.id
+
+  let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
+  if (videoFromDatabase) {
+    const p = retryTransactionWrapper(refreshVideoIfNeeded, videoFromDatabase, fetchType, syncParam)
+    if (syncParam.refreshVideo === true) videoFromDatabase = await p
+
+    return { video: videoFromDatabase }
+  }
+
+  const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
+  if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
+
+  const channelActor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
+  const video = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
+
+  await syncVideoExternalAttributes(video, fetchedVideo, syncParam)
 
   return { video }
-}
-
-async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.RequestResponse, videoObject: VideoTorrentObject }> {
-  const options = {
-    uri: videoUrl,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
-  logger.info('Fetching remote video %s.', videoUrl)
-
-  const { response, body } = await doRequest(options)
-
-  if (sanitizeAndCheckVideoTorrentObject(body) === false) {
-    logger.debug('Remote video JSON is not valid.', { body })
-    return { response, videoObject: undefined }
-  }
-
-  return { response, videoObject: body }
-}
-
-async function refreshVideoIfNeeded (video: VideoModel): Promise<VideoModel> {
-  if (!video.isOutdated()) return video
-
-  try {
-    const { response, videoObject } = await fetchRemoteVideo(video.url)
-    if (response.statusCode === 404) {
-      // Video does not exist anymore
-      await video.destroy()
-      return undefined
-    }
-
-    if (videoObject === undefined) {
-      logger.warn('Cannot refresh remote video: invalid body.')
-      return video
-    }
-
-    const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
-    const account = await AccountModel.load(channelActor.VideoChannel.accountId)
-
-    return updateVideoFromAP(video, videoObject, account, channelActor.VideoChannel)
-  } catch (err) {
-    logger.warn('Cannot refresh video.', { err })
-    return video
-  }
 }
 
 async function updateVideoFromAP (
@@ -433,12 +283,7 @@ export {
   fetchRemoteVideoStaticFile,
   fetchRemoteVideoDescription,
   generateThumbnailFromUrl,
-  videoActivityObjectToDBAttributes,
-  videoFileActivityUrlToDBAttributes,
-  createVideo,
-  getOrCreateVideoChannelFromVideoObject,
-  addVideoShares,
-  createRates
+  getOrCreateVideoChannelFromVideoObject
 }
 
 // ---------------------------------------------------------------------------
@@ -447,4 +292,167 @@ function isActivityVideoUrlObject (url: ActivityUrlObject): url is ActivityVideo
   const mimeTypes = Object.keys(VIDEO_MIMETYPE_EXT)
 
   return mimeTypes.indexOf(url.mimeType) !== -1 && url.mimeType.startsWith('video/')
+}
+
+async function createVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
+  logger.debug('Adding remote video %s.', videoObject.id)
+
+  const videoCreated: VideoModel = await sequelizeTypescript.transaction(async t => {
+    const sequelizeOptions = { transaction: t }
+
+    const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
+    const video = VideoModel.build(videoData)
+
+    const videoCreated = await video.save(sequelizeOptions)
+
+    // Process files
+    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
+    if (videoFileAttributes.length === 0) {
+      throw new Error('Cannot find valid files for video %s ' + videoObject.url)
+    }
+
+    const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
+    await Promise.all(videoFilePromises)
+
+    // Process tags
+    const tags = videoObject.tag.map(t => t.name)
+    const tagInstances = await TagModel.findOrCreateTags(tags, t)
+    await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
+
+    // Process captions
+    const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
+      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
+    })
+    await Promise.all(videoCaptionsPromises)
+
+    logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
+
+    videoCreated.VideoChannel = channelActor.VideoChannel
+    return videoCreated
+  })
+
+  const p = generateThumbnailFromUrl(videoCreated, videoObject.icon)
+    .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
+
+  if (waitThumbnail === true) await p
+
+  return videoCreated
+}
+
+async function refreshVideoIfNeeded (videoArg: VideoModel, fetchedType: VideoFetchByUrlType, syncParam: SyncParam): Promise<VideoModel> {
+  // We need more attributes if the argument video was fetched with not enough joints
+  const video = fetchedType === 'all' ? videoArg : await VideoModel.loadByUrlAndPopulateAccount(videoArg.url)
+
+  if (!video.isOutdated()) return video
+
+  try {
+    const { response, videoObject } = await fetchRemoteVideo(video.url)
+    if (response.statusCode === 404) {
+      // Video does not exist anymore
+      await video.destroy()
+      return undefined
+    }
+
+    if (videoObject === undefined) {
+      logger.warn('Cannot refresh remote video: invalid body.')
+      return video
+    }
+
+    const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
+    const account = await AccountModel.load(channelActor.VideoChannel.accountId)
+
+    await updateVideoFromAP(video, videoObject, account, channelActor.VideoChannel)
+    await syncVideoExternalAttributes(video, videoObject, syncParam)
+  } catch (err) {
+    logger.warn('Cannot refresh video.', { err })
+    return video
+  }
+}
+
+async function videoActivityObjectToDBAttributes (
+  videoChannel: VideoChannelModel,
+  videoObject: VideoTorrentObject,
+  to: string[] = []
+) {
+  const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
+  const duration = videoObject.duration.replace(/[^\d]+/, '')
+
+  let language: string | undefined
+  if (videoObject.language) {
+    language = videoObject.language.identifier
+  }
+
+  let category: number | undefined
+  if (videoObject.category) {
+    category = parseInt(videoObject.category.identifier, 10)
+  }
+
+  let licence: number | undefined
+  if (videoObject.licence) {
+    licence = parseInt(videoObject.licence.identifier, 10)
+  }
+
+  const description = videoObject.content || null
+  const support = videoObject.support || null
+
+  return {
+    name: videoObject.name,
+    uuid: videoObject.uuid,
+    url: videoObject.id,
+    category,
+    licence,
+    language,
+    description,
+    support,
+    nsfw: videoObject.sensitive,
+    commentsEnabled: videoObject.commentsEnabled,
+    waitTranscoding: videoObject.waitTranscoding,
+    state: videoObject.state,
+    channelId: videoChannel.id,
+    duration: parseInt(duration, 10),
+    createdAt: new Date(videoObject.published),
+    publishedAt: new Date(videoObject.published),
+    // FIXME: updatedAt does not seems to be considered by Sequelize
+    updatedAt: new Date(videoObject.updated),
+    views: videoObject.views,
+    likes: 0,
+    dislikes: 0,
+    remote: true,
+    privacy
+  }
+}
+
+function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObject: VideoTorrentObject) {
+  const fileUrls = videoObject.url.filter(u => isActivityVideoUrlObject(u)) as ActivityVideoUrlObject[]
+
+  if (fileUrls.length === 0) {
+    throw new Error('Cannot find video files for ' + videoCreated.url)
+  }
+
+  const attributes: VideoFileModel[] = []
+  for (const fileUrl of fileUrls) {
+    // Fetch associated magnet uri
+    const magnet = videoObject.url.find(u => {
+      return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.height === fileUrl.height
+    })
+
+    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
+
+    const parsed = magnetUtil.decode(magnet.href)
+    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) {
+      throw new Error('Cannot parse magnet URI ' + magnet.href)
+    }
+
+    const attribute = {
+      extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],
+      infoHash: parsed.infoHash,
+      resolution: fileUrl.height,
+      size: fileUrl.size,
+      videoId: videoCreated.id,
+      fps: fileUrl.fps
+    } as VideoFileModel
+    attributes.push(attribute)
+  }
+
+  return attributes
 }

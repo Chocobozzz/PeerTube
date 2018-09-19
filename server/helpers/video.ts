@@ -1,0 +1,25 @@
+import { VideoModel } from '../models/video/video'
+
+type VideoFetchType = 'all' | 'only-video' | 'id' | 'none'
+
+function fetchVideo (id: number | string, fetchType: VideoFetchType) {
+  if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+
+  if (fetchType === 'only-video') return VideoModel.load(id)
+
+  if (fetchType === 'id' || fetchType === 'none') return VideoModel.loadOnlyId(id)
+}
+
+type VideoFetchByUrlType = 'all' | 'only-video'
+function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType) {
+  if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccount(url)
+
+  if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
+}
+
+export {
+  VideoFetchType,
+  VideoFetchByUrlType,
+  fetchVideo,
+  fetchVideoByUrl
+}

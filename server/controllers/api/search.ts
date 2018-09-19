@@ -139,7 +139,7 @@ async function searchVideoURI (url: string, res: express.Response) {
         refreshVideo: false
       }
 
-      const result = await getOrCreateVideoAndAccountAndChannel(url, syncParam)
+      const result = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
       video = result ? result.video : undefined
     } catch (err) {
       logger.info('Cannot search remote video %s.', url, { err })
