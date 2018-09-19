@@ -4,14 +4,12 @@ import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { getOrCreateActorAndServerAndModel } from '../actor'
 import { sendAccept } from '../send'
 
-async function processFollowActivity (activity: ActivityFollow) {
+async function processFollowActivity (activity: ActivityFollow, byActor: ActorModel) {
   const activityObject = activity.object
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  return retryTransactionWrapper(processFollow, actor, activityObject)
+  return retryTransactionWrapper(processFollow, byActor, activityObject)
 }
 
 // ---------------------------------------------------------------------------
@@ -24,7 +22,7 @@ export {
 
 async function processFollow (actor: ActorModel, targetActorURL: string) {
   await sequelizeTypescript.transaction(async t => {
-    const targetActor = await ActorModel.loadByUrl(targetActorURL, t)
+    const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
     if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')

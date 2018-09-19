@@ -13,7 +13,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 
-async function processUndoActivity (activity: ActivityUndo) {
+async function processUndoActivity (activity: ActivityUndo, byActor: ActorModel) {
   const activityToUndo = activity.object
 
   const actorUrl = getActorUrl(activity.actor)
@@ -26,16 +26,16 @@ async function processUndoActivity (activity: ActivityUndo) {
     if (activityToUndo.object.type === 'Dislike') {
       return retryTransactionWrapper(processUndoDislike, actorUrl, activity)
     } else if (activityToUndo.object.type === 'CacheFile') {
-      return retryTransactionWrapper(processUndoCacheFile, actorUrl, activity)
+      return retryTransactionWrapper(processUndoCacheFile, byActor, activity)
     }
   }
 
   if (activityToUndo.type === 'Follow') {
-    return retryTransactionWrapper(processUndoFollow, actorUrl, activityToUndo)
+    return retryTransactionWrapper(processUndoFollow, byActor, activityToUndo)
   }
 
   if (activityToUndo.type === 'Announce') {
-    return retryTransactionWrapper(processUndoAnnounce, actorUrl, activityToUndo)
+    return retryTransactionWrapper(processUndoAnnounce, byActor, activityToUndo)
   }
 
   logger.warn('Unknown activity object type %s -> %s when undo activity.', activityToUndo.type, { activity: activity.id })
@@ -99,15 +99,12 @@ async function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
   })
 }
 
-async function processUndoCacheFile (actorUrl: string, activity: ActivityUndo) {
+async function processUndoCacheFile (byActor: ActorModel, activity: ActivityUndo) {
   const cacheFileObject = activity.object.object as CacheFileObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
 
   return sequelizeTypescript.transaction(async t => {
-    const byActor = await ActorModel.loadByUrl(actorUrl)
-    if (!byActor) throw new Error('Unknown actor ' + actorUrl)
-
     const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
     if (!cacheFile) throw new Error('Unknown video cache ' + cacheFile.url)
 
@@ -122,10 +119,9 @@ async function processUndoCacheFile (actorUrl: string, activity: ActivityUndo) {
   })
 }
 
-function processUndoFollow (actorUrl: string, followActivity: ActivityFollow) {
+function processUndoFollow (follower: ActorModel, followActivity: ActivityFollow) {
   return sequelizeTypescript.transaction(async t => {
-    const follower = await ActorModel.loadByUrl(actorUrl, t)
-    const following = await ActorModel.loadByUrl(followActivity.object, t)
+    const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
     const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
 
     if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${following.id}.`)
@@ -136,11 +132,8 @@ function processUndoFollow (actorUrl: string, followActivity: ActivityFollow) {
   })
 }
 
-function processUndoAnnounce (actorUrl: string, announceActivity: ActivityAnnounce) {
+function processUndoAnnounce (byActor: ActorModel, announceActivity: ActivityAnnounce) {
   return sequelizeTypescript.transaction(async t => {
-    const byActor = await ActorModel.loadByUrl(actorUrl, t)
-    if (!byActor) throw new Error('Unknown actor ' + actorUrl)
-
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) throw new Error(`Unknown video share ${announceActivity.id}.`)
 

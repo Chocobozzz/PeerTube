@@ -3,14 +3,11 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 
-async function processLikeActivity (activity: ActivityLike) {
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
-
-  return retryTransactionWrapper(processLikeVideo, actor, activity)
+async function processLikeActivity (activity: ActivityLike, byActor: ActorModel) {
+  return retryTransactionWrapper(processLikeVideo, byActor, activity)
 }
 
 // ---------------------------------------------------------------------------

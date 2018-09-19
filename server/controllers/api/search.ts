@@ -89,7 +89,7 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
-      const actor = await getOrCreateActorAndServerAndModel(uri, true, true)
+      const actor = await getOrCreateActorAndServerAndModel(uri, 'all', true, true)
       videoChannel = actor.VideoChannel
     } catch (err) {
       logger.info('Cannot search remote video channel %s.', uri, { err })

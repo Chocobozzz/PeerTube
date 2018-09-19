@@ -327,6 +327,29 @@ export class ActorModel extends Model<ActorModel> {
       where: {
         url
       },
+      transaction,
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: false
+        },
+        {
+          attributes: [ 'id' ],
+          model: VideoChannelModel.unscoped(),
+          required: false
+        }
+      ]
+    }
+
+    return ActorModel.unscoped().findOne(query)
+  }
+
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        url
+      },
       transaction
     }
 

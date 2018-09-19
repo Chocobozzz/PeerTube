@@ -21,6 +21,7 @@ import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../job-queue'
 import { getServerActor } from '../../helpers/utils'
+import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {
@@ -38,13 +39,14 @@ function setAsyncActorKeys (actor: ActorModel) {
 
 async function getOrCreateActorAndServerAndModel (
   activityActor: string | ActivityPubActor,
+  fetchType: ActorFetchByUrlType = 'actor-and-association-ids',
   recurseIfNeeded = true,
   updateCollections = false
 ) {
   const actorUrl = getActorUrl(activityActor)
   let created = false
 
-  let actor = await ActorModel.loadByUrl(actorUrl)
+  let actor = await fetchActorByUrl(actorUrl, fetchType)
   // Orphan actor (not associated to an account of channel) so recreate it
   if (actor && (!actor.Account && !actor.VideoChannel)) {
     await actor.destroy()
@@ -65,7 +67,7 @@ async function getOrCreateActorAndServerAndModel (
 
       try {
         // Assert we don't recurse another time
-        ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, false)
+        ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', false)
       } catch (err) {
         logger.error('Cannot get or create account attributed to video channel ' + actor.url)
         throw new Error(err)
@@ -76,10 +78,7 @@ async function getOrCreateActorAndServerAndModel (
     created = true
   }
 
-  if (actor.Account) actor.Account.Actor = actor
-  if (actor.VideoChannel) actor.VideoChannel.Actor = actor
-
-  const { actor: actorRefreshed, refreshed } = await retryTransactionWrapper(refreshActorIfNeeded, actor)
+  const { actor: actorRefreshed, refreshed } = await retryTransactionWrapper(refreshActorIfNeeded, actor, fetchType)
   if (!actorRefreshed) throw new Error('Actor ' + actorRefreshed.url + ' does not exist anymore.')
 
   if ((created === true || refreshed === true) && updateCollections === true) {
@@ -370,8 +369,14 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
   return videoChannelCreated
 }
 
-async function refreshActorIfNeeded (actor: ActorModel): Promise<{ actor: ActorModel, refreshed: boolean }> {
-  if (!actor.isOutdated()) return { actor, refreshed: false }
+async function refreshActorIfNeeded (
+  actorArg: ActorModel,
+  fetchedType: ActorFetchByUrlType
+): Promise<{ actor: ActorModel, refreshed: boolean }> {
+  if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
+
+  // We need more attributes
+  const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
 
   try {
     const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())

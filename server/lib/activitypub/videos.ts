@@ -107,7 +107,7 @@ function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject
   const channel = videoObject.attributedTo.find(a => a.type === 'Group')
   if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
 
-  return getOrCreateActorAndServerAndModel(channel.id)
+  return getOrCreateActorAndServerAndModel(channel.id, 'all')
 }
 
 type SyncParam = {

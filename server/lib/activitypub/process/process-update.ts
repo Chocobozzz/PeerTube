@@ -6,27 +6,30 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
-import { getOrCreateVideoAndAccountAndChannel, updateVideoFromAP, getOrCreateVideoChannelFromVideoObject } from '../videos'
+import { fetchAvatarIfExists, updateActorAvatarInstance, updateActorInstance } from '../actor'
+import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 import { createCacheFile, updateCacheFile } from '../cache-file'
 
-async function processUpdateActivity (activity: ActivityUpdate) {
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
+async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorModel) {
   const objectType = activity.object.type
 
   if (objectType === 'Video') {
-    return retryTransactionWrapper(processUpdateVideo, actor, activity)
+    return retryTransactionWrapper(processUpdateVideo, byActor, activity)
   }
 
   if (objectType === 'Person' || objectType === 'Application' || objectType === 'Group') {
-    return retryTransactionWrapper(processUpdateActor, actor, activity)
+    // We need more attributes
+    const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
+    return retryTransactionWrapper(processUpdateActor, byActorFull, activity)
   }
 
   if (objectType === 'CacheFile') {
-    return retryTransactionWrapper(processUpdateCacheFile, actor, activity)
+    // We need more attributes
+    const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
+    return retryTransactionWrapper(processUpdateCacheFile, byActorFull, activity)
   }
 
   return undefined

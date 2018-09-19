@@ -7,30 +7,28 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { getOrCreateActorAndServerAndModel } from '../actor'
 import { addVideoComment, resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createCacheFile } from '../cache-file'
 
-async function processCreateActivity (activity: ActivityCreate) {
+async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
   const activityType = activityObject.type
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
   if (activityType === 'View') {
-    return processCreateView(actor, activity)
+    return processCreateView(byActor, activity)
   } else if (activityType === 'Dislike') {
-    return retryTransactionWrapper(processCreateDislike, actor, activity)
+    return retryTransactionWrapper(processCreateDislike, byActor, activity)
   } else if (activityType === 'Video') {
     return processCreateVideo(activity)
   } else if (activityType === 'Flag') {
-    return retryTransactionWrapper(processCreateVideoAbuse, actor, activityObject as VideoAbuseObject)
+    return retryTransactionWrapper(processCreateVideoAbuse, byActor, activityObject as VideoAbuseObject)
   } else if (activityType === 'Note') {
-    return retryTransactionWrapper(processCreateVideoComment, actor, activity)
+    return retryTransactionWrapper(processCreateVideoComment, byActor, activity)
   } else if (activityType === 'CacheFile') {
-    return retryTransactionWrapper(processCacheFile, actor, activity)
+    return retryTransactionWrapper(processCacheFile, byActor, activity)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -118,11 +116,11 @@ async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) 
   }
 }
 
-async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
+async function processCreateVideoAbuse (byActor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
-  const account = actor.Account
-  if (!account) throw new Error('Cannot create dislike with the non account actor ' + actor.url)
+  const account = byActor.Account
+  if (!account) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoAbuseToCreateData.object })
 
