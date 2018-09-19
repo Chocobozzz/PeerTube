@@ -51,7 +51,15 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id })
   const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
 
-  return updateVideoFromAP(video, videoObject, actor.Account, channelActor.VideoChannel, activity.to)
+  const updateOptions = {
+    video,
+    videoObject,
+    account: actor.Account,
+    channel: channelActor.VideoChannel,
+    updateViews: true,
+    overrideTo: activity.to
+  }
+  return updateVideoFromAP(updateOptions)
 }
 
 async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUpdate) {

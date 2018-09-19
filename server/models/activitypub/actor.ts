@@ -266,6 +266,18 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findById(id)
   }
 
+  static isActorUrlExist (url: string) {
+    const query = {
+      raw: true,
+      where: {
+        url
+      }
+    }
+
+    return ActorModel.unscoped().findOne(query)
+      .then(a => !!a)
+  }
+
   static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
     const query = {
       where: {

@@ -157,18 +157,26 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
 async function getOrCreateVideoAndAccountAndChannel (options: {
   videoObject: VideoTorrentObject | string,
   syncParam?: SyncParam,
-  fetchType?: VideoFetchByUrlType
+  fetchType?: VideoFetchByUrlType,
+  refreshViews?: boolean
 }) {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
+  const refreshViews = options.refreshViews || false
 
   // Get video url
   const videoUrl = typeof options.videoObject === 'string' ? options.videoObject : options.videoObject.id
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
-    const p = retryTransactionWrapper(refreshVideoIfNeeded, videoFromDatabase, fetchType, syncParam)
+    const refreshOptions = {
+      video: videoFromDatabase,
+      fetchedType: fetchType,
+      syncParam,
+      refreshViews
+    }
+    const p = retryTransactionWrapper(refreshVideoIfNeeded, refreshOptions)
     if (syncParam.refreshVideo === true) videoFromDatabase = await p
 
     return { video: videoFromDatabase }
@@ -185,14 +193,15 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
   return { video }
 }
 
-async function updateVideoFromAP (
+async function updateVideoFromAP (options: {
   video: VideoModel,
   videoObject: VideoTorrentObject,
   account: AccountModel,
   channel: VideoChannelModel,
+  updateViews: boolean,
   overrideTo?: string[]
-) {
-  logger.debug('Updating remote video "%s".', videoObject.uuid)
+}) {
+  logger.debug('Updating remote video "%s".', options.videoObject.uuid)
   let videoFieldsSave: any
 
   try {
@@ -201,72 +210,72 @@ async function updateVideoFromAP (
         transaction: t
       }
 
-      videoFieldsSave = video.toJSON()
+      videoFieldsSave = options.video.toJSON()
 
       // Check actor has the right to update the video
-      const videoChannel = video.VideoChannel
-      if (videoChannel.Account.id !== account.id) {
-        throw new Error('Account ' + account.Actor.url + ' does not own video channel ' + videoChannel.Actor.url)
+      const videoChannel = options.video.VideoChannel
+      if (videoChannel.Account.id !== options.account.id) {
+        throw new Error('Account ' + options.account.Actor.url + ' does not own video channel ' + videoChannel.Actor.url)
       }
 
-      const to = overrideTo ? overrideTo : videoObject.to
-      const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, to)
-      video.set('name', videoData.name)
-      video.set('uuid', videoData.uuid)
-      video.set('url', videoData.url)
-      video.set('category', videoData.category)
-      video.set('licence', videoData.licence)
-      video.set('language', videoData.language)
-      video.set('description', videoData.description)
-      video.set('support', videoData.support)
-      video.set('nsfw', videoData.nsfw)
-      video.set('commentsEnabled', videoData.commentsEnabled)
-      video.set('waitTranscoding', videoData.waitTranscoding)
-      video.set('state', videoData.state)
-      video.set('duration', videoData.duration)
-      video.set('createdAt', videoData.createdAt)
-      video.set('publishedAt', videoData.publishedAt)
-      video.set('views', videoData.views)
-      video.set('privacy', videoData.privacy)
-      video.set('channelId', videoData.channelId)
+      const to = options.overrideTo ? options.overrideTo : options.videoObject.to
+      const videoData = await videoActivityObjectToDBAttributes(options.channel, options.videoObject, to)
+      options.video.set('name', videoData.name)
+      options.video.set('uuid', videoData.uuid)
+      options.video.set('url', videoData.url)
+      options.video.set('category', videoData.category)
+      options.video.set('licence', videoData.licence)
+      options.video.set('language', videoData.language)
+      options.video.set('description', videoData.description)
+      options.video.set('support', videoData.support)
+      options.video.set('nsfw', videoData.nsfw)
+      options.video.set('commentsEnabled', videoData.commentsEnabled)
+      options.video.set('waitTranscoding', videoData.waitTranscoding)
+      options.video.set('state', videoData.state)
+      options.video.set('duration', videoData.duration)
+      options.video.set('createdAt', videoData.createdAt)
+      options.video.set('publishedAt', videoData.publishedAt)
+      options.video.set('privacy', videoData.privacy)
+      options.video.set('channelId', videoData.channelId)
 
-      await video.save(sequelizeOptions)
+      if (options.updateViews === true) options.video.set('views', videoData.views)
+      await options.video.save(sequelizeOptions)
 
       // Don't block on request
-      generateThumbnailFromUrl(video, videoObject.icon)
-        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
+      generateThumbnailFromUrl(options.video, options.videoObject.icon)
+        .catch(err => logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err }))
 
       // Remove old video files
       const videoFileDestroyTasks: Bluebird<void>[] = []
-      for (const videoFile of video.VideoFiles) {
+      for (const videoFile of options.video.VideoFiles) {
         videoFileDestroyTasks.push(videoFile.destroy(sequelizeOptions))
       }
       await Promise.all(videoFileDestroyTasks)
 
-      const videoFileAttributes = videoFileActivityUrlToDBAttributes(video, videoObject)
+      const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
       const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, sequelizeOptions))
       await Promise.all(tasks)
 
       // Update Tags
-      const tags = videoObject.tag.map(tag => tag.name)
+      const tags = options.videoObject.tag.map(tag => tag.name)
       const tagInstances = await TagModel.findOrCreateTags(tags, t)
-      await video.$set('Tags', tagInstances, sequelizeOptions)
+      await options.video.$set('Tags', tagInstances, sequelizeOptions)
 
       // Update captions
-      await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(video.id, t)
+      await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(options.video.id, t)
 
-      const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-        return VideoCaptionModel.insertOrReplaceLanguage(video.id, c.identifier, t)
+      const videoCaptionsPromises = options.videoObject.subtitleLanguage.map(c => {
+        return VideoCaptionModel.insertOrReplaceLanguage(options.video.id, c.identifier, t)
       })
       await Promise.all(videoCaptionsPromises)
     })
 
-    logger.info('Remote video with uuid %s updated', videoObject.uuid)
+    logger.info('Remote video with uuid %s updated', options.videoObject.uuid)
 
     return updatedVideo
   } catch (err) {
-    if (video !== undefined && videoFieldsSave !== undefined) {
-      resetSequelizeInstance(video, videoFieldsSave)
+    if (options.video !== undefined && videoFieldsSave !== undefined) {
+      resetSequelizeInstance(options.video, videoFieldsSave)
     }
 
     // This is just a debug because we will retry the insert
@@ -339,9 +348,14 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
   return videoCreated
 }
 
-async function refreshVideoIfNeeded (videoArg: VideoModel, fetchedType: VideoFetchByUrlType, syncParam: SyncParam): Promise<VideoModel> {
+async function refreshVideoIfNeeded (options: {
+  video: VideoModel,
+  fetchedType: VideoFetchByUrlType,
+  syncParam: SyncParam,
+  refreshViews: boolean
+}): Promise<VideoModel> {
   // We need more attributes if the argument video was fetched with not enough joints
-  const video = fetchedType === 'all' ? videoArg : await VideoModel.loadByUrlAndPopulateAccount(videoArg.url)
+  const video = options.fetchedType === 'all' ? options.video : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
   if (!video.isOutdated()) return video
 
@@ -361,8 +375,15 @@ async function refreshVideoIfNeeded (videoArg: VideoModel, fetchedType: VideoFet
     const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
     const account = await AccountModel.load(channelActor.VideoChannel.accountId)
 
-    await updateVideoFromAP(video, videoObject, account, channelActor.VideoChannel)
-    await syncVideoExternalAttributes(video, videoObject, syncParam)
+    const updateOptions = {
+      video,
+      videoObject,
+      account,
+      channel: channelActor.VideoChannel,
+      updateViews: options.refreshViews
+    }
+    await updateVideoFromAP(updateOptions)
+    await syncVideoExternalAttributes(video, videoObject, options.syncParam)
   } catch (err) {
     logger.warn('Cannot refresh video.', { err })
     return video

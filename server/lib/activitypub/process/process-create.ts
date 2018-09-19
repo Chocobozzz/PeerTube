@@ -86,10 +86,14 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: view.object })
+  const options = {
+    videoObject: view.object,
+    fetchType: 'only-video' as 'only-video'
+  }
+  const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 
-  const actor = await ActorModel.loadByUrl(view.actor)
-  if (!actor) throw new Error('Unknown actor ' + view.actor)
+  const actorExists = await ActorModel.isActorUrlExist(view.actor)
+  if (actorExists === false) throw new Error('Unknown actor ' + view.actor)
 
   await Redis.Instance.addVideoView(video.id)
 
