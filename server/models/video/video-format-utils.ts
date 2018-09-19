@@ -112,12 +112,13 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
     }
   })
 
+  const tags = video.Tags ? video.Tags.map(t => t.name) : []
   const detailsJson = {
     support: video.support,
-    descriptionPath: video.getDescriptionPath(),
+    descriptionPath: video.getDescriptionAPIPath(),
     channel: video.VideoChannel.toFormattedJSON(),
     account: video.VideoChannel.Account.toFormattedJSON(),
-    tags: video.Tags.map(t => t.name),
+    tags,
     commentsEnabled: video.commentsEnabled,
     waitTranscoding: video.waitTranscoding,
     state: {

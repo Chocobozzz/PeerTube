@@ -61,7 +61,7 @@ function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Fu
 
 async function fetchRemoteVideoDescription (video: VideoModel) {
   const host = video.VideoChannel.Account.Actor.Server.host
-  const path = video.getDescriptionPath()
+  const path = video.getDescriptionAPIPath()
   const options = {
     uri: REMOTE_SCHEME.HTTP + '://' + host + path,
     json: true

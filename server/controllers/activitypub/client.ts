@@ -6,7 +6,13 @@ import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
 import { buildAnnounceWithVideoAudience } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
-import { asyncMiddleware, executeIfActivityPub, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
+import {
+  asyncMiddleware,
+  executeIfActivityPub,
+  localAccountValidator,
+  localVideoChannelValidator,
+  videosCustomGetValidator
+} from '../../middlewares'
 import { videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
 import { AccountModel } from '../../models/account/account'
@@ -54,7 +60,7 @@ activityPubClientRouter.get('/videos/watch/:id/activity',
   executeIfActivityPub(asyncMiddleware(videoController))
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
   executeIfActivityPub(asyncMiddleware(videoAnnouncesController))
 )
 activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
@@ -62,15 +68,15 @@ activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
   executeIfActivityPub(asyncMiddleware(videoAnnounceController))
 )
 activityPubClientRouter.get('/videos/watch/:id/likes',
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
   executeIfActivityPub(asyncMiddleware(videoLikesController))
 )
 activityPubClientRouter.get('/videos/watch/:id/dislikes',
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
   executeIfActivityPub(asyncMiddleware(videoDislikesController))
 )
 activityPubClientRouter.get('/videos/watch/:id/comments',
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
   executeIfActivityPub(asyncMiddleware(videoCommentsController))
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',

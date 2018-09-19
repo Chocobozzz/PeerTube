@@ -78,7 +78,7 @@ const videoCommentGetValidator = [
     logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await isVideoExist(req.params.videoId, res, 'id')) return
     if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
 
     return next()

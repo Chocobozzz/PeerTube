@@ -152,7 +152,8 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   return true
 }
 
-async function isVideoExist (id: string, res: Response, fetchType: 'all' | 'only-video' | 'id' | 'none' = 'all') {
+export type VideoFetchType = 'all' | 'only-video' | 'id' | 'none'
+async function isVideoExist (id: string, res: Response, fetchType: VideoFetchType = 'all') {
   let video: VideoModel | null
 
   if (fetchType === 'all') {

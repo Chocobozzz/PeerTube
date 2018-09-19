@@ -1406,7 +1406,7 @@ export class VideoModel extends Model<VideoModel> {
     return getVideoFileResolution(originalFilePath)
   }
 
-  getDescriptionPath () {
+  getDescriptionAPIPath () {
     return `/api/${API_VERSION}/videos/${this.uuid}/description`
   }
 
