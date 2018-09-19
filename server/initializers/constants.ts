@@ -212,7 +212,9 @@ const CONFIG = {
     }
   },
   REDUNDANCY: {
-    VIDEOS: buildVideosRedundancy(config.get<any[]>('redundancy.videos'))
+    VIDEOS: {
+      STRATEGIES: buildVideosRedundancy(config.get<any[]>('redundancy.videos.strategies'))
+    }
   },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }

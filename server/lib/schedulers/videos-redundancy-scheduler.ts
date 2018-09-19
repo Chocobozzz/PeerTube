@@ -1,10 +1,9 @@
 import { AbstractScheduler } from './abstract-scheduler'
 import { CONFIG, JOB_TTL, REDUNDANCY, SCHEDULER_INTERVALS_MS } from '../../initializers'
 import { logger } from '../../helpers/logger'
-import { RecentlyAddedStrategy, VideoRedundancyStrategy, VideosRedundancy } from '../../../shared/models/redundancy'
+import { VideoRedundancyStrategy, VideosRedundancy } from '../../../shared/models/redundancy'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { VideoFileModel } from '../../models/video/video-file'
-import { sortBy } from 'lodash'
 import { downloadWebTorrentVideo } from '../../helpers/webtorrent'
 import { join } from 'path'
 import { rename } from 'fs-extra'
@@ -12,7 +11,6 @@ import { getServerActor } from '../../helpers/utils'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { VideoModel } from '../../models/video/video'
 import { getVideoCacheFileActivityPubUrl } from '../activitypub/url'
-import { removeVideoRedundancy } from '../redundancy'
 import { isTestInstance } from '../../helpers/core-utils'
 
 export class VideosRedundancyScheduler extends AbstractScheduler {
@@ -31,7 +29,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     this.executing = true
 
-    for (const obj of CONFIG.REDUNDANCY.VIDEOS) {
+    for (const obj of CONFIG.REDUNDANCY.VIDEOS.STRATEGIES) {
       try {
         const videoToDuplicate = await this.findVideoToDuplicate(obj)
         if (!videoToDuplicate) continue

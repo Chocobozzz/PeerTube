@@ -40,7 +40,7 @@ function checkConfig () {
   }
 
   // Redundancies
-  const redundancyVideos = config.get<VideosRedundancy[]>('redundancy.videos')
+  const redundancyVideos = config.get<VideosRedundancy[]>('redundancy.videos.strategies')
   if (isArray(redundancyVideos)) {
     for (const r of redundancyVideos) {
       if ([ 'most-views', 'trending', 'recently-added' ].indexOf(r.strategy) === -1) {
@@ -75,6 +75,7 @@ function checkMissedConfig () {
     'cache.previews.size', 'admin.email',
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
+    'redundancy.videos.strategies',
     'transcoding.enabled', 'transcoding.threads',
     'import.videos.http.enabled', 'import.videos.torrent.enabled',
     'trending.videos.interval_days',

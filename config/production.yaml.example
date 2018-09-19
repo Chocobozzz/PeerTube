@@ -72,16 +72,17 @@ trending:
 # Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following
 redundancy:
   videos:
-#    -
-#      size: '10GB'
-#      strategy: 'most-views' # Cache videos that have the most views
-#    -
-#      size: '10GB'
-#      strategy: 'trending' # Cache trending videos
-#    -
-#      size: '10GB'
-#      strategy: 'recently-added' # Cache recently added videos
-#      minViews: 10 # Having at least x views
+    strategies:
+#      -
+#        size: '10GB'
+#        strategy: 'most-views' # Cache videos that have the most views
+#      -
+#        size: '10GB'
+#        strategy: 'trending' # Cache trending videos
+#      -
+#        size: '10GB'
+#        strategy: 'recently-added' # Cache recently added videos
+#        minViews: 10 # Having at least x views
 
 ###############################################################################
 #

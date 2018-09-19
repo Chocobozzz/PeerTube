@@ -48,10 +48,9 @@ export class TagModel extends Model<TagModel> {
         },
         defaults: {
           name: tag
-        }
+        },
+        transaction
       }
-
-      if (transaction) query['transaction'] = transaction
 
       const promise = TagModel.findOrCreate(query)
         .then(([ tagInstance ]) => tagInstance)

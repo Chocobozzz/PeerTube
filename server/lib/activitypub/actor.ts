@@ -78,6 +78,9 @@ async function getOrCreateActorAndServerAndModel (
     created = true
   }
 
+  if (actor.Account) actor.Account.Actor = actor
+  if (actor.VideoChannel) actor.VideoChannel.Actor = actor
+
   const { actor: actorRefreshed, refreshed } = await retryTransactionWrapper(refreshActorIfNeeded, actor, fetchType)
   if (!actorRefreshed) throw new Error('Actor ' + actorRefreshed.url + ' does not exist anymore.')
 

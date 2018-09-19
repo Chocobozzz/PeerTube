@@ -23,16 +23,17 @@ log:
 
 redundancy:
   videos:
-    -
-      size: '10MB'
-      strategy: 'most-views'
-    -
-      size: '10MB'
-      strategy: 'trending'
-    -
-      size: '10MB'
-      strategy: 'recently-added'
-      minViews: 1
+    strategies:
+      -
+        size: '10MB'
+        strategy: 'most-views'
+      -
+        size: '10MB'
+        strategy: 'trending'
+      -
+        size: '10MB'
+        strategy: 'recently-added'
+        minViews: 1
 
 cache:
   previews:

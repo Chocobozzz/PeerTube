@@ -23,7 +23,7 @@ async function getStats (req: express.Request, res: express.Response, next: expr
   const { totalInstanceFollowers, totalInstanceFollowing } = await ActorFollowModel.getStats()
 
   const videosRedundancyStats = await Promise.all(
-    CONFIG.REDUNDANCY.VIDEOS.map(r => {
+    CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.map(r => {
       return VideoRedundancyModel.getStats(r.strategy)
         .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
     })
