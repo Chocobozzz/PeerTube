@@ -75,7 +75,7 @@ function checkMissedConfig () {
     'cache.previews.size', 'admin.email',
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
-    'redundancy.videos.strategies',
+    'redundancy.videos.strategies', 'redundancy.videos.check_interval',
     'transcoding.enabled', 'transcoding.threads',
     'import.videos.http.enabled', 'import.videos.torrent.enabled',
     'trending.videos.interval_days',

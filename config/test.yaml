@@ -23,6 +23,7 @@ log:
 
 redundancy:
   videos:
+    check_interval: '5 seconds'
     strategies:
       -
         size: '10MB'

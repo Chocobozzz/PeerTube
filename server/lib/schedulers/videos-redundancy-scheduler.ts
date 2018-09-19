@@ -18,7 +18,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
   private executing = false
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.videosRedundancy
+  protected schedulerIntervalMs = CONFIG.REDUNDANCY.VIDEOS.CHECK_INTERVAL
 
   private constructor () {
     super()
@@ -50,6 +50,16 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       }
     }
 
+    await this.removeExpired()
+
+    this.executing = false
+  }
+
+  static get Instance () {
+    return this.instance || (this.instance = new this())
+  }
+
+  private async removeExpired () {
     const expired = await VideoRedundancyModel.listAllExpired()
 
     for (const m of expired) {
@@ -61,12 +71,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
         logger.error('Cannot remove %s video from our redundancy system.', this.buildEntryLogId(m))
       }
     }
-
-    this.executing = false
-  }
-
-  static get Instance () {
-    return this.instance || (this.instance = new this())
   }
 
   private findVideoToDuplicate (cache: VideosRedundancy) {

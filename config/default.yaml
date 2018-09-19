@@ -71,6 +71,7 @@ trending:
 # Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following
 redundancy:
   videos:
+    check_interval: '1 hour' # How often you want to check new videos to cache
     strategies:
 #      -
 #        size: '10GB'
