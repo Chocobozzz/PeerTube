@@ -29,6 +29,11 @@ async function processActivities (activities: Activity[], signatureActor?: Actor
   const actorsCache: { [ url: string ]: ActorModel } = {}
 
   for (const activity of activities) {
+    if (!signatureActor && [ 'Create', 'Announce', 'Like' ].indexOf(activity.type) === -1) {
+      logger.error('Cannot process activity %s (type: %s) without the actor signature.', activity.id, activity.type)
+      continue
+    }
+
     const actorUrl = getActorUrl(activity.actor)
 
     // When we fetch remote data, we don't have signature

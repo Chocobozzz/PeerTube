@@ -94,6 +94,10 @@ function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoComm
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {
+    if (videoComment.Account.id !== byActor.Account.id) {
+      throw new Error('Account ' + byActor.url + ' does not own video comment ' + videoComment.url)
+    }
+
     await videoComment.destroy({ transaction: t })
 
     if (videoComment.Video.isOwned()) {

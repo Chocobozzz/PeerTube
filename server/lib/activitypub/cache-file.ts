@@ -31,6 +31,10 @@ function createCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, b
 }
 
 function updateCacheFile (cacheFileObject: CacheFileObject, redundancyModel: VideoRedundancyModel, byActor: { id?: number }) {
+  if (redundancyModel.actorId !== byActor.id) {
+    throw new Error('Cannot update redundancy ' + redundancyModel.url + ' of another actor.')
+  }
+
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, redundancyModel.VideoFile.Video, byActor)
 
   redundancyModel.set('expires', attributes.expiresOn)

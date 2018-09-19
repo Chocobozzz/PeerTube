@@ -17,11 +17,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processReject (actor: ActorModel, targetActor: ActorModel) {
+async function processReject (follower: ActorModel, targetActor: ActorModel) {
   return sequelizeTypescript.transaction(async t => {
-    const actorFollow = await ActorFollowModel.loadByActorAndTarget(actor.id, targetActor.id, t)
+    const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, targetActor.id, t)
 
-    if (!actorFollow) throw new Error(`'Unknown actor follow ${actor.id} -> ${targetActor.id}.`)
+    if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${targetActor.id}.`)
 
     await actorFollow.destroy({ transaction: t })
 
