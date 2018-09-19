@@ -27,7 +27,7 @@ import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../lib/avatar'
-import { auditLoggerFactory, VideoChannelAuditView } from '../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 
 const auditLogger = auditLoggerFactory('channels')
@@ -109,7 +109,7 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel.Actor, videoChannel)
 
   auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new VideoChannelAuditView(videoChannel.toFormattedJSON()),
     oldVideoChannelAuditKeys
   )
@@ -133,7 +133,7 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
     .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, { err }))
 
   auditLogger.create(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new VideoChannelAuditView(videoChannelCreated.toFormattedJSON())
   )
   logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
@@ -166,7 +166,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
       await sendUpdateActor(videoChannelInstanceUpdated, t)
 
       auditLogger.update(
-        res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+        getAuditIdFromRes(res),
         new VideoChannelAuditView(videoChannelInstanceUpdated.toFormattedJSON()),
         oldVideoChannelAuditKeys
       )
@@ -192,10 +192,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   await sequelizeTypescript.transaction(async t => {
     await videoChannelInstance.destroy({ transaction: t })
 
-    auditLogger.delete(
-      res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-      new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
-    )
+    auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
     logger.info('Video channel with name %s and uuid %s deleted.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
   })
 

@@ -23,7 +23,7 @@ import {
 } from '../../../middlewares/validators/video-comments'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { auditLoggerFactory, CommentAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -109,7 +109,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
     }, t)
   })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new CommentAuditView(comment.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({
     comment: comment.toFormattedJSON()
@@ -128,7 +128,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
     }, t)
   })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new CommentAuditView(comment.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({
     comment: comment.toFormattedJSON()
@@ -143,7 +143,7 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
   })
 
   auditLogger.delete(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new CommentAuditView(videoCommentInstance.toFormattedJSON())
   )
   logger.info('Video comment %d deleted.', videoCommentInstance.id)

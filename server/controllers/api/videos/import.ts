@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as magnetUtil from 'magnet-uri'
 import 'multer'
-import { auditLoggerFactory, VideoImportAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import {
   CONFIG,
@@ -114,7 +114,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoImportAuditView(videoImport.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
   return res.json(videoImport.toFormattedJSON()).end()
 }
@@ -158,7 +158,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoImportAuditView(videoImport.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
   return res.json(videoImport.toFormattedJSON()).end()
 }

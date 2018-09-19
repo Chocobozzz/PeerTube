@@ -27,12 +27,15 @@ import {
   usersUpdateValidator
 } from '../../../middlewares'
 import {
-  usersAskResetPasswordValidator, usersBlockingValidator, usersResetPasswordValidator,
-  usersAskSendVerifyEmailValidator, usersVerifyEmailValidator
+  usersAskResetPasswordValidator,
+  usersAskSendVerifyEmailValidator,
+  usersBlockingValidator,
+  usersResetPasswordValidator,
+  usersVerifyEmailValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
 import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
-import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
 
 const auditLogger = auditLoggerFactory('users')
@@ -166,7 +169,7 @@ async function createUser (req: express.Request, res: express.Response) {
 
   const { user, account } = await createUserAccountAndChannel(userToCreate)
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
 
   return res.json({
@@ -245,7 +248,7 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
 
   await user.destroy()
 
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
   return res.sendStatus(204)
 }
@@ -269,7 +272,7 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   }
 
   auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new UserAuditView(user.toFormattedJSON()),
     oldUserAuditView
   )
@@ -341,7 +344,7 @@ async function changeUserBlock (res: express.Response, user: UserModel, block: b
   await Emailer.Instance.addUserBlockJob(user, block, reason)
 
   auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new UserAuditView(user.toFormattedJSON()),
     oldUserAuditView
   )

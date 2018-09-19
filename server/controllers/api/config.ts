@@ -8,7 +8,7 @@ import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
-import { auditLoggerFactory, CustomConfigAuditView } from '../../helpers/audit-logger'
+import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { remove, writeJSON } from 'fs-extra'
 
 const packageJSON = require('../../../../package.json')
@@ -134,10 +134,7 @@ async function getCustomConfig (req: express.Request, res: express.Response, nex
 async function deleteCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   await remove(CONFIG.CUSTOM_FILE)
 
-  auditLogger.delete(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new CustomConfigAuditView(customConfig())
-  )
+  auditLogger.delete(getAuditIdFromRes(res), new CustomConfigAuditView(customConfig()))
 
   reloadConfig()
   ClientHtml.invalidCache()
@@ -183,7 +180,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   const data = customConfig()
 
   auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new CustomConfigAuditView(data),
     oldCustomConfigAuditKeys
   )

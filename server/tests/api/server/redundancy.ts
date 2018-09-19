@@ -6,15 +6,16 @@ import { VideoDetails } from '../../../../shared/models/videos'
 import {
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   getFollowingListPaginationAndSort,
   getVideo,
+  immutableAssign,
   killallServers,
+  root,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  wait,
-  root, viewVideo, immutableAssign
+  viewVideo,
+  wait
 } from '../../utils'
 import { waitJobs } from '../../utils/server/jobs'
 import * as magnetUtil from 'magnet-uri'
@@ -44,12 +45,15 @@ function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: numbe
 async function runServers (strategy: VideoRedundancyStrategy, additionalParams: any = {}) {
   const config = {
     redundancy: {
-      videos: [
-        immutableAssign({
-          strategy: strategy,
-          size: '100KB'
-        }, additionalParams)
-      ]
+      videos: {
+        check_interval: '5 seconds',
+        strategies: [
+          immutableAssign({
+            strategy: strategy,
+            size: '100KB'
+          }, additionalParams)
+        ]
+      }
     }
   }
   servers = await flushAndRunMultipleServers(3, config)

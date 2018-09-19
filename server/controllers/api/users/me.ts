@@ -5,7 +5,8 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../../initializers'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware, asyncRetryTransactionMiddleware,
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
   authenticate,
   commonVideosFiltersValidator,
   paginationValidator,
@@ -17,11 +18,11 @@ import {
   usersVideoRatingValidator
 } from '../../../middlewares'
 import {
+  areSubscriptionsExistValidator,
   deleteMeValidator,
   userSubscriptionsSortValidator,
   videoImportsSortValidator,
-  videosSortValidator,
-  areSubscriptionsExistValidator
+  videosSortValidator
 } from '../../../middlewares/validators'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/account/user'
@@ -31,7 +32,7 @@ import { buildNSFWFilter, createReqFiles } from '../../../helpers/express-utils'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../../lib/avatar'
-import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
@@ -311,7 +312,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   await user.destroy()
 
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
   return res.sendStatus(204)
 }
@@ -337,7 +338,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
     await sendUpdateActor(user.Account, t)
 
     auditLogger.update(
-      res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+      getAuditIdFromRes(res),
       new UserAuditView(user.toFormattedJSON()),
       oldUserAuditView
     )
@@ -355,7 +356,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
   const avatar = await updateActorAvatarFile(avatarPhysicalFile, account.Actor, account)
 
   auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new UserAuditView(user.toFormattedJSON()),
     oldUserAuditView
   )
