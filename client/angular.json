@@ -24,7 +24,7 @@
             },
             "assets": [
               "src/assets/images",
-              "src/manifest.json"
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/sass/application.scss"
@@ -105,7 +105,7 @@
             ],
             "assets": [
               "src/assets/images",
-              "src/manifest.json"
+              "src/manifest.webmanifest"
             ]
           }
         },
