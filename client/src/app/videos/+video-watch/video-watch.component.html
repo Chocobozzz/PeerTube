@@ -32,7 +32,7 @@
         <div class="video-info-first-row">
           <div>
             <div class="d-block d-sm-none"> <!-- only shown on small devices, has its conterpart for larger viewports below -->
-              <div class="video-info-name">{{ video.name }}</div>
+              <h1 class="video-info-name">{{ video.name }}</h1>
 
               <div i18n class="video-info-date-views">
                 Published {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
@@ -41,7 +41,7 @@
 
             <div class="d-flex justify-content-between align-items-sm-end">
               <div class="d-none d-sm-block">
-                <div class="video-info-name">{{ video.name }}</div>
+                <h1 class="video-info-name">{{ video.name }}</h1>
 
                 <div i18n class="video-info-date-views">
                   Published {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
