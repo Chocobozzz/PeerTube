@@ -105,7 +105,8 @@ export class UserListComponent extends RestTable implements OnInit {
       return
     }
 
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this user?'), this.i18n('Delete'))
+    const message = this.i18n('If you remove this user, you will not be able to create another with the same username!')
+    const res = await this.confirmService.confirm(message, this.i18n('Delete'))
     if (res === false) return
 
     this.userService.removeUser(user).subscribe(
