@@ -81,6 +81,15 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     if (this.resizeSubscription) this.resizeSubscription.unsubscribe()
   }
 
+  pageByVideoId (index: number, page: Video[]) {
+    // Video are unique in all pages
+    return page[0].id
+  }
+
+  videoById (index: number, video: Video) {
+    return video.id
+  }
+
   onNearOfTop () {
     this.previousPage()
   }
@@ -166,7 +175,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     const min = this.minPageLoaded()
 
     if (min > 1) {
-      this.loadMoreVideos(min - 1)
+      this.loadMoreVideos(min - 1, true)
     }
   }
 

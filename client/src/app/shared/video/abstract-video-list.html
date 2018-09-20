@@ -11,8 +11,8 @@
     (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
     class="videos" #videosElement
   >
-    <div *ngFor="let videos of videoPages" class="videos-page">
-      <my-video-miniature *ngFor="let video of videos" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"></my-video-miniature>
+    <div *ngFor="let videos of videoPages; trackBy: pageByVideoId" class="videos-page">
+      <my-video-miniature *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"></my-video-miniature>
     </div>
   </div>
 </div>
