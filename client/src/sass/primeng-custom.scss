@@ -7,7 +7,7 @@
 @mixin glyphicon-light {
   font-family: 'Glyphicons Halflings';
   text-decoration: none !important;
-  color: #000 !important;
+  color: var(--mainForegroundColor) !important;
 }
 
 // data table customizations
@@ -33,7 +33,7 @@ p-table {
   .ui-table-tbody {
     tr {
       &:hover {
-        background-color: #f0f0f0 !important;
+        background-color: var(--submenuColor) !important;
       }
 
       &:not(:hover) {
@@ -60,15 +60,15 @@ p-table {
 
   th {
     border: none !important;
-    border-bottom: 1px solid #f0f0f0 !important;
+    border-bottom: 1px solid var(--submenuColor) !important;
     text-align: left !important;
     padding: 5px 0 5px 15px !important;
     font-weight: $font-semibold !important;
-    color: #000 !important;
+    color: var(--mainForegroundColor) !important;
 
     &.ui-sortable-column:hover {
-      background-color: #f0f0f0 !important;
-      border: 1px solid #f0f0f0 !important;
+      background-color: var(--submenuColor) !important;
+      border: 1px solid var(--submenuColor) !important;
       border-width: 0 1px !important;
 
       &:first-child {
@@ -77,7 +77,7 @@ p-table {
     }
 
     &.ui-state-highlight {
-      background-color: #fff !important;
+      background-color:var(--submenuColor) !important;
 
       .pi {
         @extend .glyphicon;
@@ -109,8 +109,9 @@ p-table {
 
   p-paginator {
     .ui-paginator-bottom {
+      background-color: var(--mainBackgroundColor) !important;
       position: relative;
-      border: 1px solid #f0f0f0 !important;
+      border: 1px solid var(--submenuColor) !important;
       height: 40px;
       display: flex;
       justify-content: center;

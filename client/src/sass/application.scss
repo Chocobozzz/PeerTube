@@ -283,6 +283,11 @@ ngb-tabset.bootstrap {
   }
 }
 
+.nav-tabs .nav-link.active {
+  background-color: var(--mainBackgroundColor) !important;
+  border-bottom: none;
+}
+
 .orange-button {
   @include peertube-button;
   @include orange-button;
