@@ -40,7 +40,7 @@ describe('Test CLI wrapper', function () {
     this.timeout(60000)
 
     const env = getEnvCli(server)
-    const stdout = await execCLI(`${env} ` + cmd + ` auth add --url ${server.url} -U user_1 -p "super password"`)
+    await execCLI(`${env} ` + cmd + ` auth add --url ${server.url} -U user_1 -p "super password"`)
   })
 
   after(async function () {
