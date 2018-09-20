@@ -36,6 +36,8 @@
 
   .actor-owner {
     @include actor-owner;
+
+    margin-top: 0;
   }
 }
 
