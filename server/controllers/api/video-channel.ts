@@ -29,6 +29,7 @@ import { updateAvatarValidator } from '../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../lib/avatar'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
+import { UserModel } from '../../models/account/user'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
@@ -123,19 +124,17 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
 
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
-  const account: AccountModel = res.locals.oauth.token.User.Account
 
   const videoChannelCreated: VideoChannelModel = await sequelizeTypescript.transaction(async t => {
+    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
     return createVideoChannel(videoChannelInfo, account, t)
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)
     .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, { err }))
 
-  auditLogger.create(
-    getAuditIdFromRes(res),
-    new VideoChannelAuditView(videoChannelCreated.toFormattedJSON())
-  )
+  auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
 
   return res.json({

@@ -24,6 +24,8 @@ import {
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
+import { AccountModel } from '../../../models/account/account'
+import { UserModel } from '../../../models/account/user'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -101,11 +103,13 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
   const videoCommentInfo: VideoCommentCreate = req.body
 
   const comment = await sequelizeTypescript.transaction(async t => {
+    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: null,
       video: res.locals.video,
-      account: res.locals.oauth.token.User.Account
+      account
     }, t)
   })
 
@@ -120,19 +124,19 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
   const videoCommentInfo: VideoCommentCreate = req.body
 
   const comment = await sequelizeTypescript.transaction(async t => {
+    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: res.locals.videoComment,
       video: res.locals.video,
-      account: res.locals.oauth.token.User.Account
+      account
     }, t)
   })
 
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
-  return res.json({
-    comment: comment.toFormattedJSON()
-  }).end()
+  return res.json({ comment: comment.toFormattedJSON() }).end()
 }
 
 async function removeVideoComment (req: express.Request, res: express.Response) {

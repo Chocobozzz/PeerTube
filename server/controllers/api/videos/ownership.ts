@@ -19,6 +19,7 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { changeVideoChannelShare } from '../../../lib/activitypub'
 import { sendUpdateVideo } from '../../../lib/activitypub/send'
+import { UserModel } from '../../../models/account/user'
 
 const ownershipVideoRouter = express.Router()
 
@@ -58,26 +59,25 @@ export {
 
 async function giveVideoOwnership (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video as VideoModel
-  const initiatorAccount = res.locals.oauth.token.User.Account as AccountModel
+  const initiatorAccountId = (res.locals.oauth.token.User as UserModel).Account.id
   const nextOwner = res.locals.nextOwner as AccountModel
 
   await sequelizeTypescript.transaction(t => {
     return VideoChangeOwnershipModel.findOrCreate({
       where: {
-        initiatorAccountId: initiatorAccount.id,
+        initiatorAccountId,
         nextOwnerAccountId: nextOwner.id,
         videoId: videoInstance.id,
         status: VideoChangeOwnershipStatus.WAITING
       },
       defaults: {
-        initiatorAccountId: initiatorAccount.id,
+        initiatorAccountId,
         nextOwnerAccountId: nextOwner.id,
         videoId: videoInstance.id,
         status: VideoChangeOwnershipStatus.WAITING
       },
       transaction: t
     })
-
   })
 
   logger.info('Ownership change for video %s created.', videoInstance.name)
@@ -85,9 +85,10 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 }
 
 async function listVideoOwnership (req: express.Request, res: express.Response) {
-  const currentAccount = res.locals.oauth.token.User.Account as AccountModel
+  const currentAccountId = (res.locals.oauth.token.User as UserModel).Account.id
+
   const resultList = await VideoChangeOwnershipModel.listForApi(
-    currentAccount.id,
+    currentAccountId,
     req.query.start || 0,
     req.query.count || 10,
     req.query.sort || 'createdAt'

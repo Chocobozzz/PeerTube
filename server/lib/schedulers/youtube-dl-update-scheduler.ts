@@ -1,12 +1,5 @@
-
-
 import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers'
-import { logger } from '../../helpers/logger'
-import * as request from 'request'
-import { createWriteStream, ensureDir, writeFile } from 'fs-extra'
-import { join } from 'path'
-import { root } from '../../helpers/core-utils'
 import { updateYoutubeDLBinary } from '../../helpers/youtube-dl'
 
 export class YoutubeDlUpdateScheduler extends AbstractScheduler {

@@ -354,10 +354,10 @@ async function refreshVideoIfNeeded (options: {
   syncParam: SyncParam,
   refreshViews: boolean
 }): Promise<VideoModel> {
+  if (!options.video.isOutdated()) return options.video
+
   // We need more attributes if the argument video was fetched with not enough joints
   const video = options.fetchedType === 'all' ? options.video : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
-
-  if (!video.isOutdated()) return video
 
   try {
     const { response, videoObject } = await fetchRemoteVideo(video.url)

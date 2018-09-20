@@ -38,6 +38,7 @@ import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
 import { logger } from '../../../helpers/logger'
+import { AccountModel } from '../../../models/account/account'
 
 const auditLogger = auditLoggerFactory('users-me')
 
@@ -329,19 +330,17 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await sequelizeTypescript.transaction(async t => {
+    const userAccount = await AccountModel.load(user.Account.id)
+
     await user.save({ transaction: t })
 
-    if (body.displayName !== undefined) user.Account.name = body.displayName
-    if (body.description !== undefined) user.Account.description = body.description
-    await user.Account.save({ transaction: t })
+    if (body.displayName !== undefined) userAccount.name = body.displayName
+    if (body.description !== undefined) userAccount.description = body.description
+    await userAccount.save({ transaction: t })
 
-    await sendUpdateActor(user.Account, t)
+    await sendUpdateActor(userAccount, t)
 
-    auditLogger.update(
-      getAuditIdFromRes(res),
-      new UserAuditView(user.toFormattedJSON()),
-      oldUserAuditView
-    )
+    auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
   })
 
   return res.sendStatus(204)
@@ -351,15 +350,12 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user: UserModel = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
-  const account = user.Account
 
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, account.Actor, account)
+  const userAccount = await AccountModel.load(user.Account.id)
 
-  auditLogger.update(
-    getAuditIdFromRes(res),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount.Actor, userAccount)
+
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }

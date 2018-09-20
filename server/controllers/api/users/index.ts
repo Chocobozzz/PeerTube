@@ -267,15 +267,9 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged) {
-    await OAuthTokenModel.deleteUserToken(userToUpdate.id)
-  }
+  if (roleChanged) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
 
-  auditLogger.update(
-    getAuditIdFromRes(res),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
   // Don't need to send this update to followers, these attributes are not propagated
 
@@ -343,9 +337,5 @@ async function changeUserBlock (res: express.Response, user: UserModel, block: b
 
   await Emailer.Instance.addUserBlockJob(user, block, reason)
 
-  auditLogger.update(
-    getAuditIdFromRes(res),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 }

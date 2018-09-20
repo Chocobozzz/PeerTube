@@ -1,9 +1,10 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { logger } from '../../helpers/logger'
-import { AccountModel } from '../account/account'
 import { UserModel } from '../account/user'
 import { OAuthClientModel } from './oauth-client'
 import { Transaction } from 'sequelize'
+import { AccountModel } from '../account/account'
+import { ActorModel } from '../activitypub/actor'
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -17,18 +18,27 @@ export type OAuthTokenInfo = {
 }
 
 enum ScopeNames {
-  WITH_ACCOUNT = 'WITH_ACCOUNT'
+  WITH_USER = 'WITH_USER'
 }
 
 @Scopes({
-  [ScopeNames.WITH_ACCOUNT]: {
+  [ScopeNames.WITH_USER]: {
     include: [
       {
-        model: () => UserModel,
+        model: () => UserModel.unscoped(),
+        required: true,
         include: [
           {
-            model: () => AccountModel,
-            required: true
+            attributes: [ 'id' ],
+            model: () => AccountModel.unscoped(),
+            required: true,
+            include: [
+              {
+                attributes: [ 'id' ],
+                model: () => ActorModel.unscoped(),
+                required: true
+              }
+            ]
           }
         ]
       }
@@ -138,7 +148,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
       }
     }
 
-    return OAuthTokenModel.scope(ScopeNames.WITH_ACCOUNT).findOne(query).then(token => {
+    return OAuthTokenModel.scope(ScopeNames.WITH_USER).findOne(query).then(token => {
       if (token) token['user'] = token.User
 
       return token
@@ -152,7 +162,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
       }
     }
 
-    return OAuthTokenModel.scope(ScopeNames.WITH_ACCOUNT)
+    return OAuthTokenModel.scope(ScopeNames.WITH_USER)
       .findOne(query)
       .then(token => {
         if (token) {
