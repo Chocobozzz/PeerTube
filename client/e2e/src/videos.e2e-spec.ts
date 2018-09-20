@@ -12,7 +12,7 @@ describe('Videos workflow', () => {
   let isSafari = false
 
   beforeEach(async () => {
-    browser.waitForAngularEnabled(false)
+    await browser.waitForAngularEnabled(false)
 
     videoWatchPage = new VideoWatchPage()
     pageUploadPage = new VideoUploadPage()
@@ -62,7 +62,7 @@ describe('Videos workflow', () => {
     if (isMobileDevice || isSafari) videoNameToExcept = await videoWatchPage.clickOnFirstVideo()
     else await videoWatchPage.clickOnVideo(videoName)
 
-    return videoWatchPage.waitWatchVideoName(videoNameToExcept, isSafari)
+    return videoWatchPage.waitWatchVideoName(videoNameToExcept, isMobileDevice, isSafari)
   })
 
   it('Should play the video', async () => {
