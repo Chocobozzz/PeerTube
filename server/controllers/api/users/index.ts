@@ -37,6 +37,7 @@ import { UserModel } from '../../../models/account/user'
 import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
+import { deleteUserToken } from '../../../lib/oauth-model'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -267,7 +268,7 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
+  if (roleChanged) await deleteUserToken(userToUpdate.id)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
@@ -330,7 +331,7 @@ async function changeUserBlock (res: express.Response, user: UserModel, block: b
   user.blockedReason = reason || null
 
   await sequelizeTypescript.transaction(async t => {
-    await OAuthTokenModel.deleteUserToken(user.id, t)
+    await deleteUserToken(user.id, t)
 
     await user.save({ transaction: t })
   })

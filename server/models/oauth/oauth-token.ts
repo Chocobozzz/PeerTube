@@ -1,10 +1,23 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AfterDelete,
+  AfterUpdate,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  ForeignKey,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { logger } from '../../helpers/logger'
 import { UserModel } from '../account/user'
 import { OAuthClientModel } from './oauth-client'
 import { Transaction } from 'sequelize'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
+import { clearCacheByToken } from '../../lib/oauth-model'
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -111,6 +124,12 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     onDelete: 'cascade'
   })
   OAuthClients: OAuthClientModel[]
+
+  @AfterUpdate
+  @AfterDelete
+  static removeTokenCache (token: OAuthTokenModel) {
+    return clearCacheByToken(token.accessToken)
+  }
 
   static getByRefreshTokenAndPopulateClient (refreshToken: string) {
     const query = {

@@ -56,7 +56,7 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
   // Check the rights
   asyncMiddleware(videoChannelsUpdateValidator),
   updateAvatarValidator,
-  asyncMiddleware(updateVideoChannelAvatar)
+  asyncRetryTransactionMiddleware(updateVideoChannelAvatar)
 )
 
 videoChannelRouter.put('/:nameWithHost',
@@ -107,13 +107,9 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel as VideoChannelModel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel.Actor, videoChannel)
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel)
 
-  auditLogger.update(
-    getAuditIdFromRes(res),
-    new VideoChannelAuditView(videoChannel.toFormattedJSON()),
-    oldVideoChannelAuditKeys
-  )
+  auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
   return res
     .json({

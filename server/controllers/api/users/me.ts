@@ -353,7 +353,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
 
   const userAccount = await AccountModel.load(user.Account.id)
 
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount.Actor, userAccount)
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 

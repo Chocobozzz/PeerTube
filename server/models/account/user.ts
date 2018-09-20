@@ -1,5 +1,7 @@
 import * as Sequelize from 'sequelize'
 import {
+  AfterDelete,
+  AfterUpdate,
   AllowNull,
   BeforeCreate,
   BeforeUpdate,
@@ -39,6 +41,7 @@ import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
 import { NSFW_POLICY_TYPES } from '../../initializers'
+import { clearCacheByUserId } from '../../lib/oauth-model'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -166,6 +169,12 @@ export class UserModel extends Model<UserModel> {
           return undefined
         })
     }
+  }
+
+  @AfterUpdate
+  @AfterDelete
+  static removeTokenCache (instance: UserModel) {
+    return clearCacheByUserId(instance.id)
   }
 
   static countTotal () {
