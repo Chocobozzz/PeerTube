@@ -81,6 +81,7 @@
     flex-grow: 1;
     // Set min width for flex item
     min-width: 1px;
+    max-width: 100%;
 
     .video-info-first-row {
       display: flex;
@@ -472,6 +473,7 @@ my-video-comments {
     margin: 20px 0 0 0;
 
     .video-info {
+      padding: 0;
 
       .video-info-first-row {
 
@@ -484,6 +486,8 @@ my-video-comments {
   }
 
   /deep/ .other-videos {
+    padding-left: 0 !important;
+
     /deep/ .video-miniature  {
       flex-direction: column;
     }
@@ -499,7 +503,27 @@ my-video-comments {
 }
 
 @media screen and (max-width: 450px) {
-  .video-bottom  .action-button .icon-text {
-    display: none !important;
+  .video-bottom {
+    .action-button .icon-text {
+      display: none !important;
+    }
+
+    .video-info .video-info-first-row {
+      .video-info-name {
+        font-size: 18px;
+      }
+
+      .video-info-date-views {
+        font-size: 14px;
+      }
+
+      .video-actions-rates {
+        margin-top: 10px;
+      }
+    }
+
+    .video-info-description {
+      font-size: 14px !important;
+    }
   }
 }

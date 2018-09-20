@@ -4,14 +4,14 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from '../audience'
+import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
 import { logger } from '../../../helpers/logger'
 
 async function buildAnnounceWithVideoAudience (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const announcedObject = video.url
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
+  const audience = getAudienceFromFollowersOf(actorsInvolvedInVideo)
 
   const activity = buildAnnounceActivity(videoShare.url, byActor, announcedObject, audience)
 

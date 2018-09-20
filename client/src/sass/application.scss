@@ -9,7 +9,7 @@ $icon-font-path: '../../node_modules/@neos21/bootstrap3-glyphicons/assets/fonts/
 @import '~video.js/dist/video-js.css';
 
 $assets-path: '../assets/';
-@import './player/player';
+@import './player/index';
 @import './loading-bar';
 
 @import './primeng-custom';

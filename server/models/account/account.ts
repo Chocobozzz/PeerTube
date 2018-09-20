@@ -134,8 +134,8 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number) {
-    return AccountModel.findById(id)
+  static load (id: number, transaction?: Sequelize.Transaction) {
+    return AccountModel.findById(id, { transaction })
   }
 
   static loadByUUID (uuid: string) {

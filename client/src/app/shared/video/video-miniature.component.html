@@ -1,11 +1,11 @@
 <div class="video-miniature">
-  <my-video-thumbnail [video]="video" [nsfw]="isVideoBlur()"></my-video-thumbnail>
+  <my-video-thumbnail [video]="video" [nsfw]="isVideoBlur"></my-video-thumbnail>
 
   <div class="video-miniature-information">
     <a
       tabindex="-1"
       class="video-miniature-name"
-      [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur() }"
+      [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
     >
       {{ video.name }}
     </a>

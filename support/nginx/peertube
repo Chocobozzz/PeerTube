@@ -58,12 +58,14 @@ server {
     root /var/www/certbot;
   }
 
+  # Bypass PeerTube for performance reasons. Could be removed
   location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
+  # Bypass PeerTube for performance reasons. Could be removed
   location ~ ^/static/(thumbnails|avatars)/ {
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
@@ -102,7 +104,7 @@ server {
     send_timeout                600;
   }
 
-  # Bypass PeerTube webseed route for better performances
+  # Bypass PeerTube for performance reasons. Could be removed
   location /static/webseed {
     # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
     limit_rate 800k;

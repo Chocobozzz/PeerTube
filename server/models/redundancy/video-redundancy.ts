@@ -14,11 +14,10 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid } from '../utils'
+import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
 import { VideoFileModel } from '../video/video-file'
-import { isDateValid } from '../../helpers/custom-validators/misc'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
 import { VideoRedundancyStrategy } from '../../../shared/models/redundancy'
@@ -28,6 +27,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { ServerModel } from '../server/server'
 import { sample } from 'lodash'
 import { isTestInstance } from '../../helpers/core-utils'
+import * as Bluebird from 'bluebird'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -145,65 +145,90 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.findOne(query)
   }
 
+  static async getVideoSample (p: Bluebird<VideoModel[]>) {
+    const rows = await p
+    const ids = rows.map(r => r.id)
+    const id = sample(ids)
+
+    return VideoModel.loadWithFile(id, undefined, !isTestInstance())
+  }
+
   static async findMostViewToDuplicate (randomizedFactor: number) {
     // On VideoModel!
     const query = {
+      attributes: [ 'id', 'views' ],
       logging: !isTestInstance(),
       limit: randomizedFactor,
-      order: [ [ 'views', 'DESC' ] ],
+      order: getVideoSort('-views'),
+      include: [
+        await VideoRedundancyModel.buildVideoFileForDuplication(),
+        VideoRedundancyModel.buildServerRedundancyInclude()
+      ]
+    }
+
+    return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
+  }
+
+  static async findTrendingToDuplicate (randomizedFactor: number) {
+    // On VideoModel!
+    const query = {
+      attributes: [ 'id', 'views' ],
+      subQuery: false,
+      logging: !isTestInstance(),
+      group: 'VideoModel.id',
+      limit: randomizedFactor,
+      order: getVideoSort('-trending'),
+      include: [
+        await VideoRedundancyModel.buildVideoFileForDuplication(),
+        VideoRedundancyModel.buildServerRedundancyInclude(),
+
+        VideoModel.buildTrendingQuery(CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS)
+      ]
+    }
+
+    return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
+  }
+
+  static async findRecentlyAddedToDuplicate (randomizedFactor: number, minViews: number) {
+    // On VideoModel!
+    const query = {
+      attributes: [ 'id', 'publishedAt' ],
+      logging: !isTestInstance(),
+      limit: randomizedFactor,
+      order: getVideoSort('-publishedAt'),
+      where: {
+        views: {
+          [ Sequelize.Op.gte ]: minViews
+        }
+      },
+      include: [
+        await VideoRedundancyModel.buildVideoFileForDuplication(),
+        VideoRedundancyModel.buildServerRedundancyInclude()
+      ]
+    }
+
+    return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
+  }
+
+  static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
+    const actor = await getServerActor()
+
+    const options = {
+      logging: !isTestInstance(),
       include: [
         {
-          model: VideoFileModel.unscoped(),
+          attributes: [],
+          model: VideoRedundancyModel,
           required: true,
           where: {
-            id: {
-              [ Sequelize.Op.notIn ]: await VideoRedundancyModel.buildExcludeIn()
-            }
+            actorId: actor.id,
+            strategy
           }
-        },
-        {
-          attributes: [],
-          model: VideoChannelModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: ActorModel.unscoped(),
-              required: true,
-              include: [
-                {
-                  attributes: [],
-                  model: ServerModel.unscoped(),
-                  required: true,
-                  where: {
-                    redundancyAllowed: true
-                  }
-                }
-              ]
-            }
-          ]
         }
       ]
     }
 
-    const rows = await VideoModel.unscoped().findAll(query)
-
-    return sample(rows)
-  }
-
-  static async getVideoFiles (strategy: VideoRedundancyStrategy) {
-    const actor = await getServerActor()
-
-    const queryVideoFiles = {
-      logging: !isTestInstance(),
-      where: {
-        actorId: actor.id,
-        strategy
-      }
-    }
-
-    return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO)
-                               .findAll(queryVideoFiles)
+    return VideoFileModel.sum('size', options)
   }
 
   static listAllExpired () {
@@ -211,13 +236,44 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       logging: !isTestInstance(),
       where: {
         expiresOn: {
-          [Sequelize.Op.lt]: new Date()
+          [ Sequelize.Op.lt ]: new Date()
         }
       }
     }
 
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO)
                                .findAll(query)
+  }
+
+  static async getStats (strategy: VideoRedundancyStrategy) {
+    const actor = await getServerActor()
+
+    const query = {
+      raw: true,
+      attributes: [
+        [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoFile.size')), '0'), 'totalUsed' ],
+        [ Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', 'videoId')), 'totalVideos' ],
+        [ Sequelize.fn('COUNT', 'videoFileId'), 'totalVideoFiles' ]
+      ],
+      where: {
+        strategy,
+        actorId: actor.id
+      },
+      include: [
+        {
+          attributes: [],
+          model: VideoFileModel,
+          required: true
+        }
+      ]
+    }
+
+    return VideoRedundancyModel.find(query as any) // FIXME: typings
+      .then((r: any) => ({
+        totalUsed: parseInt(r.totalUsed.toString(), 10),
+        totalVideos: r.totalVideos,
+        totalVideoFiles: r.totalVideoFiles
+      }))
   }
 
   toActivityPubObject (): CacheFileObject {
@@ -237,13 +293,50 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
   }
 
-  private static async buildExcludeIn () {
+  // Don't include video files we already duplicated
+  private static async buildVideoFileForDuplication () {
     const actor = await getServerActor()
 
-    return Sequelize.literal(
+    const notIn = Sequelize.literal(
       '(' +
         `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "expiresOn" >= NOW()` +
       ')'
     )
+
+    return {
+      attributes: [],
+      model: VideoFileModel.unscoped(),
+      required: true,
+      where: {
+        id: {
+          [ Sequelize.Op.notIn ]: notIn
+        }
+      }
+    }
+  }
+
+  private static buildServerRedundancyInclude () {
+    return {
+      attributes: [],
+      model: VideoChannelModel.unscoped(),
+      required: true,
+      include: [
+        {
+          attributes: [],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: {
+                redundancyAllowed: true
+              }
+            }
+          ]
+        }
+      ]
+    }
   }
 }

@@ -266,6 +266,18 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findById(id)
   }
 
+  static isActorUrlExist (url: string) {
+    const query = {
+      raw: true,
+      where: {
+        url
+      }
+    }
+
+    return ActorModel.unscoped().findOne(query)
+      .then(a => !!a)
+  }
+
   static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
     const query = {
       where: {
@@ -311,6 +323,29 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        url
+      },
+      transaction,
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: false
+        },
+        {
+          attributes: [ 'id' ],
+          model: VideoChannelModel.unscoped(),
+          required: false
+        }
+      ]
+    }
+
+    return ActorModel.unscoped().findOne(query)
+  }
+
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction) {
     const query = {
       where: {
         url

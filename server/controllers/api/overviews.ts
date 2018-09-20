@@ -4,8 +4,9 @@ import { VideoModel } from '../../models/video/video'
 import { asyncMiddleware } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
 import { VideosOverview } from '../../../shared/models/overviews'
-import { OVERVIEWS, ROUTE_CACHE_LIFETIME } from '../../initializers'
+import { MEMOIZE_TTL, OVERVIEWS, ROUTE_CACHE_LIFETIME } from '../../initializers'
 import { cacheRoute } from '../../middlewares/cache'
+import * as memoizee from 'memoizee'
 
 const overviewsRouter = express.Router()
 
@@ -20,13 +21,30 @@ export { overviewsRouter }
 
 // ---------------------------------------------------------------------------
 
+const buildSamples = memoizee(async function () {
+  const [ categories, channels, tags ] = await Promise.all([
+    VideoModel.getRandomFieldSamples('category', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT),
+    VideoModel.getRandomFieldSamples('channelId', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD ,OVERVIEWS.VIDEOS.SAMPLES_COUNT),
+    TagModel.getRandomSamples(OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT)
+  ])
+
+  return { categories, channels, tags }
+}, { maxAge: MEMOIZE_TTL.OVERVIEWS_SAMPLE })
+
 // This endpoint could be quite long, but we cache it
 async function getVideosOverview (req: express.Request, res: express.Response) {
   const attributes = await buildSamples()
+
+  const [ categories, channels, tags ] = await Promise.all([
+    Promise.all(attributes.categories.map(c => getVideosByCategory(c, res))),
+    Promise.all(attributes.channels.map(c => getVideosByChannel(c, res))),
+    Promise.all(attributes.tags.map(t => getVideosByTag(t, res)))
+  ])
+
   const result: VideosOverview = {
-    categories: await Promise.all(attributes.categories.map(c => getVideosByCategory(c, res))),
-    channels: await Promise.all(attributes.channels.map(c => getVideosByChannel(c, res))),
-    tags: await Promise.all(attributes.tags.map(t => getVideosByTag(t, res)))
+    categories,
+    channels,
+    tags
   }
 
   // Cleanup our object
@@ -35,16 +53,6 @@ async function getVideosOverview (req: express.Request, res: express.Response) {
   }
 
   return res.json(result)
-}
-
-async function buildSamples () {
-  const [ categories, channels, tags ] = await Promise.all([
-    VideoModel.getRandomFieldSamples('category', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT),
-    VideoModel.getRandomFieldSamples('channelId', OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD ,OVERVIEWS.VIDEOS.SAMPLES_COUNT),
-    TagModel.getRandomSamples(OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT)
-  ])
-
-  return { categories, channels, tags }
 }
 
 async function getVideosByTag (tag: string, res: express.Response) {
@@ -84,14 +92,16 @@ async function getVideos (
   res: express.Response,
   where: { videoChannelId?: number, tagsOneOf?: string[], categoryOneOf?: number[] }
 ) {
-  const { data } = await VideoModel.listForApi(Object.assign({
+  const query = Object.assign({
     start: 0,
     count: 10,
     sort: '-createdAt',
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(res),
     withFiles: false
-  }, where))
+  }, where)
+
+  const { data } = await VideoModel.listForApi(query, false)
 
   return data.map(d => d.toFormattedJSON())
 }

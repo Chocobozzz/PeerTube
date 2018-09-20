@@ -94,7 +94,7 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
   try {
     // Maybe it's a reply to a video?
     // If yes, it's done: we resolved all the thread
-    const { video } = await getOrCreateVideoAndAccountAndChannel(url)
+    const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: url })
 
     if (comments.length !== 0) {
       const firstReply = comments[ comments.length - 1 ]

@@ -36,9 +36,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   videoHeight: number
   videoPages: Video[][] = []
   ownerDisplayType: OwnerDisplayType = 'account'
+  firstLoadedPage: number
 
   protected baseVideoWidth = 215
-  protected baseVideoHeight = 230
+  protected baseVideoHeight = 205
 
   protected abstract notificationsService: NotificationsService
   protected abstract authService: AuthService
@@ -80,6 +81,15 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     if (this.resizeSubscription) this.resizeSubscription.unsubscribe()
   }
 
+  pageByVideoId (index: number, page: Video[]) {
+    // Video are unique in all pages
+    return page[0].id
+  }
+
+  videoById (index: number, video: Video) {
+    return video.id
+  }
+
   onNearOfTop () {
     this.previousPage()
   }
@@ -100,7 +110,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     this.loadMoreVideos(this.pagination.currentPage)
   }
 
-  loadMoreVideos (page: number) {
+  loadMoreVideos (page: number, loadOnTop = false) {
+    this.adjustVideoPageHeight()
+
+    const currentY = window.scrollY
+
     if (this.loadedPages[page] !== undefined) return
     if (this.loadingPage[page] === true) return
 
@@ -110,6 +124,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     observable.subscribe(
       ({ videos, totalVideos }) => {
         this.loadingPage[page] = false
+
+        if (this.firstLoadedPage === undefined || this.firstLoadedPage > page) this.firstLoadedPage = page
 
         // Paging is too high, return to the first one
         if (this.pagination.currentPage > 1 && totalVideos <= ((this.pagination.currentPage - 1) * this.pagination.itemsPerPage)) {
@@ -125,8 +141,17 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
         // Initialize infinite scroller now we loaded the first page
         if (Object.keys(this.loadedPages).length === 1) {
           // Wait elements creation
-          setTimeout(() => this.infiniteScroller.initialize(), 500)
+          setTimeout(() => {
+            this.infiniteScroller.initialize()
+
+            // At our first load, we did not load the first page
+            // Load the previous page so the user can move on the top (and browser previous pages)
+            if (this.pagination.currentPage > 1) this.loadMoreVideos(this.pagination.currentPage - 1, true)
+          }, 500)
         }
+
+        // Insert elements on the top but keep the scroll in the previous position
+        if (loadOnTop) setTimeout(() => { window.scrollTo(0, currentY + this.pageHeight) }, 0)
       },
       error => {
         this.loadingPage[page] = false
@@ -150,7 +175,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     const min = this.minPageLoaded()
 
     if (min > 1) {
-      this.loadMoreVideos(min - 1)
+      this.loadMoreVideos(min - 1, true)
     }
   }
 
@@ -187,6 +212,13 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   protected buildVideoPages () {
     this.videoPages = Object.values(this.loadedPages)
+  }
+
+  protected adjustVideoPageHeight () {
+    const numberOfPagesLoaded = Object.keys(this.loadedPages).length
+    if (!numberOfPagesLoaded) return
+
+    this.pageHeight = this.videosElement.nativeElement.offsetHeight / numberOfPagesLoaded
   }
 
   protected buildVideoHeight () {

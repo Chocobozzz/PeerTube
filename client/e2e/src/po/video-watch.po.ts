@@ -26,8 +26,11 @@ export class VideoWatchPage {
                   .then((texts: any) => texts.map(t => t.trim()))
   }
 
-  waitWatchVideoName (videoName: string, isSafari: boolean) {
-    const elem = element(by.css('.video-info .video-info-name'))
+  waitWatchVideoName (videoName: string, isMobileDevice: boolean, isSafari: boolean) {
+    // On mobile we display the first node, on desktop the second
+    const index = isMobileDevice ? 0 : 1
+
+    const elem = element.all(by.css('.video-info .video-info-name')).get(index)
 
     if (isSafari) return browser.sleep(5000)
 

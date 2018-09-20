@@ -31,7 +31,7 @@ export function checkUserCanTerminateOwnershipChange (
   videoChangeOwnership: VideoChangeOwnershipModel,
   res: Response
 ): boolean {
-  if (videoChangeOwnership.NextOwner.userId === user.Account.userId) {
+  if (videoChangeOwnership.NextOwner.userId === user.id) {
     return true
   }
 

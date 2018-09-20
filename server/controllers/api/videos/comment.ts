@@ -23,7 +23,9 @@ import {
 } from '../../../middlewares/validators/video-comments'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { auditLoggerFactory, CommentAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
+import { AccountModel } from '../../../models/account/account'
+import { UserModel } from '../../../models/account/user'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -86,7 +88,7 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   let resultList: ResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
-    resultList = await VideoCommentModel.listThreadCommentsForApi(res.locals.video.id, res.locals.videoCommentThread.id)
+    resultList = await VideoCommentModel.listThreadCommentsForApi(video.id, res.locals.videoCommentThread.id)
   } else {
     resultList = {
       total: 0,
@@ -101,15 +103,17 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
   const videoCommentInfo: VideoCommentCreate = req.body
 
   const comment = await sequelizeTypescript.transaction(async t => {
+    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: null,
       video: res.locals.video,
-      account: res.locals.oauth.token.User.Account
+      account
     }, t)
   })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new CommentAuditView(comment.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({
     comment: comment.toFormattedJSON()
@@ -120,19 +124,19 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
   const videoCommentInfo: VideoCommentCreate = req.body
 
   const comment = await sequelizeTypescript.transaction(async t => {
+    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: res.locals.videoComment,
       video: res.locals.video,
-      account: res.locals.oauth.token.User.Account
+      account
     }, t)
   })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new CommentAuditView(comment.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
-  return res.json({
-    comment: comment.toFormattedJSON()
-  }).end()
+  return res.json({ comment: comment.toFormattedJSON() }).end()
 }
 
 async function removeVideoComment (req: express.Request, res: express.Response) {
@@ -143,7 +147,7 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
   })
 
   auditLogger.delete(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+    getAuditIdFromRes(res),
     new CommentAuditView(videoCommentInstance.toFormattedJSON())
   )
   logger.info('Video comment %d deleted.', videoCommentInstance.id)

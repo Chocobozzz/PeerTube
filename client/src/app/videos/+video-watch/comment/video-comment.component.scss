@@ -35,6 +35,7 @@
       .comment-account {
         @include disable-default-a-behaviour;
 
+        word-break: break-all;
         color: var(--mainForegroundColor);
         font-weight: $font-bold;
       }
@@ -100,5 +101,11 @@
 
   .root-comment {
     img { margin-right: 10px; }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .root-comment {
+    font-size: 14px;
   }
 }

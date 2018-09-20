@@ -73,7 +73,7 @@
   },
   "lint-staged": {
     "*.scss": [
-      "sass-lint -c .sass-lint.yml",
+      "sass-lint -c client/.sass-lint.yml",
       "git add"
     ]
   },
@@ -116,6 +116,7 @@
     "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",
     "lodash": "^4.17.10",
     "magnet-uri": "^5.1.4",
+    "memoizee": "^0.4.14",
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "netrc-parser": "^3.1.6",
@@ -165,6 +166,7 @@
     "@types/lodash": "^4.14.64",
     "@types/magnet-uri": "^5.1.1",
     "@types/maildev": "^0.0.1",
+    "@types/memoizee": "^0.4.2",
     "@types/mkdirp": "^0.5.1",
     "@types/mocha": "^5.0.0",
     "@types/morgan": "^1.7.32",

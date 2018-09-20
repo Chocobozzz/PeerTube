@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
 import { User } from '../users'
 import { Video } from './video.model'
 import { ServerService } from '@app/core'
@@ -8,12 +8,15 @@ export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 @Component({
   selector: 'my-video-miniature',
   styleUrls: [ './video-miniature.component.scss' ],
-  templateUrl: './video-miniature.component.html'
+  templateUrl: './video-miniature.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
   @Input() video: Video
   @Input() ownerDisplayType: OwnerDisplayType = 'account'
+
+  isVideoBlur: boolean
 
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
@@ -35,10 +38,8 @@ export class VideoMiniatureComponent implements OnInit {
     } else {
       this.ownerDisplayTypeChosen = 'videoChannel'
     }
-  }
 
-  isVideoBlur () {
-    return this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
+    this.isVideoBlur = this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
   }
 
   displayOwnerAccount () {

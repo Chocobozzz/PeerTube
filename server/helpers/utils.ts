@@ -1,12 +1,12 @@
 import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers'
-import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
 import { pseudoRandomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
+import * as memoizee from 'memoizee'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -36,24 +36,12 @@ function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], obje
   } as ResultList<U>
 }
 
-async function getServerActor () {
-  if (getServerActor.serverActor === undefined) {
-    const application = await ApplicationModel.load()
-    if (!application) throw Error('Could not load Application from database.')
+const getServerActor = memoizee(async function () {
+  const application = await ApplicationModel.load()
+  if (!application) throw Error('Could not load Application from database.')
 
-    getServerActor.serverActor = application.Account.Actor
-  }
-
-  if (!getServerActor.serverActor) {
-    logger.error('Cannot load server actor.')
-    process.exit(0)
-  }
-
-  return Promise.resolve(getServerActor.serverActor)
-}
-namespace getServerActor {
-  export let serverActor: ActorModel
-}
+  return application.Account.Actor
+})
 
 function generateVideoTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash

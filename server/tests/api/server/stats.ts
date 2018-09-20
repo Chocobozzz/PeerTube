@@ -21,7 +21,7 @@ import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
-describe('Test stats', function () {
+describe('Test stats (excluding redundancy)', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {

@@ -27,13 +27,17 @@ import {
   usersUpdateValidator
 } from '../../../middlewares'
 import {
-  usersAskResetPasswordValidator, usersBlockingValidator, usersResetPasswordValidator,
-  usersAskSendVerifyEmailValidator, usersVerifyEmailValidator
+  usersAskResetPasswordValidator,
+  usersAskSendVerifyEmailValidator,
+  usersBlockingValidator,
+  usersResetPasswordValidator,
+  usersVerifyEmailValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
 import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
-import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
+import { deleteUserToken } from '../../../lib/oauth-model'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -166,7 +170,7 @@ async function createUser (req: express.Request, res: express.Response) {
 
   const { user, account } = await createUserAccountAndChannel(userToCreate)
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
 
   return res.json({
@@ -245,7 +249,7 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
 
   await user.destroy()
 
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
   return res.sendStatus(204)
 }
@@ -264,15 +268,9 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged) {
-    await OAuthTokenModel.deleteUserToken(userToUpdate.id)
-  }
+  if (roleChanged) await deleteUserToken(userToUpdate.id)
 
-  auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
   // Don't need to send this update to followers, these attributes are not propagated
 
@@ -333,16 +331,12 @@ async function changeUserBlock (res: express.Response, user: UserModel, block: b
   user.blockedReason = reason || null
 
   await sequelizeTypescript.transaction(async t => {
-    await OAuthTokenModel.deleteUserToken(user.id, t)
+    await deleteUserToken(user.id, t)
 
     await user.save({ transaction: t })
   })
 
   await Emailer.Instance.addUserBlockJob(user, block, reason)
 
-  auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 }

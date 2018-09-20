@@ -7,8 +7,8 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
-import { broadcastToFollowers, unicastTo } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from '../audience'
+import { broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
+import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
@@ -61,16 +61,16 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
 async function sendUpdateCacheFile (byActor: ActorModel, redundancyModel: VideoRedundancyModel) {
   logger.info('Creating job to update cache file %s.', redundancyModel.url)
 
-  const url = getUpdateActivityPubUrl(redundancyModel.url, redundancyModel.updatedAt.toISOString())
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.VideoFile.Video.id)
 
-  const redundancyObject = redundancyModel.toActivityPubObject()
+  const activityBuilder = (audience: ActivityAudience) => {
+    const redundancyObject = redundancyModel.toActivityPubObject()
+    const url = getUpdateActivityPubUrl(redundancyModel.url, redundancyModel.updatedAt.toISOString())
 
-  const accountsInvolvedInVideo = await getActorsInvolvedInVideo(video, undefined)
-  const audience = getObjectFollowersAudience(accountsInvolvedInVideo)
+    return buildUpdateActivity(url, byActor, redundancyObject, audience)
+  }
 
-  const updateActivity = buildUpdateActivity(url, byActor, redundancyObject, audience)
-  return unicastTo(updateActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video })
 }
 
 // ---------------------------------------------------------------------------

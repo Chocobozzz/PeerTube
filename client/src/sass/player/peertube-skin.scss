@@ -406,6 +406,7 @@
 
       width: 37px;
       margin-right: 1px;
+      cursor: pointer;
 
       .vjs-icon-placeholder {
         transition: transform 0.2s ease;
@@ -502,10 +503,6 @@
       .vjs-icon-placeholder::before {
         @include big-play-button-triangle-size(27px);
       }
-    }
-
-    .vjs-playback-rate {
-      display: none;
     }
 
     .vjs-peertube {

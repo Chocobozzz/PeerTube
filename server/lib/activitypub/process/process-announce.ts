@@ -2,15 +2,11 @@ import { ActivityAnnounce } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
-import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 
-async function processAnnounceActivity (activity: ActivityAnnounce) {
-  const actorAnnouncer = await getOrCreateActorAndServerAndModel(activity.actor)
-
+async function processAnnounceActivity (activity: ActivityAnnounce, actorAnnouncer: ActorModel) {
   return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity)
 }
 
@@ -25,7 +21,7 @@ export {
 async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel(objectUri)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: objectUri })
 
   return sequelizeTypescript.transaction(async t => {
     // Add share entry

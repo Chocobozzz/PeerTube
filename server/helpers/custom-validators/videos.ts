@@ -18,6 +18,7 @@ import { exists, isArray, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
 import * as magnetUtil from 'magnet-uri'
+import { fetchVideo, VideoFetchType } from '../video'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 
@@ -152,14 +153,8 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   return true
 }
 
-async function isVideoExist (id: string, res: Response) {
-  let video: VideoModel | null
-
-  if (validator.isInt(id)) {
-    video = await VideoModel.loadAndPopulateAccountAndServerAndTags(+id)
-  } else { // UUID
-    video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(id)
-  }
+async function isVideoExist (id: string, res: Response, fetchType: VideoFetchType = 'all') {
+  const video = await fetchVideo(id, fetchType)
 
   if (video === null) {
     res.status(404)
@@ -169,7 +164,7 @@ async function isVideoExist (id: string, res: Response) {
     return false
   }
 
-  res.locals.video = video
+  if (fetchType !== 'none') res.locals.video = video
   return true
 }
 

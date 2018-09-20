@@ -41,6 +41,7 @@ import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } f
 import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
 import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
 import { AccountModel } from '../../models/account/account'
+import { VideoFetchType } from '../../helpers/video'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -128,47 +129,49 @@ const videosUpdateValidator = getCommonVideoAttributes().concat([
   }
 ])
 
-const videosGetValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+const videosCustomGetValidator = (fetchType: VideoFetchType) => {
+  return [
+    param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosGet parameters', { parameters: req.params })
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      logger.debug('Checking videosGet parameters', { parameters: req.params })
 
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
+      if (areValidationErrors(req, res)) return
+      if (!await isVideoExist(req.params.id, res, fetchType)) return
 
-    const video: VideoModel = res.locals.video
+      const video: VideoModel = res.locals.video
 
-    // Video private or blacklisted
-    if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
-      return authenticate(req, res, () => {
-        const user: UserModel = res.locals.oauth.token.User
+      // Video private or blacklisted
+      if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
+        return authenticate(req, res, () => {
+          const user: UserModel = res.locals.oauth.token.User
 
-        // Only the owner or a user that have blacklist rights can see the video
-        if (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
-          return res.status(403)
-                    .json({ error: 'Cannot get this private or blacklisted video.' })
-                    .end()
-        }
+          // Only the owner or a user that have blacklist rights can see the video
+          if (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
+            return res.status(403)
+                      .json({ error: 'Cannot get this private or blacklisted video.' })
+                      .end()
+          }
 
-        return next()
-      })
+          return next()
+        })
+      }
 
-      return
+      // Video is public, anyone can access it
+      if (video.privacy === VideoPrivacy.PUBLIC) return next()
+
+      // Video is unlisted, check we used the uuid to fetch it
+      if (video.privacy === VideoPrivacy.UNLISTED) {
+        if (isUUIDValid(req.params.id)) return next()
+
+        // Don't leak this unlisted video
+        return res.status(404).end()
+      }
     }
+  ]
+}
 
-    // Video is public, anyone can access it
-    if (video.privacy === VideoPrivacy.PUBLIC) return next()
-
-    // Video is unlisted, check we used the uuid to fetch it
-    if (video.privacy === VideoPrivacy.UNLISTED) {
-      if (isUUIDValid(req.params.id)) return next()
-
-      // Don't leak this unlisted video
-      return res.status(404).end()
-    }
-  }
-]
+const videosGetValidator = videosCustomGetValidator('all')
 
 const videosRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -366,6 +369,7 @@ export {
   videosAddValidator,
   videosUpdateValidator,
   videosGetValidator,
+  videosCustomGetValidator,
   videosRemoveValidator,
   videosShareValidator,
 

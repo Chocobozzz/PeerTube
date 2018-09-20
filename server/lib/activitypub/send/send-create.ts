@@ -1,21 +1,13 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { getServerActor } from '../../../helpers/utils'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
-import { broadcastToActors, broadcastToFollowers, unicastTo } from './utils'
-import {
-  audiencify,
-  getActorsInvolvedInVideo,
-  getAudience,
-  getObjectFollowersAudience,
-  getVideoAudience,
-  getVideoCommentAudience
-} from '../audience'
+import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
+import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 
@@ -40,6 +32,7 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
 
   logger.info('Creating job to send video abuse %s.', url)
 
+  // Custom audience, we only send the abuse to the origin instance
   const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
   const createActivity = buildCreateActivity(url, byActor, videoAbuse.toActivityPubObject(), audience)
 
@@ -49,15 +42,15 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
 async function sendCreateCacheFile (byActor: ActorModel, fileRedundancy: VideoRedundancyModel) {
   logger.info('Creating job to send file cache of %s.', fileRedundancy.url)
 
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(fileRedundancy.VideoFile.Video.id)
   const redundancyObject = fileRedundancy.toActivityPubObject()
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(fileRedundancy.VideoFile.Video.id)
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, undefined)
-
-  const audience = getVideoAudience(video, actorsInvolvedInVideo)
-  const createActivity = buildCreateActivity(fileRedundancy.url, byActor, redundancyObject, audience)
-
-  return unicastTo(createActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  return sendVideoRelatedCreateActivity({
+    byActor,
+    video,
+    url: fileRedundancy.url,
+    object: redundancyObject
+  })
 }
 
 async function sendCreateVideoComment (comment: VideoCommentModel, t: Transaction) {
@@ -70,6 +63,7 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
   const commentObject = comment.toActivityPubObject(threadParentComments)
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, t)
+  // Add the actor that commented too
   actorsInvolvedInComment.push(byActor)
 
   const parentsCommentActors = threadParentComments.map(c => c.Account.Actor)
@@ -78,7 +72,7 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
   if (isOrigin) {
     audience = getVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment, isOrigin)
   } else {
-    audience = getObjectFollowersAudience(actorsInvolvedInComment.concat(parentsCommentActors))
+    audience = getAudienceFromFollowersOf(actorsInvolvedInComment.concat(parentsCommentActors))
   }
 
   const createActivity = buildCreateActivity(comment.url, byActor, commentObject, audience)
@@ -103,24 +97,14 @@ async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transa
   const url = getVideoViewActivityPubUrl(byActor, video)
   const viewActivity = buildViewActivity(byActor, video)
 
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-
-  // Send to origin
-  if (video.isOwned() === false) {
-    const audience = getVideoAudience(video, actorsInvolvedInVideo)
-    const createActivity = buildCreateActivity(url, byActor, viewActivity, audience)
-
-    return unicastTo(createActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-  }
-
-  // Send to followers
-  const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
-  const createActivity = buildCreateActivity(url, byActor, viewActivity, audience)
-
-  // Use the server actor to send the view
-  const serverActor = await getServerActor()
-  const actorsException = [ byActor ]
-  return broadcastToFollowers(createActivity, serverActor, actorsInvolvedInVideo, t, actorsException)
+  return sendVideoRelatedCreateActivity({
+    // Use the server actor to send the view
+    byActor,
+    video,
+    url,
+    object: viewActivity,
+    transaction: t
+  })
 }
 
 async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -129,22 +113,13 @@ async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Tra
   const url = getVideoDislikeActivityPubUrl(byActor, video)
   const dislikeActivity = buildDislikeActivity(byActor, video)
 
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-
-  // Send to origin
-  if (video.isOwned() === false) {
-    const audience = getVideoAudience(video, actorsInvolvedInVideo)
-    const createActivity = buildCreateActivity(url, byActor, dislikeActivity, audience)
-
-    return unicastTo(createActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-  }
-
-  // Send to followers
-  const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
-  const createActivity = buildCreateActivity(url, byActor, dislikeActivity, audience)
-
-  const actorsException = [ byActor ]
-  return broadcastToFollowers(createActivity, byActor, actorsInvolvedInVideo, t, actorsException)
+  return sendVideoRelatedCreateActivity({
+    byActor,
+    video,
+    url,
+    object: dislikeActivity,
+    transaction: t
+  })
 }
 
 function buildCreateActivity (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityCreate {
@@ -188,4 +163,20 @@ export {
   buildDislikeActivity,
   sendCreateVideoComment,
   sendCreateCacheFile
+}
+
+// ---------------------------------------------------------------------------
+
+async function sendVideoRelatedCreateActivity (options: {
+  byActor: ActorModel,
+  video: VideoModel,
+  url: string,
+  object: any,
+  transaction?: Transaction
+}) {
+  const activityBuilder = (audience: ActivityAudience) => {
+    return buildCreateActivity(options.url, options.byActor, options.object, audience)
+  }
+
+  return sendVideoRelatedActivity(activityBuilder, options)
 }

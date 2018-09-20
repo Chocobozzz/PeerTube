@@ -172,7 +172,7 @@ const usersVideoRatingValidator = [
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await isVideoExist(req.params.videoId, res, 'id')) return
 
     return next()
   }

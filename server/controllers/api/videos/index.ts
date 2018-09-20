@@ -4,7 +4,7 @@ import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
-import { auditLoggerFactory, VideoAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import {
   CONFIG,
@@ -253,7 +253,7 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     await federateVideoIfNeeded(video, true, t)
 
-    auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
+    auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
     return videoCreated
@@ -354,7 +354,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
 
       auditLogger.update(
-        res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+        getAuditIdFromRes(res),
         new VideoAuditView(videoInstanceUpdated.toFormattedDetailsJSON()),
         oldVideoAuditView
       )
@@ -393,9 +393,9 @@ async function viewVideo (req: express.Request, res: express.Response) {
     Redis.Instance.setIPVideoView(ip, videoInstance.uuid)
   ])
 
-  const serverAccount = await getServerActor()
+  const serverActor = await getServerActor()
 
-  await sendCreateView(serverAccount, videoInstance, undefined)
+  await sendCreateView(serverActor, videoInstance, undefined)
 
   return res.status(204).end()
 }
@@ -439,7 +439,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
     await videoInstance.destroy({ transaction: t })
   })
 
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
+  auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 
   return res.type('json').status(204).end()

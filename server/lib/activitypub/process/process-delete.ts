@@ -7,41 +7,41 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/utils'
 
-async function processDeleteActivity (activity: ActivityDelete) {
+async function processDeleteActivity (activity: ActivityDelete, byActor: ActorModel) {
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
 
   if (activity.actor === objectUrl) {
-    let actor = await ActorModel.loadByUrl(activity.actor)
-    if (!actor) return undefined
+    // We need more attributes (all the account and channel)
+    const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
 
-    if (actor.type === 'Person') {
-      if (!actor.Account) throw new Error('Actor ' + actor.url + ' is a person but we cannot find it in database.')
+    if (byActorFull.type === 'Person') {
+      if (!byActorFull.Account) throw new Error('Actor ' + byActorFull.url + ' is a person but we cannot find it in database.')
 
-      actor.Account.Actor = await actor.Account.$get('Actor') as ActorModel
-      return retryTransactionWrapper(processDeleteAccount, actor.Account)
-    } else if (actor.type === 'Group') {
-      if (!actor.VideoChannel) throw new Error('Actor ' + actor.url + ' is a group but we cannot find it in database.')
+      byActorFull.Account.Actor = await byActorFull.Account.$get('Actor') as ActorModel
+      return retryTransactionWrapper(processDeleteAccount, byActorFull.Account)
+    } else if (byActorFull.type === 'Group') {
+      if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
-      actor.VideoChannel.Actor = await actor.VideoChannel.$get('Actor') as ActorModel
-      return retryTransactionWrapper(processDeleteVideoChannel, actor.VideoChannel)
+      byActorFull.VideoChannel.Actor = await byActorFull.VideoChannel.$get('Actor') as ActorModel
+      return retryTransactionWrapper(processDeleteVideoChannel, byActorFull.VideoChannel)
     }
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
   {
     const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoCommentInstance) {
-      return retryTransactionWrapper(processDeleteVideoComment, actor, videoCommentInstance, activity)
+      return retryTransactionWrapper(processDeleteVideoComment, byActor, videoCommentInstance, activity)
     }
   }
 
   {
     const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoInstance) {
-      return retryTransactionWrapper(processDeleteVideo, actor, videoInstance)
+      if (videoInstance.isOwned()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
+
+      return retryTransactionWrapper(processDeleteVideo, byActor, videoInstance)
     }
   }
 
@@ -94,6 +94,10 @@ function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoComm
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {
+    if (videoComment.Account.id !== byActor.Account.id) {
+      throw new Error('Account ' + byActor.url + ' does not own video comment ' + videoComment.url)
+    }
+
     await videoComment.destroy({ transaction: t })
 
     if (videoComment.Video.isOwned()) {

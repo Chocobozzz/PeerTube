@@ -1,14 +1,10 @@
 import { ActivityAccept } from '../../../../shared/models/activitypub'
-import { getActorUrl } from '../../../helpers/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { addFetchOutboxJob } from '../actor'
 
-async function processAcceptActivity (activity: ActivityAccept, inboxActor?: ActorModel) {
+async function processAcceptActivity (activity: ActivityAccept, targetActor: ActorModel, inboxActor?: ActorModel) {
   if (inboxActor === undefined) throw new Error('Need to accept on explicit inbox.')
-
-  const actorUrl = getActorUrl(activity.actor)
-  const targetActor = await ActorModel.loadByUrl(actorUrl)
 
   return processAccept(inboxActor, targetActor)
 }

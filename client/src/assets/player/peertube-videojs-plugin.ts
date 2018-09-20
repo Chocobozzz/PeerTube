@@ -4,7 +4,7 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { isMobile, videoFileMaxByResolution, videoFileMinByResolution, timeToInt } from './utils'
+import { isMobile, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
@@ -83,11 +83,6 @@ class PeerTubePlugin extends Plugin {
     this.videoCaptions = options.videoCaptions
 
     this.savePlayerSrcFunction = this.player.src
-    // Hack to "simulate" src link in video.js >= 6
-    // Without this, we can't play the video after pausing it
-    // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
-    this.player.src = () => true
-
     this.playerElement = options.playerElement
 
     if (this.autoplay === true) this.player.addClass('vjs-has-autoplay')
@@ -104,9 +99,7 @@ class PeerTubePlugin extends Plugin {
 
       this.player.one('play', () => {
         // Don't run immediately scheduler, wait some seconds the TCP connections are made
-        this.runAutoQualitySchedulerTimer = setTimeout(() => {
-          this.runAutoQualityScheduler()
-        }, this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
+        this.runAutoQualitySchedulerTimer = setTimeout(() => this.runAutoQualityScheduler(), this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
       })
     })
 
@@ -167,6 +160,9 @@ class PeerTubePlugin extends Plugin {
     // Do not display error to user because we will have multiple fallback
     this.disableErrorDisplay()
 
+    // Hack to "simulate" src link in video.js >= 6
+    // Without this, we can't play the video after pausing it
+    // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
     this.player.src = () => true
     const oldPlaybackRate = this.player.playbackRate()
 
@@ -179,102 +175,6 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.trigger('videoFileUpdate')
-  }
-
-  addTorrent (
-    magnetOrTorrentUrl: string,
-    previousVideoFile: VideoFile,
-    options: {
-      forcePlay?: boolean,
-      seek?: number,
-      delay?: number
-    },
-    done: Function
-  ) {
-    console.log('Adding ' + magnetOrTorrentUrl + '.')
-
-    const oldTorrent = this.torrent
-    const torrentOptions = {
-      store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
-        max: 100
-      })
-    }
-
-    this.torrent = this.webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
-      console.log('Added ' + magnetOrTorrentUrl + '.')
-
-      if (oldTorrent) {
-        // Pause the old torrent
-        oldTorrent.pause()
-        // Pause does not remove actual peers (in particular the webseed peer)
-        oldTorrent.removePeer(oldTorrent['ws'])
-
-        // We use a fake renderer so we download correct pieces of the next file
-        if (options.delay) {
-          const fakeVideoElem = document.createElement('video')
-          renderVideo(torrent.files[0], fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
-            this.fakeRenderer = renderer
-
-            if (err) console.error('Cannot render new torrent in fake video element.', err)
-
-            // Load the future file at the correct time
-            fakeVideoElem.currentTime = this.player.currentTime() + (options.delay / 2000)
-          })
-        }
-      }
-
-      // Render the video in a few seconds? (on resolution change for example, we wait some seconds of the new video resolution)
-      this.addTorrentDelay = setTimeout(() => {
-        this.destroyFakeRenderer()
-
-        const paused = this.player.paused()
-
-        this.flushVideoFile(previousVideoFile)
-
-        const renderVideoOptions = { autoplay: false, controls: true }
-        renderVideo(torrent.files[0], this.playerElement, renderVideoOptions,(err, renderer) => {
-          this.renderer = renderer
-
-          if (err) return this.fallbackToHttp(done)
-
-          return this.tryToPlay(err => {
-            if (err) return done(err)
-
-            if (options.seek) this.seek(options.seek)
-            if (options.forcePlay === false && paused === true) this.player.pause()
-
-            return done(err)
-          })
-        })
-      }, options.delay || 0)
-    })
-
-    this.torrent.on('error', err => console.error(err))
-
-    this.torrent.on('warning', (err: any) => {
-      // We don't support HTTP tracker but we don't care -> we use the web socket tracker
-      if (err.message.indexOf('Unsupported tracker protocol') !== -1) return
-
-      // Users don't care about issues with WebRTC, but developers do so log it in the console
-      if (err.message.indexOf('Ice connection failed') !== -1) {
-        console.log(err)
-        return
-      }
-
-      // Magnet hash is not up to date with the torrent file, add directly the torrent file
-      if (err.message.indexOf('incorrect info hash') !== -1) {
-        console.error('Incorrect info hash detected, falling back to torrent file.')
-        const newOptions = { forcePlay: true, seek: options.seek }
-        return this.addTorrent(this.torrent['xs'], previousVideoFile, newOptions, done)
-      }
-
-      // Remote instance is down
-      if (err.message.indexOf('from xs param') !== -1) {
-        this.handleError(err)
-      }
-
-      console.warn(err)
-    })
   }
 
   updateResolution (resolutionId: number, delay = 0) {
@@ -334,6 +234,91 @@ class PeerTubePlugin extends Plugin {
 
   getTorrent () {
     return this.torrent
+  }
+
+  private addTorrent (
+    magnetOrTorrentUrl: string,
+    previousVideoFile: VideoFile,
+    options: {
+      forcePlay?: boolean,
+      seek?: number,
+      delay?: number
+    },
+    done: Function
+  ) {
+    console.log('Adding ' + magnetOrTorrentUrl + '.')
+
+    const oldTorrent = this.torrent
+    const torrentOptions = {
+      store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+        max: 100
+      })
+    }
+
+    this.torrent = this.webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
+      console.log('Added ' + magnetOrTorrentUrl + '.')
+
+      if (oldTorrent) {
+        // Pause the old torrent
+        this.stopTorrent(oldTorrent)
+
+        // We use a fake renderer so we download correct pieces of the next file
+        if (options.delay) this.renderFileInFakeElement(torrent.files[ 0 ], options.delay)
+      }
+
+      // Render the video in a few seconds? (on resolution change for example, we wait some seconds of the new video resolution)
+      this.addTorrentDelay = setTimeout(() => {
+        // We don't need the fake renderer anymore
+        this.destroyFakeRenderer()
+
+        const paused = this.player.paused()
+
+        this.flushVideoFile(previousVideoFile)
+
+        const renderVideoOptions = { autoplay: false, controls: true }
+        renderVideo(torrent.files[ 0 ], this.playerElement, renderVideoOptions, (err, renderer) => {
+          this.renderer = renderer
+
+          if (err) return this.fallbackToHttp(done)
+
+          return this.tryToPlay(err => {
+            if (err) return done(err)
+
+            if (options.seek) this.seek(options.seek)
+            if (options.forcePlay === false && paused === true) this.player.pause()
+
+            return done(err)
+          })
+        })
+      }, options.delay || 0)
+    })
+
+    this.torrent.on('error', err => console.error(err))
+
+    this.torrent.on('warning', (err: any) => {
+      // We don't support HTTP tracker but we don't care -> we use the web socket tracker
+      if (err.message.indexOf('Unsupported tracker protocol') !== -1) return
+
+      // Users don't care about issues with WebRTC, but developers do so log it in the console
+      if (err.message.indexOf('Ice connection failed') !== -1) {
+        console.log(err)
+        return
+      }
+
+      // Magnet hash is not up to date with the torrent file, add directly the torrent file
+      if (err.message.indexOf('incorrect info hash') !== -1) {
+        console.error('Incorrect info hash detected, falling back to torrent file.')
+        const newOptions = { forcePlay: true, seek: options.seek }
+        return this.addTorrent(this.torrent[ 'xs' ], previousVideoFile, newOptions, done)
+      }
+
+      // Remote instance is down
+      if (err.message.indexOf('from xs param') !== -1) {
+        this.handleError(err)
+      }
+
+      console.warn(err)
+    })
   }
 
   private tryToPlay (done?: Function) {
@@ -435,22 +420,22 @@ class PeerTubePlugin extends Plugin {
     if (this.autoplay === true) {
       this.player.posterImage.hide()
 
+      return this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
+    }
+
+    // Don't try on iOS that does not support MediaSource
+    if (this.isIOS()) {
+      this.currentVideoFile = this.pickAverageVideoFile()
+      return this.fallbackToHttp(undefined, false)
+    }
+
+    // Proxy first play
+    const oldPlay = this.player.play.bind(this.player)
+    this.player.play = () => {
+      this.player.addClass('vjs-has-big-play-button-clicked')
+      this.player.play = oldPlay
+
       this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
-    } else {
-      // Don't try on iOS that does not support MediaSource
-      if (this.isIOS()) {
-        this.currentVideoFile = this.pickAverageVideoFile()
-        return this.fallbackToHttp(undefined, false)
-      }
-
-      // Proxy first play
-      const oldPlay = this.player.play.bind(this.player)
-      this.player.play = () => {
-        this.player.addClass('vjs-has-big-play-button-clicked')
-        this.player.play = oldPlay
-
-        this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
-      }
     }
   }
 
@@ -605,6 +590,24 @@ class PeerTubePlugin extends Plugin {
     if (this.videoFiles.length === 1) return this.videoFiles[0]
 
     return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
+  }
+
+  private stopTorrent (torrent: WebTorrent.Torrent) {
+    torrent.pause()
+    // Pause does not remove actual peers (in particular the webseed peer)
+    torrent.removePeer(torrent[ 'ws' ])
+  }
+
+  private renderFileInFakeElement (file: WebTorrent.TorrentFile, delay: number) {
+    const fakeVideoElem = document.createElement('video')
+    renderVideo(file, fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
+      this.fakeRenderer = renderer
+
+      if (err) console.error('Cannot render new torrent in fake video element.', err)
+
+      // Load the future file at the correct time (in delay MS - 2 seconds)
+      fakeVideoElem.currentTime = this.player.currentTime() + (delay - 2000)
+    })
   }
 
   private destroyFakeRenderer () {

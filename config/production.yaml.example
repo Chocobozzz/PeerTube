@@ -72,9 +72,18 @@ trending:
 # Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following
 redundancy:
   videos:
-#    -
-#      size: '10GB'
-#      strategy: 'most-views' # Cache videos that have the most views
+    check_interval: '1 hour' # How often you want to check new videos to cache
+    strategies:
+#      -
+#        size: '10GB'
+#        strategy: 'most-views' # Cache videos that have the most views
+#      -
+#        size: '10GB'
+#        strategy: 'trending' # Cache trending videos
+#      -
+#        size: '10GB'
+#        strategy: 'recently-added' # Cache recently added videos
+#        minViews: 10 # Having at least x views
 
 ###############################################################################
 #
@@ -149,7 +158,7 @@ instance:
   # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add '/' to "Disallow:'
   robots: |
     User-agent: *
-    Disallow: ''
+    Disallow:
   # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
   securitytxt:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"

@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as express from 'express'
 import { diff } from 'deep-object-diff'
 import { chain } from 'lodash'
 import * as flatten from 'flat'
@@ -8,6 +9,11 @@ import { jsonLoggerFormat, labelFormatter } from './logger'
 import { VideoDetails, User, VideoChannel, VideoAbuse, VideoImport } from '../../shared'
 import { VideoComment } from '../../shared/models/videos/video-comment.model'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
+import { UserModel } from '../models/account/user'
+
+function getAuditIdFromRes (res: express.Response) {
+  return (res.locals.oauth.token.User as UserModel).username
+}
 
 enum AUDIT_TYPE {
   CREATE = 'create',
@@ -255,6 +261,8 @@ class CustomConfigAuditView extends EntityAuditView {
 }
 
 export {
+  getAuditIdFromRes,
+
   auditLoggerFactory,
   VideoImportAuditView,
   VideoChannelAuditView,

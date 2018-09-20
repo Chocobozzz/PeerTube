@@ -45,7 +45,9 @@ describe('Test jobs', function () {
     expect(res.body.total).to.be.above(2)
     expect(res.body.data).to.have.lengthOf(1)
 
-    const job = res.body.data[0]
+    let job = res.body.data[0]
+    // Skip repeat jobs
+    if (job.type === 'videos-views') job = res.body.data[1]
 
     expect(job.state).to.equal('completed')
     expect(job.type).to.equal('activitypub-follow')

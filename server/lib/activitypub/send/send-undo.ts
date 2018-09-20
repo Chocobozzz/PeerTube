@@ -11,8 +11,8 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
 import { getActorFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
-import { broadcastToFollowers, unicastTo } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience, getVideoAudience } from '../audience'
+import { broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
+import { audiencify, getAudience } from '../audience'
 import { buildCreateActivity, buildDislikeActivity } from './send-create'
 import { buildFollowActivity } from './send-follow'
 import { buildLikeActivity } from './send-like'
@@ -39,53 +39,6 @@ async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
   return unicastTo(undoActivity, me, following.inboxUrl)
 }
 
-async function sendUndoLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  logger.info('Creating job to undo a like of video %s.', video.url)
-
-  const likeUrl = getVideoLikeActivityPubUrl(byActor, video)
-  const undoUrl = getUndoActivityPubUrl(likeUrl)
-
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const likeActivity = buildLikeActivity(likeUrl, byActor, video)
-
-  // Send to origin
-  if (video.isOwned() === false) {
-    const audience = getVideoAudience(video, actorsInvolvedInVideo)
-    const undoActivity = undoActivityData(undoUrl, byActor, likeActivity, audience)
-
-    return unicastTo(undoActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-  }
-
-  const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
-  const undoActivity = undoActivityData(undoUrl, byActor, likeActivity, audience)
-
-  const followersException = [ byActor ]
-  return broadcastToFollowers(undoActivity, byActor, actorsInvolvedInVideo, t, followersException)
-}
-
-async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  logger.info('Creating job to undo a dislike of video %s.', video.url)
-
-  const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
-  const undoUrl = getUndoActivityPubUrl(dislikeUrl)
-
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const dislikeActivity = buildDislikeActivity(byActor, video)
-  const createDislikeActivity = buildCreateActivity(dislikeUrl, byActor, dislikeActivity)
-
-  if (video.isOwned() === false) {
-    const audience = getVideoAudience(video, actorsInvolvedInVideo)
-    const undoActivity = undoActivityData(undoUrl, byActor, createDislikeActivity, audience)
-
-    return unicastTo(undoActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-  }
-
-  const undoActivity = undoActivityData(undoUrl, byActor, createDislikeActivity)
-
-  const followersException = [ byActor ]
-  return broadcastToFollowers(undoActivity, byActor, actorsInvolvedInVideo, t, followersException)
-}
-
 async function sendUndoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   logger.info('Creating job to undo announce %s.', videoShare.url)
 
@@ -98,20 +51,32 @@ async function sendUndoAnnounce (byActor: ActorModel, videoShare: VideoShareMode
   return broadcastToFollowers(undoActivity, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
+async function sendUndoLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to undo a like of video %s.', video.url)
+
+  const likeUrl = getVideoLikeActivityPubUrl(byActor, video)
+  const likeActivity = buildLikeActivity(likeUrl, byActor, video)
+
+  return sendUndoVideoRelatedActivity({ byActor, video, url: likeUrl, activity: likeActivity, transaction: t })
+}
+
+async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  logger.info('Creating job to undo a dislike of video %s.', video.url)
+
+  const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
+  const dislikeActivity = buildDislikeActivity(byActor, video)
+  const createDislikeActivity = buildCreateActivity(dislikeUrl, byActor, dislikeActivity)
+
+  return sendUndoVideoRelatedActivity({ byActor, video, url: dislikeUrl, activity: createDislikeActivity, transaction: t })
+}
+
 async function sendUndoCacheFile (byActor: ActorModel, redundancyModel: VideoRedundancyModel, t: Transaction) {
   logger.info('Creating job to undo cache file %s.', redundancyModel.url)
 
-  const undoUrl = getUndoActivityPubUrl(redundancyModel.url)
-
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.VideoFile.Video.id)
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-
-  const audience = getVideoAudience(video, actorsInvolvedInVideo)
   const createActivity = buildCreateActivity(redundancyModel.url, byActor, redundancyModel.toActivityPubObject())
 
-  const undoActivity = undoActivityData(undoUrl, byActor, createActivity, audience)
-
-  return unicastTo(undoActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  return sendUndoVideoRelatedActivity({ byActor, video, url: redundancyModel.url, activity: createActivity, transaction: t })
 }
 
 // ---------------------------------------------------------------------------
@@ -143,4 +108,20 @@ function undoActivityData (
     },
     audience
   )
+}
+
+async function sendUndoVideoRelatedActivity (options: {
+  byActor: ActorModel,
+  video: VideoModel,
+  url: string,
+  activity: ActivityFollow | ActivityLike | ActivityCreate | ActivityAnnounce,
+  transaction: Transaction
+}) {
+  const activityBuilder = (audience: ActivityAudience) => {
+    const undoUrl = getUndoActivityPubUrl(options.url)
+
+    return undoActivityData(undoUrl, options.byActor, options.activity, audience)
+  }
+
+  return sendVideoRelatedActivity(activityBuilder, options)
 }

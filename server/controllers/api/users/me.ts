@@ -5,7 +5,8 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../../initializers'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware, asyncRetryTransactionMiddleware,
+  asyncMiddleware,
+  asyncRetryTransactionMiddleware,
   authenticate,
   commonVideosFiltersValidator,
   paginationValidator,
@@ -17,11 +18,11 @@ import {
   usersVideoRatingValidator
 } from '../../../middlewares'
 import {
+  areSubscriptionsExistValidator,
   deleteMeValidator,
   userSubscriptionsSortValidator,
   videoImportsSortValidator,
-  videosSortValidator,
-  areSubscriptionsExistValidator
+  videosSortValidator
 } from '../../../middlewares/validators'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/account/user'
@@ -31,12 +32,13 @@ import { buildNSFWFilter, createReqFiles } from '../../../helpers/express-utils'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../../lib/avatar'
-import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
 import { logger } from '../../../helpers/logger'
+import { AccountModel } from '../../../models/account/account'
 
 const auditLogger = auditLoggerFactory('users-me')
 
@@ -293,7 +295,7 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
 }
 
 async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoId = +req.params.videoId
+  const videoId = res.locals.video.id
   const accountId = +res.locals.oauth.token.User.Account.id
 
   const ratingObj = await AccountVideoRateModel.load(accountId, videoId, null)
@@ -311,7 +313,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   await user.destroy()
 
-  auditLogger.delete(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
   return res.sendStatus(204)
 }
@@ -328,19 +330,17 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await sequelizeTypescript.transaction(async t => {
+    const userAccount = await AccountModel.load(user.Account.id)
+
     await user.save({ transaction: t })
 
-    if (body.displayName !== undefined) user.Account.name = body.displayName
-    if (body.description !== undefined) user.Account.description = body.description
-    await user.Account.save({ transaction: t })
+    if (body.displayName !== undefined) userAccount.name = body.displayName
+    if (body.description !== undefined) userAccount.description = body.description
+    await userAccount.save({ transaction: t })
 
-    await sendUpdateActor(user.Account, t)
+    await sendUpdateActor(userAccount, t)
 
-    auditLogger.update(
-      res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-      new UserAuditView(user.toFormattedJSON()),
-      oldUserAuditView
-    )
+    auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
   })
 
   return res.sendStatus(204)
@@ -350,15 +350,12 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user: UserModel = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
-  const account = user.Account
 
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, account.Actor, account)
+  const userAccount = await AccountModel.load(user.Account.id)
 
-  auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new UserAuditView(user.toFormattedJSON()),
-    oldUserAuditView
-  )
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount)
+
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }

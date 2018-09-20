@@ -1,10 +1,10 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { processActivities } from '../../activitypub/process'
-import { VideoModel } from '../../../models/video/video'
-import { addVideoShares, createRates } from '../../activitypub/videos'
 import { addVideoComments } from '../../activitypub/video-comments'
 import { crawlCollectionPage } from '../../activitypub/crawl'
+import { VideoModel } from '../../../models/video/video'
+import { addVideoShares, createRates } from '../../activitypub'
 
 type FetchType = 'activity' | 'video-likes' | 'video-dislikes' | 'video-shares' | 'video-comments'
 

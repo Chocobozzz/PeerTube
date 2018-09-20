@@ -35,7 +35,7 @@ interface ServerInfo {
   }
 }
 
-function flushAndRunMultipleServers (totalServers) {
+function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
   let apps = []
   let i = 0
 
@@ -51,10 +51,7 @@ function flushAndRunMultipleServers (totalServers) {
     flushTests()
       .then(() => {
         for (let j = 1; j <= totalServers; j++) {
-          // For the virtual buffer
-          setTimeout(() => {
-            runServer(j).then(app => anotherServerDone(j, app))
-          }, 1000 * (j - 1))
+          runServer(j, configOverride).then(app => anotherServerDone(j, app))
         }
       })
   })

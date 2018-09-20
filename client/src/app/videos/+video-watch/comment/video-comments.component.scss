@@ -32,3 +32,9 @@ my-help {
     margin-left: 46px;
   }
 }
+
+@media screen and (max-width: 450px) {
+  .view-replies {
+    font-size: 14px;
+  }
+}

@@ -24,8 +24,8 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
   
-  <a href="https://www.browserstack.com/automate/public-build/VXBPc0szNjUvRUNsREJQRFF6RkEvSjJBclZ4VUJBUm1hcS9RZGpUbitRST0tLWFWbjNEdVN6eEZpYTk4dGVpMkVlQWc9PQ==--644e755052bf7fe2346eb6e868be8e706718a17c%">
-    <img src='https://www.browserstack.com/automate/badge.svg?badge_key=VXBPc0szNjUvRUNsREJQRFF6RkEvSjJBclZ4VUJBUm1hcS9RZGpUbitRST0tLWFWbjNEdVN6eEZpYTk4dGVpMkVlQWc9PQ==--644e755052bf7fe2346eb6e868be8e706718a17c%'/>
+  <a href="https://www.browserstack.com/automate/public-build/cWJhRDFJbS9qeUhzYW04MnlIVjlQQ0x3aE5POXBaV1lycGo5VlQxK3JqZz0tLTNUWW5ySEVvS1N4UnBhYlhsdXVCeVE9PQ==--db09e291d36a582af8b2929d62a625ed660cdf1d">
+    <img src='https://www.browserstack.com/automate/badge.svg?badge_key=cWJhRDFJbS9qeUhzYW04MnlIVjlQQ0x3aE5POXBaV1lycGo5VlQxK3JqZz0tLTNUWW5ySEVvS1N4UnBhYlhsdXVCeVE9PQ==--db09e291d36a582af8b2929d62a625ed660cdf1d'/>
   </a>
 </p>
 
@@ -97,11 +97,10 @@ BitTorrent) inside the web browser, as of today.
 ## Dependencies
 
   * nginx
-  * PostgreSQL
+  * **PostgreSQL >= 9.6**
   * **Redis >= 2.8.18**
   * **NodeJS >= 8.x**
   * yarn
-  * OpenSSL (cli)
   * **FFmpeg >= 3.x**
 
 ## Run in production

@@ -19,8 +19,10 @@ export class MenuComponent implements OnInit {
   private routesPerRight = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
-    [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/video-abuses',
-    [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/video-blacklist'
+    [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/moderation/video-abuses',
+    [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/moderation/video-blacklist',
+    [UserRight.MANAGE_JOBS]: '/admin/jobs',
+    [UserRight.MANAGE_CONFIGURATION]: '/admin/config'
   }
 
   constructor (
@@ -67,7 +69,9 @@ export class MenuComponent implements OnInit {
       UserRight.MANAGE_USERS,
       UserRight.MANAGE_SERVER_FOLLOW,
       UserRight.MANAGE_VIDEO_ABUSES,
-      UserRight.MANAGE_VIDEO_BLACKLIST
+      UserRight.MANAGE_VIDEO_BLACKLIST,
+      UserRight.MANAGE_JOBS,
+      UserRight.MANAGE_CONFIGURATION
     ]
 
     for (const adminRight of adminRights) {

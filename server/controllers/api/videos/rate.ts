@@ -28,10 +28,11 @@ async function rateVideo (req: express.Request, res: express.Response) {
   const body: UserVideoRateUpdate = req.body
   const rateType = body.rating
   const videoInstance: VideoModel = res.locals.video
-  const accountInstance: AccountModel = res.locals.oauth.token.User.Account
 
   await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
+
+    const accountInstance = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
     const previousRate = await AccountVideoRateModel.load(accountInstance.id, videoInstance.id, t)
 
     let likesToIncrement = 0
@@ -47,10 +48,10 @@ async function rateVideo (req: express.Request, res: express.Response) {
       else if (previousRate.type === VIDEO_RATE_TYPES.DISLIKE) dislikesToIncrement--
 
       if (rateType === 'none') { // Destroy previous rate
-        await previousRate.destroy({ transaction: t })
+        await previousRate.destroy(sequelizeOptions)
       } else { // Update previous rate
         previousRate.type = rateType
-        await previousRate.save({ transaction: t })
+        await previousRate.save(sequelizeOptions)
       }
     } else if (rateType !== 'none') { // There was not a previous rate, insert a new one if there is a rate
       const query = {
@@ -70,9 +71,9 @@ async function rateVideo (req: express.Request, res: express.Response) {
     await videoInstance.increment(incrementQuery, sequelizeOptions)
 
     await sendVideoRateChange(accountInstance, videoInstance, likesToIncrement, dislikesToIncrement, t)
-  })
 
-  logger.info('Account video rate for video %s of account %s updated.', videoInstance.name, accountInstance.name)
+    logger.info('Account video rate for video %s of account %s updated.', videoInstance.name, accountInstance.name)
+  })
 
   return res.type('json').status(204).end()
 }

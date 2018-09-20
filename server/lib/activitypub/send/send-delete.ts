@@ -5,21 +5,22 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getDeleteActivityPubUrl } from '../url'
-import { broadcastToActors, broadcastToFollowers, unicastTo } from './utils'
+import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 
-async function sendDeleteVideo (video: VideoModel, t: Transaction) {
+async function sendDeleteVideo (video: VideoModel, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
 
-  const url = getDeleteActivityPubUrl(video.url)
   const byActor = video.VideoChannel.Account.Actor
 
-  const activity = buildDeleteActivity(url, video.url, byActor)
+  const activityBuilder = (audience: ActivityAudience) => {
+    const url = getDeleteActivityPubUrl(video.url)
 
-  const actorsInvolved = await getActorsInvolvedInVideo(video, t)
+    return buildDeleteActivity(url, video.url, byActor, audience)
+  }
 
-  return broadcastToFollowers(activity, byActor, actorsInvolved, t)
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction })
 }
 
 async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
