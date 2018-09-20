@@ -39,3 +39,9 @@ form {
     @include orange-button
   }
 }
+
+@media screen and (max-width: 450px) {
+  textarea, .submit-comment button {
+    font-size: 14px !important;
+  }
+}
