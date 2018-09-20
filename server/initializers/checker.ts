@@ -1,5 +1,5 @@
 import * as config from 'config'
-import { promisify0 } from '../helpers/core-utils'
+import { promisify0, isProdInstance } from '../helpers/core-utils'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
@@ -56,6 +56,18 @@ function checkConfig () {
     const recentlyAddedStrategy = redundancyVideos.find(r => r.strategy === 'recently-added') as RecentlyAddedStrategy
     if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
       return 'Min views in recently added strategy is not a number'
+    }
+  }
+
+  if (isProdInstance()) {
+    const configStorage = config.get('storage')
+    for (const key of Object.keys(configStorage)) {
+      if (configStorage[key].startsWith('storage/')) {
+        logger.warn(
+          'Directory of %s should not be in the production directory of PeerTube. Please check your production configuration file.',
+          key
+        )
+      }
     }
   }
 

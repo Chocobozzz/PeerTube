@@ -64,6 +64,10 @@ function isTestInstance () {
   return process.env.NODE_ENV === 'test'
 }
 
+function isProdInstance () {
+  return process.env.NODE_ENV === 'production'
+}
+
 function root () {
   // We are in /helpers/utils.js
   const paths = [ __dirname, '..', '..' ]
@@ -179,6 +183,8 @@ const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 
 export {
   isTestInstance,
+  isProdInstance,
+
   root,
   escapeHTML,
   pageToStartAndCount,
