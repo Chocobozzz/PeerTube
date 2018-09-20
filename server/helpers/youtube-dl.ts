@@ -18,9 +18,9 @@ export type YoutubeDLInfo = {
   thumbnailUrl?: string
 }
 
-function getYoutubeDLInfo (url: string): Promise<YoutubeDLInfo> {
+function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>(async (res, rej) => {
-    const options = [ '-j', '--flat-playlist' ]
+    const options = opts || [ '-j', '--flat-playlist' ]
 
     const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.getInfo(url, options, (err, info) => {
@@ -110,16 +110,6 @@ async function updateYoutubeDLBinary () {
   })
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  updateYoutubeDLBinary,
-  downloadYoutubeDLVideo,
-  getYoutubeDLInfo
-}
-
-// ---------------------------------------------------------------------------
-
 async function safeGetYoutubeDL () {
   let youtubeDL
 
@@ -133,6 +123,17 @@ async function safeGetYoutubeDL () {
 
   return youtubeDL
 }
+
+// ---------------------------------------------------------------------------
+
+export {
+  updateYoutubeDLBinary,
+  downloadYoutubeDLVideo,
+  getYoutubeDLInfo,
+  safeGetYoutubeDL
+}
+
+// ---------------------------------------------------------------------------
 
 function normalizeObject (obj: any) {
   const newObj: any = {}

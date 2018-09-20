@@ -10,14 +10,14 @@
 }
 
 menu {
-  background-color: $menu-background;
+  background-color: var(--menuBackgroundColor);
   margin: 0;
   padding: 0;
   height: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  color: $menu-color;
+  color: var(--menuForegroundColor);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -52,7 +52,7 @@ menu {
       .logged-in-username {
         font-size: 16px;
         font-weight: $font-semibold;
-        color: $menu-color;
+        color: var(--menuForegroundColor);
         cursor: pointer;
 
         @include disable-default-a-behaviour;
@@ -124,7 +124,7 @@ menu {
       display: flex;
       align-items: center;
       padding-left: $menu-lateral-padding;
-      color: $menu-color;
+      color: var(--menuForegroundColor);
       cursor: pointer;
       height: 40px;
       font-size: 16px;

@@ -1,13 +1,59 @@
 # CLI tools guide
-
+ - [CLI wrapper](#cli-wrapper)
  - [Remote tools](#remote-tools)
-   - [import-videos.js](#import-videosjs)
-   - [upload.js](#uploadjs)
+   - [peertube-import-videos.js](#peertube-import-videosjs)
+   - [peertube-upload.js](#peertube-uploadjs)
+   - [peertube-watch.js](#peertube-watch)
  - [Server tools](#server-tools)
    - [parse-log](#parse-log)
    - [create-transcoding-job.js](#create-transcoding-jobjs)
    - [create-import-video-file-job.js](#create-import-video-file-jobjs)
    - [prune-storage.js](#prune-storagejs)
+
+## CLI wrapper
+
+The wrapper provides a convenient interface to most scripts, and requires the [same dependencies](#dependencies). You can access it as `peertube` via an alias in your `.bashrc` like `alias peertube="node ${PEERTUBE_PATH}/dist/server/tools/peertube.js"`:
+
+```
+  Usage: peertube [command] [options]
+
+  Options:
+
+    -v, --version         output the version number
+    -h, --help            output usage information
+
+  Commands:
+
+    auth [action]         register your accounts on remote instances to use them with other commands
+    upload|up             upload a video
+    import-videos|import  import a video from a streaming platform
+    watch|w               watch a video in the terminal ✩°｡⋆
+    help [cmd]            display help for [cmd]
+```
+
+The wrapper can keep track of instances you have an account on. We limit to one account per instance for now.
+
+```bash
+$ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"
+$ peertube auth list
+┌──────────────────────────────┬──────────────────────────────┐
+│ instance                     │ login                        │
+├──────────────────────────────┼──────────────────────────────┤
+│ "PEERTUBE_URL"               │ "PEERTUBE_USER"              │
+└──────────────────────────────┴──────────────────────────────┘
+```
+
+You can now use that account to upload videos without feeding the same parameters again.
+
+```bash
+$ peertube up <videoFile>
+```
+
+And now that your video is online, you can watch it from the confort of your terminal (use `peertube watch --help` to see the supported players):
+
+```bash
+$ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10
+```
 
 ## Remote Tools
 
@@ -40,13 +86,13 @@ $ cd ${CLONE}
 $ npm run build:server
 ```
 
-### import-videos.js
+### peertube-import-videos.js
 
 You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
 Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
-$ node dist/server/tools/import-videos.js \
+$ node dist/server/tools/peertube-import-videos.js \
     -u "PEERTUBE_URL" \
     -U "PEERTUBE_USER" \
     --password "PEERTUBE_PASSWORD" \
@@ -70,7 +116,7 @@ Already downloaded videos will not be uploaded twice, so you can run and re-run 
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
 
-### upload.js
+### peertube-upload.js
 
 You can use this script to import videos directly from the CLI.
 
@@ -78,8 +124,23 @@ Videos will be publicly available after transcoding (you can see them before tha
 
 ```
 $ cd ${CLONE}
-$ node dist/server/tools/upload.js --help
+$ node dist/server/tools/peertube-upload.js --help
 ```
+
+### peertube-watch.js
+
+You can use this script to play videos directly from the CLI.
+
+It provides support for different players:
+
+- ascii (default ; plays in ascii art in your terminal!)
+- mpv
+- mplayer
+- vlc
+- stdout
+- xbmc
+- airplay
+- chromecast
 
 
 ## Server tools
