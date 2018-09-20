@@ -68,6 +68,10 @@
   &::placeholder {
     color: var(--inputPlaceholderColor);
   }
+
+  @media screen and (max-width: $width) {
+    width: 100%;
+  }
 }
 
 @mixin peertube-input-group($width) {
