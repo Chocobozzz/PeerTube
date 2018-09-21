@@ -1,1 +1,1 @@
-module.exports = require('path-browserify');
+module.exports = require('path-browserify')

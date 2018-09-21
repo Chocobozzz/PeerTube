@@ -76,7 +76,7 @@ export class VideoCaptionService {
       }
     }
 
-    if (observables.length === 0) return of(true)
+    if (observables.length === 0) return of(undefined)
 
     return forkJoin(observables)
   }
