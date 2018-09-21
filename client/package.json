@@ -148,7 +148,7 @@
     "terser-webpack-plugin": "^1.1.0",
     "ts-jest": "^23.1.4",
     "tslint": "^5.7.0",
-    "tslint-config-standard": "^7.0.0",
+    "tslint-config-standard": "^8.0.1",
     "typescript": "2.9",
     "video.js": "^7",
     "videojs-contextmenu-ui": "^5.0.0",

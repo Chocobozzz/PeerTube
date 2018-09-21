@@ -29,13 +29,13 @@ elif [ "$1" = "api-3" ]; then
     npm run build:server
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index-3.ts
 elif [ "$1" = "lint" ]; then
+    npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
+
     ( cd client
       npm run lint
     )
-elif [ "$1" = "jest" ]; then 
+elif [ "$1" = "jest" ]; then
     ( cd client
       npm run test
     )
-
-    npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
 fi

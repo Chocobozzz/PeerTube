@@ -31,7 +31,7 @@
     "contextual-life-cycle": true,
     "trackBy-function": false,
     "use-pipe-transform-interface": true,
-    "pipe-naming": [true, "camelCase", "my"],
+    "pipe-prefix": [true, "my"],
     "component-class-suffix": true,
     "directive-class-suffix": true,
     "pipe-impure": true
