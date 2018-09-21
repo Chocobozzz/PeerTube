@@ -126,7 +126,7 @@
                 <img [src]="video.videoChannelAvatarUrl" alt="Video channel avatar" />
               </a>
 
-              <my-subscribe-button #subscribeButton *ngIf="isUserLoggedIn()" [videoChannel]="video.channel" size="small"></my-subscribe-button>
+              <my-subscribe-button #subscribeButton [videoChannel]="video.channel" size="small"></my-subscribe-button>
             </div>
 
             <div class="video-info-by">
@@ -134,8 +134,6 @@
                 <span i18n>By {{ video.byAccount }}</span>
                 <img [src]="video.accountAvatarUrl" alt="Account avatar" />
               </a>
-
-              <my-help helpType="custom" i18n-customHtml customHtml="You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.name}}@{{video.account.host}}</strong> and subscribe there."></my-help>
             </div>
           </div>
 
