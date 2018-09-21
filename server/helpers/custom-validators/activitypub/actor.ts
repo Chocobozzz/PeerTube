@@ -27,7 +27,7 @@ function isActorPublicKeyValid (publicKey: string) {
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
-const actorNameRegExp = new RegExp('^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_]+$')
+const actorNameRegExp = new RegExp('^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_\.]+$')
 function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
 }
