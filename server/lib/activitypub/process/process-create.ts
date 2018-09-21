@@ -90,9 +90,6 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
   }
   const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 
-  const actorExists = await ActorModel.isActorUrlExist(view.actor)
-  if (actorExists === false) throw new Error('Unknown actor ' + view.actor)
-
   await Redis.Instance.addVideoView(video.id)
 
   if (video.isOwned()) {

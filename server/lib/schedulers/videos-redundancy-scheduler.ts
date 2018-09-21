@@ -30,6 +30,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     this.executing = true
 
     for (const obj of CONFIG.REDUNDANCY.VIDEOS.STRATEGIES) {
+      if (!isTestInstance()) logger.info('Running redundancy scheduler for strategy %s.', obj.strategy)
+
       try {
         const videoToDuplicate = await this.findVideoToDuplicate(obj)
         if (!videoToDuplicate) continue
