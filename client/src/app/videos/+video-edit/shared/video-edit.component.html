@@ -155,7 +155,7 @@
                   [href]="videoCaption.captionPath"
                 >{{ videoCaption.language.label }}</a>
 
-                <div class="caption-entry-state">Already uploaded	&#10004;</div>
+                <div i18n class="caption-entry-state">Already uploaded	&#10004;</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
               </ng-container>
@@ -163,7 +163,7 @@
               <ng-container *ngIf="videoCaption.action === 'CREATE'">
                 <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
 
-                <div class="caption-entry-state caption-entry-state-create">Will be created on update</div>
+                <div i18n class="caption-entry-state caption-entry-state-create">Will be created on update</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
               </ng-container>
@@ -171,14 +171,14 @@
               <ng-container *ngIf="videoCaption.action === 'REMOVE'">
                 <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
 
-                <div class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
+                <div i18n class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
               </ng-container>
             </div>
           </div>
 
-          <div class="no-caption" *ngIf="videoCaptions?.length === 0">
+          <div i18n class="no-caption" *ngIf="videoCaptions?.length === 0">
             No captions for now.
           </div>
 
