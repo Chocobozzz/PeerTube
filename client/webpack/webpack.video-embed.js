@@ -39,7 +39,7 @@ module.exports = function () {
       publicPath: '/client/standalone/videos/'
     },
 
-    // devtool: 'source-map',
+    devtool: process.env.NODE_ENV === 'production' ? false : 'source-map',
 
     module: {
 

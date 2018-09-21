@@ -16,11 +16,13 @@ export class VideoMiniatureComponent implements OnInit {
   @Input() video: Video
   @Input() ownerDisplayType: OwnerDisplayType = 'account'
 
-  isVideoBlur: boolean
-
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
   constructor (private serverService: ServerService) { }
+
+  get isVideoBlur () {
+    return this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
+  }
 
   ngOnInit () {
     if (this.ownerDisplayType === 'account' || this.ownerDisplayType === 'videoChannel') {
@@ -38,8 +40,6 @@ export class VideoMiniatureComponent implements OnInit {
     } else {
       this.ownerDisplayTypeChosen = 'videoChannel'
     }
-
-    this.isVideoBlur = this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
   }
 
   displayOwnerAccount () {
