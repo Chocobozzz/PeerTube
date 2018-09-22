@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { UserCreate } from '../../../../shared'
 import { FormReactive, UserService, UserValidatorsService } from '../shared'
@@ -18,7 +17,6 @@ export class SignupComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private userValidatorsService: UserValidatorsService,
-    private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
     private serverService: ServerService,

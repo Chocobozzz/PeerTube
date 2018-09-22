@@ -11,9 +11,7 @@ export class RestExtractor {
   constructor (
     private router: Router,
     private i18n: I18n
-  ) {
-    // empty
-  }
+  ) { }
 
   extractDataBool () {
     return true

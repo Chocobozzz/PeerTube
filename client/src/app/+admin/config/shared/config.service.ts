@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestService } from '../../../shared'
+import { RestExtractor } from '../../../shared'
 
 @Injectable()
 export class ConfigService {
@@ -11,7 +11,6 @@ export class ConfigService {
 
   constructor (
     private authHttp: HttpClient,
-    private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 

@@ -5,7 +5,6 @@ import { forkJoin, Observable, of } from 'rxjs'
 import { VideosOverview as VideosOverviewServer, peertubeTranslate } from '../../../../../shared/models'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
-import { RestService } from '../rest/rest.service'
 import { VideosOverview } from '@app/shared/overview/videos-overview.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { ServerService } from '@app/core'
@@ -18,7 +17,6 @@ export class OverviewService {
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
-    private restService: RestService,
     private videosService: VideoService,
     private serverService: ServerService
   ) {}

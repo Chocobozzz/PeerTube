@@ -15,9 +15,7 @@ export class VideoDownloadComponent implements OnInit {
   downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
   resolutionId: number | string = -1
 
-  constructor (private modalService: NgbModal) {
-    // empty
-  }
+  constructor (private modalService: NgbModal) { }
 
   ngOnInit () {
     this.resolutionId = this.video.files[0].resolution.id

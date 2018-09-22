@@ -25,9 +25,7 @@ export class VideoShareComponent {
     private modalService: NgbModal,
     private notificationsService: NotificationsService,
     private i18n: I18n
-  ) {
-    // empty
-  }
+  ) { }
 
   show (currentVideoTimestamp?: number) {
     this.currentVideoTimestamp = Math.floor(currentVideoTimestamp)

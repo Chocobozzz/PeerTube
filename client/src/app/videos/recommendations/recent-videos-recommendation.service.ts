@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { RecommendationService } from '@app/videos/recommendations/recommendations.service'
 import { Video } from '@app/shared/video/video.model'
 import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
@@ -19,8 +19,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
   constructor (
     private videos: VideoService,
     private searchService: SearchService
-  ) {
-  }
+  ) { }
 
   getRecommendations (recommendation: RecommendationInfo): Observable<Video[]> {
     return this.fetchPage(1, recommendation)

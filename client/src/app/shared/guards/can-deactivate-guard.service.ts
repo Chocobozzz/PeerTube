@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot } from '@angular/router'
+import { CanDeactivate } from '@angular/router'
 import { Observable } from 'rxjs'
 import { ConfirmService } from '../../core/index'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -15,11 +15,7 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
     private i18n: I18n
   ) { }
 
-  canDeactivate (component: CanComponentDeactivate,
-    currentRoute: ActivatedRouteSnapshot,
-    currentState: RouterStateSnapshot,
-    nextState: RouterStateSnapshot
-  ) {
+  canDeactivate (component: CanComponentDeactivate) {
     const result = component.canDeactivate()
     const text = result.text || this.i18n('All unsaved data will be lost, are you sure you want to leave this page?')
 
