@@ -16,6 +16,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 })
 
 export class LoginComponent extends FormReactive implements OnInit {
+  @ViewChild('emailInput') input: ElementRef
   @ViewChild('forgotPasswordModal') forgotPasswordModal: ElementRef
   @ViewChild('forgotPasswordEmailInput') forgotPasswordEmailInput: ElementRef
 
@@ -47,6 +48,8 @@ export class LoginComponent extends FormReactive implements OnInit {
       username: this.loginValidatorsService.LOGIN_USERNAME,
       password: this.loginValidatorsService.LOGIN_PASSWORD
     })
+
+    this.input.nativeElement.focus()
   }
 
   login () {

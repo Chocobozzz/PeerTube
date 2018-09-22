@@ -13,7 +13,7 @@
         <label i18n for="username">User</label>
         <input
           type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
-          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }" #emailInput
         >
         <a i18n *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
           or create an account
