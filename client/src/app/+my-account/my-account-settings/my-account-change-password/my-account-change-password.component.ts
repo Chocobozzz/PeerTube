@@ -5,8 +5,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { filter } from 'rxjs/operators'
-import { AuthService } from '@app/core';
-import { User } from '../../../../../../shared';
+import { AuthService } from '@app/core'
+import { User } from '../../../../../../shared'
 
 @Component({
   selector: 'my-account-change-password',
@@ -46,7 +46,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   checkPassword () {
     this.error = null
-    const oldPassword = this.form.value[ 'old-password' ];
+    const oldPassword = this.form.value[ 'old-password' ]
 
     // compare old password
     this.authService.login(this.user.account.name, oldPassword)
@@ -60,7 +60,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   }
 
-  private changePassword(){
+  private changePassword () {
     this.userService.changePassword(this.form.value[ 'new-password' ]).subscribe(
       () => {
         this.notificationsService.success(this.i18n('Success'), this.i18n('Password updated.'))
