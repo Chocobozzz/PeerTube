@@ -31,12 +31,22 @@ $ sudo apt-get update
 $ sudo apt install ffmpeg
 ```
 
+Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+```
+$ sudo systemctl start redis postgresql
+```
+
 ## Arch Linux
 
   1. Run:
 
 ```
 $ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+```
+
+Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+```
+$ sudo systemctl start redis postgresql
 ```
 
 ## CentOS 7
@@ -66,6 +76,12 @@ Later when you invoke any node command, please prefix them with `CC=/opt/rh/devt
 
 ```
 $ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
+```
+
+Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+```
+$ sudo service redis start
+$ sudo service postgresql start
 ```
 
 ## FreeBSD
