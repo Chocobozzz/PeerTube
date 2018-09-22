@@ -80,6 +80,14 @@ $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 
 In dev mode, administrator username is **root** and password is **test**.
 
+You also need to start a redis server. Either by executing
+
+```
+$ redis-server
+```
+
+or by activating the redis service/process.
+
 ### Server side
 
 You can find a documentation of the server code/architecture [here](/support/doc/development/server/code.md).
