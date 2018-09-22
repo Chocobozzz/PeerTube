@@ -69,7 +69,27 @@ function getVideojsOptions (options: {
     Object.assign(videojsOptions.plugins, {
       hotkeys: {
         enableVolumeScroll: false,
-        enableModifiersForNumbers: false
+        enableModifiersForNumbers: false,
+        customKeys: {
+          increasePlaybackRateKey: {
+            key: function (event) {
+              // use '>'
+              return event.which === 51
+            },
+            handler: function (player, options, event) {
+              player.playbackRate(player.playbackRate() + 0.1)
+            }
+          },
+          decreasePlaybackRateKey: {
+            key: function (event) {
+              // use '<'
+              return event.which === 50
+            },
+            handler: function (player, options, event) {
+              player.playbackRate(player.playbackRate() - 0.1)
+            }
+          }
+        }
       }
     })
   }
