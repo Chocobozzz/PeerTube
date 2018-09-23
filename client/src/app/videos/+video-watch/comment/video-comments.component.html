@@ -10,7 +10,6 @@
 
   <ng-template [ngIf]="video.commentsEnabled === true">
     <my-video-comment-add
-      *ngIf="isUserLoggedIn()"
       [video]="video"
       [user]="user"
       (commentCreated)="onCommentThreadCreated($event)"

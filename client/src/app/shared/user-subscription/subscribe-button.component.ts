@@ -16,7 +16,7 @@ export class SubscribeButtonComponent implements OnInit {
   @Input() displayFollowers = false
   @Input() size: 'small' | 'normal' = 'normal'
 
-  subscribed = false
+  subscribed: boolean
 
   constructor (
     private authService: AuthService,

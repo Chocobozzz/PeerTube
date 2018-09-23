@@ -7,8 +7,16 @@
   float: right;
   padding: 0;
 
+  &.btn-group > .btn:not(.dropdown-toggle) {
+    padding-right: 5px;
+    font-size: 15px;
+  }
+  &.btn-group > .btn-group:not(:first-child) > .btn {
+    padding-left: 2px;
+  }
+
   &.subscribe-button {
-    /deep/ .btn {
+    .btn {
       @include orange-button;
       font-weight: 600;
     }
@@ -18,10 +26,18 @@
     }
   }
   &.unsubscribe-button {
-    /deep/ .btn {
+    .btn {
       @include grey-button;
       font-weight: 600;
     }
+  }
+
+  .dropdown-header {
+    padding-left: 1rem;
+  }
+
+  /deep/ form {
+    padding: 0.25rem 1rem;
   }
 
   input {

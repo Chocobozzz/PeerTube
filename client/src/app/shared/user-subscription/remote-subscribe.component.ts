@@ -37,7 +37,7 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
 
   formValidated () {
     const address = this.form.value['text']
-    const hostname = address.substring(address.lastIndexOf('@') + 1)
+    const [ , hostname ] = address.split('@')
     window.open(`https://${hostname}/authorize_interaction?acct=${this.account}`)
   }
 }

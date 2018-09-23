@@ -1,9 +1,11 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="avatar-and-textarea">
-    <img [src]="user.accountAvatarUrl" alt="Avatar" />
+    <img [src]="getAvatarUrl()" alt="Avatar" />
 
     <div class="form-group">
       <textarea i18n-placeholder placeholder="Add comment..." autosize
+                [readonly]="(user === null) ? true : false"
+                (click)="openVisitorModal($event)"
                 formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
                 (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
 
@@ -20,3 +22,25 @@
     </button>
   </div>
 </form>
+
+<ng-template #visitorModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" i18n>You are one step away from commenting</h4>
+    <button type="button" class="close" aria-label="Close" (click)="hideVisitorModal()"></button>
+  </div>
+  <div class="modal-body" i18n>
+    <span i18n>
+      If you have an account on this instance, you can login:
+    </span>
+    <span class="btn btn-sm mx-3" role="button" (click)="gotoLogin()" i18n>login to comment</span>
+    <span i18n>
+      Otherwise you can comment using an account on an ActivityPub-compatible instance:
+    </span>
+    <my-remote-subscribe [interact]="true" account="{{ uri }}"></my-remote-subscribe>
+  </div>
+  <div class="modal-footer inputs">
+    <span i18n class="action-button action-button-cancel" role="button" (click)="hideVisitorModal()">
+      Cancel
+    </span>
+  </div>
+</ng-template>

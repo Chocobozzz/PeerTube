@@ -1,5 +1,5 @@
 <div class="btn-group-subscribe btn-group"
-    [ngClass]="{'subscribe-button': subscribed == false, 'unsubscribe-button': subscribed == true}">
+    [ngClass]="{'subscribe-button': subscribed !== true, 'unsubscribe-button': subscribed === true}">
   <button *ngIf="subscribed === false && isUserLoggedIn()" type="button"
           class="btn btn-sm" role="button"
           (click)="subscribe()" i18n>

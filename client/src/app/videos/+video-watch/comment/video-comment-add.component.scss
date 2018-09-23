@@ -36,12 +36,24 @@ form {
 
   button {
     @include peertube-button;
-    @include orange-button
+    @include orange-button;
   }
 }
 
 @media screen and (max-width: 450px) {
   textarea, .submit-comment button {
     font-size: 14px !important;
+  }
+}
+
+.modal-body {
+  .btn {
+    @include peertube-button;
+    @include orange-button;
+  }
+
+  span {
+    float: left;
+    margin-bottom: 20px;
   }
 }
