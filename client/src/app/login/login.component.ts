@@ -72,9 +72,9 @@ export class LoginComponent extends FormReactive implements OnInit {
   }
 
   redirect () {
-    let redirect = this.authService.redirectUrl
+    const redirect = this.authService.redirectUrl
     if (redirect) {
-      this.router.navigate([redirect])
+      this.router.navigate([ redirect ])
     } else {
       this.redirectService.redirectToHomepage()
     }
