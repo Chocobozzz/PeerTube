@@ -1,5 +1,20 @@
 # Dependencies
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
+- [Arch Linux](#arch-linux)
+- [CentOS 7](#centos-7)
+- [Fedora](#fedora)
+- [FreeBSD](#freebsd)
+- [macOS](#macos)
+- [Gentoo](#gentoo)
+- [Other distributions](#other-distributions)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Debian / Ubuntu and derivatives
   1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
 
