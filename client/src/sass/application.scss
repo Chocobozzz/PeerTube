@@ -60,6 +60,10 @@ input, textarea {
   color: var(--mainForegroundColor);
 }
 
+.btn-outline-secondary {
+  border-color: $input-border-color;
+}
+
 label {
   font-weight: $font-bold;
   font-size: 15px;
