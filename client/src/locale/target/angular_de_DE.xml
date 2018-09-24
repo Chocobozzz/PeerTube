@@ -14,7 +14,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> Aufrufe</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -49,7 +49,7 @@
         <source>Get help</source>
         <target>Hilfe</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
@@ -1437,7 +1437,7 @@ Konto erstellen</target>
         <source>Go to the channel</source>
         <target>Zum Kanal gehen</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9dbe4718a5611fbc611fc6b5e0b27df813372c68">
@@ -1896,21 +1896,21 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
         <source>Direct download</source>
         <target>Direkter Download</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d">
         <source>Torrent (.torrent file)</source>
         <target>Torrent (Torrent-Datei)</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2db8d7cf6a3071f4c1519ef2b5e2713d9ff4e87f">
         <source>Torrent (magnet link)</source>
         <target>Torrent (Magnet-Link)</target>
         <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -2353,13 +2353,6 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Du kannst die Wurzel nicht löschen.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9ef88654aab4b2df4fa2083f33caa0c5419c1a60">
-        <source>Do you really want to delete this user?</source>
-        <target>Willst du wirklich diesen Benutzer entfernen?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3675,16 +3668,16 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
-        <source>Video reported.</source>
-        <target>Video gemeldet.</target>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>Kopiert.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
-        <source>Copied</source>
-        <target>Kopiert.</target>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>Video gemeldet.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

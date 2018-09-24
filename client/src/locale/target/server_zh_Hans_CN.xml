@@ -25,11 +25,11 @@
       </trans-unit>
       <trans-unit id="Travels">
         <source>Travels</source>
-        <target>游记</target>
+        <target>旅游</target>
       </trans-unit>
       <trans-unit id="Gaming">
         <source>Gaming</source>
-        <target>赌博</target>
+        <target>游戏</target>
       </trans-unit>
       <trans-unit id="People">
         <source>People</source>
@@ -47,17 +47,21 @@
         <source>News</source>
         <target>新闻</target>
       </trans-unit>
+      <trans-unit id="How To">
+        <source>How To</source>
+        <target>教程</target>
+      </trans-unit>
       <trans-unit id="Education">
         <source>Education</source>
         <target>教育</target>
       </trans-unit>
       <trans-unit id="Activism">
         <source>Activism</source>
-        <target>行动</target>
+        <target>社会活动</target>
       </trans-unit>
       <trans-unit id="Science &amp; Technology">
         <source>Science &amp; Technology</source>
-        <target>科学技术</target>
+        <target>科学和技术</target>
       </trans-unit>
       <trans-unit id="Animals">
         <source>Animals</source>
@@ -65,19 +69,39 @@
       </trans-unit>
       <trans-unit id="Kids">
         <source>Kids</source>
-        <target>童装</target>
+        <target>儿童</target>
       </trans-unit>
       <trans-unit id="Food">
         <source>Food</source>
-        <target>餐饮</target>
+        <target>美食</target>
+      </trans-unit>
+      <trans-unit id="Attribution">
+        <source>Attribution</source>
+        <target>署名</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Share Alike">
+        <source>Attribution - Share Alike</source>
+        <target>署名 - 相同方式共享</target>
+      </trans-unit>
+      <trans-unit id="Attribution - No Derivatives">
+        <source>Attribution - No Derivatives</source>
+        <target>署名 - 禁止演绎</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial">
+        <source>Attribution - Non Commercial</source>
+        <target>署名 - 非商业性使用</target>
+      </trans-unit>
+      <trans-unit id="Attribution - Non Commercial - Share Alike">
+        <source>Attribution - Non Commercial - Share Alike</source>
+        <target>署名 - 非商业性使用 - 相同方式共享</target>
       </trans-unit>
       <trans-unit id="Attribution - Non Commercial - No Derivatives">
         <source>Attribution - Non Commercial - No Derivatives</source>
-        <target>非商业</target>
+        <target>署名 - 非商业性使用 - 禁止演绎</target>
       </trans-unit>
       <trans-unit id="Public Domain Dedication">
         <source>Public Domain Dedication</source>
-        <target>公共领域</target>
+        <target>公共领域贡献</target>
       </trans-unit>
       <trans-unit id="Public">
         <source>Public</source>
@@ -89,11 +113,39 @@
       </trans-unit>
       <trans-unit id="Private">
         <source>Private</source>
-        <target>私人</target>
+        <target>私享</target>
+      </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>已发布</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>转码中</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>导入中</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>等待中</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>成功</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>失败</target>
+      </trans-unit>
+      <trans-unit id="Misc">
+        <source>Misc</source>
+        <target>杂项</target>
       </trans-unit>
       <trans-unit id="Unknown">
         <source>Unknown</source>
-        <target>空</target>
+        <target>未知</target>
       </trans-unit>
     </body>
   </file></xliff>

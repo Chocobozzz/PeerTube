@@ -7,7 +7,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visualitzacions</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -42,7 +42,7 @@
         <source>Get help</source>
         <target>Obtenir ajuda</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
@@ -1345,7 +1345,7 @@
         <source>Go to the channel</source>
         <target>Anar al canal</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9dbe4718a5611fbc611fc6b5e0b27df813372c68">
@@ -1635,7 +1635,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
         <source>Direct download</source>
         <target>Descàrrega directe</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -2060,13 +2060,6 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>No pots esborrar root.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9ef88654aab4b2df4fa2083f33caa0c5419c1a60">
-        <source>Do you really want to delete this user?</source>
-        <target>Segur que vols eliminar aquest usuari?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3200,16 +3193,16 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
-        <source>Video reported.</source>
-        <target>Vídeo reportat.</target>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>Copiat</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
-        <source>Copied</source>
-        <target>Copiat</target>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>Vídeo reportat.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

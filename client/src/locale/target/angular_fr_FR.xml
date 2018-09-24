@@ -217,7 +217,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> vues</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -252,7 +252,7 @@
         <source>Get help</source>
         <target>Obtenir de l'aide</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1fa2c66d97e7cd4a92b80396b2fdc4fe4b6907b2">
@@ -1040,7 +1040,7 @@
       See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
     </source>
         <target>
-      Les pairs web ne sont pas directement accessible car nous utilisons WebRTC dans un navigateur (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>avec la librairie WebTorrent<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), le protocole est différent du classique BitTorrent
+      Les pairs web ne sont pas directement accessibles car nous utilisons WebRTC dans un navigateur (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>avec la librairie WebTorrent<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), le protocole est différent du classique BitTorrent
       Votre navigateur va envoyer un signal au tracker contenant votre IP et le tracker renverra ces informations à d'autre utilisateurs choisis aléatoirement.
       Lisez <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>ce document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour avoir plus d'information.</target>
         <context-group name="null">
@@ -2117,7 +2117,7 @@ Cochez cette case, sauvegardez la configuration et testez avec l'URL d'une vidé
         <source>Go to the channel</source>
         <target>Aller sur la chaine</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9dbe4718a5611fbc611fc6b5e0b27df813372c68">
@@ -2718,21 +2718,21 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
         <source>Direct download</source>
         <target>Téléchargement direct</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d">
         <source>Torrent (.torrent file)</source>
         <target>Torrent (fichier .torrent)</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2db8d7cf6a3071f4c1519ef2b5e2713d9ff4e87f">
         <source>Torrent (magnet link)</source>
         <target>Torrent (URL magnet)</target>
         <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="da44efc7b658c318651866454d258bbbe57ff21c">
@@ -2743,7 +2743,7 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
       Annuler
     </target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -3403,13 +3403,6 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Vous ne pouvez pas supprimer root.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9ef88654aab4b2df4fa2083f33caa0c5419c1a60">
-        <source>Do you really want to delete this user?</source>
-        <target>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4984,16 +4977,16 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
-        <source>Video reported.</source>
-        <target>Vidéo signalée.</target>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>Copié</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
-        <source>Copied</source>
-        <target>Copié</target>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>Vidéo signalée.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
