@@ -60,7 +60,8 @@ p-table {
 
   th {
     border: none !important;
-    border-bottom: 1px solid var(--submenuColor) !important;
+    border-bottom: 1px solid !important;
+    border-color: var(--submenuColor) !important;
     text-align: left !important;
     padding: 5px 0 5px 15px !important;
     font-weight: $font-semibold !important;
@@ -68,7 +69,8 @@ p-table {
 
     &.ui-sortable-column:hover {
       background-color: var(--submenuColor) !important;
-      border: 1px solid var(--submenuColor) !important;
+      border: 1px solid !important;
+      border-color: var(--submenuColor) !important;
       border-width: 0 1px !important;
 
       &:first-child {
@@ -111,7 +113,8 @@ p-table {
     .ui-paginator-bottom {
       background-color: var(--mainBackgroundColor) !important;
       position: relative;
-      border: 1px solid var(--submenuColor) !important;
+      border: 1px solid !important;
+      border-color: var(--submenuColor) !important;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -159,7 +162,7 @@ p-table {
         a {
           color: #000 !important;
           font-weight: $font-semibold !important;
-          margin-right: 0 10px !important;
+          margin: 0 10px !important;
           outline: 0 !important;
           border-radius: 3px !important;
           padding: 5px 2px !important;
