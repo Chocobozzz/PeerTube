@@ -31,11 +31,6 @@ export class SearchFiltersComponent implements OnInit {
 
   constructor (
     private i18n: I18n,
-    private route: ActivatedRoute,
-    private metaService: MetaService,
-    private redirectService: RedirectService,
-    private notificationsService: NotificationsService,
-    private searchService: SearchService,
     private serverService: ServerService
   ) {
     this.publishedDateRanges = [

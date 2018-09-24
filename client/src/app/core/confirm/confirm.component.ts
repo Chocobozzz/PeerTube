@@ -26,9 +26,7 @@ export class ConfirmComponent implements OnInit {
     private modalService: NgbModal,
     private confirmService: ConfirmService,
     private i18n: I18n
-  ) {
-    // Empty
-  }
+  ) { }
 
   ngOnInit () {
     this.confirmService.showConfirm.subscribe(

@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { RestExtractor, RestService } from '@app/shared'
+import { RestExtractor } from '@app/shared'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
@@ -10,8 +10,7 @@ export class RedundancyService {
 
   constructor (
     private authHttp: HttpClient,
-    private restExtractor: RestExtractor,
-    private restService: RestService
+    private restExtractor: RestExtractor
   ) { }
 
   updateRedundancy (host: string, redundancyAllowed: boolean) {

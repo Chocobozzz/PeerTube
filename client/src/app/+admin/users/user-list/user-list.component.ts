@@ -25,7 +25,6 @@ export class UserListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   userActions: DropdownAction<User>[] = []
 
-  private userToBan: User
   private openedModal: NgbModalRef
 
   constructor (
@@ -63,7 +62,6 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   hideBanUserModal () {
-    this.userToBan = undefined
     this.openedModal.close()
   }
 

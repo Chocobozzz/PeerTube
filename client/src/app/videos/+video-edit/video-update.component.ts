@@ -5,11 +5,9 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
-import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
@@ -38,9 +36,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private serverService: ServerService,
     private videoService: VideoService,
-    private authService: AuthService,
     private loadingBar: LoadingBarService,
-    private videoChannelService: VideoChannelService,
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n
   ) {

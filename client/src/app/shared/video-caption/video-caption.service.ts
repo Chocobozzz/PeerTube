@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { forkJoin, Observable, of } from 'rxjs'
 import { peertubeTranslate, ResultList } from '../../../../../shared'
-import { RestExtractor, RestService } from '../rest'
+import { RestExtractor } from '../rest'
 import { VideoService } from '@app/shared/video/video.service'
 import { objectToFormData, sortBy } from '@app/shared/misc/utils'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
@@ -15,7 +15,6 @@ export class VideoCaptionService {
   constructor (
     private authHttp: HttpClient,
     private serverService: ServerService,
-    private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 

@@ -1,7 +1,4 @@
 import { Component, Input } from '@angular/core'
-import { AuthService } from '@app/core'
-import { RestExtractor } from '@app/shared/rest'
-import { RedirectService } from '@app/core/routing/redirect.service'
 import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service'
@@ -16,9 +13,6 @@ export class RedundancyCheckboxComponent {
   @Input() host: string
 
   constructor (
-    private authService: AuthService,
-    private restExtractor: RestExtractor,
-    private redirectService: RedirectService,
     private notificationsService: NotificationsService,
     private redundancyService: RedundancyService,
     private i18n: I18n

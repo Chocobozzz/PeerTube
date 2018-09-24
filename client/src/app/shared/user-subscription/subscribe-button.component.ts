@@ -1,7 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { AuthService } from '@app/core'
-import { RestExtractor } from '@app/shared/rest'
-import { RedirectService } from '@app/core/routing/redirect.service'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { NotificationsService } from 'angular2-notifications'
@@ -20,9 +17,6 @@ export class SubscribeButtonComponent implements OnInit {
   subscribed: boolean
 
   constructor (
-    private authService: AuthService,
-    private restExtractor: RestExtractor,
-    private redirectService: RedirectService,
     private notificationsService: NotificationsService,
     private userSubscriptionService: UserSubscriptionService,
     private i18n: I18n

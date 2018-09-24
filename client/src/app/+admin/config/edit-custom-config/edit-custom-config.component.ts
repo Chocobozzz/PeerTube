@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ConfirmService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
@@ -54,7 +53,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private customConfigValidatorsService: CustomConfigValidatorsService,
     private userValidatorsService: UserValidatorsService,
-    private router: Router,
     private notificationsService: NotificationsService,
     private configService: ConfigService,
     private serverService: ServerService,

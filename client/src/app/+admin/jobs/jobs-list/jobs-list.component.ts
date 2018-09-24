@@ -5,7 +5,6 @@ import { SortMeta } from 'primeng/primeng'
 import { Job } from '../../../../../../shared/index'
 import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
-import { RestExtractor } from '../../../shared/rest/rest-extractor.service'
 import { JobService } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
@@ -27,7 +26,6 @@ export class JobsListComponent extends RestTable implements OnInit {
 
   constructor (
     private notificationsService: NotificationsService,
-    private restExtractor: RestExtractor,
     private jobsService: JobService,
     private i18n: I18n
   ) {
