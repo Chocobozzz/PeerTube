@@ -73,20 +73,18 @@ function getVideojsOptions (options: {
         customKeys: {
           increasePlaybackRateKey: {
             key: function (event) {
-              // use '>'
-              return event.which === 51
+              return event.key === '>'
             },
-            handler: function (player, options, event) {
-              player.playbackRate(player.playbackRate() + 0.1)
+            handler: function (player) {
+              player.playbackRate((player.playbackRate() + 0.1).toFixed(2))
             }
           },
           decreasePlaybackRateKey: {
             key: function (event) {
-              // use '<'
-              return event.which === 50
+              return event.key === '<'
             },
-            handler: function (player, options, event) {
-              player.playbackRate(player.playbackRate() - 0.1)
+            handler: function (player) {
+              player.playbackRate((player.playbackRate() - 0.1).toFixed(2))
             }
           }
         }
