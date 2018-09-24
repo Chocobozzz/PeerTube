@@ -1,5 +1,20 @@
 # Dependencies
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Debian / Ubuntu and derivatives](#debian--ubuntu-and-derivatives)
+- [Arch Linux](#arch-linux)
+- [CentOS 7](#centos-7)
+- [Fedora](#fedora)
+- [FreeBSD](#freebsd)
+- [macOS](#macos)
+- [Gentoo](#gentoo)
+- [Other distributions](#other-distributions)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Debian / Ubuntu and derivatives
   1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
 
@@ -31,12 +46,22 @@ $ sudo apt-get update
 $ sudo apt install ffmpeg
 ```
 
+Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+```
+$ sudo systemctl start redis postgresql
+```
+
 ## Arch Linux
 
   1. Run:
 
 ```
 $ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+```
+
+Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+```
+$ sudo systemctl start redis postgresql
 ```
 
 ## CentOS 7
@@ -67,6 +92,80 @@ Later when you invoke any node command, please prefix them with `CC=/opt/rh/devt
 ```
 $ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
+
+Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+```
+$ sudo service redis start
+$ sudo service postgresql start
+```
+
+## Fedora
+
+0. Upgrade your packages:
+```
+dnf upgrade
+```
+1. Add a user with sudoers group access:
+```
+useradd my-peertube-user
+passwd my-peertube-user
+usermod my-peertube-user -a -G wheel	# Add my-peertube-user to sudoers
+su my-peertube-user
+```
+2. (Optional) Install certbot (choose instructions for nginx and your distribution) :
+[https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
+3. Install NodeJS 8.x (current LTS):
+[https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
+4. Install yarn:
+[https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
+5. Enable [RPM Fusion](https://rpmfusion.org) for Fedora (available for x86, x86_64, armhfp)
+```
+sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+```
+This is necessary because `ffmpeg` is not in the Fedora repos.
+
+6. Run:
+```
+sudo dnf install nginx ffmpeg postgresql-server postgresql-contrib openssl gcc-c++ make redis git
+ffmpeg -version # Should be >= 3.x
+g++ -v # Should be >= 5.x
+```
+7. Post-installation
+
+_from [PostgreSQL documentation](https://www.postgresql.org/download/linux/redhat/):_
+> Due to policies for Red Hat family distributions, the PostgreSQL installation will not be enabled for automatic start or have the database initialized automatically.
+```
+# PostgreSQL
+sudo postgresql-setup initdb
+sudo systemctl enable postgresql.service
+sudo systemctl start postgresql.service
+# Nginx
+sudo systemctl enable nginx.service
+sudo systemctl start nginx.service
+# Redis
+sudo systemctl enable redis.service
+sudo systemctl start redis.service
+```
+8. Firewall
+
+By default, you cannot acces your server via public IP. To do so, you must configure firewall:
+```
+# Ports used by peertube dev setup
+sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
+sudo firewall-cmd --permanent --zone=public --add-port=9000/tcp
+# Optional
+sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+# Reload firewall
+sudo firewall-cmd --reload
+```
+9. Configure max ports
+
+This is necessary if you are running dev setup, otherwise you will have errors with `nodemon`
+```
+echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+[More info](https://stackoverflow.com/questions/34662574/node-js-getting-error-nodemon-internal-watch-failed-watch-enospc#34664097)
 
 ## FreeBSD
 
