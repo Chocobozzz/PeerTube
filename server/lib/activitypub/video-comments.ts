@@ -27,7 +27,7 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
   }
 
   return {
-    url: comment.url,
+    url: comment.id,
     text: comment.content,
     videoId: video.id,
     accountId: actor.Account.id,
