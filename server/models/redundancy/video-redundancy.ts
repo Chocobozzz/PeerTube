@@ -9,7 +9,6 @@ import {
   Is,
   Model,
   Scopes,
-  Sequelize,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -28,6 +27,7 @@ import { ServerModel } from '../server/server'
 import { sample } from 'lodash'
 import { isTestInstance } from '../../helpers/core-utils'
 import * as Bluebird from 'bluebird'
+import * as Sequelize from 'sequelize'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -116,11 +116,11 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   Actor: ActorModel
 
   @AfterDestroy
-  static removeFilesAndSendDelete (instance: VideoRedundancyModel) {
+  static removeFile (instance: VideoRedundancyModel) {
     // Not us
     if (!instance.strategy) return
 
-    logger.info('Removing video file %s-.', instance.VideoFile.Video.uuid, instance.VideoFile.resolution)
+    logger.info('Removing duplicated video file %s-%s.', instance.VideoFile.Video.uuid, instance.VideoFile.resolution)
 
     return instance.VideoFile.Video.removeFile(instance.VideoFile)
   }
@@ -135,11 +135,12 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByUrl (url: string) {
+  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
     const query = {
       where: {
         url
-      }
+      },
+      transaction
     }
 
     return VideoRedundancyModel.findOne(query)
@@ -157,7 +158,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     // On VideoModel!
     const query = {
       attributes: [ 'id', 'views' ],
-      logging: !isTestInstance(),
       limit: randomizedFactor,
       order: getVideoSort('-views'),
       include: [
@@ -174,7 +174,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     const query = {
       attributes: [ 'id', 'views' ],
       subQuery: false,
-      logging: !isTestInstance(),
       group: 'VideoModel.id',
       limit: randomizedFactor,
       order: getVideoSort('-trending'),
@@ -193,7 +192,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     // On VideoModel!
     const query = {
       attributes: [ 'id', 'publishedAt' ],
-      logging: !isTestInstance(),
       limit: randomizedFactor,
       order: getVideoSort('-publishedAt'),
       where: {
@@ -210,11 +208,29 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
   }
 
+  static async loadOldestLocalThatAlreadyExpired (strategy: VideoRedundancyStrategy, expiresAfterMs: number) {
+    const expiredDate = new Date()
+    expiredDate.setMilliseconds(expiredDate.getMilliseconds() - expiresAfterMs)
+
+    const actor = await getServerActor()
+
+    const query = {
+      where: {
+        actorId: actor.id,
+        strategy,
+        createdAt: {
+          [ Sequelize.Op.lt ]: expiredDate
+        }
+      }
+    }
+
+    return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findOne(query)
+  }
+
   static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
 
     const options = {
-      logging: !isTestInstance(),
       include: [
         {
           attributes: [],
@@ -228,21 +244,39 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    return VideoFileModel.sum('size', options)
+    return VideoFileModel.sum('size', options as any) // FIXME: typings
   }
 
-  static listAllExpired () {
+  static async listLocalExpired () {
+    const actor = await getServerActor()
+
     const query = {
-      logging: !isTestInstance(),
       where: {
+        actorId: actor.id,
         expiresOn: {
           [ Sequelize.Op.lt ]: new Date()
         }
       }
     }
 
-    return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO)
-                               .findAll(query)
+    return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findAll(query)
+  }
+
+  static async listRemoteExpired () {
+    const actor = await getServerActor()
+
+    const query = {
+      where: {
+        actorId: {
+          [Sequelize.Op.ne]: actor.id
+        },
+        expiresOn: {
+          [ Sequelize.Op.lt ]: new Date()
+        }
+      }
+    }
+
+    return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findAll(query)
   }
 
   static async getStats (strategy: VideoRedundancyStrategy) {
@@ -299,7 +333,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
     const notIn = Sequelize.literal(
       '(' +
-        `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "expiresOn" >= NOW()` +
+        `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id}` +
       ')'
     )
 

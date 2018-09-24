@@ -5,7 +5,7 @@ import { createApplicationActor, createUserAccountAndChannel } from '../lib/user
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
-import { applicationExist, clientsExist, usersExist } from './checker'
+import { applicationExist, clientsExist, usersExist } from './checker-after-init'
 import { CACHE, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 import { remove, ensureDir } from 'fs-extra'

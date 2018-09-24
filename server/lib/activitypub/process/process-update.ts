@@ -12,6 +12,7 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-vali
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 import { createCacheFile, updateCacheFile } from '../cache-file'
+import { forwardVideoRelatedActivity } from '../send/utils'
 
 async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorModel) {
   const objectType = activity.object.type
@@ -68,18 +69,29 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
 async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUpdate) {
   const cacheFileObject = activity.object as CacheFileObject
 
-  if (!isCacheFileObjectValid(cacheFileObject) === false) {
-    logger.debug('Cahe file object sent by update is not valid.', { cacheFileObject })
+  if (!isCacheFileObjectValid(cacheFileObject)) {
+    logger.debug('Cache file object sent by update is not valid.', { cacheFileObject })
     return undefined
   }
 
-  const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
-  if (!redundancyModel) {
-    const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.id })
-    return createCacheFile(cacheFileObject, video, byActor)
-  }
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
 
-  return updateCacheFile(cacheFileObject, redundancyModel, byActor)
+  await sequelizeTypescript.transaction(async t => {
+    const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
+
+    if (!redundancyModel) {
+      await createCacheFile(cacheFileObject, video, byActor, t)
+    } else {
+      await updateCacheFile(cacheFileObject, redundancyModel, video, byActor, t)
+    }
+  })
+
+  if (video.isOwned()) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
+
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+  }
 }
 
 async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {

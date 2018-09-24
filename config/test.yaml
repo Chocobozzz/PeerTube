@@ -23,18 +23,21 @@ log:
 
 redundancy:
   videos:
-    check_interval: '5 seconds'
+    check_interval: '10 minutes'
     strategies:
       -
         size: '10MB'
+        min_lifetime: '10 minutes'
         strategy: 'most-views'
       -
         size: '10MB'
+        min_lifetime: '10 minutes'
         strategy: 'trending'
       -
         size: '10MB'
+        min_lifetime: '10 minutes'
         strategy: 'recently-added'
-        minViews: 1
+        min_views: 1
 
 cache:
   previews:

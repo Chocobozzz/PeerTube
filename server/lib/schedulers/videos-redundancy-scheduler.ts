@@ -1,7 +1,7 @@
 import { AbstractScheduler } from './abstract-scheduler'
-import { CONFIG, JOB_TTL, REDUNDANCY, SCHEDULER_INTERVALS_MS } from '../../initializers'
+import { CONFIG, JOB_TTL, REDUNDANCY } from '../../initializers'
 import { logger } from '../../helpers/logger'
-import { VideoRedundancyStrategy, VideosRedundancy } from '../../../shared/models/redundancy'
+import { VideosRedundancy } from '../../../shared/models/redundancy'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { VideoFileModel } from '../../models/video/video-file'
 import { downloadWebTorrentVideo } from '../../helpers/webtorrent'
@@ -12,6 +12,7 @@ import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { VideoModel } from '../../models/video/video'
 import { getVideoCacheFileActivityPubUrl } from '../activitypub/url'
 import { isTestInstance } from '../../helpers/core-utils'
+import { removeVideoRedundancy } from '../redundancy'
 
 export class VideosRedundancyScheduler extends AbstractScheduler {
 
@@ -30,7 +31,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     this.executing = true
 
     for (const obj of CONFIG.REDUNDANCY.VIDEOS.STRATEGIES) {
-      if (!isTestInstance()) logger.info('Running redundancy scheduler for strategy %s.', obj.strategy)
+      logger.info('Running redundancy scheduler for strategy %s.', obj.strategy)
 
       try {
         const videoToDuplicate = await this.findVideoToDuplicate(obj)
@@ -39,20 +40,24 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
         const videoFiles = videoToDuplicate.VideoFiles
         videoFiles.forEach(f => f.Video = videoToDuplicate)
 
-        if (await this.isTooHeavy(obj.strategy, videoFiles, obj.size)) {
-          if (!isTestInstance()) logger.info('Video %s is too big for our cache, skipping.', videoToDuplicate.url)
+        await this.purgeCacheIfNeeded(obj, videoFiles)
+
+        if (await this.isTooHeavy(obj, videoFiles)) {
+          logger.info('Video %s is too big for our cache, skipping.', videoToDuplicate.url)
           continue
         }
 
         logger.info('Will duplicate video %s in redundancy scheduler "%s".', videoToDuplicate.url, obj.strategy)
 
-        await this.createVideoRedundancy(obj.strategy, videoFiles)
+        await this.createVideoRedundancy(obj, videoFiles)
       } catch (err) {
         logger.error('Cannot run videos redundancy %s.', obj.strategy, { err })
       }
     }
 
-    await this.removeExpired()
+    await this.extendsLocalExpiration()
+
+    await this.purgeRemoteExpired()
 
     this.executing = false
   }
@@ -61,16 +66,27 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     return this.instance || (this.instance = new this())
   }
 
-  private async removeExpired () {
-    const expired = await VideoRedundancyModel.listAllExpired()
+  private async extendsLocalExpiration () {
+    const expired = await VideoRedundancyModel.listLocalExpired()
 
-    for (const m of expired) {
-      logger.info('Removing expired video %s from our redundancy system.', this.buildEntryLogId(m))
-
+    for (const redundancyModel of expired) {
       try {
-        await m.destroy()
+        const redundancy = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
+        await this.extendsExpirationOf(redundancyModel, redundancy.minLifetime)
       } catch (err) {
-        logger.error('Cannot remove %s video from our redundancy system.', this.buildEntryLogId(m))
+        logger.error('Cannot extend expiration of %s video from our redundancy system.', this.buildEntryLogId(redundancyModel))
+      }
+    }
+  }
+
+  private async purgeRemoteExpired () {
+    const expired = await VideoRedundancyModel.listRemoteExpired()
+
+    for (const redundancyModel of expired) {
+      try {
+        await removeVideoRedundancy(redundancyModel)
+      } catch (err) {
+        logger.error('Cannot remove redundancy %s from our redundancy system.', this.buildEntryLogId(redundancyModel))
       }
     }
   }
@@ -90,18 +106,14 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
   }
 
-  private async createVideoRedundancy (strategy: VideoRedundancyStrategy, filesToDuplicate: VideoFileModel[]) {
+  private async createVideoRedundancy (redundancy: VideosRedundancy, filesToDuplicate: VideoFileModel[]) {
     const serverActor = await getServerActor()
 
     for (const file of filesToDuplicate) {
       const existing = await VideoRedundancyModel.loadByFileId(file.id)
       if (existing) {
-        logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', file.Video.url, file.resolution, strategy)
+        await this.extendsExpirationOf(existing, redundancy.minLifetime)
 
-        existing.expiresOn = this.buildNewExpiration()
-        await existing.save()
-
-        await sendUpdateCacheFile(serverActor, existing)
         continue
       }
 
@@ -109,7 +121,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(file.Video.id)
       if (!video) continue
 
-      logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, strategy)
+      logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, redundancy.strategy)
 
       const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
       const magnetUri = video.generateMagnetUri(file, baseUrlHttp, baseUrlWs)
@@ -120,10 +132,10 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       await rename(tmpPath, destPath)
 
       const createdModel = await VideoRedundancyModel.create({
-        expiresOn: new Date(Date.now() + REDUNDANCY.VIDEOS.EXPIRES_AFTER_MS),
+        expiresOn: this.buildNewExpiration(redundancy.minLifetime),
         url: getVideoCacheFileActivityPubUrl(file),
         fileUrl: video.getVideoFileUrl(file, CONFIG.WEBSERVER.URL),
-        strategy,
+        strategy: redundancy.strategy,
         videoFileId: file.id,
         actorId: serverActor.id
       })
@@ -133,16 +145,36 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
   }
 
-  private async isTooHeavy (strategy: VideoRedundancyStrategy, filesToDuplicate: VideoFileModel[], maxSizeArg: number) {
-    const maxSize = maxSizeArg - this.getTotalFileSizes(filesToDuplicate)
+  private async extendsExpirationOf (redundancy: VideoRedundancyModel, expiresAfterMs: number) {
+    logger.info('Extending expiration of %s.', redundancy.url)
 
-    const totalDuplicated = await VideoRedundancyModel.getTotalDuplicated(strategy)
+    const serverActor = await getServerActor()
+
+    redundancy.expiresOn = this.buildNewExpiration(expiresAfterMs)
+    await redundancy.save()
+
+    await sendUpdateCacheFile(serverActor, redundancy)
+  }
+
+  private async purgeCacheIfNeeded (redundancy: VideosRedundancy, filesToDuplicate: VideoFileModel[]) {
+    while (this.isTooHeavy(redundancy, filesToDuplicate)) {
+      const toDelete = await VideoRedundancyModel.loadOldestLocalThatAlreadyExpired(redundancy.strategy, redundancy.minLifetime)
+      if (!toDelete) return
+
+      await removeVideoRedundancy(toDelete)
+    }
+  }
+
+  private async isTooHeavy (redundancy: VideosRedundancy, filesToDuplicate: VideoFileModel[]) {
+    const maxSize = redundancy.size - this.getTotalFileSizes(filesToDuplicate)
+
+    const totalDuplicated = await VideoRedundancyModel.getTotalDuplicated(redundancy.strategy)
 
     return totalDuplicated > maxSize
   }
 
-  private buildNewExpiration () {
-    return new Date(Date.now() + REDUNDANCY.VIDEOS.EXPIRES_AFTER_MS)
+  private buildNewExpiration (expiresAfterMs: number) {
+    return new Date(Date.now() + expiresAfterMs)
   }
 
   private buildEntryLogId (object: VideoRedundancyModel) {

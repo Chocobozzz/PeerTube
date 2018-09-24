@@ -601,7 +601,6 @@ const MEMOIZE_TTL = {
 
 const REDUNDANCY = {
   VIDEOS: {
-    EXPIRES_AFTER_MS: 48 * 3600 * 1000, // 2 days
     RANDOMIZED_FACTOR: 5
   }
 }
@@ -750,10 +749,16 @@ function updateWebserverConfig () {
   CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
 }
 
-function buildVideosRedundancy (objs: VideosRedundancy[]): VideosRedundancy[] {
+function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
   if (!objs) return []
 
-  return objs.map(obj => Object.assign(obj, { size: bytes.parse(obj.size) }))
+  return objs.map(obj => {
+    return Object.assign(obj, {
+      minLifetime: parseDuration(obj.min_lifetime),
+      size: bytes.parse(obj.size),
+      minViews: obj.min_views
+    })
+  })
 }
 
 function buildLanguages () {

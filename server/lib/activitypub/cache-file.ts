@@ -1,7 +1,7 @@
 import { CacheFileObject } from '../../../shared/index'
 import { VideoModel } from '../../models/video/video'
-import { sequelizeTypescript } from '../../initializers'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
+import { Transaction } from 'sequelize'
 
 function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }) {
   const url = cacheFileObject.url
@@ -22,25 +22,29 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
   }
 }
 
-function createCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }) {
-  return sequelizeTypescript.transaction(async t => {
-    const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
+function createCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }, t: Transaction) {
+  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
 
-    return VideoRedundancyModel.create(attributes, { transaction: t })
-  })
+  return VideoRedundancyModel.create(attributes, { transaction: t })
 }
 
-function updateCacheFile (cacheFileObject: CacheFileObject, redundancyModel: VideoRedundancyModel, byActor: { id?: number }) {
+function updateCacheFile (
+  cacheFileObject: CacheFileObject,
+  redundancyModel: VideoRedundancyModel,
+  video: VideoModel,
+  byActor: { id?: number },
+  t: Transaction
+) {
   if (redundancyModel.actorId !== byActor.id) {
     throw new Error('Cannot update redundancy ' + redundancyModel.url + ' of another actor.')
   }
 
-  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, redundancyModel.VideoFile.Video, byActor)
+  const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
 
   redundancyModel.set('expires', attributes.expiresOn)
   redundancyModel.set('fileUrl', attributes.fileUrl)
 
-  return redundancyModel.save()
+  return redundancyModel.save({ transaction: t })
 }
 
 export {

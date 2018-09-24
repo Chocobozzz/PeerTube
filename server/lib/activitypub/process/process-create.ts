@@ -95,7 +95,7 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
   if (video.isOwned()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
-    await forwardActivity(activity, undefined, exceptions)
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
 }
 
@@ -104,12 +104,14 @@ async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) 
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
 
-  await createCacheFile(cacheFile, video, byActor)
+  await sequelizeTypescript.transaction(async t => {
+    return createCacheFile(cacheFile, video, byActor, t)
+  })
 
   if (video.isOwned()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
-    await forwardActivity(activity, undefined, exceptions)
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
 }
 

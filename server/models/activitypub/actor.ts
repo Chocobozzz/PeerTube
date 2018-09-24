@@ -37,6 +37,7 @@ import { ServerModel } from '../server/server'
 import { throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
+import { VideoModel } from '../video/video'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -264,6 +265,36 @@ export class ActorModel extends Model<ActorModel> {
 
   static load (id: number) {
     return ActorModel.unscoped().findById(id)
+  }
+
+  static loadAccountActorByVideoId (videoId: number, transaction: Sequelize.Transaction) {
+    const query = {
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id' ],
+              model: VideoChannelModel.unscoped(),
+              required: true,
+              include: {
+                attributes: [ 'id' ],
+                model: VideoModel.unscoped(),
+                required: true,
+                where: {
+                  id: videoId
+                }
+              }
+            }
+          ]
+        }
+      ],
+      transaction
+    }
+
+    return ActorModel.unscoped().findOne(query as any) // FIXME: typings
   }
 
   static isActorUrlExist (url: string) {

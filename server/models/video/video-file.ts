@@ -106,4 +106,10 @@ export class VideoFileModel extends Model<VideoFileModel> {
                 return results.length === 1
               })
   }
+
+  hasSameUniqueKeysThan (other: VideoFileModel) {
+    return this.fps === other.fps &&
+      this.resolution === other.resolution &&
+      this.videoId === other.videoId
+  }
 }

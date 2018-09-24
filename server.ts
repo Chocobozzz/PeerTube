@@ -1,6 +1,4 @@
 // FIXME: https://github.com/nodejs/node/pull/16853
-import { VideosCaptionCache } from './server/lib/cache/videos-caption-cache'
-
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
@@ -17,7 +15,7 @@ import * as cors from 'cors'
 import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as useragent from 'useragent'
-import * as anonymise from 'ip-anonymize'
+import * as anonymize from 'ip-anonymize'
 
 process.title = 'peertube'
 
@@ -25,7 +23,7 @@ process.title = 'peertube'
 const app = express()
 
 // ----------- Core checker -----------
-import { checkMissedConfig, checkFFmpeg, checkConfig, checkActivityPubUrls } from './server/initializers/checker'
+import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-before-init'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
@@ -42,6 +40,8 @@ checkFFmpeg(CONFIG)
     logger.error('Error in ffmpeg check.', { err })
     process.exit(-1)
   })
+
+import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -76,7 +76,7 @@ migrate()
 import { installApplication } from './server/initializers'
 import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
-import { VideosPreviewCache } from './server/lib/cache'
+import { VideosPreviewCache, VideosCaptionCache } from './server/lib/cache'
 import {
   activityPubRouter,
   apiRouter,
@@ -111,7 +111,7 @@ if (isTestInstance()) {
 // For the logger
 morgan.token('remote-addr', req => {
   return (req.get('DNT') === '1') ?
-    anonymise(req.ip || (req.connection && req.connection.remoteAddress) || undefined,
+    anonymize(req.ip || (req.connection && req.connection.remoteAddress) || undefined,
     16, // bitmask for IPv4
     16  // bitmask for IPv6
     ) :

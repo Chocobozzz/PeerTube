@@ -144,8 +144,8 @@ function runServer (serverNumber: number, configOverride?: Object) {
   })
 }
 
-async function reRunServer (server: ServerInfo) {
-  const newServer = await runServer(server.serverNumber)
+async function reRunServer (server: ServerInfo, configOverride?: any) {
+  const newServer = await runServer(server.serverNumber, configOverride)
   server.app = newServer.app
 
   return server

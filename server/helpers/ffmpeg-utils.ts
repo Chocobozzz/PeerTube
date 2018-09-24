@@ -4,7 +4,7 @@ import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers'
 import { processImage } from './image-utils'
 import { logger } from './logger'
-import { checkFFmpegEncoders } from '../initializers/checker'
+import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { remove } from 'fs-extra'
 
 function computeResolutionsToTranscode (videoFileHeight: number) {

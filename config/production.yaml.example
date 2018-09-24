@@ -76,14 +76,20 @@ redundancy:
     strategies:
 #      -
 #        size: '10GB'
+#        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
+#        min_lifetime: '48 hours'
 #        strategy: 'most-views' # Cache videos that have the most views
 #      -
 #        size: '10GB'
+#        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
+#        min_lifetime: '48 hours'
 #        strategy: 'trending' # Cache trending videos
 #      -
 #        size: '10GB'
+#        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
+#        min_lifetime: '48 hours'
 #        strategy: 'recently-added' # Cache recently added videos
-#        minViews: 10 # Having at least x views
+#        min_views: 10 # Having at least x views
 
 ###############################################################################
 #

@@ -50,7 +50,12 @@ function getAudienceFromFollowersOf (actorsInvolvedInObject: ActorModel[]): Acti
 
 async function getActorsInvolvedInVideo (video: VideoModel, t: Transaction) {
   const actors = await VideoShareModel.loadActorsByShare(video.id, t)
-  actors.push(video.VideoChannel.Account.Actor)
+
+  const videoActor = video.VideoChannel && video.VideoChannel.Account
+    ? video.VideoChannel.Account.Actor
+    : await ActorModel.loadAccountActorByVideoId(video.id, t)
+
+  actors.push(videoActor)
 
   return actors
 }

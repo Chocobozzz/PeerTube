@@ -176,7 +176,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
       syncParam,
       refreshViews
     }
-    const p = retryTransactionWrapper(refreshVideoIfNeeded, refreshOptions)
+    const p = refreshVideoIfNeeded(refreshOptions)
     if (syncParam.refreshVideo === true) videoFromDatabase = await p
 
     return { video: videoFromDatabase }
@@ -245,29 +245,37 @@ async function updateVideoFromAP (options: {
       generateThumbnailFromUrl(options.video, options.videoObject.icon)
         .catch(err => logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err }))
 
-      // Remove old video files
-      const videoFileDestroyTasks: Bluebird<void>[] = []
-      for (const videoFile of options.video.VideoFiles) {
-        videoFileDestroyTasks.push(videoFile.destroy(sequelizeOptions))
+      {
+        const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
+        const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
+
+        // Remove video files that do not exist anymore
+        const destroyTasks = options.video.VideoFiles
+                                    .filter(f => !newVideoFiles.find(newFile => newFile.hasSameUniqueKeysThan(f)))
+                                    .map(f => f.destroy(sequelizeOptions))
+        await Promise.all(destroyTasks)
+
+        // Update or add other one
+        const upsertTasks = videoFileAttributes.map(a => VideoFileModel.upsert(a, sequelizeOptions))
+        await Promise.all(upsertTasks)
       }
-      await Promise.all(videoFileDestroyTasks)
 
-      const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
-      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, sequelizeOptions))
-      await Promise.all(tasks)
+      {
+        // Update Tags
+        const tags = options.videoObject.tag.map(tag => tag.name)
+        const tagInstances = await TagModel.findOrCreateTags(tags, t)
+        await options.video.$set('Tags', tagInstances, sequelizeOptions)
+      }
 
-      // Update Tags
-      const tags = options.videoObject.tag.map(tag => tag.name)
-      const tagInstances = await TagModel.findOrCreateTags(tags, t)
-      await options.video.$set('Tags', tagInstances, sequelizeOptions)
+      {
+        // Update captions
+        await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(options.video.id, t)
 
-      // Update captions
-      await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(options.video.id, t)
-
-      const videoCaptionsPromises = options.videoObject.subtitleLanguage.map(c => {
-        return VideoCaptionModel.insertOrReplaceLanguage(options.video.id, c.identifier, t)
-      })
-      await Promise.all(videoCaptionsPromises)
+        const videoCaptionsPromises = options.videoObject.subtitleLanguage.map(c => {
+          return VideoCaptionModel.insertOrReplaceLanguage(options.video.id, c.identifier, t)
+        })
+        await Promise.all(videoCaptionsPromises)
+      }
     })
 
     logger.info('Remote video with uuid %s updated', options.videoObject.uuid)
@@ -382,7 +390,7 @@ async function refreshVideoIfNeeded (options: {
       channel: channelActor.VideoChannel,
       updateViews: options.refreshViews
     }
-    await updateVideoFromAP(updateOptions)
+    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
   } catch (err) {
     logger.warn('Cannot refresh video.', { err })

@@ -100,7 +100,7 @@ async function processUndoCacheFile (byActor: ActorModel, activity: ActivityUndo
 
   return sequelizeTypescript.transaction(async t => {
     const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id)
-    if (!cacheFile) throw new Error('Unknown video cache ' + cacheFile.url)
+    if (!cacheFile) throw new Error('Unknown video cache ' + cacheFileObject.id)
 
     if (cacheFile.actorId !== byActor.id) throw new Error('Cannot delete redundancy ' + cacheFile.url + ' of another actor.')
 
