@@ -11,11 +11,11 @@
  * Improve message when removing a user
  * Improve responsive on small screens
  * Improve performance:
-  * Overview endpoint
-  * SQL requests of watch page endpoints
-  * SQL requests of ActivityPub endpoints
-  * Cache user token
-  * Videos infinite scroll in the web browser
+   * Overview endpoint
+   * SQL requests of watch page endpoints
+   * SQL requests of ActivityPub endpoints
+   * Cache user token
+   * Videos infinite scroll in the web browser
  * Add warning if one of the storage directory is in the peertube production directory
  * Auto focus first field on login ([@rigelk](https://github.com/rigelk))
  * Add chevron hotkeys to change playback rate ([@rigelk](https://github.com/rigelk))
