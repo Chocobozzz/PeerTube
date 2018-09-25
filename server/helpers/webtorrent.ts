@@ -1,7 +1,7 @@
 import { logger } from './logger'
 import { generateVideoTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
-import { createWriteStream, remove } from 'fs-extra'
+import { remove } from 'fs-extra'
 import { CONFIG } from '../initializers'
 import { join } from 'path'
 
@@ -9,7 +9,6 @@ function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: str
   const id = target.magnetUri || target.torrentName
   let timer
 
-  const path = generateVideoTmpPath(id)
   logger.info('Importing torrent video %s', id)
 
   return new Promise<string>((res, rej) => {
@@ -27,17 +26,7 @@ function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: str
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
-      file = torrent.files[ 0 ]
-
-      const writeStream = createWriteStream(path)
-      writeStream.on('finish', () => {
-        if (timer) clearTimeout(timer)
-
-        return safeWebtorrentDestroy(webtorrent, torrentId, file.name, target.torrentName)
-          .then(() => res(path))
-      })
-
-      file.createReadStream().pipe(writeStream)
+      torrent.on('done', () => res(join(CONFIG.STORAGE.VIDEOS_DIR, torrent.files[ 0 ].path)))
     })
 
     torrent.on('error', err => rej(err))
