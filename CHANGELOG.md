@@ -1,5 +1,40 @@
 # Changelog
 
+## v1.0.0-beta.14
+
+### Features
+
+ * Video redundancy system (experimental, see [the doc](/support/doc/redundancy.md))
+ * Add peertube script (see [the doc](/support/doc/tools.md#cli-wrapper)) ([@rigelk](https://github.com/rigelk))
+ * Improve download modal ([@rigelk](https://github.com/rigelk))
+ * Add redirect after login ([@BO41](https://github.com/BO41))
+ * Improve message when removing a user
+ * Improve responsive on small screens
+ * Improve performance:
+  * Overview endpoint
+  * SQL requests of watch page endpoints
+  * SQL requests of ActivityPub endpoints
+  * Cache user token
+  * Videos infinite scroll in the web browser
+ * Add warning if one of the storage directory is in the peertube production directory
+ * Auto focus first field on login ([@rigelk](https://github.com/rigelk))
+ * Add chevron hotkeys to change playback rate ([@rigelk](https://github.com/rigelk))
+
+### Bug fixes
+ 
+ * Fix 24 hours delay to process views
+ * Fix tag search on overview page
+ * Handle actors search beginning with '@'
+ * Fix "no results" on overview page
+ * Fix iOS player playback/subtitles menu
+ * Fix description/comments that break the video watch page
+ * Don't get recommended videos twice
+ * Fix admin access to moderators
+ * Fix nav tab and tag color in dark theme ([@rigelk](https://github.com/rigelk))
+ * Fix help popover overflow ([@rigelk](https://github.com/rigelk))
+ * Fix comment deletion with mastodon (only with new comments)
+
+
 ## v1.0.0-beta.13
 
 ### Features
