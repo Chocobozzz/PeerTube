@@ -11,7 +11,6 @@ import { getServerActor } from '../../helpers/utils'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { VideoModel } from '../../models/video/video'
 import { getVideoCacheFileActivityPubUrl } from '../activitypub/url'
-import { isTestInstance } from '../../helpers/core-utils'
 import { removeVideoRedundancy } from '../redundancy'
 
 export class VideosRedundancyScheduler extends AbstractScheduler {

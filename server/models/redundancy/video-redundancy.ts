@@ -286,8 +286,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       raw: true,
       attributes: [
         [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoFile.size')), '0'), 'totalUsed' ],
-        [ Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', 'videoId')), 'totalVideos' ],
-        [ Sequelize.fn('COUNT', 'videoFileId'), 'totalVideoFiles' ]
+        [ Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('videoId'))), 'totalVideos' ],
+        [ Sequelize.fn('COUNT', Sequelize.col('videoFileId')), 'totalVideoFiles' ]
       ],
       where: {
         strategy,
