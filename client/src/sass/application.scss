@@ -199,9 +199,18 @@ label {
 
   .dropdown-item {
     padding: 3px 15px;
+
+    &:active {
+      color: #000 !important;
+    }
+  }
+
+  button {
+    @include disable-default-a-behaviour;
   }
 
   a {
+    @include disable-default-a-behaviour;
     color: #000 !important;
   }
 }

@@ -1,51 +1,46 @@
 @import '_variables';
 @import '_mixins';
 
-.subscribe-button {
+.btn-group-subscribe {
   @include peertube-button;
-  @include orange-button;
-}
+  @include disable-default-a-behaviour;
+  float: right;
+  padding: 0;
 
-.unsubscribe-button {
-  @include peertube-button;
-  @include grey-button
-}
-
-.subscribe-button,
-.unsubscribe-button {
-  display: inline-block;
-
-  &.small {
-    min-width: 75px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 13px;
+  &.btn-group > .btn:not(.dropdown-toggle) {
+    padding-right: 5px;
+    font-size: 15px;
+  }
+  &.btn-group > .btn-group:not(:first-child) > .btn {
+    padding-left: 2px;
   }
 
-  &.normal {
-    min-width: 120px;
-    height: 30px;
-    line-height: 30px;
-    font-size: 16px;
-  }
-}
-
-.unsubscribe-button {
-  .subscribed {
-    display: inline;
-  }
-
-  .unsubscribe {
-    display: none;
-  }
-
-  &:hover {
-    .subscribed {
-      display: none;
+  &.subscribe-button {
+    .btn {
+      @include orange-button;
+      font-weight: 600;
     }
 
-    .unsubscribe {
-      display: inline;
+    span.followers-count {
+      padding-left:5px;
     }
+  }
+  &.unsubscribe-button {
+    .btn {
+      @include grey-button;
+      font-weight: 600;
+    }
+  }
+
+  .dropdown-header {
+    padding-left: 1rem;
+  }
+
+  /deep/ form {
+    padding: 0.25rem 1rem;
+  }
+
+  input {
+    @include peertube-input-text(100%);
   }
 }
