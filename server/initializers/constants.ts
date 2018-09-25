@@ -119,7 +119,7 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
-  'video-import': 1000 * 3600 * 5, // 1 hour
+  'video-import': 1000 * 3600, // 1 hour
   'email': 60000 * 10, // 10 minutes
   'videos-views': undefined // Unlimited
 }
