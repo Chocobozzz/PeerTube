@@ -1,5 +1,4 @@
 import { logger } from './logger'
-import { generateVideoTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../initializers'
@@ -26,7 +25,10 @@ function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: str
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
-      torrent.on('done', () => res(join(CONFIG.STORAGE.VIDEOS_DIR, torrent.files[ 0 ].path)))
+      torrent.on('done', () => {
+        // FIXME: Dirty fix, we need to wait the FS sync but webtorrent does not provide such method
+        setTimeout(() => res(join(CONFIG.STORAGE.VIDEOS_DIR, torrent.files[ 0 ].name)), 1000)
+      })
     })
 
     torrent.on('error', err => rej(err))
