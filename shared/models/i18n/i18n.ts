@@ -10,10 +10,11 @@ export const I18N_LOCALES = {
   'de-DE': 'Deutsch',
   'es-ES': 'Español',
   'oc': 'Occitan',
-  'zh-Hant-TW': '中文 (繁體, 台灣)',
+  'zh-Hant-TW': '繁體中文（台灣）',
   'pt-BR': 'Português (Brasil)',
-  'sv-SE': 'svenska'
+  'sv-SE': 'svenska',
   // 'pl-PL': 'Polski'
+  'zh-Hans-CN': '简体中文（中国）'
 }
 
 const I18N_LOCALE_ALIAS = {
