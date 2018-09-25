@@ -9,7 +9,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { addVideoComment, resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createCacheFile } from '../cache-file'
 
