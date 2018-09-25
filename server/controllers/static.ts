@@ -1,5 +1,4 @@
 import * as cors from 'cors'
-import { createReadStream } from 'fs-extra'
 import * as express from 'express'
 import { CONFIG, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
 import { VideosPreviewCache } from '../lib/cache'
@@ -10,6 +9,8 @@ import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
 import { UserModel } from '../models/account/user'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
+import { join } from 'path'
+import { root } from '../helpers/core-utils'
 
 const packageJSON = require('../../../package.json')
 const staticRouter = express.Router()
@@ -118,7 +119,8 @@ staticRouter.use('/.well-known/dnt-policy.txt',
   asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.DNT_POLICY)),
   (_, res: express.Response) => {
     res.type('text/plain')
-    createReadStream('./server/static/dnt-policy/dnt-policy-1.0.txt').pipe(res)
+
+    return res.sendFile(join(root(), 'server/static/dnt-policy/dnt-policy-1.0.txt'))
   }
 )
 
