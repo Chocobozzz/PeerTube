@@ -254,6 +254,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too small password', async function () {
       const fields = {
+        currentPassword: 'my super password',
         password: 'bla'
       }
 
@@ -262,10 +263,29 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too long password', async function () {
       const fields = {
+        currentPassword: 'my super password',
         password: 'super'.repeat(61)
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
+    it('Should fail without the current password', async function () {
+      const fields = {
+        currentPassword: 'my super password',
+        password: 'super'.repeat(61)
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
+    it('Should fail with an invalid current password', async function () {
+      const fields = {
+        currentPassword: 'my super password fail',
+        password: 'super'.repeat(61)
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 401 })
     })
 
     it('Should fail with an invalid NSFW policy attribute', async function () {
@@ -286,6 +306,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with an non authenticated user', async function () {
       const fields = {
+        currentPassword: 'my super password',
         password: 'my super password'
       }
 
@@ -300,9 +321,20 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
-    it('Should succeed with the correct params', async function () {
+    it('Should succeed to change password with the correct params', async function () {
       const fields = {
+        currentPassword: 'my super password',
         password: 'my super password',
+        nsfwPolicy: 'blur',
+        autoPlayVideo: false,
+        email: 'super_email@example.com'
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
+    })
+
+    it('Should succeed without password change with the correct params', async function () {
+      const fields = {
         nsfwPolicy: 'blur',
         autoPlayVideo: false,
         email: 'super_email@example.com'

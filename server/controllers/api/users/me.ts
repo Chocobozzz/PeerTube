@@ -87,7 +87,7 @@ meRouter.get('/me/videos/:videoId/rating',
 
 meRouter.put('/me',
   authenticate,
-  usersUpdateMeValidator,
+  asyncMiddleware(usersUpdateMeValidator),
   asyncRetryTransactionMiddleware(updateMe)
 )
 

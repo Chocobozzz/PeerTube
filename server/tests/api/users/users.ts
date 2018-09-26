@@ -4,10 +4,34 @@ import * as chai from 'chai'
 import 'mocha'
 import { User, UserRole } from '../../../../shared/index'
 import {
-  createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating,
-  getUserInformation, getUsersList, getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo,
-  registerUser, removeUser, removeVideo, runServer, ServerInfo, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo, userLogin,
-  deleteMe, blockUser, unblockUser, updateCustomSubConfig
+  blockUser,
+  createUser,
+  deleteMe,
+  flushTests,
+  getBlacklistedVideosList,
+  getMyUserInformation,
+  getMyUserVideoQuotaUsed,
+  getMyUserVideoRating,
+  getUserInformation,
+  getUsersList,
+  getUsersListPaginationAndSort,
+  getVideosList,
+  killallServers,
+  login,
+  makePutBodyRequest,
+  rateVideo,
+  registerUser,
+  removeUser,
+  removeVideo,
+  runServer,
+  ServerInfo,
+  testImage,
+  unblockUser,
+  updateMyAvatar,
+  updateMyUser,
+  updateUser,
+  uploadVideo,
+  userLogin
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'
@@ -302,6 +326,7 @@ describe('Test users', function () {
     await updateMyUser({
       url: server.url,
       accessToken: accessTokenUser,
+      currentPassword: 'super password',
       newPassword: 'new password'
     })
     user.password = 'new password'

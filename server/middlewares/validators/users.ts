@@ -22,6 +22,7 @@ import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
+import { comparePassword } from '../../helpers/peertube-crypto'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -137,14 +138,30 @@ const usersUpdateValidator = [
 const usersUpdateMeValidator = [
   body('displayName').optional().custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isUserDescriptionValid).withMessage('Should have a valid description'),
+  body('currentPassword').optional().custom(isUserPasswordValid).withMessage('Should have a valid current password'),
   body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('nsfwPolicy').optional().custom(isUserNSFWPolicyValid).withMessage('Should have a valid display Not Safe For Work policy'),
   body('autoPlayVideo').optional().custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    // TODO: Add old password verification
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
+
+    if (req.body.password) {
+      if (!req.body.currentPassword) {
+        return res.status(400)
+                  .send({ error: 'currentPassword parameter is missing.' })
+                  .end()
+      }
+
+      const user: UserModel = res.locals.oauth.token.User
+
+      if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
+        return res.status(401)
+                  .send({ error: 'currentPassword is invalid.' })
+                  .end()
+      }
+    }
 
     if (areValidationErrors(req, res)) return
 

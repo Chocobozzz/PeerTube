@@ -30,7 +30,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   ngOnInit () {
     this.buildForm({
-      'old-password': this.userValidatorsService.USER_PASSWORD,
+      'current-password': this.userValidatorsService.USER_PASSWORD,
       'new-password': this.userValidatorsService.USER_PASSWORD,
       'new-confirmed-password': this.userValidatorsService.USER_CONFIRM_PASSWORD
     })
@@ -44,31 +44,26 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
                           .subscribe(() => confirmPasswordControl.setErrors({ matchPassword: true }))
   }
 
-  checkPassword () {
-    this.error = null
-    const oldPassword = this.form.value[ 'old-password' ]
+  changePassword () {
+    const currentPassword = this.form.value[ 'current-password' ]
+    const newPassword = this.form.value[ 'new-password' ]
 
-    // compare old password
-    this.authService.login(this.user.account.name, oldPassword)
-      .subscribe(
-        () => this.changePassword(),
-        err => {
-          if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect old password.')
-          else this.error = err.message
-        }
-      )
-
-  }
-
-  private changePassword () {
-    this.userService.changePassword(this.form.value[ 'new-password' ]).subscribe(
+    this.userService.changePassword(currentPassword, newPassword).subscribe(
       () => {
         this.notificationsService.success(this.i18n('Success'), this.i18n('Password updated.'))
 
         this.form.reset()
+        this.error = null
       },
 
-      err => this.error = err.message
+      err => {
+        if (err.status === 401) {
+          this.error = this.i18n('You current password is invalid.')
+          return
+        }
+
+        this.error = err.message
+      }
     )
   }
 }

@@ -162,6 +162,7 @@ function unblockUser (url: string, userId: number | string, accessToken: string,
 function updateMyUser (options: {
   url: string
   accessToken: string,
+  currentPassword?: string,
   newPassword?: string,
   nsfwPolicy?: NSFWPolicyType,
   email?: string,
@@ -172,6 +173,7 @@ function updateMyUser (options: {
   const path = '/api/v1/users/me'
 
   const toSend = {}
+  if (options.currentPassword !== undefined && options.currentPassword !== null) toSend['currentPassword'] = options.currentPassword
   if (options.newPassword !== undefined && options.newPassword !== null) toSend['password'] = options.newPassword
   if (options.nsfwPolicy !== undefined && options.nsfwPolicy !== null) toSend['nsfwPolicy'] = options.nsfwPolicy
   if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend['autoPlayVideo'] = options.autoPlayVideo

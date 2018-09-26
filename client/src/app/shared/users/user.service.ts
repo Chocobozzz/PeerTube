@@ -17,9 +17,10 @@ export class UserService {
   ) {
   }
 
-  changePassword (newPassword: string) {
+  changePassword (currentPassword: string, newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
     const body: UserUpdateMe = {
+      currentPassword,
       password: newPassword
     }
 
