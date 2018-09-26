@@ -14,9 +14,9 @@
 }
 
 .section-title {
-  font-size: 17px;
+  font-size: 24px;
   font-weight: $font-semibold;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   a {
     &:hover, &:focus:not(.focus-visible), &:active {
@@ -35,14 +35,18 @@
     align-items: center;
 
     img {
-      @include avatar(30px);
+      @include avatar(28px);
 
-      margin-right: 10px;
+      margin-right: 8px;
     }
   }
 }
 
 @media screen and (max-width: 500px) {
+  .section-title {
+    font-size: 17px;
+  }
+
   .section {
     @include video-miniature-small-screen;
   }
