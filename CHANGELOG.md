@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.0.0-beta.15
+
+### Features
+
+ * Improve subscription button ([@rigelk](https://github.com/rigelk))
+  * Display it for unlogged users
+  * Add RSS feed
+  * Allow remote follow
+ * Allow remote comment ([@rigelk](https://github.com/rigelk))
+ * Support Simplified Chinese ([@SerCom-KC](https://github.com/SerCom-KC))
+
+### Bug fixes
+
+ * Fix redundancy with old PeerTube torrents
+ * Fix crash with `/static/dnt-policy/dnt-policy-1.0.txt` route
+ * Fix redundancy totalVideos stats
+ * Reduce video import TTL to 1 hour
+ * Only duplicate public videos
+ 
+
 ## v1.0.0-beta.14
 
 ### Features
