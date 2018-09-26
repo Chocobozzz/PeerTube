@@ -6,5 +6,6 @@ export interface UserUpdateMe {
   nsfwPolicy?: NSFWPolicyType
   autoPlayVideo?: boolean
   email?: string
+  currentPassword?: string
   password?: string
 }
