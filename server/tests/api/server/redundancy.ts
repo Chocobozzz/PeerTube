@@ -143,17 +143,18 @@ async function check2Webseeds (strategy: VideoRedundancyStrategy, videoUUID?: st
 
       for (const file of video.files) {
         checkMagnetWebseeds(file, webseeds, server)
+
+        // Only servers 1 and 2 have the video
+        if (server.serverNumber !== 3) {
+          await makeGetRequest({
+            url: server.url,
+            statusCodeExpected: 200,
+            path: '/static/webseed/' + `${videoUUID}-${file.resolution.id}.mp4`,
+            contentType: null
+          })
+        }
       }
     }
-  }
-
-  for (const url of [ 'http://localhost:9001', 'http://localhost:9002' ]) {
-    await makeGetRequest({
-      url,
-      statusCodeExpected: 200,
-      path: '/static/webseed/' + videoUUID,
-      contentType: null
-    })
   }
 
   for (const directory of [ 'test1', 'test2' ]) {
