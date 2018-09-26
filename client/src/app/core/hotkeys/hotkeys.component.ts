@@ -29,7 +29,7 @@ export class CheatSheetComponent implements OnInit, OnDestroy {
       if (isOpen === false) {
         this.helpVisible = false
       } else {
-        this.toggleCheatSheet()
+        this.toggleHelpVisible()
       }
     })
   }
@@ -41,6 +41,10 @@ export class CheatSheetComponent implements OnInit, OnDestroy {
   }
 
   public toggleCheatSheet (): void {
+    this.hotkeysService.cheatSheetToggle.next(!this.helpVisible)
+  }
+
+  public toggleHelpVisible (): void {
     this.helpVisible = !this.helpVisible
   }
 }

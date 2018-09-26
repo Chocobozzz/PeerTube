@@ -196,7 +196,7 @@ menu {
     padding-right: $menu-lateral-padding;
     width: $menu-width;
 
-    .language, .color-palette {
+    .language, .shortcuts, .color-palette {
       display: inline-block;
       color: $menu-bottom-color;
       cursor: pointer;
@@ -215,6 +215,17 @@ menu {
           height: 24px;
 
           background-image: url('../../assets/images/menu/language.png');
+        }
+
+        &.icon-shortcuts  {
+          position: relative;
+          top: -1px;
+          width: 24px;
+          height: 24px;
+
+          background-image: url('../../assets/images/menu/keyboard.png');
+          background-color: #fff;
+          filter: invert(100%);
         }
 
         &.icon-moonsun  {
