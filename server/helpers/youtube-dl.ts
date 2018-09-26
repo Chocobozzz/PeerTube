@@ -18,6 +18,10 @@ export type YoutubeDLInfo = {
   thumbnailUrl?: string
 }
 
+const processOptions = {
+  maxBuffer: 1024 * 1024 * 10 // 10MB
+}
+
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>(async (res, rej) => {
     const options = opts || [ '-j', '--flat-playlist' ]
@@ -44,7 +48,7 @@ function downloadYoutubeDLVideo (url: string) {
 
   return new Promise<string>(async (res, rej) => {
     const youtubeDL = await safeGetYoutubeDL()
-    youtubeDL.exec(url, options, err => {
+    youtubeDL.exec(url, options, processOptions, err => {
       if (err) return rej(err)
 
       return res(path)

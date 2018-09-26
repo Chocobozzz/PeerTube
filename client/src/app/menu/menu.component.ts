@@ -32,7 +32,7 @@ export class MenuComponent implements OnInit {
     private serverService: ServerService,
     private redirectService: RedirectService,
     private themeService: ThemeService,
-    private hotkeysService: HotkeysService
+    private hotkeysService: HotkeysService
   ) {}
 
   ngOnInit () {
