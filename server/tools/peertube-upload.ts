@@ -75,7 +75,10 @@ getSettings()
       process.exit(-1)
     }
 
-    run().catch(err => console.error(err))
+    run().catch(err => {
+      console.error(err)
+      process.exit(-1)
+    })
   })
 
 async function run () {
@@ -90,8 +93,13 @@ async function run () {
     password: program[ 'password' ]
   }
 
-  const res2 = await login(program[ 'url' ], client, user)
-  const accessToken = res2.body.access_token
+  let accessToken: string
+  try {
+    const res2 = await login(program[ 'url' ], client, user)
+    accessToken = res2.body.access_token
+  } catch (err) {
+    throw new Error('Cannot authenticate. Please check your username/password.')
+  }
 
   await access(program[ 'file' ], constants.F_OK)
 
@@ -114,7 +122,7 @@ async function run () {
     support: undefined
   }
 
-  await uploadVideo(program['url'], accessToken, videoAttributes)
+  await uploadVideo(program[ 'url' ], accessToken, videoAttributes)
 
   console.log(`Video ${program['videoName']} uploaded.`)
   process.exit(0)
