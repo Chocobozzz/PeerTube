@@ -56,7 +56,7 @@ videoChannelRouter.post('/:nameWithHost/avatar/pick',
   // Check the rights
   asyncMiddleware(videoChannelsUpdateValidator),
   updateAvatarValidator,
-  asyncRetryTransactionMiddleware(updateVideoChannelAvatar)
+  asyncMiddleware(updateVideoChannelAvatar)
 )
 
 videoChannelRouter.put('/:nameWithHost',
