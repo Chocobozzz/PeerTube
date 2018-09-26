@@ -38,6 +38,20 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.datepicker.select-month">
+        <source>Select month</source>
+        <target>انتخاب ماه</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.datepicker.select-year">
+        <source>Select year</source>
+        <target>انتخاب سال</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.first">
         <source>««</source>
         <target>««</target>
@@ -187,7 +201,7 @@
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
-        <target>تصحیح</target>
+        <target>ویرایش</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -258,7 +272,7 @@
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
         <source>I forgot my password</source>
-        <target>فراموشی گذرواژه</target>
+        <target>گذرواژه‌ام را فراموش کرده‌ام</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
         </context-group>
@@ -373,6 +387,24 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
+        <source>Change the language</source>
+        <target>تغییر زبان</target>
+        <context-group name="null">
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8c654f49714163eb2991b264e9fd4858e72c04c6">
+        <source>
+             My public profile
+            </source>
+        <target>
+             نمایه‌ عمومی من
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="01d7a5f4ca6470b564031481bc16485b53a8d4fb">
         <source>
               My account
@@ -382,6 +414,35 @@
             </target>
         <context-group name="null">
           <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa9f3da5641dbd73d83395a0bde61bb6d5cefb10">
+        <source>
+              My videos
+            </source>
+        <target>
+              ویدئو‌های من
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b795a1acb4a57ee68e6c5114daa280bf6e0f70e1">
+        <source>
+              Log out
+            </source>
+        <target>
+              خروج
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
+        <source>Login</source>
+        <target>ورود</target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
@@ -537,6 +598,38 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
+        <source>No results.</source>
+        <target>بدون نتیجه.</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
+        <source>PeerTube</source>
+        <target>PeerTube</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
+        <source>Description</source>
+        <target>توضیحات</target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
+        <source>
+  About PeerTube
+</source>
+        <target>
+  درباره‌ی PeerTube
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
         <source>Stats</source>
         <target>آمار</target>
@@ -549,6 +642,20 @@
         <target>نام</target>
         <context-group name="null">
           <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fae5a310387c065757fde11f22689b45a7b6f2d">
+        <source>Videos Overview</source>
+        <target>نمای‌کلی ویدئو‌ها</target>
+        <context-group name="null">
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
+        <source>Local videos</source>
+        <target>ویدئو‌های محلی</target>
+        <context-group name="null">
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e">
@@ -647,6 +754,19 @@
         <source>State</source>
         <context-group name="null">
           <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
+        <source>Follow</source>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
+        <source>Followers</source>
+        <target>دنبال‌کننده‌ها</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">

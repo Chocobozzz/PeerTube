@@ -38,6 +38,20 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.datepicker.select-month">
+        <source>Select month</source>
+        <target>Seleccionar lo mes</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.datepicker.select-year">
+        <source>Select year</source>
+        <target>Seleccionar l’annada</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.first">
         <source>««</source>
         <target>««</target>
@@ -2644,6 +2658,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f672385c803647b063687d3c912e2ce5738b51c8">
+        <source>Blacklist video</source>
+        <target>Botar en lista negra</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7584313e33a66811eb10646627914a01fff0347d">
         <source>
     The video is being imported, it will be available when the import is finished.
@@ -2664,6 +2685,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
   </target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd7055d3e38beff538463e75d508d1c75c683710">
+        <source>This video is blacklisted.</source>
+        <target>Aquesta vidèo es en lista negra.</target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced">
@@ -3323,6 +3351,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="af55337b4032d675ab6b2081af797ca9c979b706">
+        <source>An email with verification link will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
+        <target>Un corrièl amb un ligam de verificacion serà enviat a <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
         <source>Unable to find user id or verification string.</source>
         <target>Impossible de trobar l’id de l’utilizaire o la cadena de verificacion.</target>
@@ -3356,6 +3391,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
         <source>Confirm</source>
         <target>Confirmar</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452">
+        <source>Keyboard Shortcuts:</source>
+        <target>Acorchis clavièr :</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

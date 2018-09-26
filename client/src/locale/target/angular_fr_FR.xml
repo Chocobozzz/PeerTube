@@ -38,6 +38,20 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.datepicker.select-month">
+        <source>Select month</source>
+        <target>Choisir le mois</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.datepicker.select-year">
+        <source>Select year</source>
+        <target>Choisir l'année</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.first">
         <source>««</source>
         <target>««</target>
@@ -1678,6 +1692,13 @@ Cochez cette case, sauvegardez la configuration et testez avec l'URL d'une vidé
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1d729bcbe3529d2fe2295b7a3a41282ee09de2c8">
+        <source>Redundancy allowed</source>
+        <target>Redondance autorisée</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5fccee488a9ea908c16d2ab9dbdaf264f1aac479">
         <source>Manage follows</source>
         <target>Gérer les abonnements</target>
@@ -2157,6 +2178,13 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3a5d57052d13d2da1cbcffdbb8effb9874b1595a">
+        <source>You don't have any subscriptions yet.</source>
+        <target>Aucun abonnement pour le moment.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
         <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
         <target>Créée par <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
@@ -2436,6 +2464,13 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5e420747842373fa99a75a7a18df068cc81e46fb">
+        <source>Scheduled</source>
+        <target>Planifié</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
         <source>Publish will be available when upload is finished</source>
         <target>Vous pourrez publier cette vidéo lorsque l'envoi sera terminé</target>
@@ -2640,6 +2675,20 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
           <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
+        <source>Already uploaded	✔</source>
+        <target>Déjà téléversé	✔</target>
+        <context-group name="null">
+          <context context-type="linenumber">158</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
+        <source>Will be created on update</source>
+        <target>Sera créé après la mise à jour</target>
+        <context-group name="null">
+          <context context-type="linenumber">166</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>Annuler la création</target>
@@ -2647,11 +2696,29 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393">
+        <source>Will be deleted on update</source>
+        <target>Sera supprimé après la mise à jour</target>
+        <context-group name="null">
+          <context context-type="linenumber">174</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>Annuler la suppression</target>
         <context-group name="null">
           <context context-type="linenumber">176</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
+        <source>
+            No captions for now.
+          </source>
+        <target>
+            Pas de sous-titres pour le moment.
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
@@ -3274,6 +3341,27 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4d8f527638f3e0b518a96e07d41d886bcce01246">
+        <source>enabled</source>
+        <target>activé</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="795733aac948794cadeb3be6386882efac2c38ad">
+        <source>disabled</source>
+        <target>désactivé</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1123807fc813c816404598147173403d00117557">
+        <source>Redundancy for <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></source>
+        <target>La redondance pour <x id="INTERPOLATION" equiv-text="{{host}}"/> est <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="800cd3cdf47751b576587259ba3a1bc0a7f435b6">
         <source>Comment updated.</source>
         <target>Commentaire mis à jour.</target>
@@ -3403,6 +3491,13 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Vous ne pouvez pas supprimer root.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
+        <source>If you remove this user, you will not be able to create another with the same username!</source>
+        <target>Si vous supprimez ce compte, vous ne pourrez plus en créer de nouveau avec le même nom !</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3650,6 +3745,13 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
         <source>Confirm</source>
         <target>Confirmer</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452">
+        <source>Keyboard Shortcuts:</source>
+        <target>Raccourcis clavier :</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

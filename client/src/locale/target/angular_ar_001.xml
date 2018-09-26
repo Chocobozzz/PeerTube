@@ -821,6 +821,30 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="694cf53adfc2afe8afabf713ab00fa114d5d2f8e">
+        <source>
+      Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
+    </source>
+        <target>
+ترسل تلك الطلبات بإنتظام لتحدد من شغل/أوقف الفيديو. من السهل تحديد ذلك السلوك</target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d32608aba08c6bb3cc4e4e8ec6223e5f4e78ca19">
+        <source>Set a limit to the number of peers sent by the tracker</source>
+        <target>ضع حدا لعدد النظائر المرسلين من قبل المتتبع</target>
+        <context-group name="null">
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6d732b614143f862e69798046dc0868716547e5">
+        <source>Set a limit on the request frequency received by the tracker (being tested)</source>
+        <target>ضع حدا لعدد النظائر المستقبلين من قبل المتتبع(لا يزال تجريبيا)</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18">
         <source>Disable P2P from the administration interface</source>
         <target>تعطيل الند للند عن طريق الواجهة الإدارية</target>
@@ -926,11 +950,39 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
+        <source>Signup enabled</source>
+        <target>التسجيل مُفعل</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7">
+        <source>Signup requires email verification</source>
+        <target>يتطلب التسجيل رسالة تأكيد</target>
+        <context-group name="null">
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="68bda70e0dd4f7f91549462e55f1b2a1602d8402">
+        <source>Signup limit</source>
+        <target>حد التسجيل</target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
         <source>Import</source>
         <target>استيراد</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
+        <source>Video import with HTTP enabled</source>
+        <target>إستيراد الملف باستخدام HTTP مفعل</target>
+        <context-group name="null">
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
@@ -952,6 +1004,27 @@
         <target>المستخدِمون</target>
         <context-group name="null">
           <context context-type="linenumber">136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
+        <source>User default video quota</source>
+        <target>حصة الفيديو الافتراضية للمستخدم</target>
+        <context-group name="null">
+          <context context-type="linenumber">139</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5528147716c4d3286c89defbe63ee0b75da5ffe">
+        <source>User default daily upload limit</source>
+        <target>حد الرفع الإفتراضي للمستخدِم</target>
+        <context-group name="null">
+          <context context-type="linenumber">153</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5">
+        <source>Basic configuration</source>
+        <target>الاعدادات الإفتراصية</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="99cb827741e93125476a0f5b676372d85d15b5fc">
