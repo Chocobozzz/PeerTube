@@ -8,6 +8,7 @@ import { UserEdit } from './user-edit'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
+import { ConfigService } from '@app/+admin/config/shared/config.service'
 
 @Component({
   selector: 'my-user-create',
@@ -20,6 +21,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   constructor (
     protected serverService: ServerService,
     protected formValidatorService: FormValidatorService,
+    protected configService: ConfigService,
     private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -27,6 +29,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     private i18n: I18n
   ) {
     super()
+
+    this.buildQuotaOptions()
   }
 
   ngOnInit () {

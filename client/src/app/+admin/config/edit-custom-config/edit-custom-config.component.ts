@@ -14,37 +14,10 @@ import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
-  static videoQuotaOptions = [
-    { value: -1, label: 'Unlimited' },
-    { value: 0, label: '0' },
-    { value: 100 * 1024 * 1024, label: '100MB' },
-    { value: 500 * 1024 * 1024, label: '500MB' },
-    { value: 1024 * 1024 * 1024, label: '1GB' },
-    { value: 5 * 1024 * 1024 * 1024, label: '5GB' },
-    { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
-    { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
-  ]
-  static videoQuotaDailyOptions = [
-    { value: -1, label: 'Unlimited' },
-    { value: 0, label: '0' },
-    { value: 10 * 1024 * 1024, label: '10MB' },
-    { value: 50 * 1024 * 1024, label: '50MB' },
-    { value: 100 * 1024 * 1024, label: '100MB' },
-    { value: 500 * 1024 * 1024, label: '500MB' },
-    { value: 2 * 1024 * 1024 * 1024, label: '2GB' },
-    { value: 5 * 1024 * 1024 * 1024, label: '5GB' }
-  ]
-
   customConfig: CustomConfig
-  resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
 
-  transcodingThreadOptions = [
-    { value: 0, label: 'Auto (via ffmpeg)' },
-    { value: 1, label: '1' },
-    { value: 2, label: '2' },
-    { value: 4, label: '4' },
-    { value: 8, label: '8' }
-  ]
+  resolutions: string[] = []
+  transcodingThreadOptions: { label: string, value: number }[] = []
 
   private oldCustomJavascript: string
   private oldCustomCSS: string
@@ -60,14 +33,30 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     private i18n: I18n
   ) {
     super()
+
+    this.resolutions = [
+      this.i18n('240p'),
+      this.i18n('360p'),
+      this.i18n('480p'),
+      this.i18n('720p'),
+      this.i18n('1080p')
+    ]
+
+    this.transcodingThreadOptions = [
+      { value: 0, label: this.i18n('Auto (via ffmpeg)') },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 4, label: '4' },
+      { value: 8, label: '8' }
+    ]
   }
 
   get videoQuotaOptions () {
-    return EditCustomConfigComponent.videoQuotaOptions
+    return this.configService.videoQuotaOptions
   }
 
   get videoQuotaDailyOptions () {
-    return EditCustomConfigComponent.videoQuotaDailyOptions
+    return this.configService.videoQuotaDailyOptions
   }
 
   getResolutionKey (resolution: string) {
