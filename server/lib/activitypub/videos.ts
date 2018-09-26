@@ -478,7 +478,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
       resolution: fileUrl.height,
       size: fileUrl.size,
       videoId: videoCreated.id,
-      fps: fileUrl.fps
+      fps: fileUrl.fps || -1
     } as VideoFileModel
     attributes.push(attribute)
   }

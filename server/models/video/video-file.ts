@@ -66,8 +66,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
   @Column
   infoHash: string
 
-  @AllowNull(true)
-  @Default(null)
+  @AllowNull(false)
+  @Default(-1)
   @Is('VideoFileFPS', value => throwIfNotValid(value, isVideoFPSResolutionValid, 'fps'))
   @Column
   fps: number
