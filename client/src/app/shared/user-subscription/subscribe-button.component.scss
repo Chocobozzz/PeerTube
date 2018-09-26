@@ -4,15 +4,32 @@
 .btn-group-subscribe {
   @include peertube-button;
   @include disable-default-a-behaviour;
+
   float: right;
   padding: 0;
 
-  &.btn-group > .btn:not(.dropdown-toggle) {
-    padding-right: 5px;
+  & > .btn,
+  & > .dropdown > .dropdown-toggle {
     font-size: 15px;
   }
-  &.btn-group > .btn-group:not(:first-child) > .btn {
-    padding-left: 2px;
+
+  // Unlogged
+  & > .dropdown > .dropdown-toggle span {
+    padding-right: 3px;
+  }
+
+  // Logged
+  & > .btn {
+    padding-right: 4px;
+
+    & + .dropdown > button {
+      padding-left: 2px;
+
+      &::after {
+        position: relative;
+        top: 1px;
+      }
+    }
   }
 
   &.subscribe-button {
@@ -22,13 +39,21 @@
     }
 
     span.followers-count {
-      padding-left:5px;
+      padding-left: 5px;
     }
   }
   &.unsubscribe-button {
     .btn {
       @include grey-button;
       font-weight: 600;
+    }
+  }
+
+  .dropdown-menu {
+    cursor: default;
+
+    button {
+      cursor: pointer;
     }
   }
 

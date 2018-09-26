@@ -28,7 +28,7 @@ import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { ServerService } from '@app/core'
-import { UserSubscriptionService } from '@app/shared/user-subscription'
+import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
@@ -210,14 +210,17 @@ export class VideoService implements VideosProvider {
   buildBaseFeedUrls (params: HttpParams) {
     const feeds = [
       {
+        format: FeedFormat.RSS,
         label: 'rss 2.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
       },
       {
+        format: FeedFormat.ATOM,
         label: 'atom 1.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
       },
       {
+        format: FeedFormat.JSON,
         label: 'json 1.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
       }

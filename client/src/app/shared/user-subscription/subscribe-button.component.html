@@ -10,11 +10,16 @@
       {{ videoChannel.followersCount | myNumberFormatter }}
     </span>
   </button>
-  <button *ngIf="subscribed === true" type="button"
-          class="btn btn-sm" role="button"
-          (click)="unsubscribe()" i18n>Unsubscribe</button>
 
-  <div class="btn-group" ngbDropdown autoClose="outside" 
+  <button
+    *ngIf="subscribed === true" type="button"
+    class="btn btn-sm" role="button"
+    (click)="unsubscribe()" i18n
+  >
+    Unsubscribe
+  </button>
+
+  <div class="btn-group" ngbDropdown autoClose="outside"
        placement="bottom-right" role="group"
        aria-label="Multiple ways to subscribe to the current channel">
     <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle>
@@ -25,16 +30,20 @@
         {{ videoChannel.followersCount | myNumberFormatter }}
       </span>
     </button>
+
     <div class="dropdown-menu" ngbDropdownMenu>
 
       <h6 class="dropdown-header" i18n>Using an ActivityPub-compatible account</h6>
+
       <button class="dropdown-item" (click)="subscribe()"
               *ngIf="subscribed === false">
         <span *ngIf="!isUserLoggedIn()" i18n>Subscribe with an account on {{ videoChannel.host }}</span>
         <span *ngIf="isUserLoggedIn()" i18n>Subscribe with your local account</span>
       </button>
+
       <button class="dropdown-item" i18n>Subscribe with a remote account:</button>
       <my-remote-subscribe showHelp="true" account="{{ uriAccount }}"></my-remote-subscribe>
+
       <div class="dropdown-divider"></div>
 
       <h6 class="dropdown-header" i18n>Using a syndication feed</h6>

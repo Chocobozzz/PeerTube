@@ -5,6 +5,8 @@ import { UserSubscriptionService } from '@app/shared/user-subscription/user-subs
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoService } from '@app/shared/video/video.service'
+import { FeedFormat } from '../../../../../shared/models/feeds'
 
 @Component({
   selector: 'my-subscribe-button',
@@ -23,7 +25,8 @@ export class SubscribeButtonComponent implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService,
     private userSubscriptionService: UserSubscriptionService,
-    private i18n: I18n
+    private i18n: I18n,
+    private videoService: VideoService
   ) { }
 
   get uri () {
@@ -100,6 +103,10 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   rssOpen () {
-    window.open('')
+    const rssFeed = this.videoService
+                      .getVideoChannelFeedUrls(this.videoChannel.id)
+                      .find(i => i.format === FeedFormat.RSS)
+
+    window.open(rssFeed.url)
   }
 }
