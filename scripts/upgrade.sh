@@ -38,6 +38,8 @@ if [ "$RELEASE_VERSION" != "$PRE_RELEASE_VERSION" ]; then
       [2]* ) VERSION="$PRE_RELEASE_VERSION";;
       * ) exit;
   esac
+else
+  VERSION="$RELEASE_VERSION"
 fi
 
 echo "Installing Peertube version $VERSION"
