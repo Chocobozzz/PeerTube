@@ -136,7 +136,7 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
     const actor = await getOrCreateActorAndServerAndModel(actorUrl)
     const comment = new VideoCommentModel({
-      url: body.url,
+      url: body.id,
       text: body.content,
       videoId: null,
       accountId: actor.Account.id,
