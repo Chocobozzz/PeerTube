@@ -55,8 +55,11 @@ class PeerTubePlugin extends Plugin {
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
   private videoCaptions: VideoJSCaption[]
+
   private renderer
   private fakeRenderer
+  private destoyingFakeRenderer = false
+
   private autoResolution = true
   private forbidAutoResolution = false
   private isAutoResolutionObservation = false
@@ -599,11 +602,16 @@ class PeerTubePlugin extends Plugin {
   }
 
   private renderFileInFakeElement (file: WebTorrent.TorrentFile, delay: number) {
+    this.destoyingFakeRenderer = false
+
     const fakeVideoElem = document.createElement('video')
     renderVideo(file, fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
       this.fakeRenderer = renderer
 
-      if (err) console.error('Cannot render new torrent in fake video element.', err)
+      // The renderer returns an error when we destroy it, so skip them
+      if (this.destoyingFakeRenderer === false && err) {
+        console.error('Cannot render new torrent in fake video element.', err)
+      }
 
       // Load the future file at the correct time (in delay MS - 2 seconds)
       fakeVideoElem.currentTime = this.player.currentTime() + (delay - 2000)
@@ -612,6 +620,8 @@ class PeerTubePlugin extends Plugin {
 
   private destroyFakeRenderer () {
     if (this.fakeRenderer) {
+      this.destoyingFakeRenderer = true
+
       if (this.fakeRenderer.destroy) {
         try {
           this.fakeRenderer.destroy()
