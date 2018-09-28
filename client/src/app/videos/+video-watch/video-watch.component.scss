@@ -1,5 +1,8 @@
 @import '_variables';
 @import '_mixins';
+@import '_bootstrap-variables';
+
+$other-videos-width: 260px;
 
 .root-row {
   flex-direction: column;
@@ -361,7 +364,7 @@
 
   /deep/ .other-videos {
     padding-left: 15px;
-    width: 260px;
+    width: $other-videos-width;
 
     .title-page {
       margin-top: 0 !important;
@@ -450,6 +453,11 @@ my-video-comments {
   }
 }
 
+@media screen and (min-width: map-get($grid-breakpoints, xl)) {
+  .video-bottom .video-info {
+    max-width: calc(100% - #{$other-videos-width});
+  }
+}
 
 @media screen and (max-width: 1600px) {
   .video-bottom .video-info .video-attributes .video-attribute {
