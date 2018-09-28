@@ -57,21 +57,21 @@ class PeerTubePlugin extends Plugin {
   private torrent: WebTorrent.Torrent
   private videoCaptions: VideoJSCaption[]
 
-  private renderer
-  private fakeRenderer
+  private renderer: any
+  private fakeRenderer: any
   private destoyingFakeRenderer = false
 
   private autoResolution = true
   private forbidAutoResolution = false
   private isAutoResolutionObservation = false
 
-  private videoViewInterval
-  private torrentInfoInterval
-  private autoQualityInterval
-  private userWatchingVideoInterval
-  private addTorrentDelay
-  private qualityObservationTimer
-  private runAutoQualitySchedulerTimer
+  private videoViewInterval: any
+  private torrentInfoInterval: any
+  private autoQualityInterval: any
+  private userWatchingVideoInterval: any
+  private addTorrentDelay: any
+  private qualityObservationTimer: any
+  private runAutoQualitySchedulerTimer: any
 
   private downloadSpeeds: number[] = []
 
@@ -259,7 +259,7 @@ class PeerTubePlugin extends Plugin {
 
     const oldTorrent = this.torrent
     const torrentOptions = {
-      store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+      store: (chunkLength: any, storeOpts: any) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
         max: 100
       })
     }
@@ -290,7 +290,7 @@ class PeerTubePlugin extends Plugin {
 
           if (err) return this.fallbackToHttp(done)
 
-          return this.tryToPlay(err => {
+          return this.tryToPlay((err: Error) => {
             if (err) return done(err)
 
             if (options.seek) this.seek(options.seek)
@@ -336,7 +336,7 @@ class PeerTubePlugin extends Plugin {
     const playPromise = this.player.play()
     if (playPromise !== undefined) {
       return playPromise.then(done)
-                        .catch(err => {
+                        .catch((err: Error) => {
                           if (err.message.indexOf('The play() request was interrupted by a call to pause()') !== -1) {
                             return
                           }
@@ -611,7 +611,7 @@ class PeerTubePlugin extends Plugin {
       this.player.options_.inactivityTimeout = saveInactivityTimeout
     }
 
-    const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')
+    const settingsDialog = this.player.children_.find((c: any) => c.name_ === 'SettingsDialog')
 
     this.player.controlBar.on('mouseenter', () => disableInactivity())
     settingsDialog.on('mouseenter', () => disableInactivity())
@@ -687,7 +687,7 @@ class PeerTubePlugin extends Plugin {
       const percent = time / this.player_.duration()
       return percent >= 1 ? 1 : percent
     }
-    SeekBar.prototype.handleMouseMove = function handleMouseMove (event) {
+    SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
       let newTime = this.calculateDistance(event) * this.player_.duration()
       if (newTime === this.player_.duration()) {
         newTime = newTime - 0.1

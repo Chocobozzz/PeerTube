@@ -17,7 +17,7 @@ import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators
   styleUrls: [ './my-account-video-channel-edit.component.scss' ]
 })
 export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelEdit implements OnInit, OnDestroy {
-  @ViewChild('avatarfileInput') avatarfileInput
+  @ViewChild('avatarfileInput') avatarfileInput: any
 
   error: string
 

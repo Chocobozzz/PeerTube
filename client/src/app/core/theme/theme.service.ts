@@ -5,7 +5,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 export class ThemeService {
   private theme = document.querySelector('body')
   private darkTheme = false
-  private previousTheme = {}
+  private previousTheme: any = {}
 
   constructor () {
     // initialise the alternative theme with dark theme colors
@@ -33,7 +33,7 @@ export class ThemeService {
     }
   }
 
-  private switchProperty (property, newValue?) {
+  private switchProperty (property: any, newValue?: any) {
     const propertyOldvalue = window.getComputedStyle(this.theme).getPropertyValue('--' + property)
     this.theme.style.setProperty('--' + property, (newValue) ? newValue : this.previousTheme[property])
     this.previousTheme[property] = propertyOldvalue
