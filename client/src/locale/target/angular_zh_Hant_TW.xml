@@ -255,37 +255,6 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1fa2c66d97e7cd4a92b80396b2fdc4fe4b6907b2">
-        <source>
-  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-    <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-  <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-</source>
-        <target>
-  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-    <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-  <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
-        <source>Subscribed</source>
-        <target>已訂閱</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3042bd3ad8dffcfeca5fd1ae6159fd1047434e95">
-        <source>Unsubscribe</source>
-        <target>取消訂閱</target>
-        <context-group name="null">
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>影片配額</target>
@@ -375,6 +344,13 @@
         <target>我忘記我的密碼了</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
+        <source>Login</source>
+        <target>登入</target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
@@ -578,13 +554,6 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
-        <source>Login</source>
-        <target>登入</target>
-        <context-group name="null">
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>建立帳號</target>
@@ -659,7 +628,7 @@
         <source>Toggle dark interface</source>
         <target>切換至暗色介面</target>
         <context-group name="null">
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -722,21 +691,21 @@
         <source>Category</source>
         <target>分類</target>
         <context-group name="null">
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>授權條款</target>
         <context-group name="null">
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>語言</target>
         <context-group name="null">
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -776,17 +745,6 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="116ca0eb6d3837112867cce3b661fc6df8b93df7">
-        <source>
-      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ object.tag }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-    </source>
-        <target>
-      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ object.tag }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e093a5a83045ff283f992a93699abb7cb9dd3c1b">
@@ -835,7 +793,7 @@
         <source>Description</source>
         <target>描述</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
@@ -1997,7 +1955,7 @@
         <source>Change ownership</source>
         <target>變更所有權</target>
         <context-group name="null">
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="046c4fa30411e6b1aa46dc51bf82d07b1adf14d4">
@@ -2180,21 +2138,21 @@ When you will upload a video in this channel, the video support field will be au
         <source>Change password</source>
         <target>變更密碼</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229">
         <source>New password</source>
         <target>新密碼</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ede41f01c781b168a783cfcefc6fb67d48780d9b">
         <source>Confirm new password</source>
         <target>確認新密碼</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129">
@@ -2244,6 +2202,13 @@ When you will upload a video in this channel, the video support field will be au
         <target>（副檔名：<x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>，最大大小：<x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>刪除您的帳號</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e242e3e8608a3c4a944327eb3d5c221dc6e4e3cd">
@@ -2341,14 +2306,14 @@ When you will upload a video in this channel, the video support field will be au
         <source>Channel</source>
         <target>頻道</target>
         <context-group name="null">
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
         <target>隱私</target>
         <context-group name="null">
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
@@ -2496,7 +2461,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Tags</source>
         <target>標籤</target>
         <context-group name="null">
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="457b1cff4d8d7fad0c8742f69c413ecf5e443851">
@@ -2510,49 +2475,49 @@ When you will upload a video in this channel, the video support field will be au
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
         <target>預設情況下，影片描述不會完整顯示，需要手動操作才能展開它們。</target>
         <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
         <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
         <target>計劃發佈於 (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
         <context-group name="null">
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>這個影片包含了成人或裸露內容</target>
         <context-group name="null">
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
         <target>某些實體預設不會列出包含成人或裸露內容的影片。</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>啟用影片評論</target>
         <context-group name="null">
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
         <target>正等待發佈影片前的轉換編碼</target>
         <context-group name="null">
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
         <target>如果您決定不要等待在發佈影片前的轉換編碼，它可能會在轉換編碼結束前都無法播放。</target>
         <context-group name="null">
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -2566,49 +2531,49 @@ When you will upload a video in this channel, the video support field will be au
         <source>Add another caption</source>
         <target>新增其他字幕</target>
         <context-group name="null">
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
         <source>See the subtitle file</source>
         <target>檢視字幕檔案</target>
         <context-group name="null">
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>取消建立</target>
         <context-group name="null">
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>取消刪除</target>
         <context-group name="null">
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
         <source>Captions</source>
         <target>字幕</target>
         <context-group name="null">
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
         <source>Upload thumbnail</source>
         <target>上傳縮圖</target>
         <context-group name="null">
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639">
         <source>Upload preview</source>
         <target>上傳預覽</target>
         <context-group name="null">
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -2622,14 +2587,14 @@ When you will upload a video in this channel, the video support field will be au
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <target>告訴人們他們可以如何支援您（成員平臺等）的短文</target>
         <context-group name="null">
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>進階設定</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2335f0bd17c63d835b50cfbbcea6c459cb1314c0">
@@ -2679,7 +2644,7 @@ When you will upload a video in this channel, the video support field will be au
       取消
     </target>
         <context-group name="null">
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -2911,32 +2876,25 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5d5844aea729b7cd8e6e1e0d07c3956f8cb54f89">
-        <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and subscribe there.</source>
-        <target>您可以透過任何相容於 ActivityPub 的實體訂閱此帳號。例如 Mastodon 或 Pleroma，您可以在搜尋框中輸入 &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; 並在那裡訂閱。</target>
-        <context-group name="null">
-          <context context-type="linenumber">138</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>顯示更多</target>
         <context-group name="null">
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
         <source>Show less</source>
         <target>顯示較少</target>
         <context-group name="null">
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4c0ba3cde3b3c58b855ffb4beaa5804a2fc3826b">
         <source>Friendly Reminder: </source>
         <target>友善提醒：</target>
         <context-group name="null">
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9e66f7507eb263abdbab7abafd825f1dc8bc880b">
@@ -2947,21 +2905,21 @@ When you will upload a video in this channel, the video support field will be au
         用於此影片的分享系統代表了您系統的某些技術資訊（如公開的 IP 位置等）可能會被傳送給其他 peer。
       </target>
         <context-group name="null">
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
         <source>More information</source>
         <target>更多資訊</target>
         <context-group name="null">
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
         <target>取得更多資訊</target>
         <context-group name="null">
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
@@ -2972,7 +2930,7 @@ When you will upload a video in this channel, the video support field will be au
       確定
     </target>
         <context-group name="null">
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
@@ -3008,14 +2966,14 @@ When you will upload a video in this channel, the video support field will be au
         <source>No comments.</source>
         <target>沒有評論。</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
         <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
         <target>檢視全部 <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> 個回覆</target>
         <context-group name="null">
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -3026,7 +2984,7 @@ When you will upload a video in this channel, the video support field will be au
     評論已停用。
   </target>
         <context-group name="null">
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -3044,7 +3002,7 @@ When you will upload a video in this channel, the video support field will be au
       張貼評論
     </target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
@@ -3141,6 +3099,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="b9e64712e3e5c342ce9cd32eec6cd7d6c00f4048">
         <source>Configuration updated.</source>
         <target>設定已更新。</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
+        <source>Unlimited</source>
+        <target>無限制</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3264,13 +3229,6 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
-        <source>Unlimited</source>
-        <target>無限制</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="364463fab6c5714118d6449561a0f8de1cc10bfa">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> created.</source>
         <target>使用者 <x id="INTERPOLATION" equiv-text="{{username}}"/> 已建立。</target>
@@ -3372,13 +3330,6 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
         <source>Type your username to confirm</source>
         <target>輸入您的使用者名稱以確認</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
-        <source>Delete your account</source>
-        <target>刪除您的帳號</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4753,6 +4704,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="0f286a597f0053c3578a52e044769c204ee516fc">
         <source>Server error. Please retry later.</source>
         <target>伺服器錯誤。請稍後重試。</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
+        <source>Subscribed</source>
+        <target>已訂閱</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
