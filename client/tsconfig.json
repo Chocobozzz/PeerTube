@@ -7,6 +7,7 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "noImplicitAny": false,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"
@@ -31,6 +32,10 @@
       "stream": [ "./shims/noop" ],
       "crypto": [ "./shims/noop" ]
     }
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "fullTemplateTypeCheck": true
   },
   "exclude": [
     "../node_modules",
