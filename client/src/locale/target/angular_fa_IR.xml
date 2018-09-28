@@ -115,6 +115,13 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.timepicker.HH">
+        <source>HH</source>
+        <target>HH</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.hours">
         <source>Hours</source>
         <target>ساعت</target>
@@ -136,6 +143,13 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.timepicker.MM">
+        <source>MM</source>
+        <target>MM</target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.minutes">
         <source>Minutes</source>
         <target>دقیقه</target>
@@ -155,6 +169,13 @@
         <target>افزایش ثانیه‌</target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.timepicker.SS">
+        <source>SS</source>
+        <target>SS</target>
+        <context-group name="null">
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds">
@@ -206,25 +227,18 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196">
+        <source>Complete preview</source>
+        <target>تکمیل‌پیشنمایش</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f">
         <source>Get help</source>
         <target>کمک گرفتن</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
-        <source>Subscribed</source>
-        <target>مشترک شده‌اید</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3042bd3ad8dffcfeca5fd1ae6159fd1047434e95">
-        <source>Unsubscribe</source>
-        <target>لغو اشتراک</target>
-        <context-group name="null">
-          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -277,9 +291,16 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
+        <source>Login</source>
+        <target>ورود</target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
         <source>Forgot your password</source>
-        <target>گذرواژه‌‌ی خودتان را فراموش کرده‌اید</target>
+        <target>گذرواژه‌تان را فراموش کرده‌اید</target>
         <context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
@@ -300,7 +321,7 @@
       </trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55">
         <source>Send me an email to reset my password</source>
-        <target>یک رایانامه برای بازیابی گذرواژه برای من بفرست</target>
+        <target>یک رایانامه برای بازنشانی گذرواژه برای من بفرست</target>
         <context-group name="null">
           <context context-type="linenumber">75</context>
         </context-group>
@@ -310,7 +331,7 @@
     Reset my password
   </source>
         <target>
-    تغییر گذرواژه‌
+    تغییر گذرواژه‌ام
   </target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
@@ -332,7 +353,7 @@
       </trans-unit>
       <trans-unit id="8bdf8db5eeeaef83184b489b80c1557b516fb3c3">
         <source>Reset my password</source>
-        <target>تغییر گذرواژه</target>
+        <target>تغییر گذرواژه‌ام</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -350,7 +371,6 @@
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
         <source>Username</source>
-        <target>نام کاربری</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -438,13 +458,6 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
-        <source>Login</source>
-        <target>ورود</target>
-        <context-group name="null">
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>ساخت حساب</target>
@@ -461,7 +474,7 @@
       </trans-unit>
       <trans-unit id="357064ca9d9ac859eb618e28e8126fa32be049e2">
         <source>Subscriptions</source>
-        <target>مشترکین</target>
+        <target>اشتراک</target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
         </context-group>
@@ -518,7 +531,7 @@
       <trans-unit id="cf75021ac8cb9efd4f95e8880cf52c9acd265768">
         <source>Toggle dark interface</source>
         <context-group name="null">
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -574,21 +587,21 @@
         <source>Category</source>
         <target>دسته‌بندی</target>
         <context-group name="null">
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>مجوز</target>
         <context-group name="null">
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>زبان</target>
         <context-group name="null">
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
@@ -616,7 +629,7 @@
         <source>Description</source>
         <target>توضیحات</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
@@ -823,6 +836,258 @@
         <target>ویديو‌های من</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7815f1c4a6d3cc157a16407a48865023cc35ec0">
+        <source>January</source>
+        <target>ژانویه</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0393a96b58df82af39a2ec83deec624749e42036">
+        <source>February</source>
+        <target>فوریه</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea41ee3743ec5bdbbf863ab793bbdd6e6d9af96e">
+        <source>March</source>
+        <target>مارچ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b87ee784d9e93b5557aca9bdc9464dbd4328920a">
+        <source>April</source>
+        <target>آپریل</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="862da1034ac2707cc44123ed963b2f42109b6b3e">
+        <source>May</source>
+        <target>مِی</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f234249d4c3c39e27c0f05d4a6b73a7959caeb2">
+        <source>June</source>
+        <target>ژوئن</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="11447f95e83c8de675ab6c492150f88e4d9bd15e">
+        <source>July</source>
+        <target>جولای</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddd9a3d59a8db4e822e54e9473c05b571aca9829">
+        <source>August</source>
+        <target>آگوست</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e21dc41f9b3fdaf35ab6b2d9e2e5e8a926fb1938">
+        <source>September</source>
+        <target>سپتامبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71f49c502d13e22079a958a5532afa28dbe98b3b">
+        <source>October</source>
+        <target>اکتبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64b5ce921faa5e3d277d6d528ddcfc8c2bfe9f52">
+        <source>November</source>
+        <target>نوامبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2006e2aabb31714ebc684dc382539649f690ed5c">
+        <source>December</source>
+        <target>دسامبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8270e687cfb5624b3f6fbb7991a2e916c96464b7">
+        <source>Jan</source>
+        <target>ژانویه</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60">
+        <source>Feb</source>
+        <target>فوریه</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7">
+        <source>Mar</source>
+        <target>مارچ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="964a5f032bc846d32806a4838580a4f81cf14463">
+        <source>Apr</source>
+        <target>آپریل</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8f7274f606f71d9290ed01c5683092d701632d7f">
+        <source>Jun</source>
+        <target>ژوئن</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c3d8318d6d8d9920ae0a80350616732c33a3211">
+        <source>Jul</source>
+        <target>جولای</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212">
+        <source>Aug</source>
+        <target>آگوست</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f739d03be1c936c58978739c317d91566348204">
+        <source>Sep</source>
+        <target>سپتامبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6607cacb987a588530a13de7018d959240d19153">
+        <source>Oct</source>
+        <target>اکتبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e597400ded12a366855615e18fcc8f9ac05b72e0">
+        <source>Nov</source>
+        <target>نوامبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e">
+        <source>Dec</source>
+        <target>دسامبر</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46">
+        <source>Clear</source>
+        <target>پاک‌کردن</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5">
+        <source>yy-mm-dd </source>
+        <target>روز-ماه-سال</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dc60677d5a906e69f38a5cf9da7f2eb03931bea0">
+        <source>Links</source>
+        <target>لینک‌ها</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b15e7bec5c7833d2d9634946ccbed68967b1bee1">
+        <source>Lists</source>
+        <target>لیست‌ها</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866">
+        <source>Images</source>
+        <target>عکس‌ها</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
+        <source>Subscribed</source>
+        <target>مشترک شده‌اید</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="65cc4ab3b4c438e07c89be2b677d08369fb62da2">
+        <source>Welcome</source>
+        <target>خوش‌آمدید</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">
+        <source>Info</source>
+        <target>راهنما</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
+        <source>Upload cancelled</source>
+        <target>بارگزاری لغوشد</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
+        <source>Video published.</source>
+        <target>ویدئو انتشار‌یافت</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>کپی‌شد</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>ویدئو گزارش‌شد</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1abd89c9280323209e939fa9c30f6e5cda20c95">
+        <source>Do you really want to delete this video?</source>
+        <target>میخواهید این ویدئو را پاک کنید؟</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
     </body>

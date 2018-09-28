@@ -192,37 +192,6 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1fa2c66d97e7cd4a92b80396b2fdc4fe4b6907b2">
-        <source>
-  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-    <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-  <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-</source>
-        <target>
-  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>إشترك<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-    <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-  <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
-        <source>Subscribed</source>
-        <target>مشترك</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3042bd3ad8dffcfeca5fd1ae6159fd1047434e95">
-        <source>Unsubscribe</source>
-        <target>ألغ الاشتراك</target>
-        <context-group name="null">
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>حصة الفيديو</target>
@@ -297,6 +266,13 @@
         <target>نسيتُ كلمتي السرية</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
+        <source>Login</source>
+        <target>تسجيل الدخول</target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
@@ -481,13 +457,6 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
-        <source>Login</source>
-        <target>تسجيل الدخول</target>
-        <context-group name="null">
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>إنشاء حساب</target>
@@ -562,7 +531,7 @@
         <source>Toggle dark interface</source>
         <target>الإنتقال إلى الواجهة الداكنة</target>
         <context-group name="null">
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -625,21 +594,21 @@
         <source>Category</source>
         <target>الفئة</target>
         <context-group name="null">
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>الرخصة</target>
         <context-group name="null">
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>اللغة</target>
         <context-group name="null">
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -699,7 +668,7 @@
         <source>Description</source>
         <target>الوصف</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
@@ -1368,7 +1337,7 @@
         <source>Change ownership</source>
         <target>تغيير المالك</target>
         <context-group name="null">
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="046c4fa30411e6b1aa46dc51bf82d07b1adf14d4">
@@ -1477,21 +1446,21 @@
         <source>Change password</source>
         <target>تغيير الكلمة السرية</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229">
         <source>New password</source>
         <target>الكلمة السرية الجديدة</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ede41f01c781b168a783cfcefc6fb67d48780d9b">
         <source>Confirm new password</source>
         <target>تأكيد الكلمة السرية الجديدة</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fb17c44abac2d1ed2a54cdd28bae289dc0b9a1c2">
@@ -1520,6 +1489,13 @@
         <target>تغيير الصورة الرمزية</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>حذف حسابك</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7ee8fad77b2664dabfb90ea03470f75a6f6d1d48">
@@ -1554,14 +1530,14 @@
         <source>Channel</source>
         <target>القناة</target>
         <context-group name="null">
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
         <target>الخصوصية</target>
         <context-group name="null">
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3">
@@ -1603,14 +1579,14 @@
         <source>Tags</source>
         <target>الوسوم</target>
         <context-group name="null">
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>السماح بالتعليق على الفيديوهات</target>
         <context-group name="null">
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1624,14 +1600,14 @@
         <source>Cancel create</source>
         <target>إلغاء الإنشاء</target>
         <context-group name="null">
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>إلغاء الحذف</target>
         <context-group name="null">
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -1645,7 +1621,7 @@
         <source>Advanced settings</source>
         <target>الإعدادات المتقدمة</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611">
@@ -1682,7 +1658,7 @@
     </source>
         <target>إلغاء</target>
         <context-group name="null">
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -1817,14 +1793,14 @@
         <source>Show more</source>
         <target>عرض المزيد</target>
         <context-group name="null">
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
         <source>Show less</source>
         <target>عرض القليل</target>
         <context-group name="null">
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
@@ -1849,7 +1825,7 @@
         <source>No comments.</source>
         <target>ليس هناك تعليقات.</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -1858,7 +1834,7 @@
   </source>
         <target>تم تعطيل التعليقات.</target>
         <context-group name="null">
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -1874,7 +1850,7 @@
     </source>
         <target>إرسال التعليق</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cb23d4d98007aa4d7123837f4c17a671848377d6">
@@ -1912,6 +1888,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
+        <source>Unlimited</source>
+        <target>بلا حدود</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="950f5111d567e5c0e971f07c26e8c2be1d919a8e">
         <source>Follow request(s) sent!</source>
         <target>تم إرسال طلب المتابعة!</target>
@@ -1943,13 +1926,6 @@
       <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
         <target>الفيديو <x id="INTERPOLATION" equiv-text="{{name}}"/> أزيل من قائمة الحذف .</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
-        <source>Unlimited</source>
-        <target>بلا حدود</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2013,13 +1989,6 @@
       <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
         <source>Type your username to confirm</source>
         <target>أدخل اسم المستخدِم للتحقق</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
-        <source>Delete your account</source>
-        <target>حذف حسابك</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2566,6 +2535,13 @@
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866">
         <source>Images</source>
         <target>الصور</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
+        <source>Subscribed</source>
+        <target>مشترك</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

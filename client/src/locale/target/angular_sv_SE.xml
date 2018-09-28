@@ -38,6 +38,20 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.datepicker.select-month">
+        <source>Select month</source>
+        <target>Välj månad</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.datepicker.select-year">
+        <source>Select year</source>
+        <target>Välj år</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.first">
         <source>««</source>
         <target>««</target>
@@ -47,7 +61,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria">
         <source>First</source>
-        <target>Först</target>
+        <target>Första</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -187,14 +201,14 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM">
         <source>PM</source>
-        <target>på eftermiddagen</target>
+        <target> på eftermiddagen</target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM">
         <source>AM</source>
-        <target>på förmiddagen</target>
+        <target> på förmiddagen</target>
         <context-group name="null">
           <context context-type="linenumber">66</context>
         </context-group>
@@ -208,7 +222,7 @@
       </trans-unit>
       <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
         <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <target>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
+        <target>(tillägg: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max-storlek: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
@@ -255,35 +269,91 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1fa2c66d97e7cd4a92b80396b2fdc4fe4b6907b2">
+      <trans-unit id="450025269732888db1f04cfe6033843110ab65ee">
         <source>
-  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-    <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-  <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-</source>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      Subscribe
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </source>
         <target>
-  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Prenumerera<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-    <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-  <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-</target>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      Prenumerera
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
-        <source>Subscribed</source>
-        <target>Prenumererar</target>
+      <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
+        <source>
+    Unsubscribe
+  </source>
+        <target>
+    Avbryt prenumereration
+  </target>
         <context-group name="null">
-          <context context-type="linenumber">9</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3042bd3ad8dffcfeca5fd1ae6159fd1047434e95">
-        <source>Unsubscribe</source>
-        <target>Avbryt prenumeration</target>
+      <trans-unit id="60251958d9e05c8cc00abf9645bb0026ebbe4dc3">
+        <source>Subscribe with an account on <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></source>
+        <target>Prenumerera med ett konto på <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
+        <source>Subscribe with your local account</source>
+        <target>Prenumerera med ditt lokala konto</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1">
+        <source>Using a syndication feed</source>
+        <target>Med ett syndikeringsflöde</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5e5bc7d213694fc0414a76f0ff3085bae44268a">
+        <source>Subscribe via RSS</source>
+        <target>Prenumerera med RSS</target>
+        <context-group name="null">
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3">
+        <source>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </source>
+        <target>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Fjärrprenumerera<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Fjärrinteragera<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="319933e1af77ca2e35b75a5e9270a3c90e83dd4b">
+        <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.</source>
+        <target>Du kan prenumerera på den här kanalen via vilken ActivityPub-kapabel fediversum-instans som helst. På instanser med Mastodon eller Pleroma kan du skriva kanalens URL i sökrutan och prenumerera därifrån.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2767d5461b6c622ccdeb868df8becf26bc16b99a">
+        <source>You can interact with this via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.</source>
+        <target>Du kan interagera med den här kanalen via vilken ActivityPub-kapabel fediversum-instans som helst. På instanser med Mastodon eller Pleroma kan du skriva kanalens URL i sökrutan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
@@ -379,6 +449,13 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
+        <source>Login</source>
+        <target>Logga in</target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
         <source>Forgot your password</source>
         <target>Glömt ditt lösenord</target>
@@ -459,7 +536,7 @@
       </trans-unit>
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
         <source>Example: jane_doe</source>
-        <target>Exempel: jane_doe</target>
+        <target>Exempel: anna_johansson</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
@@ -586,13 +663,6 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
-        <source>Login</source>
-        <target>Logga in</target>
-        <context-group name="null">
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>Skapa ett konto</target>
@@ -663,11 +733,18 @@
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4752e5e33da1c3396d3248eb8fef59bca5d00cb3">
+        <source>Show keyboard shortcuts</source>
+        <target>Visa kortkommandon</target>
+        <context-group name="null">
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cf75021ac8cb9efd4f95e8880cf52c9acd265768">
         <source>Toggle dark interface</source>
         <target>Växla mörkt gränssnitt</target>
         <context-group name="null">
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -730,21 +807,21 @@
         <source>Category</source>
         <target>Kategori</target>
         <context-group name="null">
-          <context context-type="linenumber">166</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>Licens</target>
         <context-group name="null">
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>Språk</target>
         <context-group name="null">
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -784,17 +861,6 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="116ca0eb6d3837112867cce3b661fc6df8b93df7">
-        <source>
-      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ object.tag }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-    </source>
-        <target>
-      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ object.tag }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e093a5a83045ff283f992a93699abb7cb9dd3c1b">
@@ -845,7 +911,7 @@
         <source>Description</source>
         <target>Beskrivning</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
@@ -908,7 +974,7 @@
       </trans-unit>
       <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
         <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>PeerTube är en federeread (ActivityPub) videostreaming-plattform som använder P2P (WebTorrent) direkt i webbläsaren.</target>
+        <target>PeerTube är en federerad (ActivityPub) videostreaming-plattform som använder P2P (WebTorrent) direkt i webbläsaren.</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -918,7 +984,7 @@
     It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </source>
         <target>
-    Det är en fri mjukvara med öppen källkod,  under <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3-licens<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+    Den använder fri mjukvara med öppen källkod,  under <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3-licens<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
@@ -937,7 +1003,7 @@
       </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
-        <target>P2P &amp; Integritet</target>
+        <target>P2P och integritet</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -995,7 +1061,7 @@
     </source>
         <target>
       För varje skickad förfrågan, returnerar spåraren ett begränsat antal slumpmässiga serventer.
-      Till exempel, om svärmen innehåller 1000 serventer och spåraren para skickar 20 20serventer per förfrågan, måste minst 50 förfrågningar skickas för att hitta samtliga serventer i svärmen
+      Till exempel, om svärmen innehåller 1000 serventer och spåraren bara skickar 20 serventer per förfrågan, måste minst 50 förfrågningar skickas för att hitta samtliga serventer i svärmen
     </target>
         <context-group name="null">
           <context context-type="linenumber">38</context>
@@ -1006,7 +1072,7 @@
       Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
     </source>
         <target>
-      De förfrågningarna måste skickas regelbundet för att veta vem som börjar och sluta titta på en video. Det är enkelt att detektera den sortens beteende
+      Förfrågningarna måste skickas regelbundet för att veta vem som börjar och sluta titta på en video. Det är enkelt att detektera den sortens beteende
     </target>
         <context-group name="null">
           <context context-type="linenumber">43</context>
@@ -1041,7 +1107,7 @@
       See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
     </source>
         <target>
-      Webbserventer är inte åtkomliga offentligt: eftersom vi använder WebRTC i webbläsaren (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>med WebTorrent-biblioteket<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), är protokollet inte detsamma som vanlig BitTorrent.
+      Webbserventer är inte åtkomliga offentligt: eftersom vi använder WebRTC i webbläsaren (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>med WebTorrent-biblioteket<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>) är protokollet inte detsamma som vanlig BitTorrent.
       När du använder webbläsaren skickar du en signal till spåraren som slumpmässigt utser andra serventer att skicka informationen till.
       Se <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>det här dokumentet<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för mer information
     </target>
@@ -1055,7 +1121,7 @@
     There are much more effective ways to get that kind of information.
   </source>
         <target>
-    Det värsta som kan hända: en vanlig person som spionerar på sina vänner är mycket osannolikt.
+    Det värsta som kan hända, att en vanlig person som spionerar på sina vänner är mycket osannolikt.
     Det finns mycket enklare sätt att få tag på den typen av information.
   </target>
         <context-group name="null">
@@ -1076,7 +1142,7 @@
     Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
   </source>
         <target>
-    Det som hotar privatlivet på YouTube är av ett helt annat slag än det på PeerTube.
+    Det som inskränker privatlivet på YouTube är av ett helt annat slag än det på PeerTube.
     Vad gäller YouTube, samlar plattformen enorma mängder personlig information (inte bara din IP-adress) för att analysera den och spåra dig.
     Dessutom ägs YouTube av Google / Alphabet, ett företag som spårar dig på en uppsjö webbplatser (via AdSense och Google Analytics).
   </target>
@@ -1086,7 +1152,7 @@
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
         <source>What can I do to limit the exposure of my IP address?</source>
-        <target>Vad kan jag göra för att minska min IP-adress exponering?</target>
+        <target>Vad kan jag göra för att minska spridningen av min IP-adress?</target>
         <context-group name="null">
           <context context-type="linenumber">75</context>
         </context-group>
@@ -1098,8 +1164,8 @@
     Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
   </source>
         <target>
-    Din IP-adress is offentlig så varje gång du använder en webbplats, kommer ett antal aktörer (utöver den efterfrågade webbplatsen) se din IP-adress i sina anslutningsloggar: internetleveratörer, routrar, spårare, innehållsleveransnätverk (CDN) och så vidare.
-    PeerTube är öppna med det: vi varnar dig att om du vill hålla din IP-adress för dig själv, måste du använda ett virtuellt privat nätverk (VPN) eller en Tor-webbläsare.
+    Din IP-adress är offentlig så varje gång du använder en webbplats, kommer ett antal aktörer (utöver den efterfrågade webbplatsen) se din IP-adress i sina anslutningsloggar: internetleveratörer, routrar, spårare, innehållsleveransnätverk (CDN) och så vidare.
+    PeerTube är öppet med det: vi varnar dig att om du vill hålla din IP-adress för dig själv, måste du använda ett virtuellt privat nätverk (VPN) eller en Tor-webbläsare.
     Därför är det inte sant att du får tillbaka din anonymitet genom att ta bort P2P från PeerTube.
   </target>
         <context-group name="null">
@@ -1135,7 +1201,7 @@
       </trans-unit>
       <trans-unit id="a6d732b614143f862e69798046dc0868716547e5">
         <source>Set a limit on the request frequency received by the tracker (being tested)</source>
-        <target>Begränsa antalet frörfrågningar som tas emot av spåraren (testas just nu)</target>
+        <target>Begränsa antalet förfrågningar som tas emot av spåraren (testas just nu)</target>
         <context-group name="null">
           <context context-type="linenumber">92</context>
         </context-group>
@@ -1289,7 +1355,7 @@
       </trans-unit>
       <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
         <source>Signup enabled</source>
-        <target>Registrering aktiverat</target>
+        <target>Registrering aktiverad</target>
         <context-group name="null">
           <context context-type="linenumber">92</context>
         </context-group>
@@ -1338,7 +1404,7 @@
       </trans-unit>
       <trans-unit id="55a0f51e38679d3141841e8333da5779d349c587">
         <source>Admin email</source>
-        <target>Admin e-post</target>
+        <target>Administratörens e-postadress</target>
         <context-group name="null">
           <context context-type="linenumber">126</context>
         </context-group>
@@ -1366,7 +1432,7 @@
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5">
         <source>Basic configuration</source>
-        <target>Grundläggande konfiguration</target>
+        <target>Grundläggande inställningar</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -1380,14 +1446,14 @@
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
-        <target>Ditt Twitter-användarnamn</target>
+        <target>Ditt användarnamn på Twitter</target>
         <context-group name="null">
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c">
         <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
-        <target>Anger webbplatsens eller plattformens Twitterkonto, på vilken innehållet publicerades.</target>
+        <target>Webbplatsens eller plattformens Twitterkonto, på vilken innehållet publicerades.</target>
         <context-group name="null">
           <context context-type="linenumber">176</context>
         </context-group>
@@ -1526,7 +1592,7 @@
                 &lt;/pre&gt;
               </source>
         <target>
-                Skriv CSS-kode direkt. Exempel:&lt;br /&gt;
+                Skriv CSS-kod direkt. Exempel:&lt;br /&gt;
                 &lt;pre&gt;
       body <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
         background-color: red;
@@ -1546,14 +1612,14 @@
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
         <source>Advanced configuration</source>
-        <target>Avancerad konfiguration</target>
+        <target>Avancerade inställningar</target>
         <context-group name="null">
           <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8">
         <source>Update configuration</source>
-        <target>Uppdatera konfiguration</target>
+        <target>Uppdatera inställningar</target>
         <context-group name="null">
           <context context-type="linenumber">314</context>
         </context-group>
@@ -1663,7 +1729,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
         <source>State</source>
-        <target>Tillstånd</target>
+        <target>Status</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -1671,6 +1737,27 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
         <source>Created <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
         <target>Skapad <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7823909fb1d8d313382f6f4bd842f1a7ef6f08d1">
+        <source>Accepted</source>
+        <target>Accepterad</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e6a27066251ca1e04c5be86ad758380856df2506">
+        <source>Pending</source>
+        <target>Väntar</target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1d729bcbe3529d2fe2295b7a3a41282ee09de2c8">
+        <source>Redundancy allowed</source>
+        <target>Redundans tillåten</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
@@ -1719,7 +1806,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="74c8f69ec23f41a429e241126ab4d25b9d12348e">
         <source>Processed on</source>
-        <target>Processerad på</target>
+        <target>Beräknad på</target>
         <context-group name="null">
           <context context-type="linenumber">22</context>
         </context-group>
@@ -1754,7 +1841,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05">
         <source>mail@example.com</source>
-        <target>mail@exempel.com</target>
+        <target>mail@example.com</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -1955,6 +2042,13 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="23a793ed0df2e10823dd469c5cea9b5c36be8f7e">
+        <source>Video abuses</source>
+        <target>Anmälningar om missbruk</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="00ecde6001106fe7406a34cc3459cc5b88e4aec1">
         <source>Blacklisted videos</source>
         <target>Svartlistade videor</target>
@@ -2043,7 +2137,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Change ownership</source>
         <target>Ändra ägarskap</target>
         <context-group name="null">
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="046c4fa30411e6b1aa46dc51bf82d07b1adf14d4">
@@ -2147,6 +2241,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3a5d57052d13d2da1cbcffdbb8effb9874b1595a">
+        <source>You don't have any subscriptions yet.</source>
+        <target>Du har inga prenumerationer ännu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
         <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
         <target>Skapad av <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
@@ -2227,21 +2328,21 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Change password</source>
         <target>Ändra lösenord</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229">
         <source>New password</source>
         <target>Nytt lösenord</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ede41f01c781b168a783cfcefc6fb67d48780d9b">
         <source>Confirm new password</source>
         <target>Bekräfta nytt lösenord</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129">
@@ -2293,6 +2394,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
+        <source>Delete your account</source>
+        <target>Radera ditt konto</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e242e3e8608a3c4a944327eb3d5c221dc6e4e3cd">
         <source>
   Sorry, but we couldn't find the page you were looking for.
@@ -2302,6 +2410,17 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
 </target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="09a69cde5889927629e2ac9dc63a71b88252b530">
+        <source>
+    Verify account email confirmation
+  </source>
+        <target>
+    Verifiera bekräftelsen av kontots e-postadress
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="066569dd934e07e4a5f70c415692be17d5715b57">
@@ -2379,14 +2498,14 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Channel</source>
         <target>Kanal</target>
         <context-group name="null">
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
         <target>Offentlighetsstatus</target>
         <context-group name="null">
-          <context context-type="linenumber">161</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
@@ -2412,6 +2531,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <target>Välj en fil att ladda upp</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5e420747842373fa99a75a7a18df068cc81e46fb">
+        <source>Scheduled</source>
+        <target>Schemalagd</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
@@ -2538,7 +2664,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Tags</source>
         <target>Taggar</target>
         <context-group name="null">
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="457b1cff4d8d7fad0c8742f69c413ecf5e443851">
@@ -2552,49 +2678,49 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
         <target>Videobeskrivningar kortas ner som standard och manuell åtgärd krävs för att visa hela.</target>
         <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
         <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
         <target>Schemalägg publicering (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
         <context-group name="null">
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>Den här videon innehåller oförbehållsamt innehåll eller innehåll skapat för vuxna</target>
         <context-group name="null">
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
         <target>Vissa instanser listar inte videor med oförbehållsamt innehåll eller innehåll skapat för vuxna</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>Tillåt videokommentarer</target>
         <context-group name="null">
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
         <target>Publicera video när omkodningen är avklarad</target>
         <context-group name="null">
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
         <target>Om du väljer att inte vänta på omkodningen innan publicering, kommer videon inte gå att spela förrän omkodningen är färdig.</target>
         <context-group name="null">
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -2608,49 +2734,81 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Add another caption</source>
         <target>Lägg till ännu en text</target>
         <context-group name="null">
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
         <source>See the subtitle file</source>
         <target>Se undertextfilen</target>
         <context-group name="null">
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
+        <source>Already uploaded	✔</source>
+        <target>Redan uppladdad	✔</target>
+        <context-group name="null">
+          <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
+        <source>Will be created on update</source>
+        <target>Kommer skapas vid uppdatering</target>
+        <context-group name="null">
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>Avbryt skapande</target>
         <context-group name="null">
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393">
+        <source>Will be deleted on update</source>
+        <target>Kommer raderas vid uppdatering</target>
+        <context-group name="null">
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>Avbryt radering</target>
         <context-group name="null">
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
+        <source>
+            No captions for now.
+          </source>
+        <target>
+            Inga undertexter för tillfället.
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
         <source>Captions</source>
         <target>Texter</target>
         <context-group name="null">
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">139</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
         <source>Upload thumbnail</source>
         <target>Ladda upp miniatyrbild</target>
         <context-group name="null">
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639">
         <source>Upload preview</source>
         <target>Ladda upp förhandsvisning</target>
         <context-group name="null">
-          <context context-type="linenumber">201</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -2664,14 +2822,14 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <target>Kort text för att berätta hur andra kan stödja dig (medlemsplattform …).</target>
         <context-group name="null">
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>Avancerade inställningar</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2335f0bd17c63d835b50cfbbcea6c459cb1314c0">
@@ -2721,7 +2879,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       Avbryt
     </target>
         <context-group name="null">
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
@@ -2768,6 +2926,17 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <target>Bädda in</target>
         <context-group name="null">
           <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="90e0a0a3da80b46e550c1395ff4e97c27259bef8">
+        <source>
+      The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+    </source>
+        <target>
+      Länkadressen är inte säker (använder inte HTTPS) så den inbäddade videon kommer inte fungera på webbplatser som använder HTTPS eftersom webbläsare blockerar osäkert innehåll på säkra webbplatser.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
@@ -2944,46 +3113,50 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5d5844aea729b7cd8e6e1e0d07c3956f8cb54f89">
-        <source>You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and subscribe there.</source>
-        <target>Du kan prenumerera på det här kontot via valfri fediverse-instans med stöd för ActivityPub. Du kan till exempel skriva &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; i sökrutan på Mastodon eller Pleroma och prenumerera där.</target>
-        <context-group name="null">
-          <context context-type="linenumber">138</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>Visa mer</target>
         <context-group name="null">
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
         <source>Show less</source>
         <target>Visa mindre</target>
         <context-group name="null">
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4c0ba3cde3b3c58b855ffb4beaa5804a2fc3826b">
         <source>Friendly Reminder: </source>
         <target>Liten påminnelse:</target>
         <context-group name="null">
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9e66f7507eb263abdbab7abafd825f1dc8bc880b">
+        <source>
+        the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
+      </source>
+        <target>
+        den här videons delningssystem medför att en del teknisk information om ditt system (såsom publik IP-adress) kan skickas till andra serventer.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
         <source>More information</source>
         <target>Mer information</target>
         <context-group name="null">
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
         <target>Visa mer information</target>
         <context-group name="null">
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
@@ -2994,7 +3167,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       OK
     </target>
         <context-group name="null">
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
@@ -3030,14 +3203,14 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>No comments.</source>
         <target>Inga kommentarer.</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
         <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
         <target>Visa alla <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> svar</target>
         <context-group name="null">
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -3048,7 +3221,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
     Kommentarer har avaktiverats.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -3066,7 +3239,32 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       Publicera kommentar
     </target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8b2bb53dfb5f059f2b68cc4ac00661a865909135">
+        <source>You are one step away from commenting</source>
+        <target>Bara ett steg kvar för att kommentera</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7984a44ce86b961f4f18c9a58c638f5e8f07a225">
+        <source>
+      If you have an account on this instance, you can login:
+    </source>
+        <target>
+      Om du har ett konto på den här instansen, kan du logga in:
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="afe0ad39fee662489f1033e53aea3e16a7e89228">
+        <source>login to comment</source>
+        <target>logga in för att kommentera</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
@@ -3107,6 +3305,48 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="369ef5e9c0dd1251abdbf699a5db408bca10777f">
         <source>Published <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> videos</source>
         <target>Publiserade <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> videor</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d9fc2b03f04056671d7d4ffcac7197189d959cd6">
+        <source>240p</source>
+        <target>240p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8cfad7e7a16c57c42535331b65cb7de40d8402e">
+        <source>360p</source>
+        <target>360p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48f0af5a0d0bea4e84b27eaf41b19c85a531c2a5">
+        <source>480p</source>
+        <target>480p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6f06138daf6363746ff26bfc0cb2491c09cdfdf2">
+        <source>720p</source>
+        <target>720p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="65c94f9beb6fe957808c40060da280cc7ace7ab9">
+        <source>1080p</source>
+        <target>1080p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="421a937491f19774d17eefa1d24816dae1a9f111">
+        <source>Auto (via ffmpeg)</source>
+        <target>Automatiskt (via ffmpeg)</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3163,6 +3403,76 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="b9e64712e3e5c342ce9cd32eec6cd7d6c00f4048">
         <source>Configuration updated.</source>
         <target>Konfigurering uppdaterad.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
+        <source>Unlimited</source>
+        <target>Obegränsat</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="54adc67482fdaa0d361a2992bc91e064dc61cc9a">
+        <source>100MB</source>
+        <target>100&amp;nbsp;MB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd34ef1f476d5422f49f6ed429f61fc1cfcb1174">
+        <source>500MB</source>
+        <target>500&amp;nbsp;MB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a47b4beea31cac6e5970b6bc522902f545acc8b">
+        <source>1GB</source>
+        <target>1&amp;nbsp;GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b26d0cac75638623098ab7e06e16b096d1f55cc8">
+        <source>5GB</source>
+        <target>5&amp;nbsp;GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f9fc4e7ec6743cb6f69bea2d0859a655ed44ffae">
+        <source>20GB</source>
+        <target>20&amp;nbsp;GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a56e3f92fe16d97ee4f05051ea61c466ecb51d5e">
+        <source>50GB</source>
+        <target>50&amp;nbsp;GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="31dcc0c63f6234ace8caa84ae1abc33d4022122d">
+        <source>10MB</source>
+        <target>10&amp;nbsp;MB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f2f968b6f2199b919f567702c6f23b43e5ea71af">
+        <source>50MB</source>
+        <target>50&amp;nbsp;MB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c31575424fe1b2a57064413f3eda7ce657c46c8a">
+        <source>2GB</source>
+        <target>2&amp;nbsp;GB</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3230,6 +3540,27 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4d8f527638f3e0b518a96e07d41d886bcce01246">
+        <source>enabled</source>
+        <target>aktiverad</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="795733aac948794cadeb3be6386882efac2c38ad">
+        <source>disabled</source>
+        <target>avaktiverad</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1123807fc813c816404598147173403d00117557">
+        <source>Redundancy for <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></source>
+        <target>Redundans för <x id="INTERPOLATION" equiv-text="{{host}}"/> är <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="800cd3cdf47751b576587259ba3a1bc0a7f435b6">
         <source>Comment updated.</source>
         <target>Kommentaren har uppdaterats.</target>
@@ -3258,6 +3589,20 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="01a909e58239b5dde966ef97a79c656d2c452e03">
+        <source>Do you really want to delete this abuse?</source>
+        <target>Vill du verkligen ta bort den här missbruksanmälan?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a7938b8780c27540ea70cc0f8f4d928c8916cf9">
+        <source>Abuse deleted.</source>
+        <target>Missbruksanmälan raderad</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="652845b2b32b2e117b9b02879b1af07859b0e223">
         <source>Do you really want to remove this video from the blacklist? It will be available again in the videos list.</source>
         <target>Vill du verkligen ta bort den här videon från svartlistan? Den kommer i så fall skrivas upp på videolistan igen.</target>
@@ -3268,13 +3613,6 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
         <target>Videon <x id="INTERPOLATION" equiv-text="{{name}}"/> har tagits bort från svartlistan.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
-        <source>Unlimited</source>
-        <target>Obegränsat</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3349,6 +3687,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
+        <source>If you remove this user, you will not be able to create another with the same username!</source>
+        <target>Om du tar bort den här användaren kommer du inte kunna skapa en ny med samma användarnamn!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
         <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> har raderats.</target>
@@ -3380,13 +3725,6 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
         <source>Type your username to confirm</source>
         <target>Fyll i ditt användarnamn för att bekräfta</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
-        <source>Delete your account</source>
-        <target>Radera ditt konto</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3592,6 +3930,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
         <source>Confirm</source>
         <target>Bekräfta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452">
+        <source>Keyboard Shortcuts:</source>
+        <target>Kortkommandon:</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4697,14 +5042,14 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="457f161d3ca706b8de263b0cd58e493d54e7d4c5">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> compatible that supports:</source>
-        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>-kompatibel som stöder:</target>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>-kompatibel text med stöd för:</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980">
         <source>Emphasis</source>
-        <target>Betoning</target>
+        <target>Betoningar</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4765,6 +5110,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
+        <source>Subscribed</source>
+        <target>Prenumererar</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="58639b3f0be657475928fb49c4a7cbd16aa44ded">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
         <target>Prenumererar på <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
@@ -4810,6 +5162,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="65cc4ab3b4c438e07c89be2b677d08369fb62da2">
         <source>Welcome</source>
         <target>Välkommen</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5e3d1e1cd2650fc6e86fbfcc8fe854e5cf18d6c">
+        <source>Please check your email to verify your account and complete signup.</source>
+        <target>Kontrollera din e-post för att verifiera ditt konto och slutföra kontoregistreringen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
