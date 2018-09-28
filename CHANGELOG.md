@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.0.0-beta.16
+
+### BREAKING CHANGES
+
+ * Add prompt to upgrade.sh to install pre-release version ([@Nutomic](https://github.com/nutomic))
+
+### Features
+
+ * Add shortcuts icon in menu
+ * Improve overview section titles
+ * Check old password before change ([@BO41](https://github.com/BO41))
+
+### Bug fixes
+
+ * Fix some translations
+ * Fix video files duplicated when fps is null ([@rigelk](https://github.com/rigelk))
+ * Fix video import of some youtube videos
+ * Fix (long) video description when importing by url
+ * Fix Mastodon federation with a comment reply
+ * Correctly delete directories on import
+ * Remove duplicated videos on unfollow/delete redundancy
+ * Fix 404 on manifest
+ * Hide useless error when destroying fake renderer
+ * Display other videos on big screens on the right of the watch page
+ * Fix no other videos displayed on some videos
+ 
+
 ## v1.0.0-beta.15
 
 ### Features
