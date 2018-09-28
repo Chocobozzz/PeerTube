@@ -12,8 +12,17 @@ async function removeVideoRedundancy (videoRedundancy: VideoRedundancyModel, t?:
   await videoRedundancy.destroy({ transaction: t })
 }
 
+async function removeRedundancyOf (serverId: number) {
+  const videosRedundancy = await VideoRedundancyModel.listLocalOfServer(serverId)
+
+  for (const redundancy of videosRedundancy) {
+    await removeVideoRedundancy(redundancy)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  removeRedundancyOf,
   removeVideoRedundancy
 }

@@ -12,7 +12,7 @@ import {
   killallServers, makeGetRequest,
   root,
   ServerInfo,
-  setAccessTokensToServers,
+  setAccessTokensToServers, unfollow,
   uploadVideo,
   viewVideo,
   wait
@@ -39,6 +39,8 @@ function checkMagnetWebseeds (file: { magnetUri: string, resolution: { id: numbe
     const found = parsed.urlList.find(url => url === `${ws}-${file.resolution.id}.mp4`)
     expect(found, `Webseed ${ws} not found in ${file.magnetUri} on server ${server.url}`).to.not.be.undefined
   }
+
+  expect(parsed.urlList).to.have.lengthOf(baseWebseeds.length)
 }
 
 async function runServers (strategy: VideoRedundancyStrategy, additionalParams: any = {}) {
@@ -136,23 +138,21 @@ async function check2Webseeds (strategy: VideoRedundancyStrategy, videoUUID?: st
   ]
 
   for (const server of servers) {
-    {
-      const res = await getVideo(server.url, videoUUID)
+    const res = await getVideo(server.url, videoUUID)
 
-      const video: VideoDetails = res.body
+    const video: VideoDetails = res.body
 
-      for (const file of video.files) {
-        checkMagnetWebseeds(file, webseeds, server)
+    for (const file of video.files) {
+      checkMagnetWebseeds(file, webseeds, server)
 
-        // Only servers 1 and 2 have the video
-        if (server.serverNumber !== 3) {
-          await makeGetRequest({
-            url: server.url,
-            statusCodeExpected: 200,
-            path: '/static/webseed/' + `${videoUUID}-${file.resolution.id}.mp4`,
-            contentType: null
-          })
-        }
+      // Only servers 1 and 2 have the video
+      if (server.serverNumber !== 3) {
+        await makeGetRequest({
+          url: server.url,
+          statusCodeExpected: 200,
+          path: '/static/webseed/' + `${videoUUID}-${file.resolution.id}.mp4`,
+          contentType: null
+        })
       }
     }
   }
@@ -180,6 +180,21 @@ async function enableRedundancyOnServer1 () {
 
   expect(server2).to.not.be.undefined
   expect(server2.following.hostRedundancyAllowed).to.be.true
+}
+
+async function disableRedundancyOnServer1 () {
+  await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, false)
+
+  const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
+  const follows: ActorFollow[] = res.body.data
+  const server2 = follows.find(f => f.following.host === 'localhost:9002')
+  const server3 = follows.find(f => f.following.host === 'localhost:9003')
+
+  expect(server3).to.not.be.undefined
+  expect(server3.following.hostRedundancyAllowed).to.be.false
+
+  expect(server2).to.not.be.undefined
+  expect(server2.following.hostRedundancyAllowed).to.be.false
 }
 
 async function cleanServers () {
@@ -217,6 +232,17 @@ describe('Test videos redundancy', function () {
       await checkStatsWith2Webseed(strategy)
     })
 
+    it('Should undo redundancy on server 1 and remove duplicated videos', async function () {
+      this.timeout(40000)
+
+      await disableRedundancyOnServer1()
+
+      await waitJobs(servers)
+      await wait(5000)
+
+      await check1WebSeed(strategy)
+    })
+
     after(function () {
       return cleanServers()
     })
@@ -249,6 +275,17 @@ describe('Test videos redundancy', function () {
 
       await check2Webseeds(strategy)
       await checkStatsWith2Webseed(strategy)
+    })
+
+    it('Should unfollow on server 1 and remove duplicated videos', async function () {
+      this.timeout(40000)
+
+      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+
+      await waitJobs(servers)
+      await wait(5000)
+
+      await check1WebSeed(strategy)
     })
 
     after(function () {

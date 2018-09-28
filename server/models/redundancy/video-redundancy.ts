@@ -286,6 +286,47 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope([ ScopeNames.WITH_VIDEO ]).findAll(query)
   }
 
+  static async listLocalOfServer (serverId: number) {
+    const actor = await getServerActor()
+
+    const query = {
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          model: VideoFileModel,
+          required: true,
+          include: [
+            {
+              model: VideoModel,
+              required: true,
+              include: [
+                {
+                  attributes: [],
+                  model: VideoChannelModel.unscoped(),
+                  required: true,
+                  include: [
+                    {
+                      attributes: [],
+                      model: ActorModel.unscoped(),
+                      required: true,
+                      where: {
+                        serverId
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return VideoRedundancyModel.findAll(query)
+  }
+
   static async getStats (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
 

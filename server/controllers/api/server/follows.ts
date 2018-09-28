@@ -17,6 +17,7 @@ import {
 import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
+import { removeRedundancyOf } from '../../../lib/redundancy'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -100,6 +101,10 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
     const server = follow.ActorFollowing.Server
     server.redundancyAllowed = false
     await server.save({ transaction: t })
+
+    // Async, could be long
+    removeRedundancyOf(server.id)
+      .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, err))
 
     await follow.destroy({ transaction: t })
   })
