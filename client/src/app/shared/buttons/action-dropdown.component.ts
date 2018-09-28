@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core'
 
 export type DropdownAction<T> = {
   label?: string
-  handler?: (T) => any
-  linkBuilder?: (T) => (string | number)[]
-  isDisplayed?: (T) => boolean
+  handler?: (T: any) => any
+  linkBuilder?: (T: any) => (string | number)[]
+  isDisplayed?: (T: any) => boolean
 }
 
 @Component({

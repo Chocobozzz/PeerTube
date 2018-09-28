@@ -32,7 +32,7 @@ export class RestService {
     return newParams
   }
 
-  addObjectParams (params: HttpParams, object: object) {
+  addObjectParams (params: HttpParams, object: any) {
     for (const name of Object.keys(object)) {
       const value = object[name]
       if (!value) continue
