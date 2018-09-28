@@ -138,6 +138,43 @@ function transcode (options: TranscodeOptions) {
       command = command.withFPS(fps)
     }
 
+    // Constrained Encoding (VBV)
+    // https://slhck.info/video/2017/03/01/rate-control.html
+    // Sources for individual quality levels:
+    // Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
+    // YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
+    switch (options.resolution) {
+    case VideoResolution.H_240P:
+      // quality according to Google Live Encoder: 400 - 1,000 Kbps
+      // Quality according to YouTube Video Info: 263 Kbps
+      command.outputOptions('-maxrate 250K -bufsize 500M')
+      break
+    case VideoResolution.H_360P:
+      // quality according to Google Live Encoder: 400 - 1,000 Kbps
+      // Quality according to YouTube Video Info: 531 Kbps
+      command.outputOptions('-maxrate 500K -bufsize 1400M')
+      break
+    case VideoResolution.H_480P:
+      // quality according to Google Live Encoder: 500 - 2,000 Kbps
+      // Quality according to YouTube Video Info: 847 Kbps
+      command.outputOptions('-maxrate 800K -bufsize 1600M')
+      break
+    case VideoResolution.H_720P:
+      // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
+      // Quality according to YouTube Video Info: 1525 Kbps
+      command.outputOptions('-maxrate 1500K -bufsize 3M')
+      break
+    case VideoResolution.H_1080P:
+      // quality according to Google Live Encoder: 3000 - 6000 Kbps
+      // Quality according to YouTube Video Info: 2788 Kbps
+      command.outputOptions('-maxrate 3M -bufsize 6M')
+      break
+    }
+
+    // Force a keyframe every 2 seconds, and on scene cuts.
+    // https://superuser.com/a/1098329
+    command.outputOptions('-force_key_frames "expr:gte(t,n_forced*2)"')
+
     command
       .on('error', (err, stdout, stderr) => {
         logger.error('Error in transcoding job.', { stdout, stderr })
