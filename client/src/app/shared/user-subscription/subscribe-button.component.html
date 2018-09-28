@@ -33,15 +33,14 @@
 
     <div class="dropdown-menu" ngbDropdownMenu>
 
-      <h6 class="dropdown-header" i18n>Using an ActivityPub-compatible account</h6>
+      <h6 class="dropdown-header" i18n>Using an ActivityPub account</h6>
 
-      <button class="dropdown-item" (click)="subscribe()"
-              *ngIf="subscribed === false">
+      <button class="dropdown-item" (click)="subscribe()">
         <span *ngIf="!isUserLoggedIn()" i18n>Subscribe with an account on {{ videoChannel.host }}</span>
         <span *ngIf="isUserLoggedIn()" i18n>Subscribe with your local account</span>
       </button>
 
-      <button class="dropdown-item" i18n>Subscribe with a remote account:</button>
+      <button class="dropdown-item" i18n>Subscribe with a Mastodon account:</button>
       <my-remote-subscribe showHelp="true" account="{{ uriAccount }}"></my-remote-subscribe>
 
       <div class="dropdown-divider"></div>
