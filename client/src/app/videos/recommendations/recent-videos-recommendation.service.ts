@@ -3,8 +3,8 @@ import { RecommendationService } from '@app/videos/recommendations/recommendatio
 import { Video } from '@app/shared/video/video.model'
 import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
 import { VideoService } from '@app/shared/video/video.service'
-import { map } from 'rxjs/operators'
-import { Observable } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
+import { Observable, of } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
 
@@ -13,7 +13,6 @@ import { AdvancedSearch } from '@app/search/advanced-search.model'
  */
 @Injectable()
 export class RecentVideosRecommendationService implements RecommendationService {
-
   readonly pageSize = 5
 
   constructor (
@@ -32,24 +31,22 @@ export class RecentVideosRecommendationService implements RecommendationService 
   }
 
   private fetchPage (page: number, recommendation: RecommendationInfo): Observable<Video[]> {
-    let pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
-    if (!recommendation.tags) {
-      return this.videos.getVideos(pagination, '-createdAt')
-        .pipe(
-          map(v => v.videos)
-        )
-    }
-    if (recommendation.tags.length === 0) {
-      return this.videos.getVideos(pagination, '-createdAt')
-        .pipe(
-          map(v => v.videos)
-        )
-    }
+    const pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
+    const defaultSubscription = this.videos.getVideos(pagination, '-createdAt')
+                                    .pipe(map(v => v.videos))
+
+    if (!recommendation.tags || recommendation.tags.length === 0) return defaultSubscription
+
     return this.searchService.searchVideos('',
       pagination,
       new AdvancedSearch({ tagsOneOf: recommendation.tags.join(','), sort: '-createdAt' })
     ).pipe(
-      map(v => v.videos)
+      map(v => v.videos),
+      switchMap(videos => {
+        if (videos.length <= 1) return defaultSubscription
+
+        return of(videos)
+      })
     )
   }
 }
