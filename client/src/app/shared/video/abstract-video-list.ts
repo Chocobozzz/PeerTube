@@ -27,7 +27,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   sort: VideoSortField = '-publishedAt'
   categoryOneOf?: number
   defaultSort: VideoSortField = '-publishedAt'
-  syndicationItems = []
+  syndicationItems: any = []
 
   loadOnInit = true
   marginContent = true
@@ -59,7 +59,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private resizeSubscription: Subscription
 
   abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number}>
-  abstract generateSyndicationList ()
+  abstract generateSyndicationList (): any
 
   get user () {
     return this.authService.getUser()
@@ -209,7 +209,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   }
 
   protected setNewRouteParams () {
-    const paramsObject = this.buildRouteParams()
+    const paramsObject: any = this.buildRouteParams()
 
     const queryParams = Object.keys(paramsObject).map(p => p + '=' + paramsObject[p]).join('&')
     this.location.replaceState(this.currentRoute, queryParams)

@@ -6,7 +6,7 @@ class TheaterButton extends Button {
 
   private static readonly THEATER_MODE_CLASS = 'vjs-theater-enabled'
 
-  constructor (player, options) {
+  constructor (player: any, options: any) {
     super(player, options)
 
     const enabled = getStoredTheater()

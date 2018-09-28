@@ -5,7 +5,7 @@ import { buildVideoLink } from './utils'
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  constructor (player: videojs.Player, options) {
+  constructor (player: videojs.Player, options: any) {
     super(player, options)
   }
 

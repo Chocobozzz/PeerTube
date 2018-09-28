@@ -48,7 +48,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   calendarTimezone: string
   calendarDateFormat: string
 
-  private schedulerInterval
+  private schedulerInterval: any
   private firstPatchDone = false
   private initialVideoCaptions: string[] = []
 
@@ -77,13 +77,13 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   updateForm () {
-    const defaultValues = {
+    const defaultValues: any = {
       nsfw: 'false',
       commentsEnabled: 'true',
       waitTranscoding: 'true',
       tags: []
     }
-    const obj = {
+    const obj: any = {
       name: this.videoValidatorsService.VIDEO_NAME,
       privacy: this.videoValidatorsService.VIDEO_PRIVACY,
       channelId: this.videoValidatorsService.VIDEO_CHANNEL,
