@@ -146,6 +146,38 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.findOne(query)
   }
 
+  static async isLocalByVideoUUIDExists (uuid: string) {
+    const actor = await getServerActor()
+
+    const query = {
+      raw: true,
+      attributes: [ 'id' ],
+      where: {
+        actorId: actor.id
+      },
+      include: [
+        {
+          attributes: [ ],
+          model: VideoFileModel,
+          required: true,
+          include: [
+            {
+              attributes: [ ],
+              model: VideoModel,
+              required: true,
+              where: {
+                uuid
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return VideoRedundancyModel.findOne(query)
+      .then(r => !!r)
+  }
+
   static async getVideoSample (p: Bluebird<VideoModel[]>) {
     const rows = await p
     const ids = rows.map(r => r.id)

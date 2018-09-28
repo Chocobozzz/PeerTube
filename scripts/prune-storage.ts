@@ -4,6 +4,7 @@ import { CONFIG } from '../server/initializers/constants'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
 import { remove, readdir } from 'fs-extra'
+import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
 
 run()
   .then(() => process.exit(0))
@@ -15,16 +16,23 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const storageToPrune = [
+  const storageOnlyOwnedToPrune = [
     CONFIG.STORAGE.VIDEOS_DIR,
-    CONFIG.STORAGE.PREVIEWS_DIR,
-    CONFIG.STORAGE.THUMBNAILS_DIR,
     CONFIG.STORAGE.TORRENTS_DIR
   ]
 
+  const storageForAllToPrune = [
+    CONFIG.STORAGE.PREVIEWS_DIR,
+    CONFIG.STORAGE.THUMBNAILS_DIR
+  ]
+
   let toDelete: string[] = []
-  for (const directory of storageToPrune) {
-    toDelete = toDelete.concat(await pruneDirectory(directory))
+  for (const directory of storageOnlyOwnedToPrune) {
+    toDelete = toDelete.concat(await pruneDirectory(directory, true))
+  }
+
+  for (const directory of storageForAllToPrune) {
+    toDelete = toDelete.concat(await pruneDirectory(directory, false))
   }
 
   if (toDelete.length === 0) {
@@ -48,17 +56,27 @@ async function run () {
   }
 }
 
-async function pruneDirectory (directory: string) {
+async function pruneDirectory (directory: string, onlyOwned = false) {
   const files = await readdir(directory)
 
   const toDelete: string[] = []
   for (const file of files) {
     const uuid = getUUIDFromFilename(file)
     let video: VideoModel
+    let localRedundancy: boolean
 
-    if (uuid) video = await VideoModel.loadByUUIDWithFile(uuid)
+    if (uuid) {
+      video = await VideoModel.loadByUUIDWithFile(uuid)
+      localRedundancy = await VideoRedundancyModel.isLocalByVideoUUIDExists(uuid)
+    }
 
-    if (!uuid || !video) toDelete.push(join(directory, file))
+    if (
+      !uuid ||
+      !video ||
+      (onlyOwned === true && (video.isOwned() === false && localRedundancy === false))
+    ) {
+      toDelete.push(join(directory, file))
+    }
   }
 
   return toDelete
@@ -80,7 +98,8 @@ async function askConfirmation () {
       properties: {
         confirm: {
           type: 'string',
-          description: 'Are you sure you want to delete these files? Please check carefully',
+          description: 'These following unused files can be deleted, but please check your backups first (bugs happen).' +
+            ' Can we delete these files?',
           default: 'n',
           required: true
         }
