@@ -146,12 +146,11 @@ export class VideoImportModel extends Model<VideoImportModel> {
 
   toFormattedJSON (): VideoImport {
     const videoFormatOptions = {
+      completeDescription: true,
       additionalAttributes: { state: true, waitTranscoding: true, scheduledUpdate: true }
     }
     const video = this.Video
-      ? Object.assign(this.Video.toFormattedJSON(videoFormatOptions), {
-        tags: this.Video.Tags.map(t => t.name)
-      })
+      ? Object.assign(this.Video.toFormattedJSON(videoFormatOptions), { tags: this.Video.Tags.map(t => t.name) })
       : undefined
 
     return {

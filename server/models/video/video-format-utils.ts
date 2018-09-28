@@ -12,6 +12,7 @@ import {
 } from '../../lib/activitypub'
 
 export type VideoFormattingJSONOptions = {
+  completeDescription?: boolean
   additionalAttributes: {
     state?: boolean,
     waitTranscoding?: boolean,
@@ -44,7 +45,7 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
       label: VideoModel.getPrivacyLabel(video.privacy)
     },
     nsfw: video.nsfw,
-    description: video.getTruncatedDescription(),
+    description: options.completeDescription === true ? video.description : video.getTruncatedDescription(),
     isLocal: video.isOwned(),
     duration: video.duration,
     views: video.views,
