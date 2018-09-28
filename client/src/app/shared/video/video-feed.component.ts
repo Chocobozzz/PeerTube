@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core'
   templateUrl: './video-feed.component.html'
 })
 export class VideoFeedComponent {
-  @Input() syndicationItems
+  @Input() syndicationItems: any
 }

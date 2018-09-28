@@ -25,7 +25,7 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
-  @ViewChild('videofileInput') videofileInput
+  @ViewChild('videofileInput') videofileInput: any
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY

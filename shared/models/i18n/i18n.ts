@@ -17,7 +17,7 @@ export const I18N_LOCALES: any = {
   'zh-Hans-CN': '简体中文（中国）'
 }
 
-const I18N_LOCALE_ALIAS = {
+const I18N_LOCALE_ALIAS: any = {
   'en': 'en-US',
   'fr': 'fr-FR',
   'eu': 'eu-ES',

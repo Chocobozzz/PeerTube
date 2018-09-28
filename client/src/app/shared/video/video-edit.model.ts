@@ -49,7 +49,7 @@ export class VideoEdit implements VideoUpdate {
     }
   }
 
-  patch (values: Object) {
+  patch (values: any) {
     Object.keys(values).forEach((key) => {
       this[ key ] = values[ key ]
     })
