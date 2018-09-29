@@ -1,17 +1,8 @@
 const config = require('application-config')('PeerTube/CLI')
 const netrc = require('netrc-parser').default
+import { getVersion } from '../helpers/utils'
 
-const version = () => {
-  const tag = require('child_process')
-    .execSync('[[ ! -d .git ]] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true', { stdio: [0,1,2] })
-  if (tag) return tag
-
-  const version = require('child_process')
-    .execSync('[[ ! -d .git ]] || git rev-parse --short HEAD').toString().trim()
-  if (version) return version
-
-  return require('../../../package.json').version
-}
+const version = getVersion
 
 let settings = {
   remotes: [],

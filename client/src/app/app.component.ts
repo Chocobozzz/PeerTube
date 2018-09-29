@@ -45,6 +45,11 @@ export class AppComponent implements OnInit {
     return this.serverService.getConfig().serverVersion
   }
 
+  get serverCommit () {
+    const commit = this.serverService.getConfig().serverCommit || ''
+    return (commit !== '') ? '...' + commit : commit
+  }
+
   get instanceName () {
     return this.serverService.getConfig().instance.name
   }
