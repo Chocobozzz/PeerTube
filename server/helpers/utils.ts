@@ -54,6 +54,18 @@ function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
+function getVersion () {
+  const tag = require('child_process')
+    .execSync('[[ ! -d .git ]] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true', { stdio: [0,1,2] })
+  if (tag) return tag.replace(/^v/, '')
+
+  const version = require('child_process')
+    .execSync('[[ ! -d .git ]] || git rev-parse --short HEAD').toString().trim()
+  if (version) return version
+
+  return require('../../../package.json').version
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -62,5 +74,6 @@ export {
   getFormattedObjects,
   getSecureTorrentName,
   getServerActor,
+  getVersion,
   generateVideoTmpPath
 }
