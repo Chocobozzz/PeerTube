@@ -221,6 +221,7 @@
     cursor: pointer;
     height: $button-height;
     text-overflow: ellipsis;
+    color: var(--mainForegroundColor);
 
     &:focus {
       outline: none;

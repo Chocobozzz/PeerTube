@@ -15,7 +15,7 @@ p-table {
   font-size: 15px !important;
 
   td {
-    border: 1px solid #E5E5E5 !important;
+    // border: 1px solid #E5E5E5 !important;
     padding-left: 15px !important;
 
     &:not(.action-cell) {
@@ -113,7 +113,8 @@ p-table {
     .ui-paginator-bottom {
       background-color: var(--mainBackgroundColor) !important;
       position: relative;
-      border: 1px solid !important;
+      border: none;
+      border-top: 1px solid !important;
       border-color: var(--submenuColor) !important;
       height: 40px;
       display: flex;
