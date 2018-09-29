@@ -304,7 +304,7 @@ describe('Test video transcoding', function () {
           const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
           const bitrate = await getVideoFileBitrate(path)
           const resolution2 = await getVideoFileResolution(path)
-          const targetBitrate = await getTargetBitrate(resolution2.videoFileResolution)
+          const targetBitrate = getTargetBitrate(resolution2.videoFileResolution)
 
           expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution))
         }

@@ -150,9 +150,6 @@ function transcode (options: TranscodeOptions) {
 
     // Constrained Encoding (VBV)
     // https://slhck.info/video/2017/03/01/rate-control.html
-    // Sources for individual quality levels:
-    // Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
-    // YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
     const targetBitrate = getTargetBitrate(options.resolution)
     command.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 

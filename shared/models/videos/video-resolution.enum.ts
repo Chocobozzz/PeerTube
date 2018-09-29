@@ -6,6 +6,11 @@ export enum VideoResolution {
   H_1080P = 1080
 }
 
+/**
+ * Sources for individual quality levels:
+ * Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
+ * YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
+ */
 export function getTargetBitrate (resolution: VideoResolution) {
   switch (resolution) {
   case VideoResolution.H_240P:
@@ -31,6 +36,9 @@ export function getTargetBitrate (resolution: VideoResolution) {
   }
 }
 
+/**
+ * The maximum bitrate we expect to see on a transcoded video.
+ */
 export function getMaxBitrate (resolution: VideoResolution) {
   return getTargetBitrate(resolution) * 1.2
 }
