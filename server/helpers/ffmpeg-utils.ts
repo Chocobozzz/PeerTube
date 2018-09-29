@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
-import { VideoResolution } from '../../shared/models/videos'
+import { VideoResolution, getTargetBitrate } from '../../shared/models/videos'
 import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -53,6 +53,16 @@ async function getVideoFileFPS (path: string) {
   }
 
   return 0
+}
+
+async function getVideoFileBitrate (path: string) {
+  return new Promise<number>((res, rej) => {
+    ffmpeg.ffprobe(path, (err, metadata) => {
+      if (err) return rej(err)
+
+      return res(metadata.format.bit_rate)
+    })
+  })
 }
 
 function getDurationFromVideoFile (path: string) {
@@ -143,37 +153,8 @@ function transcode (options: TranscodeOptions) {
     // Sources for individual quality levels:
     // Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
     // YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
-    switch (options.resolution) {
-    case VideoResolution.H_240P:
-      // quality according to Google Live Encoder: 400 - 1,000 Kbps
-      // Quality according to YouTube Video Info: 263 Kbps
-      command.outputOptions('-maxrate 250K -bufsize 500M')
-      break
-    case VideoResolution.H_360P:
-      // quality according to Google Live Encoder: 400 - 1,000 Kbps
-      // Quality according to YouTube Video Info: 531 Kbps
-      command.outputOptions('-maxrate 500K -bufsize 1400M')
-      break
-    case VideoResolution.H_480P:
-      // quality according to Google Live Encoder: 500 - 2,000 Kbps
-      // Quality according to YouTube Video Info: 847 Kbps
-      command.outputOptions('-maxrate 800K -bufsize 1600M')
-      break
-    case VideoResolution.H_720P:
-      // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
-      // Quality according to YouTube Video Info: 1525 Kbps
-      command.outputOptions('-maxrate 1500K -bufsize 3M')
-      break
-    case VideoResolution.H_1080P:
-      // quality according to Google Live Encoder: 3000 - 6000 Kbps
-      // Quality according to YouTube Video Info: 2788 Kbps
-      command.outputOptions('-maxrate 3M -bufsize 6M')
-      break
-    }
-
-    // Force a keyframe every 2 seconds, and on scene cuts.
-    // https://superuser.com/a/1098329
-    command.outputOptions('-force_key_frames "expr:gte(t,n_forced*2)"')
+    const targetBitrate = getTargetBitrate(options.resolution)
+    command.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 
     command
       .on('error', (err, stdout, stderr) => {
@@ -194,7 +175,8 @@ export {
   transcode,
   getVideoFileFPS,
   computeResolutionsToTranscode,
-  audio
+  audio,
+  getVideoFileBitrate
 }
 
 // ---------------------------------------------------------------------------

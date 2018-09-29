@@ -4,8 +4,8 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoDetails, VideoState } from '../../../../shared/models/videos'
-import { getVideoFileFPS, audio } from '../../../helpers/ffmpeg-utils'
+import { VideoDetails, VideoState, getTargetBitrate, getMaxBitrate } from '../../../../shared/models/videos'
+import { getVideoFileFPS, audio, getVideoFileBitrate, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   doubleFollow,
@@ -263,6 +263,52 @@ describe('Test video transcoding', function () {
 
       // Server 1 should not have the video yet
       await getVideo(servers[0].url, videoId, 404)
+    }
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+      const videoToFind = res.body.data.find(v => v.name === 'waiting video')
+      expect(videoToFind).not.to.be.undefined
+
+      const res2 = await getVideo(server.url, videoToFind.id)
+      const videoDetails: VideoDetails = res2.body
+
+      expect(videoDetails.state.id).to.equal(VideoState.PUBLISHED)
+      expect(videoDetails.state.label).to.equal('Published')
+      expect(videoDetails.waitTranscoding).to.be.true
+    }
+  })
+
+  it('Should respect maximum bitrate values', async function () {
+    this.timeout(80000)
+
+    {
+      const videoAttributes = {
+        name: 'waiting video',
+        fixture: 'video_high_bitrate_1080p.mp4',
+        waitTranscoding: false
+      }
+
+      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const res = await getVideosList(server.url)
+
+        const video = res.body.data.find(v => v.name === videoAttributes.name)
+
+        for (const resolution of ['240p', '360p', '480p', '720p', '1080p']) {
+          const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+          const bitrate = await getVideoFileBitrate(path)
+          const resolution2 = await getVideoFileResolution(path)
+          const targetBitrate = await getTargetBitrate(resolution2.videoFileResolution)
+
+          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution))
+        }
+      }
     }
 
     await waitJobs(servers)
