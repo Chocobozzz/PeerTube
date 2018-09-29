@@ -106,9 +106,10 @@ async function run () {
 
   console.log('Uploading %s video...', program[ 'videoName' ])
 
-  let videoAttributes:any = {
+  const videoAttributes = {
     name: program['videoName'],
     category: program['category'],
+    channelId: program['channelId'],
     licence: program['licence'],
     language: program['language'],
     nsfw: program['nsfw'],
@@ -121,10 +122,6 @@ async function run () {
     waitTranscoding: true,
     privacy: program['privacy'],
     support: undefined
-  }
-
-  if (program['channelId']) {
-    videoAttributes.channelId = program['channelId']
   }
 
   await uploadVideo(program[ 'url' ], accessToken, videoAttributes)
