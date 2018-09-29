@@ -2,6 +2,7 @@ import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 
 export interface ServerConfig {
   serverVersion: string
+  serverCommit?: string
 
   instance: {
     name: string
