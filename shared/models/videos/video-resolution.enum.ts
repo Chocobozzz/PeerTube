@@ -40,5 +40,5 @@ export function getTargetBitrate (resolution: VideoResolution) {
  * The maximum bitrate we expect to see on a transcoded video.
  */
 export function getMaxBitrate (resolution: VideoResolution) {
-  return getTargetBitrate(resolution) * 1.2
+  return getTargetBitrate(resolution) * 1.5
 }

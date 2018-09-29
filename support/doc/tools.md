@@ -187,6 +187,17 @@ To delete them (a confirmation will be demanded first):
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
+### optimize-old-videos.js
+
+Before version v1.0.0-beta.16, Peertube did not specify a bitrate for the transcoding of uploaded videos.
+This means that videos might be encoded into very large files that are too large for streaming. This script
+re-transcodes these videos so that they can be watched properly, even on slow connections.
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run optimize-old-videos
+```
+
+
 ### update-host.js
 
 If you started PeerTube with a domain, and then changed it you will have invalid torrent files and invalid URLs in your database.
