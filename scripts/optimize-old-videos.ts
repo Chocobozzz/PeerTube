@@ -2,7 +2,8 @@ import { join } from 'path'
 import { remove, readdir, move } from 'fs-extra'
 import { CONFIG } from '../server/initializers/constants'
 import { getVideoFileResolution, transcode, getVideoFileBitrate } from '../server/helpers/ffmpeg-utils'
-import { getTargetBitrate, getMaxBitrate } from '../shared/models/videos'
+import { getMaxBitrate } from '../shared/models/videos'
+import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
 
 run()
   .then(() => process.exit(0))
@@ -17,11 +18,13 @@ async function run () {
     const inputPath = join(CONFIG.STORAGE.VIDEOS_DIR, file)
     const videoBitrate = await getVideoFileBitrate(inputPath)
     const resolution = await getVideoFileResolution(inputPath)
+    const uuid = getUUIDFromFilename(file)
 
-    // Only re-transcode videos if their bitrate is at least 10% over the maximum.
-    if (videoBitrate > getMaxBitrate(resolution.videoFileResolution)) {
+    const isLocalVideo = await VideoRedundancyModel.isLocalByVideoUUIDExists(uuid)
+    const isMaxBitrateExceeded = videoBitrate > getMaxBitrate(resolution.videoFileResolution)
+    if (uuid != null && isLocalVideo && isMaxBitrateExceeded) {
       console.log(`Optimizing video ${ file }`)
-      const outputPath = join(CONFIG.STORAGE.VIDEOS_DIR, getUUIDFromFilename(file) + '-optimized.mp4')
+      const outputPath = join(CONFIG.STORAGE.VIDEOS_DIR, uuid + '-optimized.mp4')
       await remove(outputPath)
       const transcodeOptions = {
         inputPath: inputPath,
