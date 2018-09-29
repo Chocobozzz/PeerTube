@@ -93,7 +93,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   update () {
-    if (this.checkForm() === false) {
+    if (this.checkForm() === false
+      || this.isUpdatingVideo === true) {
       return
     }
 
