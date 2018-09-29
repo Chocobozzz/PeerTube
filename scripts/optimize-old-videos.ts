@@ -38,7 +38,7 @@ async function run () {
       await transcode(transcodeOptions)
       await move(outputPath, inputPath, { overwrite: true })
       const videoModel = VideoModel.loadByUUIDWithFile(uuid)
-      videoModel.createTorrentAndSetInfoHash()
+      //videoModel.createTorrentAndSetInfoHash()
     }
   }
   console.log('Finished optimizing videos')
