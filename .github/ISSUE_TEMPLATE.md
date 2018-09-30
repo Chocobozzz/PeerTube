@@ -1,5 +1,5 @@
 <!-- If you have a question, please read the FAQ.md first -->
-
+<!-- If you report a security issue, please refrain from filling an issue and refer to SECURITY.md for the disclosure procedure. -->
 <!-- If you report a bug, please fill the form -->
 
 * **PeerTube version or URL:**
