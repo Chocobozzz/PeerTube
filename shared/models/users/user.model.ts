@@ -20,4 +20,5 @@ export interface User {
   blockedReason?: string
 
   videoQuotaUsed?: number
+  [key: string]: any
 }
