@@ -37,7 +37,8 @@ export function getTargetBitrate (resolution: VideoResolution, fps: number) {
       // Quality according to YouTube Video Info: 1752 Kbps
       return 1750 * 1000
     }
-  case VideoResolution.H_1080P:
+  case VideoResolution.H_1080P: // fallthrough
+  default:
     if (fps === 60) {
       // quality according to Google Live Encoder: 3000 - 6000 Kbps
       // Quality according to YouTube Video Info: 4387 Kbps

@@ -116,10 +116,6 @@ type TranscodeOptions = {
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
-    if (options.resolution === undefined) {
-      return rej('Invalid video file')
-    }
-
     let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
                     .preset(standard)
@@ -130,16 +126,18 @@ function transcode (options: TranscodeOptions) {
     }
 
     let fps = await getVideoFileFPS(options.inputPath)
-    // '?x720' or '720x?' for example
-    const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
-    command = command.size(size)
+    if (options.resolution !== undefined) {
+      // '?x720' or '720x?' for example
+      const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
+      command = command.size(size)
 
-    // On small/medium resolutions, limit FPS
-    if (
-      options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-      fps > VIDEO_TRANSCODING_FPS.AVERAGE
-    ) {
-      fps = VIDEO_TRANSCODING_FPS.AVERAGE
+      // On small/medium resolutions, limit FPS
+      if (
+        options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+        fps > VIDEO_TRANSCODING_FPS.AVERAGE
+      ) {
+        fps = VIDEO_TRANSCODING_FPS.AVERAGE
+      }
     }
 
     if (fps) {
