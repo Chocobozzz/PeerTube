@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { BytesPipe } from 'ngx-pipes'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { Observable } from 'rxjs'
-import { ResultList, UserCreate, UserUpdate, User } from '../../../../../../shared'
+import { ResultList, UserCreate, UserUpdate, User, UserRole } from '../../../../../../shared'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -81,7 +81,14 @@ export class UserService {
 
     const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
 
+    const roleLabels: { [ id in UserRole ]: string } = {
+      [UserRole.USER]: this.i18n('User'),
+      [UserRole.ADMINISTRATOR]: this.i18n('Administrator'),
+      [UserRole.MODERATOR]: this.i18n('Moderator')
+    }
+
     return Object.assign(user, {
+      roleLabel: roleLabels[user.role],
       videoQuota,
       videoQuotaUsed
     })

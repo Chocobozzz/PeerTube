@@ -26,14 +26,14 @@ export class MarkdownService {
     if (!markdown) return ''
 
     const html = this.textMarkdownIt.render(markdown)
-    return this.avoidTruncatedLinks(html)
+    return this.avoidTruncatedTags(html)
   }
 
   enhancedMarkdownToHTML (markdown: string) {
     if (!markdown) return ''
 
     const html = this.enhancedMarkdownIt.render(markdown)
-    return this.avoidTruncatedLinks(html)
+    return this.avoidTruncatedTags(html)
   }
 
   private createMarkdownIt (rules: string[]) {
@@ -70,8 +70,10 @@ export class MarkdownService {
     }
   }
 
-  private avoidTruncatedLinks (html: string) {
-    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
+  private avoidTruncatedTags (html: string) {
+    return html.replace(/\*\*?([^*]+)$/, '$1')
+      .replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
       .replace(/\[[^\]]+\]?\(?([^\)]+)$/, '$1')
+
   }
 }

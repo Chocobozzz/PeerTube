@@ -18,6 +18,7 @@
               <my-help i18n-preHtml preHtml="Tags could be used to suggest relevant recommendations.</br>Press Enter to add a new tag."></my-help>
               <tag-input
                 [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
+                i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a new tag"
                 formControlName="tags" maxItems="5" modelAsStrings="true"
               ></tag-input>
             </div>

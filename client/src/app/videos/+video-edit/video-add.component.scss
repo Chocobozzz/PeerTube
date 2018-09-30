@@ -6,7 +6,7 @@ $border-type: solid;
 $border-color: #EAEAEA;
 
 /deep/ .root-tabset.video-add-tabset {
-  &.hide-nav .nav {
+  &.hide-nav > .nav {
     display: none !important;
   }
 

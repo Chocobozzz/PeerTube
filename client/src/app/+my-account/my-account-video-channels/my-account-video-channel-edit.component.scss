@@ -14,6 +14,10 @@ my-actor-avatar-info {
   @include peertube-input-group(340px);
 }
 
+.input-group-append {
+  height: 30px;
+}
+
 input[type=text] {
   @include peertube-input-text(340px);
 
