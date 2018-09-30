@@ -54,7 +54,7 @@ class PeerTubePlugin extends Plugin {
 
   private player: any
   private currentVideoFile: VideoFile
-  private torrent: WebTorrent.Torrent
+  private torrent: any
   private videoCaptions: VideoJSCaption[]
 
   private renderer: any
@@ -302,7 +302,7 @@ class PeerTubePlugin extends Plugin {
       }, options.delay || 0)
     })
 
-    this.torrent.on('error', err => console.error(err))
+    this.torrent.on('error', (err: any) => console.error(err))
 
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
@@ -625,7 +625,7 @@ class PeerTubePlugin extends Plugin {
     return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
   }
 
-  private stopTorrent (torrent: WebTorrent.Torrent) {
+  private stopTorrent (torrent: any) {
     torrent.pause()
     // Pause does not remove actual peers (in particular the webseed peer)
     torrent.removePeer(torrent[ 'ws' ])

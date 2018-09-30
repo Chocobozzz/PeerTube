@@ -202,7 +202,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   private updateForm () {
-    const data = {
+    const data: any = {
       instanceName: this.customConfig.instance.name,
       instanceShortDescription: this.customConfig.instance.shortDescription,
       instanceDescription: this.customConfig.instance.description,

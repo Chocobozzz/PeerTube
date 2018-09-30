@@ -155,7 +155,7 @@ export class ServerService {
         .pipe(
           switchMap(translations => {
             return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
-                       .pipe(map(data => ({ data, translations })))
+                       .pipe(map((data: any) => ({ data, translations })))
           })
         )
         .subscribe(({ data, translations }) => {

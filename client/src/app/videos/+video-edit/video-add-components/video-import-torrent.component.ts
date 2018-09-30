@@ -23,7 +23,7 @@ import { VideoImportService } from '@app/shared/video-import'
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
-  @ViewChild('torrentfileInput') torrentfileInput
+  @ViewChild('torrentfileInput') torrentfileInput: any
 
   videoFileName: string
   magnetUri = ''
