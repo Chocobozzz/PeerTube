@@ -55,6 +55,7 @@ export interface CustomConfig {
       '480p': boolean
       '720p': boolean
       '1080p': boolean
+      [key: string]: boolean
     }
   }
 
