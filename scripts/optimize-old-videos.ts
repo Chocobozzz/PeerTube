@@ -1,7 +1,7 @@
 import { join, basename, extname } from 'path'
 import { remove, readdir, move, stat } from 'fs-extra'
 import { CONFIG } from '../server/initializers/constants'
-import { getVideoFileResolution, transcode, getVideoFileBitrate } from '../server/helpers/ffmpeg-utils'
+import { getVideoFileResolution, transcode, getVideoFileBitrate, getVideoFileFPS } from '../server/helpers/ffmpeg-utils'
 import { getMaxBitrate } from '../shared/models/videos'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
 import { VideoModel } from '../server/models/video/video'
@@ -19,11 +19,12 @@ async function run () {
   for (const file of files) {
     const inputPath = join(CONFIG.STORAGE.VIDEOS_DIR, file)
     const videoBitrate = await getVideoFileBitrate(inputPath)
+    const fps = await getVideoFileFPS(inputPath)
     const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(inputPath)
     const uuid = getUUIDFromFilename(file)
 
     const isLocalVideo = await VideoRedundancyModel.isLocalByVideoUUIDExists(uuid)
-    const isMaxBitrateExceeded = videoBitrate > getMaxBitrate(videoFileResolution)
+    const isMaxBitrateExceeded = videoBitrate > getMaxBitrate(videoFileResolution, fps)
     if (uuid && isLocalVideo && isMaxBitrateExceeded) {
       await optimizeVideo(uuid, inputPath, videoFileResolution, isPortraitMode)
     }

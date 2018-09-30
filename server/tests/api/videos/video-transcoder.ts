@@ -303,10 +303,11 @@ describe('Test video transcoding', function () {
         for (const resolution of ['240p', '360p', '480p', '720p', '1080p']) {
           const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
           const bitrate = await getVideoFileBitrate(path)
+          const fps = await getVideoFileFPS(path)
           const resolution2 = await getVideoFileResolution(path)
-          const targetBitrate = getTargetBitrate(resolution2.videoFileResolution)
+          const targetBitrate = getTargetBitrate(resolution2.videoFileResolution, fps)
 
-          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution))
+          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps))
         }
       }
     }

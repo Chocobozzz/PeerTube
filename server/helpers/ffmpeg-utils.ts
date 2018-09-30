@@ -152,7 +152,7 @@ function transcode (options: TranscodeOptions) {
 
     // Constrained Encoding (VBV)
     // https://slhck.info/video/2017/03/01/rate-control.html
-    const targetBitrate = getTargetBitrate(options.resolution)
+    const targetBitrate = getTargetBitrate(options.resolution, fps)
     command.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 
     command
