@@ -22,6 +22,7 @@ import {
 } from '../../utils'
 import { join } from 'path'
 import { waitJobs } from '../../utils/server/jobs'
+import { remove } from 'fs-extra'
 
 const expect = chai.expect
 
@@ -285,6 +286,13 @@ describe('Test video transcoding', function () {
     this.timeout(80000)
 
     {
+      // Generate high bitrate video on the fly.
+      // https://stackoverflow.com/a/18154439
+      ffmpeg(buildAbsoluteFixturePath('video_short1.webm'))
+        .output(buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4'))
+        .outputOptions(['-minrate 3M', '-b 3M', '-maxrate 3M', '-bufsize 3M', 'scale=1920:1080'])
+        .run()
+
       const videoAttributes = {
         name: 'waiting video',
         fixture: 'video_high_bitrate_1080p.mp4',
@@ -305,7 +313,6 @@ describe('Test video transcoding', function () {
           const bitrate = await getVideoFileBitrate(path)
           const fps = await getVideoFileFPS(path)
           const resolution2 = await getVideoFileResolution(path)
-          const targetBitrate = getTargetBitrate(resolution2.videoFileResolution, fps)
 
           expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps))
         }
@@ -329,6 +336,7 @@ describe('Test video transcoding', function () {
   })
 
   after(async function () {
+    remove(buildAbsoluteFixturePath('video_high_bitrate_720p.mp4'))
     killallServers(servers)
   })
 })
