@@ -70,6 +70,25 @@ function getVideojsOptions (options: {
       hotkeys: {
         enableVolumeScroll: false,
         enableModifiersForNumbers: false,
+
+        fullscreenKey: function (event) {
+          // fullscreen with the f key or Ctrl+Enter
+          return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
+        },
+
+        seekStep: function (event) {
+          // mimic VLC seek behavior, and default to 5 (original value is 5).
+          if (event.ctrlKey && event.altKey) {
+            return 5 * 60
+          } else if (event.ctrlKey) {
+            return 60
+          } else if (event.altKey) {
+            return 10
+          } else {
+            return 5
+          }
+        },
+
         customKeys: {
           increasePlaybackRateKey: {
             key: function (event) {
@@ -85,6 +104,17 @@ function getVideojsOptions (options: {
             },
             handler: function (player) {
               player.playbackRate((player.playbackRate() - 0.1).toFixed(2))
+            }
+          },
+          frameByFrame: {
+            key: function (event) {
+              return event.key === '.'
+            },
+            handler: function (player, options, event) {
+              player.pause()
+              // Calculate movement distance (assuming 30 fps)
+              const dist = 1 / 30
+              player.currentTime(player.currentTime() + dist)
             }
           }
         }
