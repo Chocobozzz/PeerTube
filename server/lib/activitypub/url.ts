@@ -11,7 +11,7 @@ function getVideoActivityPubUrl (video: VideoModel) {
 }
 
 function getVideoCacheFileActivityPubUrl (videoFile: VideoFileModel) {
-  const suffixFPS = videoFile.fps ? '-' + videoFile.fps : ''
+  const suffixFPS = videoFile.fps && videoFile.fps !== -1 ? '-' + videoFile.fps : ''
 
   return `${CONFIG.WEBSERVER.URL}/redundancy/videos/${videoFile.Video.uuid}/${videoFile.resolution}${suffixFPS}`
 }
