@@ -37,7 +37,7 @@ const videoRedundancyGetValidator = [
     if (!videoFile) return res.status(404).json({ error: 'Video file not found.' })
     res.locals.videoFile = videoFile
 
-    const videoRedundancy = await VideoRedundancyModel.loadByFileId(videoFile.id)
+    const videoRedundancy = await VideoRedundancyModel.loadLocalByFileId(videoFile.id)
     if (!videoRedundancy)return res.status(404).json({ error: 'Video redundancy not found.' })
     res.locals.videoRedundancy = videoRedundancy
 
