@@ -119,7 +119,7 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
-  'video-import': 1000 * 3600, // 1 hour
+  'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes
   'videos-views': undefined // Unlimited
 }
@@ -133,6 +133,7 @@ const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activ
 const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
+const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
 // 1 hour
 let SCHEDULER_INTERVALS_MS = {
@@ -700,6 +701,7 @@ export {
   TORRENT_MIMETYPE_EXT,
   STATIC_MAX_AGE,
   STATIC_PATHS,
+  VIDEO_IMPORT_TIMEOUT,
   ACTIVITY_PUB,
   ACTIVITY_PUB_ACTOR_TYPES,
   THUMBNAILS_SIZE,
