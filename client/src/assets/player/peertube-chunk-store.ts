@@ -40,15 +40,15 @@ export class PeertubeChunkStore extends EventEmitter {
   // If the store is full
   private memoryChunks: { [ id: number ]: Buffer | true } = {}
   private databaseName: string
-  private putBulkTimeout
-  private cleanerInterval
+  private putBulkTimeout: any
+  private cleanerInterval: any
   private db: ChunkDatabase
   private expirationDB: ExpirationDatabase
   private readonly length: number
   private readonly lastChunkLength: number
   private readonly lastChunkIndex: number
 
-  constructor (chunkLength: number, opts) {
+  constructor (chunkLength: number, opts: any) {
     super()
 
     this.databaseName = 'webtorrent-chunks-'
@@ -113,13 +113,13 @@ export class PeertubeChunkStore extends EventEmitter {
     }, PeertubeChunkStore.BUFFERING_PUT_MS)
   }
 
-  get (index: number, opts, cb) {
+  get (index: number, opts: any, cb: any): any {
     if (typeof opts === 'function') return this.get(index, null, opts)
 
     // IndexDB could be slow, use our memory index first
     const memoryChunk = this.memoryChunks[index]
     if (memoryChunk === undefined) {
-      const err = new Error('Chunk not found')
+      const err = new Error('Chunk not found') as any
       err['notFound'] = true
 
       return process.nextTick(() => cb(err))
@@ -146,11 +146,11 @@ export class PeertubeChunkStore extends EventEmitter {
     })
   }
 
-  close (db) {
+  close (db: any) {
     return this.destroy(db)
   }
 
-  async destroy (cb) {
+  async destroy (cb: any) {
     try {
       if (this.pendingPut) {
         clearTimeout(this.putBulkTimeout)
@@ -225,7 +225,7 @@ export class PeertubeChunkStore extends EventEmitter {
     }
   }
 
-  private nextTick (cb, err, val?) {
+  private nextTick (cb: any, err: Error, val?: any) {
     process.nextTick(() => cb(err, val), undefined)
   }
 }

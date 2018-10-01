@@ -11,9 +11,9 @@ declare namespace videojs {
 interface VideoJSComponentInterface {
   _player: videojs.Player
 
-  new (player: videojs.Player, options?: any)
+  new (player: videojs.Player, options?: any): any
 
-  registerComponent (name: string, obj: any)
+  registerComponent (name: string, obj: any): any
 }
 
 type VideoJSCaption = {

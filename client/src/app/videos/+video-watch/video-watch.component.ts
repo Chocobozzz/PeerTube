@@ -426,7 +426,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       videojs(this.playerElement, videojsOptions, function () {
         self.player = this
-        this.on('customError', (event, data) => self.handleError(data.err))
+        this.on('customError', (data: any) => self.handleError(data.err))
 
         addContextMenu(self.player, self.video.embedUrl)
       })
@@ -439,7 +439,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
   }
 
-  private setRating (nextRating) {
+  private setRating (nextRating: string) {
     let method
     switch (nextRating) {
       case 'like':
@@ -457,11 +457,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           .subscribe(
             () => {
               // Update the video like attribute
-              this.updateVideoRating(this.userRating, nextRating)
-              this.userRating = nextRating
+              this.updateVideoRating(this.userRating, nextRating as VideoRateType)
+              this.userRating = nextRating as UserVideoRateType
             },
 
-            err => this.notificationsService.error(this.i18n('Error'), err.message)
+            (err: any) => this.notificationsService.error(this.i18n('Error'), err.message)
           )
   }
 
