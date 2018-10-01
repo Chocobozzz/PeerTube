@@ -1,7 +1,7 @@
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { forkJoin, Observable, of } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { peertubeTranslate, ResultList } from '../../../../../shared'
 import { RestExtractor } from '../rest'
 import { VideoService } from '@app/shared/video/video.service'
@@ -61,22 +61,16 @@ export class VideoCaptionService {
   }
 
   updateCaptions (videoId: number | string, videoCaptions: VideoCaptionEdit[]) {
-    const observables: Observable<any>[] = []
+    let obs = of(true)
 
     for (const videoCaption of videoCaptions) {
       if (videoCaption.action === 'CREATE') {
-        observables.push(
-          this.addCaption(videoId, videoCaption.language.id, videoCaption.captionfile)
-        )
+        obs = obs.pipe(switchMap(() => this.addCaption(videoId, videoCaption.language.id, videoCaption.captionfile)))
       } else if (videoCaption.action === 'REMOVE') {
-        observables.push(
-          this.removeCaption(videoId, videoCaption.language.id)
-        )
+        obs = obs.pipe(switchMap(() => this.removeCaption(videoId, videoCaption.language.id)))
       }
     }
 
-    if (observables.length === 0) return of(undefined)
-
-    return forkJoin(observables)
+    return obs
   }
 }
