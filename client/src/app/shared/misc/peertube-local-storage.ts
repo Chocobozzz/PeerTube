@@ -6,7 +6,7 @@ class MemoryStorage {
   [key: string]: any
   [index: number]: string
 
-  getItem (key) {
+  getItem (key: any) {
     const stringKey = String(key)
     if (valuesMap.has(key)) {
       return String(valuesMap.get(stringKey))
@@ -15,11 +15,11 @@ class MemoryStorage {
     return null
   }
 
-  setItem (key, val) {
+  setItem (key: any, val: any) {
     valuesMap.set(String(key), String(val))
   }
 
-  removeItem (key) {
+  removeItem (key: any) {
     valuesMap.delete(key)
   }
 

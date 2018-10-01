@@ -41,6 +41,7 @@ export class User implements UserServerModel {
 
   blocked: boolean
   blockedReason?: string
+  [key: string]: any
 
   constructor (hash: UserConstructorHash) {
     this.id = hash.id

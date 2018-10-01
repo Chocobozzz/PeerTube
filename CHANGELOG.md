@@ -37,7 +37,6 @@
  * Increase timeout on upload endpoint
  * Fix redundancy with videos already duplicated by another instance(s)
  * Correctly delete files on failed import
- 
 
 ## v1.0.0-beta.15
 
@@ -57,7 +56,7 @@
  * Fix redundancy totalVideos stats
  * Reduce video import TTL to 1 hour
  * Only duplicate public videos
- 
+
 
 ## v1.0.0-beta.14
 
@@ -80,7 +79,7 @@
  * Add chevron hotkeys to change playback rate ([@rigelk](https://github.com/rigelk))
 
 ### Bug fixes
- 
+
  * Fix 24 hours delay to process views
  * Fix tag search on overview page
  * Handle actors search beginning with '@'
@@ -100,14 +99,14 @@
 
  * Improve keyboard navigation ([@rigelk](https://github.com/rigelk))
  * Remember theme in local storage ([@rigelk](https://github.com/rigelk))
- 
+
 ### Bug fixes
 
   * Fix upgrade/installation on node 8.12 (bcrypt issue)
   * Fix video channel deletion
   * Fix video channel RSS
   * Fix video views increment
- 
+
 
 ## v1.0.0-beta.12
 
@@ -115,7 +114,7 @@
 
 ### BREAKING CHANGES
 
- * Users can now use the name they want for their channel. 
+ * Users can now use the name they want for their channel.
  We will therefore favour the display of video channel handles/names instead of account in the future.
 
 ### Documentation
@@ -128,9 +127,9 @@
 ### nginx template
 
  * Add gzip support ([@scanlime](https://github.com/scanlime))
- 
+
 ### Docker template
- 
+
  * Add quota to the docker configuration values ([@kaiyou](https://github.com/kaiyou))
 
 ### Features
@@ -175,7 +174,7 @@
  * Fix thumbnail/preview in upload.js script
  * Fix import-videos.js duplicate detection
  * Fix occitan language label
- 
+
 
 ## v1.0.0-beta.11
 

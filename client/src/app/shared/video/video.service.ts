@@ -272,7 +272,7 @@ export class VideoService implements VideosProvider {
     return this.authHttp
                .get(environment.apiUrl + descriptionPath)
                .pipe(
-                 map(res => res[ 'description' ]),
+                 map((res: any) => res[ 'description' ]),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

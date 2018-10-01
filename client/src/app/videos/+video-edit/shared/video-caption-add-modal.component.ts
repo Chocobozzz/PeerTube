@@ -19,7 +19,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
   @ViewChild('modal') modal: ElementRef
 
-  videoCaptionLanguages = []
+  videoCaptionLanguages: any = []
 
   private openedModal: NgbModalRef
   private closingModal = false
@@ -73,7 +73,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
     this.hide()
 
     const languageId = this.form.value[ 'language' ]
-    const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
+    const languageObject = this.videoCaptionLanguages.find((l: any) => l.id === languageId)
 
     this.captionAdded.emit({
       language: languageObject,

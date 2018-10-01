@@ -4,7 +4,7 @@ const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Compon
 
 class PeerTubeLoadProgressBar extends Component {
 
-  constructor (player, options) {
+  constructor (player: any, options: any) {
     super(player, options)
     this.partEls_ = []
     this.on(player, 'progress', this.update)

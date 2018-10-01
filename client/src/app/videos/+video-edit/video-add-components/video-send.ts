@@ -30,7 +30,7 @@ export abstract class VideoSend extends FormReactive implements OnInit, CanCompo
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
 
-  abstract canDeactivate ()
+  abstract canDeactivate (): any
 
   ngOnInit () {
     this.buildForm({})
