@@ -43,13 +43,13 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   private updateLibraryLabel (url: string) {
     const [ path ] = url.split('?')
 
-    if (path === '/my-account/video-channels') {
+    if (path.startsWith('/my-account/video-channels')) {
       this.libraryLabel = this.i18n('Channels')
-    } else if (path === '/my-account/videos') {
+    } else if (path.startsWith('/my-account/videos')) {
       this.libraryLabel = this.i18n('Videos')
-    } else if (path === '/my-account/subscriptions') {
+    } else if (path.startsWith('/my-account/subscriptions')) {
       this.libraryLabel = this.i18n('Subscriptions')
-    } else if (path === '/my-account/video-imports') {
+    } else if (path.startsWith('/my-account/video-imports')) {
       this.libraryLabel = this.i18n('Video imports')
     } else {
       this.libraryLabel = ''
