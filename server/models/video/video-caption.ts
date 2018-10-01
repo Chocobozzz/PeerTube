@@ -120,7 +120,8 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
       language
     }
 
-    return VideoCaptionModel.upsert(values, { transaction })
+    return VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true })
+      .then(([ caption ]) => caption)
   }
 
   static listVideoCaptions (videoId: number) {
