@@ -206,6 +206,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     )
   }
 
+  isPublishingButtonDisabled () {
+    return !this.form.valid ||
+      this.isUpdatingVideo === true ||
+      this.videoUploaded !== true
+  }
+
   updateSecondStep () {
     if (this.checkForm() === false) {
       return
