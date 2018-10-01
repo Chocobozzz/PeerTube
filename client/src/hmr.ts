@@ -9,7 +9,7 @@ export const hmrBootstrap = (module: any, bootstrap: () => Promise<NgModuleRef<a
     .then(mod => {
       ngModule = mod
 
-      const applicationRef = ngModule.injector.get(ApplicationRef);
+      const applicationRef = ngModule.injector.get(ApplicationRef)
       const componentRef = applicationRef.components[ 0 ]
       // allows to run `ng.profiler.timeChangeDetection();`
       enableDebugTools(componentRef)
