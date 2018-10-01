@@ -49,10 +49,10 @@
 
     <div class="submit-button"
        (click)="updateSecondStep()"
-       [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true || videoUploaded !== true }"
+       [ngClass]="{ disabled: isPublishingButtonDisabled() }"
     >
       <span class="icon icon-validate"></span>
-      <input type="button" i18n-value value="Publish" />
+      <input [disabled]="isPublishingButtonDisabled()" type="button" i18n-value value="Publish" />
     </div>
   </div>
 </form>
