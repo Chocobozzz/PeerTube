@@ -1,4 +1,4 @@
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { PeerTubePlugin } from './peertube-videojs-plugin'
 

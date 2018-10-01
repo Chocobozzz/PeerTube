@@ -1,4 +1,4 @@
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { ResolutionMenuItem } from './resolution-menu-item'
 

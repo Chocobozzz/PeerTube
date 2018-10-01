@@ -1,11 +1,11 @@
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, UserWatching, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { isMobile, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
-import * as CacheChunkStore from 'cache-chunk-store'
+const CacheChunkStore = require('cache-chunk-store')
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,

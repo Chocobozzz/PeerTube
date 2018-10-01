@@ -1,4 +1,4 @@
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')

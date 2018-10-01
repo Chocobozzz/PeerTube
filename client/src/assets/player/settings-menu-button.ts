@@ -1,7 +1,7 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import { SettingsMenuItem } from './settings-menu-item'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { toTitleCase } from './utils'

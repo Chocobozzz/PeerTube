@@ -7,7 +7,7 @@ import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-supp
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 import { forkJoin, Subscription } from 'rxjs'
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import 'videojs-hotkeys'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import * as WebTorrent from 'webtorrent'
