@@ -56,7 +56,7 @@ const logger = winston.createLogger({
     new winston.transports.File({
       filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
       handleExceptions: true,
-      maxsize: 1024 * 1024 * 30,
+      maxsize: 1024 * 1024 * 12,
       maxFiles: 5,
       format: winston.format.combine(
         winston.format.timestamp(),
