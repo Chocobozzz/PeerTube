@@ -113,7 +113,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       const getVideoOptions = {
         videoObject: file.Video.url,
         syncParam: { likes: false, dislikes: false, shares: false, comments: false, thumbnail: false, refreshVideo: true },
-        fetchType: 'only-video' as 'only-video'
+        fetchType: 'all' as 'all'
       }
       const { video } = await getOrCreateVideoAndAccountAndChannel(getVideoOptions)
 
