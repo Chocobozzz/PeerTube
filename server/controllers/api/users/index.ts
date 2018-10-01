@@ -34,7 +34,6 @@ import {
   usersVerifyEmailValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
-import { OAuthTokenModel } from '../../../models/oauth/oauth-token'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'

@@ -136,6 +136,16 @@ describe('Test video channels API validator', function () {
         statusCodeExpected: 200
       })
     })
+
+    it('Should fail when adding a channel with the same username', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path: videoChannelPath,
+        token: server.accessToken,
+        fields: baseCorrectParams,
+        statusCodeExpected: 409
+      })
+    })
   })
 
   describe('When updating a video channel', function () {

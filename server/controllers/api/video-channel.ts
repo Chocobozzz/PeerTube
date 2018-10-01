@@ -46,7 +46,7 @@ videoChannelRouter.get('/',
 
 videoChannelRouter.post('/',
   authenticate,
-  videoChannelsAddValidator,
+  asyncMiddleware(videoChannelsAddValidator),
   asyncRetryTransactionMiddleware(addVideoChannel)
 )
 

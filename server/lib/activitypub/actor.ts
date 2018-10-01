@@ -56,7 +56,7 @@ async function getOrCreateActorAndServerAndModel (
   // We don't have this actor in our database, fetch it on remote
   if (!actor) {
     const { result } = await fetchRemoteActor(actorUrl)
-    if (result === undefined) throw new Error('Cannot fetch remote actor.')
+    if (result === undefined) throw new Error('Cannot fetch remote actor ' + actorUrl)
 
     // Create the attributed to actor
     // In PeerTube a video channel is owned by an account

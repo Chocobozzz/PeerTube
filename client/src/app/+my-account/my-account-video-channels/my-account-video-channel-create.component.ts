@@ -63,7 +63,14 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
 
-      err => this.error = err.message
+      err => {
+        if (err.status === 409) {
+          this.error = this.i18n('This name already exists on this instance.')
+          return
+        }
+
+        this.error = err.message
+      }
     )
   }
 
