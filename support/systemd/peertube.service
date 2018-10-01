@@ -9,6 +9,7 @@ Environment=NODE_CONFIG_DIR=/var/www/peertube/config
 User=peertube
 Group=peertube
 ExecStart=/usr/bin/npm start
+ExecStartPost=/bin/sh -c 'umask 022; pgrep peertube > /var/run/peertube.pid'
 WorkingDirectory=/var/www/peertube/peertube-latest
 StandardOutput=syslog
 StandardError=syslog
