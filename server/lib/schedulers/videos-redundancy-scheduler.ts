@@ -12,6 +12,7 @@ import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { VideoModel } from '../../models/video/video'
 import { getVideoCacheFileActivityPubUrl } from '../activitypub/url'
 import { removeVideoRedundancy } from '../redundancy'
+import { getOrCreateVideoAndAccountAndChannel } from '../activitypub'
 
 export class VideosRedundancyScheduler extends AbstractScheduler {
 
@@ -109,16 +110,32 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const serverActor = await getServerActor()
 
     for (const file of filesToDuplicate) {
+      // We need more attributes and check if the video still exists
+      const getVideoOptions = {
+        videoObject: file.Video.url,
+        syncParam: { likes: false, dislikes: false, shares: false, comments: false, thumbnail: false, refreshVideo: true },
+        fetchType: 'only-video' as 'only-video'
+      }
+      const { video } = await getOrCreateVideoAndAccountAndChannel(getVideoOptions)
+
       const existing = await VideoRedundancyModel.loadLocalByFileId(file.id)
       if (existing) {
-        await this.extendsExpirationOf(existing, redundancy.minLifetime)
+        if (video) {
+          await this.extendsExpirationOf(existing, redundancy.minLifetime)
+        } else {
+          logger.info('Destroying existing redundancy %s, because the associated video does not exist anymore.', existing.url)
+
+          await existing.destroy()
+        }
 
         continue
       }
 
-      // We need more attributes and check if the video still exists
-      const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(file.Video.id)
-      if (!video) continue
+      if (!video) {
+        logger.info('Video %s we want to duplicate does not existing anymore, skipping.', file.Video.url)
+
+        continue
+      }
 
       logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, redundancy.strategy)
 
