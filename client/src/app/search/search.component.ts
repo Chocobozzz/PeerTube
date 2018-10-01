@@ -51,15 +51,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       queryParams => {
         const querySearch = queryParams['search']
 
-        // New empty search
-        if (this.currentSearch && !querySearch) return this.redirectService.redirectToHomepage()
-
         // Search updated, reset filters
         if (this.currentSearch !== querySearch) {
           this.resetPagination()
           this.advancedSearch.reset()
 
-          this.currentSearch = querySearch
+          this.currentSearch = querySearch || undefined
           this.updateTitle()
         }
 
@@ -154,7 +151,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private updateUrlFromAdvancedSearch () {
-    const search = (this.currentSearch && this.currentSearch !== '') ? this.currentSearch : undefined
+    const search = this.currentSearch || undefined
 
     this.router.navigate([], {
       relativeTo: this.route,
