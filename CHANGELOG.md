@@ -11,10 +11,14 @@
  * Add shortcuts icon in menu
  * Improve overview section titles
  * Check old password before change ([@BO41](https://github.com/BO41))
+ * Adding frame-by-frame hotkey support in player ([@rigelk](https://github.com/rigelk))
 
 ### Bug fixes
 
- * Fix some translations
+ * Stop seeding torrents after a failed import
+ * Fix player crashing the web browser
+ * Fix player performance with small devices
+ * Fix some untranslated strings
  * Fix video files duplicated when fps is null ([@rigelk](https://github.com/rigelk))
  * Fix video import of some youtube videos
  * Fix (long) video description when importing by url
@@ -25,6 +29,14 @@
  * Hide useless error when destroying fake renderer
  * Display other videos on big screens on the right of the watch page
  * Fix no other videos displayed on some videos
+ * Fix hidden advanced options in upload form
+ * Fix message space on video upload cancel ([@rigelk](https://github.com/rigelk))
+ * Fix error when updating many video captions
+ * Fix "my account" subtitles
+ * Fix error when clicking on the disabled publish button
+ * Increase timeout on upload endpoint
+ * Fix redundancy with videos already duplicated by another instance(s)
+ * Correctly delete files on failed import
  
 
 ## v1.0.0-beta.15
