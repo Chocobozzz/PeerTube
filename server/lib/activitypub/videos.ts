@@ -370,13 +370,15 @@ async function refreshVideoIfNeeded (options: {
   try {
     const { response, videoObject } = await fetchRemoteVideo(video.url)
     if (response.statusCode === 404) {
+      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
+
       // Video does not exist anymore
       await video.destroy()
       return undefined
     }
 
     if (videoObject === undefined) {
-      logger.warn('Cannot refresh remote video: invalid body.')
+      logger.warn('Cannot refresh remote video %s: invalid body.', video.url)
       return video
     }
 
@@ -390,8 +392,10 @@ async function refreshVideoIfNeeded (options: {
       channel: channelActor.VideoChannel,
       updateViews: options.refreshViews
     }
-    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
-    await syncVideoExternalAttributes(video, videoObject, options.syncParam)
+    const videoUpdated = await retryTransactionWrapper(updateVideoFromAP, updateOptions)
+    await syncVideoExternalAttributes(videoUpdated, videoObject, options.syncParam)
+
+    return videoUpdated
   } catch (err) {
     logger.warn('Cannot refresh video.', { err })
     return video
