@@ -109,7 +109,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const serverActor = await getServerActor()
 
     for (const file of filesToDuplicate) {
-      const existing = await VideoRedundancyModel.loadByFileId(file.id)
+      const existing = await VideoRedundancyModel.loadLocalByFileId(file.id)
       if (existing) {
         await this.extendsExpirationOf(existing, redundancy.minLifetime)
 

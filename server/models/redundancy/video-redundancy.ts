@@ -125,9 +125,12 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return instance.VideoFile.Video.removeFile(instance.VideoFile)
   }
 
-  static loadByFileId (videoFileId: number) {
+  static async loadLocalByFileId (videoFileId: number) {
+    const actor = await getServerActor()
+
     const query = {
       where: {
+        actorId: actor.id,
         videoFileId
       }
     }
