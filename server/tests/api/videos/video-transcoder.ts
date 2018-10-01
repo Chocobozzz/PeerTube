@@ -291,8 +291,8 @@ describe('Test video transcoding', function () {
       // https://stackoverflow.com/a/15795112
       await new Promise<string>((res, rej) => {
         ffmpeg()
-          // ffmpeg -f rawvideo -video_size 1280x720 -i /dev/urandom -ac 2 -f s16le -i /dev/urandom -t 1 output.mp4
-          .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom', '-ac 2', '-f s16le', '-i /dev/urandom', '-t 1'])
+          .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
+          .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-vframes 3'])
           .output(buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4'))
           .on('error', rej)
           .on('end', () => res)
