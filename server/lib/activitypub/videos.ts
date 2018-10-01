@@ -455,11 +455,11 @@ async function videoActivityObjectToDBAttributes (
   }
 }
 
-function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObject: VideoTorrentObject) {
+function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: VideoTorrentObject) {
   const fileUrls = videoObject.url.filter(u => isActivityVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
   if (fileUrls.length === 0) {
-    throw new Error('Cannot find video files for ' + videoCreated.url)
+    throw new Error('Cannot find video files for ' + video.url)
   }
 
   const attributes: VideoFileModel[] = []
@@ -481,7 +481,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,
-      videoId: videoCreated.id,
+      videoId: video.id,
       fps: fileUrl.fps || -1
     } as VideoFileModel
     attributes.push(attribute)

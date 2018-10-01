@@ -85,7 +85,7 @@ function isRemoteVideoUrlValid (url: any) {
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.height + '', { min: 0 }) &&
       validator.isInt(url.size + '', { min: 0 }) &&
-      (!url.fps || validator.isInt(url.fps + '', { min: 0 }))
+      (!url.fps || validator.isInt(url.fps + '', { min: -1 }))
     ) ||
     (
       ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
