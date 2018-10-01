@@ -49,6 +49,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
       .catch((_) => _) // Called when closing (cancel) the modal without validating, do nothing
   }
 
+  // TODO: typing
   search (event: any) {
     const query = event.query
     this.userService.autocomplete(query)
