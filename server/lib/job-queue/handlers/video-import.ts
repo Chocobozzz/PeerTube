@@ -6,7 +6,7 @@ import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { CONFIG, sequelizeTypescript } from '../../../initializers'
+import { CONFIG, sequelizeTypescript, VIDEO_IMPORT_TIMEOUT } from '../../../initializers'
 import { doRequestAndSaveToFile } from '../../../helpers/requests'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
@@ -65,7 +65,7 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
     magnetUri: videoImport.magnetUri
   }
-  return processFile(() => downloadWebTorrentVideo(target), videoImport, options)
+  return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
 async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutubeDLPayload) {
@@ -83,7 +83,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     generatePreview: false
   }
 
-  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl), videoImport, options)
+  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
 async function getVideoImportOrDie (videoImportId: number) {

@@ -5,7 +5,7 @@ import { createWriteStream, ensureDir, remove } from 'fs-extra'
 import { CONFIG } from '../initializers'
 import { dirname, join } from 'path'
 
-async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: string }, timeout?: number) {
+async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: string }, timeout: number) {
   const id = target.magnetUri || target.torrentName
   let timer
 
@@ -50,12 +50,10 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
 
     torrent.on('error', err => rej(err))
 
-    if (timeout) {
-      timer = setTimeout(async () => {
-        return safeWebtorrentDestroy(webtorrent, torrentId, file ? { directoryPath, filepath: file.path } : undefined, target.torrentName)
-          .then(() => rej(new Error('Webtorrent download timeout.')))
-      }, timeout)
-    }
+    timer = setTimeout(async () => {
+      return safeWebtorrentDestroy(webtorrent, torrentId, file ? { directoryPath, filepath: file.path } : undefined, target.torrentName)
+        .then(() => rej(new Error('Webtorrent download timeout.')))
+    }, timeout)
   })
 }
 
