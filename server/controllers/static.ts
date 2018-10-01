@@ -120,7 +120,7 @@ staticRouter.use('/.well-known/dnt-policy.txt',
   (_, res: express.Response) => {
     res.type('text/plain')
 
-    return res.sendFile(join(root(), 'server/static/dnt-policy/dnt-policy-1.0.txt'))
+    return res.sendFile(join(root(), 'dist/server/static/dnt-policy/dnt-policy-1.0.txt'))
   }
 )
 

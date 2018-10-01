@@ -5,4 +5,4 @@ set -eu
 rm -rf ./dist
 
 npm run tsc
-cp -r "./server/static" "./dist"
+cp -r "./server/static" "./dist/server"
