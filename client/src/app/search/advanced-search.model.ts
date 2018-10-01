@@ -110,6 +110,19 @@ export class AdvancedSearch {
     }
   }
 
+  size () {
+    let acc = 0
+
+    const obj = this.toUrlObject()
+    for (const k of Object.keys(obj)) {
+      if (k === 'sort') continue // Exception
+
+      if (obj[k] !== undefined) acc++
+    }
+
+    return acc
+  }
+
   private intoArray (value: any) {
     if (!value) return undefined
 

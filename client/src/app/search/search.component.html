@@ -13,7 +13,10 @@
         [attr.aria-expanded]="!isSearchFilterCollapsed" aria-controls="collapseBasic"
       >
         <span class="icon icon-filter"></span>
-        <ng-container i18n>Filters</ng-container>
+        <ng-container i18n>
+          Filters
+          <span *ngIf="numberOfFilters() > 0" class="badge badge-secondary">{{ numberOfFilters() }}</span>
+        </ng-container>
       </div>
     </div>
 
