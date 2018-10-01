@@ -26,7 +26,11 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
       if (torrent.files.length !== 1) {
         if (timer) clearTimeout(timer)
 
-        return safeWebtorrentDestroy(webtorrent, torrentId, { directoryPath, filepath: file.path }, target.torrentName)
+        for (let file of torrent.files) {
+          deleteDownloadedFile({ directoryPath, filepath: file.path })
+        }
+
+        return safeWebtorrentDestroy(webtorrent, torrentId, undefined, target.torrentName)
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
@@ -79,23 +83,23 @@ function safeWebtorrentDestroy (
       }
 
       // Delete downloaded file
-      if (downloadedFile) {
-        // We want to delete the base directory
-        let pathToDelete = dirname(downloadedFile.filepath)
-        if (pathToDelete === '.') pathToDelete = downloadedFile.filepath
+      if (downloadedFile) deleteDownloadedFile(downloadedFile)
 
-        const toRemovePath = join(downloadedFile.directoryPath, pathToDelete)
-
-        logger.debug('Removing %s after webtorrent download.', toRemovePath)
-        remove(toRemovePath)
-          .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
-      }
-
-      if (err) {
-        logger.warn('Cannot destroy webtorrent in timeout.', { err })
-      }
+      if (err) logger.warn('Cannot destroy webtorrent in timeout.', { err })
 
       return res()
     })
   })
+}
+
+function deleteDownloadedFile (downloadedFile: { directoryPath: string, filepath: string }) {
+  // We want to delete the base directory
+  let pathToDelete = dirname(downloadedFile.filepath)
+  if (pathToDelete === '.') pathToDelete = downloadedFile.filepath
+
+  const toRemovePath = join(downloadedFile.directoryPath, pathToDelete)
+
+  logger.debug('Removing %s after webtorrent download.', toRemovePath)
+  remove(toRemovePath)
+    .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
 }
