@@ -38,7 +38,6 @@
  * Fix redundancy with videos already duplicated by another instance(s)
  * Correctly delete files on failed import
 
-
 ## v1.0.0-beta.15
 
 ### Features
