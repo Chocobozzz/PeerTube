@@ -69,7 +69,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
   providers: [
     {
       provide: TRANSLATIONS,
-      useFactory: (locale) => {
+      useFactory: (locale: string) => {
         // On dev mode, test localization
         if (isOnDevLocale()) {
           locale = buildFileLocale(getDevLocale())
