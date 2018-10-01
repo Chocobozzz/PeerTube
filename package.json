@@ -22,6 +22,7 @@
   "typings": "*.d.ts",
   "scripts": {
     "e2e": "scripty",
+    "e2e:local": "scripty",
     "build": "SCRIPTY_PARALLEL=true scripty",
     "build:server": "scripty",
     "build:client": "scripty",
