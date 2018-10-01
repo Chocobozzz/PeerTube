@@ -14,7 +14,7 @@ import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { rename, stat } from 'fs-extra'
+import { remove, rename, stat } from 'fs-extra'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -209,7 +209,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
   } catch (err) {
     try {
-      // if (tempVideoPath) await unlinkPromise(tempVideoPath)
+      if (tempVideoPath) await remove(tempVideoPath)
     } catch (errUnlink) {
       logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
     }
