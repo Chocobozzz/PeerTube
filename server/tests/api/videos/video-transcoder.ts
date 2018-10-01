@@ -286,12 +286,18 @@ describe('Test video transcoding', function () {
     this.timeout(80000)
 
     {
-      // Generate high bitrate video on the fly.
-      // https://stackoverflow.com/a/18154439
-      ffmpeg(buildAbsoluteFixturePath('video_short1.webm'))
-        .output(buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4'))
-        .outputOptions(['-minrate 3M', '-b 3M', '-maxrate 3M', '-bufsize 3M', 'scale=1920:1080'])
-        .run()
+      // Generate a random, high bitrate video on the fly, so we don't have to include
+      // a large file in the repo.
+      // https://stackoverflow.com/a/15795112
+      await new Promise<string>((res, rej) => {
+        ffmpeg()
+          // ffmpeg -f rawvideo -video_size 1280x720 -i /dev/urandom -ac 2 -f s16le -i /dev/urandom -t 1 output.mp4
+          .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom', '-ac 2', '-f s16le', '-i /dev/urandom', '-t 1'])
+          .output(buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4'))
+          .on('error', rej)
+          .on('end', () => res)
+          .run()
+      })
 
       const videoAttributes = {
         name: 'waiting video',
