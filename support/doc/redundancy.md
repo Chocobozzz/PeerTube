@@ -7,6 +7,12 @@ A PeerTube instance can cache other PeerTube videos to improve bandwidth of popu
 The instance administrator can choose between multiple redundancy strategies (cache trending videos or recently uploaded videos etc), set their maximum size and the minimum duplication lifetime.
 Then, they choose the instances they want to cache in `Manage follows -> Following` admin table.
 
+<p align="center">
+
+<img src="support/doc/user/redundancy.png" alt="Redundancy" />
+
+</p>
+
 Videos are kept in the cache for at least `min_lifetime`, and then evicted when the cache is full.
 
 When PeerTube chooses a video to duplicate, it imports all the resolution files (to avoid consistency issues) using their magnet URI and put them in the `storage.videos` directory.
