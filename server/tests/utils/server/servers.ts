@@ -1,5 +1,7 @@
 import { ChildProcess, exec, fork } from 'child_process'
 import { join } from 'path'
+import { root, wait } from '../miscs/miscs'
+import { readFile } from 'fs-extra'
 
 interface ServerInfo {
   app: ChildProcess,
@@ -157,6 +159,19 @@ function killallServers (servers: ServerInfo[]) {
   }
 }
 
+async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
+  const logfile = join(root(), 'test' + server.serverNumber, 'logs/peertube.log')
+
+  while (true) {
+    const buf = await readFile(logfile)
+
+    const matches = buf.toString().match(new RegExp(str, 'g'))
+    if (matches && matches.length === count) return
+
+    await wait(1000)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -165,5 +180,6 @@ export {
   flushTests,
   runServer,
   killallServers,
-  reRunServer
+  reRunServer,
+  waitUntilLog
 }

@@ -396,6 +396,8 @@ async function refreshVideoIfNeeded (options: {
     }
     await retryTransactionWrapper(updateVideoFromAP, updateOptions)
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
+
+    return video
   } catch (err) {
     logger.warn('Cannot refresh video %s.', options.video.url, { err })
     return video

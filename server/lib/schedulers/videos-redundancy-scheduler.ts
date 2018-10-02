@@ -157,6 +157,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       createdModel.VideoFile = file
 
       await sendCreateCacheFile(serverActor, createdModel)
+
+      logger.info('Duplicated %s - %d -> %s.', video.url, file.resolution, createdModel.url)
     }
   }
 

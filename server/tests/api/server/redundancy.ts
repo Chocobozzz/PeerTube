@@ -15,7 +15,8 @@ import {
   setAccessTokensToServers, unfollow,
   uploadVideo,
   viewVideo,
-  wait
+  wait,
+  waitUntilLog
 } from '../../utils'
 import { waitJobs } from '../../utils/server/jobs'
 import * as magnetUtil from 'magnet-uri'
@@ -225,7 +226,7 @@ describe('Test videos redundancy', function () {
       this.timeout(40000)
 
       await waitJobs(servers)
-      await wait(15000)
+      await waitUntilLog(servers[0], 'Duplicated ', 4)
       await waitJobs(servers)
 
       await check2Webseeds(strategy)
@@ -270,7 +271,7 @@ describe('Test videos redundancy', function () {
       this.timeout(40000)
 
       await waitJobs(servers)
-      await wait(15000)
+      await waitUntilLog(servers[0], 'Duplicated ', 4)
       await waitJobs(servers)
 
       await check2Webseeds(strategy)
@@ -336,7 +337,7 @@ describe('Test videos redundancy', function () {
       this.timeout(40000)
 
       await waitJobs(servers)
-      await wait(15000)
+      await waitUntilLog(servers[0], 'Duplicated ', 4)
       await waitJobs(servers)
 
       await check2Webseeds(strategy)
@@ -423,7 +424,7 @@ describe('Test videos redundancy', function () {
       await enableRedundancyOnServer1()
 
       await waitJobs(servers)
-      await wait(5000)
+      await waitUntilLog(servers[0], 'Duplicated ', 4)
       await waitJobs(servers)
 
       await check2Webseeds(strategy)
@@ -434,15 +435,21 @@ describe('Test videos redundancy', function () {
     })
 
     it('Should cache video 2 webseed on the first video', async function () {
-      this.timeout(40000)
-      this.retries(3)
+      this.timeout(50000)
 
       await waitJobs(servers)
 
       await wait(7000)
 
-      await check1WebSeed(strategy, video1Server2UUID)
-      await check2Webseeds(strategy, video2Server2UUID)
+      try {
+        await check1WebSeed(strategy, video1Server2UUID)
+        await check2Webseeds(strategy, video2Server2UUID)
+      } catch {
+        await wait(7000)
+
+        await check1WebSeed(strategy, video1Server2UUID)
+        await check2Webseeds(strategy, video2Server2UUID)
+      }
     })
 
     after(function () {
