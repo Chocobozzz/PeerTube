@@ -445,10 +445,17 @@ describe('Test videos redundancy', function () {
         await check1WebSeed(strategy, video1Server2UUID)
         await check2Webseeds(strategy, video2Server2UUID)
       } catch {
-        await wait(7000)
+        await wait(3000)
 
-        await check1WebSeed(strategy, video1Server2UUID)
-        await check2Webseeds(strategy, video2Server2UUID)
+        try {
+          await check1WebSeed(strategy, video1Server2UUID)
+          await check2Webseeds(strategy, video2Server2UUID)
+        } catch {
+          await wait(5000)
+
+          await check1WebSeed(strategy, video1Server2UUID)
+          await check2Webseeds(strategy, video2Server2UUID)
+        }
       }
     })
 
