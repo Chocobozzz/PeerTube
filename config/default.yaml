@@ -185,3 +185,10 @@ job:
     video-import: 1
     email: 5
     videos-views: 1
+
+torrent:
+  tracker:
+    rate_limits:
+      interval: 5
+      anounces_per_ip_per_infohash: 15
+      anounces_per_ip: 30

@@ -626,10 +626,14 @@ const FEEDS = {
 
 // ---------------------------------------------------------------------------
 
+const ttrl_interval = config.has('torrent.tracker.rate_limits.interval') ? config.get<number>('torrent.tracker.rate_limits.interval') : 5
+const ttrl_infohash = config.has('torrent.tracker.rate_limits.anounces_per_ip_per_infohash') ? config.get<number>('torrent.tracker.rate_limits.anounces_per_ip_per_infohash') : 15
+const ttrl_per_ip = config.has('torrent.tracker.rate_limits.anounces_per_ip') ? config.get<number>('torrent.tracker.rate_limits.anounces_per_ip') : 30
+
 const TRACKER_RATE_LIMITS = {
-  INTERVAL: 60000 * 5, // 5 minutes
-  ANNOUNCES_PER_IP_PER_INFOHASH: 15, // maximum announces per torrent in the interval
-  ANNOUNCES_PER_IP: 30 // maximum announces for all our torrents in the interval
+  INTERVAL: 60000 * ttrl_interval, // 5 minutes
+  ANNOUNCES_PER_IP_PER_INFOHASH: ttrl_infohash, // maximum announces per torrent in the interval
+  ANNOUNCES_PER_IP: ttrl_per_ip // maximum announces for all our torrents in the interval
 }
 
 // ---------------------------------------------------------------------------
