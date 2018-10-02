@@ -10,7 +10,7 @@ import { customConfigUpdateValidator } from '../../middlewares/validators/config
 import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { remove, writeJSON } from 'fs-extra'
-import { version } from '../../tools/cli'
+import { getVersion } from '../../helpers/utils'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -43,7 +43,7 @@ let serverCommit: string
 async function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   const allowed = await isSignupAllowed()
   const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
-  serverCommit = (serverCommit) ? serverCommit : version()
+  serverCommit = (serverCommit) ? serverCommit : getVersion()
   if (serverCommit === packageJSON.version) serverCommit = ''
 
   const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
