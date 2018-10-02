@@ -163,3 +163,25 @@ services:
     # If false, we use an image link card that will redirect on your PeerTube instance
     # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
     whitelisted: false
+
+job:
+  attempts:
+    activitypub-http-broadcast: 5
+    activitypub-http-unicast: 5
+    activitypub-http-fetcher: 5
+    activitypub-follow: 5
+    video-file-import: 1
+    video-file: 1
+    video-import: 1
+    email: 5
+    videos-views: 1
+  concurrency:
+    activitypub-http-broadcast: 1
+    activitypub-http-unicast: 5
+    activitypub-http-fetcher: 1
+    activitypub-follow: 3
+    video-file-import: 1
+    video-file: 1
+    video-import: 1
+    email: 5
+    videos-views: 1
