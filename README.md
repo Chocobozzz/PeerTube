@@ -59,13 +59,49 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 <br />
 
 <p align="center">
-  <a href="https://peertube.cpy.re">
+  <a href="https://peertube.cpy.re/videos/watch/a8ea95b8-0396-49a6-8f30-e25e25fb2828">
     <img src="https://lutim.cpy.re/8cZDRIEF.png" alt="screenshot" />
   </a>
 </p>
 
-Demonstration
+:sparkles: Features
 ----------------------------------------------------------------
+
+<img src="https://lutim.cpy.re/AHbctLjn.png" align="left" height="300px"/>
+<h3 align="left">Video streaming</h3>
+<p align="left">
+Just upload your videos, and be sure they will stream anywhere. Add a description, some tags and your video will be discoverable by the entire video fediverse, not just your instance. You can even embed a player on your favorite website!
+</p>
+
+---
+
+<img src="https://lutim.cpy.re/cxWccUK7.png" align="right" height="200px"/>
+
+<h3 align="right">Keep in touch with video creators</h3>
+<p align="right">
+Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma and plenty others), or just with good ol' RSS.
+</p>
+
+---
+
+<img src="https://lutim.cpy.re/K07EhFbt.png" align="left" height="200px"/>
+
+<h3 align="left">An interface to call home</h3>
+<p align="left">
+Be it as a user or an instance administrator, you can decide what your experience will be like. Don't like the colors? They are easy to change. Don't want to list videos of an instance but let your users subscribe to them? Don't like the regular web client? All of that can be changed, and much more. No UX dark pattern, no mining your data, no video recommendation bullshit™.
+</p>
+
+---
+
+<h3 align="right">Communities that help each other</h3>
+<p align="right">
+In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="/support/doc/redundancy.md">redundancy guide</a>).
+</p>
+<p align="right">
+Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisments that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
+</p>
+
+---
 
 Want to see it in action?
 

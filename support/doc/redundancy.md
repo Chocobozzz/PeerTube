@@ -9,7 +9,7 @@ Then, they choose the instances they want to cache in `Manage follows -> Followi
 
 <p align="center">
 
-<img src="support/doc/user/redundancy.png" alt="Redundancy" />
+<img src="user/redundancy.png" alt="Redundancy" />
 
 </p>
 
