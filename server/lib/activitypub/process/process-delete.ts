@@ -7,7 +7,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { forwardActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/utils'
 
 async function processDeleteActivity (activity: ActivityDelete, byActor: ActorModel) {
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
@@ -103,7 +103,7 @@ function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoComm
     if (videoComment.Video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
-      await forwardActivity(activity, t, exceptions)
+      await forwardVideoRelatedActivity(activity, t, exceptions, videoComment.Video)
     }
 
     logger.info('Remote video comment %s removed.', videoComment.url)
