@@ -35,6 +35,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
 
+  syndicationItems = []
+
   private sub: Subscription
 
   constructor (
@@ -200,6 +202,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.inReplyToCommentId = undefined
       this.componentPagination.currentPage = 1
       this.componentPagination.totalItems = null
+
+      this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
 
       this.loadMoreComments()
     }

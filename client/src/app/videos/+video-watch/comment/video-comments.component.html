@@ -3,9 +3,8 @@
     <div i18n class="title-page title-page-single">
       Comments
     </div>
-    <my-help
-      *ngIf="video.commentsEnabled === true" helpType="custom" i18n-customHtml
-      customHtml="You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.name}}@{{video.account.host}}</strong> and find back the video."></my-help>
+
+    <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>
   </div>
 
   <ng-template [ngIf]="video.commentsEnabled === true">
