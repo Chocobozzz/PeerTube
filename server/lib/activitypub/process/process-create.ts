@@ -11,7 +11,7 @@ import { addVideoComment, resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
-import { createCacheFile } from '../cache-file'
+import { createOrUpdateCacheFile } from '../cache-file'
 
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
@@ -105,7 +105,7 @@ async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
 
   await sequelizeTypescript.transaction(async t => {
-    return createCacheFile(cacheFile, video, byActor, t)
+    return createOrUpdateCacheFile(cacheFile, video, byActor, t)
   })
 
   if (video.isOwned()) {

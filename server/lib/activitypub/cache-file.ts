@@ -22,6 +22,16 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
   }
 }
 
+async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }, t: Transaction) {
+  const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
+
+  if (!redundancyModel) {
+    await createCacheFile(cacheFileObject, video, byActor, t)
+  } else {
+    await updateCacheFile(cacheFileObject, redundancyModel, video, byActor, t)
+  }
+}
+
 function createCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }, t: Transaction) {
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
 
@@ -48,6 +58,7 @@ function updateCacheFile (
 }
 
 export {
+  createOrUpdateCacheFile,
   createCacheFile,
   updateCacheFile,
   cacheFileActivityObjectToDBAttributes

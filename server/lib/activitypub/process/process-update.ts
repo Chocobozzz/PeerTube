@@ -10,8 +10,7 @@ import { fetchAvatarIfExists, updateActorAvatarInstance, updateActorInstance } f
 import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
-import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { createCacheFile, updateCacheFile } from '../cache-file'
+import { createOrUpdateCacheFile } from '../cache-file'
 import { forwardVideoRelatedActivity } from '../send/utils'
 
 async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorModel) {
@@ -77,13 +76,7 @@ async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUp
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
 
   await sequelizeTypescript.transaction(async t => {
-    const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
-
-    if (!redundancyModel) {
-      await createCacheFile(cacheFileObject, video, byActor, t)
-    } else {
-      await updateCacheFile(cacheFileObject, redundancyModel, video, byActor, t)
-    }
+    await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)
   })
 
   if (video.isOwned()) {
