@@ -56,5 +56,5 @@ yarn install --production --pure-lockfile
 cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
 
 echo "Differences in configuration files..."
-diff "$PEERTUBE_PATH/versions/peertube-${VERSION}/config/production.yaml.example" $PEERTUBE_PATH/config/production.yaml
+diff -u $PEERTUBE_PATH/config/production.yaml "$PEERTUBE_PATH/versions/peertube-${VERSION}/config/production.yaml.example"
 

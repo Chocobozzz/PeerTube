@@ -43,7 +43,7 @@ let serverCommit: string
 async function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   const allowed = await isSignupAllowed()
   const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
-  serverCommit = (serverCommit) ? serverCommit : getVersion()
+  serverCommit = (serverCommit) ? serverCommit : await getVersion()
   if (serverCommit === packageJSON.version) serverCommit = ''
 
   const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)

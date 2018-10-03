@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs'
 import { AuthService } from '@app/core'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -22,6 +23,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   private routeSub: Subscription
 
   constructor (
+    private i18n: I18n,
     private route: ActivatedRoute,
     private authService: AuthService,
     private videoChannelService: VideoChannelService,
@@ -45,7 +47,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
           this.subscribeButton.unsubscribe() :
           this.subscribeButton.subscribe()
         return false
-      }, undefined, 'Subscribe to the account')
+      }, undefined, this.i18n('Subscribe to the account'))
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
   }

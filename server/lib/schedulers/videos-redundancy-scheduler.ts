@@ -70,12 +70,26 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     for (const redundancyModel of expired) {
       try {
-        const redundancy = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
-        await this.extendsExpirationOf(redundancyModel, redundancy.minLifetime)
+        await this.extendsOrDeleteRedundancy(redundancyModel)
       } catch (err) {
         logger.error('Cannot extend expiration of %s video from our redundancy system.', this.buildEntryLogId(redundancyModel))
       }
     }
+  }
+
+  private async extendsOrDeleteRedundancy (redundancyModel: VideoRedundancyModel) {
+    // Refresh the video, maybe it was deleted
+    const video = await this.loadAndRefreshVideo(redundancyModel.VideoFile.Video.url)
+
+    if (!video) {
+      logger.info('Destroying existing redundancy %s, because the associated video does not exist anymore.', redundancyModel.url)
+
+      await redundancyModel.destroy()
+      return
+    }
+
+    const redundancy = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
+    await this.extendsExpirationOf(redundancyModel, redundancy.minLifetime)
   }
 
   private async purgeRemoteExpired () {
@@ -109,23 +123,11 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const serverActor = await getServerActor()
 
     for (const file of filesToDuplicate) {
-      // We need more attributes and check if the video still exists
-      const getVideoOptions = {
-        videoObject: file.Video.url,
-        syncParam: { likes: false, dislikes: false, shares: false, comments: false, thumbnail: false, refreshVideo: true },
-        fetchType: 'all' as 'all'
-      }
-      const { video } = await getOrCreateVideoAndAccountAndChannel(getVideoOptions)
+      const video = await this.loadAndRefreshVideo(file.Video.url)
 
-      const existing = await VideoRedundancyModel.loadLocalByFileId(file.id)
-      if (existing) {
-        if (video) {
-          await this.extendsExpirationOf(existing, redundancy.minLifetime)
-        } else {
-          logger.info('Destroying existing redundancy %s, because the associated video does not exist anymore.', existing.url)
-
-          await existing.destroy()
-        }
+      const existingRedundancy = await VideoRedundancyModel.loadLocalByFileId(file.id)
+      if (existingRedundancy) {
+        await this.extendsOrDeleteRedundancy(existingRedundancy)
 
         continue
       }
@@ -202,5 +204,17 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const fileReducer = (previous: number, current: VideoFileModel) => previous + current.size
 
     return files.reduce(fileReducer, 0)
+  }
+
+  private async loadAndRefreshVideo (videoUrl: string) {
+    // We need more attributes and check if the video still exists
+    const getVideoOptions = {
+      videoObject: videoUrl,
+      syncParam: { likes: false, dislikes: false, shares: false, comments: false, thumbnail: false, refreshVideo: true },
+      fetchType: 'all' as 'all'
+    }
+    const { video } = await getOrCreateVideoAndAccountAndChannel(getVideoOptions)
+
+    return video
   }
 }

@@ -1,6 +1,6 @@
 import {
-  AfterDestroy,
   AllowNull,
+  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -115,14 +115,20 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   })
   Actor: ActorModel
 
-  @AfterDestroy
-  static removeFile (instance: VideoRedundancyModel) {
+  @BeforeDestroy
+  static async removeFile (instance: VideoRedundancyModel) {
     // Not us
     if (!instance.strategy) return
 
-    logger.info('Removing duplicated video file %s-%s.', instance.VideoFile.Video.uuid, instance.VideoFile.resolution)
+    const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
 
-    return instance.VideoFile.Video.removeFile(instance.VideoFile)
+    const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
+    logger.info('Removing duplicated video file %s.', logIdentifier)
+
+    videoFile.Video.removeFile(videoFile)
+             .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
+
+    return undefined
   }
 
   static async loadLocalByFileId (videoFileId: number) {

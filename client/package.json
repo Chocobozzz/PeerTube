@@ -1,11 +1,11 @@
 {
   "name": "peertube-client",
-  "version": "1.0.0-beta.16",
+  "version": "1.0.0-rc.2",
   "private": true,
   "licence": "GPLv3",
   "author": {
-    "name": "Florian Bigard",
-    "email": "me@florianbigard.com",
+    "name": "Chocobozzz",
+    "email": "chocobozzz@cpy.re",
     "url": "http://github.com/Chocobozzz"
   },
   "repository": {

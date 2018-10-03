@@ -7,7 +7,7 @@ import {
 } from './cli'
 
 program
-  .version(version(), '-v, --version')
+  .version(version, '-v, --version')
   .usage('[command] [options]')
 
 /* Subcommands automatically loaded in the directory and beginning by peertube-* */

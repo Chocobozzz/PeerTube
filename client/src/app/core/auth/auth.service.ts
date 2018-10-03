@@ -65,19 +65,19 @@ export class AuthService {
       new Hotkey('m s', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/subscriptions' ])
         return false
-      }, undefined, 'Go to my subscriptions'),
+      }, undefined, this.i18n('Go to my subscriptions')),
       new Hotkey('m v', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/my-account/videos' ])
         return false
-      }, undefined, 'Go to my videos'),
+      }, undefined, this.i18n('Go to my videos')),
       new Hotkey('m i', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/my-account/video-imports' ])
         return false
-      }, undefined, 'Go to my imports'),
+      }, undefined, this.i18n('Go to my imports')),
       new Hotkey('m c', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/my-account/video-channels' ])
         return false
-      }, undefined, 'Go to my channels')
+      }, undefined, this.i18n('Go to my channels'))
     ]
   }
 

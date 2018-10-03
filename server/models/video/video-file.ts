@@ -107,6 +107,19 @@ export class VideoFileModel extends Model<VideoFileModel> {
               })
   }
 
+  static loadWithVideo (id: number) {
+    const options = {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+
+    return VideoFileModel.findById(id, options)
+  }
+
   hasSameUniqueKeysThan (other: VideoFileModel) {
     return this.fps === other.fps &&
       this.resolution === other.resolution &&
