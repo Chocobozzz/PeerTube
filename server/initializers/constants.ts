@@ -293,7 +293,7 @@ const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 3, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
-    USERNAME: { min: 3, max: 20 }, // Length
+    USERNAME: { min: 3, max: config.get<number>('fields.users.username.max') }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
