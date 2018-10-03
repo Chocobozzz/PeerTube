@@ -407,7 +407,7 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 
 const FFMPEG_NICE: { [ id: string ]: number } = {
   THUMBNAIL: 2, // 2 just for don't blocking servers
-  TRANSCODING: 15
+  TRANSCODING: config.has('transcoding.niceness') ? config.get<number>('transcoding.niceness') : 15
 }
 
 const VIDEO_CATEGORIES = {
