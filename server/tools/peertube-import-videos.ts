@@ -10,6 +10,7 @@ import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo 
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
+import { createHash } from 'crypto'
 import { safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { getSettings, netrc } from './cli'
 
@@ -155,7 +156,7 @@ function processVideo (info: any, languageCode: string, cwd: string, url: string
       return res()
     }
 
-    const path = join(cwd, new Date().getTime() + '.mp4')
+    const path = join(cwd, createHash('sha256').update(program['targetUrl']).digest('hex') + '.mp4')
 
     console.log('Downloading video "%s"...', videoInfo.title)
 
