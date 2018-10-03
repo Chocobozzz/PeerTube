@@ -90,27 +90,28 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
+// TODO in later versions remove config.has checks and just config.get the value
 const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
-  'activitypub-http-broadcast': 5,
-  'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 5,
-  'activitypub-follow': 5,
-  'video-file-import': 1,
-  'video-file': 1,
-  'video-import': 1,
-  'email': 5,
-  'videos-views': 1
+  'activitypub-http-broadcast': config.has('job.attempts.activitypub-http-broadcast') ? config.get<number>('job.attempts.activitypub-http-broadcast') : 5,
+  'activitypub-http-unicast': config.has('job.attempts.activitypub-http-unicast') ? config.get<number>('job.attempts.activitypub-http-unicast') : 5,
+  'activitypub-http-fetcher': config.has('job.attempts.activitypub-http-fetcher') ? config.get<number>('job.attempts.activitypub-http-fetcher') : 5,
+  'activitypub-follow': config.has('job.attempts.activitypub-follow') ? config.get<number>('job.attempts.activitypub-follow') : 5,
+  'video-file-import': config.has('job.attempts.video-file-import') ? config.get<number>('job.attempts.video-file-import') : 1,
+  'video-file': config.has('job.attempts.video-file') ? config.get<number>('job.attempts.video-file') : 1,
+  'video-import': config.has('job.attempts.video-import') ? config.get<number>('job.attempts.video-import') : 1,
+  'email': config.has('job.attempts.email') ? config.get<number>('job.attempts.email') : 5,
+  'videos-views': config.has('job.attempts.videos-views') ? config.get<number>('job.attempts.videos-views') : 1
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
-  'activitypub-http-broadcast': 1,
-  'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 1,
-  'activitypub-follow': 3,
-  'video-file-import': 1,
-  'video-file': 1,
-  'video-import': 1,
-  'email': 5,
-  'videos-views': 1
+  'activitypub-http-broadcast': config.has('job.concurrency.activitypub-http-broadcast') ? config.get<number>('job.concurrency.activitypub-http-broadcast') : 1,
+  'activitypub-http-unicast': config.has('job.concurrency.activitypub-http-unicast') ? config.get<number>('job.concurrency.activitypub-http-unicast') : 5,
+  'activitypub-http-fetcher': config.has('job.concurrency.activitypub-http-fetcher') ? config.get<number>('job.concurrency.activitypub-http-fetcher') : 1,
+  'activitypub-follow': config.has('job.concurrency.activitypub-follow') ? config.get<number>('job.concurrency.activitypub-follow') : 3,
+  'video-file-import': config.has('job.concurrency.video-file-import') ? config.get<number>('job.concurrency.video-file-import') : 1,
+  'video-file': config.has('job.concurrency.video-file') ? config.get<number>('job.concurrency.video-file') : 1,
+  'video-import': config.has('job.concurrency.video-import') ? config.get<number>('job.concurrency.video-import') : 1,
+  'email': config.has('job.concurrency.email') ? config.get<number>('job.concurrency.email') : 5,
+  'videos-views': config.has('job.concurrency.videos-views') ? config.get<number>('job.concurrency.videos-views') : 1
 }
 const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -625,10 +626,14 @@ const FEEDS = {
 
 // ---------------------------------------------------------------------------
 
+const ttrl_interval = config.has('torrent.tracker.rate_limits.interval') ? config.get<number>('torrent.tracker.rate_limits.interval') : 5
+const ttrl_infohash = config.has('torrent.tracker.rate_limits.anounces_per_ip_per_infohash') ? config.get<number>('torrent.tracker.rate_limits.anounces_per_ip_per_infohash') : 15
+const ttrl_per_ip = config.has('torrent.tracker.rate_limits.anounces_per_ip') ? config.get<number>('torrent.tracker.rate_limits.anounces_per_ip') : 30
+
 const TRACKER_RATE_LIMITS = {
-  INTERVAL: 60000 * 5, // 5 minutes
-  ANNOUNCES_PER_IP_PER_INFOHASH: 15, // maximum announces per torrent in the interval
-  ANNOUNCES_PER_IP: 30 // maximum announces for all our torrents in the interval
+  INTERVAL: 60000 * ttrl_interval, // 5 minutes
+  ANNOUNCES_PER_IP_PER_INFOHASH: ttrl_infohash, // maximum announces per torrent in the interval
+  ANNOUNCES_PER_IP: ttrl_per_ip // maximum announces for all our torrents in the interval
 }
 
 // ---------------------------------------------------------------------------
