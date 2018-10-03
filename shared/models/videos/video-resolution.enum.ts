@@ -16,7 +16,7 @@ export enum VideoResolution {
 export function getTargetBitrate (resolution: VideoResolution, fps: number) {
   switch (resolution) {
   case VideoResolution.H_240P:
-    // quality according to Google Live Encoder: 400 - 1,000 Kbps
+    // quality according to Google Live Encoder: 300 - 700 Kbps
     // Quality according to YouTube Video Info: 186 Kbps
     return 250 * 1000
   case VideoResolution.H_360P:

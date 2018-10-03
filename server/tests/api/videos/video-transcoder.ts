@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoDetails, VideoState, getTargetBitrate, getMaxBitrate } from '../../../../shared/models/videos'
+import { VideoDetails, VideoState, getMaxBitrate, VideoResolution } from '../../../../shared/models/videos'
 import { getVideoFileFPS, audio, getVideoFileBitrate, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
@@ -282,6 +282,7 @@ describe('Test video transcoding', function () {
     }
   })
 
+  const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4')
   it('Should respect maximum bitrate values', async function () {
     this.timeout(80000)
 
@@ -293,11 +294,14 @@ describe('Test video transcoding', function () {
         ffmpeg()
           .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
           .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-vframes 3'])
-          .output(buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4'))
+          .output(tempFixturePath)
           .on('error', rej)
           .on('end', () => res)
           .run()
       })
+
+      const bitrate = await getVideoFileBitrate(tempFixturePath)
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60))
 
       const videoAttributes = {
         name: 'waiting video',
@@ -320,6 +324,7 @@ describe('Test video transcoding', function () {
           const fps = await getVideoFileFPS(path)
           const resolution2 = await getVideoFileResolution(path)
 
+          expect(resolution2 + 'p').to.equal(resolution)
           expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps))
         }
       }
@@ -342,7 +347,7 @@ describe('Test video transcoding', function () {
   })
 
   after(async function () {
-    remove(buildAbsoluteFixturePath('video_high_bitrate_720p.mp4'))
+    remove(tempFixturePath)
     killallServers(servers)
   })
 })
