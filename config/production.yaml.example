@@ -133,6 +133,7 @@ user:
 transcoding:
   enabled: true
   threads: 1
+  concurrency: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
     360p: false
