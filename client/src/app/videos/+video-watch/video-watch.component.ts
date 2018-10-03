@@ -125,17 +125,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
         this.setLike()
         return false
-      }, undefined, 'Like the video'),
+      }, undefined, this.i18n('Like the video')),
       new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
         this.setDislike()
         return false
-      }, undefined, 'Dislike the video'),
+      }, undefined, this.i18n('Dislike the video')),
       new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
         this.subscribeButton.subscribed ?
           this.subscribeButton.unsubscribe() :
           this.subscribeButton.subscribe()
         return false
-      }, undefined, 'Subscribe to the account')
+      }, undefined, this.i18n('Subscribe to the account'))
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
   }
