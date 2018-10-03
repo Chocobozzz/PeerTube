@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.0.0-rc.1
+
+### Features
+
+ * Allow specification of channel ID in `peertube-upload.js` ([@anoadragon453](https://github.com/anoadragon453))
+ * Show last commit hash alongside server version in footer ([@rigelk](https://github.com/rigelk))
+ * Add comment feeds in watch page
+
+### Bug fixes
+
+ * Fix dnt route (yes again, but now we have unit tests for this route :D)
+ * Check video channel name is unique when creating a new one
+ * Fix video fps validator (prevent redundancy/refresh of some old videos)
+ * Allow empty search on client side ([@rigelk](https://github.com/rigelk))
+ * Correctly forward comment deletion
+
+
 ## v1.0.0-beta.16
 
 ### BREAKING CHANGES
