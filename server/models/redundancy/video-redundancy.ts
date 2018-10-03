@@ -122,9 +122,13 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
     const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
 
-    logger.info('Removing duplicated video file %s-%s.', videoFile.Video.uuid, videoFile.resolution)
+    const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
+    logger.info('Removing duplicated video file %s.', logIdentifier)
 
-    return videoFile.Video.removeFile(videoFile)
+    videoFile.Video.removeFile(videoFile)
+             .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
+
+    return undefined
   }
 
   static async loadLocalByFileId (videoFileId: number) {
