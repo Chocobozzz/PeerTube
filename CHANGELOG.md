@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0-rc.2
+
+### Bug fixes
+
+ * Fix config endpoint
+
+
 ## v1.0.0-rc.1
 
 ### Features
