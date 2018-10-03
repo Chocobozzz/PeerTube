@@ -8,9 +8,9 @@ import * as createTorrent from 'create-torrent'
 import { createHash, pseudoRandomBytes } from 'crypto'
 import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
-import * as rimraf from 'rimraf'
 import { URL } from 'url'
 import { truncate } from 'lodash'
+import { exec } from 'child_process'
 
 const timeTable = {
   ms:           1,
@@ -178,6 +178,8 @@ const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
 const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
 const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
+const execPromise2 = promisify2<string, any, string>(exec)
+const execPromise = promisify1<string, string>(exec)
 
 // ---------------------------------------------------------------------------
 
@@ -203,5 +205,7 @@ export {
   bcryptComparePromise,
   bcryptGenSaltPromise,
   bcryptHashPromise,
-  createTorrentPromise
+  createTorrentPromise,
+  execPromise2,
+  execPromise
 }

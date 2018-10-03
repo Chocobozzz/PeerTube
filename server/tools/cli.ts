@@ -1,8 +1,7 @@
 const config = require('application-config')('PeerTube/CLI')
 const netrc = require('netrc-parser').default
-import { getVersion } from '../helpers/utils'
 
-const version = getVersion
+const version = require('../../../package.json').version
 
 let settings = {
   remotes: [],

@@ -1,7 +1,7 @@
 import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers'
 import { ApplicationModel } from '../models/application/application'
-import { pseudoRandomBytesPromise, sha256 } from './core-utils'
+import { execPromise, execPromise2, pseudoRandomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
@@ -54,14 +54,25 @@ function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
-function getVersion () {
-  const tag = require('child_process')
-    .execSync('[[ ! -d .git ]] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true', { stdio: [0,1,2] })
-  if (tag) return tag.replace(/^v/, '')
+async function getVersion () {
+  try {
+    const tag = await execPromise2(
+      '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
+      { stdio: [ 0, 1, 2 ] }
+    )
 
-  const version = require('child_process')
-    .execSync('[[ ! -d .git ]] || git rev-parse --short HEAD').toString().trim()
-  if (version) return version
+    if (tag) return tag.replace(/^v/, '')
+  } catch (err) {
+    logger.debug('Cannot get version from git tags.', { err })
+  }
+
+  try {
+    const version = await execPromise('[ ! -d .git ] || git rev-parse --short HEAD')
+
+    if (version) return version.toString().trim()
+  } catch (err) {
+    logger.debug('Cannot get version from git HEAD.', { err })
+  }
 
   return require('../../../package.json').version
 }
