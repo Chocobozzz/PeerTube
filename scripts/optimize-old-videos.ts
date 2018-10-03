@@ -1,11 +1,12 @@
-import { join, basename, extname } from 'path'
-import { remove, readdir, move, stat } from 'fs-extra'
+import { join } from 'path'
+import { readdir } from 'fs-extra'
 import { CONFIG } from '../server/initializers/constants'
-import { getVideoFileResolution, transcode, getVideoFileBitrate, getVideoFileFPS } from '../server/helpers/ffmpeg-utils'
+import { getVideoFileResolution, getVideoFileBitrate, getVideoFileFPS } from '../server/helpers/ffmpeg-utils'
 import { getMaxBitrate } from '../shared/models/videos'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
 import { VideoModel } from '../server/models/video/video'
 import { getUUIDFromFilename } from '../server/helpers/utils'
+import { optimizeVideofile } from '../server/lib/video-transcoding'
 
 run()
   .then(() => process.exit(0))
@@ -20,36 +21,15 @@ async function run () {
     const inputPath = join(CONFIG.STORAGE.VIDEOS_DIR, file)
     const videoBitrate = await getVideoFileBitrate(inputPath)
     const fps = await getVideoFileFPS(inputPath)
-    const { videoFileResolution, isPortraitMode } = await getVideoFileResolution(inputPath)
+    const resolution = await getVideoFileResolution(inputPath)
     const uuid = getUUIDFromFilename(file)
 
     const isLocalVideo = await VideoRedundancyModel.isLocalByVideoUUIDExists(uuid)
-    const isMaxBitrateExceeded = videoBitrate > getMaxBitrate(videoFileResolution, fps)
+    const isMaxBitrateExceeded = videoBitrate > getMaxBitrate(resolution.videoFileResolution, fps)
     if (uuid && isLocalVideo && isMaxBitrateExceeded) {
-      await optimizeVideo(uuid, inputPath, videoFileResolution, isPortraitMode)
+      const videoModel = await VideoModel.loadByUUIDWithFile(uuid)
+      await optimizeVideofile(videoModel, inputPath)
     }
   }
   console.log('Finished optimizing videos')
-}
-
-async function optimizeVideo (uuid: string, inputPath: string, resolution: number, isPortraitMode: boolean) {
-  const ext = extname(inputPath)
-  console.log(`Optimizing video ${ basename(inputPath) }`)
-  const outputPath = join(CONFIG.STORAGE.VIDEOS_DIR, `${uuid}-${resolution}-optimized${ext}`)
-  await remove(outputPath)
-  const transcodeOptions = {
-    inputPath: inputPath,
-    outputPath: outputPath,
-    resolution: resolution,
-    isPortraitMode: isPortraitMode
-  }
-  await transcode(transcodeOptions)
-  await move(outputPath, inputPath, { overwrite: true })
-  const videoModel = await VideoModel.loadByUUIDWithFile(uuid)
-  const videoFile = videoModel.VideoFiles.find(f => f.resolution === resolution)
-  videoModel.createTorrentAndSetInfoHash(videoFile)
-  stat(inputPath, (err, stats) => {
-    if (err) throw err
-    videoFile.size = stats.size
-  })
 }

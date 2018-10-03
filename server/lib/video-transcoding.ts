@@ -1,5 +1,5 @@
 import { CONFIG } from '../initializers'
-import { join, extname } from 'path'
+import { join, extname, basename } from 'path'
 import { getVideoFileFPS, getVideoFileResolution, transcode } from '../helpers/ffmpeg-utils'
 import { copy, remove, rename, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
@@ -7,11 +7,16 @@ import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoModel } from '../models/video/video'
 
-async function optimizeOriginalVideofile (video: VideoModel) {
+async function optimizeVideofile (video: VideoModel, videoInputPath?: string) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const newExtname = '.mp4'
-  const inputVideoFile = video.getOriginalFile()
-  const videoInputPath = join(videosDirectory, video.getVideoFilename(inputVideoFile))
+  let inputVideoFile = null
+  if (videoInputPath == null) {
+    inputVideoFile = video.getOriginalFile()
+    videoInputPath = join(videosDirectory, video.getVideoFilename(inputVideoFile))
+  } else {
+    inputVideoFile = basename(videoInputPath)
+  }
   const videoTranscodedPath = join(videosDirectory, video.id + '-transcoded' + newExtname)
 
   const transcodeOptions = {
@@ -124,7 +129,7 @@ async function importVideoFile (video: VideoModel, inputFilePath: string) {
 }
 
 export {
-  optimizeOriginalVideofile,
+  optimizeVideofile,
   transcodeOriginalVideofile,
   importVideoFile
 }
