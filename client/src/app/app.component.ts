@@ -174,4 +174,10 @@ export class AppComponent implements OnInit {
   toggleMenu () {
     this.isMenuDisplayed = !this.isMenuDisplayed
   }
+
+  onResize (event) {
+    if (event.target.innerWidth < 800 && this.isMenuDisplayed) {
+      this.isMenuDisplayed = false
+    }
+  }
 }
