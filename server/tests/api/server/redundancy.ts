@@ -16,7 +16,8 @@ import {
   uploadVideo,
   viewVideo,
   wait,
-  waitUntilLog
+  waitUntilLog,
+  checkVideoFilesWereRemoved, removeVideo
 } from '../../utils'
 import { waitJobs } from '../../utils/server/jobs'
 import * as magnetUtil from 'magnet-uri'
@@ -242,6 +243,8 @@ describe('Test videos redundancy', function () {
       await wait(5000)
 
       await check1WebSeed(strategy)
+
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ 'videos' ])
     })
 
     after(function () {
@@ -287,6 +290,8 @@ describe('Test videos redundancy', function () {
       await wait(5000)
 
       await check1WebSeed(strategy)
+
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ 'videos' ])
     })
 
     after(function () {
@@ -342,6 +347,18 @@ describe('Test videos redundancy', function () {
 
       await check2Webseeds(strategy)
       await checkStatsWith2Webseed(strategy)
+    })
+
+    it('Should remove the video and the redundancy files', async function () {
+      this.timeout(20000)
+
+      await removeVideo(servers[1].url, servers[1].accessToken, video1Server2UUID)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        await checkVideoFilesWereRemoved(video1Server2UUID, server.serverNumber)
+      }
     })
 
     after(function () {

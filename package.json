@@ -11,8 +11,8 @@
     "peertube": "dist/server/tools/peertube.js"
   },
   "author": {
-    "name": "Florian Bigard",
-    "email": "florian.bigard@gmail.com",
+    "name": "Chocobozzz",
+    "email": "chocobozzz@cpy.re",
     "url": "http://github.com/Chocobozzz"
   },
   "repository": {

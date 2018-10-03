@@ -267,10 +267,14 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
           .expect(expectedStatus)
 }
 
-async function checkVideoFilesWereRemoved (videoUUID: string, serverNumber: number) {
+async function checkVideoFilesWereRemoved (
+  videoUUID: string,
+  serverNumber: number,
+  directories = [ 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]
+) {
   const testDirectory = 'test' + serverNumber
 
-  for (const directory of [ 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]) {
+  for (const directory of directories) {
     const directoryPath = join(root(), testDirectory, directory)
 
     const directoryExists = existsSync(directoryPath)
