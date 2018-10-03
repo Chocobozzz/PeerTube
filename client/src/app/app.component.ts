@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
   }
 
   isMenuDisplayed = true
+  isMenuWanted = false
 
   customCSS: SafeHtml
 
@@ -173,11 +174,14 @@ export class AppComponent implements OnInit {
 
   toggleMenu () {
     this.isMenuDisplayed = !this.isMenuDisplayed
+    this.isMenuWanted = true
   }
 
   onResize (event) {
-    if (event.target.innerWidth < 800 && this.isMenuDisplayed) {
+    if (event.target.innerWidth < 800 && !this.isMenuWanted) {
       this.isMenuDisplayed = false
+    } else if (event.target.innerWidth >= 800 && !this.isMenuWanted) {
+      this.isMenuDisplayed = true
     }
   }
 }
