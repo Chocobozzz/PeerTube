@@ -134,7 +134,7 @@ async function run (user, url: string) {
     }
 
     // https://www.youtube.com/watch?v=2Upx39TBc1s
-    console.log('I\'m finished!')
+    console.log('Video for user %s imported: %s', program['username'], program['targetUrl'])
     process.exit(0)
   })
 }
