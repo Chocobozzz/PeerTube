@@ -32,7 +32,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @ViewChild('textarea') private textareaElement: ElementRef
 
   private addingComment = false
-  private uri: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
