@@ -21,4 +21,4 @@
 * NodeJS version:
 
 * Link to browser console log if useful:
-* Link to server log if useful (journalctl or /var/www/peertube/storage/logs):
+* Link to server log if useful (journalctl or /var/www/peertube/storage/logs/):
