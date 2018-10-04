@@ -284,7 +284,7 @@ describe('Test video transcoding', function () {
 
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4')
   it('Should respect maximum bitrate values', async function () {
-    this.timeout(80000)
+    this.timeout(120000)
 
     {
       // Generate a random, high bitrate video on the fly, so we don't have to include

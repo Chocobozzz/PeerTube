@@ -1,7 +1,7 @@
 import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT } from '../../initializers'
 import { doRequest } from '../../helpers/requests'
 import { logger } from '../../helpers/logger'
-import Bluebird = require('bluebird')
+import * as Bluebird from 'bluebird'
 
 async function crawlCollectionPage <T> (uri: string, handler: (items: T[]) => Promise<any> | Bluebird<any>) {
   logger.info('Crawling ActivityPub data on %s.', uri)
