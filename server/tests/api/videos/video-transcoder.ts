@@ -294,6 +294,7 @@ describe('Test video transcoding', function () {
         ffmpeg()
           .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
           .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-vframes 3'])
+          .outputOptions(['-maxrate 10M', '-bufsize 10M'])
           .output(tempFixturePath)
           .on('error', rej)
           .on('end', () => res)
