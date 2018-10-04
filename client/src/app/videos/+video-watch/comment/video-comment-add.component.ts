@@ -127,6 +127,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     return this.form.value['text']
   }
 
+  getUrl () {
+    return window.location.href
+  }
+
   getAvatarUrl () {
     if (this.user) return this.user.accountAvatarUrl
     return window.location.origin + '/client/assets/images/default-avatar.png'
