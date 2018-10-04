@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   isMenuDisplayed = true
-  isMenuWanted = false
+  isMenuChangedByUser = false
 
   customCSS: SafeHtml
 
@@ -170,7 +170,7 @@ export class AppComponent implements OnInit {
 
     fromEvent(window, 'resize')
       .pipe(debounceTime(200))
-      .subscribe(() => this.onResize(window))
+      .subscribe(() => this.onResize())
   }
 
   isUserLoggedIn () {
@@ -179,14 +179,10 @@ export class AppComponent implements OnInit {
 
   toggleMenu () {
     this.isMenuDisplayed = !this.isMenuDisplayed
-    this.isMenuWanted = true
+    this.isMenuChangedByUser = true
   }
 
-  onResize (window) {
-    if (window.innerWidth < 800 && !this.isMenuWanted) {
-      this.isMenuDisplayed = false
-    } else if (window.innerWidth >= 800 && !this.isMenuWanted) {
-      this.isMenuDisplayed = true
-    }
+  onResize () {
+    this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 }
