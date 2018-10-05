@@ -10,7 +10,9 @@ import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo 
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
+import { createHash } from 'crypto'
 import { safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { sha256 } from '../helpers/core-utils'
 import { getSettings, netrc } from './cli'
 
 let accessToken: string
@@ -133,8 +135,7 @@ async function run (user, url: string) {
       await processVideo(info, program['language'], processOptions.cwd, url, user)
     }
 
-    // https://www.youtube.com/watch?v=2Upx39TBc1s
-    console.log('I\'m finished!')
+    console.log('Video for user %s imported: %s', program['username'], program['targetUrl'])
     process.exit(0)
   })
 }
@@ -155,7 +156,7 @@ function processVideo (info: any, languageCode: string, cwd: string, url: string
       return res()
     }
 
-    const path = join(cwd, new Date().getTime() + '.mp4')
+    const path = join(cwd, sha256(program['targetUrl']) + '.mp4')
 
     console.log('Downloading video "%s"...', videoInfo.title)
 
