@@ -13,14 +13,14 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../../middlewares'
-import { videoCommentThreadsSortValidator } from '../../../middlewares/validators'
 import {
   addVideoCommentReplyValidator,
   addVideoCommentThreadValidator,
   listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator,
-  removeVideoCommentValidator
-} from '../../../middlewares/validators/video-comments'
+  removeVideoCommentValidator,
+  videoCommentThreadsSortValidator
+} from '../../../middlewares/validators'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'

@@ -1,7 +1,7 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param, ValidationChain } from 'express-validator/check'
-import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../shared'
+import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import {
   isBooleanValid,
   isDateValid,
@@ -10,7 +10,7 @@ import {
   isUUIDValid,
   toIntOrNull,
   toValueOrNull
-} from '../../helpers/custom-validators/misc'
+} from '../../../helpers/custom-validators/misc'
 import {
   checkUserCanManageVideo,
   isScheduleVideoUpdatePrivacyValid,
@@ -27,21 +27,21 @@ import {
   isVideoRatingTypeValid,
   isVideoSupportValid,
   isVideoTagsValid
-} from '../../helpers/custom-validators/videos'
-import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
-import { logger } from '../../helpers/logger'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { VideoShareModel } from '../../models/video/video-share'
-import { authenticate } from '../oauth'
-import { areValidationErrors } from './utils'
-import { cleanUpReqFiles } from '../../helpers/express-utils'
-import { VideoModel } from '../../models/video/video'
-import { UserModel } from '../../models/account/user'
-import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../helpers/custom-validators/video-ownership'
-import { VideoChangeOwnershipAccept } from '../../../shared/models/videos/video-change-ownership-accept.model'
-import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
-import { AccountModel } from '../../models/account/account'
-import { VideoFetchType } from '../../helpers/video'
+} from '../../../helpers/custom-validators/videos'
+import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
+import { logger } from '../../../helpers/logger'
+import { CONSTRAINTS_FIELDS } from '../../../initializers'
+import { VideoShareModel } from '../../../models/video/video-share'
+import { authenticate } from '../../oauth'
+import { areValidationErrors } from '../utils'
+import { cleanUpReqFiles } from '../../../helpers/express-utils'
+import { VideoModel } from '../../../models/video/video'
+import { UserModel } from '../../../models/account/user'
+import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
+import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
+import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
+import { AccountModel } from '../../../models/account/account'
+import { VideoFetchType } from '../../../helpers/video'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')

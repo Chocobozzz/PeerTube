@@ -1,10 +1,10 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
-import { isVideoBlacklistExist, isVideoBlacklistReasonValid } from '../../helpers/custom-validators/video-blacklist'
+import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
+import { isVideoExist } from '../../../helpers/custom-validators/videos'
+import { logger } from '../../../helpers/logger'
+import { areValidationErrors } from '../utils'
+import { isVideoBlacklistExist, isVideoBlacklistReasonValid } from '../../../helpers/custom-validators/video-blacklist'
 
 const videosBlacklistRemoveValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),

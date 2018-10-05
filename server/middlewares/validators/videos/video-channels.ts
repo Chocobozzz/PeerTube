@@ -1,20 +1,20 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
-import { UserRight } from '../../../shared'
-import { isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
+import { UserRight } from '../../../../shared'
+import { isAccountNameWithHostExist } from '../../../helpers/custom-validators/accounts'
 import {
   isLocalVideoChannelNameExist,
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelNameWithHostExist,
   isVideoChannelSupportValid
-} from '../../helpers/custom-validators/video-channels'
-import { logger } from '../../helpers/logger'
-import { UserModel } from '../../models/account/user'
-import { VideoChannelModel } from '../../models/video/video-channel'
-import { areValidationErrors } from './utils'
-import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
-import { ActorModel } from '../../models/activitypub/actor'
+} from '../../../helpers/custom-validators/video-channels'
+import { logger } from '../../../helpers/logger'
+import { UserModel } from '../../../models/account/user'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { areValidationErrors } from '../utils'
+import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
+import { ActorModel } from '../../../models/activitypub/actor'
 
 const listVideoAccountChannelsValidator = [
   param('accountName').exists().withMessage('Should have a valid account name'),
