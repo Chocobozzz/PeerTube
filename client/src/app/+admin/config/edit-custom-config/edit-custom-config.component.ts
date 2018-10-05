@@ -18,6 +18,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   resolutions: string[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
+  transcodingConcurrencyOptions: { label: string, value: number }[] = []
+  transcodingNicenessOptions: { label: string, value: number }[] = []
+  transcodingTTL: number
 
   private oldCustomJavascript: string
   private oldCustomCSS: string
@@ -48,6 +51,31 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       { value: 2, label: '2' },
       { value: 4, label: '4' },
       { value: 8, label: '8' }
+    ]
+
+    this.transcodingConcurrencyOptions = [
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 4, label: '4' },
+      { value: 8, label: '8' }
+    ]
+
+    this.transcodingNicenessOptions = [
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' },
+      { value: 5, label: '5' },
+      { value: 6, label: '6' },
+      { value: 7, label: '7' },
+      { value: 8, label: '8' },
+      { value: 9, label: '9' },
+      { value: 10, label: '10' },
+      { value: 11, label: '11' },
+      { value: 12, label: '12' },
+      { value: 13, label: '13' },
+      { value: 14, label: '14' },
+      { value: 15, label: '15' },
     ]
   }
 
@@ -84,6 +112,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       userVideoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
+      transcodingConcurrency: this.customConfigValidatorsService.TRANSCODING_CONCURRENCY,
+      transcodingNiceness: this.customConfigValidatorsService.TRANSCODING_NICENESS,
+      transcodingTTL: this.customConfigValidatorsService.TRANSCODING_TTL,
       transcodingEnabled: null,
       customizationJavascript: null,
       customizationCSS: null
@@ -188,6 +219,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       transcoding: {
         enabled: this.form.value['transcodingEnabled'],
         threads: this.form.value['transcodingThreads'],
+        concurrency: this.form.value['transcodingConcurrency'],
+        niceness: this.form.value['transcodingNiceness'],
+        ttl: this.form.value['transcodingTTL'],
         resolutions: {
           '240p': this.form.value[this.getResolutionKey('240p')],
           '360p': this.form.value[this.getResolutionKey('360p')],
@@ -244,6 +278,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       userVideoQuota: this.customConfig.user.videoQuota,
       userVideoQuotaDaily: this.customConfig.user.videoQuotaDaily,
       transcodingThreads: this.customConfig.transcoding.threads,
+      transcodingConcurrency: this.customConfig.transcoding.concurrency,
+      transcodingNiceness: this.customConfig.transcoding.niceness,
+      transcodingTTL: this.customConfig.transcoding.ttl,
       transcodingEnabled: this.customConfig.transcoding.enabled,
       customizationJavascript: this.customConfig.instance.customizations.javascript,
       customizationCSS: this.customConfig.instance.customizations.css,

@@ -44,7 +44,10 @@ export class ServerService {
       requiresEmailVerification: false
     },
     transcoding: {
-      enabledResolutions: []
+      enabledResolutions: [],
+      concurrency: 1,
+      niceness: 15,
+      ttl: 48
     },
     avatar: {
       file: {
