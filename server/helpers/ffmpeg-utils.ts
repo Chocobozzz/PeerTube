@@ -150,7 +150,7 @@ function transcode (options: TranscodeOptions) {
 
     // Constrained Encoding (VBV)
     // https://slhck.info/video/2017/03/01/rate-control.html
-    // https://trac.ffmpeg.org/wiki/EncodingForStreamingSites
+    // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
     const targetBitrate = getTargetBitrate(options.resolution, fps)
     command.outputOptions([`-b:v ${ targetBitrate }B`, `-maxrate ${ targetBitrate }B`, `-bufsize ${ targetBitrate * 2 }B`])
 
