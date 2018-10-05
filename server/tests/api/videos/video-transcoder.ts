@@ -290,7 +290,7 @@ describe('Test video transcoding', function () {
       // Generate a random, high bitrate video on the fly, so we don't have to include
       // a large file in the repo.
       // https://stackoverflow.com/a/15795112
-      new Promise<void>(async (res, rej) => {
+      await new Promise<void>(async (res, rej) => {
         ffmpeg()
           .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
           .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-vframes 3'])
