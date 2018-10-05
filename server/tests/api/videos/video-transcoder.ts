@@ -20,7 +20,7 @@ import {
   uploadVideo,
   webtorrentAdd
 } from '../../utils'
-import { join } from 'path'
+import { join, basename } from 'path'
 import { waitJobs } from '../../utils/server/jobs'
 import { remove } from 'fs-extra'
 
@@ -229,7 +229,7 @@ describe('Test video transcoding', function () {
     }
   })
 
-  it('Should wait transcoding before publishing the video', async function () {
+  it('Should wait for transcoding before publishing the video', async function () {
     this.timeout(80000)
 
     {
@@ -284,20 +284,20 @@ describe('Test video transcoding', function () {
 
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4')
   it('Should respect maximum bitrate values', async function () {
-    this.timeout(120000)
+    this.timeout(80000)
 
     {
       // Generate a random, high bitrate video on the fly, so we don't have to include
       // a large file in the repo.
       // https://stackoverflow.com/a/15795112
-      await new Promise<string>((res, rej) => {
+      new Promise<void>(async (res, rej) => {
         ffmpeg()
           .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
           .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-vframes 3'])
           .outputOptions(['-maxrate 10M', '-bufsize 10M'])
           .output(tempFixturePath)
           .on('error', rej)
-          .on('end', () => res)
+          .on('end', res)
           .run()
       })
 
@@ -305,9 +305,9 @@ describe('Test video transcoding', function () {
       expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60))
 
       const videoAttributes = {
-        name: 'waiting video',
-        fixture: 'video_high_bitrate_1080p.mp4',
-        waitTranscoding: false
+        name: 'high bitrate video',
+        description: 'high bitrate video',
+        fixture: basename(tempFixturePath)
       }
 
       await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
@@ -319,13 +319,13 @@ describe('Test video transcoding', function () {
 
         const video = res.body.data.find(v => v.name === videoAttributes.name)
 
-        for (const resolution of ['240p', '360p', '480p', '720p', '1080p']) {
+        for (const resolution of ['240', '360', '480', '720', '1080']) {
           const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
           const bitrate = await getVideoFileBitrate(path)
           const fps = await getVideoFileFPS(path)
           const resolution2 = await getVideoFileResolution(path)
 
-          expect(resolution2 + 'p').to.equal(resolution)
+          expect(resolution2.videoFileResolution.toString).to.equal(resolution)
           expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps))
         }
       }
