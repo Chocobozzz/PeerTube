@@ -83,7 +83,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   pageByVideoId (index: number, page: Video[]) {
     // Video are unique in all pages
-    return page[0].id
+    return page.length !== 0 ? page[0].id : 0
   }
 
   videoById (index: number, video: Video) {
