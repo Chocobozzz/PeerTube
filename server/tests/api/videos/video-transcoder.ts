@@ -284,16 +284,17 @@ describe('Test video transcoding', function () {
 
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4')
   it('Should respect maximum bitrate values', async function () {
-    this.timeout(80000)
+    this.timeout(160000)
 
     {
       // Generate a random, high bitrate video on the fly, so we don't have to include
-      // a large file in the repo.
+      // a large file in the repo. The video needs to have a certain minimum length so
+      // that FFmpeg properly applies bitrate limits.
       // https://stackoverflow.com/a/15795112
       await new Promise<void>(async (res, rej) => {
         ffmpeg()
           .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
-          .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-vframes 3'])
+          .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-t 10'])
           .outputOptions(['-maxrate 10M', '-bufsize 10M'])
           .output(tempFixturePath)
           .on('error', rej)
