@@ -237,13 +237,10 @@
 
           <div class="form-group">
             <label i18n for="transcodingNiceness">Transcoding niceness</label>
-            <div class="peertube-select-container">
-              <select id="transcodingNiceness" formControlName="transcodingNiceness">
-                <option *ngFor="let transcodingNicenessOption of transcodingNicenessOptions" [value]="transcodingNicenessOption.value">
-                  {{ transcodingNicenessOption.label }}
-                </option>
-              </select>
-            </div>
+            <input
+              type="text" id="transcodingNiceness"
+              formControlName="transcodingNiceness" [ngClass]="{ 'input-error': formErrors['transcodingNiceness'] }"
+            >
             <div *ngIf="formErrors.transcodingNiceness" class="form-error">
               {{ formErrors.transcodingNiceness }}
             </div>
