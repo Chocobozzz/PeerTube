@@ -87,6 +87,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
     transcoding: {
       enabled: true,
       threads: 1,
+      concurrency: 1,
+      niceness: 15,
+      ttl: '2 days',
       resolutions: {
         '240p': false,
         '360p': true,

@@ -49,6 +49,9 @@ export interface CustomConfig {
   transcoding: {
     enabled: boolean
     threads: number
+    concurrency: number
+    niceness: number
+    ttl: any
     resolutions: {
       '240p': boolean
       '360p': boolean

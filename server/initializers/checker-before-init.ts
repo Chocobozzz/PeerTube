@@ -18,7 +18,7 @@ function checkMissedConfig () {
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
     'redundancy.videos.strategies', 'redundancy.videos.check_interval',
-    'transcoding.enabled', 'transcoding.threads',
+    'transcoding.enabled', 'transcoding.threads', 'transcoding.concurrency', 'transcoding.niceness', 'transcoding.ttl',
     'import.videos.http.enabled', 'import.videos.torrent.enabled',
     'trending.videos.interval_days',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',

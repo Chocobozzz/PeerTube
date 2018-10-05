@@ -13,6 +13,9 @@ export class CustomConfigValidatorsService {
   readonly SIGNUP_LIMIT: BuildFormValidator
   readonly ADMIN_EMAIL: BuildFormValidator
   readonly TRANSCODING_THREADS: BuildFormValidator
+  readonly TRANSCODING_CONCURRENCY: BuildFormValidator
+  readonly TRANSCODING_NICENESS: BuildFormValidator
+  readonly TRANSCODING_TTL: BuildFormValidator
 
   constructor (private i18n: I18n) {
     this.INSTANCE_NAME = {
@@ -76,6 +79,30 @@ export class CustomConfigValidatorsService {
       MESSAGES: {
         'required': this.i18n('Transcoding threads is required.'),
         'min': this.i18n('Transcoding threads must be greater or equal to 0.')
+      }
+    }
+
+    this.TRANSCODING_CONCURRENCY = {
+      VALIDATORS: [ Validators.required, Validators.min(1) ],
+      MESSAGES: {
+        'required': this.i18n('Transcoding concurrency is required.'),
+        'min': this.i18n('Transcoding concurrency must be greater or equal to 1.')
+      }
+    }
+
+    this.TRANSCODING_NICENESS = {
+      VALIDATORS: [ Validators.required, Validators.min(1), Validators.max(18) ],
+      MESSAGES: {
+        'required': this.i18n('Transcoding niceness is required, from 1 to 18.'),
+        'min': this.i18n('Transcoding niceness must be greater or equal to 1.'),
+        'max': this.i18n('Transcoding niceness must be less than or equal to 18.')
+      }
+    }
+
+    this.TRANSCODING_TTL = {
+      VALIDATORS: [ Validators.required ],
+      MESSAGES: {
+        'required': this.i18n('Transcoding ttl duration is required. eg. "2 days" or "12 hours".')
       }
     }
   }

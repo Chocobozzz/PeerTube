@@ -16,13 +16,16 @@ export interface ServerConfig {
   }
 
   signup: {
-    allowed: boolean,
-    allowedForCurrentIP: boolean,
+    allowed: boolean
+    allowedForCurrentIP: boolean
     requiresEmailVerification: boolean
   }
 
   transcoding: {
     enabledResolutions: number[]
+    concurrency: number
+    niceness: number
+    ttl: any
   }
 
   import: {

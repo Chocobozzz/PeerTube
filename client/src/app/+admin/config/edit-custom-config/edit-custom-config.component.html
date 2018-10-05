@@ -221,6 +221,42 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label i18n for="transcodingConcurrency">Transcoding concurrency</label>
+            <div class="peertube-select-container">
+              <select id="transcodingConcurrency" formControlName="transcodingConcurrency">
+                <option *ngFor="let transcodingConcurrencyOption of transcodingConcurrencyOptions" [value]="transcodingConcurrencyOption.value">
+                  {{ transcodingConcurrencyOption.label }}
+                </option>
+              </select>
+            </div>
+            <div *ngIf="formErrors.transcodingConcurrency" class="form-error">
+              {{ formErrors.transcodingConcurrency }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="transcodingNiceness">Transcoding niceness</label>
+            <input
+              type="text" id="transcodingNiceness"
+              formControlName="transcodingNiceness" [ngClass]="{ 'input-error': formErrors['transcodingNiceness'] }"
+            >
+            <div *ngIf="formErrors.transcodingNiceness" class="form-error">
+              {{ formErrors.transcodingNiceness }}
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="transcodingTTL">Transcoding ttl (duration)</label>
+            <input
+              type="text" id="transcodingTTL"
+              formControlName="transcodingTTL" [ngClass]="{ 'input-error': formErrors['transcodingTTL'] }"
+            >
+            <div *ngIf="formErrors.transcodingTTL" class="form-error">
+              {{ formErrors.transcodingTTL }}
+            </div>
+          </div>
+
           <div class="form-group" *ngFor="let resolution of resolutions">
             <my-peertube-checkbox
               [inputName]="getResolutionKey(resolution)" [formControlName]="getResolutionKey(resolution)"

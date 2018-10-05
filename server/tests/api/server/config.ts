@@ -41,6 +41,9 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.user.videoQuotaDaily).to.equal(-1)
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.threads).to.equal(2)
+  expect(data.transcoding.concurrency).to.equal(2)
+  expect(data.transcoding.niceness).to.equal(5)
+  expect(data.transcoding.ttl).to.equal('36 hours')
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -163,6 +166,9 @@ describe('Test config', function () {
       transcoding: {
         enabled: true,
         threads: 1,
+        concurrency: 1,
+        niceness: 15,
+        ttl: '2 days',
         resolutions: {
           '240p': false,
           '360p': true,
