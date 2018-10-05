@@ -4,3 +4,15 @@
 .sub-menu {
   @include sub-menu-with-actor;
 }
+
+my-user-moderation-dropdown,
+.badge {
+  margin-left: 10px;
+
+  position: relative;
+  top: 3px;
+}
+
+.badge {
+  font-size: 13px;
+}

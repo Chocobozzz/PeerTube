@@ -4,9 +4,9 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { UserBanModalComponent } from '@app/shared/moderation/user-ban-modal.component'
-import { User, UserService } from '@app/shared/users'
+import { UserService } from '@app/shared/users'
 import { AuthService, ConfirmService } from '@app/core'
-import { UserRight } from '../../../../../shared/models/users'
+import { User, UserRight } from '../../../../../shared/models/users'
 
 @Component({
   selector: 'my-user-moderation-dropdown',
@@ -17,7 +17,10 @@ export class UserModerationDropdownComponent implements OnInit {
   @ViewChild('userBanModal') userBanModal: UserBanModalComponent
 
   @Input() user: User
+  @Input() buttonSize: 'normal' | 'small' = 'normal'
+
   @Output() userChanged = new EventEmitter()
+  @Output() userDeleted = new EventEmitter()
 
   userActions: DropdownAction<User>[] = []
 
@@ -32,34 +35,7 @@ export class UserModerationDropdownComponent implements OnInit {
   ) { }
 
   ngOnInit () {
-    this.userActions = []
-
-    if (this.authService.isLoggedIn()) {
-      const authUser = this.authService.getUser()
-
-      if (authUser.hasRight(UserRight.MANAGE_USERS)) {
-        this.userActions = this.userActions.concat([
-          {
-            label: this.i18n('Edit'),
-            linkBuilder: this.getRouterUserEditLink
-          },
-          {
-            label: this.i18n('Delete'),
-            handler: user => this.removeUser(user)
-          },
-          {
-            label: this.i18n('Ban'),
-            handler: user => this.openBanUserModal(user),
-            isDisplayed: user => !user.blocked
-          },
-          {
-            label: this.i18n('Unban'),
-            handler: user => this.unbanUser(user),
-            isDisplayed: user => user.blocked
-          }
-        ])
-      }
-    }
+    this.buildActions()
   }
 
   hideBanUserModal () {
@@ -115,7 +91,7 @@ export class UserModerationDropdownComponent implements OnInit {
           this.i18n('Success'),
           this.i18n('User {{username}} deleted.', { username: user.username })
         )
-        this.userChanged.emit()
+        this.userDeleted.emit()
       },
 
       err => this.notificationsService.error(this.i18n('Error'), err.message)
@@ -124,5 +100,36 @@ export class UserModerationDropdownComponent implements OnInit {
 
   getRouterUserEditLink (user: User) {
     return [ '/admin', 'users', 'update', user.id ]
+  }
+
+  private buildActions () {
+    this.userActions = []
+
+    if (this.authService.isLoggedIn()) {
+      const authUser = this.authService.getUser()
+
+      if (authUser.hasRight(UserRight.MANAGE_USERS)) {
+        this.userActions = this.userActions.concat([
+          {
+            label: this.i18n('Edit'),
+            linkBuilder: this.getRouterUserEditLink
+          },
+          {
+            label: this.i18n('Delete'),
+            handler: user => this.removeUser(user)
+          },
+          {
+            label: this.i18n('Ban'),
+            handler: user => this.openBanUserModal(user),
+            isDisplayed: user => !user.blocked
+          },
+          {
+            label: this.i18n('Unban'),
+            handler: user => this.unbanUser(user),
+            isDisplayed: user => user.blocked
+          }
+        ])
+      }
+    }
   }
 }

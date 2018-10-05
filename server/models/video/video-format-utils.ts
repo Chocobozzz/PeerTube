@@ -10,7 +10,7 @@ import {
   getVideoLikesActivityPubUrl,
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
-import { isArray } from 'util'
+import { isArray } from '../../helpers/custom-validators/misc'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean

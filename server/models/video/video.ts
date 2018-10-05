@@ -94,7 +94,6 @@ import {
 import * as validator from 'validator'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 
-
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
   buildTrigramSearchIndex('video_name_trigram', 'name'),

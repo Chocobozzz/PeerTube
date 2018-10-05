@@ -170,19 +170,19 @@ export class UserService {
                )
   }
 
-  removeUser (user: User) {
+  removeUser (user: { id: number }) {
     return this.authHttp.delete(UserService.BASE_USERS_URL + user.id)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  banUser (user: User, reason?: string) {
+  banUser (user: { id: number }, reason?: string) {
     const body = reason ? { reason } : {}
 
     return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/block', body)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  unbanUser (user: User) {
+  unbanUser (user: { id: number }) {
     return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/unblock', {})
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }

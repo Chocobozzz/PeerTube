@@ -40,7 +40,8 @@
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>
       <td class="action-cell">
-        <my-user-moderation-dropdown [user]="user" (userChanged)="onUserChanged()"></my-user-moderation-dropdown>
+        <my-user-moderation-dropdown [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        </my-user-moderation-dropdown>
       </td>
     </tr>
   </ng-template>

@@ -5,7 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { FormReactive, UserValidatorsService } from '@app/shared/forms'
-import { User, UserService } from '@app/shared/users'
+import { UserService } from '@app/shared/users'
+import { User } from '../../../../../shared'
 
 @Component({
   selector: 'my-user-ban-modal',
