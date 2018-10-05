@@ -1,4 +1,5 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { concurrency } from 'sharp';
 
 export interface CustomConfig {
   instance: {
@@ -49,6 +50,9 @@ export interface CustomConfig {
   transcoding: {
     enabled: boolean
     threads: number
+    concurrency: number
+    niceness: number
+    ttl: number
     resolutions: {
       '240p': boolean
       '360p': boolean

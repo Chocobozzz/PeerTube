@@ -107,7 +107,7 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-fetcher': 1,
   'activitypub-follow': 3,
   'video-file-import': 1,
-  'video-file': config.has('transcoding.concurrency') ? config.get<number>('transcoding.concurrency') : 1,
+  'video-file': config.get<number>('transcoding.concurrency'),
   'video-import': 1,
   'email': 5,
   'videos-views': 1
@@ -118,7 +118,7 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-fetcher': 60000 * 10, // 10 minutes
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
-  'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
+  'video-file': 1000 * 3600 * config.get<number>('transcoding.ttl'), // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes
   'videos-views': undefined // Unlimited
@@ -238,6 +238,9 @@ const CONFIG = {
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
     get THREADS () { return config.get<number>('transcoding.threads') },
+    get CONCURRENCY () { return config.get<number>('transcoding.concurrency') },
+    get NICENESS () { return config.get<number>('transcoding.niceness') },
+    get TTL () { return config.get<number>('transcoding.ttl') },
     RESOLUTIONS: {
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
@@ -407,7 +410,7 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 
 const FFMPEG_NICE: { [ id: string ]: number } = {
   THUMBNAIL: 2, // 2 just for don't blocking servers
-  TRANSCODING: config.has('transcoding.niceness') ? config.get<number>('transcoding.niceness') : 15
+  TRANSCODING: config.get<number>('transcoding.niceness')  // 15
 }
 
 const VIDEO_CATEGORIES = {

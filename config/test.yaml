@@ -52,6 +52,9 @@ signup:
 transcoding:
   enabled: true
   threads: 2
+  concurrency: 2
+  niceness: 5
+  ttl: 36
   resolutions:
     240p: true
     360p: true

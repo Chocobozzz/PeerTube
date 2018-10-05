@@ -69,7 +69,10 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     transcoding: {
-      enabledResolutions
+      enabledResolutions,
+      concurrency: CONFIG.TRANSCODING.CONCURRENCY,
+      niceness: CONFIG.TRANSCODING.NICENESS,
+      ttl: CONFIG.TRANSCODING.TTL
     },
     import: {
       videos: {
@@ -160,6 +163,9 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdate.user.videoQuota = parseInt('' + toUpdate.user.videoQuota, 10)
   toUpdate.user.videoQuotaDaily = parseInt('' + toUpdate.user.videoQuotaDaily, 10)
   toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
+  toUpdate.transcoding.concurrency = parseInt('' + toUpdate.transcoding.concurrency, 10)
+  toUpdate.transcoding.niceness = parseInt('' + toUpdate.transcoding.niceness, 10)
+  toUpdate.transcoding.ttl = parseInt('' + toUpdate.transcoding.ttl, 10)
 
   // camelCase to snake_case key
   const toUpdateJSON = omit(
@@ -244,6 +250,9 @@ function customConfig (): CustomConfig {
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
       threads: CONFIG.TRANSCODING.THREADS,
+      concurrency: CONFIG.TRANSCODING.CONCURRENCY,
+      niceness: CONFIG.TRANSCODING.NICENESS,
+      ttl: CONFIG.TRANSCODING.TTL,
       resolutions: {
         '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
         '360p': CONFIG.TRANSCODING.RESOLUTIONS[ '360p' ],

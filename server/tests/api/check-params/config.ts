@@ -55,6 +55,9 @@ describe('Test config API validators', function () {
     transcoding: {
       enabled: true,
       threads: 1,
+      concurrency: 1,
+      niceness: 15,
+      ttl: 48,
       resolutions: {
         '240p': false,
         '360p': true,

@@ -1,4 +1,5 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { concurrency } from 'sharp';
 
 export interface ServerConfig {
   serverVersion: string
@@ -16,13 +17,16 @@ export interface ServerConfig {
   }
 
   signup: {
-    allowed: boolean,
-    allowedForCurrentIP: boolean,
+    allowed: boolean
+    allowedForCurrentIP: boolean
     requiresEmailVerification: boolean
   }
 
   transcoding: {
     enabledResolutions: number[]
+    concurrency: number
+    niceness: number
+    ttl: number
   }
 
   import: {
