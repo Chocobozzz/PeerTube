@@ -325,25 +325,10 @@ describe('Test video transcoding', function () {
           const fps = await getVideoFileFPS(path)
           const resolution2 = await getVideoFileResolution(path)
 
-          expect(resolution2.videoFileResolution.toString).to.equal(resolution)
+          expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
           expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps))
         }
       }
-    }
-
-    await waitJobs(servers)
-
-    for (const server of servers) {
-      const res = await getVideosList(server.url)
-      const videoToFind = res.body.data.find(v => v.name === 'waiting video')
-      expect(videoToFind).not.to.be.undefined
-
-      const res2 = await getVideo(server.url, videoToFind.id)
-      const videoDetails: VideoDetails = res2.body
-
-      expect(videoDetails.state.id).to.equal(VideoState.PUBLISHED)
-      expect(videoDetails.state.label).to.equal('Published')
-      expect(videoDetails.waitTranscoding).to.be.true
     }
   })
 

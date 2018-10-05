@@ -9,6 +9,7 @@ export enum VideoResolution {
 }
 
 /**
+ * Bitrate targets for different resolutions and frame rates, in bytes per second.
  * Sources for individual quality levels:
  * Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
  * YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
@@ -52,7 +53,7 @@ export function getTargetBitrate (resolution: VideoResolution, fps: number) {
 }
 
 /**
- * The maximum bitrate we expect to see on a transcoded video.
+ * The maximum bitrate we expect to see on a transcoded video in bytes per second.
  */
 export function getMaxBitrate (resolution: VideoResolution, fps: number) {
   return getTargetBitrate(resolution, fps) * 1.5
