@@ -121,8 +121,8 @@ transcoding:
   enabled: true
   threads: 1
   concurrency: 1
-  niceness: 15
-  ttl: '2 days' # 2 days, transcoding could be long
+  niceness: 15 # from 1 to 18
+  ttl: '2 days' # 2 days, transcoding could be long. eg. '2 days' or '12 hours'
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
     360p: false
