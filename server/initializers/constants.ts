@@ -7,6 +7,7 @@ import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } 
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, parseDuration, parseBytes, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
+import { WebTorrentPolicyType } from '../../shared/models/users/user-webtorrent-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import * as bytes from 'bytes'
@@ -16,7 +17,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 275
+const LAST_MIGRATION_VERSION = 280
 
 // ---------------------------------------------------------------------------
 
@@ -546,6 +547,12 @@ const NSFW_POLICY_TYPES: { [ id: string]: NSFWPolicyType } = {
   DISPLAY: 'display'
 }
 
+const WEBTORRENT_POLICY_TYPES: { [ id: string]: WebTorrentPolicyType } = {
+  ENABLE: 'enable',
+  DISABLE: 'disable',
+  DISABLE_ON_MOBILE: 'disable_on_mobile'
+}
+
 // ---------------------------------------------------------------------------
 
 // Express static paths (router)
@@ -698,6 +705,7 @@ export {
   FEEDS,
   JOB_TTL,
   NSFW_POLICY_TYPES,
+  WEBTORRENT_POLICY_TYPES,
   TORRENT_MIMETYPE_EXT,
   STATIC_MAX_AGE,
   STATIC_PATHS,

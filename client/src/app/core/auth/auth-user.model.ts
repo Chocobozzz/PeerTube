@@ -4,6 +4,7 @@ import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
 import { User, UserConstructorHash } from '../../shared/users/user.model'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
+import { WebTorrentPolicyType } from '../../../../../shared/models/users/user-webtorrent-policy.type'
 
 export type TokenOptions = {
   accessToken: string
@@ -72,6 +73,7 @@ export class AuthUser extends User {
     EMAIL: 'email',
     USERNAME: 'username',
     NSFW_POLICY: 'nsfw_policy',
+    WEBTORRENT_POLICY: 'peertube-videojs-' + 'webtorrent_policy',
     AUTO_PLAY_VIDEO: 'auto_play_video'
   }
 
@@ -87,6 +89,7 @@ export class AuthUser extends User {
           email: peertubeLocalStorage.getItem(this.KEYS.EMAIL),
           role: parseInt(peertubeLocalStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
           nsfwPolicy: peertubeLocalStorage.getItem(this.KEYS.NSFW_POLICY) as NSFWPolicyType,
+          webTorrentPolicy: peertubeLocalStorage.getItem(this.KEYS.WEBTORRENT_POLICY) as WebTorrentPolicyType,
           autoPlayVideo: peertubeLocalStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true'
         },
         Tokens.load()
@@ -101,6 +104,7 @@ export class AuthUser extends User {
     peertubeLocalStorage.removeItem(this.KEYS.ID)
     peertubeLocalStorage.removeItem(this.KEYS.ROLE)
     peertubeLocalStorage.removeItem(this.KEYS.NSFW_POLICY)
+    peertubeLocalStorage.removeItem(this.KEYS.WEBTORRENT_POLICY)
     peertubeLocalStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
     peertubeLocalStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
@@ -138,6 +142,7 @@ export class AuthUser extends User {
     peertubeLocalStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
     peertubeLocalStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
     peertubeLocalStorage.setItem(AuthUser.KEYS.NSFW_POLICY, this.nsfwPolicy.toString())
+    peertubeLocalStorage.setItem(AuthUser.KEYS.WEBTORRENT_POLICY, this.webTorrentPolicy.toString())
     peertubeLocalStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
     this.tokens.save()
   }

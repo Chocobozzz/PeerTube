@@ -15,6 +15,18 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label i18n for="webTorrentPolicy">Policy regarding P2P technologies</label>
+
+    <div class="peertube-select-container">
+      <select id="webTorrentPolicy" formControlName="webTorrentPolicy">
+        <option i18n value="enable">Enable WebTorrent</option>
+        <option i18n value="disable">Disable WebTorrent globally</option>
+        <option i18n value="disable_on_mobile" disabled>Disable WebTorrent on mobile devices (not yet available)</option>
+      </select>
+    </div>
+  </div>
+
   <my-peertube-checkbox
     inputName="autoPlayVideo" formControlName="autoPlayVideo"
     i18n-labelText labelText="Automatically plays video"

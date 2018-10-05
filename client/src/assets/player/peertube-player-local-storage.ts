@@ -10,6 +10,15 @@ function getStoredVolume () {
   return undefined
 }
 
+function getStoredWebTorrentPolicy () {
+  const value = getLocalStorage('webtorrent_policy')
+  if (value !== null && value !== undefined) {
+    if (value.toString() === 'disable') return true
+  }
+
+  return undefined
+}
+
 function getStoredMute () {
   const value = getLocalStorage('mute')
   if (value !== null && value !== undefined) return value === 'true'
@@ -56,6 +65,7 @@ function getAverageBandwidthInStore () {
 
 export {
   getStoredVolume,
+  getStoredWebTorrentPolicy,
   getStoredMute,
   getStoredTheater,
   saveVolumeInStore,

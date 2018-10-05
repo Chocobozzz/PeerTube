@@ -9,6 +9,7 @@ import {
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
+import { WebTorrentPolicyType } from '../../../../../shared/models/users/user-webtorrent-policy.type'
 
 export type UserConstructorHash = {
   id: number,
@@ -18,6 +19,7 @@ export type UserConstructorHash = {
   videoQuota?: number,
   videoQuotaDaily?: number,
   nsfwPolicy?: NSFWPolicyType,
+  webTorrentPolicy?: WebTorrentPolicyType,
   autoPlayVideo?: boolean,
   createdAt?: Date,
   account?: AccountServerModel,
@@ -32,6 +34,7 @@ export class User implements UserServerModel {
   email: string
   role: UserRole
   nsfwPolicy: NSFWPolicyType
+  webTorrentPolicy: WebTorrentPolicyType
   autoPlayVideo: boolean
   videoQuota: number
   videoQuotaDaily: number
@@ -52,6 +55,7 @@ export class User implements UserServerModel {
     this.videoQuota = hash.videoQuota
     this.videoQuotaDaily = hash.videoQuotaDaily
     this.nsfwPolicy = hash.nsfwPolicy
+    this.webTorrentPolicy = hash.webTorrentPolicy
     this.autoPlayVideo = hash.autoPlayVideo
     this.createdAt = hash.createdAt
     this.blocked = hash.blocked

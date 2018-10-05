@@ -31,7 +31,8 @@ import {
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserWebTorrentPolicyValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -39,8 +40,9 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
+import { WebTorrentPolicyType } from '../../../shared/models/users/user-webtorrent-policy.type'
 import { values } from 'lodash'
-import { NSFW_POLICY_TYPES } from '../../initializers'
+import { NSFW_POLICY_TYPES, WEBTORRENT_POLICY_TYPES } from '../../initializers'
 import { clearCacheByUserId } from '../../lib/oauth-model'
 
 enum ScopeNames {
@@ -106,6 +108,11 @@ export class UserModel extends Model<UserModel> {
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
   @Column(DataType.ENUM(values(NSFW_POLICY_TYPES)))
   nsfwPolicy: NSFWPolicyType
+
+  @AllowNull(false)
+  @Is('UserWebTorrentPolicy', value => throwIfNotValid(value, isUserWebTorrentPolicyValid, 'WebTorrent policy'))
+  @Column(DataType.ENUM(values(WEBTORRENT_POLICY_TYPES)))
+  webTorrentPolicy: WebTorrentPolicyType
 
   @AllowNull(false)
   @Default(true)
@@ -355,6 +362,7 @@ export class UserModel extends Model<UserModel> {
       email: this.email,
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
+      webTorrentPolicy: this.webTorrentPolicy,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],

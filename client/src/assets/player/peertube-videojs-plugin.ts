@@ -8,6 +8,7 @@ import { isMobile, timeToInt, videoFileMaxByResolution, videoFileMinByResolution
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
+  getStoredWebTorrentPolicy,
   getAverageBandwidthInStore,
   getStoredMute,
   getStoredVolume,
@@ -64,6 +65,7 @@ class PeerTubePlugin extends Plugin {
   private autoResolution = true
   private forbidAutoResolution = false
   private isAutoResolutionObservation = false
+  private playerRefusedP2P = false
 
   private videoViewInterval
   private torrentInfoInterval
@@ -97,6 +99,7 @@ class PeerTubePlugin extends Plugin {
       if (volume !== undefined) this.player.volume(volume)
       const muted = getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
+      this.playerRefusedP2P = getStoredWebTorrentPolicy() || false
 
       this.initializePlayer()
       this.runTorrentInfoScheduler()
@@ -288,7 +291,8 @@ class PeerTubePlugin extends Plugin {
         renderVideo(torrent.files[ 0 ], this.playerElement, renderVideoOptions, (err, renderer) => {
           this.renderer = renderer
 
-          if (err) return this.fallbackToHttp(done)
+          console.log('value this.playerRefusedP2P', this.playerRefusedP2P)
+          if (err || this.playerRefusedP2P) return this.fallbackToHttp(done)
 
           return this.tryToPlay(err => {
             if (err) return done(err)

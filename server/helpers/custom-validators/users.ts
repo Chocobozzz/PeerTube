@@ -1,7 +1,7 @@
 import 'express-validator'
 import * as validator from 'validator'
 import { UserRole } from '../../../shared'
-import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES, WEBTORRENT_POLICY_TYPES } from '../../initializers'
 import { exists, isFileValid, isBooleanValid } from './misc'
 import { values } from 'lodash'
 
@@ -42,6 +42,11 @@ function isUserNSFWPolicyValid (value: any) {
   return exists(value) && nsfwPolicies.indexOf(value) !== -1
 }
 
+const webTorrentPolicies = values(WEBTORRENT_POLICY_TYPES)
+function isUserWebTorrentPolicyValid (value: any) {
+  return exists(value) && webTorrentPolicies.indexOf(value) !== -1
+}
+
 function isUserAutoPlayVideoValid (value: any) {
   return isBooleanValid(value)
 }
@@ -78,6 +83,7 @@ export {
   isUserUsernameValid,
   isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
+  isUserWebTorrentPolicyValid,
   isUserAutoPlayVideoValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
