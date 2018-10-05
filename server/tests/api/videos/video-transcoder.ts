@@ -23,6 +23,7 @@ import {
 import { join, basename } from 'path'
 import { waitJobs } from '../../utils/server/jobs'
 import { remove } from 'fs-extra'
+import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
 
@@ -303,7 +304,7 @@ describe('Test video transcoding', function () {
       })
 
       const bitrate = await getVideoFileBitrate(tempFixturePath)
-      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60))
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
 
       const videoAttributes = {
         name: 'high bitrate video',
@@ -327,7 +328,7 @@ describe('Test video transcoding', function () {
           const resolution2 = await getVideoFileResolution(path)
 
           expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
-          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps))
+          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
         }
       }
     }
