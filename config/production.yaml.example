@@ -135,6 +135,7 @@ transcoding:
   threads: 1
   concurrency: 1
   niceness: 15
+  ttl: '2 days'
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
     360p: false

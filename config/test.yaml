@@ -54,7 +54,7 @@ transcoding:
   threads: 2
   concurrency: 2
   niceness: 5
-  ttl: 36
+  ttl: '36 hours'
   resolutions:
     240p: true
     360p: true

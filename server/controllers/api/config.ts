@@ -165,7 +165,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
   toUpdate.transcoding.concurrency = parseInt('' + toUpdate.transcoding.concurrency, 10)
   toUpdate.transcoding.niceness = parseInt('' + toUpdate.transcoding.niceness, 10)
-  toUpdate.transcoding.ttl = parseInt('' + toUpdate.transcoding.ttl, 10)
+  toUpdate.transcoding.ttl = toUpdate.transcoding.ttl
 
   // camelCase to snake_case key
   const toUpdateJSON = omit(

@@ -47,7 +47,7 @@ export class ServerService {
       enabledResolutions: [],
       concurrency: 1,
       niceness: 15,
-      ttl: 48
+      ttl: '2 days'
     },
     avatar: {
       file: {

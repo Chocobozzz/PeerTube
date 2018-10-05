@@ -57,7 +57,7 @@ describe('Test config API validators', function () {
       threads: 1,
       concurrency: 1,
       niceness: 15,
-      ttl: 48,
+      ttl: '2 days',
       resolutions: {
         '240p': false,
         '360p': true,

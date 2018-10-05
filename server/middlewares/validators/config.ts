@@ -21,7 +21,7 @@ const customConfigUpdateValidator = [
   body('transcoding.threads').isInt().withMessage('Should have a valid transcoding threads number'),
   body('transcoding.concurrency').isInt().withMessage('Should have a valid transcoding concurrency number'),
   body('transcoding.niceness').isInt().withMessage('Should have a valid transcoding niceness number'),
-  body('transcoding.ttl').isInt().withMessage('Should have a valid transcoding ttl number'),
+  body('transcoding.ttl').exists().withMessage('Should have a valid transcoding ttl duration'),
   body('transcoding.resolutions.240p').isBoolean().withMessage('Should have a valid transcoding 240p resolution enabled boolean'),
   body('transcoding.resolutions.360p').isBoolean().withMessage('Should have a valid transcoding 360p resolution enabled boolean'),
   body('transcoding.resolutions.480p').isBoolean().withMessage('Should have a valid transcoding 480p resolution enabled boolean'),

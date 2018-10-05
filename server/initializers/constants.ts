@@ -118,7 +118,7 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-fetcher': 60000 * 10, // 10 minutes
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
-  'video-file': 1000 * 3600 * config.get<number>('transcoding.ttl'), // 2 days, transcoding could be long
+  'video-file': parseDuration(config.get<string>('transcoding.ttl')), // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes
   'videos-views': undefined // Unlimited
@@ -240,7 +240,7 @@ const CONFIG = {
     get THREADS () { return config.get<number>('transcoding.threads') },
     get CONCURRENCY () { return config.get<number>('transcoding.concurrency') },
     get NICENESS () { return config.get<number>('transcoding.niceness') },
-    get TTL () { return config.get<number>('transcoding.ttl') },
+    get TTL () { return parseDuration(config.get<any>('transcoding.ttl')) },
     RESOLUTIONS: {
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },

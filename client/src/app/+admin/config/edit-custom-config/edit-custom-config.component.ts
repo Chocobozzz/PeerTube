@@ -20,7 +20,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   transcodingThreadOptions: { label: string, value: number }[] = []
   transcodingConcurrencyOptions: { label: string, value: number }[] = []
   transcodingNicenessOptions: { label: string, value: number }[] = []
-  transcodingTTL: number
+  transcodingTTL: any
 
   private oldCustomJavascript: string
   private oldCustomCSS: string

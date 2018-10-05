@@ -90,12 +90,19 @@ export class CustomConfigValidatorsService {
       }
     }
 
-    this.TRANSCODING_CONCURRENCY = {
+    this.TRANSCODING_NICENESS = {
       VALIDATORS: [ Validators.required, Validators.min(1), Validators.max(15) ],
       MESSAGES: {
-        'required': this.i18n('Transcoding ttl is required.'),
-        'min': this.i18n('Transcoding ttl must be greater or equal to 1.'),
-        'max': this.i18n('Transcoding ttl must be less than or equal to 15.')
+        'required': this.i18n('Transcoding niceness is required.'),
+        'min': this.i18n('Transcoding niceness must be greater or equal to 1.'),
+        'max': this.i18n('Transcoding niceness must be less than or equal to 15.')
+      }
+    }
+
+    this.TRANSCODING_TTL = {
+      VALIDATORS: [ Validators.required ],
+      MESSAGES: {
+        'required': this.i18n('Transcoding ttl duration is required.')
       }
     }
   }

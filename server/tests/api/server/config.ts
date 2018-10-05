@@ -43,7 +43,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.concurrency).to.equal(2)
   expect(data.transcoding.niceness).to.equal(5)
-  expect(data.transcoding.ttl).to.equal(36)
+  expect(data.transcoding.ttl).to.equal('36 hours')
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -168,7 +168,7 @@ describe('Test config', function () {
         threads: 1,
         concurrency: 1,
         niceness: 15,
-        ttl: 48,
+        ttl: '2 days',
         resolutions: {
           '240p': false,
           '360p': true,

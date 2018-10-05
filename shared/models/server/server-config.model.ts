@@ -1,5 +1,4 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
-import { concurrency } from 'sharp';
 
 export interface ServerConfig {
   serverVersion: string
@@ -26,7 +25,7 @@ export interface ServerConfig {
     enabledResolutions: number[]
     concurrency: number
     niceness: number
-    ttl: number
+    ttl: any
   }
 
   import: {
