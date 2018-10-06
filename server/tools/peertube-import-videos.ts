@@ -212,6 +212,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     nsfw: isNSFW(videoInfo),
     waitTranscoding: true,
     commentsEnabled: true,
+    downloadingEnabled: true,
     description: videoInfo.description || undefined,
     support: undefined,
     tags,

@@ -14,6 +14,7 @@ export class VideoEdit implements VideoUpdate {
   tags: string[]
   nsfw: boolean
   commentsEnabled: boolean
+  downloadingEnabled: boolean
   waitTranscoding: boolean
   channelId: number
   privacy: VideoPrivacy
@@ -26,7 +27,7 @@ export class VideoEdit implements VideoUpdate {
   id?: number
   scheduleUpdate?: VideoScheduleUpdate
 
-  constructor (video?: Video & { tags: string[], commentsEnabled: boolean, support: string, thumbnailUrl: string, previewUrl: string }) {
+  constructor (video?: Video & { tags: string[], commentsEnabled: boolean, downloadingEnabled: boolean, support: string, thumbnailUrl: string, previewUrl: string }) {
     if (video) {
       this.id = video.id
       this.uuid = video.uuid
@@ -38,6 +39,7 @@ export class VideoEdit implements VideoUpdate {
       this.tags = video.tags
       this.nsfw = video.nsfw
       this.commentsEnabled = video.commentsEnabled
+      this.downloadingEnabled = video.downloadingEnabled
       this.waitTranscoding = video.waitTranscoding
       this.channelId = video.channel.id
       this.privacy = video.privacy.id
@@ -80,6 +82,7 @@ export class VideoEdit implements VideoUpdate {
       tags: this.tags,
       nsfw: this.nsfw,
       commentsEnabled: this.commentsEnabled,
+      downloadingEnabled: this.downloadingEnabled,
       waitTranscoding: this.waitTranscoding,
       channelId: this.channelId,
       privacy: this.privacy

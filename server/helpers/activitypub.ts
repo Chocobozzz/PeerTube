@@ -28,6 +28,7 @@ function activityPubContextify <T> (data: T) {
         size: 'schema:Number',
         fps: 'schema:Number',
         commentsEnabled: 'schema:Boolean',
+        downloadingEnabled: 'schema:Boolean',
         waitTranscoding: 'schema:Boolean',
         expires: 'schema:expires',
         support: 'schema:Text',

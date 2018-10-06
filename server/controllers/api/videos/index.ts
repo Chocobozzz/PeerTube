@@ -179,6 +179,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     licence: videoInfo.licence,
     language: videoInfo.language,
     commentsEnabled: videoInfo.commentsEnabled || false,
+    downloadingEnabled: videoInfo.downloadingEnabled || false,
     waitTranscoding: videoInfo.waitTranscoding || false,
     state: CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED,
     nsfw: videoInfo.nsfw || false,
@@ -322,6 +323,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
       if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
+      if (videoInfoToUpdate.downloadingEnabled !== undefined) videoInstance.set('downloadingEnabled', videoInfoToUpdate.downloadingEnabled)
       if (videoInfoToUpdate.privacy !== undefined) {
         const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
         videoInstance.set('privacy', newPrivacy)

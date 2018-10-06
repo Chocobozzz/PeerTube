@@ -67,6 +67,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     isVideoViewsValid(video.views) &&
     isBooleanValid(video.sensitive) &&
     isBooleanValid(video.commentsEnabled) &&
+    isBooleanValid(video.downloadingEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&

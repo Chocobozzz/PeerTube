@@ -11,6 +11,7 @@ export interface VideoUpdate {
   privacy?: VideoPrivacy
   tags?: string[]
   commentsEnabled?: boolean
+  downloadingEnabled?: boolean
   nsfw?: boolean
   waitTranscoding?: boolean
   channelId?: number

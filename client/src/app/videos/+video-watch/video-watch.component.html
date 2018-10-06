@@ -80,7 +80,7 @@
                     </div>
 
                     <div ngbDropdownMenu>
-                      <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
+                      <a *ngIf="isVideoDownloadable()" class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
                         <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
                       </a>
 

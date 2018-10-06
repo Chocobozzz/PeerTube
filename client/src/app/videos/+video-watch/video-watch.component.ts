@@ -313,6 +313,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
+  isVideoDownloadable () {
+    return this.video && this.video.downloadingEnabled
+  }
+
   isVideoToImport () {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
   }

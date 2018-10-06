@@ -13,6 +13,7 @@ export interface VideoCreate {
   name: string
   tags?: string[]
   commentsEnabled?: boolean
+  downloadingEnabled?: boolean
   privacy: VideoPrivacy
   scheduleUpdate?: VideoScheduleUpdate
 }

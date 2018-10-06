@@ -159,6 +159,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const nsfw = false
     const waitTranscoding = true
     const commentsEnabled = true
+    const downloadingEnabled = true
     const channelId = this.firstStepChannelId.toString()
 
     const formData = new FormData()
@@ -167,6 +168,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('commentsEnabled', '' + commentsEnabled)
+    formData.append('downloadingEnabled', '' + downloadingEnabled)
     formData.append('waitTranscoding', '' + waitTranscoding)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)

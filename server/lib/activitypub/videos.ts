@@ -230,6 +230,7 @@ async function updateVideoFromAP (options: {
       options.video.set('support', videoData.support)
       options.video.set('nsfw', videoData.nsfw)
       options.video.set('commentsEnabled', videoData.commentsEnabled)
+      options.video.set('downloadingEnabled', videoData.downloadingEnabled)
       options.video.set('waitTranscoding', videoData.waitTranscoding)
       options.video.set('state', videoData.state)
       options.video.set('duration', videoData.duration)
@@ -441,6 +442,7 @@ async function videoActivityObjectToDBAttributes (
     support,
     nsfw: videoObject.sensitive,
     commentsEnabled: videoObject.commentsEnabled,
+    downloadingEnabled: videoObject.downloadingEnabled,
     waitTranscoding: videoObject.waitTranscoding,
     state: videoObject.state,
     channelId: videoChannel.id,

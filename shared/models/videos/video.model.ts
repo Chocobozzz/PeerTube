@@ -82,6 +82,7 @@ export interface VideoDetails extends Video {
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
+  downloadingEnabled: boolean
 
   // Not optional in details (unlike in Video)
   waitTranscoding: boolean
