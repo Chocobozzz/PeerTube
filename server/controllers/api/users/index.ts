@@ -3,6 +3,7 @@ import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
+import { pseudoRandomBytesPromise } from '../../../helpers/core-utils'
 import { CONFIG, RATES_LIMIT, sequelizeTypescript } from '../../../initializers'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
@@ -38,6 +39,7 @@ import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../h
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
 import { myBlocklistRouter } from './my-blocklist'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 
 const auditLogger = auditLoggerFactory('users')
 

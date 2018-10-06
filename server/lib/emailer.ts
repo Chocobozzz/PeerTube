@@ -96,6 +96,22 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
+  addForceResetPasswordEmailJob (to: string, resetPasswordUrl: string) {
+    const text = `Hi dear user,\n\n` +
+      `Your password has been reset on ${CONFIG.WEBSERVER.HOST}! ` +
+      `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to: [ to ],
+      subject: 'Reset of your PeerTube password',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
   addVerifyEmailJob (to: string, verifyEmailUrl: string) {
     const text = `Welcome to PeerTube,\n\n` +
       `To start using PeerTube on ${CONFIG.WEBSERVER.HOST} you must  verify your email! ` +
