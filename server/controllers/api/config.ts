@@ -97,7 +97,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
         }
       },
       file: {
-        extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
+        extensions: CONFIG.TRANSCODING.ENABLED ? CONSTRAINTS_FIELDS.VIDEOS.EXTNAME : CONSTRAINTS_FIELDS.VIDEOS.BROWSER_EXTNAME
       }
     },
     videoCaption: {
