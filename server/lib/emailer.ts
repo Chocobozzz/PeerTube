@@ -101,6 +101,22 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
+  addForceResetPasswordEmailJob (to: string, resetPasswordUrl: string) {
+    const text = `Hi dear user,\n\n` +
+      `Your password has been reset on ${CONFIG.WEBSERVER.HOST}! ` +
+      `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to: [ to ],
+      subject: 'Reset of your PeerTube password',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
   addNewFollowNotification (to: string[], actorFollow: ActorFollowModel, followType: 'account' | 'channel') {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()

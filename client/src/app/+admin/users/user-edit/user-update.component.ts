@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, Input } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { Notifier } from '@app/core'
@@ -19,9 +19,12 @@ import { UserService } from '@app/shared'
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   error: string
   userId: number
+  userEmail: string
   username: string
+  isAdministration = false
 
   private paramsSub: Subscription
+  private isAdministrationSub: Subscription
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -56,10 +59,15 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
         err => this.error = err.message
       )
     })
+
+    this.isAdministrationSub = this.route.data.subscribe(data => {
+      if (data.isAdministration) this.isAdministration = data.isAdministration
+    })
   }
 
   ngOnDestroy () {
     this.paramsSub.unsubscribe()
+    this.isAdministrationSub.unsubscribe()
   }
 
   formValidated () {
@@ -89,9 +97,23 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     return this.i18n('Update user')
   }
 
+  resetPassword () {
+    this.userService.askResetPassword(this.userEmail).subscribe(
+      () => {
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('An email asking for password reset has been sent to {{username}}.', { username: this.username })
+        )
+      },
+
+      err => this.error = err.message
+    )
+  }
+
   private onUserFetched (userJson: User) {
     this.userId = userJson.id
     this.username = userJson.username
+    this.userEmail = userJson.email
 
     this.form.patchValue({
       email: userJson.email,
