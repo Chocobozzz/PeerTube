@@ -238,7 +238,6 @@ const videosChangeOwnershipValidator = [
 
     const nextOwner = await AccountModel.loadLocalByName(req.body.username)
     if (!nextOwner) {
-      logger.debug('N')
       res.status(400)
         .json({ error: 'Changing video ownership to a remote account is not supported yet' })
         .end()
