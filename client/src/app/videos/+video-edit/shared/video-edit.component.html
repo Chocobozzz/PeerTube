@@ -126,6 +126,11 @@
             ></my-peertube-checkbox>
 
             <my-peertube-checkbox
+                    inputName="downloadingEnabled" formControlName="downloadingEnabled"
+                    i18n-labelText labelText="Disable downloading"
+            ></my-peertube-checkbox>
+
+            <my-peertube-checkbox
               inputName="waitTranscoding" formControlName="waitTranscoding"
               i18n-labelText labelText="Wait transcoding before publishing the video"
               i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
