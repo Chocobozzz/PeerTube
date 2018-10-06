@@ -56,6 +56,26 @@ signup:
     __name: "PEERTUBE_SIGNUP_LIMIT"
     __format: "json"
 
+search:
+  remote_uri:
+    users:
+      __name: "PEERTUBE_SEARCH_REMOTEURI_USERS"
+      __format: "json"
+    anonymous:
+      __name: "PEERTUBE_SEARCH_REMOTEURI_ANONYMOUS"
+      __format: "json"
+
+import:
+  videos:
+    http:
+      enabled:
+        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP"
+        __format: "json"
+    torrent:
+      enabled:
+        __name: "PEERTUBE_IMPORT_VIDEOS_TORRENT"
+        __format: "json"
+
 transcoding:
   enabled:
     __name: "PEERTUBE_TRANSCODING_ENABLED"
