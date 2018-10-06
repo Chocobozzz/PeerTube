@@ -32,7 +32,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @ViewChild('textarea') private textareaElement: ElementRef
 
   private addingComment = false
-  private uri: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -51,8 +50,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     this.buildForm({
       text: this.videoCommentValidatorsService.VIDEO_COMMENT_TEXT
     })
-
-    this.uri = this.router.url
 
     if (this.user) {
       if (this.focusOnInit === true) {
@@ -125,6 +122,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   isAddButtonDisplayed () {
     return this.form.value['text']
+  }
+
+  getUrl () {
+    return window.location.href
   }
 
   getAvatarUrl () {

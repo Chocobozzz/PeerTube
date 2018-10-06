@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { NotificationsService } from 'angular2-notifications'
-import { UserService } from '../shared'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { User, UserUpdate } from '../../../../../../shared'
@@ -10,6 +9,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-user-update',

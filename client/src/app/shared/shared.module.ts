@@ -56,6 +56,8 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
 import { SubscribeButtonComponent, RemoteSubscribeComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
 import { OverviewService } from '@app/shared/overview'
+import { UserBanModalComponent } from '@app/shared/moderation'
+import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
 
 @NgModule({
   imports: [
@@ -94,7 +96,9 @@ import { OverviewService } from '@app/shared/overview'
     PeertubeCheckboxComponent,
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
-    InstanceFeaturesTableComponent
+    InstanceFeaturesTableComponent,
+    UserBanModalComponent,
+    UserModerationDropdownComponent
   ],
 
   exports: [
@@ -130,6 +134,8 @@ import { OverviewService } from '@app/shared/overview'
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
+    UserBanModalComponent,
+    UserModerationDropdownComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,

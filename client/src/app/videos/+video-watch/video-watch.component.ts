@@ -369,13 +369,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
   }
 
-  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], startTime = 0) {
+  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], startTimeFromUrl: number) {
     this.video = video
 
     // Re init attributes
     this.descriptionLoading = false
     this.completeDescriptionShown = false
     this.remoteServerDown = false
+
+    let startTime = startTimeFromUrl || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
+    // Don't start the video if we are at the end
+    if (this.video.duration - startTime <= 1) startTime = 0
 
     if (this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())) {
       const res = await this.confirmService.confirm(
@@ -414,7 +418,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       poster: this.video.previewUrl,
       startTime,
       theaterMode: true,
-      language: this.localeId
+      language: this.localeId,
+
+      userWatching: this.user ? {
+        url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),
+        authorizationHeader: this.authService.getRequestHeaderValue()
+      } : undefined
     })
 
     if (this.videojsLocaleLoaded === false) {

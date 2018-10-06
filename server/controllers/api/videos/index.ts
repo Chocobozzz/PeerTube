@@ -57,6 +57,7 @@ import { videoCaptionsRouter } from './captions'
 import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { rename } from 'fs-extra'
+import { watchingRouter } from './watching'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -86,6 +87,7 @@ videosRouter.use('/', videoCommentRouter)
 videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
+videosRouter.use('/', watchingRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -119,6 +121,7 @@ videosRouter.get('/:id/description',
   asyncMiddleware(getVideoDescription)
 )
 videosRouter.get('/:id',
+  optionalAuthenticate,
   asyncMiddleware(videosGetValidator),
   getVideo
 )
@@ -433,7 +436,8 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     tagsAllOf: req.query.tagsAllOf,
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
-    withFiles: false
+    withFiles: false,
+    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

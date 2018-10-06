@@ -248,7 +248,8 @@ export class AccountModel extends Model<AccountModel> {
       displayName: this.getDisplayName(),
       description: this.description,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      userId: this.userId ? this.userId : undefined
     }
 
     return Object.assign(actor, account)

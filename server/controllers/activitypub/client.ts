@@ -13,8 +13,7 @@ import {
   localVideoChannelValidator,
   videosCustomGetValidator
 } from '../../middlewares'
-import { videosGetValidator, videosShareValidator } from '../../middlewares/validators'
-import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
+import { videoCommentGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'

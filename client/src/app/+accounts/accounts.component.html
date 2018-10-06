@@ -8,6 +8,11 @@
         <div class="actor-names">
           <div class="actor-display-name">{{ account.displayName }}</div>
           <div class="actor-name">{{ account.nameWithHost }}</div>
+
+          <span *ngIf="user?.blocked" [ngbTooltip]="user.blockedReason" class="badge badge-danger" i18n>Banned</span>
+
+          <my-user-moderation-dropdown buttonSize="small" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()">
+          </my-user-moderation-dropdown>
         </div>
         <div i18n class="actor-followers">{{ account.followersCount }} subscribers</div>
       </div>

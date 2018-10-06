@@ -1,12 +1,12 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-import { FormReactive, UserValidatorsService } from '../../../shared'
-import { UserService } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { User } from '../../../../../../shared'
+import { FormReactive, UserValidatorsService } from '@app/shared/forms'
+import { UserService } from '@app/shared/users'
+import { User } from '../../../../../shared'
 
 @Component({
   selector: 'my-user-ban-modal',

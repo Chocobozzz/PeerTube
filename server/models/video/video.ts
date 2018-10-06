@@ -92,6 +92,7 @@ import {
   videoModelToFormattedJSON
 } from './video-format-utils'
 import * as validator from 'validator'
+import { UserVideoHistoryModel } from '../account/user-video-history'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -127,7 +128,8 @@ export enum ScopeNames {
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
-  WITH_BLACKLISTED = 'WITH_BLACKLISTED'
+  WITH_BLACKLISTED = 'WITH_BLACKLISTED',
+  WITH_USER_HISTORY = 'WITH_USER_HISTORY'
 }
 
 type ForAPIOptions = {
@@ -464,6 +466,8 @@ type AvailableForListIDsOptions = {
     include: [
       {
         model: () => VideoFileModel.unscoped(),
+        // FIXME: typings
+        [ 'separate' as any ]: true, // We may have multiple files, having multiple redundancies so let's separate this join
         required: false,
         include: [
           {
@@ -482,6 +486,20 @@ type AvailableForListIDsOptions = {
         required: false
       }
     ]
+  },
+  [ ScopeNames.WITH_USER_HISTORY ]: (userId: number) => {
+    return {
+      include: [
+        {
+          attributes: [ 'currentTime' ],
+          model: UserVideoHistoryModel.unscoped(),
+          required: false,
+          where: {
+            userId
+          }
+        }
+      ]
+    }
   }
 })
 @Table({
@@ -672,10 +690,18 @@ export class VideoModel extends Model<VideoModel> {
       name: 'videoId',
       allowNull: false
     },
-    onDelete: 'cascade',
-    hooks: true
+    onDelete: 'cascade'
   })
   VideoViews: VideoViewModel[]
+
+  @HasMany(() => UserVideoHistoryModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  UserVideoHistories: UserVideoHistoryModel[]
 
   @HasOne(() => ScheduleVideoUpdateModel, {
     foreignKey: {
@@ -930,7 +956,8 @@ export class VideoModel extends Model<VideoModel> {
     accountId?: number,
     videoChannelId?: number,
     actorId?: number
-    trendingDays?: number
+    trendingDays?: number,
+    userId?: number
   }, countVideos = true) {
     const query: IFindOptions<VideoModel> = {
       offset: options.start,
@@ -961,6 +988,7 @@ export class VideoModel extends Model<VideoModel> {
       accountId: options.accountId,
       videoChannelId: options.videoChannelId,
       includeLocalVideos: options.includeLocalVideos,
+      userId: options.userId,
       trendingDays
     }
 
@@ -983,6 +1011,7 @@ export class VideoModel extends Model<VideoModel> {
     tagsAllOf?: string[]
     durationMin?: number // seconds
     durationMax?: number // seconds
+    userId?: number
   }) {
     const whereAnd = []
 
@@ -1058,7 +1087,8 @@ export class VideoModel extends Model<VideoModel> {
       licenceOneOf: options.licenceOneOf,
       languageOneOf: options.languageOneOf,
       tagsOneOf: options.tagsOneOf,
-      tagsAllOf: options.tagsAllOf
+      tagsAllOf: options.tagsAllOf,
+      userId: options.userId
     }
 
     return VideoModel.getAvailableForApi(query, queryOptions)
@@ -1125,7 +1155,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
-  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Sequelize.Transaction) {
+  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Sequelize.Transaction, userId?: number) {
     const where = VideoModel.buildWhereIdOrUUID(id)
 
     const options = {
@@ -1134,14 +1164,20 @@ export class VideoModel extends Model<VideoModel> {
       transaction: t
     }
 
+    const scopes = [
+      ScopeNames.WITH_TAGS,
+      ScopeNames.WITH_BLACKLISTED,
+      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_ACCOUNT_DETAILS,
+      ScopeNames.WITH_SCHEDULED_UPDATE
+    ]
+
+    if (userId) {
+      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] } as any) // FIXME: typings
+    }
+
     return VideoModel
-      .scope([
-        ScopeNames.WITH_TAGS,
-        ScopeNames.WITH_BLACKLISTED,
-        ScopeNames.WITH_FILES,
-        ScopeNames.WITH_ACCOUNT_DETAILS,
-        ScopeNames.WITH_SCHEDULED_UPDATE
-      ])
+      .scope(scopes)
       .findOne(options)
   }
 
@@ -1225,7 +1261,11 @@ export class VideoModel extends Model<VideoModel> {
     return {}
   }
 
-  private static async getAvailableForApi (query: IFindOptions<VideoModel>, options: AvailableForListIDsOptions, countVideos = true) {
+  private static async getAvailableForApi (
+    query: IFindOptions<VideoModel>,
+    options: AvailableForListIDsOptions & { userId?: number},
+    countVideos = true
+  ) {
     const idsScope = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST_IDS, options
@@ -1249,8 +1289,15 @@ export class VideoModel extends Model<VideoModel> {
 
     if (ids.length === 0) return { data: [], total: count }
 
-    const apiScope = {
-      method: [ ScopeNames.FOR_API, { ids, withFiles: options.withFiles } as ForAPIOptions ]
+    // FIXME: typings
+    const apiScope: any[] = [
+      {
+        method: [ ScopeNames.FOR_API, { ids, withFiles: options.withFiles } as ForAPIOptions ]
+      }
+    ]
+
+    if (options.userId) {
+      apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.userId ] })
     }
 
     const secondQuery = {

@@ -10,7 +10,7 @@ import './webtorrent-info-button'
 import './peertube-videojs-plugin'
 import './peertube-load-progress-bar'
 import './theater-button'
-import { VideoJSCaption, videojsUntyped } from './peertube-videojs-typings'
+import { UserWatching, VideoJSCaption, videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 
@@ -34,10 +34,13 @@ function getVideojsOptions (options: {
   startTime: number | string
   theaterMode: boolean,
   videoCaptions: VideoJSCaption[],
+
   language?: string,
   controls?: boolean,
   muted?: boolean,
   loop?: boolean
+
+  userWatching?: UserWatching
 }) {
   const videojsOptions = {
     // We don't use text track settings for now
@@ -57,7 +60,8 @@ function getVideojsOptions (options: {
         playerElement: options.playerElement,
         videoViewUrl: options.videoViewUrl,
         videoDuration: options.videoDuration,
-        startTime: options.startTime
+        startTime: options.startTime,
+        userWatching: options.userWatching
       }
     },
     controlBar: {

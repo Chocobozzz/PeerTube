@@ -48,6 +48,8 @@ class Redis {
     )
   }
 
+  /************* Forgot password *************/
+
   async setResetPasswordVerificationString (userId: number) {
     const generatedString = await generateRandomString(32)
 
@@ -59,6 +61,8 @@ class Redis {
   async getResetPasswordLink (userId: number) {
     return this.getValue(this.generateResetPasswordKey(userId))
   }
+
+  /************* Email verification *************/
 
   async setVerifyEmailVerificationString (userId: number) {
     const generatedString = await generateRandomString(32)
@@ -72,16 +76,20 @@ class Redis {
     return this.getValue(this.generateVerifyEmailKey(userId))
   }
 
+  /************* Views per IP *************/
+
   setIPVideoView (ip: string, videoUUID: string) {
-    return this.setValue(this.buildViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
+    return this.setValue(this.generateViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
   }
 
   async isVideoIPViewExists (ip: string, videoUUID: string) {
-    return this.exists(this.buildViewKey(ip, videoUUID))
+    return this.exists(this.generateViewKey(ip, videoUUID))
   }
 
+  /************* API cache *************/
+
   async getCachedRoute (req: express.Request) {
-    const cached = await this.getObject(this.buildCachedRouteKey(req))
+    const cached = await this.getObject(this.generateCachedRouteKey(req))
 
     return cached as CachedRoute
   }
@@ -94,8 +102,10 @@ class Redis {
     (statusCode) ? { statusCode: statusCode.toString() } : null
     )
 
-    return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
+    return this.setObject(this.generateCachedRouteKey(req), cached, lifetime)
   }
+
+  /************* Video views *************/
 
   addVideoView (videoId: number) {
     const keyIncr = this.generateVideoViewKey(videoId)
@@ -131,33 +141,37 @@ class Redis {
     ])
   }
 
-  generateVideosViewKey (hour?: number) {
+  /************* Keys generation *************/
+
+  generateCachedRouteKey (req: express.Request) {
+    return req.method + '-' + req.originalUrl
+  }
+
+  private generateVideosViewKey (hour?: number) {
     if (!hour) hour = new Date().getHours()
 
     return `videos-view-h${hour}`
   }
 
-  generateVideoViewKey (videoId: number, hour?: number) {
+  private generateVideoViewKey (videoId: number, hour?: number) {
     if (!hour) hour = new Date().getHours()
 
     return `video-view-${videoId}-h${hour}`
   }
 
-  generateResetPasswordKey (userId: number) {
+  private generateResetPasswordKey (userId: number) {
     return 'reset-password-' + userId
   }
 
-  generateVerifyEmailKey (userId: number) {
+  private generateVerifyEmailKey (userId: number) {
     return 'verify-email-' + userId
   }
 
-  buildViewKey (ip: string, videoUUID: string) {
+  private generateViewKey (ip: string, videoUUID: string) {
     return videoUUID + '-' + ip
   }
 
-  buildCachedRouteKey (req: express.Request) {
-    return req.method + '-' + req.originalUrl
-  }
+  /************* Redis helpers *************/
 
   private getValue (key: string) {
     return new Promise<string>((res, rej) => {
@@ -197,6 +211,12 @@ class Redis {
     })
   }
 
+  private deleteFieldInHash (key: string, field: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.hdel(this.prefix + key, field, err => err ? rej(err) : res())
+    })
+  }
+
   private setValue (key: string, value: string, expirationMilliseconds: number) {
     return new Promise<void>((res, rej) => {
       this.client.set(this.prefix + key, value, 'PX', expirationMilliseconds, (err, ok) => {
@@ -231,6 +251,16 @@ class Redis {
         if (err) return rej(err)
 
         return res(value)
+      })
+    })
+  }
+
+  private setValueInHash (key: string, field: string, value: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.hset(this.prefix + key, field, value, (err) => {
+        if (err) return rej(err)
+
+        return res()
       })
     })
   }

@@ -32,6 +32,7 @@ is named "Framatube".
 
 Yes, the origin server always seeds videos uploaded on it thanks to
 [Webseed](http://www.bittorrent.org/beps/bep_0019.html).
+It can also be helped by other servers using [redundancy](/support/doc/redundancy.md).
 
 
 ## What is WebSeed?
@@ -71,7 +72,7 @@ Not really. For instance, the demonstration server [https://peertube.cpy.re](htt
  * **RAM** -> nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
 
 So you would need:
- * **CPU** 1 core if you don't enable transcoding, 2 at least if you enable it
+ * **CPU** 1 core if you don't enable transcoding, 2 at least if you enable it (works with 1 but this is really slow)
  * **RAM** 1GB
  * **Storage** Completely depends on how many videos your users will upload
 
@@ -80,7 +81,7 @@ So you would need:
 
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
 The reason is they connects to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
-We hope to see compatibility with WebRTC in popular BitTorrent client in the future. See this issue for more information: https://github.com/webtorrent/webtorrent/issues/369
+To check if your BitTorrent client supports WebTorrent you can see this issue: https://github.com/webtorrent/webtorrent/issues/369
 
 
 ## Why host on GitHub and Framagit?

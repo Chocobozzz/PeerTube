@@ -4,9 +4,10 @@ import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { skip } from 'rxjs/operators'
+import { skip, debounceTime } from 'rxjs/operators'
 import { HotkeysService, Hotkey } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { fromEvent } from 'rxjs'
 
 @Component({
   selector: 'my-app',
@@ -28,6 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   isMenuDisplayed = true
+  isMenuChangedByUser = false
 
   customCSS: SafeHtml
 
@@ -165,6 +167,10 @@ export class AppComponent implements OnInit {
         return false
       }, undefined, this.i18n('Toggle Dark theme'))
     ])
+
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(200))
+      .subscribe(() => this.onResize())
   }
 
   isUserLoggedIn () {
@@ -173,5 +179,10 @@ export class AppComponent implements OnInit {
 
   toggleMenu () {
     this.isMenuDisplayed = !this.isMenuDisplayed
+    this.isMenuChangedByUser = true
+  }
+
+  onResize () {
+    this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 }

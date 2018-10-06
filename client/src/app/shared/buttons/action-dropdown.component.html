@@ -1,5 +1,5 @@
 <div class="dropdown-root" ngbDropdown [placement]="placement">
-  <div class="action-button" ngbDropdownToggle role="button">
+  <div class="action-button" [ngClass]="{ small: buttonSize === 'small' }" ngbDropdownToggle role="button">
     <span class="icon icon-action"></span>
   </div>
 

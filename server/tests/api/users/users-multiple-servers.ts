@@ -148,6 +148,12 @@ describe('Test users with multiple servers', function () {
       expect(rootServer1Get.displayName).to.equal('my super display name')
       expect(rootServer1Get.description).to.equal('my super description updated')
 
+      if (server.serverNumber === 1) {
+        expect(rootServer1Get.userId).to.be.a('number')
+      } else {
+        expect(rootServer1Get.userId).to.be.undefined
+      }
+
       await testImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')
     }
   })

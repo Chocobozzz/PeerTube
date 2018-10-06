@@ -2,8 +2,8 @@ import { VideoModel } from '../models/video/video'
 
 type VideoFetchType = 'all' | 'only-video' | 'id' | 'none'
 
-function fetchVideo (id: number | string, fetchType: VideoFetchType) {
-  if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id)
+function fetchVideo (id: number | string, fetchType: VideoFetchType, userId?: number) {
+  if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
 
   if (fetchType === 'only-video') return VideoModel.load(id)
 

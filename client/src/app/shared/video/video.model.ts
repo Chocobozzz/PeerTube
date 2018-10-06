@@ -66,6 +66,10 @@ export class Video implements VideoServerModel {
     avatar: Avatar
   }
 
+  userHistory?: {
+    currentTime: number
+  }
+
   static buildClientUrl (videoUUID: string) {
     return '/videos/watch/' + videoUUID
   }
@@ -116,6 +120,8 @@ export class Video implements VideoServerModel {
 
     this.blacklisted = hash.blacklisted
     this.blacklistedReason = hash.blacklistedReason
+
+    this.userHistory = hash.userHistory
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

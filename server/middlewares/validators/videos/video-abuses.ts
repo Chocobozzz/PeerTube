@@ -1,16 +1,16 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param } from 'express-validator/check'
-import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
-import { logger } from '../../helpers/logger'
-import { areValidationErrors } from './utils'
+import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { isVideoExist } from '../../../helpers/custom-validators/videos'
+import { logger } from '../../../helpers/logger'
+import { areValidationErrors } from '../utils'
 import {
   isVideoAbuseExist,
   isVideoAbuseModerationCommentValid,
   isVideoAbuseReasonValid,
   isVideoAbuseStateValid
-} from '../../helpers/custom-validators/video-abuses'
+} from '../../../helpers/custom-validators/video-abuses'
 
 const videoAbuseReportValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),

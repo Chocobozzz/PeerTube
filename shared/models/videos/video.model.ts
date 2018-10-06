@@ -68,6 +68,10 @@ export interface Video {
 
   account: AccountAttribute
   channel: VideoChannelAttribute
+
+  userHistory?: {
+    currentTime: number
+  }
 }
 
 export interface VideoDetails extends Video {

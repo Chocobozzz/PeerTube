@@ -29,6 +29,19 @@
     }
   }
 
+  .progress-bar {
+    height: 3px;
+    width: 100%;
+    position: relative;
+    top: -3px;
+    background-color: rgba(0, 0, 0, 0.20);
+
+    div {
+      height: 100%;
+      background-color: var(--mainColor);
+    }
+  }
+
   .video-thumbnail-overlay {
     position: absolute;
     right: 5px;
