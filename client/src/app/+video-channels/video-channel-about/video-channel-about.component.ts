@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -19,7 +18,6 @@ export class VideoChannelAboutComponent implements OnInit, OnDestroy {
   private videoChannelSub: Subscription
 
   constructor (
-    private route: ActivatedRoute,
     private i18n: I18n,
     private videoChannelService: VideoChannelService,
     private markdownService: MarkdownService

@@ -1,0 +1,6 @@
+@import '_mixins';
+
+.btn-remote-follow {
+  @include peertube-button;
+  @include orange-button;
+}

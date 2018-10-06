@@ -1,0 +1,19 @@
+@import '_variables';
+@import '_mixins';
+
+table {
+  font-size: 14px;
+
+  .label {
+    font-weight: $font-semibold;
+    min-width: 330px;
+  }
+
+  .glyphicon-ok {
+    color: $green;
+  }
+
+  .glyphicon-remove {
+    color: $red;
+  }
+}

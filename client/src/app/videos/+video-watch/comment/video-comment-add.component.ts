@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs'
 import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
@@ -10,6 +11,8 @@ import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCommentValidatorsService } from '@app/shared/forms/form-validators/video-comment-validators.service'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { AuthService } from '@app/core/auth'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -25,6 +28,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
 
+  @ViewChild('visitorModal') visitorModal: NgbModal
   @ViewChild('textarea') private textareaElement: ElementRef
 
   private addingComment = false
@@ -34,6 +38,9 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     private videoCommentValidatorsService: VideoCommentValidatorsService,
     private notificationsService: NotificationsService,
     private videoCommentService: VideoCommentService,
+    private authService: AuthService,
+    private modalService: NgbModal,
+    private router: Router,
     private i18n: I18n
   ) {
     super()
@@ -44,19 +51,21 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
       text: this.videoCommentValidatorsService.VIDEO_COMMENT_TEXT
     })
 
-    if (this.focusOnInit === true) {
-      this.textareaElement.nativeElement.focus()
-    }
+    if (this.user) {
+      if (this.focusOnInit === true) {
+        this.textareaElement.nativeElement.focus()
+      }
 
-    if (this.parentComment) {
-      const mentions = this.parentComments
-        .filter(c => c.account.id !== this.user.account.id) // Don't add mention of ourselves
-        .map(c => '@' + c.by)
+      if (this.parentComment) {
+        const mentions = this.parentComments
+          .filter(c => c.account.id !== this.user.account.id) // Don't add mention of ourselves
+          .map(c => '@' + c.by)
 
-      const mentionsSet = new Set(mentions)
-      const mentionsText = Array.from(mentionsSet).join(' ') + ' '
+        const mentionsSet = new Set(mentions)
+        const mentionsText = Array.from(mentionsSet).join(' ') + ' '
 
-      this.form.patchValue({ text: mentionsText })
+        this.form.patchValue({ text: mentionsText })
+      }
     }
   }
 
@@ -65,6 +74,20 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     if (!this.form.valid) return
 
     this.formValidated()
+  }
+
+  openVisitorModal (event) {
+    if (this.user === null) { // we only open it for visitors
+      // fixing ng-bootstrap ModalService and the "Expression Changed After It Has Been Checked" Error
+      event.srcElement.blur()
+      event.preventDefault()
+
+      this.modalService.open(this.visitorModal)
+    }
+  }
+
+  hideVisitorModal () {
+    this.modalService.dismissAll()
   }
 
   formValidated () {
@@ -99,6 +122,21 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   isAddButtonDisplayed () {
     return this.form.value['text']
+  }
+
+  getUrl () {
+    return window.location.href
+  }
+
+  getAvatarUrl () {
+    if (this.user) return this.user.accountAvatarUrl
+    return window.location.origin + '/client/assets/images/default-avatar.png'
+  }
+
+  gotoLogin () {
+    this.hideVisitorModal()
+    this.authService.redirectUrl = this.router.url
+    this.router.navigate([ '/login' ])
   }
 
   private addCommentReply (commentCreate: VideoCommentCreate) {

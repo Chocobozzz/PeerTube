@@ -1,10 +1,9 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { existsSync } from 'fs'
+import { existsSync, readdir } from 'fs-extra'
 import { join } from 'path'
 import { Account } from '../../../../shared/models/actors'
-import { readdirPromise } from '../../../helpers/core-utils'
 import { root } from '../index'
 import { makeGetRequest } from '../requests/requests'
 
@@ -47,7 +46,7 @@ async function checkActorFilesWereRemoved (actorUUID: string, serverNumber: numb
     const directoryExists = existsSync(directoryPath)
     expect(directoryExists).to.be.true
 
-    const files = await readdirPromise(directoryPath)
+    const files = await readdir(directoryPath)
     for (const file of files) {
       expect(file).to.not.contain(actorUUID)
     }

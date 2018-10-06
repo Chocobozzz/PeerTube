@@ -21,6 +21,7 @@ import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
+import { UserModel } from '../../../models/account/user'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -95,24 +96,25 @@ async function deleteVideoAbuse (req: express.Request, res: express.Response) {
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video as VideoModel
-  const reporterAccount = res.locals.oauth.token.User.Account as AccountModel
   const body: VideoAbuseCreate = req.body
 
-  const abuseToCreate = {
-    reporterAccountId: reporterAccount.id,
-    reason: body.reason,
-    videoId: videoInstance.id,
-    state: VideoAbuseState.PENDING
-  }
-
   const videoAbuse: VideoAbuseModel = await sequelizeTypescript.transaction(async t => {
+    const reporterAccount = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
+    const abuseToCreate = {
+      reporterAccountId: reporterAccount.id,
+      reason: body.reason,
+      videoId: videoInstance.id,
+      state: VideoAbuseState.PENDING
+    }
+
     const videoAbuseInstance = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
     videoAbuseInstance.Video = videoInstance
     videoAbuseInstance.Account = reporterAccount
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
-      await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance, t)
+      await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance)
     }
 
     auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseInstance.toFormattedJSON()))
@@ -121,7 +123,6 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
   })
 
   logger.info('Abuse report for video %s created.', videoInstance.name)
-  return res.json({
-    videoAbuse: videoAbuse.toFormattedJSON()
-  }).end()
+
+  return res.json({ videoAbuse: videoAbuse.toFormattedJSON() }).end()
 }

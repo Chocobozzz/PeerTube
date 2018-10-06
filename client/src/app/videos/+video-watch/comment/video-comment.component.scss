@@ -35,7 +35,8 @@
       .comment-account {
         @include disable-default-a-behaviour;
 
-        color: #000;
+        word-break: break-all;
+        color: var(--mainForegroundColor);
         font-weight: $font-bold;
       }
 
@@ -54,7 +55,7 @@
         &:not(.linkified-url) {
           @include disable-default-a-behaviour;
 
-          color: #000;
+          color: var(--mainForegroundColor);
 
           font-weight: $font-semibold;
         }
@@ -73,7 +74,7 @@
         margin-right: 10px;
 
         &:hover {
-          color: #000;
+          color: var(--mainForegroundColor);
         }
       }
     }
@@ -100,5 +101,11 @@
 
   .root-comment {
     img { margin-right: 10px; }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .root-comment {
+    font-size: 14px;
   }
 }

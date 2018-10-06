@@ -3,11 +3,16 @@
 
 #search-video {
   @include peertube-input-text($search-input-width);
+  padding-left: 10px;
   margin-right: 15px;
-  padding-right: 25px; // For the search icon
+  padding-right: 40px; // For the search icon
 
   &::placeholder {
-    color: #000;
+    color: var(--inputPlaceholderColor);
+  }
+
+  &:focus::placeholder {
+    opacity: 0 !important;
   }
 
   @media screen and (max-width: 800px) {
@@ -23,7 +28,8 @@
   @include icon(25px);
   height: 21px;
 
-  background-image: url('../../assets/images/header/search.svg');
+  background-color: var(--mainForegroundColor);
+  mask: url('../../assets/images/header/search.svg') no-repeat 50% 50%;
 
   // yolo
   position: absolute;

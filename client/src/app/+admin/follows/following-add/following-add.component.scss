@@ -5,6 +5,13 @@ textarea {
   height: 250px;
 }
 
+.form-control {
+  &, &:focus {
+    background-color: var(--inputColor);
+    color: var(--mainForegroundColor);
+  }
+}
+
 input[type=submit] {
   @include peertube-button;
   @include orange-button;

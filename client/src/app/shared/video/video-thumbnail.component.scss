@@ -14,6 +14,11 @@
     text-decoration: none !important;
   }
 
+  @include disable-outline;
+  &.focus-visible {
+    box-shadow: 0 0 0 2px var(--mainColor);
+  }
+
   img {
     width: $video-thumbnail-width;
     height: $video-thumbnail-height;
@@ -21,6 +26,19 @@
     &.blur-filter {
       filter: blur(5px);
       transform : scale(1.03);
+    }
+  }
+
+  .progress-bar {
+    height: 3px;
+    width: 100%;
+    position: relative;
+    top: -3px;
+    background-color: rgba(0, 0, 0, 0.20);
+
+    div {
+      height: 100%;
+      background-color: var(--mainColor);
     }
   }
 

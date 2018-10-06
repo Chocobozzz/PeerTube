@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { lineFeedToHtml } from '@app/shared/misc/utils'
 import { Observable } from 'rxjs'
-import { ResultList } from '../../../../../../shared/models'
+import { ResultList, FeedFormat } from '../../../../../../shared/models'
 import {
   VideoComment as VideoCommentServerModel,
   VideoCommentCreate,
@@ -18,6 +18,7 @@ import { VideoComment } from './video-comment.model'
 @Injectable()
 export class VideoCommentService {
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  private static BASE_FEEDS_URL = environment.apiUrl + '/feeds/video-comments.'
 
   constructor (
     private authHttp: HttpClient,
@@ -86,6 +87,34 @@ export class VideoCommentService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  getVideoCommentsFeeds (videoUUID?: string) {
+    const feeds = [
+      {
+        format: FeedFormat.RSS,
+        label: 'rss 2.0',
+        url: VideoCommentService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
+      },
+      {
+        format: FeedFormat.ATOM,
+        label: 'atom 1.0',
+        url: VideoCommentService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
+      },
+      {
+        format: FeedFormat.JSON,
+        label: 'json 1.0',
+        url: VideoCommentService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
+      }
+    ]
+
+    if (videoUUID !== undefined) {
+      for (const feed of feeds) {
+        feed.url += '?videoId=' + videoUUID
+      }
+    }
+
+    return feeds
   }
 
   private extractVideoComment (videoComment: VideoCommentServerModel) {

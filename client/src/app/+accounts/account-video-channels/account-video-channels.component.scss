@@ -2,7 +2,7 @@
 @import '_mixins';
 
 .row {
-  text-align: center;
+  justify-content: center;
 }
 
 a.video-channel {
@@ -10,7 +10,7 @@ a.video-channel {
 
   display: inline-block;
   text-align: center;
-  color: #000;
+  color: var(--mainForegroundColor);
   margin: 10px 30px;
 
   img {

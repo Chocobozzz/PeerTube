@@ -14,9 +14,11 @@
             </div>
 
             <div class="form-group">
-              <label i18n class="label-tags">Tags</label> <span i18n>(press Enter to add)</span>
+              <label i18n class="label-tags">Tags</label>
+              <my-help i18n-preHtml preHtml="Tags could be used to suggest relevant recommendations.</br>Press Enter to add a new tag."></my-help>
               <tag-input
                 [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
+                i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a new tag"
                 formControlName="tags" maxItems="5" modelAsStrings="true"
               ></tag-input>
             </div>
@@ -154,7 +156,7 @@
                   [href]="videoCaption.captionPath"
                 >{{ videoCaption.language.label }}</a>
 
-                <div class="caption-entry-state">Already uploaded	&#10004;</div>
+                <div i18n class="caption-entry-state">Already uploaded	&#10004;</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Delete</span>
               </ng-container>
@@ -162,7 +164,7 @@
               <ng-container *ngIf="videoCaption.action === 'CREATE'">
                 <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
 
-                <div class="caption-entry-state caption-entry-state-create">Will be created on update</div>
+                <div i18n class="caption-entry-state caption-entry-state-create">Will be created on update</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel create</span>
               </ng-container>
@@ -170,14 +172,14 @@
               <ng-container *ngIf="videoCaption.action === 'REMOVE'">
                 <span class="caption-entry-label">{{ videoCaption.language.label }}</span>
 
-                <div class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
+                <div i18n class="caption-entry-state caption-entry-state-delete">Will be deleted on update</div>
 
                 <span i18n class="caption-entry-delete" (click)="deleteCaption(videoCaption)">Cancel deletion</span>
               </ng-container>
             </div>
           </div>
 
-          <div class="no-caption" *ngIf="videoCaptions?.length === 0">
+          <div i18n class="no-caption" *ngIf="videoCaptions?.length === 0">
             No captions for now.
           </div>
 

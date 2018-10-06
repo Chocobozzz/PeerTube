@@ -115,6 +115,30 @@
         <source>Private</source>
         <target>Privado</target>
       </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>Publicado</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>para recodificar</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>para importar</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>Pendente</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>Correcta</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>Fallou</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
         <target>Variado</target>

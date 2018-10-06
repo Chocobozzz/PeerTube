@@ -2,11 +2,24 @@
   <div class="sub-menu">
     <a i18n routerLink="/my-account/settings" routerLinkActive="active" class="title-page">My settings</a>
 
-    <a i18n routerLink="/my-account/video-channels" routerLinkActive="active" class="title-page">My video channels</a>
+    <div ngbDropdown class="my-library">
+      <span role="button" class="title-page" [ngClass]="{ active: libraryLabel !== '' }" ngbDropdownToggle>
+        <ng-container i18n>My library</ng-container>
+        <ng-container *ngIf="libraryLabel"> - {{ libraryLabel }}</ng-container>
+      </span>
 
-    <a i18n routerLink="/my-account/videos" routerLinkActive="active" class="title-page">My videos</a>
+      <div ngbDropdownMenu>
+        <a class="dropdown-item" i18n routerLink="/my-account/video-channels">My channels</a>
 
-    <a *ngIf="isVideoImportEnabled()" i18n routerLink="/my-account/video-imports" routerLinkActive="active" class="title-page">My video imports</a>
+        <a class="dropdown-item" i18n routerLink="/my-account/videos">My videos</a>
+
+        <a class="dropdown-item" i18n routerLink="/my-account/subscriptions">My subscriptions</a>
+
+        <a class="dropdown-item" *ngIf="isVideoImportEnabled()" i18n routerLink="/my-account/video-imports">My imports</a>
+      </div>
+    </div>
+
+    <a i18n routerLink="/my-account/ownership" routerLinkActive="active" class="title-page">Ownership changes</a>
   </div>
 
   <div class="margin-content">

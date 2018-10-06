@@ -1,15 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-.no-result {
-  height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: $font-semibold;
-}
-
 .search-result {
   padding: 40px;
 
@@ -32,6 +23,7 @@
       }
 
       .results-filter-button {
+        cursor: pointer;
 
         .icon.icon-filter {
           @include icon(20px);
@@ -75,7 +67,7 @@
         .video-info-name {
           @include disable-default-a-behaviour;
 
-          color: #000;
+          color: var(--mainForegroundColor);
           display: block;
           width: fit-content;
           font-size: 18px;
@@ -103,40 +95,96 @@
         }
       }
     }
+
+    &.video-channel {
+
+      img {
+        @include avatar(120px);
+
+        margin: 0 50px 0 40px;
+      }
+
+      .video-channel-info {
+        flex-grow: 1;
+        width: fit-content;
+
+        .video-channel-names {
+          @include disable-default-a-behaviour;
+
+          display: flex;
+          align-items: baseline;
+          color: var(--mainForegroundColor);
+          width: fit-content;
+
+          .video-channel-display-name {
+            font-weight: $font-semibold;
+            font-size: 18px;
+          }
+
+          .video-channel-name {
+            font-size: 14px;
+            color: $grey-actor-name;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: $small-view) {
+  .video-channel-names {
+    flex-direction: column !important;
+
+    .video-channel-name {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
   .search-result {
-    margin: 20px 10px;
-  }
+    padding: 20px 10px;
 
-  .results-header {
-    font-size: 15px !important;
-  }
+    .results-header {
+      font-size: 15px !important;
+    }
 
-  .entry {
-    flex-direction: column;
-    height: auto;
-    text-align: center;
+    .entry {
+      flex-direction: column;
+      height: auto;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
 
-    &.video {
-      .video-info-name,
-      .video-info-account {
-        margin: auto;
-      }
+      &.video {
+        .video-info-name,
+        .video-info-account {
+          margin: auto;
+        }
 
-      my-video-thumbnail {
-        margin-right: 0 !important;
+        my-video-thumbnail {
+          margin-right: 0 !important;
 
-        /deep/ .video-thumbnail {
-          width: 100%;
-          height: auto;
-
-          img {
+          /deep/ .video-thumbnail {
             width: 100%;
             height: auto;
+
+            img {
+              width: 100%;
+              height: auto;
+            }
           }
+        }
+      }
+
+      &.video-channel {
+        .video-channel-info .video-channel-names {
+          align-items: center;
+        }
+
+        my-subscribe-button {
+          margin-top: 5px;
         }
       }
     }

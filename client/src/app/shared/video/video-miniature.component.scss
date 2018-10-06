@@ -14,14 +14,17 @@
     line-height: normal;
 
     .video-miniature-name {
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      @include ellipsis-multiline(
+        $font-size: 1rem,
+        $line-height: 1,
+        $lines-to-show: 2
+      );
       transition: color 0.2s;
       font-size: 16px;
       font-weight: $font-semibold;
-      color: #000;
+      color: var(--mainForegroundColor);
+      margin-top: 5px;
+      margin-bottom: 5px;
 
       &:hover {
         text-decoration: none;
@@ -38,7 +41,8 @@
       font-size: 13px;
     }
 
-    .video-miniature-account {
+    .video-miniature-account,
+    .video-miniature-channel {
       @include disable-default-a-behaviour;
 
       display: block;

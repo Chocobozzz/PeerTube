@@ -1,13 +1,14 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { existsSync, readFile } from 'fs'
+import { existsSync, readdir, readFile } from 'fs-extra'
 import * as parseTorrent from 'parse-torrent'
 import { extname, join } from 'path'
 import * as request from 'supertest'
 import {
   buildAbsoluteFixturePath,
-  getMyUserInformation, immutableAssign,
+  getMyUserInformation,
+  immutableAssign,
   makeGetRequest,
   makePutBodyRequest,
   makeUploadRequest,
@@ -16,7 +17,6 @@ import {
   testImage
 } from '../'
 import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
-import { readdirPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
 
@@ -199,13 +199,13 @@ function getAccountVideos (
 function getVideoChannelVideos (
   url: string,
   accessToken: string,
-  videoChannelId: number | string,
+  videoChannelName: string,
   start: number,
   count: number,
   sort?: string,
   query: { nsfw?: boolean } = {}
 ) {
-  const path = '/api/v1/video-channels/' + videoChannelId + '/videos'
+  const path = '/api/v1/video-channels/' + videoChannelName + '/videos'
 
   return makeGetRequest({
     url,
@@ -267,16 +267,20 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
           .expect(expectedStatus)
 }
 
-async function checkVideoFilesWereRemoved (videoUUID: string, serverNumber: number) {
+async function checkVideoFilesWereRemoved (
+  videoUUID: string,
+  serverNumber: number,
+  directories = [ 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]
+) {
   const testDirectory = 'test' + serverNumber
 
-  for (const directory of [ 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]) {
+  for (const directory of directories) {
     const directoryPath = join(root(), testDirectory, directory)
 
     const directoryExists = existsSync(directoryPath)
     expect(directoryExists).to.be.true
 
-    const files = await readdirPromise(directoryPath)
+    const files = await readdir(directoryPath)
     for (const file of files) {
       expect(file).to.not.contain(videoUUID)
     }
@@ -438,18 +442,19 @@ async function completeVideoCheck (
       name: string
       host: string
     }
-    isLocal: boolean,
-    tags: string[],
-    privacy: number,
-    likes?: number,
-    dislikes?: number,
-    duration: number,
+    isLocal: boolean
+    tags: string[]
+    privacy: number
+    likes?: number
+    dislikes?: number
+    duration: number
     channel: {
-      name: string,
+      displayName: string
+      name: string
       description
       isLocal: boolean
     }
-    fixture: string,
+    fixture: string
     files: {
       resolution: number
       size: number
@@ -476,8 +481,8 @@ async function completeVideoCheck (
   expect(video.account.uuid).to.be.a('string')
   expect(video.account.host).to.equal(attributes.account.host)
   expect(video.account.name).to.equal(attributes.account.name)
-  expect(video.channel.displayName).to.equal(attributes.channel.name)
-  expect(video.channel.name).to.have.lengthOf(36)
+  expect(video.channel.displayName).to.equal(attributes.channel.displayName)
+  expect(video.channel.name).to.equal(attributes.channel.name)
   expect(video.likes).to.equal(attributes.likes)
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
@@ -497,8 +502,8 @@ async function completeVideoCheck (
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
   expect(videoDetails.account.name).to.equal(attributes.account.name)
   expect(videoDetails.account.host).to.equal(attributes.account.host)
-  expect(videoDetails.channel.displayName).to.equal(attributes.channel.name)
-  expect(videoDetails.channel.name).to.have.lengthOf(36)
+  expect(video.channel.displayName).to.equal(attributes.channel.displayName)
+  expect(video.channel.name).to.equal(attributes.channel.name)
   expect(videoDetails.channel.host).to.equal(attributes.account.host)
   expect(videoDetails.channel.isLocal).to.equal(attributes.channel.isLocal)
   expect(dateIsValid(videoDetails.channel.createdAt.toString())).to.be.true

@@ -31,6 +31,7 @@ pre_build_hook
 defaultLanguage="en_US"
 npm run ng build -- --output-path "dist/$defaultLanguage/" --deploy-url "/client/$defaultLanguage/" --prod --stats-json
 mv "./dist/$defaultLanguage/assets" "./dist"
+mv "./dist/$defaultLanguage/manifest.webmanifest" "./dist/manifest.webmanifest"
 
 post_build_hook
 
@@ -40,7 +41,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         languages=("fr_FR")
     else
         # Supported languages
-        languages=("fr_FR" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES" "oc")
+        languages=("fr_FR" "pt_BR" "sv_SE" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES" "oc" "zh_Hans_CN")
     fi
 
     for lang in "${languages[@]}"; do

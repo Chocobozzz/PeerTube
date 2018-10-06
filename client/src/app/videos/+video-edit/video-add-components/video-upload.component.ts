@@ -31,6 +31,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
   userVideoQuotaUsed = 0
+  userVideoQuotaUsedDaily = 0
 
   isUploadingVideo = false
   isUpdatingVideo = false
@@ -67,7 +68,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     super.ngOnInit()
 
     this.userService.getMyVideoQuotaUsed()
-      .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
+        .subscribe(data => {
+          this.userVideoQuotaUsed = data.videoQuotaUsed
+          this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
+        })
   }
 
   ngOnDestroy () {
@@ -79,7 +83,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
 
     if (this.videoUploaded === true) {
       // FIXME: cannot concatenate strings inside i18n service :/
-      text = this.i18n('Your video was uploaded to your account and is private.') +
+      text = this.i18n('Your video was uploaded to your account and is private.') + ' ' +
         this.i18n('But associated data (tags, description...) will be lost, are you sure you want to leave this page?')
     } else {
       text = this.i18n('Your video is not uploaded yet, are you sure you want to leave this page?')
@@ -115,16 +119,29 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       return
     }
 
+    const bytePipes = new BytesPipe()
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
-      const bytePipes = new BytesPipe()
-
       const msg = this.i18n(
-        'Your video quota is exceeded with this video (video size: {{ videoSize }}, used: {{ videoQuotaUsed }}, quota: {{ videoQuota }})',
+        'Your video quota is exceeded with this video (video size: {{videoSize}}, used: {{videoQuotaUsed}}, quota: {{videoQuota}})',
         {
           videoSize: bytePipes.transform(videofile.size, 0),
           videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
           videoQuota: bytePipes.transform(videoQuota, 0)
+        }
+      )
+      this.notificationsService.error(this.i18n('Error'), msg)
+      return
+    }
+
+    const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
+    if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
+      const msg = this.i18n(
+        'Your daily video quota is exceeded with this video (video size: {{videoSize}}, used: {{quotaUsedDaily}}, quota: {{quotaDaily}})',
+        {
+          videoSize: bytePipes.transform(videofile.size, 0),
+          quotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
+          quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
         }
       )
       this.notificationsService.error(this.i18n('Error'), msg)
@@ -164,6 +181,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       channelId
     })
 
+    this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+
     this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
@@ -185,6 +204,12 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.notificationsService.error(this.i18n('Error'), err.message)
       }
     )
+  }
+
+  isPublishingButtonDisabled () {
+    return !this.form.valid ||
+      this.isUpdatingVideo === true ||
+      this.videoUploaded !== true
   }
 
   updateSecondStep () {

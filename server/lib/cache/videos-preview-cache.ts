@@ -16,7 +16,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
   }
 
   async getFilePath (videoUUID: string) {
-    const video = await VideoModel.loadByUUID(videoUUID)
+    const video = await VideoModel.loadByUUIDWithFile(videoUUID)
     if (!video) return undefined
 
     if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())
@@ -25,7 +25,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
   }
 
   protected async loadRemoteFile (key: string) {
-    const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(key)
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(key)
     if (!video) return undefined
 
     if (video.isOwned()) throw new Error('Cannot load remote preview of owned video.')

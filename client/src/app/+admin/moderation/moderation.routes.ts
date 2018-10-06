@@ -16,6 +16,16 @@ export const ModerationRoutes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'video-abuses',
+        redirectTo: 'video-abuses/list',
+        pathMatch: 'full'
+      },
+      {
+        path: 'video-blacklist',
+        redirectTo: 'video-blacklist/list',
+        pathMatch: 'full'
+      },
+      {
         path: 'video-abuses/list',
         component: VideoAbuseListComponent,
         canActivate: [ UserRightGuard ],

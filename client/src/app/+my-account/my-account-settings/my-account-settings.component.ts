@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { AuthService } from '../../core'
-import { ServerService } from '../../core/server'
 import { User } from '../../shared'
 import { UserService } from '../../shared/users'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -20,7 +19,6 @@ export class MyAccountSettingsComponent implements OnInit {
   constructor (
     private userService: UserService,
     private authService: AuthService,
-    private serverService: ServerService,
     private notificationsService: NotificationsService,
     private i18n: I18n
   ) {}

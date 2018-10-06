@@ -6,6 +6,7 @@ import { environment } from './environments/environment'
 
 import { hmrBootstrap } from './hmr'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { buildFileLocale } from '../../shared'
 
 let providers = []
 if (environment.production) {
@@ -14,7 +15,7 @@ if (environment.production) {
 
 // Template translation, should be in the bootstrap step
 if (isOnDevLocale()) {
-  const locale = getDevLocale()
+  const locale = buildFileLocale(getDevLocale())
   const translations = require(`raw-loader!./locale/target/angular_${locale}.xml`)
 
   providers = [

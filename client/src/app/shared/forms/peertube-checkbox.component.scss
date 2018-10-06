@@ -3,7 +3,6 @@
 
 .form-group {
   display: flex;
-  align-items: center;
 
   .form-group-checkbox {
     display: flex;
@@ -19,5 +18,10 @@
       width: 10px;
       margin-right: 10px;
     }
+  }
+
+  my-help {
+    position: relative;
+    top: -2px;
   }
 }

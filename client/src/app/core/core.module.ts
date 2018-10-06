@@ -14,6 +14,9 @@ import { ConfirmComponent, ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
+import { ThemeService } from './theme'
+import { HotkeyModule } from 'angular2-hotkeys'
+import { CheatSheetComponent } from '@app/core/hotkeys'
 
 @NgModule({
   imports: [
@@ -26,11 +29,16 @@ import { ServerService } from './server'
 
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
-    LoadingBarModule.forRoot()
+    LoadingBarModule.forRoot(),
+
+    HotkeyModule.forRoot({
+      cheatSheetCloseEsc: true
+    })
   ],
 
   declarations: [
-    ConfirmComponent
+    ConfirmComponent,
+    CheatSheetComponent
   ],
 
   exports: [
@@ -38,13 +46,15 @@ import { ServerService } from './server'
     LoadingBarHttpClientModule,
     LoadingBarModule,
 
-    ConfirmComponent
+    ConfirmComponent,
+    CheatSheetComponent
   ],
 
   providers: [
     AuthService,
     ConfirmService,
     ServerService,
+    ThemeService,
     LoginGuard,
     UserRightGuard,
     RedirectService

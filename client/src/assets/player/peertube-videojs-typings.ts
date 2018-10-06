@@ -22,6 +22,11 @@ type VideoJSCaption = {
   src: string
 }
 
+type UserWatching = {
+  url: string,
+  authorizationHeader: string
+}
+
 type PeertubePluginOptions = {
   videoFiles: VideoFile[]
   playerElement: HTMLVideoElement
@@ -30,6 +35,8 @@ type PeertubePluginOptions = {
   startTime: number | string
   autoplay: boolean,
   videoCaptions: VideoJSCaption[]
+
+  userWatching?: UserWatching
 }
 
 // videojs typings don't have some method we need
@@ -39,5 +46,6 @@ export {
   VideoJSComponentInterface,
   PeertubePluginOptions,
   videojsUntyped,
-  VideoJSCaption
+  VideoJSCaption,
+  UserWatching
 }

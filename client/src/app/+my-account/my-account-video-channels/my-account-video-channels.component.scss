@@ -12,11 +12,7 @@
 }
 
 .video-channel {
-  display: flex;
-  min-height: 130px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #C6C6C6;
+  @include row-blocks;
 
   img {
     @include avatar(80px);
@@ -30,8 +26,10 @@
     a.video-channel-names {
       @include disable-default-a-behaviour;
 
+      width: fit-content;
       display: flex;
-      color: #000;
+      align-items: baseline;
+      color: var(--mainForegroundColor);
 
       .video-channel-display-name {
         font-weight: $font-semibold;
@@ -40,7 +38,12 @@
 
       .video-channel-name {
         font-size: 14px;
-        color: #777272;
+        color: $grey-actor-name;
+        margin-left: 5px;
+      }
+
+      .video-channel-followers {
+
       }
     }
   }
@@ -61,12 +64,9 @@
   }
 
   .video-channel {
-    flex-direction: column;
-    height: auto;
-    text-align: center;
-
     .video-channel-names {
-      justify-content: center;
+      flex-direction: column;
+      align-items: center !important;
     }
 
     img {

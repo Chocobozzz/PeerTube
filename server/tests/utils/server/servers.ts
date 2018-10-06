@@ -1,5 +1,7 @@
 import { ChildProcess, exec, fork } from 'child_process'
 import { join } from 'path'
+import { root, wait } from '../miscs/miscs'
+import { readFile } from 'fs-extra'
 
 interface ServerInfo {
   app: ChildProcess,
@@ -35,7 +37,7 @@ interface ServerInfo {
   }
 }
 
-function flushAndRunMultipleServers (totalServers) {
+function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
   let apps = []
   let i = 0
 
@@ -51,10 +53,7 @@ function flushAndRunMultipleServers (totalServers) {
     flushTests()
       .then(() => {
         for (let j = 1; j <= totalServers; j++) {
-          // For the virtual buffer
-          setTimeout(() => {
-            runServer(j).then(app => anotherServerDone(j, app))
-          }, 1000 * (j - 1))
+          runServer(j, configOverride).then(app => anotherServerDone(j, app))
         }
       })
   })
@@ -147,8 +146,8 @@ function runServer (serverNumber: number, configOverride?: Object) {
   })
 }
 
-async function reRunServer (server: ServerInfo) {
-  const newServer = await runServer(server.serverNumber)
+async function reRunServer (server: ServerInfo, configOverride?: any) {
+  const newServer = await runServer(server.serverNumber, configOverride)
   server.app = newServer.app
 
   return server
@@ -160,6 +159,19 @@ function killallServers (servers: ServerInfo[]) {
   }
 }
 
+async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
+  const logfile = join(root(), 'test' + server.serverNumber, 'logs/peertube.log')
+
+  while (true) {
+    const buf = await readFile(logfile)
+
+    const matches = buf.toString().match(new RegExp(str, 'g'))
+    if (matches && matches.length === count) return
+
+    await wait(1000)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -168,5 +180,6 @@ export {
   flushTests,
   runServer,
   killallServers,
-  reRunServer
+  reRunServer,
+  waitUntilLog
 }

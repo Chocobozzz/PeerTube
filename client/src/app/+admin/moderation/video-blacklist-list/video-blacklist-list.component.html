@@ -36,10 +36,10 @@
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-videoBlacklist>
-    <tr class="blacklist-reason">
-      <td colspan="7">
-        <span i18n class="blacklist-reason-label">Blacklist reason:</span>
-        {{ videoBlacklist.reason }}
+    <tr>
+      <td class="moderation-expanded" colspan="5">
+        <span i18n class="moderation-expanded-label">Blacklist reason:</span>
+        <span class="moderation-expanded-text">{{ videoBlacklist.reason }}</span>
       </td>
     </tr>
   </ng-template>

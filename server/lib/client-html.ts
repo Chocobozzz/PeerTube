@@ -1,12 +1,14 @@
 import * as express from 'express'
 import * as Bluebird from 'bluebird'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CONFIG, EMBED_SIZE, CUSTOM_HTML_TAG_COMMENTS, STATIC_PATHS } from '../initializers'
+import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, STATIC_PATHS } from '../initializers'
 import { join } from 'path'
-import { escapeHTML, readFileBufferPromise } from '../helpers/core-utils'
+import { escapeHTML } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
 import * as validator from 'validator'
 import { VideoPrivacy } from '../../shared/models/videos'
+import { readFile } from 'fs-extra'
+import { getActivityStreamDuration } from '../models/video/video-format-utils'
 
 export class ClientHtml {
 
@@ -20,7 +22,7 @@ export class ClientHtml {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
     if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
-    const buffer = await readFileBufferPromise(path)
+    const buffer = await readFile(path)
 
     let html = buffer.toString()
 
@@ -37,10 +39,8 @@ export class ClientHtml {
     let videoPromise: Bluebird<VideoModel>
 
     // Let Angular application handle errors
-    if (validator.isUUID(videoId, 4)) {
-      videoPromise = VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(videoId)
-    } else if (validator.isInt(videoId)) {
-      videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(+videoId)
+    if (validator.isInt(videoId) || validator.isUUID(videoId, 4)) {
+      videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
     } else {
       return ClientHtml.getIndexHTML(req, res)
     }
@@ -149,7 +149,7 @@ export class ClientHtml {
       description: videoDescriptionEscaped,
       thumbnailUrl: previewUrl,
       uploadDate: video.createdAt.toISOString(),
-      duration: video.getActivityStreamDuration(),
+      duration: getActivityStreamDuration(video.duration),
       contentUrl: videoUrl,
       embedUrl: embedUrl,
       interactionCount: video.views

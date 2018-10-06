@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import { UserService } from '../shared'
 import { ServerService } from '../../../core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
+import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-user-create',
@@ -20,6 +21,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   constructor (
     protected serverService: ServerService,
     protected formValidatorService: FormValidatorService,
+    protected configService: ConfigService,
     private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -27,12 +29,15 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     private i18n: I18n
   ) {
     super()
+
+    this.buildQuotaOptions()
   }
 
   ngOnInit () {
     const defaultValues = {
       role: UserRole.USER.toString(),
-      videoQuota: '-1'
+      videoQuota: '-1',
+      videoQuotaDaily: '-1'
     }
 
     this.buildForm({
@@ -40,7 +45,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       email: this.userValidatorsService.USER_EMAIL,
       password: this.userValidatorsService.USER_PASSWORD,
       role: this.userValidatorsService.USER_ROLE,
-      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY
     }, defaultValues)
   }
 

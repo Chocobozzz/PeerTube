@@ -1,15 +1,15 @@
+$icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
+@import '_bootstrap';
+
 @import '_variables';
 @import '_mixins';
-
-$icon-font-path: '../../node_modules/@neos21/bootstrap3-glyphicons/assets/fonts/';
-@import '_bootstrap';
 
 @import '_fonts';
 
 @import '~video.js/dist/video-js.css';
 
 $assets-path: '../assets/';
-@import './player/player';
+@import './player/index';
 @import './loading-bar';
 
 @import './primeng-custom';
@@ -19,9 +19,22 @@ $assets-path: '../assets/';
 }
 
 body {
+  /*** theme ***/
+  // now beware node-sass requires interpolation
+  // for css custom properties #{$var}
+  --mainColor: #{$orange-color};
+  --mainHoverColor: #{$orange-hoover-color};
+  --mainBackgroundColor: #{$bg-color};
+  --mainForegroundColor: #{$fg-color};
+  --menuBackgroundColor: #{$menu-background};
+  --menuForegroundColor: #{$menu-color};
+  --submenuColor: #{$sub-menu-color};
+  --inputColor: #{$input-background-color};
+  --inputPlaceholderColor: #{$input-placeholder-color};
+
   font-family: $main-fonts;
   font-weight: $font-regular;
-  color: #000;
+  color: var(--mainForegroundColor);
   font-size: 14px;
 }
 
@@ -39,11 +52,16 @@ strong {
 
 input.readonly {
   /* Force blank on readonly inputs */
-  background-color: #fff !important;
+  background-color: var(--inputColor) !important;
 }
 
 input, textarea {
   outline: none;
+  color: var(--mainForegroundColor);
+}
+
+.btn-outline-secondary {
+  border-color: $input-border-color;
 }
 
 label {
@@ -53,12 +71,19 @@ label {
 
 .form-error {
   display: block;
-  color: $red-error;
+  color: $red;
   margin-top: 5px;
 }
 
 .input-error {
-  border-color: $red-error !important;
+  border-color: $red !important;
+}
+
+.fullWidth {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: initial;
 }
 
 .glyphicon-black {
@@ -76,13 +101,14 @@ label {
   }
 
   .sub-menu {
-    background-color: #F7F7F7;
+    background-color: var(--submenuColor);
     width: 100%;
     height: 81px;
     margin-bottom: 30px;
     display: flex;
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
+    padding-right: $not-expanded-horizontal-margins;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
@@ -96,12 +122,13 @@ label {
 
     .sub-menu {
       padding-left: $expanded-horizontal-margins;
+      padding-right: $expanded-horizontal-margins;
     }
   }
 }
 
 .title-page {
-  color: #000;
+  color: var(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
   margin-right: 55px;
@@ -109,14 +136,14 @@ label {
   @include disable-default-a-behaviour;
 
   &.active, &.title-page-single {
-    border-bottom: 2px solid $orange-color;
+    border-bottom: 2px solid var(--mainColor);
     font-weight: $font-bold;
     margin-top: 30px;
     margin-bottom: 25px;
   }
 
   &:hover, &:active, &:focus {
-    color: #000;
+    color: var(--mainForegroundColor);
   }
 
   @media screen and (max-width: 500px) {
@@ -137,13 +164,14 @@ label {
     @include disable-default-a-behaviour;
 
     font-size: 16px;
-    color: #000;
+    color: var(--mainForegroundColor);
     padding: 5px 15px;
     border-radius: 0.25rem;
 
     &.active {
       font-weight: $font-semibold;
       background-color: #f0f0f0;
+      color: #000;
     }
   }
 }
@@ -171,14 +199,27 @@ label {
 
   .dropdown-item {
     padding: 3px 15px;
+
+    &:active {
+      color: #000 !important;
+    }
+  }
+
+  button {
+    @include disable-default-a-behaviour;
   }
 
   a {
+    @include disable-default-a-behaviour;
     color: #000 !important;
   }
 }
 
 .modal {
+  .modal-content {
+    background-color: var(--mainBackgroundColor);
+  }
+
   .modal-header {
     border-bottom: none;
     margin-bottom: 5px;
@@ -203,7 +244,6 @@ label {
   }
 
   .inputs {
-    margin-top: 40px;
     margin-bottom: 0;
     text-align: right;
 
@@ -240,7 +280,7 @@ label {
   a {
     @include disable-default-a-behaviour;
 
-    color: #000;
+    color: var(--mainForegroundColor);
   }
 }
 
@@ -250,9 +290,14 @@ ngb-tabset.bootstrap {
     &, & a {
       @include disable-default-a-behaviour;
 
-      color: #000 !important;
+      color: var(--mainForegroundColor) !important;
     }
   }
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--mainBackgroundColor) !important;
+  border-bottom: none;
 }
 
 .orange-button {
@@ -284,27 +329,46 @@ table {
   }
 }
 
-@media screen and (max-width: 900px) {
-  .main-col {
-    &, &.expanded {
-      .margin-content {
-        margin-left: 50px;
-        margin-right: 50px;
-      }
+.no-results {
+  height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: $font-semibold;
+}
 
-      .sub-menu {
-        padding-left: 50px;
+@media screen and (max-width: 1600px) {
+  .main-col {
+    &.expanded {
+      .margin-content {
+        margin-left: $expanded-horizontal-margins/2;
+        margin-right: $expanded-horizontal-margins/2;
       }
     }
   }
 }
 
-@media screen and (max-width: 600px) {
-  .menu-wrapper {
-    width: 100% !important;
-    z-index: 10000;
-  }
+@media screen and (max-width: 900px) {
+  .main-col {
+    &.expanded {
+      .margin-content {
+        margin-left: $expanded-horizontal-margins/3;
+        margin-right: $expanded-horizontal-margins/3;
+      }
 
+      .sub-menu {
+        padding-left: 50px;
+
+        .title-page {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $small-view) {
   .main-col {
     margin-left: 0;
 
@@ -316,6 +380,7 @@ table {
 
       .sub-menu {
         padding-left: 15px;
+        padding-right: 15px;
         margin-bottom: 10px;
       }
 

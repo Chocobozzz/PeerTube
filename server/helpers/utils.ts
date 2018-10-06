@@ -1,14 +1,15 @@
 import { ResultList } from '../../shared'
 import { CONFIG } from '../initializers'
-import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
-import { pseudoRandomBytesPromise, sha256, unlinkPromise } from './core-utils'
+import { execPromise, execPromise2, pseudoRandomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
+import { remove } from 'fs-extra'
+import * as memoizee from 'memoizee'
 
 function deleteFileAsync (path: string) {
-  unlinkPromise(path)
+  remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
 }
 
@@ -35,24 +36,12 @@ function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], obje
   } as ResultList<U>
 }
 
-async function getServerActor () {
-  if (getServerActor.serverActor === undefined) {
-    const application = await ApplicationModel.load()
-    if (!application) throw Error('Could not load Application from database.')
+const getServerActor = memoizee(async function () {
+  const application = await ApplicationModel.load()
+  if (!application) throw Error('Could not load Application from database.')
 
-    getServerActor.serverActor = application.Account.Actor
-  }
-
-  if (!getServerActor.serverActor) {
-    logger.error('Cannot load server actor.')
-    process.exit(0)
-  }
-
-  return Promise.resolve(getServerActor.serverActor)
-}
-namespace getServerActor {
-  export let serverActor: ActorModel
-}
+  return application.Account.Actor
+})
 
 function generateVideoTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash
@@ -65,6 +54,29 @@ function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
+async function getVersion () {
+  try {
+    const tag = await execPromise2(
+      '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
+      { stdio: [ 0, 1, 2 ] }
+    )
+
+    if (tag) return tag.replace(/^v/, '')
+  } catch (err) {
+    logger.debug('Cannot get version from git tags.', { err })
+  }
+
+  try {
+    const version = await execPromise('[ ! -d .git ] || git rev-parse --short HEAD')
+
+    if (version) return version.toString().trim()
+  } catch (err) {
+    logger.debug('Cannot get version from git HEAD.', { err })
+  }
+
+  return require('../../../package.json').version
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -73,5 +85,6 @@ export {
   getFormattedObjects,
   getSecureTorrentName,
   getServerActor,
+  getVersion,
   generateVideoTmpPath
 }

@@ -6,24 +6,29 @@
   height: calc(100vh - #{$header-height});
   padding: 0;
   width: $menu-width;
+  z-index: 10000;
 }
 
 menu {
-  background-color: $black-background;
+  background-color: var(--menuBackgroundColor);
   margin: 0;
   padding: 0;
   height: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  z-index: 1000;
-  color: $menu-color;
-  overflow-y: auto;
+  color: var(--menuForegroundColor);
   display: flex;
   flex-direction: column;
+  width: 100%;
+
+  &:focus, &:hover {
+    overflow-y: auto;
+  }
 
   .top-menu {
     flex-grow: 1;
+    width: $menu-width;
   }
 
   .logged-in-block {
@@ -47,7 +52,7 @@ menu {
       .logged-in-username {
         font-size: 16px;
         font-weight: $font-semibold;
-        color: $menu-color;
+        color: var(--menuForegroundColor);
         cursor: pointer;
 
         @include disable-default-a-behaviour;
@@ -118,15 +123,15 @@ menu {
     a {
       display: flex;
       align-items: center;
-      padding-left: $menu-left-padding;
-      color: $menu-color;
+      padding-left: $menu-lateral-padding;
+      color: var(--menuForegroundColor);
       cursor: pointer;
       height: 40px;
       font-size: 16px;
       transition: background-color .1s ease-in-out;
       @include disable-default-a-behaviour;
 
-      &:hover {
+      &:hover, &.focus-visible {
         background-color: rgba(255, 255, 255, 0.15);
       }
 
@@ -135,25 +140,36 @@ menu {
 
         margin-right: 18px;
 
+        &.icon-videos-subscriptions {
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/images/menu/subscriptions.svg');
+        }
+
+        &.icon-videos-overview {
+          position: relative;
+          background-image: url('../../assets/images/menu/globe.svg');
+        }
+
         &.icon-videos-trending {
           position: relative;
-          top: -2px;
+          top: -1px;
           background-image: url('../../assets/images/menu/trending.svg');
         }
 
         &.icon-videos-recently-added {
           width: 23px;
           height: 23px;
-          position: relative;
-          top: -1px;
           background-image: url('../../assets/images/menu/recently-added.svg');
         }
 
         &.icon-videos-local {
           width: 23px;
           height: 23px;
+
           position: relative;
           top: -1px;
+
           background-image: url('../../assets/images/menu/home.svg');
         }
 
@@ -175,10 +191,12 @@ menu {
   }
 
   .footer {
-    margin-bottom: 15px;
-    padding-left: $menu-left-padding;
+    padding-bottom: 15px;
+    padding-left: $menu-lateral-padding;
+    padding-right: $menu-lateral-padding;
+    width: $menu-width;
 
-    .language {
+    .language, .shortcuts, .color-palette {
       display: inline-block;
       color: $menu-bottom-color;
       cursor: pointer;
@@ -186,6 +204,7 @@ menu {
       font-weight: $font-semibold;
 
       .icon {
+        @include disable-outline;
         @include icon(28px);
         opacity: 0.9;
 
@@ -198,10 +217,41 @@ menu {
           background-image: url('../../assets/images/menu/language.png');
         }
 
+        &.icon-shortcuts  {
+          position: relative;
+          top: -1px;
+          width: 24px;
+          height: 24px;
+
+          background-image: url('../../assets/images/menu/keyboard.png');
+          background-color: #fff;
+          filter: invert(100%);
+        }
+
+        &.icon-moonsun  {
+          margin-left: 10px;
+          position: relative;
+          top: -1px;
+          width: 24px;
+          height: 24px;
+
+          background-image: url('../../assets/images/menu/moonsun.svg');
+        }
+
         &:hover {
           opacity: 1;
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .menu-wrapper {
+    width: 100% !important;
+  }
+
+  .top-menu, .footer {
+    width: 100% !important;
   }
 }

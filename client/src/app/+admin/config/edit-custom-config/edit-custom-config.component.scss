@@ -28,7 +28,7 @@ input[type=submit] {
 
 .inner-form-title {
   text-transform: uppercase;
-  color: $orange-color;
+  color: var(--mainColor);
   font-weight: $font-bold;
   font-size: 13px;
   margin-top: 30px;

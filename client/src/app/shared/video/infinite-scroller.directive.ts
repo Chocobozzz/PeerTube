@@ -6,12 +6,11 @@ import { fromEvent, Subscription } from 'rxjs'
   selector: '[myInfiniteScroller]'
 })
 export class InfiniteScrollerDirective implements OnInit, OnDestroy {
-  private static PAGE_VIEW_TOP_MARGIN = 500
-
   @Input() containerHeight: number
   @Input() pageHeight: number
+  @Input() firstLoadedPage = 1
   @Input() percentLimit = 70
-  @Input() autoLoading = false
+  @Input() autoInit = false
 
   @Output() nearOfBottom = new EventEmitter<void>()
   @Output() nearOfTop = new EventEmitter<void>()
@@ -23,13 +22,14 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   private scrollDownSub: Subscription
   private scrollUpSub: Subscription
   private pageChangeSub: Subscription
+  private middleScreen: number
 
   constructor () {
     this.decimalLimit = this.percentLimit / 100
   }
 
   ngOnInit () {
-    if (this.autoLoading === true) return this.initialize()
+    if (this.autoInit === true) return this.initialize()
   }
 
   ngOnDestroy () {
@@ -39,6 +39,8 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   }
 
   initialize () {
+    this.middleScreen = window.innerHeight / 2
+
     // Emit the last value
     const throttleOptions = { leading: true, trailing: true }
 
@@ -92,6 +94,11 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   }
 
   private calculateCurrentPage (current: number) {
-    return Math.max(1, Math.round((current + InfiniteScrollerDirective.PAGE_VIEW_TOP_MARGIN) / this.pageHeight))
+    const scrollY = current + this.middleScreen
+
+    const page = Math.max(1, Math.ceil(scrollY / this.pageHeight))
+
+    // Offset page
+    return page + (this.firstLoadedPage - 1)
   }
 }

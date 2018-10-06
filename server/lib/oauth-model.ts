@@ -3,15 +3,51 @@ import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
+import { CONFIG } from '../initializers/constants'
+import { Transaction } from 'sequelize'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
+const accessTokenCache: { [ accessToken: string ]: OAuthTokenModel } = {}
+const userHavingToken: { [ userId: number ]: string } = {}
 
 // ---------------------------------------------------------------------------
+
+function deleteUserToken (userId: number, t?: Transaction) {
+  clearCacheByUserId(userId)
+
+  return OAuthTokenModel.deleteUserToken(userId, t)
+}
+
+function clearCacheByUserId (userId: number) {
+  const token = userHavingToken[userId]
+  if (token !== undefined) {
+    accessTokenCache[ token ] = undefined
+    userHavingToken[ userId ] = undefined
+  }
+}
+
+function clearCacheByToken (token: string) {
+  const tokenModel = accessTokenCache[ token ]
+  if (tokenModel !== undefined) {
+    userHavingToken[tokenModel.userId] = undefined
+    accessTokenCache[ token ] = undefined
+  }
+}
 
 function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
+  if (accessTokenCache[bearerToken] !== undefined) return accessTokenCache[bearerToken]
+
   return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
+    .then(tokenModel => {
+      if (tokenModel) {
+        accessTokenCache[ bearerToken ] = tokenModel
+        userHavingToken[ tokenModel.userId ] = tokenModel.accessToken
+      }
+
+      return tokenModel
+    })
 }
 
 function getClient (clientId: string, clientSecret: string) {
@@ -37,12 +73,21 @@ async function getUser (usernameOrEmail: string, password: string) {
 
   if (user.blocked) throw new AccessDeniedError('User is blocked.')
 
+  if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
+    throw new AccessDeniedError('User email is not verified.')
+  }
+
   return user
 }
 
 async function revokeToken (tokenInfo: TokenInfo) {
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
-  if (token) token.destroy()
+  if (token) {
+    clearCacheByToken(token.accessToken)
+
+    token.destroy()
+         .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+  }
 
   /*
     * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
@@ -77,6 +122,9 @@ async function saveToken (token: TokenInfo, client: OAuthClientModel, user: User
 
 // See https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification for the model specifications
 export {
+  deleteUserToken,
+  clearCacheByUserId,
+  clearCacheByToken,
   getAccessToken,
   getClient,
   getRefreshToken,

@@ -35,18 +35,8 @@
   }
 }
 
-/deep/ .action-button {
-  &.action-button-delete {
-    margin-right: 10px;
-  }
-}
-
 .video {
-  display: flex;
-  min-height: 130px;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #C6C6C6;
+  @include row-blocks;
 
   &:first-child {
     margin-top: 47px;
@@ -69,7 +59,7 @@
     .video-info-name {
       @include disable-default-a-behaviour;
 
-      color: #000;
+      color: var(--mainForegroundColor);
       display: block;
       width: fit-content;
       font-size: 16px;
@@ -100,6 +90,10 @@
 
   .video-buttons {
     min-width: 190px;
+
+    *:not(:last-child) {
+      margin-right: 10px;
+    }
   }
 }
 

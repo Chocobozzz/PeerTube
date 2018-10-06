@@ -9,7 +9,7 @@
   -moz-transition: 350ms linear all;
   -o-transition: 350ms linear all;
   transition: 350ms linear all;
-  color: #29d;
+  color: var(--mainColor);
 }
 
 #loading-bar .bar {
@@ -18,7 +18,7 @@
   -o-transition: width 350ms;
   transition: width 350ms;
 
-  background: #29d;
+  background: var(--mainColor);
   position: fixed;
   z-index: 10002;
   top: 0;

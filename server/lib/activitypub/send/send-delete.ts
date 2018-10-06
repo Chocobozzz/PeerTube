@@ -5,34 +5,34 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getDeleteActivityPubUrl } from '../url'
-import { broadcastToActors, broadcastToFollowers, unicastTo } from './utils'
+import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 
-async function sendDeleteVideo (video: VideoModel, t: Transaction) {
+async function sendDeleteVideo (video: VideoModel, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
 
-  const url = getDeleteActivityPubUrl(video.url)
   const byActor = video.VideoChannel.Account.Actor
 
-  const data = deleteActivityData(url, video.url, byActor)
+  const activityBuilder = (audience: ActivityAudience) => {
+    const url = getDeleteActivityPubUrl(video.url)
 
-  const actorsInvolved = await VideoShareModel.loadActorsByShare(video.id, t)
-  actorsInvolved.push(byActor)
+    return buildDeleteActivity(url, video.url, byActor, audience)
+  }
 
-  return broadcastToFollowers(data, byActor, actorsInvolved, t)
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction })
 }
 
 async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
   logger.info('Creating job to broadcast delete of actor %s.', byActor.url)
 
   const url = getDeleteActivityPubUrl(byActor.url)
-  const data = deleteActivityData(url, byActor.url, byActor)
+  const activity = buildDeleteActivity(url, byActor.url, byActor)
 
   const actorsInvolved = await VideoShareModel.loadActorsByVideoOwner(byActor.id, t)
   actorsInvolved.push(byActor)
 
-  return broadcastToFollowers(data, byActor, actorsInvolved, t)
+  return broadcastToFollowers(activity, byActor, actorsInvolved, t)
 }
 
 async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Transaction) {
@@ -45,23 +45,23 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, t)
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, t)
-  actorsInvolvedInComment.push(byActor)
+  actorsInvolvedInComment.push(byActor) // Add the actor that commented the video
 
   const audience = getVideoCommentAudience(videoComment, threadParentComments, actorsInvolvedInComment, isVideoOrigin)
-  const data = deleteActivityData(url, videoComment.url, byActor, audience)
+  const activity = buildDeleteActivity(url, videoComment.url, byActor, audience)
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
-  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), actorsException)
+  await broadcastToActors(activity, byActor, threadParentComments.map(c => c.Account.Actor), actorsException)
 
   // Broadcast to our followers
-  await broadcastToFollowers(data, byActor, [ byActor ], t)
+  await broadcastToFollowers(activity, byActor, [ byActor ], t)
 
   // Send to actors involved in the comment
-  if (isVideoOrigin) return broadcastToFollowers(data, byActor, actorsInvolvedInComment, t, actorsException)
+  if (isVideoOrigin) return broadcastToFollowers(activity, byActor, actorsInvolvedInComment, t, actorsException)
 
   // Send to origin
-  return unicastTo(data, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
+  return unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 // ---------------------------------------------------------------------------
@@ -74,7 +74,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function deleteActivityData (url: string, object: string, byActor: ActorModel, audience?: ActivityAudience): ActivityDelete {
+function buildDeleteActivity (url: string, object: string, byActor: ActorModel, audience?: ActivityAudience): ActivityDelete {
   const activity = {
     type: 'Delete' as 'Delete',
     id: url,

@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { getFormattedObjects } from '../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -10,17 +10,16 @@ import {
   setDefaultPagination,
   setDefaultSort,
   videoChannelsAddValidator,
-  videoChannelsGetValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../middlewares'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { videosSortValidator } from '../../middlewares/validators'
+import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createVideoChannel } from '../../lib/video-channel'
-import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
 import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
@@ -28,8 +27,9 @@ import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../lib/avatar'
-import { auditLoggerFactory, VideoChannelAuditView } from '../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
+import { UserModel } from '../../models/account/user'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
@@ -46,11 +46,11 @@ videoChannelRouter.get('/',
 
 videoChannelRouter.post('/',
   authenticate,
-  videoChannelsAddValidator,
+  asyncMiddleware(videoChannelsAddValidator),
   asyncRetryTransactionMiddleware(addVideoChannel)
 )
 
-videoChannelRouter.post('/:id/avatar/pick',
+videoChannelRouter.post('/:nameWithHost/avatar/pick',
   authenticate,
   reqAvatarFile,
   // Check the rights
@@ -59,25 +59,25 @@ videoChannelRouter.post('/:id/avatar/pick',
   asyncMiddleware(updateVideoChannelAvatar)
 )
 
-videoChannelRouter.put('/:id',
+videoChannelRouter.put('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsUpdateValidator),
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
-videoChannelRouter.delete('/:id',
+videoChannelRouter.delete('/:nameWithHost',
   authenticate,
   asyncMiddleware(videoChannelsRemoveValidator),
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
-videoChannelRouter.get('/:id',
-  asyncMiddleware(videoChannelsGetValidator),
+videoChannelRouter.get('/:nameWithHost',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   asyncMiddleware(getVideoChannel)
 )
 
-videoChannelRouter.get('/:id/videos',
-  asyncMiddleware(videoChannelsGetValidator),
+videoChannelRouter.get('/:nameWithHost/videos',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
@@ -96,7 +96,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoChannelModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const serverActor = await getServerActor()
+  const resultList = await VideoChannelModel.listForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -106,13 +107,9 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
   const videoChannel = res.locals.videoChannel as VideoChannelModel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
-  const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel.Actor, videoChannel)
+  const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel)
 
-  auditLogger.update(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new VideoChannelAuditView(videoChannel.toFormattedJSON()),
-    oldVideoChannelAuditKeys
-  )
+  auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
 
   return res
     .json({
@@ -123,19 +120,17 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
 
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
-  const account: AccountModel = res.locals.oauth.token.User.Account
 
   const videoChannelCreated: VideoChannelModel = await sequelizeTypescript.transaction(async t => {
+    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+
     return createVideoChannel(videoChannelInfo, account, t)
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)
     .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, { err }))
 
-  auditLogger.create(
-    res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-    new VideoChannelAuditView(videoChannelCreated.toFormattedJSON())
-  )
+  auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
 
   return res.json({
@@ -166,7 +161,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
       await sendUpdateActor(videoChannelInstanceUpdated, t)
 
       auditLogger.update(
-        res.locals.oauth.token.User.Account.Actor.getIdentifier(),
+        getAuditIdFromRes(res),
         new VideoChannelAuditView(videoChannelInstanceUpdated.toFormattedJSON()),
         oldVideoChannelAuditKeys
       )
@@ -192,10 +187,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   await sequelizeTypescript.transaction(async t => {
     await videoChannelInstance.destroy({ transaction: t })
 
-    auditLogger.delete(
-      res.locals.oauth.token.User.Account.Actor.getIdentifier(),
-      new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
-    )
+    auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
     logger.info('Video channel with name %s and uuid %s deleted.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
   })
 
@@ -210,11 +202,14 @@ async function getVideoChannel (req: express.Request, res: express.Response, nex
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
+  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
+    actorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    includeLocalVideos: true,
     categoryOneOf: req.query.categoryOneOf,
     licenceOneOf: req.query.licenceOneOf,
     languageOneOf: req.query.languageOneOf,

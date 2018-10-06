@@ -7,20 +7,20 @@ function makeGetRequest (options: {
   path: string,
   query?: any,
   token?: string,
-  statusCodeExpected?: number
+  statusCodeExpected?: number,
+  contentType?: string
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
+  if (options.contentType === undefined) options.contentType = 'application/json'
 
   const req = request(options.url)
     .get(options.path)
-    .set('Accept', 'application/json')
 
+  if (options.contentType) req.set('Accept', options.contentType)
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
   if (options.query) req.query(options.query)
 
-  return req
-    .expect('Content-Type', /json/)
-    .expect(options.statusCodeExpected)
+  return req.expect(options.statusCodeExpected)
 }
 
 function makeDeleteRequest (options: {

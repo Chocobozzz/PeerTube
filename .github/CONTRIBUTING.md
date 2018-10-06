@@ -44,7 +44,9 @@ before you start working on them :).
 
 ### Prerequisites
 
-First, make sure that you have followed 
+First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead to crashes.
+
+Make sure that you have followed 
 [the steps](/support/doc/dependencies.md) 
 to install the dependencies.
 

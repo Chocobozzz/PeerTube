@@ -8,11 +8,40 @@
 }
 
 @mixin disable-outline {
-  outline: none;
+  &:focus:not(.focus-visible) {
+    outline: none;
+  }
 
   &::-moz-focus-inner {
     border: 0;
     padding: 0
+  }
+}
+
+/**
+ *  This mixin will crop text in block for needed amount of lines and put ellipsis at the end
+ *
+ *  @param $font-size font-size property
+ *  @param $line-height line-height property
+ *  @param $lines-to-show amount of lines to show
+ */
+@mixin ellipsis-multiline($font-size: 1rem, $line-height: 1, $lines-to-show: 2) {
+  display: block;
+  /* Fallback for non-webkit */
+  display: -webkit-box;
+  max-height: $font-size*$line-height*$lines-to-show;
+  /* Fallback for non-webkit */
+  font-size: $font-size;
+  line-height: $line-height;
+  -webkit-line-clamp: $lines-to-show;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin prefix($property, $parameters...) {
+  @each $prefix in -webkit-, -moz-, -ms-, -o-, "" {
+    #{$prefix}#{$property}: $parameters;
   }
 }
 
@@ -24,21 +53,36 @@
   -ms-hyphens: auto;
   -moz-hyphens: auto;
   hyphens: auto;
-  text-align: justify;
 }
 
 @mixin peertube-input-text($width) {
   display: inline-block;
   height: $button-height;
   width: $width;
-  background: #fff;
+  background: var(--inputColor);
   border: 1px solid #C6C6C6;
   border-radius: 3px;
   padding-left: 15px;
   padding-right: 15px;
 
   &::placeholder {
-    color: #585858;
+    color: var(--inputPlaceholderColor);
+  }
+
+  @media screen and (max-width: $width) {
+    width: 100%;
+  }
+}
+
+@mixin peertube-input-group($width) {
+  width: $width;
+  height: $button-height;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  .input-group-text{
+    font-size: 14px;
+    color: gray;
   }
 }
 
@@ -53,12 +97,12 @@
 @mixin orange-button {
   &, &:active, &:focus {
     color: #fff;
-    background-color: $orange-color;
+    background-color: var(--mainColor);
   }
 
   &:hover {
     color: #fff;
-    background-color: $orange-hoover-color;
+    background-color: var(--mainHoverColor);
   }
 
   &[disabled], &.disabled {
@@ -147,7 +191,7 @@
   width: $width;
   border-radius: 3px;
   overflow: hidden;
-  background: #fff;
+  background: var(--inputColor);
   position: relative;
   font-size: 15px;
 
@@ -177,6 +221,7 @@
     cursor: pointer;
     height: $button-height;
     text-overflow: ellipsis;
+    color: var(--mainForegroundColor);
 
     &:focus {
       outline: none;
@@ -244,7 +289,7 @@
     position: relative;
     width: 18px;
     height: 18px;
-    border: $border-width solid #000;
+    border: $border-width solid var(--mainForegroundColor);
     border-radius: 3px;
     vertical-align: middle;
     cursor: pointer;
@@ -258,14 +303,14 @@
       height: 12px;
       opacity: 0;
       transform: rotate(45deg) scale(0);
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
+      border-right: 2px solid var(--mainBackgroundColor);
+      border-bottom: 2px solid var(--mainBackgroundColor);
     }
   }
 
   &:checked + span {
     border-color: transparent;
-    background: $orange-color;
+    background: var(--mainColor);
     animation: jelly 0.6s ease;
 
     &:after {
@@ -323,9 +368,30 @@
 
 @mixin in-content-small-title {
   text-transform: uppercase;
-  color: $orange-color;
+  color: var(--mainColor);
   font-weight: $font-bold;
   font-size: 13px;
+}
+
+@mixin actor-owner {
+  @include disable-default-a-behaviour;
+
+  display: inline-table;
+  font-size: 13px;
+  margin-top: 4px;
+  color: var(--mainForegroundColor);
+
+  span:hover {
+    opacity: 0.8;
+  }
+
+  img {
+    @include avatar(18px);
+
+    margin-left: 7px;
+    position: relative;
+    top: -2px;
+  }
 }
 
 @mixin sub-menu-with-actor {
@@ -364,7 +430,7 @@
           position: relative;
           top: 3px;
           font-size: 14px;
-          color: #777272;
+          color: $grey-actor-name;
         }
       }
 
@@ -373,24 +439,7 @@
       }
 
       .actor-owner {
-        @include disable-default-a-behaviour;
-
-        display: block;
-        font-size: 13px;
-        margin-top: 4px;
-        color: #000;
-
-        span:hover {
-          opacity: 0.8;
-        }
-
-        img {
-          @include avatar(18px);
-
-          margin-left: 7px;
-          position: relative;
-          top: -2px;
-        }
+        @include actor-owner;
       }
     }
   }
@@ -417,5 +466,49 @@
     top: -1px;
     margin-right: 5px;
     background-image: url($imageUrl);
+  }
+}
+
+@mixin row-blocks {
+  display: flex;
+  min-height: 130px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C6C6C6;
+
+  @media screen and (max-width: 800px) {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+    align-items: center;
+  }
+}
+
+@mixin video-miniature-small-screen {
+  text-align: center;
+
+  /deep/ .video-miniature {
+    padding-right: 0;
+    height: auto;
+    width: 100%;
+    margin-bottom: 20px;
+
+    .video-miniature-information {
+      width: 100% !important;
+
+      span {
+        width: 100%;
+      }
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      height: auto;
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
   }
 }

@@ -5,6 +5,8 @@ import { MetaGuard } from '@ngx-meta/core'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
 import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosComponent } from './videos.component'
+import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
+import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
 
 const videosRoutes: Routes = [
   {
@@ -13,9 +15,13 @@ const videosRoutes: Routes = [
     canActivateChild: [ MetaGuard ],
     children: [
       {
-        path: 'list',
-        pathMatch: 'full',
-        redirectTo: 'recently-added'
+        path: 'overview',
+        component: VideoOverviewComponent,
+        data: {
+          meta: {
+            title: 'Videos overview'
+          }
+        }
       },
       {
         path: 'trending',
@@ -32,6 +38,15 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: 'Recently added videos'
+          }
+        }
+      },
+      {
+        path: 'subscriptions',
+        component: VideoUserSubscriptionsComponent,
+        data: {
+          meta: {
+            title: 'Subscriptions'
           }
         }
       },

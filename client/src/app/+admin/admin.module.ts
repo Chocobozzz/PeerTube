@@ -10,10 +10,11 @@ import { FollowingListComponent } from './follows/following-list/following-list.
 import { JobsComponent } from './jobs/job.component'
 import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
 import { JobService } from './jobs/shared/job.service'
-import { UserCreateComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
+import { UserCreateComponent, UserListComponent, UsersComponent, UserUpdateComponent } from './users'
 import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoBlacklistListComponent } from './moderation'
-import { UserBanModalComponent } from '@app/+admin/users/user-list/user-ban-modal.component'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
+import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
+import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service'
 
 @NgModule({
   imports: [
@@ -29,12 +30,12 @@ import { ModerationComponent } from '@app/+admin/moderation/moderation.component
     FollowingAddComponent,
     FollowersListComponent,
     FollowingListComponent,
+    RedundancyCheckboxComponent,
 
     UsersComponent,
     UserCreateComponent,
     UserUpdateComponent,
     UserListComponent,
-    UserBanModalComponent,
 
     ModerationComponent,
     VideoBlacklistListComponent,
@@ -54,7 +55,7 @@ import { ModerationComponent } from '@app/+admin/moderation/moderation.component
 
   providers: [
     FollowService,
-    UserService,
+    RedundancyService,
     JobService,
     ConfigService
   ]

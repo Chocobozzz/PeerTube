@@ -7,8 +7,9 @@ import { ResultList } from '../../../../../shared/models/result-list.model'
 import {
   UserVideoRate,
   UserVideoRateUpdate,
-  VideoChannel,
+  VideoConstant,
   VideoFilter,
+  VideoPrivacy,
   VideoRateType,
   VideoUpdate
 } from '../../../../../shared/models/videos'
@@ -27,9 +28,21 @@ import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { ServerService } from '@app/core'
+import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
+import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+
+export interface VideosProvider {
+  getVideos (
+    videoPagination: ComponentPagination,
+    sort: VideoSortField,
+    filter?: VideoFilter,
+    categoryOneOf?: number
+  ): Observable<{ videos: Video[], totalVideos: number }>
+}
 
 @Injectable()
-export class VideoService {
+export class VideoService implements VideosProvider {
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
 
@@ -37,11 +50,16 @@ export class VideoService {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private i18n: I18n
   ) {}
 
   getVideoViewUrl (uuid: string) {
     return VideoService.BASE_VIDEO_URL + uuid + '/views'
+  }
+
+  getUserWatchingVideoUrl (uuid: string) {
+    return VideoService.BASE_VIDEO_URL + uuid + '/watching'
   }
 
   getVideo (uuid: string): Observable<VideoDetails> {
@@ -52,14 +70,6 @@ export class VideoService {
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  viewVideo (uuid: string): Observable<boolean> {
-    return this.authHttp.post(this.getVideoViewUrl(uuid), {})
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -150,7 +160,24 @@ export class VideoService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp
-               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.uuid + '/videos', { params })
+               .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
+               .pipe(
+                 switchMap(res => this.extractVideos(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getUserSubscriptionVideos (
+    videoPagination: ComponentPagination,
+    sort: VideoSortField
+  ): Observable<{ videos: Video[], totalVideos: number }> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp
+               .get<ResultList<Video>>(UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -187,14 +214,17 @@ export class VideoService {
   buildBaseFeedUrls (params: HttpParams) {
     const feeds = [
       {
+        format: FeedFormat.RSS,
         label: 'rss 2.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
       },
       {
+        format: FeedFormat.ATOM,
         label: 'atom 1.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
       },
       {
+        format: FeedFormat.JSON,
         label: 'json 1.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
       }
@@ -285,6 +315,21 @@ export class VideoService {
                    return { videos, totalVideos }
                  })
                )
+  }
+
+  explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
+    const newPrivacies = privacies.slice()
+
+    const privatePrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PRIVATE)
+    if (privatePrivacy) privatePrivacy.label = this.i18n('Only I can see this video')
+
+    const unlistedPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.UNLISTED)
+    if (unlistedPrivacy) unlistedPrivacy.label = this.i18n('Only people with the private link can see this video')
+
+    const publicPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PUBLIC)
+    if (publicPrivacy) publicPrivacy.label = this.i18n('Anyone can see this video')
+
+    return privacies
   }
 
   private setVideoRate (id: number, rateType: VideoRateType) {

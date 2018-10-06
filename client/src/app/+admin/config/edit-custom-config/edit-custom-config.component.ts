@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ConfirmService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
@@ -16,25 +15,9 @@ import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
   customConfig: CustomConfig
-  resolutions = [ '240p', '360p', '480p', '720p', '1080p' ]
 
-  videoQuotaOptions = [
-    { value: -1, label: 'Unlimited' },
-    { value: 0, label: '0' },
-    { value: 100 * 1024 * 1024, label: '100MB' },
-    { value: 500 * 1024 * 1024, label: '500MB' },
-    { value: 1024 * 1024 * 1024, label: '1GB' },
-    { value: 5 * 1024 * 1024 * 1024, label: '5GB' },
-    { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
-    { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
-  ]
-  transcodingThreadOptions = [
-    { value: 0, label: 'Auto (via ffmpeg)' },
-    { value: 1, label: '1' },
-    { value: 2, label: '2' },
-    { value: 4, label: '4' },
-    { value: 8, label: '8' }
-  ]
+  resolutions: string[] = []
+  transcodingThreadOptions: { label: string, value: number }[] = []
 
   private oldCustomJavascript: string
   private oldCustomCSS: string
@@ -43,7 +26,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private customConfigValidatorsService: CustomConfigValidatorsService,
     private userValidatorsService: UserValidatorsService,
-    private router: Router,
     private notificationsService: NotificationsService,
     private configService: ConfigService,
     private serverService: ServerService,
@@ -51,6 +33,30 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     private i18n: I18n
   ) {
     super()
+
+    this.resolutions = [
+      this.i18n('240p'),
+      this.i18n('360p'),
+      this.i18n('480p'),
+      this.i18n('720p'),
+      this.i18n('1080p')
+    ]
+
+    this.transcodingThreadOptions = [
+      { value: 0, label: this.i18n('Auto (via ffmpeg)') },
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 4, label: '4' },
+      { value: 8, label: '8' }
+    ]
+  }
+
+  get videoQuotaOptions () {
+    return this.configService.videoQuotaOptions
+  }
+
+  get videoQuotaDailyOptions () {
+    return this.configService.videoQuotaDailyOptions
   }
 
   getResolutionKey (resolution: string) {
@@ -71,10 +77,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfigValidatorsService.CACHE_CAPTIONS_SIZE,
       signupEnabled: null,
       signupLimit: this.customConfigValidatorsService.SIGNUP_LIMIT,
+      signupRequiresEmailVerification: null,
       importVideosHttpEnabled: null,
       importVideosTorrentEnabled: null,
       adminEmail: this.customConfigValidatorsService.ADMIN_EMAIL,
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      userVideoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
       transcodingEnabled: null,
       customizationJavascript: null,
@@ -167,13 +175,15 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       },
       signup: {
         enabled: this.form.value['signupEnabled'],
-        limit: this.form.value['signupLimit']
+        limit: this.form.value['signupLimit'],
+        requiresEmailVerification: this.form.value['signupRequiresEmailVerification']
       },
       admin: {
         email: this.form.value['adminEmail']
       },
       user: {
-        videoQuota: this.form.value['userVideoQuota']
+        videoQuota: this.form.value['userVideoQuota'],
+        videoQuotaDaily: this.form.value['userVideoQuotaDaily']
       },
       transcoding: {
         enabled: this.form.value['transcodingEnabled'],
@@ -229,8 +239,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       cacheCaptionsSize: this.customConfig.cache.captions.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,
+      signupRequiresEmailVerification: this.customConfig.signup.requiresEmailVerification,
       adminEmail: this.customConfig.admin.email,
       userVideoQuota: this.customConfig.user.videoQuota,
+      userVideoQuotaDaily: this.customConfig.user.videoQuotaDaily,
       transcodingThreads: this.customConfig.transcoding.threads,
       transcodingEnabled: this.customConfig.transcoding.enabled,
       customizationJavascript: this.customConfig.instance.customizations.javascript,

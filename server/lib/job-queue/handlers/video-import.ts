@@ -6,8 +6,7 @@ import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { renamePromise, statPromise, unlinkPromise } from '../../../helpers/core-utils'
-import { CONFIG, sequelizeTypescript } from '../../../initializers'
+import { CONFIG, sequelizeTypescript, VIDEO_IMPORT_TIMEOUT } from '../../../initializers'
 import { doRequestAndSaveToFile } from '../../../helpers/requests'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
@@ -15,6 +14,7 @@ import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
+import { remove, rename, stat } from 'fs-extra'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -65,7 +65,7 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
     torrentName: videoImport.torrentName ? getSecureTorrentName(videoImport.torrentName) : undefined,
     magnetUri: videoImport.magnetUri
   }
-  return processFile(() => downloadWebTorrentVideo(target), videoImport, options)
+  return processFile(() => downloadWebTorrentVideo(target, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
 async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutubeDLPayload) {
@@ -83,7 +83,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     generatePreview: false
   }
 
-  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl), videoImport, options)
+  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
 async function getVideoImportOrDie (videoImportId: number) {
@@ -114,7 +114,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     tempVideoPath = await downloader()
 
     // Get information about this video
-    const stats = await statPromise(tempVideoPath)
+    const stats = await stat(tempVideoPath)
     const isAble = await videoImport.User.isAbleToUploadVideo({ size: stats.size })
     if (isAble === false) {
       throw new Error('The user video quota is exceeded with this video to import.')
@@ -138,7 +138,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
     // Move file
     videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
-    await renamePromise(tempVideoPath, videoDestFile)
+    await rename(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail
@@ -183,7 +183,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       const videoUpdated = await video.save({ transaction: t })
 
       // Now we can federate the video (reload from database, we need more attributes)
-      const videoForFederation = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid, t)
+      const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
       await federateVideoIfNeeded(videoForFederation, true, t)
 
       // Update video import object
@@ -209,7 +209,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
   } catch (err) {
     try {
-      // if (tempVideoPath) await unlinkPromise(tempVideoPath)
+      if (tempVideoPath) await remove(tempVideoPath)
     } catch (errUnlink) {
       logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
     }

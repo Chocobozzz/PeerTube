@@ -5,11 +5,9 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
-import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
@@ -24,7 +22,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  videoPrivacies: VideoConstant<string>[] = []
+  videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   userVideoChannels: { id: number, label: string, support: string }[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
@@ -38,9 +36,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private serverService: ServerService,
     private videoService: VideoService,
-    private authService: AuthService,
     private loadingBar: LoadingBarService,
-    private videoChannelService: VideoChannelService,
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n
   ) {
@@ -62,10 +58,12 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
           // We cannot set private a video that was not private
           if (this.video.privacy !== VideoPrivacy.PRIVATE) {
-            this.videoPrivacies = this.videoPrivacies.filter(p => p.id.toString() !== VideoPrivacy.PRIVATE.toString())
+            this.videoPrivacies = this.videoPrivacies.filter(p => p.id !== VideoPrivacy.PRIVATE)
           } else { // We can schedule video publication only if it it is private
             this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
           }
+
+          this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
 
           // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
           setTimeout(() => this.hydrateFormFromVideo())
@@ -95,7 +93,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   update () {
-    if (this.checkForm() === false) {
+    if (this.checkForm() === false
+      || this.isUpdatingVideo === true) {
       return
     }
 

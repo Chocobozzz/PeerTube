@@ -37,10 +37,24 @@ import { ServerModel } from '../server/server'
 import { throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
+import { VideoModel } from '../video/video'
 
 enum ScopeNames {
   FULL = 'FULL'
 }
+
+export const unusedActorAttributesForAPI = [
+  'publicKey',
+  'privateKey',
+  'inboxUrl',
+  'outboxUrl',
+  'sharedInboxUrl',
+  'followersUrl',
+  'followingUrl',
+  'url',
+  'createdAt',
+  'updatedAt'
+]
 
 @DefaultScope({
   include: [
@@ -63,7 +77,13 @@ enum ScopeNames {
       },
       {
         model: () => VideoChannelModel.unscoped(),
-        required: false
+        required: false,
+        include: [
+          {
+            model: () => AccountModel,
+            required: true
+          }
+        ]
       },
       {
         model: () => ServerModel,
@@ -247,6 +267,48 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findById(id)
   }
 
+  static loadAccountActorByVideoId (videoId: number, transaction: Sequelize.Transaction) {
+    const query = {
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id' ],
+              model: VideoChannelModel.unscoped(),
+              required: true,
+              include: {
+                attributes: [ 'id' ],
+                model: VideoModel.unscoped(),
+                required: true,
+                where: {
+                  id: videoId
+                }
+              }
+            }
+          ]
+        }
+      ],
+      transaction
+    }
+
+    return ActorModel.unscoped().findOne(query as any) // FIXME: typings
+  }
+
+  static isActorUrlExist (url: string) {
+    const query = {
+      raw: true,
+      where: {
+        url
+      }
+    }
+
+    return ActorModel.unscoped().findOne(query)
+      .then(a => !!a)
+  }
+
   static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
     const query = {
       where: {
@@ -260,12 +322,13 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string) {
+  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction) {
     const query = {
       where: {
         preferredUsername,
         serverId: null
-      }
+      },
+      transaction
     }
 
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
@@ -295,6 +358,29 @@ export class ActorModel extends Model<ActorModel> {
       where: {
         url
       },
+      transaction,
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: false
+        },
+        {
+          attributes: [ 'id' ],
+          model: VideoChannelModel.unscoped(),
+          required: false
+        }
+      ]
+    }
+
+    return ActorModel.unscoped().findOne(query)
+  }
+
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        url
+      },
       transaction
     }
 
@@ -311,45 +397,6 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  static async getActorsFollowerSharedInboxUrls (actors: ActorModel[], t: Sequelize.Transaction) {
-    const query = {
-      // attribute: [],
-      where: {
-        id: {
-          [Sequelize.Op.in]: actors.map(a => a.id)
-        }
-      },
-      include: [
-        {
-          // attributes: [ ],
-          model: ActorFollowModel.unscoped(),
-          required: true,
-          as: 'ActorFollowers',
-          where: {
-            state: 'accepted'
-          },
-          include: [
-            {
-              attributes: [ 'sharedInboxUrl' ],
-              model: ActorModel.unscoped(),
-              as: 'ActorFollower',
-              required: true
-            }
-          ]
-        }
-      ],
-      transaction: t
-    }
-
-    const hash: { [ id: number ]: string[] } = {}
-    const res = await ActorModel.findAll(query)
-    for (const actor of res) {
-      hash[actor.id] = actor.ActorFollowers.map(follow => follow.ActorFollower.sharedInboxUrl)
-    }
-
-    return hash
-  }
-
   toFormattedJSON () {
     let avatar: Avatar = null
     if (this.Avatar) {
@@ -362,6 +409,7 @@ export class ActorModel extends Model<ActorModel> {
       uuid: this.uuid,
       name: this.preferredUsername,
       host: this.getHost(),
+      hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
       avatar,
@@ -463,6 +511,10 @@ export class ActorModel extends Model<ActorModel> {
 
   getHost () {
     return this.Server ? this.Server.host : CONFIG.WEBSERVER.HOST
+  }
+
+  getRedundancyAllowed () {
+    return this.Server ? this.Server.redundancyAllowed : false
   }
 
   getAvatarUrl () {

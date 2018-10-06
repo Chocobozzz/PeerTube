@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { createWriteStream } from 'fs'
+import { createWriteStream } from 'fs-extra'
 import * as request from 'request'
 import { ACTIVITY_PUB } from '../initializers'
 

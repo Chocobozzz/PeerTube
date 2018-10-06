@@ -3,34 +3,23 @@ import { ActivityAudience, ActivityLike } from '../../../../shared/models/activi
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { getVideoLikeActivityPubUrl } from '../url'
-import { broadcastToFollowers, unicastTo } from './utils'
-import { audiencify, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience, getVideoAudience } from '../audience'
+import { sendVideoRelatedActivity } from './utils'
+import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 
 async function sendLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
   logger.info('Creating job to like %s.', video.url)
 
-  const url = getVideoLikeActivityPubUrl(byActor, video)
+  const activityBuilder = (audience: ActivityAudience) => {
+    const url = getVideoLikeActivityPubUrl(byActor, video)
 
-  const accountsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-
-  // Send to origin
-  if (video.isOwned() === false) {
-    const audience = getVideoAudience(video, accountsInvolvedInVideo)
-    const data = likeActivityData(url, byActor, video, audience)
-
-    return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+    return buildLikeActivity(url, byActor, video, audience)
   }
 
-  // Send to followers
-  const audience = getObjectFollowersAudience(accountsInvolvedInVideo)
-  const data = likeActivityData(url, byActor, video, audience)
-
-  const followersException = [ byActor ]
-  return broadcastToFollowers(data, byActor, accountsInvolvedInVideo, t, followersException)
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction: t })
 }
 
-function likeActivityData (url: string, byActor: ActorModel, video: VideoModel, audience?: ActivityAudience): ActivityLike {
+function buildLikeActivity (url: string, byActor: ActorModel, video: VideoModel, audience?: ActivityAudience): ActivityLike {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(
@@ -48,5 +37,5 @@ function likeActivityData (url: string, byActor: ActorModel, video: VideoModel, 
 
 export {
   sendLike,
-  likeActivityData
+  buildLikeActivity
 }

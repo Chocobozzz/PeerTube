@@ -5,10 +5,12 @@
   margin-right: 0 !important;
 }
 
-.btn-outline-secondary {
-  border-color: $input-border-color;
-}
-
 .qr-code-group {
   text-align: center;
+}
+
+.start-at {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
 }

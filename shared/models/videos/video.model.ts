@@ -17,6 +17,26 @@ export interface VideoFile {
   fps: number
 }
 
+export interface VideoChannelAttribute {
+  id: number
+  uuid: string
+  name: string
+  displayName: string
+  url: string
+  host: string
+  avatar: Avatar
+}
+
+export interface AccountAttribute {
+  id: number
+  uuid: string
+  name: string
+  displayName: string
+  url: string
+  host: string
+  avatar: Avatar
+}
+
 export interface Video {
   id: number
   uuid: string
@@ -46,24 +66,11 @@ export interface Video {
   blacklisted?: boolean
   blacklistedReason?: string
 
-  account: {
-    id: number
-    uuid: string
-    name: string
-    displayName: string
-    url: string
-    host: string
-    avatar: Avatar
-  }
+  account: AccountAttribute
+  channel: VideoChannelAttribute
 
-  channel: {
-    id: number
-    uuid: string
-    name: string
-    displayName: string
-    url: string
-    host: string
-    avatar: Avatar
+  userHistory?: {
+    currentTime: number
   }
 }
 

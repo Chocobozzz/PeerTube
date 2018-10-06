@@ -54,12 +54,12 @@ function addVideoChannel (
 function updateVideoChannel (
   url: string,
   token: string,
-  channelId: number | string,
+  channelName: string,
   attributes: VideoChannelUpdate,
   expectedStatus = 204
 ) {
   const body = {}
-  const path = '/api/v1/video-channels/' + channelId
+  const path = '/api/v1/video-channels/' + channelName
 
   if (attributes.displayName) body['displayName'] = attributes.displayName
   if (attributes.description) body['description'] = attributes.description
@@ -73,8 +73,8 @@ function updateVideoChannel (
     .expect(expectedStatus)
 }
 
-function deleteVideoChannel (url: string, token: string, channelId: number | string, expectedStatus = 204) {
-  const path = '/api/v1/video-channels/' + channelId
+function deleteVideoChannel (url: string, token: string, channelName: string, expectedStatus = 204) {
+  const path = '/api/v1/video-channels/' + channelName
 
   return request(url)
     .delete(path)
@@ -83,8 +83,8 @@ function deleteVideoChannel (url: string, token: string, channelId: number | str
     .expect(expectedStatus)
 }
 
-function getVideoChannel (url: string, channelId: number | string) {
-  const path = '/api/v1/video-channels/' + channelId
+function getVideoChannel (url: string, channelName: string) {
+  const path = '/api/v1/video-channels/' + channelName
 
   return request(url)
     .get(path)
@@ -97,10 +97,10 @@ function updateVideoChannelAvatar (options: {
   url: string,
   accessToken: string,
   fixture: string,
-  videoChannelId: string | number
+  videoChannelName: string | number
 }) {
 
-  const path = '/api/v1/video-channels/' + options.videoChannelId + '/avatar/pick'
+  const path = '/api/v1/video-channels/' + options.videoChannelName + '/avatar/pick'
 
   return updateAvatarRequest(Object.assign(options, { path }))
 }

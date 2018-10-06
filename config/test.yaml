@@ -21,6 +21,24 @@ smtp:
 log:
   level: 'debug'
 
+redundancy:
+  videos:
+    check_interval: '10 minutes'
+    strategies:
+      -
+        size: '10MB'
+        min_lifetime: '10 minutes'
+        strategy: 'most-views'
+      -
+        size: '10MB'
+        min_lifetime: '10 minutes'
+        strategy: 'trending'
+      -
+        size: '10MB'
+        min_lifetime: '10 minutes'
+        strategy: 'recently-added'
+        min_views: 1
+
 cache:
   previews:
     size: 1
@@ -29,6 +47,7 @@ cache:
 
 signup:
   enabled: true
+  requires_email_verification: false
 
 transcoding:
   enabled: true

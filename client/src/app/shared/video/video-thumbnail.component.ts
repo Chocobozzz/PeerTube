@@ -22,4 +22,12 @@ export class VideoThumbnailComponent {
 
     return this.video.thumbnailUrl
   }
+
+  getProgressPercent () {
+    if (!this.video.userHistory) return 0
+
+    const currentTime = this.video.userHistory.currentTime
+
+    return (currentTime / this.video.duration) * 100
+  }
 }

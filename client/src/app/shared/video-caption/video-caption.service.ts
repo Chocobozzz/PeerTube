@@ -1,9 +1,9 @@
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { forkJoin, Observable, of } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { peertubeTranslate, ResultList } from '../../../../../shared'
-import { RestExtractor, RestService } from '../rest'
+import { RestExtractor } from '../rest'
 import { VideoService } from '@app/shared/video/video.service'
 import { objectToFormData, sortBy } from '@app/shared/misc/utils'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
@@ -15,7 +15,6 @@ export class VideoCaptionService {
   constructor (
     private authHttp: HttpClient,
     private serverService: ServerService,
-    private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 
@@ -62,22 +61,16 @@ export class VideoCaptionService {
   }
 
   updateCaptions (videoId: number | string, videoCaptions: VideoCaptionEdit[]) {
-    const observables: Observable<any>[] = []
+    let obs = of(true)
 
     for (const videoCaption of videoCaptions) {
       if (videoCaption.action === 'CREATE') {
-        observables.push(
-          this.addCaption(videoId, videoCaption.language.id, videoCaption.captionfile)
-        )
+        obs = obs.pipe(switchMap(() => this.addCaption(videoId, videoCaption.language.id, videoCaption.captionfile)))
       } else if (videoCaption.action === 'REMOVE') {
-        observables.push(
-          this.removeCaption(videoId, videoCaption.language.id)
-        )
+        obs = obs.pipe(switchMap(() => this.removeCaption(videoId, videoCaption.language.id)))
       }
     }
 
-    if (observables.length === 0) return of(true)
-
-    return forkJoin(observables)
+    return obs
   }
 }

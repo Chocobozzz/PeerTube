@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import 'multer'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { exists } from './misc'
 
@@ -20,7 +20,13 @@ function isVideoChannelSupportValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.SUPPORT))
 }
 
-async function isVideoChannelExist (id: string, res: express.Response) {
+async function isLocalVideoChannelNameExist (name: string, res: express.Response) {
+  const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
+
+  return processVideoChannelExist(videoChannel, res)
+}
+
+async function isVideoChannelIdExist (id: string, res: express.Response) {
   let videoChannel: VideoChannelModel
   if (validator.isInt(id)) {
     videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
@@ -28,23 +34,39 @@ async function isVideoChannelExist (id: string, res: express.Response) {
     videoChannel = await VideoChannelModel.loadByUUIDAndPopulateAccount(id)
   }
 
+  return processVideoChannelExist(videoChannel, res)
+}
+
+async function isVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
+  const [ name, host ] = nameWithDomain.split('@')
+  let videoChannel: VideoChannelModel
+
+  if (!host || host === CONFIG.WEBSERVER.HOST) videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
+  else videoChannel = await VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
+
+  return processVideoChannelExist(videoChannel, res)
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  isVideoChannelNameWithHostExist,
+  isLocalVideoChannelNameExist,
+  isVideoChannelDescriptionValid,
+  isVideoChannelNameValid,
+  isVideoChannelSupportValid,
+  isVideoChannelIdExist
+}
+
+function processVideoChannelExist (videoChannel: VideoChannelModel, res: express.Response) {
   if (!videoChannel) {
     res.status(404)
-      .json({ error: 'Video channel not found' })
-      .end()
+       .json({ error: 'Video channel not found' })
+       .end()
 
     return false
   }
 
   res.locals.videoChannel = videoChannel
   return true
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  isVideoChannelDescriptionValid,
-  isVideoChannelNameValid,
-  isVideoChannelSupportValid,
-  isVideoChannelExist
 }

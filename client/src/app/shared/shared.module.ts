@@ -12,6 +12,7 @@ import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
+import { ButtonComponent } from './buttons/button.component'
 import { DeleteButtonComponent } from './buttons/delete-button.component'
 import { EditButtonComponent } from './buttons/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
@@ -22,6 +23,7 @@ import { RestExtractor, RestService } from './rest'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
+import { VideoOwnershipService } from './video-ownership'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
 import { VideoFeedComponent } from './video/video-feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
@@ -36,10 +38,12 @@ import {
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
   UserValidatorsService,
-  VideoAbuseValidatorsService, VideoBlacklistValidatorsService,
+  VideoAbuseValidatorsService,
+  VideoBlacklistValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
-  VideoValidatorsService
+  VideoValidatorsService,
+  VideoChangeOwnershipValidatorsService, VideoAcceptOwnershipValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -49,6 +53,11 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
+import { SubscribeButtonComponent, RemoteSubscribeComponent, UserSubscriptionService } from '@app/shared/user-subscription'
+import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
+import { OverviewService } from '@app/shared/overview'
+import { UserBanModalComponent } from '@app/shared/moderation'
+import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
 
 @NgModule({
   imports: [
@@ -58,11 +67,11 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     RouterModule,
     HttpClientModule,
 
-    NgbDropdownModule.forRoot(),
-    NgbModalModule.forRoot(),
-    NgbPopoverModule.forRoot(),
-    NgbTabsetModule.forRoot(),
-    NgbTooltipModule.forRoot(),
+    NgbDropdownModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTabsetModule,
+    NgbTooltipModule,
 
     PrimeSharedModule,
     NgPipesModule
@@ -73,6 +82,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     VideoFeedComponent,
+    ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     ActionDropdownComponent,
@@ -83,7 +93,12 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     InfiniteScrollerDirective,
     HelpComponent,
     ReactiveFileComponent,
-    PeertubeCheckboxComponent
+    PeertubeCheckboxComponent,
+    SubscribeButtonComponent,
+    RemoteSubscribeComponent,
+    InstanceFeaturesTableComponent,
+    UserBanModalComponent,
+    UserModerationDropdownComponent
   ],
 
   exports: [
@@ -107,6 +122,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     VideoFeedComponent,
+    ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     ActionDropdownComponent,
@@ -115,6 +131,11 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
+    SubscribeButtonComponent,
+    RemoteSubscribeComponent,
+    InstanceFeaturesTableComponent,
+    UserBanModalComponent,
+    UserModerationDropdownComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -127,6 +148,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     RestService,
     VideoAbuseService,
     VideoBlacklistService,
+    VideoOwnershipService,
     UserService,
     VideoService,
     AccountService,
@@ -134,6 +156,7 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoChannelService,
     VideoCaptionService,
     VideoImportService,
+    UserSubscriptionService,
 
     FormValidatorService,
     CustomConfigValidatorsService,
@@ -146,6 +169,9 @@ import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, N
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
     VideoBlacklistValidatorsService,
+    OverviewService,
+    VideoChangeOwnershipValidatorsService,
+    VideoAcceptOwnershipValidatorsService,
 
     I18nPrimengCalendarService,
     ScreenService,

@@ -38,8 +38,15 @@ class SettingsMenuItem extends MenuItem {
     this.eventHandlers()
 
     player.ready(() => {
-      this.build()
-      this.reset()
+      // Voodoo magic for IOS
+      setTimeout(() => {
+        this.build()
+
+        // Update on rate change
+        player.on('ratechange', this.submenuClickHandler)
+
+        this.reset()
+      }, 0)
     })
   }
 
@@ -57,7 +64,7 @@ class SettingsMenuItem extends MenuItem {
       target = event.currentTarget
     }
 
-    if (target.classList.contains('vjs-back-button')) {
+    if (target && target.classList.contains('vjs-back-button')) {
       this.loadMainMenu()
       return
     }

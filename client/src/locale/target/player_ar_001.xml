@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="Duration">
         <source>Duration</source>
-        <target>مدة</target>
+        <target>المدة</target>
       </trans-unit>
       <trans-unit id="Remaining Time">
         <source>Remaining Time</source>
@@ -75,6 +75,10 @@
         <source>Unmute</source>
         <target>ألغ الكتم</target>
       </trans-unit>
+      <trans-unit id="Playback Rate">
+        <source>Playback Rate</source>
+        <target>معدل التشغيل</target>
+      </trans-unit>
       <trans-unit id="Subtitles">
         <source>Subtitles</source>
         <target>ترجمة</target>
@@ -103,17 +107,25 @@
         <source>descriptions off</source>
         <target>ألغ الوصف</target>
       </trans-unit>
+      <trans-unit id="Audio Track">
+        <source>Audio Track</source>
+        <target>مسار الصوت</target>
+      </trans-unit>
       <trans-unit id="Volume Level">
         <source>Volume Level</source>
         <target>حجم الصوت</target>
       </trans-unit>
       <trans-unit id="You aborted the media playback">
         <source>You aborted the media playback</source>
-        <target>ألغيت إعادة تشغيل الوسائط</target>
+        <target>لقد ألغيت إعادة تشغيل الوسائط</target>
+      </trans-unit>
+      <trans-unit id="A network error caused the media download to fail part-way.">
+        <source>A network error caused the media download to fail part-way.</source>
+        <target>تسبب خطأ في الشبكة بفشل تحميل الفيديو بالكامل.</target>
       </trans-unit>
       <trans-unit id="The media could not be loaded, either because the server or network failed or because the format is not supported.">
         <source>The media could not be loaded, either because the server or network failed or because the format is not supported.</source>
-        <target>لا يمكن تحميل الوسيط بسبب فشل الخادم أو الشبكة أو أن الصيغة غير مدعومة</target>
+        <target>لا يمكن تحميل الوسيط بسبب فشل الخادم أو الشبكة أو أن الصيغة غير مدعومة.</target>
       </trans-unit>
       <trans-unit id="The media playback was aborted due to a corruption problem or because the media used features your browser did not support.">
         <source>The media playback was aborted due to a corruption problem or because the media used features your browser did not support.</source>
@@ -125,7 +137,7 @@
       </trans-unit>
       <trans-unit id="The media is encrypted and we do not have the keys to decrypt it.">
         <source>The media is encrypted and we do not have the keys to decrypt it.</source>
-        <target>الوسيط مشفر ولا نملك المفتاح لإلغاء تشفيره.</target>
+        <target>الوسيط مشفر ولا نملك المفتاح لفك تشفيره.</target>
       </trans-unit>
       <trans-unit id="Play Video">
         <source>Play Video</source>
@@ -134,6 +146,170 @@
       <trans-unit id="Close">
         <source>Close</source>
         <target>أغلق</target>
+      </trans-unit>
+      <trans-unit id="Close Modal Dialog">
+        <source>Close Modal Dialog</source>
+        <target>أغلق النافذة المشروطة</target>
+      </trans-unit>
+      <trans-unit id="Modal Window">
+        <source>Modal Window</source>
+        <target>نافذة مشروطة</target>
+      </trans-unit>
+      <trans-unit id="This is a modal window">
+        <source>This is a modal window</source>
+        <target>هذه نافذة مشروطة</target>
+      </trans-unit>
+      <trans-unit id="This modal can be closed by pressing the Escape key or activating the close button.">
+        <source>This modal can be closed by pressing the Escape key or activating the close button.</source>
+        <target>يمكن غلق هذه النافذة المشروطة عن طريق الضغط على زر الخروج أو تفعيل زر الإغلاق</target>
+      </trans-unit>
+      <trans-unit id=", opens captions settings dialog">
+        <source>, opens captions settings dialog</source>
+        <target>، إفتح نافذة  إعدادات التعليقات</target>
+      </trans-unit>
+      <trans-unit id=", opens subtitles settings dialog">
+        <source>, opens subtitles settings dialog</source>
+        <target>، إفتح نافذة  إعدادات الترجمة</target>
+      </trans-unit>
+      <trans-unit id=", opens descriptions settings dialog">
+        <source>, opens descriptions settings dialog</source>
+        <target>، إفتح نافذة  إعدادات الوصف</target>
+      </trans-unit>
+      <trans-unit id=", selected">
+        <source>, selected</source>
+        <target>، مختار</target>
+      </trans-unit>
+      <trans-unit id="captions settings">
+        <source>captions settings</source>
+        <target>إعدادات التعليقات</target>
+      </trans-unit>
+      <trans-unit id="subtitles settings">
+        <source>subititles settings</source>
+        <target>إعدادات الترجمة</target>
+      </trans-unit>
+      <trans-unit id="descriptions settings">
+        <source>descriptions settings</source>
+        <target>إعدادات الوصف</target>
+      </trans-unit>
+      <trans-unit id="Text">
+        <source>Text</source>
+        <target>نص</target>
+      </trans-unit>
+      <trans-unit id="White">
+        <source>White</source>
+        <target>أبيض</target>
+      </trans-unit>
+      <trans-unit id="Black">
+        <source>Black</source>
+        <target>أسود</target>
+      </trans-unit>
+      <trans-unit id="Red">
+        <source>Red</source>
+        <target>أحمر</target>
+      </trans-unit>
+      <trans-unit id="Green">
+        <source>Green</source>
+        <target>أخضر</target>
+      </trans-unit>
+      <trans-unit id="Blue">
+        <source>Blue</source>
+        <target>أزرق</target>
+      </trans-unit>
+      <trans-unit id="Yellow">
+        <source>Yellow</source>
+        <target>أصفر</target>
+      </trans-unit>
+      <trans-unit id="Magenta">
+        <source>Magenta</source>
+        <target>وردي</target>
+      </trans-unit>
+      <trans-unit id="Cyan">
+        <source>Cyan</source>
+        <target>سماوي</target>
+      </trans-unit>
+      <trans-unit id="Background">
+        <source>Background</source>
+        <target>الخلفية</target>
+      </trans-unit>
+      <trans-unit id="Window">
+        <source>Window</source>
+        <target>نافذة</target>
+      </trans-unit>
+      <trans-unit id="Transparent">
+        <source>Transparent</source>
+        <target>شفافة</target>
+      </trans-unit>
+      <trans-unit id="Semi-Transparent">
+        <source>Semi-Transparent</source>
+        <target>شبه شفافة</target>
+      </trans-unit>
+      <trans-unit id="Font Size">
+        <source>Font Size</source>
+        <target>حجم الخط</target>
+      </trans-unit>
+      <trans-unit id="None">
+        <source>None</source>
+        <target>لا شيئ</target>
+      </trans-unit>
+      <trans-unit id="Reset">
+        <source>Reset</source>
+        <target>إعادة الضبط</target>
+      </trans-unit>
+      <trans-unit id="restore all settings to the default values">
+        <source>restore all settings to the default values</source>
+        <target>أعد كل الإعدادات الى القيم الافتراضية</target>
+      </trans-unit>
+      <trans-unit id="Done">
+        <source>Done</source>
+        <target>تم</target>
+      </trans-unit>
+      <trans-unit id="Caption Settings Dialog">
+        <source>Caption Settings Dialog</source>
+        <target>اعدادات التعليقات</target>
+      </trans-unit>
+      <trans-unit id="End of dialog window.">
+        <source>End of dialog window.</source>
+        <target>نهاية نافذة الحوار</target>
+      </trans-unit>
+      <trans-unit id="{1} is loading.">
+        <source>{1} is loading.</source>
+        <target>{1} يحمل</target>
+      </trans-unit>
+      <trans-unit id="Quality">
+        <source>Quality</source>
+        <target>الجودة</target>
+      </trans-unit>
+      <trans-unit id="Auto">
+        <source>Auto</source>
+        <target>تلقائية</target>
+      </trans-unit>
+      <trans-unit id="Speed">
+        <source>Speed</source>
+        <target>السرعة</target>
+      </trans-unit>
+      <trans-unit id="peers">
+        <source>peers</source>
+        <target>الأقران</target>
+      </trans-unit>
+      <trans-unit id="Go to the video page">
+        <source>Go to the video page</source>
+        <target>الإنتقال إلى صفحة الفيديو</target>
+      </trans-unit>
+      <trans-unit id="Settings">
+        <source>Settings</source>
+        <target>الإعدادات</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL">
+        <source>Copy the video URL</source>
+        <target>نسخ رابط الفيديو</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL at the current time">
+        <source>Copy the video URL at the current time</source>
+        <target>نسخ رابط الفيديو بالوقت الحالي</target>
+      </trans-unit>
+      <trans-unit id="Copy embed code">
+        <source>Copy embed code</source>
+        <target>نسخ الكود المضمن</target>
       </trans-unit>
     </body>
   </file></xliff>

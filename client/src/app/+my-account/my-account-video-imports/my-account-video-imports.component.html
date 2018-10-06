@@ -29,10 +29,10 @@
       </td>
 
       <td *ngIf="isVideoImportPending(videoImport)">
-        {{ videoImport.video.name }}
+        {{ videoImport.video?.name }}
       </td>
-      <td *ngIf="isVideoImportSuccess(videoImport)">
-        <a [href]="getVideoUrl(videoImport.video)" target="_blank" rel="noopener noreferrer">{{ videoImport.video.name }}</a>
+      <td *ngIf="isVideoImportSuccess(videoImport) && videoImport.video">
+        <a [href]="getVideoUrl(videoImport.video)" target="_blank" rel="noopener noreferrer">{{ videoImport.video?.name }}</a>
       </td>
       <td *ngIf="isVideoImportFailed(videoImport)"></td>
 
@@ -40,7 +40,7 @@
       <td>{{ videoImport.createdAt }}</td>
 
       <td class="action-cell">
-        <my-edit-button *ngIf="isVideoImportSuccess(videoImport)" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
+        <my-edit-button *ngIf="isVideoImportSuccess(videoImport) && videoImport.video" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
       </td>
     </tr>
   </ng-template>

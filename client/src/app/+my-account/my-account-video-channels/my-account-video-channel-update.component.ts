@@ -78,7 +78,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
       support: body.support || null
     }
 
-    this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.uuid, videoChannelUpdate).subscribe(
+    this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.name, videoChannelUpdate).subscribe(
       () => {
         this.authService.refreshUserInformation()
         this.notificationsService.success(
@@ -93,7 +93,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   }
 
   onAvatarChange (formData: FormData) {
-    this.videoChannelService.changeVideoChannelAvatar(this.videoChannelToUpdate.uuid, formData)
+    this.videoChannelService.changeVideoChannelAvatar(this.videoChannelToUpdate.name, formData)
         .subscribe(
           data => {
             this.notificationsService.success(this.i18n('Success'), this.i18n('Avatar changed.'))

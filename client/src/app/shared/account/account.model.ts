@@ -6,11 +6,14 @@ export class Account extends Actor implements ServerAccount {
   description: string
   nameWithHost: string
 
+  userId?: number
+
   constructor (hash: ServerAccount) {
     super(hash)
 
     this.displayName = hash.displayName
     this.description = hash.description
+    this.userId = hash.userId
     this.nameWithHost = Actor.CREATE_BY_STRING(this.name, this.host)
   }
 }

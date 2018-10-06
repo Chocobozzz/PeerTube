@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as magnetUtil from 'magnet-uri'
 import 'multer'
-import { auditLoggerFactory, VideoImportAuditView } from '../../../helpers/audit-logger'
+import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import {
   CONFIG,
@@ -27,8 +27,8 @@ import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
-import { readFileBufferPromise, renamePromise } from '../../../helpers/core-utils'
 import { getSecureTorrentName } from '../../../helpers/utils'
+import { readFile, rename } from 'fs-extra'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -78,10 +78,10 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
 
     // Rename the torrent to a secured name
     const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
-    await renamePromise(torrentfile.path, newTorrentPath)
+    await rename(torrentfile.path, newTorrentPath)
     torrentfile.path = newTorrentPath
 
-    const buf = await readFileBufferPromise(torrentfile.path)
+    const buf = await readFile(torrentfile.path)
     const parsedTorrent = parseTorrent(buf)
 
     videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[ 0 ] : parsedTorrent.name as string
@@ -114,7 +114,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoImportAuditView(videoImport.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
   return res.json(videoImport.toFormattedJSON()).end()
 }
@@ -158,7 +158,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
-  auditLogger.create(res.locals.oauth.token.User.Account.Actor.getIdentifier(), new VideoImportAuditView(videoImport.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
   return res.json(videoImport.toFormattedJSON()).end()
 }

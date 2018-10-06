@@ -1,5 +1,206 @@
 # Changelog
 
+## v1.0.0-rc.2
+
+### Bug fixes
+
+ * Fix config endpoint
+
+
+## v1.0.0-rc.1
+
+### Features
+
+ * Allow specification of channel ID in `peertube-upload.js` ([@anoadragon453](https://github.com/anoadragon453))
+ * Show last commit hash alongside server version in footer ([@rigelk](https://github.com/rigelk))
+ * Add comment feeds in watch page
+
+### Bug fixes
+
+ * Fix dnt route (yes again, but now we have unit tests for this route :D)
+ * Check video channel name is unique when creating a new one
+ * Fix video fps validator (prevent redundancy/refresh of some old videos)
+ * Allow empty search on client side ([@rigelk](https://github.com/rigelk))
+ * Correctly forward comment deletion
+
+
+## v1.0.0-beta.16
+
+### BREAKING CHANGES
+
+ * Add prompt to upgrade.sh to install pre-release version ([@Nutomic](https://github.com/nutomic))
+
+### Features
+
+ * Add shortcuts icon in menu
+ * Improve overview section titles
+ * Check old password before change ([@BO41](https://github.com/BO41))
+ * Adding frame-by-frame hotkey support in player ([@rigelk](https://github.com/rigelk))
+
+### Bug fixes
+
+ * Stop seeding torrents after a failed import
+ * Fix player crashing the web browser
+ * Fix player performance with small devices
+ * Fix some untranslated strings
+ * Fix video files duplicated when fps is null ([@rigelk](https://github.com/rigelk))
+ * Fix video import of some youtube videos
+ * Fix (long) video description when importing by url
+ * Fix Mastodon federation with a comment reply
+ * Correctly delete directories on import
+ * Remove duplicated videos on unfollow/delete redundancy
+ * Fix 404 on manifest
+ * Hide useless error when destroying fake renderer
+ * Display other videos on big screens on the right of the watch page
+ * Fix no other videos displayed on some videos
+ * Fix hidden advanced options in upload form
+ * Fix message space on video upload cancel ([@rigelk](https://github.com/rigelk))
+ * Fix error when updating many video captions
+ * Fix "my account" subtitles
+ * Fix error when clicking on the disabled publish button
+ * Increase timeout on upload endpoint
+ * Fix redundancy with videos already duplicated by another instance(s)
+ * Correctly delete files on failed import
+ 
+
+## v1.0.0-beta.15
+
+### Features
+
+ * Improve subscription button ([@rigelk](https://github.com/rigelk))
+  * Display it for unlogged users
+  * Add RSS feed
+  * Allow remote follow
+ * Allow remote comment ([@rigelk](https://github.com/rigelk))
+ * Support Simplified Chinese ([@SerCom-KC](https://github.com/SerCom-KC))
+
+### Bug fixes
+
+ * Fix redundancy with old PeerTube torrents
+ * Fix crash with `/static/dnt-policy/dnt-policy-1.0.txt` route
+ * Fix redundancy totalVideos stats
+ * Reduce video import TTL to 1 hour
+ * Only duplicate public videos
+ 
+
+## v1.0.0-beta.14
+
+### Features
+
+ * Video redundancy system (experimental, see [the doc](/support/doc/redundancy.md))
+ * Add peertube script (see [the doc](/support/doc/tools.md#cli-wrapper)) ([@rigelk](https://github.com/rigelk))
+ * Improve download modal ([@rigelk](https://github.com/rigelk))
+ * Add redirect after login ([@BO41](https://github.com/BO41))
+ * Improve message when removing a user
+ * Improve responsive on small screens
+ * Improve performance:
+   * Overview endpoint
+   * SQL requests of watch page endpoints
+   * SQL requests of ActivityPub endpoints
+   * Cache user token
+   * Videos infinite scroll in the web browser
+ * Add warning if one of the storage directory is in the peertube production directory
+ * Auto focus first field on login ([@rigelk](https://github.com/rigelk))
+ * Add chevron hotkeys to change playback rate ([@rigelk](https://github.com/rigelk))
+
+### Bug fixes
+ 
+ * Fix 24 hours delay to process views
+ * Fix tag search on overview page
+ * Handle actors search beginning with '@'
+ * Fix "no results" on overview page
+ * Fix iOS player playback/subtitles menu
+ * Fix description/comments that break the video watch page
+ * Don't get recommended videos twice
+ * Fix admin access to moderators
+ * Fix nav tab and tag color in dark theme ([@rigelk](https://github.com/rigelk))
+ * Fix help popover overflow ([@rigelk](https://github.com/rigelk))
+ * Fix comment deletion with mastodon (only with new comments)
+
+
+## v1.0.0-beta.13
+
+### Features
+
+ * Improve keyboard navigation ([@rigelk](https://github.com/rigelk))
+ * Remember theme in local storage ([@rigelk](https://github.com/rigelk))
+ 
+### Bug fixes
+
+  * Fix upgrade/installation on node 8.12 (bcrypt issue)
+  * Fix video channel deletion
+  * Fix video channel RSS
+  * Fix video views increment
+ 
+
+## v1.0.0-beta.12
+
+**If you have not updated to v1.0.0-beta.10, see the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**
+
+### BREAKING CHANGES
+
+ * Users can now use the name they want for their channel. 
+ We will therefore favour the display of video channel handles/names instead of account in the future.
+
+### Documentation
+
+ * Add SECURITY.md document
+ * Add TCP/IP tuning template to prevent buffer bloat/latency ([@scanlime](https://github.com/scanlime))
+ * Add `parse-log` admin tool documentation
+ * Improve README schemas ([@Edznux](https://github.com/edznux))
+
+### nginx template
+
+ * Add gzip support ([@scanlime](https://github.com/scanlime))
+ 
+### Docker template
+ 
+ * Add quota to the docker configuration values ([@kaiyou](https://github.com/kaiyou))
+
+### Features
+
+ * Add portuguese and swedish languages
+ * Support user subscriptions
+ * Add ability to search videos or channels with their URL/handle (can be opt-out by the admin)
+ * Add "videos overview" page (pick randomly some categories/tags/channels and display their videos)
+ * Add ability to set a name (left part of the handle) to a channel instead of UUID
+ * Users can "give" their videos to other local users (WIP, feedback welcome) ([@grizio](https://github.com/grizio))
+ * Add keyboard shortcuts (press `?` to see them) ([@rigelk](https://github.com/rigelk))
+ * Add ability to set daily video upload quota to users ([@Nutomic](https://github.com/nutomic))
+ * Add user email verification (can be opt-in by the admin) ([@joshmorel](https://github.com/joshmorel))
+ * Improve video watch page style ([@rigelk](https://github.com/rigelk))
+ * Trending page takes into account views from the last x days (defined by the admin in the configuration file)
+ * Add "start at" checkbox in the video share modal
+ * Add instance capabilities table in the signup page ([@rigelk](https://github.com/rigelk))
+ * Improve video abuses display in admin ([@Nutomic](https://github.com/nutomic))
+ * Add "my videos" shortcut in menu ([@LeoMouyna](https://github.com/LeoMouyna))
+ * Support 0.75 and 1.25 playback speeds ([@Glandos](https://github.com/Glandos))
+ * Improve error message on actor name conflict
+ * Improve videos list/search SQL query (split it into 2 queries)
+ * Make left menu show the scrollbar only on hover/focus ([@rigelk](https://github.com/rigelk))
+ * Other videos column in watch page show related tagged videos if possible ([@jorropo](https://github.com/jorropo))
+ * Password change errors more friendly ([@jorropo](https://github.com/jorropo))
+ * Improve labels for video privacies (video upload/update)
+ * Add theming via CSS custom properties ([@rigelk](https://github.com/rigelk))
+ * Add dark theme ([@rigelk](https://github.com/rigelk))
+ * Add input color to cope with browser themes ([@rigelk](https://github.com/rigelk))
+
+### Bug fixes
+
+ * Fix player video playback (videos never ends or infinite load after seeking)
+ * Fix video URL import with videos having a small title
+ * Make HSTS opt-in and leave it to the reverse-proxy ([@rigelk](https://github.com/rigelk))
+ * Fix search results on mobile
+ * Do not import live streaming
+ * Fix NSFW filter when the instance decides to hide them and the user decides to list them
+ * Delete highlighted comment too if needed
+ * Fix ffmpeg auto thread admin configuration ([@jorropo](https://github.com/jorropo))
+ * ActivityPub: use height instead of width to represent the video resolution
+ * Fix thumbnail/preview in upload.js script
+ * Fix import-videos.js duplicate detection
+ * Fix occitan language label
+ 
+
 ## v1.0.0-beta.11
 
 **If you have not updated to v1.0.0-beta.10, see the v1.0.0-beta.10.pre.1 changelog, in particular how to upgrade**

@@ -10,8 +10,11 @@ export const I18N_LOCALES = {
   'de-DE': 'Deutsch',
   'es-ES': 'Español',
   'oc': 'Occitan',
-  'zh-Hant-TW': '中文 (繁體, 台灣)'
+  'zh-Hant-TW': '繁體中文（台灣）',
+  'pt-BR': 'Português (Brasil)',
+  'sv-SE': 'svenska',
   // 'pl-PL': 'Polski'
+  'zh-Hans-CN': '简体中文（中国）'
 }
 
 const I18N_LOCALE_ALIAS = {
@@ -21,7 +24,9 @@ const I18N_LOCALE_ALIAS = {
   'ca': 'ca-ES',
   'cs': 'cs-CZ',
   'de': 'de-DE',
-  'es': 'es-ES'
+  'es': 'es-ES',
+  'pt': 'pt-BR',
+  'sv': 'sv-SE'
   // 'pl': 'pl-PL'
 }
 

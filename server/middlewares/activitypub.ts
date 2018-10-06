@@ -18,7 +18,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
   try {
     actor = await getOrCreateActorAndServerAndModel(creator)
   } catch (err) {
-    logger.error('Cannot create remote actor and check signature.', { err })
+    logger.warn('Cannot create remote actor %s and check signature.', creator, { err })
     return res.sendStatus(403)
   }
 

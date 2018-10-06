@@ -11,7 +11,7 @@ import { Video } from '../../../shared/video/video.model'
 @Component({
   selector: 'my-video-blacklist-list',
   templateUrl: './video-blacklist-list.component.html',
-  styleUrls: [ './video-blacklist-list.component.scss' ]
+  styleUrls: [ '../moderation.component.scss' ]
 })
 export class VideoBlacklistListComponent extends RestTable implements OnInit {
   blacklist: VideoBlacklist[] = []
