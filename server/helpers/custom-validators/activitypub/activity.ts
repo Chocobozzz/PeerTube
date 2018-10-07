@@ -1,7 +1,10 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
 import {
-  isActorAcceptActivityValid, isActorDeleteActivityValid, isActorFollowActivityValid, isActorRejectActivityValid,
+  isActorAcceptActivityValid,
+  isActorDeleteActivityValid,
+  isActorFollowActivityValid,
+  isActorRejectActivityValid,
   isActorUpdateActivityValid
 } from './actor'
 import { isAnnounceActivityValid } from './announce'
@@ -11,12 +14,13 @@ import { isUndoActivityValid } from './undo'
 import { isVideoCommentCreateActivityValid, isVideoCommentDeleteActivityValid } from './video-comments'
 import {
   isVideoFlagValid,
-  sanitizeAndCheckVideoTorrentCreateActivity,
   isVideoTorrentDeleteActivityValid,
+  sanitizeAndCheckVideoTorrentCreateActivity,
   sanitizeAndCheckVideoTorrentUpdateActivity
 } from './videos'
 import { isViewActivityValid } from './view'
 import { exists } from '../misc'
+import { isCacheFileCreateActivityValid, isCacheFileUpdateActivityValid } from './cache-file'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) && (
@@ -67,11 +71,13 @@ function checkCreateActivity (activity: any) {
     isDislikeActivityValid(activity) ||
     sanitizeAndCheckVideoTorrentCreateActivity(activity) ||
     isVideoFlagValid(activity) ||
-    isVideoCommentCreateActivityValid(activity)
+    isVideoCommentCreateActivityValid(activity) ||
+    isCacheFileCreateActivityValid(activity)
 }
 
 function checkUpdateActivity (activity: any) {
-  return sanitizeAndCheckVideoTorrentUpdateActivity(activity) ||
+  return isCacheFileUpdateActivityValid(activity) ||
+    sanitizeAndCheckVideoTorrentUpdateActivity(activity) ||
     isActorUpdateActivityValid(activity)
 }
 

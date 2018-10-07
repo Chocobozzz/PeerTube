@@ -2,7 +2,15 @@
 @import 'mixins';
 
 .peertube-select-container {
-  @include peertube-select-container(130px);
+  @include peertube-select-container(100px);
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+
+  select {
+    height: inherit;
+  }
 }
 
 .download-type {

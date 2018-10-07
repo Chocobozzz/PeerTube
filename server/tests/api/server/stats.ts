@@ -21,7 +21,7 @@ import { waitJobs } from '../../utils/server/jobs'
 
 const expect = chai.expect
 
-describe('Test stats', function () {
+describe('Test stats (excluding redundancy)', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
@@ -45,6 +45,9 @@ describe('Test stats', function () {
     await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'comment')
 
     await viewVideo(servers[0].url, videoUUID)
+
+    // Wait the video views repeatable job
+    await wait(8000)
 
     await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
     await waitJobs(servers)

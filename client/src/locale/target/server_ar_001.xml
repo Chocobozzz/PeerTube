@@ -111,6 +111,18 @@
         <source>Private</source>
         <target>خاص</target>
       </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>للاستيراد</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>نجح</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>فشل</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
         <target>أخرى</target>

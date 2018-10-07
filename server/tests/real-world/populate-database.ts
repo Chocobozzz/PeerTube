@@ -66,6 +66,7 @@ function getRandomInt (min, max) {
 
 function createCustomChannel (server: ServerInfo) {
   const videoChannel = {
+    name: Date.now().toString(),
     displayName: Date.now().toString(),
     description: Date.now().toString()
   }

@@ -8,6 +8,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-validators.service'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'my-login',
@@ -16,6 +17,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 })
 
 export class LoginComponent extends FormReactive implements OnInit {
+  @ViewChild('emailInput') input: ElementRef
   @ViewChild('forgotPasswordModal') forgotPasswordModal: ElementRef
   @ViewChild('forgotPasswordEmailInput') forgotPasswordEmailInput: ElementRef
 
@@ -25,6 +27,7 @@ export class LoginComponent extends FormReactive implements OnInit {
   private openedForgotPasswordModal: NgbModalRef
 
   constructor (
+    public router: Router,
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private loginValidatorsService: LoginValidatorsService,
@@ -47,6 +50,8 @@ export class LoginComponent extends FormReactive implements OnInit {
       username: this.loginValidatorsService.LOGIN_USERNAME,
       password: this.loginValidatorsService.LOGIN_PASSWORD
     })
+
+    this.input.nativeElement.focus()
   }
 
   login () {
@@ -56,7 +61,7 @@ export class LoginComponent extends FormReactive implements OnInit {
 
     this.authService.login(username, password)
       .subscribe(
-        () => this.redirectService.redirectToHomepage(),
+        () => this.redirect(),
 
         err => {
           if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
@@ -64,6 +69,15 @@ export class LoginComponent extends FormReactive implements OnInit {
           else this.error = err.message
         }
       )
+  }
+
+  redirect () {
+    const redirect = this.authService.redirectUrl
+    if (redirect) {
+      this.router.navigate([ redirect ])
+    } else {
+      this.redirectService.redirectToHomepage()
+    }
   }
 
   askResetPassword () {

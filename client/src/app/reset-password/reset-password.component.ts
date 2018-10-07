@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { UserService, UserValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
-import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
@@ -22,7 +21,6 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private resetPasswordValidatorsService: ResetPasswordValidatorsService,
     private userValidatorsService: UserValidatorsService,
-    private authService: AuthService,
     private userService: UserService,
     private notificationsService: NotificationsService,
     private router: Router,

@@ -2,6 +2,7 @@ import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 
 export interface ServerConfig {
   serverVersion: string
+  serverCommit?: string
 
   instance: {
     name: string
@@ -16,7 +17,8 @@ export interface ServerConfig {
 
   signup: {
     allowed: boolean,
-    allowedForCurrentIP: boolean
+    allowedForCurrentIP: boolean,
+    requiresEmailVerification: boolean
   }
 
   transcoding: {
@@ -66,5 +68,6 @@ export interface ServerConfig {
 
   user: {
     videoQuota: number
+    videoQuotaDaily: number
   }
 }

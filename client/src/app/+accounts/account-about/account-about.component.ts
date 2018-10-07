@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -18,7 +17,6 @@ export class AccountAboutComponent implements OnInit, OnDestroy {
   private accountSub: Subscription
 
   constructor (
-    private route: ActivatedRoute,
     private i18n: I18n,
     private accountService: AccountService,
     private markdownService: MarkdownService

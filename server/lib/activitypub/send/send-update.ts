@@ -7,25 +7,31 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
-import { broadcastToFollowers } from './utils'
-import { audiencify, getAudience } from '../audience'
+import { broadcastToFollowers, sendVideoRelatedActivity } from './utils'
+import { audiencify, getActorsInvolvedInVideo, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
+import { VideoCaptionModel } from '../../../models/video/video-caption'
+import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 
-async function sendUpdateVideo (video: VideoModel, t: Transaction) {
+async function sendUpdateVideo (video: VideoModel, t: Transaction, overrodeByActor?: ActorModel) {
   logger.info('Creating job to update video %s.', video.url)
 
-  const byActor = video.VideoChannel.Account.Actor
+  const byActor = overrodeByActor ? overrodeByActor : video.VideoChannel.Account.Actor
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
+
+  // Needed to build the AP object
+  if (!video.VideoCaptions) video.VideoCaptions = await video.$get('VideoCaptions') as VideoCaptionModel[]
+
   const videoObject = video.toActivityPubObject()
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)
 
-  const data = updateActivityData(url, byActor, videoObject, audience)
+  const updateActivity = buildUpdateActivity(url, byActor, videoObject, audience)
 
-  const actorsInvolved = await VideoShareModel.loadActorsByShare(video.id, t)
-  actorsInvolved.push(byActor)
+  const actorsInvolved = await getActorsInvolvedInVideo(video, t)
+  if (overrodeByActor) actorsInvolved.push(overrodeByActor)
 
-  return broadcastToFollowers(data, byActor, actorsInvolved, t)
+  return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
 }
 
 async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelModel, t: Transaction) {
@@ -36,7 +42,7 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
   const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
   const accountOrChannelObject = accountOrChannel.toActivityPubObject()
   const audience = getAudience(byActor)
-  const data = updateActivityData(url, byActor, accountOrChannelObject, audience)
+  const updateActivity = buildUpdateActivity(url, byActor, accountOrChannelObject, audience)
 
   let actorsInvolved: ActorModel[]
   if (accountOrChannel instanceof AccountModel) {
@@ -49,19 +55,35 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
 
   actorsInvolved.push(byActor)
 
-  return broadcastToFollowers(data, byActor, actorsInvolved, t)
+  return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
+}
+
+async function sendUpdateCacheFile (byActor: ActorModel, redundancyModel: VideoRedundancyModel) {
+  logger.info('Creating job to update cache file %s.', redundancyModel.url)
+
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.VideoFile.Video.id)
+
+  const activityBuilder = (audience: ActivityAudience) => {
+    const redundancyObject = redundancyModel.toActivityPubObject()
+    const url = getUpdateActivityPubUrl(redundancyModel.url, redundancyModel.updatedAt.toISOString())
+
+    return buildUpdateActivity(url, byActor, redundancyObject, audience)
+  }
+
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video })
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   sendUpdateActor,
-  sendUpdateVideo
+  sendUpdateVideo,
+  sendUpdateCacheFile
 }
 
 // ---------------------------------------------------------------------------
 
-function updateActivityData (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityUpdate {
+function buildUpdateActivity (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityUpdate {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(

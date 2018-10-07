@@ -1,5 +1,5 @@
 import * as program from 'commander'
-import { createReadStream, readdirSync, statSync } from 'fs'
+import { createReadStream, readdirSync, statSync } from 'fs-extra'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'

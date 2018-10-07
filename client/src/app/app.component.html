@@ -1,5 +1,7 @@
 <div *ngIf="customCSS" [innerHTML]="customCSS"></div>
 
+<my-hotkeys-cheatsheet></my-hotkeys-cheatsheet>
+
 <div [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
   <div class="header">
 
@@ -12,7 +14,7 @@
       </a>
     </div>
 
-    <div class="header-right">
+    <div class="header-right" [ngClass]="{ 'border-bottom': isMenuDisplayed === false }">
       <my-header></my-header>
     </div>
   </div>
@@ -20,20 +22,20 @@
   <div class="sub-header-container">
     <my-menu *ngIf="isMenuDisplayed"></my-menu>
 
-    <div class="main-col container-fluid" [ngClass]="{ expanded: isMenuDisplayed === false }">
+    <div id="content" tabindex="-1" class="main-col container-fluid" [ngClass]="{ expanded: isMenuDisplayed === false }">
 
       <div class="main-row">
         <router-outlet></router-outlet>
       </div>
 
       <footer class="row">
-        <a href="https://joinpeertube.org" title="PeerTube website" target="_blank" rel="noopener noreferrer">PeerTube v{{ serverVersion }}</a> -
+        <a href="https://joinpeertube.org" title="PeerTube website" target="_blank" rel="noopener noreferrer">PeerTube v{{ serverVersion }}{{ serverCommit }}</a>&nbsp;-&nbsp;
         <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube license" target="_blank" rel="noopener noreferrer">CopyLeft 2015-2018</a>
       </footer>
     </div>
   </div>
 </div>
 
-<ngx-loading-bar [includeSpinner]="false" color="#F1680D"></ngx-loading-bar>
+<ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
 <my-confirm></my-confirm>
 <simple-notifications [options]="notificationOptions"></simple-notifications>

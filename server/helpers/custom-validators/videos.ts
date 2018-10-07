@@ -6,7 +6,6 @@ import * as validator from 'validator'
 import { UserRight, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
-  VIDEO_ABUSE_STATES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_MIMETYPE_EXT,
@@ -19,10 +18,9 @@ import { exists, isArray, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
 import * as magnetUtil from 'magnet-uri'
-import { VideoAbuseModel } from '../../models/video/video-abuse'
+import { fetchVideo, VideoFetchType } from '../video'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
-const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
 function isVideoCategoryValid (value: any) {
   return value === null || VIDEO_CATEGORIES[ value ] !== undefined
@@ -155,14 +153,10 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   return true
 }
 
-async function isVideoExist (id: string, res: Response) {
-  let video: VideoModel | null
+async function isVideoExist (id: string, res: Response, fetchType: VideoFetchType = 'all') {
+  const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
 
-  if (validator.isInt(id)) {
-    video = await VideoModel.loadAndPopulateAccountAndServerAndTags(+id)
-  } else { // UUID
-    video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(id)
-  }
+  const video = await fetchVideo(id, fetchType, userId)
 
   if (video === null) {
     res.status(404)
@@ -172,7 +166,7 @@ async function isVideoExist (id: string, res: Response) {
     return false
   }
 
-  res.locals.video = video
+  if (fetchType !== 'none') res.locals.video = video
   return true
 }
 
@@ -181,7 +175,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
     const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
     if (videoChannel === null) {
       res.status(400)
-         .json({ error: 'Unknown video video channel on this instance.' })
+         .json({ error: 'Unknown video `video channel` on this instance.' })
          .end()
 
       return false
@@ -194,7 +188,7 @@ async function isVideoChannelOfAccountExist (channelId: number, user: UserModel,
   const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, user.Account.id)
   if (videoChannel === null) {
     res.status(400)
-       .json({ error: 'Unknown video video channel for this account.' })
+       .json({ error: 'Unknown video `video channel` for this account.' })
        .end()
 
     return false

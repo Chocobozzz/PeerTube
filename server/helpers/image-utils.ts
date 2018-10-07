@@ -1,6 +1,6 @@
 import 'multer'
 import * as sharp from 'sharp'
-import { unlinkPromise } from './core-utils'
+import { remove } from 'fs-extra'
 
 async function processImage (
   physicalFile: { path: string },
@@ -11,7 +11,7 @@ async function processImage (
     .resize(newSize.width, newSize.height)
     .toFile(destination)
 
-  await unlinkPromise(physicalFile.path)
+  await remove(physicalFile.path)
 }
 
 // ---------------------------------------------------------------------------

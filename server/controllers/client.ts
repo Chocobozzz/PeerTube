@@ -35,7 +35,7 @@ clientsRouter.use('' +
 // Static HTML/CSS/JS client files
 
 const staticClientFiles = [
-  'manifest.json',
+  'manifest.webmanifest',
   'ngsw-worker.js',
   'ngsw.json'
 ]

@@ -13,9 +13,8 @@ import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
 
 export abstract class VideoSend extends FormReactive implements OnInit, CanComponentDeactivate {
-
   userVideoChannels: { id: number, label: string, support: string }[] = []
-  videoPrivacies: VideoConstant<string>[] = []
+  videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 
   firstStepPrivacyId = 0

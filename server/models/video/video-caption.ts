@@ -19,7 +19,7 @@ import { VideoCaption } from '../../../shared/models/videos/caption/video-captio
 import { CONFIG, STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'
-import { unlinkPromise } from '../../helpers/core-utils'
+import { remove } from 'fs-extra'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
@@ -120,7 +120,8 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
       language
     }
 
-    return VideoCaptionModel.upsert(values, { transaction })
+    return VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true })
+      .then(([ caption ]) => caption)
   }
 
   static listVideoCaptions (videoId: number) {
@@ -172,6 +173,6 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
   }
 
   removeCaptionFile () {
-    return unlinkPromise(CONFIG.STORAGE.CAPTIONS_DIR + this.getCaptionName())
+    return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.getCaptionName())
   }
 }

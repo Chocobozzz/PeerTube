@@ -51,6 +51,18 @@ function dateToHuman (date: string) {
   return datePipe.transform(date, 'medium')
 }
 
+function durationToString (duration: number) {
+  const hours = Math.floor(duration / 3600)
+  const minutes = Math.floor((duration % 3600) / 60)
+  const seconds = duration % 60
+
+  const minutesPadding = minutes >= 10 ? '' : '0'
+  const secondsPadding = seconds >= 10 ? '' : '0'
+  const displayedHours = hours > 0 ? hours.toString() + ':' : ''
+
+  return displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
+}
+
 function immutableAssign <A, B> (target: A, source: B) {
   return Object.assign({}, target, source)
 }
@@ -114,6 +126,7 @@ function sortBy (obj: any[], key1: string, key2?: string) {
 
 export {
   sortBy,
+  durationToString,
   objectToUrlEncoded,
   getParameterByName,
   populateAsyncUserVideoChannels,

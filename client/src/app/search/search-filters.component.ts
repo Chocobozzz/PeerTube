@@ -18,8 +18,8 @@ export class SearchFiltersComponent implements OnInit {
 
   @Output() filtered = new EventEmitter<AdvancedSearch>()
 
-  videoCategories: VideoConstant<string>[] = []
-  videoLicences: VideoConstant<string>[] = []
+  videoCategories: VideoConstant<number>[] = []
+  videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoConstant<string>[] = []
 
   publishedDateRanges: { id: string, label: string }[] = []
@@ -31,11 +31,6 @@ export class SearchFiltersComponent implements OnInit {
 
   constructor (
     private i18n: I18n,
-    private route: ActivatedRoute,
-    private metaService: MetaService,
-    private redirectService: RedirectService,
-    private notificationsService: NotificationsService,
-    private searchService: SearchService,
     private serverService: ServerService
   ) {
     this.publishedDateRanges = [

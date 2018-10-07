@@ -2,7 +2,7 @@ import * as express from 'express'
 import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
-import { CONFIG, USER_PASSWORD_RESET_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
+import { CONFIG, USER_PASSWORD_RESET_LIFETIME, USER_EMAIL_VERIFY_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
 
 type CachedRoute = {
   body: string,
@@ -48,6 +48,8 @@ class Redis {
     )
   }
 
+  /************* Forgot password *************/
+
   async setResetPasswordVerificationString (userId: number) {
     const generatedString = await generateRandomString(32)
 
@@ -60,16 +62,34 @@ class Redis {
     return this.getValue(this.generateResetPasswordKey(userId))
   }
 
-  setView (ip: string, videoUUID: string) {
-    return this.setValue(this.buildViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
+  /************* Email verification *************/
+
+  async setVerifyEmailVerificationString (userId: number) {
+    const generatedString = await generateRandomString(32)
+
+    await this.setValue(this.generateVerifyEmailKey(userId), generatedString, USER_EMAIL_VERIFY_LIFETIME)
+
+    return generatedString
   }
 
-  async isViewExists (ip: string, videoUUID: string) {
-    return this.exists(this.buildViewKey(ip, videoUUID))
+  async getVerifyEmailLink (userId: number) {
+    return this.getValue(this.generateVerifyEmailKey(userId))
   }
+
+  /************* Views per IP *************/
+
+  setIPVideoView (ip: string, videoUUID: string) {
+    return this.setValue(this.generateViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
+  }
+
+  async isVideoIPViewExists (ip: string, videoUUID: string) {
+    return this.exists(this.generateViewKey(ip, videoUUID))
+  }
+
+  /************* API cache *************/
 
   async getCachedRoute (req: express.Request) {
-    const cached = await this.getObject(this.buildCachedRouteKey(req))
+    const cached = await this.getObject(this.generateCachedRouteKey(req))
 
     return cached as CachedRoute
   }
@@ -82,20 +102,76 @@ class Redis {
     (statusCode) ? { statusCode: statusCode.toString() } : null
     )
 
-    return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
+    return this.setObject(this.generateCachedRouteKey(req), cached, lifetime)
   }
 
-  generateResetPasswordKey (userId: number) {
+  /************* Video views *************/
+
+  addVideoView (videoId: number) {
+    const keyIncr = this.generateVideoViewKey(videoId)
+    const keySet = this.generateVideosViewKey()
+
+    return Promise.all([
+      this.addToSet(keySet, videoId.toString()),
+      this.increment(keyIncr)
+    ])
+  }
+
+  async getVideoViews (videoId: number, hour: number) {
+    const key = this.generateVideoViewKey(videoId, hour)
+
+    const valueString = await this.getValue(key)
+    return parseInt(valueString, 10)
+  }
+
+  async getVideosIdViewed (hour: number) {
+    const key = this.generateVideosViewKey(hour)
+
+    const stringIds = await this.getSet(key)
+    return stringIds.map(s => parseInt(s, 10))
+  }
+
+  deleteVideoViews (videoId: number, hour: number) {
+    const keySet = this.generateVideosViewKey(hour)
+    const keyIncr = this.generateVideoViewKey(videoId, hour)
+
+    return Promise.all([
+      this.deleteFromSet(keySet, videoId.toString()),
+      this.deleteKey(keyIncr)
+    ])
+  }
+
+  /************* Keys generation *************/
+
+  generateCachedRouteKey (req: express.Request) {
+    return req.method + '-' + req.originalUrl
+  }
+
+  private generateVideosViewKey (hour?: number) {
+    if (!hour) hour = new Date().getHours()
+
+    return `videos-view-h${hour}`
+  }
+
+  private generateVideoViewKey (videoId: number, hour?: number) {
+    if (!hour) hour = new Date().getHours()
+
+    return `video-view-${videoId}-h${hour}`
+  }
+
+  private generateResetPasswordKey (userId: number) {
     return 'reset-password-' + userId
   }
 
-  buildViewKey (ip: string, videoUUID: string) {
+  private generateVerifyEmailKey (userId: number) {
+    return 'verify-email-' + userId
+  }
+
+  private generateViewKey (ip: string, videoUUID: string) {
     return videoUUID + '-' + ip
   }
 
-  buildCachedRouteKey (req: express.Request) {
-    return req.method + '-' + req.originalUrl
-  }
+  /************* Redis helpers *************/
 
   private getValue (key: string) {
     return new Promise<string>((res, rej) => {
@@ -104,6 +180,40 @@ class Redis {
 
         return res(value)
       })
+    })
+  }
+
+  private getSet (key: string) {
+    return new Promise<string[]>((res, rej) => {
+      this.client.smembers(this.prefix + key, (err, value) => {
+        if (err) return rej(err)
+
+        return res(value)
+      })
+    })
+  }
+
+  private addToSet (key: string, value: string) {
+    return new Promise<string[]>((res, rej) => {
+      this.client.sadd(this.prefix + key, value, err => err ? rej(err) : res())
+    })
+  }
+
+  private deleteFromSet (key: string, value: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.srem(this.prefix + key, value, err => err ? rej(err) : res())
+    })
+  }
+
+  private deleteKey (key: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.del(this.prefix + key, err => err ? rej(err) : res())
+    })
+  }
+
+  private deleteFieldInHash (key: string, field: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.hdel(this.prefix + key, field, err => err ? rej(err) : res())
     })
   }
 
@@ -138,6 +248,26 @@ class Redis {
   private getObject (key: string) {
     return new Promise<{ [ id: string ]: string }>((res, rej) => {
       this.client.hgetall(this.prefix + key, (err, value) => {
+        if (err) return rej(err)
+
+        return res(value)
+      })
+    })
+  }
+
+  private setValueInHash (key: string, field: string, value: string) {
+    return new Promise<void>((res, rej) => {
+      this.client.hset(this.prefix + key, field, value, (err) => {
+        if (err) return rej(err)
+
+        return res()
+      })
+    })
+  }
+
+  private increment (key: string) {
+    return new Promise<number>((res, rej) => {
+      this.client.incr(this.prefix + key, (err, value) => {
         if (err) return rej(err)
 
         return res(value)

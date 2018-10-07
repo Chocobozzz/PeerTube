@@ -1,0 +1,32 @@
+$dropdown-link-active-bg: inherit;
+
+$zindex-modal: 10005;
+$modal-footer-border-width: 0;
+$modal-md: 600px;
+
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0,
+  // Small screen / phone
+  sm: 576px,
+  // Medium screen / tablet
+  md: 768px,
+  // Large screen / desktop
+  lg: 900px,
+  // Extra large screen / wide desktop
+  xl: 1200px
+);
+
+$container-max-widths: (
+  sm: 420px,
+  md: 720px,
+  lg: 900px,
+  xl: 1140px
+);
+
+$input-btn-focus-width: 0;
+$input-btn-focus-color: inherit;
+$input-focus-border-color: #ced4da;
+
+$nav-pills-link-active-bg: #F0F0F0;
+$nav-pills-link-active-color: #000;

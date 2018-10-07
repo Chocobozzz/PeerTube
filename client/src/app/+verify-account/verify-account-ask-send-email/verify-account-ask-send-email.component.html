@@ -1,0 +1,22 @@
+<div class="margin-content">
+  <div i18n class="title-page title-page-single">
+    Request email for account verification
+  </div>
+
+  <form *ngIf="requiresEmailVerification; else emailVerificationNotRequired" role="form" (ngSubmit)="askSendVerifyEmail()" [formGroup]="form">
+    <div class="form-group">
+      <label i18n for="verify-email-email">Email</label>
+      <input
+        type="email" id="verify-email-email" i18n-placeholder placeholder="Email address" required
+        formControlName="verify-email-email" [ngClass]="{ 'input-error': formErrors['verify-email-email'] }"
+      >
+      <div *ngIf="formErrors['verify-email-email']" class="form-error">
+          {{ formErrors['verify-email-email'] }}
+      </div>
+    </div>
+    <input type="submit" i18n-value value="Send verification email" [disabled]="!form.valid">
+  </form>
+  <ng-template #emailVerificationNotRequired>
+    <div i18n>This instance does not require email verification.</div>
+  </ng-template>
+</div>

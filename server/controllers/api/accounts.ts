@@ -11,7 +11,7 @@ import {
 import { accountsNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
-import { buildNSFWFilter } from '../../helpers/express-utils'
+import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
 
 const accountsRouter = express.Router()
@@ -73,11 +73,14 @@ async function listVideoAccountChannels (req: express.Request, res: express.Resp
 
 async function listAccountVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
+  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
+    actorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    includeLocalVideos: true,
     categoryOneOf: req.query.categoryOneOf,
     licenceOneOf: req.query.licenceOneOf,
     languageOneOf: req.query.languageOneOf,

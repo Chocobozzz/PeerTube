@@ -311,7 +311,8 @@ describe('Test follows', function () {
         likes: 1,
         dislikes: 1,
         channel: {
-          name: 'Default root channel',
+          displayName: 'Main root channel',
+          name: 'root_channel',
           description: '',
           isLocal
         },

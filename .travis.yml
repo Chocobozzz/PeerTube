@@ -36,10 +36,12 @@ before_script:
 matrix:
   include:
   - env: TEST_SUITE=misc
-  - env: TEST_SUITE=api-fast
-  - env: TEST_SUITE=api-slow
+  - env: TEST_SUITE=api-1
+  - env: TEST_SUITE=api-2
+  - env: TEST_SUITE=api-3
   - env: TEST_SUITE=cli
   - env: TEST_SUITE=lint
+  - env: TEST_SUITE=jest
 
 script:
   - travis_retry npm run travis -- "$TEST_SUITE"

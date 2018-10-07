@@ -40,7 +40,8 @@
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>
       <td class="action-cell">
-        <my-action-dropdown i18n-label label="Actions" [actions]="userActions" [entry]="user"></my-action-dropdown>
+        <my-user-moderation-dropdown [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        </my-user-moderation-dropdown>
       </td>
     </tr>
   </ng-template>
@@ -55,4 +56,3 @@
   </ng-template>
 </p-table>
 
-<my-user-ban-modal #userBanModal (userBanned)="onUserBanned()"></my-user-ban-modal>

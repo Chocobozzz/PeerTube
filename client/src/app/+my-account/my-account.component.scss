@@ -1,0 +1,14 @@
+.my-library {
+  span[role=button] {
+    cursor: pointer;
+  }
+
+  a {
+    display: block;
+  }
+}
+
+/deep/ .dropdown-toggle::after {
+  position: relative;
+  top: 2px;
+}

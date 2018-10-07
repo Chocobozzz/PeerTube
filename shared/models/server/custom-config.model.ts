@@ -34,6 +34,7 @@ export interface CustomConfig {
   signup: {
     enabled: boolean
     limit: number
+    requiresEmailVerification: boolean
   }
 
   admin: {
@@ -42,6 +43,7 @@ export interface CustomConfig {
 
   user: {
     videoQuota: number
+    videoQuotaDaily: number
   }
 
   transcoding: {

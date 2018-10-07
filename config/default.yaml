@@ -57,6 +57,39 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
 
+search:
+  remote_uri: # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
+    users: true
+    anonymous: false
+
+trending:
+  videos:
+    interval_days: 7 # Compute trending videos for the last x days
+
+# Cache remote videos on your server, to help other instances to broadcast the video
+# You can define multiple caches using different sizes/strategies
+# Once you have defined your strategies, choose which instances you want to cache in admin -> manage follows -> following
+redundancy:
+  videos:
+    check_interval: '1 hour' # How often you want to check new videos to cache
+    strategies:
+#      -
+#        size: '10GB'
+#        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
+#        min_lifetime: '48 hours'
+#        strategy: 'most-views' # Cache videos that have the most views
+#      -
+#        size: '10GB'
+#        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
+#        min_lifetime: '48 hours'
+#        strategy: 'trending' # Cache trending videos
+#      -
+#        size: '10GB'
+#        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
+#        min_lifetime: '48 hours'
+#        strategy: 'recently-added' # Cache recently added videos
+#        min_views: 10 # Having at least x views
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
@@ -69,6 +102,7 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  requires_email_verification: false
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []
@@ -78,6 +112,7 @@ user:
   # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
   # -1 == unlimited
   video_quota: -1
+  video_quota_daily: -1
 
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
@@ -115,7 +150,10 @@ instance:
   # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add '/' to "Disallow:'
   robots: |
     User-agent: *
-    Disallow: ''
+    Disallow:
+  # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
+  securitytxt:
+    "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
 
 services:
   # Cards configuration to format video in Twitter

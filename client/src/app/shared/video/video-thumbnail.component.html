@@ -2,9 +2,11 @@
   [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name"
   class="video-thumbnail"
 >
-<img alt="" [attr.aria-labelledby]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
+  <img alt="" [attr.aria-labelledby]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 
-<div class="video-thumbnail-overlay">
-  {{ video.durationLabel }}
-</div>
+  <div class="video-thumbnail-overlay">{{ video.durationLabel }}</div>
+
+  <div class="progress-bar" *ngIf="video.userHistory?.currentTime">
+    <div [ngStyle]="{ 'width.%': getProgressPercent() }"></div>
+  </div>
 </a>

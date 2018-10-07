@@ -34,7 +34,7 @@ describe('Test video NSFW policy', function () {
     return getMyUserInformation(server.url, server.accessToken)
       .then(res => {
         const user: User = res.body
-        const videoChannelUUID = user.videoChannels[0].uuid
+        const videoChannelName = user.videoChannels[0].name
         const accountName = user.account.name + '@' + user.account.host
 
         if (token) {
@@ -42,7 +42,7 @@ describe('Test video NSFW policy', function () {
             getVideosListWithToken(server.url, token, query),
             searchVideoWithToken(server.url, 'n', token, query),
             getAccountVideos(server.url, token, accountName, 0, 5, undefined, query),
-            getVideoChannelVideos(server.url, token, videoChannelUUID, 0, 5, undefined, query)
+            getVideoChannelVideos(server.url, token, videoChannelName, 0, 5, undefined, query)
           ])
         }
 
@@ -50,7 +50,7 @@ describe('Test video NSFW policy', function () {
           getVideosList(server.url),
           searchVideo(server.url, 'n'),
           getAccountVideos(server.url, undefined, accountName, 0, 5),
-          getVideoChannelVideos(server.url, undefined, videoChannelUUID, 0, 5)
+          getVideoChannelVideos(server.url, undefined, videoChannelName, 0, 5)
         ])
       })
   }
@@ -148,6 +148,9 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should display NSFW videos with blur user NSFW policy', async function () {
+      customConfig.instance.defaultNSFWPolicy = 'do_not_list'
+      await updateCustomConfig(server.url, server.accessToken, customConfig)
+
       for (const res of await getVideosFunctions(userAccessToken)) {
         expect(res.body.total).to.equal(2)
 

@@ -95,6 +95,9 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
           thumbnailUrl: null,
           previewUrl: null
         }))
+
+        this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+
         this.hydrateFormFromVideo()
       },
 

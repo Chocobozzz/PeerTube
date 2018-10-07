@@ -41,14 +41,16 @@ describe('Test jobs', function () {
   })
 
   it('Should list jobs with sort and pagination', async function () {
-    const res = await getJobsListPaginationAndSort(servers[1].url, servers[1].accessToken, 'completed', 1, 1, 'createdAt')
+    const res = await getJobsListPaginationAndSort(servers[1].url, servers[1].accessToken, 'completed', 1, 2, 'createdAt')
     expect(res.body.total).to.be.above(2)
-    expect(res.body.data).to.have.lengthOf(1)
+    expect(res.body.data).to.have.lengthOf(2)
 
-    const job = res.body.data[0]
+    let job = res.body.data[0]
+    // Skip repeat jobs
+    if (job.type === 'videos-views') job = res.body.data[1]
 
     expect(job.state).to.equal('completed')
-    expect(job.type).to.equal('activitypub-http-unicast')
+    expect(job.type).to.equal('activitypub-follow')
     expect(dateIsValid(job.createdAt)).to.be.true
     expect(dateIsValid(job.processedOn)).to.be.true
     expect(dateIsValid(job.finishedOn)).to.be.true

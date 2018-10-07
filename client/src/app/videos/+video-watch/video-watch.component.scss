@@ -1,5 +1,8 @@
 @import '_variables';
 @import '_mixins';
+@import '_bootstrap-variables';
+
+$other-videos-width: 260px;
 
 .root-row {
   flex-direction: column;
@@ -76,14 +79,12 @@
 
 .video-bottom {
   margin-top: 40px;
-  display: flex;
-  flex-grow: 1;
 
   .video-info {
     flex-grow: 1;
-    margin-right: 40px;
     // Set min width for flex item
     min-width: 1px;
+    max-width: 100%;
 
     .video-info-first-row {
       display: flex;
@@ -101,9 +102,10 @@
       }
 
       .video-info-date-views {
-        font-size: 16px;
-        margin-bottom: 10px;
         flex-grow: 1;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        font-size: 16px;
       }
 
       .video-info-channel {
@@ -113,7 +115,7 @@
         a {
           @include disable-default-a-behaviour;
 
-          color: #000;
+          color: var(--mainForegroundColor);
 
           &:hover {
             opacity: 0.8;
@@ -125,6 +127,10 @@
             margin: -2px 2px 0 5px;
           }
         }
+
+        my-subscribe-button {
+          margin-left: 5px;
+        }
       }
 
       .video-info-by {
@@ -135,7 +141,7 @@
           display: inline;
           align-items: center;
           font-size: 13px;
-          color: #000;
+          color: var(--mainForegroundColor);
 
           span:hover {
             opacity: 0.8;
@@ -162,9 +168,8 @@
       }
 
       .video-actions-rates {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+        margin: 20px 0 10px 0;
+        align-items: start;
 
         .video-actions {
           height: 40px; // Align with the title
@@ -222,7 +227,7 @@
             }
 
             &.action-button-like.activated {
-              background-color: #39CC0B;
+              background-color: $green;
 
               .icon-like {
                 background-image: url('../../../assets/images/video/like-white.svg');
@@ -230,7 +235,7 @@
             }
 
             &.action-button-dislike.activated {
-              background-color: #FF0000;
+              background-color: $red;
 
               .icon-dislike {
                 background-image: url('../../../assets/images/video/dislike-white.svg');
@@ -280,14 +285,17 @@
         }
 
         .video-info-likes-dislikes-bar {
-          height: 5px;
+          $likes-bar-height: 2px;
+          height: $likes-bar-height;
+          margin-top: -$likes-bar-height;
           width: 186px;
-          background-color: #E5E5E5;
-          margin-top: 25px;
+          background-color: $red;
+          position: relative;
+          top: 10px;
 
           .likes-bar {
             height: 100%;
-            background-color: #39CC0B;
+            background-color: $green;
           }
         }
       }
@@ -337,7 +345,7 @@
 
       a.video-attribute-value {
         @include disable-default-a-behaviour;
-        color: #000;
+        color: var(--mainForegroundColor);
 
         &:hover {
           opacity: 0.9;
@@ -354,14 +362,15 @@
     }
   }
 
-  .other-videos {
-    padding-left: 1em;
+  /deep/ .other-videos {
+    padding-left: 15px;
+    width: $other-videos-width;
 
     .title-page {
-      margin-top: 0;
+      margin-top: 0 !important;
     }
 
-    /deep/ .video-miniature {
+    .video-miniature {
       display: flex;
       height: 100%;
       margin-bottom: 20px;
@@ -369,10 +378,19 @@
 
       .video-miniature-information {
         flex-grow: 1;
-        margin-left: 10px;
+      }
+
+      .video-thumbnail {
+        margin-right: 10px
       }
     }
   }
+}
+
+my-video-comments {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 // If the view is not expanded, take into account the menu
@@ -380,9 +398,16 @@
   width: calc(100% - #{$menu-width});
 }
 
+@media screen and (max-width: $small-view) {
+  .privacy-concerns {
+    margin-left: $menu-width;
+  }
+}
+
 :host-context(.expanded) {
   .privacy-concerns {
     width: 100%;
+    margin-left: 0;
   }
 }
 
@@ -405,7 +430,7 @@
   a {
     @include disable-default-a-behaviour;
 
-    color: $orange-color;
+    color: var(--mainColor);
     transition: color 0.3s;
 
     &:hover {
@@ -414,7 +439,7 @@
   }
 
   .privacy-concerns-okay {
-    background-color: $orange-color;
+    background-color: var(--mainColor);
     padding: 5px 8px 5px 7px;
     margin-left: auto;
     border-radius: 3px;
@@ -428,51 +453,19 @@
   }
 }
 
+@media screen and (min-width: map-get($grid-breakpoints, xl)) {
+  .video-bottom .video-info {
+    max-width: calc(100% - #{$other-videos-width});
+  }
+}
 
 @media screen and (max-width: 1600px) {
-  .video-bottom {
-    .video-info {
-      margin-right: 20px;
-
-      .video-info-first-row {
-        flex-direction: column;
-        margin-bottom: 30px;
-
-        .video-actions-rates {
-          margin-top: 20px;
-          align-items: start;
-
-          .video-info-likes-dislikes-bar {
-            margin-top: 10px;
-          }
-        }
-      }
-
-      .video-info-date-views {
-        flex-direction: column;
-        margin-bottom: 30px;
-
-        .video-info-likes-dislikes-bar {
-          margin-top: 0;
-        }
-      }
-
-      .video-attributes .video-attribute {
-        margin-bottom: 5px;
-      }
-    }
+  .video-bottom .video-info .video-attributes .video-attribute {
+    margin-bottom: 5px;
   }
 }
 
 @media screen and (max-width: 1300px) {
-  .video-bottom {
-    flex-direction: column;
-  }
-
-  .other-videos {
-    padding-left: 0 !important;
-  }
-
   .privacy-concerns {
     font-size: 12px;
     padding: 2px 5px;
@@ -488,6 +481,7 @@
     margin: 20px 0 0 0;
 
     .video-info {
+      padding: 0;
 
       .video-info-first-row {
 
@@ -499,13 +493,11 @@
     }
   }
 
-  .other-videos {
+  /deep/ .other-videos {
+    padding-left: 0 !important;
+
     /deep/ .video-miniature  {
       flex-direction: column;
-
-      .video-miniature-information {
-        margin-left: 0 !important;
-      }
     }
   }
 
@@ -519,7 +511,27 @@
 }
 
 @media screen and (max-width: 450px) {
-  .video-bottom  .action-button .icon-text {
-    display: none !important;
+  .video-bottom {
+    .action-button .icon-text {
+      display: none !important;
+    }
+
+    .video-info .video-info-first-row {
+      .video-info-name {
+        font-size: 18px;
+      }
+
+      .video-info-date-views {
+        font-size: 14px;
+      }
+
+      .video-actions-rates {
+        margin-top: 10px;
+      }
+    }
+
+    .video-info-description {
+      font-size: 14px !important;
+    }
   }
 }

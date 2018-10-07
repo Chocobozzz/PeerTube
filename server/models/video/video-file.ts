@@ -1,5 +1,18 @@
 import { values } from 'lodash'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  Is,
+  Model,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import {
   isVideoFileInfoHashValid,
   isVideoFileResolutionValid,
@@ -10,6 +23,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import * as Sequelize from 'sequelize'
+import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 
 @Table({
   tableName: 'videoFile',
@@ -52,8 +66,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
   @Column
   infoHash: string
 
-  @AllowNull(true)
-  @Default(null)
+  @AllowNull(false)
+  @Default(-1)
   @Is('VideoFileFPS', value => throwIfNotValid(value, isVideoFPSResolutionValid, 'fps'))
   @Column
   fps: number
@@ -70,6 +84,15 @@ export class VideoFileModel extends Model<VideoFileModel> {
   })
   Video: VideoModel
 
+  @HasMany(() => VideoRedundancyModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'CASCADE',
+    hooks: true
+  })
+  RedundancyVideos: VideoRedundancyModel[]
+
   static isInfohashExists (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
     const options = {
@@ -82,5 +105,24 @@ export class VideoFileModel extends Model<VideoFileModel> {
               .then(results => {
                 return results.length === 1
               })
+  }
+
+  static loadWithVideo (id: number) {
+    const options = {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+
+    return VideoFileModel.findById(id, options)
+  }
+
+  hasSameUniqueKeysThan (other: VideoFileModel) {
+    return this.fps === other.fps &&
+      this.resolution === other.resolution &&
+      this.videoId === other.videoId
   }
 }

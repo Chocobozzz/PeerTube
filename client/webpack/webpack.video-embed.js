@@ -3,15 +3,12 @@ const path = require('path')
 
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const PurifyCSSPlugin = require('purifycss-webpack')
 
 module.exports = function () {
-  const isProd = process.env.NODE_ENV === 'production'
-
   const configuration = {
     entry: {
       'video-embed': './src/standalone/videos/embed.ts',
@@ -42,7 +39,7 @@ module.exports = function () {
       publicPath: '/client/standalone/videos/'
     },
 
-    // devtool: 'source-map',
+    devtool: process.env.NODE_ENV === 'production' ? false : 'source-map',
 
     module: {
 
@@ -72,7 +69,12 @@ module.exports = function () {
                   importLoaders: 1
                 }
               },
-              'resolve-url-loader',
+              // {
+              //   loader: 'resolve-url-loader',
+              //   options: {
+              //     debug: true
+              //   }
+              // },
               {
                 loader: 'sass-loader',
                 options: {
@@ -113,9 +115,9 @@ module.exports = function () {
       }),
 
       new PurifyCSSPlugin({
-        paths: [ 
+        paths: [
           helpers.root('src/standalone/videos/embed.ts'),
-          helpers.root('src/standalone/videos/test-embed.html') 
+          helpers.root('src/standalone/videos/test-embed.html')
         ],
         purifyOptions: {
           minify: true,
@@ -158,6 +160,27 @@ module.exports = function () {
       })
     ],
 
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            ecma: 6,
+            warnings: false,
+            ie8: false,
+            mangle: true,
+            compress: {
+              passes: 3,
+              pure_getters: true
+            },
+            output: {
+              ascii_only: true,
+              comments: false
+            }
+          }
+        })
+      ]
+    },
+
     performance: {
       maxEntrypointSize: 700000, // 600kB
       maxAssetSize: 700000
@@ -172,29 +195,6 @@ module.exports = function () {
       clearImmediate: false,
       setImmediate: false
     }
-  }
-
-  if (isProd) {
-    configuration.plugins.push(
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          ecma: 6,
-          warnings: false,
-          ie8: false,
-          mangle: true,
-          compress: {
-            passes: 3,
-            pure_getters: true
-          },
-          output: {
-            ascii_only: true,
-            comments: false
-          }
-        }
-      }),
-
-      new HashedModuleIdsPlugin()
-    )
   }
 
   return configuration

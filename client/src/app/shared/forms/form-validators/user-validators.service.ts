@@ -8,7 +8,9 @@ export class UserValidatorsService {
   readonly USER_USERNAME: BuildFormValidator
   readonly USER_EMAIL: BuildFormValidator
   readonly USER_PASSWORD: BuildFormValidator
+  readonly USER_CONFIRM_PASSWORD: BuildFormValidator
   readonly USER_VIDEO_QUOTA: BuildFormValidator
+  readonly USER_VIDEO_QUOTA_DAILY: BuildFormValidator
   readonly USER_ROLE: BuildFormValidator
   readonly USER_DISPLAY_NAME: BuildFormValidator
   readonly USER_DESCRIPTION: BuildFormValidator
@@ -54,11 +56,25 @@ export class UserValidatorsService {
       }
     }
 
+    this.USER_CONFIRM_PASSWORD = {
+      VALIDATORS: [],
+      MESSAGES: {
+        'matchPassword': this.i18n('The new password and the confirmed password do not correspond.')
+      }
+    }
+
     this.USER_VIDEO_QUOTA = {
       VALIDATORS: [ Validators.required, Validators.min(-1) ],
       MESSAGES: {
         'required': this.i18n('Video quota is required.'),
         'min': this.i18n('Quota must be greater than -1.')
+      }
+    }
+    this.USER_VIDEO_QUOTA_DAILY = {
+      VALIDATORS: [ Validators.required, Validators.min(-1) ],
+      MESSAGES: {
+        'required': this.i18n('Daily upload limit is required.'),
+        'min': this.i18n('Daily upload limit must be greater than -1.')
       }
     }
 

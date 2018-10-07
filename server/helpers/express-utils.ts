@@ -6,6 +6,7 @@ import { User } from '../../shared/models/users'
 import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
+import { UserModel } from '../models/account/user'
 
 function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -13,9 +14,13 @@ function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'both') return undefined
 
   if (res.locals.oauth) {
-    const user: User = res.locals.oauth.token.User
+    const user: UserModel = res.locals.oauth.token.User
+
     // User does not want NSFW videos
-    if (user && user.nsfwPolicy === 'do_not_list') return false
+    if (user.nsfwPolicy === 'do_not_list') return false
+
+    // Both
+    return undefined
   }
 
   if (CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list') return false
@@ -95,11 +100,19 @@ function createReqFiles (
   return multer({ storage }).fields(fields)
 }
 
+function isUserAbleToSearchRemoteURI (res: express.Response) {
+  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
+
+  return CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
+    (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildNSFWFilter,
   getHostWithPort,
+  isUserAbleToSearchRemoteURI,
   badRequest,
   createReqFiles,
   cleanUpReqFiles

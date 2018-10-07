@@ -1,20 +1,22 @@
 import { IConfig } from 'config'
 import { dirname, join } from 'path'
-import { JobType, VideoRateType, VideoState } from '../../shared/models'
+import { JobType, VideoRateType, VideoState, VideosRedundancy } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoPrivacy, VideoAbuseState, VideoImportState } from '../../shared/models/videos'
+import { VideoAbuseState, VideoImportState, VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { buildPath, isTestInstance, parseDuration, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
+import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
+import * as bytes from 'bytes'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 255
+const LAST_MIGRATION_VERSION = 275
 
 // ---------------------------------------------------------------------------
 
@@ -31,18 +33,21 @@ const PAGINATION = {
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
+  USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ],
 
-  VIDEOS_SEARCH: [ 'match', 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ]
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
+
+  VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -53,11 +58,16 @@ const OAUTH_LIFETIME = {
 const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
+  SECURITYTXT: '2 hours',
   NODEINFO: '10 minutes',
   DNT_POLICY: '1 week',
+  OVERVIEWS: {
+    VIDEOS: '1 hour'
+  },
   ACTIVITY_PUB: {
     VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
-  }
+  },
+  STATS: '4 hours'
 }
 
 // ---------------------------------------------------------------------------
@@ -88,7 +98,8 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'video-file-import': 1,
   'video-file': 1,
   'video-import': 1,
-  'email': 5
+  'email': 5,
+  'videos-views': 1
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
@@ -98,7 +109,8 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'video-file-import': 1,
   'video-file': 1,
   'video-import': 1,
-  'email': 5
+  'email': 5,
+  'videos-views': 1
 }
 const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -107,12 +119,21 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
-  'video-import': 1000 * 3600 * 5, // 5 hours
-  'email': 60000 * 10 // 10 minutes
+  'video-import': 1000 * 3600 * 2, //  hours
+  'email': 60000 * 10, // 10 minutes
+  'videos-views': undefined // Unlimited
 }
+const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
+  'videos-views': {
+    cron: '1 * * * *' // At 1 minutes past the hour
+  }
+}
+
 const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
 const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
+const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
 // 1 hour
 let SCHEDULER_INTERVALS_MS = {
@@ -179,12 +200,30 @@ const CONFIG = {
   LOG: {
     LEVEL: config.get<string>('log.level')
   },
+  SEARCH: {
+    REMOTE_URI: {
+      USERS: config.get<boolean>('search.remote_uri.users'),
+      ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
+    }
+  },
+  TRENDING: {
+    VIDEOS: {
+      INTERVAL_DAYS: config.get<number>('trending.videos.interval_days')
+    }
+  },
+  REDUNDANCY: {
+    VIDEOS: {
+      CHECK_INTERVAL: parseDuration(config.get<string>('redundancy.videos.check_interval')),
+      STRATEGIES: buildVideosRedundancy(config.get<any[]>('redundancy.videos.strategies'))
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
     get LIMIT () { return config.get<number>('signup.limit') },
+    get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
     FILTERS: {
       CIDR: {
         get WHITELIST () { return config.get<string[]>('signup.filters.cidr.whitelist') },
@@ -193,7 +232,8 @@ const CONFIG = {
     }
   },
   USER: {
-    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') }
+    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') },
+    get VIDEO_QUOTA_DAILY () { return config.get<number>('user.video_quota_daily') }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
@@ -235,7 +275,9 @@ const CONFIG = {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }
     },
-    get ROBOTS () { return config.get<string>('instance.robots') }
+    get ROBOTS () { return config.get<string>('instance.robots') },
+    get SECURITYTXT () { return config.get<string>('instance.securitytxt') },
+    get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') }
   },
   SERVICES: {
     TWITTER: {
@@ -254,6 +296,7 @@ const CONSTRAINTS_FIELDS = {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
+    VIDEO_QUOTA_DAILY: { min: -1 },
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
@@ -286,6 +329,9 @@ const CONSTRAINTS_FIELDS = {
         max: 1024 * 200 // 200 KB
       }
     }
+  },
+  VIDEOS_REDUNDANCY: {
+    URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -339,6 +385,10 @@ const RATES_LIMIT = {
   LOGIN: {
     WINDOW_MS: 5 * 60 * 1000, // 5 minutes
     MAX: 15 // 15 attempts
+  },
+  ASK_SEND_EMAIL: {
+    WINDOW_MS: 5 * 60 * 1000, // 5 minutes
+    MAX: 3 // 3 attempts
   }
 }
 
@@ -442,6 +492,15 @@ const TORRENT_MIMETYPE_EXT = {
 
 // ---------------------------------------------------------------------------
 
+const OVERVIEWS = {
+  VIDEOS: {
+    SAMPLE_THRESHOLD: 6,
+    SAMPLES_COUNT: 2
+  }
+}
+
+// ---------------------------------------------------------------------------
+
 const SERVER_ACTOR_NAME = 'peertube'
 
 const ACTIVITY_PUB = {
@@ -460,7 +519,8 @@ const ACTIVITY_PUB = {
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
   MAX_RECURSION_COMMENTS: 100,
-  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
+  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000, // 1 day
+  VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
 }
 
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
@@ -477,6 +537,8 @@ const PRIVATE_RSA_KEY_SIZE = 2048
 const BCRYPT_SALT_SIZE = 10
 
 const USER_PASSWORD_RESET_LIFETIME = 60000 * 5 // 5 minutes
+
+const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
 const NSFW_POLICY_TYPES: { [ id: string]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
@@ -534,6 +596,16 @@ const CACHE = {
   }
 }
 
+const MEMOIZE_TTL = {
+  OVERVIEWS_SAMPLE: 1000 * 3600 * 4 // 4 hours
+}
+
+const REDUNDANCY = {
+  VIDEOS: {
+    RANDOMIZED_FACTOR: 5
+  }
+}
+
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 // ---------------------------------------------------------------------------
@@ -572,18 +644,24 @@ if (isTestInstance() === true) {
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+  ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 
   SCHEDULER_INTERVALS_MS.badActorFollow = 10000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
+  REPEAT_JOBS['videos-views'] = { every: 5000 }
+
+  REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
 
   CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
+  MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
+  ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0ms'
 }
 
 updateWebserverConfig()
@@ -601,6 +679,7 @@ export {
   CONFIG,
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
+  REDUNDANCY,
   JOB_CONCURRENCY,
   JOB_ATTEMPTS,
   LAST_MIGRATION_VERSION,
@@ -622,6 +701,7 @@ export {
   TORRENT_MIMETYPE_EXT,
   STATIC_MAX_AGE,
   STATIC_PATHS,
+  VIDEO_IMPORT_TIMEOUT,
   ACTIVITY_PUB,
   ACTIVITY_PUB_ACTOR_TYPES,
   THUMBNAILS_SIZE,
@@ -637,11 +717,16 @@ export {
   VIDEO_ABUSE_STATES,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
+  MEMOIZE_TTL,
+  USER_EMAIL_VERIFY_LIFETIME,
   IMAGE_MIMETYPE_EXT,
+  OVERVIEWS,
   SCHEDULER_INTERVALS_MS,
+  REPEAT_JOBS,
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,
+  CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
@@ -664,6 +749,18 @@ function getLocalConfigFilePath () {
 function updateWebserverConfig () {
   CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
   CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+}
+
+function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
+  if (!objs) return []
+
+  return objs.map(obj => {
+    return Object.assign(obj, {
+      minLifetime: parseDuration(obj.min_lifetime),
+      size: bytes.parse(obj.size),
+      minViews: obj.min_views
+    })
+  })
 }
 
 function buildLanguages () {
@@ -701,6 +798,9 @@ function buildLanguages () {
         additionalLanguages[l.iso6393] === true
     })
     .forEach(l => languages[l.iso6391 || l.iso6393] = l.name)
+
+  // Override Occitan label
+  languages['oc'] = 'Occitan'
 
   return languages
 }

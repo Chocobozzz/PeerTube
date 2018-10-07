@@ -1,5 +1,5 @@
 <xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="namespace1" datatype="plaintext" source-language="undefined" target-language="undefined">
+  <file original="namespace1" datatype="plaintext">
     <body>
       <trans-unit id="Music">
         <source>Music</source>

@@ -1,0 +1,12 @@
+@import '_variables';
+@import '_mixins';
+
+input:not([type=submit]) {
+  @include peertube-input-text(340px);
+  display: block;
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+}

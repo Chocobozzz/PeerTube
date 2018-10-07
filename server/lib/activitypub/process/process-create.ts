@@ -1,4 +1,4 @@
-import { ActivityCreate, VideoAbuseState, VideoTorrentObject } from '../../../../shared'
+import { ActivityCreate, CacheFileObject, VideoAbuseState, VideoTorrentObject } from '../../../../shared'
 import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -7,27 +7,28 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { VideoCommentModel } from '../../../models/video/video-comment'
-import { getOrCreateActorAndServerAndModel } from '../actor'
-import { resolveThread } from '../video-comments'
-import { getOrCreateAccountAndVideoAndChannel } from '../videos'
-import { forwardActivity, forwardVideoRelatedActivity } from '../send/utils'
+import { addVideoComment, resolveThread } from '../video-comments'
+import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { forwardVideoRelatedActivity } from '../send/utils'
+import { Redis } from '../../redis'
+import { createOrUpdateCacheFile } from '../cache-file'
 
-async function processCreateActivity (activity: ActivityCreate) {
+async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
   const activityType = activityObject.type
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
   if (activityType === 'View') {
-    return processCreateView(actor, activity)
+    return processCreateView(byActor, activity)
   } else if (activityType === 'Dislike') {
-    return retryTransactionWrapper(processCreateDislike, actor, activity)
+    return retryTransactionWrapper(processCreateDislike, byActor, activity)
   } else if (activityType === 'Video') {
-    return processCreateVideo(actor, activity)
+    return processCreateVideo(activity)
   } else if (activityType === 'Flag') {
-    return retryTransactionWrapper(processCreateVideoAbuse, actor, activityObject as VideoAbuseObject)
+    return retryTransactionWrapper(processCreateVideoAbuse, byActor, activityObject as VideoAbuseObject)
   } else if (activityType === 'Note') {
-    return retryTransactionWrapper(processCreateVideoComment, actor, activity)
+    return retryTransactionWrapper(processCreateVideoComment, byActor, activity)
+  } else if (activityType === 'CacheFile') {
+    return retryTransactionWrapper(processCacheFile, byActor, activity)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -42,13 +43,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateVideo (
-  actor: ActorModel,
-  activity: ActivityCreate
-) {
+async function processCreateVideo (activity: ActivityCreate) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(videoToCreateData, actor)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
 
   return video
 }
@@ -59,7 +57,7 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(dislike.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislike.object })
 
   return sequelizeTypescript.transaction(async t => {
     const rate = {
@@ -86,27 +84,44 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(view.object)
+  const options = {
+    videoObject: view.object,
+    fetchType: 'only-video' as 'only-video'
+  }
+  const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 
-  const actor = await ActorModel.loadByUrl(view.actor)
-  if (!actor) throw new Error('Unknown actor ' + view.actor)
-
-  await video.increment('views')
+  await Redis.Instance.addVideoView(video.id)
 
   if (video.isOwned()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
-    await forwardActivity(activity, undefined, exceptions)
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
 }
 
-async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
+async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) {
+  const cacheFile = activity.object as CacheFileObject
+
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
+
+  await sequelizeTypescript.transaction(async t => {
+    return createOrUpdateCacheFile(cacheFile, video, byActor, t)
+  })
+
+  if (video.isOwned()) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+  }
+}
+
+async function processCreateVideoAbuse (byActor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
-  const account = actor.Account
-  if (!account) throw new Error('Cannot create dislike with the non account actor ' + actor.url)
+  const account = byActor.Account
+  if (!account) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateAccountAndVideoAndChannel(videoAbuseToCreateData.object)
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoAbuseToCreateData.object })
 
   return sequelizeTypescript.transaction(async t => {
     const videoAbuseData = {
@@ -116,55 +131,26 @@ async function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateDat
       state: VideoAbuseState.PENDING
     }
 
-    await VideoAbuseModel.create(videoAbuseData)
+    await VideoAbuseModel.create(videoAbuseData, { transaction: t })
 
     logger.info('Remote abuse for video uuid %s created', videoAbuseToCreateData.object)
   })
 }
 
 async function processCreateVideoComment (byActor: ActorModel, activity: ActivityCreate) {
-  const comment = activity.object as VideoCommentObject
+  const commentObject = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
-  const { video, parents } = await resolveThread(comment.inReplyTo)
+  const { video } = await resolveThread(commentObject.inReplyTo)
 
-  return sequelizeTypescript.transaction(async t => {
-    let originCommentId = null
-    let inReplyToCommentId = null
+  const { created } = await addVideoComment(video, commentObject.id)
 
-    if (parents.length !== 0) {
-      const parent = parents[0]
+  if (video.isOwned() && created === true) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
 
-      originCommentId = parent.getThreadId()
-      inReplyToCommentId = parent.id
-    }
-
-    // This is a new thread
-    const objectToCreate = {
-      url: comment.id,
-      text: comment.content,
-      originCommentId,
-      inReplyToCommentId,
-      videoId: video.id,
-      accountId: byAccount.id
-    }
-
-    const options = {
-      where: {
-        url: objectToCreate.url
-      },
-      defaults: objectToCreate,
-      transaction: t
-    }
-    const [ ,created ] = await VideoCommentModel.findOrCreate(options)
-
-    if (video.isOwned() && created === true) {
-      // Don't resend the activity to the sender
-      const exceptions = [ byActor ]
-
-      await forwardVideoRelatedActivity(activity, t, exceptions, video)
-    }
-  })
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+  }
 }

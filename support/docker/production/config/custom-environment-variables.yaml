@@ -7,6 +7,8 @@ webserver:
     __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
+trust_proxy: "PEERTUBE_TRUST_PROXY"
+
 database:
   hostname: "PEERTUBE_DB_HOSTNAME"
   port:
@@ -37,6 +39,11 @@ smtp:
     __name: "PEERTUBE_SMTP_DISABLE_STARTTLS"
     __format: "json"
   from_address: "PEERTUBE_SMTP_FROM"
+
+user:
+  video_quota:
+    __name: "PEERTUBE_USER_VIDEO_QUOTA"
+    __format: "json"
 
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"

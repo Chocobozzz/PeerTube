@@ -1,5 +1,5 @@
 import * as xliff12ToJs from 'xliff/xliff12ToJs'
-import { readFileSync, unlink, writeFile } from 'fs'
+import { readFileSync, unlink, writeFile } from 'fs-extra'
 import { join } from 'path'
 import { buildFileLocale, I18N_LOCALES, isDefaultLocale } from '../../shared/models/i18n/i18n'
 import { eachSeries } from 'async'

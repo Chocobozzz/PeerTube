@@ -71,7 +71,8 @@ describe('Test handle downs', function () {
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
     channel: {
-      name: 'Default root channel',
+      name: 'root_channel',
+      displayName: 'Main root channel',
       description: '',
       isLocal: false
     },

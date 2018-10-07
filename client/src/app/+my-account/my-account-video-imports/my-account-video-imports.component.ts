@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core'
 import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { NotificationsService } from 'angular2-notifications'
-import { ConfirmService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoImport, VideoImportState } from '../../../../../shared/models/videos'
 import { VideoImportService } from '@app/shared/video-import'
@@ -21,7 +20,6 @@ export class MyAccountVideoImportsComponent extends RestTable implements OnInit 
 
   constructor (
     private notificationsService: NotificationsService,
-    private confirmService: ConfirmService,
     private videoImportService: VideoImportService,
     private i18n: I18n
   ) {

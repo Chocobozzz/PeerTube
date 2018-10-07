@@ -1,15 +1,4 @@
-$dropdown-link-active-bg: inherit;
-
-$zindex-modal: 10005;
-$modal-footer-border-width: 0;
-$modal-md: 600px;
-
-$input-btn-focus-width: 0;
-$input-btn-focus-color: inherit;
-$input-focus-border-color: #ced4da;
-
-$nav-pills-link-active-bg: #F0F0F0;
-$nav-pills-link-active-color: #000;
+@import "./_bootstrap-variables";
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
@@ -21,12 +10,12 @@ $nav-pills-link-active-color: #000;
 //@import '~bootstrap/scss/images';
 //@import '~bootstrap/scss/code';
 @import '~bootstrap/scss/grid';
-//@import '~bootstrap/scss/tables';
+@import '~bootstrap/scss/tables';
 @import '~bootstrap/scss/forms';
 @import '~bootstrap/scss/buttons';
 //@import '~bootstrap/scss/transitions';
 @import '~bootstrap/scss/dropdown';
-//@import '~bootstrap/scss/button-group';
+@import '~bootstrap/scss/button-group';
 @import '~bootstrap/scss/input-group';
 //@import '~bootstrap/scss/custom-forms';
 @import '~bootstrap/scss/nav';
@@ -34,7 +23,7 @@ $nav-pills-link-active-color: #000;
 //@import '~bootstrap/scss/card';
 //@import '~bootstrap/scss/breadcrumb';
 //@import '~bootstrap/scss/pagination';
-//@import '~bootstrap/scss/badge';
+@import '~bootstrap/scss/badge';
 //@import '~bootstrap/scss/jumbotron';
 @import '~bootstrap/scss/alert';
 //@import '~bootstrap/scss/progress';

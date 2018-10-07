@@ -19,7 +19,6 @@ import { isAccountDescriptionValid } from '../../helpers/custom-validators/accou
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
-import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
@@ -29,18 +28,8 @@ import { UserModel } from './user'
 @DefaultScope({
   include: [
     {
-      model: () => ActorModel,
-      required: true,
-      include: [
-        {
-          model: () => ServerModel,
-          required: false
-        },
-        {
-          model: () => AvatarModel,
-          required: false
-        }
-      ]
+      model: () => ActorModel, // Default scope includes avatar and server
+      required: true
     }
   ]
 })
@@ -144,8 +133,8 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number) {
-    return AccountModel.findById(id)
+  static load (id: number, transaction?: Sequelize.Transaction) {
+    return AccountModel.findById(id, { transaction })
   }
 
   static loadByUUID (uuid: string) {
@@ -194,7 +183,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadLocalByNameAndHost (name: string, host: string) {
+  static loadByNameAndHost (name: string, host: string) {
     const query = {
       include: [
         {
@@ -259,7 +248,8 @@ export class AccountModel extends Model<AccountModel> {
       displayName: this.getDisplayName(),
       description: this.description,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      userId: this.userId ? this.userId : undefined
     }
 
     return Object.assign(actor, account)

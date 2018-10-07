@@ -3,8 +3,11 @@ import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActi
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
 import { logger } from '../../helpers/logger'
 import { processActivities } from '../../lib/activitypub/process/process'
-import { asyncMiddleware, checkSignature, localAccountValidator, signatureValidator } from '../../middlewares'
+import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChannelValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { AccountModel } from '../../models/account/account'
+import { queue } from 'async'
 import { ActorModel } from '../../models/activitypub/actor'
 
 const inboxRouter = express.Router()
@@ -13,7 +16,7 @@ inboxRouter.post('/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
   asyncMiddleware(activityPubValidator),
-  asyncMiddleware(inboxController)
+  inboxController
 )
 
 inboxRouter.post('/accounts/:name/inbox',
@@ -21,7 +24,14 @@ inboxRouter.post('/accounts/:name/inbox',
   asyncMiddleware(checkSignature),
   asyncMiddleware(localAccountValidator),
   asyncMiddleware(activityPubValidator),
-  asyncMiddleware(inboxController)
+  inboxController
+)
+inboxRouter.post('/video-channels/:name/inbox',
+  signatureValidator,
+  asyncMiddleware(checkSignature),
+  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(activityPubValidator),
+  inboxController
 )
 
 // ---------------------------------------------------------------------------
@@ -32,7 +42,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function inboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
+const inboxQueue = queue<{ activities: Activity[], signatureActor?: ActorModel, inboxActor?: ActorModel }, Error>((task, cb) => {
+  processActivities(task.activities, task.signatureActor, task.inboxActor)
+    .then(() => cb())
+})
+
+function inboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const rootActivity: RootActivity = req.body
   let activities: Activity[] = []
 
@@ -49,16 +64,20 @@ async function inboxController (req: express.Request, res: express.Response, nex
   activities = activities.filter(a => isActivityValid(a))
   logger.debug('We keep %d activities.', activities.length, { activities })
 
-  let specificActor: ActorModel = undefined
+  let accountOrChannel: VideoChannelModel | AccountModel
   if (res.locals.account) {
-    specificActor = res.locals.account
+    accountOrChannel = res.locals.account
   } else if (res.locals.videoChannel) {
-    specificActor = res.locals.videoChannel
+    accountOrChannel = res.locals.videoChannel
   }
 
   logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor.url)
 
-  await processActivities(activities, res.locals.signature.actor, specificActor)
+  inboxQueue.push({
+    activities,
+    signatureActor: res.locals.signature.actor,
+    inboxActor: accountOrChannel ? accountOrChannel.Actor : undefined
+  })
 
-  res.status(204).end()
+  return res.status(204).end()
 }

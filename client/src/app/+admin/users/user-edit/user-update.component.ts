@@ -2,13 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { NotificationsService } from 'angular2-notifications'
-import { UserService } from '../shared'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
-import { UserUpdate, User } from '../../../../../../shared'
+import { User, UserUpdate } from '../../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
+import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-user-update',
@@ -25,6 +26,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   constructor (
     protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
+    protected configService: ConfigService,
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
     private router: Router,
@@ -33,14 +35,17 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private i18n: I18n
   ) {
     super()
+
+    this.buildQuotaOptions()
   }
 
   ngOnInit () {
-    const defaultValues = { videoQuota: '-1' }
+    const defaultValues = { videoQuota: '-1', videoQuotaDaily: '-1' }
     this.buildForm({
       email: this.userValidatorsService.USER_EMAIL,
       role: this.userValidatorsService.USER_ROLE,
-      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
+      videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY
     }, defaultValues)
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -64,6 +69,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     // A select in HTML is always mapped as a string, we convert it to number
     userUpdate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
+    userUpdate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
     this.userService.updateUser(this.userId, userUpdate).subscribe(
       () => {
@@ -93,7 +99,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     this.form.patchValue({
       email: userJson.email,
       role: userJson.role,
-      videoQuota: userJson.videoQuota
+      videoQuota: userJson.videoQuota,
+      videoQuotaDaily: userJson.videoQuotaDaily
     })
   }
 }

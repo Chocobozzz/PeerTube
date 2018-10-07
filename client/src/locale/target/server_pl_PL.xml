@@ -115,6 +115,30 @@
         <source>Private</source>
         <target>Prywatne</target>
       </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>Opublikowano</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>Transkodować</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>Importować</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>Oczekiwanie</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>Sukces</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>Niepowodzenie</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
         <target>Różne</target>

@@ -1,3 +1,6 @@
+$small-view: 800px;
+$mobile-view: 500px;
+
 $main-fonts: 'Source Sans Pro', sans-serif;
 $font-regular: 400;
 $font-semibold: 600;
@@ -8,9 +11,13 @@ $grey-hoover-color: #EFEFEF;;
 $orange-color: #F1680D;
 $orange-hoover-color: #F97D46;
 
-$black-background: #000;
-$grey-background: #f6f2f2;
-$red-error: #FF0000;
+$bg-color: #fff;
+$fg-color: #000;
+
+$red: #FF0000;
+$green: #39CC0B;
+
+$grey-actor-name: #777272;
 
 $expanded-horizontal-margins: 150px;
 $not-expanded-horizontal-margins: 30px;
@@ -21,10 +28,13 @@ $header-height: 50px;
 $header-border-color: #e9eff6;
 $search-input-width: 375px;
 
+$menu-background: #000;
 $menu-color: #fff;
 $menu-bottom-color: #C6C6C6;
 $menu-width: 240px;
-$menu-left-padding: 26px;
+$menu-lateral-padding: 26px;
+
+$sub-menu-color: #F7F7F7;
 
 $footer-height: 30px;
 $footer-margin: 30px;
@@ -34,4 +44,29 @@ $footer-border-color: $header-border-color;
 $video-thumbnail-height: 110px;
 $video-thumbnail-width: 200px;
 
-$theater-bottom-space: 85px;
+$theater-bottom-space: 115px;
+
+$input-background-color: $bg-color;
+$input-placeholder-color: #898989;
+
+/*** map theme ***/
+
+// pass variables into a sass map,
+// to be warned of non-existing variables
+$variables: (
+  --mainColor: var(--mainColor),
+  --mainHoverColor: var(--mainHoverColor),
+  --mainBackgroundColor: var(--mainBackgroundColor),
+  --mainForegroundColor: var(--mainForegroundColor),
+  --menuBackgroundColor: var(--menuBackgroundColor),
+  --menuForegroundColor: var(--menuForegroundColor),
+  --submenuColor: var(--submenuColor),
+  --inputColor: var(--inputColor),
+  --inputPlaceholderColor: var(--inputPlaceholderColor)
+);
+
+/*** theme helper ***/
+
+@function var($variable) {
+  @return map-get($variables, $variable);
+}

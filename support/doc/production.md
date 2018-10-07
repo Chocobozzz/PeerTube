@@ -134,6 +134,19 @@ On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated
 $ sudo pkg install dehydrated
 ```
 
+### TCP/IP Tuning
+
+**On Linux**
+
+```
+$ sudo cp /var/www/peertube/peertube-latest/support/sysctl.d/30-peertube-tcp.conf /etc/sysctl.d/
+$ sudo sysctl -p /etc/sysctl.d/30-peertube-tcp.conf
+```
+
+Your distro may enable this by default, but at least Debian 9 does not, and the default FIFO
+scheduler is quite prone to "Buffer Bloat" and extreme latency when dealing with slower client
+links as we often encounter in a video server.
+
 ### systemd
 
 If your OS uses systemd, copy the configuration template:
@@ -168,9 +181,8 @@ $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
 ```
 
-### FreeBSD
-
-If you're using FreeBSD, copy the startup script and update rc.conf:
+**FreeBSD**
+On FreeBSD, copy the startup script and update rc.conf:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/

@@ -15,6 +15,10 @@ function isUserVideoQuotaValid (value: string) {
   return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA)
 }
 
+function isUserVideoQuotaDailyValid (value: string) {
+  return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA_DAILY)
+}
+
 function isUserUsernameValid (value: string) {
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
@@ -27,6 +31,10 @@ function isUserDisplayNameValid (value: string) {
 
 function isUserDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION))
+}
+
+function isUserEmailVerifiedValid (value: any) {
+  return isBooleanValid(value)
 }
 
 const nsfwPolicies = values(NSFW_POLICY_TYPES)
@@ -66,7 +74,9 @@ export {
   isUserBlockedReasonValid,
   isUserRoleValid,
   isUserVideoQuotaValid,
+  isUserVideoQuotaDailyValid,
   isUserUsernameValid,
+  isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
   isUserAutoPlayVideoValid,
   isUserDisplayNameValid,

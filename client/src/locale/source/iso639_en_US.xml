@@ -1,5 +1,5 @@
 <xliff xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd" xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
-  <file original="namespace1" datatype="plaintext" source-language="undefined" target-language="undefined">
+  <file original="namespace1" datatype="plaintext">
     <body>
       <trans-unit id="Afar">
         <source>Afar</source>
@@ -505,8 +505,8 @@
         <source>Nyanja</source>
         <target>undefined</target>
       </trans-unit>
-      <trans-unit id="Occitan (post 1500)">
-        <source>Occitan (post 1500)</source>
+      <trans-unit id="Occitan">
+        <source>Occitan</source>
         <target>undefined</target>
       </trans-unit>
       <trans-unit id="Ojibwa">

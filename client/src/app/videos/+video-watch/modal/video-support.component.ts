@@ -19,9 +19,7 @@ export class VideoSupportComponent {
   constructor (
     private markdownService: MarkdownService,
     private modalService: NgbModal
-  ) {
-    // empty
-  }
+  ) { }
 
   show () {
     this.videoHTMLSupport = this.markdownService.enhancedMarkdownToHTML(this.video.support)

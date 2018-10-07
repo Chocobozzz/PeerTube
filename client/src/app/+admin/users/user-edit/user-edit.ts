@@ -1,22 +1,17 @@
 import { ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
 import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
+import { EditCustomConfigComponent } from '../../../+admin/config/edit-custom-config/'
+import { ConfigService } from '@app/+admin/config/shared/config.service'
 
 export abstract class UserEdit extends FormReactive {
-  videoQuotaOptions = [
-    { value: -1, label: 'Unlimited' },
-    { value: 0, label: '0' },
-    { value: 100 * 1024 * 1024, label: '100MB' },
-    { value: 500 * 1024 * 1024, label: '500MB' },
-    { value: 1024 * 1024 * 1024, label: '1GB' },
-    { value: 5 * 1024 * 1024 * 1024, label: '5GB' },
-    { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
-    { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
-  ].map(q => ({ value: q.value.toString(), label: q.label })) // Used by a HTML select, so convert key into strings
 
+  videoQuotaOptions: { value: string, label: string }[] = []
+  videoQuotaDailyOptions: { value: string, label: string }[] = []
   roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
 
   protected abstract serverService: ServerService
+  protected abstract configService: ConfigService
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
 
@@ -37,5 +32,14 @@ export abstract class UserEdit extends FormReactive {
     }
 
     return multiplier * parseInt(this.form.value['videoQuota'], 10)
+  }
+
+  protected buildQuotaOptions () {
+    // These are used by a HTML select, so convert key into strings
+    this.videoQuotaOptions = this.configService
+                                 .videoQuotaOptions.map(q => ({ value: q.value.toString(), label: q.label }))
+
+    this.videoQuotaDailyOptions = this.configService
+                                      .videoQuotaDailyOptions.map(q => ({ value: q.value.toString(), label: q.label }))
   }
 }

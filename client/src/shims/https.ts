@@ -1,1 +1,1 @@
-module.exports = require('https-browserify');
+module.exports = require('https-browserify')

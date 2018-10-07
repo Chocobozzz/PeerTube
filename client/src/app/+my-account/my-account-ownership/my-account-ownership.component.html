@@ -1,0 +1,54 @@
+<p-table
+    [value]="videoChangeOwnerships"
+    [lazy]="true"
+    [paginator]="true"
+    [totalRecords]="totalRecords"
+    [rows]="rowsPerPage"
+    [sortField]="sort.field"
+    [sortOrder]="sort.order"
+    (onLazyLoad)="loadLazy($event)"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th i18n>Initiator</th>
+      <th i18n>Video</th>
+      <th i18n pSortableColumn="createdAt">
+        Created
+        <p-sortIcon field="createdAt"></p-sortIcon>
+      </th>
+      <th i18n>Status</th>
+      <th i18n>Action</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-videoChangeOwnership>
+    <tr>
+      <td>
+        <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Go to the account"
+           target="_blank" rel="noopener noreferrer">
+          {{ createByString(videoChangeOwnership.initiatorAccount) }}
+        </a>
+      </td>
+      <td>
+        <a [href]="videoChangeOwnership.video.url" i18n-title title="Go to the video" target="_blank"
+           rel="noopener noreferrer">
+          {{ videoChangeOwnership.video.name }}
+        </a>
+      </td>
+      <td>{{ videoChangeOwnership.createdAt }}</td>
+      <td i18n>{{ videoChangeOwnership.status }}</td>
+      <td class="action-cell">
+        <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
+          <my-button i18n label="Accept"
+                     icon="icon-tick"
+                     (click)="openAcceptModal(videoChangeOwnership)"></my-button>
+          <my-button i18n label="Refuse"
+                     icon="icon-cross"
+                     (click)="refuse(videoChangeOwnership)">Refuse</my-button>
+        </ng-container>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<my-account-accept-ownership #myAccountAcceptOwnershipComponent (accepted)="accepted()"></my-account-accept-ownership>

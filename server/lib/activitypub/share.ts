@@ -6,6 +6,11 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
 import { getAnnounceActivityPubUrl } from './url'
 import { VideoChannelModel } from '../../models/video/video-channel'
+import * as Bluebird from 'bluebird'
+import { doRequest } from '../../helpers/requests'
+import { getOrCreateActorAndServerAndModel } from './actor'
+import { logger } from '../../helpers/logger'
+import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
@@ -17,13 +22,48 @@ async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) 
 }
 
 async function changeVideoChannelShare (video: VideoModel, oldVideoChannel: VideoChannelModel, t: Transaction) {
+  logger.info('Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name)
+
   await undoShareByVideoChannel(video, oldVideoChannel, t)
 
   await shareByVideoChannel(video, t)
 }
 
+async function addVideoShares (shareUrls: string[], instance: VideoModel) {
+  await Bluebird.map(shareUrls, async shareUrl => {
+    try {
+      // Fetch url
+      const { body } = await doRequest({
+        uri: shareUrl,
+        json: true,
+        activityPub: true
+      })
+      if (!body || !body.actor) throw new Error('Body of body actor is invalid')
+
+      const actorUrl = body.actor
+      const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+
+      const entry = {
+        actorId: actor.id,
+        videoId: instance.id,
+        url: shareUrl
+      }
+
+      await VideoShareModel.findOrCreate({
+        where: {
+          url: shareUrl
+        },
+        defaults: entry
+      })
+    } catch (err) {
+      logger.warn('Cannot add share %s.', shareUrl, { err })
+    }
+  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
+}
+
 export {
   changeVideoChannelShare,
+  addVideoShares,
   shareVideoByServerAndChannel
 }
 

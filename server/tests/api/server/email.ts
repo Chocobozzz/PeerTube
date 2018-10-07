@@ -5,6 +5,7 @@ import 'mocha'
 import {
   addVideoToBlacklist,
   askResetPassword,
+  askSendVerifyEmail,
   blockUser,
   createUser, removeVideoFromBlacklist,
   reportVideoAbuse,
@@ -12,7 +13,8 @@ import {
   runServer,
   unblockUser,
   uploadVideo,
-  userLogin
+  userLogin,
+  verifyEmail
 } from '../../utils'
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { mockSmtpServer } from '../../utils/miscs/email'
@@ -204,6 +206,44 @@ describe('Test emails', function () {
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblacklisted')
       expect(email['text']).contains('my super user video')
+    })
+  })
+
+  describe('When verifying a user email', function () {
+
+    it('Should ask to send the verification email', async function () {
+      this.timeout(10000)
+
+      await askSendVerifyEmail(server.url, 'user_1@example.com')
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(7)
+
+      const email = emails[6]
+
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('user_1@example.com')
+      expect(email['subject']).contains('Verify')
+
+      const verificationStringMatches = /verificationString=([a-z0-9]+)/.exec(email['text'])
+      expect(verificationStringMatches).not.to.be.null
+
+      verificationString = verificationStringMatches[1]
+      expect(verificationString).to.not.be.undefined
+      expect(verificationString).to.have.length.above(2)
+
+      const userIdMatches = /userId=([0-9]+)/.exec(email['text'])
+      expect(userIdMatches).not.to.be.null
+
+      userId = parseInt(userIdMatches[1], 10)
+    })
+
+    it('Should not verify the email with an invalid verification string', async function () {
+      await verifyEmail(server.url, userId, verificationString + 'b', 403)
+    })
+
+    it('Should verify the email', async function () {
+      await verifyEmail(server.url, userId, verificationString)
     })
   })
 

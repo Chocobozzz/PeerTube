@@ -8,7 +8,7 @@ const lock = new AsyncLock({ timeout: 5000 })
 
 function cacheRoute (lifetimeArg: string | number) {
   return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
-    const redisKey = Redis.Instance.buildCachedRouteKey(req)
+    const redisKey = Redis.Instance.generateCachedRouteKey(req)
 
     try {
       await lock.acquire(redisKey, async (done) => {
@@ -31,6 +31,8 @@ function cacheRoute (lifetimeArg: string | number) {
                      logger.error('Cannot cache route.', { err })
                      return done(err)
                    })
+            } else {
+              done()
             }
 
             return sendSave(body)
@@ -52,7 +54,7 @@ function cacheRoute (lifetimeArg: string | number) {
         return done()
       })
     } catch (err) {
-      logger.error('Cannot serve cached route.', err)
+      logger.error('Cannot serve cached route.', { err })
       return next()
     }
   }

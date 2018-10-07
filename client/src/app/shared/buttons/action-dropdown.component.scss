@@ -22,6 +22,12 @@
     background-image: url('../../../assets/images/video/more.svg');
     top: -1px;
   }
+
+  &.small {
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px;
+  }
 }
 
 .dropdown-menu {

@@ -3,7 +3,9 @@
     Login
   </div>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}
+    <span *ngIf="error === 'User email is not verified.'"> <a i18n routerLink="/verify-account/ask-send-email">Request new verification email.</a></span>
+  </div>
 
   <form role="form" (ngSubmit)="login()" [formGroup]="form">
     <div class="form-group">
@@ -11,13 +13,13 @@
         <label i18n for="username">User</label>
         <input
           type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
-          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }" #emailInput
         >
         <a i18n *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
           or create an account
         </a>
 
-        <a i18n *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#getting-started" target="_blank" title="Click here to see how to get started!" class="create-an-account">
+        <a i18n *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#instances-list" target="_blank" title="Click here to see a list of instances where to register" class="create-an-account">
           or create an account on another instance
         </a>
 
@@ -46,7 +48,7 @@
       </div>
     </div>
 
-    <input type="submit" value="Login" [disabled]="!form.valid">
+    <input type="submit" i18n-value value="Login" [disabled]="!form.valid">
   </form>
 </div>
 

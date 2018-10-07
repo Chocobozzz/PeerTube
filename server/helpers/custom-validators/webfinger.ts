@@ -2,7 +2,7 @@ import { CONFIG, REMOTE_SCHEME } from '../../initializers'
 import { sanitizeHost } from '../core-utils'
 import { exists } from './misc'
 
-function isWebfingerResourceValid (value: string) {
+function isWebfingerLocalResourceValid (value: string) {
   if (!exists(value)) return false
   if (value.startsWith('acct:') === false) return false
 
@@ -17,5 +17,5 @@ function isWebfingerResourceValid (value: string) {
 // ---------------------------------------------------------------------------
 
 export {
-  isWebfingerResourceValid
+  isWebfingerLocalResourceValid
 }

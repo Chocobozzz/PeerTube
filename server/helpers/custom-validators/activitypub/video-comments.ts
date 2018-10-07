@@ -9,7 +9,7 @@ function isVideoCommentCreateActivityValid (activity: any) {
 }
 
 function sanitizeAndCheckVideoCommentObject (comment: any) {
-  if (comment.type !== 'Note') return false
+  if (!comment || comment.type !== 'Note') return false
 
   normalizeComment(comment)
 

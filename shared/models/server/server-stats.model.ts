@@ -1,3 +1,5 @@
+import { VideoRedundancyStrategy } from '../redundancy'
+
 export interface ServerStats {
   totalUsers: number
   totalLocalVideos: number
@@ -9,4 +11,12 @@ export interface ServerStats {
 
   totalInstanceFollowers: number
   totalInstanceFollowing: number
+
+  videosRedundancy: {
+    strategy: VideoRedundancyStrategy
+    totalSize: number
+    totalUsed: number
+    totalVideoFiles: number
+    totalVideos: number
+  }[]
 }

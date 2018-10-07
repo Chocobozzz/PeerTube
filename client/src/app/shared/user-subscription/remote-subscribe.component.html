@@ -1,0 +1,24 @@
+<form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
+  <div class="form-group">
+    <input type="email"
+      formControlName="text"
+      class="form-control"
+      (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()"
+      placeholder="jane_doe@example.com">
+  </div>
+
+  <button type="submit" [disabled]="!form.valid" class="btn btn-sm btn-remote-follow" i18n>
+    <span *ngIf="!interact">Remote subscribe</span>
+    <span *ngIf="interact">Remote interact</span>
+  </button>
+
+  <my-help *ngIf="!interact && showHelp"
+           helpType="custom"
+           i18n-customHtml customHtml="You can subscribe to the channel via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.">
+  </my-help>
+
+  <my-help *ngIf="showHelp && interact"
+           helpType="custom"
+           i18n-customHtml customHtml="You can interact with this via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.">
+  </my-help>
+</form>

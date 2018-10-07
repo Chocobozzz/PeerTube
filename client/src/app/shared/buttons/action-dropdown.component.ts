@@ -17,4 +17,5 @@ export class ActionDropdownComponent<T> {
   @Input() actions: DropdownAction<T>[] = []
   @Input() entry: T
   @Input() placement = 'left'
+  @Input() buttonSize: 'normal' | 'small' = 'normal'
 }

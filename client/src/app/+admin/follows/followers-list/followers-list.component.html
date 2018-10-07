@@ -19,7 +19,10 @@
       <td>{{ follow.score }}</td>
       <td>{{ follow.follower.name }}</td>
       <td>{{ follow.follower.host }}</td>
-      <td>{{ follow.state }}</td>
+
+      <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
+      <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
+
       <td>{{ follow.createdAt }}</td>
     </tr>
   </ng-template>
