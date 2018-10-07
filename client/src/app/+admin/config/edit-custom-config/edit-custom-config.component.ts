@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { ConfirmService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { CustomConfigValidatorsService, FormReactive, UserValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
@@ -29,7 +28,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private configService: ConfigService,
     private serverService: ServerService,
-    private confirmService: ConfirmService,
     private i18n: I18n
   ) {
     super()
