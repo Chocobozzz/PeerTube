@@ -158,9 +158,7 @@
     "webpack-cli": "^3.0.8",
     "webtorrent": "https://github.com/webtorrent/webtorrent#e9b209c7970816fc29e0cc871157a4918d66001d",
     "whatwg-fetch": "^3.0.0",
-    "zone.js": "~0.8.5"
-  },
-  "dependencies": {
+    "zone.js": "~0.8.5",
     "generate-password-browser": "^1.0.2"
   }
 }
