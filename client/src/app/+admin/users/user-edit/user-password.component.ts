@@ -19,9 +19,10 @@ import { FormReactive } from '../../../shared'
 })
 export class UserPasswordComponent extends FormReactive implements OnInit, OnDestroy {
   error: string
-  userId: number
   username: string
   showPassword = false
+
+  @Input() userId: number
 
   private paramsSub: Subscription
 
@@ -42,15 +43,6 @@ export class UserPasswordComponent extends FormReactive implements OnInit, OnDes
   ngOnInit () {
     this.buildForm({
       password: this.userValidatorsService.USER_PASSWORD
-    })
-
-    this.paramsSub = this.route.params.subscribe(routeParams => {
-      const userId = routeParams['id']
-      this.userService.getUser(userId).subscribe(
-        user => this.onUserFetched(user),
-
-        err => this.error = err.message
-      )
     })
   }
 
