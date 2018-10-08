@@ -1,5 +1,5 @@
 listen:
-  listen: '0.0.0.0'
+  hostname: '0.0.0.0'
   port: 9000
 
 webserver:
