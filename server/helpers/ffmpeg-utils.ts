@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
-import { VideoResolution } from '../../shared/models/videos'
+import { VideoResolution, getTargetBitrate } from '../../shared/models/videos'
 import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -53,6 +53,16 @@ async function getVideoFileFPS (path: string) {
   }
 
   return 0
+}
+
+async function getVideoFileBitrate (path: string) {
+  return new Promise<number>((res, rej) => {
+    ffmpeg.ffprobe(path, (err, metadata) => {
+      if (err) return rej(err)
+
+      return res(metadata.format.bit_rate)
+    })
+  })
 }
 
 function getDurationFromVideoFile (path: string) {
@@ -138,6 +148,12 @@ function transcode (options: TranscodeOptions) {
       command = command.withFPS(fps)
     }
 
+    // Constrained Encoding (VBV)
+    // https://slhck.info/video/2017/03/01/rate-control.html
+    // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
+    const targetBitrate = getTargetBitrate(options.resolution, fps, VIDEO_TRANSCODING_FPS)
+    command.outputOptions([`-b:v ${ targetBitrate }`, `-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
+
     command
       .on('error', (err, stdout, stderr) => {
         logger.error('Error in transcoding job.', { stdout, stderr })
@@ -157,7 +173,8 @@ export {
   transcode,
   getVideoFileFPS,
   computeResolutionsToTranscode,
-  audio
+  audio,
+  getVideoFileBitrate
 }
 
 // ---------------------------------------------------------------------------

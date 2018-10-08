@@ -5,6 +5,7 @@ import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
 import { remove, readdir } from 'fs-extra'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
+import { getUUIDFromFilename } from '../server/helpers/utils'
 
 run()
   .then(() => process.exit(0))
@@ -80,15 +81,6 @@ async function pruneDirectory (directory: string, onlyOwned = false) {
   }
 
   return toDelete
-}
-
-function getUUIDFromFilename (filename: string) {
-  const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
-  const result = filename.match(regex)
-
-  if (!result || Array.isArray(result) === false) return null
-
-  return result[0]
 }
 
 async function askConfirmation () {

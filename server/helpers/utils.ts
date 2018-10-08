@@ -77,6 +77,20 @@ async function getVersion () {
   return require('../../../package.json').version
 }
 
+/**
+ * From a filename like "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3.mp4", returns
+ * only the "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3" part. If the filename does
+ * not contain a UUID, returns null.
+ */
+function getUUIDFromFilename (filename: string) {
+  const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
+  const result = filename.match(regex)
+
+  if (!result || Array.isArray(result) === false) return null
+
+  return result[0]
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -86,5 +100,6 @@ export {
   getSecureTorrentName,
   getServerActor,
   getVersion,
-  generateVideoTmpPath
+  generateVideoTmpPath,
+  getUUIDFromFilename
 }

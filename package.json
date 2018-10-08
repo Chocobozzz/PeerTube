@@ -51,6 +51,7 @@
     "generate-api-doc": "scripty",
     "parse-log": "node ./dist/scripts/parse-log.js",
     "prune-storage": "node ./dist/scripts/prune-storage.js",
+    "optimize-old-videos": "node ./dist/scripts/optimize-old-videos.js",
     "postinstall": "cd client && yarn install --pure-lockfile",
     "tsc": "tsc",
     "spectacle-docs": "node_modules/spectacle-docs/bin/spectacle.js",

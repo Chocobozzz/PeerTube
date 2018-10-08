@@ -8,7 +8,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { importVideoFile, transcodeOriginalVideofile, optimizeOriginalVideofile } from '../../video-transcoding'
+import { importVideoFile, transcodeOriginalVideofile, optimizeVideofile } from '../../video-transcoding'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -56,7 +56,7 @@ async function processVideoFile (job: Bull.Job) {
 
     await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
   } else {
-    await optimizeOriginalVideofile(video)
+    await optimizeVideofile(video)
 
     await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload.isNewVideo)
   }

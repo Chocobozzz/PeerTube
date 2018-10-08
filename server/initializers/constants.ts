@@ -3,7 +3,7 @@ import { dirname, join } from 'path'
 import { JobType, VideoRateType, VideoState, VideosRedundancy } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoAbuseState, VideoImportState, VideoPrivacy } from '../../shared/models/videos'
+import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, parseDuration, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
@@ -393,7 +393,7 @@ const RATES_LIMIT = {
 }
 
 let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
-const VIDEO_TRANSCODING_FPS = {
+const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MIN: 10,
   AVERAGE: 30,
   MAX: 60,
