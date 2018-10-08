@@ -30,7 +30,7 @@ if (!program['tags']) program['tags'] = []
 if (!program['nsfw']) program['nsfw'] = false
 if (!program['privacy']) program['privacy'] = VideoPrivacy.PUBLIC
 if (!program['commentsEnabled']) program['commentsEnabled'] = false
-if (!program['downloadingEnabled']) program['downloadingEnabled'] = false
+if (!program['downloadingEnabled']) program['downloadingEnabled'] = true
 
 getSettings()
   .then(settings => {
