@@ -124,7 +124,7 @@ $ npm run dev
 
 Depending on your OS, you may face the following error :
 ```
-$ [nodemon] Internal watch failed: ENOSPC: no space left on device, watch '/home/clement/PeerTube/dist'
+$ [nodemon] Internal watch failed: ENOSPC: no space left on device, watch '/PeerTube/dist'
 ```
 
 This is due to your system's limit on the number of files you can monitor for live-checking changes. For example, Ubuntu uses inotify and this limit is set to 8192. Then you need to change this limit :
