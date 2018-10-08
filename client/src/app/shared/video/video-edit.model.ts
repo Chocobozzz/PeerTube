@@ -27,7 +27,15 @@ export class VideoEdit implements VideoUpdate {
   id?: number
   scheduleUpdate?: VideoScheduleUpdate
 
-  constructor (video?: Video & { tags: string[], commentsEnabled: boolean, downloadEnabled: boolean, support: string, thumbnailUrl: string, previewUrl: string }) {
+  constructor (
+    video?: Video & {
+      tags: string[],
+      commentsEnabled: boolean,
+      downloadEnabled: boolean,
+      support: string,
+      thumbnailUrl: string,
+      previewUrl: string
+    }) {
     if (video) {
       this.id = video.id
       this.uuid = video.uuid
