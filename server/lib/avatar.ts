@@ -7,10 +7,11 @@ import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { extname, join } from 'path'
 import { retryTransactionWrapper } from '../helpers/database-utils'
+import * as uuidv4 from 'uuid/v4'
 
 async function updateActorAvatarFile (avatarPhysicalFile: Express.Multer.File, accountOrChannel: AccountModel | VideoChannelModel) {
   const extension = extname(avatarPhysicalFile.filename)
-  const avatarName = accountOrChannel.Actor.uuid + extension
+  const avatarName = uuidv4() + extension
   const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
   await processImage(avatarPhysicalFile, destination, AVATARS_SIZE)
 
