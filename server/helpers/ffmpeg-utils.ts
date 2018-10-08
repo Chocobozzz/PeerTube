@@ -152,7 +152,7 @@ function transcode (options: TranscodeOptions) {
     // https://slhck.info/video/2017/03/01/rate-control.html
     // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
     const targetBitrate = getTargetBitrate(options.resolution, fps, VIDEO_TRANSCODING_FPS)
-    command.outputOptions([`-b:v ${ targetBitrate }`, `-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
+    command.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 
     command
       .on('error', (err, stdout, stderr) => {
