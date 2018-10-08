@@ -34,22 +34,22 @@ export function getTargetBitrate (resolution: VideoResolution, fps: number,
       // quality according to Google Live Encoder: 2,250 - 6,000 Kbps
       // Quality according to YouTube Video Info: 2634 Kbps
       return 2600 * 1000
-    } else {
-      // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
-      // Quality according to YouTube Video Info: 1752 Kbps
-      return 1750 * 1000
     }
+
+    // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
+    // Quality according to YouTube Video Info: 1752 Kbps
+    return 1750 * 1000
   case VideoResolution.H_1080P: // fallthrough
   default:
     if (fps === fpsTranscodingConstants.MAX) {
       // quality according to Google Live Encoder: 3000 - 6000 Kbps
       // Quality according to YouTube Video Info: 4387 Kbps
       return 4400 * 1000
-    } else {
-      // quality according to Google Live Encoder: 3000 - 6000 Kbps
-      // Quality according to YouTube Video Info: 3277 Kbps
-      return 3300 * 1000
     }
+
+    // quality according to Google Live Encoder: 3000 - 6000 Kbps
+    // Quality according to YouTube Video Info: 3277 Kbps
+    return 3300 * 1000
   }
 }
 

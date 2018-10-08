@@ -4,8 +4,8 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoDetails, VideoState, getMaxBitrate, VideoResolution } from '../../../../shared/models/videos'
-import { getVideoFileFPS, audio, getVideoFileBitrate, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
+import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   doubleFollow,
@@ -20,9 +20,9 @@ import {
   uploadVideo,
   webtorrentAdd
 } from '../../utils'
-import { join, basename } from 'path'
+import { join } from 'path'
 import { waitJobs } from '../../utils/server/jobs'
-import { remove } from 'fs-extra'
+import { pathExists } from 'fs-extra'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
@@ -283,59 +283,62 @@ describe('Test video transcoding', function () {
     }
   })
 
-  const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4')
+  const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)
   it('Should respect maximum bitrate values', async function () {
     this.timeout(160000)
 
     {
-      // Generate a random, high bitrate video on the fly, so we don't have to include
-      // a large file in the repo. The video needs to have a certain minimum length so
-      // that FFmpeg properly applies bitrate limits.
-      // https://stackoverflow.com/a/15795112
-      await new Promise<void>(async (res, rej) => {
-        ffmpeg()
-          .outputOptions(['-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom'])
-          .outputOptions(['-ac 2', '-f s16le', '-i /dev/urandom', '-t 10'])
-          .outputOptions(['-maxrate 10M', '-bufsize 10M'])
-          .output(tempFixturePath)
-          .on('error', rej)
-          .on('end', res)
-          .run()
-      })
+      const exists = await pathExists(tempFixturePath)
+      if (!exists) {
+
+        // Generate a random, high bitrate video on the fly, so we don't have to include
+        // a large file in the repo. The video needs to have a certain minimum length so
+        // that FFmpeg properly applies bitrate limits.
+        // https://stackoverflow.com/a/15795112
+        await new Promise<void>(async (res, rej) => {
+          ffmpeg()
+            .outputOptions([ '-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom' ])
+            .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])
+            .outputOptions([ '-maxrate 10M', '-bufsize 10M' ])
+            .output(tempFixturePath)
+            .on('error', rej)
+            .on('end', res)
+            .run()
+        })
+      }
 
       const bitrate = await getVideoFileBitrate(tempFixturePath)
       expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
+    }
 
-      const videoAttributes = {
-        name: 'high bitrate video',
-        description: 'high bitrate video',
-        fixture: basename(tempFixturePath)
-      }
+    const videoAttributes = {
+      name: 'high bitrate video',
+      description: 'high bitrate video',
+      fixture: tempFixturePath
+    }
 
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+    await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-      await waitJobs(servers)
+    await waitJobs(servers)
 
-      for (const server of servers) {
-        const res = await getVideosList(server.url)
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
 
-        const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
 
-        for (const resolution of ['240', '360', '480', '720', '1080']) {
-          const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
-          const bitrate = await getVideoFileBitrate(path)
-          const fps = await getVideoFileFPS(path)
-          const resolution2 = await getVideoFileResolution(path)
+      for (const resolution of ['240', '360', '480', '720', '1080']) {
+        const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+        const bitrate = await getVideoFileBitrate(path)
+        const fps = await getVideoFileFPS(path)
+        const resolution2 = await getVideoFileResolution(path)
 
-          expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
-          expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
-        }
+        expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
+        expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
       }
     }
   })
 
   after(async function () {
-    remove(tempFixturePath)
     killallServers(servers)
   })
 })

@@ -51,10 +51,12 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   expect(data.length).to.be.below(maxLength)
 }
 
-function buildAbsoluteFixturePath (path: string) {
+function buildAbsoluteFixturePath (path: string, customTravisPath = false) {
   if (isAbsolute(path)) {
     return path
   }
+
+  if (customTravisPath && process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
 
   return join(__dirname, '..', '..', 'fixtures', path)
 }

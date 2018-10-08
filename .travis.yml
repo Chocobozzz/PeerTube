@@ -14,7 +14,10 @@ addons:
       - g++-4.9
   postgresql: "9.4"
 
-cache: yarn
+cache:
+  directories:
+    - $HOME/.cache/yarn
+    - $HOME/fixtures
 
 sudo: false
 
