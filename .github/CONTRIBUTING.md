@@ -122,6 +122,18 @@ and the web server is automatically restarted.
 $ npm run dev
 ```
 
+Depending on your OS, you may face the following error :
+```
+$ [nodemon] Internal watch failed: ENOSPC: no space left on device, watch '/PeerTube/dist'
+```
+
+This is due to your system's limit on the number of files you can monitor for live-checking changes. For example, Ubuntu uses inotify and this limit is set to 8192. Then you need to change this limit :
+```
+echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+
+See more information here : https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
+
 ### Federation
 
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
