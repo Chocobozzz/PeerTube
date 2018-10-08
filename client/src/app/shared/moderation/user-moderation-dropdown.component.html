@@ -1,5 +1,5 @@
 <ng-container *ngIf="user && userActions.length !== 0">
   <my-user-ban-modal #userBanModal (userBanned)="onUserBanned()"></my-user-ban-modal>
 
-  <my-action-dropdown [actions]="userActions" [entry]="user" [buttonSize]="buttonSize"></my-action-dropdown>
+  <my-action-dropdown [actions]="userActions" [entry]="user" [buttonSize]="buttonSize" [placement]="placement"></my-action-dropdown>
 </ng-container>

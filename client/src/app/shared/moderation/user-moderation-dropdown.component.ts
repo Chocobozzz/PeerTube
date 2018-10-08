@@ -17,6 +17,7 @@ export class UserModerationDropdownComponent implements OnInit {
 
   @Input() user: User
   @Input() buttonSize: 'normal' | 'small' = 'normal'
+  @Input() placement = 'left'
 
   @Output() userChanged = new EventEmitter()
   @Output() userDeleted = new EventEmitter()

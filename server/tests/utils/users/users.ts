@@ -112,7 +112,7 @@ function getUsersList (url: string, accessToken: string) {
           .expect('Content-Type', /json/)
 }
 
-function getUsersListPaginationAndSort (url: string, accessToken: string, start: number, count: number, sort: string) {
+function getUsersListPaginationAndSort (url: string, accessToken: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/users'
 
   return request(url)
@@ -120,6 +120,7 @@ function getUsersListPaginationAndSort (url: string, accessToken: string, start:
           .query({ start })
           .query({ count })
           .query({ sort })
+          .query({ search })
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
           .expect(200)

@@ -25,6 +25,7 @@
       <div>
         <input
           type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+          (keyup)="onSearch($event.target.value)"
         >
       </div>
     </div>

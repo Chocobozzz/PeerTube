@@ -158,9 +158,11 @@ export class UserService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getUsers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<User>> {
+  getUsers (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<User>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<User>>(UserService.BASE_USERS_URL, { params })
                .pipe(

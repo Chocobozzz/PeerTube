@@ -181,7 +181,25 @@ export class UserModel extends Model<UserModel> {
     return this.count()
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static listForApi (start: number, count: number, sort: string, search?: string) {
+    let where = undefined
+    if (search) {
+      where = {
+        [Sequelize.Op.or]: [
+          {
+            email: {
+              [Sequelize.Op.iLike]: '%' + search + '%'
+            }
+          },
+          {
+            username: {
+              [ Sequelize.Op.iLike ]: '%' + search + '%'
+            }
+          }
+        ]
+      }
+    }
+
     const query = {
       attributes: {
         include: [
@@ -204,7 +222,8 @@ export class UserModel extends Model<UserModel> {
       },
       offset: start,
       limit: count,
-      order: getSort(sort)
+      order: getSort(sort),
+      where
     }
 
     return UserModel.findAndCountAll(query)

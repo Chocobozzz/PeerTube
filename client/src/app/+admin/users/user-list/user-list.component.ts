@@ -35,7 +35,7 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
 
     this.bulkUserActions = [
       {
@@ -58,7 +58,7 @@ export class UserListComponent extends RestTable implements OnInit {
   protected loadData () {
     this.selectedUsers = []
 
-    this.userService.getUsers(this.pagination, this.sort)
+    this.userService.getUsers(this.pagination, this.sort, this.search)
                     .subscribe(
                       resultList => {
                         this.users = resultList.data

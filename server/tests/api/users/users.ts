@@ -180,7 +180,7 @@ describe('Test users', function () {
   it('Should be able to upload a video again')
 
   it('Should be able to create a new user', async function () {
-    await createUser(server.url, accessToken, user.username,user.password, 2 * 1024 * 1024)
+    await createUser(server.url, accessToken, user.username, user.password, 2 * 1024 * 1024)
   })
 
   it('Should be able to login with this user', async function () {
@@ -320,6 +320,40 @@ describe('Test users', function () {
     expect(users[ 1 ].username).to.equal('user_1')
     expect(users[ 1 ].email).to.equal('user_1@example.com')
     expect(users[ 1 ].nsfwPolicy).to.equal('display')
+  })
+
+  it('Should search user by username', async function () {
+    const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'oot')
+    const users = res.body.data as User[]
+
+    expect(res.body.total).to.equal(1)
+    expect(users.length).to.equal(1)
+
+    expect(users[ 0 ].username).to.equal('root')
+  })
+
+  it('Should search user by email', async function () {
+    {
+      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'r_1@exam')
+      const users = res.body.data as User[]
+
+      expect(res.body.total).to.equal(1)
+      expect(users.length).to.equal(1)
+
+      expect(users[ 0 ].username).to.equal('user_1')
+      expect(users[ 0 ].email).to.equal('user_1@example.com')
+    }
+
+    {
+      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'example')
+      const users = res.body.data as User[]
+
+      expect(res.body.total).to.equal(2)
+      expect(users.length).to.equal(2)
+
+      expect(users[ 0 ].username).to.equal('root')
+      expect(users[ 1 ].username).to.equal('user_1')
+    }
   })
 
   it('Should update my password', async function () {

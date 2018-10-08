@@ -238,7 +238,7 @@ async function autocompleteUsers (req: express.Request, res: express.Response, n
 }
 
 async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.search)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

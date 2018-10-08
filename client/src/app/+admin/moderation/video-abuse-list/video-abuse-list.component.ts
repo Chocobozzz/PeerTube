@@ -57,7 +57,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
   }
 
   openModerationCommentModal (videoAbuse: VideoAbuse) {

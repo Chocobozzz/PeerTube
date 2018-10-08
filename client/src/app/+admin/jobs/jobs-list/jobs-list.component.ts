@@ -34,7 +34,7 @@ export class JobsListComponent extends RestTable implements OnInit {
 
   ngOnInit () {
     this.loadJobState()
-    this.loadSort()
+    this.initialize()
   }
 
   onJobStateChanged () {
