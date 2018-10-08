@@ -788,6 +788,16 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_FILES).findAll()
   }
 
+  static listLocal () {
+    const query = {
+      where: {
+        remote: false
+      }
+    }
+
+    return VideoModel.scope(ScopeNames.WITH_FILES).findAll(query)
+  }
+
   static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
     function getRawQuery (select: string) {
       const queryVideo = 'SELECT ' + select + ' FROM "video" AS "Video" ' +
