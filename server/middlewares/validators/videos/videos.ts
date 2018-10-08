@@ -69,7 +69,6 @@ const videosAddValidator = getCommonVideoAttributes().concat([
     if (isAble === false) {
       res.status(403)
          .json({ error: 'The user video quota is exceeded with this video.' })
-         .end()
 
       return cleanUpReqFiles(req)
     }
@@ -82,7 +81,6 @@ const videosAddValidator = getCommonVideoAttributes().concat([
       logger.error('Invalid input file in videosAddValidator.', { err })
       res.status(400)
          .json({ error: 'Invalid input file.' })
-         .end()
 
       return cleanUpReqFiles(req)
     }
@@ -120,7 +118,6 @@ const videosUpdateValidator = getCommonVideoAttributes().concat([
       cleanUpReqFiles(req)
       return res.status(409)
         .json({ error: 'Cannot set "private" a video that was not private.' })
-        .end()
     }
 
     if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
@@ -150,7 +147,6 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
           if (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
             return res.status(403)
                       .json({ error: 'Cannot get this private or blacklisted video.' })
-                      .end()
           }
 
           return next()
@@ -240,7 +236,7 @@ const videosChangeOwnershipValidator = [
     if (!nextOwner) {
       res.status(400)
         .json({ error: 'Changing video ownership to a remote account is not supported yet' })
-        .end()
+
       return
     }
     res.locals.nextOwner = nextOwner
@@ -271,7 +267,7 @@ const videosTerminateChangeOwnershipValidator = [
     } else {
       res.status(403)
         .json({ error: 'Ownership already accepted or refused' })
-        .end()
+
       return
     }
   }
@@ -288,7 +284,7 @@ const videosAcceptChangeOwnershipValidator = [
     if (isAble === false) {
       res.status(403)
         .json({ error: 'The user video quota is exceeded with this video.' })
-        .end()
+
       return
     }
 
@@ -389,7 +385,6 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
     if (!req.body.scheduleUpdate.updateAt) {
       res.status(400)
          .json({ error: 'Schedule update at is mandatory.' })
-         .end()
 
       return true
     }
