@@ -44,8 +44,7 @@ export const UsersRoutes: Routes = [
         data: {
           meta: {
             title: 'Update a user'
-          },
-          isAdministration: true
+          }
         }
       }
     ]

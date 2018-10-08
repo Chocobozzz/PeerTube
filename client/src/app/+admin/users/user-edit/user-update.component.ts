@@ -21,10 +21,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   userId: number
   userEmail: string
   username: string
-  isAdministration = false
 
   private paramsSub: Subscription
-  private isAdministrationSub: Subscription
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -59,15 +57,10 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
         err => this.error = err.message
       )
     })
-
-    this.isAdministrationSub = this.route.data.subscribe(data => {
-      if (data.isAdministration) this.isAdministration = data.isAdministration
-    })
   }
 
   ngOnDestroy () {
     this.paramsSub.unsubscribe()
-    this.isAdministrationSub.unsubscribe()
   }
 
   formValidated () {
