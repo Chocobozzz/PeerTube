@@ -600,7 +600,7 @@ export class VideoModel extends Model<VideoModel> {
 
   @AllowNull(false)
   @Column
-  downloadingEnabled: boolean
+  downloadEnabled: boolean
 
   @AllowNull(false)
   @Column

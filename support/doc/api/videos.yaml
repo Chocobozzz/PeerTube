@@ -65,8 +65,8 @@ parameters:
     in: formData
     type: boolean
     description: 'Enable or disable comments for this video'
-  downloadingEnabled:
-    name: downloadingEnabled
+  downloadEnabled:
+    name: downloadEnabled
     in: formData
     type: boolean
     description: 'Enable or disable downloading for this video'

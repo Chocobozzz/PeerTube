@@ -349,7 +349,7 @@ function getCommonVideoAttributes () {
       .optional()
       .toBoolean()
       .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
-    body('downloadingEnabled')
+    body('downloadEnabled')
       .optional()
       .toBoolean()
       .custom(isBooleanValid).withMessage('Should have downloading enabled boolean'),

@@ -127,7 +127,7 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p1', 'tag2p1' ],
           privacy: VideoPrivacy.PUBLIC,
           commentsEnabled: true,
-          downloadingEnabled: true,
+          downloadEnabled: true,
           channel: {
             displayName: 'my channel',
             name: 'super_channel_name',
@@ -199,7 +199,7 @@ describe('Test multiple servers', function () {
           },
           isLocal,
           commentsEnabled: true,
-          downloadingEnabled: true,
+          downloadEnabled: true,
           duration: 5,
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -308,7 +308,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: true,
-          downloadingEnabled: true,
+          downloadEnabled: true,
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
@@ -340,7 +340,7 @@ describe('Test multiple servers', function () {
             host: 'localhost:9003'
           },
           commentsEnabled: true,
-          downloadingEnabled: true,
+          downloadEnabled: true,
           isLocal,
           duration: 5,
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
@@ -658,7 +658,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: true,
-          downloadingEnabled: true,
+          downloadEnabled: true,
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
@@ -980,7 +980,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: false,
-          downloadingEnabled: false,
+          downloadEnabled: false,
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {

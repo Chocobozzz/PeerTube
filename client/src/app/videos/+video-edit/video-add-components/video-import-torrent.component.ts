@@ -77,7 +77,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
       privacy: this.firstStepPrivacyId,
       waitTranscoding: false,
       commentsEnabled: true,
-      downloadingEnabled: true,
+      downloadEnabled: true,
       channelId: this.firstStepChannelId
     }
 
@@ -92,7 +92,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
 
         this.video = new VideoEdit(Object.assign(res.video, {
           commentsEnabled: videoUpdate.commentsEnabled,
-          downloadingEnabled: videoUpdate.downloadingEnabled,
+          downloadEnabled: videoUpdate.downloadEnabled,
           support: null,
           thumbnailUrl: null,
           previewUrl: null

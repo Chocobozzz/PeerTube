@@ -128,7 +128,7 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,
     commentsEnabled: video.commentsEnabled,
-    downloadingEnabled: video.downloadingEnabled,
+    downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
     state: {
       id: video.state,
@@ -260,7 +260,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     waitTranscoding: video.waitTranscoding,
     state: video.state,
     commentsEnabled: video.commentsEnabled,
-    downloadingEnabled: video.downloadingEnabled,
+    downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),
     updated: video.updatedAt.toISOString(),
     mediaType: 'text/markdown',

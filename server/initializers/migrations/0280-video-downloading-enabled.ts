@@ -11,10 +11,10 @@ async function up (utils: {
     allowNull: false,
     defaultValue: true
   } as Migration.Boolean
-  await utils.queryInterface.addColumn('video', 'downloadingEnabled', data)
+  await utils.queryInterface.addColumn('video', 'downloadEnabled', data)
 
   data.defaultValue = null
-  return utils.queryInterface.changeColumn('video', 'downloadingEnabled', data)
+  return utils.queryInterface.changeColumn('video', 'downloadEnabled', data)
 }
 
 function down (options) {

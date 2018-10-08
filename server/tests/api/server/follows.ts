@@ -305,7 +305,7 @@ describe('Test follows', function () {
         },
         isLocal,
         commentsEnabled: true,
-        downloadingEnabled: true,
+        downloadEnabled: true,
         duration: 5,
         tags: [ 'tag1', 'tag2', 'tag3' ],
         privacy: VideoPrivacy.PUBLIC,

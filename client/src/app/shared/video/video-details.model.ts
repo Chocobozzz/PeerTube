@@ -12,7 +12,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
-  downloadingEnabled: boolean
+  downloadEnabled: boolean
 
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
@@ -30,7 +30,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.tags = hash.tags
     this.support = hash.support
     this.commentsEnabled = hash.commentsEnabled
-    this.downloadingEnabled = hash.downloadingEnabled
+    this.downloadEnabled = hash.downloadEnabled
 
     this.buildLikeAndDislikePercents()
   }

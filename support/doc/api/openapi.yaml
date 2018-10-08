@@ -536,7 +536,7 @@ paths:
         - $ref: "videos.yaml#/parameters/name"
         - $ref: "videos.yaml#/parameters/tags"
         - $ref: "videos.yaml#/parameters/commentsEnabled"
-        - $ref: "videos.yaml#/parameters/downloadingEnabled"
+        - $ref: "videos.yaml#/parameters/downloadEnabled"
         - $ref: "videos.yaml#/parameters/privacy"
         - $ref: "videos.yaml#/parameters/scheduleUpdate"
       responses:
@@ -633,7 +633,7 @@ paths:
         - $ref: "videos.yaml#/parameters/name"
         - $ref: "videos.yaml#/parameters/tags"
         - $ref: "videos.yaml#/parameters/commentsEnabled"
-        - $ref: "videos.yaml#/parameters/downloadingEnabled"
+        - $ref: "videos.yaml#/parameters/downloadEnabled"
         - $ref: "videos.yaml#/parameters/privacy"
         - $ref: "videos.yaml#/parameters/scheduleUpdate"
       responses:

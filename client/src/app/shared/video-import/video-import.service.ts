@@ -81,7 +81,7 @@ export class VideoImportService {
       nsfw: video.nsfw,
       waitTranscoding: video.waitTranscoding,
       commentsEnabled: video.commentsEnabled,
-      downloadingEnabled: video.downloadingEnabled,
+      downloadEnabled: video.downloadEnabled,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile,
       scheduleUpdate

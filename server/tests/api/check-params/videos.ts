@@ -175,7 +175,7 @@ describe('Test videos API validator', function () {
         language: 'pt',
         nsfw: false,
         commentsEnabled: true,
-        downloadingEnabled: true,
+        downloadEnabled: true,
         waitTranscoding: true,
         description: 'my super description',
         support: 'my super support text',
@@ -420,7 +420,7 @@ describe('Test videos API validator', function () {
       language: 'pt',
       nsfw: false,
       commentsEnabled: false,
-      downloadingEnabled: false,
+      downloadEnabled: false,
       description: 'my super description',
       privacy: VideoPrivacy.PUBLIC,
       tags: [ 'tag1', 'tag2' ]

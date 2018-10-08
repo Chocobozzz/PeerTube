@@ -21,7 +21,7 @@ export interface VideoTorrentObject {
   views: number
   sensitive: boolean
   commentsEnabled: boolean,
-  downloadingEnabled: boolean,
+  downloadEnabled: boolean,
   waitTranscoding: boolean
   state: VideoState
   published: string

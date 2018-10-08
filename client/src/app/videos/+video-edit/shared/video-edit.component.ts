@@ -80,7 +80,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     const defaultValues = {
       nsfw: 'false',
       commentsEnabled: 'true',
-      downloadingEnabled: 'true',
+      downloadEnabled: 'true',
       waitTranscoding: 'true',
       tags: []
     }
@@ -90,7 +90,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       channelId: this.videoValidatorsService.VIDEO_CHANNEL,
       nsfw: null,
       commentsEnabled: null,
-      downloadingEnabled: null,
+      downloadEnabled: null,
       waitTranscoding: null,
       category: this.videoValidatorsService.VIDEO_CATEGORY,
       licence: this.videoValidatorsService.VIDEO_LICENCE,
