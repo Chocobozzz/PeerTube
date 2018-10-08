@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ResultList, User, UserCreate, UserRole, UserUpdate, UserUpdateMe, UserVideoQuota } from '../../../../../shared'
@@ -170,21 +170,38 @@ export class UserService {
                )
   }
 
-  removeUser (user: { id: number }) {
-    return this.authHttp.delete(UserService.BASE_USERS_URL + user.id)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  removeUser (usersArg: User | User[]) {
+    const users = Array.isArray(usersArg) ? usersArg : [ usersArg ]
+
+    return from(users)
+      .pipe(
+        concatMap(u => this.authHttp.delete(UserService.BASE_USERS_URL + u.id)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  banUser (user: { id: number }, reason?: string) {
+  banUsers (usersArg: User | User[], reason?: string) {
     const body = reason ? { reason } : {}
+    const users = Array.isArray(usersArg) ? usersArg : [ usersArg ]
 
-    return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/block', body)
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+    return from(users)
+      .pipe(
+        concatMap(u => this.authHttp.post(UserService.BASE_USERS_URL + u.id + '/block', body)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
-  unbanUser (user: { id: number }) {
-    return this.authHttp.post(UserService.BASE_USERS_URL + user.id + '/unblock', {})
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  unbanUsers (usersArg: User | User[]) {
+    const users = Array.isArray(usersArg) ? usersArg : [ usersArg ]
+
+    return from(users)
+      .pipe(
+        concatMap(u => this.authHttp.post(UserService.BASE_USERS_URL + u.id + '/unblock', {})),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   private formatUser (user: User) {

@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { UserBanModalComponent } from '@app/shared/moderation/user-ban-modal.component'
 import { UserService } from '@app/shared/users'
 import { AuthService, ConfirmService } from '@app/core'
@@ -24,8 +23,6 @@ export class UserModerationDropdownComponent implements OnInit {
 
   userActions: DropdownAction<User>[] = []
 
-  private openedModal: NgbModalRef
-
   constructor (
     private authService: AuthService,
     private notificationsService: NotificationsService,
@@ -36,10 +33,6 @@ export class UserModerationDropdownComponent implements OnInit {
 
   ngOnInit () {
     this.buildActions()
-  }
-
-  hideBanUserModal () {
-    this.openedModal.close()
   }
 
   openBanUserModal (user: User) {
@@ -60,7 +53,7 @@ export class UserModerationDropdownComponent implements OnInit {
     const res = await this.confirmService.confirm(message, this.i18n('Unban'))
     if (res === false) return
 
-    this.userService.unbanUser(user)
+    this.userService.unbanUsers(user)
         .subscribe(
           () => {
             this.notificationsService.success(

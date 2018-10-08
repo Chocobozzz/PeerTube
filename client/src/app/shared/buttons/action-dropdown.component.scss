@@ -3,7 +3,14 @@
 
 .action-button {
   @include peertube-button;
-  @include grey-button;
+
+  &.grey {
+    @include grey-button;
+  }
+
+  &.orange {
+    @include orange-button;
+  }
 
   display: inline-block;
   padding: 0 10px;
@@ -28,6 +35,11 @@
     height: 20px;
     line-height: 20px;
   }
+}
+
+.dropdown-toggle::after {
+  position: relative;
+  top: 1px;
 }
 
 .dropdown-menu {

@@ -16,6 +16,8 @@ export type DropdownAction<T> = {
 export class ActionDropdownComponent<T> {
   @Input() actions: DropdownAction<T>[] = []
   @Input() entry: T
-  @Input() placement = 'left'
+  @Input() placement = 'bottom-left'
   @Input() buttonSize: 'normal' | 'small' = 'normal'
+  @Input() label: string
+  @Input() theme: 'orange' | 'grey' = 'grey'
 }

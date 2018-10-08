@@ -10,10 +10,31 @@
 <p-table
   [value]="users" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [(selection)]="selectedUsers"
 >
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div>
+        <my-action-dropdown
+          *ngIf="isInSelectionMode()" i18n-label label="Batch actions" theme="orange"
+          [actions]="bulkUserActions" [entry]="selectedUsers"
+        >
+        </my-action-dropdown>
+      </div>
+
+      <div>
+        <input
+          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+        >
+      </div>
+    </div>
+  </ng-template>
+
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
+      <th style="width: 40px">
+      </th>
       <th i18n pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
       <th i18n>Email</th>
       <th i18n>Video quota</th>
@@ -25,12 +46,17 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-user>
 
-    <tr [ngClass]="{ banned: user.blocked }">
+    <tr [pSelectableRow]="user" [ngClass]="{ banned: user.blocked }">
+      <td>
+        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+      </td>
+
       <td>
         <span *ngIf="user.blockedReason" class="expander" [pRowToggler]="user">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
+
       <td>
         {{ user.username }}
         <span *ngIf="user.blocked" class="banned-info">(banned)</span>
@@ -40,7 +66,7 @@
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>
       <td class="action-cell">
-        <my-user-moderation-dropdown [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
         </my-user-moderation-dropdown>
       </td>
     </tr>
@@ -56,3 +82,4 @@
   </ng-template>
 </p-table>
 
+<my-user-ban-modal #userBanModal (userBanned)="onUsersBanned()"></my-user-ban-modal>
