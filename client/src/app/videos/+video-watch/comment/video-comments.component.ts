@@ -35,7 +35,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
 
-  syndicationItems = []
+  syndicationItems: any = []
 
   private sub: Subscription
 

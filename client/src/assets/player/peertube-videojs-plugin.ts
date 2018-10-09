@@ -75,7 +75,7 @@ class PeerTubePlugin extends Plugin {
 
   private downloadSpeeds: number[] = []
 
-  constructor (player: videojs.Player, options: PeertubePluginOptions) {
+  constructor (player: any, options: PeertubePluginOptions) {
     super(player, options)
 
     // Disable auto play on iOS

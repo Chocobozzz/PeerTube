@@ -11,7 +11,7 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsButton extends Button {
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: any, options: any) {
     super(player, options)
 
     this.playerComponent = player
@@ -218,7 +218,7 @@ class SettingsButton extends Button {
 }
 
 class SettingsPanel extends Component {
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: any, options: any) {
     super(player, options)
   }
 
@@ -232,7 +232,7 @@ class SettingsPanel extends Component {
 }
 
 class SettingsPanelChild extends Component {
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: any, options: any) {
     super(player, options)
   }
 
@@ -246,7 +246,7 @@ class SettingsPanelChild extends Component {
 }
 
 class SettingsDialog extends Component {
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: any, options: any) {
     super(player, options)
     this.hide()
   }

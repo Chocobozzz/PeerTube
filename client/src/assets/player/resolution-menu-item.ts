@@ -1,10 +1,9 @@
-const videojs = require('video.js')
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
 class ResolutionMenuItem extends MenuItem {
 
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: any, options: any) {
     const currentResolutionId = player.peertube().getCurrentResolutionId()
     options.selectable = true
     options.selected = options.id === currentResolutionId

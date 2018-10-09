@@ -45,7 +45,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
-  player: videojs.Player
+  player: any
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
   video: VideoDetails = null

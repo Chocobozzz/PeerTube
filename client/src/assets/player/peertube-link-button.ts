@@ -1,11 +1,10 @@
-const videojs = require('video.js')
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoLink } from './utils'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: any, options: any) {
     super(player, options)
   }
 

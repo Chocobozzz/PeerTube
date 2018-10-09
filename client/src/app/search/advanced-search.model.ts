@@ -113,7 +113,7 @@ export class AdvancedSearch {
   size () {
     let acc = 0
 
-    const obj = this.toUrlObject()
+    const obj: any = this.toUrlObject()
     for (const k of Object.keys(obj)) {
       if (k === 'sort') continue // Exception
 
