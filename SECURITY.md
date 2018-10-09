@@ -1,8 +1,6 @@
-**Introduction**
-
 Security is core to our values, and we value the input of hackers acting in good faith to help us maintain a high standard for the security and privacy for our users. This includes encouraging responsible vulnerability research and disclosure. This policy sets out our definition of good faith in the context of finding and reporting vulnerabilities, as well as what you can expect from us in return.
 
-**Expectations**
+## Expectations
 
 When working with us according to this policy, you can expect us to:
 - Extend Safe Harbor (see below) for your vulnerability research that is related to this policy;
@@ -10,7 +8,7 @@ When working with us according to this policy, you can expect us to:
 - Work to remediate discovered vulnerabilities in a timely manner; and
 - Recognize your contribution to improving our security if you are the first to report a unique vulnerability, and your report triggers a code or configuration change.
 
-**Safe Harbor**
+## Safe Harbor
 
 When conducting vulnerability research according to this policy, we consider this research to be:
 - Authorized in accordance with the law, and we will not initiate or support legal action against you for accidental, good faith violations of this policy;
@@ -22,7 +20,7 @@ You are expected, as always, to comply with all applicable laws.
 
 If at any time you have concerns or are uncertain whether your security research is consistent with this policy, please submit a report through one of our Official Channels before going any further.
 
-**Ground Rules**
+## Ground Rules
 
 To encourage vulnerability research and to avoid any confusion between good-faith hacking and malicious attack, we ask that you:
 - Play by the rules. This includes following this policy, as well as any other relevant agreements. If there is any inconsistency between this policy and any other relevant terms, the terms of this policy will prevail.
@@ -35,10 +33,15 @@ To encourage vulnerability research and to avoid any confusion between good-fait
 - You should only interact with test accounts you own or with explicit permission from the account holder.
 - Do not engage in extortion.
 
-**Official Channels**
+## Disclosure Terms
+
+The vulnerability is kept private until a majority of instances known on instances.joinpeertube.org have updated to a safe version of PeerTube or applied a hotfix. The PeerTube development team coordinates efforts to update once the patch is issued.
+
+## Official Channels
 
 To help us receive vulnerability submissions we use the following official reporting channels:
 - chocobozzz@cpy.re (GPG: [583A612D890159BE](https://keybase.io/chocobozzz/pgp_keys.asc?fingerprint=c44aad638367912ca93edd57583a612d890159be))
+- sendmemail@rigelk.eu (GPG: [EA12971B0E438F36](https://api.github.com/users/rigelk/gpg_keys))
 
 If you think you have found a vulnerability, please include the following details with your report and be as descriptive as possible:
 - The location and nature of the vulnerability,
