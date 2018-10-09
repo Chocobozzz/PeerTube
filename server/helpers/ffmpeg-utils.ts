@@ -147,12 +147,6 @@ function transcode (options: TranscodeOptions) {
       command = command.withFPS(fps)
     }
 
-    // Constrained Encoding (VBV)
-    // https://slhck.info/video/2017/03/01/rate-control.html
-    // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
-    const targetBitrate = getTargetBitrate(options.resolution, fps, VIDEO_TRANSCODING_FPS)
-    command.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
-
     command
       .on('error', (err, stdout, stderr) => {
         logger.error('Error in transcoding job.', { stdout, stderr })
@@ -327,7 +321,7 @@ async function presetH264 (ffmpeg: ffmpeg, resolution: VideoResolution, fps: num
   // https://slhck.info/video/2017/03/01/rate-control.html
   // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
   const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-  localFfmpeg.outputOptions([`-b:v ${ targetBitrate }`, `-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
+  localFfmpeg.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 
   // Keyframe interval of 2 seconds for faster seeking and resolution switching.
   // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
