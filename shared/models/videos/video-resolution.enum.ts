@@ -15,7 +15,7 @@ export enum VideoResolution {
  * Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
  * YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
  */
-export function getBaseBitrate (resolution: VideoResolution) {
+function getBaseBitrate (resolution: VideoResolution) {
   switch (resolution) {
   case VideoResolution.H_240P:
     // quality according to Google Live Encoder: 300 - 700 Kbps
