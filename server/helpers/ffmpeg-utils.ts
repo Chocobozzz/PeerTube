@@ -126,7 +126,7 @@ function transcode (options: TranscodeOptions) {
 
     let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
-    presetH264(command, options.resolution, 0)
+    presetH264(command, options.resolution, fps)
 
     if (CONFIG.TRANSCODING.THREADS > 0) {
       // if we don't set any threads ffmpeg will chose automatically
