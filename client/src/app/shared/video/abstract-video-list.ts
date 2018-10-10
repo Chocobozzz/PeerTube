@@ -37,6 +37,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   videoPages: Video[][] = []
   ownerDisplayType: OwnerDisplayType = 'account'
   firstLoadedPage: number
+  displayModerationBlock = false
 
   protected baseVideoWidth = 215
   protected baseVideoHeight = 205
@@ -158,6 +159,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
         this.notificationsService.error(this.i18n('Error'), error.message)
       }
     )
+  }
+
+  toggleModerationDisplay () {
+    throw new Error('toggleModerationDisplay is not implemented')
   }
 
   protected hasMoreVideos () {

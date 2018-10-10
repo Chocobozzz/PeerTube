@@ -5,6 +5,11 @@
   @include peertube-select-container(auto);
 }
 
+my-peertube-checkbox {
+  display: block;
+  margin-bottom: 1rem;
+}
+
 .video-edit {
   height: 100%;
   min-height: 300px;

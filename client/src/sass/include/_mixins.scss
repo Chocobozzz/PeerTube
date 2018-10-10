@@ -29,7 +29,7 @@
   display: block;
   /* Fallback for non-webkit */
   display: -webkit-box;
-  max-height: $font-size*$line-height*$lines-to-show;
+  max-height: $font-size*$line-height*$lines-to-show + 0.2;
   /* Fallback for non-webkit */
   font-size: $font-size;
   line-height: $line-height;
