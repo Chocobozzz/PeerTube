@@ -93,7 +93,26 @@ describe('Test follows', function () {
     expect(server3Follow.state).to.equal('accepted')
   })
 
-  it('Should have 0 followings on server 1 and 2', async function () {
+  it('Should search followings on server 1', async function () {
+    {
+      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', ':9002')
+      const follows = res.body.data
+
+      expect(res.body.total).to.equal(1)
+      expect(follows.length).to.equal(1)
+      expect(follows[ 0 ].following.host).to.equal('localhost:9002')
+    }
+
+    {
+      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', 'bla')
+      const follows = res.body.data
+
+      expect(res.body.total).to.equal(0)
+      expect(follows.length).to.equal(0)
+    }
+  })
+
+  it('Should have 0 followings on server 2 and 3', async function () {
     for (const server of [ servers[1], servers[2] ]) {
       const res = await getFollowingListPaginationAndSort(server.url, 0, 5, 'createdAt')
       const follows = res.body.data
@@ -113,6 +132,25 @@ describe('Test follows', function () {
       expect(follows).to.be.an('array')
       expect(follows.length).to.equal(1)
       expect(follows[0].follower.host).to.equal('localhost:9001')
+    }
+  })
+
+  it('Should search followers on server 2', async function () {
+    {
+      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', '9001')
+      const follows = res.body.data
+
+      expect(res.body.total).to.equal(1)
+      expect(follows.length).to.equal(1)
+      expect(follows[ 0 ].following.host).to.equal('localhost:9003')
+    }
+
+    {
+      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', 'bla')
+      const follows = res.body.data
+
+      expect(res.body.total).to.equal(0)
+      expect(follows.length).to.equal(0)
     }
   })
 

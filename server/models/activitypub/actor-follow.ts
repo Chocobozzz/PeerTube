@@ -280,7 +280,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  static listFollowingForApi (id: number, start: number, count: number, sort: string) {
+  static listFollowingForApi (id: number, start: number, count: number, sort: string, search?: string) {
     const query = {
       distinct: true,
       offset: start,
@@ -299,7 +299,17 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
-          include: [ ServerModel ]
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: search ? {
+                host: {
+                  [Sequelize.Op.iLike]: '%' + search + '%'
+                }
+              } : undefined
+            }
+          ]
         }
       ]
     }
@@ -311,6 +321,49 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           total: count
         }
       })
+  }
+
+  static listFollowersForApi (id: number, start: number, count: number, sort: string, search?: string) {
+    const query = {
+      distinct: true,
+      offset: start,
+      limit: count,
+      order: getSort(sort),
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          as: 'ActorFollower',
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: search ? {
+                host: {
+                  [ Sequelize.Op.iLike ]: '%' + search + '%'
+                }
+              } : undefined
+            }
+          ]
+        },
+        {
+          model: ActorModel,
+          as: 'ActorFollowing',
+          required: true,
+          where: {
+            id
+          }
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAndCountAll(query)
+                           .then(({ rows, count }) => {
+                             return {
+                               data: rows,
+                               total: count
+                             }
+                           })
   }
 
   static listSubscriptionsForApi (id: number, start: number, count: number, sort: string) {
@@ -368,39 +421,6 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                                total: count
                              }
                            })
-  }
-
-  static listFollowersForApi (id: number, start: number, count: number, sort: string) {
-    const query = {
-      distinct: true,
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollower',
-          include: [ ServerModel ]
-        },
-        {
-          model: ActorModel,
-          as: 'ActorFollowing',
-          required: true,
-          where: {
-            id
-          }
-        }
-      ]
-    }
-
-    return ActorFollowModel.findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
   }
 
   static listAcceptedFollowerUrlsForApi (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {

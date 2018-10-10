@@ -11,3 +11,11 @@ my-redundancy-checkbox /deep/ my-peertube-checkbox {
     margin: 0;
   }
 }
+
+.caption {
+  justify-content: flex-end;
+
+  input {
+    @include peertube-input-text(250px);
+  }
+}

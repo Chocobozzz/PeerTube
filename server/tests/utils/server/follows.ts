@@ -2,7 +2,7 @@ import * as request from 'supertest'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
 
-function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string) {
+function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/server/followers'
 
   return request(url)
@@ -10,12 +10,13 @@ function getFollowersListPaginationAndSort (url: string, start: number, count: n
     .query({ start })
     .query({ count })
     .query({ sort })
+    .query({ search })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
 }
 
-function getFollowingListPaginationAndSort (url: string, start: number, count: number, sort: string) {
+function getFollowingListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/server/following'
 
   return request(url)
@@ -23,6 +24,7 @@ function getFollowingListPaginationAndSort (url: string, start: number, count: n
     .query({ start })
     .query({ count })
     .query({ sort })
+    .query({ search })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)

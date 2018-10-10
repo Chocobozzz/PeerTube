@@ -16,6 +16,12 @@ p-table {
 
   .ui-table-caption {
     border: none;
+
+    .caption {
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
   }
 
   td {
