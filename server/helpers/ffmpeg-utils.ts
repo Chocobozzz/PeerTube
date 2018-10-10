@@ -192,7 +192,7 @@ function getVideoFileStream (path: string) {
  * and quality. Superfast and ultrafast will give you better
  * performance, but then quality is noticeably worse.
  */
-async function presetH264VeryFast (ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
+async function presetH264VeryFast (ffmpeg: ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
   const localFfmpeg = await presetH264(ffmpeg, resolution, fps)
   localFfmpeg
     .outputOption('-preset:v veryfast')
@@ -213,7 +213,7 @@ async function presetH264VeryFast (ffmpeg, resolution: VideoResolution, fps: num
 /**
  * A preset optimised for a stillimage audio video
  */
-async function presetStillImageWithAudio (ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
+async function presetStillImageWithAudio (ffmpeg: ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
   const localFfmpeg = await presetH264VeryFast(ffmpeg, resolution, fps)
   localFfmpeg
     .outputOption('-tune stillimage')
