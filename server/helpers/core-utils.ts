@@ -5,7 +5,7 @@
 
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
-import { createHash, pseudoRandomBytes } from 'crypto'
+import { createHash, HexBase64Latin1Encoding, pseudoRandomBytes } from 'crypto'
 import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
@@ -126,8 +126,8 @@ function peertubeTruncate (str: string, maxLength: number) {
   return truncate(str, options)
 }
 
-function sha256 (str: string) {
-  return createHash('sha256').update(str).digest('hex')
+function sha256 (str: string, encoding: HexBase64Latin1Encoding = 'hex') {
+  return createHash('sha256').update(str).digest(encoding)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
