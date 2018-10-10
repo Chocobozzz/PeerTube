@@ -2,7 +2,6 @@ import * as express from 'express'
 import * as multer from 'multer'
 import { CONFIG, REMOTE_SCHEME } from '../initializers'
 import { logger } from './logger'
-import { User } from '../../shared/models/users'
 import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
@@ -101,7 +100,7 @@ function createReqFiles (
 }
 
 function isUserAbleToSearchRemoteURI (res: express.Response) {
-  const user: User = res.locals.oauth ? res.locals.oauth.token.User : undefined
+  const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   return CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
     (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)

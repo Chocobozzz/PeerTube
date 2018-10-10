@@ -235,7 +235,14 @@ type AvailableForListIDsOptions = {
               )
             }
           ]
-        },
+        }
+      },
+      include: []
+    }
+
+    // Only list public/published videos
+    if (!options.filter || options.filter !== 'all-local') {
+      const privacyWhere = {
         // Always list public videos
         privacy: VideoPrivacy.PUBLIC,
         // Always list published videos, or videos that are being transcoded but on which we don't want to wait for transcoding
@@ -250,8 +257,9 @@ type AvailableForListIDsOptions = {
             }
           }
         ]
-      },
-      include: []
+      }
+
+      Object.assign(query.where, privacyWhere)
     }
 
     if (options.filter || options.accountId || options.videoChannelId) {
@@ -969,6 +977,10 @@ export class VideoModel extends Model<VideoModel> {
     trendingDays?: number,
     userId?: number
   }, countVideos = true) {
+    if (options.filter && options.filter === 'all-local' && !options.userId) {
+      throw new Error('Try to filter all-local but no userId is provided')
+    }
+
     const query: IFindOptions<VideoModel> = {
       offset: options.start,
       limit: options.count,
@@ -1021,7 +1033,8 @@ export class VideoModel extends Model<VideoModel> {
     tagsAllOf?: string[]
     durationMin?: number // seconds
     durationMax?: number // seconds
-    userId?: number
+    userId?: number,
+    filter?: VideoFilter
   }) {
     const whereAnd = []
 
@@ -1098,7 +1111,8 @@ export class VideoModel extends Model<VideoModel> {
       languageOneOf: options.languageOneOf,
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
-      userId: options.userId
+      userId: options.userId,
+      filter: options.filter
     }
 
     return VideoModel.getAvailableForApi(query, queryOptions)
@@ -1262,7 +1276,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static buildActorWhereWithFilter (filter?: VideoFilter) {
-    if (filter && filter === 'local') {
+    if (filter && (filter === 'local' || filter === 'all-local')) {
       return {
         serverId: null
       }

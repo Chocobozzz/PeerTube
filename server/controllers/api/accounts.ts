@@ -86,9 +86,11 @@ async function listAccountVideos (req: express.Request, res: express.Response, n
     languageOneOf: req.query.languageOneOf,
     tagsOneOf: req.query.tagsOneOf,
     tagsAllOf: req.query.tagsAllOf,
+    filter: req.query.filter,
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
-    accountId: account.id
+    accountId: account.id,
+    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

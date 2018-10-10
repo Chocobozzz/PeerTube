@@ -3,7 +3,7 @@ import 'express-validator'
 import { values } from 'lodash'
 import 'multer'
 import * as validator from 'validator'
-import { UserRight, VideoPrivacy, VideoRateType } from '../../../shared'
+import { UserRight, VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
   VIDEO_CATEGORIES,
@@ -21,6 +21,10 @@ import * as magnetUtil from 'magnet-uri'
 import { fetchVideo, VideoFetchType } from '../video'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
+
+function isVideoFilterValid (filter: VideoFilter) {
+  return filter === 'local' || filter === 'all-local'
+}
 
 function isVideoCategoryValid (value: any) {
   return value === null || VIDEO_CATEGORIES[ value ] !== undefined
@@ -225,5 +229,6 @@ export {
   isVideoExist,
   isVideoImage,
   isVideoChannelOfAccountExist,
-  isVideoSupportValid
+  isVideoSupportValid,
+  isVideoFilterValid
 }

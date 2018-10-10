@@ -1,7 +1,14 @@
 import * as express from 'express'
 import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
 import { THUMBNAILS_SIZE } from '../initializers'
-import { asyncMiddleware, setDefaultSort, videoCommentsFeedsValidator, videoFeedsValidator, videosSortValidator } from '../middlewares'
+import {
+  asyncMiddleware,
+  commonVideosFiltersValidator,
+  setDefaultSort,
+  videoCommentsFeedsValidator,
+  videoFeedsValidator,
+  videosSortValidator
+} from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
 import { AccountModel } from '../models/account/account'
@@ -22,6 +29,7 @@ feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
   asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  commonVideosFiltersValidator,
   asyncMiddleware(videoFeedsValidator),
   asyncMiddleware(generateVideoFeed)
 )

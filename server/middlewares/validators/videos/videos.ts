@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'express-validator'
-import { body, param, ValidationChain } from 'express-validator/check'
+import { body, param, query, ValidationChain } from 'express-validator/check'
 import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import {
   isBooleanValid,
@@ -8,6 +8,7 @@ import {
   isIdOrUUIDValid,
   isIdValid,
   isUUIDValid,
+  toArray,
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
@@ -19,6 +20,7 @@ import {
   isVideoDescriptionValid,
   isVideoExist,
   isVideoFile,
+  isVideoFilterValid,
   isVideoImage,
   isVideoLanguageValid,
   isVideoLicenceValid,
@@ -42,6 +44,7 @@ import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/vid
 import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
 import { AccountModel } from '../../../models/account/account'
 import { VideoFetchType } from '../../../helpers/video'
+import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -359,6 +362,51 @@ function getCommonVideoAttributes () {
   ] as (ValidationChain | express.Handler)[]
 }
 
+const commonVideosFiltersValidator = [
+  query('categoryOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isNumberArray).withMessage('Should have a valid one of category array'),
+  query('licenceOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isNumberArray).withMessage('Should have a valid one of licence array'),
+  query('languageOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isStringArray).withMessage('Should have a valid one of language array'),
+  query('tagsOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isStringArray).withMessage('Should have a valid one of tags array'),
+  query('tagsAllOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isStringArray).withMessage('Should have a valid all of tags array'),
+  query('nsfw')
+    .optional()
+    .custom(isNSFWQueryValid).withMessage('Should have a valid NSFW attribute'),
+  query('filter')
+    .optional()
+    .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking commons video filters query', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+    if (req.query.filter === 'all-local' && (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)) {
+      res.status(401)
+         .json({ error: 'You are not allowed to see all local videos.' })
+
+      return
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -375,7 +423,9 @@ export {
   videosTerminateChangeOwnershipValidator,
   videosAcceptChangeOwnershipValidator,
 
-  getCommonVideoAttributes
+  getCommonVideoAttributes,
+
+  commonVideosFiltersValidator
 }
 
 // ---------------------------------------------------------------------------
