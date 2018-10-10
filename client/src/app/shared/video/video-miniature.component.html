@@ -9,8 +9,8 @@
     >
       {{ video.name }}
 
-      <span *ngIf="isUnlistedVideo(video)" class="badge badge-warning" i18n>Unlisted</span>
-      <span *ngIf="isPrivateVideo(video)" class="badge badge-danger" i18n>Private</span>
+      <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
+      <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
     </a>
 
     <span i18n class="video-miniature-created-at-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
