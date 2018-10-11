@@ -17,132 +17,6 @@ let config: IConfig = require('config')
 // ---------------------------------------------------------------------------
 
 const LAST_MIGRATION_VERSION = 275
-
-// ---------------------------------------------------------------------------
-
-// API version
-const API_VERSION = 'v1'
-
-const PAGINATION = {
-  COUNT: {
-    DEFAULT: 15,
-    MAX: 100
-  }
-}
-
-// Sortable columns per schema
-const SORTABLE_COLUMNS = {
-  USERS: [ 'id', 'username', 'createdAt' ],
-  USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
-  ACCOUNTS: [ 'createdAt' ],
-  JOBS: [ 'createdAt' ],
-  VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
-  VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
-  VIDEO_IMPORTS: [ 'createdAt' ],
-  VIDEO_COMMENT_THREADS: [ 'createdAt' ],
-  BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
-  FOLLOWERS: [ 'createdAt' ],
-  FOLLOWING: [ 'createdAt' ],
-
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
-
-  VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
-  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
-}
-
-const OAUTH_LIFETIME = {
-  ACCESS_TOKEN: 3600 * 24, // 1 day, for upload
-  REFRESH_TOKEN: 1209600 // 2 weeks
-}
-
-const ROUTE_CACHE_LIFETIME = {
-  FEEDS: '15 minutes',
-  ROBOTS: '2 hours',
-  SECURITYTXT: '2 hours',
-  NODEINFO: '10 minutes',
-  DNT_POLICY: '1 week',
-  OVERVIEWS: {
-    VIDEOS: '1 hour'
-  },
-  ACTIVITY_PUB: {
-    VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
-  },
-  STATS: '4 hours'
-}
-
-// ---------------------------------------------------------------------------
-
-// Number of points we add/remove after a successful/bad request
-const ACTOR_FOLLOW_SCORE = {
-  PENALTY: -10,
-  BONUS: 10,
-  BASE: 1000,
-  MAX: 10000
-}
-
-const FOLLOW_STATES: { [ id: string ]: FollowState } = {
-  PENDING: 'pending',
-  ACCEPTED: 'accepted'
-}
-
-const REMOTE_SCHEME = {
-  HTTP: 'https',
-  WS: 'wss'
-}
-
-const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
-  'activitypub-http-broadcast': 5,
-  'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 5,
-  'activitypub-follow': 5,
-  'video-file-import': 1,
-  'video-file': 1,
-  'video-import': 1,
-  'email': 5,
-  'videos-views': 1
-}
-const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
-  'activitypub-http-broadcast': 1,
-  'activitypub-http-unicast': 5,
-  'activitypub-http-fetcher': 1,
-  'activitypub-follow': 3,
-  'video-file-import': 1,
-  'video-file': config.get<number>('transcoding.concurrency'),
-  'video-import': 1,
-  'email': 5,
-  'videos-views': 1
-}
-const JOB_TTL: { [ id in JobType ]: number } = {
-  'activitypub-http-broadcast': 60000 * 10, // 10 minutes
-  'activitypub-http-unicast': 60000 * 10, // 10 minutes
-  'activitypub-http-fetcher': 60000 * 10, // 10 minutes
-  'activitypub-follow': 60000 * 10, // 10 minutes
-  'video-file-import': 1000 * 3600, // 1 hour
-  'video-file': parseDuration(config.get<string>('transcoding.ttl')), // 2 days, transcoding could be long
-  'video-import': 1000 * 3600 * 2, //  hours
-  'email': 60000 * 10, // 10 minutes
-  'videos-views': undefined // Unlimited
-}
-const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
-  'videos-views': {
-    cron: '1 * * * *' // At 1 minutes past the hour
-  }
-}
-
-const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
-const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
-const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
-const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
-const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
-
-// 1 hour
-let SCHEDULER_INTERVALS_MS = {
-  badActorFollow: 60000 * 60, // 1 hour
-  removeOldJobs: 60000 * 60, // 1 hour
-  updateVideos: 60000, // 1 minute
-  youtubeDLUpdate: 60000 * 60 * 24 // 1 day
-}
-
 // ---------------------------------------------------------------------------
 
 const CONFIG = {
@@ -292,6 +166,131 @@ const CONFIG = {
 
 // ---------------------------------------------------------------------------
 
+// API version
+const API_VERSION = 'v1'
+
+const PAGINATION = {
+  COUNT: {
+    DEFAULT: 15,
+    MAX: 100
+  }
+}
+
+// Sortable columns per schema
+const SORTABLE_COLUMNS = {
+  USERS: [ 'id', 'username', 'createdAt' ],
+  USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
+  ACCOUNTS: [ 'createdAt' ],
+  JOBS: [ 'createdAt' ],
+  VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
+  VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
+  VIDEO_IMPORTS: [ 'createdAt' ],
+  VIDEO_COMMENT_THREADS: [ 'createdAt' ],
+  BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
+  FOLLOWERS: [ 'createdAt' ],
+  FOLLOWING: [ 'createdAt' ],
+
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
+
+  VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
+}
+
+const OAUTH_LIFETIME = {
+  ACCESS_TOKEN: 3600 * 24, // 1 day, for upload
+  REFRESH_TOKEN: 1209600 // 2 weeks
+}
+
+const ROUTE_CACHE_LIFETIME = {
+  FEEDS: '15 minutes',
+  ROBOTS: '2 hours',
+  SECURITYTXT: '2 hours',
+  NODEINFO: '10 minutes',
+  DNT_POLICY: '1 week',
+  OVERVIEWS: {
+    VIDEOS: '1 hour'
+  },
+  ACTIVITY_PUB: {
+    VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
+  },
+  STATS: '4 hours'
+}
+
+// ---------------------------------------------------------------------------
+
+// Number of points we add/remove after a successful/bad request
+const ACTOR_FOLLOW_SCORE = {
+  PENALTY: -10,
+  BONUS: 10,
+  BASE: 1000,
+  MAX: 10000
+}
+
+const FOLLOW_STATES: { [ id: string ]: FollowState } = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted'
+}
+
+const REMOTE_SCHEME = {
+  HTTP: 'https',
+  WS: 'wss'
+}
+
+const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 5,
+  'activitypub-http-unicast': 5,
+  'activitypub-http-fetcher': 5,
+  'activitypub-follow': 5,
+  'video-file-import': 1,
+  'video-file': 1,
+  'video-import': 1,
+  'email': 5,
+  'videos-views': 1
+}
+const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 1,
+  'activitypub-http-unicast': 5,
+  'activitypub-http-fetcher': 1,
+  'activitypub-follow': 3,
+  'video-file-import': 1,
+  'video-file': CONFIG.TRANSCODING.CONCURRENCY,
+  'video-import': 1,
+  'email': 5,
+  'videos-views': 1
+}
+const JOB_TTL: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 60000 * 10, // 10 minutes
+  'activitypub-http-unicast': 60000 * 10, // 10 minutes
+  'activitypub-http-fetcher': 60000 * 10, // 10 minutes
+  'activitypub-follow': 60000 * 10, // 10 minutes
+  'video-file-import': 1000 * 3600, // 1 hour
+  'video-file': CONFIG.TRANSCODING.TTL, // 2 days, transcoding could be long
+  'video-import': 1000 * 3600 * 2, //  hours
+  'email': 60000 * 10, // 10 minutes
+  'videos-views': undefined // Unlimited
+}
+const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
+  'videos-views': {
+    cron: '1 * * * *' // At 1 minutes past the hour
+  }
+}
+
+const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
+const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
+const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
+const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
+
+// 1 hour
+let SCHEDULER_INTERVALS_MS = {
+  badActorFollow: 60000 * 60, // 1 hour
+  removeOldJobs: 60000 * 60, // 1 hour
+  updateVideos: 60000, // 1 minute
+  youtubeDLUpdate: 60000 * 60 * 24 // 1 day
+}
+
+// ---------------------------------------------------------------------------
+
 const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -410,7 +409,7 @@ const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
 
 const FFMPEG_NICE: { [ id: string ]: number } = {
   THUMBNAIL: 2, // 2 just for don't blocking servers
-  TRANSCODING: config.get<number>('transcoding.niceness')  // 15
+  TRANSCODING: CONFIG.TRANSCODING.NICENESS
 }
 
 const VIDEO_CATEGORIES = {
