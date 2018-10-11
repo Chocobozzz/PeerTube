@@ -133,9 +133,9 @@ user:
 transcoding:
   enabled: true
   threads: 1
-  concurrency: 1 # number of jobs running, different than number of threads(per job)
-  niceness: 15 # from 1 to 18
-  ttl: '2 days' # 2 days, transcoding could be long, this parameter is used to kill too long transcoding jobs eg. '2 days' or '12 hours'
+  concurrency: 1 # number of jobs running, different than number of threads(per job); a peertube restart is required if this changes
+  niceness: 15 # from 1 to 18; a peertube restart is required if this changes
+  ttl: '2 days' # 2 days, transcoding could be long, this parameter is used to kill too long transcoding jobs eg. '2 days' or '12 hours'; a peertube restart is required if this changes
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
     360p: false
