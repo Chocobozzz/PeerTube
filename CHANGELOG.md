@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.0.0
+
+Announcement scheduled for october 15
+
+### Bug fixes
+
+ * Check video exists before extending expiration
+ * Correctly delete redundancy files
+ * Fix account URI in remote comment modal ([@rigelk](https://github.com/rigelk))
+ * Fix avatar update
+ * Avoid old issue regarding duplicated hosts in database
+
+
 ## v1.0.0-rc.2
 
 ### Bug fixes
