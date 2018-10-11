@@ -5,6 +5,7 @@ import * as chai from 'chai'
 import { About } from '../../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import { deleteCustomConfig, getAbout, killallServers, reRunServer } from '../../utils'
+import { parseDuration } from '../../../helpers/core-utils'
 import {
   flushTests,
   getConfig,
@@ -43,7 +44,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.concurrency).to.equal(2)
   expect(data.transcoding.niceness).to.equal(5)
-  expect(data.transcoding.ttl).to.equal('36 hours')
+  expect(data.transcoding.ttl).to.equal(parseDuration('36 hours'))
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
