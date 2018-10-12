@@ -4,7 +4,7 @@ import { ServerBlocklistModel } from '../models/server/server-blocklist'
 
 function addAccountInBlocklist (byAccountId: number, targetAccountId: number) {
   return sequelizeTypescript.transaction(async t => {
-    return AccountBlocklistModel.create({
+    return AccountBlocklistModel.upsert({
       accountId: byAccountId,
       targetAccountId: targetAccountId
     }, { transaction: t })
@@ -13,7 +13,7 @@ function addAccountInBlocklist (byAccountId: number, targetAccountId: number) {
 
 function addServerInBlocklist (byAccountId: number, targetServerId: number) {
   return sequelizeTypescript.transaction(async t => {
-    return ServerBlocklistModel.create({
+    return ServerBlocklistModel.upsert({
       accountId: byAccountId,
       targetServerId
     }, { transaction: t })

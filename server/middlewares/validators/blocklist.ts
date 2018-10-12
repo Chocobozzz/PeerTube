@@ -1,4 +1,4 @@
-import { param, body } from 'express-validator/check'
+import { body, param } from 'express-validator/check'
 import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
@@ -7,6 +7,8 @@ import { UserModel } from '../../models/account/user'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist'
+import { ServerModel } from '../../models/server/server'
+import { CONFIG } from '../../initializers'
 
 const blockAccountByAccountValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),
@@ -16,6 +18,17 @@ const blockAccountByAccountValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await isAccountNameWithHostExist(req.body.accountName, res)) return
+
+    const user = res.locals.oauth.token.User as UserModel
+    const accountToBlock = res.locals.account
+
+    if (user.Account.id === accountToBlock.id) {
+      res.status(409)
+         .send({ error: 'You cannot block yourself.' })
+         .end()
+
+      return
+    }
 
     return next()
   }
@@ -33,6 +46,35 @@ const unblockAccountByAccountValidator = [
     const user = res.locals.oauth.token.User as UserModel
     const targetAccount = res.locals.account
     if (!await isUnblockAccountExists(user.Account.id, targetAccount.id, res)) return
+
+    return next()
+  }
+]
+
+const blockServerByAccountValidator = [
+  body('host').custom(isHostValid).withMessage('Should have a valid host'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking serverGetValidator parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return
+
+    const host: string = req.body.host
+
+    if (host === CONFIG.WEBSERVER.HOST) {
+      return res.status(409)
+        .send({ error: 'You cannot block your own server.' })
+        .end()
+    }
+
+    const server = await ServerModel.loadByHost(host)
+    if (!server) {
+      return res.status(404)
+                .send({ error: 'Server host not found.' })
+                .end()
+    }
+
+    res.locals.server = server
 
     return next()
   }
@@ -56,6 +98,7 @@ const unblockServerByAccountValidator = [
 // ---------------------------------------------------------------------------
 
 export {
+  blockServerByAccountValidator,
   blockAccountByAccountValidator,
   unblockAccountByAccountValidator,
   unblockServerByAccountValidator

@@ -72,7 +72,7 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
     },
     onDelete: 'CASCADE'
   })
-  ServerBlocked: ServerModel
+  BlockedServer: ServerModel
 
   static loadByAccountAndHost (accountId: number, host: string) {
     const query = {
@@ -114,7 +114,7 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
   toFormattedJSON (): ServerBlock {
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
-      serverBlocked: this.ServerBlocked.toFormattedJSON(),
+      blockedServer: this.BlockedServer.toFormattedJSON(),
       createdAt: this.createdAt
     }
   }

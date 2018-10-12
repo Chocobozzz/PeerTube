@@ -58,6 +58,7 @@ import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-fe
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
+import { BlocklistService } from '@app/shared/blocklist'
 
 @NgModule({
   imports: [
@@ -172,6 +173,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
+    BlocklistService,
 
     I18nPrimengCalendarService,
     ScreenService,

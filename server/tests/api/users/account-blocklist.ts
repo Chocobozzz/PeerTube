@@ -183,9 +183,9 @@ describe('Test accounts blocklist', function () {
         const block = blocks[0]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
-        expect(block.accountBlocked.displayName).to.equal('user2')
-        expect(block.accountBlocked.name).to.equal('user2')
-        expect(block.accountBlocked.host).to.equal('localhost:9002')
+        expect(block.blockedAccount.displayName).to.equal('user2')
+        expect(block.blockedAccount.name).to.equal('user2')
+        expect(block.blockedAccount.host).to.equal('localhost:9002')
       }
 
       {
@@ -197,9 +197,9 @@ describe('Test accounts blocklist', function () {
         const block = blocks[0]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
-        expect(block.accountBlocked.displayName).to.equal('user1')
-        expect(block.accountBlocked.name).to.equal('user1')
-        expect(block.accountBlocked.host).to.equal('localhost:9001')
+        expect(block.blockedAccount.displayName).to.equal('user1')
+        expect(block.blockedAccount.name).to.equal('user1')
+        expect(block.blockedAccount.host).to.equal('localhost:9001')
       }
     })
 
@@ -267,7 +267,7 @@ describe('Test accounts blocklist', function () {
       const block = blocks[0]
       expect(block.byAccount.displayName).to.equal('root')
       expect(block.byAccount.name).to.equal('root')
-      expect(block.serverBlocked.host).to.equal('localhost:9002')
+      expect(block.blockedServer.host).to.equal('localhost:9002')
     })
 
     it('Should unblock the remote server', async function () {

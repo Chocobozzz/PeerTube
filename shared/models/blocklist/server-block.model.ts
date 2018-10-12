@@ -2,7 +2,7 @@ import { Account } from '../actors'
 
 export interface ServerBlock {
   byAccount: Account
-  serverBlocked: {
+  blockedServer: {
     host: string
   }
   createdAt: Date | string

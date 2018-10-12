@@ -19,7 +19,21 @@
       </div>
     </div>
 
-    <a i18n routerLink="/my-account/ownership" routerLinkActive="active" class="title-page">Ownership changes</a>
+    <div ngbDropdown class="misc">
+      <span role="button" class="title-page" [ngClass]="{ active: miscLabel !== '' }" ngbDropdownToggle>
+        <ng-container i18n>Misc</ng-container>
+        <ng-container *ngIf="miscLabel"> - {{ miscLabel }}</ng-container>
+      </span>
+
+      <div ngbDropdownMenu>
+        <a class="dropdown-item" i18n routerLink="/my-account/blocklist/accounts">Muted accounts</a>
+
+        <a class="dropdown-item" i18n routerLink="/my-account/blocklist/servers">Muted instances</a>
+
+        <a class="dropdown-item" i18n routerLink="/my-account/ownership">Ownership changes</a>
+      </div>
+    </div>
+
   </div>
 
   <div class="margin-content">

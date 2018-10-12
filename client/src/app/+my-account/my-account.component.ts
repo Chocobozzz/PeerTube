@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs'
 export class MyAccountComponent implements OnInit, OnDestroy {
 
   libraryLabel = ''
+  miscLabel = ''
 
   private routeSub: Subscription
 
@@ -23,11 +24,11 @@ export class MyAccountComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit () {
-    this.updateLibraryLabel(this.router.url)
+    this.updateLabels(this.router.url)
 
     this.routeSub = this.router.events
         .pipe(filter(event => event instanceof NavigationStart))
-        .subscribe((event: NavigationStart) => this.updateLibraryLabel(event.url))
+        .subscribe((event: NavigationStart) => this.updateLabels(event.url))
   }
 
   ngOnDestroy () {
@@ -40,7 +41,7 @@ export class MyAccountComponent implements OnInit, OnDestroy {
     return importConfig.http.enabled || importConfig.torrent.enabled
   }
 
-  private updateLibraryLabel (url: string) {
+  private updateLabels (url: string) {
     const [ path ] = url.split('?')
 
     if (path.startsWith('/my-account/video-channels')) {
@@ -53,6 +54,14 @@ export class MyAccountComponent implements OnInit, OnDestroy {
       this.libraryLabel = this.i18n('Video imports')
     } else {
       this.libraryLabel = ''
+    }
+
+    if (path.startsWith('/my-account/blocklist/accounts')) {
+      this.miscLabel = this.i18n('Muted accounts')
+    } else if (path.startsWith('/my-account/blocklist/servers')) {
+      this.miscLabel = this.i18n('Muted instances')
+    } else {
+      this.miscLabel = ''
     }
   }
 }

@@ -18,7 +18,7 @@ enum ScopeNames {
       {
         model: () => AccountModel,
         required: true,
-        as: 'AccountBlocked'
+        as: 'BlockedAccount'
       }
     ]
   }
@@ -67,10 +67,10 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       name: 'targetAccountId',
       allowNull: false
     },
-    as: 'AccountBlocked',
+    as: 'BlockedAccount',
     onDelete: 'CASCADE'
   })
-  AccountBlocked: AccountModel
+  BlockedAccount: AccountModel
 
   static loadByAccountAndTarget (accountId: number, targetAccountId: number) {
     const query = {
@@ -104,7 +104,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
   toFormattedJSON (): AccountBlock {
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
-      accountBlocked: this.AccountBlocked.toFormattedJSON(),
+      blockedAccount: this.BlockedAccount.toFormattedJSON(),
       createdAt: this.createdAt
     }
   }

@@ -6,7 +6,6 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   paginationValidator,
-  serverGetValidator,
   setDefaultPagination,
   setDefaultSort,
   unblockAccountByAccountValidator
@@ -14,6 +13,7 @@ import {
 import {
   accountsBlocklistSortValidator,
   blockAccountByAccountValidator,
+  blockServerByAccountValidator,
   serversBlocklistSortValidator,
   unblockServerByAccountValidator
 } from '../../../middlewares/validators'
@@ -58,7 +58,7 @@ myBlocklistRouter.get('/me/blocklist/servers',
 
 myBlocklistRouter.post('/me/blocklist/servers',
   authenticate,
-  asyncMiddleware(serverGetValidator),
+  asyncMiddleware(blockServerByAccountValidator),
   asyncRetryTransactionMiddleware(blockServer)
 )
 
