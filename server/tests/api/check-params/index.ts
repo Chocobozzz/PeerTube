@@ -1,5 +1,6 @@
 // Order of the tests we want to execute
 import './accounts'
+import './blocklist'
 import './config'
 import './follows'
 import './jobs'

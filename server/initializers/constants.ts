@@ -47,7 +47,10 @@ const SORTABLE_COLUMNS = {
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
 
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
-  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+
+  ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
+  SERVERS_BLOCKLIST: [ 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
