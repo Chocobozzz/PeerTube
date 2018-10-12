@@ -174,7 +174,7 @@ See the more general [admin documentation](https://docs.joinpeertube.org/lang/en
 
  * [Import videos (YouTube, Dailymotion, Vimeo...)](/support/doc/tools.md)
  * [Upload videos from the CLI](/support/doc/tools.md)
- * [Admin server tools (create transcoding jobs, prune storage...)](/develop/support/doc/tools.md#server-tools)
+ * [Admin server tools (create transcoding jobs, prune storage...)](/support/doc/tools.md#server-tools)
 
 ### Technical documentation
 
