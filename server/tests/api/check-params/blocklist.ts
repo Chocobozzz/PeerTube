@@ -85,6 +85,16 @@ describe('Test blocklist API validators', function () {
           })
         })
 
+        it('Should fail to block ourselves', async function () {
+          await makePostBodyRequest({
+            url: server.url,
+            token: server.accessToken,
+            path,
+            fields: { accountName: 'root' },
+            statusCodeExpected: 409
+          })
+        })
+
         it('Should succeed with the correct params', async function () {
           await makePostBodyRequest({
             url: server.url,
@@ -167,6 +177,16 @@ describe('Test blocklist API validators', function () {
             path,
             fields: { host: 'localhost:9003' },
             statusCodeExpected: 404
+          })
+        })
+
+        it('Should fail with our own server', async function () {
+          await makePostBodyRequest({
+            url: server.url,
+            token: server.accessToken,
+            path,
+            fields: { host: 'localhost:9001' },
+            statusCodeExpected: 409
           })
         })
 

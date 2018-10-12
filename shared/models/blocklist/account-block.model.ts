@@ -2,6 +2,6 @@ import { Account } from '../actors'
 
 export interface AccountBlock {
   byAccount: Account
-  accountBlocked: Account
+  blockedAccount: Account
   createdAt: Date | string
 }

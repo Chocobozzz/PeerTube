@@ -46,5 +46,10 @@
   .dropdown-item {
     cursor: pointer;
     color: #000 !important;
+
+    a, span {
+      display: block;
+      width: 100%;
+    }
   }
 }
