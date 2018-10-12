@@ -1,6 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { values } from 'lodash'
-import { WEBTORRENT_POLICY_TYPES } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -9,18 +7,22 @@ async function up (utils: {
 }): Promise<any> {
   {
     const data = {
-      type: Sequelize.ENUM(values(WEBTORRENT_POLICY_TYPES)),
+      type: Sequelize.BOOLEAN,
       allowNull: false,
-      defaultValue: 'enable'
+      defaultValue: true
     }
 
-    await utils.queryInterface.addColumn('user', 'webTorrentPolicy', data)
+    await utils.queryInterface.addColumn('user', 'webTorrentEnabled', data)
   }
 
 }
 
-function down (options) {
-  throw new Error('Not implemented.')
+async function down (utils: {
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
+}): Promise<any> {
+  await utils.queryInterface.removeColumn('user', 'webTorrentEnabled')
 }
 
 export { up, down }

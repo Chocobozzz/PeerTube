@@ -327,7 +327,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
   if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
-  if (body.webTorrentPolicy !== undefined) user.webTorrentPolicy = body.webTorrentPolicy
+  if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await sequelizeTypescript.transaction(async t => {
