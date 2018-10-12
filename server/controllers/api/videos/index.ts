@@ -437,7 +437,7 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false,
-    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

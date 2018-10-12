@@ -1,7 +1,8 @@
 import * as express from 'express'
 import { getFormattedObjects } from '../../helpers/utils'
 import {
-  asyncMiddleware, commonVideosFiltersValidator,
+  asyncMiddleware,
+  commonVideosFiltersValidator,
   listVideoAccountChannelsValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -90,7 +91,7 @@ async function listAccountVideos (req: express.Request, res: express.Response, n
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
     accountId: account.id,
-    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
