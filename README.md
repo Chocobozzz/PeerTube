@@ -59,7 +59,7 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 <br />
 
 <p align="center">
-  <a href="https://peertube.cpy.re/videos/watch/a8ea95b8-0396-49a6-8f30-e25e25fb2828">
+  <a href="https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3">
     <img src="https://lutim.cpy.re/8cZDRIEF.png" alt="screenshot" />
   </a>
 </p>
@@ -109,11 +109,8 @@ Want to see it in action?
      * [peertube.cpy.re](https://peertube.cpy.re)
      * [peertube2.cpy.re](https://peertube2.cpy.re)
      * [peertube3.cpy.re](https://peertube3.cpy.re)
-   * [Video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) What is PeerTube?
-   * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
-     to see what the "decentralization feature" looks like
-   * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) to see
-     the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
+   * [Video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what is PeerTube
+   * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) showing the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
 
 :question: Motivation
 ----------------------------------------------------------------
@@ -177,7 +174,7 @@ See the more general [admin documentation](https://docs.joinpeertube.org/lang/en
 
  * [Import videos (YouTube, Dailymotion, Vimeo...)](/support/doc/tools.md)
  * [Upload videos from the CLI](/support/doc/tools.md)
- * [Admin server tools (create transcoding jobs, prune storage...)](/develop/support/doc/tools.md#server-tools)
+ * [Admin server tools (create transcoding jobs, prune storage...)](/support/doc/tools.md#server-tools)
 
 ### Technical documentation
 
