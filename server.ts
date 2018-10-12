@@ -53,11 +53,14 @@ if (errorMessage !== null) {
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
 // Security middleware
+import { baseCSP } from './server/middlewares'
+
 app.use(helmet({
   frameguard: {
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
   },
-  hsts: false
+  hsts: false,
+  baseCSP
 }))
 
 // ----------- Database -----------
