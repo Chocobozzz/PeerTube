@@ -41,6 +41,39 @@ export function parseDuration (duration: number | string): number {
   throw new Error('Duration could not be properly parsed')
 }
 
+export function parseBytes(value: string | number): number {
+  if (typeof value === 'number') return value;
+
+  var tgm = /^(\d+)\s*TB\s*(\d+)\s*GB\s*(\d+)\s*MB$/;
+  var tg = /^(\d+)\s*TB\s*(\d+)\s*GB$/;
+  var tm = /^(\d+)\s*TB\s*(\d+)\s*MB$/;
+  var gm = /^(\d+)\s*GB\s*(\d+)\s*MB$/;
+  var t = /^(\d+)\s*TB$/;
+  var g = /^(\d+)\s*GB$/;
+  var m = /^(\d+)\s*MB$/;
+  var b = /^(\d+)\s*B$/;
+  var match;
+  if (match = value.match(tgm)) {
+    return parseInt(match[1]) * 1024 * 1024 * 1024 * 1024 + parseInt(match[2]) * 1024 * 1024 * 1024 + parseInt(match[3]) * 1024 * 1024;
+  } else if (match = value.match(tg)) {
+    return parseInt(match[1]) * 1024 * 1024 * 1024 * 1024 + parseInt(match[2]) * 1024 * 1024 * 1024
+  } else if (match = value.match(tm)) {
+    return parseInt(match[1]) * 1024 * 1024 * 1024 * 1024 + parseInt(match[2]) * 1024 * 1024
+  } else if (match = value.match(gm)) {
+    return parseInt(match[1]) * 1024 * 1024 * 1024 + parseInt(match[2]) * 1024 * 1024;
+  } else if (match = value.match(t)) {
+    return parseInt(match[1]) * 1024 * 1024 * 1024 * 1024;
+  } else if (match = value.match(g)) {
+    return parseInt(match[1]) * 1024 * 1024 * 1024;
+  } else if (match = value.match(m)) {
+    return parseInt(match[1]) * 1024 * 1024;
+  } else if (match = value.match(b)) {
+    return parseInt(match[1]) * 1024;
+  } else {
+    return parseInt(value);
+  }
+}
+
 function sanitizeUrl (url: string) {
   const urlObject = new URL(url)
 
