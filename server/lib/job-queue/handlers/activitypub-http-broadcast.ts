@@ -3,7 +3,7 @@ import * as Bluebird from 'bluebird'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
+import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers'
 
 export type ActivitypubHttpBroadcastPayload = {
@@ -25,7 +25,8 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
     uri: '',
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: JOB_REQUEST_TIMEOUT
+    timeout: JOB_REQUEST_TIMEOUT,
+    headers: buildGlobalHeaders(body)
   }
 
   const badUrls: string[] = []

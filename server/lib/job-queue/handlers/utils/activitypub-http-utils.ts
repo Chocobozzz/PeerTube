@@ -1,8 +1,11 @@
 import { buildSignedActivity } from '../../../../helpers/activitypub'
 import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
+import { sha256 } from '../../../../helpers/core-utils'
 
-async function computeBody (payload: { body: any, signatureActorId?: number }) {
+type Payload = { body: any, signatureActorId?: number }
+
+async function computeBody (payload: Payload) {
   let body = payload.body
 
   if (payload.signatureActorId) {
@@ -14,7 +17,7 @@ async function computeBody (payload: { body: any, signatureActorId?: number }) {
   return body
 }
 
-async function buildSignedRequestOptions (payload: { signatureActorId?: number }) {
+async function buildSignedRequestOptions (payload: Payload) {
   let actor: ActorModel | null
   if (payload.signatureActorId) {
     actor = await ActorModel.load(payload.signatureActorId)
@@ -29,11 +32,21 @@ async function buildSignedRequestOptions (payload: { signatureActorId?: number }
     algorithm: 'rsa-sha256',
     authorizationHeaderName: 'Signature',
     keyId,
-    key: actor.privateKey
+    key: actor.privateKey,
+    headers: [ 'date', 'host', 'digest', '(request-target)' ]
+  }
+}
+
+function buildGlobalHeaders (body: object) {
+  const digest = 'SHA-256=' + sha256(JSON.stringify(body), 'base64')
+
+  return {
+    'Digest': digest
   }
 }
 
 export {
+  buildGlobalHeaders,
   computeBody,
   buildSignedRequestOptions
 }
