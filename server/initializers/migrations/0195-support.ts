@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { CONSTRAINTS_FIELDS } from '../index'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
@@ -8,7 +7,7 @@ async function up (utils: {
 }): Promise<void> {
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max),
+      type: Sequelize.STRING(500),
       allowNull: true,
       defaultValue: null
     }
@@ -17,7 +16,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max),
+      type: Sequelize.STRING(500),
       allowNull: true,
       defaultValue: null
     }
@@ -26,7 +25,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max),
+      type: Sequelize.STRING(250),
       allowNull: true,
       defaultValue: null
     }
@@ -35,7 +34,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max),
+      type: Sequelize.STRING(10000),
       allowNull: true,
       defaultValue: null
     }
