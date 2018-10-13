@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { CONSTRAINTS_FIELDS } from '../constants'
 import { VideoAbuseState } from '../../../shared/models/videos'
 
 async function up (utils: {
@@ -10,7 +9,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEO_BLACKLIST.REASON.max),
+      type: Sequelize.STRING(300),
       allowNull: true,
       defaultValue: null
     }
