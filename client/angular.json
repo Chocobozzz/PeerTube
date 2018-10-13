@@ -38,6 +38,7 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
+              "subresourceIntegrity": true,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,

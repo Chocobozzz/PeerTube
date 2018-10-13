@@ -1,6 +1,7 @@
 import * as helmet from 'helmet'
 
 const baseDirectives = {
+  requireSriFor: ['script style'],
   defaultSrc: ["'none'"], // by default, not specifying default-src = '*'
   connectSrc: ['*'],
   mediaSrc: ["'self'"],
@@ -16,7 +17,8 @@ const baseDirectives = {
   manifestSrc: ["'self'"],
   frameSrc: ["'self'"], // instead of deprecated child-src / self because of test-embed
   workerSrc: ["'self'"], // instead of deprecated child-src
-  upgradeInsecureRequests: true
+  upgradeInsecureRequests: true,
+  blockAllMixedContent: true
 }
 
 const baseCSP = helmet.contentSecurityPolicy({
