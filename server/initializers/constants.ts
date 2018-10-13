@@ -428,7 +428,8 @@ const VIDEO_CATEGORIES = {
   15: 'Science & Technology',
   16: 'Animals',
   17: 'Kids',
-  18: 'Food'
+  18: 'Food',
+  19: 'Political'
 }
 
 // See https://creativecommons.org/licenses/?lang=en
