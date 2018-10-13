@@ -6,7 +6,7 @@ const baseDirectives = {
   mediaSrc: ["'self'"],
   fontSrc: ["'self' data:"],
   imgSrc: ["'self' data:"],
-  scriptSrc: ["'self' 'unsafe-inline' 'unsafe-eval'"],
+  scriptSrc: ["'self' 'unsafe-inline'"],
   styleSrc: ["'self' 'unsafe-inline'"],
   // objectSrc: ["'none'"], // only define to allow plugins, else let defaultSrc 'none' block it
   formAction: ["'self'"],
