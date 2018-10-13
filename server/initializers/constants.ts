@@ -429,7 +429,7 @@ const VIDEO_CATEGORIES = {
   16: 'Animals',
   17: 'Kids',
   18: 'Food',
-  19: 'Political'
+  19: 'Politics'
 }
 
 // See https://creativecommons.org/licenses/?lang=en
