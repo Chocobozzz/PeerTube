@@ -1,52 +1,79 @@
 import * as repl from 'repl'
 import * as path from 'path'
 import * as _ from 'lodash'
-import * as moment from 'moment'
-import * as YoutubeDL from 'youtube-dl'
 import * as uuidv1 from 'uuid/v1'
 import * as uuidv3 from 'uuid/v3'
 import * as uuidv4 from 'uuid/v4'
 import * as uuidv5 from 'uuid/v5'
+import * as Sequelize from 'sequelize'
+import * as YoutubeDL from 'youtube-dl'
 
 import { initDatabaseModels, sequelizeTypescript } from '../initializers'
-const version = require('../../../package.json').version
+import * as cli from '../tools/cli'
+import { logger } from '../helpers/logger'
+import * as constants from '../initializers/constants'
+import * as modelsUtils from '../models/utils'
+import * as coreUtils from '../helpers/core-utils'
+import * as ffmpegUtils from '../helpers/ffmpeg-utils'
+import * as peertubeCryptoUtils from '../helpers/peertube-crypto'
+import * as signupUtils from '../helpers/signup'
+import * as utils from '../helpers/utils'
+import * as YoutubeDLUtils from '../helpers/youtube-dl'
+
+let versionCommitHash
 
 const start = async () => {
   await initDatabaseModels(true)
 
+  await utils.getVersion().then((data) => {
+    versionCommitHash = data
+  })
+
   const initContext = (replServer) => {
     return (context) => {
-      context.lodash = _;
-      context.path = path;
-      context.repl = replServer;
-      context.moment = moment;
-      context.env = process.env;
-      context.models = sequelizeTypescript.models;
-      context.YoutubeDL = YoutubeDL
-      context.uuidv1 = uuidv1
-      context.uuidv3 = uuidv3
-      context.uuidv4 = uuidv4
-      context.uuidv5 = uuidv5
+      const properties = {
+        context, repl: replServer, env: process.env,
+        lodash: _, path,
+        uuidv1, uuidv3, uuidv4, uuidv5,
+        cli, logger, constants,
+        Sequelize, sequelizeTypescript, modelsUtils,
+        models: sequelizeTypescript.models, transaction: sequelizeTypescript.transaction,
+        query: sequelizeTypescript.query, queryInterface: sequelizeTypescript.getQueryInterface(),
+        YoutubeDL,
+        coreUtils, ffmpegUtils, peertubeCryptoUtils, signupUtils, utils, YoutubeDLUtils
+      }
+
+      for (let prop in properties) {
+        Object.defineProperty(context, prop, {
+          configurable: false,
+          enumerable: true,
+          value: properties[prop]
+        })
+      }
     }
   }
 
   const replServer = repl.start({
-    prompt: `PeerTube [${version}] >`,
-  });
+    prompt: `PeerTube [${cli.version}] (${versionCommitHash})> `
+  })
 
-  initContext(replServer)(replServer.context);
-  replServer.on('reset', initContext(replServer));
+  initContext(replServer)(replServer.context)
+  replServer.on('reset', initContext(replServer))
 
   const resetCommand = {
     help: 'Reset REPL',
-    action() {
-      this.write('.clear\n');  
-      this.displayPrompt();
+    action () {
+      this.write('.clear\n')
+      this.displayPrompt()
     }
-  };
-  replServer.defineCommand('reset', resetCommand);
-  replServer.defineCommand('r', resetCommand);
+  }
+  replServer.defineCommand('reset', resetCommand)
+  replServer.defineCommand('r', resetCommand)
 
 }
 
-start().then(()=>{}).catch(()=>{})
+start().then((data) => {
+  // do nothing
+}).catch((err) => {
+  console.error(err)
+})
