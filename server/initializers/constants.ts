@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 275
+const LAST_MIGRATION_VERSION = 280
 
 // ---------------------------------------------------------------------------
 
@@ -292,7 +292,8 @@ const CONFIG = {
 const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 250 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
@@ -308,7 +309,7 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 500 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
     SUPPORT: { min: 3, max: 500 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
@@ -338,7 +339,7 @@ const CONSTRAINTS_FIELDS = {
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
-    SUPPORT: { min: 3, max: 500 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
