@@ -421,15 +421,14 @@ const VIDEO_CATEGORIES = {
   8: 'People',
   9: 'Comedy',
   10: 'Entertainment',
-  11: 'News',
+  11: 'News & Politics',
   12: 'How To',
   13: 'Education',
   14: 'Activism',
   15: 'Science & Technology',
   16: 'Animals',
   17: 'Kids',
-  18: 'Food',
-  19: 'Politics'
+  18: 'Food'
 }
 
 // See https://creativecommons.org/licenses/?lang=en
