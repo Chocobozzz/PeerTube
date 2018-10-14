@@ -1,3 +1,30 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [CLI tools guide](#cli-tools-guide)
+  - [CLI wrapper](#cli-wrapper)
+  - [Remote Tools](#remote-tools)
+    - [Dependencies](#dependencies)
+    - [Installation](#installation)
+    - [peertube-import-videos.js](#peertube-import-videosjs)
+    - [peertube-upload.js](#peertube-uploadjs)
+    - [peertube-watch.js](#peertube-watchjs)
+  - [Server tools](#server-tools)
+    - [parse-log](#parse-log)
+    - [create-transcoding-job.js](#create-transcoding-jobjs)
+    - [create-import-video-file-job.js](#create-import-video-file-jobjs)
+    - [prune-storage.js](#prune-storagejs)
+    - [optimize-old-videos.js](#optimize-old-videosjs)
+    - [update-host.js](#update-hostjs)
+    - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
+      - [.help](#help)
+      - [Lodash example](#lodash-example)
+      - [YoutubeDL example](#youtubedl-example)
+      - [Models examples](#models-examples)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # CLI tools guide
  - [CLI wrapper](#cli-wrapper)
  - [Remote tools](#remote-tools)
@@ -159,7 +186,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 ### create-transcoding-job.js
 
-You can use this script to force transcoding of an existing video.
+You can use this script to force transcoding of an existing video. PeerTube needs to be running.
 
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID]
@@ -172,7 +199,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
    
 ### create-import-video-file-job.js
 
-You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video.
+You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video. PeerTube needs to be running.
 
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
@@ -189,9 +216,10 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 ### optimize-old-videos.js
 
-Before version v1.0.0-beta.16, Peertube did not specify a bitrate for the transcoding of uploaded videos.
-This means that videos might be encoded into very large files that are too large for streaming. This script
-re-transcodes these videos so that they can be watched properly, even on slow connections.
+Before version v1.0.0-beta.16, Peertube did not specify a bitrate for the
+transcoding of uploaded videos. This means that videos might be encoded into
+very large files that are too large for streaming. This script re-transcodes
+these videos so that they can be watched properly, even on slow connections.
 
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run optimize-old-videos
@@ -200,8 +228,9 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 ### update-host.js
 
-If you started PeerTube with a domain, and then changed it you will have invalid torrent files and invalid URLs in your database.
-To fix this, you have to run:
+If you started PeerTube with a domain, and then changed it you will have
+invalid torrent files and invalid URLs in your database. To fix this, you have
+to run:
 
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run update-host
@@ -209,7 +238,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 ### REPL ([Read Eval Print Loop](https://nodejs.org/docs/latest-v8.x/api/repl.html))
 
-If you want to interact with the application libraries and objects, there is a REPL for that.
+If you want to interact with the application libraries and objects even when PeerTube is not running, there is a REPL for that.
 
 usage: `node ./dist/server/tools/repl.js`
 
