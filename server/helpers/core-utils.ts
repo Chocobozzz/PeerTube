@@ -21,6 +21,7 @@ const timeTable = {
   week:         3600000 * 24 * 7,
   month:        3600000 * 24 * 30
 }
+
 export function parseDuration (duration: number | string): number {
   if (typeof duration === 'number') return duration
 
@@ -39,6 +40,53 @@ export function parseDuration (duration: number | string): number {
   }
 
   throw new Error('Duration could not be properly parsed')
+}
+
+export function parseBytes (value: string | number): number {
+  if (typeof value === 'number') return value
+
+  const tgm = /^(\d+)\s*TB\s*(\d+)\s*GB\s*(\d+)\s*MB$/
+  const tg = /^(\d+)\s*TB\s*(\d+)\s*GB$/
+  const tm = /^(\d+)\s*TB\s*(\d+)\s*MB$/
+  const gm = /^(\d+)\s*GB\s*(\d+)\s*MB$/
+  const t = /^(\d+)\s*TB$/
+  const g = /^(\d+)\s*GB$/
+  const m = /^(\d+)\s*MB$/
+  const b = /^(\d+)\s*B$/
+  let match
+
+  if (value.match(tgm)) {
+    match = value.match(tgm)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024 * 1024
+    + parseInt(match[3], 10) * 1024 * 1024
+  } else if (value.match(tg)) {
+    match = value.match(tg)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024 * 1024
+  } else if (value.match(tm)) {
+    match = value.match(tm)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024
+  } else if (value.match(gm)) {
+    match = value.match(gm)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024
+  } else if (value.match(t)) {
+    match = value.match(t)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+  } else if (value.match(g)) {
+    match = value.match(g)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024
+  } else if (value.match(m)) {
+    match = value.match(m)
+    return parseInt(match[1], 10) * 1024 * 1024
+  } else if (value.match(b)) {
+    match = value.match(b)
+    return parseInt(match[1], 10) * 1024
+  } else {
+    return parseInt(value, 10)
+  }
 }
 
 function sanitizeUrl (url: string) {

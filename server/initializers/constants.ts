@@ -5,7 +5,7 @@ import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { buildPath, isTestInstance, parseDuration, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { buildPath, isTestInstance, parseDuration, parseBytes, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
@@ -232,8 +232,8 @@ const CONFIG = {
     }
   },
   USER: {
-    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') },
-    get VIDEO_QUOTA_DAILY () { return config.get<number>('user.video_quota_daily') }
+    get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
+    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
