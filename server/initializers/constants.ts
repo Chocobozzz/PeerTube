@@ -421,7 +421,7 @@ const VIDEO_CATEGORIES = {
   8: 'People',
   9: 'Comedy',
   10: 'Entertainment',
-  11: 'News',
+  11: 'News & Politics',
   12: 'How To',
   13: 'Education',
   14: 'Activism',
