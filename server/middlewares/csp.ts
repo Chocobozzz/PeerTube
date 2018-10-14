@@ -4,7 +4,7 @@ const baseDirectives = {
   requireSriFor: ['script style'],
   defaultSrc: ["'none'"], // by default, not specifying default-src = '*'
   connectSrc: ['*'],
-  mediaSrc: ["'self'"],
+  mediaSrc: ["'self' blob:"],
   fontSrc: ["'self' data:"],
   imgSrc: ["'self' data:"],
   scriptSrc: ["'self' 'unsafe-inline'"],
