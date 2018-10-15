@@ -55,20 +55,6 @@ export class UserListComponent extends RestTable implements OnInit {
     ]
   }
 
-  protected loadData () {
-    this.selectedUsers = []
-
-    this.userService.getUsers(this.pagination, this.sort, this.search)
-                    .subscribe(
-                      resultList => {
-                        this.users = resultList.data
-                        this.totalRecords = resultList.total
-                      },
-
-                      err => this.notificationsService.error(this.i18n('Error'), err.message)
-                    )
-  }
-
   openBanUserModal (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {
@@ -130,5 +116,19 @@ export class UserListComponent extends RestTable implements OnInit {
 
   isInSelectionMode () {
     return this.selectedUsers.length !== 0
+  }
+
+  protected loadData () {
+    this.selectedUsers = []
+
+    this.userService.getUsers(this.pagination, this.sort, this.search)
+                    .subscribe(
+                      resultList => {
+                        this.users = resultList.data
+                        this.totalRecords = resultList.total
+                      },
+
+                      err => this.notificationsService.error(this.i18n('Error'), err.message)
+                    )
   }
 }
