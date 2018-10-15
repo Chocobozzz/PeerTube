@@ -224,6 +224,7 @@ const CONFIG = {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
     get LIMIT () { return config.get<number>('signup.limit') },
     get REQUIRES_EMAIL_VERIFICATION () { return config.get<boolean>('signup.requires_email_verification') },
+    get CHANNEL_SUFFIX () { return config.has('signup.channel_suffix') ? config.get<boolean>('signup.channel_suffix') : true },
     FILTERS: {
       CIDR: {
         get WHITELIST () { return config.get<string[]>('signup.filters.cidr.whitelist') },

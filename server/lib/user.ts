@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../initializers'
+import { sequelizeTypescript, SERVER_ACTOR_NAME, CONFIG } from '../initializers'
 import { AccountModel } from '../models/account/account'
 import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
@@ -21,7 +21,12 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
     const accountCreated = await createLocalAccountWithoutKeys(userToCreate.username, userToCreate.id, null, t)
     userCreated.Account = accountCreated
 
-    let channelName = userCreated.username + '_channel'
+    let channelName
+    if (CONFIG.SIGNUP.CHANNEL_SUFFIX === true) {
+      channelName = userCreated.username + '_channel'
+    } else {
+      channelName = userCreated.username
+    }
 
     // Conflict, generate uuid instead
     const actor = await ActorModel.loadLocalByName(channelName)

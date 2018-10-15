@@ -116,6 +116,7 @@ signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
   requires_email_verification: false
+  channel_suffix: true # when this is true, adds '_channel' to the end of username for channel when user created.
   filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []
