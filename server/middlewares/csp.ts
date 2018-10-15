@@ -1,7 +1,6 @@
 import * as helmet from 'helmet'
 
 const baseDirectives = {
-  requireSriFor: ['script style'],
   defaultSrc: ["'none'"], // by default, not specifying default-src = '*'
   connectSrc: ['*'],
   mediaSrc: ["'self' blob:"],
