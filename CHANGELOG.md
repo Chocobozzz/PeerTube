@@ -2,7 +2,9 @@
 
 ## v1.0.0
 
-Announcement scheduled for october 15
+### SECURITY
+
+ * Add more headers to HTTP signature to avoid actor impersonation by replaying modified signed HTTP requests (thanks Thibaut Girka)
 
 ### Bug fixes
 
