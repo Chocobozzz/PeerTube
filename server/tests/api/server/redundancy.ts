@@ -456,19 +456,19 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      await wait(7000)
+      await wait(10000)
 
       try {
         await check1WebSeed(strategy, video1Server2UUID)
         await check2Webseeds(strategy, video2Server2UUID)
       } catch {
-        await wait(3000)
+        await wait(10000)
 
         try {
           await check1WebSeed(strategy, video1Server2UUID)
           await check2Webseeds(strategy, video2Server2UUID)
         } catch {
-          await wait(5000)
+          await wait(10000)
 
           await check1WebSeed(strategy, video1Server2UUID)
           await check2Webseeds(strategy, video2Server2UUID)
