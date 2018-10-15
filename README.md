@@ -94,7 +94,7 @@ Be it as a user or an instance administrator, you can decide what your experienc
 In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="/support/doc/redundancy.md">redundancy guide</a>).
 </p>
 <p align="right">
-Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisments that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
+Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
 </p>
 
 ---
@@ -105,7 +105,7 @@ Want to see it in action?
      * [peertube.cpy.re](https://peertube.cpy.re)
      * [peertube2.cpy.re](https://peertube2.cpy.re)
      * [peertube3.cpy.re](https://peertube3.cpy.re)
-   * [Video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what is PeerTube
+   * [Video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what PeerTube is
    * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) showing the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
 
 :question: Motivation
