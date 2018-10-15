@@ -72,8 +72,6 @@ function buildBlockedAccountSQL (serverAccountId: number, userAccountId?: number
 
   const query = 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
     ' UNION ALL ' +
-    // 'SELECT "accountId" FROM "accountBlocklist" WHERE "targetAccountId" = user.account.id
-    // UNION ALL
     'SELECT "account"."id" AS "id" FROM account INNER JOIN "actor" ON account."actorId" = actor.id ' +
     'INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ' +
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'

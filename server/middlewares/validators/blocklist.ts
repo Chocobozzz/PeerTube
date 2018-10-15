@@ -9,8 +9,9 @@ import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist'
 import { ServerModel } from '../../models/server/server'
 import { CONFIG } from '../../initializers'
+import { getServerActor } from '../../helpers/utils'
 
-const blockAccountByAccountValidator = [
+const blockAccountValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -51,7 +52,24 @@ const unblockAccountByAccountValidator = [
   }
 ]
 
-const blockServerByAccountValidator = [
+const unblockAccountByServerValidator = [
+  param('accountName').exists().withMessage('Should have an account name with host'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking unblockAccountByServerValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isAccountNameWithHostExist(req.params.accountName, res)) return
+
+    const serverActor = await getServerActor()
+    const targetAccount = res.locals.account
+    if (!await isUnblockAccountExists(serverActor.Account.id, targetAccount.id, res)) return
+
+    return next()
+  }
+]
+
+const blockServerValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -95,13 +113,30 @@ const unblockServerByAccountValidator = [
   }
 ]
 
+const unblockServerByServerValidator = [
+  param('host').custom(isHostValid).withMessage('Should have an account name with host'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking unblockServerByServerValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    const serverActor = await getServerActor()
+    if (!await isUnblockServerExists(serverActor.Account.id, req.params.host, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
-  blockServerByAccountValidator,
-  blockAccountByAccountValidator,
+  blockServerValidator,
+  blockAccountValidator,
   unblockAccountByAccountValidator,
-  unblockServerByAccountValidator
+  unblockServerByAccountValidator,
+  unblockAccountByServerValidator,
+  unblockServerByServerValidator
 }
 
 // ---------------------------------------------------------------------------

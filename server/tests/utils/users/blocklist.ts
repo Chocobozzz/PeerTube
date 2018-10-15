@@ -91,6 +91,94 @@ function removeServerFromAccountBlocklist (url: string, token: string, serverToB
   })
 }
 
+function getAccountBlocklistByServer (
+  url: string,
+  token: string,
+  start: number,
+  count: number,
+  sort = '-createdAt',
+  statusCodeExpected = 200
+) {
+  const path = '/api/v1/server/blocklist/accounts'
+
+  return makeGetRequest({
+    url,
+    token,
+    query: { start, count, sort },
+    path,
+    statusCodeExpected
+  })
+}
+
+function addAccountToServerBlocklist (url: string, token: string, accountToBlock: string, statusCodeExpected = 204) {
+  const path = '/api/v1/server/blocklist/accounts'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    token,
+    fields: {
+      accountName: accountToBlock
+    },
+    statusCodeExpected
+  })
+}
+
+function removeAccountFromServerBlocklist (url: string, token: string, accountToUnblock: string, statusCodeExpected = 204) {
+  const path = '/api/v1/server/blocklist/accounts/' + accountToUnblock
+
+  return makeDeleteRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
+
+function getServerBlocklistByServer (
+  url: string,
+  token: string,
+  start: number,
+  count: number,
+  sort = '-createdAt',
+  statusCodeExpected = 200
+) {
+  const path = '/api/v1/server/blocklist/servers'
+
+  return makeGetRequest({
+    url,
+    token,
+    query: { start, count, sort },
+    path,
+    statusCodeExpected
+  })
+}
+
+function addServerToServerBlocklist (url: string, token: string, serverToBlock: string, statusCodeExpected = 204) {
+  const path = '/api/v1/server/blocklist/servers'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    token,
+    fields: {
+      host: serverToBlock
+    },
+    statusCodeExpected
+  })
+}
+
+function removeServerFromServerBlocklist (url: string, token: string, serverToBlock: string, statusCodeExpected = 204) {
+  const path = '/api/v1/server/blocklist/servers/' + serverToBlock
+
+  return makeDeleteRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -99,5 +187,12 @@ export {
   removeAccountFromAccountBlocklist,
   getServerBlocklistByAccount,
   addServerToAccountBlocklist,
-  removeServerFromAccountBlocklist
+  removeServerFromAccountBlocklist,
+
+  getAccountBlocklistByServer,
+  addAccountToServerBlocklist,
+  removeAccountFromServerBlocklist,
+  getServerBlocklistByServer,
+  addServerToServerBlocklist,
+  removeServerFromServerBlocklist
 }
