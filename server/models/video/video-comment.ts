@@ -294,7 +294,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   static async listThreadsForApi (videoId: number, start: number, count: number, sort: string, user?: UserModel) {
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
-    const userAccountId = user.Account.id
+    const userAccountId = user ? user.Account.id : undefined
 
     const query = {
       offset: start,
@@ -330,7 +330,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   static async listThreadCommentsForApi (videoId: number, threadId: number, user?: UserModel) {
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
-    const userAccountId = user.Account.id
+    const userAccountId = user ? user.Account.id : undefined
 
     const query = {
       order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ],

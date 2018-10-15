@@ -5,8 +5,10 @@ export class Account extends Actor implements ServerAccount {
   displayName: string
   description: string
   nameWithHost: string
-  muted: boolean
-  mutedServer: boolean
+  mutedByUser: boolean
+  mutedByInstance: boolean
+  mutedServerByUser: boolean
+  mutedServerByInstance: boolean
 
   userId?: number
 
@@ -18,7 +20,9 @@ export class Account extends Actor implements ServerAccount {
     this.userId = hash.userId
     this.nameWithHost = Actor.CREATE_BY_STRING(this.name, this.host)
 
-    this.muted = false
-    this.mutedServer = false
+    this.mutedByUser = false
+    this.mutedByInstance = false
+    this.mutedServerByUser = false
+    this.mutedServerByInstance = false
   }
 }

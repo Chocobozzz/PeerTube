@@ -1,0 +1,22 @@
+<p-table
+  [value]="blockedAccounts" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th i18n>Account</th>
+      <th i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-accountBlock>
+    <tr>
+      <td>{{ accountBlock.blockedAccount.nameWithHost }}</td>
+      <td>{{ accountBlock.createdAt }}</td>
+      <td class="action-cell">
+        <button class="unblock-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

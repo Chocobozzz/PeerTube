@@ -14,7 +14,7 @@ import {
   userLogin
 } from '../../utils/index'
 import { setAccessTokensToServers } from '../../utils/users/login'
-import { getVideosListWithToken } from '../../utils/videos/videos'
+import { getVideosListWithToken, getVideosList } from '../../utils/videos/videos'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
@@ -41,9 +41,17 @@ import {
 const expect = chai.expect
 
 async function checkAllVideos (url: string, token: string) {
-  const res = await getVideosListWithToken(url, token)
+  {
+    const res = await getVideosListWithToken(url, token)
 
-  expect(res.body.data).to.have.lengthOf(4)
+    expect(res.body.data).to.have.lengthOf(4)
+  }
+
+  {
+    const res = await getVideosList(url)
+
+    expect(res.body.data).to.have.lengthOf(4)
+  }
 }
 
 async function checkAllComments (url: string, token: string, videoUUID: string) {
@@ -444,16 +452,19 @@ describe('Test blocklist', function () {
 
       it('Should hide its videos', async function () {
         for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          const res = await getVideosListWithToken(servers[ 0 ].url, token)
+          const res1 = await getVideosList(servers[ 0 ].url)
+          const res2 = await getVideosListWithToken(servers[ 0 ].url, token)
 
-          const videos: Video[] = res.body.data
-          expect(videos).to.have.lengthOf(2)
+          for (const res of [ res1, res2 ]) {
+            const videos: Video[] = res.body.data
+            expect(videos).to.have.lengthOf(2)
 
-          const v1 = videos.find(v => v.name === 'video user 2')
-          const v2 = videos.find(v => v.name === 'video server 2')
+            const v1 = videos.find(v => v.name === 'video user 2')
+            const v2 = videos.find(v => v.name === 'video server 2')
 
-          expect(v1).to.be.undefined
-          expect(v2).to.be.undefined
+            expect(v1).to.be.undefined
+            expect(v2).to.be.undefined
+          }
         }
       })
 

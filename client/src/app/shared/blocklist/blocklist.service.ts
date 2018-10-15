@@ -11,6 +11,7 @@ import { AccountBlock } from '@app/shared/blocklist/account-block.model'
 @Injectable()
 export class BlocklistService {
   static BASE_USER_BLOCKLIST_URL = environment.apiUrl + '/api/v1/users/me/blocklist'
+  static BASE_SERVER_BLOCKLIST_URL = environment.apiUrl + '/api/v1/server/blocklist'
 
   constructor (
     private authHttp: HttpClient,
@@ -68,6 +69,61 @@ export class BlocklistService {
 
   unblockServerByUser (host: string) {
     const path = BlocklistService.BASE_USER_BLOCKLIST_URL + '/servers/' + host
+
+    return this.authHttp.delete(path)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  /*********************** Instance -> Account blocklist ***********************/
+
+  getInstanceAccountBlocklist (pagination: RestPagination, sort: SortMeta) {
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp.get<ResultList<AccountBlock>>(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts', { params })
+               .pipe(
+                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
+                 map(res => this.restExtractor.applyToResultListData(res, this.formatAccountBlock.bind(this))),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  blockAccountByInstance (account: Account) {
+    const body = { accountName: account.nameWithHost }
+
+    return this.authHttp.post(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts', body)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  unblockAccountByInstance (account: Account) {
+    const path = BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts/' + account.nameWithHost
+
+    return this.authHttp.delete(path)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  /*********************** Instance -> Server blocklist ***********************/
+
+  getInstanceServerBlocklist (pagination: RestPagination, sort: SortMeta) {
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp.get<ResultList<ServerBlock>>(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers', { params })
+               .pipe(
+                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  blockServerByInstance (host: string) {
+    const body = { host }
+
+    return this.authHttp.post(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers', body)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  unblockServerByInstance (host: string) {
+    const path = BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers/' + host
 
     return this.authHttp.delete(path)
                .pipe(catchError(err => this.restExtractor.handleError(err)))

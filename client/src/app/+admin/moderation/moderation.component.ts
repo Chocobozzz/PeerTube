@@ -16,4 +16,12 @@ export class ModerationComponent {
   hasVideoBlacklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
+
+  hasAccountsBlacklistRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)
+  }
+
+  hasServersBlacklistRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
+  }
 }

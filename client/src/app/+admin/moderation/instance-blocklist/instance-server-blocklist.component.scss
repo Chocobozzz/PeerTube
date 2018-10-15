@@ -1,0 +1,7 @@
+@import '_variables';
+@import '_mixins';
+
+.unblock-button {
+  @include peertube-button;
+  @include grey-button;
+}
