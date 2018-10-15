@@ -34,6 +34,7 @@ export class VideoMiniatureComponent implements OnInit {
     // If the video channel name an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
     // -> Use the account name
     if (
+      this.video.channel.name === this.video.account.name ||
       this.video.channel.name === `${this.video.account.name}_channel` ||
       this.video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
     ) {
