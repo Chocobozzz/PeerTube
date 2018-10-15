@@ -1255,9 +1255,11 @@ export class VideoModel extends Model<VideoModel> {
 
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
-    const actorId = (await getServerActor()).id
+    const serverActor = await getServerActor()
+    const actorId = serverActor.id
 
-    const scopeOptions = {
+    const scopeOptions: AvailableForListIDsOptions = {
+      serverAccountId: serverActor.Account.id,
       actorId,
       includeLocalVideos: true
     }
