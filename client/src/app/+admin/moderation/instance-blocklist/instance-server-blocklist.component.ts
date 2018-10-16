@@ -12,7 +12,7 @@ import { ServerBlock } from '../../../../../../shared'
   templateUrl: './instance-server-blocklist.component.html'
 })
 export class InstanceServerBlocklistComponent extends RestTable implements OnInit {
-  blockedAccounts: ServerBlock[] = []
+  blockedServers: ServerBlock[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -50,7 +50,7 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
     return this.blocklistService.getInstanceServerBlocklist(this.pagination, this.sort)
       .subscribe(
         resultList => {
-          this.blockedAccounts = resultList.data
+          this.blockedServers = resultList.data
           this.totalRecords = resultList.total
         },
 
