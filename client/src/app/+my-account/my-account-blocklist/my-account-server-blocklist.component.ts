@@ -12,7 +12,7 @@ import { BlocklistService } from '@app/shared/blocklist'
   templateUrl: './my-account-server-blocklist.component.html'
 })
 export class MyAccountServerBlocklistComponent extends RestTable implements OnInit {
-  blockedAccounts: ServerBlock[] = []
+  blockedServers: ServerBlock[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -50,7 +50,7 @@ export class MyAccountServerBlocklistComponent extends RestTable implements OnIn
     return this.blocklistService.getUserServerBlocklist(this.pagination, this.sort)
       .subscribe(
         resultList => {
-          this.blockedAccounts = resultList.data
+          this.blockedServers = resultList.data
           this.totalRecords = resultList.total
         },
 
