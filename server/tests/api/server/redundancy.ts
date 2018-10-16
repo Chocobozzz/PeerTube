@@ -419,7 +419,7 @@ describe('Test videos redundancy', function () {
 
       killallServers([ servers[0] ])
 
-      await wait(10000)
+      await wait(15000)
 
       await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2Flocalhost%3A9001')
     })
@@ -452,26 +452,22 @@ describe('Test videos redundancy', function () {
     })
 
     it('Should cache video 2 webseed on the first video', async function () {
-      this.timeout(50000)
+      this.timeout(120000)
 
       await waitJobs(servers)
 
-      await wait(7000)
+      let checked = false
 
-      try {
-        await check1WebSeed(strategy, video1Server2UUID)
-        await check2Webseeds(strategy, video2Server2UUID)
-      } catch {
-        await wait(3000)
+      while (checked === false) {
+        await wait(1000)
 
         try {
           await check1WebSeed(strategy, video1Server2UUID)
           await check2Webseeds(strategy, video2Server2UUID)
-        } catch {
-          await wait(5000)
 
-          await check1WebSeed(strategy, video1Server2UUID)
-          await check2Webseeds(strategy, video2Server2UUID)
+          checked = true
+        } catch {
+          checked = false
         }
       }
     })
