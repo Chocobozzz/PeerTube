@@ -11,10 +11,17 @@ import {
   getAverageBandwidthInStore,
   getStoredMute,
   getStoredVolume,
+  getStoredWebTorrentEnabled,
   saveAverageBandwidth,
   saveMuteInStore,
   saveVolumeInStore
 } from './peertube-player-local-storage'
+
+type PlayOptions = {
+  forcePlay?: boolean,
+  seek?: number,
+  delay?: number
+}
 
 const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
@@ -64,6 +71,7 @@ class PeerTubePlugin extends Plugin {
   private autoResolution = true
   private forbidAutoResolution = false
   private isAutoResolutionObservation = false
+  private playerRefusedP2P = false
 
   private videoViewInterval
   private torrentInfoInterval
@@ -80,6 +88,7 @@ class PeerTubePlugin extends Plugin {
 
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false
+    this.playerRefusedP2P = !getStoredWebTorrentEnabled()
 
     this.startTime = timeToInt(options.startTime)
     this.videoFiles = options.videoFiles
@@ -178,6 +187,15 @@ class PeerTubePlugin extends Plugin {
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
 
+    // Don't try on iOS that does not support MediaSource
+    // Or don't use P2P if webtorrent is disabled
+    if (this.isIOS() || this.playerRefusedP2P) {
+      return this.fallbackToHttp(options, () => {
+        this.player.playbackRate(oldPlaybackRate)
+        return done()
+      })
+    }
+
     this.addTorrent(this.currentVideoFile.magnetUri, previousVideoFile, options, () => {
       this.player.playbackRate(oldPlaybackRate)
       return done()
@@ -248,11 +266,7 @@ class PeerTubePlugin extends Plugin {
   private addTorrent (
     magnetOrTorrentUrl: string,
     previousVideoFile: VideoFile,
-    options: {
-      forcePlay?: boolean,
-      seek?: number,
-      delay?: number
-    },
+    options: PlayOptions,
     done: Function
   ) {
     console.log('Adding ' + magnetOrTorrentUrl + '.')
@@ -288,7 +302,7 @@ class PeerTubePlugin extends Plugin {
         renderVideo(torrent.files[ 0 ], this.playerElement, renderVideoOptions, (err, renderer) => {
           this.renderer = renderer
 
-          if (err) return this.fallbackToHttp(done)
+          if (err) return this.fallbackToHttp(options, done)
 
           return this.tryToPlay(err => {
             if (err) return done(err)
@@ -296,7 +310,7 @@ class PeerTubePlugin extends Plugin {
             if (options.seek) this.seek(options.seek)
             if (options.forcePlay === false && paused === true) this.player.pause()
 
-            return done(err)
+            return done()
           })
         })
       }, options.delay || 0)
@@ -432,12 +446,6 @@ class PeerTubePlugin extends Plugin {
       return this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
     }
 
-    // Don't try on iOS that does not support MediaSource
-    if (this.isIOS()) {
-      this.currentVideoFile = this.pickAverageVideoFile()
-      return this.fallbackToHttp(undefined, false)
-    }
-
     // Proxy first play
     const oldPlay = this.player.play.bind(this.player)
     this.player.play = () => {
@@ -567,7 +575,9 @@ class PeerTubePlugin extends Plugin {
     return fetch(url, { method: 'PUT', body, headers })
   }
 
-  private fallbackToHttp (done?: Function, play = true) {
+  private fallbackToHttp (options: PlayOptions, done?: Function) {
+    const paused = this.player.paused()
+
     this.disableAutoResolution(true)
 
     this.flushVideoFile(this.currentVideoFile, true)
@@ -579,9 +589,15 @@ class PeerTubePlugin extends Plugin {
     const httpUrl = this.currentVideoFile.fileUrl
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
-    if (play) this.tryToPlay()
 
-    if (done) return done()
+    return this.tryToPlay(err => {
+      if (err && done) return done(err)
+
+      if (options.seek) this.seek(options.seek)
+      if (options.forcePlay === false && paused === true) this.player.pause()
+
+      if (done) return done()
+    })
   }
 
   private handleError (err: Error | string) {
