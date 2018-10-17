@@ -118,11 +118,13 @@ function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     let fps = await getVideoFileFPS(options.inputPath)
     // On small/medium resolutions, limit FPS
-    if (options.resolution !== undefined &&
-        options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-        fps > VIDEO_TRANSCODING_FPS.AVERAGE) {
-      fps = VIDEO_TRANSCODING_FPS.AVERAGE
-    }
+    // if (
+    //   options.resolution !== undefined &&
+    //   options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+    //   fps > VIDEO_TRANSCODING_FPS.AVERAGE
+    // ) {
+    //   fps = VIDEO_TRANSCODING_FPS.AVERAGE
+    // }
 
     let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
@@ -321,12 +323,12 @@ async function presetH264 (ffmpeg: ffmpeg, resolution: VideoResolution, fps: num
   // https://slhck.info/video/2017/03/01/rate-control.html
   // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
   const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-  localFfmpeg.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
+  localFfmpeg = localFfmpeg.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 
   // Keyframe interval of 2 seconds for faster seeking and resolution switching.
   // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
   // https://superuser.com/a/908325
-  localFfmpeg.outputOption(`-g ${ fps * 2 }`)
+  localFfmpeg = localFfmpeg.outputOption(`-g ${ fps * 2 }`)
 
   return localFfmpeg
 }

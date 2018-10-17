@@ -50,8 +50,7 @@ function getBaseBitrate (resolution: VideoResolution) {
  * getBaseBitrate() * 1.4. All other values are calculated linearly
  * between these two points.
  */
-export function getTargetBitrate (resolution: VideoResolution, fps: number,
-    fpsTranscodingConstants: VideoTranscodingFPS) {
+export function getTargetBitrate (resolution: VideoResolution, fps: number, fpsTranscodingConstants: VideoTranscodingFPS) {
   const baseBitrate = getBaseBitrate(resolution)
   // The maximum bitrate, used when fps === VideoTranscodingFPS.MAX
   // Based on numbers from Youtube, 60 fps bitrate divided by 30 fps bitrate:
@@ -71,7 +70,6 @@ export function getTargetBitrate (resolution: VideoResolution, fps: number,
 /**
  * The maximum bitrate we expect to see on a transcoded video in bytes per second.
  */
-export function getMaxBitrate (resolution: VideoResolution, fps: number,
-    fpsTranscodingConstants: VideoTranscodingFPS) {
+export function getMaxBitrate (resolution: VideoResolution, fps: number, fpsTranscodingConstants: VideoTranscodingFPS) {
   return getTargetBitrate(resolution, fps, fpsTranscodingConstants) * 2
 }

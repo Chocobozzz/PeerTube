@@ -109,6 +109,7 @@ export class UserModel extends Model<UserModel> {
   nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)
+  @Default(true)
   @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
   @Column
   webTorrentEnabled: boolean
