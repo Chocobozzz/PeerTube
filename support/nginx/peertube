@@ -96,8 +96,18 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    # Hard limit, PeerTube does not support videos > 8GB
+    # This is the maximum upload size, which roughly matches the maximum size of a video file
+    # you can send via the API or the web interface. By default this is 8GB, but administrators
+    # can increase or decrease the limit. Currently there's no way to communicate this limit
+    # to users automatically, so you may want to leave a note in your instance 'about' page if
+    # you change this.
+    #
+    # Note that temporary space is needed equal to the total size of all concurrent uploads.
+    # This data gets stored in /var/lib/nginx by default, so you may want to put this directory
+    # on a dedicated filesystem.
+    #
     client_max_body_size 8G;
+
     proxy_connect_timeout       600;
     proxy_send_timeout          600;
     proxy_read_timeout          600;
