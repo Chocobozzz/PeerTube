@@ -118,13 +118,13 @@ function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     let fps = await getVideoFileFPS(options.inputPath)
     // On small/medium resolutions, limit FPS
-    // if (
-    //   options.resolution !== undefined &&
-    //   options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-    //   fps > VIDEO_TRANSCODING_FPS.AVERAGE
-    // ) {
-    //   fps = VIDEO_TRANSCODING_FPS.AVERAGE
-    // }
+    if (
+      options.resolution !== undefined &&
+      options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+      fps > VIDEO_TRANSCODING_FPS.AVERAGE
+    ) {
+      fps = VIDEO_TRANSCODING_FPS.AVERAGE
+    }
 
     let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
