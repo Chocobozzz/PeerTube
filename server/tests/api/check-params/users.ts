@@ -99,13 +99,13 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'fi' })
+      const fields = immutableAssign(baseCorrectParams, { username: '' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(11) })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -541,13 +541,13 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'ji' })
+      const fields = immutableAssign(baseCorrectParams, { username: '' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(11) })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
