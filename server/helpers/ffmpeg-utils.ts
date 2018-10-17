@@ -116,28 +116,27 @@ type TranscodeOptions = {
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
+    let fps = await getVideoFileFPS(options.inputPath)
+    // On small/medium resolutions, limit FPS
+    if (options.resolution !== undefined &&
+        options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+        fps > VIDEO_TRANSCODING_FPS.AVERAGE) {
+      fps = VIDEO_TRANSCODING_FPS.AVERAGE
+    }
+
     let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
                     .output(options.outputPath)
-                    .preset(standard)
+    command = await presetH264(command, options.resolution, fps)
 
     if (CONFIG.TRANSCODING.THREADS > 0) {
       // if we don't set any threads ffmpeg will chose automatically
       command = command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
     }
 
-    let fps = await getVideoFileFPS(options.inputPath)
     if (options.resolution !== undefined) {
       // '?x720' or '720x?' for example
       const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
       command = command.size(size)
-
-      // On small/medium resolutions, limit FPS
-      if (
-        options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-        fps > VIDEO_TRANSCODING_FPS.AVERAGE
-      ) {
-        fps = VIDEO_TRANSCODING_FPS.AVERAGE
-      }
     }
 
     if (fps) {
@@ -147,12 +146,6 @@ function transcode (options: TranscodeOptions) {
 
       command = command.withFPS(fps)
     }
-
-    // Constrained Encoding (VBV)
-    // https://slhck.info/video/2017/03/01/rate-control.html
-    // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
-    const targetBitrate = getTargetBitrate(options.resolution, fps, VIDEO_TRANSCODING_FPS)
-    command.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
 
     command
       .on('error', (err, stdout, stderr) => {
@@ -199,9 +192,9 @@ function getVideoFileStream (path: string) {
  * and quality. Superfast and ultrafast will give you better
  * performance, but then quality is noticeably worse.
  */
-function veryfast (_ffmpeg) {
-  _ffmpeg
-    .preset(standard)
+async function presetH264VeryFast (ffmpeg: ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
+  const localFfmpeg = await presetH264(ffmpeg, resolution, fps)
+  localFfmpeg
     .outputOption('-preset:v veryfast')
     .outputOption(['--aq-mode=2', '--aq-strength=1.3'])
   /*
@@ -220,9 +213,9 @@ function veryfast (_ffmpeg) {
 /**
  * A preset optimised for a stillimage audio video
  */
-function audio (_ffmpeg) {
-  _ffmpeg
-    .preset(veryfast)
+async function presetStillImageWithAudio (ffmpeg: ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
+  const localFfmpeg = await presetH264VeryFast(ffmpeg, resolution, fps)
+  localFfmpeg
     .outputOption('-tune stillimage')
 }
 
@@ -290,8 +283,8 @@ namespace audio {
  * As for the audio, quality '5' is the highest and ensures 96-112kbps/channel
  * See https://trac.ffmpeg.org/wiki/Encode/AAC#fdk_vbr
  */
-async function standard (_ffmpeg) {
-  let localFfmpeg = _ffmpeg
+async function presetH264 (ffmpeg: ffmpeg, resolution: VideoResolution, fps: number): ffmpeg {
+  let localFfmpeg = ffmpeg
     .format('mp4')
     .videoCodec('libx264')
     .outputOption('-level 3.1') // 3.1 is the minimal ressource allocation for our highest supported resolution
@@ -323,6 +316,17 @@ async function standard (_ffmpeg) {
   }
 
   if (bitrate !== undefined) return localFfmpeg.audioBitrate(bitrate)
+
+  // Constrained Encoding (VBV)
+  // https://slhck.info/video/2017/03/01/rate-control.html
+  // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
+  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+  localFfmpeg.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
+
+  // Keyframe interval of 2 seconds for faster seeking and resolution switching.
+  // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
+  // https://superuser.com/a/908325
+  localFfmpeg.outputOption(`-g ${ fps * 2 }`)
 
   return localFfmpeg
 }
