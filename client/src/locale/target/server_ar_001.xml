@@ -43,10 +43,6 @@
         <source>Entertainment</source>
         <target>ترفيه</target>
       </trans-unit>
-      <trans-unit id="News">
-        <source>News</source>
-        <target>أخبار</target>
-      </trans-unit>
       <trans-unit id="How To">
         <source>How To</source>
         <target>كيف</target>
