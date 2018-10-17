@@ -22,14 +22,16 @@ const baseDirectives = {
 
 const baseCSP = helmet.contentSecurityPolicy({
   directives: baseDirectives,
-  browserSniff: false
+  browserSniff: false,
+  reportOnly: true
 })
 
 const embedCSP = helmet.contentSecurityPolicy({
   directives: Object.assign(baseDirectives, {
     frameAncestors: ['*']
   }),
-  browserSniff: false // assumes a modern browser, but allows CDN in front
+  browserSniff: false, // assumes a modern browser, but allows CDN in front
+  reportOnly: true
 })
 
 // ---------------------------------------------------------------------------
