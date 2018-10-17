@@ -2,10 +2,10 @@ import * as helmet from 'helmet'
 
 const baseDirectives = {
   defaultSrc: ["'none'"], // by default, not specifying default-src = '*'
-  connectSrc: ['*'],
-  mediaSrc: ["'self' blob:"],
-  fontSrc: ["'self' data:"],
-  imgSrc: ["'self' data:"],
+  connectSrc: ['*', 'data:'],
+  mediaSrc: ["'self'", 'blob:'],
+  fontSrc: ["'self'", 'data:'],
+  imgSrc: ["'self'", 'data:'],
   scriptSrc: ["'self' 'unsafe-inline'"],
   styleSrc: ["'self' 'unsafe-inline'"],
   // objectSrc: ["'none'"], // only define to allow plugins, else let defaultSrc 'none' block it
