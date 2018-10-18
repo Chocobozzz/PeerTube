@@ -1,7 +1,7 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
-import * as videojs from 'video.js'
+const videojs = require('video.js')
 import { SettingsMenuItem } from './settings-menu-item'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { toTitleCase } from './utils'
@@ -11,7 +11,7 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsButton extends Button {
-  constructor (player: videojs.Player, options) {
+  constructor (player: any, options: any) {
     super(player, options)
 
     this.playerComponent = player
@@ -48,7 +48,7 @@ class SettingsButton extends Button {
     }
   }
 
-  onDisposeSettingsItem (event, name: string) {
+  onDisposeSettingsItem (name: string) {
     if (name === undefined) {
       let children = this.menu.children()
 
@@ -74,7 +74,7 @@ class SettingsButton extends Button {
     }
   }
 
-  onAddSettingsItem (event, data) {
+  onAddSettingsItem (data: any) {
     const [ entry, options ] = data
 
     this.addMenuItem(entry, options)
@@ -120,7 +120,7 @@ class SettingsButton extends Button {
     this.resetChildren()
   }
 
-  getComponentSize (element) {
+  getComponentSize (element: any) {
     let width: number = null
     let height: number = null
 
@@ -178,7 +178,7 @@ class SettingsButton extends Button {
     this.panelChild.addChild(this.menu)
   }
 
-  addMenuItem (entry, options) {
+  addMenuItem (entry: any, options: any) {
     const openSubMenu = function () {
       if (videojsUntyped.dom.hasClass(this.el_, 'open')) {
         videojsUntyped.dom.removeClass(this.el_, 'open')
@@ -218,7 +218,7 @@ class SettingsButton extends Button {
 }
 
 class SettingsPanel extends Component {
-  constructor (player: videojs.Player, options) {
+  constructor (player: any, options: any) {
     super(player, options)
   }
 
@@ -232,7 +232,7 @@ class SettingsPanel extends Component {
 }
 
 class SettingsPanelChild extends Component {
-  constructor (player: videojs.Player, options) {
+  constructor (player: any, options: any) {
     super(player, options)
   }
 
@@ -246,7 +246,7 @@ class SettingsPanelChild extends Component {
 }
 
 class SettingsDialog extends Component {
-  constructor (player: videojs.Player, options) {
+  constructor (player: any, options: any) {
     super(player, options)
     this.hide()
   }

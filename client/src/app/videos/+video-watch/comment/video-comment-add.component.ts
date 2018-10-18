@@ -76,7 +76,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     this.formValidated()
   }
 
-  openVisitorModal (event) {
+  openVisitorModal (event: any) {
     if (this.user === null) { // we only open it for visitors
       // fixing ng-bootstrap ModalService and the "Expression Changed After It Has Been Checked" Error
       event.srcElement.blur()

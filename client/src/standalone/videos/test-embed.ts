@@ -66,11 +66,11 @@ window.addEventListener('load', async () => {
     updateRates()
   })
 
-  let updateResolutions = resolutions => {
+  let updateResolutions = ((resolutions: any) => {
     let resolutionListEl = document.querySelector('#resolution-list')
     resolutionListEl.innerHTML = ''
 
-    resolutions.forEach(resolution => {
+    resolutions.forEach((resolution: any) => {
       if (resolution.active) {
         let itemEl = document.createElement('strong')
         itemEl.innerText = `${resolution.label} (active)`
@@ -87,7 +87,7 @@ window.addEventListener('load', async () => {
         resolutionListEl.appendChild(itemEl)
       }
     })
-  }
+  })
 
   player.getResolutions().then(
     resolutions => updateResolutions(resolutions))

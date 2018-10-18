@@ -25,6 +25,7 @@ export class VideoEdit implements VideoUpdate {
   uuid?: string
   id?: number
   scheduleUpdate?: VideoScheduleUpdate
+  [key: string]: any
 
   constructor (video?: Video & { tags: string[], commentsEnabled: boolean, support: string, thumbnailUrl: string, previewUrl: string }) {
     if (video) {
@@ -49,7 +50,7 @@ export class VideoEdit implements VideoUpdate {
     }
   }
 
-  patch (values: Object) {
+  patch (values: any) {
     Object.keys(values).forEach((key) => {
       this[ key ] = values[ key ]
     })

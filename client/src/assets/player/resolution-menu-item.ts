@@ -1,10 +1,9 @@
-import * as videojs from 'video.js'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
 class ResolutionMenuItem extends MenuItem {
 
-  constructor (player: videojs.Player, options) {
+  constructor (player: any, options: any) {
     const currentResolutionId = player.peertube().getCurrentResolutionId()
     options.selectable = true
     options.selected = options.id === currentResolutionId
@@ -18,7 +17,7 @@ class ResolutionMenuItem extends MenuItem {
     player.peertube().on('autoResolutionUpdate', () => this.updateSelection())
   }
 
-  handleClick (event) {
+  handleClick (event: any) {
     if (this.id === -1 && this.player_.peertube().isAutoResolutionForbidden()) return
 
     super.handleClick(event)

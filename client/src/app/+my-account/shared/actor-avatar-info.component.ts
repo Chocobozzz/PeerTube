@@ -10,7 +10,7 @@ import { Account } from '@app/shared/account/account.model'
   styleUrls: [ './actor-avatar-info.component.scss' ]
 })
 export class ActorAvatarInfoComponent {
-  @ViewChild('avatarfileInput') avatarfileInput
+  @ViewChild('avatarfileInput') avatarfileInput: any
 
   @Input() actor: VideoChannel | Account
 

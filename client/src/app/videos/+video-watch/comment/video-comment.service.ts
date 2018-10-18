@@ -32,7 +32,7 @@ export class VideoCommentService {
 
     return this.authHttp.post(url, normalizedComment)
                .pipe(
-                  map(data => this.extractVideoComment(data['comment'])),
+                  map((data: any) => this.extractVideoComment(data['comment'])),
                   catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -43,7 +43,7 @@ export class VideoCommentService {
 
     return this.authHttp.post(url, normalizedComment)
                .pipe(
-                 map(data => this.extractVideoComment(data[ 'comment' ])),
+                 map((data: any) => this.extractVideoComment(data[ 'comment' ])),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

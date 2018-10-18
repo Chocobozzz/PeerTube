@@ -66,7 +66,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
   }
 
   isInSelectionMode () {
-    return Object.keys(this.checkedVideos).some(k => this.checkedVideos[ k ] === true)
+    return Object.keys(this.checkedVideos).some((k: any) => this.checkedVideos[ k ] === true)
   }
 
   getVideosObservable (page: number) {
@@ -81,7 +81,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
   async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.checkedVideos)
-                                    .filter(k => this.checkedVideos[ k ] === true)
+                                    .filter((k: any) => this.checkedVideos[ k ] === true)
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
@@ -168,9 +168,10 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
   }
 
   private spliceVideosById (id: number) {
-    for (const key of Object.keys(this.loadedPages)) {
+    let key: any
+    for (key of Object.keys(this.loadedPages)) {
       const videos = this.loadedPages[ key ]
-      const index = videos.findIndex(v => v.id === id)
+      const index = videos.findIndex((v: any) => v.id === id)
 
       if (index !== -1) {
         videos.splice(index, 1)
