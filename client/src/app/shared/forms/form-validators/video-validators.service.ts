@@ -82,7 +82,7 @@ export class VideoValidatorsService {
       VALIDATORS: [ Validators.minLength(3), Validators.maxLength(1000) ],
       MESSAGES: {
         'minlength': this.i18n('Video support must be at least 3 characters long.'),
-        'maxlength': this.i18n('Video support cannot be more than 500 characters long.')
+        'maxlength': this.i18n('Video support cannot be more than 1000 characters long.')
       }
     }
 
