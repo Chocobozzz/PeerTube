@@ -101,11 +101,11 @@ export class UserValidatorsService {
     this.USER_DESCRIPTION = {
       VALIDATORS: [
         Validators.minLength(3),
-        Validators.maxLength(250)
+        Validators.maxLength(1000)
       ],
       MESSAGES: {
         'minlength': this.i18n('Description must be at least 3 characters long.'),
-        'maxlength': this.i18n('Description cannot be more than 250 characters long.')
+        'maxlength': this.i18n('Description cannot be more than 1000 characters long.')
       }
     }
 

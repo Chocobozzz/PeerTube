@@ -293,7 +293,6 @@ const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 3, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
-    SUPPORT: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
@@ -310,7 +309,7 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
-    SUPPORT: { min: 3, max: 500 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_CAPTIONS: {

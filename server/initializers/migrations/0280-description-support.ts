@@ -37,7 +37,7 @@ async function up (utils: {
     const data = {
       type: Sequelize.STRING(1000),
       allowNull: true,
-      defaultValue: false
+      defaultValue: null
     }
     await utils.queryInterface.changeColumn('account', 'description', data)
   }

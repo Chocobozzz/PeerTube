@@ -315,7 +315,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too long description', async function () {
       const fields = {
-        description: 'super'.repeat(60)
+        description: 'super'.repeat(201)
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
