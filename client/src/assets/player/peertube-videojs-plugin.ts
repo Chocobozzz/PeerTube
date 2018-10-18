@@ -1,11 +1,13 @@
-const videojs = require('video.js')
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import * as videojs from 'video.js'
+
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, UserWatching, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { isMobile, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
-const CacheChunkStore = require('cache-chunk-store')
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
@@ -16,6 +18,8 @@ import {
   saveMuteInStore,
   saveVolumeInStore
 } from './peertube-player-local-storage'
+
+const CacheChunkStore = require('cache-chunk-store')
 
 type PlayOptions = {
   forcePlay?: boolean,
@@ -61,7 +65,7 @@ class PeerTubePlugin extends Plugin {
 
   private player: any
   private currentVideoFile: VideoFile
-  private torrent: any
+  private torrent: WebTorrent.Torrent
   private videoCaptions: VideoJSCaption[]
 
   private renderer: any
@@ -83,7 +87,7 @@ class PeerTubePlugin extends Plugin {
 
   private downloadSpeeds: number[] = []
 
-  constructor (player: any, options: PeertubePluginOptions) {
+  constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
 
     // Disable auto play on iOS
@@ -273,7 +277,7 @@ class PeerTubePlugin extends Plugin {
 
     const oldTorrent = this.torrent
     const torrentOptions = {
-      store: (chunkLength: any, storeOpts: any) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+      store: (chunkLength: number, storeOpts: any) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
         max: 100
       })
     }
@@ -304,7 +308,7 @@ class PeerTubePlugin extends Plugin {
 
           if (err) return this.fallbackToHttp(options, done)
 
-          return this.tryToPlay((err: Error) => {
+          return this.tryToPlay(err => {
             if (err) return done(err)
 
             if (options.seek) this.seek(options.seek)
@@ -344,7 +348,7 @@ class PeerTubePlugin extends Plugin {
     })
   }
 
-  private tryToPlay (done?: Function) {
+  private tryToPlay (done?: (err?: Error) => void) {
     if (!done) done = function () { /* empty */ }
 
     const playPromise = this.player.play()
@@ -641,7 +645,7 @@ class PeerTubePlugin extends Plugin {
     return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
   }
 
-  private stopTorrent (torrent: any) {
+  private stopTorrent (torrent: WebTorrent.Torrent) {
     torrent.pause()
     // Pause does not remove actual peers (in particular the webseed peer)
     torrent.removePeer(torrent[ 'ws' ])

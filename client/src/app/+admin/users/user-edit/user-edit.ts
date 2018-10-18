@@ -7,7 +7,7 @@ export abstract class UserEdit extends FormReactive {
 
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
-  roles = Object.keys(USER_ROLE_LABELS).map((key: any) => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
+  roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService

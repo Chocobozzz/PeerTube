@@ -15,5 +15,4 @@ export interface VideosOverview {
     tag: string
     videos: Video[]
   }[]
-  [key: string]: any
 }

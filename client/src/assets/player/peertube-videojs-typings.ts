@@ -1,4 +1,7 @@
-const videojs = require('video.js')
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import * as videojs from 'video.js'
+
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { PeerTubePlugin } from './peertube-videojs-plugin'
 

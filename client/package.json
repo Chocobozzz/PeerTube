@@ -94,7 +94,7 @@
     "@types/markdown-it": "^0.0.5",
     "@types/node": "^10.9.2",
     "@types/sanitize-html": "1.18.0",
-    "@types/video.js": "6.2.7",
+    "@types/video.js": "^7.2.5",
     "@types/webtorrent": "^0.98.4",
     "angular2-hotkeys": "^2.1.2",
     "angular2-notifications": "^1.0.2",

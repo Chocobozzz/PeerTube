@@ -76,7 +76,7 @@ export class PeertubeChunkStore extends EventEmitter {
     this.runCleaner()
   }
 
-  put (index: number, buf: Buffer, cb: Function) {
+  put (index: number, buf: Buffer, cb: (err?: Error) => void) {
     const isLastChunk = (index === this.lastChunkIndex)
     if (isLastChunk && buf.length !== this.lastChunkLength) {
       return this.nextTick(cb, new Error('Last chunk length must be ' + this.lastChunkLength))
@@ -113,7 +113,7 @@ export class PeertubeChunkStore extends EventEmitter {
     }, PeertubeChunkStore.BUFFERING_PUT_MS)
   }
 
-  get (index: number, opts: any, cb: any): any {
+  get (index: number, opts: any, cb: (err?: Error, buf?: Buffer) => void): void {
     if (typeof opts === 'function') return this.get(index, null, opts)
 
     // IndexDB could be slow, use our memory index first
@@ -146,11 +146,11 @@ export class PeertubeChunkStore extends EventEmitter {
     })
   }
 
-  close (db: any) {
-    return this.destroy(db)
+  close (cb: (err?: Error) => void) {
+    return this.destroy(cb)
   }
 
-  async destroy (cb: any) {
+  async destroy (cb: (err?: Error) => void) {
     try {
       if (this.pendingPut) {
         clearTimeout(this.putBulkTimeout)
@@ -225,7 +225,7 @@ export class PeertubeChunkStore extends EventEmitter {
     }
   }
 
-  private nextTick (cb: any, err: Error, val?: any) {
+  private nextTick <T> (cb: (err?: Error, val?: T) => void, err: Error, val?: T) {
     process.nextTick(() => cb(err, val), undefined)
   }
 }

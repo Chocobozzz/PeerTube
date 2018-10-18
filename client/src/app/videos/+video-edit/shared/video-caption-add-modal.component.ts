@@ -5,6 +5,7 @@ import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validator
 import { ServerService } from '@app/core'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { VideoConstant } from '../../../../../../shared'
 
 @Component({
   selector: 'my-video-caption-add-modal',
@@ -19,7 +20,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
   @ViewChild('modal') modal: ElementRef
 
-  videoCaptionLanguages: any = []
+  videoCaptionLanguages: VideoConstant<string>[] = []
 
   private openedModal: NgbModalRef
   private closingModal = false
@@ -73,7 +74,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
     this.hide()
 
     const languageId = this.form.value[ 'language' ]
-    const languageObject = this.videoCaptionLanguages.find((l: any) => l.id === languageId)
+    const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 
     this.captionAdded.emit({
       language: languageObject,

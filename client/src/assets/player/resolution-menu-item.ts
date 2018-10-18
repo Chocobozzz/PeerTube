@@ -1,9 +1,13 @@
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import { Player } from 'video.js'
+
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
 class ResolutionMenuItem extends MenuItem {
 
-  constructor (player: any, options: any) {
+  constructor (player: Player, options: any) {
     const currentResolutionId = player.peertube().getCurrentResolutionId()
     options.selectable = true
     options.selected = options.id === currentResolutionId

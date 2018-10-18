@@ -60,7 +60,7 @@ export class HelpComponent implements OnInit, OnChanges {
   }
 
   private createMarkdownList (rules: string[]) {
-    const rulesToText: any = {
+    const rulesToText = {
       'emphasis': this.i18n('Emphasis'),
       'link': this.i18n('Links'),
       'newline': this.i18n('New lines'),

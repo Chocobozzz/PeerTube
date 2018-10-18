@@ -1,3 +1,7 @@
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import { Player } from 'video.js'
+
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { ResolutionMenuItem } from './resolution-menu-item'
 
@@ -6,7 +10,7 @@ const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuB
 class ResolutionMenuButton extends MenuButton {
   label: HTMLElement
 
-  constructor (player: any, options: any) {
+  constructor (player: Player, options: any) {
     super(player, options)
     this.player = player
 

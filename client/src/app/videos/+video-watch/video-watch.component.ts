@@ -7,7 +7,9 @@ import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-supp
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 import { forkJoin, Subscription } from 'rxjs'
-const videojs = require('video.js')
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import videojs from 'video.js'
 import 'videojs-hotkeys'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import * as WebTorrent from 'webtorrent'
@@ -45,7 +47,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
-  player: any
+  player: videojs.Player
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
   video: VideoDetails = null
@@ -435,7 +437,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       videojs(this.playerElement, videojsOptions, function () {
         self.player = this
-        this.on('customError', (data: any) => self.handleError(data.err))
+        this.on('customError', ({ err }: { err: any }) => self.handleError(err))
 
         addContextMenu(self.player, self.video.embedUrl)
       })
@@ -448,7 +450,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
   }
 
-  private setRating (nextRating: string) {
+  private setRating (nextRating: VideoRateType) {
     let method
     switch (nextRating) {
       case 'like':
@@ -466,11 +468,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           .subscribe(
             () => {
               // Update the video like attribute
-              this.updateVideoRating(this.userRating, nextRating as VideoRateType)
-              this.userRating = nextRating as UserVideoRateType
+              this.updateVideoRating(this.userRating, nextRating)
+              this.userRating = nextRating
             },
 
-            (err: any) => this.notificationsService.error(this.i18n('Error'), err.message)
+            (err: { message: string }) => this.notificationsService.error(this.i18n('Error'), err.message)
           )
   }
 

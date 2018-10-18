@@ -23,7 +23,7 @@ export class UserListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   selectedUsers: User[] = []
-  bulkUserActions: DropdownAction<User>[] = []
+  bulkUserActions: DropdownAction<User[]>[] = []
 
   constructor (
     private notificationsService: NotificationsService,
@@ -45,12 +45,12 @@ export class UserListComponent extends RestTable implements OnInit {
       {
         label: this.i18n('Ban'),
         handler: users => this.openBanUserModal(users),
-        isDisplayed: users => users.every((u: any) => u.blocked === false)
+        isDisplayed: users => users.every(u => u.blocked === false)
       },
       {
         label: this.i18n('Unban'),
         handler: users => this.unbanUsers(users),
-        isDisplayed: users => users.every((u: any) => u.blocked === true)
+        isDisplayed: users => users.every(u => u.blocked === true)
       }
     ]
   }

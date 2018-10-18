@@ -1,10 +1,13 @@
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoLink } from './utils'
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import { Player } from 'video.js'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  constructor (player: any, options: any) {
+  constructor (player: Player, options: any) {
     super(player, options)
   }
 

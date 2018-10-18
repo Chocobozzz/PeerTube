@@ -8,9 +8,9 @@ import { Component, Input } from '@angular/core'
 
 export class ButtonComponent {
   @Input() label = ''
-  @Input() className: any = undefined
-  @Input() icon: any = undefined
-  @Input() title: any = undefined
+  @Input() className: string = undefined
+  @Input() icon: string = undefined
+  @Input() title: string = undefined
 
   getTitle () {
     return this.title || this.label

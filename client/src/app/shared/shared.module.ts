@@ -25,7 +25,7 @@ import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
 import { VideoOwnershipService } from './video-ownership'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
-import { VideoFeedComponent } from './video/video-feed.component'
+import { FeedComponent } from './video/feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 import { AccountService } from '@app/shared/account/account.service'
@@ -82,7 +82,7 @@ import { BlocklistService } from '@app/shared/blocklist'
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
@@ -122,7 +122,7 @@ import { BlocklistService } from '@app/shared/blocklist'
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,

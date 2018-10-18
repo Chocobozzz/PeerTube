@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -25,7 +25,7 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
-  @ViewChild('videofileInput') videofileInput: any
+  @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
@@ -110,7 +110,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   uploadFirstStep () {
-    const videofile = this.videofileInput.nativeElement.files[0] as File
+    const videofile = this.videofileInput.nativeElement.files[0]
     if (!videofile) return
 
     // Cannot upload videos > 8GB for now

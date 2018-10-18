@@ -1,6 +1,6 @@
 export const LOCALE_FILES = [ 'player', 'server' ]
 
-export const I18N_LOCALES: any = {
+export const I18N_LOCALES = {
   'en-US': 'English',
   'fr-FR': 'Français',
   'eu-ES': 'Euskara',
@@ -17,7 +17,7 @@ export const I18N_LOCALES: any = {
   'zh-Hans-CN': '简体中文（中国）'
 }
 
-const I18N_LOCALE_ALIAS: any = {
+const I18N_LOCALE_ALIAS = {
   'en': 'en-US',
   'fr': 'fr-FR',
   'eu': 'eu-ES',

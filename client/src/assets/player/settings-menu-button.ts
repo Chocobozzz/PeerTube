@@ -1,7 +1,10 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
-const videojs = require('video.js')
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import * as videojs from 'video.js'
+
 import { SettingsMenuItem } from './settings-menu-item'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { toTitleCase } from './utils'
@@ -11,7 +14,7 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsButton extends Button {
-  constructor (player: any, options: any) {
+  constructor (player: videojs.Player, options: any) {
     super(player, options)
 
     this.playerComponent = player
@@ -48,7 +51,7 @@ class SettingsButton extends Button {
     }
   }
 
-  onDisposeSettingsItem (name: string) {
+  onDisposeSettingsItem (event: any, name: string) {
     if (name === undefined) {
       let children = this.menu.children()
 
@@ -74,7 +77,7 @@ class SettingsButton extends Button {
     }
   }
 
-  onAddSettingsItem (data: any) {
+  onAddSettingsItem (event: any, data: any) {
     const [ entry, options ] = data
 
     this.addMenuItem(entry, options)
@@ -218,7 +221,7 @@ class SettingsButton extends Button {
 }
 
 class SettingsPanel extends Component {
-  constructor (player: any, options: any) {
+  constructor (player: videojs.Player, options: any) {
     super(player, options)
   }
 
@@ -232,7 +235,7 @@ class SettingsPanel extends Component {
 }
 
 class SettingsPanelChild extends Component {
-  constructor (player: any, options: any) {
+  constructor (player: videojs.Player, options: any) {
     super(player, options)
   }
 
@@ -246,7 +249,7 @@ class SettingsPanelChild extends Component {
 }
 
 class SettingsDialog extends Component {
-  constructor (player: any, options: any) {
+  constructor (player: videojs.Player, options: any) {
     super(player, options)
     this.hide()
   }

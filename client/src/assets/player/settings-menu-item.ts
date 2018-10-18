@@ -1,6 +1,10 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import * as videojs from 'video.js'
+
 import { toTitleCase } from './utils'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
@@ -9,7 +13,7 @@ const component: VideoJSComponentInterface = videojsUntyped.getComponent('Compon
 
 class SettingsMenuItem extends MenuItem {
 
-  constructor (player: any, options: any, entry: string, menuButton: VideoJSComponentInterface) {
+  constructor (player: videojs.Player, options: any, entry: string, menuButton: VideoJSComponentInterface) {
     super(player, options)
 
     this.settingsButton = menuButton
@@ -229,7 +233,7 @@ class SettingsMenuItem extends MenuItem {
   }
 
   update (event?: any) {
-    let target = null
+    let target: HTMLElement = null
     let subMenu = this.subMenu.name()
 
     if (event && event.type === 'tap') {
