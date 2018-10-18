@@ -36,7 +36,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
     this.videoAbuseActions = [
       {
-        label: this.i18n('Delete'),
+        label: this.i18n('Delete this report'),
         handler: videoAbuse => this.removeVideoAbuse(videoAbuse)
       },
       {
