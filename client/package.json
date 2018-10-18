@@ -63,9 +63,9 @@
     "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.8.3",
+    "@angular-devkit/build-angular": "~0.10.0",
     "@angular/animations": "~6.1.4",
-    "@angular/cli": "~6.2.3",
+    "@angular/cli": "~7.0.1",
     "@angular/common": "~6.1.4",
     "@angular/compiler": "~6.1.4",
     "@angular/compiler-cli": "~6.1.4",
