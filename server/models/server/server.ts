@@ -49,4 +49,10 @@ export class ServerModel extends Model<ServerModel> {
 
     return ServerModel.findOne(query)
   }
+
+  toFormattedJSON () {
+    return {
+      host: this.host
+    }
+  }
 }

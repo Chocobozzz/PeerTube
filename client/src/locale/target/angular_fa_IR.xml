@@ -224,7 +224,7 @@
         <source>Edit</source>
         <target>ویرایش</target>
         <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196">
@@ -239,6 +239,13 @@
         <target>کمک گرفتن</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>دلیل...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -389,13 +396,6 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
-        <source>Filters</source>
-        <target>فیلتر‌ها</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -404,7 +404,7 @@
     نتیجه‌ای یافت نشد
   </target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -615,7 +615,7 @@
         <source>No results.</source>
         <target>بدون نتیجه.</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -753,14 +753,14 @@
         <source>Score</source>
         <target>امتیاز</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
         <source>Host</source>
         <target>میزبان</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
@@ -800,14 +800,7 @@
         <source>Role</source>
         <target>نقش</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>دلیل...</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">

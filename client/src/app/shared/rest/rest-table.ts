@@ -16,8 +16,6 @@ export abstract class RestTable {
   private searchStream: Subject<string>
   private sortLocalStorageKey = 'rest-table-sort-' + this.constructor.name
 
-  protected abstract loadData (): void
-
   initialize () {
     this.loadSort()
     this.initSearch()
@@ -71,4 +69,6 @@ export abstract class RestTable {
   onSearch (search: string) {
     this.searchStream.next(search)
   }
+
+  protected abstract loadData (): void
 }

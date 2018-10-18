@@ -3,7 +3,6 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { catchError, switchMap, tap } from 'rxjs/operators'
 import { FormReactive } from '@app/shared'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
 import { AuthService, ServerService } from '@app/core'
 import { VideoService } from '@app/shared/video/video.service'
@@ -11,8 +10,9 @@ import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.m
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
+import { CanComponentDeactivateResult } from '@app/shared/guards/can-deactivate-guard.service'
 
-export abstract class VideoSend extends FormReactive implements OnInit, CanComponentDeactivate {
+export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
@@ -30,7 +30,7 @@ export abstract class VideoSend extends FormReactive implements OnInit, CanCompo
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
 
-  abstract canDeactivate ()
+  abstract canDeactivate (): CanComponentDeactivateResult
 
   ngOnInit () {
     this.buildForm({})

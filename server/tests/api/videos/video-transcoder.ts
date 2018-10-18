@@ -123,7 +123,7 @@ describe('Test video transcoding', function () {
       expect(videoDetails.files).to.have.lengthOf(4)
 
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(ffmpeg, path)
+      const probe = await audio.get(path)
 
       if (probe.audioStream) {
         expect(probe.audioStream[ 'codec_name' ]).to.be.equal('aac')
@@ -154,7 +154,7 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(ffmpeg, path)
+      const probe = await audio.get(path)
       expect(probe).to.not.have.property('audioStream')
     }
   })
@@ -179,9 +179,9 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
-      const fixtureVideoProbe = await audio.get(ffmpeg, fixturePath)
+      const fixtureVideoProbe = await audio.get(fixturePath)
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const videoProbe = await audio.get(ffmpeg, path)
+      const videoProbe = await audio.get(path)
       if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
         const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
         expect(omit(videoProbe.audioStream, toOmit)).to.be.deep.equal(omit(fixtureVideoProbe.audioStream, toOmit))

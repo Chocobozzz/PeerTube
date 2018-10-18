@@ -19,7 +19,9 @@ export interface ActivityIconObject {
 
 export type ActivityVideoUrlObject = {
   type: 'Link'
-  mimeType: 'video/mp4' | 'video/webm' | 'video/ogg'
+  // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
+  mimeType?: 'video/mp4' | 'video/webm' | 'video/ogg'
+  mediaType: 'video/mp4' | 'video/webm' | 'video/ogg'
   href: string
   height: number
   size: number
@@ -31,14 +33,18 @@ export type ActivityUrlObject =
   |
   {
     type: 'Link'
-    mimeType: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
+    // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
+    mimeType?: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
+    mediaType: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
     href: string
     height: number
   }
   |
   {
     type: 'Link'
-    mimeType: 'text/html'
+    // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
+    mimeType?: 'text/html'
+    mediaType: 'text/html'
     href: string
   }
 

@@ -221,7 +221,7 @@ export class AuthService {
   }
 
   refreshUserInformation () {
-    const obj = {
+    const obj: UserLoginWithUsername = {
       access_token: this.user.getAccessToken(),
       refresh_token: null,
       token_type: this.user.getTokenType(),

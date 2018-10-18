@@ -64,9 +64,25 @@ function createSimilarityAttribute (col: string, value: string) {
   )
 }
 
+function buildBlockedAccountSQL (serverAccountId: number, userAccountId?: number) {
+  const blockerIds = [ serverAccountId ]
+  if (userAccountId) blockerIds.push(userAccountId)
+
+  const blockerIdsString = blockerIds.join(', ')
+
+  const query = 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
+    ' UNION ALL ' +
+    'SELECT "account"."id" AS "id" FROM account INNER JOIN "actor" ON account."actorId" = actor.id ' +
+    'INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ' +
+    'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'
+
+  return query
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  buildBlockedAccountSQL,
   SortType,
   getSort,
   getVideoSort,

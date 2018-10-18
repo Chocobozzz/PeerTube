@@ -14,7 +14,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizaciones</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -28,7 +28,7 @@
         <source>Edit</source>
         <target>Modificar</target>
         <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -56,7 +56,14 @@
         <source>Video quota</source>
         <target>Cuota de vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>Motivo...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -241,13 +248,6 @@ Iniciar sesión</target>
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
-        <source>Filters</source>
-        <target>Filtros</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -256,7 +256,7 @@ Iniciar sesión</target>
     No hubo resultados
   </target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -424,14 +424,14 @@ Iniciar sesión</target>
         <source>No results.</source>
         <target> Ningún resultados</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
         <target>Nodo</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -776,14 +776,14 @@ Iniciar sesión</target>
         <source><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> suscriptores</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8">
         <source>Video channels</source>
         <target>Canales de vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -910,13 +910,6 @@ Iniciar sesión</target>
         <target>Importar</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
-        <source>Video import with HTTP enabled</source>
-        <target>Importar video con HTTP activado</target>
-        <context-group name="null">
-          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
@@ -1174,14 +1167,14 @@ Iniciar sesión</target>
         <source>Score</source>
         <target>Puntuación</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
         <source>Host</source>
         <target>Host</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
@@ -1286,7 +1279,7 @@ Iniciar sesión</target>
         <source>Role</source>
         <target>Rol</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
@@ -1302,13 +1295,6 @@ Iniciar sesión</target>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>Motivo...</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
         <source>Users list</source>
         <target>Lista de usuarios</target>
@@ -1320,7 +1306,14 @@ Iniciar sesión</target>
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
         <target>Nombre de usuario <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
+        <source>Go to the account page</source>
+        <target>Ir a la página de la cuenta</target>
+        <context-group name="null">
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2">
@@ -1514,14 +1507,14 @@ Cuando subas un vídeo a este canal, el campo de soporte del vídeo se rellenar�
         <source>Automatically plays video</source>
         <target>Reproducir vídeo automáticamente</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe">
         <source>Save</source>
         <target>Guardar</target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2fa66a905b6b7f691c83be681d18188cbe4a8ba">
@@ -2052,13 +2045,6 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
-        <source>Go to the account page</source>
-        <target>Ir a la página de la cuenta</target>
-        <context-group name="null">
-          <context context-type="linenumber">133</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>Mostrar más</target>
@@ -2109,25 +2095,18 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="da8a38f72f92714cf8680560c99982dc651480d5">
-        <source>You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and find back the video. Direct commenting capabilities are being worked on in &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</source>
-        <target>Puedes comentar bien a través de la página de tu nodo donde este vídeo está federado con tu cuenta de PeerTube, o bien a través de cualquier instancia del fediverso equipada con ActivityPub. Por ejemplo, con Mastodon o Pleroma puede escribir en la caja de búsqueda &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; y encontrar el vídeo. Estamos trabajando en la capacidad de comentar directamente en &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</target>
-        <context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
         <source>No comments.</source>
         <target>No hay comentarios</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
         <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
         <target>Ver las <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> respuestas</target>
         <context-group name="null">
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -2138,7 +2117,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
     Los comentarios están inhabilitados.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -2204,41 +2183,6 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
         <source>Error</source>
         <target>Error</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="27a71a0aee65258179e90ecf0841c0a68f95beed">
-        <source>You set custom <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </source>
-        <target>Ajustaste de forma personalizada <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="865bc18d22e223101ede0916967ead0abd515d0e">
-        <source>This could lead to security issues or bugs if you do not understand it. </source>
-        <target>Esto podría provocar problemas de seguridad o bugs si no lo entiendes. </target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="262e18b2efb5912651684a522fc08d77c99972d0">
-        <source>Are you sure you want to update the configuration?</source>
-        <target>¿Estás seguro de que quieres actualizar la configuración?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1ae0ab69f5c19d179282c8d882fd2f3c00e29119">
-        <source>Please type</source>
-        <target>Por favor escribe</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="75f4bb68ee4c6b282abfd9d8d32be22c6202794d">
-        <source>to confirm.</source>
-        <target>para confirmar.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2358,13 +2302,6 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>No puedes eliminar al root.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
-        <target>Usuario <x id="INTERPOLATION" equiv-text="{{username}}"/> eliminado.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3557,6 +3494,13 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866">
         <source>Images</source>
         <target>Imágenes</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target>Usuario <x id="INTERPOLATION" equiv-text="{{username}}"/> eliminado.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

@@ -14,14 +14,14 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visionados</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
         <target>Editar</target>
         <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -230,13 +230,6 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
-        <source>Filters</source>
-        <target>Filtros</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -245,7 +238,7 @@
     Non se atoparon resultados
   </target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -413,14 +406,14 @@
         <source>No results.</source>
         <target>Sin resultados.</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
         <target>Instancia</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -722,14 +715,14 @@
         <source><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> suscritoras</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8">
         <source>Video channels</source>
         <target>Canles de vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -856,13 +849,6 @@
         <target>Importar</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
-        <source>Video import with HTTP enabled</source>
-        <target>Importación de vídeos por HTTP activada</target>
-        <context-group name="null">
-          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">

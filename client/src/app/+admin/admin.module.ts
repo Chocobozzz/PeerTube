@@ -15,6 +15,7 @@ import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoBlacklis
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
 import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service'
+import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 
 @NgModule({
   imports: [
@@ -41,6 +42,8 @@ import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service
     VideoBlacklistListComponent,
     VideoAbuseListComponent,
     ModerationCommentModalComponent,
+    InstanceServerBlocklistComponent,
+    InstanceAccountBlocklistComponent,
 
     JobsComponent,
     JobsListComponent,

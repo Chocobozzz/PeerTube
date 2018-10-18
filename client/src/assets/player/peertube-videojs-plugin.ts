@@ -1,20 +1,31 @@
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
 import * as videojs from 'video.js'
+
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, UserWatching, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { isMobile, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from './utils'
-import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
   getStoredMute,
   getStoredVolume,
+  getStoredWebTorrentEnabled,
   saveAverageBandwidth,
   saveMuteInStore,
   saveVolumeInStore
 } from './peertube-player-local-storage'
+
+const CacheChunkStore = require('cache-chunk-store')
+
+type PlayOptions = {
+  forcePlay?: boolean,
+  seek?: number,
+  delay?: number
+}
 
 const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
@@ -57,21 +68,22 @@ class PeerTubePlugin extends Plugin {
   private torrent: WebTorrent.Torrent
   private videoCaptions: VideoJSCaption[]
 
-  private renderer
-  private fakeRenderer
+  private renderer: any
+  private fakeRenderer: any
   private destoyingFakeRenderer = false
 
   private autoResolution = true
   private forbidAutoResolution = false
   private isAutoResolutionObservation = false
+  private playerRefusedP2P = false
 
-  private videoViewInterval
-  private torrentInfoInterval
-  private autoQualityInterval
-  private userWatchingVideoInterval
-  private addTorrentDelay
-  private qualityObservationTimer
-  private runAutoQualitySchedulerTimer
+  private videoViewInterval: any
+  private torrentInfoInterval: any
+  private autoQualityInterval: any
+  private userWatchingVideoInterval: any
+  private addTorrentDelay: any
+  private qualityObservationTimer: any
+  private runAutoQualitySchedulerTimer: any
 
   private downloadSpeeds: number[] = []
 
@@ -80,6 +92,7 @@ class PeerTubePlugin extends Plugin {
 
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false
+    this.playerRefusedP2P = !getStoredWebTorrentEnabled()
 
     this.startTime = timeToInt(options.startTime)
     this.videoFiles = options.videoFiles
@@ -178,6 +191,15 @@ class PeerTubePlugin extends Plugin {
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
 
+    // Don't try on iOS that does not support MediaSource
+    // Or don't use P2P if webtorrent is disabled
+    if (this.isIOS() || this.playerRefusedP2P) {
+      return this.fallbackToHttp(options, () => {
+        this.player.playbackRate(oldPlaybackRate)
+        return done()
+      })
+    }
+
     this.addTorrent(this.currentVideoFile.magnetUri, previousVideoFile, options, () => {
       this.player.playbackRate(oldPlaybackRate)
       return done()
@@ -248,18 +270,14 @@ class PeerTubePlugin extends Plugin {
   private addTorrent (
     magnetOrTorrentUrl: string,
     previousVideoFile: VideoFile,
-    options: {
-      forcePlay?: boolean,
-      seek?: number,
-      delay?: number
-    },
+    options: PlayOptions,
     done: Function
   ) {
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
     const torrentOptions = {
-      store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+      store: (chunkLength: number, storeOpts: any) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
         max: 100
       })
     }
@@ -288,7 +306,7 @@ class PeerTubePlugin extends Plugin {
         renderVideo(torrent.files[ 0 ], this.playerElement, renderVideoOptions, (err, renderer) => {
           this.renderer = renderer
 
-          if (err) return this.fallbackToHttp(done)
+          if (err) return this.fallbackToHttp(options, done)
 
           return this.tryToPlay(err => {
             if (err) return done(err)
@@ -296,13 +314,13 @@ class PeerTubePlugin extends Plugin {
             if (options.seek) this.seek(options.seek)
             if (options.forcePlay === false && paused === true) this.player.pause()
 
-            return done(err)
+            return done()
           })
         })
       }, options.delay || 0)
     })
 
-    this.torrent.on('error', err => console.error(err))
+    this.torrent.on('error', (err: any) => console.error(err))
 
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
@@ -330,13 +348,13 @@ class PeerTubePlugin extends Plugin {
     })
   }
 
-  private tryToPlay (done?: Function) {
+  private tryToPlay (done?: (err?: Error) => void) {
     if (!done) done = function () { /* empty */ }
 
     const playPromise = this.player.play()
     if (playPromise !== undefined) {
       return playPromise.then(done)
-                        .catch(err => {
+                        .catch((err: Error) => {
                           if (err.message.indexOf('The play() request was interrupted by a call to pause()') !== -1) {
                             return
                           }
@@ -430,12 +448,6 @@ class PeerTubePlugin extends Plugin {
       this.player.posterImage.hide()
 
       return this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
-    }
-
-    // Don't try on iOS that does not support MediaSource
-    if (this.isIOS()) {
-      this.currentVideoFile = this.pickAverageVideoFile()
-      return this.fallbackToHttp(undefined, false)
     }
 
     // Proxy first play
@@ -567,7 +579,9 @@ class PeerTubePlugin extends Plugin {
     return fetch(url, { method: 'PUT', body, headers })
   }
 
-  private fallbackToHttp (done?: Function, play = true) {
+  private fallbackToHttp (options: PlayOptions, done?: Function) {
+    const paused = this.player.paused()
+
     this.disableAutoResolution(true)
 
     this.flushVideoFile(this.currentVideoFile, true)
@@ -579,9 +593,15 @@ class PeerTubePlugin extends Plugin {
     const httpUrl = this.currentVideoFile.fileUrl
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
-    if (play) this.tryToPlay()
 
-    if (done) return done()
+    return this.tryToPlay(err => {
+      if (err && done) return done(err)
+
+      if (options.seek) this.seek(options.seek)
+      if (options.forcePlay === false && paused === true) this.player.pause()
+
+      if (done) return done()
+    })
   }
 
   private handleError (err: Error | string) {
@@ -611,7 +631,7 @@ class PeerTubePlugin extends Plugin {
       this.player.options_.inactivityTimeout = saveInactivityTimeout
     }
 
-    const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')
+    const settingsDialog = this.player.children_.find((c: any) => c.name_ === 'SettingsDialog')
 
     this.player.controlBar.on('mouseenter', () => disableInactivity())
     settingsDialog.on('mouseenter', () => disableInactivity())
@@ -687,7 +707,7 @@ class PeerTubePlugin extends Plugin {
       const percent = time / this.player_.duration()
       return percent >= 1 ? 1 : percent
     }
-    SeekBar.prototype.handleMouseMove = function handleMouseMove (event) {
+    SeekBar.prototype.handleMouseMove = function handleMouseMove (event: any) {
       let newTime = this.calculateDistance(event) * this.player_.duration()
       if (newTime === this.player_.duration()) {
         newTime = newTime - 0.1

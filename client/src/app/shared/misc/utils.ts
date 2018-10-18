@@ -102,7 +102,7 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   return fd
 }
 
-function lineFeedToHtml (obj: object, keyToNormalize: string) {
+function lineFeedToHtml (obj: any, keyToNormalize: string) {
   return immutableAssign(obj, {
     [keyToNormalize]: obj[keyToNormalize].replace(/\r?\n|\r/g, '<br />')
   })

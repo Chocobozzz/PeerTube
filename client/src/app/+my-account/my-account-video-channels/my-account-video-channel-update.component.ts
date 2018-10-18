@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
@@ -17,11 +17,9 @@ import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators
   styleUrls: [ './my-account-video-channel-edit.component.scss' ]
 })
 export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelEdit implements OnInit, OnDestroy {
-  @ViewChild('avatarfileInput') avatarfileInput
-
   error: string
-
   videoChannelToUpdate: VideoChannel
+
   private paramsSub: Subscription
 
   constructor (

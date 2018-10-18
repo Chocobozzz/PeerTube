@@ -31,7 +31,8 @@ import {
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserWebTorrentEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -106,6 +107,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
   @Column(DataType.ENUM(values(NSFW_POLICY_TYPES)))
   nsfwPolicy: NSFWPolicyType
+
+  @AllowNull(false)
+  @Default(true)
+  @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
+  @Column
+  webTorrentEnabled: boolean
 
   @AllowNull(false)
   @Default(true)
@@ -355,6 +362,7 @@ export class UserModel extends Model<UserModel> {
       email: this.email,
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
+      webTorrentEnabled: this.webTorrentEnabled,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],

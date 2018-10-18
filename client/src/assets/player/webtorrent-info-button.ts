@@ -65,7 +65,7 @@ class WebtorrentInfoButton extends Button {
     subDivHttp.appendChild(subDivHttpText)
     div.appendChild(subDivHttp)
 
-    this.player_.peertube().on('torrentInfo', (event, data) => {
+    this.player_.peertube().on('torrentInfo', (event: any, data: any) => {
       // We are in HTTP fallback
       if (!data) {
         subDivHttp.className = 'vjs-peertube-displayed'

@@ -25,7 +25,7 @@ import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
 import { VideoOwnershipService } from './video-ownership'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
-import { VideoFeedComponent } from './video/video-feed.component'
+import { FeedComponent } from './video/feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 import { AccountService } from '@app/shared/account/account.service'
@@ -58,6 +58,7 @@ import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-fe
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
+import { BlocklistService } from '@app/shared/blocklist'
 
 @NgModule({
   imports: [
@@ -81,7 +82,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
@@ -121,7 +122,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
@@ -172,6 +173,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
+    BlocklistService,
 
     I18nPrimengCalendarService,
     ScreenService,

@@ -3,7 +3,7 @@
     <div *ngIf="titlePage" class="title-page title-page-single">
       {{ titlePage }}
     </div>
-    <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>
+    <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
       <my-peertube-checkbox

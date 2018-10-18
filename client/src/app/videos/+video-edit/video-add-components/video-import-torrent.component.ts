@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoPrivacy, VideoUpdate } from '../../../../../../shared/models/videos'
@@ -23,7 +23,7 @@ import { VideoImportService } from '@app/shared/video-import'
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
-  @ViewChild('torrentfileInput') torrentfileInput
+  @ViewChild('torrentfileInput') torrentfileInput: ElementRef<HTMLInputElement>
 
   videoFileName: string
   magnetUri = ''
@@ -64,7 +64,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
   }
 
   fileChange () {
-    const torrentfile = this.torrentfileInput.nativeElement.files[0] as File
+    const torrentfile = this.torrentfileInput.nativeElement.files[0]
     if (!torrentfile) return
 
     this.importVideo(torrentfile)

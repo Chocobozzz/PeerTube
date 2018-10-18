@@ -47,7 +47,10 @@ const SORTABLE_COLUMNS = {
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
 
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
-  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+
+  ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
+  SERVERS_BLOCKLIST: [ 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -421,7 +424,7 @@ const VIDEO_CATEGORIES = {
   8: 'People',
   9: 'Comedy',
   10: 'Entertainment',
-  11: 'News',
+  11: 'News & Politics',
   12: 'How To',
   13: 'Education',
   14: 'Activism',

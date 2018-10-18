@@ -34,8 +34,8 @@ fi
 
 version="v$1"
 github_prerelease_option=""
-if [[ "$version" = *".pre."* ]]; then
-  echo "This is a pre-release."
+if [[ "$version" = *"-alpha."* ]] || [[ "$version" = *"-beta."* ]] || [[ "$version" = *"-rc."* ]]; then
+  echo -e "This is a pre-release.\n"
   github_prerelease_option="--pre-release"
 fi
 
@@ -45,7 +45,7 @@ tar_name="peertube-$version.tar.xz"
 
 changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
 
-printf "Changelog will be:\\n%s\\n" "$changelog"
+printf "Changelog will be:\\n\\n%s\\n\\n" "$changelog"
 
 read -p "Are you sure to release? " -n 1 -r
 echo

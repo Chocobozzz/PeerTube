@@ -77,7 +77,7 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
     }
   }
 
-  checkFFmpegEncoders()
+  return checkFFmpegEncoders()
 }
 
 // Optional encoders, if present, can be used to improve transcoding
@@ -95,10 +95,10 @@ async function checkFFmpegEncoders (): Promise<Map<string, boolean>> {
   supportedOptionalEncoders = new Map<string, boolean>()
 
   for (const encoder of optionalEncoders) {
-    supportedOptionalEncoders.set(encoder,
-      encoders[encoder] !== undefined
-    )
+    supportedOptionalEncoders.set(encoder, encoders[encoder] !== undefined)
   }
+
+  return supportedOptionalEncoders
 }
 
 // ---------------------------------------------------------------------------

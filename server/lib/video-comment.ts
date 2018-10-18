@@ -64,10 +64,8 @@ function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): 
     }
 
     const parentCommentThread = idx[childComment.inReplyToCommentId]
-    if (!parentCommentThread) {
-      const msg = `Cannot format video thread tree, parent ${childComment.inReplyToCommentId} not found for child ${childComment.id}`
-      throw new Error(msg)
-    }
+    // Maybe the parent comment was blocked by the admin/user
+    if (!parentCommentThread) continue
 
     parentCommentThread.children.push(childCommentThread)
     idx[childComment.id] = childCommentThread

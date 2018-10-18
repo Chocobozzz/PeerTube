@@ -1,0 +1,27 @@
+<div class="admin-sub-header">
+  <div i18n class="form-sub-title">Muted instances</div>
+</div>
+
+<p-table
+  [value]="blockedServers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th i18n>Instance</th>
+      <th i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-serverBlock>
+    <tr>
+      <td>{{ serverBlock.blockedServer.host }}</td>
+      <td>{{ serverBlock.createdAt }}</td>
+      <td class="action-cell">
+        <button class="unblock-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

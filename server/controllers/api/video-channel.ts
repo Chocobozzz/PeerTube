@@ -219,7 +219,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
     videoChannelId: videoChannelInstance.id,
-    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

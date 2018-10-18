@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { ServerService } from '../../core/server'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
@@ -10,7 +10,7 @@ import { Account } from '@app/shared/account/account.model'
   styleUrls: [ './actor-avatar-info.component.scss' ]
 })
 export class ActorAvatarInfoComponent {
-  @ViewChild('avatarfileInput') avatarfileInput
+  @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
 
   @Input() actor: VideoChannel | Account
 

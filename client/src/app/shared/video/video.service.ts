@@ -274,9 +274,9 @@ export class VideoService implements VideosProvider {
 
   loadCompleteDescription (descriptionPath: string) {
     return this.authHttp
-               .get(environment.apiUrl + descriptionPath)
+               .get<{ description: string }>(environment.apiUrl + descriptionPath)
                .pipe(
-                 map(res => res[ 'description' ]),
+                 map(res => res.description),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

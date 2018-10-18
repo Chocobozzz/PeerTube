@@ -1,7 +1,10 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
 import * as videojs from 'video.js'
+
 import { toTitleCase } from './utils'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
@@ -10,7 +13,7 @@ const component: VideoJSComponentInterface = videojsUntyped.getComponent('Compon
 
 class SettingsMenuItem extends MenuItem {
 
-  constructor (player: videojs.Player, options, entry: string, menuButton: VideoJSComponentInterface) {
+  constructor (player: videojs.Player, options: any, entry: string, menuButton: VideoJSComponentInterface) {
     super(player, options)
 
     this.settingsButton = menuButton
@@ -55,7 +58,7 @@ class SettingsMenuItem extends MenuItem {
     this.transitionEndHandler = this.onTransitionEnd.bind(this)
   }
 
-  onSubmenuClick (event) {
+  onSubmenuClick (event: any) {
     let target = null
 
     if (event.type === 'tap') {
@@ -150,7 +153,7 @@ class SettingsMenuItem extends MenuItem {
    *
    * @method PrefixedEvent
    */
-  PrefixedEvent (element, type, callback, action = 'addEvent') {
+  PrefixedEvent (element: any, type: any, callback: any, action = 'addEvent') {
     let prefix = ['webkit', 'moz', 'MS', 'o', '']
 
     for (let p = 0; p < prefix.length; p++) {
@@ -166,7 +169,7 @@ class SettingsMenuItem extends MenuItem {
     }
   }
 
-  onTransitionEnd (event) {
+  onTransitionEnd (event: any) {
     if (event.propertyName !== 'margin-right') {
       return
     }
@@ -229,8 +232,8 @@ class SettingsMenuItem extends MenuItem {
     )
   }
 
-  update (event?: Event) {
-    let target = null
+  update (event?: any) {
+    let target: HTMLElement = null
     let subMenu = this.subMenu.name()
 
     if (event && event.type === 'tap') {

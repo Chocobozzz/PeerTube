@@ -1,3 +1,7 @@
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import * as videojs from 'video.js'
+
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 import { saveTheaterInStore, getStoredTheater } from './peertube-player-local-storage'
 
@@ -6,7 +10,7 @@ class TheaterButton extends Button {
 
   private static readonly THEATER_MODE_CLASS = 'vjs-theater-enabled'
 
-  constructor (player, options) {
+  constructor (player: videojs.Player, options: any) {
     super(player, options)
 
     const enabled = getStoredTheater()

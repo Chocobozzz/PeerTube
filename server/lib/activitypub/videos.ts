@@ -310,7 +310,8 @@ export {
 function isActivityVideoUrlObject (url: ActivityUrlObject): url is ActivityVideoUrlObject {
   const mimeTypes = Object.keys(VIDEO_MIMETYPE_EXT)
 
-  return mimeTypes.indexOf(url.mimeType) !== -1 && url.mimeType.startsWith('video/')
+  const urlMediaType = url.mediaType || url.mimeType
+  return mimeTypes.indexOf(urlMediaType) !== -1 && urlMediaType.startsWith('video/')
 }
 
 async function createVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
@@ -468,7 +469,8 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
-      return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.height === fileUrl.height
+      const mediaType = u.mediaType || u.mimeType
+      return mediaType === 'application/x-bittorrent;x-scheme-handler/magnet' && (u as any).height === fileUrl.height
     })
 
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
@@ -478,8 +480,9 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }
 
+    const mediaType = fileUrl.mediaType || fileUrl.mimeType
     const attribute = {
-      extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],
+      extname: VIDEO_MIMETYPE_EXT[ mediaType ],
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,

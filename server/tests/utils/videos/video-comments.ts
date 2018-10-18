@@ -1,7 +1,7 @@
 import * as request from 'supertest'
 import { makeDeleteRequest } from '../'
 
-function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string) {
+function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string, token?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
   const req = request(url)
@@ -10,20 +10,24 @@ function getVideoCommentThreads (url: string, videoId: number | string, start: n
     .query({ count: count })
 
   if (sort) req.query({ sort })
+  if (token) req.set('Authorization', 'Bearer ' + token)
 
   return req.set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
 }
 
-function getVideoThreadComments (url: string, videoId: number | string, threadId: number) {
+function getVideoThreadComments (url: string, videoId: number | string, threadId: number, token?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads/' + threadId
 
-  return request(url)
+  const req = request(url)
     .get(path)
     .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
+
+  if (token) req.set('Authorization', 'Bearer ' + token)
+
+  return req.expect(200)
+            .expect('Content-Type', /json/)
 }
 
 function addVideoCommentThread (url: string, token: string, videoId: number | string, text: string, expectedStatus = 200) {

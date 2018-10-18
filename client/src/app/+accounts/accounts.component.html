@@ -10,8 +10,15 @@
           <div class="actor-name">{{ account.nameWithHost }}</div>
 
           <span *ngIf="user?.blocked" [ngbTooltip]="user.blockedReason" class="badge badge-danger" i18n>Banned</span>
+          <span *ngIf="account.mutedByUser" class="badge badge-danger" i18n>Muted</span>
+          <span *ngIf="account.mutedServerByUser" class="badge badge-danger" i18n>Muted by your instance</span>
+          <span *ngIf="account.mutedByInstance" class="badge badge-danger" i18n>Instance muted</span>
+          <span *ngIf="account.mutedServerByInstance" class="badge badge-danger" i18n>Instance muted by your instance</span>
 
-          <my-user-moderation-dropdown buttonSize="small" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()">
+          <my-user-moderation-dropdown
+            buttonSize="small" [account]="account" [user]="user"
+            (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
+          >
           </my-user-moderation-dropdown>
         </div>
         <div i18n class="actor-followers">{{ account.followersCount }} subscribers</div>

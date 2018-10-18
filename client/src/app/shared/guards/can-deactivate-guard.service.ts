@@ -4,8 +4,10 @@ import { Observable } from 'rxjs'
 import { ConfirmService } from '../../core/index'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
+export type CanComponentDeactivateResult = { text?: string, canDeactivate: Observable<boolean> | boolean }
+
 export interface CanComponentDeactivate {
-  canDeactivate: () => { text?: string, canDeactivate: Observable<boolean> | boolean }
+  canDeactivate: () => CanComponentDeactivateResult
 }
 
 @Injectable()

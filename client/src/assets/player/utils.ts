@@ -12,7 +12,7 @@ const dictionaryBytes: Array<{max: number, type: string}> = [
   { max: 1073741824, type: 'MB' },
   { max: 1.0995116e12, type: 'GB' }
 ]
-function bytes (value) {
+function bytes (value: number) {
   const format = dictionaryBytes.find(d => value < d.max) || dictionaryBytes[dictionaryBytes.length - 1]
   const calc = Math.floor(value / (format.max / 1024)).toString()
 
