@@ -45,6 +45,8 @@ async function run () {
         } else {
           console.log('Failed to optimize %s, restoring original', inputPath)
           move(backupFile, inputPath, { overwrite: true })
+          await video.createTorrentAndSetInfoHash(file)
+          await file.save()
         }
       }
     }
