@@ -4,7 +4,8 @@ import * as chai from 'chai'
 import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
-import { readFile } from 'fs-extra'
+import { pathExists, readFile } from 'fs-extra'
+import * as ffmpeg from 'fluent-ffmpeg'
 
 const expect = chai.expect
 let webtorrent = new WebTorrent()
@@ -61,6 +62,31 @@ function buildAbsoluteFixturePath (path: string, customTravisPath = false) {
   return join(__dirname, '..', '..', 'fixtures', path)
 }
 
+async function generateHighBitrateVideo () {
+  const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)
+
+  const exists = await pathExists(tempFixturePath)
+  if (!exists) {
+
+    // Generate a random, high bitrate video on the fly, so we don't have to include
+    // a large file in the repo. The video needs to have a certain minimum length so
+    // that FFmpeg properly applies bitrate limits.
+    // https://stackoverflow.com/a/15795112
+    return new Promise<string>(async (res, rej) => {
+      ffmpeg()
+        .outputOptions([ '-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom' ])
+        .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])
+        .outputOptions([ '-maxrate 10M', '-bufsize 10M' ])
+        .output(tempFixturePath)
+        .on('error', rej)
+        .on('end', () => res(tempFixturePath))
+        .run()
+    })
+  }
+
+  return tempFixturePath
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -70,5 +96,6 @@ export {
   immutableAssign,
   testImage,
   buildAbsoluteFixturePath,
-  root
+  root,
+  generateHighBitrateVideo
 }
