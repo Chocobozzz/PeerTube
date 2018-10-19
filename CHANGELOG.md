@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.0.1
+
+### SECURITY
+ 
+ * Add HTTP Signature in addition to Linked Signature:
+    * It's faster
+    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation
+
+
 ## v1.1.0-alpha.1
 
 We released this alpha version because some admins/users need some moderation tools we implemented in recent weeks.
