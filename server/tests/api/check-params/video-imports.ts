@@ -140,7 +140,7 @@ describe('Test video imports API validator', function () {
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(150) })
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })

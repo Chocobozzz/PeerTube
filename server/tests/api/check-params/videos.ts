@@ -233,7 +233,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(150) })
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -482,7 +482,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(150) })
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

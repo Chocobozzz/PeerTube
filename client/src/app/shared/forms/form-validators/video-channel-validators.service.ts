@@ -42,22 +42,22 @@ export class VideoChannelValidatorsService {
     this.VIDEO_CHANNEL_DESCRIPTION = {
       VALIDATORS: [
         Validators.minLength(3),
-        Validators.maxLength(500)
+        Validators.maxLength(1000)
       ],
       MESSAGES: {
         'minlength': i18n('Description must be at least 3 characters long.'),
-        'maxlength': i18n('Description cannot be more than 500 characters long.')
+        'maxlength': i18n('Description cannot be more than 1000 characters long.')
       }
     }
 
     this.VIDEO_CHANNEL_SUPPORT = {
       VALIDATORS: [
         Validators.minLength(3),
-        Validators.maxLength(500)
+        Validators.maxLength(1000)
       ],
       MESSAGES: {
         'minlength': i18n('Support text must be at least 3 characters long.'),
-        'maxlength': i18n('Support text cannot be more than 500 characters long.')
+        'maxlength': i18n('Support text cannot be more than 1000 characters long.')
       }
     }
   }
