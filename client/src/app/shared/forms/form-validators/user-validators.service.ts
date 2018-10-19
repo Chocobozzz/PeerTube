@@ -93,7 +93,7 @@ export class UserValidatorsService {
       ],
       MESSAGES: {
         'required': this.i18n('Display name is required.'),
-        'minlength': this.i18n('Display name must be at least 1 characters long.'),
+        'minlength': this.i18n('Display name must be at least 1 character long.'),
         'maxlength': this.i18n('Display name cannot be more than 50 characters long.')
       }
     }
