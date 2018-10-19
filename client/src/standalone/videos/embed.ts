@@ -19,7 +19,7 @@ import 'whatwg-fetch'
 
 // FIXME: something weird with our path definition in tsconfig and typings
 // @ts-ignore
-import vjs from 'video.js'
+import * as vjs from 'video.js'
 
 import * as Channel from 'jschannel'
 
