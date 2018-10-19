@@ -62,10 +62,7 @@ function isJsonLDSignatureVerified (fromActor: ActorModel, signedDocument: any) 
 
   return jsig.promises
              .verify(signedDocument, options)
-             .then((result: { verified: boolean }) => {
-               logger.info('coucou', result)
-               return result.verified
-             })
+             .then((result: { verified: boolean }) => result.verified)
              .catch(err => {
                logger.error('Cannot check signature.', { err })
                return false
