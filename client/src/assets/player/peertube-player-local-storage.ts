@@ -14,7 +14,8 @@ function getStoredWebTorrentEnabled (): boolean {
   const value = getLocalStorage('webtorrent_enabled')
   if (value !== null && value !== undefined) return value === 'true'
 
-  return false
+  // By default webtorrent is enabled
+  return true
 }
 
 function getStoredMute () {
