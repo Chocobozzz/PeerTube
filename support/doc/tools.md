@@ -1,41 +1,30 @@
+# CLI tools guide
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+**Table of Contents**  
 
-- [CLI tools guide](#cli-tools-guide)
-  - [CLI wrapper](#cli-wrapper)
-  - [Remote Tools](#remote-tools)
-    - [Dependencies](#dependencies)
-    - [Installation](#installation)
-    - [peertube-import-videos.js](#peertube-import-videosjs)
-    - [peertube-upload.js](#peertube-uploadjs)
-    - [peertube-watch.js](#peertube-watchjs)
-  - [Server tools](#server-tools)
-    - [parse-log](#parse-log)
-    - [create-transcoding-job.js](#create-transcoding-jobjs)
-    - [create-import-video-file-job.js](#create-import-video-file-jobjs)
-    - [prune-storage.js](#prune-storagejs)
-    - [optimize-old-videos.js](#optimize-old-videosjs)
-    - [update-host.js](#update-hostjs)
-    - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
-      - [.help](#help)
-      - [Lodash example](#lodash-example)
-      - [YoutubeDL example](#youtubedl-example)
-      - [Models examples](#models-examples)
+- [CLI wrapper](#cli-wrapper)
+- [Remote Tools](#remote-tools)
+  - [Dependencies](#dependencies)
+  - [Installation](#installation)
+  - [peertube-import-videos.js](#peertube-import-videosjs)
+  - [peertube-upload.js](#peertube-uploadjs)
+  - [peertube-watch.js](#peertube-watchjs)
+- [Server tools](#server-tools)
+  - [parse-log](#parse-log)
+  - [create-transcoding-job.js](#create-transcoding-jobjs)
+  - [create-import-video-file-job.js](#create-import-video-file-jobjs)
+  - [prune-storage.js](#prune-storagejs)
+  - [optimize-old-videos.js](#optimize-old-videosjs)
+  - [update-host.js](#update-hostjs)
+  - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
+    - [.help](#help)
+    - [Lodash example](#lodash-example)
+    - [YoutubeDL example](#youtubedl-example)
+    - [Models examples](#models-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# CLI tools guide
- - [CLI wrapper](#cli-wrapper)
- - [Remote tools](#remote-tools)
-   - [peertube-import-videos.js](#peertube-import-videosjs)
-   - [peertube-upload.js](#peertube-uploadjs)
-   - [peertube-watch.js](#peertube-watch)
- - [Server tools](#server-tools)
-   - [parse-log](#parse-log)
-   - [create-transcoding-job.js](#create-transcoding-jobjs)
-   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
-   - [prune-storage.js](#prune-storagejs)
 
 ## CLI wrapper
 
@@ -55,6 +44,7 @@ The wrapper provides a convenient interface to most scripts, and requires the [s
     upload|up             upload a video
     import-videos|import  import a video from a streaming platform
     watch|w               watch a video in the terminal ✩°｡⋆
+    repl                  initiate a REPL to access internals
     help [cmd]            display help for [cmd]
 ```
 
