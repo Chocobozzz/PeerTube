@@ -987,19 +987,19 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 720,
-              size: 36000
+              size: 72000
             },
             {
               resolution: 480,
-              size: 21000
+              size: 45000
             },
             {
               resolution: 360,
-              size: 17000
+              size: 34600
             },
             {
               resolution: 240,
-              size: 13000
+              size: 24770
             }
           ]
         }

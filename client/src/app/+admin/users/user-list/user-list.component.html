@@ -60,8 +60,10 @@
       </td>
 
       <td>
-        {{ user.username }}
-        <span *ngIf="user.blocked" class="banned-info">(banned)</span>
+        <a i18n-title title="Go to the account page" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
+          {{ user.username }}
+          <span i18n *ngIf="user.blocked" class="banned-info">(banned)</span>
+        </a>
       </td>
       <td>{{ user.email }}</td>
       <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>

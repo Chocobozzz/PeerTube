@@ -2,10 +2,16 @@
 
 ## Vocabulary
 
-  - **Fediverse:** several servers following each others.
+  - **Fediverse:** several servers following one another, several users
+    following each other. Designates federated communities in general.
+  - **Vidiverse:** same as Fediverse, but federating videos specifically.
   - **Instance:** a server which runs PeerTube in the fediverse.
   - **Origin instance:** the instance on which the video was uploaded and which
     is seeding (through the WebSeed protocol) the video.
+  - **Cache instance:** an instance that decided to make available a WebSeed
+    of its own for a video originating from another instance. It sends a `ptCache`
+    activity to notify the origin instance, which will then update its list of
+    WebSeeds for the video.
   - **Following:** the action of a PeerTube instance which will follow another
     instance (subscribe to its videos).
 
@@ -22,8 +28,8 @@
   * All the requests are retried several times if they fail.
 
 ### Instance
-  * An instance has a websocket tracker which is responsible for all the video
-    uploaded in it.
+  * An instance has a websocket tracker which is responsible for all videos
+    uploaded by its users.
   * An instance has an administrator that can follow other instances.
   * An instance can be configured to follow back automatically.
   * An instance can blacklist other instances (only used in "follow back"

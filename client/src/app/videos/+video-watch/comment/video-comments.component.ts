@@ -12,6 +12,7 @@ import { VideoDetails } from '../../../shared/video/video-details.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Syndication } from '@app/shared/video/syndication.model'
 
 @Component({
   selector: 'my-video-comments',
@@ -35,7 +36,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
 
-  syndicationItems = []
+  syndicationItems: Syndication[] = []
 
   private sub: Subscription
 

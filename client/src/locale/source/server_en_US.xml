@@ -41,8 +41,8 @@
         <source>Entertainment</source>
         <target>undefined</target>
       </trans-unit>
-      <trans-unit id="News">
-        <source>News</source>
+      <trans-unit id="News &amp; Politics">
+        <source>News &amp; Politics</source>
         <target>undefined</target>
       </trans-unit>
       <trans-unit id="How To">

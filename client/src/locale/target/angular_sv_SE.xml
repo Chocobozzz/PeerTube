@@ -231,7 +231,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -245,7 +245,7 @@
         <source>Edit</source>
         <target>Redigera</target>
         <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -301,6 +301,13 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66">
+        <source>Using an ActivityPub account</source>
+        <target>Med ett ActivityPub-konto</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="60251958d9e05c8cc00abf9645bb0026ebbe4dc3">
         <source>Subscribe with an account on <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></source>
         <target>Prenumerera med ett konto på <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></target>
@@ -313,6 +320,13 @@
         <target>Prenumerera med ditt lokala konto</target>
         <context-group name="null">
           <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed">
+        <source>Subscribe with a Mastodon account:</source>
+        <target>Prenumerera med ett Mastodon-konto:</target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1">
@@ -360,7 +374,7 @@
         <source>Video quota</source>
         <target>Videokvot</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
@@ -372,6 +386,38 @@
         </target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
+        <source>Ban</source>
+        <target>Blockera</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>Anledning …</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
+        <source>
+        A banned user will no longer be able to login.
+      </source>
+        <target>
+        En blockerad användare kommer inte längre kunna logga in.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
+        <source>Ban this user</source>
+        <target>Blockera den här användaren</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -580,13 +626,6 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
-        <source>Filters</source>
-        <target>Filter</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -595,21 +634,21 @@
     Inga resultat hittades
   </target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> prenumeranter</target>
         <context-group name="null">
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="602281e45fe8b79748e3fbf21c432379fcb58883">
         <source><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> visningar</target>
         <context-group name="null">
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -849,7 +888,7 @@
         <source>No results.</source>
         <target>Inga resultat.</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2290d09f4f113351baa9152ca8ad14cd03a11ba6">
@@ -861,6 +900,17 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48a5d0af93b94c4575b7f76a47fb3cdee58e6919">
+        <source>
+      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>#<x id="INTERPOLATION" equiv-text="{{ object.tag }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+    </source>
+        <target>
+      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>#<x id="INTERPOLATION" equiv-text="{{ object.tag }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e093a5a83045ff283f992a93699abb7cb9dd3c1b">
@@ -886,7 +936,7 @@
         <source>Instance</source>
         <target>Instans</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -1231,14 +1281,14 @@
         <source><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> prenumeranter</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8">
         <source>Video channels</source>
         <target>Videokanaler</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -1379,13 +1429,6 @@
         <target>Importera</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
-        <source>Video import with HTTP enabled</source>
-        <target>Videoimport med HTTP aktiverad</target>
-        <context-group name="null">
-          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
@@ -1717,14 +1760,14 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Score</source>
         <target>Poäng</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
         <source>Host</source>
         <target>Värd</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
@@ -1745,21 +1788,21 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Accepted</source>
         <target>Accepterad</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e6a27066251ca1e04c5be86ad758380856df2506">
         <source>Pending</source>
         <target>Väntar</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1d729bcbe3529d2fe2295b7a3a41282ee09de2c8">
         <source>Redundancy allowed</source>
         <target>Redundans tillåten</target>
         <context-group name="null">
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5fccee488a9ea908c16d2ab9dbdaf264f1aac479">
@@ -1850,7 +1893,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Role</source>
         <target>Roll</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
@@ -1873,38 +1916,6 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ffd94bfbcc0363386484e45e8bdc7b2361a95a33">
-        <source>Ban <x id="INTERPOLATION" equiv-text="{{ userToBan.username }}"/></source>
-        <target>Blockera <x id="INTERPOLATION" equiv-text="{{ userToBan.username }}"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>Anledning …</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
-        <source>
-        A banned user will no longer be able to login.
-      </source>
-        <target>
-        En blockerad användare kommer inte längre kunna logga in.
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
-        <source>Ban this user</source>
-        <target>Blockera den här användaren</target>
-        <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
         <source>Users list</source>
         <target>Användarlista</target>
@@ -1916,21 +1927,21 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
         <target>Användarnamn <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
-        <source>Actions</source>
-        <target>Åtgärder</target>
+      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
+        <source>Go to the account page</source>
+        <target>Gå till kontots sida</target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
         <source>Ban reason:</source>
         <target>Blockeringsanledning:</target>
         <context-group name="null">
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f">
@@ -1974,7 +1985,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="7e7ad19f1bcc2c33cdba4c1ad25e2b398ad453d9">
         <source>State <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>Tillstånd <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target>Status <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
@@ -1989,6 +2000,13 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
         <source>Go to the video</source>
         <target>Gå till videon</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
+        <source>Actions</source>
+        <target>Åtgärder</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
@@ -2102,7 +2120,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Ownership changes</source>
         <target>Ändringar av ägarskap</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -2331,6 +2349,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0dd390d056411e1709ec97ec51c46d78600e3f7b">
+        <source>Current password</source>
+        <target>Nuvarande lösenord</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229">
         <source>New password</source>
         <target>Nytt lösenord</target>
@@ -2356,14 +2381,14 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <source>Automatically plays video</source>
         <target>Spela videor automatiskt</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe">
         <source>Save</source>
         <target>Spara</target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2fa66a905b6b7f691c83be681d18188cbe4a8ba">
@@ -2392,6 +2417,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <target>(filändelser: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d1a04ba05116499d4cf59a48a282a8bcbf5b622d">
+        <source>Once you delete your account, there is no going back. Please be certain.</source>
+        <target>När du har raderat ditt konto går det inte att ångra. Är du säker på att du vill fortsätta?</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
@@ -2561,6 +2593,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1b518e7f8c067fa55ea797bb1b35b4a2d31dccbc">
+        <source>Or</source>
+        <target>Eller</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
         <source>Paste magnet URI</source>
         <target>Klistra in magnet-URI</target>
@@ -2672,6 +2711,20 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <target>Taggar kan användas för att föreslå relevanta rekommendationer.&lt;/br&gt;Tryck Enter för att lägg till en ny tagg.</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf">
+        <source>+ Tag</source>
+        <target>+ Tagg</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
+        <source>Enter a new tag</source>
+        <target>Lägg till en ny tagg</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
@@ -3106,13 +3159,6 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
-        <source>Go to the account page</source>
-        <target>Gå till kontots sida</target>
-        <context-group name="null">
-          <context context-type="linenumber">133</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>Visa mer</target>
@@ -3192,25 +3238,18 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="da8a38f72f92714cf8680560c99982dc651480d5">
-        <source>You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and find back the video. Direct commenting capabilities are being worked on in &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</source>
-        <target>Du kan kommentera med ditt PeerTube-konto på din instans sida dit videon är federerad eller via valfri fediverse-instans med stöd för ActivityPub. Med till exempel Mastodon eller Pleroma kan du skriva &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; i sökrutan för att hitta videon. Kommentering direkt härfrån är en funktion vi arbetar på i &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</target>
-        <context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
         <source>No comments.</source>
         <target>Inga kommentarer.</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
         <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
         <target>Visa alla <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> svar</target>
         <context-group name="null">
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -3221,7 +3260,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
     Kommentarer har avaktiverats.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -3267,6 +3306,32 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a5a3f17c9b4876952d78363834d57280c8684e7c">
+        <source>
+      Otherwise you can comment using an account on any ActivityPub-compatible instance.
+      On most platforms, you can find the video by typing its URL in the search bar and then comment it
+      from within the software's interface.
+    </source>
+        <target>
+      Annars kan du kommentera med ett konto på en valfri ActivityPub-instans.
+      På de flesta plattformar kan du hitta videon genom att skriva dess URL i sökrutan och kommentera
+      från mjukvarugränssnittet.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
+        <source>
+      If you have an account on Mastodon or Pleroma, you can open it directly in their interface:
+    </source>
+        <target>
+      Om du har ett konto på Mastodon eller Pleroma kan du öppna det direkt därifrån:
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
         <source>Highlighted comment</source>
         <target>Markerad kommentar</target>
@@ -3304,7 +3369,14 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="369ef5e9c0dd1251abdbf699a5db408bca10777f">
         <source>Published <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> videos</source>
-        <target>Publiserade <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> videor</target>
+        <target>Publicerade <x id="INTERPOLATION" equiv-text="{{totalVideos}}"/> videor</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
+        <source>Error</source>
+        <target>Fel</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3347,48 +3419,6 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="421a937491f19774d17eefa1d24816dae1a9f111">
         <source>Auto (via ffmpeg)</source>
         <target>Automatiskt (via ffmpeg)</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
-        <source>Error</source>
-        <target>Fel</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="27a71a0aee65258179e90ecf0841c0a68f95beed">
-        <source>You set custom <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </source>
-        <target>Du definierade en egen <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="865bc18d22e223101ede0916967ead0abd515d0e">
-        <source>This could lead to security issues or bugs if you do not understand it. </source>
-        <target>Detta kan orsaka säkerhetsproblem eller buggar om du inte förstår det.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="262e18b2efb5912651684a522fc08d77c99972d0">
-        <source>Are you sure you want to update the configuration?</source>
-        <target>Är du säker på att du vill uppdatera konfigurationen?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1ae0ab69f5c19d179282c8d882fd2f3c00e29119">
-        <source>Please type</source>
-        <target>Skriv</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="75f4bb68ee4c6b282abfd9d8d32be22c6202794d">
-        <source>to confirm.</source>
-        <target>för att bekräfta.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3638,20 +3668,6 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
-        <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> har blockerats.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
-        <source>Ban</source>
-        <target>Blockera</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8">
         <source>Unban</source>
         <target>Avsluta blockering</target>
@@ -3666,37 +3682,9 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
-        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
-        <target>Vill du verkligen avsluta blockeringen av <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
-        <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> är inte längre blockerad.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Du kan inte radera root.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
-        <source>If you remove this user, you will not be able to create another with the same username!</source>
-        <target>Om du tar bort den här användaren kommer du inte kunna skapa en ny med samma användarnamn!</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
-        <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> har raderats.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3711,6 +3699,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="19508af0dfbc685cbf10cf02061bb5a0f423b6fc">
         <source>Password updated.</source>
         <target>Lösenordet har uppdaterats.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c">
+        <source>You current password is invalid.</source>
+        <target>Ditt nuvarande lösenord är inte giltigt.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5082,6 +5077,41 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
+        <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> har blockerats.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
+        <target>Vill du verkligen avsluta blockeringen av <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
+        <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> är inte längre blockerad.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
+        <source>If you remove this user, you will not be able to create another with the same username!</source>
+        <target>Om du tar bort den här användaren kommer du inte kunna skapa en ny med samma användarnamn!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target>Användaren <x id="INTERPOLATION" equiv-text="{{username}}"/> har raderats.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0c0f5bbcd2386018ec057877f9d3c5c2c9880cac">
         <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
         <target>Förfrågan är för stor för servern. Kontakta gärna din administratör om du vill öka storleksbegränsningen.</target>
@@ -5134,6 +5164,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26">
         <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
         <target>Prenumerationen på  <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> är avslutad</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf">
+        <source>Moderator</source>
+        <target>Moderator</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

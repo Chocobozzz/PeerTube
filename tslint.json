@@ -4,7 +4,7 @@
     "await-promise": [true, "Bluebird"],
     "no-inferrable-types": true,
     "eofline": true,
-    "indent": ["spaces"],
+    "indent": [true, "spaces"],
     "ter-indent": [true, 2],
     "max-line-length": [true, 140],
     "no-unused-variable": false, // Memory issues

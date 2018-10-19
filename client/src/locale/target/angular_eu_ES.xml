@@ -217,7 +217,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> ikustaldi</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -231,7 +231,7 @@
         <source>Edit</source>
         <target>Editatu</target>
         <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -259,7 +259,7 @@
         <source>Video quota</source>
         <target>Bideo-kuota</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
@@ -271,6 +271,38 @@
         </target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
+        <source>Ban</source>
+        <target>Debekatu</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>Arrazoia...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
+        <source>
+        A banned user will no longer be able to login.
+      </source>
+        <target>
+        Debekatutako erabiltzaile batek ezin izango du saioa hasi.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
+        <source>Ban this user</source>
+        <target>Debekatu erabiltzaile hau</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -479,13 +511,6 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
-        <source>Filters</source>
-        <target>Iragazkiak</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -494,21 +519,21 @@
     Ez da emaitzarik aurkitu
   </target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> harpidedun</target>
         <context-group name="null">
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="602281e45fe8b79748e3fbf21c432379fcb58883">
         <source><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> ikustaldi</target>
         <context-group name="null">
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -741,7 +766,7 @@
         <source>No results.</source>
         <target>Emaitzarik ez.</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2290d09f4f113351baa9152ca8ad14cd03a11ba6">
@@ -778,7 +803,7 @@
         <source>Instance</source>
         <target>Instantzia</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -1119,14 +1144,14 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <source><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> harpidedun</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8">
         <source>Video channels</source>
         <target>Bideo kanalak</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -1267,13 +1292,6 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <target>Inportatu</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
-        <source>Video import with HTTP enabled</source>
-        <target>Bideoa HTTP bidez inportatzea gaituta</target>
-        <context-group name="null">
-          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
@@ -1599,14 +1617,14 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <source>Score</source>
         <target>Puntuazioa</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
         <source>Host</source>
         <target>Ostalaria </target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
@@ -1711,7 +1729,7 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <source>Role</source>
         <target>Rola</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
@@ -1734,38 +1752,6 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ffd94bfbcc0363386484e45e8bdc7b2361a95a33">
-        <source>Ban <x id="INTERPOLATION" equiv-text="{{ userToBan.username }}"/></source>
-        <target>Debekatu <x id="INTERPOLATION" equiv-text="{{ userToBan.username }}"/></target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>Arrazoia...</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
-        <source>
-        A banned user will no longer be able to login.
-      </source>
-        <target>
-        Debekatutako erabiltzaile batek ezin izango du saioa hasi.
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
-        <source>Ban this user</source>
-        <target>Debekatu erabiltzaile hau</target>
-        <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
         <source>Users list</source>
         <target>Erabiltzaileen zerrenda</target>
@@ -1777,21 +1763,21 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
         <target>Erabiltzaile-izena <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
-        <source>Actions</source>
-        <target>Ekintzak</target>
+      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
+        <source>Go to the account page</source>
+        <target>Joan kontuaren orrira</target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
         <source>Ban reason:</source>
         <target>Debekatzeko arrazoia:</target>
         <context-group name="null">
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f">
@@ -1850,6 +1836,13 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
         <source>Go to the video</source>
         <target>Joan bideora</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
+        <source>Actions</source>
+        <target>Ekintzak</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
@@ -1963,7 +1956,7 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <source>Ownership changes</source>
         <target>Jabetza aldaketak</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -2209,14 +2202,14 @@ Kanal honetara bideo bat igotzen duzunean, bideoa babesteko eremua testu honekin
         <source>Automatically plays video</source>
         <target>Automatikoki abiatzen du bideoa</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe">
         <source>Save</source>
         <target>Gorde</target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2fa66a905b6b7f691c83be681d18188cbe4a8ba">
@@ -2920,13 +2913,6 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
-        <source>Go to the account page</source>
-        <target>Joan kontuaren orrira</target>
-        <context-group name="null">
-          <context context-type="linenumber">133</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>Erakutsi gehiago</target>
@@ -3006,25 +2992,18 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="da8a38f72f92714cf8680560c99982dc651480d5">
-        <source>You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; and find back the video. Direct commenting capabilities are being worked on in &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</source>
-        <target>Bideo hau zure PeerTube kontuarekin federatzen den zure instantziaren orrian egin dezakezu iruzkina, edo ActivityPub onartzen duen fedibertsoko edozein instantzian. Adibidez Mastodon edo Pleroma instantzietan, bilaketa kutxan &lt;strong&gt;@<x id="INTERPOLATION" equiv-text="{{video.account.name}}"/>@<x id="INTERPOLATION_1" equiv-text="{{video.account.host}}"/>&lt;/strong&gt; idatzi dezakezu bideoa aurkitzeko. Iruzkinak zuzenean egitek aukera garapenean dago: &lt;a href='https://github.com/Chocobozzz/PeerTube/issues/224'&gt;#224&lt;/a&gt;.</target>
-        <context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
         <source>No comments.</source>
         <target>Iruzkinik ez.</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
         <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
         <target>Ikusi <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> erantzun</target>
         <context-group name="null">
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -3035,7 +3014,7 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
     Iruzkinak desgaituta daude.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -3101,41 +3080,6 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
         <source>Error</source>
         <target>Errorea</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="27a71a0aee65258179e90ecf0841c0a68f95beed">
-        <source>You set custom <x id="INTERPOLATION" equiv-text="{{customizationsText}}"/>. </source>
-        <target><x id="INTERPOLATION" equiv-text="{{customizationsText}}"/> pertsonalizatua ezarri duzu. </target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="865bc18d22e223101ede0916967ead0abd515d0e">
-        <source>This could lead to security issues or bugs if you do not understand it. </source>
-        <target>Honek segurtasun arazoak edo akatsak ekar litzake egindakoa ulertzen ez baduzu. </target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="262e18b2efb5912651684a522fc08d77c99972d0">
-        <source>Are you sure you want to update the configuration?</source>
-        <target>Ziur konfigurazioa aldatu nahi duzula?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1ae0ab69f5c19d179282c8d882fd2f3c00e29119">
-        <source>Please type</source>
-        <target>Idatzi</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="75f4bb68ee4c6b282abfd9d8d32be22c6202794d">
-        <source>to confirm.</source>
-        <target>berresteko.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3301,20 +3245,6 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
-        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailea debekatuta.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
-        <source>Ban</source>
-        <target>Debekatu</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8">
         <source>Unban</source>
         <target>Kendu debekua</target>
@@ -3329,30 +3259,9 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
-        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
-        <target>Ziur zaude <x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzaileari debekua kendu nahi diozula?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
-        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzaileari debekua kendu zaio.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Ezin duzu erroa ezabatu.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
-        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
-        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailea ezabatuta.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4727,6 +4636,34 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866">
         <source>Images</source>
         <target>Irudiak</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailea debekatuta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
+        <target>Ziur zaude <x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzaileari debekua kendu nahi diozula?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzaileari debekua kendu zaio.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailea ezabatuta.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

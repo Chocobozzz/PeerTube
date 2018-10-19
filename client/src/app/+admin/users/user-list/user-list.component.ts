@@ -23,7 +23,7 @@ export class UserListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   selectedUsers: User[] = []
-  bulkUserActions: DropdownAction<User>[] = []
+  bulkUserActions: DropdownAction<User[]>[] = []
 
   constructor (
     private notificationsService: NotificationsService,
@@ -53,20 +53,6 @@ export class UserListComponent extends RestTable implements OnInit {
         isDisplayed: users => users.every(u => u.blocked === true)
       }
     ]
-  }
-
-  protected loadData () {
-    this.selectedUsers = []
-
-    this.userService.getUsers(this.pagination, this.sort, this.search)
-                    .subscribe(
-                      resultList => {
-                        this.users = resultList.data
-                        this.totalRecords = resultList.total
-                      },
-
-                      err => this.notificationsService.error(this.i18n('Error'), err.message)
-                    )
   }
 
   openBanUserModal (users: User[]) {
@@ -130,5 +116,19 @@ export class UserListComponent extends RestTable implements OnInit {
 
   isInSelectionMode () {
     return this.selectedUsers.length !== 0
+  }
+
+  protected loadData () {
+    this.selectedUsers = []
+
+    this.userService.getUsers(this.pagination, this.sort, this.search)
+                    .subscribe(
+                      resultList => {
+                        this.users = resultList.data
+                        this.totalRecords = resultList.total
+                      },
+
+                      err => this.notificationsService.error(this.i18n('Error'), err.message)
+                    )
   }
 }

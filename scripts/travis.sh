@@ -31,6 +31,9 @@ elif [ "$1" = "api-2" ]; then
 elif [ "$1" = "api-3" ]; then
     npm run build:server
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index-3.ts
+elif [ "$1" = "api-3" ]; then
+    npm run build:server
+    mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index-4.ts
 elif [ "$1" = "lint" ]; then
     npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
 

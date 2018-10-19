@@ -14,6 +14,10 @@ import { UserWatching, VideoJSCaption, videojsUntyped } from './peertube-videojs
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import { Player } from 'video.js'
+
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
 // Change Captions to Subtitles/CC
@@ -75,12 +79,12 @@ function getVideojsOptions (options: {
         enableVolumeScroll: false,
         enableModifiersForNumbers: false,
 
-        fullscreenKey: function (event) {
+        fullscreenKey: function (event: KeyboardEvent) {
           // fullscreen with the f key or Ctrl+Enter
           return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
         },
 
-        seekStep: function (event) {
+        seekStep: function (event: KeyboardEvent) {
           // mimic VLC seek behavior, and default to 5 (original value is 5).
           if (event.ctrlKey && event.altKey) {
             return 5 * 60
@@ -95,26 +99,26 @@ function getVideojsOptions (options: {
 
         customKeys: {
           increasePlaybackRateKey: {
-            key: function (event) {
+            key: function (event: KeyboardEvent) {
               return event.key === '>'
             },
-            handler: function (player) {
+            handler: function (player: Player) {
               player.playbackRate((player.playbackRate() + 0.1).toFixed(2))
             }
           },
           decreasePlaybackRateKey: {
-            key: function (event) {
+            key: function (event: KeyboardEvent) {
               return event.key === '<'
             },
-            handler: function (player) {
+            handler: function (player: Player) {
               player.playbackRate((player.playbackRate() - 0.1).toFixed(2))
             }
           },
           frameByFrame: {
-            key: function (event) {
+            key: function (event: KeyboardEvent) {
               return event.key === '.'
             },
-            handler: function (player, options, event) {
+            handler: function (player: Player) {
               player.pause()
               // Calculate movement distance (assuming 30 fps)
               const dist = 1 / 30

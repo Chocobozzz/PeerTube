@@ -17,7 +17,10 @@ import 'core-js/es6/set'
 // For google bot that uses Chrome 41 and does not understand fetch
 import 'whatwg-fetch'
 
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
 import * as vjs from 'video.js'
+
 import * as Channel from 'jschannel'
 
 import { peertubeTranslate, ResultList, VideoDetails } from '../../../../shared'
@@ -304,7 +307,7 @@ class PeerTubeEmbed {
 
     this.playerOptions = videojsOptions
     this.player = vjs(this.videoContainerId, videojsOptions, () => {
-      this.player.on('customError', (event, data) => this.handleError(data.err))
+      this.player.on('customError', (event: any, data: any) => this.handleError(data.err))
 
       window[ 'videojsPlayer' ] = this.player
 

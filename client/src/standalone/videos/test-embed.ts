@@ -1,6 +1,6 @@
 import './test-embed.scss'
 import { PeerTubePlayer } from '../player/player'
-import { PlayerEventType } from '../player/definitions'
+import { PeerTubeResolution, PlayerEventType } from '../player/definitions'
 
 window.addEventListener('load', async () => {
   const urlParts = window.location.href.split('/')
@@ -66,7 +66,7 @@ window.addEventListener('load', async () => {
     updateRates()
   })
 
-  let updateResolutions = resolutions => {
+  let updateResolutions = ((resolutions: PeerTubeResolution[]) => {
     let resolutionListEl = document.querySelector('#resolution-list')
     resolutionListEl.innerHTML = ''
 
@@ -87,7 +87,7 @@ window.addEventListener('load', async () => {
         resolutionListEl.appendChild(itemEl)
       }
     })
-  }
+  })
 
   player.getResolutions().then(
     resolutions => updateResolutions(resolutions))

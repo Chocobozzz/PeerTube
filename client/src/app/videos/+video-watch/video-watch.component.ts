@@ -7,7 +7,9 @@ import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-supp
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 import { forkJoin, Subscription } from 'rxjs'
-import * as videojs from 'video.js'
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import videojs from 'video.js'
 import 'videojs-hotkeys'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import * as WebTorrent from 'webtorrent'
@@ -435,7 +437,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       videojs(this.playerElement, videojsOptions, function () {
         self.player = this
-        this.on('customError', (event, data) => self.handleError(data.err))
+        this.on('customError', ({ err }: { err: any }) => self.handleError(err))
 
         addContextMenu(self.player, self.video.embedUrl)
       })
@@ -448,7 +450,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
   }
 
-  private setRating (nextRating) {
+  private setRating (nextRating: VideoRateType) {
     let method
     switch (nextRating) {
       case 'like':
@@ -470,7 +472,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               this.userRating = nextRating
             },
 
-            err => this.notificationsService.error(this.i18n('Error'), err.message)
+            (err: { message: string }) => this.notificationsService.error(this.i18n('Error'), err.message)
           )
   }
 

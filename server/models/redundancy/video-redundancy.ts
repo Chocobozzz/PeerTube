@@ -408,6 +408,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       url: {
         type: 'Link',
         mimeType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mediaType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,
         size: this.VideoFile.size,

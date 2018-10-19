@@ -18,7 +18,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  webtorrentAdd
+  webtorrentAdd,
+  generateHighBitrateVideo
 } from '../../utils'
 import { join } from 'path'
 import { waitJobs } from '../../utils/server/jobs'
@@ -123,7 +124,7 @@ describe('Test video transcoding', function () {
       expect(videoDetails.files).to.have.lengthOf(4)
 
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(ffmpeg, path)
+      const probe = await audio.get(path)
 
       if (probe.audioStream) {
         expect(probe.audioStream[ 'codec_name' ]).to.be.equal('aac')
@@ -154,7 +155,7 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(ffmpeg, path)
+      const probe = await audio.get(path)
       expect(probe).to.not.have.property('audioStream')
     }
   })
@@ -179,9 +180,9 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
-      const fixtureVideoProbe = await audio.get(ffmpeg, fixturePath)
+      const fixtureVideoProbe = await audio.get(fixturePath)
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const videoProbe = await audio.get(ffmpeg, path)
+      const videoProbe = await audio.get(path)
       if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
         const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
         expect(omit(videoProbe.audioStream, toOmit)).to.be.deep.equal(omit(fixtureVideoProbe.audioStream, toOmit))
@@ -283,29 +284,13 @@ describe('Test video transcoding', function () {
     }
   })
 
-  const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)
   it('Should respect maximum bitrate values', async function () {
     this.timeout(160000)
 
-    {
-      const exists = await pathExists(tempFixturePath)
-      if (!exists) {
+    let tempFixturePath: string
 
-        // Generate a random, high bitrate video on the fly, so we don't have to include
-        // a large file in the repo. The video needs to have a certain minimum length so
-        // that FFmpeg properly applies bitrate limits.
-        // https://stackoverflow.com/a/15795112
-        await new Promise<void>(async (res, rej) => {
-          ffmpeg()
-            .outputOptions([ '-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom' ])
-            .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])
-            .outputOptions([ '-maxrate 10M', '-bufsize 10M' ])
-            .output(tempFixturePath)
-            .on('error', rej)
-            .on('end', res)
-            .run()
-        })
-      }
+    {
+      tempFixturePath = await generateHighBitrateVideo()
 
       const bitrate = await getVideoFileBitrate(tempFixturePath)
       expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))

@@ -1,7 +1,6 @@
 import { ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
 import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
-import { EditCustomConfigComponent } from '../../../+admin/config/edit-custom-config/'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 
 export abstract class UserEdit extends FormReactive {

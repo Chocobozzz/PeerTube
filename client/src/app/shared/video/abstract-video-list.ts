@@ -12,6 +12,7 @@ import { Video } from './video.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
+import { Syndication } from '@app/shared/video/syndication.model'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private static LINES_PER_PAGE = 4
@@ -27,7 +28,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   sort: VideoSortField = '-publishedAt'
   categoryOneOf?: number
   defaultSort: VideoSortField = '-publishedAt'
-  syndicationItems = []
+  syndicationItems: Syndication[] = []
 
   loadOnInit = true
   marginContent = true
@@ -59,7 +60,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private resizeSubscription: Subscription
 
   abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number}>
-  abstract generateSyndicationList ()
+  abstract generateSyndicationList (): void
 
   get user () {
     return this.authService.getUser()
@@ -211,7 +212,9 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected setNewRouteParams () {
     const paramsObject = this.buildRouteParams()
 
-    const queryParams = Object.keys(paramsObject).map(p => p + '=' + paramsObject[p]).join('&')
+    const queryParams = Object.keys(paramsObject)
+                              .map(p => p + '=' + paramsObject[p])
+                              .join('&')
     this.location.replaceState(this.currentRoute, queryParams)
   }
 

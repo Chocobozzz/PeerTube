@@ -208,6 +208,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     url.push({
       type: 'Link',
       mimeType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
+      mediaType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
       href: video.getVideoFileUrl(file, baseUrlHttp),
       height: file.resolution,
       size: file.size,
@@ -217,6 +218,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     url.push({
       type: 'Link',
       mimeType: 'application/x-bittorrent' as 'application/x-bittorrent',
+      mediaType: 'application/x-bittorrent' as 'application/x-bittorrent',
       href: video.getTorrentUrl(file, baseUrlHttp),
       height: file.resolution
     })
@@ -224,6 +226,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     url.push({
       type: 'Link',
       mimeType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
+      mediaType: 'application/x-bittorrent;x-scheme-handler/magnet' as 'application/x-bittorrent;x-scheme-handler/magnet',
       href: video.generateMagnetUri(file, baseUrlHttp, baseUrlWs),
       height: file.resolution
     })
@@ -233,6 +236,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
   url.push({
     type: 'Link',
     mimeType: 'text/html',
+    mediaType: 'text/html',
     href: CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
   })
 

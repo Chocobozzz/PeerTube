@@ -154,7 +154,7 @@ export class ServerService {
     this.localeObservable
         .pipe(
           switchMap(translations => {
-            return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
+            return this.http.get<{ [id: string]: string }>(ServerService.BASE_VIDEO_URL + attributeName)
                        .pipe(map(data => ({ data, translations })))
           })
         )

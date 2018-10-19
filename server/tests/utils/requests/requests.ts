@@ -37,9 +37,7 @@ function makeDeleteRequest (options: {
 
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
 
-  return req
-    .expect('Content-Type', /json/)
-    .expect(options.statusCodeExpected)
+  return req.expect(options.statusCodeExpected)
 }
 
 function makeUploadRequest (options: {

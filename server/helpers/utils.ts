@@ -40,7 +40,10 @@ const getServerActor = memoizee(async function () {
   const application = await ApplicationModel.load()
   if (!application) throw Error('Could not load Application from database.')
 
-  return application.Account.Actor
+  const actor = application.Account.Actor
+  actor.Account = application.Account
+
+  return actor
 })
 
 function generateVideoTmpPath (target: string | ParseTorrent) {

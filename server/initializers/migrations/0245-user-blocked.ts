@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { CONSTRAINTS_FIELDS } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -31,7 +30,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.USERS.BLOCKED_REASON.max),
+      type: Sequelize.STRING(250),
       allowNull: true,
       defaultValue: null
     }

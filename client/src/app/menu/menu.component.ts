@@ -18,7 +18,7 @@ export class MenuComponent implements OnInit {
   userHasAdminAccess = false
   helpVisible = false
 
-  private routesPerRight = {
+  private routesPerRight: { [ role in UserRight ]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
     [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/moderation/video-abuses',

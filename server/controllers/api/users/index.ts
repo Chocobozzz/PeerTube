@@ -37,6 +37,7 @@ import { UserModel } from '../../../models/account/user'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
+import { myBlocklistRouter } from './my-blocklist'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -53,6 +54,7 @@ const askSendEmailLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', myBlocklistRouter)
 usersRouter.use('/', meRouter)
 
 usersRouter.get('/autocomplete',

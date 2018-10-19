@@ -27,7 +27,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { VideoPrivacy, VideoState } from '../../../shared'
+import { UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
@@ -70,7 +70,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { buildTrigramSearchIndex, createSimilarityAttribute, getVideoSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, buildTrigramSearchIndex, createSimilarityAttribute, getVideoSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
@@ -93,6 +93,7 @@ import {
 } from './video-format-utils'
 import * as validator from 'validator'
 import { UserVideoHistoryModel } from '../account/user-video-history'
+import { UserModel } from '../account/user'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -138,6 +139,7 @@ type ForAPIOptions = {
 }
 
 type AvailableForListIDsOptions = {
+  serverAccountId: number
   actorId: number
   includeLocalVideos: boolean
   filter?: VideoFilter
@@ -151,6 +153,7 @@ type AvailableForListIDsOptions = {
   accountId?: number
   videoChannelId?: number
   trendingDays?: number
+  user?: UserModel
 }
 
 @Scopes({
@@ -235,6 +238,15 @@ type AvailableForListIDsOptions = {
               )
             }
           ]
+        },
+        channelId: {
+          [ Sequelize.Op.notIn ]: Sequelize.literal(
+            '(' +
+              'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
+                buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
+              ')' +
+            ')'
+          )
         }
       },
       include: []
@@ -975,10 +987,10 @@ export class VideoModel extends Model<VideoModel> {
     videoChannelId?: number,
     actorId?: number
     trendingDays?: number,
-    userId?: number
+    user?: UserModel
   }, countVideos = true) {
-    if (options.filter && options.filter === 'all-local' && !options.userId) {
-      throw new Error('Try to filter all-local but no userId is provided')
+    if (options.filter && options.filter === 'all-local' && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
+      throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
     const query: IFindOptions<VideoModel> = {
@@ -994,11 +1006,14 @@ export class VideoModel extends Model<VideoModel> {
       query.group = 'VideoModel.id'
     }
 
+    const serverActor = await getServerActor()
+
     // actorId === null has a meaning, so just check undefined
-    const actorId = options.actorId !== undefined ? options.actorId : (await getServerActor()).id
+    const actorId = options.actorId !== undefined ? options.actorId : serverActor.id
 
     const queryOptions = {
       actorId,
+      serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
       categoryOneOf: options.categoryOneOf,
       licenceOneOf: options.licenceOneOf,
@@ -1010,7 +1025,7 @@ export class VideoModel extends Model<VideoModel> {
       accountId: options.accountId,
       videoChannelId: options.videoChannelId,
       includeLocalVideos: options.includeLocalVideos,
-      userId: options.userId,
+      user: options.user,
       trendingDays
     }
 
@@ -1033,7 +1048,7 @@ export class VideoModel extends Model<VideoModel> {
     tagsAllOf?: string[]
     durationMin?: number // seconds
     durationMax?: number // seconds
-    userId?: number,
+    user?: UserModel,
     filter?: VideoFilter
   }) {
     const whereAnd = []
@@ -1104,6 +1119,7 @@ export class VideoModel extends Model<VideoModel> {
     const serverActor = await getServerActor()
     const queryOptions = {
       actorId: serverActor.id,
+      serverAccountId: serverActor.Account.id,
       includeLocalVideos: options.includeLocalVideos,
       nsfw: options.nsfw,
       categoryOneOf: options.categoryOneOf,
@@ -1111,7 +1127,7 @@ export class VideoModel extends Model<VideoModel> {
       languageOneOf: options.languageOneOf,
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
-      userId: options.userId,
+      user: options.user,
       filter: options.filter
     }
 
@@ -1239,9 +1255,11 @@ export class VideoModel extends Model<VideoModel> {
 
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
-    const actorId = (await getServerActor()).id
+    const serverActor = await getServerActor()
+    const actorId = serverActor.id
 
-    const scopeOptions = {
+    const scopeOptions: AvailableForListIDsOptions = {
+      serverAccountId: serverActor.Account.id,
       actorId,
       includeLocalVideos: true
     }
@@ -1287,7 +1305,7 @@ export class VideoModel extends Model<VideoModel> {
 
   private static async getAvailableForApi (
     query: IFindOptions<VideoModel>,
-    options: AvailableForListIDsOptions & { userId?: number},
+    options: AvailableForListIDsOptions,
     countVideos = true
   ) {
     const idsScope = {
@@ -1320,8 +1338,8 @@ export class VideoModel extends Model<VideoModel> {
       }
     ]
 
-    if (options.userId) {
-      apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.userId ] })
+    if (options.user) {
+      apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })
     }
 
     const secondQuery = {

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, RedirectService } from '@app/core'
+import { AuthService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
 import { forkJoin, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
@@ -40,7 +40,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private metaService: MetaService,
-    private redirectService: RedirectService,
     private notificationsService: NotificationsService,
     private searchService: SearchService,
     private authService: AuthService
