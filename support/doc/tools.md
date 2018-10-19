@@ -230,7 +230,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 
 If you want to interact with the application libraries and objects even when PeerTube is not running, there is a REPL for that.
 
-usage: `node ./dist/server/tools/repl.js`
+usage: `node ./dist/server/tools/peertube-repl.js`
 
 "The default evaluator will, by default, assign the result of the most recently evaluated expression to the special variable `_` (underscore). Explicitly setting `_` to a value will disable this behavior."
 
