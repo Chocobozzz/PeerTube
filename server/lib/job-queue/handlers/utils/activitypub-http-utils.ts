@@ -2,6 +2,7 @@ import { buildSignedActivity } from '../../../../helpers/activitypub'
 import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { sha256 } from '../../../../helpers/core-utils'
+import { HTTP_SIGNATURE } from '../../../../initializers'
 
 type Payload = { body: any, signatureActorId?: number }
 
@@ -29,11 +30,11 @@ async function buildSignedRequestOptions (payload: Payload) {
 
   const keyId = actor.getWebfingerUrl()
   return {
-    algorithm: 'rsa-sha256',
-    authorizationHeaderName: 'Signature',
+    algorithm: HTTP_SIGNATURE.ALGORITHM,
+    authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
     keyId,
     key: actor.privateKey,
-    headers: [ 'date', 'host', 'digest', '(request-target)' ]
+    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN
   }
 }
 
