@@ -4,7 +4,7 @@ import { ResultList } from '../../shared/models'
 import { Activity, ActivityPubActor } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
-import { signObject } from './peertube-crypto'
+import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
 
 function activityPubContextify <T> (data: T) {
@@ -15,22 +15,22 @@ function activityPubContextify <T> (data: T) {
       {
         RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
         pt: 'https://joinpeertube.org/ns',
-        schema: 'http://schema.org#',
+        sc: 'http://schema.org#',
         Hashtag: 'as:Hashtag',
-        uuid: 'schema:identifier',
-        category: 'schema:category',
-        licence: 'schema:license',
-        subtitleLanguage: 'schema:subtitleLanguage',
+        uuid: 'sc:identifier',
+        category: 'sc:category',
+        licence: 'sc:license',
+        subtitleLanguage: 'sc:subtitleLanguage',
         sensitive: 'as:sensitive',
-        language: 'schema:inLanguage',
-        views: 'schema:Number',
-        stats: 'schema:Number',
-        size: 'schema:Number',
-        fps: 'schema:Number',
-        commentsEnabled: 'schema:Boolean',
-        waitTranscoding: 'schema:Boolean',
-        expires: 'schema:expires',
-        support: 'schema:Text',
+        language: 'sc:inLanguage',
+        views: 'sc:Number',
+        stats: 'sc:Number',
+        size: 'sc:Number',
+        fps: 'sc:Number',
+        commentsEnabled: 'sc:Boolean',
+        waitTranscoding: 'sc:Boolean',
+        expires: 'sc:expires',
+        support: 'sc:Text',
         CacheFile: 'pt:CacheFile'
       },
       {
@@ -102,7 +102,7 @@ async function activityPubCollectionPagination (url: string, handler: ActivityPu
 function buildSignedActivity (byActor: ActorModel, data: Object) {
   const activity = activityPubContextify(data)
 
-  return signObject(byActor, activity) as Promise<Activity>
+  return signJsonLDObject(byActor, activity) as Promise<Activity>
 }
 
 function getActorUrl (activityActor: string | ActivityPubActor) {

@@ -529,6 +529,12 @@ const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
   APPLICATION: 'Application'
 }
 
+const HTTP_SIGNATURE = {
+  HEADER_NAME: 'signature',
+  ALGORITHM: 'rsa-sha256',
+  HEADERS_TO_SIGN: [ 'date', 'host', 'digest', '(request-target)' ]
+}
+
 // ---------------------------------------------------------------------------
 
 const PRIVATE_RSA_KEY_SIZE = 2048
@@ -728,6 +734,7 @@ export {
   VIDEO_EXT_MIMETYPE,
   CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
+  HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   buildLanguages
