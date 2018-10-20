@@ -17,6 +17,7 @@ program
   .command('import-videos', 'import a video from a streaming platform').alias('import')
   .command('get-access-token', 'get a peertube access token', { noHelp: true }).alias('token')
   .command('watch', 'watch a video in the terminal ✩°｡⋆').alias('w')
+  .command('repl', 'initiate a REPL to access internals')
 
 /* Not Yet Implemented */
 program

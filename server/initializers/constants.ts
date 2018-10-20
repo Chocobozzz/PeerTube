@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 280
+const LAST_MIGRATION_VERSION = 285
 
 // ---------------------------------------------------------------------------
 
@@ -295,7 +295,7 @@ const CONFIG = {
 const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 250 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
@@ -311,8 +311,8 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 500 }, // Length
-    SUPPORT: { min: 3, max: 500 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_CAPTIONS: {
@@ -341,7 +341,7 @@ const CONSTRAINTS_FIELDS = {
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
-    SUPPORT: { min: 3, max: 500 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
@@ -530,6 +530,12 @@ const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
   GROUP: 'Group',
   PERSON: 'Person',
   APPLICATION: 'Application'
+}
+
+const HTTP_SIGNATURE = {
+  HEADER_NAME: 'signature',
+  ALGORITHM: 'rsa-sha256',
+  HEADERS_TO_SIGN: [ 'date', 'host', 'digest', '(request-target)' ]
 }
 
 // ---------------------------------------------------------------------------
@@ -731,6 +737,7 @@ export {
   VIDEO_EXT_MIMETYPE,
   CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
+  HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   buildLanguages

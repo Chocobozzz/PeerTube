@@ -3,42 +3,43 @@ import * as Sequelize from 'sequelize'
 async function up (utils: {
   transaction: Sequelize.Transaction,
   queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize
+  sequelize: Sequelize.Sequelize,
+  db: any
 }): Promise<void> {
   {
     const data = {
-      type: Sequelize.STRING(500),
+      type: Sequelize.STRING(1000),
       allowNull: true,
       defaultValue: null
     }
-    await utils.queryInterface.addColumn('video', 'support', data)
+    await utils.queryInterface.changeColumn('video', 'support', data)
   }
 
   {
     const data = {
-      type: Sequelize.STRING(500),
+      type: Sequelize.STRING(1000),
       allowNull: true,
       defaultValue: null
     }
-    await utils.queryInterface.addColumn('videoChannel', 'support', data)
+    await utils.queryInterface.changeColumn('videoChannel', 'support', data)
   }
 
   {
     const data = {
-      type: Sequelize.STRING(250),
+      type: Sequelize.STRING(1000),
       allowNull: true,
       defaultValue: null
     }
-    await utils.queryInterface.addColumn('account', 'description', data)
+    await utils.queryInterface.changeColumn('videoChannel', 'description', data)
   }
 
   {
     const data = {
-      type: Sequelize.STRING(10000),
+      type: Sequelize.STRING(1000),
       allowNull: true,
       defaultValue: null
     }
-    await utils.queryInterface.changeColumn('video', 'description', data)
+    await utils.queryInterface.changeColumn('account', 'description', data)
   }
 }
 

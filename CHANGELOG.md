@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.1.0-alpha.2 (since v1.1.0-alpha.1)
+
+### Security/Maintenance/Federation
+ 
+ * Add HTTP Signature in addition to Linked Signature:
+    * It's faster
+    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation 
+ 
+### Features
+
+ * Set shorter keyframe interval for transcoding (2 seconds) ([@Nutomic](https://github.com/nutomic))
+ * Add ability to disable webtorrent (as a user) ([@rigelk](https://github.com/rigelk))
+ * Make abuse-delete clearer ([@barbeque](https://github.com/barbeque))
+ * Adding minimum signup age conforming to ceiling GPDR age ([@rigelk](https://github.com/rigelk))
+ * Feature/description support fields length 1000 ([@McFlat](https://github.com/mcflat))
+
+### Bug fixes
+
+ * Scale bitrate linearly with FPS ([@Nutomic](https://github.com/nutomic))
+ * AP mimeType -> mediaType
+ * PeerTube is not in beta anymore
+ * PeerTube is not in alpha anymore :p
+ * Fix optimize old videos script
+
+
+## v1.0.1
+
+### Security/Maintenance/Federation
+ 
+ * Add HTTP Signature in addition to Linked Signature:
+    * It's faster
+    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation
+
+
 ## v1.1.0-alpha.1
 
 We released this alpha version because some admins/users need some moderation tools we implemented in recent weeks.
