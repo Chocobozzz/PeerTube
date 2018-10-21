@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors":true,
     "alwaysStrict": true,
     "target": "es5",
