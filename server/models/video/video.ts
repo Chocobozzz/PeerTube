@@ -1082,8 +1082,11 @@ export class VideoModel extends Model<VideoModel> {
               '(' +
               'SELECT "video"."id" FROM "video" ' +
               'WHERE ' +
+              'lower(immutable_unaccent("video"."uuid")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
               'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
-              'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+              'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + ')) OR ' +
+              'lower(immutable_unaccent("video"."description")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+              'lower(immutable_unaccent("video"."description")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + ')) ' +
               'UNION ALL ' +
               'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
               'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
@@ -1094,7 +1097,9 @@ export class VideoModel extends Model<VideoModel> {
         }
       )
 
+      attributesInclude.push(createSimilarityAttribute('VideoModel.uuid', options.search))
       attributesInclude.push(createSimilarityAttribute('VideoModel.name', options.search))
+      attributesInclude.push(createSimilarityAttribute('VideoModel.description', options.search))
     }
 
     // Cannot search on similarity if we don't have a search
