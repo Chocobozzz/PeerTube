@@ -3,7 +3,7 @@ FROM ubuntu:bionic
 # Avoid tzdata interactive dialog
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install PeerTube's dependencies, Node.js 8.x and Yarn
+# Install PeerTube's dependencies.
 # Packages are from https://github.com/Chocobozzz/PeerTube#dependencies
 RUN apt-get update -q && apt-get install -qy \
       curl \
