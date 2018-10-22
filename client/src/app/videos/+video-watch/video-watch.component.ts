@@ -435,7 +435,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const self = this
     this.zone.runOutsideAngular(async () => {
-      videojs(this.playerElement, videojsOptions, function (this: any) {
+      videojs(this.playerElement, videojsOptions, function (this: videojs.Player) {
         self.player = this
         this.on('customError', ({ err }: { err: any }) => self.handleError(err))
 
