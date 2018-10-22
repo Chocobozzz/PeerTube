@@ -7,7 +7,9 @@ webserver:
     __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
-trust_proxy: "PEERTUBE_TRUST_PROXY"
+trust_proxy:
+  __name: "PEERTUBE_TRUST_PROXY"
+  __format: "json"
 
 database:
   hostname: "PEERTUBE_DB_HOSTNAME"
