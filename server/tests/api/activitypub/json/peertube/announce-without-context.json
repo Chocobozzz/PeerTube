@@ -1,0 +1,13 @@
+{
+  "type": "Announce",
+  "id": "http://localhost:9002/videos/watch/997111d4-e8d8-4f45-99d3-857905785d05/announces/1",
+  "actor": "http://localhost:9002/accounts/peertube",
+  "object": "http://localhost:9002/videos/watch/997111d4-e8d8-4f45-99d3-857905785d05",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public",
+    "http://localhost:9002/accounts/peertube/followers",
+    "http://localhost:9002/video-channels/root_channel/followers",
+    "http://localhost:9002/accounts/root/followers"
+  ],
+  "cc": []
+}

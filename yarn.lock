@@ -5054,7 +5054,7 @@ jsonify@~0.0.0:
 
 jsonld@^0.5.12:
   version "0.5.21"
-  resolved "http://registry.npmjs.org/jsonld/-/jsonld-0.5.21.tgz#4d5b78d717eb92bcd1ac9d88e34efad95370c0bf"
+  resolved "https://registry.yarnpkg.com/jsonld/-/jsonld-0.5.21.tgz#4d5b78d717eb92bcd1ac9d88e34efad95370c0bf"
   integrity sha512-1dQhaw1Eb3p7Cz5ECE2DNPwLvTmK+f6D45hACBdonJaFKP1bN9zlKLZWbPZQeZtduAc/LNv10J4ML0IiTBVahw==
   dependencies:
     rdf-canonize "^0.2.1"

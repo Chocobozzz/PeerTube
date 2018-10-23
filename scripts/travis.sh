@@ -12,7 +12,6 @@ killall -q peertube || true
 if [ "$1" = "misc" ]; then
     npm run build -- --light-fr
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/client.ts \
-        server/tests/activitypub.ts \
         server/tests/feeds/index.ts \
         server/tests/misc-endpoints.ts \
         server/tests/helpers/index.ts
