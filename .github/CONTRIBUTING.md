@@ -134,6 +134,24 @@ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo s
 
 See more information here : https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
 
+### Configurations for VPS
+
+If you want to develop using a Virtual Private Server, you will need to configure the url for the API and the hostname. First, you need to edit the [client/src/environments/environment.hmr.ts](client/src/environments/environment.hmr.ts) file by replacing the `localhost` in the `apiUrl` field with the address of your VPS. Thus, the [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/) from Webpack will be set up for developping with live-reload.
+
+Next, you will need to edit the [config/default.yaml](config/default.yaml) file. Just replace the `localhost` with your VPS address in the following `hostname` fields :
+```
+listen:
+  hostname: 'my-vps-address.net'
+  port: 9000
+
+webserver:
+  https: false
+  hostname: 'my-vps-address.net'
+  port: 9000
+```
+
+Then, you just need to listen to `https://my-vps-address.net:3000/` in your web browser.
+
 ### Federation
 
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
