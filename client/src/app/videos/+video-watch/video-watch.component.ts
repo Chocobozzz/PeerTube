@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/operators'
+import { catchError, debounceTime } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
@@ -6,7 +6,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, Subscription, fromEvent } from 'rxjs'
 // FIXME: something weird with our path definition in tsconfig and typings
 // @ts-ignore
 import videojs from 'video.js'
@@ -61,6 +61,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   hasAlreadyAcceptedPrivacyConcern = false
   remoteServerDown = false
   hotkeys: Hotkey[]
+  playerPopedOut = false
 
   private videojsLocaleLoaded = false
   private paramsSub: Subscription
@@ -140,6 +141,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }, undefined, this.i18n('Subscribe to the account'))
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+
+    fromEvent(window, 'scroll')
+      .pipe(debounceTime(250))
+      .subscribe(() => this.onScroll())
   }
 
   ngOnDestroy () {
@@ -532,6 +537,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.player) {
       this.player.dispose()
       this.player = undefined
+    }
+  }
+
+  private onScroll () {
+    const playerElementWrapper = this.elementRef.nativeElement.querySelector('#video-element-wrapper')
+    const position = playerElementWrapper.getBoundingClientRect()
+
+    if (position.bottom <= 150 && !this.playerPopedOut) {
+      this.playerPopedOut = true
+      playerElementWrapper.classList.add('video-element-wrapper-popup')
+    } else if (window.pageYOffset <= 150 && this.playerPopedOut) {
+      this.playerPopedOut = false
+      playerElementWrapper.classList.remove('video-element-wrapper-popup')
     }
   }
 }

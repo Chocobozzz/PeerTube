@@ -64,6 +64,18 @@ $other-videos-width: 260px;
   }
 }
 
+.video-element-wrapper-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 30;
+
+  /deep/ .video-js {
+    width: 280px !important;
+    height: 160px !important;
+  }
+}
+
 .alert {
   text-align: center;
 }
