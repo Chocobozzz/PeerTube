@@ -478,6 +478,7 @@ describe('Test users', function () {
       userId,
       accessToken,
       email: 'updated2@example.com',
+      emailVerified: true,
       videoQuota: 42,
       role: UserRole.MODERATOR
     })
@@ -487,6 +488,7 @@ describe('Test users', function () {
 
     expect(user.username).to.equal('user_1')
     expect(user.email).to.equal('updated2@example.com')
+    expect(user.emailVerified).to.be.true
     expect(user.nsfwPolicy).to.equal('do_not_list')
     expect(user.videoQuota).to.equal(42)
     expect(user.roleLabel).to.equal('Moderator')
