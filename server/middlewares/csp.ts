@@ -16,8 +16,7 @@ const baseDirectives = {
   manifestSrc: ["'self'"],
   frameSrc: ["'self'"], // instead of deprecated child-src / self because of test-embed
   workerSrc: ["'self'"], // instead of deprecated child-src
-  upgradeInsecureRequests: true,
-  blockAllMixedContent: true
+  upgradeInsecureRequests: true
 }
 
 const baseCSP = helmet.contentSecurityPolicy({
