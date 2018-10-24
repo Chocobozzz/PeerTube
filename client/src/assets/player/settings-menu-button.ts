@@ -182,7 +182,7 @@ class SettingsButton extends Button {
   }
 
   addMenuItem (entry: any, options: any) {
-    const openSubMenu = function () {
+    const openSubMenu = function (this: any) {
       if (videojsUntyped.dom.hasClass(this.el_, 'open')) {
         videojsUntyped.dom.removeClass(this.el_, 'open')
       } else {

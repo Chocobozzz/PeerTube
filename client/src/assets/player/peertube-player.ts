@@ -213,7 +213,7 @@ function addContextMenu (player: any, videoEmbedUrl: string) {
       {
         label: player.localize('Copy the video URL at the current time'),
         listener: function () {
-          const player = this
+          const player = this as Player
           copyToClipboard(buildVideoLink(player.currentTime()))
         }
       },
@@ -226,7 +226,7 @@ function addContextMenu (player: any, videoEmbedUrl: string) {
       {
         label: player.localize('Copy magnet URI'),
         listener: function () {
-          const player = this
+          const player = this as Player
           copyToClipboard(player.peertube().getCurrentVideoFile().magnetUri)
         }
       }

@@ -41,7 +41,7 @@ export class LinkifierService {
     const TT_UNDERSCORE = TT.UNDERSCORE
     const TT_DOT = TT.DOT
 
-    function MENTION (value: any) {
+    function MENTION (this: any, value: any) {
       this.v = value
     }
 
