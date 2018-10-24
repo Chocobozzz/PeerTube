@@ -1,6 +1,6 @@
 # Welcome to the contributing guide for PeerTube
 
-Interesting in contributing? Awesome!
+Interested in contributing? Awesome!
 
 **Quick Links:**
 
