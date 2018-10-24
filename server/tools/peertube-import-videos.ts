@@ -10,6 +10,7 @@ import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo 
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
+import { sha256 } from '../helpers/core-utils'
 import { safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { getSettings, netrc } from './cli'
 
@@ -133,8 +134,7 @@ async function run (user, url: string) {
       await processVideo(info, program['language'], processOptions.cwd, url, user)
     }
 
-    // https://www.youtube.com/watch?v=2Upx39TBc1s
-    console.log('I\'m finished!')
+    console.log('Video/s for user %s imported: %s', program['username'], program['targetUrl'])
     process.exit(0)
   })
 }
@@ -155,7 +155,7 @@ function processVideo (info: any, languageCode: string, cwd: string, url: string
       return res()
     }
 
-    const path = join(cwd, new Date().getTime() + '.mp4')
+    const path = join(cwd, sha256(videoInfo.url) + '.mp4')
 
     console.log('Downloading video "%s"...', videoInfo.title)
 
@@ -192,7 +192,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
 
   let thumbnailfile
   if (videoInfo.thumbnail) {
-    thumbnailfile = join(cwd, 'thumbnail.jpg')
+    thumbnailfile = join(cwd, sha256(videoInfo.thumbnail) + '.jpg')
 
     await doRequestAndSaveToFile({
       method: 'GET',
