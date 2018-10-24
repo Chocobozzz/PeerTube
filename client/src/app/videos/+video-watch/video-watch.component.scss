@@ -64,11 +64,21 @@ $other-videos-width: 260px;
   }
 }
 
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .video-element-wrapper-popup {
   position: fixed;
   bottom: 20px;
   right: 20px;
   z-index: 30;
+  animation: fade 1.5s;
   box-shadow: 0 5px 10px 0 rgba(0,0,0,.3),0 1px 8px -3px rgba(0,0,0,.26),0 2px 16px 0 rgba(0,0,0,.28);
 
   /deep/ .video-js {
