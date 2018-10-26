@@ -25,5 +25,10 @@
     i18n-labelText labelText="Automatically plays video"
   ></my-peertube-checkbox>
 
+  <my-peertube-checkbox
+    inputName="pipPlayer" formControlName="pipPlayer"
+    i18n-labelText labelText="Open small player on scroll down"
+  ></my-peertube-checkbox>
+
   <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
 </form>

@@ -1,4 +1,4 @@
-import { catchError, debounceTime } from 'rxjs/operators'
+import { catchError } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
@@ -142,9 +142,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
 
-    fromEvent(window, 'scroll')
-      .pipe(debounceTime(250))
-      .subscribe(() => this.onScroll())
+    if (this.user.pipPlayer) {
+      fromEvent(window, 'scroll')
+      .pipe().subscribe(() => this.onScroll())
+    }
   }
 
   ngOnDestroy () {
