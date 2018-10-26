@@ -371,6 +371,7 @@ export class UserModel extends Model<UserModel> {
       nsfwPolicy: this.nsfwPolicy,
       webTorrentEnabled: this.webTorrentEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      pipPlayer: this.pipPlayer,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
