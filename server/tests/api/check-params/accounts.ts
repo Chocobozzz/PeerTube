@@ -2,9 +2,13 @@
 
 import 'mocha'
 
-import { flushTests, killallServers, runServer, ServerInfo } from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getAccount } from '../../utils/users/accounts'
+import { flushTests, killallServers, runServer, ServerInfo } from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { getAccount } from '../../../../shared/utils/users/accounts'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/accounts/'

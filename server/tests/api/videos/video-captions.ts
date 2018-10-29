@@ -2,10 +2,17 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { checkVideoFilesWereRemoved, doubleFollow, flushAndRunMultipleServers, removeVideo, uploadVideo, wait } from '../../utils'
-import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
-import { waitJobs } from '../../utils/server/jobs'
-import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
+import {
+  checkVideoFilesWereRemoved,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  removeVideo,
+  uploadVideo,
+  wait
+} from '../../../../shared/utils'
+import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/utils/index'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../../../shared/utils/videos/video-captions'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect

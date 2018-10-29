@@ -8,9 +8,13 @@ import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enu
 import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
   makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, runServer, ServerInfo, setAccessTokensToServers, userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getAccountsList } from '../../utils/users/accounts'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { getAccountsList } from '../../../../shared/utils/users/accounts'
 
 const expect = chai.expect
 

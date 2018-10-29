@@ -32,10 +32,10 @@ import {
   updateUser,
   uploadVideo,
   userLogin
-} from '../../utils/index'
-import { follow } from '../../utils/server/follows'
-import { setAccessTokensToServers } from '../../utils/users/login'
-import { getMyVideos } from '../../utils/videos/videos'
+} from '../../../../shared/utils/index'
+import { follow } from '../../../../shared/utils/server/follows'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
+import { getMyVideos } from '../../../../shared/utils/videos/videos'
 
 const expect = chai.expect
 

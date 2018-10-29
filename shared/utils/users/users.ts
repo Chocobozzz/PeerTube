@@ -1,8 +1,8 @@
 import * as request from 'supertest'
 import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../'
 
-import { UserRole } from '../../../../shared/index'
-import { NSFWPolicyType } from '../../../../shared/models/videos/nsfw-policy.type'
+import { UserRole } from '../../index'
+import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
 
 function createUser (
   url: string,

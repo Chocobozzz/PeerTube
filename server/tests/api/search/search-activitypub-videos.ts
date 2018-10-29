@@ -16,8 +16,8 @@ import {
   uploadVideo,
   wait,
   searchVideo
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect

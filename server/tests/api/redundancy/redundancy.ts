@@ -18,15 +18,15 @@ import {
   wait,
   waitUntilLog,
   checkVideoFilesWereRemoved, removeVideo
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import * as magnetUtil from 'magnet-uri'
-import { updateRedundancy } from '../../utils/server/redundancy'
+import { updateRedundancy } from '../../../../shared/utils/server/redundancy'
 import { ActorFollow } from '../../../../shared/models/actors'
 import { readdir } from 'fs-extra'
 import { join } from 'path'
 import { VideoRedundancyStrategy } from '../../../../shared/models/redundancy'
-import { getStats } from '../../utils/server/stats'
+import { getStats } from '../../../../shared/utils/server/stats'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
 
 const expect = chai.expect

@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { flushTests, killallServers, makeGetRequest, runServer, ServerInfo } from './utils'
+import { flushTests, killallServers, makeGetRequest, runServer, ServerInfo } from '../../shared/utils'
 
 const expect = chai.expect
 

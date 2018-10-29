@@ -9,11 +9,15 @@ import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
   makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
   updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../utils/videos/video-imports'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/utils/videos/video-imports'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { waitJobs } from '../../utils/server/jobs'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { expect } from 'chai'
 
 describe('Test users API validators', function () {

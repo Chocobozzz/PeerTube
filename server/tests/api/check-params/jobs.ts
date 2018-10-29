@@ -2,9 +2,21 @@
 
 import 'mocha'
 
-import { createUser, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, userLogin } from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { makeGetRequest } from '../../utils/requests/requests'
+import {
+  createUser,
+  flushTests,
+  killallServers,
+  runServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  userLogin
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { makeGetRequest } from '../../../../shared/utils/requests/requests'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'

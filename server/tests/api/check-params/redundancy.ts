@@ -12,7 +12,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../utils'
+} from '../../../../shared/utils'
 
 describe('Test server redundancy API validators', function () {
   let servers: ServerInfo[]
