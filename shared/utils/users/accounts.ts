@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { existsSync, readdir } from 'fs-extra'
 import { join } from 'path'
-import { Account } from '../../../../shared/models/actors'
+import { Account } from '../../models/actors'
 import { root } from '../index'
 import { makeGetRequest } from '../requests/requests'
 

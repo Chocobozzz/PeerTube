@@ -1,4 +1,4 @@
-import { VideoImportCreate } from '../../../../shared/models/videos'
+import { VideoImportCreate } from '../../models/videos'
 import { makeGetRequest, makeUploadRequest } from '..'
 
 function getYoutubeVideoUrl () {

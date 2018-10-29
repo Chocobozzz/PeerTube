@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared/models/videos'
+import { VideoChannelCreate, VideoChannelUpdate } from '../../models/videos'
 import { updateAvatarRequest } from '../index'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {

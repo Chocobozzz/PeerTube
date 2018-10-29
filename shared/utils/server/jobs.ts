@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { Job, JobState } from '../../../../shared/models'
+import { Job, JobState } from '../../models'
 import { ServerInfo, wait } from '../index'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {

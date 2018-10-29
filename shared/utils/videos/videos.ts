@@ -16,8 +16,8 @@ import {
   ServerInfo,
   testImage
 } from '../'
-import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
+import { VideoDetails, VideoPrivacy } from '../../models/videos'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
 
 type VideoAttributes = {
