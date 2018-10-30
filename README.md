@@ -75,7 +75,7 @@ Just upload your videos, and be sure they will stream anywhere. Add a descriptio
 
 <h3 align="right">Keep in touch with video creators</h3>
 <p align="right">
-Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma and plenty others), or just with good ol' RSS.
+Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma, and plenty others), or just with good ol' RSS.
 </p>
 
 ---
