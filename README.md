@@ -1,7 +1,7 @@
 <h1 align="center">
   <a href="https://joinpeertube.org">
-  <img src="https://joinpeertube.org/img/brand.png" alt="PeerTube">
-  <a>
+    <img src="https://joinpeertube.org/img/brand.png" alt="PeerTube">
+  </a>
 </h1>
 
 <p align=center>
