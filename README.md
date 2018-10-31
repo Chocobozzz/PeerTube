@@ -7,7 +7,7 @@
 <p align=center>
   <strong><a href="https://joinpeertube.org">Website</a></strong>
   | <strong><a href="https://instances.joinpeertube.org">Join an instance</a></strong>
-  | <strong><a href="#package-create-your-own-instance">Create one</a></strong>
+  | <strong><a href="#package-create-your-own-instance">Create an instance</a></strong>
   | <strong><a href="#contact">Chat with us</a></strong>
 </p>
 
