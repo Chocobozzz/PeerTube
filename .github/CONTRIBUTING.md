@@ -8,7 +8,7 @@ Interested in contributing? Awesome!
   * [Give your feedback](#give-your-feedback)
   * [Write documentation](#write-documentation)
   * [Develop](#develop)
-
+  * [Improve the website](#improve-the-website)
 
 ## Translate
 
@@ -35,6 +35,11 @@ Some hints:
  * Routes are defined in [/server/controllers/](/server/controllers/) directory
  * Parameters validators are defined in [/server/middlewares/validators](/server/middlewares/validators) directory
  * Models sent/received by the controllers are defined in [/shared/models](/shared/models) directory
+
+
+## Improve the website
+
+PeerTube's website is [joinpeertube.org](https://joinpeertube.org), where people can learn about the project and how it works – not that it is not a PeerTube instance, but more the “marketing website”. You can help us improve it too! It is not hosted on GitHub but rather on [Framasoft](https://framasoft.org/)'s own [GitLab](https://about.gitlab.com/) instance, [FramaGit](https://framagit.org): https://framagit.org/framasoft/peertube/joinpeertube
 
 
 ## Develop
