@@ -137,19 +137,23 @@ See the [production guide](/support/doc/production.md), which is the recommended
 
 See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
 
-:wrench: Contribute/Translate/Test
+:wrench: Contribute
 ----------------------------------------------------------------
 
-*Spoiler alert*: you don't need to be a coder to help!
+You don't need to be a coder to help!
 
-See the [contributing
-guide](/.github/CONTRIBUTING.md). Or simply join the cheerful bunch that makes our community:
+You can give us your feedback, report bugs, help us translate PeerTube, write documentation, and more. Check out the [contributing
+guide](/.github/CONTRIBUTING.md) to know how, it takes less than 2 minutes to get started. :wink:
 
-  * Chat<a name="contact"></a>:
-    * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
-    * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
-  * Forum:
-    * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
+You can also join the cheerful bunch that makes our community:
+
+* Chat<a name="contact"></a>:
+  * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
+  * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+* Forum:
+  * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
+    
+Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
 :book: Documentation
 ----------------------------------------------------------------
