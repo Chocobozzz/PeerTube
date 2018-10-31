@@ -121,22 +121,6 @@ enough because one video could become popular and overload the server.  That is
 why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make BitTorrent inside the web browser, as of today.
 
-:package: Create your own instance
-----------------------------------------------------------------
-
-#### Dependencies
-
-  * nginx
-  * **PostgreSQL >= 9.6**
-  * **Redis >= 2.8.18**
-  * **NodeJS >= 8.x**
-  * **yarn >= 1.x**
-  * **FFmpeg >= 3.x**
-
-See the [production guide](/support/doc/production.md), which is the recommended way.
-
-See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
-
 :raised_hands: Contributing
 ----------------------------------------------------------------
 
@@ -154,6 +138,22 @@ You can also join the cheerful bunch that makes our community:
   * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
     
 Feel free to reach out if you have any questions or ideas! :speech_balloon:
+
+:package: Create your own instance
+----------------------------------------------------------------
+
+#### Dependencies
+
+  * nginx
+  * **PostgreSQL >= 9.6**
+  * **Redis >= 2.8.18**
+  * **NodeJS >= 8.x**
+  * **yarn >= 1.x**
+  * **FFmpeg >= 3.x**
+
+See the [production guide](/support/doc/production.md), which is the recommended way.
+
+See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
 
 :book: Documentation
 ----------------------------------------------------------------
