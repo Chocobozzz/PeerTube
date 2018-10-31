@@ -137,7 +137,7 @@ See the [production guide](/support/doc/production.md), which is the recommended
 
 See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
 
-:wrench: Contribute
+:raised_hands: Contributing
 ----------------------------------------------------------------
 
 You don't need to be a coder to help!
