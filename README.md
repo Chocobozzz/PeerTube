@@ -60,6 +60,23 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
   </a>
 </p>
 
+Introduction
+----------------------------------------------------------------
+
+PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper:
+
+PeerTube is a software that enables the creation of a network of multiple small interconnected video hosting providers, called instances. :movie_camera: :globe_with_meridians:
+
+To learn more, see:
+
+* This [two-minute video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what PeerTube is and how it works (hosted on PeerTube, of course :wink:)
+* PeerTube's Website, [joinpeertube.org](https://joinpeertube.org)
+* Demonstration instances:
+  * [peertube.cpy.re](https://peertube.cpy.re)
+  * [peertube2.cpy.re](https://peertube2.cpy.re)
+  * [peertube3.cpy.re](https://peertube3.cpy.re)
+* This [video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) demonstrating the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon) (decentralized Twitter alternative)
+
 :sparkles: Features
 ----------------------------------------------------------------
 
@@ -96,17 +113,6 @@ In addition to visitors using WebTorrent to share the load among them, instances
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
 </p>
-
----
-
-Want to see it in action?
-
-   * Demonstration servers:
-     * [peertube.cpy.re](https://peertube.cpy.re)
-     * [peertube2.cpy.re](https://peertube2.cpy.re)
-     * [peertube3.cpy.re](https://peertube3.cpy.re)
-   * [Video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what PeerTube is
-   * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) showing the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
 
 :question: Motivation
 ----------------------------------------------------------------
