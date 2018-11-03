@@ -31,6 +31,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { VideoCaptionService } from '@app/shared/video-caption'
+// import { RecentVideosRecommendationService } from '@app/videos/recommendations/recent-videos-recommendation.service'
 
 @Component({
   selector: 'my-video-watch',
@@ -84,6 +85,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
     private hotkeysService: HotkeysService,
+    // private recommendations: RecentVideosRecommendationService,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -438,6 +440,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videojs(this.playerElement, videojsOptions, function (this: videojs.Player) {
         self.player = this
         this.on('customError', ({ err }: { err: any }) => self.handleError(err))
+        // if (autoplayNext)
+        this.on('ended', self.autoplayNext)
 
         addContextMenu(self.player, self.video.embedUrl)
       })
@@ -533,5 +537,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.dispose()
       this.player = undefined
     }
+  }
+
+  private autoplayNext () {
+    // console.log(this.recommendations.getRecommendations)
+    // s
+    // this.router.navigate([ '/videos/watch/9e711e03-8a6a-4bf0-a9b4-ca613f0c00ae' ])
   }
 }
