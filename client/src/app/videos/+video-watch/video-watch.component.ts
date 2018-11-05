@@ -6,7 +6,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, Subscription, Observable } from 'rxjs'
 // FIXME: something weird with our path definition in tsconfig and typings
 // @ts-ignore
 import videojs from 'video.js'
@@ -31,7 +31,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { VideoCaptionService } from '@app/shared/video-caption'
-// import { RecentVideosRecommendationService } from '@app/videos/recommendations/recent-videos-recommendation.service'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-video-watch',
@@ -63,6 +63,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
   hotkeys: Hotkey[]
 
+  private nextVideoUrl = ''
   private videojsLocaleLoaded = false
   private paramsSub: Subscription
 
@@ -85,7 +86,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
     private hotkeysService: HotkeysService,
-    // private recommendations: RecentVideosRecommendationService,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -325,6 +325,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.scheduledUpdate !== undefined
   }
 
+  onRecommendations (videos: Video[]) {
+    this.nextVideoUrl = videos[0].embedPath
+  }
+
   private updateVideoDescription (description: string) {
     this.video.description = description
     this.setVideoDescriptionHTML()
@@ -540,8 +544,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private autoplayNext () {
-    // console.log(this.recommendations.getRecommendations)
-    // s
+    console.log(this.nextVideoUrl)
     // this.router.navigate([ '/videos/watch/9e711e03-8a6a-4bf0-a9b4-ca613f0c00ae' ])
   }
 }
