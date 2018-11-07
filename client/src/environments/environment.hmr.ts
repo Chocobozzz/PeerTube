@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   hmr: true,
-  apiUrl: 'http://localhost:9000'
+  apiUrl: 'http://peertube-preprod.dmz.u-bourgogne.fr:9000'
 }

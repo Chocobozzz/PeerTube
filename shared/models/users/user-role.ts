@@ -4,11 +4,13 @@ import { UserRight } from './user-right.enum'
 export enum UserRole {
   ADMINISTRATOR = 0,
   MODERATOR = 1,
-  USER = 2
+  USER = 2,
+  VALIDATOR = 3
 }
 
 // TODO: use UserRole for key once https://github.com/Microsoft/TypeScript/issues/13042 is fixed
 export const USER_ROLE_LABELS: { [ id: number ]: string } = {
+  [UserRole.VALIDATOR]: 'Validator',
   [UserRole.USER]: 'User',
   [UserRole.MODERATOR]: 'Moderator',
   [UserRole.ADMINISTRATOR]: 'Administrator'
@@ -32,7 +34,8 @@ const userRoleRights: { [ id: number ]: UserRight[] } = {
     UserRight.MANAGE_SERVERS_BLOCKLIST
   ],
 
-  [UserRole.USER]: []
+  [UserRole.USER]: [],
+  [UserRole.VALIDATOR]: []
 }
 
 export function hasUserRight (userRole: UserRole, userRight: UserRight) {

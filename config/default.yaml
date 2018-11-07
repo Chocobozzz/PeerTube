@@ -1,12 +1,12 @@
 # /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
 
 listen:
-  hostname: '127.0.0.1'
+  hostname: 'peertube-preprod.dmz.u-bourgogne.fr'
   port: 9000
 
 webserver:
   https: false
-  hostname: 'localhost'
+  hostname: 'peertube-preprod.dmz.u-bourgogne.fr'
   port: 9000
 
 # Proxies to trust to get real client IP
