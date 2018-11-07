@@ -198,3 +198,4 @@ describe('Test syndication feeds', () => {
         });
     });
 });
+//# sourceMappingURL=feeds.js.map

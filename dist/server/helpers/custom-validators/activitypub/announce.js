@@ -7,3 +7,4 @@ function isAnnounceActivityValid(activity) {
             (activity.object && misc_1.isActivityPubUrlValid(activity.object.id)));
 }
 exports.isAnnounceActivityValid = isAnnounceActivityValid;
+//# sourceMappingURL=announce.js.map

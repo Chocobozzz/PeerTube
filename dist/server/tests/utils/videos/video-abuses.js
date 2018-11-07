@@ -44,3 +44,4 @@ function deleteVideoAbuse(url, token, videoId, videoAbuseId, statusCodeExpected 
     });
 }
 exports.deleteVideoAbuse = deleteVideoAbuse;
+//# sourceMappingURL=video-abuses.js.map

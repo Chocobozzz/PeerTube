@@ -260,3 +260,4 @@ function getActivityStreamDuration(duration) {
     return 'PT' + duration + 'S';
 }
 exports.getActivityStreamDuration = getActivityStreamDuration;
+//# sourceMappingURL=video-format-utils.js.map

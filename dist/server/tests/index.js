@@ -5,3 +5,4 @@ require("./activitypub");
 require("./feeds/");
 require("./cli/");
 require("./api/");
+//# sourceMappingURL=index.js.map

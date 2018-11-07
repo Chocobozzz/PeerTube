@@ -30,3 +30,4 @@ class RemoveOldJobsScheduler extends abstract_scheduler_1.AbstractScheduler {
     }
 }
 exports.RemoveOldJobsScheduler = RemoveOldJobsScheduler;
+//# sourceMappingURL=remove-old-jobs-scheduler.js.map

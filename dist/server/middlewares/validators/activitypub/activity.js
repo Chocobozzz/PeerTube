@@ -28,3 +28,4 @@ function activityPubValidator(req, res, next) {
     });
 }
 exports.activityPubValidator = activityPubValidator;
+//# sourceMappingURL=activity.js.map

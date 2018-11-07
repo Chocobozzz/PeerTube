@@ -13,3 +13,4 @@ function isDislikeActivityValid(activity) {
         misc_1.isActivityPubUrlValid(activity.object.object);
 }
 exports.isDislikeActivityValid = isDislikeActivityValid;
+//# sourceMappingURL=rate.js.map

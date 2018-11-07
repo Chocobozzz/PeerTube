@@ -145,3 +145,4 @@ describe('Test video privacy', function () {
         });
     });
 });
+//# sourceMappingURL=video-privacy.js.map

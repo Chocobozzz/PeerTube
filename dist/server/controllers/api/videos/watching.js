@@ -27,3 +27,4 @@ function userWatchVideo(req, res) {
         return res.type('json').status(204).end();
     });
 }
+//# sourceMappingURL=watching.js.map

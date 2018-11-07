@@ -74,3 +74,4 @@ function checkUndoActivity(activity) {
 function checkLikeActivity(activity) {
     return rate_1.isLikeActivityValid(activity);
 }
+//# sourceMappingURL=activity.js.map

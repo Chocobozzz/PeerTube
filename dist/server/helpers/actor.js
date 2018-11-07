@@ -8,3 +8,4 @@ function fetchActorByUrl(url, fetchType) {
         return actor_1.ActorModel.loadByUrl(url);
 }
 exports.fetchActorByUrl = fetchActorByUrl;
+//# sourceMappingURL=actor.js.map

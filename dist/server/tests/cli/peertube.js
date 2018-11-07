@@ -45,3 +45,4 @@ describe('Test CLI wrapper', function () {
         });
     });
 });
+//# sourceMappingURL=peertube.js.map

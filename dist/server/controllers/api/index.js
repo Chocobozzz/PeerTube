@@ -35,3 +35,4 @@ apiRouter.use('/*', express_utils_1.badRequest);
 function pong(req, res, next) {
     return res.send('pong').status(200).end();
 }
+//# sourceMappingURL=index.js.map

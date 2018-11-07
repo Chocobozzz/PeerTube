@@ -65,3 +65,4 @@ function isFileValid(files, mimeTypeRegex, field, maxSize, optional = false) {
     return new RegExp(`^${mimeTypeRegex}$`, 'i').test(file.mimetype);
 }
 exports.isFileValid = isFileValid;
+//# sourceMappingURL=misc.js.map

@@ -9,3 +9,4 @@ function makeActivityPubGetRequest(url, path) {
         .expect('Content-Type', /json/);
 }
 exports.makeActivityPubGetRequest = makeActivityPubGetRequest;
+//# sourceMappingURL=activitypub.js.map

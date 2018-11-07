@@ -277,3 +277,4 @@ describe('Test video comments API validator', function () {
         });
     });
 });
+//# sourceMappingURL=video-comments.js.map

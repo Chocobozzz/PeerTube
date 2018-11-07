@@ -38,3 +38,4 @@ function normalizeComment(comment) {
     }
     return;
 }
+//# sourceMappingURL=video-comments.js.map

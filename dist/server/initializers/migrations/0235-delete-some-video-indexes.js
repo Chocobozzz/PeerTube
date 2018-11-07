@@ -37,3 +37,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0235-delete-some-video-indexes.js.map

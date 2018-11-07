@@ -139,3 +139,4 @@ function changeForeignKey(q, sequelize, tableName, allowNull) {
         return sequelize.query(query);
     });
 }
+//# sourceMappingURL=0055-video-uuid.js.map

@@ -149,3 +149,4 @@ VideoChangeOwnershipModel = VideoChangeOwnershipModel_1 = __decorate([
     })
 ], VideoChangeOwnershipModel);
 exports.VideoChangeOwnershipModel = VideoChangeOwnershipModel;
+//# sourceMappingURL=video-change-ownership.js.map

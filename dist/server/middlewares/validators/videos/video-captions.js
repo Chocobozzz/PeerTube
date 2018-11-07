@@ -66,3 +66,4 @@ const listVideoCaptionsValidator = [
     })
 ];
 exports.listVideoCaptionsValidator = listVideoCaptionsValidator;
+//# sourceMappingURL=video-captions.js.map

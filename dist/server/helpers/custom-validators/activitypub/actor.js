@@ -116,3 +116,4 @@ function areValidActorHandles(handles) {
     return misc_1.isArray(handles) && handles.every(h => isValidActorHandle(h));
 }
 exports.areValidActorHandles = areValidActorHandles;
+//# sourceMappingURL=actor.js.map

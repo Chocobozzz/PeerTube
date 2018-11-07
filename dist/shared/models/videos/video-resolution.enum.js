@@ -35,3 +35,4 @@ function getMaxBitrate(resolution, fps, fpsTranscodingConstants) {
     return getTargetBitrate(resolution, fps, fpsTranscodingConstants) * 2;
 }
 exports.getMaxBitrate = getMaxBitrate;
+//# sourceMappingURL=video-resolution.enum.js.map

@@ -6,3 +6,4 @@ var VideoPrivacy;
     VideoPrivacy[VideoPrivacy["UNLISTED"] = 2] = "UNLISTED";
     VideoPrivacy[VideoPrivacy["PRIVATE"] = 3] = "PRIVATE";
 })(VideoPrivacy = exports.VideoPrivacy || (exports.VideoPrivacy = {}));
+//# sourceMappingURL=video-privacy.enum.js.map

@@ -328,3 +328,4 @@ describe('Test video channels API validator', function () {
         });
     });
 });
+//# sourceMappingURL=video-channels.js.map

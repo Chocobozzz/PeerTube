@@ -38,3 +38,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0200-video-published-at.js.map

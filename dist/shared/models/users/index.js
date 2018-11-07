@@ -5,3 +5,4 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./user-right.enum"));
 __export(require("./user-role"));
+//# sourceMappingURL=index.js.map

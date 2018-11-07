@@ -68,3 +68,4 @@ function buildDeleteActivity(url, object, byActor, audience) {
         return audience_1.audiencify(activity, audience);
     return activity;
 }
+//# sourceMappingURL=send-delete.js.map

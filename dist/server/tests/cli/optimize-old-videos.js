@@ -92,3 +92,4 @@ describe('Test optimize old videos', function () {
         });
     });
 });
+//# sourceMappingURL=optimize-old-videos.js.map

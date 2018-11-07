@@ -71,3 +71,4 @@ function createJSONString(obj) {
     Object.keys(strings).forEach(k => res[k] = strings[k].target);
     return JSON.stringify(res);
 }
+//# sourceMappingURL=xliff2json.js.map

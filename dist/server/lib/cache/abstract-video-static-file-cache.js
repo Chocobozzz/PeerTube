@@ -38,3 +38,4 @@ class AbstractVideoStaticFileCache {
     }
 }
 exports.AbstractVideoStaticFileCache = AbstractVideoStaticFileCache;
+//# sourceMappingURL=abstract-video-static-file-cache.js.map

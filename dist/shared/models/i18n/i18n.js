@@ -69,3 +69,4 @@ function buildFileLocale(locale) {
     return completeLocale.replace(/-/g, '_');
 }
 exports.buildFileLocale = buildFileLocale;
+//# sourceMappingURL=i18n.js.map

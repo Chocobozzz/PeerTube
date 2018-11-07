@@ -71,3 +71,4 @@ function removeFollow(req, res, next) {
         return res.status(204).end();
     });
 }
+//# sourceMappingURL=follows.js.map

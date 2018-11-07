@@ -50,3 +50,4 @@ function setAccessTokensToServers(servers) {
     return Promise.all(tasks);
 }
 exports.setAccessTokensToServers = setAccessTokensToServers;
+//# sourceMappingURL=login.js.map

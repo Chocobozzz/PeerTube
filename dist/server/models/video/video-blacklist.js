@@ -124,3 +124,4 @@ VideoBlacklistModel = VideoBlacklistModel_1 = __decorate([
     })
 ], VideoBlacklistModel);
 exports.VideoBlacklistModel = VideoBlacklistModel;
+//# sourceMappingURL=video-blacklist.js.map

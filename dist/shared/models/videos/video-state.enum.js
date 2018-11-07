@@ -6,3 +6,4 @@ var VideoState;
     VideoState[VideoState["TO_TRANSCODE"] = 2] = "TO_TRANSCODE";
     VideoState[VideoState["TO_IMPORT"] = 3] = "TO_IMPORT";
 })(VideoState = exports.VideoState || (exports.VideoState = {}));
+//# sourceMappingURL=video-state.enum.js.map

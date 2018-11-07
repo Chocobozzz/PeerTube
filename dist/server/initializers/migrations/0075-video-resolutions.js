@@ -43,3 +43,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0075-video-resolutions.js.map

@@ -225,3 +225,4 @@ describe('Test video blacklist API validators', function () {
         });
     });
 });
+//# sourceMappingURL=video-blacklist.js.map

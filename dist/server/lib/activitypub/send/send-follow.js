@@ -23,3 +23,4 @@ function buildFollowActivity(url, byActor, targetActor) {
     };
 }
 exports.buildFollowActivity = buildFollowActivity;
+//# sourceMappingURL=send-follow.js.map

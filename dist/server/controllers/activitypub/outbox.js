@@ -58,3 +58,4 @@ function buildActivities(actor, start, count) {
         };
     });
 }
+//# sourceMappingURL=outbox.js.map

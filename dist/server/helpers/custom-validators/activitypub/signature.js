@@ -14,3 +14,4 @@ function isSignatureValueValid(signatureValue) {
     return misc_1.exists(signatureValue) && signatureValue.length > 0;
 }
 exports.isSignatureValueValid = isSignatureValueValid;
+//# sourceMappingURL=signature.js.map

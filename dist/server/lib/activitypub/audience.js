@@ -74,3 +74,4 @@ function audiencify(object, audience) {
     return Object.assign(object, audience);
 }
 exports.audiencify = audiencify;
+//# sourceMappingURL=audience.js.map

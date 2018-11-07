@@ -33,3 +33,4 @@ function updateActorAvatarFile(avatarPhysicalFile, accountOrChannel) {
     });
 }
 exports.updateActorAvatarFile = updateActorAvatarFile;
+//# sourceMappingURL=avatar.js.map

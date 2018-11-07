@@ -45,3 +45,4 @@ function token(req, res, next) {
     });
 }
 exports.token = token;
+//# sourceMappingURL=oauth.js.map

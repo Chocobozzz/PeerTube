@@ -82,3 +82,4 @@ function getUndoActivityPubUrl(originalUrl) {
     return originalUrl + '/undo';
 }
 exports.getUndoActivityPubUrl = getUndoActivityPubUrl;
+//# sourceMappingURL=url.js.map

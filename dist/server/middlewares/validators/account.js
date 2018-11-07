@@ -36,3 +36,4 @@ const accountsNameWithHostGetValidator = [
     })
 ];
 exports.accountsNameWithHostGetValidator = accountsNameWithHostGetValidator;
+//# sourceMappingURL=account.js.map

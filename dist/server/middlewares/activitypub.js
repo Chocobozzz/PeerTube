@@ -98,3 +98,4 @@ function checkJsonLDSignature(req, res) {
         return true;
     });
 }
+//# sourceMappingURL=activitypub.js.map

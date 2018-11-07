@@ -119,3 +119,4 @@ function undoShareByVideoChannel(video, oldVideoChannel, t) {
         yield oldShare.destroy({ transaction: t });
     });
 }
+//# sourceMappingURL=share.js.map

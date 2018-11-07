@@ -34,3 +34,4 @@ function buildLikeActivity(url, byActor, video, audience) {
     }, audience);
 }
 exports.buildLikeActivity = buildLikeActivity;
+//# sourceMappingURL=send-like.js.map

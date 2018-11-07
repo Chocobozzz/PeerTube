@@ -145,3 +145,4 @@ function sendVideoRelatedCreateActivity(options) {
         return utils_1.sendVideoRelatedActivity(activityBuilder, options);
     });
 }
+//# sourceMappingURL=send-create.js.map

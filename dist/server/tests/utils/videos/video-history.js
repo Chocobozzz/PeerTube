@@ -7,3 +7,4 @@ function userWatchVideo(url, token, videoId, currentTime) {
     return requests_1.makePutBodyRequest({ url, path, token, fields, statusCodeExpected: 204 });
 }
 exports.userWatchVideo = userWatchVideo;
+//# sourceMappingURL=video-history.js.map

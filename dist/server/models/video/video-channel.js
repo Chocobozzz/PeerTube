@@ -414,3 +414,4 @@ VideoChannelModel = VideoChannelModel_1 = __decorate([
     })
 ], VideoChannelModel);
 exports.VideoChannelModel = VideoChannelModel;
+//# sourceMappingURL=video-channel.js.map

@@ -27,6 +27,7 @@
 /*.sublime-project
 /*.sublime-workspace
 /**/.idea
+/dist
 /PeerTube.iml
 
 # Zanata

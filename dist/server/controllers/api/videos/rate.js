@@ -65,3 +65,4 @@ function rateVideo(req, res) {
         return res.type('json').status(204).end();
     });
 }
+//# sourceMappingURL=rate.js.map

@@ -33,3 +33,4 @@ function createVideoChannel(videoChannelInfo, account, t) {
     });
 }
 exports.createVideoChannel = createVideoChannel;
+//# sourceMappingURL=video-channel.js.map

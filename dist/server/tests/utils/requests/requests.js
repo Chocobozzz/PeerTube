@@ -117,3 +117,4 @@ function updateAvatarRequest(options) {
     });
 }
 exports.updateAvatarRequest = updateAvatarRequest;
+//# sourceMappingURL=requests.js.map

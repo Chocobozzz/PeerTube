@@ -46,3 +46,4 @@ function inboxController(req, res, next) {
     });
     return res.status(204).end();
 }
+//# sourceMappingURL=inbox.js.map

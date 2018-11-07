@@ -9,3 +9,4 @@ function isValidVideoCommentText(value) {
     return value === null || validator.isLength(value, VIDEO_COMMENTS_CONSTRAINTS_FIELDS.TEXT);
 }
 exports.isValidVideoCommentText = isValidVideoCommentText;
+//# sourceMappingURL=video-comments.js.map

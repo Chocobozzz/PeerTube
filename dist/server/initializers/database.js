@@ -143,3 +143,4 @@ $func$  LANGUAGE sql IMMUTABLE;`;
         return sequelizeTypescript.query(query, { raw: true });
     });
 }
+//# sourceMappingURL=database.js.map

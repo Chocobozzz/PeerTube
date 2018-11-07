@@ -105,3 +105,4 @@ describe('Test videos history', function () {
         });
     });
 });
+//# sourceMappingURL=videos-history.js.map

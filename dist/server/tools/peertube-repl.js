@@ -75,3 +75,4 @@ start().then((data) => {
 }).catch((err) => {
     console.error(err);
 });
+//# sourceMappingURL=peertube-repl.js.map

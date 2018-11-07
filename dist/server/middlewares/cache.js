@@ -61,3 +61,4 @@ function cacheRoute(lifetimeArg) {
     };
 }
 exports.cacheRoute = cacheRoute;
+//# sourceMappingURL=cache.js.map

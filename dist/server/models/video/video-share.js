@@ -210,3 +210,4 @@ VideoShareModel = VideoShareModel_1 = __decorate([
     })
 ], VideoShareModel);
 exports.VideoShareModel = VideoShareModel;
+//# sourceMappingURL=video-share.js.map

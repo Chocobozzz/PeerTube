@@ -18,3 +18,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0145-delete-author.js.map

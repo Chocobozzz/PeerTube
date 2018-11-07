@@ -72,3 +72,4 @@ function getNewestFile(files, basePath) {
     out.sort((a, b) => b.mtime - a.mtime);
     return (out.length > 0) ? out[0].file : '';
 }
+//# sourceMappingURL=parse-log.js.map

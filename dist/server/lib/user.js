@@ -67,3 +67,4 @@ function createApplicationActor(applicationId) {
     });
 }
 exports.createApplicationActor = createApplicationActor;
+//# sourceMappingURL=user.js.map

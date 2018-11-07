@@ -16,3 +16,4 @@ function isWebfingerLocalResourceValid(value) {
     return core_utils_1.sanitizeHost(host, initializers_1.REMOTE_SCHEME.HTTP) === initializers_1.CONFIG.WEBSERVER.HOST;
 }
 exports.isWebfingerLocalResourceValid = isWebfingerLocalResourceValid;
+//# sourceMappingURL=webfinger.js.map

@@ -64,3 +64,4 @@ const videoImportAddValidator = videos_1.getCommonVideoAttributes().concat([
     })
 ]);
 exports.videoImportAddValidator = videoImportAddValidator;
+//# sourceMappingURL=video-imports.js.map

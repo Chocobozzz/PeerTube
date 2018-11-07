@@ -17,3 +17,4 @@ const updateAvatarValidator = [
     }
 ];
 exports.updateAvatarValidator = updateAvatarValidator;
+//# sourceMappingURL=avatar.js.map

@@ -17,3 +17,4 @@ function fetchVideoByUrl(url, fetchType) {
         return video_1.VideoModel.loadByUrl(url);
 }
 exports.fetchVideoByUrl = fetchVideoByUrl;
+//# sourceMappingURL=video.js.map

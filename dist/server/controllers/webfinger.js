@@ -21,3 +21,4 @@ function webfingerController(req, res, next) {
     };
     return res.json(json).end();
 }
+//# sourceMappingURL=webfinger.js.map

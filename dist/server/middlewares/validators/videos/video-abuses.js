@@ -64,3 +64,4 @@ const videoAbuseUpdateValidator = [
     })
 ];
 exports.videoAbuseUpdateValidator = videoAbuseUpdateValidator;
+//# sourceMappingURL=video-abuses.js.map

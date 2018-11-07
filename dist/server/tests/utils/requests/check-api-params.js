@@ -32,3 +32,4 @@ function checkBadSortPagination(url, path, token, query = {}) {
     });
 }
 exports.checkBadSortPagination = checkBadSortPagination;
+//# sourceMappingURL=check-api-params.js.map

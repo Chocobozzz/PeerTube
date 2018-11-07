@@ -37,3 +37,4 @@ function buildAcceptActivity(url, byActor, followActivityData) {
         object: followActivityData
     };
 }
+//# sourceMappingURL=send-accept.js.map

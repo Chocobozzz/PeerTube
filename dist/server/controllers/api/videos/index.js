@@ -323,3 +323,4 @@ function removeVideo(req, res) {
         return res.type('json').status(204).end();
     });
 }
+//# sourceMappingURL=index.js.map

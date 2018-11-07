@@ -86,3 +86,4 @@ const bunyanLogger = {
     fatal: bunyanLogFactory('error')
 };
 exports.bunyanLogger = bunyanLogger;
+//# sourceMappingURL=logger.js.map

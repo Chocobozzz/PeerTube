@@ -26,3 +26,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0225-video-fps.js.map

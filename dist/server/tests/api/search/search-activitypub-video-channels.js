@@ -176,3 +176,4 @@ describe('Test a ActivityPub video channels search', function () {
         });
     });
 });
+//# sourceMappingURL=search-activitypub-video-channels.js.map

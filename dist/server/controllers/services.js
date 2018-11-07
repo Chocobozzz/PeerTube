@@ -49,3 +49,4 @@ function generateOEmbed(req, res, next) {
 function redirectToAccountUrl(req, res, next) {
     return res.redirect(res.locals.account.Actor.url);
 }
+//# sourceMappingURL=services.js.map

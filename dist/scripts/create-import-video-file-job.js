@@ -45,3 +45,4 @@ function run() {
         console.log('Import job for video %s created.', video.uuid);
     });
 }
+//# sourceMappingURL=create-import-video-file-job.js.map

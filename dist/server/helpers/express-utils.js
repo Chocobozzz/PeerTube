@@ -97,3 +97,4 @@ function isUserAbleToSearchRemoteURI(res) {
         (initializers_1.CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined);
 }
 exports.isUserAbleToSearchRemoteURI = isUserAbleToSearchRemoteURI;
+//# sourceMappingURL=express-utils.js.map

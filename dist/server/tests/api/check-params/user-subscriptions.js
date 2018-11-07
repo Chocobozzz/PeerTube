@@ -308,3 +308,4 @@ describe('Test user subscriptions API validators', function () {
         });
     });
 });
+//# sourceMappingURL=user-subscriptions.js.map

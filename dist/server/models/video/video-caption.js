@@ -179,3 +179,4 @@ VideoCaptionModel = VideoCaptionModel_1 = __decorate([
     })
 ], VideoCaptionModel);
 exports.VideoCaptionModel = VideoCaptionModel;
+//# sourceMappingURL=video-caption.js.map

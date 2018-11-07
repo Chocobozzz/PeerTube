@@ -8,3 +8,4 @@ function isViewActivityValid(activity) {
         misc_1.isActivityPubUrlValid(activity.object.object);
 }
 exports.isViewActivityValid = isViewActivityValid;
+//# sourceMappingURL=view.js.map

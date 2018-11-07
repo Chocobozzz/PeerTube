@@ -529,3 +529,4 @@ ActorFollowModel = ActorFollowModel_1 = __decorate([
     })
 ], ActorFollowModel);
 exports.ActorFollowModel = ActorFollowModel;
+//# sourceMappingURL=actor-follow.js.map

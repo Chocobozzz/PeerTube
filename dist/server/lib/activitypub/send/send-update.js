@@ -76,3 +76,4 @@ function buildUpdateActivity(url, byActor, object, audience) {
         object: audience_1.audiencify(object, audience)
     }, audience);
 }
+//# sourceMappingURL=send-update.js.map

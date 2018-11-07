@@ -58,3 +58,4 @@ function deleteVideoComment(url, token, videoId, commentId, statusCodeExpected =
     });
 }
 exports.deleteVideoComment = deleteVideoComment;
+//# sourceMappingURL=video-comments.js.map

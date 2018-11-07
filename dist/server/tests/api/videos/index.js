@@ -19,3 +19,4 @@ require("./video-transcoder");
 require("./videos-filter");
 require("./videos-history");
 require("./videos-overview");
+//# sourceMappingURL=index.js.map

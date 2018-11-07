@@ -76,3 +76,4 @@ function signJsonLDObject(byActor, data) {
     return custom_jsonld_signature_1.jsig.promises.sign(data, options);
 }
 exports.signJsonLDObject = signJsonLDObject;
+//# sourceMappingURL=peertube-crypto.js.map

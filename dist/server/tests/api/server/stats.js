@@ -87,3 +87,4 @@ describe('Test stats (excluding redundancy)', function () {
         });
     });
 });
+//# sourceMappingURL=stats.js.map

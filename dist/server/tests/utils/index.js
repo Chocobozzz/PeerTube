@@ -21,3 +21,4 @@ __export(require("./videos/videos"));
 __export(require("./videos/video-change-ownership"));
 __export(require("./feeds/feeds"));
 __export(require("./search/videos"));
+//# sourceMappingURL=index.js.map

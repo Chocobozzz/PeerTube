@@ -81,3 +81,4 @@ function deleteDownloadedFile(downloadedFile) {
     fs_extra_1.remove(toRemovePath)
         .catch(err => logger_1.logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }));
 }
+//# sourceMappingURL=webtorrent.js.map

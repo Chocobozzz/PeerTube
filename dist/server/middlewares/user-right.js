@@ -19,3 +19,4 @@ function ensureUserHasRight(userRight) {
     };
 }
 exports.ensureUserHasRight = ensureUserHasRight;
+//# sourceMappingURL=user-right.js.map

@@ -128,3 +128,4 @@ VideoFileModel = VideoFileModel_1 = __decorate([
     })
 ], VideoFileModel);
 exports.VideoFileModel = VideoFileModel;
+//# sourceMappingURL=video-file.js.map

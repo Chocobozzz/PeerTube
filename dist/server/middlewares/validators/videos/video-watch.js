@@ -28,3 +28,4 @@ const videoWatchingValidator = [
     })
 ];
 exports.videoWatchingValidator = videoWatchingValidator;
+//# sourceMappingURL=video-watch.js.map

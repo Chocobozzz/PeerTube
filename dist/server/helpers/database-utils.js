@@ -41,3 +41,4 @@ function resetSequelizeInstance(instance, savedFields) {
     });
 }
 exports.resetSequelizeInstance = resetSequelizeInstance;
+//# sourceMappingURL=database-utils.js.map

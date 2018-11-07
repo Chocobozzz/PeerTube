@@ -11,3 +11,4 @@ serverRouter.use('/', follows_1.serverFollowsRouter);
 serverRouter.use('/', redundancy_1.serverRedundancyRouter);
 serverRouter.use('/', stats_1.statsRouter);
 serverRouter.use('/', server_blocklist_1.serverBlocklistRouter);
+//# sourceMappingURL=index.js.map

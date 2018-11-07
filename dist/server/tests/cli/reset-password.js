@@ -35,3 +35,4 @@ describe('Test reset password scripts', function () {
         });
     });
 });
+//# sourceMappingURL=reset-password.js.map

@@ -74,3 +74,4 @@ UserVideoHistoryModel = __decorate([
     })
 ], UserVideoHistoryModel);
 exports.UserVideoHistoryModel = UserVideoHistoryModel;
+//# sourceMappingURL=user-video-history.js.map

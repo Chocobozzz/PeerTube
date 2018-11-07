@@ -28,3 +28,4 @@ const videoChannelsSearchValidator = [
     }
 ];
 exports.videoChannelsSearchValidator = videoChannelsSearchValidator;
+//# sourceMappingURL=search.js.map

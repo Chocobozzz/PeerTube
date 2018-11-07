@@ -106,3 +106,4 @@ describe('Test create transcoding jobs', function () {
         });
     });
 });
+//# sourceMappingURL=create-transcoding-job.js.map

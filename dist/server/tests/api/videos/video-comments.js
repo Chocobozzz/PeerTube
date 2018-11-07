@@ -177,3 +177,4 @@ describe('Test video comments', function () {
         });
     });
 });
+//# sourceMappingURL=video-comments.js.map

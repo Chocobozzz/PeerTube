@@ -122,3 +122,4 @@ AccountBlocklistModel = AccountBlocklistModel_1 = __decorate([
     })
 ], AccountBlocklistModel);
 exports.AccountBlocklistModel = AccountBlocklistModel;
+//# sourceMappingURL=account-blocklist.js.map

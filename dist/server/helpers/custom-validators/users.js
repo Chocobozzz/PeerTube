@@ -70,3 +70,4 @@ function isAvatarFile(files) {
     return misc_1.isFileValid(files, avatarMimeTypesRegex, 'avatarfile', initializers_1.CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max);
 }
 exports.isAvatarFile = isAvatarFile;
+//# sourceMappingURL=users.js.map

@@ -32,3 +32,4 @@ function processActivityPubHttpFetcher(job) {
     });
 }
 exports.processActivityPubHttpFetcher = processActivityPubHttpFetcher;
+//# sourceMappingURL=activitypub-http-fetcher.js.map

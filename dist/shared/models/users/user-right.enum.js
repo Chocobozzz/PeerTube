@@ -19,3 +19,4 @@ var UserRight;
     UserRight[UserRight["SEE_ALL_VIDEOS"] = 14] = "SEE_ALL_VIDEOS";
     UserRight[UserRight["CHANGE_VIDEO_OWNERSHIP"] = 15] = "CHANGE_VIDEO_OWNERSHIP";
 })(UserRight = exports.UserRight || (exports.UserRight = {}));
+//# sourceMappingURL=user-right.enum.js.map

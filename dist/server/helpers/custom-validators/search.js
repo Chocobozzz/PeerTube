@@ -15,3 +15,4 @@ function isNSFWQueryValid(value) {
     return value === 'true' || value === 'false' || value === 'both';
 }
 exports.isNSFWQueryValid = isNSFWQueryValid;
+//# sourceMappingURL=search.js.map

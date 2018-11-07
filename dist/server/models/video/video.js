@@ -1361,3 +1361,4 @@ VideoModel = VideoModel_1 = __decorate([
     })
 ], VideoModel);
 exports.VideoModel = VideoModel;
+//# sourceMappingURL=video.js.map

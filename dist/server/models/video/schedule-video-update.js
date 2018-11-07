@@ -110,3 +110,4 @@ ScheduleVideoUpdateModel = ScheduleVideoUpdateModel_1 = __decorate([
     })
 ], ScheduleVideoUpdateModel);
 exports.ScheduleVideoUpdateModel = ScheduleVideoUpdateModel;
+//# sourceMappingURL=schedule-video-update.js.map

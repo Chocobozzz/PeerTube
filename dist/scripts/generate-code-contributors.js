@@ -78,3 +78,4 @@ function fetchZanata(zanataUsername, zanataPassword) {
         return get(url, headers);
     });
 }
+//# sourceMappingURL=generate-code-contributors.js.map

@@ -117,3 +117,4 @@ AccountVideoRateModel = AccountVideoRateModel_1 = __decorate([
     })
 ], AccountVideoRateModel);
 exports.AccountVideoRateModel = AccountVideoRateModel;
+//# sourceMappingURL=account-video-rate.js.map

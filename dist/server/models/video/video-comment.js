@@ -493,3 +493,4 @@ VideoCommentModel = VideoCommentModel_1 = __decorate([
     })
 ], VideoCommentModel);
 exports.VideoCommentModel = VideoCommentModel;
+//# sourceMappingURL=video-comment.js.map

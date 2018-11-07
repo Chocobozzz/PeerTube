@@ -65,3 +65,4 @@ describe('Test tracker', function () {
         });
     });
 });
+//# sourceMappingURL=tracker.js.map

@@ -128,3 +128,4 @@ describe('Test a ActivityPub videos search', function () {
         });
     });
 });
+//# sourceMappingURL=search-activitypub-videos.js.map

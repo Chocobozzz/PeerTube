@@ -106,3 +106,4 @@ function onVideoFileOptimizerSuccess(video, isNewVideo) {
         }));
     });
 }
+//# sourceMappingURL=video-file.js.map

@@ -55,3 +55,4 @@ function isSignupAllowedForCurrentIP(ip) {
     return !excludeList.includes(matched);
 }
 exports.isSignupAllowedForCurrentIP = isSignupAllowedForCurrentIP;
+//# sourceMappingURL=signup.js.map

@@ -113,3 +113,4 @@ function processUpdateActor(actor, activity) {
         }
     });
 }
+//# sourceMappingURL=process-update.js.map

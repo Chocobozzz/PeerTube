@@ -21,3 +21,4 @@ function isCacheFileObjectValid(object) {
         videos_1.isRemoteVideoUrlValid(object.url);
 }
 exports.isCacheFileObjectValid = isCacheFileObjectValid;
+//# sourceMappingURL=cache-file.js.map

@@ -6,3 +6,4 @@ function activityPubResponse(data, res) {
         .end();
 }
 exports.activityPubResponse = activityPubResponse;
+//# sourceMappingURL=utils.js.map

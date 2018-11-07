@@ -61,3 +61,4 @@ function removeVideoFromBlacklistController(req, res, next) {
         return res.type('json').status(204).end();
     });
 }
+//# sourceMappingURL=blacklist.js.map

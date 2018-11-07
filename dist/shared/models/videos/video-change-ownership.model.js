@@ -6,3 +6,4 @@ var VideoChangeOwnershipStatus;
     VideoChangeOwnershipStatus["ACCEPTED"] = "ACCEPTED";
     VideoChangeOwnershipStatus["REFUSED"] = "REFUSED";
 })(VideoChangeOwnershipStatus = exports.VideoChangeOwnershipStatus || (exports.VideoChangeOwnershipStatus = {}));
+//# sourceMappingURL=video-change-ownership.model.js.map

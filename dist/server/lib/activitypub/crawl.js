@@ -40,3 +40,4 @@ function crawlCollectionPage(uri, handler) {
     });
 }
 exports.crawlCollectionPage = crawlCollectionPage;
+//# sourceMappingURL=crawl.js.map

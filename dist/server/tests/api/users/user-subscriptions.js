@@ -315,3 +315,4 @@ describe('Test users subscriptions', function () {
         });
     });
 });
+//# sourceMappingURL=user-subscriptions.js.map

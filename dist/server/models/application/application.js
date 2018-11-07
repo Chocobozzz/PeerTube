@@ -50,3 +50,4 @@ ApplicationModel = ApplicationModel_1 = __decorate([
     })
 ], ApplicationModel);
 exports.ApplicationModel = ApplicationModel;
+//# sourceMappingURL=application.js.map

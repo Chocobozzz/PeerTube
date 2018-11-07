@@ -80,3 +80,4 @@ function updateVideoChannelAvatar(options) {
     return index_1.updateAvatarRequest(Object.assign(options, { path }));
 }
 exports.updateVideoChannelAvatar = updateVideoChannelAvatar;
+//# sourceMappingURL=video-channels.js.map

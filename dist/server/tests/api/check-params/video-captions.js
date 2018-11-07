@@ -255,3 +255,4 @@ describe('Test video captions API validator', function () {
         });
     });
 });
+//# sourceMappingURL=video-captions.js.map

@@ -29,3 +29,4 @@ function createSortableColumns(sortableColumns) {
     return sortableColumns.concat(sortableColumnDesc);
 }
 exports.createSortableColumns = createSortableColumns;
+//# sourceMappingURL=utils.js.map

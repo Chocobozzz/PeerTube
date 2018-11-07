@@ -61,3 +61,4 @@ function deleteVideoCaption(req, res) {
         return res.type('json').status(204).end();
     });
 }
+//# sourceMappingURL=captions.js.map

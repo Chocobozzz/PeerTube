@@ -198,3 +198,4 @@ function videoRates(req, rateType, video, url) {
     });
     return activitypub_1.activityPubCollectionPagination(url, handler, req.query.page);
 }
+//# sourceMappingURL=client.js.map

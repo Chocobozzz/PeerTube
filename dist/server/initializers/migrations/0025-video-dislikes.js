@@ -15,3 +15,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0025-video-dislikes.js.map

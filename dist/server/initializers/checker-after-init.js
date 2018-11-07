@@ -93,3 +93,4 @@ function applicationExist() {
     });
 }
 exports.applicationExist = applicationExist;
+//# sourceMappingURL=checker-after-init.js.map

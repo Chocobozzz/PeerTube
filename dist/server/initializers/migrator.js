@@ -79,3 +79,4 @@ function executeMigration(actualVersion, entity) {
         }));
     });
 }
+//# sourceMappingURL=migrator.js.map

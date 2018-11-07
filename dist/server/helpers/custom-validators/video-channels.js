@@ -69,3 +69,4 @@ function processVideoChannelExist(videoChannel, res) {
     res.locals.videoChannel = videoChannel;
     return true;
 }
+//# sourceMappingURL=video-channels.js.map

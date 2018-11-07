@@ -86,3 +86,4 @@ function sendHTML(html, res) {
     res.set('Content-Type', 'text/html; charset=UTF-8');
     return res.send(html);
 }
+//# sourceMappingURL=client.js.map

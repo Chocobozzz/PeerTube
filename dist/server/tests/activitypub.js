@@ -38,3 +38,4 @@ describe('Test activitypub', function () {
         });
     });
 });
+//# sourceMappingURL=activitypub.js.map

@@ -77,3 +77,4 @@ describe('Test video blacklists', function () {
         });
     });
 });
+//# sourceMappingURL=video-blacklist.js.map

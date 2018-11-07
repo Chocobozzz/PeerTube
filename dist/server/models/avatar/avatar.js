@@ -60,3 +60,4 @@ AvatarModel = __decorate([
     })
 ], AvatarModel);
 exports.AvatarModel = AvatarModel;
+//# sourceMappingURL=avatar.js.map

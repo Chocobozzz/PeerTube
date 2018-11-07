@@ -732,3 +732,4 @@ describe('Test videos API validator', function () {
         });
     });
 });
+//# sourceMappingURL=videos.js.map

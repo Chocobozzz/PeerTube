@@ -225,3 +225,4 @@ function updateMyAvatar(req, res, next) {
         return res.json({ avatar: avatar.toFormattedJSON() });
     });
 }
+//# sourceMappingURL=me.js.map

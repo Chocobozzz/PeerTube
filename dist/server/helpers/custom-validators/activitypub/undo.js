@@ -14,3 +14,4 @@ function isUndoActivityValid(activity) {
             cache_file_1.isCacheFileCreateActivityValid(activity.object));
 }
 exports.isUndoActivityValid = isUndoActivityValid;
+//# sourceMappingURL=undo.js.map

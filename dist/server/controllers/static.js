@@ -154,3 +154,4 @@ function getVideoAndFile(req, res) {
     const videoFile = video.VideoFiles.find(f => f.resolution === resolution);
     return { video, videoFile };
 }
+//# sourceMappingURL=static.js.map

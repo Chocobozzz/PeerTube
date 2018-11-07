@@ -52,3 +52,4 @@ function getSortedBlacklistedVideosList(url, token, sort, specialStatus = 200) {
         .expect('Content-Type', /json/);
 }
 exports.getSortedBlacklistedVideosList = getSortedBlacklistedVideosList;
+//# sourceMappingURL=video-blacklist.js.map

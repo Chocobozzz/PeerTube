@@ -82,3 +82,4 @@ function buildDirectionAndField(value) {
     }
     return { direction, field };
 }
+//# sourceMappingURL=utils.js.map

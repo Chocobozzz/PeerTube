@@ -185,3 +185,4 @@ function insertIntoDB(video, videoChannel, tags, videoImportAttributes) {
         return videoImport;
     }));
 }
+//# sourceMappingURL=import.js.map

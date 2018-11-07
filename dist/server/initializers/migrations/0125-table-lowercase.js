@@ -36,3 +36,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0125-table-lowercase.js.map

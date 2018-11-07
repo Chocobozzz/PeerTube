@@ -23,3 +23,4 @@ initializers_1.initDatabaseModels(true)
     })
         .then(() => process.exit(0));
 });
+//# sourceMappingURL=cleaner.js.map

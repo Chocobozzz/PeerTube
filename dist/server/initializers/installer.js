@@ -130,3 +130,4 @@ function createApplicationIfNotExist() {
         return user_1.createApplicationActor(application.id);
     });
 }
+//# sourceMappingURL=installer.js.map

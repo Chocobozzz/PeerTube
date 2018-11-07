@@ -61,3 +61,4 @@ function processActivities(activities, signatureActor, inboxActor) {
     });
 }
 exports.processActivities = processActivities;
+//# sourceMappingURL=process.js.map

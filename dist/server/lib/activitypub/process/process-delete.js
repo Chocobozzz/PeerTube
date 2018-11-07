@@ -95,3 +95,4 @@ function processDeleteVideoComment(byActor, videoComment, activity) {
         logger_1.logger.info('Remote video comment %s removed.', videoComment.url);
     }));
 }
+//# sourceMappingURL=process-delete.js.map

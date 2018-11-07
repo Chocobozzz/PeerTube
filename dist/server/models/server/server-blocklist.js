@@ -132,3 +132,4 @@ ServerBlocklistModel = ServerBlocklistModel_1 = __decorate([
     })
 ], ServerBlocklistModel);
 exports.ServerBlocklistModel = ServerBlocklistModel;
+//# sourceMappingURL=server-blocklist.js.map

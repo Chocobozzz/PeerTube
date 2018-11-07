@@ -16,3 +16,4 @@ class YoutubeDlUpdateScheduler extends abstract_scheduler_1.AbstractScheduler {
     }
 }
 exports.YoutubeDlUpdateScheduler = YoutubeDlUpdateScheduler;
+//# sourceMappingURL=youtube-dl-update-scheduler.js.map

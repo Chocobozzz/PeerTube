@@ -183,3 +183,4 @@ function isVideoChannelOfAccountExist(channelId, user, res) {
     });
 }
 exports.isVideoChannelOfAccountExist = isVideoChannelOfAccountExist;
+//# sourceMappingURL=videos.js.map

@@ -15,3 +15,4 @@ jsonld.documentLoader = (url, cb) => {
     lru.get(url, cb);
 };
 jsig.use('jsonld', jsonld);
+//# sourceMappingURL=custom-jsonld-signature.js.map

@@ -262,3 +262,4 @@ describe('Test video transcoding', function () {
         });
     });
 });
+//# sourceMappingURL=video-transcoder.js.map

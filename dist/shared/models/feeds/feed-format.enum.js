@@ -6,3 +6,4 @@ var FeedFormat;
     FeedFormat["ATOM"] = "atom";
     FeedFormat["JSON"] = "json";
 })(FeedFormat = exports.FeedFormat || (exports.FeedFormat = {}));
+//# sourceMappingURL=feed-format.enum.js.map

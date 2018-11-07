@@ -15,3 +15,4 @@ function down(options) {
     throw new Error('Not implemented.');
 }
 exports.down = down;
+//# sourceMappingURL=0130-user-autoplay-video.js.map

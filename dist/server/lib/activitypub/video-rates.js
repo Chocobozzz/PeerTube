@@ -60,3 +60,4 @@ function sendVideoRateChange(account, video, likes, dislikes, t) {
     });
 }
 exports.sendVideoRateChange = sendVideoRateChange;
+//# sourceMappingURL=video-rates.js.map

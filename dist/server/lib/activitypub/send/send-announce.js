@@ -41,3 +41,4 @@ function buildAnnounceActivity(url, byActor, object, audience) {
     }, audience);
 }
 exports.buildAnnounceActivity = buildAnnounceActivity;
+//# sourceMappingURL=send-announce.js.map

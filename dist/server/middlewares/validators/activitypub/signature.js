@@ -26,3 +26,4 @@ const signatureValidator = [
     }
 ];
 exports.signatureValidator = signatureValidator;
+//# sourceMappingURL=signature.js.map

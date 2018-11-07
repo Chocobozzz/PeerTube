@@ -87,3 +87,4 @@ function refuseOwnership(req, res) {
         }));
     });
 }
+//# sourceMappingURL=ownership.js.map

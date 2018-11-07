@@ -55,3 +55,4 @@ function buildGlobalHeaders(body) {
     };
 }
 exports.buildGlobalHeaders = buildGlobalHeaders;
+//# sourceMappingURL=activitypub-http-utils.js.map

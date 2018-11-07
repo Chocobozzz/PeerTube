@@ -50,3 +50,4 @@ const accountsBlocklistSortValidator = utils_1.checkSort(SORTABLE_ACCOUNTS_BLOCK
 exports.accountsBlocklistSortValidator = accountsBlocklistSortValidator;
 const serversBlocklistSortValidator = utils_1.checkSort(SORTABLE_SERVERS_BLOCKLIST_COLUMNS);
 exports.serversBlocklistSortValidator = serversBlocklistSortValidator;
+//# sourceMappingURL=sort.js.map

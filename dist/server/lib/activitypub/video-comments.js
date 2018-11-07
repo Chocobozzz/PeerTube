@@ -140,3 +140,4 @@ function resolveThread(url, comments = []) {
     });
 }
 exports.resolveThread = resolveThread;
+//# sourceMappingURL=video-comments.js.map

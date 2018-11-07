@@ -44,3 +44,4 @@ function formatJob(job, state) {
         processedOn: new Date(job.processedOn)
     };
 }
+//# sourceMappingURL=jobs.js.map

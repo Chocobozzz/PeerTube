@@ -105,3 +105,4 @@ function removeVideoComment(req, res) {
         return res.type('json').status(204).end();
     });
 }
+//# sourceMappingURL=comment.js.map

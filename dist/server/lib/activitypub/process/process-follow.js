@@ -54,3 +54,4 @@ function processFollow(actor, targetActorURL) {
         logger_1.logger.info('Actor %s is followed by actor %s.', targetActorURL, actor.url);
     });
 }
+//# sourceMappingURL=process-follow.js.map

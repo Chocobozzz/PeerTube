@@ -141,3 +141,4 @@ function checkVideoChannelIsNotTheLastOne(res) {
         return true;
     });
 }
+//# sourceMappingURL=video-channels.js.map

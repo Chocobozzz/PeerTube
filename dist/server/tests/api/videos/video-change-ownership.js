@@ -235,3 +235,4 @@ describe('Test video change ownership - quota too small', function () {
         });
     });
 });
+//# sourceMappingURL=video-change-ownership.js.map

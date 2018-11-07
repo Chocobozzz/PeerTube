@@ -18,3 +18,4 @@ function mockSmtpServer(emailsCollection) {
     });
 }
 exports.mockSmtpServer = mockSmtpServer;
+//# sourceMappingURL=email.js.map

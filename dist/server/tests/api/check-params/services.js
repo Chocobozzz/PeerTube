@@ -107,3 +107,4 @@ function checkParamEmbed(server, embedUrl, statusCodeExpected = 400, query = {})
         statusCodeExpected
     });
 }
+//# sourceMappingURL=services.js.map

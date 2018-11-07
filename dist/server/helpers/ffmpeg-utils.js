@@ -267,3 +267,4 @@ function presetH264(command, resolution, fps) {
         return localCommand;
     });
 }
+//# sourceMappingURL=ffmpeg-utils.js.map

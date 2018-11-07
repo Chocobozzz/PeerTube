@@ -382,3 +382,4 @@ describe('Test follows', function () {
         });
     });
 });
+//# sourceMappingURL=follows.js.map

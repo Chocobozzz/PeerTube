@@ -69,3 +69,4 @@ describe('Test videos history API validator', function () {
         });
     });
 });
+//# sourceMappingURL=videos-history.js.map

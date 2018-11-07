@@ -244,3 +244,4 @@ describe('Test video channels', function () {
         });
     });
 });
+//# sourceMappingURL=video-channels.js.map

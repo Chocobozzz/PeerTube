@@ -62,3 +62,4 @@ function buildFormattedCommentTree(resultList) {
     return thread;
 }
 exports.buildFormattedCommentTree = buildFormattedCommentTree;
+//# sourceMappingURL=video-comment.js.map

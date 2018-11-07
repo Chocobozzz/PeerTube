@@ -96,3 +96,4 @@ function checkFFmpegEncoders() {
     });
 }
 exports.checkFFmpegEncoders = checkFFmpegEncoders;
+//# sourceMappingURL=checker-before-init.js.map

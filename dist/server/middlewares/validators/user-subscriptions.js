@@ -62,3 +62,4 @@ const userSubscriptionGetValidator = [
     })
 ];
 exports.userSubscriptionGetValidator = userSubscriptionGetValidator;
+//# sourceMappingURL=user-subscriptions.js.map

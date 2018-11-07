@@ -60,3 +60,4 @@ function handler(argv) {
         child_process_1.execSync(CMD + CMDargs);
     }
 }
+//# sourceMappingURL=peertube-watch.js.map

@@ -41,3 +41,4 @@ function convertSrtToVtt(source, destination) {
             .on('finish', () => res());
     });
 }
+//# sourceMappingURL=captions-utils.js.map

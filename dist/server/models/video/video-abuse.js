@@ -157,3 +157,4 @@ VideoAbuseModel = VideoAbuseModel_1 = __decorate([
     })
 ], VideoAbuseModel);
 exports.VideoAbuseModel = VideoAbuseModel;
+//# sourceMappingURL=video-abuse.js.map

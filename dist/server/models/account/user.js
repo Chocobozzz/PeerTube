@@ -420,3 +420,4 @@ UserModel = UserModel_1 = __decorate([
     })
 ], UserModel);
 exports.UserModel = UserModel;
+//# sourceMappingURL=user.js.map

@@ -79,3 +79,4 @@ function handleError(err) {
     console.error(err);
     process.exit(-1);
 }
+//# sourceMappingURL=create-custom-files.js.map

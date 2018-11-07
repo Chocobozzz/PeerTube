@@ -141,3 +141,4 @@ function processCreateVideoComment(byActor, activity) {
         }
     });
 }
+//# sourceMappingURL=process-create.js.map

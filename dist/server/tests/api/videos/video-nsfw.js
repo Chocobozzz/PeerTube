@@ -213,3 +213,4 @@ describe('Test video NSFW policy', function () {
         });
     });
 });
+//# sourceMappingURL=video-nsfw.js.map

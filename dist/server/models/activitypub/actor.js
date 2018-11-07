@@ -511,3 +511,4 @@ ActorModel = ActorModel_1 = __decorate([
     })
 ], ActorModel);
 exports.ActorModel = ActorModel;
+//# sourceMappingURL=actor.js.map

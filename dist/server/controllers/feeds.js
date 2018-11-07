@@ -161,3 +161,4 @@ function sendFeed(feed, req, res) {
     res.set('Content-Type', 'application/rss+xml');
     return res.send(feed.rss2()).end();
 }
+//# sourceMappingURL=feeds.js.map

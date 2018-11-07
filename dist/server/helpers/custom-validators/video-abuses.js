@@ -39,3 +39,4 @@ function isVideoAbuseExist(abuseId, videoId, res) {
     });
 }
 exports.isVideoAbuseExist = isVideoAbuseExist;
+//# sourceMappingURL=video-abuses.js.map

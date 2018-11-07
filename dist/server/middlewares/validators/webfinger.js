@@ -33,3 +33,4 @@ const webfingerValidator = [
     })
 ];
 exports.webfingerValidator = webfingerValidator;
+//# sourceMappingURL=webfinger.js.map

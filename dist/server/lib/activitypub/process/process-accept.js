@@ -30,3 +30,4 @@ function processAccept(actor, targetActor) {
         }
     });
 }
+//# sourceMappingURL=process-accept.js.map

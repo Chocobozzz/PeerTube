@@ -102,3 +102,4 @@ function askConfirmation() {
         });
     });
 }
+//# sourceMappingURL=prune-storage.js.map

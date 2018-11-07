@@ -50,3 +50,4 @@ function writeSettings(settings) {
 }
 exports.writeSettings = writeSettings;
 netrc.loadSync();
+//# sourceMappingURL=cli.js.map

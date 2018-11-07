@@ -60,3 +60,4 @@ function follow(fromActor, targetActor) {
             yield send_1.sendFollow(actorFollow);
     }));
 }
+//# sourceMappingURL=activitypub-follow.js.map

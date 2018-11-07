@@ -58,3 +58,4 @@ function advancedVideosSearch(url, options) {
         .expect('Content-Type', /json/);
 }
 exports.advancedVideosSearch = advancedVideosSearch;
+//# sourceMappingURL=videos.js.map

@@ -88,3 +88,4 @@ function rateCustom(server, rating) {
 function goodbye() {
     return process.exit(-1);
 }
+//# sourceMappingURL=populate-database.js.map

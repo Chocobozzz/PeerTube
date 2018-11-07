@@ -197,3 +197,4 @@ function getCategory(categories) {
     }
     return undefined;
 }
+//# sourceMappingURL=youtube-dl.js.map

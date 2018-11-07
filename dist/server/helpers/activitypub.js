@@ -105,3 +105,4 @@ function getActorUrl(activityActor) {
     return activityActor.id;
 }
 exports.getActorUrl = getActorUrl;
+//# sourceMappingURL=activitypub.js.map

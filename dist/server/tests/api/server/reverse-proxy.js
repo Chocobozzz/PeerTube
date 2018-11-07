@@ -81,3 +81,4 @@ describe('Test application behind a reverse proxy', function () {
         });
     });
 });
+//# sourceMappingURL=reverse-proxy.js.map

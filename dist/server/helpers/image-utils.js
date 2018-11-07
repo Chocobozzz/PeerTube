@@ -20,3 +20,4 @@ function processImage(physicalFile, destination, newSize) {
     });
 }
 exports.processImage = processImage;
+//# sourceMappingURL=image-utils.js.map

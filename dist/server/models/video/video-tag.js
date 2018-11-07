@@ -46,3 +46,4 @@ VideoTagModel = __decorate([
     })
 ], VideoTagModel);
 exports.VideoTagModel = VideoTagModel;
+//# sourceMappingURL=video-tag.js.map

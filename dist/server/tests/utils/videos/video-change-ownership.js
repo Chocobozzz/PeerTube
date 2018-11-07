@@ -41,3 +41,4 @@ function refuseChangeOwnership(url, token, ownershipId, expectedStatus = 204) {
         .expect(expectedStatus);
 }
 exports.refuseChangeOwnership = refuseChangeOwnership;
+//# sourceMappingURL=video-change-ownership.js.map

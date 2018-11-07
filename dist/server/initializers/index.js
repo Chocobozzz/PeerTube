@@ -7,3 +7,4 @@ __export(require("./constants"));
 __export(require("./database"));
 __export(require("./installer"));
 __export(require("./migrator"));
+//# sourceMappingURL=index.js.map

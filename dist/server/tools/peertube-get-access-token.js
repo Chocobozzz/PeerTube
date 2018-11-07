@@ -41,3 +41,4 @@ index_1.getClient(program.url)
     console.error(err);
     process.exit(-1);
 });
+//# sourceMappingURL=peertube-get-access-token.js.map

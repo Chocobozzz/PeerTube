@@ -137,3 +137,4 @@ function run() {
 function list(val) {
     return val.split(',');
 }
+//# sourceMappingURL=peertube-upload.js.map

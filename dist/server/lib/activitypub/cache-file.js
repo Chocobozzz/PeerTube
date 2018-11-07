@@ -53,3 +53,4 @@ function updateCacheFile(cacheFileObject, redundancyModel, video, byActor, t) {
     return redundancyModel.save({ transaction: t });
 }
 exports.updateCacheFile = updateCacheFile;
+//# sourceMappingURL=cache-file.js.map

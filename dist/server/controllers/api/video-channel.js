@@ -148,3 +148,4 @@ function listVideoChannelVideos(req, res, next) {
         return res.json(utils_1.getFormattedObjects(resultList.data, resultList.total));
     });
 }
+//# sourceMappingURL=video-channel.js.map

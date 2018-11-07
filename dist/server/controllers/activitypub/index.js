@@ -9,3 +9,4 @@ exports.activityPubRouter = activityPubRouter;
 activityPubRouter.use('/', inbox_1.inboxRouter);
 activityPubRouter.use('/', outbox_1.outboxRouter);
 activityPubRouter.use('/', client_1.activityPubClientRouter);
+//# sourceMappingURL=index.js.map

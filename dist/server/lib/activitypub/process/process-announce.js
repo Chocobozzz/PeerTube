@@ -44,3 +44,4 @@ function processVideoShare(actorAnnouncer, activity) {
         }));
     });
 }
+//# sourceMappingURL=process-announce.js.map

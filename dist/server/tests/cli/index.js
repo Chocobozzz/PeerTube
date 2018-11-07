@@ -5,3 +5,4 @@ require("./create-transcoding-job");
 require("./peertube");
 require("./reset-password");
 require("./update-host");
+//# sourceMappingURL=index.js.map

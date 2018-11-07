@@ -21,3 +21,4 @@ function getJSONfeed(url, feed, query = {}) {
         .expect('Content-Type', /json/);
 }
 exports.getJSONfeed = getJSONfeed;
+//# sourceMappingURL=feeds.js.map

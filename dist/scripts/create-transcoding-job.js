@@ -49,3 +49,4 @@ function run() {
         console.log('Transcoding job for video %s created.', video.uuid);
     });
 }
+//# sourceMappingURL=create-transcoding-job.js.map

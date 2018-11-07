@@ -169,3 +169,4 @@ function processFile(downloader, videoImport, options) {
         }
     });
 }
+//# sourceMappingURL=video-import.js.map

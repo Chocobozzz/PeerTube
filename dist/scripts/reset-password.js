@@ -40,3 +40,4 @@ initializers_1.initDatabaseModels(true)
             .finally(() => process.exit(0));
     });
 });
+//# sourceMappingURL=reset-password.js.map

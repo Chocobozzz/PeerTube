@@ -65,3 +65,4 @@ function areSubscriptionsExist(url, token, uris, statusCodeExpected = 200) {
     });
 }
 exports.areSubscriptionsExist = areSubscriptionsExist;
+//# sourceMappingURL=user-subscriptions.js.map

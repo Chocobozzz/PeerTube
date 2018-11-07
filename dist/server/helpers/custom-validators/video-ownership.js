@@ -42,3 +42,4 @@ function checkUserCanTerminateOwnershipChange(user, videoChangeOwnership, res) {
     return false;
 }
 exports.checkUserCanTerminateOwnershipChange = checkUserCanTerminateOwnershipChange;
+//# sourceMappingURL=video-ownership.js.map

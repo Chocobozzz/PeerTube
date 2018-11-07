@@ -61,3 +61,4 @@ function webfingerLookup(nameWithHost) {
         });
     });
 }
+//# sourceMappingURL=webfinger.js.map

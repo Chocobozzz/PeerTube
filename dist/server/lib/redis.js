@@ -238,3 +238,4 @@ class Redis {
     }
 }
 exports.Redis = Redis;
+//# sourceMappingURL=redis.js.map

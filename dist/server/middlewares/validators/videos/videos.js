@@ -348,3 +348,4 @@ function areErrorsInScheduleUpdate(req, res) {
     }
     return false;
 }
+//# sourceMappingURL=videos.js.map

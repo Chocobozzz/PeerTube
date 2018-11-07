@@ -61,3 +61,4 @@ VideoViewModel = __decorate([
     })
 ], VideoViewModel);
 exports.VideoViewModel = VideoViewModel;
+//# sourceMappingURL=video-views.js.map

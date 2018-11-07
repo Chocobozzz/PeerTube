@@ -61,3 +61,4 @@ cli_1.getSettings()
     })
         .parse(process.argv);
 });
+//# sourceMappingURL=peertube.js.map

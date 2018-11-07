@@ -57,3 +57,4 @@ function checkActorFilesWereRemoved(actorUUID, serverNumber) {
     });
 }
 exports.checkActorFilesWereRemoved = checkActorFilesWereRemoved;
+//# sourceMappingURL=accounts.js.map

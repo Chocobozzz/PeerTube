@@ -6,3 +6,4 @@ var VideoAbuseState;
     VideoAbuseState[VideoAbuseState["REJECTED"] = 2] = "REJECTED";
     VideoAbuseState[VideoAbuseState["ACCEPTED"] = 3] = "ACCEPTED";
 })(VideoAbuseState = exports.VideoAbuseState || (exports.VideoAbuseState = {}));
+//# sourceMappingURL=video-abuse-state.model.js.map

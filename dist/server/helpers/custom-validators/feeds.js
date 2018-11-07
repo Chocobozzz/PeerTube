@@ -16,3 +16,4 @@ function isValidRSSFeed(value) {
     return feedExtensions.indexOf(value) !== -1;
 }
 exports.isValidRSSFeed = isValidRSSFeed;
+//# sourceMappingURL=feeds.js.map

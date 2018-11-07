@@ -34,3 +34,4 @@ function hasUserRight(userRole, userRight) {
     return userRights.indexOf(user_right_enum_1.UserRight.ALL) !== -1 || userRights.indexOf(userRight) !== -1;
 }
 exports.hasUserRight = hasUserRight;
+//# sourceMappingURL=user-role.js.map

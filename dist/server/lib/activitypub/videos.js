@@ -396,3 +396,4 @@ function videoFileActivityUrlToDBAttributes(video, videoObject) {
     }
     return attributes;
 }
+//# sourceMappingURL=videos.js.map

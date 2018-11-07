@@ -218,3 +218,4 @@ function changeUserBlock(res, user, block, reason) {
         auditLogger.update(audit_logger_1.getAuditIdFromRes(res), new audit_logger_1.UserAuditView(user.toFormattedJSON()), oldUserAuditView);
     });
 }
+//# sourceMappingURL=index.js.map

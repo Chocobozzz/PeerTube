@@ -70,3 +70,4 @@ function run() {
         console.log('Finished optimizing videos');
     });
 }
+//# sourceMappingURL=optimize-old-videos.js.map

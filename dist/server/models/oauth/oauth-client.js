@@ -77,3 +77,4 @@ OAuthClientModel = OAuthClientModel_1 = __decorate([
     })
 ], OAuthClientModel);
 exports.OAuthClientModel = OAuthClientModel;
+//# sourceMappingURL=oauth-client.js.map

@@ -44,3 +44,4 @@ function getStats(req, res, next) {
         return res.json(data).end();
     });
 }
+//# sourceMappingURL=stats.js.map

@@ -65,3 +65,4 @@ class UpdateVideosScheduler extends abstract_scheduler_1.AbstractScheduler {
     }
 }
 exports.UpdateVideosScheduler = UpdateVideosScheduler;
+//# sourceMappingURL=update-videos-scheduler.js.map

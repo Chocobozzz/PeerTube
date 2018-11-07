@@ -78,3 +78,4 @@ function reportVideoAbuse(req, res) {
         return res.json({ videoAbuse: videoAbuse.toFormattedJSON() }).end();
     });
 }
+//# sourceMappingURL=abuse.js.map

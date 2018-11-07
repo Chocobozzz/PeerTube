@@ -255,3 +255,4 @@ class CustomConfigAuditView extends EntityAuditView {
     }
 }
 exports.CustomConfigAuditView = CustomConfigAuditView;
+//# sourceMappingURL=audit-logger.js.map

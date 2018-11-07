@@ -16,3 +16,4 @@ function setDefaultPagination(req, res, next) {
     return next();
 }
 exports.setDefaultPagination = setDefaultPagination;
+//# sourceMappingURL=pagination.js.map

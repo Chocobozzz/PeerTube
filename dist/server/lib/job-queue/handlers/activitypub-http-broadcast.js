@@ -39,3 +39,4 @@ function processActivityPubHttpBroadcast(job) {
     });
 }
 exports.processActivityPubHttpBroadcast = processActivityPubHttpBroadcast;
+//# sourceMappingURL=activitypub-http-broadcast.js.map

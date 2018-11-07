@@ -171,3 +171,4 @@ function checkUserCanDeleteVideoComment(user, videoComment, res) {
     }
     return true;
 }
+//# sourceMappingURL=video-comments.js.map

@@ -137,3 +137,4 @@ describe('Test a client controllers', function () {
         });
     });
 });
+//# sourceMappingURL=client.js.map

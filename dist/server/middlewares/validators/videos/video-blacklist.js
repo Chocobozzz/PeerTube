@@ -60,3 +60,4 @@ const videosBlacklistUpdateValidator = [
     })
 ];
 exports.videosBlacklistUpdateValidator = videosBlacklistUpdateValidator;
+//# sourceMappingURL=video-blacklist.js.map
