@@ -217,6 +217,7 @@ export class UserService {
     const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
 
     const roleLabels: { [ id in UserRole ]: string } = {
+      [UserRole.VALIDATOR]: this.i18n('Validator'),
       [UserRole.USER]: this.i18n('User'),
       [UserRole.ADMINISTRATOR]: this.i18n('Administrator'),
       [UserRole.MODERATOR]: this.i18n('Moderator')
