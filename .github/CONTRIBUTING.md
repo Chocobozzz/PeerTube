@@ -2,13 +2,15 @@
 
 Interested in contributing? Awesome!
 
-**Quick Links:**
+**This guide will present you the following contribution topics:**
 
   * [Translate](#translate)
   * [Give your feedback](#give-your-feedback)
   * [Write documentation](#write-documentation)
   * [Develop](#develop)
   * [Improve the website](#improve-the-website)
+  * [Troubleshooting](#troubleshooting)
+  * [Tutorials](#tutorials)
 
 ## Translate
 
@@ -131,37 +133,7 @@ and the web server is automatically restarted.
 $ npm run dev
 ```
 
-Depending on your OS, you may face the following error :
-```
-$ [nodemon] Internal watch failed: ENOSPC: no space left on device, watch '/PeerTube/dist'
-```
-
-This is due to your system's limit on the number of files you can monitor for live-checking changes. For example, Ubuntu uses inotify and this limit is set to 8192. Then you need to change this limit :
-```
-echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-```
-
-See more information here : https://github.com/guard/listen/wiki/Increasing-the-amount-of-inotify-watchers
-
-### Configurations for VPS
-
-If you want to develop using a Virtual Private Server, you will need to configure the url for the API and the hostname. First, you need to edit the [client/src/environments/environment.hmr.ts](client/src/environments/environment.hmr.ts) file by replacing the `localhost` in the `apiUrl` field with the address of your VPS. Thus, the [Hot Module Replacement](https://webpack.js.org/concepts/hot-module-replacement/) from Webpack will be set up for developping with live-reload.
-
-Next, you will need to edit the [config/default.yaml](config/default.yaml) file. Just replace the `localhost` with your VPS address in the following `hostname` fields :
-```
-listen:
-  hostname: 'my-vps-address.net'
-  port: 9000
-
-webserver:
-  https: false
-  hostname: 'my-vps-address.net'
-  port: 9000
-```
-
-Then, you just need to listen to `https://my-vps-address.net:3000/` in your web browser.
-
-### Federation
+### Testing the federation of PeerTube servers
 
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
 Then, we can create the databases (if they don't already exist):
@@ -215,3 +187,11 @@ $ npm run mocha -- --exit --require ts-node/register/type-check --bail server/te
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
+
+### Troubleshooting
+
+Please check out the issues and [list of common errors](https://docs.joinpeertube.org/lang/en/devdocs/troubleshooting.html).
+
+### Tutorials
+
+Please check out the related section in the [development documentation](https://docs.joinpeertube.org/lang/en/devdocs/index.html#tutorials). Contribute tutorials at [framagit.org/framasoft/peertube/documentation](https://framagit.org/framasoft/peertube/documentation).
