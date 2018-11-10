@@ -330,6 +330,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
   if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
+  if (body.autoPlayNextVideo !== undefined) user.autoPlayNextVideo = body.autoPlayNextVideo
 
   await sequelizeTypescript.transaction(async t => {
     const userAccount = await AccountModel.load(user.Account.id)

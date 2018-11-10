@@ -23,6 +23,7 @@ import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid,
+  isUserAutoPlayNextVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
@@ -113,6 +114,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
   @Column
   webTorrentEnabled: boolean
+
+  @AllowNull(false)
+  @Default(false)
+  @Is('UserAutoPlayNextVideo', value => throwIfNotValid(value, isUserAutoPlayNextVideoValid, 'auto play next video boolean'))
+  @Column
+  autoPlayNextVideo: boolean
 
   @AllowNull(false)
   @Default(true)
@@ -364,6 +371,7 @@ export class UserModel extends Model<UserModel> {
       nsfwPolicy: this.nsfwPolicy,
       webTorrentEnabled: this.webTorrentEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      autoPlayNextVideo: this.autoPlayNextVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,

@@ -22,7 +22,6 @@ import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
-import { comparePassword } from '../../helpers/peertube-crypto'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),

@@ -35,6 +35,7 @@ export class User implements UserServerModel {
   nsfwPolicy: NSFWPolicyType
   webTorrentEnabled: boolean
   autoPlayVideo: boolean
+  autoPlayNextVideo: boolean
   videoQuota: number
   videoQuotaDaily: number
   account: Account

@@ -6,6 +6,7 @@ export interface UserUpdateMe {
   nsfwPolicy?: NSFWPolicyType,
   webTorrentEnabled?: boolean,
   autoPlayVideo?: boolean
+  autoPlayNextVideo?: boolean
   email?: string
   currentPassword?: string
   password?: string

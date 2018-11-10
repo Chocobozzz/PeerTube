@@ -30,14 +30,16 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
     this.buildForm({
       nsfwPolicy: null,
       webTorrentEnabled: null,
-      autoPlayVideo: null
+      autoPlayVideo: null,
+      autoPlayNextVideo: null
     })
 
     this.userInformationLoaded.subscribe(() => {
       this.form.patchValue({
         nsfwPolicy: this.user.nsfwPolicy,
         webTorrentEnabled: this.user.webTorrentEnabled,
-        autoPlayVideo: this.user.autoPlayVideo === true
+        autoPlayVideo: this.user.autoPlayVideo === true,
+        autoPlayNextVideo: this.user.autoPlayNextVideo
       })
     })
   }
@@ -46,10 +48,12 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
     const nsfwPolicy = this.form.value['nsfwPolicy']
     const webTorrentEnabled = this.form.value['webTorrentEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
+    const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
     const details: UserUpdateMe = {
       nsfwPolicy,
       webTorrentEnabled,
-      autoPlayVideo
+      autoPlayVideo,
+      autoPlayNextVideo
     }
 
     this.userService.updateMyProfile(details).subscribe(
