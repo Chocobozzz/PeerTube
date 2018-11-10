@@ -444,7 +444,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videojs(this.playerElement, videojsOptions, function (this: videojs.Player) {
         self.player = this
         this.on('customError', ({ err }: { err: any }) => self.handleError(err))
-        if (this.user.autoPlayNextVideo) {
+        if (self.user.autoPlayNextVideo) {
           this.on('ended', (() => self.autoplayNext()))
         }
 
