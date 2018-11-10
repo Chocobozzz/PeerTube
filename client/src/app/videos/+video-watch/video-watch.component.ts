@@ -6,7 +6,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { forkJoin, Subscription, Observable } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 // FIXME: something weird with our path definition in tsconfig and typings
 // @ts-ignore
 import videojs from 'video.js'
@@ -326,7 +326,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   onRecommendations (videos: Video[]) {
-    this.nextVideoUrl = videos[0].embedPath
+    this.nextVideoUrl = videos[0].uuid
   }
 
   private updateVideoDescription (description: string) {
@@ -445,7 +445,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         self.player = this
         this.on('customError', ({ err }: { err: any }) => self.handleError(err))
         // if (autoplayNext)
-        this.on('ended', self.autoplayNext)
+        this.on('ended', (() => self.autoplayNext()))
 
         addContextMenu(self.player, self.video.embedUrl)
       })
@@ -544,7 +544,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private autoplayNext () {
-    console.log(this.nextVideoUrl)
-    // this.router.navigate([ '/videos/watch/9e711e03-8a6a-4bf0-a9b4-ca613f0c00ae' ])
+    this.router.navigate([ '/videos/watch', this.nextVideoUrl ])
   }
 }
