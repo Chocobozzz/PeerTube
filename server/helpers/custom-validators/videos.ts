@@ -9,9 +9,11 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_MIMETYPE_EXT,
+  VIDEO_FFMPEG_MIMETYPE_EXT,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
-  VIDEO_STATES
+  VIDEO_STATES,
+  CONFIG
 } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isFileValid } from './misc'
@@ -83,10 +85,8 @@ function isVideoRatingTypeValid (value: string) {
   return value === 'none' || values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
 }
 
-const videoFileTypes = Object.keys(VIDEO_MIMETYPE_EXT).map(m => `(${m})`)
-const videoFileTypesRegex = videoFileTypes.join('|')
-
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
+  const videoFileTypesRegex = Object.keys(CONFIG.TRANSCODING.ENABLED ? VIDEO_FFMPEG_MIMETYPE_EXT : VIDEO_MIMETYPE_EXT).map(m => `(${m})`).join('|')
   return isFileValid(files, videoFileTypesRegex, 'videofile', null)
 }
 

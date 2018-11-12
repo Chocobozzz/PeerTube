@@ -323,6 +323,27 @@ describe('Test video transcoding', function () {
     }
   })
 
+  it('Should not upload the mkv video on server 1', async function () {
+    const videoAttributes = {
+      name: 'my super mkv name',
+      category: 2,
+      nsfw: false,
+      licence: 6,
+      tags: [ 'tag1', 'tag2', 'tag3' ]
+    }
+    const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes, 400)
+  })
+  it('Should upload and transcode the mkv video on server 2', async function () {
+    const videoAttributes = {
+      name: 'my super mkv name',
+      category: 2,
+      nsfw: false,
+      licence: 6,
+      tags: [ 'tag1', 'tag2', 'tag3' ]
+    }
+    const res = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+  })
+
   after(async function () {
     killallServers(servers)
   })

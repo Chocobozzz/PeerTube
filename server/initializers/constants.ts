@@ -348,7 +348,8 @@ const CONSTRAINTS_FIELDS = {
         max: 2 * 1024 * 1024 // 2MB
       }
     },
-    EXTNAME: [ '.mp4', '.ogv', '.webm' ],
+    EXTNAME: [ '.mp4', '.ogv', '.webm', '.mkv', '.mov', '.avi', '.flv' ],
+    BROWSER_EXTNAME: [ '.mp4', '.ogv', '.webm'],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
@@ -477,6 +478,16 @@ const VIDEO_MIMETYPE_EXT = {
   'video/mp4': '.mp4'
 }
 const VIDEO_EXT_MIMETYPE = invert(VIDEO_MIMETYPE_EXT)
+const VIDEO_FFMPEG_MIMETYPE_EXT = {
+  'video/webm': '.webm',
+  'video/ogg': '.ogv',
+  'video/mp4': '.mp4',
+  'video/quicktime': '.mov',
+  'video/x-msvideo': '.avi',
+  'video/x-flv': '.flv',
+  'video/x-matroska': '.mkv'
+}
+const VIDEO_FFMPEG_EXT_MIMETYPE = invert(VIDEO_MIMETYPE_EXT)
 
 const IMAGE_MIMETYPE_EXT = {
   'image/png': '.png',
@@ -735,6 +746,8 @@ export {
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   VIDEO_EXT_MIMETYPE,
+  VIDEO_FFMPEG_MIMETYPE_EXT,
+  VIDEO_FFMPEG_EXT_MIMETYPE,
   CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
