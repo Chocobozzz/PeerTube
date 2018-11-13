@@ -24,7 +24,7 @@ function activityPubContextify <T> (data: T) {
         sensitive: 'as:sensitive',
         language: 'sc:inLanguage',
         views: 'sc:Number',
-        stats: 'sc:Number',
+        state: 'sc:Number',
         size: 'sc:Number',
         fps: 'sc:Number',
         commentsEnabled: 'sc:Boolean',
