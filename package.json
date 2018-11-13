@@ -71,7 +71,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged && ./scripts/openapi-peertube-version.sh"
     }
   },
   "lint-staged": {
