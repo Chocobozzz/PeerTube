@@ -2,24 +2,105 @@ swagger: '2.0'
 info:
   title: PeerTube
   version: 1.1.0-alpha.2
-  description: Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.
-host: peertube.example.com
+  contact:
+    name: PeerTube Community
+    url: 'https://joinpeertube.org'
+  license:
+    name: AGPLv3.0
+    url: 'https://github.com/Chocobozzz/PeerTube/blob/master/LICENSE'
+  x-logo:
+    url: 'https://joinpeertube.org/img/brand.png'
+  description: |
+    # Introduction
+    The PeerTube API is built on HTTP(S). Our API is RESTful. It has predictable
+    resource URLs. It returns HTTP response codes to indicate errors. It also
+    accepts and returns JSON in the HTTP body. You can use your favorite
+    HTTP/REST library for your programming language to use PeerTube. No official
+    SDK is currently provided.
+    
+    # Authentication
+    When you sign up for an account, you are given the possibility to generate
+    sessions, and authenticate using this session token. One session token can 
+    currently be used at a time.
 securityDefinitions:
   OAuth2:
-    description: 'In the header: *Authorization: Bearer mytoken*'
+    description: |
+      In the header: *Authorization: Bearer <token\>*
+      
+      Authenticating via OAuth requires the following steps:
+
+      - Have an account with sufficient authorization levels
+      - [Generate](https://docs.joinpeertube.org/lang/en/devdocs/rest.html) a Bearer Token
+      - Make Authenticated Requests
     type: oauth2
     flow: password
     # Not implemented yet
     # authorizationUrl: https://example.com/oauth/authorize
     tokenUrl: https://peertube.example.com/api/v1/users/token
+    scopes:
+      admin: Admin scope
+      moderator: Moderator scope
+      user: User scope
 basePath: '/api/v1'
 schemes:
   - https
+host: peertube.example.com
+x-servers:
+  - url: 'https://peertube.cpy.re/api/v1'
+    description: Live Server
+produces:
+  - application/json; charset=utf-8
+consumes:
+  - application/json
+tags:
+  - name: Accounts
+    description: |
+      Using some features of PeerTube require authentication, for which Accounts
+      provide different levels of permission as well as associated user information.
+      Accounts also encompass remote accounts discovered across the federation.
+  - name: Config
+    description: |
+      Each server exposes public information regarding supported videos and options.
+  - name: Feeds
+    description: |
+      Feeds of videos and feeds of comments allow to see updates and get them in
+      an aggregator or script of your choice.
+  - name: Job
+    description: |
+      Jobs are long-running tasks enqueued and processed by the instance itself. 
+      No additional worker registration is currently available.
+  - name: ServerFollowing
+    description: |
+      Managing servers which the instance interacts with is crucial to the concept
+      of federation in PeerTube and external video indexation. The PeerTube server
+      then deals with inter-server ActivityPub operations and propagates 
+      information across its social graph by posting activities to actors' inbox
+      endpoints.
+  - name: VideoAbuse
+    description: |
+      Video abuses deal with reports of local or remote videos alike.
+  - name: Video
+    description: |
+      Operations dealing with listing, uploading, fetching or modifying videos.
+  - name: Search
+    description: |
+      The search helps to find _videos_ from within the instance and beyond.
+      Videos from other instances federated by the instance (that is, instances
+      followed by the instance) can be found via keywords and other criteria of
+      the advanced search.
+  - name: VideoComment
+    description: |
+      Operations dealing with comments to a video. Comments are organized in threads.
+  - name: VideoChannel
+    description: |
+      Operations dealing with creation, modification and video listing of a user's
+      channels.
 paths:
   '/accounts/{name}':
     get:
       tags:
         - Accounts
+      summary: Get the account by name
       consumes:
         - application/json
       produces:
@@ -38,6 +119,8 @@ paths:
     get:
       tags:
         - Accounts
+        - Video
+      summary: Get videos for an account, provided the name of that account
       consumes:
         - application/json
       produces:
@@ -49,14 +132,24 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Video'
+      x-code-samples:
+        - lang: JavaScript
+          source: |
+            fetch('https://peertube.cpy.re/api/v1/accounts/{name}/videos')
+            .then(function(response) {
+              return response.json()
+            }).then(function(data) {
+              console.log(data)
+            })
   /accounts:
     get:
       tags:
         - Accounts
+      summary: Get all accounts
       consumes:
         - application/json
       produces:
-        - application/json
+        - application/jsonhttps://peertube.cpy.re/api/v1
       responses:
         '200':
           description: successful operation
@@ -68,6 +161,7 @@ paths:
     get:
       tags:
         - Config
+      summary: Get the configuration of the server
       consumes:
         - application/json
       produces:
@@ -79,6 +173,7 @@ paths:
             $ref: '#/definitions/ServerConfig'
   /feeds/videos.{format}:
     get:
+      summary: Get the feed of videos for the server, with optional filter by account name or id
       tags:
         - Feeds
       produces:
@@ -108,8 +203,9 @@ paths:
           description: successful operation
   /jobs:
     get:
+      summary: Get list of jobs
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin ]
       tags:
         - Job
       consumes:
@@ -135,9 +231,10 @@ paths:
   '/server/following/{host}':
     delete:
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin ]
       tags:
         - ServerFollowing
+      summary: Unfollow a server by hostname
       consumes:
         - application/json
       produces:
@@ -155,6 +252,7 @@ paths:
     get:
       tags:
         - ServerFollowing
+      summary: Get followers of the server
       consumes:
         - application/json
       produces:
@@ -174,6 +272,7 @@ paths:
     get:
       tags:
         - ServerFollowing
+      summary: Get servers followed by the server
       consumes:
         - application/json
       produces:
@@ -191,9 +290,10 @@ paths:
               $ref: '#/definitions/Follow'
     post:
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin ]
       tags:
         - ServerFollowing
+      summary: Follow a server
       consumes:
         - application/json
       produces:
@@ -208,8 +308,9 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   /users:
     post:
+      summary: Creates user
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin ]
       tags:
         - User
       consumes:
@@ -229,6 +330,7 @@ paths:
           schema:
             $ref: '#/definitions/AddUserResponse'
     get:
+      summary: Get a list of users
       security:
         - OAuth2: [ ]
       tags:
@@ -250,8 +352,9 @@ paths:
               $ref: '#/definitions/User'
   '/users/{id}':
     delete:
+      summary: Delete a user by its id
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin ]
       tags:
         - User
       consumes:
@@ -264,6 +367,7 @@ paths:
         '204':
           $ref: "commons.yaml#/responses/emptySuccess"
     get:
+      summary: Get user by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -280,6 +384,7 @@ paths:
           schema:
             $ref: '#/definitions/User'
     put:
+      summary: Update user profile by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -300,6 +405,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   /users/me:
     get:
+      summary: Get current user information
       security:
         - OAuth2: [ ]
       tags:
@@ -316,6 +422,7 @@ paths:
             items:
               $ref: '#/definitions/User'
     put:
+      summary: Update current user information
       security:
         - OAuth2: [ ]
       tags:
@@ -335,6 +442,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   /users/me/video-quota-used:
     get:
+      summary: Get current user used quota
       security:
         - OAuth2: [ ]
       tags:
@@ -351,6 +459,7 @@ paths:
             type: number
   '/users/me/videos/{videoId}/rating':
     get:
+      summary: Get rating of video by its id, among those of the current user
       security:
         - OAuth2: [ ]
       tags:
@@ -372,6 +481,7 @@ paths:
             $ref: '#/definitions/GetMeVideoRating'
   /users/me/videos:
     get:
+      summary: Get videos of the current user
       security:
         - OAuth2: [ ]
       tags:
@@ -393,6 +503,7 @@ paths:
               $ref: '#/definitions/Video'
   /users/register:
     post:
+      summary: Register a user
       tags:
         - User
       consumes:
@@ -410,6 +521,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   /users/me/avatar/pick:
     post:
+      summary: Update current user avatar
       security:
         - OAuth2: [ ]
       tags:
@@ -430,6 +542,7 @@ paths:
             $ref: '#/definitions/Avatar'
   /videos:
     get:
+      summary: Get list of videos
       tags:
         - Video
       consumes:
@@ -454,6 +567,7 @@ paths:
               $ref: '#/definitions/Video'
   /videos/categories:
     get:
+      summary: Get list of video licences known by the server
       tags:
         - Video
       consumes:
@@ -469,6 +583,7 @@ paths:
               type: string
   /videos/licences:
     get:
+      summary: Get list of video licences known by the server
       tags:
         - Video
       consumes:
@@ -484,6 +599,7 @@ paths:
               type: string
   /videos/languages:
     get:
+      summary: Get list of languages known by the server
       tags:
         - Video
       consumes:
@@ -499,6 +615,7 @@ paths:
               type: string
   /videos/privacies:
     get:
+      summary: Get list of privacy policies supported by the server
       tags:
         - Video
       consumes:
@@ -514,6 +631,7 @@ paths:
               type: string
   "/videos/{id}":
     put:
+      summary: Update metadata for a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -544,6 +662,7 @@ paths:
           schema:
             $ref: '#/definitions/Video'
     get:
+      summary: Get a video by its id
       tags:
         - Video
       consumes:
@@ -558,6 +677,7 @@ paths:
           schema:
             $ref: '#/definitions/Video'
     delete:
+      summary: Delete a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -573,6 +693,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   "/videos/{id}/description":
     get:
+      summary: Get a video description by its id
       tags:
         - Video
       consumes:
@@ -588,6 +709,7 @@ paths:
             type: string
   "/videos/{id}/views":
     post:
+      summary: Add a view to the video by its id
       tags:
         - Video
       consumes:
@@ -601,6 +723,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   /videos/upload:
     post:
+      summary: Upload a video file with its metadata
       security:
         - OAuth2: [ ]
       tags:
@@ -641,6 +764,7 @@ paths:
             $ref: '#/definitions/VideoUploadResponse'
   /videos/abuse:
     get:
+      summary: Get list of reported video abuses
       security:
         - OAuth2: [ ]
       tags:
@@ -662,6 +786,7 @@ paths:
               $ref: '#/definitions/VideoAbuse'
   "/videos/{id}/abuse":
     post:
+      summary: Report an abuse, on a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -677,8 +802,9 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   "/videos/{id}/blacklist":
     post:
+      summary: Put on blacklist a video by its id
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin, moderator ]
       tags:
         - VideoBlacklist
       consumes:
@@ -691,8 +817,9 @@ paths:
         '204':
           $ref: "commons.yaml#/responses/emptySuccess"
     delete:
+      summary: Delete an entry of the blacklist of a video by its id
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin, moderator ]
       tags:
         - VideoBlacklist
       consumes:
@@ -706,8 +833,9 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   /videos/blacklist:
     get:
+      summary: Get list of videos on blacklist
       security:
-        - OAuth2: [ ]
+        - OAuth2: [ admin, moderator ]
       tags:
         - VideoBlacklist
       consumes:
@@ -727,6 +855,7 @@ paths:
               $ref: '#/definitions/VideoBlacklist'
   /video-channels:
     get:
+      summary: Get list of video channels
       tags:
         - VideoChannel
       consumes:
@@ -745,6 +874,7 @@ paths:
             items:
               $ref: '#/definitions/VideoChannel'
     post:
+      summary: Creates a video channel for the current user
       security:
         - OAuth2: [ ]
       tags:
@@ -763,6 +893,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   "/video-channels/{id}":
     get:
+      summary: Get a video channel by its id
       tags:
         - VideoChannel
       consumes:
@@ -777,6 +908,7 @@ paths:
           schema:
             $ref: '#/definitions/VideoChannel'
     put:
+      summary: Update a video channel by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -795,6 +927,7 @@ paths:
         '204':
           $ref: "commons.yaml#/responses/emptySuccess"
     delete:
+      summary: Delete a video channel by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -810,6 +943,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   "/video-channels/{id}/videos":
     get:
+      summary: Get videos of a video channel by its id
       tags:
         - VideoChannel
       consumes:
@@ -825,6 +959,7 @@ paths:
             $ref: '#/definitions/Video'
   /accounts/{name}/video-channels:
     get:
+      summary: Get video channels of an account by its name
       tags:
         - VideoChannel
       consumes:
@@ -842,6 +977,7 @@ paths:
               $ref: '#/definitions/VideoChannel'
   "/videos/{id}/comment-threads":
     get:
+      summary: Get the comment threads of a video by its id
       tags:
         - VideoComment
       consumes:
@@ -859,6 +995,7 @@ paths:
           schema:
             $ref: '#/definitions/CommentThreadResponse'
     post:
+      summary: Creates a comment thread, on a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -876,6 +1013,7 @@ paths:
             $ref: '#/definitions/CommentThreadPostResponse'
   "/videos/{id}/comment-threads/{threadId}":
     get:
+      summary: Get the comment thread by its id, of a video by its id
       tags:
         - VideoComment
       consumes:
@@ -892,6 +1030,7 @@ paths:
             $ref: '#/definitions/VideoCommentThreadTree'
   "/videos/{id}/comments/{commentId}":
     post:
+      summary: Creates a comment in a comment thread by its id, of a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -909,6 +1048,7 @@ paths:
           schema:
             $ref: '#/definitions/CommentThreadPostResponse'
     delete:
+      summary: Delete a comment in a comment therad by its id, of a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -925,6 +1065,7 @@ paths:
           $ref: "commons.yaml#/responses/emptySuccess"
   "/videos/{id}/rate":
     put:
+      summary: Vote for a video by its id
       security:
         - OAuth2: [ ]
       tags:
@@ -942,6 +1083,7 @@ paths:
     get:
       tags:
         - Search
+      summary: Get the videos corresponding to a given query
       consumes:
         - application/json
       produces:
