@@ -43,6 +43,7 @@
     "dev:server": "scripty",
     "dev:client": "scripty",
     "start": "node dist/server",
+    "start:server": "node dist/server --no-client",
     "update-host": "node ./dist/scripts/update-host.js",
     "create-transcoding-job": "node ./dist/scripts/create-transcoding-job.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
