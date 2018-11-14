@@ -16,6 +16,7 @@ import * as cookieParser from 'cookie-parser'
 import * as helmet from 'helmet'
 import * as useragent from 'useragent'
 import * as anonymize from 'ip-anonymize'
+import * as cli from 'commander'
 
 process.title = 'peertube'
 
@@ -98,6 +99,10 @@ import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redund
 
 // ----------- Command line -----------
 
+cli
+  .option('--no-client', 'Start PeerTube without client interface')
+  .parse(process.argv)
+
 // ----------- App -----------
 
 // Enable CORS for develop
@@ -151,7 +156,7 @@ app.use('/', trackerRouter)
 app.use('/', staticRouter)
 
 // Client files, last valid routes!
-app.use('/', clientsRouter)
+if (cli.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
