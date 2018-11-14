@@ -26,14 +26,12 @@ import {
   isVideoLicenceValid,
   isVideoNameValid,
   isVideoPrivacyValid,
-  isVideoRatingTypeValid,
   isVideoSupportValid,
   isVideoTagsValid
 } from '../../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { VideoShareModel } from '../../../models/video/video-share'
 import { authenticate } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -184,41 +182,6 @@ const videosRemoveValidator = [
     // Check if the user who did the request is able to delete the video
     if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.REMOVE_ANY_VIDEO, res)) return
 
-    return next()
-  }
-]
-
-const videoRateValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoRate parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
-
-    return next()
-  }
-]
-
-const videosShareValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('accountId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid account id'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoShare parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
-
-    const share = await VideoShareModel.load(req.params.accountId, res.locals.video.id, undefined)
-    if (!share) {
-      return res.status(404)
-        .end()
-    }
-
-    res.locals.videoShare = share
     return next()
   }
 ]
@@ -415,9 +378,6 @@ export {
   videosGetValidator,
   videosCustomGetValidator,
   videosRemoveValidator,
-  videosShareValidator,
-
-  videoRateValidator,
 
   videosChangeOwnershipValidator,
   videosTerminateChangeOwnershipValidator,

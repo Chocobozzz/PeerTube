@@ -4,7 +4,7 @@ import { VideoModel } from '../server/models/video/video'
 import { ActorModel } from '../server/models/activitypub/actor'
 import {
   getAccountActivityPubUrl,
-  getAnnounceActivityPubUrl,
+  getVideoAnnounceActivityPubUrl,
   getVideoActivityPubUrl, getVideoChannelActivityPubUrl,
   getVideoCommentActivityPubUrl
 } from '../server/lib/activitypub'
@@ -78,7 +78,7 @@ async function run () {
 
     console.log('Updating video share ' + videoShare.url)
 
-    videoShare.url = getAnnounceActivityPubUrl(videoShare.Video.url, videoShare.Actor)
+    videoShare.url = getVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
     await videoShare.save()
   }
 

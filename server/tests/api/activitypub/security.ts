@@ -2,7 +2,7 @@
 
 import 'mocha'
 
-import { flushAndRunMultipleServers, flushTests, killallServers, makeAPRequest, makeFollowRequest, ServerInfo } from '../../utils'
+import { flushAndRunMultipleServers, flushTests, killallServers, makePOSTAPRequest, makeFollowRequest, ServerInfo } from '../../utils'
 import { HTTP_SIGNATURE } from '../../../initializers'
 import { buildDigest, buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as chai from 'chai'
@@ -63,7 +63,7 @@ describe('Test ActivityPub security', function () {
         Digest: buildDigest({ hello: 'coucou' })
       }
 
-      const { response } = await makeAPRequest(url, body, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, body, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(403)
     })
@@ -73,7 +73,7 @@ describe('Test ActivityPub security', function () {
       const headers = buildGlobalHeaders(body)
       headers['date'] = 'Wed, 21 Oct 2015 07:28:00 GMT'
 
-      const { response } = await makeAPRequest(url, body, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, body, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(403)
     })
@@ -85,7 +85,7 @@ describe('Test ActivityPub security', function () {
       const body = activityPubContextify(require('./json/peertube/announce-without-context.json'))
       const headers = buildGlobalHeaders(body)
 
-      const { response } = await makeAPRequest(url, body, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, body, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(403)
     })
@@ -97,7 +97,7 @@ describe('Test ActivityPub security', function () {
       const body = activityPubContextify(require('./json/peertube/announce-without-context.json'))
       const headers = buildGlobalHeaders(body)
 
-      const { response } = await makeAPRequest(url, body, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, body, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(204)
     })
@@ -126,7 +126,7 @@ describe('Test ActivityPub security', function () {
 
       const headers = buildGlobalHeaders(signedBody)
 
-      const { response } = await makeAPRequest(url, signedBody, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(403)
     })
@@ -147,7 +147,7 @@ describe('Test ActivityPub security', function () {
 
       const headers = buildGlobalHeaders(signedBody)
 
-      const { response } = await makeAPRequest(url, signedBody, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(403)
     })
@@ -163,7 +163,7 @@ describe('Test ActivityPub security', function () {
 
       const headers = buildGlobalHeaders(signedBody)
 
-      const { response } = await makeAPRequest(url, signedBody, baseHttpSignature, headers)
+      const { response } = await makePOSTAPRequest(url, signedBody, baseHttpSignature, headers)
 
       expect(response.statusCode).to.equal(204)
     })

@@ -64,7 +64,7 @@ async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Trans
   logger.info('Creating job to undo a dislike of video %s.', video.url)
 
   const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
-  const dislikeActivity = buildDislikeActivity(byActor, video)
+  const dislikeActivity = buildDislikeActivity(dislikeUrl, byActor, video)
   const createDislikeActivity = buildCreateActivity(dislikeUrl, byActor, dislikeActivity)
 
   return sendUndoVideoRelatedActivity({ byActor, video, url: dislikeUrl, activity: createDislikeActivity, transaction: t })

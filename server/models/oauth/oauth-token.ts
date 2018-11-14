@@ -47,7 +47,7 @@ enum ScopeNames {
             required: true,
             include: [
               {
-                attributes: [ 'id' ],
+                attributes: [ 'id', 'url' ],
                 model: () => ActorModel.unscoped(),
                 required: true
               }

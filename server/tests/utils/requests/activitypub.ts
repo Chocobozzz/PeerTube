@@ -3,7 +3,7 @@ import { HTTP_SIGNATURE } from '../../../initializers'
 import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import { activityPubContextify } from '../../../helpers/activitypub'
 
-function makeAPRequest (url: string, body: any, httpSignature: any, headers: any) {
+function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {
     method: 'POST',
     uri: url,
@@ -34,10 +34,10 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
   }
   const headers = buildGlobalHeaders(body)
 
-  return makeAPRequest(to.url, body, httpSignature, headers)
+  return makePOSTAPRequest(to.url, body, httpSignature, headers)
 }
 
 export {
-  makeAPRequest,
+  makePOSTAPRequest,
   makeFollowRequest
 }

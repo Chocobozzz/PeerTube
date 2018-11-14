@@ -23,7 +23,7 @@ async function processActivityPubHttpFetcher (job: Bull.Job) {
   if (payload.videoId) video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoId)
 
   const fetcherType: { [ id in FetchType ]: (items: any[]) => Promise<any> } = {
-    'activity': items => processActivities(items),
+    'activity': items => processActivities(items, { outboxUrl: payload.uri }),
     'video-likes': items => createRates(items, video, 'like'),
     'video-dislikes': items => createRates(items, video, 'dislike'),
     'video-shares': items => addVideoShares(items, video),
