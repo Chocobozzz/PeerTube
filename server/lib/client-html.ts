@@ -116,7 +116,7 @@ export class ClientHtml {
 
       'og:video:url': embedUrl,
       'og:video:secure_url': embedUrl,
-      'og:video:type': 'video/mp4',
+      'og:video:type': 'text/html',
       'og:video:width': EMBED_SIZE.width,
       'og:video:height': EMBED_SIZE.height,
 
