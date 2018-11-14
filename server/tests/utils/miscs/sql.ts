@@ -24,6 +24,15 @@ function setActorField (serverNumber: number, to: string, field: string, value: 
   return seq.query(`UPDATE actor SET "${field}" = '${value}' WHERE url = '${to}'`, options)
 }
 
+function setVideoField (serverNumber: number, uuid: string, field: string, value: string) {
+  const seq = getSequelize(serverNumber)
+
+  const options = { type: Sequelize.QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE video SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
+}
+
 export {
+  setVideoField,
   setActorField
 }
