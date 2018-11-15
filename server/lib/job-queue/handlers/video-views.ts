@@ -39,7 +39,7 @@ async function processVideosViews () {
           })
 
           const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
-          await federateVideoIfNeeded(video, false)
+          if (video.isOwned()) await federateVideoIfNeeded(video, false)
         } catch (err) {
           logger.debug('Cannot create video views for video %d in hour %d. Maybe the video does not exist anymore?', videoId, hour)
         }
