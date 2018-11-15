@@ -5,7 +5,7 @@ import 'mocha'
 import { JobState, Video } from '../../../../shared/models'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { completeVideoCheck, getVideo, immutableAssign, reRunServer, unfollow, viewVideo } from '../../utils'
+import { completeVideoCheck, getVideo, immutableAssign, reRunServer, unfollow, updateVideo, viewVideo } from '../../utils'
 import {
   flushAndRunMultipleServers,
   getVideosList,
@@ -194,15 +194,15 @@ describe('Test handle downs', function () {
     expect(res.body.data).to.have.lengthOf(2)
   })
 
-  it('Should send a view to server 3, and automatically fetch the video', async function () {
+  it('Should send an update to server 3, and automatically fetch the video', async function () {
     this.timeout(15000)
 
     const res1 = await getVideosList(servers[2].url)
     expect(res1.body.data).to.be.an('array')
     expect(res1.body.data).to.have.lengthOf(11)
 
-    await viewVideo(servers[0].url, missedVideo1.uuid)
-    await viewVideo(servers[0].url, unlistedVideo.uuid)
+    await updateVideo(servers[0].url, servers[0].accessToken, missedVideo1.uuid, { })
+    await updateVideo(servers[0].url, servers[0].accessToken, unlistedVideo.uuid, { })
 
     await waitJobs(servers)
 
