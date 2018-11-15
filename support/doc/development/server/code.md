@@ -41,18 +41,18 @@ Uses [JavaScript Standard Style](http://standardjs.com/).
 
 The server is composed by:
 
-  * a REST API (Express framework)
-  * a WebTorrent Tracker
+  * a REST API (relying on the Express framework) documented on http://docs.joinpeertube.org/api.html
+  * a WebTorrent Tracker (slightly custom version of [webtorrent/bittorrent-tracker](https://github.com/webtorrent/bittorrent-tracker#server))
 
 A video is seeded by the server with the [WebSeed](http://www.bittorrent.org/beps/bep_0019.html) protocol (HTTP).
 
 ![Architecture scheme](/support/doc/development/server/upload-video.png)
 
-When a user uploads a video, the rest API create the torrent file and then adds it to its database.
+When a user uploads a video, the REST API creates the torrent file and then adds it to its database.
 
 If a user wants to watch the video, the tracker will indicate all other users that are watching the video + the HTTP url for the WebSeed.
 
 ## Newcomers
 
-The server entrypoint is [server.ts](/server.ts). You can begin to look at this file.
-Then you can try to understand the [controllers](/server/controllers): they are the entrypoint of each API request.
+The server entrypoint is [server.ts](/server.ts). Looking at this file is a good start.
+Then you can try to understand the [controllers](/server/controllers): they are the entrypoints of each API request.

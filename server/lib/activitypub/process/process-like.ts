@@ -5,6 +5,8 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { ActorModel } from '../../../models/activitypub/actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { immutableAssign } from '../../../tests/utils'
+import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
 
 async function processLikeActivity (activity: ActivityLike, byActor: ActorModel) {
   return retryTransactionWrapper(processLikeVideo, byActor, activity)
@@ -34,7 +36,7 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
     }
     const [ , created ] = await AccountVideoRateModel.findOrCreate({
       where: rate,
-      defaults: rate,
+      defaults: immutableAssign(rate, { url: getVideoLikeActivityPubUrl(byActor, video) }),
       transaction: t
     })
     if (created === true) await video.increment('likes', { transaction: t })

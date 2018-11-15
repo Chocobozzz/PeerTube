@@ -131,8 +131,12 @@ menu {
       transition: background-color .1s ease-in-out;
       @include disable-default-a-behaviour;
 
-      &:hover, &.focus-visible {
+      &.active {
         background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      &:hover, &.focus-visible {
+        background-color: rgba(255, 255, 255, 0.10);
       }
 
       .icon {

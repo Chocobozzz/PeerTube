@@ -1,13 +1,13 @@
 <h1 align="center">
   <a href="https://joinpeertube.org">
-  <img src="https://joinpeertube.org/img/brand.png" alt="PeerTube">
-  <a>
+    <img src="https://joinpeertube.org/img/brand.png" alt="PeerTube">
+  </a>
 </h1>
 
 <p align=center>
   <strong><a href="https://joinpeertube.org">Website</a></strong>
   | <strong><a href="https://instances.joinpeertube.org">Join an instance</a></strong>
-  | <strong><a href="#package-create-your-own-instance">Create one</a></strong>
+  | <strong><a href="#package-create-your-own-instance">Create an instance</a></strong>
   | <strong><a href="#contact">Chat with us</a></strong>
 </p>
 
@@ -75,7 +75,7 @@ Just upload your videos, and be sure they will stream anywhere. Add a descriptio
 
 <h3 align="right">Keep in touch with video creators</h3>
 <p align="right">
-Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma and plenty others), or just with good ol' RSS.
+Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma, and plenty others), or just with good ol' RSS.
 </p>
 
 ---
@@ -121,6 +121,24 @@ enough because one video could become popular and overload the server.  That is
 why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make BitTorrent inside the web browser, as of today.
 
+:raised_hands: Contributing
+----------------------------------------------------------------
+
+You don't need to be a coder to help!
+
+You can give us your feedback, report bugs, help us translate PeerTube, write documentation, and more. Check out the [contributing
+guide](/.github/CONTRIBUTING.md) to know how, it takes less than 2 minutes to get started. :wink:
+
+You can also join the cheerful bunch that makes our community:
+
+* Chat<a name="contact"></a>:
+  * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
+  * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+* Forum:
+  * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
+    
+Feel free to reach out if you have any questions or ideas! :speech_balloon:
+
 :package: Create your own instance
 ----------------------------------------------------------------
 
@@ -136,20 +154,6 @@ why we need to use a P2P protocol to limit the server load.  Thanks to
 See the [production guide](/support/doc/production.md), which is the recommended way.
 
 See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
-
-:wrench: Contribute/Translate/Test
-----------------------------------------------------------------
-
-*Spoiler alert*: you don't need to be a coder to help!
-
-See the [contributing
-guide](/.github/CONTRIBUTING.md). Or simply join the cheerful bunch that makes our community:
-
-  * Chat<a name="contact"></a>:
-    * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
-    * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
-  * Forum:
-    * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
 
 :book: Documentation
 ----------------------------------------------------------------
@@ -179,9 +183,8 @@ See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation of the a
 #### Backend
 
   * REST API:
-    * Quick Start: [/support/doc/api/quickstart.md](/support/doc/api/quickstart.md)
-    * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
-    * HTML explorer: [/support/doc/api/html/index.html](https://htmlpreview.github.io/?https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/html/index.html)
+    * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+    * HTML explorer: [docs.joinpeertube.org/api.html](http://docs.joinpeertube.org/api.html)
   * Servers communicate with each other with [Activity
     Pub](https://www.w3.org/TR/activitypub/).
   * Each server has its own users who query it (search videos, query where the

@@ -5,34 +5,25 @@ import { getSettings, writeSettings, netrc } from './cli'
 import { isHostValid } from '../helpers/custom-validators/servers'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
 
-function delInstance (url: string) {
-  return new Promise((res, rej): void => {
-    getSettings()
-      .then(async (settings) => {
-        settings.remotes.splice(settings.remotes.indexOf(url))
-        await writeSettings(settings)
-        delete netrc.machines[url]
-        netrc.save()
-        res()
-      })
-      .catch(err => rej(err))
-  })
+async function delInstance (url: string) {
+  const settings = await getSettings()
+
+  settings.remotes.splice(settings.remotes.indexOf(url))
+  await writeSettings(settings)
+
+  delete netrc.machines[url]
+  await netrc.save()
 }
 
 async function setInstance (url: string, username: string, password: string) {
-  return new Promise((res, rej): void => {
-    getSettings()
-      .then(async settings => {
-        if (settings.remotes.indexOf(url) === -1) {
-          settings.remotes.push(url)
-        }
-        await writeSettings(settings)
-        netrc.machines[url] = { login: username, password }
-        netrc.save()
-        res()
-      })
-      .catch(err => rej(err))
-  })
+  const settings = await getSettings()
+  if (settings.remotes.indexOf(url) === -1) {
+    settings.remotes.push(url)
+  }
+  await writeSettings(settings)
+
+  netrc.machines[url] = { login: username, password }
+  await netrc.save()
 }
 
 function isURLaPeerTubeInstance (url: string) {
@@ -71,56 +62,60 @@ program
           required: true
         }
       }
-    }, (_, result) => {
-      setInstance(result.url, result.username, result.password)
+    }, async (_, result) => {
+      await setInstance(result.url, result.username, result.password)
+
+      process.exit(0)
     })
   })
 
 program
   .command('del <url>')
   .description('unregisters a remote instance')
-  .action((url) => {
-    delInstance(url)
+  .action(async url => {
+    await delInstance(url)
+
+    process.exit(0)
   })
 
 program
   .command('list')
   .description('lists registered remote instances')
-  .action(() => {
-    getSettings()
-      .then(settings => {
-        const table = new Table({
-          head: ['instance', 'login'],
-          colWidths: [30, 30]
-        })
-        netrc.loadSync()
-        settings.remotes.forEach(element => {
-          table.push([
-            element,
-            netrc.machines[element].login
-          ])
-        })
+  .action(async () => {
+    const settings = await getSettings()
+    const table = new Table({
+      head: ['instance', 'login'],
+      colWidths: [30, 30]
+    })
+    netrc.loadSync()
+    settings.remotes.forEach(element => {
+      table.push([
+        element,
+        netrc.machines[element].login
+      ])
+    })
 
-        console.log(table.toString())
-      })
+    console.log(table.toString())
+
+    process.exit(0)
   })
 
 program
   .command('set-default <url>')
   .description('set an existing entry as default')
-  .action((url) => {
-    getSettings()
-      .then(settings => {
-        const instanceExists = settings.remotes.indexOf(url) !== -1
+  .action(async url => {
+    const settings = await getSettings()
+    const instanceExists = settings.remotes.indexOf(url) !== -1
 
-        if (instanceExists) {
-          settings.default = settings.remotes.indexOf(url)
-          writeSettings(settings)
-        } else {
-          console.log('<url> is not a registered instance.')
-          process.exit(-1)
-        }
-      })
+    if (instanceExists) {
+      settings.default = settings.remotes.indexOf(url)
+      await writeSettings(settings)
+
+      process.exit(0)
+    } else {
+      console.log('<url> is not a registered instance.')
+      process.exit(-1)
+    }
   })
 
 program.on('--help', function () {

@@ -450,7 +450,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
   }
 
-  private setRating (nextRating: VideoRateType) {
+  private setRating (nextRating: UserVideoRateType) {
     let method
     switch (nextRating) {
       case 'like':
@@ -476,7 +476,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           )
   }
 
-  private updateVideoRating (oldRating: UserVideoRateType, newRating: VideoRateType) {
+  private updateVideoRating (oldRating: UserVideoRateType, newRating: UserVideoRateType) {
     let likesToIncrement = 0
     let dislikesToIncrement = 0
 

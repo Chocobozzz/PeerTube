@@ -43,19 +43,18 @@
     "dev:server": "scripty",
     "dev:client": "scripty",
     "start": "node dist/server",
+    "start:server": "node dist/server --no-client",
     "update-host": "node ./dist/scripts/update-host.js",
     "create-transcoding-job": "node ./dist/scripts/create-transcoding-job.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
     "test": "scripty",
     "help": "scripty",
-    "generate-api-doc": "scripty",
     "generate-cli-doc": "scripty",
     "parse-log": "node ./dist/scripts/parse-log.js",
     "prune-storage": "node ./dist/scripts/prune-storage.js",
     "optimize-old-videos": "node ./dist/scripts/optimize-old-videos.js",
     "postinstall": "cd client && yarn install --pure-lockfile",
     "tsc": "tsc",
-    "spectacle-docs": "node_modules/spectacle-docs/bin/spectacle.js",
     "commander": "commander",
     "ng": "ng",
     "nodemon": "nodemon",
@@ -71,12 +70,20 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "./scripts/openapi-peertube-version.sh && lint-staged"
     }
   },
   "lint-staged": {
     "*.scss": [
       "sass-lint -c client/.sass-lint.yml",
+      "git add"
+    ],
+    "support/doc/api/*.yaml": [
+      "node ./node_modules/swagger-cli/bin/swagger-cli.js validate support/doc/api/openapi.yaml",
+      "git add"
+    ],
+    "server/tools/README.md": [
+      "npm run generate-cli-doc",
       "git add"
     ]
   },
@@ -88,7 +95,7 @@
     "async": "^2.0.0",
     "async-lock": "^1.1.2",
     "async-lru": "^1.1.1",
-    "bcrypt": "2",
+    "bcrypt": "3.0.2",
     "bittorrent-tracker": "^9.0.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.12.4",
@@ -113,7 +120,7 @@
     "http-signature": "^1.2.0",
     "ip-anonymize": "^0.0.6",
     "ipaddr.js": "1.8.1",
-    "is-cidr": "^2.0.5",
+    "is-cidr": "^3.0.0",
     "iso-639-3": "^1.0.1",
     "js-yaml": "^3.5.4",
     "jsonld": "^1.0.1",
@@ -138,9 +145,9 @@
     "request": "^2.81.0",
     "safe-buffer": "^5.0.1",
     "scripty": "^1.5.0",
-    "sequelize": "4.38.0",
+    "sequelize": "4.41.2",
     "sequelize-typescript": "0.6.6",
-    "sharp": "^0.20.0",
+    "sharp": "^0.21.0",
     "srt-to-vtt": "^1.1.2",
     "summon-install": "^0.4.3",
     "useragent": "^2.3.0",
@@ -155,7 +162,7 @@
   "devDependencies": {
     "@types/async": "^2.0.40",
     "@types/async-lock": "^1.1.0",
-    "@types/bcrypt": "^2.0.0",
+    "@types/bcrypt": "^3.0.0",
     "@types/bluebird": "3.5.21",
     "@types/body-parser": "^1.16.3",
     "@types/bull": "^3.3.12",
@@ -183,7 +190,7 @@
     "@types/pem": "^1.9.3",
     "@types/redis": "^2.8.5",
     "@types/request": "^2.0.3",
-    "@types/sharp": "^0.17.6",
+    "@types/sharp": "^0.21.0",
     "@types/supertest": "^2.0.3",
     "@types/validator": "^9.4.0",
     "@types/webtorrent": "^0.98.4",
@@ -192,19 +199,19 @@
     "chai-json-schema": "^1.5.0",
     "chai-xml": "^0.3.2",
     "husky": "^1.0.0-rc.4",
-    "libxmljs": "0.19.3",
-    "lint-staged": "^7.1.0",
+    "libxmljs": "0.19.5",
+    "lint-staged": "^8.0.4",
     "maildev": "^1.0.0-rc3",
     "mocha": "^5.0.0",
     "nodemon": "^1.11.0",
     "sass-lint": "^1.12.1",
     "source-map-support": "^0.5.0",
-    "spectacle-docs": "^1.0.2",
     "supertest": "^3.0.0",
+    "swagger-cli": "^2.2.0",
     "ts-node": "7.0.1",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^2.5.2",
+    "typescript": "^3.1.6",
     "xliff": "^4.0.0"
   },
   "scripty": {

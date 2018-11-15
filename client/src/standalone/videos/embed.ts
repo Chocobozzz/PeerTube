@@ -256,9 +256,8 @@ class PeerTubeEmbed {
   }
 
   private async initCore () {
-    const urlParts = window.location.href.split('/')
-    const lastPart = urlParts[ urlParts.length - 1 ]
-    const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
+    const urlParts = window.location.pathname.split('/')
+    const videoId = urlParts[ urlParts.length - 1 ]
 
     const [ , serverTranslations, videoResponse, captionsResponse ] = await Promise.all([
       loadLocaleInVideoJS(window.location.origin, vjs, navigator.language),

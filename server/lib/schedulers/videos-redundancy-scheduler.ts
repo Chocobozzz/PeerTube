@@ -185,11 +185,12 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   }
 
   private async isTooHeavy (redundancy: VideosRedundancy, filesToDuplicate: VideoFileModel[]) {
-    const maxSize = redundancy.size - this.getTotalFileSizes(filesToDuplicate)
+    const maxSize = redundancy.size
 
     const totalDuplicated = await VideoRedundancyModel.getTotalDuplicated(redundancy.strategy)
+    const totalWillDuplicate = totalDuplicated + this.getTotalFileSizes(filesToDuplicate)
 
-    return totalDuplicated > maxSize
+    return totalWillDuplicate > maxSize
   }
 
   private buildNewExpiration (expiresAfterMs: number) {

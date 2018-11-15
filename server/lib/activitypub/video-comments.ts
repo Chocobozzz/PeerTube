@@ -9,6 +9,7 @@ import { VideoCommentModel } from '../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
+import { checkUrlsSameHost } from '../../helpers/activitypub'
 
 async function videoCommentActivityObjectToDBAttributes (video: VideoModel, actor: ActorModel, comment: VideoCommentObject) {
   let originCommentId: number = null
@@ -60,6 +61,14 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
 
   const actorUrl = body.attributedTo
   if (!actorUrl) return { created: false }
+
+  if (checkUrlsSameHost(commentUrl, actorUrl) !== true) {
+    throw new Error(`Actor url ${actorUrl} has not the same host than the comment url ${commentUrl}`)
+  }
+
+  if (checkUrlsSameHost(body.id, commentUrl) !== true) {
+    throw new Error(`Comment url ${commentUrl} host is different from the AP object id ${body.id}`)
+  }
 
   const actor = await getOrCreateActorAndServerAndModel(actorUrl)
   const entry = await videoCommentActivityObjectToDBAttributes(videoInstance, actor, body)
@@ -133,6 +142,14 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
     const actorUrl = body.attributedTo
     if (!actorUrl) throw new Error('Miss attributed to in comment')
+
+    if (checkUrlsSameHost(url, actorUrl) !== true) {
+      throw new Error(`Actor url ${actorUrl} has not the same host than the comment url ${url}`)
+    }
+
+    if (checkUrlsSameHost(body.id, url) !== true) {
+      throw new Error(`Comment url ${url} host is different from the AP object id ${body.id}`)
+    }
 
     const actor = await getOrCreateActorAndServerAndModel(actorUrl)
     const comment = new VideoCommentModel({

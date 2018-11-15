@@ -44,6 +44,8 @@ describe('Test CLI wrapper', function () {
   })
 
   after(async function () {
+    this.timeout(10000)
+
     await execCLI(cmd + ` auth del ${server.url}`)
 
     killallServers([ server ])

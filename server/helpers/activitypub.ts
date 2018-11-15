@@ -6,6 +6,7 @@ import { ACTIVITY_PUB } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
 import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
+import { parse } from 'url'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data, {
@@ -24,7 +25,7 @@ function activityPubContextify <T> (data: T) {
         sensitive: 'as:sensitive',
         language: 'sc:inLanguage',
         views: 'sc:Number',
-        stats: 'sc:Number',
+        state: 'sc:Number',
         size: 'sc:Number',
         fps: 'sc:Number',
         commentsEnabled: 'sc:Boolean',
@@ -111,9 +112,17 @@ function getActorUrl (activityActor: string | ActivityPubActor) {
   return activityActor.id
 }
 
+function checkUrlsSameHost (url1: string, url2: string) {
+  const idHost = parse(url1).host
+  const actorHost = parse(url2).host
+
+  return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  checkUrlsSameHost,
   getActorUrl,
   activityPubContextify,
   activityPubCollectionPagination,

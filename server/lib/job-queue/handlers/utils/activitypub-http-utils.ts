@@ -38,15 +38,20 @@ async function buildSignedRequestOptions (payload: Payload) {
   }
 }
 
-function buildGlobalHeaders (body: object) {
-  const digest = 'SHA-256=' + sha256(JSON.stringify(body), 'base64')
-
+function buildGlobalHeaders (body: any) {
   return {
-    'Digest': digest
+    'Digest': buildDigest(body)
   }
 }
 
+function buildDigest (body: any) {
+  const rawBody = typeof body === 'string' ? body : JSON.stringify(body)
+
+  return 'SHA-256=' + sha256(rawBody, 'base64')
+}
+
 export {
+  buildDigest,
   buildGlobalHeaders,
   computeBody,
   buildSignedRequestOptions

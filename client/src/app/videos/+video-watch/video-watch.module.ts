@@ -17,7 +17,6 @@ import { NgxQRCodeModule } from 'ngx-qrcode2'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { VideoBlacklistComponent } from '@app/videos/+video-watch/modal/video-blacklist.component'
 import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
-import { TextareaAutosizeModule } from 'ngx-textarea-autosize'
 
 @NgModule({
   imports: [
@@ -26,7 +25,6 @@ import { TextareaAutosizeModule } from 'ngx-textarea-autosize'
     ClipboardModule,
     NgbTooltipModule,
     NgxQRCodeModule,
-    TextareaAutosizeModule,
     RecommendationsModule
   ],
 

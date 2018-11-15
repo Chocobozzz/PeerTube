@@ -1,9 +1,12 @@
 import { Request } from 'express'
 import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
-import { bcryptComparePromise, bcryptGenSaltPromise, bcryptHashPromise, createPrivateKey, getPublicKey } from './core-utils'
-import { jsig } from './custom-jsonld-signature'
+import { bcryptComparePromise, bcryptGenSaltPromise, bcryptHashPromise, createPrivateKey, getPublicKey, sha256 } from './core-utils'
+import { jsig, jsonld } from './custom-jsonld-signature'
 import { logger } from './logger'
+import { cloneDeep } from 'lodash'
+import { createVerify } from 'crypto'
+import { buildDigest } from '../lib/job-queue/handlers/utils/activitypub-http-utils'
 
 const httpSignature = require('http-signature')
 
@@ -30,21 +33,36 @@ async function cryptPassword (password: string) {
 
 // HTTP Signature
 
-function isHTTPSignatureVerified (httpSignatureParsed: any, actor: ActorModel) {
+function isHTTPSignatureDigestValid (rawBody: Buffer, req: Request): boolean {
+  if (req.headers[HTTP_SIGNATURE.HEADER_NAME] && req.headers['digest']) {
+    return buildDigest(rawBody.toString()) === req.headers['digest']
+  }
+
+  return true
+}
+
+function isHTTPSignatureVerified (httpSignatureParsed: any, actor: ActorModel): boolean {
   return httpSignature.verifySignature(httpSignatureParsed, actor.publicKey) === true
 }
 
-function parseHTTPSignature (req: Request) {
-  return httpSignature.parse(req, { authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME })
+function parseHTTPSignature (req: Request, clockSkew?: number) {
+  return httpSignature.parse(req, { authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME, clockSkew })
 }
 
 // JSONLD
 
-function isJsonLDSignatureVerified (fromActor: ActorModel, signedDocument: any) {
+async function isJsonLDSignatureVerified (fromActor: ActorModel, signedDocument: any): Promise<boolean> {
+  if (signedDocument.signature.type === 'RsaSignature2017') {
+    // Mastodon algorithm
+    const res = await isJsonLDRSA2017Verified(fromActor, signedDocument)
+    // Success? If no, try with our library
+    if (res === true) return true
+  }
+
   const publicKeyObject = {
     '@context': jsig.SECURITY_CONTEXT_URL,
     id: fromActor.url,
-    type:  'CryptographicKey',
+    type: 'CryptographicKey',
     owner: fromActor.url,
     publicKeyPem: fromActor.publicKey
   }
@@ -69,6 +87,44 @@ function isJsonLDSignatureVerified (fromActor: ActorModel, signedDocument: any) 
              })
 }
 
+// Backward compatibility with "other" implementations
+async function isJsonLDRSA2017Verified (fromActor: ActorModel, signedDocument: any) {
+  function hash (obj: any): Promise<any> {
+    return jsonld.promises
+                 .normalize(obj, {
+                   algorithm: 'URDNA2015',
+                   format: 'application/n-quads'
+                 })
+                 .then(res => sha256(res))
+  }
+
+  const signatureCopy = cloneDeep(signedDocument.signature)
+  Object.assign(signatureCopy, {
+    '@context': [
+      'https://w3id.org/security/v1',
+      { RsaSignature2017: 'https://w3id.org/security#RsaSignature2017' }
+    ]
+  })
+  delete signatureCopy.type
+  delete signatureCopy.id
+  delete signatureCopy.signatureValue
+
+  const docWithoutSignature = cloneDeep(signedDocument)
+  delete docWithoutSignature.signature
+
+  const [ documentHash, optionsHash ] = await Promise.all([
+    hash(docWithoutSignature),
+    hash(signatureCopy)
+  ])
+
+  const toVerify = optionsHash + documentHash
+
+  const verify = createVerify('RSA-SHA256')
+  verify.update(toVerify, 'utf8')
+
+  return verify.verify(fromActor.publicKey, signedDocument.signature.signatureValue, 'base64')
+}
+
 function signJsonLDObject (byActor: ActorModel, data: any) {
   const options = {
     privateKeyPem: byActor.privateKey,
@@ -82,6 +138,7 @@ function signJsonLDObject (byActor: ActorModel, data: any) {
 // ---------------------------------------------------------------------------
 
 export {
+  isHTTPSignatureDigestValid,
   parseHTTPSignature,
   isHTTPSignatureVerified,
   isJsonLDSignatureVerified,

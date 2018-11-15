@@ -293,6 +293,11 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
 
     return VideoFileModel.sum('size', options as any) // FIXME: typings
+      .then(v => {
+        if (!v || isNaN(v)) return 0
+
+        return v
+      })
   }
 
   static async listLocalExpired () {

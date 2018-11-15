@@ -11,6 +11,7 @@ import {
   setAccessTokensToServers
 } from '../../shared/utils'
 
+
 const expect = chai.expect
 
 describe('Test activitypub', function () {

@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 285
+const LAST_MIGRATION_VERSION = 290
 
 // ---------------------------------------------------------------------------
 
@@ -336,6 +336,9 @@ const CONSTRAINTS_FIELDS = {
   VIDEOS_REDUNDANCY: {
     URL: { min: 3, max: 2000 } // Length
   },
+  VIDEO_RATES: {
+    URL: { min: 3, max: 2000 } // Length
+  },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
     LANGUAGE: { min: 1, max: 10 }, // Length
@@ -535,7 +538,7 @@ const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
 const HTTP_SIGNATURE = {
   HEADER_NAME: 'signature',
   ALGORITHM: 'rsa-sha256',
-  HEADERS_TO_SIGN: [ 'date', 'host', 'digest', '(request-target)' ]
+  HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ]
 }
 
 // ---------------------------------------------------------------------------
