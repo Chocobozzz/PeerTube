@@ -1,7 +1,0 @@
-parameters:
-  id:
-    name: id
-    in: path
-    required: true
-    type: number
-    description: 'The user id'

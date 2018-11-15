@@ -49,14 +49,12 @@
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
     "test": "scripty",
     "help": "scripty",
-    "generate-api-doc": "scripty",
     "generate-cli-doc": "scripty",
     "parse-log": "node ./dist/scripts/parse-log.js",
     "prune-storage": "node ./dist/scripts/prune-storage.js",
     "optimize-old-videos": "node ./dist/scripts/optimize-old-videos.js",
     "postinstall": "cd client && yarn install --pure-lockfile",
     "tsc": "tsc",
-    "spectacle-docs": "node_modules/spectacle-docs/bin/spectacle.js",
     "commander": "commander",
     "ng": "ng",
     "nodemon": "nodemon",
@@ -72,12 +70,20 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && ./scripts/openapi-peertube-version.sh"
+      "pre-commit": "./scripts/openapi-peertube-version.sh && lint-staged"
     }
   },
   "lint-staged": {
     "*.scss": [
       "sass-lint -c client/.sass-lint.yml",
+      "git add"
+    ],
+    "support/doc/api/*.yaml": [
+      "node ./node_modules/swagger-cli/bin/swagger-cli.js validate support/doc/api/openapi.yaml",
+      "git add"
+    ],
+    "server/tools/README.md": [
+      "npm run generate-cli-doc",
       "git add"
     ]
   },
@@ -200,8 +206,8 @@
     "nodemon": "^1.11.0",
     "sass-lint": "^1.12.1",
     "source-map-support": "^0.5.0",
-    "spectacle-docs": "^1.0.2",
     "supertest": "^3.0.0",
+    "swagger-cli": "^2.2.0",
     "ts-node": "7.0.1",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^8.0.1",

@@ -183,9 +183,8 @@ See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation of the a
 #### Backend
 
   * REST API:
-    * Quick Start: [/support/doc/api/quickstart.md](/support/doc/api/quickstart.md)
-    * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
-    * HTML explorer: [/support/doc/api/html/index.html](https://htmlpreview.github.io/?https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/html/index.html)
+    * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+    * HTML explorer: [docs.joinpeertube.org/api.html](http://docs.joinpeertube.org/api.html)
   * Servers communicate with each other with [Activity
     Pub](https://www.w3.org/TR/activitypub/).
   * Each server has its own users who query it (search videos, query where the
