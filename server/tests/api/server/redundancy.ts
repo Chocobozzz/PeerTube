@@ -54,7 +54,7 @@ async function runServers (strategy: VideoRedundancyStrategy, additionalParams: 
           immutableAssign({
             min_lifetime: '1 hour',
             strategy: strategy,
-            size: '100KB'
+            size: '200KB'
           }, additionalParams)
         ]
       }
@@ -111,8 +111,8 @@ async function checkStatsWith2Webseed (strategy: VideoRedundancyStrategy) {
   const stat = data.videosRedundancy[0]
 
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(102400)
-  expect(stat.totalUsed).to.be.at.least(1).and.below(102401)
+  expect(stat.totalSize).to.equal(204800)
+  expect(stat.totalUsed).to.be.at.least(1).and.below(204800)
   expect(stat.totalVideoFiles).to.equal(4)
   expect(stat.totalVideos).to.equal(1)
 }
@@ -125,7 +125,7 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategy) {
 
   const stat = data.videosRedundancy[0]
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(102400)
+  expect(stat.totalSize).to.equal(204800)
   expect(stat.totalUsed).to.equal(0)
   expect(stat.totalVideoFiles).to.equal(0)
   expect(stat.totalVideos).to.equal(0)
@@ -223,7 +223,7 @@ describe('Test videos redundancy', function () {
       return enableRedundancyOnServer1()
     })
 
-    it('Should have 2 webseed on the first video', async function () {
+    it('Should have 2 webseeds on the first video', async function () {
       this.timeout(40000)
 
       await waitJobs(servers)
@@ -270,7 +270,7 @@ describe('Test videos redundancy', function () {
       return enableRedundancyOnServer1()
     })
 
-    it('Should have 2 webseed on the first video', async function () {
+    it('Should have 2 webseeds on the first video', async function () {
       this.timeout(40000)
 
       await waitJobs(servers)
@@ -338,7 +338,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
     })
 
-    it('Should have 2 webseed on the first video', async function () {
+    it('Should have 2 webseeds on the first video', async function () {
       this.timeout(40000)
 
       await waitJobs(servers)
@@ -399,7 +399,7 @@ describe('Test videos redundancy', function () {
       await enableRedundancyOnServer1()
     })
 
-    it('Should still have 2 webseeds after 10 seconds', async function () {
+    it('Should still have 2 webseedss after 10 seconds', async function () {
       this.timeout(40000)
 
       await wait(10000)
@@ -451,7 +451,7 @@ describe('Test videos redundancy', function () {
       video2Server2UUID = res.body.video.uuid
     })
 
-    it('Should cache video 2 webseed on the first video', async function () {
+    it('Should cache video 2 webseeds on the first video', async function () {
       this.timeout(120000)
 
       await waitJobs(servers)
