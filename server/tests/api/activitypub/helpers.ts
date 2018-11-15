@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { expect } from 'chai'
-import { buildRequestStub } from '../../utils'
+import { buildRequestStub } from '../../utils/miscs/stubs'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../../../helpers/peertube-crypto'
 import { cloneDeep } from 'lodash'
 import { buildSignedActivity } from '../../../helpers/activitypub'

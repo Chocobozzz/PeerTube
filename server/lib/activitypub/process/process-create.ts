@@ -12,7 +12,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createOrUpdateCacheFile } from '../cache-file'
-import { immutableAssign } from '../../../tests/utils'
+import { immutableAssign } from '../../../../shared/utils'
 import { getVideoDislikeActivityPubUrl } from '../url'
 import { VideoModel } from '../../../models/video/video'
 

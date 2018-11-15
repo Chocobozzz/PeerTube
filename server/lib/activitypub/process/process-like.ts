@@ -5,7 +5,7 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { ActorModel } from '../../../models/activitypub/actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { immutableAssign } from '../../../tests/utils'
+import { immutableAssign } from '../../../../shared/utils'
 import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
 
 async function processLikeActivity (activity: ActivityLike, byActor: ActorModel) {

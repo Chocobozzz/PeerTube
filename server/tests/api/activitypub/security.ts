@@ -2,7 +2,16 @@
 
 import 'mocha'
 
-import { flushAndRunMultipleServers, flushTests, killallServers, makePOSTAPRequest, makeFollowRequest, ServerInfo } from '../../utils'
+import {
+  flushAndRunMultipleServers,
+  flushTests,
+  killallServers,
+  ServerInfo
+} from '../../../../shared/utils'
+import {
+  makePOSTAPRequest,
+  makeFollowRequest,
+} from '../../utils/requests/activitypub'
 import { HTTP_SIGNATURE } from '../../../initializers'
 import { buildDigest, buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as chai from 'chai'

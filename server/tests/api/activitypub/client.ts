@@ -9,7 +9,7 @@ import {
   runServer,
   ServerInfo,
   setAccessTokensToServers
-} from '../../shared/utils'
+} from '../../../../shared/utils'
 
 
 const expect = chai.expect

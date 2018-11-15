@@ -13,10 +13,10 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../utils'
+} from '../../../../shared/utils'
 import * as chai from 'chai'
 import { setActorField, setVideoField } from '../../utils/miscs/sql'
-import { waitJobs } from '../../utils/server/jobs'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { Video } from '../../../../shared/models/videos'
 
 const expect = chai.expect
