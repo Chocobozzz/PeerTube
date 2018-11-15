@@ -29,7 +29,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
 
   @ViewChild('visitorModal') visitorModal: NgbModal
-  @ViewChild('textarea') private textareaElement: ElementRef
+  @ViewChild('textarea') textareaElement: ElementRef
 
   addingComment = false
 
