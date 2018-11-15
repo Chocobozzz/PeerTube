@@ -116,12 +116,16 @@ paths:
       x-code-samples:
         - lang: JavaScript
           source: |
-            fetch('https://peertube.cpy.re/api/v1/accounts/{name}/videos')
+            fetch('https://peertube2.cpy.re/api/v1/accounts/{name}/videos')
             .then(function(response) {
               return response.json()
             }).then(function(data) {
               console.log(data)
             })
+        - lang: Shell
+          source: |
+            # pip install httpie
+            http -b GET https://peertube2.cpy.re/api/v1/accounts/{name}/videos
   /accounts:
     get:
       tags:
@@ -131,7 +135,7 @@ paths:
         '200':
           description: successful operation
           content:
-            'application/jsonhttps://peertube.cpy.re/api/v1':
+            'application/json':
               schema:
                 type: array
                 items:
@@ -730,6 +734,8 @@ paths:
                 previewfile:
                   description: Video preview file
                   type: string
+                privacy:
+                  $ref: '#/components/schemas/VideoPrivacy'
                 category:
                   description: Video category
                   type: string
@@ -764,6 +770,36 @@ paths:
               required:
                 - videofile
                 - channelId
+                - name
+                - privacy
+      x-code-samples:
+        - lang: Shell
+          source: |
+            ## DEPENDENCIES: httpie, jq
+            # pip install httpie
+            USERNAME="<your_username>"
+            PASSWORD="<your_password>"
+            FILE_PATH="<your_file_path>"
+            CHANNEL_ID="<your_channel_id>"
+            PRIVACY="1" # public: 1, unlisted: 2, private: 3
+            NAME="<video_name>"
+
+            API_PATH="https://peertube2.cpy.re/api/v1"
+            ## AUTH
+            client_id=$(http -b GET "$API_PATH/oauth-clients/local" | jq -r ".client_id")
+            client_secret=$(http -b GET "$API_PATH/oauth-clients/local" | jq -r ".client_secret")
+            token=$(http -b --form POST "$API_PATH/users/token" \
+              client_id="$client_id" client_secret="$client_secret" grant_type=password response_type=code \
+              username=$USERNAME \
+              password=$PASSWORD \
+              | jq -r ".access_token")
+            ## VIDEO UPLOAD
+            http -b --form POST "$API_PATH/videos/upload" \
+              videofile@$FILE_PATH \
+              channelId=$CHANNEL_ID \
+              name=$NAME \
+              privacy=$PRIVACY \
+              "Authorization:Bearer $token"
   /videos/abuse:
     get:
       summary: Get list of reported video abuses
@@ -1060,7 +1096,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Video'
 servers:
-  - url: 'https://peertube.cpy.re/api/v1'
+  - url: 'https://peertube2.cpy.re/api/v1'
     description: Live Server
 components:
   parameters:
