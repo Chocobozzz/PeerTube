@@ -37,13 +37,15 @@ import {
   LoginValidatorsService,
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
+  TextareaAutoResizeDirective,
   UserValidatorsService,
   VideoAbuseValidatorsService,
+  VideoAcceptOwnershipValidatorsService,
   VideoBlacklistValidatorsService,
+  VideoChangeOwnershipValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
-  VideoValidatorsService,
-  VideoChangeOwnershipValidatorsService, VideoAcceptOwnershipValidatorsService
+  VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -53,7 +55,7 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { SubscribeButtonComponent, RemoteSubscribeComponent, UserSubscriptionService } from '@app/shared/user-subscription'
+import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
@@ -92,6 +94,7 @@ import { BlocklistService } from '@app/shared/blocklist'
     FromNowPipe,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    TextareaAutoResizeDirective,
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
@@ -129,6 +132,7 @@ import { BlocklistService } from '@app/shared/blocklist'
     ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    TextareaAutoResizeDirective,
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,

@@ -30,7 +30,7 @@ elif [ "$1" = "api-2" ]; then
 elif [ "$1" = "api-3" ]; then
     npm run build:server
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index-3.ts
-elif [ "$1" = "api-3" ]; then
+elif [ "$1" = "api-4" ]; then
     npm run build:server
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index-4.ts
 elif [ "$1" = "lint" ]; then

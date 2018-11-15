@@ -129,7 +129,6 @@
     "ngx-clipboard": "11.1.7",
     "ngx-pipes": "^2.1.7",
     "ngx-qrcode2": "^0.0.9",
-    "ngx-textarea-autosize": "^2.0.0",
     "node-sass": "^4.9.3",
     "npm-font-source-sans-pro": "^1.0.2",
     "path-browserify": "^1.0.0",

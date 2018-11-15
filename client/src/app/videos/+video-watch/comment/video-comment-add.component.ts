@@ -31,7 +31,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @ViewChild('visitorModal') visitorModal: NgbModal
   @ViewChild('textarea') private textareaElement: ElementRef
 
-  private addingComment = false
+  addingComment = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
