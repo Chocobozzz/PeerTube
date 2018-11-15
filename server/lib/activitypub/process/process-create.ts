@@ -13,7 +13,8 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { immutableAssign } from '../../../tests/utils'
-import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
+import { getVideoDislikeActivityPubUrl } from '../url'
+import { VideoModel } from '../../../models/video/video'
 
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
@@ -87,19 +88,10 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const options = {
-    videoObject: view.object,
-    fetchType: 'only-video' as 'only-video'
-  }
-  const { video } = await getOrCreateVideoAndAccountAndChannel(options)
+  const video = await VideoModel.loadByUrl(view.object)
+  if (!video || video.isOwned() === false) return
 
   await Redis.Instance.addVideoView(video.id)
-
-  if (video.isOwned()) {
-    // Don't resend the activity to the sender
-    const exceptions = [ byActor ]
-    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
-  }
 }
 
 async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) {
