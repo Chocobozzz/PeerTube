@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/operators'
+import { catchError, throttleTime } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
@@ -140,11 +140,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         return false
       }, undefined, this.i18n('Subscribe to the account'))
     ]
-    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+    if (this.isUserLoggedIn()) {
+      this.hotkeysService.add(this.hotkeys)
 
-    if (this.user.pipPlayer) {
+      if (this.user.pipPlayer) {
+        fromEvent(window, 'scroll')
+        .pipe(throttleTime(250))
+        .subscribe(() => this.onScroll())
+      }
+    } else {
       fromEvent(window, 'scroll')
-      .pipe().subscribe(() => this.onScroll())
+        .pipe(throttleTime(250))
+        .subscribe(() => this.onScroll())
     }
   }
 
@@ -543,8 +550,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private onScroll () {
     const playerElementWrapper = this.elementRef.nativeElement.querySelector('#video-element-wrapper')
+    // returns position of an element relative to the viewport
     const position = playerElementWrapper.getBoundingClientRect()
 
+    // if the player is 150px from leaving screen, it pops out
     if (position.bottom <= 150 && !this.playerPopedOut) {
       this.playerPopedOut = true
       playerElementWrapper.classList.add('video-element-wrapper-popup')
