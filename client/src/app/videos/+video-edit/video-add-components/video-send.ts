@@ -21,6 +21,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   firstStepChannelId = 0
 
   abstract firstStepDone: EventEmitter<string>
+  abstract firstStepError: EventEmitter<void>
   protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService

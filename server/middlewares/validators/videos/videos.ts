@@ -393,6 +393,8 @@ export {
 function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
   if (req.body.scheduleUpdate) {
     if (!req.body.scheduleUpdate.updateAt) {
+      logger.warn('Invalid parameters: scheduleUpdate.updateAt is mandatory.')
+
       res.status(400)
          .json({ error: 'Schedule update at is mandatory.' })
 

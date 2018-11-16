@@ -12,6 +12,7 @@ import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { FormValidatorService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoImportService } from '@app/shared/video-import'
+import { scrollToTop } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-import-url',
@@ -23,15 +24,16 @@ import { VideoImportService } from '@app/shared/video-import'
 })
 export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
+  @Output() firstStepError = new EventEmitter<void>()
 
   targetUrl = ''
-  videoFileName: string
 
   isImportingVideo = false
   hasImportedVideo = false
   isUpdatingVideo = false
 
   video: VideoEdit
+  error: string
 
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
@@ -96,6 +98,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
       err => {
         this.loadingBar.complete()
         this.isImportingVideo = false
+        this.firstStepError.emit()
         this.notificationsService.error(this.i18n('Error'), err.message)
       }
     )
@@ -121,8 +124,8 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
           },
 
           err => {
-            this.isUpdatingVideo = false
-            this.notificationsService.error(this.i18n('Error'), err.message)
+            this.error = err.message
+            scrollToTop()
             console.error(err)
           }
         )
