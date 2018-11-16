@@ -59,7 +59,10 @@ log:
   level: 'info' # debug/info/warning/error
 
 search:
-  remote_uri: # Add ability to search remote videos/actors by URI, that may not be federated with your instance
+  # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
+  # If enabled, the associated group will be able to "escape" from the instance follows
+  # That means they will be able to follow channels, watch videos, list videos of non followed instances
+  remote_uri:
     users: true
     anonymous: false
 
