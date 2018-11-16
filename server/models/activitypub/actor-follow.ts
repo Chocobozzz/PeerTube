@@ -509,12 +509,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       tasks.push(ActorFollowModel.sequelize.query(query, options))
     }
 
-    const [ followers, [ { total } ] ] = await Promise.all(tasks)
+    const [ followers, [ dataTotal ] ] = await Promise.all(tasks)
     const urls: string[] = followers.map(f => f.url)
 
     return {
       data: urls,
-      total: parseInt(total, 10)
+      total: dataTotal ? parseInt(dataTotal.total, 10) : 0
     }
   }
 

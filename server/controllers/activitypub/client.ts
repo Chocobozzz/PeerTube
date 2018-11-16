@@ -298,7 +298,7 @@ async function actorFollowing (req: express.Request, actor: ActorModel) {
     return ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, handler, req.query.page)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 async function actorFollowers (req: express.Request, actor: ActorModel) {
@@ -306,7 +306,7 @@ async function actorFollowers (req: express.Request, actor: ActorModel) {
     return ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, handler, req.query.page)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 function videoRates (req: express.Request, rateType: VideoRateType, video: VideoModel, url: string) {
