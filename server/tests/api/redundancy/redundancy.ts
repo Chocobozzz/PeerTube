@@ -17,7 +17,7 @@ import {
   viewVideo,
   wait,
   waitUntilLog,
-  checkVideoFilesWereRemoved, removeVideo
+  checkVideoFilesWereRemoved, removeVideo, getVideoWithToken
 } from '../../utils'
 import { waitJobs } from '../../utils/server/jobs'
 import * as magnetUtil from 'magnet-uri'
@@ -93,7 +93,8 @@ async function check1WebSeed (strategy: VideoRedundancyStrategy, videoUUID?: str
 
   for (const server of servers) {
     {
-      const res = await getVideo(server.url, videoUUID)
+      // With token to avoid issues with video follow constraints
+      const res = await getVideoWithToken(server.url, server.accessToken, videoUUID)
 
       const video: VideoDetails = res.body
       for (const f of video.files) {

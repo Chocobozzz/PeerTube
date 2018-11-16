@@ -10,8 +10,8 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validat
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { doRequest, downloadImage } from '../../helpers/requests'
+import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_MIMETYPE_EXT } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -97,11 +97,7 @@ function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) 
   const thumbnailName = video.getThumbnailName()
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
 
-  const options = {
-    method: 'GET',
-    uri: icon.url
-  }
-  return doRequestAndSaveToFile(options, thumbnailPath)
+  return downloadImage(icon.url, thumbnailPath, THUMBNAILS_SIZE)
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
