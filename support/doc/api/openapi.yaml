@@ -771,7 +771,6 @@ paths:
                 - videofile
                 - channelId
                 - name
-                - privacy
       x-code-samples:
         - lang: Shell
           source: |
@@ -781,7 +780,6 @@ paths:
             PASSWORD="<your_password>"
             FILE_PATH="<your_file_path>"
             CHANNEL_ID="<your_channel_id>"
-            PRIVACY="1" # public: 1, unlisted: 2, private: 3
             NAME="<video_name>"
 
             API_PATH="https://peertube2.cpy.re/api/v1"
@@ -798,7 +796,6 @@ paths:
               videofile@$FILE_PATH \
               channelId=$CHANNEL_ID \
               name=$NAME \
-              privacy=$PRIVACY \
               "Authorization:Bearer $token"
   /videos/abuse:
     get:
