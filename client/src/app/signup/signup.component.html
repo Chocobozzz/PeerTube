@@ -4,6 +4,7 @@
     Create an account
   </div>
 
+  <div *ngIf="info" class="alert alert-info">{{ info }}</div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <div class="d-flex justify-content-left flex-wrap">
@@ -59,7 +60,7 @@
         </div>
       </div>
 
-      <input type="submit" i18n-value value="Signup" [disabled]="!form.valid">
+      <input type="submit" i18n-value value="Signup" [disabled]="!form.valid || signupDone">
     </form>
 
     <div>

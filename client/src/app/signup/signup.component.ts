@@ -12,7 +12,9 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
   styleUrls: [ './signup.component.scss' ]
 })
 export class SignupComponent extends FormReactive implements OnInit {
+  info: string = null
   error: string = null
+  signupDone = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -50,17 +52,17 @@ export class SignupComponent extends FormReactive implements OnInit {
 
     this.userService.signup(userCreate).subscribe(
       () => {
+        this.signupDone = true
+
         if (this.requiresEmailVerification) {
-          this.notificationsService.alert(
-            this.i18n('Welcome'),
-            this.i18n('Please check your email to verify your account and complete signup.')
-          )
-        } else {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('Registration for {{username}} complete.', { username: userCreate.username })
-          )
+          this.info = this.i18n('Welcome! Now please check your emails to verify your account and complete signup.')
+          return
         }
+
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('Registration for {{username}} complete.', { username: userCreate.username })
+        )
         this.redirectService.redirectToHomepage()
       },
 
