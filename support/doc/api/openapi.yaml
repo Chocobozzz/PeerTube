@@ -22,6 +22,8 @@ info:
     When you sign up for an account, you are given the possibility to generate
     sessions, and authenticate using this session token. One session token can 
     currently be used at a time.
+externalDocs:
+  url: https://docs.joinpeertube.org/api.html
 tags:
   - name: Accounts
     description: >
@@ -144,7 +146,7 @@ paths:
     get:
       tags:
         - Config
-      summary: Get the configuration of the server
+      summary: Get the public configuration of the server
       responses:
         '200':
           description: successful operation
@@ -152,6 +154,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerConfig'
+  /config/about:
+    get:
+      summary: Get the instance about page content
+      tags:
+        - Config
+      responses:
+        '200':
+          description: successful operation
+  /config/custom:
+    get:
+      summary: Get the runtime configuration of the server
+      tags:
+        - Config
+      security:
+        - OAuth2:
+            - admin
+      responses:
+        '200':
+          description: successful operation
+    put:
+      summary: Set the runtime configuration of the server
+      tags:
+        - Config
+      security:
+        - OAuth2:
+            - admin
+      responses:
+        '200':
+          description: successful operation
+    delete:
+      summary: Delete the runtime configuration of the server
+      tags:
+        - Config
+      security:
+        - OAuth2:
+            - admin
+      responses:
+        '200':
+          description: successful operation
   '/feeds/videos.{format}':
     get:
       summary: >-
@@ -701,6 +742,85 @@ paths:
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/{id}/watching':
+    put:
+      summary: Indicate progress of in watching the video by its id for a user
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWatchingVideo'
+        required: true
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  /videos/ownership:
+    get:
+      summary: Get list of video ownership changes requests
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '200':
+          description: successful operation
+  '/videos/ownership/{id}/accept':
+    post:
+      summary: Refuse ownership change request for video by its id
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/ownership/{id}/refuse':
+    post:
+      summary: Accept ownership change request for video by its id
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/{id}/give-ownership':
+    post:
+      summary: Request change of ownership for a video you own, by its id
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+        '400':
+          description: 'Changing video ownership to a remote account is not supported yet'
   /videos/upload:
     post:
       summary: Upload a video file with its metadata
@@ -1093,8 +1213,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Video'
 servers:
+  - url: 'https://peertube.cpy.re/api/v1'
+    description: Live Test Server (live data - stable version)
   - url: 'https://peertube2.cpy.re/api/v1'
-    description: Live Server
+    description: Live Test Server (live data - bleeding edge version)
+  - url: 'https://peertube3.cpy.re/api/v1'
+    description: Live Test Server (live data - bleeding edge version)
 components:
   parameters:
     start:
@@ -1414,6 +1538,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VideoChannel'
+    UserWatchingVideo:
+      properties:
+        currentTime:
+          type: number
     ServerConfig:
       properties:
         signup:
