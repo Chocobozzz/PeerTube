@@ -106,6 +106,7 @@ x-tagGroups:
       - Video Rate
   - name: Moderation
     tags:
+      - Vdieo Abuse
       - Video Blacklist
   - name: Public Instance Information
     tags:
