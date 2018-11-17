@@ -58,8 +58,8 @@ export class UserListComponent extends RestTable implements OnInit {
         isDisplayed: users => users.every(u => u.blocked === true)
       },
       {
-        label: this.i18n('Verify Email'),
-        handler: users => this.verifyUserEmails(users),
+        label: this.i18n('Set Email as Verified'),
+        handler: users => this.setEmailsAsVerified(users),
         isDisplayed: users => this.requiresEmailVerification && users.every(u => !u.blocked && u.emailVerified === false)
       }
     ]
@@ -124,12 +124,12 @@ export class UserListComponent extends RestTable implements OnInit {
     )
   }
 
-  async verifyUserEmails (users: User[]) {
+  async setEmailsAsVerified (users: User[]) {
     this.userService.updateUsers(users, { emailVerified: true }).subscribe(
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('{{num}} users email set to verified.', { num: users.length })
+          this.i18n('{{num}} users email set as verified.', { num: users.length })
         )
         this.loadData()
       },

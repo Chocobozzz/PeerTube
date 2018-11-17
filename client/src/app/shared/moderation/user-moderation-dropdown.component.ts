@@ -102,7 +102,7 @@ export class UserModerationDropdownComponent implements OnChanges {
     )
   }
 
-  verifyUserEmail (user: User) {
+  setEmailAsVerified (user: User) {
     this.userService.updateUser(user.id, { emailVerified: true }).subscribe(
       () => {
         this.notificationsService.success(
@@ -284,8 +284,8 @@ export class UserModerationDropdownComponent implements OnChanges {
             isDisplayed: ({ user }: { user: User }) => user.blocked
           },
           {
-            label: this.i18n('Verify Email'),
-            handler: ({ user }: { user: User }) => this.verifyUserEmail(user),
+            label: this.i18n('Set Email as Verified'),
+            handler: ({ user }: { user: User }) => this.setEmailAsVerified(user),
             isDisplayed: ({ user }: { user: User }) => this.requiresEmailVerification && !user.blocked && user.emailVerified === false
           }
         ])
