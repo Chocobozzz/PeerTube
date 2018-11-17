@@ -3,8 +3,9 @@ import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoViewModel } from '../../../models/video/video-views'
 import { isTestInstance } from '../../../helpers/core-utils'
+import { federateVideoIfNeeded } from '../../activitypub'
 
-async function processVideosViewsViews () {
+async function processVideosViews () {
   const lastHour = new Date()
 
   // In test mode, we run this function multiple times per hour, so we don't want the values of the previous hour
@@ -36,6 +37,9 @@ async function processVideosViewsViews () {
             views,
             videoId
           })
+
+          const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+          if (video.isOwned()) await federateVideoIfNeeded(video, false)
         } catch (err) {
           logger.debug('Cannot create video views for video %d in hour %d. Maybe the video does not exist anymore?', videoId, hour)
         }
@@ -51,5 +55,5 @@ async function processVideosViewsViews () {
 // ---------------------------------------------------------------------------
 
 export {
-  processVideosViewsViews
+  processVideosViews
 }

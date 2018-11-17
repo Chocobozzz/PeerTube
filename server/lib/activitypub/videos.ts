@@ -10,8 +10,8 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validat
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { doRequest, downloadImage } from '../../helpers/requests'
+import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_MIMETYPE_EXT } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -29,6 +29,7 @@ import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
+import { checkUrlsSameHost } from '../../helpers/activitypub'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -63,7 +64,7 @@ async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.
 
   const { response, body } = await doRequest(options)
 
-  if (sanitizeAndCheckVideoTorrentObject(body) === false) {
+  if (sanitizeAndCheckVideoTorrentObject(body) === false || checkUrlsSameHost(body.id, videoUrl) !== true) {
     logger.debug('Remote video JSON is not valid.', { body })
     return { response, videoObject: undefined }
   }
@@ -96,16 +97,16 @@ function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) 
   const thumbnailName = video.getThumbnailName()
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
 
-  const options = {
-    method: 'GET',
-    uri: icon.url
-  }
-  return doRequestAndSaveToFile(options, thumbnailPath)
+  return downloadImage(icon.url, thumbnailPath, THUMBNAILS_SIZE)
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
   const channel = videoObject.attributedTo.find(a => a.type === 'Group')
   if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
+
+  if (checkUrlsSameHost(channel.id, videoObject.id) !== true) {
+    throw new Error(`Video channel url ${channel.id} does not have the same host than video object id ${videoObject.id}`)
+  }
 
   return getOrCreateActorAndServerAndModel(channel.id, 'all')
 }

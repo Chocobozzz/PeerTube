@@ -95,7 +95,7 @@ async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transa
   logger.info('Creating job to send view of %s.', video.url)
 
   const url = getVideoViewActivityPubUrl(byActor, video)
-  const viewActivity = buildViewActivity(byActor, video)
+  const viewActivity = buildViewActivity(url, byActor, video)
 
   return sendVideoRelatedCreateActivity({
     // Use the server actor to send the view
@@ -111,7 +111,7 @@ async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Tra
   logger.info('Creating job to dislike %s.', video.url)
 
   const url = getVideoDislikeActivityPubUrl(byActor, video)
-  const dislikeActivity = buildDislikeActivity(byActor, video)
+  const dislikeActivity = buildDislikeActivity(url, byActor, video)
 
   return sendVideoRelatedCreateActivity({
     byActor,
@@ -136,16 +136,18 @@ function buildCreateActivity (url: string, byActor: ActorModel, object: any, aud
   )
 }
 
-function buildDislikeActivity (byActor: ActorModel, video: VideoModel) {
+function buildDislikeActivity (url: string, byActor: ActorModel, video: VideoModel) {
   return {
+    id: url,
     type: 'Dislike',
     actor: byActor.url,
     object: video.url
   }
 }
 
-function buildViewActivity (byActor: ActorModel, video: VideoModel) {
+function buildViewActivity (url: string, byActor: ActorModel, video: VideoModel) {
   return {
+    id: url,
     type: 'View',
     actor: byActor.url,
     object: video.url

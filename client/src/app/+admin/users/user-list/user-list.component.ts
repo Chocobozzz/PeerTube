@@ -76,7 +76,7 @@ export class UserListComponent extends RestTable implements OnInit {
     this.userBanModal.openModal(users)
   }
 
-  onUsersBanned () {
+  onUserChanged () {
     this.loadData()
   }
 

@@ -31,6 +31,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  checkVideoFollowConstraints,
   commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -123,6 +124,7 @@ videosRouter.get('/:id/description',
 videosRouter.get('/:id',
   optionalAuthenticate,
   asyncMiddleware(videosGetValidator),
+  asyncMiddleware(checkVideoFollowConstraints),
   getVideo
 )
 videosRouter.post('/:id/views',
@@ -405,7 +407,11 @@ async function viewVideo (req: express.Request, res: express.Response) {
 
   const serverActor = await getServerActor()
 
-  await sendCreateView(serverActor, videoInstance, undefined)
+  // Send the event to the origin server
+  // If we own the video, we'll send an update event when we'll process the views (in our job queue)
+  if (videoInstance.isOwned() === false) {
+    await sendCreateView(serverActor, videoInstance, undefined)
+  }
 
   return res.status(204).end()
 }

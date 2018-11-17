@@ -114,7 +114,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       )
         .pipe(
           // If 401, the video is private or blacklisted so redirect to 404
-          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 404 ]))
+          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))
         )
         .subscribe(([ video, captionsResult ]) => {
           const startTime = this.route.snapshot.queryParams.start
@@ -450,7 +450,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
   }
 
-  private setRating (nextRating: VideoRateType) {
+  private setRating (nextRating: UserVideoRateType) {
     let method
     switch (nextRating) {
       case 'like':
@@ -476,7 +476,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           )
   }
 
-  private updateVideoRating (oldRating: UserVideoRateType, newRating: VideoRateType) {
+  private updateVideoRating (oldRating: UserVideoRateType, newRating: UserVideoRateType) {
     let likesToIncrement = 0
     let dislikesToIncrement = 0
 

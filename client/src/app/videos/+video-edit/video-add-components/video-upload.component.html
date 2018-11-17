@@ -29,12 +29,17 @@
   </div>
 </div>
 
-<div *ngIf="isUploadingVideo" class="upload-progress-cancel">
+<div *ngIf="isUploadingVideo && !error" class="upload-progress-cancel">
   <p-progressBar
     [value]="videoUploadPercents"
     [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
   ></p-progressBar>
   <input *ngIf="videoUploaded === false" type="button" value="Cancel" (click)="cancelUpload()" />
+</div>
+
+<div *ngIf="error" class="alert alert-danger">
+  <div i18n>Sorry, but something went wrong</div>
+  {{ error }}
 </div>
 
 <!-- Hidden because we want to load the component -->

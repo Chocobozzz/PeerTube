@@ -10,7 +10,7 @@ import { EmailPayload, processEmail } from './handlers/email'
 import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 import { processVideoImport, VideoImportPayload } from './handlers/video-import'
-import { processVideosViewsViews } from './handlers/video-views'
+import { processVideosViews } from './handlers/video-views'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -32,7 +32,7 @@ const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'video-file': processVideoFile,
   'email': processEmail,
   'video-import': processVideoImport,
-  'videos-views': processVideosViewsViews
+  'videos-views': processVideosViews
 }
 
 const jobTypes: JobType[] = [

@@ -45,7 +45,12 @@
   </div>
 </div>
 
-<div *ngIf="hasImportedVideo" class="alert alert-info" i18n>
+<div *ngIf="error" class="alert alert-danger">
+  <div i18n>Sorry, but something went wrong</div>
+  {{ error }}
+</div>
+
+<div *ngIf="hasImportedVideo && !error" class="alert alert-info" i18n>
   Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
 </div>
 

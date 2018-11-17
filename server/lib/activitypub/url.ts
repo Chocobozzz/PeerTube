@@ -33,14 +33,14 @@ function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseModel) {
 }
 
 function getVideoViewActivityPubUrl (byActor: ActorModel, video: VideoModel) {
-  return video.url + '/views/' + byActor.uuid + '/' + new Date().toISOString()
+  return byActor.url + '/views/videos/' + video.id + '/' + new Date().toISOString()
 }
 
-function getVideoLikeActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+function getVideoLikeActivityPubUrl (byActor: ActorModel, video: VideoModel | { id: number }) {
   return byActor.url + '/likes/' + video.id
 }
 
-function getVideoDislikeActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+function getVideoDislikeActivityPubUrl (byActor: ActorModel, video: VideoModel | { id: number }) {
   return byActor.url + '/dislikes/' + video.id
 }
 
@@ -74,8 +74,8 @@ function getActorFollowAcceptActivityPubUrl (actorFollow: ActorFollowModel) {
   return follower.url + '/accepts/follows/' + me.id
 }
 
-function getAnnounceActivityPubUrl (originalUrl: string, byActor: ActorModel) {
-  return originalUrl + '/announces/' + byActor.id
+function getVideoAnnounceActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+  return video.url + '/announces/' + byActor.id
 }
 
 function getDeleteActivityPubUrl (originalUrl: string) {
@@ -97,7 +97,7 @@ export {
   getVideoAbuseActivityPubUrl,
   getActorFollowActivityPubUrl,
   getActorFollowAcceptActivityPubUrl,
-  getAnnounceActivityPubUrl,
+  getVideoAnnounceActivityPubUrl,
   getUpdateActivityPubUrl,
   getUndoActivityPubUrl,
   getVideoViewActivityPubUrl,

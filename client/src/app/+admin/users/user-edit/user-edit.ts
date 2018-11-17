@@ -4,10 +4,10 @@ import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 
 export abstract class UserEdit extends FormReactive {
-
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
   roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
+  username: string
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService

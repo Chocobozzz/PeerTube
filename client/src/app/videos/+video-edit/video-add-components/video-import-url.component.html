@@ -37,7 +37,13 @@
   </div>
 </div>
 
-<div *ngIf="hasImportedVideo" class="alert alert-info" i18n>
+
+<div *ngIf="error" class="alert alert-danger">
+  <div i18n>Sorry, but something went wrong</div>
+  {{ error }}
+</div>
+
+<div *ngIf="!error && hasImportedVideo" class="alert alert-info" i18n>
   Congratulations, the video behind {{ targetUrl }} will be imported! You can already add information about this video.
 </div>
 

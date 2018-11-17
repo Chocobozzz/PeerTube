@@ -60,6 +60,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   hide () {
     this.closingModal = true
     this.openedModal.close()
+    this.form.reset()
   }
 
   isReplacingExistingCaption () {

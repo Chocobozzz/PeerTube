@@ -7,10 +7,10 @@
       class="video-miniature-name"
       [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
     >
-      {{ video.name }}
-
       <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
       <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
+
+      {{ video.name }}
     </a>
 
     <span i18n class="video-miniature-created-at-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>

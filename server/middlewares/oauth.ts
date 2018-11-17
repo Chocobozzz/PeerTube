@@ -28,8 +28,23 @@ function authenticate (req: express.Request, res: express.Response, next: expres
   })
 }
 
+function authenticatePromiseIfNeeded (req: express.Request, res: express.Response) {
+  return new Promise(resolve => {
+    // Already authenticated? (or tried to)
+    if (res.locals.oauth && res.locals.oauth.token.User) return resolve()
+
+    if (res.locals.authenticated === false) return res.sendStatus(401)
+
+    authenticate(req, res, () => {
+      return resolve()
+    })
+  })
+}
+
 function optionalAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (req.header('authorization')) return authenticate(req, res, next)
+
+  res.locals.authenticated = false
 
   return next()
 }
@@ -53,6 +68,7 @@ function token (req: express.Request, res: express.Response, next: express.NextF
 
 export {
   authenticate,
+  authenticatePromiseIfNeeded,
   optionalAuthenticate,
   token
 }

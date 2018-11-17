@@ -53,7 +53,8 @@ function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
 
 export {
   checkSignature,
-  executeIfActivityPub
+  executeIfActivityPub,
+  checkHttpSignature
 }
 
 // ---------------------------------------------------------------------------
@@ -94,7 +95,7 @@ async function checkHttpSignature (req: Request, res: Response) {
 async function checkJsonLDSignature (req: Request, res: Response) {
   const signatureObject: ActivityPubSignature = req.body.signature
 
-  if (!signatureObject.creator) {
+  if (!signatureObject || !signatureObject.creator) {
     res.sendStatus(403)
     return false
   }

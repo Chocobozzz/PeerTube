@@ -26,15 +26,13 @@ import {
   isVideoLicenceValid,
   isVideoNameValid,
   isVideoPrivacyValid,
-  isVideoRatingTypeValid,
   isVideoSupportValid,
   isVideoTagsValid
 } from '../../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { VideoShareModel } from '../../../models/video/video-share'
-import { authenticate } from '../../oauth'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../../initializers'
+import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { VideoModel } from '../../../models/video/video'
@@ -45,6 +43,7 @@ import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ow
 import { AccountModel } from '../../../models/account/account'
 import { VideoFetchType } from '../../../helpers/video'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
+import { getServerActor } from '../../../helpers/utils'
 
 const videosAddValidator = getCommonVideoAttributes().concat([
   body('videofile')
@@ -129,6 +128,31 @@ const videosUpdateValidator = getCommonVideoAttributes().concat([
   }
 ])
 
+async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const video: VideoModel = res.locals.video
+
+  // Anybody can watch local videos
+  if (video.isOwned() === true) return next()
+
+  // Logged user
+  if (res.locals.oauth) {
+    // Users can search or watch remote videos
+    if (CONFIG.SEARCH.REMOTE_URI.USERS === true) return next()
+  }
+
+  // Anybody can search or watch remote videos
+  if (CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true) return next()
+
+  // Check our instance follows an actor that shared this video
+  const serverActor = await getServerActor()
+  if (await VideoModel.checkVideoHasInstanceFollow(video.id, serverActor.id) === true) return next()
+
+  return res.status(403)
+            .json({
+              error: 'Cannot get this video regarding follow constraints.'
+            })
+}
+
 const videosCustomGetValidator = (fetchType: VideoFetchType) => {
   return [
     param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -143,17 +167,20 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
 
       // Video private or blacklisted
       if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
-        return authenticate(req, res, () => {
-          const user: UserModel = res.locals.oauth.token.User
+        await authenticatePromiseIfNeeded(req, res)
 
-          // Only the owner or a user that have blacklist rights can see the video
-          if (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)) {
-            return res.status(403)
-                      .json({ error: 'Cannot get this private or blacklisted video.' })
-          }
+        const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : null
 
-          return next()
-        })
+        // Only the owner or a user that have blacklist rights can see the video
+        if (
+          !user ||
+          (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST))
+        ) {
+          return res.status(403)
+                    .json({ error: 'Cannot get this private or blacklisted video.' })
+        }
+
+        return next()
       }
 
       // Video is public, anyone can access it
@@ -184,41 +211,6 @@ const videosRemoveValidator = [
     // Check if the user who did the request is able to delete the video
     if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.REMOVE_ANY_VIDEO, res)) return
 
-    return next()
-  }
-]
-
-const videoRateValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoRate parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
-
-    return next()
-  }
-]
-
-const videosShareValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('accountId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid account id'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoShare parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
-
-    const share = await VideoShareModel.load(req.params.accountId, res.locals.video.id, undefined)
-    if (!share) {
-      return res.status(404)
-        .end()
-    }
-
-    res.locals.videoShare = share
     return next()
   }
 ]
@@ -413,11 +405,9 @@ export {
   videosAddValidator,
   videosUpdateValidator,
   videosGetValidator,
+  checkVideoFollowConstraints,
   videosCustomGetValidator,
   videosRemoveValidator,
-  videosShareValidator,
-
-  videoRateValidator,
 
   videosChangeOwnershipValidator,
   videosTerminateChangeOwnershipValidator,
@@ -433,6 +423,8 @@ export {
 function areErrorsInScheduleUpdate (req: express.Request, res: express.Response) {
   if (req.body.scheduleUpdate) {
     if (!req.body.scheduleUpdate.updateAt) {
+      logger.warn('Invalid parameters: scheduleUpdate.updateAt is mandatory.')
+
       res.status(400)
          .json({ error: 'Schedule update at is mandatory.' })
 

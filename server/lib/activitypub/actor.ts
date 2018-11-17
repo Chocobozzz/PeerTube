@@ -5,15 +5,15 @@ import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { getActorUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getActorUrl } from '../../helpers/activitypub'
 import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { doRequest, doRequestAndSaveToFile, downloadImage } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, PREVIEWS_SIZE, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -65,8 +65,12 @@ async function getOrCreateActorAndServerAndModel (
       const accountAttributedTo = result.attributedTo.find(a => a.type === 'Person')
       if (!accountAttributedTo) throw new Error('Cannot find account attributed to video channel ' + actor.url)
 
+      if (checkUrlsSameHost(accountAttributedTo.id, actorUrl) !== true) {
+        throw new Error(`Account attributed to ${accountAttributedTo.id} does not have the same host than actor url ${actorUrl}`)
+      }
+
       try {
-        // Assert we don't recurse another time
+        // Don't recurse another time
         ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', false)
       } catch (err) {
         logger.error('Cannot get or create account attributed to video channel ' + actor.url)
@@ -176,10 +180,7 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
     const avatarName = uuidv4() + extension
     const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
 
-    await doRequestAndSaveToFile({
-      method: 'GET',
-      uri: actorJSON.icon.url
-    }, destPath)
+    await downloadImage(actorJSON.icon.url, destPath, AVATARS_SIZE)
 
     return avatarName
   }
@@ -297,10 +298,13 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
   normalizeActor(requestResult.body)
 
   const actorJSON: ActivityPubActor = requestResult.body
-
   if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
     return { result: undefined, statusCode: requestResult.response.statusCode }
+  }
+
+  if (checkUrlsSameHost(actorJSON.id, actorUrl) !== true) {
+    throw new Error('Actor url ' + actorUrl + ' has not the same host than its AP id ' + actorJSON.id)
   }
 
   const followersCount = await fetchActorTotalItems(actorJSON.followers)
