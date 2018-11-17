@@ -428,6 +428,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
     })
 
+    it('Should fail with an invalid emailVerified attribute', async function () {
+      const fields = {
+        emailVerified: 'yes'
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
     it('Should fail with an invalid videoQuota attribute', async function () {
       const fields = {
         videoQuota: -90
@@ -463,6 +471,7 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {
         email: 'email@example.com',
+        emailVerified: true,
         videoQuota: 42,
         role: UserRole.MODERATOR
       }
