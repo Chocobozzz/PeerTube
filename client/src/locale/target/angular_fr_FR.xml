@@ -3015,7 +3015,7 @@ Assurez-vous d'avoir les droits de diffusion de ce contenu afin d'éviter toute 
     The video is being imported, it will be available when the import is finished.
   </source>
         <target>
-    La vidéo est en cours d'importation, elle sera disponible quand l'importation sera fini.
+    La vidéo est en cours d'importation, elle sera disponible quand l'importation sera terminée.
   </target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
