@@ -14,6 +14,7 @@ import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-se
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { FormValidatorService, UserService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
+import { scrollToTop } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-upload',
@@ -25,6 +26,7 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
+  @Output() firstStepError = new EventEmitter<void>()
   @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
 
   // So that it can be accessed in the template
@@ -42,6 +44,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+
+  error: string
 
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
@@ -201,6 +205,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
         this.videoUploadObservable = null
+        this.firstStepError.emit()
         this.notificationsService.error(this.i18n('Error'), err.message)
       }
     )
@@ -235,8 +240,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           },
 
           err => {
-            this.isUpdatingVideo = false
-            this.notificationsService.error(this.i18n('Error'), err.message)
+            this.error = err.message
+            scrollToTop()
             console.error(err)
           }
         )

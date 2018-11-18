@@ -5,6 +5,14 @@
   @include peertube-select-container(190px);
 }
 
+.alert.alert-danger {
+  text-align: center;
+
+  & > div {
+    font-weight: $font-semibold;
+  }
+}
+
 .upload-video {
   display: flex;
   flex-direction: column;

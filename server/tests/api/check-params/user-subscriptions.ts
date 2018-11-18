@@ -14,11 +14,13 @@ import {
   setAccessTokensToServers,
   userLogin
 } from '../../../../shared/utils'
+
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/utils/requests/check-api-params'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
@@ -145,6 +147,8 @@ describe('Test user subscriptions API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
+      this.timeout(20000)
+
       await makePostBodyRequest({
         url: server.url,
         path,
@@ -152,6 +156,8 @@ describe('Test user subscriptions API validators', function () {
         fields: { uri: 'user1_channel@localhost:9001' },
         statusCodeExpected: 204
       })
+
+      await waitJobs([ server ])
     })
   })
 

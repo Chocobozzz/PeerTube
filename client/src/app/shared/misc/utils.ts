@@ -124,6 +124,10 @@ function sortBy (obj: any[], key1: string, key2?: string) {
   })
 }
 
+function scrollToTop () {
+  window.scroll(0, 0)
+}
+
 export {
   sortBy,
   durationToString,
@@ -135,5 +139,6 @@ export {
   immutableAssign,
   objectToFormData,
   lineFeedToHtml,
-  removeElementFromArray
+  removeElementFromArray,
+  scrollToTop
 }

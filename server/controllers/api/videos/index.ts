@@ -31,6 +31,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  checkVideoFollowConstraints,
   commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -123,6 +124,7 @@ videosRouter.get('/:id/description',
 videosRouter.get('/:id',
   optionalAuthenticate,
   asyncMiddleware(videosGetValidator),
+  asyncMiddleware(checkVideoFollowConstraints),
   getVideo
 )
 videosRouter.post('/:id/views',

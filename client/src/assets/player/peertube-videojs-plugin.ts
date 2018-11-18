@@ -111,6 +111,8 @@ class PeerTubePlugin extends Plugin {
       const muted = getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
 
+      this.player.duration(options.videoDuration)
+
       this.initializePlayer()
       this.runTorrentInfoScheduler()
       this.runViewAdd()
@@ -301,6 +303,9 @@ class PeerTubePlugin extends Plugin {
         const paused = this.player.paused()
 
         this.flushVideoFile(previousVideoFile)
+
+        // Update progress bar (just for the UI), do not wait rendering
+        if (options.seek) this.player.currentTime(options.seek)
 
         const renderVideoOptions = { autoplay: false, controls: true }
         renderVideo(torrent.files[ 0 ], this.playerElement, renderVideoOptions, (err, renderer) => {

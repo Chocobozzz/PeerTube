@@ -39,6 +39,7 @@ import {
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { videoRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { getServerActor } from '../../helpers/utils'
+import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 
 const activityPubClientRouter = express.Router()
 
@@ -164,6 +165,8 @@ function getAccountVideoRate (rateType: VideoRateType) {
 async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
 
+  if (video.isOwned() === false) return res.redirect(video.url)
+
   // We need captions to render AP object
   video.VideoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
 
@@ -180,6 +183,9 @@ async function videoController (req: express.Request, res: express.Response, nex
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
+
+  if (share.Actor.isOwned() === false) return res.redirect(share.url)
+
   const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.video, undefined)
 
   return activityPubResponse(activityPubContextify(activity), res)
@@ -252,6 +258,8 @@ async function videoChannelFollowingController (req: express.Request, res: expre
 async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoComment: VideoCommentModel = res.locals.videoComment
 
+  if (videoComment.isOwned() === false) return res.redirect(videoComment.url)
+
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   const isPublic = true // Comments are always public
   const audience = getAudience(videoComment.Account.Actor, isPublic)
@@ -267,7 +275,9 @@ async function videoCommentController (req: express.Request, res: express.Respon
 }
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
-  const videoRedundancy = res.locals.videoRedundancy
+  const videoRedundancy: VideoRedundancyModel = res.locals.videoRedundancy
+  if (videoRedundancy.isOwned() === false) return res.redirect(videoRedundancy.url)
+
   const serverActor = await getServerActor()
 
   const audience = getAudience(serverActor)
@@ -288,7 +298,7 @@ async function actorFollowing (req: express.Request, actor: ActorModel) {
     return ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, handler, req.query.page)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 async function actorFollowers (req: express.Request, actor: ActorModel) {
@@ -296,7 +306,7 @@ async function actorFollowers (req: express.Request, actor: ActorModel) {
     return ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, handler, req.query.page)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 function videoRates (req: express.Request, rateType: VideoRateType, video: VideoModel, url: string) {

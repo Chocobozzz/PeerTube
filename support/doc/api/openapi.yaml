@@ -10,27 +10,41 @@ info:
     url: 'https://github.com/Chocobozzz/PeerTube/blob/master/LICENSE'
   x-logo:
     url: 'https://joinpeertube.org/img/brand.png'
+    altText: PeerTube Project Homepage
   description: |
     # Introduction
     The PeerTube API is built on HTTP(S). Our API is RESTful. It has predictable
     resource URLs. It returns HTTP response codes to indicate errors. It also
     accepts and returns JSON in the HTTP body. You can use your favorite
     HTTP/REST library for your programming language to use PeerTube. No official
-    SDK is currently provided.
+    SDK is currently provided, but the spec API is fully compatible with
+    [openapi-generator](https://github.com/OpenAPITools/openapi-generator/wiki/API-client-generator-HOWTO)
+    which generates a client SDK in the language of your choice.
 
     # Authentication
     When you sign up for an account, you are given the possibility to generate
     sessions, and authenticate using this session token. One session token can 
     currently be used at a time.
+
+    # Errors
+    The API uses standard HTTP status codes to indicate the success or failure
+    of the API call. The body of the response will be JSON in the following
+    format.
+
+    ```
+    {
+      "code": "unauthorized_request", // example inner error code
+      "error": "Token is invalid." // example exposed error message
+    }
+    ```
+externalDocs:
+  url: https://docs.joinpeertube.org/api.html
 tags:
   - name: Accounts
     description: >
       Using some features of PeerTube require authentication, for which Accounts
-
       provide different levels of permission as well as associated user
-      information.
-
-      Accounts also encompass remote accounts discovered across the federation.
+      information. Accounts also encompass remote accounts discovered across the federation.
   - name: Config
     description: >
       Each server exposes public information regarding supported videos and
@@ -42,23 +56,15 @@ tags:
   - name: Job
     description: >
       Jobs are long-running tasks enqueued and processed by the instance
-      itself. 
-
-      No additional worker registration is currently available.
-  - name: ServerFollowing
+      itself. No additional worker registration is currently available.
+  - name: Server Following
     description: >
       Managing servers which the instance interacts with is crucial to the
-      concept
-
-      of federation in PeerTube and external video indexation. The PeerTube
-      server
-
-      then deals with inter-server ActivityPub operations and propagates 
-
+      concept of federation in PeerTube and external video indexation. The PeerTube
+      server then deals with inter-server ActivityPub operations and propagates 
       information across its social graph by posting activities to actors' inbox
-
       endpoints.
-  - name: VideoAbuse
+  - name: Video Abuse
     description: |
       Video abuses deal with reports of local or remote videos alike.
   - name: Video
@@ -70,16 +76,51 @@ tags:
       Videos from other instances federated by the instance (that is, instances
       followed by the instance) can be found via keywords and other criteria of
       the advanced search.
-  - name: VideoComment
+  - name: Video Comment
     description: >
       Operations dealing with comments to a video. Comments are organized in
       threads.
-  - name: VideoChannel
+  - name: Video Channel
     description: >
       Operations dealing with creation, modification and video listing of a
-      user's
-
-      channels.
+      user's channels.
+  - name: Video Blacklist
+    description: >
+      Operations dealing with blacklisting videos (removing them from view and
+      preventing interactions).
+  - name: Video Rate
+    description: >
+      Voting for a video.
+x-tagGroups:
+  - name: Accounts
+    tags:
+      - Accounts
+      - User
+  - name: Videos
+    tags:
+      - Video
+      - Video Channel
+      - Video Comment
+      - Video Abuse
+      - Video Following
+      - Video Rate
+  - name: Moderation
+    tags:
+      - Video Abuse
+      - Video Blacklist
+  - name: Public Instance Information
+    tags:
+      - Config
+      - Server Following
+  - name: Notifications
+    tags:
+      - Feeds
+  - name: Jobs
+    tags:
+      - Job
+  - name: Search
+    tags:
+      - Search
 paths:
   '/accounts/{name}':
     get:
@@ -126,6 +167,37 @@ paths:
           source: |
             # pip install httpie
             http -b GET https://peertube2.cpy.re/api/v1/accounts/{name}/videos
+        - lang: Ruby
+          source: |
+            require 'uri'
+            require 'net/http'
+
+            url = URI("https://peertube2.cpy.re/api/v1/accounts/{name}/videos")
+
+            http = Net::HTTP.new(url.host, url.port)
+            http.use_ssl = true
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+            request = Net::HTTP::Post.new(url)
+            request["content-type"] = 'application/json'
+            response = http.request(request)
+            puts response.read_body
+        - lang: Python
+          source: |
+            import http.client
+
+            conn = http.client.HTTPSConnection("https://peertube2.cpy.re/api/v1")
+
+            headers = {
+              'content-type': "application/json"
+            }
+
+            conn.request("POST", "/accounts/{name}/videos", None, headers)
+
+            res = conn.getresponse()
+            data = res.read()
+
+            print(data.decode("utf-8"))
   /accounts:
     get:
       tags:
@@ -144,7 +216,7 @@ paths:
     get:
       tags:
         - Config
-      summary: Get the configuration of the server
+      summary: Get the public configuration of the server
       responses:
         '200':
           description: successful operation
@@ -152,6 +224,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServerConfig'
+  /config/about:
+    get:
+      summary: Get the instance about page content
+      tags:
+        - Config
+      responses:
+        '200':
+          description: successful operation
+  /config/custom:
+    get:
+      summary: Get the runtime configuration of the server
+      tags:
+        - Config
+      security:
+        - OAuth2:
+            - admin
+      responses:
+        '200':
+          description: successful operation
+    put:
+      summary: Set the runtime configuration of the server
+      tags:
+        - Config
+      security:
+        - OAuth2:
+            - admin
+      responses:
+        '200':
+          description: successful operation
+    delete:
+      summary: Delete the runtime configuration of the server
+      tags:
+        - Config
+      security:
+        - OAuth2:
+            - admin
+      responses:
+        '200':
+          description: successful operation
   '/feeds/videos.{format}':
     get:
       summary: >-
@@ -223,7 +334,7 @@ paths:
         - OAuth2:
             - admin
       tags:
-        - ServerFollowing
+        - Server Following
       summary: Unfollow a server by hostname
       parameters:
         - name: host
@@ -238,7 +349,7 @@ paths:
   /server/followers:
     get:
       tags:
-        - ServerFollowing
+        - Server Following
       summary: Get followers of the server
       parameters:
         - $ref: '#/components/parameters/start'
@@ -256,7 +367,7 @@ paths:
   /server/following:
     get:
       tags:
-        - ServerFollowing
+        - Server Following
       summary: Get servers followed by the server
       parameters:
         - $ref: '#/components/parameters/start'
@@ -276,7 +387,7 @@ paths:
         - OAuth2:
             - admin
       tags:
-        - ServerFollowing
+        - Server Following
       summary: Follow a server
       responses:
         '204':
@@ -701,6 +812,85 @@ paths:
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/{id}/watching':
+    put:
+      summary: Indicate progress of in watching the video by its id for a user
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserWatchingVideo'
+        required: true
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  /videos/ownership:
+    get:
+      summary: Get list of video ownership changes requests
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '200':
+          description: successful operation
+  '/videos/ownership/{id}/accept':
+    post:
+      summary: Refuse ownership change request for video by its id
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/ownership/{id}/refuse':
+    post:
+      summary: Accept ownership change request for video by its id
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/{id}/give-ownership':
+    post:
+      summary: Request change of ownership for a video you own, by its id
+      tags:
+        - Video
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+        '400':
+          description: 'Changing video ownership to a remote account is not supported yet'
   /videos/upload:
     post:
       summary: Upload a video file with its metadata
@@ -771,7 +961,6 @@ paths:
                 - videofile
                 - channelId
                 - name
-                - privacy
       x-code-samples:
         - lang: Shell
           source: |
@@ -781,7 +970,6 @@ paths:
             PASSWORD="<your_password>"
             FILE_PATH="<your_file_path>"
             CHANNEL_ID="<your_channel_id>"
-            PRIVACY="1" # public: 1, unlisted: 2, private: 3
             NAME="<video_name>"
 
             API_PATH="https://peertube2.cpy.re/api/v1"
@@ -798,7 +986,6 @@ paths:
               videofile@$FILE_PATH \
               channelId=$CHANNEL_ID \
               name=$NAME \
-              privacy=$PRIVACY \
               "Authorization:Bearer $token"
   /videos/abuse:
     get:
@@ -806,7 +993,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoAbuse
+        - Video Abuse
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -826,7 +1013,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoAbuse
+        - Video Abuse
       parameters:
         - $ref: '#/components/parameters/id2'
       responses:
@@ -840,7 +1027,7 @@ paths:
             - admin
             - moderator
       tags:
-        - VideoBlacklist
+        - Video Blacklist
       parameters:
         - $ref: '#/components/parameters/id2'
       responses:
@@ -853,7 +1040,7 @@ paths:
             - admin
             - moderator
       tags:
-        - VideoBlacklist
+        - Video Blacklist
       parameters:
         - $ref: '#/components/parameters/id2'
       responses:
@@ -867,7 +1054,7 @@ paths:
             - admin
             - moderator
       tags:
-        - VideoBlacklist
+        - Video Blacklist
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -885,7 +1072,7 @@ paths:
     get:
       summary: Get list of video channels
       tags:
-        - VideoChannel
+        - Video Channel
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -904,7 +1091,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoChannel
+        - Video Channel
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -914,7 +1101,7 @@ paths:
     get:
       summary: Get a video channel by its id
       tags:
-        - VideoChannel
+        - Video Channel
       parameters:
         - $ref: '#/components/parameters/id3'
       responses:
@@ -929,7 +1116,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoChannel
+        - Video Channel
       parameters:
         - $ref: '#/components/parameters/id3'
       responses:
@@ -942,7 +1129,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoChannel
+        - Video Channel
       parameters:
         - $ref: '#/components/parameters/id3'
       responses:
@@ -952,7 +1139,7 @@ paths:
     get:
       summary: Get videos of a video channel by its id
       tags:
-        - VideoChannel
+        - Video Channel
       parameters:
         - $ref: '#/components/parameters/id3'
       responses:
@@ -966,7 +1153,7 @@ paths:
     get:
       summary: Get video channels of an account by its name
       tags:
-        - VideoChannel
+        - Video Channel
       parameters:
         - $ref: '#/components/parameters/name'
       responses:
@@ -982,7 +1169,7 @@ paths:
     get:
       summary: Get the comment threads of a video by its id
       tags:
-        - VideoComment
+        - Video Comment
       parameters:
         - $ref: '#/components/parameters/id2'
         - $ref: '#/components/parameters/start'
@@ -1000,7 +1187,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoComment
+        - Video Comment
       parameters:
         - $ref: '#/components/parameters/id2'
       responses:
@@ -1014,7 +1201,7 @@ paths:
     get:
       summary: 'Get the comment thread by its id, of a video by its id'
       tags:
-        - VideoComment
+        - Video Comment
       parameters:
         - $ref: '#/components/parameters/id2'
         - name: threadId
@@ -1036,7 +1223,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoComment
+        - Video Comment
       parameters:
         - $ref: '#/components/parameters/id2'
         - $ref: '#/components/parameters/commentId'
@@ -1052,7 +1239,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoComment
+        - Video Comment
       parameters:
         - $ref: '#/components/parameters/id2'
         - $ref: '#/components/parameters/commentId'
@@ -1065,7 +1252,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - VideoRate
+        - Video Rate
       parameters:
         - $ref: '#/components/parameters/id2'
       responses:
@@ -1096,8 +1283,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Video'
 servers:
+  - url: 'https://peertube.cpy.re/api/v1'
+    description: Live Test Server (live data - stable version)
   - url: 'https://peertube2.cpy.re/api/v1'
-    description: Live Server
+    description: Live Test Server (live data - bleeding edge version)
+  - url: 'https://peertube3.cpy.re/api/v1'
+    description: Live Test Server (live data - bleeding edge version)
 components:
   parameters:
     start:
@@ -1417,6 +1608,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VideoChannel'
+    UserWatchingVideo:
+      properties:
+        currentTime:
+          type: number
     ServerConfig:
       properties:
         signup:

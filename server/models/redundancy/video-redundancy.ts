@@ -117,8 +117,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   @BeforeDestroy
   static async removeFile (instance: VideoRedundancyModel) {
-    // Not us
-    if (!instance.strategy) return
+    if (!instance.isOwned()) return
 
     const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
 
@@ -402,6 +401,10 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
         totalVideos: r.totalVideos,
         totalVideoFiles: r.totalVideoFiles
       }))
+  }
+
+  isOwned () {
+    return !!this.strategy
   }
 
   toActivityPubObject (): CacheFileObject {

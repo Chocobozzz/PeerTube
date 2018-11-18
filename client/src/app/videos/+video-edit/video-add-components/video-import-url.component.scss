@@ -7,6 +7,14 @@ $width-size: 190px;
   @include peertube-select-container($width-size);
 }
 
+.alert.alert-danger {
+  text-align: center;
+
+  & > div {
+    font-weight: $font-semibold;
+  }
+}
+
 .import-video-url {
   display: flex;
   flex-direction: column;

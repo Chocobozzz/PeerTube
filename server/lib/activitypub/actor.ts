@@ -11,9 +11,9 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { doRequest, doRequestAndSaveToFile, downloadImage } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, PREVIEWS_SIZE, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -180,10 +180,7 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
     const avatarName = uuidv4() + extension
     const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
 
-    await doRequestAndSaveToFile({
-      method: 'GET',
-      uri: actorJSON.icon.url
-    }, destPath)
+    await downloadImage(actorJSON.icon.url, destPath, AVATARS_SIZE)
 
     return avatarName
   }

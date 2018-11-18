@@ -6,8 +6,8 @@ import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { CONFIG, sequelizeTypescript, VIDEO_IMPORT_TIMEOUT } from '../../../initializers'
-import { doRequestAndSaveToFile } from '../../../helpers/requests'
+import { CONFIG, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_IMPORT_TIMEOUT } from '../../../initializers'
+import { doRequestAndSaveToFile, downloadImage } from '../../../helpers/requests'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
@@ -133,7 +133,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       videoId: videoImport.videoId
     }
     videoFile = new VideoFileModel(videoFileData)
-    // Import if the import fails, to clean files
+    // To clean files if the import fails
     videoImport.Video.VideoFiles = [ videoFile ]
 
     // Move file
@@ -145,7 +145,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     if (options.downloadThumbnail) {
       if (options.thumbnailUrl) {
         const destThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoImport.Video.getThumbnailName())
-        await doRequestAndSaveToFile({ method: 'GET', uri: options.thumbnailUrl }, destThumbnailPath)
+        await downloadImage(options.thumbnailUrl, destThumbnailPath, THUMBNAILS_SIZE)
       } else {
         await videoImport.Video.createThumbnail(videoFile)
       }
@@ -157,7 +157,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     if (options.downloadPreview) {
       if (options.thumbnailUrl) {
         const destPreviewPath = join(CONFIG.STORAGE.PREVIEWS_DIR, videoImport.Video.getPreviewName())
-        await doRequestAndSaveToFile({ method: 'GET', uri: options.thumbnailUrl }, destPreviewPath)
+        await downloadImage(options.thumbnailUrl, destPreviewPath, PREVIEWS_SIZE)
       } else {
         await videoImport.Video.createPreview(videoFile)
       }

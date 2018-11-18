@@ -17,9 +17,10 @@ import {
   viewVideo,
   wait,
   waitUntilLog,
-  checkVideoFilesWereRemoved, removeVideo
+  checkVideoFilesWereRemoved, removeVideo, getVideoWithToken
 } from '../../../../shared/utils'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
+
 import * as magnetUtil from 'magnet-uri'
 import { updateRedundancy } from '../../../../shared/utils/server/redundancy'
 import { ActorFollow } from '../../../../shared/models/actors'
@@ -93,7 +94,8 @@ async function check1WebSeed (strategy: VideoRedundancyStrategy, videoUUID?: str
 
   for (const server of servers) {
     {
-      const res = await getVideo(server.url, videoUUID)
+      // With token to avoid issues with video follow constraints
+      const res = await getVideoWithToken(server.url, server.accessToken, videoUUID)
 
       const video: VideoDetails = res.body
       for (const f of video.files) {

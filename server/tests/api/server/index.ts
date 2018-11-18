@@ -1,5 +1,6 @@
 import './config'
 import './email'
+import './follow-constraints'
 import './follows'
 import './handle-down'
 import './jobs'
