@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import * as validator from 'validator'
 import { ResultList } from '../../shared/models'
-import { Activity, ActivityPubActor } from '../../shared/models/activitypub'
+import { Activity } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
 import { signJsonLDObject } from './peertube-crypto'
@@ -106,10 +106,10 @@ function buildSignedActivity (byActor: ActorModel, data: Object) {
   return signJsonLDObject(byActor, activity) as Promise<Activity>
 }
 
-function getActorUrl (activityActor: string | ActivityPubActor) {
-  if (typeof activityActor === 'string') return activityActor
+function getAPUrl (activity: string | { id: string }) {
+  if (typeof activity === 'string') return activity
 
-  return activityActor.id
+  return activity.id
 }
 
 function checkUrlsSameHost (url1: string, url2: string) {
@@ -123,7 +123,7 @@ function checkUrlsSameHost (url1: string, url2: string) {
 
 export {
   checkUrlsSameHost,
-  getActorUrl,
+  getAPUrl,
   activityPubContextify,
   activityPubCollectionPagination,
   buildSignedActivity

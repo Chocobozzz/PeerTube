@@ -29,7 +29,7 @@ import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
-import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -167,7 +167,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
   const refreshViews = options.refreshViews || false
 
   // Get video url
-  const videoUrl = typeof options.videoObject === 'string' ? options.videoObject : options.videoObject.id
+  const videoUrl = getAPUrl(options.videoObject)
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
