@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
-import { makeDeleteRequest, makePostBodyRequest } from '../requests/requests'
-import { makeGetRequest } from '../requests/requests'
+import { makeGetRequest, makeDeleteRequest, makePostBodyRequest } from '../requests/requests'
 
 function getAccountBlocklistByAccount (
   url: string,
