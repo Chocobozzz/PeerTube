@@ -300,7 +300,7 @@ paths:
       responses:
         '200':
           description: successful operation
-  /jobs:
+  /jobs/{state}:
     get:
       summary: Get list of jobs
       security:
