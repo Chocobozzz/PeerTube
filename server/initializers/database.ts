@@ -119,25 +119,27 @@ export {
 // ---------------------------------------------------------------------------
 
 async function checkPostgresExtensions () {
-  const extensions = [
-    'pg_trgm',
-    'unaccent'
+  const promises = [
+    checkPostgresExtension('pg_trgm'),
+    checkPostgresExtension('unaccent')
   ]
 
-  for (const extension of extensions) {
-    const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
-    const [ res ] = await sequelizeTypescript.query(query, { raw: true })
+  return Promise.all(promises)
+}
 
-    if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
-      // Try to create the extension ourself
-      try {
-        await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
+async function checkPostgresExtension (extension: string) {
+  const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
+  const [ res ] = await sequelizeTypescript.query(query, { raw: true })
 
-      } catch {
-        const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
-          `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`
-        throw new Error(errorMessage)
-      }
+  if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
+    // Try to create the extension ourself
+    try {
+      await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
+
+    } catch {
+      const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
+        `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`
+      throw new Error(errorMessage)
     }
   }
 }

@@ -204,9 +204,11 @@ async function startApplication () {
 
   // Email initialization
   Emailer.Instance.init()
-  await Emailer.Instance.checkConnectionOrDie()
 
-  await JobQueue.Instance.init()
+  await Promise.all([
+    Emailer.Instance.checkConnectionOrDie(),
+    JobQueue.Instance.init()
+  ])
 
   // Caches initializations
   VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, CACHE.PREVIEWS.MAX_AGE)
