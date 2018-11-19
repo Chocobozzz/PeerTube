@@ -101,14 +101,13 @@ x-tagGroups:
       - Video
       - Video Channel
       - Video Comment
-      - Video Abuse
       - Video Following
       - Video Rate
   - name: Moderation
     tags:
       - Video Abuse
       - Video Blacklist
-  - name: Public Instance Information
+  - name: Instance Configuration
     tags:
       - Config
       - Server Following
@@ -316,6 +315,12 @@ paths:
           description: The state of the job
           schema:
             type: string
+            enum:
+              - active
+              - completed
+              - failed
+              - waiting
+              - delayed
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
