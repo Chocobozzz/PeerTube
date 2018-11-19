@@ -25,7 +25,6 @@ export class VerifyAccountEmailComponent implements OnInit {
   }
 
   ngOnInit () {
-
     this.userId = this.route.snapshot.queryParams['userId']
     this.verificationString = this.route.snapshot.queryParams['verificationString']
 

@@ -242,10 +242,6 @@ async function updateVideoFromAP (options: {
       if (options.updateViews === true) options.video.set('views', videoData.views)
       await options.video.save(sequelizeOptions)
 
-      // Don't block on request
-      generateThumbnailFromUrl(options.video, options.videoObject.icon)
-        .catch(err => logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err }))
-
       {
         const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
         const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
@@ -292,6 +288,12 @@ async function updateVideoFromAP (options: {
     // This is just a debug because we will retry the insert
     logger.debug('Cannot update the remote video.', { err })
     throw err
+  }
+
+  try {
+    await generateThumbnailFromUrl(options.video, options.videoObject.icon)
+  } catch (err) {
+    logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err })
   }
 }
 
