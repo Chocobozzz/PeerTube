@@ -4,7 +4,7 @@ import { expect } from 'chai'
 import { existsSync, readdir } from 'fs-extra'
 import { join } from 'path'
 import { Account } from '../../../../shared/models/actors'
-import { root } from '../index'
+import { root } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
 
 function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected = 200) {

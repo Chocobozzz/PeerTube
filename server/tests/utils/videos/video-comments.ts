@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { makeDeleteRequest } from '../'
+import { makeDeleteRequest } from '../requests/requests'
 
 function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string, token?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'

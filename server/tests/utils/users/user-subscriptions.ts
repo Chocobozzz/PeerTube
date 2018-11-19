@@ -1,4 +1,4 @@
-import { makeDeleteRequest, makeGetRequest, makePostBodyRequest } from '../'
+import { makeDeleteRequest, makeGetRequest, makePostBodyRequest } from '../requests/requests'
 
 function addUserSubscription (url: string, token: string, targetUri: string, statusCodeExpected = 204) {
   const path = '/api/v1/users/me/subscriptions'

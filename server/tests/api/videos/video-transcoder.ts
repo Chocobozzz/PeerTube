@@ -3,13 +3,13 @@
 import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
-import * as ffmpeg from 'fluent-ffmpeg'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
 import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   doubleFollow,
   flushAndRunMultipleServers,
+  generateHighBitrateVideo,
   getMyVideos,
   getVideo,
   getVideosList,
@@ -18,12 +18,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  webtorrentAdd,
-  generateHighBitrateVideo
+  webtorrentAdd
 } from '../../utils'
 import { join } from 'path'
 import { waitJobs } from '../../utils/server/jobs'
-import { pathExists } from 'fs-extra'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect

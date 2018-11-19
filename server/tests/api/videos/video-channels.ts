@@ -7,10 +7,12 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideoChannelVideos, serverLogin, testImage,
+  getVideoChannelVideos,
+  testImage,
   updateVideo,
   updateVideoChannelAvatar,
-  uploadVideo, wait, userLogin
+  uploadVideo,
+  userLogin
 } from '../../utils'
 import {
   addVideoChannel,

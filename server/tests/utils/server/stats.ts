@@ -1,4 +1,4 @@
-import { makeGetRequest } from '../'
+import { makeGetRequest } from '../requests/requests'
 
 function getStats (url: string, useCache = false) {
   const path = '/api/v1/server/stats'

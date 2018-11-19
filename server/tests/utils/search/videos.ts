@@ -2,7 +2,7 @@
 
 import * as request from 'supertest'
 import { VideosSearchQuery } from '../../../../shared/models/search'
-import { immutableAssign } from '..'
+import { immutableAssign } from '../miscs/miscs'
 
 function searchVideo (url: string, search: string) {
   const path = '/api/v1/search/videos'

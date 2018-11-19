@@ -1,7 +1,7 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
 import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
-import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers'
+import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'

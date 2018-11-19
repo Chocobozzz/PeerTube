@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import * as chai from 'chai'
-import * as lodash from 'lodash'
+import { orderBy } from 'lodash'
 import 'mocha'
 import {
   addVideoToBlacklist,
@@ -22,7 +22,6 @@ import { waitJobs } from '../../utils/server/jobs'
 import { VideoAbuse } from '../../../../shared/models/videos'
 
 const expect = chai.expect
-const orderBy = lodash.orderBy
 
 describe('Test video blacklist management', function () {
   let servers: ServerInfo[] = []

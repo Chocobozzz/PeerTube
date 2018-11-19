@@ -1,4 +1,4 @@
-import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../'
+import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 function getConfig (url: string) {

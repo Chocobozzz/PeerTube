@@ -17,8 +17,8 @@ import {
   testImage
 } from '../'
 import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
-import { dateIsValid, webtorrentAdd } from '../index'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
+import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
 
 type VideoAttributes = {
   name?: string

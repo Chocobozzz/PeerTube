@@ -17,10 +17,8 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
       validate: validateUser
     }
 
-    const [ userCreated, accountCreated ] = await Promise.all([
-      userToCreate.save(userOptions),
-      createLocalAccountWithoutKeys(userToCreate.username, userToCreate.id, null, t)
-    ])
+    const userCreated = await userToCreate.save(userOptions)
+    const accountCreated = await createLocalAccountWithoutKeys(userCreated.username, userCreated.id, null, t)
     userCreated.Account = accountCreated
 
     let channelName = userCreated.username + '_channel'
