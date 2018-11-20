@@ -16,9 +16,10 @@ import {
   ServerInfo,
   testImage
 } from '../'
+
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers'
-import { dateIsValid, webtorrentAdd } from '../index'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
+import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
 
 type VideoAttributes = {
   name?: string

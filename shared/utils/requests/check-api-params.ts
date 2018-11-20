@@ -1,5 +1,5 @@
 import { makeGetRequest } from './requests'
-import { immutableAssign } from '..'
+import { immutableAssign } from '../miscs/miscs'
 
 function checkBadStartPagination (url: string, path: string, token?: string, query = {}) {
   return makeGetRequest({

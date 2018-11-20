@@ -87,15 +87,19 @@
 
         <div i18n class="inner-form-title">Signup</div>
 
-        <my-peertube-checkbox
-          inputName="signupEnabled" formControlName="signupEnabled"
-          i18n-labelText labelText="Signup enabled"
-        ></my-peertube-checkbox>
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="signupEnabled" formControlName="signupEnabled"
+            i18n-labelText labelText="Signup enabled"
+          ></my-peertube-checkbox>
+        </div>
 
-        <my-peertube-checkbox *ngIf="isSignupEnabled()"
-          inputName="signupRequiresEmailVerification" formControlName="signupRequiresEmailVerification"
-          i18n-labelText labelText="Signup requires email verification"
-        ></my-peertube-checkbox>
+        <div class="form-group">
+          <my-peertube-checkbox *ngIf="isSignupEnabled()"
+            inputName="signupRequiresEmailVerification" formControlName="signupRequiresEmailVerification"
+            i18n-labelText labelText="Signup requires email verification"
+          ></my-peertube-checkbox>
+        </div>
 
         <div *ngIf="isSignupEnabled()" class="form-group">
           <label i18n for="signupLimit">Signup limit</label>
@@ -110,15 +114,19 @@
 
         <div i18n class="inner-form-title">Import</div>
 
-        <my-peertube-checkbox
-          inputName="importVideosHttpEnabled" formControlName="importVideosHttpEnabled"
-          i18n-labelText labelText="Video import with HTTP URL (i.e. YouTube) enabled"
-        ></my-peertube-checkbox>
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="importVideosHttpEnabled" formControlName="importVideosHttpEnabled"
+            i18n-labelText labelText="Video import with HTTP URL (i.e. YouTube) enabled"
+          ></my-peertube-checkbox>
+        </div>
 
-        <my-peertube-checkbox
-          inputName="importVideosTorrentEnabled" formControlName="importVideosTorrentEnabled"
-          i18n-labelText labelText="Video import with a torrent file or a magnet URI enabled"
-        ></my-peertube-checkbox>
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="importVideosTorrentEnabled" formControlName="importVideosTorrentEnabled"
+            i18n-labelText labelText="Video import with a torrent file or a magnet URI enabled"
+          ></my-peertube-checkbox>
+        </div>
 
         <div i18n class="inner-form-title">Administrator</div>
 
@@ -184,13 +192,15 @@
           </div>
         </div>
 
-        <my-peertube-checkbox
-          inputName="servicesTwitterWhitelisted" formControlName="servicesTwitterWhitelisted"
-          i18n-labelText labelText="Instance whitelisted by Twitter"
-          i18n-helpHtml helpHtml="If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
-  If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
-  Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a> to see if you instance is whitelisted."
-        ></my-peertube-checkbox>
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="servicesTwitterWhitelisted" formControlName="servicesTwitterWhitelisted"
+            i18n-labelText labelText="Instance whitelisted by Twitter"
+            i18n-helpHtml helpHtml="If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
+    If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
+    Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a> to see if you instance is whitelisted."
+          ></my-peertube-checkbox>
+        </div>
     </ng-template>
     </ngb-tab>
 
@@ -199,11 +209,13 @@
 
         <div i18n class="inner-form-title">Transcoding</div>
 
-        <my-peertube-checkbox
-          inputName="transcodingEnabled" formControlName="transcodingEnabled"
-          i18n-labelText labelText="Transcoding enabled"
-          i18n-helpHtml helpHtml="If you disable transcoding, many videos from your users will not work!"
-        ></my-peertube-checkbox>
+        <div class="form-group">
+          <my-peertube-checkbox
+            inputName="transcodingEnabled" formControlName="transcodingEnabled"
+            i18n-labelText labelText="Transcoding enabled"
+            i18n-helpHtml helpHtml="If you disable transcoding, many videos from your users will not work!"
+          ></my-peertube-checkbox>
+        </div>
 
         <ng-template [ngIf]="isTranscodingEnabled()">
 
@@ -226,7 +238,6 @@
               [inputName]="getResolutionKey(resolution)" [formControlName]="getResolutionKey(resolution)"
               i18n-labelText labelText="Resolution {{resolution}} enabled"
             ></my-peertube-checkbox>
-
           </div>
         </ng-template>
 

@@ -18,7 +18,7 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
     }
 
     const userCreated = await userToCreate.save(userOptions)
-    const accountCreated = await createLocalAccountWithoutKeys(userToCreate.username, userToCreate.id, null, t)
+    const accountCreated = await createLocalAccountWithoutKeys(userCreated.username, userCreated.id, null, t)
     userCreated.Account = accountCreated
 
     let channelName = userCreated.username + '_channel'
@@ -37,8 +37,13 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
     return { user: userCreated, account: accountCreated, videoChannel }
   })
 
-  account.Actor = await setAsyncActorKeys(account.Actor)
-  videoChannel.Actor = await setAsyncActorKeys(videoChannel.Actor)
+  const [ accountKeys, channelKeys ] = await Promise.all([
+    setAsyncActorKeys(account.Actor),
+    setAsyncActorKeys(videoChannel.Actor)
+  ])
+
+  account.Actor = accountKeys
+  videoChannel.Actor = channelKeys
 
   return { user, account, videoChannel } as { user: UserModel, account: AccountModel, videoChannel: VideoChannelModel }
 }

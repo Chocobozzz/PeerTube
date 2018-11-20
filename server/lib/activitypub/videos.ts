@@ -29,7 +29,7 @@ import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
-import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -167,7 +167,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
   const refreshViews = options.refreshViews || false
 
   // Get video url
-  const videoUrl = typeof options.videoObject === 'string' ? options.videoObject : options.videoObject.id
+  const videoUrl = getAPUrl(options.videoObject)
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
@@ -242,10 +242,6 @@ async function updateVideoFromAP (options: {
       if (options.updateViews === true) options.video.set('views', videoData.views)
       await options.video.save(sequelizeOptions)
 
-      // Don't block on request
-      generateThumbnailFromUrl(options.video, options.videoObject.icon)
-        .catch(err => logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err }))
-
       {
         const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
         const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
@@ -292,6 +288,12 @@ async function updateVideoFromAP (options: {
     // This is just a debug because we will retry the insert
     logger.debug('Cannot update the remote video.', { err })
     throw err
+  }
+
+  try {
+    await generateThumbnailFromUrl(options.video, options.videoObject.icon)
+  } catch (err) {
+    logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err })
   }
 }
 

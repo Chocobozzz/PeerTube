@@ -1,5 +1,5 @@
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { checkUrlsSameHost, getActorUrl } from '../../../helpers/activitypub'
+import { checkUrlsSameHost, getAPUrl } from '../../../helpers/activitypub'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { processAcceptActivity } from './process-accept'
@@ -40,7 +40,7 @@ async function processActivities (
       continue
     }
 
-    const actorUrl = getActorUrl(activity.actor)
+    const actorUrl = getAPUrl(activity.actor)
 
     // When we fetch remote data, we don't have signature
     if (options.signatureActor && actorUrl !== options.signatureActor.url) {

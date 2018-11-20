@@ -11,7 +11,7 @@ import { doRequest } from '../../helpers/requests'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers'
-import { checkUrlsSameHost, getActorUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
@@ -41,7 +41,7 @@ async function addVideoShares (shareUrls: string[], instance: VideoModel) {
       })
       if (!body || !body.actor) throw new Error('Body or body actor is invalid')
 
-      const actorUrl = getActorUrl(body.actor)
+      const actorUrl = getAPUrl(body.actor)
       if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {
         throw new Error(`Actor url ${actorUrl} has not the same host than the share url ${shareUrl}`)
       }

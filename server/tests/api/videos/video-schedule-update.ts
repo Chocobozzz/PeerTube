@@ -16,7 +16,6 @@ import {
   uploadVideo,
   wait
 } from '../../../../shared/utils'
-import { join } from 'path'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect

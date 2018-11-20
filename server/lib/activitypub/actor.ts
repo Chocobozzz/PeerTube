@@ -5,15 +5,15 @@ import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { checkUrlsSameHost, getActorUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
 import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest, doRequestAndSaveToFile, downloadImage } from '../../helpers/requests'
+import { doRequest, downloadImage } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, PREVIEWS_SIZE, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -43,7 +43,7 @@ async function getOrCreateActorAndServerAndModel (
   recurseIfNeeded = true,
   updateCollections = false
 ) {
-  const actorUrl = getActorUrl(activityActor)
+  const actorUrl = getAPUrl(activityActor)
   let created = false
 
   let actor = await fetchActorByUrl(actorUrl, fetchType)

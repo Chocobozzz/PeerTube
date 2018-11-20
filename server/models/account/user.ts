@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import {
-  AfterDelete,
+  AfterDestroy,
   AfterUpdate,
   AllowNull,
   BeforeCreate,
@@ -179,7 +179,7 @@ export class UserModel extends Model<UserModel> {
   }
 
   @AfterUpdate
-  @AfterDelete
+  @AfterDestroy
   static removeTokenCache (instance: UserModel) {
     return clearCacheByUserId(instance.id)
   }

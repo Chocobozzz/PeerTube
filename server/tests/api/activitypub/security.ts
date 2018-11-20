@@ -8,15 +8,12 @@ import {
   killallServers,
   ServerInfo
 } from '../../../../shared/utils'
-import {
-  makePOSTAPRequest,
-  makeFollowRequest,
-} from '../../utils/requests/activitypub'
 import { HTTP_SIGNATURE } from '../../../initializers'
 import { buildDigest, buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as chai from 'chai'
 import { setActorField } from '../../utils/miscs/sql'
 import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
+import { makeFollowRequest, makePOSTAPRequest } from '../../utils/requests/activitypub'
 
 const expect = chai.expect
 

@@ -1,7 +1,7 @@
-import { makeDeleteRequest, makeGetRequest } from '../'
-import { buildAbsoluteFixturePath, makeUploadRequest } from '../index'
+import { makeDeleteRequest, makeGetRequest, makeUploadRequest } from '../requests/requests'
 import * as request from 'supertest'
 import * as chai from 'chai'
+import { buildAbsoluteFixturePath } from '../miscs/miscs'
 
 const expect = chai.expect
 

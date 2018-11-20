@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../'
+import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
 
 import { UserRole } from '../../index'
 import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
