@@ -1,66 +1,50 @@
-FROM node:8-stretch
-
-RUN set -ex; \
-    if ! command -v gpg > /dev/null; then \
-      apt-get update; \
-      apt-get install -y --no-install-recommends \
-        gnupg \
-        dirmngr \
-      ; \
-      rm -rf /var/lib/apt/lists/*; \
-fi
-
-# Install dependencies
-RUN apt-get update \
-    && apt-get -y install ffmpeg \
-    && rm /var/lib/apt/lists/* -fR
+FROM node:8-alpine
 
 # Add peertube user
-RUN groupadd -r peertube \
-    && useradd -r -g peertube -m peertube
+RUN addgroup -S peertube \
+    && adduser -S -G peertube peertube
 
-# grab gosu for easy step-down from root
+WORKDIR /app
+COPY . ./
+
+# Install dependencies, including gosu for easy step-down from root. After that, compile with yarn.
 # https://github.com/tianon/gosu/releases
 ENV GOSU_VERSION 1.10
 RUN set -ex; \
+    apk add --no-cache \
+        gnupg \
+        ca-certificates \
+        wget \
+        ffmpeg \
+        git \
+        python \
+        make \
+        g++ \
+        bash \
+    ; \
     \
-    fetchDeps='ca-certificates wget'; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends $fetchDeps; \
-    rm -rf /var/lib/apt/lists/*; \
-    \
-    dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
-    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
-    wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+    wget -O /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64"; \
+    wget -O /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-amd64.asc"; \
     export GNUPGHOME="$(mktemp -d)"; \
     for server in $(shuf -e ha.pool.sks-keyservers.net \
                             hkp://p80.pool.sks-keyservers.net:80 \
                             keyserver.ubuntu.com \
                             hkp://keyserver.ubuntu.com:80 \
                             pgp.mit.edu) ; do \
-        gpg --keyserver "$server" --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && break || : ; \
+        gpg --no-tty --keyserver "$server" --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && break || : ; \
     done; \
-    gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
+    gpg --no-tty --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -rf "$GNUPGHOME" /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
     gosu nobody true; \
     \
-    apt-get purge -y --auto-remove wget
-
-# Install PeerTube
-WORKDIR /app
-COPY . ./
-RUN chown -R peertube:peertube /app
-
-USER peertube
-
-RUN yarn install --pure-lockfile \
-    && npm run build \
-    && rm -r ./node_modules ./client/node_modules \
-    && yarn install --pure-lockfile --production \
-    && yarn cache clean
-
-USER root
+    yarn install --pure-lockfile; \
+    npm run build; \
+    rm -r ./node_modules ./client/node_modules; \
+    yarn install --pure-lockfile --production; \
+    yarn cache clean; \
+    apk del git python make g++ wget; \
+    chown -R peertube:peertube /app
 
 RUN mkdir /data /config
 RUN chown -R peertube:peertube /data /config
