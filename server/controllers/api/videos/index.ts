@@ -387,6 +387,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
 function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
+  if (videoInstance.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoInstance.url } })
+      .catch(err => logger.error('Cannot create AP refresher job for video %s.', videoInstance.url, { err }))
+  }
+
   return res.json(videoInstance.toFormattedDetailsJSON())
 }
 
@@ -429,7 +434,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
   return res.json({ description })
 }
 
-async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listVideos (req: express.Request, res: express.Response) {
   const resultList = await VideoModel.listForApi({
     start: req.query.start,
     count: req.query.count,

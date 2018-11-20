@@ -1561,6 +1561,12 @@ export class VideoModel extends Model<VideoModel> {
       (now - updatedAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL
   }
 
+  setAsRefreshed () {
+    this.changed('updatedAt', true)
+
+    return this.save()
+  }
+
   getBaseUrls () {
     let baseUrlHttp
     let baseUrlWs

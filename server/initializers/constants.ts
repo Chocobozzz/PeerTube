@@ -102,7 +102,8 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'video-file': 1,
   'video-import': 1,
   'email': 5,
-  'videos-views': 1
+  'videos-views': 1,
+  'activitypub-refresher': 1
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
@@ -113,7 +114,8 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'video-file': 1,
   'video-import': 1,
   'email': 5,
-  'videos-views': 1
+  'videos-views': 1,
+  'activitypub-refresher': 1
 }
 const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -124,11 +126,12 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes
-  'videos-views': undefined // Unlimited
+  'videos-views': undefined, // Unlimited
+  'activitypub-refresher': 60000 * 10 // 10 minutes
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
-    cron: '1 * * * *' // At 1 minutes past the hour
+    cron: '1 * * * *' // At 1 minute past the hour
   }
 }
 
@@ -543,7 +546,7 @@ const HTTP_SIGNATURE = {
 
 // ---------------------------------------------------------------------------
 
-const PRIVATE_RSA_KEY_SIZE = 2048
+let PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
@@ -647,6 +650,8 @@ const TRACKER_RATE_LIMITS = {
 
 // Special constants for a test instance
 if (isTestInstance() === true) {
+  PRIVATE_RSA_KEY_SIZE = 1024
+
   ACTOR_FOLLOW_SCORE.BASE = 20
 
   REMOTE_SCHEME.HTTP = 'http'

@@ -117,7 +117,7 @@ type SyncParam = {
   shares: boolean
   comments: boolean
   thumbnail: boolean
-  refreshVideo: boolean
+  refreshVideo?: boolean
 }
 async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: VideoTorrentObject, syncParam: SyncParam) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
@@ -158,13 +158,11 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
 async function getOrCreateVideoAndAccountAndChannel (options: {
   videoObject: VideoTorrentObject | string,
   syncParam?: SyncParam,
-  fetchType?: VideoFetchByUrlType,
-  refreshViews?: boolean
+  fetchType?: VideoFetchByUrlType
 }) {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
-  const refreshViews = options.refreshViews || false
 
   // Get video url
   const videoUrl = getAPUrl(options.videoObject)
@@ -174,11 +172,11 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
     const refreshOptions = {
       video: videoFromDatabase,
       fetchedType: fetchType,
-      syncParam,
-      refreshViews
+      syncParam
     }
-    const p = refreshVideoIfNeeded(refreshOptions)
-    if (syncParam.refreshVideo === true) videoFromDatabase = await p
+
+    if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
+    else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoFromDatabase.url } })
 
     return { video: videoFromDatabase }
   }
@@ -199,7 +197,6 @@ async function updateVideoFromAP (options: {
   videoObject: VideoTorrentObject,
   account: AccountModel,
   channel: VideoChannelModel,
-  updateViews: boolean,
   overrideTo?: string[]
 }) {
   logger.debug('Updating remote video "%s".', options.videoObject.uuid)
@@ -238,8 +235,8 @@ async function updateVideoFromAP (options: {
       options.video.set('publishedAt', videoData.publishedAt)
       options.video.set('privacy', videoData.privacy)
       options.video.set('channelId', videoData.channelId)
+      options.video.set('views', videoData.views)
 
-      if (options.updateViews === true) options.video.set('views', videoData.views)
       await options.video.save(sequelizeOptions)
 
       {
@@ -297,8 +294,58 @@ async function updateVideoFromAP (options: {
   }
 }
 
+async function refreshVideoIfNeeded (options: {
+  video: VideoModel,
+  fetchedType: VideoFetchByUrlType,
+  syncParam: SyncParam
+}): Promise<VideoModel> {
+  if (!options.video.isOutdated()) return options.video
+
+  // We need more attributes if the argument video was fetched with not enough joints
+  const video = options.fetchedType === 'all' ? options.video : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
+
+  try {
+    const { response, videoObject } = await fetchRemoteVideo(video.url)
+    if (response.statusCode === 404) {
+      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
+
+      // Video does not exist anymore
+      await video.destroy()
+      return undefined
+    }
+
+    if (videoObject === undefined) {
+      logger.warn('Cannot refresh remote video %s: invalid body.', video.url)
+
+      await video.setAsRefreshed()
+      return video
+    }
+
+    const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
+    const account = await AccountModel.load(channelActor.VideoChannel.accountId)
+
+    const updateOptions = {
+      video,
+      videoObject,
+      account,
+      channel: channelActor.VideoChannel
+    }
+    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
+    await syncVideoExternalAttributes(video, videoObject, options.syncParam)
+
+    return video
+  } catch (err) {
+    logger.warn('Cannot refresh video %s.', options.video.url, { err })
+
+    // Don't refresh in loop
+    await video.setAsRefreshed()
+    return video
+  }
+}
+
 export {
   updateVideoFromAP,
+  refreshVideoIfNeeded,
   federateVideoIfNeeded,
   fetchRemoteVideo,
   getOrCreateVideoAndAccountAndChannel,
@@ -360,52 +407,6 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
   if (waitThumbnail === true) await p
 
   return videoCreated
-}
-
-async function refreshVideoIfNeeded (options: {
-  video: VideoModel,
-  fetchedType: VideoFetchByUrlType,
-  syncParam: SyncParam,
-  refreshViews: boolean
-}): Promise<VideoModel> {
-  if (!options.video.isOutdated()) return options.video
-
-  // We need more attributes if the argument video was fetched with not enough joints
-  const video = options.fetchedType === 'all' ? options.video : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
-
-  try {
-    const { response, videoObject } = await fetchRemoteVideo(video.url)
-    if (response.statusCode === 404) {
-      logger.info('Cannot refresh remote video %s: video does not exist anymore. Deleting it.', video.url)
-
-      // Video does not exist anymore
-      await video.destroy()
-      return undefined
-    }
-
-    if (videoObject === undefined) {
-      logger.warn('Cannot refresh remote video %s: invalid body.', video.url)
-      return video
-    }
-
-    const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
-    const account = await AccountModel.load(channelActor.VideoChannel.accountId)
-
-    const updateOptions = {
-      video,
-      videoObject,
-      account,
-      channel: channelActor.VideoChannel,
-      updateViews: options.refreshViews
-    }
-    await retryTransactionWrapper(updateVideoFromAP, updateOptions)
-    await syncVideoExternalAttributes(video, videoObject, options.syncParam)
-
-    return video
-  } catch (err) {
-    logger.warn('Cannot refresh video %s.', options.video.url, { err })
-    return video
-  }
 }
 
 async function videoActivityObjectToDBAttributes (

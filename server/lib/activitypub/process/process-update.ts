@@ -59,7 +59,6 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
     videoObject,
     account: actor.Account,
     channel: channelActor.VideoChannel,
-    updateViews: true,
     overrideTo: activity.to
   }
   return updateVideoFromAP(updateOptions)
