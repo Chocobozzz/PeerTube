@@ -1741,7 +1741,12 @@ components:
           type: string
           description: 'The user videoQuota '
         role:
-          type: string
+          type: integer
+          format: int32
+          enum:
+            - 0
+            - 1
+            - 2
           description: 'The user role '
       required:
         - username
