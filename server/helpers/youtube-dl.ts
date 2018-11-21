@@ -24,10 +24,10 @@ const processOptions = {
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>(async (res, rej) => {
-    const options = opts || [ '-j', '--flat-playlist' ]
+    const args = opts || [ '-j', '--flat-playlist' ]
 
     const youtubeDL = await safeGetYoutubeDL()
-    youtubeDL.getInfo(url, options, (err, info) => {
+    youtubeDL.getInfo(url, args, processOptions, (err, info) => {
       if (err) return rej(err)
       if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
 
