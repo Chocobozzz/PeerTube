@@ -109,6 +109,8 @@ export class UserModerationDropdownComponent implements OnChanges {
           this.i18n('Success'),
           this.i18n('User {{username}} email set as verified', { username: user.username })
         )
+
+        this.userChanged.emit()
       },
 
       err => this.notificationsService.error(this.i18n('Error'), err.message)
