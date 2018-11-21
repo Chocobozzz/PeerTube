@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.dropdown-divider:last-child {
+  display: none;
+}
+
 .action-button {
   @include peertube-button;
 

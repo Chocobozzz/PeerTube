@@ -26,7 +26,7 @@ export class UserModerationDropdownComponent implements OnChanges {
   @Output() userChanged = new EventEmitter()
   @Output() userDeleted = new EventEmitter()
 
-  userActions: DropdownAction<{ user: User, account: Account }>[] = []
+  userActions: DropdownAction<{ user: User, account: Account }>[][] = []
 
   constructor (
     private authService: AuthService,
@@ -264,7 +264,7 @@ export class UserModerationDropdownComponent implements OnChanges {
       if (this.user && authUser.id === this.user.id) return
 
       if (this.user && authUser.hasRight(UserRight.MANAGE_USERS)) {
-        this.userActions = this.userActions.concat([
+        this.userActions.push([
           {
             label: this.i18n('Edit'),
             linkBuilder: ({ user }) => this.getRouterUserEditLink(user)
@@ -294,7 +294,7 @@ export class UserModerationDropdownComponent implements OnChanges {
       // Actions on accounts/servers
       if (this.account) {
         // User actions
-        this.userActions = this.userActions.concat([
+        this.userActions.push([
           {
             label: this.i18n('Mute this account'),
             isDisplayed: ({ account }: { account: Account }) => account.mutedByUser === false,
@@ -317,9 +317,11 @@ export class UserModerationDropdownComponent implements OnChanges {
           }
         ])
 
+        let instanceActions: DropdownAction<{ user: User, account: Account }>[] = []
+
         // Instance actions
         if (authUser.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)) {
-          this.userActions = this.userActions.concat([
+          instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute this account by your instance'),
               isDisplayed: ({ account }: { account: Account }) => account.mutedByInstance === false,
@@ -335,7 +337,7 @@ export class UserModerationDropdownComponent implements OnChanges {
 
         // Instance actions
         if (authUser.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
-          this.userActions = this.userActions.concat([
+          instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute the instance by your instance'),
               isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === false,
@@ -347,6 +349,10 @@ export class UserModerationDropdownComponent implements OnChanges {
               handler: ({ account }: { account: Account }) => this.unblockServerByInstance(account.host)
             }
           ])
+        }
+
+        if (instanceActions.length !== 0) {
+          this.userActions.push(instanceActions)
         }
       }
     }

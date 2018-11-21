@@ -8,14 +8,20 @@
   </div>
 
   <div ngbDropdownMenu class="dropdown-menu">
-    <ng-container *ngFor="let action of actions">
-      <ng-container *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
-        <a *ngIf="action.linkBuilder" class="dropdown-item" [routerLink]="action.linkBuilder(entry)">{{ action.label }}</a>
+    <ng-container *ngFor="let actions of getActions()">
 
-        <span *ngIf="!action.linkBuilder" class="custom-action dropdown-item" (click)="action.handler(entry)" role="button">
-          {{ action.label }}
-        </span>
+      <ng-container *ngFor="let action of actions">
+        <ng-container *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
+          <a *ngIf="action.linkBuilder" class="dropdown-item" [routerLink]="action.linkBuilder(entry)">{{ action.label }}</a>
+
+          <span *ngIf="!action.linkBuilder" class="custom-action dropdown-item" (click)="action.handler(entry)" role="button">
+            {{ action.label }}
+          </span>
+        </ng-container>
       </ng-container>
+
+      <div class="dropdown-divider"></div>
+
     </ng-container>
   </div>
 </div>
