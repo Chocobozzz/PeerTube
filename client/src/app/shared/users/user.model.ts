@@ -15,6 +15,7 @@ export type UserConstructorHash = {
   username: string,
   email: string,
   role: UserRole,
+  emailVerified?: boolean,
   videoQuota?: number,
   videoQuotaDaily?: number,
   nsfwPolicy?: NSFWPolicyType,
@@ -31,6 +32,7 @@ export class User implements UserServerModel {
   id: number
   username: string
   email: string
+  emailVerified: boolean
   role: UserRole
   nsfwPolicy: NSFWPolicyType
   webTorrentEnabled: boolean

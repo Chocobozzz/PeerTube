@@ -7,7 +7,7 @@ export interface User {
   id: number
   username: string
   email: string
-  emailVerified?: boolean
+  emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
   autoPlayVideo: boolean
   role: UserRole
