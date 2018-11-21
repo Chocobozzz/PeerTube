@@ -4,16 +4,19 @@ services:
 
   reverse-proxy:
     image: traefik
-    command: --api --docker # Enables the web UI and tells Træfik to listen to docker
+    command: --docker # Tells Træfik to listen to docker
     ports:
       - "80:80"     # The HTTP port
       - "443:443"   # The HTTPS port
-      - "8080:8080" # The Web UI (enabled by --api)
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
       - ./docker-volume/traefik/acme.json:/etc/acme.json
       - ./docker-volume/traefik/traefik.toml:/traefik.toml
     restart: "always"
+    # If you want to use the Traefik dashboard, you should expose it on a 
+    # subdomain with HTTPS and authentification:
+    # https://medium.com/@xavier.priour/secure-traefik-dashboard-with-https-and-password-in-docker-5b657e2aa15f
+    # https://github.com/containous/traefik/issues/880#issuecomment-310301168
 
   peertube:
     # If you don't want to use the official image and build one from sources
@@ -38,6 +41,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - postfix
     restart: "always"
 
   postgres:
@@ -59,3 +63,11 @@ services:
     restart: "always"
     labels:
       traefik.enable: "false"
+
+  postfix:
+    image: mwader/postfix-relay
+    environment:
+      - POSTFIX_myhostname=${PEERTUBE_WEBSERVER_HOSTNAME}
+    labels:
+      traefik.enable: "false"
+    restart: "always"
