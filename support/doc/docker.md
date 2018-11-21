@@ -63,7 +63,6 @@ Pull the latest images and rerun PeerTube:
 
 ```shell
 $ cd /your/peertube/directory
-$ docker-compose down
 $ docker-compose pull
 $ docker-compose up -d
 ```
