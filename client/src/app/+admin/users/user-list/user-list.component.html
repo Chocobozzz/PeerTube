@@ -65,7 +65,17 @@
           <span i18n *ngIf="user.blocked" class="banned-info">(banned)</span>
         </a>
       </td>
-      <td>{{ user.email }}</td>
+      <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus">{{ user.email }}</td>
+      <ng-template #emailWithVerificationStatus>
+        <td *ngIf="user.emailVerified === false; else emailVerifiedNotFalse" i18n-title title="User's email must be verified to login">
+          <em>? {{ user.email }}</em>
+        </td>
+        <ng-template #emailVerifiedNotFalse>
+          <td i18n-title title="User's email is verified / User can login without email verification">
+            &#x2713; {{ user.email }}
+          </td>
+        </ng-template>
+      </ng-template>
       <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>

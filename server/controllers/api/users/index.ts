@@ -262,6 +262,7 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
   if (body.email !== undefined) userToUpdate.email = body.email
+  if (body.emailVerified !== undefined) userToUpdate.emailVerified = body.emailVerified
   if (body.videoQuota !== undefined) userToUpdate.videoQuota = body.videoQuota
   if (body.videoQuotaDaily !== undefined) userToUpdate.videoQuotaDaily = body.videoQuotaDaily
   if (body.role !== undefined) userToUpdate.role = body.role

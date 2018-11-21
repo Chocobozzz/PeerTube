@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { ConfirmService } from '../../../core'
+import { ConfirmService, ServerService } from '../../../core'
 import { RestPagination, RestTable, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User } from '../../../../../../shared'
@@ -28,10 +28,15 @@ export class UserListComponent extends RestTable implements OnInit {
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
+    private serverService: ServerService,
     private userService: UserService,
     private i18n: I18n
   ) {
     super()
+  }
+
+  get requiresEmailVerification () {
+    return this.serverService.getConfig().signup.requiresEmailVerification
   }
 
   ngOnInit () {
@@ -51,6 +56,11 @@ export class UserListComponent extends RestTable implements OnInit {
         label: this.i18n('Unban'),
         handler: users => this.unbanUsers(users),
         isDisplayed: users => users.every(u => u.blocked === true)
+      },
+      {
+        label: this.i18n('Set Email as Verified'),
+        handler: users => this.setEmailsAsVerified(users),
+        isDisplayed: users => this.requiresEmailVerification && users.every(u => !u.blocked && u.emailVerified === false)
       }
     ]
   }
@@ -106,6 +116,20 @@ export class UserListComponent extends RestTable implements OnInit {
         this.notificationsService.success(
           this.i18n('Success'),
           this.i18n('{{num}} users deleted.', { num: users.length })
+        )
+        this.loadData()
+      },
+
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
+    )
+  }
+
+  async setEmailsAsVerified (users: User[]) {
+    this.userService.updateUsers(users, { emailVerified: true }).subscribe(
+      () => {
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('{{num}} users email set as verified.', { num: users.length })
         )
         this.loadData()
       },

@@ -4,7 +4,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { UserBanModalComponent } from '@app/shared/moderation/user-ban-modal.component'
 import { UserService } from '@app/shared/users'
-import { AuthService, ConfirmService } from '@app/core'
+import { AuthService, ConfirmService, ServerService } from '@app/core'
 import { User, UserRight } from '../../../../../shared/models/users'
 import { Account } from '@app/shared/account/account.model'
 import { BlocklistService } from '@app/shared/blocklist'
@@ -32,10 +32,15 @@ export class UserModerationDropdownComponent implements OnChanges {
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
+    private serverService: ServerService,
     private userService: UserService,
     private blocklistService: BlocklistService,
     private i18n: I18n
   ) { }
+
+  get requiresEmailVerification () {
+    return this.serverService.getConfig().signup.requiresEmailVerification
+  }
 
   ngOnChanges () {
     this.buildActions()
@@ -91,6 +96,19 @@ export class UserModerationDropdownComponent implements OnChanges {
           this.i18n('User {{username}} deleted.', { username: user.username })
         )
         this.userDeleted.emit()
+      },
+
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
+    )
+  }
+
+  setEmailAsVerified (user: User) {
+    this.userService.updateUser(user.id, { emailVerified: true }).subscribe(
+      () => {
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('User {{username}} email set as verified', { username: user.username })
+        )
       },
 
       err => this.notificationsService.error(this.i18n('Error'), err.message)
@@ -264,6 +282,11 @@ export class UserModerationDropdownComponent implements OnChanges {
             label: this.i18n('Unban'),
             handler: ({ user }: { user: User }) => this.unbanUser(user),
             isDisplayed: ({ user }: { user: User }) => user.blocked
+          },
+          {
+            label: this.i18n('Set Email as Verified'),
+            handler: ({ user }: { user: User }) => this.setEmailAsVerified(user),
+            isDisplayed: ({ user }: { user: User }) => this.requiresEmailVerification && !user.blocked && user.emailVerified === false
           }
         ])
       }
