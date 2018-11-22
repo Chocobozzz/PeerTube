@@ -5,6 +5,7 @@
 ### Maintenance
 
  * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
+ * Add basic ActivityPub documentation: https://docs.joinpeertube.org/lang/en/devdocs/federation.html ([@rigelk](https://github.com/rigelk))
  * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
  * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
  * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
