@@ -883,8 +883,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
-        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <context-group name="null">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source><target>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</target><context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>

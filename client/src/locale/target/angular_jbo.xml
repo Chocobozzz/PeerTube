@@ -480,8 +480,7 @@ lo mi vidvi</target>
         </context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
-        <source>Instance</source>
-        <context-group name="null">
+        <source>Instance</source><target>Instance</target><context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>

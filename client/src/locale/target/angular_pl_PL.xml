@@ -1061,8 +1061,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6">
-        <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source>
-        <context-group name="null">
+        <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source><target>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</target><context-group name="null">
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
@@ -1123,8 +1122,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="554488d11165f38b27b8fe230aba8a2e30d57003">
-        <source>Default client route</source>
-        <context-group name="null">
+        <source>Default client route</source><target>Default client route</target><context-group name="null">
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
@@ -1496,8 +1494,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
-        <source>State</source>
-        <context-group name="null">
+        <source>State</source><target>State</target><context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
@@ -2326,8 +2323,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         </context-group>
       </trans-unit>
       <trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509">
-        <source>Dislike this video</source>
-        <context-group name="null">
+        <source>Dislike this video</source><target>Dislike this video</target><context-group name="null">
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
@@ -3404,8 +3400,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         </context-group>
       </trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
-        <source>Video support must be at least 3 characters long.</source>
-        <context-group name="null">
+        <source>Video support must be at least 3 characters long.</source><target>Video support must be at least 3 characters long.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -4068,8 +4063,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         </context-group>
       </trans-unit>
       <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e">
-        <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source><target><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

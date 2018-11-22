@@ -377,8 +377,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
-        <source>Username</source>
-        <context-group name="null">
+        <source>Username</source><target>Username</target><context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
@@ -529,8 +528,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cf75021ac8cb9efd4f95e8880cf52c9acd265768">
-        <source>Toggle dark interface</source>
-        <context-group name="null">
+        <source>Toggle dark interface</source><target>Toggle dark interface</target><context-group name="null">
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
@@ -764,14 +762,12 @@
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
-        <source>State</source>
-        <context-group name="null">
+        <source>State</source><target>State</target><context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
-        <source>Follow</source>
-        <context-group name="null">
+        <source>Follow</source><target>Follow</target><context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>

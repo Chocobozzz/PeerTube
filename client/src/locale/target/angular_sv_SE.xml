@@ -1319,26 +1319,22 @@
         </context-group>
       </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
-        <source>Muted</source>
-        <context-group name="null">
+        <source>Muted</source><target>Muted</target><context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="48bbf6dbdb22e0ef4bd257eae2ab356f2ea66c89">
-        <source>Muted by your instance</source>
-        <context-group name="null">
+        <source>Muted by your instance</source><target>Muted by your instance</target><context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="44bd08a7ec1e407356620967d65d8fe2d8639d0a">
-        <source>Instance muted</source>
-        <context-group name="null">
+        <source>Instance muted</source><target>Instance muted</target><context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1a6443bb7ed01046dd83cf78806f795f1204ffa1">
-        <source>Instance muted by your instance</source>
-        <context-group name="null">
+        <source>Instance muted by your instance</source><target>Instance muted by your instance</target><context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
@@ -2157,14 +2153,12 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         </context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
-        <source>Muted accounts</source>
-        <context-group name="null">
+        <source>Muted accounts</source><target>Muted accounts</target><context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd0611346af048015e0a1275091ef68ce98832d2">
-        <source>Muted servers</source>
-        <context-group name="null">
+        <source>Muted servers</source><target>Muted servers</target><context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
@@ -2176,14 +2170,12 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         </context-group>
       </trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4">
-        <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <context-group name="null">
+        <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source><target>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target><context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
-        <source>Unmute</source>
-        <context-group name="null">
+        <source>Unmute</source><target>Unmute</target><context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
@@ -2237,8 +2229,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         </context-group>
       </trans-unit>
       <trans-unit id="2bc7533f8c8e7d183950ba1094a0acd9efc22e5e">
-        <source>Muted instances</source>
-        <context-group name="null">
+        <source>Muted instances</source><target>Muted instances</target><context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
@@ -3725,14 +3716,12 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         </context-group>
       </trans-unit>
       <trans-unit id="53cc0f4a4566c4139c65f93b5dce2fe8302e78da">
-        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source>
-        <context-group name="null">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source><target>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="468b52e3c04fb9a3d8c8213555dfcad0cbcae330">
-        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by your instance.</source>
-        <context-group name="null">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by your instance.</source><target>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by your instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -3870,14 +3859,12 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         </context-group>
       </trans-unit>
       <trans-unit id="2667ca38672421a0a7a22343d2a0060ee41246de">
-        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted.</source>
-        <context-group name="null">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted.</source><target>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c6af80b42938d4a49e6f6c4f60ce26228916994c">
-        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</source>
-        <context-group name="null">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</source><target>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -5410,86 +5397,72 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         </context-group>
       </trans-unit>
       <trans-unit id="33a6319f765848a22a155cef9f1d8e645202e249">
-        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source>
-        <context-group name="null">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source><target>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="086eda792aeb1b0d131d633b50fdd1792f5f24c6">
-        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</source>
-        <context-group name="null">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</source><target>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb72d6d1219e89d182e9fd09d853d83baf8d6499">
-        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</source>
-        <context-group name="null">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</source><target>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8686834bc4afe42c1991c6c18f0bce174a0e17a6">
-        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source>
-        <context-group name="null">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source><target>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="35d3509161861a610b0895bf084c781e56ba2830">
-        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
-        <context-group name="null">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source><target>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="978aeec5613fa97e8a5336d3599cebb23ee5a90f">
-        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</source>
-        <context-group name="null">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</source><target>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4a09bf8724e7659fbb5ec33647529cdef7614bdc">
-        <source>Mute this account</source>
-        <context-group name="null">
+        <source>Mute this account</source><target>Mute this account</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d666ca3261aef72b2ddcd649d7b32af488f59952">
-        <source>Unmute this account</source>
-        <context-group name="null">
+        <source>Unmute this account</source><target>Unmute this account</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e17218983b1de76e5a920b04e1c2ecbdb6e3e06d">
-        <source>Mute the instance</source>
-        <context-group name="null">
+        <source>Mute the instance</source><target>Mute the instance</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a23514d8aca2f8633622dda0e86b399dc576a2b9">
-        <source>Unmute the instance</source>
-        <context-group name="null">
+        <source>Unmute the instance</source><target>Unmute the instance</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4e4107055b44eee44b6954c41120de1cb4d46432">
-        <source>Mute this account by your instance</source>
-        <context-group name="null">
+        <source>Mute this account by your instance</source><target>Mute this account by your instance</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a51c59cb5ecb7004a6a8ddd2855b5c52266ad957">
-        <source>Unmute this account by your instance</source>
-        <context-group name="null">
+        <source>Unmute this account by your instance</source><target>Unmute this account by your instance</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="588073e831cec240d6bb0db0b133e45dab69f178">
-        <source>Mute the instance by your instance</source>
-        <context-group name="null">
+        <source>Mute the instance by your instance</source><target>Mute the instance by your instance</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="676221cdabd4805901343976988c028dbf71b20a">
-        <source>Unmute the instance by your instance</source>
-        <context-group name="null">
+        <source>Unmute the instance by your instance</source><target>Unmute the instance by your instance</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

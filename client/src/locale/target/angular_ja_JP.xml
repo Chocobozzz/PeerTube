@@ -109,8 +109,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value">
-        <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source><target><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</target><context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
@@ -220,8 +219,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
-        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <context-group name="null">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source><target>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target><context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
@@ -362,8 +360,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
-        <source>Forgot your password</source>
-        <context-group name="null">
+        <source>Forgot your password</source><target>Forgot your password</target><context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
@@ -400,8 +397,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7f3bdcce4b2e8c37cd7f0f6c92ef8cff34b039b8">
-        <source>Confirm password</source>
-        <context-group name="null">
+        <source>Confirm password</source><target>Confirm password</target><context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
@@ -459,8 +455,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
-        <source>Change the language</source>
-        <context-group name="null">
+        <source>Change the language</source><target>Change the language</target><context-group name="null">
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
@@ -520,8 +515,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
-        <source>Trending</source>
-        <context-group name="null">
+        <source>Trending</source><target>Trending</target><context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
@@ -891,8 +885,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
-        <source>Transcoding threads</source>
-        <context-group name="null">
+        <source>Transcoding threads</source><target>Transcoding threads</target><context-group name="null">
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
@@ -1658,8 +1651,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ac401df84c5fa471700c3368de51c969ccb8bacf">
-        <source>You cannot ban root.</source>
-        <context-group name="null">
+        <source>You cannot ban root.</source><target>You cannot ban root.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

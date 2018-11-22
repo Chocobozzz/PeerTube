@@ -1278,32 +1278,27 @@ Konto erstellen</target>
         </context-group>
       </trans-unit>
       <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605">
-        <source>Banned</source>
-        <context-group name="null">
+        <source>Banned</source><target>Banned</target><context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
-        <source>Muted</source>
-        <context-group name="null">
+        <source>Muted</source><target>Muted</target><context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="48bbf6dbdb22e0ef4bd257eae2ab356f2ea66c89">
-        <source>Muted by your instance</source>
-        <context-group name="null">
+        <source>Muted by your instance</source><target>Muted by your instance</target><context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="44bd08a7ec1e407356620967d65d8fe2d8639d0a">
-        <source>Instance muted</source>
-        <context-group name="null">
+        <source>Instance muted</source><target>Instance muted</target><context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1a6443bb7ed01046dd83cf78806f795f1204ffa1">
-        <source>Instance muted by your instance</source>
-        <context-group name="null">
+        <source>Instance muted by your instance</source><target>Instance muted by your instance</target><context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
@@ -1968,8 +1963,7 @@ Konto erstellen</target>
         </context-group>
       </trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
-        <source>(banned)</source>
-        <context-group name="null">
+        <source>(banned)</source><target>(banned)</target><context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
@@ -2118,14 +2112,12 @@ Konto erstellen</target>
         </context-group>
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
-        <source>Muted accounts</source>
-        <context-group name="null">
+        <source>Muted accounts</source><target>Muted accounts</target><context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd0611346af048015e0a1275091ef68ce98832d2">
-        <source>Muted servers</source>
-        <context-group name="null">
+        <source>Muted servers</source><target>Muted servers</target><context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
@@ -2137,14 +2129,12 @@ Konto erstellen</target>
         </context-group>
       </trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4">
-        <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <context-group name="null">
+        <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source><target>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target><context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
-        <source>Unmute</source>
-        <context-group name="null">
+        <source>Unmute</source><target>Unmute</target><context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
@@ -2191,8 +2181,7 @@ Konto erstellen</target>
         </context-group>
       </trans-unit>
       <trans-unit id="2bc7533f8c8e7d183950ba1094a0acd9efc22e5e">
-        <source>Muted instances</source>
-        <context-group name="null">
+        <source>Muted instances</source><target>Muted instances</target><context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
@@ -3679,8 +3668,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
         </context-group>
       </trans-unit>
       <trans-unit id="53cc0f4a4566c4139c65f93b5dce2fe8302e78da">
-        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source>
-        <context-group name="null">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source><target>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -3776,8 +3764,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
         </context-group>
       </trans-unit>
       <trans-unit id="9de914fe915cc730efc57e81c987188a24d3ac51">
-        <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <context-group name="null">
+        <source>If you remove these users, you will not be able to create others with the same username!</source><target>If you remove these users, you will not be able to create others with the same username!</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
@@ -3992,8 +3979,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
         </context-group>
       </trans-unit>
       <trans-unit id="ff6becacbce7fc0943b0af0df4dd67e5e11bf598">
-        <source>Subscribe to the account</source>
-        <context-group name="null">
+        <source>Subscribe to the account</source><target>Subscribe to the account</target><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>

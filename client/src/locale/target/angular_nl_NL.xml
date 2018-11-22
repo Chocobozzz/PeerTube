@@ -1115,8 +1115,7 @@ Als je een video uploadt in dit kanaal, wordt deze tekst ingevuld in het "onders
         </context-group>
       </trans-unit>
       <trans-unit id="fb17c44abac2d1ed2a54cdd28bae289dc0b9a1c2">
-        <source>Automatically plays video</source>
-        <context-group name="null">
+        <source>Automatically plays video</source><target>Automatically plays video</target><context-group name="null">
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
