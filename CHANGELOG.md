@@ -1,5 +1,53 @@
 # Changelog
 
+## v1.1.0-rc.1 (since v1.1.0-alpha.2)
+
+### Maintenance
+
+ * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
+ * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
+ * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
+ * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
+ * Allow peertube-import-videos.ts CLI script to run concurrently ([@McFlat](https://github.com/mcflat))
+
+### Docker
+
+ * Improve docker compose template ([@Nutomic](https://github.com/nutomic))
+  * Add postfix image
+  * Redirect HTTP -> HTTPS
+  * Disable Træfik web UI
+ * Add ability to set an array in `PEERTUBE_TRUST_PROXY` ([LecygneNoir](https://github.com/LecygneNoir))
+
+### Features
+
+ * Add background effect to activated menu entry
+ * Improve video upload error handling
+ * Improve message visibility on signup
+ * Auto login user on signup if email verification is disabled
+ * Speed up PeerTube startup (in particular the first one)
+ * Delete invalid or deleted remote videos
+ * Add ability to admin to set email as verified ([@joshmorel](https://github.com/joshmorel))
+ * Add separators in user moderation dropdown
+
+### Bug fixes
+
+ * Check follow constraints when getting a video
+ * Fix application-config initialization in CLI tools ([Yetangitu](https://github.com/Yetangitu))
+ * Fix video pixel format compatibility (using yuv420p) ([@rigelk](https://github.com/rigelk))
+ * Fix video `state` AP context  ([tcitworld](https://github.com/tcitworld))
+ * Fix Linked Signature compatibility
+ * Fix AP collections pagination
+ * Fix too big thumbnails (when using URL import)
+ * Do not host remote AP objects: use redirection instead
+ * Fix video miniature with a long name
+ * Fix video views inconsistencies inside the federation
+ * Fix video embed in Wordpress Gutenberg
+ * Fix video channel videos url when scrolling
+ * Fix player progress bar/seeking when changing resolution
+ * Fix search tab title with no search
+ * Fix YouTube video import with some videos
+    
+
 ## v1.1.0-alpha.2 (since v1.1.0-alpha.1)
 
 ### Security/Maintenance/Federation
