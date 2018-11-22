@@ -386,7 +386,7 @@
         <source>Example: jane_doe</source>
         <target>نمونه: مهراد_روستا</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
@@ -682,7 +682,7 @@
         <source>Signup enabled</source>
         <target>ثبت‌نام فعال است</target>
         <context-group name="null">
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -696,35 +696,35 @@
         <source>Administrator</source>
         <target>مدیر</target>
         <context-group name="null">
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
         <source>Users</source>
         <target>کاربران</target>
         <context-group name="null">
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="99cb827741e93125476a0f5b676372d85d15b5fc">
         <source>Twitter</source>
         <target>توییتر</target>
         <context-group name="null">
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>نام‌کاربری توییتر شما</target>
         <context-group name="null">
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>جاوااکسریپت</target>
         <context-group name="null">
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">278</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1030,13 +1030,6 @@
       <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
         <source>Subscribed</source>
         <target>مشترک شده‌اید</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="65cc4ab3b4c438e07c89be2b677d08369fb62da2">
-        <source>Welcome</source>
-        <target>خوش‌آمدید</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
