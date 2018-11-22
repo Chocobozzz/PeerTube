@@ -12,8 +12,7 @@
 </p>
 
 <p align="center">
-Federated (ActivityPub) video streaming platform using P2P (BitTorrent)
-directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+Be part of a network of multiple small interconnected, federated, interoperable video hosting providers. Follow video creators and create videos. No vendor lock-in. All on a platform that is community-owned and ad-free.
 </p>
 
 <p align="center">
@@ -63,19 +62,16 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 Introduction
 ----------------------------------------------------------------
 
-PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper:
-
-PeerTube is a software that enables the creation of a network of multiple small interconnected video hosting providers, called instances. :movie_camera: :globe_with_meridians:
+PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper: But one organization hosting PeerTube alone may not have enough money to pay for bandwidth and video storage of its servers, all servers of PeerTube are interoperable as a federated network, and non-PeerTube servers can be part of the larger Vidiverse (federated video network) by talking our implementation of ActivityPub. Video load is reduced thanks to P2P (BitTorrent) in the web browser via <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 
 To learn more, see:
-
-* This [two-minute video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what PeerTube is and how it works (hosted on PeerTube, of course :wink:)
-* PeerTube's Website, [joinpeertube.org](https://joinpeertube.org)
+* This [two-minute video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) (hosted on PeerTube) explaining what PeerTube is and how it works
+* PeerTube's project homepage, [joinpeertube.org](https://joinpeertube.org)
 * Demonstration instances:
   * [peertube.cpy.re](https://peertube.cpy.re)
   * [peertube2.cpy.re](https://peertube2.cpy.re)
   * [peertube3.cpy.re](https://peertube3.cpy.re)
-* This [video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) demonstrating the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon) (decentralized Twitter alternative)
+* This [video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) demonstrating the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon) (a decentralized Twitter alternative)
 
 :sparkles: Features
 ----------------------------------------------------------------
@@ -113,19 +109,6 @@ In addition to visitors using WebTorrent to share the load among them, instances
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
 </p>
-
-:question: Motivation
-----------------------------------------------------------------
-
-We can't build a FOSS video streaming alternative to YouTube, Dailymotion,
-Vimeo... with centralized software. One organization alone may not have
-enough money to pay for bandwidth and video storage of its servers.
-
-So we need to have a decentralized network of servers seeding videos (as
-[Diaspora](https://github.com/diaspora/diaspora) for example).  But it's not
-enough because one video could become popular and overload the server.  That is 
-why we need to use a P2P protocol to limit the server load.  Thanks to
-[WebTorrent](https://github.com/feross/webtorrent), we can make BitTorrent inside the web browser, as of today.
 
 :raised_hands: Contributing
 ----------------------------------------------------------------
