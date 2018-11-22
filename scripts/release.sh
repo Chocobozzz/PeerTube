@@ -60,7 +60,9 @@ fi
 
 npm version -f --no-git-tag-version --no-commit-hooks "$1"
 
-git commit package.json client/package.json -m "Bumped to version $version"
+./scripts/openapi-peertube-version.sh
+
+git commit package.json client/package.json ./support/doc/api/openapi.yaml -m "Bumped to version $version"
 git tag -s -a "$version" -m "$version"
 
 npm run build
