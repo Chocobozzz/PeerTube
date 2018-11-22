@@ -12,7 +12,6 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createOrUpdateCacheFile } from '../cache-file'
-import { immutableAssign } from '../../../tests/utils'
 import { getVideoDislikeActivityPubUrl } from '../url'
 import { VideoModel } from '../../../models/video/video'
 
@@ -71,7 +70,7 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 
     const [ , created ] = await AccountVideoRateModel.findOrCreate({
       where: rate,
-      defaults: immutableAssign(rate, { url: getVideoDislikeActivityPubUrl(byActor, video) }),
+      defaults: Object.assign({}, rate, { url: getVideoDislikeActivityPubUrl(byActor, video) }),
       transaction: t
     })
     if (created === true) await video.increment('dislikes', { transaction: t })
