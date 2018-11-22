@@ -13,9 +13,9 @@
 ### Docker
 
  * Improve docker compose template ([@Nutomic](https://github.com/nutomic))
-  * Add postfix image
-  * Redirect HTTP -> HTTPS
-  * Disable Træfik web UI
+   * Add postfix image
+   * Redirect HTTP -> HTTPS
+   * Disable Træfik web UI
  * Add ability to set an array in `PEERTUBE_TRUST_PROXY` ([LecygneNoir](https://github.com/LecygneNoir))
 
 ### Features
