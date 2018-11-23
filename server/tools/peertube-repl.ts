@@ -20,14 +20,10 @@ import * as signupUtils from '../helpers/signup'
 import * as utils from '../helpers/utils'
 import * as YoutubeDLUtils from '../helpers/youtube-dl'
 
-let versionCommitHash
-
 const start = async () => {
   await initDatabaseModels(true)
 
-  await utils.getVersion().then((data) => {
-    versionCommitHash = data
-  })
+  const versionCommitHash = await utils.getServerCommit()
 
   const initContext = (replServer) => {
     return (context) => {
@@ -59,6 +55,7 @@ const start = async () => {
 
   initContext(replServer)(replServer.context)
   replServer.on('reset', initContext(replServer))
+  replServer.on('exit', () => process.exit())
 
   const resetCommand = {
     help: 'Reset REPL',

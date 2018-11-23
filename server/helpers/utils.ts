@@ -57,7 +57,7 @@ function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
-async function getVersion () {
+async function getServerCommit () {
   try {
     const tag = await execPromise2(
       '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
@@ -77,7 +77,7 @@ async function getVersion () {
     logger.debug('Cannot get version from git HEAD.', { err })
   }
 
-  return require('../../../package.json').version
+  return ''
 }
 
 /**
@@ -102,7 +102,7 @@ export {
   getFormattedObjects,
   getSecureTorrentName,
   getServerActor,
-  getVersion,
+  getServerCommit,
   generateVideoTmpPath,
   getUUIDFromFilename
 }
