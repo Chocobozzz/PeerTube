@@ -9,10 +9,11 @@
   | <strong><a href="https://instances.joinpeertube.org">Join an instance</a></strong>
   | <strong><a href="#package-create-your-own-instance">Create an instance</a></strong>
   | <strong><a href="#contact">Chat with us</a></strong>
+  | <strong><a href="https://framasoft.org/en/#soutenir">Donate</a></strong>
 </p>
 
 <p align="center">
-Be part of a network of multiple small interconnected, federated, interoperable video hosting providers. Follow video creators and create videos. No vendor lock-in. All on a platform that is community-owned and ad-free.
+Be part of a network of multiple small federated, interoperable video hosting providers. Follow video creators and create videos. No vendor lock-in. All on a platform that is community-owned and ad-free.
 </p>
 
 <p align="center">
@@ -104,7 +105,7 @@ Be it as a user or an instance administrator, you can decide what your experienc
 
 <h3 align="right">Communities that help each other</h3>
 <p align="right">
-In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="/support/doc/redundancy.md">redundancy guide</a>).
+In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances">redundancy guide</a>).
 </p>
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
@@ -167,35 +168,13 @@ See the more general [admin documentation](https://docs.joinpeertube.org/lang/en
 
 ### Technical documentation
 
-See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation of the architectural choices.
+See the [architecture blueprint](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html) for a more detailed explanation of the architectural choices.
 
-#### Backend
+See our REST API documentation:
+  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+  * Spec explorer: [docs.joinpeertube.org/api.html](http://docs.joinpeertube.org/api.html)
 
-  * REST API:
-    * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
-    * HTML explorer: [docs.joinpeertube.org/api.html](http://docs.joinpeertube.org/api.html)
-  * Servers communicate with each other with [Activity
-    Pub](https://www.w3.org/TR/activitypub/).
-  * Each server has its own users who query it (search videos, query where the
-    torrent URI of this specific video is...).
-  * When a user uploads a video, the server sends its followers metadata about the video (name, short description, torrent URI...).
-  * A server is a tracker responsible for all the videos uploaded on it.
-  * Even if nobody watches a video, it is seeded by the server (through
-    [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the
-    video was uploaded.
-
-Here are some simple schemes:
-
-<p align="center">
-
-<img src="support/doc/user/decentralized.png" alt="Decentralized" />
-
-<img src="support/doc/user/watch-video.png" alt="Watch a video" />
-
-<img src="support/doc/user/watch-p2p.png" alt="Watch a P2P video" />
-
-</p>
-
+See our [ActivityPub documentation](https://docs.joinpeertube.org/lang/en/devdocs/federation.html).
 
 :heart: Supports of our crowdfunding
 ----------------------------------------------------------------

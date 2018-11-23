@@ -219,7 +219,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
 
 ### Features
 
- * Video redundancy system (experimental, see [the doc](/support/doc/redundancy.md))
+ * Video redundancy system (experimental, see [the doc](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances))
  * Add peertube script (see [the doc](/support/doc/tools.md#cli-wrapper)) ([@rigelk](https://github.com/rigelk))
  * Improve download modal ([@rigelk](https://github.com/rigelk))
  * Add redirect after login ([@BO41](https://github.com/BO41))
