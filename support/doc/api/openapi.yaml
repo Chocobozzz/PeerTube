@@ -433,7 +433,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/usersSort'
       responses:
         '200':
           description: successful operation
@@ -622,15 +622,16 @@ paths:
       tags:
         - Video
       parameters:
-        - name: category
-          in: query
-          required: false
-          description: category id of the video
-          schema:
-            type: number
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videosSort'
       responses:
         '200':
           description: successful operation
@@ -1002,7 +1003,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/abusesSort'
       responses:
         '200':
           description: successful operation
@@ -1063,7 +1064,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/blacklistsSort'
       responses:
         '200':
           description: successful operation
@@ -1271,7 +1272,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videosSearchSort'
         - name: search
           in: query
           required: true
@@ -1317,6 +1318,74 @@ components:
       description: Sort column (-createdAt for example)
       schema:
         type: string
+    videosSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort videos by criteria
+      schema:
+        type: string
+        enum:
+        - -name
+        - -duration
+        - -createdAt
+        - -publishedAt
+        - -views
+        - -likes
+        - -trending
+    videosSearchSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort videos by criteria
+      schema:
+        type: string
+        enum:
+        - -name
+        - -duration
+        - -createdAt
+        - -publishedAt
+        - -views
+        - -likes
+        - -match
+    blacklistsSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort blacklists by criteria
+      schema:
+        type: string
+        enum:
+        - -id
+        - -name
+        - -duration
+        - -views
+        - -likes
+        - -dislikes
+        - -uuid
+        - -createdAt
+    usersSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort users by criteria
+      schema:
+        type: string
+        enum:
+        - -id
+        - -username
+        - -createdAt
+    abusesSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort abuses by criteria
+      schema:
+        type: string
+        enum:
+        - -id
+        - -createdAt
+        - -state
     name:
       name: name
       in: path
@@ -1354,6 +1423,84 @@ components:
       description: The comment id
       schema:
         type: number
+    categoryOneOf:
+      name: categoryOneOf
+      in: query
+      required: false
+      description: category id of the video
+      schema:
+        oneOf:
+        - type: number
+        - type: array
+          items:
+            type: number
+    tagsOneOf:
+      name: tagsOneOf
+      in: query
+      required: false
+      description: tag(s) of the video
+      schema:
+        oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+    tagsAllOf:
+      name: tagsAllOf
+      in: query
+      required: false
+      description: tag(s) of the video, where all should be present in the video
+      schema:
+        oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+    languageOneOf:
+      name: languageOneOf
+      in: query
+      required: false
+      description: language id of the video
+      schema:
+        oneOf:
+        - type: number
+        - type: array
+          items:
+            type: number
+    licenceOneOf:
+      name: licenceOneOf
+      in: query
+      required: false
+      description: licence id of the video
+      schema:
+        oneOf:
+        - type: number
+        - type: array
+          items:
+            type: number
+    nsfw:
+      name: nsfw
+      in: query
+      required: false
+      description: whether to include nsfw videos, if any
+      schema:
+        type: string
+        enum:
+        - 'true'
+        - 'false'
+    filter:
+      name: filter
+      in: query
+      required: false
+      description: >
+        Special filters (local for instance) which might require special rights:
+         * `local` - only videos local to the instance
+         * `all-local` - only videos local to the instance, but showing private and unlisted videos (requires Admin privileges)
+      schema:
+        type: string
+        enum:
+        - local
+        - all-local
   requestBodies:
     VideoChannelInput:
       content:
