@@ -14,5 +14,5 @@ export interface VideoImport {
   state: VideoConstant<VideoImportState>
   error?: string
 
-  video?: Video & { tags: string[] }
+  video?: Video & { tags: string[], autors: string[] }
 }

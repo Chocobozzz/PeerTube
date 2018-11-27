@@ -43,7 +43,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     uuid: ''
   }
 
-  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
+  protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PRIVATE
 
   constructor (
     protected formValidatorService: FormValidatorService,

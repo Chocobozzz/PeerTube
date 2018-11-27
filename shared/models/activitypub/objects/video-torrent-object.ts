@@ -3,6 +3,7 @@ import {
   ActivityIdentifierObject,
   ActivityPubAttributedTo,
   ActivityTagObject,
+  ActivityAutorObject,
   ActivityUrlObject
 } from './common-objects'
 import { VideoState } from '../../videos'
@@ -14,6 +15,7 @@ export interface VideoTorrentObject {
   duration: string
   uuid: string
   tag: ActivityTagObject[]
+  autor: ActivityAutorObject[]
   category: ActivityIdentifierObject
   licence: ActivityIdentifierObject
   language: ActivityIdentifierObject

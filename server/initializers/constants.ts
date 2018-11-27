@@ -353,6 +353,8 @@ const CONSTRAINTS_FIELDS = {
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
+    AUTORS: { min: 0, max: 5 }, // Number of total autors
+    AUTOR: { min: 2, max: 30 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
     THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
     VIEWS: { min: 0 },
@@ -625,7 +627,12 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   CUSTOM_CSS: '<!-- custom css tag -->',
   OPENGRAPH_AND_OEMBED: '<!-- open graph and oembed tags -->'
 }
-
+const CUSTOM_HTML_AUTOR_COMMENTS = {
+  TITLE: '<!-- title autor -->',
+  DESCRIPTION: '<!-- description autor -->',
+  CUSTOM_CSS: '<!-- custom css autor -->',
+  OPENGRAPH_AND_OEMBED: '<!-- open graph and oembed autors -->'
+}
 // ---------------------------------------------------------------------------
 
 const FEEDS = {
@@ -694,6 +701,7 @@ export {
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
+  CUSTOM_HTML_AUTOR_COMMENTS,
   BROADCAST_CONCURRENCY,
   PAGINATION,
   ACTOR_FOLLOW_SCORE,

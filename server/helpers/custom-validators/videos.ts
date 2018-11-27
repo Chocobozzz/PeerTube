@@ -66,7 +66,9 @@ function isVideoNameValid (value: string) {
 function isVideoTagValid (tag: string) {
   return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
 }
-
+function isVideoAutorValid (autor: string) {
+  return exists(autor) && validator.isLength(autor, VIDEOS_CONSTRAINTS_FIELDS.AUTOR)
+}
 function isVideoTagsValid (tags: string[]) {
   return tags === null || (
     isArray(tags) &&
@@ -74,7 +76,13 @@ function isVideoTagsValid (tags: string[]) {
     tags.every(tag => isVideoTagValid(tag))
   )
 }
-
+function isVideoAutorsValid (autors: string[]) {
+  return autors === null || (
+    isArray(autors) &&
+    validator.isInt(autors.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.AUTORS) &&
+    autors.every(autor => isVideoAutorValid(autor))
+  )
+}
 function isVideoViewsValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
@@ -214,6 +222,7 @@ export {
   isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
+  isVideoAutorsValid,
   isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
   isVideoFile,
@@ -223,6 +232,7 @@ export {
   isVideoRatingTypeValid,
   isVideoDurationValid,
   isVideoTagValid,
+  isVideoAutorValid,
   isVideoPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,

@@ -15,6 +15,9 @@ export class AdvancedSearch {
   tagsOneOf: string
   tagsAllOf: string
 
+  autorsOneOf: string
+  autorsAllOf: string
+
   durationMin: number // seconds
   durationMax: number // seconds
 
@@ -29,6 +32,8 @@ export class AdvancedSearch {
     languageOneOf?: string
     tagsOneOf?: string
     tagsAllOf?: string
+    autorsOneOf?: string
+    autorsAllOf?: string
     durationMin?: string
     durationMax?: string
     sort?: string
@@ -43,6 +48,8 @@ export class AdvancedSearch {
     this.languageOneOf = options.languageOneOf || undefined
     this.tagsOneOf = options.tagsOneOf || undefined
     this.tagsAllOf = options.tagsAllOf || undefined
+    this.autorsOneOf = options.autorsOneOf || undefined
+    this.autorsAllOf = options.autorsAllOf || undefined
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
 
@@ -72,6 +79,8 @@ export class AdvancedSearch {
     this.languageOneOf = undefined
     this.tagsOneOf = undefined
     this.tagsAllOf = undefined
+    this.autorsOneOf = undefined
+    this.autorsAllOf = undefined
     this.durationMin = undefined
     this.durationMax = undefined
 
@@ -88,6 +97,8 @@ export class AdvancedSearch {
       languageOneOf: this.languageOneOf,
       tagsOneOf: this.tagsOneOf,
       tagsAllOf: this.tagsAllOf,
+      autorsOneOf: this.autorsOneOf,
+      autorsAllOf: this.autorsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
       sort: this.sort
@@ -104,6 +115,8 @@ export class AdvancedSearch {
       languageOneOf: this.intoArray(this.languageOneOf),
       tagsOneOf: this.intoArray(this.tagsOneOf),
       tagsAllOf: this.intoArray(this.tagsAllOf),
+      autorsOneOf: this.intoArray(this.autorsOneOf),
+      autorsAllOf: this.intoArray(this.autorsAllOf),
       durationMin: this.durationMin,
       durationMax: this.durationMax,
       sort: this.sort

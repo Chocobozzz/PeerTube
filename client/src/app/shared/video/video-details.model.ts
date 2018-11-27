@@ -9,6 +9,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   support: string
   channel: VideoChannel
   tags: string[]
+  autors: string[]
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
@@ -27,6 +28,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.channel = new VideoChannel(hash.channel)
     this.account = new Account(hash.account)
     this.tags = hash.tags
+    this.autors = hash.autors
     this.support = hash.support
     this.commentsEnabled = hash.commentsEnabled
 

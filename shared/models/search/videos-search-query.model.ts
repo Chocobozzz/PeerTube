@@ -22,6 +22,9 @@ export interface VideosSearchQuery {
   tagsOneOf?: string[]
   tagsAllOf?: string[]
 
+  autorsOneOf?: string[]
+  autorsAllOf?: string[]
+
   durationMin?: number // seconds
   durationMax?: number // seconds
 

@@ -194,6 +194,13 @@
               class="video-attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ] }"
             >{{ tag }}</a>
           </div>
+            <div class="video-attribute video-attribute-autors">
+            <span i18n class="video-attribute-label">Autors</span>
+            <a
+              *ngFor="let autor of getVideoAutors()"
+              class="video-attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ autorsOneOf: [ autor ] }"
+            >{{ autor }}</a>
+          </div>
         </div>
 
         <my-video-comments [video]="video" [user]="user"></my-video-comments>

@@ -12,6 +12,7 @@ export interface VideoCreate {
   waitTranscoding?: boolean
   name: string
   tags?: string[]
+  autors?: string[]
   commentsEnabled?: boolean
   privacy: VideoPrivacy
   scheduleUpdate?: VideoScheduleUpdate

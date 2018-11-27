@@ -40,6 +40,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   tagValidators: ValidatorFn[]
   tagValidatorsMessages: { [ name: string ]: string }
 
+  autorValidators: ValidatorFn[]
+  autorValidatorsMessages: { [ name: string ]: string }
+
   schedulePublicationEnabled = false
 
   calendarLocale: any = {}
@@ -64,7 +67,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   ) {
     this.tagValidators = this.videoValidatorsService.VIDEO_TAGS.VALIDATORS
     this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
-
+    this.autorValidators = this.videoValidatorsService.VIDEO_AUTORS.VALIDATORS
+    this.autorValidatorsMessages = this.videoValidatorsService.VIDEO_AUTORS.MESSAGES
     this.calendarLocale = this.i18nPrimengCalendarService.getCalendarLocale()
     this.calendarTimezone = this.i18nPrimengCalendarService.getTimezone()
     this.calendarDateFormat = this.i18nPrimengCalendarService.getDateFormat()
@@ -81,6 +85,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       nsfw: 'false',
       commentsEnabled: 'true',
       waitTranscoding: 'true',
+      autors: [],
       tags: []
     }
     const obj: any = {
@@ -95,6 +100,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       language: this.videoValidatorsService.VIDEO_LANGUAGE,
       description: this.videoValidatorsService.VIDEO_DESCRIPTION,
       tags: null,
+      autors: null,
       thumbnailfile: null,
       previewfile: null,
       support: this.videoValidatorsService.VIDEO_SUPPORT,

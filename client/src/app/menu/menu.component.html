@@ -42,12 +42,7 @@
       <div class="panel-block">
         <div i18n class="block-title">Videos</div>
 
-        <a *ngIf="isLoggedIn" routerLink="/videos/subscriptions" routerLinkActive="active">
-          <span class="icon icon-videos-subscriptions"></span>
-          <ng-container i18n>Subscriptions</ng-container>
-        </a>
-
-        <a routerLink="/videos/overview" routerLinkActive="active">
+       <!-- <a routerLink="/videos/overview" routerLinkActive="active">
           <span class="icon icon-videos-overview"></span>
           <ng-container i18n>Overview</ng-container>
         </a>
@@ -55,8 +50,23 @@
         <a routerLink="/videos/trending" routerLinkActive="active">
           <span class="icon icon-videos-trending"></span>
           <ng-container i18n>Trending</ng-container>
+        </a>-->
+        <a routerLink="/video-channels/jres2015/videos" routerLinkActive="active">
+          <span class="icon icon-videos-local"></span>
+          <ng-container i18n>Jres2015</ng-container>
         </a>
-
+        <a routerLink="/video-channels/jres2017/videos" routerLinkActive="active">
+          <span class="icon icon-videos-local"></span>
+          <ng-container i18n>Jres2017</ng-container>
+        </a>
+        <a routerLink="/video-channels/jres2019/videos" routerLinkActive="active">
+          <span class="icon icon-videos-local"></span>
+          <ng-container i18n>Jres2019</ng-container>
+        </a>
+        <a *ngIf="isLoggedIn" routerLink="/videos/subscriptions" routerLinkActive="active">
+          <span class="icon icon-videos-subscriptions"></span>
+          <ng-container i18n>Subscriptions</ng-container>
+        </a>
         <a routerLink="/videos/recently-added" routerLinkActive="active">
           <span class="icon icon-videos-recently-added"></span>
           <ng-container i18n>Recently added</ng-container>

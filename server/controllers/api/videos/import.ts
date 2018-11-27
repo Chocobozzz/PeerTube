@@ -18,6 +18,7 @@ import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '.
 import { VideoModel } from '../../../models/video/video'
 import { getVideoActivityPubUrl } from '../../../lib/activitypub'
 import { TagModel } from '../../../models/video/tag'
+import { AutorModel } from '../../../models/video/autor'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
 import { processImage } from '../../../helpers/image-utils'
@@ -98,13 +99,14 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
   await processPreview(req, video)
 
   const tags = body.tags || undefined
+  const autors = body.autors || undefined
   const videoImportAttributes = {
     magnetUri,
     torrentName,
     state: VideoImportState.PENDING,
     userId: user.id
   }
-  const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
+  const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, autors, videoImportAttributes)
 
   // Create job to import the video
   const payload = {
@@ -141,12 +143,13 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const downloadPreview = !await processPreview(req, video)
 
   const tags = body.tags || youtubeDLInfo.tags
+  const autors = body.autors || undefined
   const videoImportAttributes = {
     targetUrl,
     state: VideoImportState.PENDING,
     userId: user.id
   }
-  const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
+  const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, autors, videoImportAttributes)
 
   // Create job to import the video
   const payload = {
@@ -214,6 +217,7 @@ function insertIntoDB (
   video: VideoModel,
   videoChannel: VideoChannelModel,
   tags: string[],
+  autors: string[],
   videoImportAttributes: FilteredModelAttributes<VideoImportModel>
 ): Bluebird<VideoImportModel> {
   return sequelizeTypescript.transaction(async t => {
@@ -233,6 +237,15 @@ function insertIntoDB (
       videoCreated.Tags = []
     }
 
+    // Set autors to the video
+    if (autors) {
+      const autorInstances = await AutorModel.findOrCreateAutors(autors, t)
+
+      await videoCreated.$set('Autors', autorInstances, sequelizeOptions)
+      videoCreated.Autors = autorInstances
+    } else {
+      videoCreated.Autors = []
+    }
     // Create video import object in database
     const videoImport = await VideoImportModel.create(
       Object.assign({ videoId: videoCreated.id }, videoImportAttributes),

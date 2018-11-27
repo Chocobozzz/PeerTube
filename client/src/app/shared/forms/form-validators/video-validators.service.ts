@@ -14,6 +14,7 @@ export class VideoValidatorsService {
   readonly VIDEO_CHANNEL: BuildFormValidator
   readonly VIDEO_DESCRIPTION: BuildFormValidator
   readonly VIDEO_TAGS: BuildFormValidator
+  readonly VIDEO_AUTORS: BuildFormValidator
   readonly VIDEO_SUPPORT: BuildFormValidator
   readonly VIDEO_SCHEDULE_PUBLICATION_AT: BuildFormValidator
 
@@ -77,7 +78,13 @@ export class VideoValidatorsService {
         'maxlength': this.i18n('A tag should be less than 30 characters long.')
       }
     }
-
+    this.VIDEO_AUTORS = {
+      VALIDATORS: [ Validators.minLength(3), Validators.maxLength(30) ],
+      MESSAGES: {
+        'minlength': this.i18n('An author should be more than 3 characters long.'),
+        'maxlength': this.i18n('An author should be less than 30 characters long.')
+      }
+    }
     this.VIDEO_SUPPORT = {
       VALIDATORS: [ Validators.minLength(3), Validators.maxLength(1000) ],
       MESSAGES: {

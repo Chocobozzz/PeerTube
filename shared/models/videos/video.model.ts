@@ -79,6 +79,7 @@ export interface VideoDetails extends Video {
   support: string
   channel: VideoChannel
   tags: string[]
+  autors: string[]
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean

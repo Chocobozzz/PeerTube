@@ -43,6 +43,7 @@ import {
   videosUpdateValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
+import { AutorModel } from '../../../models/video/autor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { abuseVideoRouter } from './abuse'
@@ -251,7 +252,13 @@ async function addVideo (req: express.Request, res: express.Response) {
       await video.$set('Tags', tagInstances, sequelizeOptions)
       video.Tags = tagInstances
     }
+    // Create autors
+    if (videoInfo.autors !== undefined) {
+      const autorInstances = await AutorModel.findOrCreateAutors(videoInfo.autors, t)
 
+      await video.$set('Autors', autorInstances, sequelizeOptions)
+      video.Autors = autorInstances
+    }
     // Schedule an update in the future?
     if (videoInfo.scheduleUpdate) {
       await ScheduleVideoUpdateModel.create({
@@ -340,7 +347,13 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await videoInstanceUpdated.$set('Tags', tagInstances, sequelizeOptions)
         videoInstanceUpdated.Tags = tagInstances
       }
+      // Video autors update?
+      if (videoInfoToUpdate.autors !== undefined) {
+        const autorInstances = await AutorModel.findOrCreateAutors(videoInfoToUpdate.autors, t)
 
+        await videoInstanceUpdated.$set('Autors', autorInstances, sequelizeOptions)
+        videoInstanceUpdated.Autors = autorInstances
+      }
       // Video channel update?
       if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {
         await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel, { transaction: t })
@@ -434,6 +447,8 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     languageOneOf: req.query.languageOneOf,
     tagsOneOf: req.query.tagsOneOf,
     tagsAllOf: req.query.tagsAllOf,
+    autorsOneOf: req.query.autorsOneOf,
+    autorsAllOf: req.query.autorsAllOf,
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false,

@@ -28,7 +28,8 @@ import {
   isVideoPrivacyValid,
   isVideoRatingTypeValid,
   isVideoSupportValid,
-  isVideoTagsValid
+  isVideoTagsValid,
+  isVideoAutorsValid
 } from '../../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
@@ -344,6 +345,10 @@ function getCommonVideoAttributes () {
       .optional()
       .customSanitizer(toValueOrNull)
       .custom(isVideoTagsValid).withMessage('Should have correct tags'),
+    body('autors')
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isVideoAutorsValid).withMessage('Should have correct autors'),
     body('commentsEnabled')
       .optional()
       .toBoolean()
@@ -383,6 +388,14 @@ const commonVideosFiltersValidator = [
     .optional()
     .customSanitizer(toArray)
     .custom(isStringArray).withMessage('Should have a valid all of tags array'),
+  query('autorsOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isStringArray).withMessage('Should have a valid one of autors array'),
+  query('autorsAllOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isStringArray).withMessage('Should have a valid all of autors array'),
   query('nsfw')
     .optional()
     .custom(isNSFWQueryValid).withMessage('Should have a valid NSFW attribute'),

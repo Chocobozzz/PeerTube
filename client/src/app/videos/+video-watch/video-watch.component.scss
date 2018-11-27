@@ -359,6 +359,13 @@ $other-videos-width: 260px;
           }
         }
       }
+      &.video-attribute-autors {
+        .video-attribute-value:not(:nth-child(2)) {
+          &::before {
+            content: ', '
+          }
+        }
+      }
     }
   }
 

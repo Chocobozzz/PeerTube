@@ -10,6 +10,7 @@ export interface VideoUpdate {
   support?: string
   privacy?: VideoPrivacy
   tags?: string[]
+  autors?: string[]
   commentsEnabled?: boolean
   nsfw?: boolean
   waitTranscoding?: boolean

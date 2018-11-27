@@ -92,6 +92,7 @@ export class VideoService implements VideosProvider {
       channelId: video.channelId,
       privacy: video.privacy,
       tags: video.tags,
+      autors: video.autors,
       nsfw: video.nsfw,
       waitTranscoding: video.waitTranscoding,
       commentsEnabled: video.commentsEnabled,

@@ -121,12 +121,14 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
   })
 
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
+  const autors = video.Autors ? video.Autors.map(t => t.name) : []
   const detailsJson = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
     channel: video.VideoChannel.toFormattedJSON(),
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,
+    autors,
     commentsEnabled: video.commentsEnabled,
     waitTranscoding: video.waitTranscoding,
     state: {
@@ -178,7 +180,12 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     type: 'Hashtag' as 'Hashtag',
     name: t.name
   }))
+  if (!video.Autors) video.Autors = []
 
+  const autor = video.Autors.map(t => ({
+    type: 'Hashautor' as 'Hashautor',
+    name: t.name
+  }))
   let language
   if (video.language) {
     language = {
@@ -255,6 +262,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     duration: getActivityStreamDuration(video.duration),
     uuid: video.uuid,
     tag,
+    autor,
     category,
     licence,
     language,

@@ -28,7 +28,7 @@ import { UserModel } from '../account/user'
       required: true
     },
     {
-      model: () => VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
+      model: () => VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS, VideoModelScopeNames.WITH_AUTORS]),
       required: false
     }
   ]
@@ -150,7 +150,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
       additionalAttributes: { state: true, waitTranscoding: true, scheduledUpdate: true }
     }
     const video = this.Video
-      ? Object.assign(this.Video.toFormattedJSON(videoFormatOptions), { tags: this.Video.Tags.map(t => t.name) })
+      ? Object.assign(this.Video.toFormattedJSON(videoFormatOptions), { tags: this.Video.Tags.map(t => t.name), autors: this.Video.Autors.map(t => t.name) })
       : undefined
 
     return {

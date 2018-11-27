@@ -8,7 +8,11 @@ export interface ActivityTagObject {
   href?: string
   name: string
 }
-
+export interface ActivityAutorObject {
+  type: 'Hashautor' | 'Mention'
+  href?: string
+  name: string
+}
 export interface ActivityIconObject {
   type: 'Image'
   url: string

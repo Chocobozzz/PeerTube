@@ -13,6 +13,7 @@ import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
 import { ServerModel } from '../models/server/server'
 import { TagModel } from '../models/video/tag'
+import { AutorModel } from '../models/video/autor'
 import { VideoModel } from '../models/video/video'
 import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
@@ -21,6 +22,7 @@ import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoShareModel } from '../models/video/video-share'
 import { VideoTagModel } from '../models/video/video-tag'
+import { VideoAutorModel } from '../models/video/video-autor'
 import { CONFIG } from './constants'
 import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update'
 import { VideoCaptionModel } from '../models/video/video-caption'
@@ -77,6 +79,7 @@ async function initDatabaseModels (silent: boolean) {
     OAuthTokenModel,
     ServerModel,
     TagModel,
+    AutorModel,
     AccountVideoRateModel,
     UserModel,
     VideoAbuseModel,
@@ -87,6 +90,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoCaptionModel,
     VideoBlacklistModel,
     VideoTagModel,
+    VideoAutorModel,
     VideoModel,
     VideoCommentModel,
     ScheduleVideoUpdateModel,

@@ -279,6 +279,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     return this.video.tags
   }
+  getVideoAutors () {
+    if (!this.video || Array.isArray(this.video.autors) === false) return []
+
+    return this.video.autors
+  }
 
   isVideoRemovable () {
     return this.video.isRemovableBy(this.authService.getUser())

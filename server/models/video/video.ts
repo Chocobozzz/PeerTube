@@ -72,12 +72,14 @@ import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { buildBlockedAccountSQL, buildTrigramSearchIndex, createSimilarityAttribute, getVideoSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
+import { AutorModel } from './autor'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
 import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
+import { VideoAutorModel } from './video-autor'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
@@ -127,6 +129,7 @@ export enum ScopeNames {
   FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
+  WITH_AUTORS = 'WITH_AUTORS',
   WITH_FILES = 'WITH_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
@@ -149,6 +152,8 @@ type AvailableForListIDsOptions = {
   languageOneOf?: string[]
   tagsOneOf?: string[]
   tagsAllOf?: string[]
+  autorsOneOf?: string[]
+  autorsAllOf?: string[]
   withFiles?: boolean
   accountId?: number
   videoChannelId?: number
@@ -388,6 +393,37 @@ type AvailableForListIDsOptions = {
       }
     }
 
+    if (options.autorsAllOf || options.autorsOneOf) {
+      const createAutorsIn = (autors: string[]) => {
+        return autors.map(t => VideoModel.sequelize.escape(t))
+                   .join(', ')
+      }
+
+      if (options.autorsOneOf) {
+        query.where[ 'id' ][ Sequelize.Op.and ].push({
+          [ Sequelize.Op.in ]: Sequelize.literal(
+            '(' +
+            'SELECT "videoId" FROM "videoAutor" ' +
+            'INNER JOIN "autor" ON "autor"."id" = "videoAutor"."autorId" ' +
+            'WHERE "autor"."name" IN (' + createAutorsIn(options.autorsOneOf) + ')' +
+            ')'
+          )
+        })
+      }
+
+      if (options.autorsAllOf) {
+        query.where[ 'id' ][ Sequelize.Op.and ].push({
+          [ Sequelize.Op.in ]: Sequelize.literal(
+            '(' +
+            'SELECT "videoId" FROM "videoAutor" ' +
+            'INNER JOIN "autor" ON "autor"."id" = "videoAutor"."autorId" ' +
+            'WHERE "autor"."name" IN (' + createAutorsIn(options.autorsAllOf) + ')' +
+            'GROUP BY "videoAutor"."videoId" HAVING COUNT(*) = ' + options.autorsAllOf.length +
+            ')'
+          )
+        })
+      }
+    }
     if (options.nsfw === true || options.nsfw === false) {
       query.where[ 'nsfw' ] = options.nsfw
     }
@@ -472,6 +508,9 @@ type AvailableForListIDsOptions = {
   },
   [ ScopeNames.WITH_TAGS ]: {
     include: [ () => TagModel ]
+  },
+  [ ScopeNames.WITH_AUTORS ]: {
+    include: [ () => AutorModel ]
   },
   [ ScopeNames.WITH_BLACKLISTED ]: {
     include: [
@@ -657,6 +696,13 @@ export class VideoModel extends Model<VideoModel> {
     onDelete: 'CASCADE'
   })
   Tags: TagModel[]
+
+  @BelongsToMany(() => AutorModel, {
+    foreignKey: 'videoId',
+    through: () => VideoAutorModel,
+    onDelete: 'CASCADE'
+  })
+  Autors: AutorModel[]
 
   @HasMany(() => VideoAbuseModel, {
     foreignKey: {
@@ -902,7 +948,8 @@ export class VideoModel extends Model<VideoModel> {
           ]
         },
         VideoFileModel,
-        TagModel
+        TagModel,
+        AutorModel
       ]
     }
 
@@ -982,6 +1029,8 @@ export class VideoModel extends Model<VideoModel> {
     languageOneOf?: string[],
     tagsOneOf?: string[],
     tagsAllOf?: string[],
+    autorsOneOf?: string[],
+    autorsAllOf?: string[],
     filter?: VideoFilter,
     accountId?: number,
     videoChannelId?: number,
@@ -1020,6 +1069,8 @@ export class VideoModel extends Model<VideoModel> {
       languageOneOf: options.languageOneOf,
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
+      autorsOneOf: options.autorsOneOf,
+      autorsAllOf: options.autorsAllOf,
       filter: options.filter,
       withFiles: options.withFiles,
       accountId: options.accountId,
@@ -1046,6 +1097,8 @@ export class VideoModel extends Model<VideoModel> {
     languageOneOf?: string[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
+    autorsOneOf?: string[]
+    autorsAllOf?: string[]
     durationMin?: number // seconds
     durationMax?: number // seconds
     user?: UserModel,
@@ -1087,7 +1140,11 @@ export class VideoModel extends Model<VideoModel> {
               'UNION ALL ' +
               'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
               'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE "tag"."name" = ' + escapedSearch +
+              'WHERE "tag"."name" = ' + escapedSearch + 
+              'UNION ALL ' +
+              'SELECT "video"."id" FROM "video" LEFT JOIN "videoAutor" ON "videoAutor"."videoId" = "video"."id" ' +
+              'INNER JOIN "autor" ON "autor"."id" = "videoAutor"."autorId" ' +
+              'WHERE "autor"."name" = ' + escapedSearch +
               ')'
             )
           }
@@ -1127,6 +1184,8 @@ export class VideoModel extends Model<VideoModel> {
       languageOneOf: options.languageOneOf,
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
+      autorsOneOf: options.autorsOneOf,
+      autorsAllOf: options.autorsAllOf,
       user: options.user,
       filter: options.filter
     }
@@ -1206,6 +1265,7 @@ export class VideoModel extends Model<VideoModel> {
 
     const scopes = [
       ScopeNames.WITH_TAGS,
+      ScopeNames.WITH_AUTORS,
       ScopeNames.WITH_BLACKLISTED,
       ScopeNames.WITH_FILES,
       ScopeNames.WITH_ACCOUNT_DETAILS,

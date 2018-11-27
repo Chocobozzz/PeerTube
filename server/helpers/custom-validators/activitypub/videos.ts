@@ -7,6 +7,7 @@ import {
   isVideoNameValid,
   isVideoStateValid,
   isVideoTagValid,
+  isVideoAutorValid,
   isVideoTruncatedDescriptionValid,
   isVideoViewsValid
 } from '../videos'
@@ -48,6 +49,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!video || video.type !== 'Video') return false
 
   if (!setValidRemoteTags(video)) return false
+  if (!setValidRemoteAutors(video)) return false
   if (!setValidRemoteVideoUrls(video)) return false
   if (!setRemoteVideoTruncatedContent(video)) return false
   if (!setValidAttributedTo(video)) return false
@@ -120,6 +122,17 @@ function setValidRemoteTags (video: any) {
   video.tag = video.tag.filter(t => {
     return t.type === 'Hashtag' &&
       isVideoTagValid(t.name)
+  })
+
+  return true
+}
+
+function setValidRemoteAutors (video: any) {
+  if (Array.isArray(video.autor) === false) return false
+
+  video.autor = video.autor.filter(t => {
+    return t.type === 'Hashautor' &&
+      isVideoAutorValid(t.name)
   })
 
   return true
