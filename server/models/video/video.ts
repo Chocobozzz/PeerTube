@@ -1100,6 +1100,8 @@ export class VideoModel extends Model<VideoModel> {
     sort?: string
     publishedStartDate?: string // ISO 8601
     publishedEndDate?: string // ISO 8601
+    originallyPublishedStartYear?: string
+    originallyPublishedEndYear?: string
     nsfw?: boolean
     categoryOneOf?: number[]
     licenceOneOf?: number[]
@@ -1120,6 +1122,15 @@ export class VideoModel extends Model<VideoModel> {
       if (options.publishedEndDate) publishedAtRange[ Sequelize.Op.lte ] = options.publishedEndDate
 
       whereAnd.push({ publishedAt: publishedAtRange })
+    }
+
+    if (options.originallyPublishedStartYear || options.originallyPublishedEndYear) {
+      const originallyPublishedAtRange = {}
+
+      if (options.originallyPublishedStartYear) originallyPublishedAtRange[ Sequelize.Op.gte ] = new Date(options.originallyPublishedStartYear).toISOString()
+      if (options.originallyPublishedEndYear) originallyPublishedAtRange[ Sequelize.Op.lte ] = new Date(options.originallyPublishedEndYear).toISOString()
+
+      whereAnd.push({ originallyPublishedAt: originallyPublishedAtRange })
     }
 
     if (options.durationMin || options.durationMax) {

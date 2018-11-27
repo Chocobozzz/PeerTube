@@ -4,6 +4,9 @@ export class AdvancedSearch {
   publishedStartDate: string // ISO 8601
   publishedEndDate: string // ISO 8601
 
+  originallyPublishedStartYear: string // ISO 8601
+  originallyPublishedEndYear: string // ISO 8601
+
   nsfw: NSFWQuery
 
   categoryOneOf: string
@@ -23,6 +26,8 @@ export class AdvancedSearch {
   constructor (options?: {
     publishedStartDate?: string
     publishedEndDate?: string
+    originallyPublishedStartYear?: string
+    originallyPublishedEndYear?: string
     nsfw?: NSFWQuery
     categoryOneOf?: string
     licenceOneOf?: string
@@ -37,6 +42,8 @@ export class AdvancedSearch {
 
     this.publishedStartDate = options.publishedStartDate || undefined
     this.publishedEndDate = options.publishedEndDate || undefined
+    this.originallyPublishedStartYear = options.originallyPublishedStartYear || undefined
+    this.originallyPublishedEndYear = options.originallyPublishedEndYear || undefined
     this.nsfw = options.nsfw || undefined
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
@@ -66,6 +73,8 @@ export class AdvancedSearch {
   reset () {
     this.publishedStartDate = undefined
     this.publishedEndDate = undefined
+    this.originallyPublishedStartYear = undefined
+    this.originallyPublishedEndYear = undefined
     this.nsfw = undefined
     this.categoryOneOf = undefined
     this.licenceOneOf = undefined
@@ -82,6 +91,8 @@ export class AdvancedSearch {
     return {
       publishedStartDate: this.publishedStartDate,
       publishedEndDate: this.publishedEndDate,
+      originallyPublishedStartYear: this.originallyPublishedStartYear,
+      originallyPublishedEndYear: this.originallyPublishedEndYear,
       nsfw: this.nsfw,
       categoryOneOf: this.categoryOneOf,
       licenceOneOf: this.licenceOneOf,
@@ -98,6 +109,8 @@ export class AdvancedSearch {
     return {
       publishedStartDate: this.publishedStartDate,
       publishedEndDate: this.publishedEndDate,
+      originallyPublishedStartYear: this.originallyPublishedStartYear,
+      originallyPublishedEndYear: this.originallyPublishedEndYear,
       nsfw: this.nsfw,
       categoryOneOf: this.intoArray(this.categoryOneOf),
       licenceOneOf: this.intoArray(this.licenceOneOf),

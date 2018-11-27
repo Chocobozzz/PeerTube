@@ -23,6 +23,8 @@ export class SearchFiltersComponent implements OnInit {
   durationRanges: { id: string, label: string }[] = []
 
   publishedDateRange: string
+  originallyPublishedStartYear: string
+  originallyPublishedEndYear: string
   durationRange: string
 
   constructor (
@@ -174,4 +176,5 @@ export class SearchFiltersComponent implements OnInit {
 
     this.advancedSearch.publishedStartDate = date.toISOString()
   }
+
 }
