@@ -21,6 +21,27 @@
       </div>
 
       <div class="form-group">
+        <label i18n for="original-publication-after">Original publication year</label>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <input
+              type="text" id="original-publication-after" name="original-publication-after"
+              i18n-placeholder placeholder="After..."
+              [(ngModel)]="originallyPublishedStartYear"
+            >
+          </div>
+          <div class="col-sm-6">
+            <input
+              type="text" id="original-publication-before" name="original-publication-before"
+              i18n-placeholder placeholder="Before..."
+              [(ngModel)]="originallyPublishedEndYear"
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
         <div i18n class="radio-label">Duration</div>
 
         <div class="peertube-radio-container" *ngFor="let duration of durationRanges">

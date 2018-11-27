@@ -25,6 +25,9 @@ export class SearchFiltersComponent implements OnInit {
   publishedDateRange: string
   durationRange: string
 
+  originallyPublishedStartYear: string
+  originallyPublishedEndYear: string
+
   constructor (
     private i18n: I18n,
     private serverService: ServerService
@@ -86,13 +89,25 @@ export class SearchFiltersComponent implements OnInit {
 
     this.loadFromDurationRange()
     this.loadFromPublishedRange()
+    this.loadOriginallyPublishedAtYears()
   }
 
   formUpdated () {
     this.updateModelFromDurationRange()
     this.updateModelFromPublishedRange()
+    this.updateModelFromOriginallyPublishedAtYears()
 
     this.filtered.emit(this.advancedSearch)
+  }
+
+  private loadOriginallyPublishedAtYears () {
+    this.originallyPublishedStartYear = this.advancedSearch.originallyPublishedStartDate
+      ? new Date(this.advancedSearch.originallyPublishedStartDate).getFullYear().toString()
+      : null
+
+    this.originallyPublishedEndYear = this.advancedSearch.originallyPublishedEndDate
+      ? new Date(this.advancedSearch.originallyPublishedEndDate).getFullYear().toString()
+      : null
   }
 
   private loadFromDurationRange () {
@@ -124,6 +139,32 @@ export class SearchFiltersComponent implements OnInit {
       else if (numberOfDays >= 30) this.publishedDateRange = 'last_30days'
       else if (numberOfDays >= 7) this.publishedDateRange = 'last_7days'
       else if (numberOfDays >= 0) this.publishedDateRange = 'today'
+    }
+  }
+
+  private updateModelFromOriginallyPublishedAtYears () {
+    const baseDate = new Date()
+    baseDate.setHours(0, 0, 0, 0)
+    baseDate.setMonth(0, 1)
+
+    if (this.originallyPublishedStartYear) {
+      const year = parseInt(this.originallyPublishedStartYear, 10)
+      const start = new Date(baseDate)
+      start.setFullYear(year)
+
+      this.advancedSearch.originallyPublishedStartDate = start.toISOString()
+    } else {
+      this.advancedSearch.originallyPublishedStartDate = null
+    }
+
+    if (this.originallyPublishedEndYear) {
+      const year = parseInt(this.originallyPublishedEndYear, 10)
+      const end = new Date(baseDate)
+      end.setFullYear(year)
+
+      this.advancedSearch.originallyPublishedEndDate = end.toISOString()
+    } else {
+      this.advancedSearch.originallyPublishedEndDate = null
     }
   }
 
@@ -174,4 +215,5 @@ export class SearchFiltersComponent implements OnInit {
 
     this.advancedSearch.startDate = date.toISOString()
   }
+
 }

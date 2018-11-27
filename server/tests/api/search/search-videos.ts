@@ -60,7 +60,10 @@ describe('Test a videos search', function () {
       const attributes6 = immutableAssign(attributes1, { name: attributes1.name + ' - 6', tags: [ 't1', 't2 '] })
       await uploadVideo(server.url, server.accessToken, attributes6)
 
-      const attributes7 = immutableAssign(attributes1, { name: attributes1.name + ' - 7' })
+      const attributes7 = immutableAssign(attributes1, {
+        name: attributes1.name + ' - 7',
+        originallyPublishedAt: '2019-02-12T09:58:08.286Z'
+      })
       await uploadVideo(server.url, server.accessToken, attributes7)
 
       const attributes8 = immutableAssign(attributes1, { name: attributes1.name + ' - 8', licence: 4 })
@@ -341,6 +344,67 @@ describe('Test a videos search', function () {
 
     const videos = res.body.data
     expect(videos[0].name).to.equal('1111 2222 3333')
+  })
+
+  it('Should search on originally published date', async function () {
+    const baseQuery = {
+      search: '1111 2222 3333',
+      languageOneOf: [ 'pl', 'fr' ],
+      durationMax: 4,
+      nsfw: 'false' as 'false',
+      licenceOneOf: [ 1, 4 ]
+    }
+
+    {
+      const query = immutableAssign(baseQuery, { originallyPublishedStartDate: '2019-02-11T09:58:08.286Z' })
+      const res = await advancedVideosSearch(server.url, query)
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
+    }
+
+    {
+      const query = immutableAssign(baseQuery, { originallyPublishedEndDate: '2019-03-11T09:58:08.286Z' })
+      const res = await advancedVideosSearch(server.url, query)
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
+    }
+
+    {
+      const query = immutableAssign(baseQuery, { originallyPublishedEndDate: '2019-01-11T09:58:08.286Z' })
+      const res = await advancedVideosSearch(server.url, query)
+
+      expect(res.body.total).to.equal(0)
+    }
+
+    {
+      const query = immutableAssign(baseQuery, { originallyPublishedStartDate: '2019-03-11T09:58:08.286Z' })
+      const res = await advancedVideosSearch(server.url, query)
+
+      expect(res.body.total).to.equal(0)
+    }
+
+    {
+      const query = immutableAssign(baseQuery, {
+        originallyPublishedStartDate: '2019-01-11T09:58:08.286Z',
+        originallyPublishedEndDate: '2019-01-10T09:58:08.286Z'
+      })
+      const res = await advancedVideosSearch(server.url, query)
+
+      expect(res.body.total).to.equal(0)
+    }
+
+    {
+      const query = immutableAssign(baseQuery, {
+        originallyPublishedStartDate: '2019-01-11T09:58:08.286Z',
+        originallyPublishedEndDate: '2019-04-11T09:58:08.286Z'
+      })
+      const res = await advancedVideosSearch(server.url, query)
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
+    }
   })
 
   after(async function () {
