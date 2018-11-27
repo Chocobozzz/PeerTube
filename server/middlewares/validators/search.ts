@@ -7,8 +7,8 @@ import { isDateValid } from '../../helpers/custom-validators/misc'
 const videosSearchValidator = [
   query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
 
-  query('startDate').optional().custom(isDateValid).withMessage('Should have a valid start date'),
-  query('endDate').optional().custom(isDateValid).withMessage('Should have a valid end date'),
+  query('publishedStartDate').optional().custom(isDateValid).withMessage('Should have a valid start date'),
+  query('publishedEndDate').optional().custom(isDateValid).withMessage('Should have a valid end date'),
 
   query('durationMin').optional().isInt().withMessage('Should have a valid min duration'),
   query('durationMax').optional().isInt().withMessage('Should have a valid max duration'),

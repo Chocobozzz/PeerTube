@@ -1098,8 +1098,8 @@ export class VideoModel extends Model<VideoModel> {
     start?: number
     count?: number
     sort?: string
-    startDate?: string // ISO 8601
-    endDate?: string // ISO 8601
+    publishedStartDate?: string // ISO 8601
+    publishedEndDate?: string // ISO 8601
     nsfw?: boolean
     categoryOneOf?: number[]
     licenceOneOf?: number[]
@@ -1113,11 +1113,11 @@ export class VideoModel extends Model<VideoModel> {
   }) {
     const whereAnd = []
 
-    if (options.startDate || options.endDate) {
+    if (options.publishedStartDate || options.publishedEndDate) {
       const publishedAtRange = {}
 
-      if (options.startDate) publishedAtRange[ Sequelize.Op.gte ] = options.startDate
-      if (options.endDate) publishedAtRange[ Sequelize.Op.lte ] = options.endDate
+      if (options.publishedStartDate) publishedAtRange[ Sequelize.Op.gte ] = options.publishedStartDate
+      if (options.publishedEndDate) publishedAtRange[ Sequelize.Op.lte ] = options.publishedEndDate
 
       whereAnd.push({ publishedAt: publishedAtRange })
     }

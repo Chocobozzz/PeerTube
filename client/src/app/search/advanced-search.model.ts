@@ -1,8 +1,8 @@
 import { NSFWQuery } from '../../../../shared/models/search'
 
 export class AdvancedSearch {
-  startDate: string // ISO 8601
-  endDate: string // ISO 8601
+  publishedStartDate: string // ISO 8601
+  publishedEndDate: string // ISO 8601
 
   nsfw: NSFWQuery
 
@@ -21,8 +21,8 @@ export class AdvancedSearch {
   sort: string
 
   constructor (options?: {
-    startDate?: string
-    endDate?: string
+    publishedStartDate?: string
+    publishedEndDate?: string
     nsfw?: NSFWQuery
     categoryOneOf?: string
     licenceOneOf?: string
@@ -35,8 +35,8 @@ export class AdvancedSearch {
   }) {
     if (!options) return
 
-    this.startDate = options.startDate || undefined
-    this.endDate = options.endDate || undefined
+    this.publishedStartDate = options.publishedStartDate || undefined
+    this.publishedEndDate = options.publishedEndDate || undefined
     this.nsfw = options.nsfw || undefined
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
@@ -64,8 +64,8 @@ export class AdvancedSearch {
   }
 
   reset () {
-    this.startDate = undefined
-    this.endDate = undefined
+    this.publishedStartDate = undefined
+    this.publishedEndDate = undefined
     this.nsfw = undefined
     this.categoryOneOf = undefined
     this.licenceOneOf = undefined
@@ -80,8 +80,8 @@ export class AdvancedSearch {
 
   toUrlObject () {
     return {
-      startDate: this.startDate,
-      endDate: this.endDate,
+      publishedStartDate: this.publishedStartDate,
+      publishedEndDate: this.publishedEndDate,
       nsfw: this.nsfw,
       categoryOneOf: this.categoryOneOf,
       licenceOneOf: this.licenceOneOf,
@@ -96,8 +96,8 @@ export class AdvancedSearch {
 
   toAPIObject () {
     return {
-      startDate: this.startDate,
-      endDate: this.endDate,
+      publishedStartDate: this.publishedStartDate,
+      publishedEndDate: this.publishedEndDate,
       nsfw: this.nsfw,
       categoryOneOf: this.intoArray(this.categoryOneOf),
       licenceOneOf: this.intoArray(this.licenceOneOf),

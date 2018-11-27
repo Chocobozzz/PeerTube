@@ -8,8 +8,8 @@ export interface VideosSearchQuery {
   count?: number
   sort?: string
 
-  startDate?: string // ISO 8601
-  endDate?: string // ISO 8601
+  publishedStartDate?: string // ISO 8601
+  publishedEndDate?: string // ISO 8601
 
   nsfw?: NSFWQuery
 

@@ -108,10 +108,10 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with invalid dates', async function () {
-      const customQuery1 = immutableAssign(query, { startDate: 'hello' })
+      const customQuery1 = immutableAssign(query, { publishedStartDate: 'hello' })
       await makeGetRequest({ url: server.url, path, query: customQuery1, statusCodeExpected: 400 })
 
-      const customQuery2 = immutableAssign(query, { endDate: 'hello' })
+      const customQuery2 = immutableAssign(query, { publishedEndDate: 'hello' })
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: 400 })
     })
   })

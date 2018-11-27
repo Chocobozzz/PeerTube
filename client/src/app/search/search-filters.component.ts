@@ -111,8 +111,8 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   private loadFromPublishedRange () {
-    if (this.advancedSearch.startDate) {
-      const date = new Date(this.advancedSearch.startDate)
+    if (this.advancedSearch.publishedStartDate) {
+      const date = new Date(this.advancedSearch.publishedStartDate)
       const now = new Date()
 
       const diff = Math.abs(date.getTime() - now.getTime())
@@ -172,6 +172,6 @@ export class SearchFiltersComponent implements OnInit {
         break
     }
 
-    this.advancedSearch.startDate = date.toISOString()
+    this.advancedSearch.publishedStartDate = date.toISOString()
   }
 }

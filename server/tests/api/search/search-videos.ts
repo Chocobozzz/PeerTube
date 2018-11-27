@@ -19,7 +19,7 @@ const expect = chai.expect
 
 describe('Test a videos search', function () {
   let server: ServerInfo = null
-  let startDate: string
+  let publishedStartDate: string
 
   before(async function () {
     this.timeout(30000)
@@ -52,7 +52,7 @@ describe('Test a videos search', function () {
 
       await wait(1000)
 
-      startDate = new Date().toISOString()
+      publishedStartDate = new Date().toISOString()
 
       const attributes5 = immutableAssign(attributes1, { name: attributes1.name + ' - 5', licence: 2 })
       await uploadVideo(server.url, server.accessToken, attributes5)
@@ -250,10 +250,10 @@ describe('Test a videos search', function () {
     expect(res2.body.total).to.equal(0)
   })
 
-  it('Should search by start date', async function () {
+  it('Should search by PublishedAt start date', async function () {
     const query = {
       search: '1111 2222 3333',
-      startDate
+      publishedStartDate
     }
 
     const res = await advancedVideosSearch(server.url, query)
