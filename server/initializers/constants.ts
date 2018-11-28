@@ -351,7 +351,7 @@ const CONSTRAINTS_FIELDS = {
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 0 }, // Number
-    TAGS: { min: 0, max: 5 }, // Number of total tags
+    TAGS: { min: 0, max: 15 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
     AUTORS: { min: 0, max: 5 }, // Number of total autors
     AUTOR: { min: 2, max: 30 }, // Length
@@ -416,24 +416,24 @@ const FFMPEG_NICE: { [ id: string ]: number } = {
 }
 
 const VIDEO_CATEGORIES = {
-  1: 'Music',
-  2: 'Films',
-  3: 'Vehicles',
-  4: 'Art',
-  5: 'Sports',
-  6: 'Travels',
-  7: 'Gaming',
-  8: 'People',
-  9: 'Comedy',
-  10: 'Entertainment',
-  11: 'News & Politics',
-  12: 'How To',
-  13: 'Education',
-  14: 'Activism',
-  15: 'Science & Technology',
-  16: 'Animals',
-  17: 'Kids',
-  18: 'Food'
+  1: 'Stockage, sauvegarde et archivage',
+  2: 'Services et applications',
+  3: 'Sécurité',
+  4: 'Réseau et infrastructures',
+  5: 'Virtualisation, système et hébergement',
+  6: 'Stratégie, organisation et collaboration',
+  7: 'Maitrise et administration du SI',
+  8: 'Identité numérique',
+  9: 'Messagerie et outils collaboratifs',
+  10: 'Usages et Pédagogie',
+  11: 'Gestion des logs',
+  12: 'Bonnes pratiques',
+  13: 'Confiance numérique',
+  14: 'Serveurs et Cloud',
+  15: 'Gestion de parc',
+  16: 'Plateformes scientifiques',
+  17: 'Prospective',
+  18: 'Réseau'
 }
 
 // See https://creativecommons.org/licenses/?lang=en
