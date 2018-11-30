@@ -2,25 +2,42 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, killallServers, makeActivityPubGetRequest, runServer, ServerInfo, setAccessTokensToServers } from '../../utils'
+import {
+  doubleFollow,
+  flushAndRunMultipleServers,
+  flushTests,
+  killallServers,
+  makeActivityPubGetRequest,
+  runServer,
+  ServerInfo,
+  setAccessTokensToServers, uploadVideo
+} from '../../utils'
 
 const expect = chai.expect
 
 describe('Test activitypub', function () {
-  let server: ServerInfo = null
+  let servers: ServerInfo[] = []
+  let videoUUID: string
 
   before(async function () {
     this.timeout(30000)
 
     await flushTests()
 
-    server = await runServer(1)
+    servers = await flushAndRunMultipleServers(2)
 
-    await setAccessTokensToServers([ server ])
+    await setAccessTokensToServers(servers)
+
+    {
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
+      videoUUID = res.body.video.uuid
+    }
+
+    await doubleFollow(servers[0], servers[1])
   })
 
   it('Should return the account object', async function () {
-    const res = await makeActivityPubGetRequest(server.url, '/accounts/root')
+    const res = await makeActivityPubGetRequest(servers[0].url, '/accounts/root')
     const object = res.body
 
     expect(object.type).to.equal('Person')
@@ -29,7 +46,22 @@ describe('Test activitypub', function () {
     expect(object.preferredUsername).to.equal('root')
   })
 
+  it('Should return the video object', async function () {
+    const res = await makeActivityPubGetRequest(servers[0].url, '/videos/watch/' + videoUUID)
+    const object = res.body
+
+    expect(object.type).to.equal('Video')
+    expect(object.id).to.equal('http://localhost:9001/videos/watch/' + videoUUID)
+    expect(object.name).to.equal('video')
+  })
+
+  it('Should redirect to the origin video object', async function () {
+    const res = await makeActivityPubGetRequest(servers[1].url, '/videos/watch/' + videoUUID, 302)
+
+    expect(res.header.location).to.equal('http://localhost:9001/videos/watch/' + videoUUID)
+  })
+
   after(async function () {
-    killallServers([ server ])
+    killallServers(servers)
   })
 })

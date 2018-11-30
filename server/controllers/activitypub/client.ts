@@ -162,10 +162,10 @@ function getAccountVideoRate (rateType: VideoRateType) {
   }
 }
 
-async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoController (req: express.Request, res: express.Response) {
   const video: VideoModel = res.locals.video
 
-  if (video.isOwned() === false) return res.redirect(video.url)
+  if (video.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(video.url)
 
   // We need captions to render AP object
   video.VideoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -181,17 +181,17 @@ async function videoController (req: express.Request, res: express.Response, nex
   return activityPubResponse(activityPubContextify(videoObject), res)
 }
 
-async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoAnnounceController (req: express.Request, res: express.Response) {
   const share = res.locals.videoShare as VideoShareModel
 
-  if (share.Actor.isOwned() === false) return res.redirect(share.url)
+  if (share.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(share.url)
 
   const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.video, undefined)
 
   return activityPubResponse(activityPubContextify(activity), res)
 }
 
-async function videoAnnouncesController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoAnnouncesController (req: express.Request, res: express.Response) {
   const video: VideoModel = res.locals.video
 
   const handler = async (start: number, count: number) => {
@@ -206,21 +206,21 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
   return activityPubResponse(activityPubContextify(json), res)
 }
 
-async function videoLikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoLikesController (req: express.Request, res: express.Response) {
   const video: VideoModel = res.locals.video
   const json = await videoRates(req, 'like', video, getVideoLikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
-async function videoDislikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoDislikesController (req: express.Request, res: express.Response) {
   const video: VideoModel = res.locals.video
   const json = await videoRates(req, 'dislike', video, getVideoDislikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
-async function videoCommentsController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoCommentsController (req: express.Request, res: express.Response) {
   const video: VideoModel = res.locals.video
 
   const handler = async (start: number, count: number) => {
@@ -235,30 +235,30 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   return activityPubResponse(activityPubContextify(json), res)
 }
 
-async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoChannelController (req: express.Request, res: express.Response) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
 
   return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject()), res)
 }
 
-async function videoChannelFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoChannelFollowersController (req: express.Request, res: express.Response) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const activityPubResult = await actorFollowers(req, videoChannel.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
-async function videoChannelFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoChannelFollowingController (req: express.Request, res: express.Response) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const activityPubResult = await actorFollowing(req, videoChannel.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
-async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoCommentController (req: express.Request, res: express.Response) {
   const videoComment: VideoCommentModel = res.locals.videoComment
 
-  if (videoComment.isOwned() === false) return res.redirect(videoComment.url)
+  if (videoComment.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(videoComment.url)
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   const isPublic = true // Comments are always public
@@ -276,7 +276,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
   const videoRedundancy: VideoRedundancyModel = res.locals.videoRedundancy
-  if (videoRedundancy.isOwned() === false) return res.redirect(videoRedundancy.url)
+  if (videoRedundancy.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(videoRedundancy.url)
 
   const serverActor = await getServerActor()
 
