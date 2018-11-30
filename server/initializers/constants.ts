@@ -353,7 +353,7 @@ const CONSTRAINTS_FIELDS = {
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 15 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
-    AUTORS: { min: 0, max: 5 }, // Number of total autors
+    S: { min: 0, max: 5 }, // Number of total autors
     AUTOR: { min: 2, max: 30 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
     THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
@@ -433,7 +433,8 @@ const VIDEO_CATEGORIES = {
   15: 'Gestion de parc',
   16: 'Plateformes scientifiques',
   17: 'Prospective',
-  18: 'Réseau'
+  18: 'Réseau',
+  19: 'Divers'
 }
 
 // See https://creativecommons.org/licenses/?lang=en
@@ -499,7 +500,7 @@ const TORRENT_MIMETYPE_EXT = {
 
 const OVERVIEWS = {
   VIDEOS: {
-    SAMPLE_THRESHOLD: 6,
+    SAMPLE_THRESHOLD: 2,
     SAMPLES_COUNT: 2
   }
 }

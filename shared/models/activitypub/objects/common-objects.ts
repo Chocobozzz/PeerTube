@@ -2,7 +2,6 @@ export interface ActivityIdentifierObject {
   identifier: string
   name: string
 }
-
 export interface ActivityTagObject {
   type: 'Hashtag' | 'Mention'
   href?: string

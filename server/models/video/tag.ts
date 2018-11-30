@@ -74,7 +74,6 @@ export class TagModel extends Model<TagModel> {
       bind: { threshold, count, videoPrivacy: VideoPrivacy.PUBLIC, videoState: VideoState.PUBLISHED },
       type: Sequelize.QueryTypes.SELECT
     }
-
     return TagModel.sequelize.query(query, options)
                     .then(data => data.map(d => d.name))
   }

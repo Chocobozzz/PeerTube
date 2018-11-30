@@ -121,7 +121,7 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
   })
 
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
-  const autors = video.Autors ? video.Autors.map(t => t.name) : []
+  const autors = video.Autors ? video.Autors.map(a => a.name) : []
   const detailsJson = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
@@ -182,9 +182,9 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
   }))
   if (!video.Autors) video.Autors = []
 
-  const autor = video.Autors.map(t => ({
+  const autor = video.Autors.map(a => ({
     type: 'Hashautor' as 'Hashautor',
-    name: t.name
+    name: a.name
   }))
   let language
   if (video.language) {
