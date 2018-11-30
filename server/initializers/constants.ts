@@ -354,6 +354,7 @@ const CONSTRAINTS_FIELDS = {
     TAGS: { min: 0, max: 15 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
     S: { min: 0, max: 5 }, // Number of total autors
+    AUTORS: { min: 0, max: 15 }, // Length
     AUTOR: { min: 2, max: 30 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
     THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
@@ -500,7 +501,7 @@ const TORRENT_MIMETYPE_EXT = {
 
 const OVERVIEWS = {
   VIDEOS: {
-    SAMPLE_THRESHOLD: 2,
+    SAMPLE_THRESHOLD: 4,
     SAMPLES_COUNT: 2
   }
 }
