@@ -20,13 +20,15 @@ if [ ! -e "$PEERTUBE_PATH/versions" -o ! -e "$PEERTUBE_PATH/config/production.ya
   exit 1
 fi
 
-REMAINING=$(df -k $PEERTUBE_PATH | awk '{ print $4}' | sed -n 2p)
-ONE_GB=$((1024 * 1024))
-if [ "$REMAINING" -lt "$ONE_GB" ]; then
-  echo "Error - not enough free space for upgrading"
-  echo ""
-  echo "Make sure you have at least 1 GB of free space in $PEERTUBE_PATH"
-  exit 1
+if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ] ; then
+    REMAINING=$(df -k $PEERTUBE_PATH | awk '{ print $4}' | sed -n 2p)
+    ONE_GB=$((1024 * 1024))
+    if [ "$REMAINING" -lt "$ONE_GB" ]; then
+    echo "Error - not enough free space for upgrading"
+    echo ""
+    echo "Make sure you have at least 1 GB of free space in $PEERTUBE_PATH"
+    exit 1
+    fi
 fi
 
 # Backup database
