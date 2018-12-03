@@ -1,5 +1,94 @@
 # Changelog
 
+## v1.1.0
+
+## Since v1.0.1
+
+### Maintenance
+
+ * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
+ * Add basic ActivityPub documentation: https://docs.joinpeertube.org/lang/en/devdocs/federation.html ([@rigelk](https://github.com/rigelk))
+ * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
+ * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
+ * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
+ * Allow peertube-import-videos.ts CLI script to run concurrently ([@McFlat](https://github.com/mcflat))
+
+### Scripts
+
+ * Use DB information from config/production.yaml in upgrade script ([@ldidry](https://github.com/ldidry))
+ * Add REPL script ([@McFlat](https://github.com/mcflat))
+
+### Docker
+
+ * Add search and import settings env settings env variables ([@kaiyou](https://github.com/kaiyou))
+ * Add docker dev image ([@am97](https://github.com/am97))
+ * Improve docker compose template ([@Nutomic](https://github.com/nutomic))
+   * Add postfix image
+   * Redirect HTTP -> HTTPS
+   * Disable Træfik web UI
+ * Add ability to set an array in `PEERTUBE_TRUST_PROXY` ([LecygneNoir](https://github.com/LecygneNoir))
+
+### Features
+ 
+ * Automatically resume videos if the user is logged in
+ * Hide automatically the menu when the window is resized ([@BO41](https://github.com/BO41))
+ * Remove confirm modal for JavaScript/CSS injection ([@scanlime](https://github.com/scanlime))
+ * Set bitrate limits for transcoding ([@Nutomic](https://github.com/nutomic))
+ * Add moderation tools in the account page
+ * Add bulk actions in users table (Delete/Ban for now)
+ * Add search filter in admin users table
+ * Add search filter in admin following
+ * Add search filter in admin followers
+ * Add ability to list all local videos
+ * Add ability for users to mute an account or an instance
+ * Add ability for administrators to mute an account or an instance
+ * Rename "News" category to "News & Politics" ([@daker](https://github.com/daker))
+ * Add explicit error message when changing video ownership ([@lucas-dclrcq](https://github.com/lucas-dclrcq))
+ * Improve description of the HTTP video import feature ([@rigelk](https://github.com/rigelk))
+ * Set shorter keyframe interval for transcoding (2 seconds) ([@Nutomic](https://github.com/nutomic))
+ * Add ability to disable webtorrent (as a user) ([@rigelk](https://github.com/rigelk))
+ * Make abuse-delete clearer ([@barbeque](https://github.com/barbeque))
+ * Adding minimum signup age conforming to ceiling GPDR age ([@rigelk](https://github.com/rigelk))
+ * Feature/description support fields length 1000 ([@McFlat](https://github.com/mcflat))
+ * Add background effect to activated menu entry
+ * Improve video upload error handling
+ * Improve message visibility on signup
+ * Auto login user on signup if email verification is disabled
+ * Speed up PeerTube startup (in particular the first one)
+ * Delete invalid or deleted remote videos
+ * Add ability to admin to set email as verified ([@joshmorel](https://github.com/joshmorel))
+ * Add separators in user moderation dropdown
+
+### Bug fixes
+
+ * AP mimeType -> mediaType
+ * PeerTube is not in beta anymore
+ * PeerTube is not in alpha anymore :p
+ * Fix optimize old videos script
+ * Check follow constraints when getting a video
+ * Fix application-config initialization in CLI tools ([Yetangitu](https://github.com/Yetangitu))
+ * Fix video pixel format compatibility (using yuv420p) ([@rigelk](https://github.com/rigelk))
+ * Fix video `state` AP context  ([tcitworld](https://github.com/tcitworld))
+ * Fix Linked Signature compatibility
+ * Fix AP collections pagination
+ * Fix too big thumbnails (when using URL import)
+ * Do not host remote AP objects: use redirection instead
+ * Fix video miniature with a long name
+ * Fix video views inconsistencies inside the federation
+ * Fix video embed in Wordpress Gutenberg
+ * Fix video channel videos url when scrolling
+ * Fix player progress bar/seeking when changing resolution
+ * Fix search tab title with no search
+ * Fix YouTube video import with some videos
+
+## Since v1.1.0-rc.1
+
+### Bug fixes
+
+ * Fix AP infinite redirection
+ * Fix trending page
+
+
 ## v1.1.0-rc.1 (since v1.1.0-alpha.2)
 
 ### Maintenance
