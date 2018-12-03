@@ -2,7 +2,7 @@
 
 ## v1.1.0
 
-## Since v1.0.1
+***Since v1.0.1***
 
 ### Maintenance
 
@@ -81,7 +81,7 @@
  * Fix search tab title with no search
  * Fix YouTube video import with some videos
 
-## Since v1.1.0-rc.1
+***Since v1.1.0-rc.1***
 
 ### Bug fixes
 
