@@ -87,10 +87,19 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
 async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const video = await VideoModel.loadByUrl(view.object)
-  if (!video || video.isOwned() === false) return
+  const options = {
+    videoObject: view.object,
+    fetchType: 'only-video' as 'only-video'
+  }
+  const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 
   await Redis.Instance.addVideoView(video.id)
+
+  if (video.isOwned()) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
+    await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
+  }
 }
 
 async function processCacheFile (byActor: ActorModel, activity: ActivityCreate) {

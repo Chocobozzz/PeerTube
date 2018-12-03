@@ -24,11 +24,9 @@ async function processVideosViews () {
     try {
       const views = await Redis.Instance.getVideoViews(videoId, hour)
       if (isNaN(views)) {
-        logger.error('Cannot process videos views of video %d in hour %d: views number is NaN.', videoId, hour)
+        logger.error('Cannot process videos views of video %d in hour %d: views number is NaN (%s).', videoId, hour, views)
       } else {
         logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
-
-        await VideoModel.incrementViews(videoId, views)
 
         try {
           await VideoViewModel.create({
@@ -39,7 +37,14 @@ async function processVideosViews () {
           })
 
           const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
-          if (video.isOwned()) await federateVideoIfNeeded(video, false)
+          if (video.isOwned()) {
+            // If this is a remote video, the origin instance will send us an update
+            await VideoModel.incrementViews(videoId, views)
+
+            // Send video update
+            video.views += views
+            await federateVideoIfNeeded(video, false)
+          }
         } catch (err) {
           logger.debug('Cannot create video views for video %d in hour %d. Maybe the video does not exist anymore?', videoId, hour)
         }
