@@ -43,7 +43,7 @@ directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 tar_name="peertube-$version.tar.xz"
 
-changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
+changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "## $version" | sed '1{/^$/d}')
 
 printf "Changelog will be:\\n\\n%s\\n\\n" "$changelog"
 
