@@ -1,5 +1,5 @@
 import * as Bull from 'bull'
-import { VideoResolution, VideoState } from '../../../../shared'
+import { VideoResolution, VideoState, Job } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
@@ -111,7 +111,7 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
     )
 
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Bluebird<any>[] = []
+      const tasks: Bluebird<Bull.Job<any>>[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {

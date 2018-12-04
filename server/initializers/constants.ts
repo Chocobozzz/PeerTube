@@ -773,7 +773,7 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
   if (!objs) return []
 
   return objs.map(obj => {
-    return Object.assign(obj, {
+    return Object.assign({}, obj, {
       minLifetime: parseDuration(obj.min_lifetime),
       size: bytes.parse(obj.size),
       minViews: obj.min_views
