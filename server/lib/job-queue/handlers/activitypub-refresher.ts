@@ -10,7 +10,8 @@ export type RefreshPayload = {
 
 async function refreshAPObject (job: Bull.Job) {
   const payload = job.data as RefreshPayload
-  logger.info('Processing AP refresher in job %d.', job.id)
+
+  logger.info('Processing AP refresher in job %d for video %s.', job.id, payload.videoUrl)
 
   if (payload.type === 'video') return refreshAPVideo(payload.videoUrl)
 }

@@ -158,25 +158,30 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
 async function getOrCreateVideoAndAccountAndChannel (options: {
   videoObject: VideoTorrentObject | string,
   syncParam?: SyncParam,
-  fetchType?: VideoFetchByUrlType
+  fetchType?: VideoFetchByUrlType,
+  allowRefresh?: boolean // true by default
 }) {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
+  const allowRefresh = options.allowRefresh !== false
 
   // Get video url
   const videoUrl = getAPUrl(options.videoObject)
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
-    const refreshOptions = {
-      video: videoFromDatabase,
-      fetchedType: fetchType,
-      syncParam
-    }
 
-    if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
-    else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoFromDatabase.url } })
+    if (allowRefresh === true) {
+      const refreshOptions = {
+        video: videoFromDatabase,
+        fetchedType: fetchType,
+        syncParam
+      }
+
+      if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
+      else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoFromDatabase.url } })
+    }
 
     return { video: videoFromDatabase }
   }

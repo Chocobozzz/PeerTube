@@ -3,6 +3,7 @@ import { createWriteStream } from 'fs-extra'
 import * as request from 'request'
 import { ACTIVITY_PUB } from '../initializers'
 import { processImage } from './image-utils'
+import { extname } from 'path'
 
 function doRequest <T> (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean }
@@ -29,8 +30,7 @@ function doRequestAndSaveToFile (requestOptions: request.CoreOptions & request.U
 }
 
 async function downloadImage (url: string, destPath: string, size: { width: number, height: number }) {
-  const tmpPath = destPath + '.tmp'
-
+  const tmpPath = destPath + '.tmp' + extname(destPath)
   await doRequestAndSaveToFile({ method: 'GET', uri: url }, tmpPath)
 
   await processImage({ path: tmpPath }, destPath, size)
