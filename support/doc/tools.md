@@ -82,7 +82,7 @@ The wrapper provides a convenient interface to the following scripts. You can ac
 The wrapper can keep track of instances you have an account on. We limit to one account per instance for now.
 
 ```bash
-$ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"
+$ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password 'PEERTUBE_PASSWORD'
 $ peertube auth list
 ┌──────────────────────────────┬──────────────────────────────┐
 │ instance                     │ login                        │
@@ -112,7 +112,7 @@ Be sure you own the videos or have the author's authorization to do so.
 $ node dist/server/tools/peertube-import-videos.js \
     -u "PEERTUBE_URL" \
     -U "PEERTUBE_USER" \
-    --password "PEERTUBE_PASSWORD" \
+    --password 'PEERTUBE_PASSWORD' \
     -t "TARGET_URL"
 ```
 
