@@ -601,6 +601,13 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7fe213724c4c0a4112c40c673884acb98a0a3b92">
+        <source>I am at least 16 years old and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
+        <target>16 urte edo gehiago ditut eta onartzen ditut instantzia honen &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;erabilera badintzak&lt;/a&gt;</target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>Eman izena</target>
@@ -631,6 +638,19 @@
         </target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c603b9ed878097782e2b8908f662e2344b46061">
+        <source>
+          Filters
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </source>
+        <target>
+          Iragazkiak
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
@@ -1237,6 +1257,19 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
         <target>Zer egingo da arazo hau gutxiagotzeko?</target>
         <context-group name="null">
           <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1372cb61ca791a0f7f95bf31c86c97df142adc4">
+        <source>
+    PeerTube is in its early stages, and want to deliver the best countermeasures possible by the time the stable is released.
+    In the meantime, we want to test different ideas related to this issue:
+  </source>
+        <target>
+    PeerTube oso berria da oraindik, eta egonkortzen denerako babes-neurri egokienak ezarri nahi ditugu.
+    Bitartean, hainbat ideia saiatu nahi ditugu gai honen inguruan:
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d32608aba08c6bb3cc4e4e8ec6223e5f4e78ca19">
@@ -1984,6 +2017,20 @@ Erabiltzaile berriek izena ematea ez da onartzen orain.</target>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
+        <source>User's email must be verified to login</source>
+        <target>Erabiltzailearen e-mail helbidea baieztatu behar da saioa hasi aurretik</target>
+        <context-group name="null">
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b">
+        <source>User's email is verified / User can login without email verification</source>
+        <target>Erabiltzailearen e-mail helbidea baieztatuta dago / Erabiltzaileak e-mail helbidea baieztatu gabe saioa hasi dezake</target>
+        <context-group name="null">
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
         <source>Ban reason:</source>
         <target>Debekatzeko arrazoia:</target>
@@ -2465,6 +2512,13 @@ Kanal honetara bideo bat igotzen duzunean, bideoa babesteko eremua testu honekin
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d044c51156e295824813a866dba9545bdb59466b">
+        <source>Use WebTorrent to exchange parts of the video with others</source>
+        <target>Erabili WebTorrent bideoaren zatiak besteekin partekatzeko</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fb17c44abac2d1ed2a54cdd28bae289dc0b9a1c2">
         <source>Automatically plays video</source>
         <target>Automatikoki abiatzen du bideoa</target>
@@ -2505,6 +2559,13 @@ Kanal honetara bideo bat igotzen duzunean, bideoa babesteko eremua testu honekin
         <target>(extensions: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | byte }}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d1a04ba05116499d4cf59a48a282a8bcbf5b622d">
+        <source>Once you delete your account, there is no going back. Please be certain.</source>
+        <target>Behin kontua ezabatuta ez dago atzera egiterik. Ziurtatu hau dela nahi duzuna.</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
@@ -2619,6 +2680,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
         <target>Pribatutasuna</target>
         <context-group name="null">
           <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
+        <source>Sorry, but something went wrong</source>
+        <target>Akatsen bat egon da</target>
+        <context-group name="null">
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
@@ -2885,6 +2953,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
+        <source>Will be created on update</source>
+        <target>Eguneratzean sortuko da</target>
+        <context-group name="null">
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>Ezeztatu sorkuntza</target>
@@ -2892,11 +2967,29 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393">
+        <source>Will be deleted on update</source>
+        <target>Eguneratzean ezabatuko da</target>
+        <context-group name="null">
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>Ezeztatu ezabaketa</target>
         <context-group name="null">
           <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
+        <source>
+            No captions for now.
+          </source>
+        <target>
+            Azpititulurik ez oraingoz.
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
@@ -3337,11 +3430,38 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8b2bb53dfb5f059f2b68cc4ac00661a865909135">
+        <source>You are one step away from commenting</source>
+        <target>Iruzkina egitetik urrats batera zaude</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7984a44ce86b961f4f18c9a58c638f5e8f07a225">
+        <source>
+      If you have an account on this instance, you can login:
+    </source>
+        <target>
+      Instantzia honetan kontua baduzu, saioa hasi dezakezu:
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="afe0ad39fee662489f1033e53aea3e16a7e89228">
         <source>login to comment</source>
         <target>hasi saioa iruzkinak egiteko</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
+        <source>
+      If you have an account on Mastodon or Pleroma, you can open it directly in their interface:
+    </source>
+        <target>Mastodon edo Pleroma sareetan kontua baduzu, zuzenean ireki dezakezu hango interfazean:</target>
+        <context-group name="null">
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
@@ -3596,6 +3716,20 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="53cc0f4a4566c4139c65f93b5dce2fe8302e78da">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> kontua zure instantziak desmutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="468b52e3c04fb9a3d8c8213555dfcad0cbcae330">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by your instance.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> instantzia zure instantziak demutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="800cd3cdf47751b576587259ba3a1bc0a7f435b6">
         <source>Comment updated.</source>
         <target>Iruzkina eguneratua.</target>
@@ -3687,9 +3821,30 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="910ed85f550272401b134a40d019ab3359fe883f">
+        <source>Set Email as Verified</source>
+        <target>Ezarri e-maila baieztatua gisa</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ac401df84c5fa471700c3368de51c969ccb8bacf">
         <source>You cannot ban root.</source>
         <target>Ezin duzu root debekatu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98119091712a8ca72905e3b4c1cf60649af7565e">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{num}}"/> users?</source>
+        <target>Ziur <x id="INTERPOLATION" equiv-text="{{num}}"/> erabiltzaileei debekua kendu nahi diozula?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6121be086a51c4c73bbdd8aebdddd9744c8f1ffd">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users unbanned.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> erabiltzaileei debekua kendu zaie.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3708,6 +3863,34 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b708d332e3f89b24745e749fa530210f0bdea329">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users deleted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> erabiltzaile ezabatuta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4a8f2ef1fbfc19e1e049e69f63c40063c0d0650">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users email set as verified.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> erabiltzailearen e-mail helbidea baieztatua gisa ezarri da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2667ca38672421a0a7a22343d2a0060ee41246de">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> kontua desmutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c6af80b42938d4a49e6f6c4f60ce26228916994c">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> instantzia desmutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="507192ee1fa84aefed02d603caada2d84927023e">
         <source>Ownership accepted</source>
         <target>Jabetza onartuta</target>
@@ -3718,6 +3901,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="19508af0dfbc685cbf10cf02061bb5a0f423b6fc">
         <source>Password updated.</source>
         <target>Pasahitza eguneratuta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c">
+        <source>You current password is invalid.</source>
+        <target>Zure uneko pasahitza baliogabea da.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3932,9 +4122,79 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b19ee83cbd2b735fd081b9aa483a890578019099">
+        <source>Toggle the left menu</source>
+        <target>Txandakatu ezkerreko menua</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b54759e30f7c1983940cdacb8eb03f102a869084">
         <source>Go to the videos overview page</source>
         <target>Joan bideoen ikuspegi orokorraren orrira </target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0">
+        <source>Go to the trending videos page</source>
+        <target>Joan puri-purian dauden bideoen orrira</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d">
+        <source>Go to the recently added videos page</source>
+        <target>Joan gehitutako azken bideoen orrira</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5">
+        <source>Go to the local videos page</source>
+        <target>Joan bideo lokalen orrira</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1fb6204f39a7338e5110b2f113643c9288496ba">
+        <source>Go to the videos upload page</source>
+        <target>Joan bideoak igotzeko orrira</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0ed7b40c11da9d4565af9c041df20c15bc6be97e">
+        <source>Toggle Dark theme</source>
+        <target>Txandakatu gai iluna</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2">
+        <source>Go to my subscriptions</source>
+        <target>Joan nire harpidetzetara</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1">
+        <source>Go to my videos</source>
+        <target>Joan nire bideoetara</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7">
+        <source>Go to my imports</source>
+        <target>Joan nire inportazioetara</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cfe3c51f0ae9385dc2ce6df740d87e5514aa9390">
+        <source>Go to my channels</source>
+        <target>Joan nire kanaletara</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3965,6 +4225,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
         <source>Confirm</source>
         <target>Berretsi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452">
+        <source>Keyboard Shortcuts:</source>
+        <target>Teklatu laster-bideak:</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4322,6 +4589,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="d531c2261dc0c2739bd7cbb2bb175946b7eeb3ae">
         <source>Description must be at least 3 characters long.</source>
         <target>Deskripzioa gutxienez 3 karaktere luze izan behar da.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a4179e366d4aa335f1ddd0a13e9109c71a9338d0">
+        <source>Description cannot be more than 1000 characters long.</source>
+        <target>Deskripzioa ezin da 1000 karaktere baino luzeagoa izan.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5103,6 +5377,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f9b4f2d8146c789cd40314f640ec4e88efbaf681">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users banned.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> erabiltzaile debekatuta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
         <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailea debekatuta.</target>
@@ -5124,6 +5405,13 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
+        <source>If you remove this user, you will not be able to create another with the same username!</source>
+        <target>Erabiltzaile hau kentzen baduzu, ezin izango duzu erabiltzaile-izen bera duen beste bat sortu gero!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
         <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailea ezabatuta.</target>
@@ -5131,9 +5419,51 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="534202c90c6dcadd2989fc72c5030d5483e26096">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> email set as verified</source>
+        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> erabiltzailearen e-mail helbidea baieztatua gisa ezarri da</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="33a6319f765848a22a155cef9f1d8e645202e249">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source>
         <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> kontua mutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="086eda792aeb1b0d131d633b50fdd1792f5f24c6">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> instantzia mutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb72d6d1219e89d182e9fd09d853d83baf8d6499">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> kontua instantziak mutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8686834bc4afe42c1991c6c18f0bce174a0e17a6">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> kontua instantziak desmutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="35d3509161861a610b0895bf084c781e56ba2830">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> instantzia instantziak mutututa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="978aeec5613fa97e8a5336d3599cebb23ee5a90f">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> kontua instantziak desmutututa.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5278,6 +5608,20 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="21565881ad1dff3c98738b9535b3515cec140609">
+        <source>Welcome! Now please check your emails to verify your account and complete signup.</source>
+        <target>Ongi etorri! Egiaztatu zure e-maila kontua baieztatzeko eta izen ematea osatzeko.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6">
+        <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
+        <target><x id="INTERPOLATION" equiv-text="{{username}}"/> gisa hasi duzu saioa!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
         <source>Video to import updated.</source>
         <target>Inportatzeko bideoa eguneratuta.</target>
@@ -5323,6 +5667,20 @@ Ezin izan dugu bilatzen duzun orria aurkitu.
       <trans-unit id="c55f41189ac6ad3003cce813245f4508284ed0aa">
         <source>We are sorry but PeerTube cannot handle videos &gt; 8GB</source>
         <target>Sentitzen dugu, PeerTubek ezin du 8GB baino gehiagoko bideorik kudeatu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6019e856f511dbe1fe658790c71c594b26930ee">
+        <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</source>
+        <target>Zure bideo-kuota bideo honekin gainditzen da (bideoaren tamaina: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, erabilita: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, kuota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c980896ac8e08e9751545db1b7ef0e93fb8a52cd">
+        <source>Your daily video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</source>
+        <target>Zure eguneko bideo-kuota bideo honekin gainditzen da (bideoaren tamaina: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, erabilita: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, kuota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

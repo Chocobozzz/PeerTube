@@ -613,6 +613,19 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7c603b9ed878097782e2b8908f662e2344b46061">
+        <source>
+          Filters
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </source>
+        <target>
+          Filtri
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -1646,6 +1659,21 @@
       <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
                 &lt;/pre&gt;
               </source>
+        <target>
+                Scrivi direttamente codice CSS .Esempio:&lt;br /&gt;
+                &lt;pre&gt;
+      body <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+        background-color: red;
+      <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+                &lt;/pre&gt;
+
+                Precedi con &lt;em&gt;#custom-css&lt;/em&gt; per sovrascrivere stili. Esempio:
+                &lt;pre&gt;
+      #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+        color: red;
+      <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+                &lt;/pre&gt;
+              </target>
         <context-group name="null">
           <context context-type="linenumber">297</context>
         </context-group>
@@ -1901,6 +1929,10 @@
       Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
       At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
     </source>
+        <target>
+      Il Transcoding e abilitato sul server. La quota video considera solo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>originale<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      In totale, questo utente potrebbe usare ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+    </target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
@@ -2292,6 +2324,8 @@
       <trans-unit id="74728de5289ea2ff3f553bc2b48f1811680b931a">
         <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
 When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target>Breve testo per dire alla gente come possono supportare il tuo canale (iscrizione piattaforma...).&lt;br /&gt;&lt;br /&gt;
+Quando tu carichi un video su questo canale. il campo di supporto per il video verra riempito con questo testo.</target>
         <context-group name="null">
           <context context-type="linenumber">52</context>
         </context-group>
@@ -2970,6 +3004,9 @@ When you will upload a video in this channel, the video support field will be au
         <source>
       The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
     </source>
+        <target>
+      L'url non è sicuro (no HTTPS), quindi il video "incluso" non funzionerà su siti HTTPS  (il  browser blocca richieste verso siti HTTP su siti in cui HTTPS  è abilitato).
+    </target>
         <context-group name="null">
           <context context-type="linenumber">45</context>
         </context-group>
@@ -2992,6 +3029,9 @@ When you will upload a video in this channel, the video support field will be au
         <source>
     The video is being imported, it will be available when the import is finished.
   </source>
+        <target>
+    Il video è nella fase di import, sarà disponibile quando l'import sarà completato.
+  </target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
@@ -3028,6 +3068,9 @@ When you will upload a video in this channel, the video support field will be au
         <source>
                 Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
               </source>
+        <target>
+                Pubblicato <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visioni
+              </target>
         <context-group name="null">
           <context context-type="linenumber">37</context>
         </context-group>
@@ -3297,6 +3340,20 @@ Altri video</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d9fc2b03f04056671d7d4ffcac7197189d959cd6">
+        <source>240p</source>
+        <target>240p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8cfad7e7a16c57c42535331b65cb7de40d8402e">
+        <source>360p</source>
+        <target>360p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba">
         <source>Success</source><target>Success</target><context-group name="null">
           <context context-type="linenumber">1</context>
@@ -3312,6 +3369,48 @@ Altri video</target>
       <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
         <source>Unlimited</source>
         <target>Illimitato/ti</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="54adc67482fdaa0d361a2992bc91e064dc61cc9a">
+        <source>100MB</source>
+        <target>100MB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd34ef1f476d5422f49f6ed429f61fc1cfcb1174">
+        <source>500MB</source>
+        <target>500MB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a47b4beea31cac6e5970b6bc522902f545acc8b">
+        <source>1GB</source>
+        <target>1GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b26d0cac75638623098ab7e06e16b096d1f55cc8">
+        <source>5GB</source>
+        <target>5GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f9fc4e7ec6743cb6f69bea2d0859a655ed44ffae">
+        <source>20GB</source>
+        <target>20GB</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a56e3f92fe16d97ee4f05051ea61c466ecb51d5e">
+        <source>50GB</source>
+        <target>50GB</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3400,6 +3499,13 @@ Altri video</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4d8f527638f3e0b518a96e07d41d886bcce01246">
+        <source>enabled</source>
+        <target>attivato</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="795733aac948794cadeb3be6386882efac2c38ad">
         <source>disabled</source>
         <target>disabilitato</target>
@@ -3421,6 +3527,13 @@ Altri video</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="586bee8c27a761611eb05661524cc7ca944b5978">
+        <source>Delete this report</source>
+        <target>Elimina questa segnalazione</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cf3b28ba29a907b334ab0e6dccd080a60ba23321">
         <source>Update moderation comment</source>
         <target>Modifica commento di moderazione</target>
@@ -3438,6 +3551,13 @@ Altri video</target>
       <trans-unit id="d895b090c054bfc0ad3aba816af0615a1997f5a3">
         <source>Mark as rejected</source>
         <target>Segna come rifiutato</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73b70e37cddaa6494d8a666b6cba90dc80595599">
+        <source>Do you really want to delete this abuse report?</source>
+        <target>Vuoi veramente eliminare questa segnalazione di abuso?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3497,6 +3617,13 @@ Altri video</target>
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Non puoi rimuovere root.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b708d332e3f89b24745e749fa530210f0bdea329">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users deleted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> utenti eliminati.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3572,6 +3699,13 @@ Altri video</target>
       <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
         <target>Il canale video <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> è stato creato.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47">
+        <source>This name already exists on this instance.</source>
+        <target>Questo nome esiste già nell'istanza.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3701,6 +3835,13 @@ Altri video</target>
       <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752">
         <source>Unable to find user id or verification string.</source>
         <target>Impossibile trovare utente o testo di verifica.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b54759e30f7c1983940cdacb8eb03f102a869084">
+        <source>Go to the videos overview page</source>
+        <target>Vai alla pagina di anteprima dei video</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

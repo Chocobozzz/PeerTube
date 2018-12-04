@@ -1601,6 +1601,10 @@
       Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
       At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
     </source>
+        <target>
+      Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+    </target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>

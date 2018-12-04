@@ -5550,6 +5550,20 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="21565881ad1dff3c98738b9535b3515cec140609">
+        <source>Welcome! Now please check your emails to verify your account and complete signup.</source>
+        <target>Välkommen! Kontrollera gärna din e-post för att verifiera ditt konto och fullfölja kontoskapandet.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6">
+        <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
+        <target>Du är nu inloggad som <x id="INTERPOLATION" equiv-text="{{username}}"/>!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
         <source>Video to import updated.</source>
         <target>Videon att importera har uppdaterats.</target>

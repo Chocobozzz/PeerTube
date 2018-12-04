@@ -81,7 +81,7 @@
       </trans-unit>
       <trans-unit id="Subtitles">
         <source>Subtitles</source>
-        <target>ترجمة</target>
+        <target>الترجمات</target>
       </trans-unit>
       <trans-unit id="subtitles off">
         <source>subtitles off</source>

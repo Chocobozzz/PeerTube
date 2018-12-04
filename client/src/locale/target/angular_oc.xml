@@ -1578,6 +1578,17 @@
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8b0ee765cc3fea9baef14bfb9d5288dfcbe386b6">
+        <source>If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.&lt;br /&gt;
+    If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.&lt;br /&gt;&lt;br /&gt;
+    Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; to see if you instance is whitelisted.</source>
+        <target>Se vòstra instància es mesa en lista blanca per Twitter, un lector vidèo serà integrat pel fil Twitter sul partatge d’una vidèo PeerTube.&lt;br /&gt;
+  Se l’instància es pas en lista blanca, utilizam un imatge amb un ligam que mena a l’instància PeerTube.&lt;br /&gt;&lt;br /&gt;
+  Clicatz aquesta bóstia, salvagardatz la configuracion e ensajatz amb l’URL d’una vidèo de vòstra instància (https://exemple.com/videos/watch/blabla) sus &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; per veire se vòstra instància es en lista blanca.</target>
+        <context-group name="null">
+          <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
         <source>Services</source>
         <target>Servicis</target>
@@ -2020,6 +2031,20 @@
         <target>Anar a la pagina del compte</target>
         <context-group name="null">
           <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
+        <source>User's email must be verified to login</source>
+        <target>Lo corrièl de l’utilizaire deu èsser verificat abans la connexion</target>
+        <context-group name="null">
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b">
+        <source>User's email is verified / User can login without email verification</source>
+        <target>Lo corrièl de l’utilizaire es verificat / Pòt se connectar sens verificacion de l’adreça</target>
+        <context-group name="null">
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
@@ -2678,6 +2703,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
         <target>Confidencialitat</target>
         <context-group name="null">
           <context context-type="linenumber">159</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
+        <source>Sorry, but something went wrong</source>
+        <target>O planhèm, quicòm a trucat</target>
+        <context-group name="null">
+          <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
@@ -3836,6 +3868,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="910ed85f550272401b134a40d019ab3359fe883f">
+        <source>Set Email as Verified</source>
+        <target>Passar l’adreça coma verificada</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ac401df84c5fa471700c3368de51c969ccb8bacf">
         <source>You cannot ban root.</source>
         <target>Podètz pas fòrabandir lo root.</target>
@@ -3874,6 +3913,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       <trans-unit id="b708d332e3f89b24745e749fa530210f0bdea329">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users deleted.</source>
         <target><x id="INTERPOLATION" equiv-text="{{num}}"/> utilizaires suprimits.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4a8f2ef1fbfc19e1e049e69f63c40063c0d0650">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users email set as verified.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> adreças d’utilizaires passadas coma verificadas.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5420,6 +5466,13 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="534202c90c6dcadd2989fc72c5030d5483e26096">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> email set as verified</source>
+        <target>L’adreça a <x id="INTERPOLATION" equiv-text="{{username}}"/> es passada coma verificada</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="33a6319f765848a22a155cef9f1d8e645202e249">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source>
         <target>Lo compte <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> es mut.</target>
@@ -5598,6 +5651,20 @@ Quand enviaretz una vidèo dins aquesta cadena, lo camp vidèo sosten serà auto
       <trans-unit id="15be15cbdc6e960f57e801f457c19165ab39632b">
         <source>Anyone can see this video</source>
         <target>Tot lo monde pòt veire aquesta vidèo</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="21565881ad1dff3c98738b9535b3515cec140609">
+        <source>Welcome! Now please check your emails to verify your account and complete signup.</source>
+        <target>La benvenguda ! Ara volgatz ben verificar vòstres corrièls per confirmar vòstre compte e acabar l’inscripcion.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6">
+        <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
+        <target>Sètz ara connectat coma <x id="INTERPOLATION" equiv-text="{{username}}"/> !</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
