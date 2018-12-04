@@ -1538,8 +1538,10 @@ export class VideoModel extends Model<VideoModel> {
       .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
-  removeFile (videoFile: VideoFileModel) {
-    const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
+  removeFile (videoFile: VideoFileModel, isRedundancy = false) {
+    const baseDir = isRedundancy ? CONFIG.STORAGE.REDUNDANCY_DIR : CONFIG.STORAGE.VIDEOS_DIR
+
+    const filePath = join(baseDir, this.getVideoFilename(videoFile))
     return remove(filePath)
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
@@ -1615,6 +1617,10 @@ export class VideoModel extends Model<VideoModel> {
 
   getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
     return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+  }
+
+  getVideoRedundancyUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + this.getVideoFilename(videoFile)
   }
 
   getVideoFileDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {

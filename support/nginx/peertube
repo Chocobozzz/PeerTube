@@ -105,7 +105,7 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Could be removed
-  location /static/webseed {
+  location ~ ^/static/(webseed|redundancy)/ {
     # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
     limit_rate 800k;
 
@@ -128,7 +128,12 @@ server {
       access_log off;
     }
 
-    alias /var/www/peertube/storage/videos;
+    root /var/www/peertube/storage;
+
+    rewrite ^/static/webseed/(.*)$ /videos/$1 break;
+    rewrite ^/static/redundancy/(.*)$ /redundancy/$1 break;
+
+    try_files $uri /;
   }
 
   # Websocket tracker

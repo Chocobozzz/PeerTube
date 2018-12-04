@@ -37,12 +37,12 @@ staticRouter.use(
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(CONFIG.STORAGE.VIDEOS_DIR)
+  express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
 )
 staticRouter.use(
-  STATIC_PATHS.WEBSEED,
+  STATIC_PATHS.REDUNDANCY,
   cors(),
-  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404, because we don't have this video
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
 )
 
 staticRouter.use(

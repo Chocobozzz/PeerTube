@@ -15,7 +15,7 @@ import {
 import { ActorModel } from '../activitypub/actor'
 import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS, STATIC_PATHS, VIDEO_EXT_MIMETYPE } from '../../initializers'
 import { VideoFileModel } from '../video/video-file'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
@@ -124,7 +124,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
     logger.info('Removing duplicated video file %s.', logIdentifier)
 
-    videoFile.Video.removeFile(videoFile)
+    videoFile.Video.removeFile(videoFile, true)
              .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
 
     return undefined

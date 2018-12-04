@@ -136,7 +136,7 @@ async function check2Webseeds (strategy: VideoRedundancyStrategy, videoUUID?: st
   if (!videoUUID) videoUUID = video1Server2UUID
 
   const webseeds = [
-    'http://localhost:9001/static/webseed/' + videoUUID,
+    'http://localhost:9001/static/redundancy/' + videoUUID,
     'http://localhost:9002/static/webseed/' + videoUUID
   ]
 
@@ -148,20 +148,23 @@ async function check2Webseeds (strategy: VideoRedundancyStrategy, videoUUID?: st
     for (const file of video.files) {
       checkMagnetWebseeds(file, webseeds, server)
 
-      // Only servers 1 and 2 have the video
-      if (server.serverNumber !== 3) {
-        await makeGetRequest({
-          url: server.url,
-          statusCodeExpected: 200,
-          path: '/static/webseed/' + `${videoUUID}-${file.resolution.id}.mp4`,
-          contentType: null
-        })
-      }
+      await makeGetRequest({
+        url: servers[0].url,
+        statusCodeExpected: 200,
+        path: '/static/redundancy/' + `${videoUUID}-${file.resolution.id}.mp4`,
+        contentType: null
+      })
+      await makeGetRequest({
+        url: servers[1].url,
+        statusCodeExpected: 200,
+        path: '/static/webseed/' + `${videoUUID}-${file.resolution.id}.mp4`,
+        contentType: null
+      })
     }
   }
 
-  for (const directory of [ 'test1', 'test2' ]) {
-    const files = await readdir(join(root(), directory, 'videos'))
+  for (const directory of [ 'test1/redundancy', 'test2/videos' ]) {
+    const files = await readdir(join(root(), directory))
     expect(files).to.have.length.at.least(4)
 
     for (const resolution of [ 240, 360, 480, 720 ]) {
