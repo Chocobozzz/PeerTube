@@ -46,11 +46,11 @@ const getServerActor = memoizee(async function () {
   return actor
 })
 
-function generateVideoTmpPath (target: string | ParseTorrent) {
+function generateVideoImportTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash
 
   const hash = sha256(id)
-  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+  return join(CONFIG.STORAGE.TMP_DIR, hash + '-import.mp4')
 }
 
 function getSecureTorrentName (originalName: string) {
@@ -103,6 +103,6 @@ export {
   getSecureTorrentName,
   getServerActor,
   getServerCommit,
-  generateVideoTmpPath,
+  generateVideoImportTmpPath,
   getUUIDFromFilename
 }

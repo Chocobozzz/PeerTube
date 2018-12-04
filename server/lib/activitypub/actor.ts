@@ -178,9 +178,7 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
     const extension = IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType]
 
     const avatarName = uuidv4() + extension
-    const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-
-    await downloadImage(actorJSON.icon.url, destPath, AVATARS_SIZE)
+    await downloadImage(actorJSON.icon.url, CONFIG.STORAGE.AVATARS_DIR, avatarName, AVATARS_SIZE)
 
     return avatarName
   }

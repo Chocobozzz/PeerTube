@@ -45,8 +45,10 @@ smtp:
 
 # From the project root directory
 storage:
+  tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
+  redundancy: 'storage/redundancy/'
   logs: 'storage/logs/'
   previews: 'storage/previews/'
   thumbnails: 'storage/thumbnails/'
@@ -75,7 +77,7 @@ trending:
 redundancy:
   videos:
     check_interval: '1 hour' # How often you want to check new videos to cache
-    strategies:
+    strategies: # Just uncomment strategies you want
 #      -
 #        size: '10GB'
 #        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)

@@ -32,7 +32,7 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
 
 const auditLogger = auditLoggerFactory('channels')
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const videoChannelRouter = express.Router()
 

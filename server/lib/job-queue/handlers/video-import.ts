@@ -7,7 +7,7 @@ import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } fro
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { CONFIG, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_IMPORT_TIMEOUT } from '../../../initializers'
-import { doRequestAndSaveToFile, downloadImage } from '../../../helpers/requests'
+import { downloadImage } from '../../../helpers/requests'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
@@ -109,6 +109,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
   let tempVideoPath: string
   let videoDestFile: string
   let videoFile: VideoFileModel
+
   try {
     // Download video from youtubeDL
     tempVideoPath = await downloader()
@@ -144,8 +145,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     // Process thumbnail
     if (options.downloadThumbnail) {
       if (options.thumbnailUrl) {
-        const destThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoImport.Video.getThumbnailName())
-        await downloadImage(options.thumbnailUrl, destThumbnailPath, THUMBNAILS_SIZE)
+        await downloadImage(options.thumbnailUrl, CONFIG.STORAGE.THUMBNAILS_DIR, videoImport.Video.getThumbnailName(), THUMBNAILS_SIZE)
       } else {
         await videoImport.Video.createThumbnail(videoFile)
       }
@@ -156,8 +156,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     // Process preview
     if (options.downloadPreview) {
       if (options.thumbnailUrl) {
-        const destPreviewPath = join(CONFIG.STORAGE.PREVIEWS_DIR, videoImport.Video.getPreviewName())
-        await downloadImage(options.thumbnailUrl, destPreviewPath, PREVIEWS_SIZE)
+        await downloadImage(options.thumbnailUrl, CONFIG.STORAGE.PREVIEWS_DIR, videoImport.Video.getPreviewName(), PREVIEWS_SIZE)
       } else {
         await videoImport.Video.createPreview(videoFile)
       }

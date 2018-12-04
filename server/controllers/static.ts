@@ -34,12 +34,17 @@ staticRouter.use(
 )
 
 // Videos path for webseeding
-const videosPhysicalPath = CONFIG.STORAGE.VIDEOS_DIR
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(videosPhysicalPath)
+  express.static(CONFIG.STORAGE.VIDEOS_DIR)
 )
+staticRouter.use(
+  STATIC_PATHS.WEBSEED,
+  cors(),
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404, because we don't have this video
+)
+
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   asyncMiddleware(videosGetValidator),

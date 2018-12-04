@@ -67,17 +67,17 @@ const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
   Object.assign({}, VIDEO_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
   {
-    videofile: CONFIG.STORAGE.VIDEOS_DIR,
-    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+    videofile: CONFIG.STORAGE.TMP_DIR,
+    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
+    previewfile: CONFIG.STORAGE.TMP_DIR
   }
 )
 const reqVideoFileUpdate = createReqFiles(
   [ 'thumbnailfile', 'previewfile' ],
   IMAGE_MIMETYPE_EXT,
   {
-    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
+    previewfile: CONFIG.STORAGE.TMP_DIR
   }
 )
 

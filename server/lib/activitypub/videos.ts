@@ -95,9 +95,8 @@ function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Fu
 
 function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
-  const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
 
-  return downloadImage(icon.url, thumbnailPath, THUMBNAILS_SIZE)
+  return downloadImage(icon.url, CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName, THUMBNAILS_SIZE)
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {

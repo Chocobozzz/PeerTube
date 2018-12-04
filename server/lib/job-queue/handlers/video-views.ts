@@ -23,9 +23,7 @@ async function processVideosViews () {
   for (const videoId of videoIds) {
     try {
       const views = await Redis.Instance.getVideoViews(videoId, hour)
-      if (isNaN(views)) {
-        logger.error('Cannot process videos views of video %d in hour %d: views number is NaN (%s).', videoId, hour, views)
-      } else {
+      if (views) {
         logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
 
         try {

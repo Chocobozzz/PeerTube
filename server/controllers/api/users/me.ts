@@ -42,7 +42,7 @@ import { AccountModel } from '../../../models/account/account'
 
 const auditLogger = auditLoggerFactory('users-me')
 
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const meRouter = express.Router()
 
@@ -348,7 +348,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   return res.sendStatus(204)
 }
 
-async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateMyAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user: UserModel = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())

@@ -37,9 +37,9 @@ const reqVideoFileImport = createReqFiles(
   [ 'thumbnailfile', 'previewfile', 'torrentfile' ],
   Object.assign({}, TORRENT_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
   {
-    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR,
-    torrentfile: CONFIG.STORAGE.TORRENTS_DIR
+    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
+    previewfile: CONFIG.STORAGE.TMP_DIR,
+    torrentfile: CONFIG.STORAGE.TMP_DIR
   }
 )
 

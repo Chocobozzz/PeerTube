@@ -185,9 +185,11 @@ const CONFIG = {
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
   STORAGE: {
+    TMP_DIR: buildPath(config.get<string>('storage.tmp')),
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
+    REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
