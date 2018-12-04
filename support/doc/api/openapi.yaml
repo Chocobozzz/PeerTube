@@ -1434,6 +1434,8 @@ components:
         - type: array
           items:
             type: number
+      style: form
+      explode: false
     tagsOneOf:
       name: tagsOneOf
       in: query
@@ -1445,6 +1447,8 @@ components:
         - type: array
           items:
             type: string
+      style: form
+      explode: false
     tagsAllOf:
       name: tagsAllOf
       in: query
@@ -1456,6 +1460,8 @@ components:
         - type: array
           items:
             type: string
+      style: form
+      explode: false
     languageOneOf:
       name: languageOneOf
       in: query
@@ -1463,10 +1469,12 @@ components:
       description: language id of the video
       schema:
         oneOf:
-        - type: number
+        - type: string
         - type: array
           items:
-            type: number
+            type: string
+      style: form
+      explode: false
     licenceOneOf:
       name: licenceOneOf
       in: query
@@ -1478,6 +1486,8 @@ components:
         - type: array
           items:
             type: number
+      style: form
+      explode: false
     nsfw:
       name: nsfw
       in: query
