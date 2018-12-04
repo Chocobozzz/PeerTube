@@ -82,12 +82,12 @@ The wrapper provides a convenient interface to the following scripts. You can ac
 The wrapper can keep track of instances you have an account on. We limit to one account per instance for now.
 
 ```bash
-$ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password 'PEERTUBE_PASSWORD'
+$ peertube auth add -u 'PEERTUBE_URL' -U 'PEERTUBE_USER' --password 'PEERTUBE_PASSWORD'
 $ peertube auth list
 ┌──────────────────────────────┬──────────────────────────────┐
 │ instance                     │ login                        │
 ├──────────────────────────────┼──────────────────────────────┤
-│ "PEERTUBE_URL"               │ "PEERTUBE_USER"              │
+│ 'PEERTUBE_URL'               │ 'PEERTUBE_USER'              │
 └──────────────────────────────┴──────────────────────────────┘
 ```
 
@@ -110,15 +110,15 @@ Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
 $ node dist/server/tools/peertube-import-videos.js \
-    -u "PEERTUBE_URL" \
-    -U "PEERTUBE_USER" \
+    -u 'PEERTUBE_URL' \
+    -U 'PEERTUBE_USER' \
     --password 'PEERTUBE_PASSWORD' \
-    -t "TARGET_URL"
+    -t 'TARGET_URL'
 ```
 
 * `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
 * `PEERTUBE_USER` : your PeerTube account where videos will be uploaded
-* `PEERTUBE_PASSWORD` : password of your PeerTube account (if omitted, you will be prompted for it)
+* `PEERTUBE_PASSWORD` : password of your PeerTube account (if `PEERTUBE_PASSWORD` is omitted, you will be prompted for it)
 * `TARGET_URL` : the target url you want to import. Examples:
   * YouTube:
     * Channel: https://www.youtube.com/channel/ChannelId
