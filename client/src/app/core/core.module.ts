@@ -29,7 +29,7 @@ import { CheatSheetComponent } from '@app/core/hotkeys'
 
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
-    LoadingBarModule.forRoot(),
+    LoadingBarModule,
 
     HotkeyModule.forRoot({
       cheatSheetCloseEsc: true
