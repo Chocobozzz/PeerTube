@@ -19,7 +19,6 @@ import { Router } from '@angular/router'
 export class LoginComponent extends FormReactive implements OnInit {
   @ViewChild('emailInput') input: ElementRef
   @ViewChild('forgotPasswordModal') forgotPasswordModal: ElementRef
-  @ViewChild('forgotPasswordEmailInput') forgotPasswordEmailInput: ElementRef
 
   error: string = null
   forgotPasswordEmail = ''
@@ -43,6 +42,10 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   get signupAllowed () {
     return this.serverService.getConfig().signup.allowed === true
+  }
+
+  isEmailDisabled () {
+    return this.serverService.getConfig().email.enabled === false
   }
 
   ngOnInit () {
@@ -94,10 +97,6 @@ export class LoginComponent extends FormReactive implements OnInit {
 
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
-  }
-
-  onForgotPasswordModalShown () {
-    this.forgotPasswordEmailInput.nativeElement.focus()
   }
 
   openForgotPasswordModal () {

@@ -11,6 +11,7 @@ import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { remove, writeJSON } from 'fs-extra'
 import { getServerCommit } from '../../helpers/utils'
+import { Emailer } from '../../lib/emailer'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -60,6 +61,9 @@ async function getConfig (req: express.Request, res: express.Response) {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
+    },
+    email: {
+      enabled: Emailer.Instance.isEnabled()
     },
     serverVersion: packageJSON.version,
     serverCommit,

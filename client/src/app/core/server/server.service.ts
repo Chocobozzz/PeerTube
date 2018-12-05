@@ -37,6 +37,9 @@ export class ServerService {
         css: ''
       }
     },
+    email: {
+      enabled: false
+    },
     serverVersion: 'Unknown',
     signup: {
       allowed: false,
