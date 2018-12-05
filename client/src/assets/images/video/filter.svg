@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>filter-ios</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-4" transform="translate(-796.000000, -291.000000)">
+            <g id="98" transform="translate(796.000000, 291.000000)">
+                <circle id="Oval-23" stroke="#333333" stroke-width="2" cx="12" cy="12" r="10"></circle>
+                <rect id="Rectangle-44" fill="#333333" x="6" y="8" width="12" height="2" rx="1"></rect>
+                <rect id="Rectangle-44" fill="#333333" x="8" y="12" width="8" height="2" rx="1"></rect>
+                <rect id="Rectangle-44" fill="#333333" x="10" y="16" width="4" height="2" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

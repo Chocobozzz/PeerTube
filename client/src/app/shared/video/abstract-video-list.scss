@@ -29,7 +29,44 @@
     justify-content: flex-end;
     align-items: center;
   }
+
+  .results-filter-button {
+    cursor: pointer;
+
+    .results-filter-title {
+      font-size: 16px;
+      //font-weight: $font-semibold;
+      //margin: 0 5px 0 0;
+      border-bottom: 2px solid #DADADA;
+    }
+
+
+    .icon.icon-filter {
+      @include icon(20px);
+
+      position: relative;
+      top: -1px;
+      margin-right: 5px;
+      background-image: url('../../../assets/images/video/filter.svg');
+    }
+  }
 }
+
+.first-line {
+  display: flex;
+  flex-direction: row;
+
+  .results-counter {
+    flex-grow: 1;
+
+    .search-value {
+      font-weight: $font-semibold;
+    }
+  }
+
+
+}
+
 
 @media screen and (max-width: 500px) {
   .videos {
