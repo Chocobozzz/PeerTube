@@ -6,6 +6,11 @@
 
   <div class="modal-body">
 
+    <div i18n class="information">
+      Your report will be sent to moderators of {{ currentHost }}.
+      <ng-container *ngIf="isRemoteVideo()"> It will be forwarded to origin instance {{ originHost }} too.</ng-container>
+    </div>
+
     <form novalidate [formGroup]="form" (ngSubmit)="report()">
       <div class="form-group">
         <textarea i18n-placeholder placeholder="Reason..." formControlName="reason" [ngClass]="{ 'input-error': formErrors['reason'] }">
