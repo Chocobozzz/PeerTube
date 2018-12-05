@@ -91,6 +91,7 @@ async function askConfirmation () {
         confirm: {
           type: 'string',
           description: 'These following unused files can be deleted, but please check your backups first (bugs happen).' +
+            ' Notice PeerTube must have been stopped when your ran this script.' +
             ' Can we delete these files?',
           default: 'n',
           required: true

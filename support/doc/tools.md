@@ -198,10 +198,10 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 ### prune-storage.js
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
-To delete them (a confirmation will be demanded first):
+Stop PeerTube and delete these files (a confirmation will be demanded first):
 
 ```
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
+$ sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
 ### optimize-old-videos.js
