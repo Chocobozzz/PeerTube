@@ -148,6 +148,7 @@
     "sequelize": "4.41.2",
     "sequelize-typescript": "0.6.6",
     "sharp": "^0.21.0",
+    "sitemap": "^2.1.0",
     "srt-to-vtt": "^1.1.2",
     "summon-install": "^0.4.3",
     "useragent": "^2.3.0",

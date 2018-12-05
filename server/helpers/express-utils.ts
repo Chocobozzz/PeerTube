@@ -7,12 +7,12 @@ import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
 import { UserModel } from '../models/account/user'
 
-function buildNSFWFilter (res: express.Response, paramNSFW?: string) {
+function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
   if (paramNSFW === 'false') return false
   if (paramNSFW === 'both') return undefined
 
-  if (res.locals.oauth) {
+  if (res && res.locals.oauth) {
     const user: UserModel = res.locals.oauth.token.User
 
     // User does not want NSFW videos

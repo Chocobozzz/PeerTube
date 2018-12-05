@@ -61,6 +61,7 @@ const OAUTH_LIFETIME = {
 const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
+  SITEMAP: '1 day',
   SECURITYTXT: '2 hours',
   NODEINFO: '10 minutes',
   DNT_POLICY: '1 week',

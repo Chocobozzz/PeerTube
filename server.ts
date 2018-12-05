@@ -87,7 +87,7 @@ import {
   servicesRouter,
   webfingerRouter,
   trackerRouter,
-  createWebsocketServer
+  createWebsocketServer, botsRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
@@ -156,6 +156,7 @@ app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', webfingerRouter)
 app.use('/', trackerRouter)
+app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
