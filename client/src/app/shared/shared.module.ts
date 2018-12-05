@@ -61,6 +61,7 @@ import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
 import { BlocklistService } from '@app/shared/blocklist'
+import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
 
 @NgModule({
   imports: [
@@ -102,7 +103,8 @@ import { BlocklistService } from '@app/shared/blocklist'
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
-    UserModerationDropdownComponent
+    UserModerationDropdownComponent,
+    TopMenuDropdownComponent
   ],
 
   exports: [
@@ -141,6 +143,7 @@ import { BlocklistService } from '@app/shared/blocklist'
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
+    TopMenuDropdownComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
