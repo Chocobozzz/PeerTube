@@ -277,18 +277,18 @@ export class UserModerationDropdownComponent implements OnChanges {
           },
           {
             label: this.i18n('Ban'),
-            handler: ({ user }: { user: User }) => this.openBanUserModal(user),
-            isDisplayed: ({ user }: { user: User }) => !user.blocked
+            handler: ({ user }) => this.openBanUserModal(user),
+            isDisplayed: ({ user }) => !user.blocked
           },
           {
             label: this.i18n('Unban'),
-            handler: ({ user }: { user: User }) => this.unbanUser(user),
-            isDisplayed: ({ user }: { user: User }) => user.blocked
+            handler: ({ user }) => this.unbanUser(user),
+            isDisplayed: ({ user }) => user.blocked
           },
           {
             label: this.i18n('Set Email as Verified'),
-            handler: ({ user }: { user: User }) => this.setEmailAsVerified(user),
-            isDisplayed: ({ user }: { user: User }) => this.requiresEmailVerification && !user.blocked && user.emailVerified === false
+            handler: ({ user }) => this.setEmailAsVerified(user),
+            isDisplayed: ({ user }) => this.requiresEmailVerification && !user.blocked && user.emailVerified === false
           }
         ])
       }
@@ -299,23 +299,23 @@ export class UserModerationDropdownComponent implements OnChanges {
         this.userActions.push([
           {
             label: this.i18n('Mute this account'),
-            isDisplayed: ({ account }: { account: Account }) => account.mutedByUser === false,
-            handler: ({ account }: { account: Account }) => this.blockAccountByUser(account)
+            isDisplayed: ({ account }) => account.mutedByUser === false,
+            handler: ({ account }) => this.blockAccountByUser(account)
           },
           {
             label: this.i18n('Unmute this account'),
-            isDisplayed: ({ account }: { account: Account }) => account.mutedByUser === true,
-            handler: ({ account }: { account: Account }) => this.unblockAccountByUser(account)
+            isDisplayed: ({ account }) => account.mutedByUser === true,
+            handler: ({ account }) => this.unblockAccountByUser(account)
           },
           {
             label: this.i18n('Mute the instance'),
-            isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === false,
-            handler: ({ account }: { account: Account }) => this.blockServerByUser(account.host)
+            isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
+            handler: ({ account }) => this.blockServerByUser(account.host)
           },
           {
             label: this.i18n('Unmute the instance'),
-            isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === true,
-            handler: ({ account }: { account: Account }) => this.unblockServerByUser(account.host)
+            isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
+            handler: ({ account }) => this.unblockServerByUser(account.host)
           }
         ])
 
@@ -326,13 +326,13 @@ export class UserModerationDropdownComponent implements OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute this account by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => account.mutedByInstance === false,
-              handler: ({ account }: { account: Account }) => this.blockAccountByInstance(account)
+              isDisplayed: ({ account }) => account.mutedByInstance === false,
+              handler: ({ account }) => this.blockAccountByInstance(account)
             },
             {
               label: this.i18n('Unmute this account by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => account.mutedByInstance === true,
-              handler: ({ account }: { account: Account }) => this.unblockAccountByInstance(account)
+              isDisplayed: ({ account }) => account.mutedByInstance === true,
+              handler: ({ account }) => this.unblockAccountByInstance(account)
             }
           ])
         }
@@ -342,13 +342,13 @@ export class UserModerationDropdownComponent implements OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute the instance by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === false,
-              handler: ({ account }: { account: Account }) => this.blockServerByInstance(account.host)
+              isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
+              handler: ({ account }) => this.blockServerByInstance(account.host)
             },
             {
               label: this.i18n('Unmute the instance by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === true,
-              handler: ({ account }: { account: Account }) => this.unblockServerByInstance(account.host)
+              isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
+              handler: ({ account }) => this.unblockServerByInstance(account.host)
             }
           ])
         }

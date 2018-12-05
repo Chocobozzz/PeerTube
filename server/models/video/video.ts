@@ -140,7 +140,7 @@ type ForAPIOptions = {
 
 type AvailableForListIDsOptions = {
   serverAccountId: number
-  actorId: number
+  followerActorId: number
   includeLocalVideos: boolean
   filter?: VideoFilter
   categoryOneOf?: number[]
@@ -315,7 +315,7 @@ type AvailableForListIDsOptions = {
       query.include.push(videoChannelInclude)
     }
 
-    if (options.actorId) {
+    if (options.followerActorId) {
       let localVideosReq = ''
       if (options.includeLocalVideos === true) {
         localVideosReq = ' UNION ALL ' +
@@ -327,7 +327,7 @@ type AvailableForListIDsOptions = {
       }
 
       // Force actorId to be a number to avoid SQL injections
-      const actorIdNumber = parseInt(options.actorId.toString(), 10)
+      const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
       query.where[ 'id' ][ Sequelize.Op.and ].push({
         [ Sequelize.Op.in ]: Sequelize.literal(
           '(' +
@@ -985,7 +985,7 @@ export class VideoModel extends Model<VideoModel> {
     filter?: VideoFilter,
     accountId?: number,
     videoChannelId?: number,
-    actorId?: number
+    followerActorId?: number
     trendingDays?: number,
     user?: UserModel
   }, countVideos = true) {
@@ -1008,11 +1008,11 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
 
-    // actorId === null has a meaning, so just check undefined
-    const actorId = options.actorId !== undefined ? options.actorId : serverActor.id
+    // followerActorId === null has a meaning, so just check undefined
+    const followerActorId = options.followerActorId !== undefined ? options.followerActorId : serverActor.id
 
     const queryOptions = {
-      actorId,
+      followerActorId,
       serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
       categoryOneOf: options.categoryOneOf,
@@ -1118,7 +1118,7 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
     const queryOptions = {
-      actorId: serverActor.id,
+      followerActorId: serverActor.id,
       serverAccountId: serverActor.Account.id,
       includeLocalVideos: options.includeLocalVideos,
       nsfw: options.nsfw,
@@ -1273,11 +1273,11 @@ export class VideoModel extends Model<VideoModel> {
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
     const serverActor = await getServerActor()
-    const actorId = serverActor.id
+    const followerActorId = serverActor.id
 
     const scopeOptions: AvailableForListIDsOptions = {
       serverAccountId: serverActor.Account.id,
-      actorId,
+      followerActorId,
       includeLocalVideos: true
     }
 

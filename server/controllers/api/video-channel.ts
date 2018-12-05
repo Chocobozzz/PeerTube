@@ -202,10 +202,10 @@ async function getVideoChannel (req: express.Request, res: express.Response, nex
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
-  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
-    actorId,
+    followerActorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

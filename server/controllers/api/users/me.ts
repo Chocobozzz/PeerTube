@@ -238,7 +238,7 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false,
-    actorId: user.Account.Actor.id,
+    followerActorId: user.Account.Actor.id,
     user
   })
 
