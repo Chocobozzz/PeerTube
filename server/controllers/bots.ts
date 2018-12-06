@@ -85,7 +85,7 @@ async function getSitemapLocalVideoUrls () {
         // Sitemap description should be < 2000 characters
         description: truncate(v.description || v.name, { length: 2000, omission: '...' }),
         player_loc: CONFIG.WEBSERVER.URL + '/videos/embed/' + v.uuid,
-        thumbnail_loc: v.getThumbnailStaticPath()
+        thumbnail_loc: CONFIG.WEBSERVER.URL + v.getThumbnailStaticPath()
       }
     ]
   }))
