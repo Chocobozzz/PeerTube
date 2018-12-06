@@ -37,7 +37,8 @@ async function run () {
     toDelete = toDelete.concat(await pruneDirectory(directory, false))
   }
 
-  toDelete = toDelete.concat(await readdir(CONFIG.STORAGE.TMP_DIR))
+  const tmpFiles = await readdir(CONFIG.STORAGE.TMP_DIR)
+  toDelete = toDelete.concat(tmpFiles.map(t => join(CONFIG.STORAGE.TMP_DIR, t)))
 
   if (toDelete.length === 0) {
     console.log('No files to delete.')
