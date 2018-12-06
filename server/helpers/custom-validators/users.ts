@@ -54,6 +54,10 @@ function isUserAutoPlayVideoValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserPipPlayerValid (value: any) {
+  return isBooleanValid(value)
+}
+
 function isUserBlockedValid (value: any) {
   return isBooleanValid(value)
 }
@@ -89,6 +93,7 @@ export {
   isUserNSFWPolicyValid,
   isUserWebTorrentEnabledValid,
   isUserAutoPlayVideoValid,
+  isUserPipPlayerValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
   isAvatarFile

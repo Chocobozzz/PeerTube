@@ -23,6 +23,7 @@ import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid,
+  isUserPipPlayerValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
@@ -139,6 +140,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
+
+  @AllowNull(false)
+  @Default(false)
+  @Is('UserPipPlayer', value => throwIfNotValid(value, isUserPipPlayerValid, 'pip player enabled'))
+  @Column
+  pipPlayer: boolean
 
   @AllowNull(false)
   @Default(false)
@@ -533,6 +540,7 @@ export class UserModel extends Model<UserModel> {
       webTorrentEnabled: this.webTorrentEnabled,
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      pipPlayer: this.pipPlayer,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,

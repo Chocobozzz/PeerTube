@@ -29,5 +29,12 @@
     ></my-peertube-checkbox>
   </div>
 
+  <div class="form-group">
+    <my-peertube-checkbox
+      inputName="pipPlayer" formControlName="pipPlayer"
+      i18n-labelText labelText="Reduce player to the corner when scrolling below the fold"
+    ></my-peertube-checkbox>
+  </div>
+
   <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
 </form>

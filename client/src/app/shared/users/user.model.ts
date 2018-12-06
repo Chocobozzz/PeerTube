@@ -15,6 +15,7 @@ export class User implements UserServerModel {
   autoPlayVideo: boolean
   videosHistoryEnabled: boolean
 
+  pipPlayer: boolean
   videoQuota: number
   videoQuotaDaily: number
   account: Account

@@ -1,4 +1,7 @@
 <div class="root-row row">
+  <!-- A blank element that fills the space when the popup is shown to avoid scrollback -->
+  <div [style.display]="playerPopedOut ? 'inherit' : 'none'" [style.height]="videoElementBlankFillerHeight + 'px'"></div>
+
   <!-- We need the video container for videojs so we just hide it -->
   <div id="video-element-wrapper">
     <div *ngIf="remoteServerDown" class="remote-server-down">
