@@ -19,7 +19,8 @@ async function run () {
 
   const storageOnlyOwnedToPrune = [
     CONFIG.STORAGE.VIDEOS_DIR,
-    CONFIG.STORAGE.TORRENTS_DIR
+    CONFIG.STORAGE.TORRENTS_DIR,
+    CONFIG.STORAGE.REDUNDANCY_DIR
   ]
 
   const storageForAllToPrune = [
@@ -35,6 +36,8 @@ async function run () {
   for (const directory of storageForAllToPrune) {
     toDelete = toDelete.concat(await pruneDirectory(directory, false))
   }
+
+  toDelete = toDelete.concat(await readdir(CONFIG.STORAGE.TMP_DIR))
 
   if (toDelete.length === 0) {
     console.log('No files to delete.')
