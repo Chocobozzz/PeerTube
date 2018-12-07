@@ -33,6 +33,7 @@ export class VideoDownloadComponent implements OnInit {
 
   download () {
     window.location.assign(this.getLink())
+    this.hide()
   }
 
   getLink () {
