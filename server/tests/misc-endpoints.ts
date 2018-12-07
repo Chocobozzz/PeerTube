@@ -72,6 +72,16 @@ describe('Test misc endpoints', function () {
 
       expect(res.body.tracking).to.equal('N')
     })
+
+    it('Should get change-password location', async function () {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/.well-known/change-password',
+        statusCodeExpected: 302
+      })
+
+      expect(res.header.location).to.equal('/my-account/settings')
+    })
   })
 
   describe('Test classic static endpoints', function () {

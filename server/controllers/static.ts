@@ -136,6 +136,12 @@ staticRouter.use('/.well-known/dnt/',
   }
 )
 
+staticRouter.use('/.well-known/change-password',
+  (_, res: express.Response) => {
+    res.redirect('/my-account/settings')
+  }
+)
+
 // ---------------------------------------------------------------------------
 
 export {
