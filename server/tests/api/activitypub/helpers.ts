@@ -91,7 +91,7 @@ describe('Test activity pub helpers', function () {
       req.headers = mastodonObject.headers
       req.headers.signature = 'Signature ' + req.headers.signature
 
-      const parsed = parseHTTPSignature(req, 3600 * 365 * 3)
+      const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       const publicKey = require('./json/mastodon/public-key.json').publicKey
 
       const actor = { publicKey }
@@ -110,7 +110,7 @@ describe('Test activity pub helpers', function () {
       req.headers = mastodonObject.headers
       req.headers.signature = 'Signature ' + req.headers.signature
 
-      const parsed = parseHTTPSignature(req, 3600 * 365 * 3)
+      const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       const publicKey = require('./json/mastodon/bad-public-key.json').publicKey
 
       const actor = { publicKey }
@@ -150,7 +150,7 @@ describe('Test activity pub helpers', function () {
 
       let errored = false
       try {
-        parseHTTPSignature(req, 3600 * 365 * 3)
+        parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       } catch {
         errored = true
       }
@@ -168,7 +168,7 @@ describe('Test activity pub helpers', function () {
       req.headers = mastodonObject.headers
       req.headers.signature = 'Signature ' + req.headers.signature
 
-      const parsed = parseHTTPSignature(req, 3600 * 365 * 3)
+      const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       const publicKey = require('./json/mastodon/public-key.json').publicKey
 
       const actor = { publicKey }
