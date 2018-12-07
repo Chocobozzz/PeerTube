@@ -15,8 +15,12 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
 import { VideoDetails } from '../../../../shared/models/videos'
 import { expect } from 'chai'
 

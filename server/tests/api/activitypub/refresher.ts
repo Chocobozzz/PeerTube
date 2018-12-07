@@ -1,10 +1,19 @@
 /* tslint:disable:no-unused-expression */
 
 import 'mocha'
-import { doubleFollow, getVideo, reRunServer } from '../../utils'
-import { flushAndRunMultipleServers, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo, wait } from '../../utils/index'
-import { waitJobs } from '../../utils/server/jobs'
-import { setVideoField } from '../../utils/miscs/sql'
+import {
+  doubleFollow,
+  flushAndRunMultipleServers,
+  getVideo,
+  killallServers,
+  reRunServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  wait,
+  setVideoField,
+  waitJobs
+} from '../../../../shared/utils'
 
 describe('Test AP refresher', function () {
   let servers: ServerInfo[] = []

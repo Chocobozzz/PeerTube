@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import * as request from 'supertest'
-import { VideosSearchQuery } from '../../../../shared/models/search'
+import { VideosSearchQuery } from '../../models/search'
 import { immutableAssign } from '../miscs/miscs'
 
 function searchVideo (url: string, search: string) {

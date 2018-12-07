@@ -28,7 +28,7 @@ import {
   uploadVideo,
   viewVideo,
   wait
-} from '../../utils'
+} from '../../../../shared/utils'
 
 const expect = chai.expect
 

@@ -13,7 +13,6 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { getVideoDislikeActivityPubUrl } from '../url'
-import { VideoModel } from '../../../models/video/video'
 
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object

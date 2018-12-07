@@ -8,10 +8,10 @@ import {
   flushTests,
   killallServers,
   makeActivityPubGetRequest,
-  runServer,
   ServerInfo,
-  setAccessTokensToServers, uploadVideo
-} from '../../utils'
+  setAccessTokensToServers,
+  uploadVideo
+} from '../../../../shared/utils'
 
 const expect = chai.expect
 

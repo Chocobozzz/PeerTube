@@ -33,8 +33,8 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
 }
 
 function root () {
-  // We are in server/tests/utils/miscs
-  return join(__dirname, '..', '..', '..', '..')
+  // We are in /shared/utils/miscs
+  return join(__dirname, '..', '..', '..')
 }
 
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
@@ -44,7 +44,7 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
 
   const body = res.body
 
-  const data = await readFile(join(__dirname, '..', '..', 'fixtures', imageName + extension))
+  const data = await readFile(join(root(), 'server', 'tests', 'fixtures', imageName + extension))
   const minLength = body.length - ((20 * body.length) / 100)
   const maxLength = body.length + ((20 * body.length) / 100)
 
@@ -59,7 +59,7 @@ function buildAbsoluteFixturePath (path: string, customTravisPath = false) {
 
   if (customTravisPath && process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
 
-  return join(__dirname, '..', '..', 'fixtures', path)
+  return join(root(), 'server', 'tests', 'fixtures', path)
 }
 
 async function generateHighBitrateVideo () {

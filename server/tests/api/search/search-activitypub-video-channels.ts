@@ -17,10 +17,10 @@ import {
   uploadVideo,
   userLogin,
   wait
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { VideoChannel } from '../../../../shared/models/videos'
-import { searchVideoChannel } from '../../utils/search/video-channels'
+import { searchVideoChannel } from '../../../../shared/utils/search/video-channels'
 
 const expect = chai.expect
 

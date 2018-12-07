@@ -13,7 +13,7 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../utils'
+} from '../../../../shared/utils'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { UserRole } from '../../../../shared/models/users'
 

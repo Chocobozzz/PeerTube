@@ -14,11 +14,14 @@ import {
   unblockUser,
   uploadVideo,
   userLogin,
-  verifyEmail
-} from '../../utils'
-import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
-import { mockSmtpServer } from '../../utils/miscs/email'
-import { waitJobs } from '../../utils/server/jobs'
+  verifyEmail,
+  flushTests,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers
+} from '../../../../shared/utils'
+import { mockSmtpServer } from '../../../../shared/utils/miscs/email'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 

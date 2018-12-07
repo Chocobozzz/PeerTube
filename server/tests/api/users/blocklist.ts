@@ -12,16 +12,16 @@ import {
   ServerInfo,
   uploadVideo,
   userLogin
-} from '../../utils/index'
-import { setAccessTokensToServers } from '../../utils/users/login'
-import { getVideosListWithToken, getVideosList } from '../../utils/videos/videos'
+} from '../../../../shared/utils/index'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
+import { getVideosListWithToken, getVideosList } from '../../../../shared/utils/videos/videos'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import {
   addAccountToAccountBlocklist,
@@ -36,7 +36,7 @@ import {
   removeAccountFromServerBlocklist,
   removeServerFromAccountBlocklist,
   removeServerFromServerBlocklist
-} from '../../utils/users/blocklist'
+} from '../../../../shared/utils/users/blocklist'
 
 const expect = chai.expect
 

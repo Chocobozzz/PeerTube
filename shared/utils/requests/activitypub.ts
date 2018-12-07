@@ -1,7 +1,7 @@
-import { doRequest } from '../../../helpers/requests'
-import { HTTP_SIGNATURE } from '../../../initializers'
-import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
-import { activityPubContextify } from '../../../helpers/activitypub'
+import { doRequest } from '../../../server/helpers/requests'
+import { HTTP_SIGNATURE } from '../../../server/initializers'
+import { buildGlobalHeaders } from '../../../server/lib/job-queue/handlers/utils/activitypub-http-utils'
+import { activityPubContextify } from '../../../server/helpers/activitypub'
 
 function makePOSTAPRequest (url: string, body: any, httpSignature: any, headers: any) {
   const options = {

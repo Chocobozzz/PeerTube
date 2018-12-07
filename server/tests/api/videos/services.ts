@@ -2,8 +2,16 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, getOEmbed, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
-import { runServer } from '../../utils/server/servers'
+import {
+  flushTests,
+  getOEmbed,
+  getVideosList,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo
+} from '../../../../shared/utils/index'
+import { runServer } from '../../../../shared/utils/server/servers'
 
 const expect = chai.expect
 

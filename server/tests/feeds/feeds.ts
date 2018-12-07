@@ -13,10 +13,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, userLogin
-} from '../utils'
+} from '../../../shared/utils'
 import * as libxmljs from 'libxmljs'
-import { addVideoCommentThread } from '../utils/videos/video-comments'
-import { waitJobs } from '../utils/server/jobs'
+import { addVideoCommentThread } from '../../../shared/utils/videos/video-comments'
+import { waitJobs } from '../../../shared/utils/server/jobs'
 import { User } from '../../../shared/models/users'
 
 chai.use(require('chai-xml'))

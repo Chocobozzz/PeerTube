@@ -16,8 +16,9 @@ import {
   ServerInfo,
   testImage
 } from '../'
-import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
+
+import { VideoDetails, VideoPrivacy } from '../../models/videos'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
 
 type VideoAttributes = {
@@ -416,7 +417,7 @@ function rateVideo (url: string, accessToken: string, id: number, rating: string
 function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   return new Promise<any>((res, rej) => {
     const torrentName = videoUUID + '-' + resolution + '.torrent'
-    const torrentPath = join(__dirname, '..', '..', '..', '..', 'test' + server.serverNumber, 'torrents', torrentName)
+    const torrentPath = join(root(), 'test' + server.serverNumber, 'torrents', torrentName)
     readFile(torrentPath, (err, data) => {
       if (err) return rej(err)
 

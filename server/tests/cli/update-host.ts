@@ -3,8 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
-import { waitJobs } from '../utils/server/jobs'
-import { addVideoCommentThread } from '../utils/videos/video-comments'
+import { waitJobs } from '../../../shared/utils/server/jobs'
+import { addVideoCommentThread } from '../../../shared/utils/videos/video-comments'
 import {
   addVideoChannel,
   createUser,
@@ -21,8 +21,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../utils'
-import { getAccountsList } from '../utils/users/accounts'
+} from '../../../shared/utils'
+import { getAccountsList } from '../../../shared/utils/users/accounts'
 
 const expect = chai.expect
 

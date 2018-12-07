@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { buildAbsoluteFixturePath } from '../miscs/miscs'
+import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
 
 function makeGetRequest (options: {
@@ -142,7 +142,7 @@ function updateAvatarRequest (options: {
   if (isAbsolute(options.fixture)) {
     filePath = options.fixture
   } else {
-    filePath = join(__dirname, '..', '..', 'fixtures', options.fixture)
+    filePath = join(root(), 'server', 'tests', 'fixtures', options.fixture)
   }
 
   return makeUploadRequest({

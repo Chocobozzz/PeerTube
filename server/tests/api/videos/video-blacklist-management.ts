@@ -16,9 +16,9 @@ import {
   setAccessTokensToServers,
   updateVideoBlacklist,
   uploadVideo
-} from '../../utils/index'
-import { doubleFollow } from '../../utils/server/follows'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils/index'
+import { doubleFollow } from '../../../../shared/utils/server/follows'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { VideoAbuse } from '../../../../shared/models/videos'
 
 const expect = chai.expect

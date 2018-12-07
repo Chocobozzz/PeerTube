@@ -13,7 +13,7 @@ import {
   updateVideoChannelAvatar,
   uploadVideo,
   userLogin
-} from '../../utils'
+} from '../../../../shared/utils'
 import {
   addVideoChannel,
   deleteVideoChannel,
@@ -26,8 +26,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateVideoChannel
-} from '../../utils/index'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils/index'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 

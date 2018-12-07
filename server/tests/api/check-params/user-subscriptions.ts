@@ -13,9 +13,14 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
