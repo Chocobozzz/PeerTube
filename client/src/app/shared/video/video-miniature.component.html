@@ -14,6 +14,73 @@
     </a>
 
     <span i18n class="video-miniature-created-at-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+  
+    <div class="dropdown" ngbDropdown placement="bottom-right" role="group">
+
+      <button class="icon-action" aria-label="Actions on this video" title="Actions on this video" 
+              (mouseover)="loadDropdownInformations()"
+              ngbDropdownToggle></button>
+
+      <div class="dropdown-menu" ngbDropdownMenu>
+
+        <!-- User common actions -->
+        <button class="dropdown-item" i18n-title title="Un/subscribe to this channel" (click)="toggleSubscription()">
+          <span *ngIf="subscribed !== true" i18n>Subscribe to {{ video.channel.displayName }}</span>
+          <span *ngIf="subscribed === true" i18n>Unsubscribe from {{ video.channel.displayName }}</span>
+        </button>
+
+        <a *ngIf="isVideoUpdatable()" i18n-title title="Update this video" class="dropdown-item" [routerLink]="[ '/videos/update', video.uuid ]" i18n>
+          Update
+        </a>
+
+        <button class="dropdown-item" i18n-title title="Delete this video" *ngIf="isVideoRemovable()" (click)="removeVideo($event)" i18n>
+          Delete
+        </button>
+
+        <!-- User self-moderation actions -->
+        <div *ngIf="isUserLoggedIn()">
+          <div class="dropdown-divider"></div>
+
+          <button i18n-title title="Mute this account" class="dropdown-item disabled" *ngIf="!isAccountBlockable()">
+            <span i18n>Mute @{{ video.byAccount }}</span>
+          </button>
+          <button i18n-title title="Mute this account" class="dropdown-item" *ngIf="isAccountBlockable()" (click)="muteAccountByUser($event)">
+            <span i18n>Mute @{{ video.byAccount }}</span>
+          </button>
+
+          <button i18n-title title="Not yet implemented" class="dropdown-item disabled" aria-disabled="true">
+            <span i18n>Block @{{ video.byAccount }}</span>
+          </button>
+
+      </div>
+
+        <!-- Moderator/Admin actions -->
+        <div *ngIf="isUserLoggedIn() && displayModerationBlock">
+          <div class="dropdown-divider"></div>
+
+          <button i18n-title title="Mute this account instance-wide" 
+                  *ngIf="isAccountBlockable()" class="dropdown-item" (click)="blockAccountByInstance()">
+            <span i18n>Mute @{{ video.byAccount }} instance-wide</span>
+          </button>
+
+          <button i18n-title title="Not yet implemented" 
+                  *ngIf="isAccountBlockable()" class="dropdown-item disabled">
+            <span i18n>Block @{{ video.byAccount }} instance-wide</span>
+          </button>
+
+          <button *ngIf="isVideoBlacklistable()" i18n-title title="Blacklist this video instance-wide"
+                  class="dropdown-item">
+            <span i18n>Blacklist video instance-wide</span>
+          </button>
+          <button *ngIf="isVideoUnblacklistable()" i18n-title title="Unblacklist this video instance-wide"
+                  class="dropdown-item">
+            <span i18n>Unblacklist video instance-wide</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
 
     <a tabindex="-1" *ngIf="displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
       {{ video.byAccount }}
@@ -21,5 +88,6 @@
     <a tabindex="-1" *ngIf="displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
       {{ video.byVideoChannel }}
     </a>
+
   </div>
 </div>

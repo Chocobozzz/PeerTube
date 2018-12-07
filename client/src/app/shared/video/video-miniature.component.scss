@@ -45,7 +45,6 @@
     .video-miniature-channel {
       @include disable-default-a-behaviour;
 
-      display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -55,6 +54,45 @@
       &:hover {
         color: #303030;
       }
+    }
+    .video-miniature-account {
+      padding: 0 25px 0 0; // leave some space for the action button
+    }
+
+    .icon-action:hover:active
+    .icon-action:hover,
+    .icon-action {
+      @include icon(21px);
+      @include disable-outline;
+  
+      background: var(--mainBackgroundColor) url('../../../assets/images/video/more.svg');
+      top: -1px;
+      float: right;
+      border: none;
+      transform: rotate(90deg) scale(.7);
+    }
+
+    .dropdown-toggle::after {
+      display:none;
+    }
+
+    .dropdown {
+      top: -18px; // to align with the channel name bloc
+      right: -5px;
+    }
+    .dropdown-item {
+      font-size: 13px;
+      padding: 4px 14px;
+
+      &.disabled,&:disabled {
+        color: #6c757d !important;
+      }
+    }
+    .dropdown-menu {
+      padding: 0.2rem 0;
+    }
+    .dropdown-divider {
+      margin: 0.2rem 0;
     }
   }
 }

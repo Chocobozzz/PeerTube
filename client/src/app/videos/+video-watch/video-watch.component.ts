@@ -1,6 +1,6 @@
 import { catchError } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
@@ -69,7 +69,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private changeDetector: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private router: Router,
     private videoService: VideoService,
     private videoBlacklistService: VideoBlacklistService,
     private confirmService: ConfirmService,
