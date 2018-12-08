@@ -82,10 +82,12 @@
   <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
 </form>
 
+<div *ngIf="!isCreation()">
   <div class="account-title" i18n>Danger Zone</div>
 
-<p i18n>Send a link to reset the password by mail to the user.</p>
-<button (click)="resetPassword()" i18n>Ask for new password</button>
+  <p i18n>Send a link to reset the password by mail to the user.</p>
+  <button style="margin-top:0;" (click)="resetPassword()" i18n>Ask for new password</button>
 
-<p class="mt-4" i18n>Manually set the user password</p>
-<my-user-password userId="userId"></my-user-password>
+  <p class="mt-4" i18n>Manually set the user password</p>
+  <my-user-password userId="userId"></my-user-password>
+</div>

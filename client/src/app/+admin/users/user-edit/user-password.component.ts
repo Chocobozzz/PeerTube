@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Subscription } from 'rxjs'
 import * as generator from 'generate-password-browser'
 import { NotificationsService } from 'angular2-notifications'
 import { UserService } from '@app/shared/users/user.service'
@@ -24,8 +23,6 @@ export class UserPasswordComponent extends FormReactive implements OnInit, OnDes
 
   @Input() userId: number
 
-  private paramsSub: Subscription
-
   constructor (
     protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
@@ -47,7 +44,7 @@ export class UserPasswordComponent extends FormReactive implements OnInit, OnDes
   }
 
   ngOnDestroy () {
-    this.paramsSub.unsubscribe()
+    //
   }
 
   formValidated () {
