@@ -820,7 +820,7 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/videos/{id}/watching':
     put:
-      summary: Indicate progress of in watching the video by its id for a user
+      summary: Set watching progress of a video by its id for a user
       tags:
         - Video
       security:
