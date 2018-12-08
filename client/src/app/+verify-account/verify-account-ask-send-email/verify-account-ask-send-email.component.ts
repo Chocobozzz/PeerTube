@@ -31,6 +31,10 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
     return this.serverService.getConfig().signup.requiresEmailVerification
   }
 
+  isEmailDisabled () {
+    return this.serverService.getConfig().email.enabled === false
+  }
+
   ngOnInit () {
     this.buildForm({
       'verify-email-email': this.userValidatorsService.USER_EMAIL
