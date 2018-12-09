@@ -196,8 +196,13 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       return videoImportUpdated
     })
 
-    Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
     Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
+
+    if (videoImportUpdated.Video.quarantined) {
+      Notifier.Instance.notifyOnVideoQuarantine(videoImportUpdated.Video)
+    } else {
+      Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
+    }
 
     // Create transcoding jobs?
     if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {

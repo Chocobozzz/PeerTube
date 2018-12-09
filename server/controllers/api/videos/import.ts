@@ -18,9 +18,11 @@ import { join } from 'path'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoChannelModel } from '../../../models/video/video-channel'
+import { UserModel } from '../../../models/account/user'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
+import { shouldVideoBeQuarantined } from '../../../helpers/video'
 import { readFile, move } from 'fs-extra'
 
 const auditLogger = auditLoggerFactory('video-imports')
@@ -85,7 +87,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoName = isArray(parsed.name) ? parsed.name[ 0 ] : parsed.name as string
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
+  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName }, user)
 
   await processThumbnail(req, video)
   await processPreview(req, video)
@@ -128,7 +130,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     }).end()
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
+  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo, user)
 
   const downloadThumbnail = !await processThumbnail(req, video)
   const downloadPreview = !await processPreview(req, video)
@@ -156,7 +158,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
-function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo) {
+function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo, user: UserModel) {
   const videoData = {
     name: body.name || importData.name || 'Unknown name',
     remote: false,
@@ -173,7 +175,8 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     privacy: body.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
     channelId: channelId,
-    originallyPublishedAt: importData.originallyPublishedAt
+    originallyPublishedAt: importData.originallyPublishedAt,
+    quarantined: shouldVideoBeQuarantined(user)
   }
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video)

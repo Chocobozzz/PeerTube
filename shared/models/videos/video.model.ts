@@ -63,6 +63,7 @@ export interface Video {
 
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
+  quarantined?: boolean
   scheduledUpdate?: VideoScheduleUpdate
 
   blacklisted?: boolean
@@ -89,6 +90,7 @@ export interface VideoDetails extends Video {
   // Not optional in details (unlike in Video)
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
+  quarantined: boolean
 
   trackerUrls: string[]
 

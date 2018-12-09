@@ -6,6 +6,7 @@ import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
+import { shouldVideoBeQuarantined } from '../../../helpers/video'
 import {
   CONFIG,
   MIMETYPES,
@@ -58,6 +59,7 @@ import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
+import { quarantineRouter } from './quarantine'
 import { Notifier } from '../../../lib/notifier'
 import { sendView } from '../../../lib/activitypub/send/send-view'
 
@@ -90,6 +92,7 @@ videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
 videosRouter.use('/', watchingRouter)
+videosRouter.use('/', quarantineRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -191,7 +194,8 @@ async function addVideo (req: express.Request, res: express.Response) {
     privacy: videoInfo.privacy,
     duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
     channelId: res.locals.videoChannel.id,
-    originallyPublishedAt: videoInfo.originallyPublishedAt
+    originallyPublishedAt: videoInfo.originallyPublishedAt,
+    quarantined: shouldVideoBeQuarantined(res.locals.oauth.token.User)
   }
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
@@ -274,7 +278,11 @@ async function addVideo (req: express.Request, res: express.Response) {
     return videoCreated
   })
 
-  Notifier.Instance.notifyOnNewVideo(videoCreated)
+  if (videoCreated.quarantined) {
+    Notifier.Instance.notifyOnVideoQuarantine(videoCreated)
+  } else {
+    Notifier.Instance.notifyOnNewVideo(videoCreated)
+  }
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now

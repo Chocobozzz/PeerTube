@@ -1,0 +1,49 @@
+<div i18n *ngIf="pagination.totalItems === 0">No results.</div>
+<div
+  myInfiniteScroller
+  [pageHeight]="pageHeight"
+  (nearOfTop)="onNearOfTop()"
+  (nearOfBottom)="onNearOfBottom()"
+  (pageChanged)="onPageChanged($event)"
+  class="videos" #videosElement
+>
+  <div *ngFor="let videos of videoPages; let i = index" class="videos-page">
+    <div class="video" *ngFor="let video of videos; let j = index">
+      <div class="checkbox-container">
+        <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
+      </div>
+      <my-video-thumbnail [video]="video"></my-video-thumbnail>
+
+      <div class="video-info">
+        <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+        <div>{{ video.account.displayName }}</div>
+        <div>{{ video.publishedAt | myFromNow }}</div>
+        <div><span i18n>Privacy: </span><span>{{ video.privacy.label }}</span></div>
+        <div><span i18n>Sensitve: </span><span> {{ video.nsfw }}</span></div>
+      </div>
+
+      <!-- Display only once -->
+      <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0 && j === 0">
+        <div class="action-selection-mode-child">
+          <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
+            Cancel
+          </span>
+
+          <span class="action-button action-button-release-selection" (click)="releaseSelectedVideosFromQuarantine()">
+            <my-global-icon iconName="tick"></my-global-icon>
+            <ng-container i18n>Release</ng-container>
+          </span>
+        </div>
+      </div>
+
+      <div class="video-buttons" *ngIf="isInSelectionMode() === false">
+        <my-button
+          i18n-label
+          label="Release"
+          icon="tick"
+          (click)="releaseVideoFromQuarantine(video)"
+        >Release</my-button>
+      </div>
+    </div>
+
+</div>

@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 340
+const LAST_MIGRATION_VERSION = 345
 
 // ---------------------------------------------------------------------------
 
@@ -41,6 +41,7 @@ const SORTABLE_COLUMNS = {
   VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
+  VIDEO_QUARANTINES: [ 'publishedAt' ],
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ],
 
@@ -273,6 +274,11 @@ const CONFIG = {
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
       }
+    }
+  },
+  QUARANTINE: {
+    VIDEOS: {
+      get ENABLED () { return config.get<boolean>('quarantine.videos.enabled') }
     }
   },
   CACHE: {

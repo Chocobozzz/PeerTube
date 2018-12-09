@@ -254,6 +254,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     )
   }
 
+  releaseQuarantinedVideo () {
+    this.videoService.releaseQuarantinedVideos(this.video.id).subscribe(
+      () => {
+        this.notifier.success(this.i18n('Video was released from quarantine.'))
+        this.redirectService.redirectToPreviousRoute()
+      },
+
+      err => this.notifier.error(err.message)
+    )
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
@@ -268,6 +279,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoUnblacklistable () {
     return this.video.isUnblacklistableBy(this.user)
+  }
+
+  isQuarantinedVideoReleasable () {
+    return this.isVideoQuarantined() && this.video.isQuarantineReleasableBy(this.user)
   }
 
   getVideoTags () {
@@ -314,6 +329,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoToImport () {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
+  }
+
+  isVideoQuarantined () {
+    return this.video && this.video.quarantined === true
   }
 
   hasVideoScheduledPublication () {

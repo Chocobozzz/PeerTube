@@ -25,7 +25,8 @@ export type VideoFormattingJSONOptions = {
     state?: boolean,
     waitTranscoding?: boolean,
     scheduledUpdate?: boolean,
-    blacklistInfo?: boolean
+    blacklistInfo?: boolean,
+    quarantined?: boolean
   }
 }
 function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormattingJSONOptions): Video {
@@ -115,6 +116,11 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
       videoObject.blacklisted = !!video.VideoBlacklist
       videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
     }
+
+    if (options.additionalAttributes.quarantined === true) {
+      videoObject.quarantined = video.quarantined
+    }
+
   }
 
   return videoObject
@@ -147,6 +153,7 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
       id: video.state,
       label: VideoModel.getStateLabel(video.state)
     },
+    quarantined: video.quarantined,
 
     trackerUrls: video.getTrackerUrls(baseUrlHttp, baseUrlWs),
 

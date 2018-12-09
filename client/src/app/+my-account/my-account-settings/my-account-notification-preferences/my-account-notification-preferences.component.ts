@@ -22,6 +22,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   labelNotifications: { [ id in keyof UserNotificationSetting ]: string } = {} as any
   rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]: UserRight } = {} as any
   emailEnabled: boolean
+  quarantineVideosEnabled: boolean
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
 
@@ -31,12 +32,17 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private serverService: ServerService,
     private notifier: Notifier
   ) {
+    this.quarantineVideosEnabled = this.serverService.getConfig().quarantine.videos.enabled
+
     this.labelNotifications = {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
       newCommentOnMyVideo: this.i18n('New comment on your video'),
       videoAbuseAsModerator: this.i18n('New video abuse on local video'),
+      videoQuarantineAsModerator: this.i18n('New quarantine on video waiting release'),
       blacklistOnMyVideo: this.i18n('One of your video is blacklisted/unblacklisted'),
-      myVideoPublished: this.i18n('Video published (after transcoding/scheduled update)'),
+      myVideoPublished: this.quarantineVideosEnabled ?
+        this.i18n('Video published (after transcoding/scheduled update/release from quarantine)') :
+        this.i18n('Video published (after transcoding/scheduled update)'),
       myVideoImportFinished: this.i18n('Video import finished'),
       newUserRegistration: this.i18n('A new user registered on your instance'),
       newFollow: this.i18n('You or your channel(s) has a new follower'),
@@ -46,6 +52,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
 
     this.rightNotifications = {
       videoAbuseAsModerator: UserRight.MANAGE_VIDEO_ABUSES,
+      videoQuarantineAsModerator: UserRight.MANAGE_VIDEO_QUARANTINE,
       newUserRegistration: UserRight.MANAGE_USERS
     }
 

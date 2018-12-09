@@ -8,6 +8,7 @@ export interface UserNotificationSetting {
   newVideoFromSubscription: UserNotificationSettingValue
   newCommentOnMyVideo: UserNotificationSettingValue
   videoAbuseAsModerator: UserNotificationSettingValue
+  videoQuarantineAsModerator: UserNotificationSettingValue
   blacklistOnMyVideo: UserNotificationSettingValue
   myVideoPublished: UserNotificationSettingValue
   myVideoImportFinished: UserNotificationSettingValue

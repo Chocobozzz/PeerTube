@@ -12,6 +12,17 @@ $other-videos-width: 260px;
   font-weight: $font-semibold;
 }
 
+.release-quarantine-button {
+  &:hover {
+    cursor: pointer;
+    font-weight: $font-semibold;
+  }
+
+  .release-quarantine-button-label {
+    text-decoration: underline;
+  }
+}
+
 #video-element-wrapper {
   background-color: #000;
   display: flex;

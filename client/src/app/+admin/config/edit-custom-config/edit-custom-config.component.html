@@ -152,6 +152,21 @@
           </ng-container>
         </ng-container>
 
+        <div i18n class="inner-form-title">Quarantine</div>
+
+        <ng-container formGroupName="quarantine">
+          <ng-container formGroupName="videos">
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="quarantineVideosEnabled" formControlName="enabled"
+                i18n-labelText labelText="Require moderator review and release before videos can be viewed by users"
+              ></my-peertube-checkbox>
+            </div>
+
+          </ng-container>
+        </ng-container>
+
         <div i18n class="inner-form-title">Administrator</div>
 
         <div class="form-group" formGroupName="admin">

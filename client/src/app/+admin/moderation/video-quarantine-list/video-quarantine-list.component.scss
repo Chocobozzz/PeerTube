@@ -20,7 +20,7 @@
       margin-right: 10px;
     }
 
-    .action-button-delete-selection {
+    .action-button-release-selection {
       @include peertube-button;
       @include orange-button;
       @include button-with-icon(21px);
@@ -62,40 +62,10 @@
       font-size: 16px;
       font-weight: $font-semibold;
     }
-
-    .video-info-date-views,
-    .video-info-private,
-    .video-info-blacklisted {
-      font-size: 13px;
-
-      &.video-info-private,
-      &.video-info-blacklisted .blacklisted-label {
-        font-weight: $font-semibold;
-      }
-
-      &.video-info-quarantined {
-        color: $orange-color;
-      }
-
-      &.video-info-blacklisted {
-        color: red;
-
-        .blacklisted-reason {
-          &::before {
-            content: ' - ';
-          }
-        }
-      }
-
-    }
   }
 
   .video-buttons {
     min-width: 190px;
-
-    *:not(:last-child) {
-      margin-right: 10px;
-    }
   }
 }
 

@@ -23,19 +23,35 @@ class Notifier {
   private constructor () {}
 
   notifyOnNewVideo (video: VideoModel): void {
-    // Only notify on public and published videos
-    if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED) return
+    // Only notify on public and published videos which are not quarantined
+    if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED || video.quarantined) return
 
     this.notifySubscribersOfNewVideo(video)
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
   }
 
-  notifyOnPendingVideoPublished (video: VideoModel): void {
-    // Only notify on public videos that has been published while the user waited transcoding/scheduled update
-    if (video.waitTranscoding === false && !video.ScheduleVideoUpdate) return
+  notifyOnVideoPublishedAfterTranscoding (video: VideoModel): void {
+    // don't notify if didn't wait for transcoding or video is still quarantined/waiting for scheduled update
+    if (!video.waitTranscoding || video.quarantined || video.ScheduleVideoUpdate) return
 
     this.notifyOwnedVideoHasBeenPublished(video)
-        .catch(err => logger.error('Cannot notify owner that its video %s has been published.', video.url, { err }))
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after transcoding.', video.url, { err }))
+  }
+
+  notifyOnVideoPublishedAfterScheduledUpdate (video: VideoModel): void {
+    // don't notify if video is still quarantined or waiting for transcoding
+    if (video.quarantined || (video.waitTranscoding && video.state !== VideoState.PUBLISHED)) return
+
+    this.notifyOwnedVideoHasBeenPublished(video)
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after scheduled update.', video.url, { err }))
+  }
+
+  notifyOnVideoPublishedAfterQuarantineRelease (video: VideoModel): void {
+    // don't notify if video is still waiting for transcoding or scheduled update
+    if (video.ScheduleVideoUpdate || (video.waitTranscoding && video.state !== VideoState.PUBLISHED)) return
+
+    this.notifyOwnedVideoHasBeenPublished(video)
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after quarantine release.', video.url, { err })) // tslint:disable-line:max-line-length
   }
 
   notifyOnNewComment (comment: VideoCommentModel): void {
@@ -49,6 +65,11 @@ class Notifier {
   notifyOnNewVideoAbuse (videoAbuse: VideoAbuseModel): void {
     this.notifyModeratorsOfNewVideoAbuse(videoAbuse)
       .catch(err => logger.error('Cannot notify of new video abuse of video %s.', videoAbuse.Video.url, { err }))
+  }
+
+  notifyOnVideoQuarantine (video: VideoModel): void {
+    this.notifyModeratorsOfVideoQuarantine(video)
+      .catch(err => logger.error('Cannot notify of quarantine of video %s.', video.url, { err }))
   }
 
   notifyOnVideoBlacklist (videoBlacklist: VideoBlacklistModel): void {
@@ -263,6 +284,34 @@ class Notifier {
 
     function emailSender (emails: string[]) {
       return Emailer.Instance.addVideoAbuseModeratorsNotification(emails, videoAbuse)
+    }
+
+    return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyModeratorsOfVideoQuarantine (video: VideoModel) {
+    const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_QUARANTINE)
+    if (moderators.length === 0) return
+
+    logger.info('Notifying %s moderators of new quarantine %s.', moderators.length, video.url)
+
+    function settingGetter (user: UserModel) {
+      return user.NotificationSetting.videoQuarantineAsModerator
+    }
+    async function notificationCreator (user: UserModel) {
+
+      const notification = await UserNotificationModel.create({
+        type: UserNotificationType.NEW_VIDEO_QUARANTINE_FOR_MODERATORS,
+        userId: user.id,
+        videoId: video.id
+      })
+      notification.Video = video
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addVideoQuarantineModeratorsNotification(emails, video)
     }
 
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })

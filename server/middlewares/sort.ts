@@ -14,6 +14,12 @@ function setDefaultSearchSort (req: express.Request, res: express.Response, next
   return next()
 }
 
+function setDefaultVideoQuarantinesSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = 'publishedAt' // prioritize first "published" (to moderators) as waiting longest
+
+  return next()
+}
+
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   let newSort: SortType = { sortModel: undefined, sortValue: '' }
 
@@ -40,5 +46,6 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 export {
   setDefaultSort,
   setDefaultSearchSort,
+  setDefaultVideoQuarantinesSort,
   setBlacklistSort
 }

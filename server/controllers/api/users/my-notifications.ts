@@ -70,6 +70,7 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     newVideoFromSubscription: body.newVideoFromSubscription,
     newCommentOnMyVideo: body.newCommentOnMyVideo,
     videoAbuseAsModerator: body.videoAbuseAsModerator,
+    videoQuarantineAsModerator: body.videoQuarantineAsModerator,
     blacklistOnMyVideo: body.blacklistOnMyVideo,
     myVideoPublished: body.myVideoPublished,
     myVideoImportFinished: body.myVideoImportFinished,

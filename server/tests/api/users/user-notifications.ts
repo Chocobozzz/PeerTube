@@ -17,7 +17,10 @@ import {
   updateVideo,
   updateVideoChannel,
   userLogin,
-  wait
+  wait,
+  getCustomConfig,
+  updateCustomConfig,
+  releaseVideoQuarantine
 } from '../../../../shared/utils'
 import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
@@ -31,6 +34,7 @@ import {
   checkNewBlacklistOnMyVideo,
   checkNewCommentOnMyVideo,
   checkNewVideoAbuseForModerators,
+  checkNewVideoQuarantineForModerators,
   checkNewVideoFromSubscription,
   checkUserRegistered,
   checkVideoIsPublished,
@@ -54,6 +58,7 @@ import { getBadVideoUrl, getYoutubeVideoUrl, importVideo } from '../../../../sha
 import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/utils/videos/video-comments'
 import * as uuidv4 from 'uuid/v4'
 import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/utils/users/blocklist'
+import { CustomConfig } from '../../../../shared/models/server'
 
 const expect = chai.expect
 
@@ -92,6 +97,7 @@ describe('Test users notifications', function () {
     newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoQuarantineAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoImportFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
@@ -305,7 +311,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should send a new video notification after a video import', async function () {
-      this.timeout(30000)
+      this.timeout(100000)
 
       const name = 'video import ' + uuidv4()
 
@@ -904,6 +910,169 @@ describe('Test users notifications', function () {
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'account', 'root', 'super root 2 name', myUserName, 'presence')
+    })
+  })
+
+  describe('Video-related notifications when video quarantine is enabled', function () {
+    let userBaseParams: CheckerBaseParams
+    let adminBaseParamsServer1: CheckerBaseParams
+    let adminBaseParamsServer2: CheckerBaseParams
+    let videoUUID: string
+    let videoName: string
+    let currentCustomConfig: CustomConfig
+
+    before(async () => {
+
+      adminBaseParamsServer1 = {
+        server: servers[0],
+        emails,
+        socketNotifications: adminNotifications,
+        token: servers[0].accessToken
+      }
+
+      adminBaseParamsServer2 = {
+        server: servers[1],
+        emails,
+        socketNotifications: adminNotificationsServer2,
+        token: servers[1].accessToken
+      }
+
+      userBaseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: userNotifications,
+        token: userAccessToken
+      }
+
+      const resCustomConfig = await getCustomConfig(servers[0].url, servers[0].accessToken)
+      currentCustomConfig = resCustomConfig.body
+      const quarantineTestsCustomConfig = immutableAssign(currentCustomConfig, {
+        quarantine: {
+          videos: {
+            enabled: true
+          }
+        }
+      })
+      // enable transcoding otherwise own publish notification after transcoding not expected
+      quarantineTestsCustomConfig.transcoding.enabled = true
+      await updateCustomConfig(servers[0].url, servers[0].accessToken, quarantineTestsCustomConfig)
+
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+
+    })
+
+    it('Should send notification to moderators on new video with quarantine', async function () {
+      this.timeout(20000)
+
+      videoName = 'video with quarantine ' + uuidv4()
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: videoName })
+      videoUUID = resVideo.body.video.uuid
+
+      await waitJobs(servers)
+      await checkNewVideoQuarantineForModerators(adminBaseParamsServer1, videoUUID, videoName, 'presence')
+    })
+
+    it('Should not send video publish notification if quarantined', async function () {
+      await checkVideoIsPublished(userBaseParams, videoName, videoUUID, 'absence')
+    })
+
+    it('Should not send a local user subscription notification if quarantined', async function () {
+      await checkNewVideoFromSubscription(adminBaseParamsServer1, videoName, videoUUID, 'absence')
+    })
+
+    it('Should not send a remote user subscription notification if quarantined', async function () {
+      await checkNewVideoFromSubscription(adminBaseParamsServer2, videoName, videoUUID, 'absence')
+    })
+
+    it('Should send video publish notification after video quarantine released', async function () {
+      this.timeout(20000)
+
+      await releaseVideoQuarantine(servers[0].url, servers[0].accessToken, videoUUID)
+
+      await waitJobs(servers)
+      await checkVideoIsPublished(userBaseParams, videoName, videoUUID, 'presence')
+    })
+
+    it('Should send a local user subscription notification after video quarantine released', async function () {
+      await checkNewVideoFromSubscription(adminBaseParamsServer1, videoName, videoUUID, 'presence')
+    })
+
+    it('Should send a remote user subscription notification after video quarantined released', async function () {
+      await checkNewVideoFromSubscription(adminBaseParamsServer2, videoName, videoUUID, 'presence')
+    })
+
+    it('Should not send notifications after video quarantine released if scheduled update pending', async function () {
+      this.timeout(20000)
+
+      let updateAt = new Date(new Date().getTime() + 100000)
+
+      const name = 'video with quarantine and future schedule ' + uuidv4()
+
+      const data = {
+        name,
+        privacy: VideoPrivacy.PRIVATE,
+        scheduleUpdate: {
+          updateAt: updateAt.toISOString(),
+          privacy: VideoPrivacy.PUBLIC
+        }
+      }
+
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, data)
+      const uuid = resVideo.body.video.uuid
+
+      await releaseVideoQuarantine(servers[0].url, servers[0].accessToken, uuid)
+
+      await waitJobs(servers)
+      await checkVideoIsPublished(userBaseParams, name, uuid, 'absence')
+      await checkNewVideoFromSubscription(adminBaseParamsServer1, name, uuid, 'absence')
+      await checkNewVideoFromSubscription(adminBaseParamsServer2, name, uuid, 'absence')
+    })
+
+    it('Should not send notifications after scheduled update if video still quarantined', async function () {
+      this.timeout(20000)
+
+      // In 2 seconds
+      let updateAt = new Date(new Date().getTime() + 2000)
+
+      const name = 'video with schedule done and still quarantined ' + uuidv4()
+
+      const data = {
+        name,
+        privacy: VideoPrivacy.PRIVATE,
+        scheduleUpdate: {
+          updateAt: updateAt.toISOString(),
+          privacy: VideoPrivacy.PUBLIC
+        }
+      }
+
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, data)
+      const uuid = resVideo.body.video.uuid
+
+      await wait(6000)
+      await checkVideoIsPublished(userBaseParams, name, uuid, 'absence')
+      await checkNewVideoFromSubscription(adminBaseParamsServer1, name, uuid, 'absence')
+      await checkNewVideoFromSubscription(adminBaseParamsServer2, name, uuid, 'absence')
+    })
+
+    it('Should not send a notification to moderators on new video without quarantine', async function () {
+      this.timeout(20000)
+
+      const name = 'video without quarantine ' + uuidv4()
+
+      // admin will have bypass quarantine right
+      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name })
+      const uuid = resVideo.body.video.uuid
+
+      await waitJobs(servers)
+      await checkNewVideoQuarantineForModerators(adminBaseParamsServer1, uuid, name, 'absence')
+    })
+
+    after(async () => {
+      await updateCustomConfig(servers[0].url, servers[0].accessToken, currentCustomConfig)
+
+      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
     })
   })
 

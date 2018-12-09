@@ -111,6 +111,11 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
           enabled: false
         }
       }
+    },
+    quarantine: {
+      videos: {
+        enabled: false
+      }
     }
   }
 

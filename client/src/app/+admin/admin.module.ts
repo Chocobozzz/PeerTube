@@ -11,7 +11,12 @@ import { JobsComponent } from './jobs/job.component'
 import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
 import { JobService } from './jobs/shared/job.service'
 import { UserCreateComponent, UserListComponent, UsersComponent, UserUpdateComponent, UserPasswordComponent } from './users'
-import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoBlacklistListComponent } from './moderation'
+import {
+  ModerationCommentModalComponent,
+  VideoAbuseListComponent,
+  VideoBlacklistListComponent,
+  VideoQuarantineListComponent
+} from './moderation'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
 import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service'
@@ -42,6 +47,7 @@ import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } f
     ModerationComponent,
     VideoBlacklistListComponent,
     VideoAbuseListComponent,
+    VideoQuarantineListComponent,
     ModerationCommentModalComponent,
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,

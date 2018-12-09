@@ -157,6 +157,11 @@ import:
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 
+quarantine:
+  # Require moderator review and release before videos can be viewed by users
+  videos:
+    enabled: false
+
 instance:
   name: 'PeerTube'
   short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'

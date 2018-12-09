@@ -48,6 +48,12 @@ export interface ServerConfig {
     }
   }
 
+  quarantine: {
+    videos: {
+      enabled: boolean
+    }
+  }
+
   avatar: {
     file: {
       size: {

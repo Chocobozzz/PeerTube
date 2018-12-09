@@ -95,6 +95,11 @@ export class ServerService {
       videos: {
         intervalDays: 0
       }
+    },
+    quarantine: {
+      videos: {
+        enabled: false
+      }
     }
   }
   private videoCategories: Array<VideoConstant<number>> = []

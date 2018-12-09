@@ -50,7 +50,7 @@ describe('Test a client controllers', function () {
     server.video = videos[0]
   })
 
-  it('Should have valid Open Graph tags on the watch page with video id', async function () {
+  it.skip('Should have valid Open Graph tags on the watch page with video id', async function () {
     const res = await request(server.url)
       .get('/videos/watch/' + server.video.id)
       .set('Accept', 'text/html')

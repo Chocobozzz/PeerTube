@@ -36,6 +36,14 @@
         </div>
       </ng-container>
 
+      <ng-container i18n *ngSwitchCase="UserNotificationType.NEW_VIDEO_QUARANTINE_FOR_MODERATORS">
+        <my-global-icon iconName="no"></my-global-icon>
+
+        <div class="message">
+          <a (click)="markAsRead(notification)" [routerLink]="notification.videoQuarantineUrl">There is a new quarantine</a> on the recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
+        </div>
+      </ng-container>
+
       <ng-container i18n *ngSwitchCase="UserNotificationType.NEW_COMMENT_ON_MY_VIDEO">
         <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
 

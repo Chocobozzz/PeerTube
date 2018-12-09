@@ -76,4 +76,11 @@ export interface CustomConfig {
       }
     }
   }
+
+  quarantine: {
+    videos: {
+      enabled: boolean
+    }
+  }
+
 }

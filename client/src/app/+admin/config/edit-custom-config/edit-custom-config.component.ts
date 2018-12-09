@@ -116,6 +116,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         threads: this.customConfigValidatorsService.TRANSCODING_THREADS,
         allowAdditionalExtensions: null,
         resolutions: {}
+      },
+      quarantine: {
+        videos: {
+          enabled: null
+        }
       }
     }
 

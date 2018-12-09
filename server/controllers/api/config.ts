@@ -93,6 +93,11 @@ async function getConfig (req: express.Request, res: express.Response) {
         }
       }
     },
+    quarantine: {
+      videos: {
+        enabled: CONFIG.QUARANTINE.VIDEOS.ENABLED
+      }
+    },
     avatar: {
       file: {
         size: {
@@ -262,6 +267,11 @@ function customConfig (): CustomConfig {
         torrent: {
           enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
         }
+      }
+    },
+    quarantine: {
+      videos: {
+        enabled: CONFIG.QUARANTINE.VIDEOS.ENABLED
       }
     }
   }

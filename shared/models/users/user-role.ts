@@ -28,9 +28,13 @@ const userRoleRights: { [ id: number ]: UserRight[] } = {
     UserRight.REMOVE_ANY_VIDEO_COMMENT,
     UserRight.UPDATE_ANY_VIDEO,
     UserRight.SEE_ALL_VIDEOS,
+    UserRight.MANAGE_VIDEO_QUARANTINE,
+    UserRight.BYPASS_VIDEO_QUARANTINE,
     UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
     UserRight.MANAGE_SERVERS_BLOCKLIST,
-    UserRight.MANAGE_USERS
+    UserRight.MANAGE_USERS,
+    UserRight.MANAGE_VIDEO_QUARANTINE,
+    UserRight.BYPASS_VIDEO_QUARANTINE
   ],
 
   [UserRole.USER]: []

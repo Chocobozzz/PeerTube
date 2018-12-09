@@ -1,7 +1,7 @@
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { catchError, map, switchMap, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { from as observableFrom, Observable } from 'rxjs'
 import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } from '../../../../../shared'
 import { ResultList } from '../../../../../shared/models/result-list.model'
 import {
@@ -318,6 +318,32 @@ export class VideoService implements VideosProvider {
                    return { videos, totalVideos }
                  })
                )
+  }
+
+  getQuarantinedVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number }> {
+
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp
+      .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL + 'quarantine', { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(res => this.restExtractor.handleError(res))
+      )
+  }
+
+  releaseQuarantinedVideos (videoIdsArg: number | number[]) {
+    const videoIds = Array.isArray(videoIdsArg) ? videoIdsArg : [ videoIdsArg ]
+
+    return observableFrom(videoIds)
+      .pipe(
+        concatMap(id => this.authHttp.delete(VideoService.BASE_VIDEO_URL + id + '/quarantine')),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {

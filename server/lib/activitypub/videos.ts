@@ -42,8 +42,8 @@ import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
-  // If the video is not private and published, we federate it
-  if (video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
+  // If the video is not private or quaranted and is published, we federate it
+  if (!video.quarantined && video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {
       video.VideoCaptions = await video.$get('VideoCaptions', {

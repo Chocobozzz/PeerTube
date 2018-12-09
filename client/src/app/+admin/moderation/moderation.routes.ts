@@ -3,6 +3,7 @@ import { UserRight } from '../../../../../shared'
 import { UserRightGuard } from '@app/core'
 import { VideoAbuseListComponent } from '@app/+admin/moderation/video-abuse-list'
 import { VideoBlacklistListComponent } from '@app/+admin/moderation/video-blacklist-list'
+import { VideoQuarantineListComponent } from '@app/+admin/moderation/video-quarantine-list'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 
@@ -27,6 +28,11 @@ export const ModerationRoutes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'video-quarantine',
+        redirectTo: 'video-quarantine/list',
+        pathMatch: 'full'
+      },
+      {
         path: 'video-abuses/list',
         component: VideoAbuseListComponent,
         canActivate: [ UserRightGuard ],
@@ -45,6 +51,17 @@ export const ModerationRoutes: Routes = [
           userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
           meta: {
             title: 'Blacklisted videos'
+          }
+        }
+      },
+      {
+        path: 'video-quarantine/list',
+        component: VideoQuarantineListComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_VIDEO_QUARANTINE,
+          meta: {
+            title: 'Quarantined videos'
           }
         }
       },

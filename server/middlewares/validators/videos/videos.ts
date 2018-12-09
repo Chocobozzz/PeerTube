@@ -184,6 +184,24 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
         return next()
       }
 
+      // Video quarantined
+      if (video.quarantined) {
+        await authenticatePromiseIfNeeded(req, res)
+
+        const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : null
+
+        // Only the owner or a user that have quarantine rights can see the video
+        if (
+          !user ||
+          (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_QUARANTINE))
+        ) {
+          return res.status(403)
+                    .json({ error: 'Cannot get this quarantined video.' })
+        }
+
+        return next()
+      }
+
       // Video is public, anyone can access it
       if (video.privacy === VideoPrivacy.PUBLIC) return next()
 
@@ -216,6 +234,26 @@ const videosRemoveValidator = [
   }
 ]
 
+const videosReleaseQuarantineValidator = [
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videosReleaseQuarantine parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.id, res)) return
+
+    const video = res.locals.video
+
+    if (video.quarantined === false) {
+      return res.status(409)
+        .json({ error: 'Video is not quarantined.' })
+    }
+
+    return next()
+  }
+]
+
 const videosChangeOwnershipValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
@@ -227,6 +265,13 @@ const videosChangeOwnershipValidator = [
 
     // Check if the user who did the request is able to change the ownership of the video
     if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
+
+    // Check if video is quarantined
+    const video: VideoModel = res.locals.video
+    if (video.quarantined) {
+      return res.status(403)
+                .json({ error: 'Changing ownership of a quarantined video is not allowed' })
+    }
 
     const nextOwner = await AccountModel.loadLocalByName(req.body.username)
     if (!nextOwner) {
@@ -416,6 +461,7 @@ export {
   checkVideoFollowConstraints,
   videosCustomGetValidator,
   videosRemoveValidator,
+  videosReleaseQuarantineValidator,
 
   videosChangeOwnershipValidator,
   videosTerminateChangeOwnershipValidator,

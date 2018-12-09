@@ -61,6 +61,7 @@ function checkInitialConfig (data: CustomConfig) {
 
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
+  expect(data.quarantine.videos.enabled).to.be.false
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -101,6 +102,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
+  expect(data.quarantine.videos.enabled).to.be.true
 }
 
 describe('Test config', function () {
@@ -221,6 +223,11 @@ describe('Test config', function () {
           torrent: {
             enabled: false
           }
+        }
+      },
+      quarantine: {
+        videos: {
+          enabled: true
         }
       }
     }

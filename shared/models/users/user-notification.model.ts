@@ -13,7 +13,9 @@ export enum UserNotificationType {
 
   NEW_USER_REGISTRATION = 9,
   NEW_FOLLOW = 10,
-  COMMENT_MENTION = 11
+  COMMENT_MENTION = 11,
+
+  NEW_VIDEO_QUARANTINE_FOR_MODERATORS = 12
 }
 
 export interface VideoInfo {

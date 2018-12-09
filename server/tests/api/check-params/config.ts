@@ -79,6 +79,11 @@ describe('Test config API validators', function () {
           enabled: false
         }
       }
+    },
+    quarantine: {
+      videos: {
+        enabled: false
+      }
     }
   }
 
