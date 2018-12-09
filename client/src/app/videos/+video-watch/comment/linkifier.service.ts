@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core'
 import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
-import * as linkify from 'linkifyjs'
-import * as linkifyHtml from 'linkifyjs/html'
+// FIXME: use @types/linkify when https://github.com/DefinitelyTyped/DefinitelyTyped/pull/29682/files is merged?
+const linkify = require('linkifyjs')
+const linkifyHtml = require('linkifyjs/html')
 
 @Injectable()
 export class LinkifierService {
@@ -40,7 +41,7 @@ export class LinkifierService {
     const TT_UNDERSCORE = TT.UNDERSCORE
     const TT_DOT = TT.DOT
 
-    function MENTION (value) {
+    function MENTION (this: any, value: any) {
       this.v = value
     }
 

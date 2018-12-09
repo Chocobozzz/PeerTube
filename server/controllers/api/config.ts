@@ -10,7 +10,8 @@ import { customConfigUpdateValidator } from '../../middlewares/validators/config
 import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { remove, writeJSON } from 'fs-extra'
-import { getVersion } from '../../helpers/utils'
+import { getServerCommit } from '../../helpers/utils'
+import { Emailer } from '../../lib/emailer'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -40,11 +41,11 @@ configRouter.delete('/custom',
 )
 
 let serverCommit: string
-async function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getConfig (req: express.Request, res: express.Response) {
   const allowed = await isSignupAllowed()
   const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
-  serverCommit = (serverCommit) ? serverCommit : await getVersion()
-  if (serverCommit === packageJSON.version) serverCommit = ''
+
+  if (serverCommit === undefined) serverCommit = await getServerCommit()
 
   const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
    .filter(key => CONFIG.TRANSCODING.ENABLED === CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
@@ -60,6 +61,9 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
+    },
+    email: {
+      enabled: Emailer.Instance.isEnabled()
     },
     serverVersion: packageJSON.version,
     serverCommit,

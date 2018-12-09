@@ -14,7 +14,10 @@ addons:
       - g++-4.9
   postgresql: "9.4"
 
-cache: yarn
+cache:
+  directories:
+    - $HOME/.cache/yarn
+    - $HOME/fixtures
 
 sudo: false
 
@@ -39,6 +42,7 @@ matrix:
   - env: TEST_SUITE=api-1
   - env: TEST_SUITE=api-2
   - env: TEST_SUITE=api-3
+  - env: TEST_SUITE=api-4
   - env: TEST_SUITE=cli
   - env: TEST_SUITE=lint
   - env: TEST_SUITE=jest

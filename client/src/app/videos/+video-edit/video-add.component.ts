@@ -27,6 +27,11 @@ export class VideoAddComponent implements CanComponentDeactivate {
     this.videoName = videoName
   }
 
+  onError () {
+    this.videoName = undefined
+    this.secondStepType = undefined
+  }
+
   canDeactivate () {
     if (this.secondStepType === 'upload') return this.videoUpload.canDeactivate()
     if (this.secondStepType === 'import-url') return this.videoImportUrl.canDeactivate()

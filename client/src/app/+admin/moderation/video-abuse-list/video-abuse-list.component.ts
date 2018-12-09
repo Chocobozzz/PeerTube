@@ -36,7 +36,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
     this.videoAbuseActions = [
       {
-        label: this.i18n('Delete'),
+        label: this.i18n('Delete this report'),
         handler: videoAbuse => this.removeVideoAbuse(videoAbuse)
       },
       {
@@ -57,7 +57,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
   }
 
   openModerationCommentModal (videoAbuse: VideoAbuse) {
@@ -85,7 +85,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   async removeVideoAbuse (videoAbuse: VideoAbuse) {
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this abuse?'), this.i18n('Delete'))
+    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this abuse report?'), this.i18n('Delete'))
     if (res === false) return
 
     this.videoAbuseService.removeVideoAbuse(videoAbuse).subscribe(

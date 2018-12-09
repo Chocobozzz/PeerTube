@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { ConfirmService } from '../../../core'
+import { ConfirmService, ServerService } from '../../../core'
 import { RestPagination, RestTable, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User } from '../../../../../../shared'
+import { UserBanModalComponent } from '@app/shared/moderation'
+import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 
 @Component({
   selector: 'my-user-list',
@@ -12,31 +14,138 @@ import { User } from '../../../../../../shared'
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent extends RestTable implements OnInit {
+  @ViewChild('userBanModal') userBanModal: UserBanModalComponent
+
   users: User[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
+  selectedUsers: User[] = []
+  bulkUserActions: DropdownAction<User[]>[] = []
+
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
+    private serverService: ServerService,
     private userService: UserService,
     private i18n: I18n
   ) {
     super()
   }
 
+  get requiresEmailVerification () {
+    return this.serverService.getConfig().signup.requiresEmailVerification
+  }
+
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
+
+    this.bulkUserActions = [
+      {
+        label: this.i18n('Delete'),
+        handler: users => this.removeUsers(users)
+      },
+      {
+        label: this.i18n('Ban'),
+        handler: users => this.openBanUserModal(users),
+        isDisplayed: users => users.every(u => u.blocked === false)
+      },
+      {
+        label: this.i18n('Unban'),
+        handler: users => this.unbanUsers(users),
+        isDisplayed: users => users.every(u => u.blocked === true)
+      },
+      {
+        label: this.i18n('Set Email as Verified'),
+        handler: users => this.setEmailsAsVerified(users),
+        isDisplayed: users => this.requiresEmailVerification && users.every(u => !u.blocked && u.emailVerified === false)
+      }
+    ]
+  }
+
+  openBanUserModal (users: User[]) {
+    for (const user of users) {
+      if (user.username === 'root') {
+        this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot ban root.'))
+        return
+      }
+    }
+
+    this.userBanModal.openModal(users)
   }
 
   onUserChanged () {
     this.loadData()
   }
 
+  async unbanUsers (users: User[]) {
+    const message = this.i18n('Do you really want to unban {{num}} users?', { num: users.length })
+
+    const res = await this.confirmService.confirm(message, this.i18n('Unban'))
+    if (res === false) return
+
+    this.userService.unbanUsers(users)
+        .subscribe(
+          () => {
+            const message = this.i18n('{{num}} users unbanned.', { num: users.length })
+
+            this.notificationsService.success(this.i18n('Success'), message)
+            this.loadData()
+          },
+
+          err => this.notificationsService.error(this.i18n('Error'), err.message)
+        )
+  }
+
+  async removeUsers (users: User[]) {
+    for (const user of users) {
+      if (user.username === 'root') {
+        this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot delete root.'))
+        return
+      }
+    }
+
+    const message = this.i18n('If you remove these users, you will not be able to create others with the same username!')
+    const res = await this.confirmService.confirm(message, this.i18n('Delete'))
+    if (res === false) return
+
+    this.userService.removeUser(users).subscribe(
+      () => {
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('{{num}} users deleted.', { num: users.length })
+        )
+        this.loadData()
+      },
+
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
+    )
+  }
+
+  async setEmailsAsVerified (users: User[]) {
+    this.userService.updateUsers(users, { emailVerified: true }).subscribe(
+      () => {
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('{{num}} users email set as verified.', { num: users.length })
+        )
+        this.loadData()
+      },
+
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
+    )
+  }
+
+  isInSelectionMode () {
+    return this.selectedUsers.length !== 0
+  }
+
   protected loadData () {
-    this.userService.getUsers(this.pagination, this.sort)
+    this.selectedUsers = []
+
+    this.userService.getUsers(this.pagination, this.sort, this.search)
                     .subscribe(
                       resultList => {
                         this.users = resultList.data

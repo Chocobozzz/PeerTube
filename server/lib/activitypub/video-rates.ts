@@ -8,13 +8,35 @@ import { getOrCreateActorAndServerAndModel } from './actor'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers'
+import { doRequest } from '../../helpers/requests'
+import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
+import { ActorModel } from '../../models/activitypub/actor'
+import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from './url'
 
-async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
+async function createRates (ratesUrl: string[], video: VideoModel, rate: VideoRateType) {
   let rateCounts = 0
 
-  await Bluebird.map(actorUrls, async actorUrl => {
+  await Bluebird.map(ratesUrl, async rateUrl => {
     try {
+      // Fetch url
+      const { body } = await doRequest({
+        uri: rateUrl,
+        json: true,
+        activityPub: true
+      })
+      if (!body || !body.actor) throw new Error('Body or body actor is invalid')
+
+      const actorUrl = getAPUrl(body.actor)
+      if (checkUrlsSameHost(actorUrl, rateUrl) !== true) {
+        throw new Error(`Rate url ${rateUrl} has not the same host than actor url ${actorUrl}`)
+      }
+
+      if (checkUrlsSameHost(body.id, rateUrl) !== true) {
+        throw new Error(`Rate url ${rateUrl} host is different from the AP object id ${body.id}`)
+      }
+
       const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+
       const [ , created ] = await AccountVideoRateModel
         .findOrCreate({
           where: {
@@ -24,13 +46,14 @@ async function createRates (actorUrls: string[], video: VideoModel, rate: VideoR
           defaults: {
             videoId: video.id,
             accountId: actor.Account.id,
-            type: rate
+            type: rate,
+            url: body.id
           }
         })
 
       if (created) rateCounts += 1
     } catch (err) {
-      logger.warn('Cannot add rate %s for actor %s.', rate, actorUrl, { err })
+      logger.warn('Cannot add rate %s.', rateUrl, { err })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 
@@ -62,7 +85,12 @@ async function sendVideoRateChange (account: AccountModel,
   if (dislikes > 0) await sendCreateDislike(actor, video, t)
 }
 
+function getRateUrl (rateType: VideoRateType, actor: ActorModel, video: VideoModel) {
+  return rateType === 'like' ? getVideoLikeActivityPubUrl(actor, video) : getVideoDislikeActivityPubUrl(actor, video)
+}
+
 export {
+  getRateUrl,
   createRates,
   sendVideoRateChange
 }

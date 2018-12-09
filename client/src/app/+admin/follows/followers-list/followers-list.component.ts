@@ -28,7 +28,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
   }
 
   protected loadData () {

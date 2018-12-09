@@ -49,14 +49,14 @@ export class VideoEdit implements VideoUpdate {
     }
   }
 
-  patch (values: Object) {
+  patch (values: { [ id: string ]: string }) {
     Object.keys(values).forEach((key) => {
       this[ key ] = values[ key ]
     })
 
     // If schedule publication, the video is private and will be changed to public privacy
     if (parseInt(values['privacy'], 10) === VideoEdit.SPECIAL_SCHEDULED_PRIVACY) {
-      const updateAt = (values['schedulePublicationAt'] as Date)
+      const updateAt = new Date(values['schedulePublicationAt'])
       updateAt.setSeconds(0)
 
       this.privacy = VideoPrivacy.PRIVATE

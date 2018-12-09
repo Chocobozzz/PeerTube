@@ -1,6 +1,17 @@
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, IFindOptions, Is, Model, Scopes, Table,
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  ForeignKey,
+  IFindOptions,
+  Is,
+  Model,
+  Scopes,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityTagObject } from '../../../shared/models/activitypub/objects/common-objects'
@@ -13,9 +24,11 @@ import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
+import { getServerActor } from '../../helpers/utils'
+import { UserModel } from '../account/user'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -25,18 +38,29 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.ATTRIBUTES_FOR_API]: {
-    attributes: {
-      include: [
-        [
-          Sequelize.literal(
-            '(SELECT COUNT("replies"."id") ' +
-            'FROM "videoComment" AS "replies" ' +
-            'WHERE "replies"."originCommentId" = "VideoCommentModel"."id")'
-          ),
-          'totalReplies'
+  [ScopeNames.ATTRIBUTES_FOR_API]: (serverAccountId: number, userAccountId?: number) => {
+    return {
+      attributes: {
+        include: [
+          [
+            Sequelize.literal(
+              '(' +
+                'WITH "blocklist" AS (' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')' +
+                'SELECT COUNT("replies"."id") - (' +
+                  'SELECT COUNT("replies"."id") ' +
+                  'FROM "videoComment" AS "replies" ' +
+                  'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
+                  'AND "accountId" IN (SELECT "id" FROM "blocklist")' +
+                ')' +
+                'FROM "videoComment" AS "replies" ' +
+                'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
+                'AND "accountId" NOT IN (SELECT "id" FROM "blocklist")' +
+              ')'
+            ),
+            'totalReplies'
+          ]
         ]
-      ]
+      }
     }
   },
   [ScopeNames.WITH_ACCOUNT]: {
@@ -267,26 +291,47 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static listThreadsForApi (videoId: number, start: number, count: number, sort: string) {
+  static async listThreadsForApi (videoId: number, start: number, count: number, sort: string, user?: UserModel) {
+    const serverActor = await getServerActor()
+    const serverAccountId = serverActor.Account.id
+    const userAccountId = user ? user.Account.id : undefined
+
     const query = {
       offset: start,
       limit: count,
       order: getSort(sort),
       where: {
         videoId,
-        inReplyToCommentId: null
+        inReplyToCommentId: null,
+        accountId: {
+          [Sequelize.Op.notIn]: Sequelize.literal(
+            '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
+          )
+        }
       }
     }
 
+    // FIXME: typings
+    const scopes: any[] = [
+      ScopeNames.WITH_ACCOUNT,
+      {
+        method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
+      }
+    ]
+
     return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.ATTRIBUTES_FOR_API ])
+      .scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
   }
 
-  static listThreadCommentsForApi (videoId: number, threadId: number) {
+  static async listThreadCommentsForApi (videoId: number, threadId: number, user?: UserModel) {
+    const serverActor = await getServerActor()
+    const serverAccountId = serverActor.Account.id
+    const userAccountId = user ? user.Account.id : undefined
+
     const query = {
       order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ],
       where: {
@@ -294,12 +339,24 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         [ Sequelize.Op.or ]: [
           { id: threadId },
           { originCommentId: threadId }
-        ]
+        ],
+        accountId: {
+          [Sequelize.Op.notIn]: Sequelize.literal(
+            '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
+          )
+        }
       }
     }
 
+    const scopes: any[] = [
+      ScopeNames.WITH_ACCOUNT,
+      {
+        method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
+      }
+    ]
+
     return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.ATTRIBUTES_FOR_API ])
+      .scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }

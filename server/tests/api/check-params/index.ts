@@ -1,5 +1,6 @@
 // Order of the tests we want to execute
 import './accounts'
+import './blocklist'
 import './config'
 import './follows'
 import './jobs'
@@ -15,4 +16,5 @@ import './video-channels'
 import './video-comments'
 import './video-imports'
 import './videos'
+import './videos-filter'
 import './videos-history'

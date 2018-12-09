@@ -7,7 +7,9 @@ webserver:
     __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
-trust_proxy: "PEERTUBE_TRUST_PROXY"
+trust_proxy:
+  __name: "PEERTUBE_TRUST_PROXY"
+  __format: "json"
 
 database:
   hostname: "PEERTUBE_DB_HOSTNAME"
@@ -55,6 +57,26 @@ signup:
   limit:
     __name: "PEERTUBE_SIGNUP_LIMIT"
     __format: "json"
+
+search:
+  remote_uri:
+    users:
+      __name: "PEERTUBE_SEARCH_REMOTEURI_USERS"
+      __format: "json"
+    anonymous:
+      __name: "PEERTUBE_SEARCH_REMOTEURI_ANONYMOUS"
+      __format: "json"
+
+import:
+  videos:
+    http:
+      enabled:
+        __name: "PEERTUBE_IMPORT_VIDEOS_HTTP"
+        __format: "json"
+    torrent:
+      enabled:
+        __name: "PEERTUBE_IMPORT_VIDEOS_TORRENT"
+        __format: "json"
 
 transcoding:
   enabled:

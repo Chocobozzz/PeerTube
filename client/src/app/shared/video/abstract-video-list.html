@@ -1,8 +1,18 @@
 <div [ngClass]="{ 'margin-content': marginContent }">
-  <div *ngIf="titlePage" class="title-page title-page-single">
-    {{ titlePage }}
+  <div class="videos-header">
+    <div *ngIf="titlePage" class="title-page title-page-single">
+      {{ titlePage }}
+    </div>
+    <my-feed [syndicationItems]="syndicationItems"></my-feed>
+
+    <div class="moderation-block" *ngIf="displayModerationBlock">
+      <my-peertube-checkbox
+        (change)="toggleModerationDisplay()"
+        inputName="display-unlisted-private"  i18n-labelText labelText="Display unlisted and private videos"
+      >
+      </my-peertube-checkbox>
+    </div>
   </div>
-  <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>
 
   <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div

@@ -5,7 +5,7 @@
 
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
-import { createHash, pseudoRandomBytes } from 'crypto'
+import { createHash, HexBase64Latin1Encoding, pseudoRandomBytes } from 'crypto'
 import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
@@ -21,6 +21,7 @@ const timeTable = {
   week:         3600000 * 24 * 7,
   month:        3600000 * 24 * 30
 }
+
 export function parseDuration (duration: number | string): number {
   if (typeof duration === 'number') return duration
 
@@ -39,6 +40,53 @@ export function parseDuration (duration: number | string): number {
   }
 
   throw new Error('Duration could not be properly parsed')
+}
+
+export function parseBytes (value: string | number): number {
+  if (typeof value === 'number') return value
+
+  const tgm = /^(\d+)\s*TB\s*(\d+)\s*GB\s*(\d+)\s*MB$/
+  const tg = /^(\d+)\s*TB\s*(\d+)\s*GB$/
+  const tm = /^(\d+)\s*TB\s*(\d+)\s*MB$/
+  const gm = /^(\d+)\s*GB\s*(\d+)\s*MB$/
+  const t = /^(\d+)\s*TB$/
+  const g = /^(\d+)\s*GB$/
+  const m = /^(\d+)\s*MB$/
+  const b = /^(\d+)\s*B$/
+  let match
+
+  if (value.match(tgm)) {
+    match = value.match(tgm)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024 * 1024
+    + parseInt(match[3], 10) * 1024 * 1024
+  } else if (value.match(tg)) {
+    match = value.match(tg)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024 * 1024
+  } else if (value.match(tm)) {
+    match = value.match(tm)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024
+  } else if (value.match(gm)) {
+    match = value.match(gm)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024
+    + parseInt(match[2], 10) * 1024 * 1024
+  } else if (value.match(t)) {
+    match = value.match(t)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
+  } else if (value.match(g)) {
+    match = value.match(g)
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024
+  } else if (value.match(m)) {
+    match = value.match(m)
+    return parseInt(match[1], 10) * 1024 * 1024
+  } else if (value.match(b)) {
+    match = value.match(b)
+    return parseInt(match[1], 10) * 1024
+  } else {
+    return parseInt(value, 10)
+  }
 }
 
 function sanitizeUrl (url: string) {
@@ -126,8 +174,8 @@ function peertubeTruncate (str: string, maxLength: number) {
   return truncate(str, options)
 }
 
-function sha256 (str: string) {
-  return createHash('sha256').update(str).digest('hex')
+function sha256 (str: string, encoding: HexBase64Latin1Encoding = 'hex') {
+  return createHash('sha256').update(str).digest(encoding)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {

@@ -42,6 +42,10 @@ function isUserNSFWPolicyValid (value: any) {
   return exists(value) && nsfwPolicies.indexOf(value) !== -1
 }
 
+function isUserWebTorrentEnabledValid (value: any) {
+  return isBooleanValid(value)
+}
+
 function isUserAutoPlayVideoValid (value: any) {
   return isBooleanValid(value)
 }
@@ -78,6 +82,7 @@ export {
   isUserUsernameValid,
   isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
+  isUserWebTorrentEnabledValid,
   isUserAutoPlayVideoValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,

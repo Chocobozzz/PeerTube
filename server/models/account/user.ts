@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import {
-  AfterDelete,
+  AfterDestroy,
   AfterUpdate,
   AllowNull,
   BeforeCreate,
@@ -31,7 +31,8 @@ import {
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserWebTorrentEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -109,6 +110,12 @@ export class UserModel extends Model<UserModel> {
 
   @AllowNull(false)
   @Default(true)
+  @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
+  @Column
+  webTorrentEnabled: boolean
+
+  @AllowNull(false)
+  @Default(true)
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
@@ -172,7 +179,7 @@ export class UserModel extends Model<UserModel> {
   }
 
   @AfterUpdate
-  @AfterDelete
+  @AfterDestroy
   static removeTokenCache (instance: UserModel) {
     return clearCacheByUserId(instance.id)
   }
@@ -181,7 +188,25 @@ export class UserModel extends Model<UserModel> {
     return this.count()
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static listForApi (start: number, count: number, sort: string, search?: string) {
+    let where = undefined
+    if (search) {
+      where = {
+        [Sequelize.Op.or]: [
+          {
+            email: {
+              [Sequelize.Op.iLike]: '%' + search + '%'
+            }
+          },
+          {
+            username: {
+              [ Sequelize.Op.iLike ]: '%' + search + '%'
+            }
+          }
+        ]
+      }
+    }
+
     const query = {
       attributes: {
         include: [
@@ -204,7 +229,8 @@ export class UserModel extends Model<UserModel> {
       },
       offset: start,
       limit: count,
-      order: getSort(sort)
+      order: getSort(sort),
+      where
     }
 
     return UserModel.findAndCountAll(query)
@@ -336,6 +362,7 @@ export class UserModel extends Model<UserModel> {
       email: this.email,
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
+      webTorrentEnabled: this.webTorrentEnabled,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],

@@ -2,7 +2,7 @@ import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
+import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 import { JOB_REQUEST_TIMEOUT } from '../../../initializers'
 
 export type ActivitypubHttpUnicastPayload = {
@@ -25,7 +25,8 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
     uri,
     json: body,
     httpSignature: httpSignatureOptions,
-    timeout: JOB_REQUEST_TIMEOUT
+    timeout: JOB_REQUEST_TIMEOUT,
+    headers: buildGlobalHeaders(body)
   }
 
   try {

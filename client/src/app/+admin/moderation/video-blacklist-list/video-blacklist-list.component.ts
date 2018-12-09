@@ -39,7 +39,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
   }
 
   getVideoUrl (videoBlacklist: VideoBlacklist) {

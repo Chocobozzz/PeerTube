@@ -8,7 +8,7 @@ import { hmrBootstrap } from './hmr'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { buildFileLocale } from '../../shared'
 
-let providers = []
+let providers: any[] = []
 if (environment.production) {
   enableProdMode()
 }

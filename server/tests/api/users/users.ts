@@ -32,10 +32,10 @@ import {
   updateUser,
   uploadVideo,
   userLogin
-} from '../../utils/index'
-import { follow } from '../../utils/server/follows'
-import { setAccessTokensToServers } from '../../utils/users/login'
-import { getMyVideos } from '../../utils/videos/videos'
+} from '../../../../shared/utils/index'
+import { follow } from '../../../../shared/utils/server/follows'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
+import { getMyVideos } from '../../../../shared/utils/videos/videos'
 
 const expect = chai.expect
 
@@ -180,7 +180,7 @@ describe('Test users', function () {
   it('Should be able to upload a video again')
 
   it('Should be able to create a new user', async function () {
-    await createUser(server.url, accessToken, user.username,user.password, 2 * 1024 * 1024)
+    await createUser(server.url, accessToken, user.username, user.password, 2 * 1024 * 1024)
   })
 
   it('Should be able to login with this user', async function () {
@@ -322,6 +322,40 @@ describe('Test users', function () {
     expect(users[ 1 ].nsfwPolicy).to.equal('display')
   })
 
+  it('Should search user by username', async function () {
+    const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'oot')
+    const users = res.body.data as User[]
+
+    expect(res.body.total).to.equal(1)
+    expect(users.length).to.equal(1)
+
+    expect(users[ 0 ].username).to.equal('root')
+  })
+
+  it('Should search user by email', async function () {
+    {
+      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'r_1@exam')
+      const users = res.body.data as User[]
+
+      expect(res.body.total).to.equal(1)
+      expect(users.length).to.equal(1)
+
+      expect(users[ 0 ].username).to.equal('user_1')
+      expect(users[ 0 ].email).to.equal('user_1@example.com')
+    }
+
+    {
+      const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt', 'example')
+      const users = res.body.data as User[]
+
+      expect(res.body.total).to.equal(2)
+      expect(users.length).to.equal(2)
+
+      expect(users[ 0 ].username).to.equal('root')
+      expect(users[ 1 ].username).to.equal('user_1')
+    }
+  })
+
   it('Should update my password', async function () {
     await updateMyUser({
       url: server.url,
@@ -444,6 +478,7 @@ describe('Test users', function () {
       userId,
       accessToken,
       email: 'updated2@example.com',
+      emailVerified: true,
       videoQuota: 42,
       role: UserRole.MODERATOR
     })
@@ -453,6 +488,7 @@ describe('Test users', function () {
 
     expect(user.username).to.equal('user_1')
     expect(user.email).to.equal('updated2@example.com')
+    expect(user.emailVerified).to.be.true
     expect(user.nsfwPolicy).to.equal('do_not_list')
     expect(user.videoQuota).to.equal(42)
     expect(user.roleLabel).to.equal('Moderator')

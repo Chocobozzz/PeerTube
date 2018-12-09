@@ -5,8 +5,12 @@ import 'mocha'
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
 
 describe('Test server follows API validators', function () {
   let server: ServerInfo

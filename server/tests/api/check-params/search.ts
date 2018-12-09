@@ -2,8 +2,12 @@
 
 import 'mocha'
 
-import { flushTests, immutableAssign, killallServers, makeGetRequest, runServer, ServerInfo } from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+import { flushTests, immutableAssign, killallServers, makeGetRequest, runServer, ServerInfo } from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
 
 describe('Test videos API validator', function () {
   let server: ServerInfo

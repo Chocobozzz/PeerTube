@@ -15,6 +15,10 @@ export interface ServerConfig {
     }
   }
 
+  email: {
+    enabled: boolean
+  }
+
   signup: {
     allowed: boolean,
     allowedForCurrentIP: boolean,

@@ -15,7 +15,7 @@ import {
 import { ActorModel } from '../activitypub/actor'
 import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS, STATIC_PATHS, VIDEO_EXT_MIMETYPE } from '../../initializers'
 import { VideoFileModel } from '../video/video-file'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
@@ -117,15 +117,14 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   @BeforeDestroy
   static async removeFile (instance: VideoRedundancyModel) {
-    // Not us
-    if (!instance.strategy) return
+    if (!instance.isOwned()) return
 
     const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
 
     const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
     logger.info('Removing duplicated video file %s.', logIdentifier)
 
-    videoFile.Video.removeFile(videoFile)
+    videoFile.Video.removeFile(videoFile, true)
              .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
 
     return undefined
@@ -293,6 +292,11 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
 
     return VideoFileModel.sum('size', options as any) // FIXME: typings
+      .then(v => {
+        if (!v || isNaN(v)) return 0
+
+        return v
+      })
   }
 
   static async listLocalExpired () {
@@ -399,6 +403,10 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       }))
   }
 
+  isOwned () {
+    return !!this.strategy
+  }
+
   toActivityPubObject (): CacheFileObject {
     return {
       id: this.url,
@@ -408,6 +416,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       url: {
         type: 'Link',
         mimeType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mediaType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,
         size: this.VideoFile.size,

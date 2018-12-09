@@ -10,8 +10,10 @@ database:
 
 # From the project root directory
 storage:
+  tmp: 'test5/tmp/'
   avatars: 'test5/avatars/'
   videos: 'test5/videos/'
+  redundancy: 'test5/redundancy/'
   logs: 'test5/logs/'
   previews: 'test5/previews/'
   thumbnails: 'test5/thumbnails/'

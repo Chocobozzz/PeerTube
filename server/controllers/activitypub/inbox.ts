@@ -43,11 +43,13 @@ export {
 // ---------------------------------------------------------------------------
 
 const inboxQueue = queue<{ activities: Activity[], signatureActor?: ActorModel, inboxActor?: ActorModel }, Error>((task, cb) => {
-  processActivities(task.activities, task.signatureActor, task.inboxActor)
+  const options = { signatureActor: task.signatureActor, inboxActor: task.inboxActor }
+
+  processActivities(task.activities, options)
     .then(() => cb())
 })
 
-function inboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
+function inboxController (req: express.Request, res: express.Response) {
   const rootActivity: RootActivity = req.body
   let activities: Activity[] = []
 

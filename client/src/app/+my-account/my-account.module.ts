@@ -19,6 +19,8 @@ import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-i
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settings/my-account-danger-zone'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
+import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
+import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
 
 @NgModule({
   imports: [
@@ -45,7 +47,9 @@ import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-sub
     ActorAvatarInfoComponent,
     MyAccountVideoImportsComponent,
     MyAccountDangerZoneComponent,
-    MyAccountSubscriptionsComponent
+    MyAccountSubscriptionsComponent,
+    MyAccountBlocklistComponent,
+    MyAccountServerBlocklistComponent
   ],
 
   exports: [

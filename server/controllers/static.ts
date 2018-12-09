@@ -34,12 +34,17 @@ staticRouter.use(
 )
 
 // Videos path for webseeding
-const videosPhysicalPath = CONFIG.STORAGE.VIDEOS_DIR
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(videosPhysicalPath)
+  express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
 )
+staticRouter.use(
+  STATIC_PATHS.REDUNDANCY,
+  cors(),
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
+)
+
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   asyncMiddleware(videosGetValidator),
@@ -128,6 +133,12 @@ staticRouter.use('/.well-known/dnt-policy.txt',
 staticRouter.use('/.well-known/dnt/',
   (_, res: express.Response) => {
     res.json({ tracking: 'N' })
+  }
+)
+
+staticRouter.use('/.well-known/change-password',
+  (_, res: express.Response) => {
+    res.redirect('/my-account/settings')
   }
 )
 

@@ -1,12 +1,14 @@
 import { values } from 'lodash'
 import { Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
 import { VideoRateType } from '../../../shared/models/videos'
-import { VIDEO_RATE_TYPES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers'
 import { VideoModel } from '../video/video'
 import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
+import { throwIfNotValid } from '../utils'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 
 /*
   Account rates per video.
@@ -26,6 +28,10 @@ import { ActorModel } from '../activitypub/actor'
     },
     {
       fields: [ 'videoId', 'type' ]
+    },
+    {
+      fields: [ 'url' ],
+      unique: true
     }
   ]
 })
@@ -34,6 +40,11 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   @AllowNull(false)
   @Column(DataType.ENUM(values(VIDEO_RATE_TYPES)))
   type: VideoRateType
+
+  @AllowNull(false)
+  @Is('AccountVideoRateUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_RATES.URL.max))
+  url: string
 
   @CreatedAt
   createdAt: Date
@@ -65,11 +76,54 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   })
   Account: AccountModel
 
-  static load (accountId: number, videoId: number, transaction: Transaction) {
+  static load (accountId: number, videoId: number, transaction?: Transaction) {
     const options: IFindOptions<AccountVideoRateModel> = {
       where: {
         accountId,
         videoId
+      }
+    }
+    if (transaction) options.transaction = transaction
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
+  static loadLocalAndPopulateVideo (rateType: VideoRateType, accountName: string, videoId: number, transaction?: Transaction) {
+    const options: IFindOptions<AccountVideoRateModel> = {
+      where: {
+        videoId,
+        type: rateType
+      },
+      include: [
+        {
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id', 'url', 'preferredUsername' ],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: {
+                preferredUsername: accountName
+              }
+            }
+          ]
+        },
+        {
+          model: VideoModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+    if (transaction) options.transaction = transaction
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
+  static loadByUrl (url: string, transaction: Transaction) {
+    const options: IFindOptions<AccountVideoRateModel> = {
+      where: {
+        url
       }
     }
     if (transaction) options.transaction = transaction

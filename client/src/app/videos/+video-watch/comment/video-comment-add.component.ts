@@ -29,9 +29,9 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
 
   @ViewChild('visitorModal') visitorModal: NgbModal
-  @ViewChild('textarea') private textareaElement: ElementRef
+  @ViewChild('textarea') textareaElement: ElementRef
 
-  private addingComment = false
+  addingComment = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -76,7 +76,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     this.formValidated()
   }
 
-  openVisitorModal (event) {
+  openVisitorModal (event: any) {
     if (this.user === null) { // we only open it for visitors
       // fixing ng-bootstrap ModalService and the "Expression Changed After It Has Been Checked" Error
       event.srcElement.blur()

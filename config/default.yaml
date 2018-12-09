@@ -45,8 +45,10 @@ smtp:
 
 # From the project root directory
 storage:
+  tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
+  redundancy: 'storage/redundancy/'
   logs: 'storage/logs/'
   previews: 'storage/previews/'
   thumbnails: 'storage/thumbnails/'
@@ -58,7 +60,10 @@ log:
   level: 'info' # debug/info/warning/error
 
 search:
-  remote_uri: # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
+  # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
+  # If enabled, the associated group will be able to "escape" from the instance follows
+  # That means they will be able to follow channels, watch videos, list videos of non followed instances
+  remote_uri:
     users: true
     anonymous: false
 
@@ -72,7 +77,7 @@ trending:
 redundancy:
   videos:
     check_interval: '1 hour' # How often you want to check new videos to cache
-    strategies:
+    strategies: # Just uncomment strategies you want
 #      -
 #        size: '10GB'
 #        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)

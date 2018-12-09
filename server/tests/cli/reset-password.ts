@@ -10,7 +10,7 @@ import {
   runServer,
   ServerInfo,
   setAccessTokensToServers
-} from '../utils'
+} from '../../../shared/utils'
 
 describe('Test reset password scripts', function () {
   let server: ServerInfo

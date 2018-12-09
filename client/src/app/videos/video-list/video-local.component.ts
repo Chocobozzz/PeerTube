@@ -10,6 +10,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { UserRight } from '../../../../../shared/models/users'
 
 @Component({
   selector: 'my-videos-local',
@@ -40,6 +41,11 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   ngOnInit () {
     super.ngOnInit()
 
+    if (this.authService.isLoggedIn()) {
+      const user = this.authService.getUser()
+      this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
+    }
+
     this.generateSyndicationList()
   }
 
@@ -55,5 +61,11 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
 
   generateSyndicationList () {
     this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, this.filter, this.categoryOneOf)
+  }
+
+  toggleModerationDisplay () {
+    this.filter = this.filter === 'local' ? 'all-local' as 'all-local' : 'local' as 'local'
+
+    this.reloadVideos()
   }
 }

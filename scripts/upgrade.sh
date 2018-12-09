@@ -20,11 +20,26 @@ if [ ! -e "$PEERTUBE_PATH/versions" -o ! -e "$PEERTUBE_PATH/config/production.ya
   exit 1
 fi
 
+if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ] ; then
+    REMAINING=$(df -k $PEERTUBE_PATH | awk '{ print $4}' | sed -n 2p)
+    ONE_GB=$((1024 * 1024))
+    if [ "$REMAINING" -lt "$ONE_GB" ]; then
+    echo "Error - not enough free space for upgrading"
+    echo ""
+    echo "Make sure you have at least 1 GB of free space in $PEERTUBE_PATH"
+    exit 1
+    fi
+fi
 
 # Backup database
 SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
+DB_USER=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
+DB_PASS=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
+DB_HOST=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
+DB_SUFFIX=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
 mkdir -p $PEERTUBE_PATH/backup
-pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH" 
+
+PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "peertube${DB_SUFFIX}" -f "$SQL_BACKUP_PATH"
 
 # If there is a pre-release, give the user a choice which one to install.
 RELEASE_VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4)

@@ -33,7 +33,7 @@ export class RestExtractor {
     return this.applyToResultListData(result, this.convertDateToHuman, [ fieldsToConvert ])
   }
 
-  convertDateToHuman (target: object, fieldsToConvert: string[]) {
+  convertDateToHuman (target: { [ id: string ]: string }, fieldsToConvert: string[]) {
     fieldsToConvert.forEach(field => target[field] = dateToHuman(target[field]))
 
     return target
@@ -83,7 +83,7 @@ export class RestExtractor {
       errorMessage = err
     }
 
-    const errorObj = {
+    const errorObj: { message: string, status: string, body: string } = {
       message: errorMessage,
       status: undefined,
       body: undefined

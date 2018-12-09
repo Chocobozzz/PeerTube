@@ -33,6 +33,18 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     super()
   }
 
+  get currentHost () {
+    return window.location.host
+  }
+
+  get originHost () {
+    if (this.isRemoteVideo()) {
+      return this.video.account.host
+    }
+
+    return ''
+  }
+
   ngOnInit () {
     this.buildForm({
       reason: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON
@@ -60,5 +72,9 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
                             err => this.notificationsService.error(this.i18n('Error'), err.message)
                            )
+  }
+
+  isRemoteVideo () {
+    return !this.video.isLocal
   }
 }

@@ -25,7 +25,7 @@ import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
 import { VideoOwnershipService } from './video-ownership'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
-import { VideoFeedComponent } from './video/video-feed.component'
+import { FeedComponent } from './video/feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 import { AccountService } from '@app/shared/account/account.service'
@@ -37,13 +37,15 @@ import {
   LoginValidatorsService,
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
+  TextareaAutoResizeDirective,
   UserValidatorsService,
   VideoAbuseValidatorsService,
+  VideoAcceptOwnershipValidatorsService,
   VideoBlacklistValidatorsService,
+  VideoChangeOwnershipValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
-  VideoValidatorsService,
-  VideoChangeOwnershipValidatorsService, VideoAcceptOwnershipValidatorsService
+  VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -53,11 +55,13 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { SubscribeButtonComponent, RemoteSubscribeComponent, UserSubscriptionService } from '@app/shared/user-subscription'
+import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
+import { BlocklistService } from '@app/shared/blocklist'
+import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
 
 @NgModule({
   imports: [
@@ -81,7 +85,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
@@ -91,6 +95,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     FromNowPipe,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    TextareaAutoResizeDirective,
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
@@ -98,7 +103,8 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
-    UserModerationDropdownComponent
+    UserModerationDropdownComponent,
+    TopMenuDropdownComponent
   ],
 
   exports: [
@@ -121,13 +127,14 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    TextareaAutoResizeDirective,
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
@@ -136,6 +143,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
+    TopMenuDropdownComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -172,6 +180,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
+    BlocklistService,
 
     I18nPrimengCalendarService,
     ScreenService,

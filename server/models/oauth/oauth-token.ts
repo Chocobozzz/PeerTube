@@ -1,5 +1,5 @@
 import {
-  AfterDelete,
+  AfterDestroy,
   AfterUpdate,
   AllowNull,
   BelongsTo,
@@ -47,7 +47,7 @@ enum ScopeNames {
             required: true,
             include: [
               {
-                attributes: [ 'id' ],
+                attributes: [ 'id', 'url' ],
                 model: () => ActorModel.unscoped(),
                 required: true
               }
@@ -126,7 +126,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
   OAuthClients: OAuthClientModel[]
 
   @AfterUpdate
-  @AfterDelete
+  @AfterDestroy
   static removeTokenCache (token: OAuthTokenModel) {
     return clearCacheByToken(token.accessToken)
   }

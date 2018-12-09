@@ -4,8 +4,11 @@ import 'mocha'
 import * as chai from 'chai'
 import { About } from '../../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-import { deleteCustomConfig, getAbout, killallServers, reRunServer } from '../../utils'
 import {
+  deleteCustomConfig,
+  getAbout,
+  killallServers,
+  reRunServer,
   flushTests,
   getConfig,
   getCustomConfig,
@@ -13,7 +16,7 @@ import {
   runServer,
   setAccessTokensToServers,
   updateCustomConfig
-} from '../../utils/index'
+} from '../../../../shared/utils'
 
 const expect = chai.expect
 

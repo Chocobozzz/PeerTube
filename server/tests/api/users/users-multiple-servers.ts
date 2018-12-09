@@ -13,13 +13,13 @@ import {
   removeUser,
   updateMyUser,
   userLogin
-} from '../../utils'
-import { getMyUserInformation, killallServers, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../utils/index'
-import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../utils/users/accounts'
-import { setAccessTokensToServers } from '../../utils/users/login'
+} from '../../../../shared/utils'
+import { getMyUserInformation, killallServers, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../../../shared/utils/index'
+import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../../../shared/utils/users/accounts'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
 import { User } from '../../../../shared/models/users'
 import { VideoChannel } from '../../../../shared/models/videos'
-import { waitJobs } from '../../utils/server/jobs'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 

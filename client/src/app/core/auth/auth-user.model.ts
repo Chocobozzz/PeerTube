@@ -72,6 +72,7 @@ export class AuthUser extends User {
     EMAIL: 'email',
     USERNAME: 'username',
     NSFW_POLICY: 'nsfw_policy',
+    WEBTORRENT_ENABLED: 'peertube-videojs-' + 'webtorrent_enabled',
     AUTO_PLAY_VIDEO: 'auto_play_video'
   }
 
@@ -87,6 +88,7 @@ export class AuthUser extends User {
           email: peertubeLocalStorage.getItem(this.KEYS.EMAIL),
           role: parseInt(peertubeLocalStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
           nsfwPolicy: peertubeLocalStorage.getItem(this.KEYS.NSFW_POLICY) as NSFWPolicyType,
+          webTorrentEnabled: peertubeLocalStorage.getItem(this.KEYS.WEBTORRENT_ENABLED) === 'true',
           autoPlayVideo: peertubeLocalStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true'
         },
         Tokens.load()
@@ -101,6 +103,7 @@ export class AuthUser extends User {
     peertubeLocalStorage.removeItem(this.KEYS.ID)
     peertubeLocalStorage.removeItem(this.KEYS.ROLE)
     peertubeLocalStorage.removeItem(this.KEYS.NSFW_POLICY)
+    peertubeLocalStorage.removeItem(this.KEYS.WEBTORRENT_ENABLED)
     peertubeLocalStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
     peertubeLocalStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
@@ -138,6 +141,7 @@ export class AuthUser extends User {
     peertubeLocalStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
     peertubeLocalStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
     peertubeLocalStorage.setItem(AuthUser.KEYS.NSFW_POLICY, this.nsfwPolicy.toString())
+    peertubeLocalStorage.setItem(AuthUser.KEYS.WEBTORRENT_ENABLED, JSON.stringify(this.webTorrentEnabled))
     peertubeLocalStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
     this.tokens.save()
   }

@@ -1,5 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -14,6 +14,7 @@ import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-se
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { FormValidatorService, UserService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
+import { scrollToTop } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-upload',
@@ -25,7 +26,8 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
-  @ViewChild('videofileInput') videofileInput
+  @Output() firstStepError = new EventEmitter<void>()
+  @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
@@ -42,6 +44,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+
+  error: string
 
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
@@ -110,14 +114,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   uploadFirstStep () {
-    const videofile = this.videofileInput.nativeElement.files[0] as File
+    const videofile = this.videofileInput.nativeElement.files[0]
     if (!videofile) return
-
-    // Cannot upload videos > 8GB for now
-    if (videofile.size > 8 * 1024 * 1024 * 1024) {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('We are sorry but PeerTube cannot handle videos > 8GB'))
-      return
-    }
 
     const bytePipes = new BytesPipe()
     const videoQuota = this.authService.getUser().videoQuota
@@ -201,6 +199,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
         this.videoUploadObservable = null
+        this.firstStepError.emit()
         this.notificationsService.error(this.i18n('Error'), err.message)
       }
     )
@@ -235,8 +234,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           },
 
           err => {
-            this.isUpdatingVideo = false
-            this.notificationsService.error(this.i18n('Error'), err.message)
+            this.error = err.message
+            scrollToTop()
             console.error(err)
           }
         )

@@ -11,9 +11,9 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../utils'
+} from '../../../../shared/utils'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
-import { userWatchVideo } from '../../utils/videos/video-history'
+import { userWatchVideo } from '../../../../shared/utils/videos/video-history'
 
 const expect = chai.expect
 

@@ -3,9 +3,9 @@ import { dirname, join } from 'path'
 import { JobType, VideoRateType, VideoState, VideosRedundancy } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoAbuseState, VideoImportState, VideoPrivacy } from '../../shared/models/videos'
+import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { buildPath, isTestInstance, parseDuration, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { buildPath, isTestInstance, parseDuration, parseBytes, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 275
+const LAST_MIGRATION_VERSION = 290
 
 // ---------------------------------------------------------------------------
 
@@ -47,7 +47,10 @@ const SORTABLE_COLUMNS = {
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'trending' ],
 
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes', 'match' ],
-  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ]
+  VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+
+  ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
+  SERVERS_BLOCKLIST: [ 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -58,6 +61,7 @@ const OAUTH_LIFETIME = {
 const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
+  SITEMAP: '1 day',
   SECURITYTXT: '2 hours',
   NODEINFO: '10 minutes',
   DNT_POLICY: '1 week',
@@ -99,7 +103,8 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'video-file': 1,
   'video-import': 1,
   'email': 5,
-  'videos-views': 1
+  'videos-views': 1,
+  'activitypub-refresher': 1
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
@@ -110,7 +115,8 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'video-file': 1,
   'video-import': 1,
   'email': 5,
-  'videos-views': 1
+  'videos-views': 1,
+  'activitypub-refresher': 1
 }
 const JOB_TTL: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
@@ -121,11 +127,12 @@ const JOB_TTL: { [ id in JobType ]: number } = {
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes
-  'videos-views': undefined // Unlimited
+  'videos-views': undefined, // Unlimited
+  'activitypub-refresher': 60000 * 10 // 10 minutes
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {
-    cron: '1 * * * *' // At 1 minutes past the hour
+    cron: '1 * * * *' // At 1 minute past the hour
   }
 }
 
@@ -179,9 +186,11 @@ const CONFIG = {
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
   STORAGE: {
+    TMP_DIR: buildPath(config.get<string>('storage.tmp')),
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
+    REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
@@ -232,8 +241,8 @@ const CONFIG = {
     }
   },
   USER: {
-    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') },
-    get VIDEO_QUOTA_DAILY () { return config.get<number>('user.video_quota_daily') }
+    get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
+    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
@@ -291,9 +300,9 @@ const CONFIG = {
 
 const CONSTRAINTS_FIELDS = {
   USERS: {
-    NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 250 }, // Length
-    USERNAME: { min: 3, max: 20 }, // Length
+    NAME: { min: 1, max: 50 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
+    USERNAME: { min: 1, max: 50 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
@@ -307,9 +316,9 @@ const CONSTRAINTS_FIELDS = {
     REASON: { min: 2, max: 300 } // Length
   },
   VIDEO_CHANNELS: {
-    NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 500 }, // Length
-    SUPPORT: { min: 3, max: 500 }, // Length
+    NAME: { min: 1, max: 50 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_CAPTIONS: {
@@ -333,12 +342,15 @@ const CONSTRAINTS_FIELDS = {
   VIDEOS_REDUNDANCY: {
     URL: { min: 3, max: 2000 } // Length
   },
+  VIDEO_RATES: {
+    URL: { min: 3, max: 2000 } // Length
+  },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
-    SUPPORT: { min: 3, max: 500 }, // Length
+    SUPPORT: { min: 3, max: 1000 }, // Length
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
@@ -393,7 +405,7 @@ const RATES_LIMIT = {
 }
 
 let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
-const VIDEO_TRANSCODING_FPS = {
+const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MIN: 10,
   AVERAGE: 30,
   MAX: 60,
@@ -421,7 +433,7 @@ const VIDEO_CATEGORIES = {
   8: 'People',
   9: 'Comedy',
   10: 'Entertainment',
-  11: 'News',
+  11: 'News & Politics',
   12: 'How To',
   13: 'Education',
   14: 'Activism',
@@ -529,9 +541,15 @@ const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
   APPLICATION: 'Application'
 }
 
+const HTTP_SIGNATURE = {
+  HEADER_NAME: 'signature',
+  ALGORITHM: 'rsa-sha256',
+  HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ]
+}
+
 // ---------------------------------------------------------------------------
 
-const PRIVATE_RSA_KEY_SIZE = 2048
+let PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
@@ -554,6 +572,7 @@ const STATIC_PATHS = {
   THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
+  REDUNDANCY: '/static/redundancy/',
   AVATARS: '/static/avatars/',
   VIDEO_CAPTIONS: '/static/video-captions/'
 }
@@ -635,6 +654,8 @@ const TRACKER_RATE_LIMITS = {
 
 // Special constants for a test instance
 if (isTestInstance() === true) {
+  PRIVATE_RSA_KEY_SIZE = 1024
+
   ACTOR_FOLLOW_SCORE.BASE = 20
 
   REMOTE_SCHEME.HTTP = 'http'
@@ -728,6 +749,7 @@ export {
   VIDEO_EXT_MIMETYPE,
   CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
+  HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   buildLanguages
@@ -755,7 +777,7 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
   if (!objs) return []
 
   return objs.map(obj => {
-    return Object.assign(obj, {
+    return Object.assign({}, obj, {
       minLifetime: parseDuration(obj.min_lifetime),
       size: bytes.parse(obj.size),
       minViews: obj.min_views

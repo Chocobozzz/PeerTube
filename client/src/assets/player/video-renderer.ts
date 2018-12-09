@@ -1,9 +1,9 @@
 // Thanks: https://github.com/feross/render-media
 // TODO: use render-media once https://github.com/feross/render-media/issues/32 is fixed
 
-import * as MediaElementWrapper from 'mediasource'
+const MediaElementWrapper = require('mediasource')
 import { extname } from 'path'
-import * as videostream from 'videostream'
+const videostream = require('videostream')
 
 const VIDEOSTREAM_EXTS = [
   '.m4a',
@@ -17,7 +17,7 @@ type RenderMediaOptions = {
 }
 
 function renderVideo (
-  file,
+  file: any,
   elem: HTMLVideoElement,
   opts: RenderMediaOptions,
   callback: (err: Error, renderer: any) => void
@@ -27,11 +27,11 @@ function renderVideo (
   return renderMedia(file, elem, opts, callback)
 }
 
-function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, callback: (err: Error, renderer?: any) => void) {
+function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOptions, callback: (err: Error, renderer?: any) => void) {
   const extension = extname(file.name).toLowerCase()
-  let preparedElem = undefined
+  let preparedElem: any = undefined
   let currentTime = 0
-  let renderer
+  let renderer: any
 
   try {
     if (VIDEOSTREAM_EXTS.indexOf(extension) >= 0) {
@@ -45,7 +45,7 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
 
   function useVideostream () {
     prepareElem()
-    preparedElem.addEventListener('error', function onError (err) {
+    preparedElem.addEventListener('error', function onError (err: Error) {
       preparedElem.removeEventListener('error', onError)
 
       return callback(err)
@@ -58,7 +58,7 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
     const codecs = getCodec(file.name, useVP9)
 
     prepareElem()
-    preparedElem.addEventListener('error', function onError (err) {
+    preparedElem.addEventListener('error', function onError (err: Error) {
       preparedElem.removeEventListener('error', onError)
 
       // Try with vp9 before returning an error
@@ -102,7 +102,7 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
   }
 }
 
-function validateFile (file) {
+function validateFile (file: any) {
   if (file == null) {
     throw new Error('file cannot be null or undefined')
   }

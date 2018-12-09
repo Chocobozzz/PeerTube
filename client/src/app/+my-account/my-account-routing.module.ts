@@ -11,6 +11,8 @@ import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-accoun
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
 import { MyAccountOwnershipComponent } from '@app/+my-account/my-account-ownership/my-account-ownership.component'
+import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
+import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -92,6 +94,24 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Ownership changes'
+          }
+        }
+      },
+      {
+        path: 'blocklist/accounts',
+        component: MyAccountBlocklistComponent,
+        data: {
+          meta: {
+            title: 'Muted accounts'
+          }
+        }
+      },
+      {
+        path: 'blocklist/servers',
+        component: MyAccountServerBlocklistComponent,
+        data: {
+          meta: {
+            title: 'Muted instances'
           }
         }
       }

@@ -31,6 +31,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  checkVideoFollowConstraints,
   commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
@@ -66,17 +67,17 @@ const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
   Object.assign({}, VIDEO_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
   {
-    videofile: CONFIG.STORAGE.VIDEOS_DIR,
-    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+    videofile: CONFIG.STORAGE.TMP_DIR,
+    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
+    previewfile: CONFIG.STORAGE.TMP_DIR
   }
 )
 const reqVideoFileUpdate = createReqFiles(
   [ 'thumbnailfile', 'previewfile' ],
   IMAGE_MIMETYPE_EXT,
   {
-    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
+    previewfile: CONFIG.STORAGE.TMP_DIR
   }
 )
 
@@ -123,6 +124,7 @@ videosRouter.get('/:id/description',
 videosRouter.get('/:id',
   optionalAuthenticate,
   asyncMiddleware(videosGetValidator),
+  asyncMiddleware(checkVideoFollowConstraints),
   getVideo
 )
 videosRouter.post('/:id/views',
@@ -385,6 +387,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
 function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
+  if (videoInstance.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoInstance.url } })
+      .catch(err => logger.error('Cannot create AP refresher job for video %s.', videoInstance.url, { err }))
+  }
+
   return res.json(videoInstance.toFormattedDetailsJSON())
 }
 
@@ -404,7 +411,6 @@ async function viewVideo (req: express.Request, res: express.Response) {
   ])
 
   const serverActor = await getServerActor()
-
   await sendCreateView(serverActor, videoInstance, undefined)
 
   return res.status(204).end()
@@ -423,7 +429,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
   return res.json({ description })
 }
 
-async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listVideos (req: express.Request, res: express.Response) {
   const resultList = await VideoModel.listForApi({
     start: req.query.start,
     count: req.query.count,
@@ -437,7 +443,7 @@ async function listVideos (req: express.Request, res: express.Response, next: ex
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false,
-    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

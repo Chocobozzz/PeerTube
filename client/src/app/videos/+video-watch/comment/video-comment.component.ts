@@ -26,7 +26,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   @Output() resetReply = new EventEmitter()
 
   sanitizedCommentHTML = ''
-  newParentComments = []
+  newParentComments: VideoComment[] = []
 
   constructor (
     private linkifierService: LinkifierService,

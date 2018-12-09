@@ -18,9 +18,11 @@ export class FollowService {
   ) {
   }
 
-  getFollowing (pagination: RestPagination, sort: SortMeta): Observable<ResultList<ActorFollow>> {
+  getFollowing (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<ActorFollow>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<ActorFollow>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
                .pipe(
@@ -29,9 +31,11 @@ export class FollowService {
                )
   }
 
-  getFollowers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<ActorFollow>> {
+  getFollowers (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<ActorFollow>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<ActorFollow>>(FollowService.BASE_APPLICATION_URL + '/followers', { params })
                .pipe(

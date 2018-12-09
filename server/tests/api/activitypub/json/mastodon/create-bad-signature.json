@@ -1,0 +1,81 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    "https://w3id.org/security/v1",
+    {
+      "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+      "sensitive": "as:sensitive",
+      "movedTo": {
+        "@id": "as:movedTo",
+        "@type": "@id"
+      },
+      "Hashtag": "as:Hashtag",
+      "ostatus": "http://ostatus.org#",
+      "atomUri": "ostatus:atomUri",
+      "inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+      "conversation": "ostatus:conversation",
+      "toot": "http://joinmastodon.org/ns#",
+      "Emoji": "toot:Emoji",
+      "focalPoint": {
+        "@container": "@list",
+        "@id": "toot:focalPoint"
+      },
+      "featured": {
+        "@id": "toot:featured",
+        "@type": "@id"
+      },
+      "schema": "http://schema.org#",
+      "PropertyValue": "schema:PropertyValue",
+      "value": "schema:value"
+    }
+  ],
+  "id": "http://localhost:3000/users/ronan2/statuses/100939345950887698/activity",
+  "type": "Create",
+  "actor": "http://localhost:3000/users/ronan2",
+  "published": "2018-10-22T12:43:07Z",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "http://localhost:3000/users/ronan2/followers",
+    "http://localhost:9000/accounts/ronan"
+  ],
+  "object": {
+    "id": "http://localhost:3000/users/ronan2/statuses/100939345950887698",
+    "type": "Note",
+    "summary": null,
+    "inReplyTo": "http://localhost:9000/videos/watch/90e6f8ed-b369-423c-b0c8-f44e5350c752",
+    "published": "2018-10-22T12:43:07Z",
+    "url": "http://localhost:3000/@ronan2/100939345950887698",
+    "attributedTo": "http://localhost:3000/users/ronan2",
+    "to": [
+      "https://www.w3.org/ns/activitystreams#Public"
+    ],
+    "cc": [
+      "http://localhost:3000/users/ronan2/followers",
+      "http://localhost:9000/accounts/ronan"
+    ],
+    "sensitive": false,
+    "atomUri": "http://localhost:3000/users/ronan2/statuses/100939345950887698",
+    "inReplyToAtomUri": "http://localhost:9000/videos/watch/90e6f8ed-b369-423c-b0c8-f44e5350c752",
+    "conversation": "tag:localhost:3000,2018-10-19:objectId=72:objectType=Conversation",
+    "content": "<p><span class=\"h-card\"><a href=\"http://localhost:9000/accounts/ronan\" class=\"u-url mention\">@<span>ronan</span></a></span> zerg</p>",
+    "contentMap": {
+      "en": "<p><span class=\"h-card\"><a href=\"http://localhost:9000/accounts/ronan\" class=\"u-url mention\">@<span>ronan</span></a></span> zerg</p>"
+    },
+    "attachment": [],
+    "tag": [
+      {
+        "type": "Mention",
+        "href": "http://localhost:9000/accounts/ronan",
+        "name": "@ronan@localhost:9000"
+      }
+    ]
+  },
+  "signature": {
+    "type": "RsaSignature2017",
+    "creator": "http://localhost:3000/users/ronan2#main-key",
+    "created": "2018-10-22T12:43:08Z",
+    "signatureValue": "Vgr8nA0agPr9TcA4BlX+MWhmuE+rBcoIJLpnPbm3E5SnOCXbgjEfEaTLqfuzzkKNsR3PBbkvi3YWK4/DxJ0zmpzSB7yy4NRzluQMVQHqJiFKXAX3Sr3fIrK24xkWW9/F207c1NpFajSGbgnFKBdtFE0e5VqwSrSoOJkZukZW/2ATSnsyzblieuUmvTWpD0PqpUOsynPjw+RqZnqPn0cjw1z2Dm7ZRt3trnyMTXFYZw5U/YuqMY2kpadD6vq780md8kXlJIylxG6ZrlO2jz9fJdnfuVq43d4QFNsBm1K1r2WtNqX+i+wiqh+u3PjF4pzXtl/a3hJOH18IfZnK7I21mQ=="
+  }
+}

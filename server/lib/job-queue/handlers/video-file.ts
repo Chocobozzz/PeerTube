@@ -1,5 +1,5 @@
 import * as Bull from 'bull'
-import { VideoResolution, VideoState } from '../../../../shared'
+import { VideoResolution, VideoState, Job } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
@@ -8,7 +8,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { importVideoFile, transcodeOriginalVideofile, optimizeOriginalVideofile } from '../../video-transcoding'
+import { importVideoFile, transcodeOriginalVideofile, optimizeVideofile } from '../../video-transcoding'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -56,7 +56,7 @@ async function processVideoFile (job: Bull.Job) {
 
     await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
   } else {
-    await optimizeOriginalVideofile(video)
+    await optimizeVideofile(video)
 
     await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload.isNewVideo)
   }
@@ -111,7 +111,7 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
     )
 
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Bluebird<any>[] = []
+      const tasks: Bluebird<Bull.Job<any>>[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {

@@ -15,8 +15,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../utils'
-import { waitJobs } from '../utils/server/jobs'
+} from '../../../shared/utils'
+import { waitJobs } from '../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 

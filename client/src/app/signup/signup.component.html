@@ -4,6 +4,7 @@
     Create an account
   </div>
 
+  <div *ngIf="info" class="alert alert-info">{{ info }}</div>
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <div class="d-flex justify-content-left flex-wrap">
@@ -51,7 +52,7 @@
       <div class="form-group form-group-terms">
         <my-peertube-checkbox
           inputName="terms" formControlName="terms"
-          i18n-labelHtml labelHtml="I have read and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
+          i18n-labelHtml labelHtml="I am at least 16 years old and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
         ></my-peertube-checkbox>
 
         <div *ngIf="formErrors.terms" class="form-error">
@@ -59,11 +60,11 @@
         </div>
       </div>
 
-      <input type="submit" i18n-value value="Signup" [disabled]="!form.valid">
+      <input type="submit" i18n-value value="Signup" [disabled]="!form.valid || signupDone">
     </form>
 
     <div>
-      <label for="email" i18n>Features found on this instance</label>
+      <label i18n>Features found on this instance</label>
       <my-instance-features-table></my-instance-features-table>
     </div>
   </div>

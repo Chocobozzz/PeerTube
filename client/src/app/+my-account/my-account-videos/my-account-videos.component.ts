@@ -169,7 +169,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
   private spliceVideosById (id: number) {
     for (const key of Object.keys(this.loadedPages)) {
-      const videos = this.loadedPages[ key ]
+      const videos: Video[] = this.loadedPages[ key ]
       const index = videos.findIndex(v => v.id === id)
 
       if (index !== -1) {

@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import * as chai from 'chai'
-import * as lodash from 'lodash'
+import { orderBy } from 'lodash'
 import 'mocha'
 import {
   addVideoToBlacklist,
@@ -16,13 +16,12 @@ import {
   setAccessTokensToServers,
   updateVideoBlacklist,
   uploadVideo
-} from '../../utils/index'
-import { doubleFollow } from '../../utils/server/follows'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils/index'
+import { doubleFollow } from '../../../../shared/utils/server/follows'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { VideoAbuse } from '../../../../shared/models/videos'
 
 const expect = chai.expect
-const orderBy = lodash.orderBy
 
 describe('Test video blacklist management', function () {
   let servers: ServerInfo[] = []

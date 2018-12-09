@@ -14,6 +14,7 @@ class Emailer {
   private static instance: Emailer
   private initialized = false
   private transporter: Transporter
+  private enabled = false
 
   private constructor () {}
 
@@ -50,11 +51,17 @@ class Emailer {
         tls,
         auth
       })
+
+      this.enabled = true
     } else {
       if (!isTestInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
       }
     }
+  }
+
+  isEnabled () {
+    return this.enabled
   }
 
   async checkConnectionOrDie () {

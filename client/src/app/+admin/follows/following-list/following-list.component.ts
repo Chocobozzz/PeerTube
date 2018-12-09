@@ -29,7 +29,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
   }
 
   async removeFollowing (follow: ActorFollow) {
@@ -53,7 +53,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
   }
 
   protected loadData () {
-    this.followService.getFollowing(this.pagination, this.sort)
+    this.followService.getFollowing(this.pagination, this.sort, this.search)
                       .subscribe(
                         resultList => {
                           this.following = resultList.data

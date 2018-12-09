@@ -27,15 +27,15 @@ fi
 maintainer_public_key=${MAINTAINER_GPG:-"583A612D890159BE"}
 
 branch=$(git symbolic-ref --short -q HEAD)
-if [ "$branch" != "develop" ] && [[ "$branch" != feature/* ]]; then
+if [ "$branch" != "develop" ] && [[ "$branch" != release/* ]]; then
   echo "Need to be on develop or release branch."
   exit -1
 fi
 
 version="v$1"
 github_prerelease_option=""
-if [[ "$version" = *".pre."* ]]; then
-  echo "This is a pre-release."
+if [[ "$version" = *"-alpha."* ]] || [[ "$version" = *"-beta."* ]] || [[ "$version" = *"-rc."* ]]; then
+  echo -e "This is a pre-release.\n"
   github_prerelease_option="--pre-release"
 fi
 
@@ -43,9 +43,9 @@ directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 tar_name="peertube-$version.tar.xz"
 
-changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
+changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "## $version" | sed '1{/^$/d}')
 
-printf "Changelog will be:\\n%s\\n" "$changelog"
+printf "Changelog will be:\\n\\n%s\\n\\n" "$changelog"
 
 read -p "Are you sure to release? " -n 1 -r
 echo
@@ -60,7 +60,9 @@ fi
 
 npm version -f --no-git-tag-version --no-commit-hooks "$1"
 
-git commit package.json client/package.json -m "Bumped to version $version"
+./scripts/openapi-peertube-version.sh
+
+git commit package.json client/package.json ./support/doc/api/openapi.yaml -m "Bumped to version $version"
 git tag -s -a "$version" -m "$version"
 
 npm run build

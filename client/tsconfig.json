@@ -7,7 +7,10 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors":true,
+    "alwaysStrict": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"

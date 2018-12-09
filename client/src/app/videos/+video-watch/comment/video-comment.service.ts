@@ -30,9 +30,9 @@ export class VideoCommentService {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     const normalizedComment = lineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
                .pipe(
-                  map(data => this.extractVideoComment(data['comment'])),
+                  map(data => this.extractVideoComment(data.comment)),
                   catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -41,9 +41,9 @@ export class VideoCommentService {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
     const normalizedComment = lineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
                .pipe(
-                 map(data => this.extractVideoComment(data[ 'comment' ])),
+                 map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

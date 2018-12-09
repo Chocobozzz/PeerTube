@@ -7,11 +7,13 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideoChannelVideos, serverLogin, testImage,
+  getVideoChannelVideos,
+  testImage,
   updateVideo,
   updateVideoChannelAvatar,
-  uploadVideo, wait, userLogin
-} from '../../utils'
+  uploadVideo,
+  userLogin
+} from '../../../../shared/utils'
 import {
   addVideoChannel,
   deleteVideoChannel,
@@ -24,8 +26,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateVideoChannel
-} from '../../utils/index'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils/index'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 

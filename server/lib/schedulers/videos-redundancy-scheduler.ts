@@ -145,13 +145,13 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
       const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
-      const destPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(file))
+      const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, video.getVideoFilename(file))
       await rename(tmpPath, destPath)
 
       const createdModel = await VideoRedundancyModel.create({
         expiresOn: this.buildNewExpiration(redundancy.minLifetime),
         url: getVideoCacheFileActivityPubUrl(file),
-        fileUrl: video.getVideoFileUrl(file, CONFIG.WEBSERVER.URL),
+        fileUrl: video.getVideoRedundancyUrl(file, CONFIG.WEBSERVER.URL),
         strategy: redundancy.strategy,
         videoFileId: file.id,
         actorId: serverActor.id
@@ -185,11 +185,12 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   }
 
   private async isTooHeavy (redundancy: VideosRedundancy, filesToDuplicate: VideoFileModel[]) {
-    const maxSize = redundancy.size - this.getTotalFileSizes(filesToDuplicate)
+    const maxSize = redundancy.size
 
     const totalDuplicated = await VideoRedundancyModel.getTotalDuplicated(redundancy.strategy)
+    const totalWillDuplicate = totalDuplicated + this.getTotalFileSizes(filesToDuplicate)
 
-    return totalDuplicated > maxSize
+    return totalWillDuplicate > maxSize
   }
 
   private buildNewExpiration (expiresAfterMs: number) {

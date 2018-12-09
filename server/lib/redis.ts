@@ -121,7 +121,14 @@ class Redis {
     const key = this.generateVideoViewKey(videoId, hour)
 
     const valueString = await this.getValue(key)
-    return parseInt(valueString, 10)
+    const valueInt = parseInt(valueString, 10)
+
+    if (isNaN(valueInt)) {
+      logger.error('Cannot get videos views of video %d in hour %d: views number is NaN (%s).', videoId, hour, valueString)
+      return undefined
+    }
+
+    return valueInt
   }
 
   async getVideosIdViewed (hour: number) {

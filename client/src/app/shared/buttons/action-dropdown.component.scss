@@ -1,9 +1,20 @@
 @import '_variables';
 @import '_mixins';
 
+.dropdown-divider:last-child {
+  display: none;
+}
+
 .action-button {
   @include peertube-button;
-  @include grey-button;
+
+  &.grey {
+    @include grey-button;
+  }
+
+  &.orange {
+    @include orange-button;
+  }
 
   display: inline-block;
   padding: 0 10px;
@@ -30,9 +41,19 @@
   }
 }
 
+.dropdown-toggle::after {
+  position: relative;
+  top: 1px;
+}
+
 .dropdown-menu {
   .dropdown-item {
     cursor: pointer;
     color: #000 !important;
+
+    a, span {
+      display: block;
+      width: 100%;
+    }
   }
 }

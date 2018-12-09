@@ -13,11 +13,11 @@ import {
   uploadVideo,
   viewVideo,
   wait
-} from '../../utils'
-import { flushTests, setAccessTokensToServers } from '../../utils/index'
-import { getStats } from '../../utils/server/stats'
-import { addVideoCommentThread } from '../../utils/videos/video-comments'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { flushTests, setAccessTokensToServers } from '../../../../shared/utils/index'
+import { getStats } from '../../../../shared/utils/server/stats'
+import { addVideoCommentThread } from '../../../../shared/utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 

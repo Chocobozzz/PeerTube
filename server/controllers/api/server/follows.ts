@@ -61,14 +61,26 @@ export {
 
 async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowingForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await ActorFollowModel.listFollowingForApi(
+    serverActor.id,
+    req.query.start,
+    req.query.count,
+    req.query.sort,
+    req.query.search
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowersForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await ActorFollowModel.listFollowersForApi(
+    serverActor.id,
+    req.query.start,
+    req.query.count,
+    req.query.sort,
+    req.query.search
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

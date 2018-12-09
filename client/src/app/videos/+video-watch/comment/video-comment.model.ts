@@ -14,7 +14,7 @@ export class VideoComment implements VideoCommentServerModel {
   account: AccountInterface
   totalReplies: number
   by: string
-  accountAvatarUrl
+  accountAvatarUrl: string
 
   constructor (hash: VideoCommentServerModel) {
     this.id = hash.id

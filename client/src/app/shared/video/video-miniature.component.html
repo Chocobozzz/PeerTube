@@ -7,6 +7,9 @@
       class="video-miniature-name"
       [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
     >
+      <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
+      <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
+
       {{ video.name }}
     </a>
 

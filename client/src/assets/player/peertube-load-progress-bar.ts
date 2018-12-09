@@ -1,10 +1,13 @@
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+// FIXME: something weird with our path definition in tsconfig and typings
+// @ts-ignore
+import { Player } from 'video.js'
 
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class PeerTubeLoadProgressBar extends Component {
 
-  constructor (player, options) {
+  constructor (player: Player, options: any) {
     super(player, options)
     this.partEls_ = []
     this.on(player, 'progress', this.update)

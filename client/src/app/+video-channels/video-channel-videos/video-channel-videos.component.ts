@@ -25,7 +25,7 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   marginContent = false // Disable margin
-  currentRoute = '/video-channel/videos'
+  currentRoute = '/video-channels/videos'
   loadOnInit = false
 
   private videoChannel: VideoChannel
@@ -55,7 +55,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
-        this.currentRoute = '/video-channel/' + this.videoChannel.uuid + '/videos'
+        this.currentRoute = '/video-channels/' + this.videoChannel.uuid + '/videos'
 
         this.reloadVideos()
         this.generateSyndicationList()

@@ -3,7 +3,7 @@
     <img [src]="getAvatarUrl()" alt="Avatar" />
 
     <div class="form-group">
-      <textarea i18n-placeholder placeholder="Add comment..." autosize
+      <textarea i18n-placeholder placeholder="Add comment..." myAutoResize
                 [readonly]="(user === null) ? true : false"
                 (click)="openVisitorModal($event)"
                 formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"

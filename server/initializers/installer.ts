@@ -12,12 +12,21 @@ import { remove, ensureDir } from 'fs-extra'
 
 async function installApplication () {
   try {
-    await sequelizeTypescript.sync()
-    await removeCacheDirectories()
-    await createDirectoriesIfNotExist()
-    await createApplicationIfNotExist()
-    await createOAuthClientIfNotExist()
-    await createOAuthAdminIfNotExist()
+    await Promise.all([
+      // Database related
+      sequelizeTypescript.sync()
+        .then(() => {
+          return Promise.all([
+            createApplicationIfNotExist(),
+            createOAuthClientIfNotExist(),
+            createOAuthAdminIfNotExist()
+          ])
+        }),
+
+      // Directories
+      removeCacheDirectories()
+        .then(() => createDirectoriesIfNotExist())
+    ])
   } catch (err) {
     logger.error('Cannot install application.', { err })
     process.exit(-1)

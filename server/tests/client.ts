@@ -15,7 +15,7 @@ import {
   updateCustomConfig,
   updateCustomSubConfig,
   uploadVideo
-} from './utils'
+} from '../../shared/utils'
 
 const expect = chai.expect
 

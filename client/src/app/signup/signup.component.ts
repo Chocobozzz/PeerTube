@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { UserCreate } from '../../../../shared'
 import { FormReactive, UserService, UserValidatorsService } from '../shared'
-import { RedirectService, ServerService } from '@app/core'
+import { AuthService, RedirectService, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
@@ -12,10 +12,13 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
   styleUrls: [ './signup.component.scss' ]
 })
 export class SignupComponent extends FormReactive implements OnInit {
+  info: string = null
   error: string = null
+  signupDone = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private authService: AuthService,
     private userValidatorsService: UserValidatorsService,
     private notificationsService: NotificationsService,
     private userService: UserService,
@@ -50,18 +53,27 @@ export class SignupComponent extends FormReactive implements OnInit {
 
     this.userService.signup(userCreate).subscribe(
       () => {
+        this.signupDone = true
+
         if (this.requiresEmailVerification) {
-          this.notificationsService.alert(
-            this.i18n('Welcome'),
-            this.i18n('Please check your email to verify your account and complete signup.')
-          )
-        } else {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('Registration for {{username}} complete.', { username: userCreate.username })
-          )
+          this.info = this.i18n('Welcome! Now please check your emails to verify your account and complete signup.')
+          return
         }
-        this.redirectService.redirectToHomepage()
+
+        // Auto login
+        this.authService.login(userCreate.username, userCreate.password)
+            .subscribe(
+              () => {
+                this.notificationsService.success(
+                  this.i18n('Success'),
+                  this.i18n('You are now logged in as {{username}}!', { username: userCreate.username })
+                )
+
+                this.redirectService.redirectToHomepage()
+              },
+
+              err => this.error = err.message
+            )
       },
 
       err => this.error = err.message

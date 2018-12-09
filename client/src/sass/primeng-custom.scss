@@ -14,8 +14,17 @@
 p-table {
   font-size: 15px !important;
 
+  .ui-table-caption {
+    border: none;
+
+    .caption {
+      height: 40px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
   td {
-    // border: 1px solid #E5E5E5 !important;
     padding-left: 15px !important;
 
     &:not(.action-cell) {
@@ -28,6 +37,11 @@ p-table {
   tr {
     background-color: var(--mainBackgroundColor) !important;
     height: 46px;
+
+    &.ui-state-highlight {
+      background-color:var(--submenuColor) !important;
+      color:var(--mainForegroundColor) !important;
+    }
   }
 
   .ui-table-tbody {
@@ -214,6 +228,34 @@ p-calendar .ui-datepicker {
     .pi.pi-chevron-down {
       @extend .glyphicon-chevron-down;
       @include glyphicon-light;
+    }
+  }
+}
+
+.ui-chkbox-box {
+  &.ui-state-active {
+    border-color: var(--mainColor) !important;
+    background-color: var(--mainColor) !important;
+  }
+
+  .ui-chkbox-icon {
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 5px;
+      width: 5px;
+      height: 12px;
+      opacity: 0;
+      transform: rotate(45deg) scale(0);
+      border-right: 2px solid var(--mainBackgroundColor);
+      border-bottom: 2px solid var(--mainBackgroundColor);
+    }
+
+    &.pi-check:after {
+      opacity: 1;
+      transform: rotate(45deg) scale(1);
     }
   }
 }

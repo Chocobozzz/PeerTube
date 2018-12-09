@@ -5,6 +5,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Why did you create PeerTube?](#why-did-you-create-peertube)
 - [I don't like the name "PeerTube"](#i-dont-like-the-name-peertube)
 - [If nobody watches a video, is it seeded?](#if-nobody-watches-a-video-is-it-seeded)
 - [What is WebSeed?](#what-is-webseed)
@@ -18,8 +19,31 @@
 - [Are you going to use the Steem blockchain?](#are-you-going-to-use-the-steem-blockchain)
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
+- [I have found a security vulnerability in PeerTube. Where and how should I report it?](#i-have-found-a-security-vulnerability-in-peertube-where-and-how-should-i-report-it)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Why did you create PeerTube?
+
+We can't build a FOSS video streaming alternative to YouTube, Dailymotion,
+Vimeo... with centralized software. One organization alone may not have
+enough money to pay for bandwidth and video storage of its servers.
+
+Our stance is that only a decentralized network of servers can provide an
+acceptable answer to technical issues (bandwidth, transcoding expenses, etc.)
+and social answers (need for a particular moderation policy, preserving
+content, etc.).
+
+While a paragraph is not enough to answer all these problems, PeerTube has
+very early prouded itself for using a contributory design, both for creating
+communities as federated nodes (as [Mastodon](https://joinmastodon.org/) for
+example), and for seeding videos (instances can seed each other's videos). But it's not
+enough because one video could become popular and overload the server. That is
+why we need to use a P2P protocol to limit the server load. Thanks to
+[WebTorrent](https://github.com/feross/webtorrent), we can use BitTorrent
+inside most modern web browsers, and users become seeds as the video gets
+more viewers.
+
 
 ## I don't like the name "PeerTube"
 
@@ -32,7 +56,7 @@ is named "Framatube".
 
 Yes, the origin server always seeds videos uploaded on it thanks to
 [Webseed](http://www.bittorrent.org/beps/bep_0019.html).
-It can also be helped by other servers using [redundancy](/support/doc/redundancy.md).
+It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances).
 
 
 ## What is WebSeed?
@@ -120,3 +144,7 @@ If you still want to use a functionality potentially altering that state of thin
 
 With that being said, know that we are not against these features *per se*.
 We are always open to discussion about potential PRs bringing in features, even of that kind. But we certainly won't dedicate our limited resources to develop them ourselves when there is so much to be done elsewhere.
+
+## I have found a security vulnerability in PeerTube. Where and how should I report it?
+
+We have a policy for contributions related to security. Please refer to [SECURITY.md](./SECURITY.md)

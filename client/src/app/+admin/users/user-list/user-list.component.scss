@@ -16,3 +16,11 @@ tr.banned {
 .ban-reason-label {
   font-weight: $font-semibold;
 }
+
+.caption {
+  justify-content: space-between;
+
+  input {
+    @include peertube-input-text(250px);
+  }
+}

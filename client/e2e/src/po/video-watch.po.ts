@@ -23,7 +23,7 @@ export class VideoWatchPage {
   getVideosListName () {
     return element.all(by.css('.videos .video-miniature .video-miniature-name'))
                   .getText()
-                  .then((texts: any) => texts.map(t => t.trim()))
+                  .then((texts: any) => texts.map((t: any) => t.trim()))
   }
 
   waitWatchVideoName (videoName: string, isMobileDevice: boolean, isSafari: boolean) {

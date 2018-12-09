@@ -27,7 +27,7 @@ export class MyAccountVideoImportsComponent extends RestTable implements OnInit 
   }
 
   ngOnInit () {
-    this.loadSort()
+    this.initialize()
   }
 
   isVideoImportSuccess (videoImport: VideoImport) {

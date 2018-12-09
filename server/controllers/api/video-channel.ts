@@ -32,7 +32,7 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
 
 const auditLogger = auditLoggerFactory('channels')
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const videoChannelRouter = express.Router()
 
@@ -202,10 +202,10 @@ async function getVideoChannel (req: express.Request, res: express.Response, nex
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
-  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
-    actorId,
+    followerActorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -215,9 +215,11 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     languageOneOf: req.query.languageOneOf,
     tagsOneOf: req.query.tagsOneOf,
     tagsAllOf: req.query.tagsAllOf,
+    filter: req.query.filter,
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
-    videoChannelId: videoChannelInstance.id
+    videoChannelId: videoChannelInstance.id,
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

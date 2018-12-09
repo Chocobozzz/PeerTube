@@ -16,8 +16,8 @@ import {
   updateVideo,
   uploadVideo, viewVideo,
   wait
-} from '../utils'
-import { getJobsListPaginationAndSort } from '../utils/server/jobs'
+} from '../../../shared/utils'
+import { getJobsListPaginationAndSort } from '../../../shared/utils/server/jobs'
 
 interface ServerInfo extends DefaultServerInfo {
   requestsNumber: number

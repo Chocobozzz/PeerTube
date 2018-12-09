@@ -18,8 +18,8 @@ import {
   uploadVideo,
   userLogin,
   getVideo
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { User } from '../../../../shared/models/users'
 import { VideoDetails } from '../../../../shared/models/videos'
 

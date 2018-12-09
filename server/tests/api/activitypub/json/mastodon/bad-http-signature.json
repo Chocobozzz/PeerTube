@@ -1,0 +1,93 @@
+{
+  "headers": {
+    "user-agent": "http.rb/3.3.0 (Mastodon/2.5.0; +http://localhost:3000/)",
+    "host": "localhost",
+    "date": "Mon, 22 Oct 2018 13:34:22 GMT",
+    "accept-encoding": "gzip",
+    "digest": "SHA-256=FEr5j2WSSfdEMcG3NTOXuGU0lUchfTJx4+BtUlWOwDk=",
+    "content-type": "application/activity+json",
+    "signature": "keyId=\"http://localhost:3000/users/ronan2#main-key\",algorithm=\"rsa-sha256\",headers=\"(request-target) host date digest content-type\",signature=\"oLKbgxdFXdXsHJ3x/UsG9Svu7oa8Dyqiy6Jif4wqNuhAqRVMRaG18f+dd2OcfFX3XRGF8p8flZkU6vvoEQBauTwGRGcgXAJuKC1zYIWGk+PeiW8lNUnE4qGapWcTiFnIo7FKauNdsgqg/tvgs1pQIdHkDDjZMI64twP7sTN/4vG1PCq+kyqi/DM+ORLi/W7vFuLVHt2Iz7ikfw/R3/mMtS4FwLops+tVYBQ2iQ9DVRhTwLKVbeL/LLVB/tdGzNZ4F4nImBAQQ9I7WpPM6J/k+cBmoEbrUKs8ptx9gbX3OSsl4wlvPVMNzU9F9yb2MrB/Y/J4qssKz+LbiaktKGj7OQ==\"",
+    "content-length": "2815"
+  },
+  "body": {
+    "@context": [
+      "https://www.w3.org/ns/activitystreams",
+      "https://w3id.org/security/v1",
+      {
+        "manuallyApprovesFollowers": "as:manuallyApprovesFollowers",
+        "sensitive": "as:sensitive",
+        "movedTo": {
+          "@id": "as:movedTo",
+          "@type": "@id"
+        },
+        "Hashtag": "as:Hashtag",
+        "ostatus": "http://ostatus.org#",
+        "atomUri": "ostatus:atomUri",
+        "inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+        "conversation": "ostatus:conversation",
+        "toot": "http://joinmastodon.org/ns#",
+        "Emoji": "toot:Emoji",
+        "focalPoint": {
+          "@container": "@list",
+          "@id": "toot:focalPoint"
+        },
+        "featured": {
+          "@id": "toot:featured",
+          "@type": "@id"
+        },
+        "schema": "http://schema.org#",
+        "PropertyValue": "schema:PropertyValue",
+        "value": "schema:value"
+      }
+    ],
+    "id": "http://localhost:3000/users/ronan2/statuses/100939547203370948/activity",
+    "type": "Create",
+    "actor": "http://localhost:3000/users/ronan2",
+    "published": "2018-10-22T13:34:18Z",
+    "to": [
+      "https://www.w3.org/ns/activitystreams#Public"
+    ],
+    "cc": [
+      "http://localhost:3000/users/ronan2/followers",
+      "http://localhost:9000/accounts/ronan"
+    ],
+    "object": {
+      "id": "http://localhost:3000/users/ronan2/statuses/100939547203370948",
+      "type": "Note",
+      "summary": null,
+      "inReplyTo": "http://localhost:9000/videos/watch/90e6f8ed-b369-423c-b0c8-f44e5350c752",
+      "published": "2018-10-22T13:34:18Z",
+      "url": "http://localhost:3000/@ronan2/100939547203370948",
+      "attributedTo": "http://localhost:3000/users/ronan2",
+      "to": [
+        "https://www.w3.org/ns/activitystreams#Public"
+      ],
+      "cc": [
+        "http://localhost:3000/users/ronan2/followers",
+        "http://localhost:9000/accounts/ronan"
+      ],
+      "sensitive": false,
+      "atomUri": "http://localhost:3000/users/ronan2/statuses/100939547203370948",
+      "inReplyToAtomUri": "http://localhost:9000/videos/watch/90e6f8ed-b369-423c-b0c8-f44e5350c752",
+      "conversation": "tag:localhost:3000,2018-10-19:objectId=72:objectType=Conversation",
+      "content": "<p><span class=\"h-card\"><a href=\"http://localhost:9000/accounts/ronan\" class=\"u-url mention\">@<span>ronan</span></a></span> zergzerg</p>",
+      "contentMap": {
+        "en": "<p><span class=\"h-card\"><a href=\"http://localhost:9000/accounts/ronan\" class=\"u-url mention\">@<span>ronan</span></a></span> zergzerg</p>"
+      },
+      "attachment": [],
+      "tag": [
+        {
+          "type": "Mention",
+          "href": "http://localhost:9000/accounts/ronan",
+          "name": "@ronan@localhost:9000"
+        }
+      ]
+    },
+    "signature": {
+      "type": "RsaSignature2017",
+      "creator": "http://localhost:3000/users/ronan2#main-key",
+      "created": "2018-10-22T13:34:19Z",
+      "signatureValue": "x+xL4l8ERziYVhwEafHJyBQOInvNZ0gV4ccYd9AtFYeGJagc8fY6jjjhbDRCD7yMhgTjBX69z20MXnDuwpmM6wej3dt1wLKdIyXVViO84nAlqFz7KmNxtk5lDnAVX/vttscT5YUFvw4dbPT2mQiEd1lKbaLftRiIPEomZpQ37+fUkQdcPrnhruPAISO/Sof1n1LFW4mYIffozteQSZBH6HaCVp+MRMIhdMi5e8w7PD48/cZz8D/EU8Vqi91FM76/3tMqg6nLqQ+8bq74Jvt2kzwZlIufe+I55QMpZOmF6hGIJEt+R0JXdjQbtgcELONmNj2dr8sAlzu7zKlAGuJ24Q=="
+    }
+  }
+}

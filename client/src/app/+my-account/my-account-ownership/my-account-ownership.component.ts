@@ -31,19 +31,7 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadSort()
-  }
-
-  protected loadData () {
-    return this.videoOwnershipService.getOwnershipChanges(this.pagination, this.sort)
-      .subscribe(
-        resultList => {
-          this.videoChangeOwnerships = resultList.data
-          this.totalRecords = resultList.total
-        },
-
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
-      )
+    this.initialize()
   }
 
   createByString (account: Account) {
@@ -62,6 +50,18 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
     this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
       .subscribe(
         () => this.loadData(),
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
+      )
+  }
+
+  protected loadData () {
+    return this.videoOwnershipService.getOwnershipChanges(this.pagination, this.sort)
+      .subscribe(
+        resultList => {
+          this.videoChangeOwnerships = resultList.data
+          this.totalRecords = resultList.total
+        },
+
         err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }

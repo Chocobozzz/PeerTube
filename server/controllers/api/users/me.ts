@@ -42,7 +42,7 @@ import { AccountModel } from '../../../models/account/account'
 
 const auditLogger = auditLoggerFactory('users-me')
 
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const meRouter = express.Router()
 
@@ -238,7 +238,8 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false,
-    actorId: user.Account.Actor.id
+    followerActorId: user.Account.Actor.id,
+    user
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -327,6 +328,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
   if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
+  if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await sequelizeTypescript.transaction(async t => {
@@ -346,7 +348,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   return res.sendStatus(204)
 }
 
-async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateMyAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user: UserModel = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())

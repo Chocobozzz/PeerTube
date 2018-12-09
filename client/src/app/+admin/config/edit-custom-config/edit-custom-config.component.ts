@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { ConfirmService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { CustomConfigValidatorsService, FormReactive, UserValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
@@ -29,7 +28,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private configService: ConfigService,
     private serverService: ServerService,
-    private confirmService: ConfirmService,
     private i18n: I18n
   ) {
     super()
@@ -64,7 +62,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    const formGroupData = {
+    const formGroupData: { [key: string]: any } = {
       instanceName: this.customConfigValidatorsService.INSTANCE_NAME,
       instanceShortDescription: this.customConfigValidatorsService.INSTANCE_SHORT_DESCRIPTION,
       instanceDescription: null,
@@ -124,28 +122,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   async formValidated () {
-    const newCustomizationJavascript = this.form.value['customizationJavascript']
-    const newCustomizationCSS = this.form.value['customizationCSS']
-
-    const customizations = []
-    if (newCustomizationJavascript && newCustomizationJavascript !== this.oldCustomJavascript) customizations.push('JavaScript')
-    if (newCustomizationCSS && newCustomizationCSS !== this.oldCustomCSS) customizations.push('CSS')
-
-    if (customizations.length !== 0) {
-      const customizationsText = customizations.join('/')
-
-      // FIXME: i18n service does not support string concatenation
-      const message = this.i18n('You set custom {{customizationsText}}. ', { customizationsText }) +
-        this.i18n('This could lead to security issues or bugs if you do not understand it. ') +
-        this.i18n('Are you sure you want to update the configuration?')
-
-      const label = this.i18n('Please type') + ` "I understand the ${customizationsText} I set" ` + this.i18n('to confirm.')
-      const expectedInputValue = `I understand the ${customizationsText} I set`
-
-      const confirmRes = await this.confirmService.confirmWithInput(message, label, expectedInputValue)
-      if (confirmRes === false) return
-    }
-
     const data: CustomConfig = {
       instance: {
         name: this.form.value['instanceName'],
@@ -226,7 +202,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   private updateForm () {
-    const data = {
+    const data: { [key: string]: any } = {
       instanceName: this.customConfig.instance.name,
       instanceShortDescription: this.customConfig.instance.shortDescription,
       instanceDescription: this.customConfig.instance.description,

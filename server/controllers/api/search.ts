@@ -118,7 +118,8 @@ async function searchVideosDB (query: VideosSearchQuery, res: express.Response) 
   const options = Object.assign(query, {
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(res, query.nsfw),
-    userId: res.locals.oauth ? res.locals.oauth.token.User.id : undefined
+    filter: query.filter,
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
   const resultList = await VideoModel.searchAndPopulateAccountAndServer(options)
 
