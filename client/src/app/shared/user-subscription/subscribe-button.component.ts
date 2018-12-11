@@ -50,11 +50,10 @@ export class SubscribeButtonComponent implements OnInit {
 
   subscribe () {
     if (this.isUserLoggedIn()) {
-      this.localSubscribe()
-    } else {
-      this.authService.redirectUrl = this.router.url
-      this.gotoLogin()
+      return this.localSubscribe()
     }
+
+    return this.gotoLogin()
   }
 
   localSubscribe () {

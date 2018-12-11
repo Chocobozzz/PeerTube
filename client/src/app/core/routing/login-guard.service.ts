@@ -20,8 +20,6 @@ export class LoginGuard implements CanActivate, CanActivateChild {
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.auth.isLoggedIn() === true) return true
 
-    this.auth.redirectUrl = state.url
-
     this.router.navigate([ '/login' ])
     return false
   }
