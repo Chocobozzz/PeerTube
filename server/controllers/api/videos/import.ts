@@ -21,7 +21,7 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { readFile, rename } from 'fs-extra'
+import { readFile, move } from 'fs-extra'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -71,7 +71,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
 
     // Rename the torrent to a secured name
     const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
-    await rename(torrentfile.path, newTorrentPath)
+    await move(torrentfile.path, newTorrentPath)
     torrentfile.path = newTorrentPath
 
     const buf = await readFile(torrentfile.path)

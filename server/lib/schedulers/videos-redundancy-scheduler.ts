@@ -6,7 +6,7 @@ import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { VideoFileModel } from '../../models/video/video-file'
 import { downloadWebTorrentVideo } from '../../helpers/webtorrent'
 import { join } from 'path'
-import { rename } from 'fs-extra'
+import { move } from 'fs-extra'
 import { getServerActor } from '../../helpers/utils'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { getVideoCacheFileActivityPubUrl } from '../activitypub/url'
@@ -146,7 +146,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
       const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, video.getVideoFilename(file))
-      await rename(tmpPath, destPath)
+      await move(tmpPath, destPath)
 
       const createdModel = await VideoRedundancyModel.create({
         expiresOn: this.buildNewExpiration(redundancy.minLifetime),
