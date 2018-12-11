@@ -22,7 +22,7 @@ import { createVideoChannel } from '../../lib/video-channel'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
-import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { CONFIG, MIMETYPES, sequelizeTypescript } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
@@ -32,7 +32,7 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
 
 const auditLogger = auditLoggerFactory('channels')
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const videoChannelRouter = express.Router()
 

@@ -82,6 +82,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       userVideoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       userVideoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
       transcodingThreads: this.customConfigValidatorsService.TRANSCODING_THREADS,
+      transcodingAllowAdditionalExtensions: null,
       transcodingEnabled: null,
       customizationJavascript: null,
       customizationCSS: null
@@ -163,6 +164,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       },
       transcoding: {
         enabled: this.form.value['transcodingEnabled'],
+        allowAdditionalExtensions: this.form.value['transcodingAllowAdditionalExtensions'],
         threads: this.form.value['transcodingThreads'],
         resolutions: {
           '240p': this.form.value[this.getResolutionKey('240p')],
@@ -221,6 +223,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       userVideoQuotaDaily: this.customConfig.user.videoQuotaDaily,
       transcodingThreads: this.customConfig.transcoding.threads,
       transcodingEnabled: this.customConfig.transcoding.enabled,
+      transcodingAllowAdditionalExtensions: this.customConfig.transcoding.allowAdditionalExtensions,
       customizationJavascript: this.customConfig.instance.customizations.javascript,
       customizationCSS: this.customConfig.instance.customizations.css,
       importVideosHttpEnabled: this.customConfig.import.videos.http.enabled,

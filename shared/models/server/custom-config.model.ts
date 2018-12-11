@@ -48,6 +48,7 @@ export interface CustomConfig {
 
   transcoding: {
     enabled: boolean
+    allowAdditionalExtensions: boolean
     threads: number
     resolutions: {
       '240p': boolean

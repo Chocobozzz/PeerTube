@@ -86,6 +86,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
     },
     transcoding: {
       enabled: true,
+      allowAdditionalExtensions: true,
       threads: 1,
       resolutions: {
         '240p': false,

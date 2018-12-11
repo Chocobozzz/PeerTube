@@ -220,6 +220,14 @@
         <ng-template [ngIf]="isTranscodingEnabled()">
 
           <div class="form-group">
+            <my-peertube-checkbox
+              inputName="transcodingAllowAdditionalExtensions" formControlName="transcodingAllowAdditionalExtensions"
+              i18n-labelText labelText="Allow additional extensions"
+              i18n-helpHtml helpHtml="Allow your users to upload .mkv, .mov, .avi, .flv videos"
+            ></my-peertube-checkbox>
+          </div>
+
+          <div class="form-group">
             <label i18n for="transcodingThreads">Transcoding threads</label>
             <div class="peertube-select-container">
               <select id="transcodingThreads" formControlName="transcodingThreads">

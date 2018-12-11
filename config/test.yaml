@@ -51,6 +51,7 @@ signup:
 
 transcoding:
   enabled: true
+  allow_additional_extensions: false
   threads: 2
   resolutions:
     240p: true
