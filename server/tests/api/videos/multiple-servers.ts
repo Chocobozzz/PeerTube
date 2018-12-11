@@ -8,6 +8,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import {
   addVideoChannel,
+  checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   completeVideoCheck,
   createUser,
@@ -1004,6 +1005,14 @@ describe('Test multiple servers', function () {
           ]
         }
         await completeVideoCheck(server.url, video, checkAttributes)
+      }
+    })
+  })
+
+  describe('TMP directory', function () {
+    it('Should have an empty tmp directory', async function () {
+      for (const server of servers) {
+        await checkTmpIsEmpty(server)
       }
     })
   })

@@ -1,7 +1,11 @@
+/* tslint:disable:no-unused-expression */
+
 import { ChildProcess, exec, fork } from 'child_process'
 import { join } from 'path'
 import { root, wait } from '../miscs/miscs'
-import { readFile } from 'fs-extra'
+import { readdir, readFile } from 'fs-extra'
+import { existsSync } from 'fs'
+import { expect } from 'chai'
 
 interface ServerInfo {
   app: ChildProcess,
@@ -153,6 +157,18 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
   return server
 }
 
+async function checkTmpIsEmpty (server: ServerInfo) {
+  const testDirectory = 'test' + server.serverNumber
+
+  const directoryPath = join(root(), testDirectory, 'tmp')
+
+  const directoryExists = existsSync(directoryPath)
+  expect(directoryExists).to.be.true
+
+  const files = await readdir(directoryPath)
+  expect(files).to.have.lengthOf(0)
+}
+
 function killallServers (servers: ServerInfo[]) {
   for (const server of servers) {
     process.kill(-server.app.pid)
@@ -175,6 +191,7 @@ async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
 // ---------------------------------------------------------------------------
 
 export {
+  checkTmpIsEmpty,
   ServerInfo,
   flushAndRunMultipleServers,
   flushTests,
