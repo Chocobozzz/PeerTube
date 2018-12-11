@@ -13,7 +13,7 @@ async function moveAndProcessCaptionFile (physicalFile: { filename: string, path
     await convertSrtToVtt(physicalFile.path, destination)
     await remove(physicalFile.path)
   } else { // Just move the vtt file
-    await move(physicalFile.path, destination)
+    await move(physicalFile.path, destination, { overwrite: true })
   }
 
   // This is important in case if there is another attempt in the retry process
