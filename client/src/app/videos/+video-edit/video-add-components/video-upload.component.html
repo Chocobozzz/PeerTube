@@ -6,7 +6,7 @@
       <span i18n>Select the file to upload</span>
       <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" />
     </div>
-    <span class="button-file-extension">(.mp4, .webm, .ogv)</span>
+    <span class="button-file-extension">({{ videoExtensions }})</span>
 
     <div class="form-group form-group-channel">
       <label i18n for="first-step-channel">Channel</label>
@@ -47,6 +47,7 @@
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
     [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
+    [waitTranscodingEnabled]="waitTranscodingEnabled"
   ></my-video-edit>
 
   <div class="submit-container">

@@ -1,5 +1,4 @@
 import * as Bluebird from 'bluebird'
-import { join } from 'path'
 import { Transaction } from 'sequelize'
 import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
@@ -13,7 +12,7 @@ import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, downloadImage } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, CONFIG, MIMETYPES, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -172,10 +171,10 @@ async function fetchActorTotalItems (url: string) {
 
 async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   if (
-    actorJSON.icon && actorJSON.icon.type === 'Image' && IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
+    actorJSON.icon && actorJSON.icon.type === 'Image' && MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
     isActivityPubUrlValid(actorJSON.icon.url)
   ) {
-    const extension = IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType]
+    const extension = MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType]
 
     const avatarName = uuidv4() + extension
     await downloadImage(actorJSON.icon.url, CONFIG.STORAGE.AVATARS_DIR, avatarName, AVATARS_SIZE)

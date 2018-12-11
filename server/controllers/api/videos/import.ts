@@ -3,14 +3,7 @@ import * as magnetUtil from 'magnet-uri'
 import 'multer'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import {
-  CONFIG,
-  IMAGE_MIMETYPE_EXT,
-  PREVIEWS_SIZE,
-  sequelizeTypescript,
-  THUMBNAILS_SIZE,
-  TORRENT_MIMETYPE_EXT
-} from '../../../initializers'
+import { CONFIG, MIMETYPES, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE } from '../../../initializers'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -35,7 +28,7 @@ const videoImportsRouter = express.Router()
 
 const reqVideoFileImport = createReqFiles(
   [ 'thumbnailfile', 'previewfile', 'torrentfile' ],
-  Object.assign({}, TORRENT_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
+  Object.assign({}, MIMETYPES.TORRENT.MIMETYPE_EXT, MIMETYPES.IMAGE.MIMETYPE_EXT),
   {
     thumbnailfile: CONFIG.STORAGE.TMP_DIR,
     previewfile: CONFIG.STORAGE.TMP_DIR,

@@ -2,7 +2,7 @@ import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoModel } from './video'
 import { VideoFileModel } from './video-file'
 import { ActivityUrlObject, VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { CONFIG, THUMBNAILS_SIZE, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONFIG, MIMETYPES, THUMBNAILS_SIZE } from '../../initializers'
 import { VideoCaptionModel } from './video-caption'
 import {
   getVideoCommentsActivityPubUrl,
@@ -207,8 +207,8 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
   for (const file of video.VideoFiles) {
     url.push({
       type: 'Link',
-      mimeType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
-      mediaType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
+      mimeType: MIMETYPES.VIDEO.EXT_MIMETYPE[ file.extname ] as any,
+      mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ file.extname ] as any,
       href: video.getVideoFileUrl(file, baseUrlHttp),
       height: file.resolution,
       size: file.size,

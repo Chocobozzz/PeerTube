@@ -17,6 +17,7 @@ import {
   setAccessTokensToServers,
   updateCustomConfig
 } from '../../../../shared/utils'
+import { ServerConfig } from '../../../../shared/models'
 
 const expect = chai.expect
 
@@ -43,6 +44,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
   expect(data.transcoding.enabled).to.be.false
+  expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
@@ -74,6 +76,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.user.videoQuotaDaily).to.equal(318742)
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
+  expect(data.transcoding.allowAdditionalExtensions).to.be.true
   expect(data.transcoding.resolutions['240p']).to.be.false
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -96,7 +99,7 @@ describe('Test config', function () {
 
   it('Should have a correct config on a server with registration enabled', async function () {
     const res = await getConfig(server.url)
-    const data = res.body
+    const data: ServerConfig = res.body
 
     expect(data.signup.allowed).to.be.true
   })
@@ -111,9 +114,19 @@ describe('Test config', function () {
     ])
 
     const res = await getConfig(server.url)
-    const data = res.body
+    const data: ServerConfig = res.body
 
     expect(data.signup.allowed).to.be.false
+  })
+
+  it('Should have the correct video allowed extensions', async function () {
+    const res = await getConfig(server.url)
+    const data: ServerConfig = res.body
+
+    expect(data.video.file.extensions).to.have.lengthOf(3)
+    expect(data.video.file.extensions).to.contain('.mp4')
+    expect(data.video.file.extensions).to.contain('.webm')
+    expect(data.video.file.extensions).to.contain('.ogv')
   })
 
   it('Should get the customized configuration', async function () {
@@ -165,6 +178,7 @@ describe('Test config', function () {
       },
       transcoding: {
         enabled: true,
+        allowAdditionalExtensions: true,
         threads: 1,
         resolutions: {
           '240p': false,
@@ -191,6 +205,18 @@ describe('Test config', function () {
     const data = res.body
 
     checkUpdatedConfig(data)
+  })
+
+  it('Should have the correct updated video allowed extensions', async function () {
+    const res = await getConfig(server.url)
+    const data: ServerConfig = res.body
+
+    expect(data.video.file.extensions).to.have.length.above(3)
+    expect(data.video.file.extensions).to.contain('.mp4')
+    expect(data.video.file.extensions).to.contain('.webm')
+    expect(data.video.file.extensions).to.contain('.ogv')
+    expect(data.video.file.extensions).to.contain('.flv')
+    expect(data.video.file.extensions).to.contain('.mkv')
   })
 
   it('Should have the configuration updated after a restart', async function () {

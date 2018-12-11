@@ -29,3 +29,4 @@ signup:
 
 transcoding:
   enabled: true
+  allow_additional_extensions: true

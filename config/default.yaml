@@ -124,6 +124,8 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+  # Allow your users to upload .mkv, .mov, .avi, .flv videos
+  allow_additional_extensions: true
   threads: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false

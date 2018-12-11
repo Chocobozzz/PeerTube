@@ -14,6 +14,7 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import {
+  isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
@@ -58,7 +59,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
   size: number
 
   @AllowNull(false)
-  @Column(DataType.ENUM(values(CONSTRAINTS_FIELDS.VIDEOS.EXTNAME)))
+  @Is('VideoFileExtname', value => throwIfNotValid(value, isVideoFileExtnameValid, 'extname'))
+  @Column
   extname: string
 
   @AllowNull(false)

@@ -172,7 +172,8 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
     'instance.defaultClientRoute',
     'instance.shortDescription',
     'cache.videoCaptions',
-    'signup.requiresEmailVerification'
+    'signup.requiresEmailVerification',
+    'transcoding.allowAdditionalExtensions'
   )
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   toUpdateJSON.user['video_quota_daily'] = toUpdate.user.videoQuotaDaily
@@ -180,6 +181,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
   toUpdateJSON.signup['requires_email_verification'] = toUpdate.signup.requiresEmailVerification
+  toUpdateJSON.transcoding['allow_additional_extensions'] = toUpdate.transcoding.allowAdditionalExtensions
 
   await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
@@ -247,6 +249,7 @@ function customConfig (): CustomConfig {
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
+      allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
         '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
