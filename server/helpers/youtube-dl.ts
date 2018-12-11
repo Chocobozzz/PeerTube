@@ -16,6 +16,7 @@ export type YoutubeDLInfo = {
   nsfw?: boolean
   tags?: string[]
   thumbnailUrl?: string
+  originallyPublishedAt?: string
 }
 
 const processOptions = {
@@ -173,6 +174,9 @@ function normalizeObject (obj: any) {
 }
 
 function buildVideoInfo (obj: any) {
+
+  const date = obj.upload_date.slice(0,4)+","+obj.upload_date.slice(4,6)+","+obj.upload_date.slice(6,8)
+
   return {
     name: titleTruncation(obj.title),
     description: descriptionTruncation(obj.description),
@@ -180,7 +184,8 @@ function buildVideoInfo (obj: any) {
     licence: getLicence(obj.license),
     nsfw: isNSFW(obj),
     tags: getTags(obj.tags),
-    thumbnailUrl: obj.thumbnail || undefined
+    thumbnailUrl: obj.thumbnail || undefined,
+    originallyPublishedAt: new Date(date).toISOString()
   }
 }
 
