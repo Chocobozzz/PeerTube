@@ -38,6 +38,7 @@ export class Video implements VideoServerModel {
   views: number
   likes: number
   dislikes: number
+  articleid: number
   nsfw: boolean
 
   waitTranscoding?: boolean

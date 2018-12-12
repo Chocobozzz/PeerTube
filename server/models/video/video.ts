@@ -644,6 +644,13 @@ export class VideoModel extends Model<VideoModel> {
   @Column
   dislikes: number
 
+  @AllowNull(true)
+  @Default(null)
+  @IsInt
+  @Min(0)
+  @Column
+  articleid: number
+
   @AllowNull(false)
   @Column
   remote: boolean

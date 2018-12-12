@@ -54,6 +54,7 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
     views: video.views,
     likes: video.likes,
     dislikes: video.dislikes,
+    articleid: video.articleid,
     thumbnailPath: video.getThumbnailStaticPath(),
     previewPath: video.getPreviewStaticPath(),
     embedPath: video.getEmbedStaticPath(),
