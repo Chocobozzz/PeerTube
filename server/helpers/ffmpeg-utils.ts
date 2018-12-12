@@ -184,7 +184,7 @@ function getVideoFileStream (path: string) {
       if (err) return rej(err)
 
       const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      if (!videoStream) throw new Error('Cannot find video stream of ' + path)
+      if (!videoStream) return rej(new Error('Cannot find video stream of ' + path))
 
       return res(videoStream)
     })
