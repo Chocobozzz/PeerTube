@@ -24,8 +24,9 @@ NODE_CONFIG_DIR=/var/www/peertube/config \
 USER=peertube"
 peertube_user=peertube
 procname="node:"
+pidfile="/var/run/peertube.pid"
 
-command="/usr/local/bin/npm"
-command_args="start >> /var/log/peertube/${name}.log 2>&1 &"
+command="/usr/sbin/daemon"
+command_args="-p ${pidfile} -o /var/log/peertube/${name}.log -t ${name} -u ${peertube_user} /usr/local/bin/npm start"
 
 run_rc_command "$1"
