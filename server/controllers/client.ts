@@ -2,7 +2,7 @@ import * as express from 'express'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
 import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers'
-import { asyncMiddleware } from '../middlewares'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
 import { ClientHtml } from '../lib/client-html'
 import { logger } from '../helpers/logger'
@@ -22,6 +22,7 @@ clientsRouter.use('/videos/watch/:id',
 
 clientsRouter.use('' +
   '/videos/embed',
+  embedCSP,
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     res.removeHeader('X-Frame-Options')
     res.sendFile(embedPath)
