@@ -184,7 +184,7 @@ function getVideoFileStream (path: string) {
       if (err) return rej(err)
 
       const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      if (!videoStream) throw new Error('Cannot find video stream of ' + path)
+      if (!videoStream) return rej(new Error('Cannot find video stream of ' + path))
 
       return res(videoStream)
     })
@@ -328,10 +328,10 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, resolution: VideoResol
     const audioCodecName = parsedAudio.audioStream[ 'codec_name' ]
     let bitrate: number
     if (audio.bitrate[ audioCodecName ]) {
-      bitrate = audio.bitrate[ audioCodecName ](parsedAudio.audioStream[ 'bit_rate' ])
+      localCommand = localCommand.audioCodec('aac')
 
-      if (bitrate === -1) localCommand = localCommand.audioCodec('copy')
-      else if (bitrate !== undefined) localCommand = localCommand.audioBitrate(bitrate)
+      bitrate = audio.bitrate[ audioCodecName ](parsedAudio.audioStream[ 'bit_rate' ])
+      if (bitrate !== undefined && bitrate !== -1) localCommand = localCommand.audioBitrate(bitrate)
     }
   }
 

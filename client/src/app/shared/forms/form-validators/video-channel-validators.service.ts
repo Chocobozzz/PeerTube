@@ -22,7 +22,7 @@ export class VideoChannelValidatorsService {
         'required': this.i18n('Name is required.'),
         'minlength': this.i18n('Name must be at least 1 character long.'),
         'maxlength': this.i18n('Name cannot be more than 50 characters long.'),
-        'pattern': this.i18n('Name should be lowercase alphanumeric; underscores are allowed.')
+        'pattern': this.i18n('Name should be lowercase alphanumeric; dots and underscores are allowed.')
       }
     }
 

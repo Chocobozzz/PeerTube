@@ -1,4 +1,4 @@
-import { CONSTRAINTS_FIELDS, VIDEO_CAPTIONS_MIMETYPE_EXT, VIDEO_LANGUAGES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers'
 import { exists, isFileValid } from './misc'
 import { Response } from 'express'
 import { VideoModel } from '../../models/video/video'
@@ -8,7 +8,7 @@ function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_LANGUAGES[ value ] !== undefined
 }
 
-const videoCaptionTypes = Object.keys(VIDEO_CAPTIONS_MIMETYPE_EXT)
+const videoCaptionTypes = Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
                                 .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream ><
                                 .map(m => `(${m})`)
 const videoCaptionTypesRegex = videoCaptionTypes.join('|')

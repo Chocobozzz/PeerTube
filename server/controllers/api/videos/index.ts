@@ -7,15 +7,13 @@ import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import {
-  CONFIG,
-  IMAGE_MIMETYPE_EXT,
+  CONFIG, MIMETYPES,
   PREVIEWS_SIZE,
   sequelizeTypescript,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
-  VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
 import {
@@ -57,7 +55,7 @@ import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-u
 import { videoCaptionsRouter } from './captions'
 import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
-import { rename } from 'fs-extra'
+import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
 
 const auditLogger = auditLoggerFactory('videos')
@@ -65,7 +63,7 @@ const videosRouter = express.Router()
 
 const reqVideoFileAdd = createReqFiles(
   [ 'videofile', 'thumbnailfile', 'previewfile' ],
-  Object.assign({}, VIDEO_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
+  Object.assign({}, MIMETYPES.VIDEO.MIMETYPE_EXT, MIMETYPES.IMAGE.MIMETYPE_EXT),
   {
     videofile: CONFIG.STORAGE.TMP_DIR,
     thumbnailfile: CONFIG.STORAGE.TMP_DIR,
@@ -74,7 +72,7 @@ const reqVideoFileAdd = createReqFiles(
 )
 const reqVideoFileUpdate = createReqFiles(
   [ 'thumbnailfile', 'previewfile' ],
-  IMAGE_MIMETYPE_EXT,
+  MIMETYPES.IMAGE.MIMETYPE_EXT,
   {
     thumbnailfile: CONFIG.STORAGE.TMP_DIR,
     previewfile: CONFIG.STORAGE.TMP_DIR
@@ -208,7 +206,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Move physical file
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
   const destination = join(videoDir, video.getVideoFilename(videoFile))
-  await rename(videoPhysicalFile.path, destination)
+  await move(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
   videoPhysicalFile.filename = video.getVideoFilename(videoFile)
   videoPhysicalFile.path = destination

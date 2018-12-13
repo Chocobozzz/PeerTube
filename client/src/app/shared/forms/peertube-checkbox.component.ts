@@ -19,8 +19,7 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor {
   @Input() labelText: string
   @Input() labelHtml: string
   @Input() helpHtml: string
-
-  isDisabled = false
+  @Input() disabled = false
 
   propagateChange = (_: any) => { /* empty */ }
 
@@ -41,6 +40,6 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor {
   }
 
   setDisabledState (isDisabled: boolean) {
-    this.isDisabled = isDisabled
+    this.disabled = isDisabled
   }
 }

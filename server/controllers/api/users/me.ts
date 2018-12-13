@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'multer'
 import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../../initializers'
+import { CONFIG, MIMETYPES, sequelizeTypescript } from '../../../initializers'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
@@ -42,7 +42,7 @@ import { AccountModel } from '../../../models/account/account'
 
 const auditLogger = auditLoggerFactory('users-me')
 
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const meRouter = express.Router()
 

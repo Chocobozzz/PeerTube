@@ -1,6 +1,6 @@
 <div class="root">
   <label class="form-group-checkbox">
-    <input type="checkbox" [(ngModel)]="checked" (ngModelChange)="onModelChange()" [id]="inputName" [disabled]="isDisabled" />
+    <input type="checkbox" [(ngModel)]="checked" (ngModelChange)="onModelChange()" [id]="inputName" [disabled]="disabled" />
     <span role="checkbox" [attr.aria-checked]="checked"></span>
     <span *ngIf="labelText">{{ labelText }}</span>
     <span *ngIf="labelHtml" [innerHTML]="labelHtml"></span>

@@ -27,6 +27,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: VideoCaptionEdit[] = []
+  @Input() waitTranscodingEnabled = true
 
   @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
 

@@ -54,6 +54,7 @@ describe('Test config API validators', function () {
     },
     transcoding: {
       enabled: true,
+      allowAdditionalExtensions: true,
       threads: 1,
       resolutions: {
         '240p': false,

@@ -1,7 +1,7 @@
 import 'express-validator'
 import 'multer'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS, TORRENT_MIMETYPE_EXT, VIDEO_IMPORT_STATES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initializers'
 import { exists, isFileValid } from './misc'
 import * as express from 'express'
 import { VideoImportModel } from '../../models/video/video-import'
@@ -24,7 +24,7 @@ function isVideoImportStateValid (value: any) {
   return exists(value) && VIDEO_IMPORT_STATES[ value ] !== undefined
 }
 
-const videoTorrentImportTypes = Object.keys(TORRENT_MIMETYPE_EXT).map(m => `(${m})`)
+const videoTorrentImportTypes = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT).map(m => `(${m})`)
 const videoTorrentImportRegex = videoTorrentImportTypes.join('|')
 function isVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
   return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)

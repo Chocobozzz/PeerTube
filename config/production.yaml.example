@@ -137,6 +137,8 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+  # Allow your users to upload .mkv, .mov, .avi, .flv videos
+  allow_additional_extensions: true
   threads: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
@@ -175,6 +177,8 @@ instance:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
 
 services:
+  # You can provide a reporting endpoint for Content Security Policy violations
+  csp-logger:
   # Cards configuration to format video in Twitter
   twitter:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published

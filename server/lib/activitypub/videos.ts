@@ -1,7 +1,6 @@
 import * as Bluebird from 'bluebird'
 import * as sequelize from 'sequelize'
 import * as magnetUtil from 'magnet-uri'
-import { join } from 'path'
 import * as request from 'request'
 import { ActivityIconObject, ActivityUrlObject, ActivityVideoUrlObject, VideoState } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -11,7 +10,7 @@ import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, downloadImage } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { ACTIVITY_PUB, CONFIG, MIMETYPES, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -362,7 +361,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function isActivityVideoUrlObject (url: ActivityUrlObject): url is ActivityVideoUrlObject {
-  const mimeTypes = Object.keys(VIDEO_MIMETYPE_EXT)
+  const mimeTypes = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
   const urlMediaType = url.mediaType || url.mimeType
   return mimeTypes.indexOf(urlMediaType) !== -1 && urlMediaType.startsWith('video/')
@@ -490,7 +489,7 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
 
     const mediaType = fileUrl.mediaType || fileUrl.mimeType
     const attribute = {
-      extname: VIDEO_MIMETYPE_EXT[ mediaType ],
+      extname: MIMETYPES.VIDEO.MIMETYPE_EXT[ mediaType ],
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,

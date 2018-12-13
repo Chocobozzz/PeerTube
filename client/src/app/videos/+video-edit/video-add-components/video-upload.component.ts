@@ -44,6 +44,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+  waitTranscodingEnabled = true
 
   error: string
 
@@ -117,6 +118,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const videofile = this.videofileInput.nativeElement.files[0]
     if (!videofile) return
 
+    // Check global user quota
     const bytePipes = new BytesPipe()
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
@@ -132,6 +134,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       return
     }
 
+    // Check daily user quota
     const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
     if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
       const msg = this.i18n(
@@ -146,12 +149,18 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       return
     }
 
+    // Build name field
     const nameWithoutExtension = videofile.name.replace(/\.[^/.]+$/, '')
     let name: string
 
     // If the name of the file is very small, keep the extension
     if (nameWithoutExtension.length < 3) name = videofile.name
     else name = nameWithoutExtension
+
+    // Force user to wait transcoding for unsupported video types in web browsers
+    if (!videofile.name.endsWith('.mp4') && !videofile.name.endsWith('.webm') && !videofile.name.endsWith('.ogv')) {
+      this.waitTranscodingEnabled = false
+    }
 
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false

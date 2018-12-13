@@ -271,7 +271,7 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
   serverNumber: number,
-  directories = [ 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]
+  directories = [ 'redundancy', 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]
 ) {
   const testDirectory = 'test' + serverNumber
 

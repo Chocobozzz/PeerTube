@@ -14,7 +14,7 @@ import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { remove, rename, stat } from 'fs-extra'
+import { remove, move, stat } from 'fs-extra'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -139,7 +139,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
     // Move file
     videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
-    await rename(tempVideoPath, videoDestFile)
+    await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail

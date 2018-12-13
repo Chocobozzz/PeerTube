@@ -109,7 +109,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(11) })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -560,7 +560,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(11) })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })

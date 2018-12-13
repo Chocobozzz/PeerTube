@@ -135,7 +135,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   gotoLogin () {
     this.hideVisitorModal()
-    this.authService.redirectUrl = this.router.url
     this.router.navigate([ '/login' ])
   }
 

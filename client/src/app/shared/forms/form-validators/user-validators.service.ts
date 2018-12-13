@@ -31,7 +31,7 @@ export class UserValidatorsService {
         'required': this.i18n('Username is required.'),
         'minlength': this.i18n('Username must be at least 1 character long.'),
         'maxlength': this.i18n('Username cannot be more than 50 characters long.'),
-        'pattern': this.i18n('Username should be lowercase alphanumeric; underscores are allowed.')
+        'pattern': this.i18n('Username should be lowercase alphanumeric; dots and underscores are allowed.')
       }
     }
 

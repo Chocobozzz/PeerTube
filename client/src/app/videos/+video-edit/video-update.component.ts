@@ -12,6 +12,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { VideoDetails } from '@app/shared/video/video-details.model'
 
 @Component({
   selector: 'my-videos-update',
@@ -26,6 +27,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
+  waitTranscodingEnabled = true
 
   private updateDone = false
 
@@ -64,6 +66,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           }
 
           this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+
+          const videoFiles = (video as VideoDetails).files
+          if (videoFiles.length > 1) { // Already transcoded
+            this.waitTranscodingEnabled = false
+          }
 
           // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
           setTimeout(() => this.hydrateFormFromVideo())

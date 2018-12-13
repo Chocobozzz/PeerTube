@@ -64,7 +64,7 @@ export class LoginComponent extends FormReactive implements OnInit {
 
     this.authService.login(username, password)
       .subscribe(
-        () => this.redirect(),
+        () => this.redirectService.redirectToPreviousRoute(),
 
         err => {
           if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
@@ -72,15 +72,6 @@ export class LoginComponent extends FormReactive implements OnInit {
           else this.error = err.message
         }
       )
-  }
-
-  redirect () {
-    const redirect = this.authService.redirectUrl
-    if (redirect) {
-      this.router.navigate([ redirect ])
-    } else {
-      this.redirectService.redirectToHomepage()
-    }
   }
 
   askResetPassword () {

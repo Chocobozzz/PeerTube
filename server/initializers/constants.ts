@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 290
+const LAST_MIGRATION_VERSION = 295
 
 // ---------------------------------------------------------------------------
 
@@ -246,6 +246,7 @@ const CONFIG = {
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },
+    get ALLOW_ADDITIONAL_EXTENSIONS () { return config.get<boolean>('transcoding.allow_additional_extensions') },
     get THREADS () { return config.get<number>('transcoding.threads') },
     RESOLUTIONS: {
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
@@ -289,6 +290,7 @@ const CONFIG = {
     get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') }
   },
   SERVICES: {
+    get 'CSP-LOGGER' () { return config.get<string>('services.csp-logger') },
     TWITTER: {
       get USERNAME () { return config.get<string>('services.twitter.username') },
       get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }
@@ -298,9 +300,9 @@ const CONFIG = {
 
 // ---------------------------------------------------------------------------
 
-const CONSTRAINTS_FIELDS = {
+let CONSTRAINTS_FIELDS = {
   USERS: {
-    NAME: { min: 1, max: 50 }, // Length
+    NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     USERNAME: { min: 1, max: 50 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
@@ -316,7 +318,7 @@ const CONSTRAINTS_FIELDS = {
     REASON: { min: 2, max: 300 } // Length
   },
   VIDEO_CHANNELS: {
-    NAME: { min: 1, max: 50 }, // Length
+    NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
     SUPPORT: { min: 3, max: 1000 }, // Length
     URL: { min: 3, max: 2000 } // Length
@@ -357,7 +359,7 @@ const CONSTRAINTS_FIELDS = {
         max: 2 * 1024 * 1024 // 2MB
       }
     },
-    EXTNAME: [ '.mp4', '.ogv', '.webm' ],
+    EXTNAME: buildVideosExtname(),
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
@@ -480,27 +482,31 @@ const VIDEO_ABUSE_STATES = {
   [VideoAbuseState.ACCEPTED]: 'Accepted'
 }
 
-const VIDEO_MIMETYPE_EXT = {
-  'video/webm': '.webm',
-  'video/ogg': '.ogv',
-  'video/mp4': '.mp4'
+const MIMETYPES = {
+  VIDEO: {
+    MIMETYPE_EXT: buildVideoMimetypeExt(),
+    EXT_MIMETYPE: null as { [ id: string ]: string }
+  },
+  IMAGE: {
+    MIMETYPE_EXT: {
+      'image/png': '.png',
+      'image/jpg': '.jpg',
+      'image/jpeg': '.jpg'
+    }
+  },
+  VIDEO_CAPTIONS: {
+    MIMETYPE_EXT: {
+      'text/vtt': '.vtt',
+      'application/x-subrip': '.srt'
+    }
+  },
+  TORRENT: {
+    MIMETYPE_EXT: {
+      'application/x-bittorrent': '.torrent'
+    }
+  }
 }
-const VIDEO_EXT_MIMETYPE = invert(VIDEO_MIMETYPE_EXT)
-
-const IMAGE_MIMETYPE_EXT = {
-  'image/png': '.png',
-  'image/jpg': '.jpg',
-  'image/jpeg': '.jpg'
-}
-
-const VIDEO_CAPTIONS_MIMETYPE_EXT = {
-  'text/vtt': '.vtt',
-  'application/x-subrip': '.srt'
-}
-
-const TORRENT_MIMETYPE_EXT = {
-  'application/x-bittorrent': '.torrent'
-}
+MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
 // ---------------------------------------------------------------------------
 
@@ -526,7 +532,7 @@ const ACTIVITY_PUB = {
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 100,
   URL_MIME_TYPES: {
-    VIDEO: Object.keys(VIDEO_MIMETYPE_EXT),
+    VIDEO: Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT),
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
@@ -685,13 +691,12 @@ if (isTestInstance() === true) {
   ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0ms'
 }
 
-updateWebserverConfig()
+updateWebserverUrls()
 
 // ---------------------------------------------------------------------------
 
 export {
   API_VERSION,
-  VIDEO_CAPTIONS_MIMETYPE_EXT,
   AVATARS_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
@@ -719,7 +724,6 @@ export {
   FEEDS,
   JOB_TTL,
   NSFW_POLICY_TYPES,
-  TORRENT_MIMETYPE_EXT,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   VIDEO_IMPORT_TIMEOUT,
@@ -732,7 +736,6 @@ export {
   VIDEO_LICENCES,
   VIDEO_STATES,
   VIDEO_RATE_TYPES,
-  VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   VIDEO_ABUSE_STATES,
@@ -740,13 +743,12 @@ export {
   USER_PASSWORD_RESET_LIFETIME,
   MEMOIZE_TTL,
   USER_EMAIL_VERIFY_LIFETIME,
-  IMAGE_MIMETYPE_EXT,
   OVERVIEWS,
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
-  VIDEO_EXT_MIMETYPE,
+  MIMETYPES,
   CRAWL_REQUEST_CONCURRENCY,
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
@@ -768,9 +770,41 @@ function getLocalConfigFilePath () {
   return join(dirname(configSources[ 0 ].name), filename + '.json')
 }
 
-function updateWebserverConfig () {
+function buildVideoMimetypeExt () {
+  const data = {
+    'video/webm': '.webm',
+    'video/ogg': '.ogv',
+    'video/mp4': '.mp4'
+  }
+
+  if (CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
+    Object.assign(data, {
+      'video/quicktime': '.mov',
+      'video/x-msvideo': '.avi',
+      'video/x-flv': '.flv',
+      'video/x-matroska': '.mkv'
+    })
+  }
+
+  return data
+}
+
+function updateWebserverUrls () {
   CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
   CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+}
+
+function updateWebserverConfig () {
+  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = buildVideosExtname()
+
+  MIMETYPES.VIDEO.MIMETYPE_EXT = buildVideoMimetypeExt()
+  MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
+}
+
+function buildVideosExtname () {
+  return CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS
+    ? [ '.mp4', '.ogv', '.webm', '.mkv', '.mov', '.avi', '.flv' ]
+    : [ '.mp4', '.ogv', '.webm' ]
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
@@ -854,4 +888,5 @@ export function reloadConfig () {
   config = require('config')
 
   updateWebserverConfig()
+  updateWebserverUrls()
 }

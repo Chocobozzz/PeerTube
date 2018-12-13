@@ -88,7 +88,6 @@ class JobQueue {
 
       queue.on('error', err => {
         logger.error('Error in job queue %s.', handlerName, { err })
-        process.exit(-1)
       })
 
       this.queues[handlerName] = queue

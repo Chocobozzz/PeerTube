@@ -320,8 +320,13 @@ describe('Test videos API validator', function () {
 
     it('Should fail without an incorrect input file', async function () {
       const fields = baseCorrectParams
-      const attaches = {
+      let attaches = {
         'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
+      }
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+
+      attaches = {
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.mkv')
       }
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
