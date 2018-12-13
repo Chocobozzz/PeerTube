@@ -32,7 +32,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
   }
 
   protected loadData () {
-    this.followService.getFollowers(this.pagination, this.sort)
+    this.followService.getFollowers(this.pagination, this.sort, this.search)
                       .subscribe(
                         resultList => {
                           this.followers = resultList.data
