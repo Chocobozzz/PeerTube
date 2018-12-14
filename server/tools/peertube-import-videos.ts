@@ -58,7 +58,7 @@ getSettings()
         settings.remotes[settings.default] :
         settings.remotes[0]
     }
-    
+
     if (!program['username']) program['username'] = netrc.machines[program['url']].login
     if (!program['password']) program['password'] = netrc.machines[program['url']].password
   }
@@ -69,7 +69,7 @@ getSettings()
     if (!program['targetUrl']) console.error('--targetUrl field is required.')
     process.exit(-1)
   }
-  
+
   removeEndSlashes(program['url'])
   removeEndSlashes(program['targetUrl'])
 
@@ -326,8 +326,8 @@ function isNSFW (info: any) {
   return false
 }
 
-function removeEndSlashes(url: string) {
-  while(url.endsWith('/')){
+function removeEndSlashes (url: string) {
+  while (url.endsWith('/')) {
     url.slice(0, -1)
   }
 }
