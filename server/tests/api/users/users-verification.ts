@@ -7,7 +7,7 @@ import {
   userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig
 } from '../../../../shared/utils'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
-import { mockSmtpServer } from '../../../../shared/utils/miscs/email'
+import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
@@ -30,7 +30,7 @@ describe('Test users account verification', function () {
   before(async function () {
     this.timeout(30000)
 
-    await mockSmtpServer(emails)
+    await MockSmtpServer.Instance.collectEmails(emails)
 
     await flushTests()
 
