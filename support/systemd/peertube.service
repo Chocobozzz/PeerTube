@@ -28,6 +28,11 @@ PrivateDevices=false
 ; Ensures that the service process and all its children can never gain new
 ; privileges through execve().
 NoNewPrivileges=true
+; This makes /home, /root, and /run/user inaccessible and empty for processes invoked
+; by this unit. Make sure that you do not depend on data inside these folders.
+ProtectHome=true
+; Drops the sys admin capability from the daemon.
+CapabilityBoundingSet=~CAP_SYS_ADMIN
 
 [Install]
 WantedBy=multi-user.target
