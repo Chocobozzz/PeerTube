@@ -112,6 +112,7 @@ server {
     proxy_send_timeout          600;
     proxy_read_timeout          600;
     send_timeout                600;
+    proxy_next_upstream         off;
   }
 
   # Bypass PeerTube for performance reasons. Could be removed
