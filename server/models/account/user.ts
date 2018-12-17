@@ -32,7 +32,8 @@ import {
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
-  isUserWebTorrentEnabledValid
+  isUserWebTorrentEnabledValid,
+  isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -113,6 +114,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
   @Column
   webTorrentEnabled: boolean
+
+  @AllowNull(false)
+  @Default(true)
+  @Is('UserVideosHistoryEnabled', value => throwIfNotValid(value, isUserVideosHistoryEnabledValid, 'Videos history enabled'))
+  @Column
+  videosHistoryEnabled: boolean
 
   @AllowNull(false)
   @Default(true)

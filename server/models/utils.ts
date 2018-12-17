@@ -29,7 +29,7 @@ function getVideoSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
     ]
   }
 
-  return [ [ field, direction ], lastSort ]
+  return [ field.split('.').concat([ direction ]), lastSort ]
 }
 
 function getSortOnModel (model: any, value: string, lastSort: string[] = [ 'id', 'ASC' ]) {

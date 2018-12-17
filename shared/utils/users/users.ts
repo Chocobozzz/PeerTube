@@ -162,14 +162,15 @@ function unblockUser (url: string, userId: number | string, accessToken: string,
 
 function updateMyUser (options: {
   url: string
-  accessToken: string,
-  currentPassword?: string,
-  newPassword?: string,
-  nsfwPolicy?: NSFWPolicyType,
-  email?: string,
+  accessToken: string
+  currentPassword?: string
+  newPassword?: string
+  nsfwPolicy?: NSFWPolicyType
+  email?: string
   autoPlayVideo?: boolean
-  displayName?: string,
+  displayName?: string
   description?: string
+  videosHistoryEnabled?: boolean
 }) {
   const path = '/api/v1/users/me'
 
@@ -181,6 +182,9 @@ function updateMyUser (options: {
   if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
   if (options.description !== undefined && options.description !== null) toSend['description'] = options.description
   if (options.displayName !== undefined && options.displayName !== null) toSend['displayName'] = options.displayName
+  if (options.videosHistoryEnabled !== undefined && options.videosHistoryEnabled !== null) {
+    toSend['videosHistoryEnabled'] = options.videosHistoryEnabled
+  }
 
   return makePutBodyRequest({
     url: options.url,
