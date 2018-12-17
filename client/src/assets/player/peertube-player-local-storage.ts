@@ -60,6 +60,14 @@ function getAverageBandwidthInStore () {
   return undefined
 }
 
+function saveLastSubtitle (language: string) {
+  return setLocalStorage('last-subtitle', language)
+}
+
+function getStoredLastSubtitle () {
+  return getLocalStorage('last-subtitle')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -71,7 +79,9 @@ export {
   saveMuteInStore,
   saveTheaterInStore,
   saveAverageBandwidth,
-  getAverageBandwidthInStore
+  getAverageBandwidthInStore,
+  saveLastSubtitle,
+  getStoredLastSubtitle
 }
 
 // ---------------------------------------------------------------------------
