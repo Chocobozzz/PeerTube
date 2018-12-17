@@ -118,7 +118,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
         .subscribe(([ video, captionsResult ]) => {
           const startTime = this.route.snapshot.queryParams.start
-          this.onVideoFetched(video, captionsResult.data, startTime)
+          const subtitle = this.route.snapshot.queryParams.subtitle
+
+          this.onVideoFetched(video, captionsResult.data, { startTime, subtitle })
               .catch(err => this.handleError(err))
         })
     })
@@ -371,7 +373,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
   }
 
-  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], startTimeFromUrl: number) {
+  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], urlOptions: { startTime: number, subtitle: string }) {
     this.video = video
 
     // Re init attributes
@@ -379,7 +381,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.completeDescriptionShown = false
     this.remoteServerDown = false
 
-    let startTime = startTimeFromUrl || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
+    let startTime = urlOptions.startTime || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
     // Don't start the video if we are at the end
     if (this.video.duration - startTime <= 1) startTime = 0
 
@@ -419,6 +421,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       peertubeLink: false,
       poster: this.video.previewUrl,
       startTime,
+      subtitle: urlOptions.subtitle,
       theaterMode: true,
       language: this.localeId,
 
