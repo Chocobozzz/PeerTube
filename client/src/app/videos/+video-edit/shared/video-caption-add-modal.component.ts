@@ -72,8 +72,6 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   }
 
   async addCaption () {
-    this.hide()
-
     const languageId = this.form.value[ 'language' ]
     const languageObject = this.videoCaptionLanguages.find(l => l.id === languageId)
 
@@ -82,6 +80,6 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
       captionfile: this.form.value[ 'captionfile' ]
     })
 
-    this.form.reset()
+    this.hide()
   }
 }
