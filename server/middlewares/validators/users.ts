@@ -5,15 +5,16 @@ import { body, param } from 'express-validator/check'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isUserAutoPlayVideoValid, isUserBlockedReasonValid,
+  isUserAutoPlayVideoValid,
+  isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid,
-  isUserVideoQuotaDailyValid
+  isUserVideoQuotaDailyValid,
+  isUserVideoQuotaValid, isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
@@ -22,7 +23,6 @@ import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
-import { comparePassword } from '../../helpers/peertube-crypto'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -144,6 +144,9 @@ const usersUpdateMeValidator = [
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('nsfwPolicy').optional().custom(isUserNSFWPolicyValid).withMessage('Should have a valid display Not Safe For Work policy'),
   body('autoPlayVideo').optional().custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
+  body('videosHistoryEnabled')
+    .optional()
+    .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled attribute'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
