@@ -425,6 +425,11 @@ type AvailableForListIDsOptions = {
           userId: options.historyOfUser.id
         }
       })
+
+      // Even if the relation is n:m, we know that a user only have 0..1 video history
+      // So we won't have multiple rows for the same video
+      // Without this, we would not be able to sort on "updatedAt" column of UserVideoHistoryModel
+      query.subQuery = false
     }
 
     return query

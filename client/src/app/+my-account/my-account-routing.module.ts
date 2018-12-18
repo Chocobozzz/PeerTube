@@ -13,6 +13,7 @@ import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-sub
 import { MyAccountOwnershipComponent } from '@app/+my-account/my-account-ownership/my-account-ownership.component'
 import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
+import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -112,6 +113,15 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Muted instances'
+          }
+        }
+      },
+      {
+        path: 'history/videos',
+        component: MyAccountHistoryComponent,
+        data: {
+          meta: {
+            title: 'Videos history'
           }
         }
       }

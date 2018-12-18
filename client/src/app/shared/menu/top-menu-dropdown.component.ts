@@ -1,9 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { filter, take } from 'rxjs/operators'
-import { NavigationStart, Router } from '@angular/router'
+import { NavigationEnd, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { drop } from 'lodash-es'
 
 export type TopMenuDropdownParam = {
   label: string
@@ -34,7 +33,7 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     this.updateChildLabels(window.location.pathname)
 
     this.routeSub = this.router.events
-                        .pipe(filter(event => event instanceof NavigationStart))
+                        .pipe(filter(event => event instanceof NavigationEnd))
                         .subscribe(() => this.updateChildLabels(window.location.pathname))
   }
 
@@ -50,6 +49,15 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     dropdown.openChange
             .pipe(take(1))
             .subscribe(e => this.openedOnHover = false)
+  }
+
+  dropdownAnchorClicked (dropdown: NgbDropdown) {
+    if (this.openedOnHover) {
+      this.openedOnHover = false
+      return
+    }
+
+    return dropdown.toggle()
   }
 
   closeDropdownIfHovered (dropdown: NgbDropdown) {

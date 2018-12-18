@@ -21,6 +21,7 @@ import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settin
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
 import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
+import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
 
 @NgModule({
   imports: [
@@ -49,7 +50,8 @@ import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-b
     MyAccountDangerZoneComponent,
     MyAccountSubscriptionsComponent,
     MyAccountBlocklistComponent,
-    MyAccountServerBlocklistComponent
+    MyAccountServerBlocklistComponent,
+    MyAccountHistoryComponent
   ],
 
   exports: [
