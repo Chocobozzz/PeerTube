@@ -43,7 +43,9 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
       .then(response => response.json())
       .then(data => new Promise((resolve, reject) => {
         if (data && Array.isArray(data.links)) {
-          const link = data.links.find(link =>
+          const link: {
+            template: string
+          } = data.links.find(link =>
             link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe')
           
           if (link && link.template.includes('{uri}'))
