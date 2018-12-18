@@ -54,9 +54,7 @@
 
     /deep/ .ui-progressbar {
       font-size: 15px !important;
-      color: #fff !important;
       height: 30px !important;
-      line-height: 30px !important;
       border-radius: 3px !important;
       background-color: rgba(11, 204, 41, 0.16) !important;
 
@@ -68,6 +66,8 @@
         text-align: left;
         padding-left: 18px;
         margin-top: 0 !important;
+        color: #fff !important;
+        line-height: 30px !important;
       }
     }
 

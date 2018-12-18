@@ -1,6 +1,7 @@
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { AutoCompleteModule } from 'primeng/autocomplete'
+import { InputSwitchModule } from 'primeng/inputswitch'
 import { SharedModule } from '../shared'
 import { MyAccountRoutingModule } from './my-account-routing.module'
 import { MyAccountChangePasswordComponent } from './my-account-settings/my-account-change-password/my-account-change-password.component'
@@ -29,7 +30,8 @@ import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/m
     MyAccountRoutingModule,
     AutoCompleteModule,
     SharedModule,
-    TableModule
+    TableModule,
+    InputSwitchModule
   ],
 
   declarations: [

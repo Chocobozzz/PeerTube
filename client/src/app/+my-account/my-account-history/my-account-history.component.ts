@@ -11,6 +11,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { UserHistoryService } from '@app/shared/users/user-history.service'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-account-history',
@@ -25,6 +26,7 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
     itemsPerPage: 5,
     totalItems: null
   }
+  videosHistoryEnabled: boolean
 
   protected baseVideoWidth = -1
   protected baseVideoHeight = 155
@@ -33,6 +35,7 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
     protected router: Router,
     protected route: ActivatedRoute,
     protected authService: AuthService,
+    protected userService: UserService,
     protected notificationsService: NotificationsService,
     protected location: Location,
     protected screenService: ScreenService,
@@ -48,6 +51,8 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
 
   ngOnInit () {
     super.ngOnInit()
+
+    this.videosHistoryEnabled = this.authService.getUser().videosHistoryEnabled
   }
 
   ngOnDestroy () {
@@ -62,5 +67,41 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
 
   generateSyndicationList () {
     throw new Error('Method not implemented.')
+  }
+
+  onVideosHistoryChange () {
+    this.userService.updateMyProfile({ videosHistoryEnabled: this.videosHistoryEnabled })
+      .subscribe(
+        () => {
+          const message = this.videosHistoryEnabled === true ?
+            this.i18n('Videos history is enabled') :
+            this.i18n('Videos history is disabled')
+
+          this.notificationsService.success(this.i18n('Success'), message)
+
+          this.authService.refreshUserInformation()
+        },
+
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
+      )
+  }
+
+  async deleteHistory () {
+    const title = this.i18n('Delete videos history')
+    const message = this.i18n('Are you sure you want to delete all your videos history?')
+
+    const res = await this.confirmService.confirm(message, title)
+    if (res !== true) return
+
+    this.userHistoryService.deleteUserVideosHistory()
+        .subscribe(
+          () => {
+            this.notificationsService.success(this.i18n('Success'), this.i18n('Videos history deleted'))
+
+            this.reloadVideos()
+          },
+
+          err => this.notificationsService.error(this.i18n('Error'), err.message)
+        )
   }
 }

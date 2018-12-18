@@ -1,6 +1,37 @@
 @import '_variables';
 @import '_mixins';
 
+.no-history {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  font-weight: $font-semibold;
+  font-size: 16px;
+}
+
+.top-buttons {
+  margin-bottom: 20px;
+  display: flex;
+
+  .history-switch {
+    display: flex;
+    flex-grow: 1;
+
+    label {
+      margin: 0 0 0 5px;
+    }
+  }
+
+  .delete-history {
+    font-size: 15px;
+
+    button {
+      @include peertube-button;
+      @include grey-button;
+    }
+  }
+}
+
 .video {
   @include row-blocks;
 

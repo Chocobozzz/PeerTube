@@ -370,6 +370,7 @@ export class UserModel extends Model<UserModel> {
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
       webTorrentEnabled: this.webTorrentEnabled,
+      videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
