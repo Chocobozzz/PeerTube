@@ -38,7 +38,7 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   formValidated () {
     const address = this.form.value['text']
     const [ username, hostname ] = address.split('@')
-    
+
     fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
       .then(response => response.json())
       .then(data => new Promise((resolve, reject) => {
@@ -47,9 +47,10 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
             template: string
           } = data.links.find(link =>
             link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe')
-          
-          if (link && link.template.includes('{uri}'))
+
+          if (link && link.template.includes('{uri}')) {
             resolve(link.template.replace('{uri}', `acct:${this.account}`))
+          }
         }
         reject()
       }))
