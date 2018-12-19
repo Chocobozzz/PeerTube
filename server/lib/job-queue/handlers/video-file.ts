@@ -91,15 +91,15 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
   })
 }
 
-async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boolean) {
-  if (video === undefined) return undefined
+async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: boolean) {
+  if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
-  const { videoFileResolution } = await video.getOriginalFileResolution()
+  const { videoFileResolution } = await videoArg.getOriginalFileResolution()
 
   return sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+    let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
@@ -128,13 +128,13 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
       logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
     } else {
       // No transcoding to do, it's now published
-      video.state = VideoState.PUBLISHED
-      video = await video.save({ transaction: t })
+      videoDatabase.state = VideoState.PUBLISHED
+      videoDatabase = await videoDatabase.save({ transaction: t })
 
-      logger.info('No transcoding jobs created for video %s (no resolutions).', video.uuid)
+      logger.info('No transcoding jobs created for video %s (no resolutions).', videoDatabase.uuid, { privacy: videoDatabase.privacy })
     }
 
-    return federateVideoIfNeeded(video, isNewVideo, t)
+    return federateVideoIfNeeded(videoDatabase, isNewVideo, t)
   })
 }
 
