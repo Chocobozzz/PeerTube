@@ -425,7 +425,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       theaterMode: true,
       language: this.localeId,
 
-      userWatching: this.user ? {
+      userWatching: this.user && this.user.videosHistoryEnabled === true ? {
         url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),
         authorizationHeader: this.authService.getRequestHeaderValue()
       } : undefined
