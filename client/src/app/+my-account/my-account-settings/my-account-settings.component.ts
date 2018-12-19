@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { BytesPipe } from 'ngx-pipes'
 import { AuthService } from '../../core'
 import { User } from '../../shared'
@@ -19,7 +19,7 @@ export class MyAccountSettingsComponent implements OnInit {
   constructor (
     private userService: UserService,
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private i18n: I18n
   ) {}
 
@@ -48,12 +48,12 @@ export class MyAccountSettingsComponent implements OnInit {
     this.userService.changeAvatar(formData)
       .subscribe(
         data => {
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Avatar changed.'))
+          this.notifier.success(this.i18n('Avatar changed.'))
 
           this.user.updateAccountAvatar(data.avatar)
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

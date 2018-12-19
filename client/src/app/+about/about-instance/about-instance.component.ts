@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { ServerService } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { MarkdownService } from '@app/videos/shared'
-import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
@@ -9,14 +8,13 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   templateUrl: './about-instance.component.html',
   styleUrls: [ './about-instance.component.scss' ]
 })
-
 export class AboutInstanceComponent implements OnInit {
   shortDescription = ''
   descriptionHTML = ''
   termsHTML = ''
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private serverService: ServerService,
     private markdownService: MarkdownService,
     private i18n: I18n
@@ -43,7 +41,7 @@ export class AboutInstanceComponent implements OnInit {
           this.termsHTML = this.markdownService.textMarkdownToHTML(res.instance.terms)
         },
 
-        err => this.notificationsService.error(this.i18n('Error getting about from server'), err)
+        () => this.notifier.error(this.i18n('Cannot get about information from server'))
       )
   }
 

@@ -5,7 +5,7 @@ import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier, ServerService } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 // FIXME: something weird with our path definition in tsconfig and typings
 // @ts-ignore
@@ -13,7 +13,7 @@ import videojs from 'video.js'
 import 'videojs-hotkeys'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import * as WebTorrent from 'webtorrent'
-import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoRateType, VideoState } from '../../../../../shared'
+import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -26,7 +26,6 @@ import { VideoShareComponent } from './modal/video-share.component'
 import { VideoBlacklistComponent } from './modal/video-blacklist.component'
 import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
 import { addContextMenu, getVideojsOptions, loadLocaleInVideoJS } from '../../../assets/player/peertube-player'
-import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
@@ -77,7 +76,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
@@ -205,7 +204,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
           error => {
             this.descriptionLoading = false
-            this.notificationsService.error(this.i18n('Error'), error.message)
+            this.notifier.error(error.message)
           }
         )
   }
@@ -247,16 +246,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoBlacklistService.removeVideoFromBlacklist(this.video.id).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('Video {{name}} removed from the blacklist.', { name: this.video.name })
-        )
+        this.notifier.success(this.i18n('Video {{name}} removed from the blacklist.', { name: this.video.name }))
 
         this.video.blacklisted = false
         this.video.blacklistedReason = null
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -294,17 +290,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoService.removeVideo(this.video.id)
         .subscribe(
-          status => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name })
-            )
+          () => {
+            this.notifier.success(this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name }))
 
             // Go back to the video-list.
             this.redirectService.redirectToHomepage()
           },
 
-          error => this.notificationsService.error(this.i18n('Error'), error.message)
+          error => this.notifier.error(error.message)
         )
   }
 
@@ -354,7 +347,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       return
     }
 
-    this.notificationsService.error(this.i18n('Error'), errorMessage)
+    this.notifier.error(errorMessage)
   }
 
   private checkUserRating () {
@@ -369,7 +362,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             }
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -475,7 +468,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               this.userRating = nextRating
             },
 
-            (err: { message: string }) => this.notificationsService.error(this.i18n('Error'), err.message)
+            (err: { message: string }) => this.notifier.error(err.message)
           )
   }
 

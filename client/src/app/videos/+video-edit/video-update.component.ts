@@ -2,7 +2,7 @@ import { map, switchMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { FormReactive } from '../../shared'
@@ -35,7 +35,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private serverService: ServerService,
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
@@ -78,7 +78,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
         err => {
           console.error(err)
-          this.notificationsService.error(this.i18n('Error'), err.message)
+          this.notifier.error(err.message)
         }
       )
   }
@@ -121,14 +121,14 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.updateDone = true
             this.isUpdatingVideo = false
             this.loadingBar.complete()
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))
+            this.notifier.success(this.i18n('Video updated.'))
             this.router.navigate([ '/videos/watch', this.video.uuid ])
           },
 
           err => {
             this.loadingBar.complete()
             this.isUpdatingVideo = false
-            this.notificationsService.error(this.i18n('Error'), err.message)
+            this.notifier.error(err.message)
             console.error(err)
           }
         )

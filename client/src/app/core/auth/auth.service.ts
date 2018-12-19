@@ -3,7 +3,7 @@ import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core/notification'
 import { OAuthClientLocal, User as UserServerModel, UserRefreshToken } from '../../../../../shared'
 import { User } from '../../../../../shared/models/users'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
@@ -47,7 +47,7 @@ export class AuthService {
 
   constructor (
     private http: HttpClient,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private hotkeysService: HotkeysService,
     private restExtractor: RestExtractor,
     private router: Router,
@@ -105,9 +105,8 @@ export class AuthService {
               )
             }
 
-            // We put a bigger timeout
-            // This is an important message
-            this.notificationsService.error(this.i18n('Error'), errorMessage, { timeOut: 7000 })
+            // We put a bigger timeout: this is an important message
+            this.notifier.error(errorMessage, this.i18n('Error'), 7000)
           }
         )
   }

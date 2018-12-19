@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { UserService } from '@app/shared'
 
 @Component({
@@ -17,7 +17,7 @@ export class VerifyAccountEmailComponent implements OnInit {
 
   constructor (
     private userService: UserService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
     private i18n: I18n
@@ -29,7 +29,7 @@ export class VerifyAccountEmailComponent implements OnInit {
     this.verificationString = this.route.snapshot.queryParams['verificationString']
 
     if (!this.userId || !this.verificationString) {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('Unable to find user id or verification string.'))
+      this.notifier.error(this.i18n('Unable to find user id or verification string.'))
     } else {
       this.verifyEmail()
     }
@@ -46,7 +46,7 @@ export class VerifyAccountEmailComponent implements OnInit {
         },
 
         err => {
-          this.notificationsService.error(this.i18n('Error'), err.message)
+          this.notifier.error(err.message)
         }
       )
   }

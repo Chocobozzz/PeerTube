@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier } from '@app/core'
 import { FormReactive, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { filter } from 'rxjs/operators'
-import { AuthService } from '@app/core'
 import { User } from '../../../../../../shared'
 
 @Component({
@@ -20,7 +19,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
   constructor (
     protected formValidatorService: FormValidatorService,
     private userValidatorsService: UserValidatorsService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private authService: AuthService,
     private userService: UserService,
     private i18n: I18n
@@ -50,7 +49,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
     this.userService.changePassword(currentPassword, newPassword).subscribe(
       () => {
-        this.notificationsService.success(this.i18n('Success'), this.i18n('Password updated.'))
+        this.notifier.success(this.i18n('Password updated.'))
 
         this.form.reset()
         this.error = null

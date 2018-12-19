@@ -7,7 +7,7 @@ import {
   Router
 } from '@angular/router'
 
-import { AuthService } from '../auth'
+import { AuthService } from '../auth/auth.service'
 
 @Injectable()
 export class UserRightGuard implements CanActivate, CanActivateChild {

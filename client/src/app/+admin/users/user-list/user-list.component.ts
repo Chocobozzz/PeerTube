@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { ConfirmService, ServerService } from '../../../core'
 import { RestPagination, RestTable, UserService } from '../../../shared'
@@ -26,7 +26,7 @@ export class UserListComponent extends RestTable implements OnInit {
   bulkUserActions: DropdownAction<User[]>[] = []
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private serverService: ServerService,
     private userService: UserService,
@@ -68,7 +68,7 @@ export class UserListComponent extends RestTable implements OnInit {
   openBanUserModal (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {
-        this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot ban root.'))
+        this.notifier.error(this.i18n('You cannot ban root.'))
         return
       }
     }
@@ -91,18 +91,18 @@ export class UserListComponent extends RestTable implements OnInit {
           () => {
             const message = this.i18n('{{num}} users unbanned.', { num: users.length })
 
-            this.notificationsService.success(this.i18n('Success'), message)
+            this.notifier.success(message)
             this.loadData()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
   async removeUsers (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {
-        this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot delete root.'))
+        this.notifier.error(this.i18n('You cannot delete root.'))
         return
       }
     }
@@ -113,28 +113,22 @@ export class UserListComponent extends RestTable implements OnInit {
 
     this.userService.removeUser(users).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('{{num}} users deleted.', { num: users.length })
-        )
+        this.notifier.success(this.i18n('{{num}} users deleted.', { num: users.length }))
         this.loadData()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
   async setEmailsAsVerified (users: User[]) {
     this.userService.updateUsers(users, { emailVerified: true }).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('{{num}} users email set as verified.', { num: users.length })
-        )
+        this.notifier.success(this.i18n('{{num}} users email set as verified.', { num: users.length }))
         this.loadData()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -146,13 +140,13 @@ export class UserListComponent extends RestTable implements OnInit {
     this.selectedUsers = []
 
     this.userService.getUsers(this.pagination, this.sort, this.search)
-                    .subscribe(
-                      resultList => {
-                        this.users = resultList.data
-                        this.totalRecords = resultList.total
-                      },
+        .subscribe(
+          resultList => {
+            this.users = resultList.data
+            this.totalRecords = resultList.total
+          },
 
-                      err => this.notificationsService.error(this.i18n('Error'), err.message)
-                    )
+          err => this.notifier.error(err.message)
+        )
   }
 }

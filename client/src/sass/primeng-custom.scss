@@ -299,3 +299,48 @@ p-inputswitch {
     background-color: var(--mainColor) !important;
   }
 }
+
+p-toast {
+  .ui-toast-message {
+    font-family: $main-fonts;
+
+    &.ui-toast-message-success {
+      color: #fff !important;
+      background-color: #8BC34A !important;
+    }
+
+    &.ui-toast-message-error {
+      color: #fff !important;
+      background-color: #F44336 !important;
+    }
+
+    &.ui-toast-message-info {
+      color: #fff !important;
+      background-color: #03A9F4 !important;
+    }
+
+    &.ui-toast-message-info {
+      color: #fff !important;
+      background-color: #03A9F4 !important;
+    }
+
+    .message {
+      float: left;
+
+      h3 {
+        font-size: 21px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+    }
+
+    .glyphicon {
+      float: right;
+      font-size: 32px;
+      margin-top: 15px;
+      margin-right: 5px;
+    }
+  }
+}

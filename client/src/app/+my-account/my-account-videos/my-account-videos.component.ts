@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -40,7 +40,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     protected router: Router,
     protected route: ActivatedRoute,
     protected authService: AuthService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected location: Location,
     protected screenService: ScreenService,
     protected i18n: I18n,
@@ -102,16 +102,13 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
       .pipe(concatAll())
       .subscribe(
         res => {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length })
-          )
+          this.notifier.success(this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length }))
 
           this.abortSelectionMode()
           this.reloadVideos()
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -124,15 +121,12 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
     this.videoService.removeVideo(video.id)
         .subscribe(
-          status => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Video {{videoName}} deleted.', { videoName: video.name })
-            )
+          () => {
+            this.notifier.success(this.i18n('Video {{videoName}} deleted.', { videoName: video.name }))
             this.reloadVideos()
           },
 
-          error => this.notificationsService.error(this.i18n('Error'), error.message)
+          error => this.notifier.error(error.message)
         )
   }
 

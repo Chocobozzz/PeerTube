@@ -1,7 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core'
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ConfirmService } from '@app/core'
-import { NotificationsService } from 'angular2-notifications'
+import { ConfirmService, Notifier } from '@app/core'
 import { Subscription } from 'rxjs'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
@@ -42,7 +41,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
@@ -92,7 +91,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           }
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -104,7 +103,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.componentPagination.totalItems = res.totalComments
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -155,7 +154,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           if (this.highlightedThread.id === commentToDelete.id) this.highlightedThread = undefined
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 

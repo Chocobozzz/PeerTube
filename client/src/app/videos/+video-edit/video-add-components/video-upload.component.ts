@@ -2,11 +2,10 @@ import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs'
 import { VideoPrivacy } from '../../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../../core'
+import { AuthService, Notifier, ServerService } from '../../../core'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -53,7 +52,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected authService: AuthService,
     protected serverService: ServerService,
     protected videoService: VideoService,
@@ -110,7 +109,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
       this.videoUploadObservable = null
-      this.notificationsService.info(this.i18n('Info'), this.i18n('Upload cancelled'))
+      this.notifier.info(this.i18n('Upload cancelled'))
     }
   }
 
@@ -130,7 +129,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           videoQuota: bytePipes.transform(videoQuota, 0)
         }
       )
-      this.notificationsService.error(this.i18n('Error'), msg)
+      this.notifier.error(msg)
       return
     }
 
@@ -145,7 +144,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
         }
       )
-      this.notificationsService.error(this.i18n('Error'), msg)
+      this.notifier.error(msg)
       return
     }
 
@@ -209,7 +208,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.videoUploadPercents = 0
         this.videoUploadObservable = null
         this.firstStepError.emit()
-        this.notificationsService.error(this.i18n('Error'), err.message)
+        this.notifier.error(err.message)
       }
     )
   }
@@ -238,7 +237,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUpdatingVideo = false
             this.isUploadingVideo = false
 
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
+            this.notifier.success(this.i18n('Video published.'))
             this.router.navigate([ '/videos/watch', video.uuid ])
           },
 

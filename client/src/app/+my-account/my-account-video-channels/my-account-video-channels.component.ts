@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
@@ -20,7 +20,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoChannelService: VideoChannelService,
     private i18n: I18n
@@ -46,15 +46,14 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
     this.videoChannelService.removeVideoChannel(videoChannel)
       .subscribe(
-        status => {
+        () => {
           this.loadVideoChannels()
-          this.notificationsService.success(
-            this.i18n('Success'),
+          this.notifier.success(
             this.i18n('Video channel {{videoChannelName}} deleted.', { videoChannelName: videoChannel.displayName })
           )
         },
 
-        error => this.notificationsService.error(this.i18n('Error'), error.message)
+        error => this.notifier.error(error.message)
       )
   }
 

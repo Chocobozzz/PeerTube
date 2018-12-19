@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -12,6 +11,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { UserHistoryService } from '@app/shared/users/user-history.service'
 import { UserService } from '@app/shared'
+import { Notifier } from '@app/core'
 
 @Component({
   selector: 'my-account-history',
@@ -36,7 +36,7 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
     protected route: ActivatedRoute,
     protected authService: AuthService,
     protected userService: UserService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected location: Location,
     protected screenService: ScreenService,
     protected i18n: I18n,
@@ -77,12 +77,12 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
             this.i18n('Videos history is enabled') :
             this.i18n('Videos history is disabled')
 
-          this.notificationsService.success(this.i18n('Success'), message)
+          this.notifier.success(message)
 
           this.authService.refreshUserInformation()
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -96,12 +96,12 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
     this.userHistoryService.deleteUserVideosHistory()
         .subscribe(
           () => {
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Videos history deleted'))
+            this.notifier.success(this.i18n('Videos history deleted'))
 
             this.reloadVideos()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 }

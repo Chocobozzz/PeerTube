@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { BlocklistService, AccountBlock } from '@app/shared/blocklist'
+import { AccountBlock, BlocklistService } from '@app/shared/blocklist'
 
 @Component({
   selector: 'my-instance-account-blocklist',
@@ -18,7 +18,7 @@ export class InstanceAccountBlocklistComponent extends RestTable implements OnIn
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private blocklistService: BlocklistService,
     private i18n: I18n
   ) {
@@ -35,8 +35,7 @@ export class InstanceAccountBlocklistComponent extends RestTable implements OnIn
     this.blocklistService.unblockAccountByInstance(blockedAccount)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
+            this.notifier.success(
               this.i18n('Account {{nameWithHost}} unmuted by your instance.', { nameWithHost: blockedAccount.nameWithHost })
             )
 
@@ -53,7 +52,7 @@ export class InstanceAccountBlocklistComponent extends RestTable implements OnIn
           this.totalRecords = resultList.total
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

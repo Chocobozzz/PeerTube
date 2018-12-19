@@ -38,4 +38,15 @@
 
 <ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
 <my-confirm></my-confirm>
-<simple-notifications [options]="notificationOptions"></simple-notifications>
+<p-toast position="bottom-right">
+  <ng-template let-message pTemplate="message">
+    <div class="message">
+      <h3>{{ message.summary }}</h3>
+      <p>{{ message.detail }}</p>
+    </div>
+
+    <span *ngIf="message.severity === 'success'" class="glyphicon glyphicon-ok"></span>
+    <span *ngIf="message.severity === 'info'" class="glyphicon glyphicon-info-sign"></span>
+    <span *ngIf="message.severity === 'error'" class="glyphicon glyphicon-remove"></span>
+  </ng-template>
+</p-toast>
