@@ -16,7 +16,6 @@ import { getOrCreateVideoAndAccountAndChannel } from '../activitypub'
 export class VideosRedundancyScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
-  private executing = false
 
   protected schedulerIntervalMs = CONFIG.REDUNDANCY.VIDEOS.CHECK_INTERVAL
 
@@ -24,11 +23,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     super()
   }
 
-  async execute () {
-    if (this.executing) return
-
-    this.executing = true
-
+  protected async internalExecute () {
     for (const obj of CONFIG.REDUNDANCY.VIDEOS.STRATEGIES) {
       logger.info('Running redundancy scheduler for strategy %s.', obj.strategy)
 
@@ -57,8 +52,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     await this.extendsLocalExpiration()
 
     await this.purgeRemoteExpired()
-
-    this.executing = false
   }
 
   static get Instance () {

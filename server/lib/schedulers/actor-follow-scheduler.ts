@@ -3,18 +3,35 @@ import { logger } from '../../helpers/logger'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers'
+import { ActorFollowScoreCache } from '../cache'
 
-export class BadActorFollowScheduler extends AbstractScheduler {
+export class ActorFollowScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
 
-  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.badActorFollow
+  protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.actorFollowScores
 
   private constructor () {
     super()
   }
 
-  async execute () {
+  protected async internalExecute () {
+    await this.processPendingScores()
+
+    await this.removeBadActorFollows()
+  }
+
+  private async processPendingScores () {
+    const pendingScores = ActorFollowScoreCache.Instance.getPendingFollowsScoreCopy()
+
+    ActorFollowScoreCache.Instance.clearPendingFollowsScore()
+
+    for (const inbox of Object.keys(pendingScores)) {
+      await ActorFollowModel.updateFollowScore(inbox, pendingScores[inbox])
+    }
+  }
+
+  private async removeBadActorFollows () {
     if (!isTestInstance()) logger.info('Removing bad actor follows (scheduler).')
 
     try {

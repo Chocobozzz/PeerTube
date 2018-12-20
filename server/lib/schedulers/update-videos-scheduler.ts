@@ -12,23 +12,12 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.updateVideos
 
-  private isRunning = false
-
   private constructor () {
     super()
   }
 
-  async execute () {
-    if (this.isRunning === true) return
-    this.isRunning = true
-
-    try {
-      await retryTransactionWrapper(this.updateVideos.bind(this))
-    } catch (err) {
-      logger.error('Cannot execute update videos scheduler.', { err })
-    } finally {
-      this.isRunning = false
-    }
+  protected async internalExecute () {
+    return retryTransactionWrapper(this.updateVideos.bind(this))
   }
 
   private async updateVideos () {
