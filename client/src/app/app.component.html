@@ -40,13 +40,15 @@
 <my-confirm></my-confirm>
 <p-toast position="bottom-right">
   <ng-template let-message pTemplate="message">
-    <div class="message">
-      <h3>{{ message.summary }}</h3>
-      <p>{{ message.detail }}</p>
-    </div>
+    <div class="notification-block">
+      <div class="message">
+        <h3>{{ message.summary }}</h3>
+        <p>{{ message.detail }}</p>
+      </div>
 
-    <span *ngIf="message.severity === 'success'" class="glyphicon glyphicon-ok"></span>
-    <span *ngIf="message.severity === 'info'" class="glyphicon glyphicon-info-sign"></span>
-    <span *ngIf="message.severity === 'error'" class="glyphicon glyphicon-remove"></span>
+      <span *ngIf="message.severity === 'success'" class="glyphicon glyphicon-ok"></span>
+      <span *ngIf="message.severity === 'info'" class="glyphicon glyphicon-info-sign"></span>
+      <span *ngIf="message.severity === 'error'" class="glyphicon glyphicon-remove"></span>
+    </div>
   </ng-template>
 </p-toast>

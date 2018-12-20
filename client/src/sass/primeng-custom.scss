@@ -324,23 +324,24 @@ p-toast {
       background-color: #03A9F4 !important;
     }
 
-    .message {
-      float: left;
+    .notification-block {
+      display: flex;
 
-      h3 {
-        font-size: 21px;
+      .message {
+        h3 {
+          font-size: 21px;
+        }
+
+        p {
+          font-size: 15px;
+        }
       }
 
-      p {
-        font-size: 15px;
+      .glyphicon {
+        font-size: 32px;
+        margin-top: 15px;
+        margin-right: 5px;
       }
-    }
-
-    .glyphicon {
-      float: right;
-      font-size: 32px;
-      margin-top: 15px;
-      margin-right: 5px;
     }
   }
 }
