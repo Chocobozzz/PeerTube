@@ -102,16 +102,44 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
   { fields: [ 'createdAt' ] },
   { fields: [ 'publishedAt' ] },
   { fields: [ 'duration' ] },
-  { fields: [ 'category' ] },
-  { fields: [ 'licence' ] },
-  { fields: [ 'nsfw' ] },
-  { fields: [ 'language' ] },
-  { fields: [ 'waitTranscoding' ] },
-  { fields: [ 'state' ] },
-  { fields: [ 'remote' ] },
   { fields: [ 'views' ] },
-  { fields: [ 'likes' ] },
   { fields: [ 'channelId' ] },
+  {
+    fields: [ 'category' ], // We don't care videos with an unknown category
+    where: {
+      category: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
+  {
+    fields: [ 'licence' ], // We don't care videos with an unknown licence
+    where: {
+      licence: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
+  {
+    fields: [ 'language' ], // We don't care videos with an unknown language
+    where: {
+      language: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
+  {
+    fields: [ 'nsfw' ], // Most of the videos are not NSFW
+    where: {
+      nsfw: true
+    }
+  },
+  {
+    fields: [ 'remote' ], // Only index local videos
+    where: {
+      remote: false
+    }
+  },
   {
     fields: [ 'uuid' ],
     unique: true
