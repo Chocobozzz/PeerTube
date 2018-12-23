@@ -88,21 +88,3 @@ If everything is right, you can safely shut down the old server.
 ## Acknowledgements
 
 Thanks to the [Mastodon](https://joinmastodon.org/) team for their migration guide on which this one is very inspired.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
