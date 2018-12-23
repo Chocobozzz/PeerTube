@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 295
+const LAST_MIGRATION_VERSION = 305
 
 // ---------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
 // 1 hour
 let SCHEDULER_INTERVALS_MS = {
-  badActorFollow: 60000 * 60, // 1 hour
+  actorFollowScores: 60000 * 60, // 1 hour
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24 // 1 day
@@ -675,7 +675,7 @@ if (isTestInstance() === true) {
 
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 
-  SCHEDULER_INTERVALS_MS.badActorFollow = 10000
+  SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   REPEAT_JOBS['videos-views'] = { every: 5000 }

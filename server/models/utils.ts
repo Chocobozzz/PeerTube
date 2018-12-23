@@ -29,7 +29,11 @@ function getVideoSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
     ]
   }
 
-  return [ [ field, direction ], lastSort ]
+  const firstSort = typeof field === 'string' ?
+    field.split('.').concat([ direction ]) :
+    [ field, direction ]
+
+  return [ firstSort, lastSort ]
 }
 
 function getSortOnModel (model: any, value: string, lastSort: string[] = [ 'id', 'ASC' ]) {

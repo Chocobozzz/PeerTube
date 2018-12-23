@@ -157,10 +157,11 @@ class PeerTubeEmbed {
   player: any
   playerOptions: any
   api: PeerTubeEmbedApi = null
-  autoplay = false
-  controls = true
-  muted = false
-  loop = false
+  autoplay: boolean
+  controls: boolean
+  muted: boolean
+  loop: boolean
+  subtitle: string
   enableApi = false
   startTime: number | string = 0
   scope = 'peertube'
@@ -214,11 +215,11 @@ class PeerTubeEmbed {
     this.displayError(text)
   }
 
-  getParamToggle (params: URLSearchParams, name: string, defaultValue: boolean) {
+  getParamToggle (params: URLSearchParams, name: string, defaultValue?: boolean) {
     return params.has(name) ? (params.get(name) === '1' || params.get(name) === 'true') : defaultValue
   }
 
-  getParamString (params: URLSearchParams, name: string, defaultValue: string) {
+  getParamString (params: URLSearchParams, name: string, defaultValue?: string) {
     return params.has(name) ? params.get(name) : defaultValue
   }
 
@@ -241,15 +242,15 @@ class PeerTubeEmbed {
     try {
       let params = new URL(window.location.toString()).searchParams
 
-      this.autoplay = this.getParamToggle(params, 'autoplay', this.autoplay)
-      this.controls = this.getParamToggle(params, 'controls', this.controls)
-      this.muted = this.getParamToggle(params, 'muted', this.muted)
-      this.loop = this.getParamToggle(params, 'loop', this.loop)
+      this.autoplay = this.getParamToggle(params, 'autoplay')
+      this.controls = this.getParamToggle(params, 'controls')
+      this.muted = this.getParamToggle(params, 'muted')
+      this.loop = this.getParamToggle(params, 'loop')
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
-      this.scope = this.getParamString(params, 'scope', this.scope)
 
-      const startTimeParamString = params.get('start')
-      if (startTimeParamString) this.startTime = startTimeParamString
+      this.scope = this.getParamString(params, 'scope', this.scope)
+      this.subtitle = this.getParamString(params, 'subtitle')
+      this.startTime = this.getParamString(params, 'start')
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
@@ -291,6 +292,7 @@ class PeerTubeEmbed {
       muted: this.muted,
       loop: this.loop,
       startTime: this.startTime,
+      subtitle: this.subtitle,
 
       videoCaptions,
       inactivityTimeout: 1500,

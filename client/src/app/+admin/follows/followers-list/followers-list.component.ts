@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/primeng'
 import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
 import { RestPagination, RestTable } from '../../../shared'
@@ -20,7 +20,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private followService: FollowService,
     private i18n: I18n
   ) {
@@ -39,7 +39,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notificationsService.error(this.i18n('Error'), err.message)
+                        err => this.notifier.error(err.message)
                       )
   }
 }

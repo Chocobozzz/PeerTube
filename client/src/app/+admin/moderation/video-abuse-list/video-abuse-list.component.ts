@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Account } from '../../../shared/account/account.model'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { VideoAbuse, VideoAbuseState } from '../../../../../../shared'
 import { RestPagination, RestTable, VideoAbuseService } from '../../../shared'
@@ -27,7 +27,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   videoAbuseActions: DropdownAction<VideoAbuse>[] = []
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private videoAbuseService: VideoAbuseService,
     private confirmService: ConfirmService,
     private i18n: I18n
@@ -90,14 +90,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
     this.videoAbuseService.removeVideoAbuse(videoAbuse).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('Abuse deleted.')
-        )
+        this.notifier.success(this.i18n('Abuse deleted.'))
         this.loadData()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -106,7 +103,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
       .subscribe(
         () => this.loadData(),
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
 
   }
@@ -119,7 +116,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
                    this.totalRecords = resultList.total
                  },
 
-                 err => this.notificationsService.error(this.i18n('Error'), err.message)
+                 err => this.notifier.error(err.message)
                )
   }
 }

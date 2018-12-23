@@ -1,10 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { RedirectService, ServerService } from '@app/core'
-import { NotificationsService } from 'angular2-notifications'
-import { SearchService } from '@app/search/search.service'
+import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { MetaService } from '@ngx-meta/core'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { VideoConstant } from '../../../../shared'
 

@@ -999,11 +999,6 @@ angular2-hotkeys@^2.1.2:
     "@types/mousetrap" "^1.6.0"
     mousetrap "^1.6.0"
 
-angular2-notifications@^1.0.2:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/angular2-notifications/-/angular2-notifications-1.0.4.tgz#7b3c449dbad45503965f8cd8ac00e998a4463544"
-  integrity sha512-DjazfwXtLY8BNXKIEw1oEEMy7G6fmldpzP1FYwyVGUwEtZPLQyYGu9MQYCjtVlZMljxpa3qvnv8l9ZUfXAarNA==
-
 ansi-colors@^3.0.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.2.2.tgz#e49349137dbeb6d381b91e607c189915e53265ba"

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier, RedirectService, ServerService } from '@app/core'
 import { UserCreate } from '../../../../shared'
 import { FormReactive, UserService, UserValidatorsService } from '../shared'
-import { AuthService, RedirectService, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
@@ -20,7 +19,7 @@ export class SignupComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
     private userValidatorsService: UserValidatorsService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private serverService: ServerService,
     private redirectService: RedirectService,
@@ -64,10 +63,7 @@ export class SignupComponent extends FormReactive implements OnInit {
         this.authService.login(userCreate.username, userCreate.password)
             .subscribe(
               () => {
-                this.notificationsService.success(
-                  this.i18n('Success'),
-                  this.i18n('You are now logged in as {{username}}!', { username: userCreate.username })
-                )
+                this.notifier.success(this.i18n('You are now logged in as {{username}}!', { username: userCreate.username }))
 
                 this.redirectService.redirectToHomepage()
               },

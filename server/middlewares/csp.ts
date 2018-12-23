@@ -8,19 +8,18 @@ const baseDirectives = Object.assign({},
     mediaSrc: ["'self'", 'https:', 'blob:'],
     fontSrc: ["'self'", 'data:'],
     imgSrc: ["'self'", 'data:'],
-    scriptSrc: ["'self' 'unsafe-inline'"],
+    scriptSrc: ["'self' 'unsafe-inline' 'unsafe-eval'"],
     styleSrc: ["'self' 'unsafe-inline'"],
-    // objectSrc: ["'none'"], // only define to allow plugins, else let defaultSrc 'none' block it
+    objectSrc: ["'none'"], // only define to allow plugins, else let defaultSrc 'none' block it
     formAction: ["'self'"],
     frameAncestors: ["'none'"],
     baseUri: ["'self'"],
-    pluginTypes: ["'none'"],
     manifestSrc: ["'self'"],
     frameSrc: ["'self'"], // instead of deprecated child-src / self because of test-embed
-    workerSrc: ["'self'"], // instead of deprecated child-src
-    upgradeInsecureRequests: true
+    workerSrc: ["'self'"] // instead of deprecated child-src
   },
-  (CONFIG.SERVICES['CSP-LOGGER'] != null) ? { reportUri: CONFIG.SERVICES['CSP-LOGGER'] } : {}
+  CONFIG.SERVICES['CSP-LOGGER'] ? { reportUri: CONFIG.SERVICES['CSP-LOGGER'] } : {},
+  CONFIG.WEBSERVER.SCHEME === 'https' ? { upgradeInsecureRequests: true } : {}
 )
 
 const baseCSP = helmet.contentSecurityPolicy({

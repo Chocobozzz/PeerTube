@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { RestPagination, RestTable, VideoBlacklistService } from '../../../shared'
 import { VideoBlacklist } from '../../../../../../shared'
@@ -23,7 +23,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   videoBlacklistActions: DropdownAction<VideoBlacklist>[] = []
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoBlacklistService: VideoBlacklistService,
     private i18n: I18n
@@ -56,14 +56,11 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
 
     this.videoBlacklistService.removeVideoFromBlacklist(entry.video.id).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('Video {{name}} removed from the blacklist.', { name: entry.video.name })
-        )
+        this.notifier.success(this.i18n('Video {{name}} removed from the blacklist.', { name: entry.video.name }))
         this.loadData()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -75,7 +72,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
           this.totalRecords = resultList.total
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

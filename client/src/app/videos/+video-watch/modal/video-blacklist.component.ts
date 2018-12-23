@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier, RedirectService } from '@app/core'
 import { FormReactive, VideoBlacklistService, VideoBlacklistValidatorsService } from '../../../shared/index'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { RedirectService } from '@app/core'
 
 @Component({
   selector: 'my-video-blacklist',
@@ -27,7 +26,7 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private videoBlacklistValidatorsService: VideoBlacklistValidatorsService,
     private videoBlacklistService: VideoBlacklistService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private redirectService: RedirectService,
     private i18n: I18n
   ) {
@@ -55,12 +54,12 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
     this.videoBlacklistService.blacklistVideo(this.video.id, reason)
         .subscribe(
           () => {
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video blacklisted.'))
+            this.notifier.success(this.i18n('Video blacklisted.'))
             this.hide()
             this.redirectService.redirectToHomepage()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 }

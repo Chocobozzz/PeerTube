@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/primeng'
 import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
 import { ConfirmService } from '../../../core/confirm/confirm.service'
@@ -20,7 +20,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private followService: FollowService,
     private i18n: I18n
@@ -41,14 +41,11 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
     this.followService.unfollow(follow).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('You are not following {{host}} anymore.', { host: follow.following.host })
-        )
+        this.notifier.success(this.i18n('You are not following {{host}} anymore.', { host: follow.following.host }))
         this.loadData()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -60,7 +57,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
                           this.totalRecords = resultList.total
                         },
 
-                        err => this.notificationsService.error(this.i18n('Error'), err.message)
+                        err => this.notifier.error(err.message)
                       )
   }
 }

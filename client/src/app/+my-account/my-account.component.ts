@@ -21,7 +21,7 @@ export class MyAccountComponent {
       children: [
         {
           label: this.i18n('My channels'),
-          routerLink: '/my-account/videos'
+          routerLink: '/my-account/video-channels'
         },
         {
           label: this.i18n('My videos'),
@@ -30,6 +30,10 @@ export class MyAccountComponent {
         {
           label: this.i18n('My subscriptions'),
           routerLink: '/my-account/subscriptions'
+        },
+        {
+          label: this.i18n('My history'),
+          routerLink: '/my-account/history/videos'
         }
       ]
     }

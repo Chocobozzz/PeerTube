@@ -1,9 +1,9 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 import { JOB_REQUEST_TIMEOUT } from '../../../initializers'
+import { ActorFollowScoreCache } from '../../cache'
 
 export type ActivitypubHttpUnicastPayload = {
   uri: string
@@ -31,9 +31,9 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
 
   try {
     await doRequest(options)
-    ActorFollowModel.updateActorFollowsScore([ uri ], [], undefined)
+    ActorFollowScoreCache.Instance.updateActorFollowsScore([ uri ], [])
   } catch (err) {
-    ActorFollowModel.updateActorFollowsScore([], [ uri ], undefined)
+    ActorFollowScoreCache.Instance.updateActorFollowsScore([], [ uri ])
 
     throw err
   }

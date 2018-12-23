@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Notifier } from '@app/core'
 import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { VideoChangeOwnership } from '../../../../../shared'
 import { VideoOwnershipService } from '@app/shared/video-ownership'
 import { Account } from '@app/shared/account/account.model'
-import { MyAccountAcceptOwnershipComponent }
-from '@app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component'
+import { MyAccountAcceptOwnershipComponent } from './my-account-accept-ownership/my-account-accept-ownership.component'
 
 @Component({
   selector: 'my-account-ownership',
@@ -23,9 +21,8 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
   @ViewChild('myAccountAcceptOwnershipComponent') myAccountAcceptOwnershipComponent: MyAccountAcceptOwnershipComponent
 
   constructor (
-    private notificationsService: NotificationsService,
-    private videoOwnershipService: VideoOwnershipService,
-    private i18n: I18n
+    private notifier: Notifier,
+    private videoOwnershipService: VideoOwnershipService
   ) {
     super()
   }
@@ -50,7 +47,7 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
     this.videoOwnershipService.refuseOwnership(videoChangeOwnership.id)
       .subscribe(
         () => this.loadData(),
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -62,7 +59,7 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
           this.totalRecords = resultList.total
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

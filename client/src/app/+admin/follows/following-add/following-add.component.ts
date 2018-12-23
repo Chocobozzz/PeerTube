@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { validateHost } from '../../../shared'
 import { FollowService } from '../shared'
@@ -18,7 +18,7 @@ export class FollowingAddComponent {
 
   constructor (
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private followService: FollowService,
     private i18n: I18n
@@ -64,12 +64,12 @@ export class FollowingAddComponent {
 
     this.followService.follow(hosts).subscribe(
       () => {
-        this.notificationsService.success(this.i18n('Success'), this.i18n('Follow request(s) sent!'))
+        this.notifier.success(this.i18n('Follow request(s) sent!'))
 
         setTimeout(() => this.router.navigate([ '/admin/follows/following-list' ]), 500)
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 

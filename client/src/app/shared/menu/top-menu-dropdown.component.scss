@@ -12,3 +12,7 @@
   position: relative;
   top: 2px;
 }
+
+/deep/ .dropdown-menu {
+  margin-top: 0 !important;
+}

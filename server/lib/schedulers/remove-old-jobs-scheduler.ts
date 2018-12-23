@@ -14,10 +14,10 @@ export class RemoveOldJobsScheduler extends AbstractScheduler {
     super()
   }
 
-  async execute () {
-    if (!isTestInstance()) logger.info('Removing old jobs (scheduler).')
+  protected internalExecute () {
+    if (!isTestInstance()) logger.info('Removing old jobs in scheduler.')
 
-    JobQueue.Instance.removeOldJobs()
+    return JobQueue.Instance.removeOldJobs()
   }
 
   static get Instance () {

@@ -153,7 +153,8 @@ type AvailableForListIDsOptions = {
   accountId?: number
   videoChannelId?: number
   trendingDays?: number
-  user?: UserModel
+  user?: UserModel,
+  historyOfUser?: UserModel
 }
 
 @Scopes({
@@ -413,6 +414,21 @@ type AvailableForListIDsOptions = {
     if (options.trendingDays) {
       query.include.push(VideoModel.buildTrendingQuery(options.trendingDays))
 
+      query.subQuery = false
+    }
+
+    if (options.historyOfUser) {
+      query.include.push({
+        model: UserVideoHistoryModel,
+        required: true,
+        where: {
+          userId: options.historyOfUser.id
+        }
+      })
+
+      // Even if the relation is n:m, we know that a user only have 0..1 video history
+      // So we won't have multiple rows for the same video
+      // Without this, we would not be able to sort on "updatedAt" column of UserVideoHistoryModel
       query.subQuery = false
     }
 
@@ -987,7 +1003,8 @@ export class VideoModel extends Model<VideoModel> {
     videoChannelId?: number,
     followerActorId?: number
     trendingDays?: number,
-    user?: UserModel
+    user?: UserModel,
+    historyOfUser?: UserModel
   }, countVideos = true) {
     if (options.filter && options.filter === 'all-local' && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
@@ -1026,6 +1043,7 @@ export class VideoModel extends Model<VideoModel> {
       videoChannelId: options.videoChannelId,
       includeLocalVideos: options.includeLocalVideos,
       user: options.user,
+      historyOfUser: options.historyOfUser,
       trendingDays
     }
 
@@ -1341,7 +1359,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const [ count, rowsId ] = await Promise.all([
-      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve(undefined),
+      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve<number>(undefined),
       VideoModel.scope(idsScope).findAll(query)
     ])
     const ids = rowsId.map(r => r.id)

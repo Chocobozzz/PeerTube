@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserSubscriptionService } from '@app/shared/user-subscription'
@@ -21,7 +21,7 @@ export class MyAccountSubscriptionsComponent implements OnInit {
 
   constructor (
     private userSubscriptionService: UserSubscriptionService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private i18n: I18n
   ) {}
 
@@ -37,7 +37,7 @@ export class MyAccountSubscriptionsComponent implements OnInit {
             this.pagination.totalItems = res.total
           },
 
-          error => this.notificationsService.error(this.i18n('Error'), error.message)
+          error => this.notifier.error(error.message)
         )
   }
 

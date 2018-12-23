@@ -1,10 +1,9 @@
 import { EventEmitter, OnInit } from '@angular/core'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { catchError, switchMap, tap } from 'rxjs/operators'
 import { FormReactive } from '@app/shared'
 import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
-import { AuthService, ServerService } from '@app/core'
 import { VideoService } from '@app/shared/video/video.service'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/video-caption'
@@ -25,7 +24,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService
-  protected notificationsService: NotificationsService
+  protected notifier: Notifier
   protected authService: AuthService
   protected serverService: ServerService
   protected videoService: VideoService

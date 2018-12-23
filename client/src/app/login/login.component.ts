@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { RedirectService, ServerService } from '@app/core'
+import { Notifier, RedirectService, ServerService } from '@app/core'
 import { UserService } from '@app/shared'
-import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -34,7 +33,7 @@ export class LoginComponent extends FormReactive implements OnInit {
     private userService: UserService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private i18n: I18n
   ) {
     super()
@@ -82,11 +81,11 @@ export class LoginComponent extends FormReactive implements OnInit {
             'An email with the reset password instructions will be sent to {{email}}.',
             { email: this.forgotPasswordEmail }
           )
-          this.notificationsService.success(this.i18n('Success'), message)
+          this.notifier.success(message)
           this.hideForgotPasswordModal()
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 

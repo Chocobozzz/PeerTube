@@ -9,7 +9,11 @@ export interface User {
   email: string
   emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
+
   autoPlayVideo: boolean
+  webTorrentEnabled: boolean
+  videosHistoryEnabled: boolean
+
   role: UserRole
   videoQuota: number
   videoQuotaDaily: number

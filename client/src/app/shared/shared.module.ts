@@ -62,6 +62,7 @@ import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
 import { BlocklistService } from '@app/shared/blocklist'
 import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
+import { UserHistoryService } from '@app/shared/users/user-history.service'
 
 @NgModule({
   imports: [
@@ -181,6 +182,7 @@ import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.com
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
     BlocklistService,
+    UserHistoryService,
 
     I18nPrimengCalendarService,
     ScreenService,

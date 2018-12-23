@@ -15,19 +15,6 @@ import { fromEvent } from 'rxjs'
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
-  notificationOptions = {
-    timeOut: 5000,
-    lastOnBottom: true,
-    clickToClose: true,
-    maxLength: 0,
-    maxStack: 7,
-    showProgressBar: false,
-    pauseOnHover: false,
-    preventDuplicates: false,
-    preventLastDuplicates: 'visible',
-    rtl: false
-  }
-
   isMenuDisplayed = true
   isMenuChangedByUser = false
 

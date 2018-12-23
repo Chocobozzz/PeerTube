@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService } from '@app/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -40,7 +39,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private metaService: MetaService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private searchService: SearchService,
     private authService: AuthService
   ) { }
@@ -68,7 +67,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.search()
       },
 
-      err => this.notificationsService.error('Error', err.text)
+      err => this.notifier.error(err.text)
     )
   }
 
@@ -112,9 +111,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.firstSearch = false
         },
 
-        error => {
-          this.notificationsService.error(this.i18n('Error'), error.message)
-        }
+        err => this.notifier.error(err.message)
       )
 
   }

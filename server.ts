@@ -94,7 +94,7 @@ import {
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
-import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
+import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
@@ -219,7 +219,7 @@ async function startApplication () {
   VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, CACHE.VIDEO_CAPTIONS.MAX_AGE)
 
   // Enable Schedulers
-  BadActorFollowScheduler.Instance.enable()
+  ActorFollowScheduler.Instance.enable()
   RemoveOldJobsScheduler.Instance.enable()
   UpdateVideosScheduler.Instance.enable()
   YoutubeDlUpdateScheduler.Instance.enable()

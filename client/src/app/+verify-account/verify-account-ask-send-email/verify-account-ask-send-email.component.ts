@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier, RedirectService } from '@app/core'
 import { ServerService } from '@app/core/server'
-import { RedirectService } from '@app/core'
-import { UserService, FormReactive } from '@app/shared'
+import { FormReactive, UserService } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
@@ -20,7 +19,7 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
     private userValidatorsService: UserValidatorsService,
     private userService: UserService,
     private serverService: ServerService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private redirectService: RedirectService,
     private i18n: I18n
   ) {
@@ -46,12 +45,12 @@ export class VerifyAccountAskSendEmailComponent extends FormReactive implements 
             'An email with verification link will be sent to {{email}}.',
             { email }
           )
-          this.notificationsService.success(this.i18n('Success'), message)
+          this.notifier.success(message)
           this.redirectService.redirectToHomepage()
         },
 
         err => {
-          this.notificationsService.error(this.i18n('Error'), err.message)
+          this.notifier.error(err.message)
         }
       )
   }

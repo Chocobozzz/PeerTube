@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
-import { ServerService } from '../../../core'
+import { Notifier, ServerService } from '@app/core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -24,7 +23,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     protected configService: ConfigService,
     private userValidatorsService: UserValidatorsService,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private i18n: I18n
   ) {
@@ -60,10 +59,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     this.userService.addUser(userCreate).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('User {{username}} created.', { username: userCreate.username })
-        )
+        this.notifier.success(this.i18n('User {{username}} created.', { username: userCreate.username }))
         this.router.navigate([ '/admin/users/list' ])
       },
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ServerService } from '@app/core/server/server.service'
 import { CustomConfigValidatorsService, FormReactive, UserValidatorsService } from '@app/shared'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
@@ -25,7 +25,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private customConfigValidatorsService: CustomConfigValidatorsService,
     private userValidatorsService: UserValidatorsService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private configService: ConfigService,
     private serverService: ServerService,
     private i18n: I18n
@@ -110,7 +110,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           this.forceCheck()
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -196,10 +196,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
           this.updateForm()
 
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Configuration updated.'))
+          this.notifier.success(this.i18n('Configuration updated.'))
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 

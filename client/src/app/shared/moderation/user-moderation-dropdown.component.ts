@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { UserBanModalComponent } from '@app/shared/moderation/user-ban-modal.component'
 import { UserService } from '@app/shared/users'
-import { AuthService, ConfirmService, ServerService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { User, UserRight } from '../../../../../shared/models/users'
 import { Account } from '@app/shared/account/account.model'
 import { BlocklistService } from '@app/shared/blocklist'
@@ -30,7 +29,7 @@ export class UserModerationDropdownComponent implements OnChanges {
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private serverService: ServerService,
     private userService: UserService,
@@ -48,7 +47,7 @@ export class UserModerationDropdownComponent implements OnChanges {
 
   openBanUserModal (user: User) {
     if (user.username === 'root') {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot ban root.'))
+      this.notifier.error(this.i18n('You cannot ban root.'))
       return
     }
 
@@ -67,21 +66,18 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.userService.unbanUsers(user)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('User {{username}} unbanned.', { username: user.username })
-            )
+            this.notifier.success(this.i18n('User {{username}} unbanned.', { username: user.username }))
 
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
   async removeUser (user: User) {
     if (user.username === 'root') {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot delete root.'))
+      this.notifier.error(this.i18n('You cannot delete root.'))
       return
     }
 
@@ -91,29 +87,23 @@ export class UserModerationDropdownComponent implements OnChanges {
 
     this.userService.removeUser(user).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('User {{username}} deleted.', { username: user.username })
-        )
+        this.notifier.success(this.i18n('User {{username}} deleted.', { username: user.username }))
         this.userDeleted.emit()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
   setEmailAsVerified (user: User) {
     this.userService.updateUser(user.id, { emailVerified: true }).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('User {{username}} email set as verified', { username: user.username })
-        )
+        this.notifier.success(this.i18n('User {{username}} email set as verified', { username: user.username }))
 
         this.userChanged.emit()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -121,16 +111,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByUser(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} muted.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} muted.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByUser = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -138,16 +125,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockAccountByUser(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} unmuted.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} unmuted.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByUser = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -155,16 +139,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockServerByUser(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} muted.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} muted.', { host }))
 
             this.account.mutedServerByUser = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -172,16 +153,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockServerByUser(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} unmuted.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} unmuted.', { host }))
 
             this.account.mutedServerByUser = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -189,16 +167,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByInstance(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByInstance = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -206,16 +181,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockAccountByInstance(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} unmuted by the instance.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} unmuted by the instance.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByInstance = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -223,16 +195,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockServerByInstance(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} muted by the instance.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} muted by the instance.', { host }))
 
             this.account.mutedServerByInstance = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -240,16 +209,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockServerByInstance(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} unmuted by the instance.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} unmuted by the instance.', { host }))
 
             this.account.mutedServerByInstance = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
