@@ -32,7 +32,7 @@ Less crucially, you'll proably also want to copy the following for convenience:
 
 ### Dump and load Postgres
 
-Run this as the `peertube`user on the old server
+Run this as the `peertube` user on the old server
 
 ```
 sudo -u peertube  pg_dump -Fc peertube_prod > /tmp/peertube_prod-dump.db
@@ -75,7 +75,7 @@ You can also copy over any other important files, such as `config/` and the ngin
 
 ### During migration
 
-You may want to configure nginx to send a 503 (service unavailable) reply instead of a 501(bad gateaway), and edit a 500.html personalized.
+You may want to configure nginx to send a 503 (_service unavailable_) reply instead of a 501 (_bad gateaway_), and edit a `500.html` personalized.
 
 You'll probably also want to set the DNS TTL to something small (30-60 minutes) about a day in advance, so that DNS can propagate quickly once you point it to the new IP address.
 
