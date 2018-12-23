@@ -81,7 +81,8 @@ You'll probably also want to set the DNS TTL to something small (30-60 minutes) 
 
 ### After migrating
 
-You can check whatsmydns.net to see the progress of DNS propagation. To jumpstart the process, you can always edit your own /etc/hosts file to point to your new server so you can start playing around with it early and check if all is all right.
+You can check [whatsmydns.net](https://www.whatsmydns.net/) to see the progress of DNS propagation.
+To jumpstart the process, you can always edit your own `/etc/hosts` file to point to your new server so you can start playing around with it early and check if all is all right.
 
 If everything is right, you can safely shut down the old server.
 
