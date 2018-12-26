@@ -448,6 +448,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
   }
 
+  getCommentStaticPath () {
+    return this.Video.getWatchStaticPath() + ';threadId=' + this.getThreadId()
+  }
+
   getThreadId (): number {
     return this.originCommentId || this.id
   }

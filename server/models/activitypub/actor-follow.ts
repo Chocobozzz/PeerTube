@@ -307,7 +307,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listFollowersForApi (id: number, start: number, count: number, sort: string, search?: string) {
+  static listFollowersForApi (actorId: number, start: number, count: number, sort: string, search?: string) {
     const query = {
       distinct: true,
       offset: start,
@@ -335,7 +335,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           as: 'ActorFollowing',
           required: true,
           where: {
-            id
+            id: actorId
           }
         }
       ]
@@ -350,7 +350,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                            })
   }
 
-  static listSubscriptionsForApi (id: number, start: number, count: number, sort: string) {
+  static listSubscriptionsForApi (actorId: number, start: number, count: number, sort: string) {
     const query = {
       attributes: [],
       distinct: true,
@@ -358,7 +358,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       limit: count,
       order: getSort(sort),
       where: {
-        actorId: id
+        actorId: actorId
       },
       include: [
         {
@@ -451,9 +451,9 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   static updateFollowScore (inboxUrl: string, value: number, t?: Sequelize.Transaction) {
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
-      'SELECT "actorFollow"."id" FROM "actorFollow" ' +
-      'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
-      `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
+        `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
       ')'
 
     const options = {

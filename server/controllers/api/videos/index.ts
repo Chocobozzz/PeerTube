@@ -7,7 +7,8 @@ import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import {
-  CONFIG, MIMETYPES,
+  CONFIG,
+  MIMETYPES,
   PREVIEWS_SIZE,
   sequelizeTypescript,
   THUMBNAILS_SIZE,
@@ -57,6 +58,7 @@ import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
+import { Notifier } from '../../../lib/notifier'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -262,6 +264,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     }
 
     await federateVideoIfNeeded(video, true, t)
+    Notifier.Instance.notifyOnNewVideo(video)
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
@@ -293,6 +296,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
   const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
+  const wasUnlistedVideo = videoInstance.privacy === VideoPrivacy.UNLISTED
 
   // Process thumbnail or create it from the video
   if (req.files && req.files['thumbnailfile']) {
@@ -362,6 +366,10 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
       await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
+
+      if (wasUnlistedVideo || wasPrivateVideo) {
+        Notifier.Instance.notifyOnNewVideo(videoInstanceUpdated)
+      }
 
       auditLogger.update(
         getAuditIdFromRes(res),

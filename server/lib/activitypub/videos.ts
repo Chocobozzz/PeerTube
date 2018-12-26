@@ -29,6 +29,7 @@ import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
 import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
+import { Notifier } from '../notifier'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -181,7 +182,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
       else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoFromDatabase.url } })
     }
 
-    return { video: videoFromDatabase }
+    return { video: videoFromDatabase, created: false }
   }
 
   const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
@@ -192,7 +193,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 
   await syncVideoExternalAttributes(video, fetchedVideo, syncParam)
 
-  return { video }
+  return { video, created: true }
 }
 
 async function updateVideoFromAP (options: {
@@ -212,6 +213,9 @@ async function updateVideoFromAP (options: {
       }
 
       videoFieldsSave = options.video.toJSON()
+
+      const wasPrivateVideo = options.video.privacy === VideoPrivacy.PRIVATE
+      const wasUnlistedVideo = options.video.privacy === VideoPrivacy.UNLISTED
 
       // Check actor has the right to update the video
       const videoChannel = options.video.VideoChannel
@@ -276,6 +280,13 @@ async function updateVideoFromAP (options: {
           return VideoCaptionModel.insertOrReplaceLanguage(options.video.id, c.identifier, t)
         })
         options.video.VideoCaptions = await Promise.all(videoCaptionsPromises)
+      }
+
+      {
+        // Notify our users?
+        if (wasPrivateVideo || wasUnlistedVideo) {
+          Notifier.Instance.notifyOnNewVideo(options.video)
+        }
       }
     })
 

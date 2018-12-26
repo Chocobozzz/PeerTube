@@ -35,10 +35,10 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
-  const tasks: Promise<any>[] = []
-  let pendingRequests: boolean
+  let pendingRequests = false
 
-  do {
+  function tasksBuilder () {
+    const tasks: Promise<any>[] = []
     pendingRequests = false
 
     // Check if each server has pending request
@@ -54,13 +54,16 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
       }
     }
 
-    await Promise.all(tasks)
+    return tasks
+  }
+
+  do {
+    await Promise.all(tasksBuilder())
 
     // Retry, in case of new jobs were created
     if (pendingRequests === false) {
       await wait(2000)
-
-      await Promise.all(tasks)
+      await Promise.all(tasksBuilder())
     }
 
     if (pendingRequests) {

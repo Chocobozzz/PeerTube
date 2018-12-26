@@ -28,7 +28,7 @@ import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-be
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, CACHE, HTTP_SIGNATURE } from './server/initializers/constants'
+import { API_VERSION, CONFIG, CACHE } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -90,7 +90,7 @@ import {
   servicesRouter,
   webfingerRouter,
   trackerRouter,
-  createWebsocketServer, botsRouter
+  createWebsocketTrackerServer, botsRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
@@ -100,6 +100,7 @@ import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-sch
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
+import { PeerTubeSocket } from './server/lib/peertube-socket'
 
 // ----------- Command line -----------
 
@@ -136,7 +137,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb',
-  verify: (req: express.Request, _, buf: Buffer, encoding: string) => {
+  verify: (req: express.Request, _, buf: Buffer) => {
     const valid = isHTTPSignatureDigestValid(buf, req)
     if (valid !== true) throw new Error('Invalid digest')
   }
@@ -189,7 +190,7 @@ app.use(function (err, req, res, next) {
   return res.status(err.status || 500).end()
 })
 
-const server = createWebsocketServer(app)
+const server = createWebsocketTrackerServer(app)
 
 // ----------- Run -----------
 
@@ -227,6 +228,8 @@ async function startApplication () {
 
   // Redis initialization
   Redis.Instance.init()
+
+  PeerTubeSocket.Instance.init(server)
 
   // Make server listening
   server.listen(port, hostname, () => {

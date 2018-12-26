@@ -1527,6 +1527,10 @@ export class VideoModel extends Model<VideoModel> {
     videoFile.infoHash = parsedTorrent.infoHash
   }
 
+  getWatchStaticPath () {
+    return '/videos/watch/' + this.uuid
+  }
+
   getEmbedStaticPath () {
     return '/videos/embed/' + this.uuid
   }

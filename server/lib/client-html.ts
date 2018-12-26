@@ -115,8 +115,8 @@ export class ClientHtml {
   }
 
   private static addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
-    const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
-    const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+    const previewUrl = CONFIG.WEBSERVER.URL + video.getPreviewStaticPath()
+    const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 
     const videoNameEscaped = escapeHTML(video.name)
     const videoDescriptionEscaped = escapeHTML(video.description)

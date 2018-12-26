@@ -16,6 +16,8 @@ import {
 } from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
+import { Notifier } from '../../../lib/notifier'
+import { VideoModel } from '../../../models/video/video'
 
 const blacklistRouter = express.Router()
 
@@ -67,13 +69,18 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response)
     reason: body.reason
   }
 
-  await VideoBlacklistModel.create(toCreate)
+  const blacklist = await VideoBlacklistModel.create(toCreate)
+  blacklist.Video = videoInstance
+
+  Notifier.Instance.notifyOnVideoBlacklist(blacklist)
+
+  logger.info('Video %s blacklisted.', res.locals.video.uuid)
+
   return res.type('json').status(204).end()
 }
 
 async function updateVideoBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist as VideoBlacklistModel
-  logger.info(videoBlacklist)
 
   if (req.body.reason !== undefined) videoBlacklist.reason = req.body.reason
 
@@ -92,10 +99,13 @@ async function listBlacklist (req: express.Request, res: express.Response, next:
 
 async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoBlacklist = res.locals.videoBlacklist as VideoBlacklistModel
+  const video: VideoModel = res.locals.video
 
   await sequelizeTypescript.transaction(t => {
     return videoBlacklist.destroy({ transaction: t })
   })
+
+  Notifier.Instance.notifyOnVideoUnblacklist(video)
 
   logger.info('Video %s removed from blacklist.', res.locals.video.uuid)
 

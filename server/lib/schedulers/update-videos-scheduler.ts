@@ -5,6 +5,7 @@ import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { federateVideoIfNeeded } from '../activitypub'
 import { SCHEDULER_INTERVALS_MS, sequelizeTypescript } from '../../initializers'
 import { VideoPrivacy } from '../../../shared/models/videos'
+import { Notifier } from '../notifier'
 
 export class UpdateVideosScheduler extends AbstractScheduler {
 
@@ -39,6 +40,10 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
           await video.save({ transaction: t })
           await federateVideoIfNeeded(video, isNewVideo, t)
+
+          if (oldPrivacy === VideoPrivacy.UNLISTED || oldPrivacy === VideoPrivacy.PRIVATE) {
+            Notifier.Instance.notifyOnNewVideo(video)
+          }
         }
 
         await schedule.destroy({ transaction: t })

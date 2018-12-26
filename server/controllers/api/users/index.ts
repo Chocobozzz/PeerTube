@@ -39,6 +39,7 @@ import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
 import { myBlocklistRouter } from './my-blocklist'
 import { myVideosHistoryRouter } from './my-history'
+import { myNotificationsRouter } from './my-notifications'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -55,6 +56,7 @@ const askSendEmailLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', myNotificationsRouter)
 usersRouter.use('/', myBlocklistRouter)
 usersRouter.use('/', myVideosHistoryRouter)
 usersRouter.use('/', meRouter)

@@ -86,11 +86,6 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   })
   Video: VideoModel
 
-  @AfterCreate
-  static sendEmailNotification (instance: VideoAbuseModel) {
-    return Emailer.Instance.addVideoAbuseReportJob(instance.videoId)
-  }
-
   static loadByIdAndVideoId (id: number, videoId: number) {
     const query = {
       where: {
