@@ -53,16 +53,6 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   })
   Video: VideoModel
 
-  @AfterCreate
-  static sendBlacklistEmailNotification (instance: VideoBlacklistModel) {
-    return Emailer.Instance.addVideoBlacklistReportJob(instance.videoId, instance.reason)
-  }
-
-  @AfterDestroy
-  static sendUnblacklistEmailNotification (instance: VideoBlacklistModel) {
-    return Emailer.Instance.addVideoUnblacklistReportJob(instance.videoId)
-  }
-
   static listForApi (start: number, count: number, sort: SortType) {
     const query = {
       offset: start,

@@ -219,6 +219,7 @@ export class ActorModel extends Model<ActorModel> {
       name: 'actorId',
       allowNull: false
     },
+    as: 'ActorFollowings',
     onDelete: 'cascade'
   })
   ActorFollowing: ActorFollowModel[]

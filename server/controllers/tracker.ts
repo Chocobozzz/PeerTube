@@ -59,7 +59,7 @@ const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
 trackerRouter.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
 trackerRouter.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
 
-function createWebsocketServer (app: express.Application) {
+function createWebsocketTrackerServer (app: express.Application) {
   const server = http.createServer(app)
   const wss = new WebSocketServer({ server: server, path: '/tracker/socket' })
   wss.on('connection', function (ws, req) {
@@ -76,7 +76,7 @@ function createWebsocketServer (app: express.Application) {
 
 export {
   trackerRouter,
-  createWebsocketServer
+  createWebsocketTrackerServer
 }
 
 // ---------------------------------------------------------------------------

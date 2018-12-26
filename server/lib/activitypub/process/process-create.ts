@@ -13,6 +13,7 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { getVideoDislikeActivityPubUrl } from '../url'
+import { Notifier } from '../../notifier'
 
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
@@ -47,7 +48,9 @@ export {
 async function processCreateVideo (activity: ActivityCreate) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
+  const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
+
+  if (created) Notifier.Instance.notifyOnNewVideo(video)
 
   return video
 }
@@ -133,7 +136,10 @@ async function processCreateVideoAbuse (byActor: ActorModel, videoAbuseToCreateD
       state: VideoAbuseState.PENDING
     }
 
-    await VideoAbuseModel.create(videoAbuseData, { transaction: t })
+    const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t })
+    videoAbuseInstance.Video = video
+
+    Notifier.Instance.notifyOnNewVideoAbuse(videoAbuseInstance)
 
     logger.info('Remote abuse for video uuid %s created', videoAbuseToCreateData.object)
   })
@@ -147,7 +153,7 @@ async function processCreateVideoComment (byActor: ActorModel, activity: Activit
 
   const { video } = await resolveThread(commentObject.inReplyTo)
 
-  const { created } = await addVideoComment(video, commentObject.id)
+  const { comment, created } = await addVideoComment(video, commentObject.id)
 
   if (video.isOwned() && created === true) {
     // Don't resend the activity to the sender
@@ -155,4 +161,6 @@ async function processCreateVideoComment (byActor: ActorModel, activity: Activit
 
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
+
+  if (created === true) Notifier.Instance.notifyOnNewComment(comment)
 }

@@ -31,6 +31,8 @@ import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { UserVideoHistoryModel } from '../models/account/user-video-history'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
+import { UserNotificationModel } from '../models/account/user-notification'
+import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -95,7 +97,9 @@ async function initDatabaseModels (silent: boolean) {
     VideoRedundancyModel,
     UserVideoHistoryModel,
     AccountBlocklistModel,
-    ServerBlocklistModel
+    ServerBlocklistModel,
+    UserNotificationModel,
+    UserNotificationSettingModel
   ])
 
   // Check extensions exist in the database

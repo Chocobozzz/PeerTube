@@ -15,6 +15,7 @@ import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { remove, move, stat } from 'fs-extra'
+import { Notifier } from '../../notifier'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -184,6 +185,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       // Now we can federate the video (reload from database, we need more attributes)
       const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
       await federateVideoIfNeeded(videoForFederation, true, t)
+      Notifier.Instance.notifyOnNewVideo(videoForFederation)
 
       // Update video import object
       videoImport.state = VideoImportState.SUCCESS

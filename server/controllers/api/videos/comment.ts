@@ -26,6 +26,7 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { AccountModel } from '../../../models/account/account'
 import { UserModel } from '../../../models/account/user'
+import { Notifier } from '../../../lib/notifier'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -119,6 +120,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
     }, t)
   })
 
+  Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({
@@ -140,6 +142,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
     }, t)
   })
 
+  Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({ comment: comment.toFormattedJSON() }).end()

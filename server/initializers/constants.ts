@@ -50,7 +50,9 @@ const SORTABLE_COLUMNS = {
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
 
   ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
-  SERVERS_BLOCKLIST: [ 'createdAt' ]
+  SERVERS_BLOCKLIST: [ 'createdAt' ],
+
+  USER_NOTIFICATIONS: [ 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {

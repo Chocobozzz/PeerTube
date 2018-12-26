@@ -1,3 +1,4 @@
+import * as Bluebird from 'bluebird'
 import { AccessDeniedError } from 'oauth2-server'
 import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
@@ -37,7 +38,7 @@ function clearCacheByToken (token: string) {
 function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
-  if (accessTokenCache[bearerToken] !== undefined) return accessTokenCache[bearerToken]
+  if (accessTokenCache[bearerToken] !== undefined) return Bluebird.resolve(accessTokenCache[bearerToken])
 
   return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
     .then(tokenModel => {

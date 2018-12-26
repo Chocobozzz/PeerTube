@@ -9,6 +9,7 @@ import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 import { importVideoFile, transcodeOriginalVideofile, optimizeVideofile } from '../../video-transcoding'
+import { Notifier } from '../../notifier'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -86,6 +87,7 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
 
     // If the video was not published, we consider it is a new one for other instances
     await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+    if (isNewVideo) Notifier.Instance.notifyOnNewVideo(video)
 
     return undefined
   })
@@ -134,7 +136,8 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: bo
       logger.info('No transcoding jobs created for video %s (no resolutions).', videoDatabase.uuid, { privacy: videoDatabase.privacy })
     }
 
-    return federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+    await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+    if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
   })
 }
 

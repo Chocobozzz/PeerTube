@@ -70,7 +70,7 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
     throw new Error(`Comment url ${commentUrl} host is different from the AP object id ${body.id}`)
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+  const actor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
   const entry = await videoCommentActivityObjectToDBAttributes(videoInstance, actor, body)
   if (!entry) return { created: false }
 
@@ -80,6 +80,8 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
     },
     defaults: entry
   })
+  comment.Account = actor.Account
+  comment.Video = videoInstance
 
   return { comment, created }
 }
