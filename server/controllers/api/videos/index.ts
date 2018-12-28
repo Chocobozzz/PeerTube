@@ -264,13 +264,14 @@ async function addVideo (req: express.Request, res: express.Response) {
     }
 
     await federateVideoIfNeeded(video, true, t)
-    Notifier.Instance.notifyOnNewVideo(video)
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
     return videoCreated
   })
+
+  Notifier.Instance.notifyOnNewVideo(videoCreated)
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now
@@ -311,10 +312,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
   }
 
   try {
-    await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = {
-        transaction: t
-      }
+    const videoInstanceUpdated = await sequelizeTypescript.transaction(async t => {
+      const sequelizeOptions = { transaction: t }
       const oldVideoChannel = videoInstance.VideoChannel
 
       if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
@@ -367,17 +366,19 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
       await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
 
-      if (wasUnlistedVideo || wasPrivateVideo) {
-        Notifier.Instance.notifyOnNewVideo(videoInstanceUpdated)
-      }
-
       auditLogger.update(
         getAuditIdFromRes(res),
         new VideoAuditView(videoInstanceUpdated.toFormattedDetailsJSON()),
         oldVideoAuditView
       )
       logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
+
+      return videoInstanceUpdated
     })
+
+    if (wasUnlistedVideo || wasPrivateVideo) {
+      Notifier.Instance.notifyOnNewVideo(videoInstanceUpdated)
+    }
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed

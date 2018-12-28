@@ -180,12 +180,11 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       // Update video DB object
       video.duration = duration
       video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
-      const videoUpdated = await video.save({ transaction: t })
+      await video.save({ transaction: t })
 
       // Now we can federate the video (reload from database, we need more attributes)
       const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
       await federateVideoIfNeeded(videoForFederation, true, t)
-      Notifier.Instance.notifyOnNewVideo(videoForFederation)
 
       // Update video import object
       videoImport.state = VideoImportState.SUCCESS
@@ -193,9 +192,11 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
       logger.info('Video %s imported.', video.uuid)
 
-      videoImportUpdated.Video = videoUpdated
+      videoImportUpdated.Video = videoForFederation
       return videoImportUpdated
     })
+
+    Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
 
     // Create transcoding jobs?
     if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {

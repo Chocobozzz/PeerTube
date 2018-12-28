@@ -204,18 +204,16 @@ async function updateVideoFromAP (options: {
   overrideTo?: string[]
 }) {
   logger.debug('Updating remote video "%s".', options.videoObject.uuid)
+
   let videoFieldsSave: any
+  const wasPrivateVideo = options.video.privacy === VideoPrivacy.PRIVATE
+  const wasUnlistedVideo = options.video.privacy === VideoPrivacy.UNLISTED
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = {
-        transaction: t
-      }
+      const sequelizeOptions = { transaction: t }
 
       videoFieldsSave = options.video.toJSON()
-
-      const wasPrivateVideo = options.video.privacy === VideoPrivacy.PRIVATE
-      const wasUnlistedVideo = options.video.privacy === VideoPrivacy.UNLISTED
 
       // Check actor has the right to update the video
       const videoChannel = options.video.VideoChannel
@@ -281,14 +279,12 @@ async function updateVideoFromAP (options: {
         })
         options.video.VideoCaptions = await Promise.all(videoCaptionsPromises)
       }
-
-      {
-        // Notify our users?
-        if (wasPrivateVideo || wasUnlistedVideo) {
-          Notifier.Instance.notifyOnNewVideo(options.video)
-        }
-      }
     })
+
+    // Notify our users?
+    if (wasPrivateVideo || wasUnlistedVideo) {
+      Notifier.Instance.notifyOnNewVideo(options.video)
+    }
 
     logger.info('Remote video with uuid %s updated', options.videoObject.uuid)
   } catch (err) {

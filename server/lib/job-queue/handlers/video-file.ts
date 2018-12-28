@@ -1,5 +1,5 @@
 import * as Bull from 'bull'
-import { VideoResolution, VideoState, Job } from '../../../../shared'
+import { VideoResolution, VideoState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
@@ -8,7 +8,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { importVideoFile, transcodeOriginalVideofile, optimizeVideofile } from '../../video-transcoding'
+import { importVideoFile, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
 
 export type VideoFilePayload = {
@@ -68,7 +68,7 @@ async function processVideoFile (job: Bull.Job) {
 async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
   if (video === undefined) return undefined
 
-  return sequelizeTypescript.transaction(async t => {
+  const { videoDatabase, isNewVideo } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
     // Video does not exist anymore
@@ -87,10 +87,11 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
 
     // If the video was not published, we consider it is a new one for other instances
     await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
-    if (isNewVideo) Notifier.Instance.notifyOnNewVideo(video)
 
-    return undefined
+    return { videoDatabase, isNewVideo }
   })
+
+  if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
 }
 
 async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: boolean) {
@@ -99,7 +100,7 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: bo
   // Outside the transaction (IO on disk)
   const { videoFileResolution } = await videoArg.getOriginalFileResolution()
 
-  return sequelizeTypescript.transaction(async t => {
+  const videoDatabase = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
     // Video does not exist anymore
@@ -137,8 +138,11 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: bo
     }
 
     await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
-    if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+
+    return videoDatabase
   })
+
+  if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
 }
 
 // ---------------------------------------------------------------------------
