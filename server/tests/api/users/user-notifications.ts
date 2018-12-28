@@ -152,6 +152,8 @@ describe('Test users notifications', function () {
       const videoName = 'remote video ' + videoNameId
 
       const uuid = await uploadVideoByRemoteAccount(servers, videoNameId)
+      await waitJobs(servers)
+
       await checkNewVideoFromSubscription(baseParams, videoName, uuid, 'presence')
     })
 
@@ -194,6 +196,7 @@ describe('Test users notifications', function () {
         }
       }
       const uuid = await uploadVideoByRemoteAccount(servers, videoNameId, data)
+      await waitJobs(servers)
 
       await wait(6000)
       await checkNewVideoFromSubscription(baseParams, videoName, uuid, 'presence')
@@ -245,6 +248,7 @@ describe('Test users notifications', function () {
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const uuid = await uploadVideoByRemoteAccount(servers, videoNameId, data)
+      await waitJobs(servers)
 
       await checkNewVideoFromSubscription(baseParams, videoName, uuid, 'absence')
 
@@ -276,6 +280,7 @@ describe('Test users notifications', function () {
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const uuid = await uploadVideoByRemoteAccount(servers, videoNameId, data)
+      await waitJobs(servers)
 
       await updateVideo(servers[1].url, servers[1].accessToken, uuid, { privacy: VideoPrivacy.UNLISTED })
 
