@@ -328,6 +328,8 @@ p-toast {
       display: flex;
 
       .message {
+        flex-grow: 1;
+
         h3 {
           font-size: 21px;
         }
