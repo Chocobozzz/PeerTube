@@ -1,10 +1,25 @@
 import * as express from 'express'
 import 'express-validator'
-import { body } from 'express-validator/check'
+import { body, query } from 'express-validator/check'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { isIntArray } from '../../helpers/custom-validators/misc'
+
+const listUserNotificationsValidator = [
+  query('unread')
+    .optional()
+    .toBoolean()
+    .isBoolean().withMessage('Should have a valid unread boolean'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking listUserNotificationsValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
 
 const updateNotificationSettingsValidator = [
   body('newVideoFromSubscription')
@@ -41,6 +56,7 @@ const markAsReadUserNotificationsValidator = [
 // ---------------------------------------------------------------------------
 
 export {
+  listUserNotificationsValidator,
   updateNotificationSettingsValidator,
   markAsReadUserNotificationsValidator
 }

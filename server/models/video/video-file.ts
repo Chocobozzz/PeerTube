@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import {
   AllowNull,
   BelongsTo,
@@ -20,7 +19,6 @@ import {
   isVideoFileSizeValid,
   isVideoFPSResolutionValid
 } from '../../helpers/custom-validators/videos'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import * as Sequelize from 'sequelize'

@@ -48,6 +48,7 @@ import { UserNotificationSettingModel } from './user-notification-setting'
 import { VideoModel } from '../video/video'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
+import { VideoImportModel } from '../video/video-import'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -185,6 +186,12 @@ export class UserModel extends Model<UserModel> {
     hooks: true
   })
   NotificationSetting: UserNotificationSettingModel
+
+  @HasMany(() => VideoImportModel, {
+    foreignKey: 'userId',
+    onDelete: 'cascade'
+  })
+  VideoImports: VideoImportModel[]
 
   @HasMany(() => OAuthTokenModel, {
     foreignKey: 'userId',
@@ -393,6 +400,23 @@ export class UserModel extends Model<UserModel> {
               ]
             }
           ]
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByVideoImportId (videoImportId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: VideoImportModel.unscoped(),
+          where: {
+            id: videoImportId
+          }
         }
       ]
     }

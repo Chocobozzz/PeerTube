@@ -10,6 +10,7 @@ import { readFileSync } from 'fs-extra'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
+import { VideoImportModel } from '../models/video/video-import'
 
 class Emailer {
 
@@ -96,6 +97,66 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to,
       subject: channelName + ' just published a new video',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  myVideoPublishedNotification (to: string[], video: VideoModel) {
+    const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
+
+    const text = `Hi dear user,\n\n` +
+      `Your video ${video.name} has been published.` +
+      `\n\n` +
+      `You can view it on ${videoUrl} ` +
+      `\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: `Your video ${video.name} is published`,
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  myVideoImportSuccessNotification (to: string[], videoImport: VideoImportModel) {
+    const videoUrl = CONFIG.WEBSERVER.URL + videoImport.Video.getWatchStaticPath()
+
+    const text = `Hi dear user,\n\n` +
+      `Your video import ${videoImport.getTargetIdentifier()} is finished.` +
+      `\n\n` +
+      `You can view the imported video on ${videoUrl} ` +
+      `\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: `Your video import ${videoImport.getTargetIdentifier()} is finished`,
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  myVideoImportErrorNotification (to: string[], videoImport: VideoImportModel) {
+    const importUrl = CONFIG.WEBSERVER.URL + '/my-account/video-imports'
+
+    const text = `Hi dear user,\n\n` +
+      `Your video import ${videoImport.getTargetIdentifier()} encountered an error.` +
+      `\n\n` +
+      `See your videos import dashboard for more information: ${importUrl}` +
+      `\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
       text
     }
 

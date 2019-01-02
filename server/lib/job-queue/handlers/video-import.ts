@@ -197,6 +197,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     })
 
     Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
+    Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
 
     // Create transcoding jobs?
     if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {
@@ -219,6 +220,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     videoImport.error = err.message
     videoImport.state = VideoImportState.FAILED
     await videoImport.save()
+
+    Notifier.Instance.notifyOnFinishedVideoImport(videoImport, false)
 
     throw err
   }

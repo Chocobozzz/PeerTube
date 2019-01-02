@@ -94,6 +94,7 @@ import {
 import * as validator from 'validator'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 import { UserModel } from '../account/user'
+import { VideoImportModel } from './video-import'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -784,6 +785,15 @@ export class VideoModel extends Model<VideoModel> {
     onDelete: 'cascade'
   })
   VideoBlacklist: VideoBlacklistModel
+
+  @HasOne(() => VideoImportModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: true
+    },
+    onDelete: 'set null'
+  })
+  VideoImport: VideoImportModel
 
   @HasMany(() => VideoCaptionModel, {
     foreignKey: {
