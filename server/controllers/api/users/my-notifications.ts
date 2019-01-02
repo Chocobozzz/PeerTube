@@ -14,10 +14,11 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { UserNotificationModel } from '../../../models/account/user-notification'
 import { meRouter } from './me'
 import {
+  listUserNotificationsValidator,
   markAsReadUserNotificationsValidator,
   updateNotificationSettingsValidator
 } from '../../../middlewares/validators/user-notifications'
-import { UserNotificationSetting } from '../../../../shared/models/users'
+import { UserNotificationSetting, UserNotificationSettingValue } from '../../../../shared/models/users'
 import { UserNotificationSettingModel } from '../../../models/account/user-notification-setting'
 
 const myNotificationsRouter = express.Router()
@@ -34,6 +35,7 @@ myNotificationsRouter.get('/me/notifications',
   userNotificationsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  listUserNotificationsValidator,
   asyncMiddleware(listUserNotifications)
 )
 
@@ -61,7 +63,11 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
 
   await UserNotificationSettingModel.update({
     newVideoFromSubscription: body.newVideoFromSubscription,
-    newCommentOnMyVideo: body.newCommentOnMyVideo
+    newCommentOnMyVideo: body.newCommentOnMyVideo,
+    videoAbuseAsModerator: body.videoAbuseAsModerator,
+    blacklistOnMyVideo: body.blacklistOnMyVideo,
+    myVideoPublished: body.myVideoPublished,
+    myVideoImportFinished: body.myVideoImportFinished
   }, query)
 
   return res.status(204).end()
@@ -70,7 +76,7 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
 async function listUserNotifications (req: express.Request, res: express.Response) {
   const user: UserModel = res.locals.oauth.token.User
 
-  const resultList = await UserNotificationModel.listForApi(user.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await UserNotificationModel.listForApi(user.id, req.query.start, req.query.count, req.query.sort, req.query.unread)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

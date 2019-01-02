@@ -10,4 +10,6 @@ export interface UserNotificationSetting {
   newCommentOnMyVideo: UserNotificationSettingValue
   videoAbuseAsModerator: UserNotificationSettingValue
   blacklistOnMyVideo: UserNotificationSettingValue
+  myVideoPublished: UserNotificationSettingValue
+  myVideoImportFinished: UserNotificationSettingValue
 }

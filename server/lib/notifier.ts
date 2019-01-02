@@ -11,6 +11,8 @@ import { VideoPrivacy, VideoState } from '../../shared/models/videos'
 import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import * as Bluebird from 'bluebird'
+import { VideoImportModel } from '../models/video/video-import'
+import { AccountBlocklistModel } from '../models/account/account-blocklist'
 
 class Notifier {
 
@@ -24,6 +26,14 @@ class Notifier {
 
     this.notifySubscribersOfNewVideo(video)
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
+  }
+
+  notifyOnPendingVideoPublished (video: VideoModel): void {
+    // Only notify on public videos that has been published while the user waited transcoding/scheduled update
+    if (video.waitTranscoding === false && !video.ScheduleVideoUpdate) return
+
+    this.notifyOwnedVideoHasBeenPublished(video)
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published.', video.url, { err }))
   }
 
   notifyOnNewComment (comment: VideoCommentModel): void {
@@ -44,6 +54,11 @@ class Notifier {
   notifyOnVideoUnblacklist (video: VideoModel): void {
     this.notifyVideoOwnerOfUnblacklist(video)
         .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', video.url, { err }))
+  }
+
+  notifyOnFinishedVideoImport (videoImport: VideoImportModel, success: boolean): void {
+    this.notifyOwnerVideoImportIsFinished(videoImport, success)
+      .catch(err => logger.error('Cannot notify owner that its video import %s is finished.', videoImport.getTargetIdentifier(), { err }))
   }
 
   private async notifySubscribersOfNewVideo (video: VideoModel) {
@@ -79,6 +94,9 @@ class Notifier {
 
     // Not our user or user comments its own video
     if (!user || comment.Account.userId === user.id) return
+
+    const accountMuted = await AccountBlocklistModel.isAccountMutedBy(user.Account.id, comment.accountId)
+    if (accountMuted) return
 
     logger.info('Notifying user %s of new comment %s.', user.username, comment.url)
 
@@ -183,6 +201,64 @@ class Notifier {
 
     function emailSender (emails: string[]) {
       return Emailer.Instance.addVideoUnblacklistNotification(emails, video)
+    }
+
+    return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyOwnedVideoHasBeenPublished (video: VideoModel) {
+    const user = await UserModel.loadByVideoId(video.id)
+    if (!user) return
+
+    logger.info('Notifying user %s of the publication of its video %s.', user.username, video.url)
+
+    function settingGetter (user: UserModel) {
+      return user.NotificationSetting.myVideoPublished
+    }
+
+    async function notificationCreator (user: UserModel) {
+      const notification = await UserNotificationModel.create({
+        type: UserNotificationType.MY_VIDEO_PUBLISHED,
+        userId: user.id,
+        videoId: video.id
+      })
+      notification.Video = video
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.myVideoPublishedNotification(emails, video)
+    }
+
+    return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyOwnerVideoImportIsFinished (videoImport: VideoImportModel, success: boolean) {
+    const user = await UserModel.loadByVideoImportId(videoImport.id)
+    if (!user) return
+
+    logger.info('Notifying user %s its video import %s is finished.', user.username, videoImport.getTargetIdentifier())
+
+    function settingGetter (user: UserModel) {
+      return user.NotificationSetting.myVideoImportFinished
+    }
+
+    async function notificationCreator (user: UserModel) {
+      const notification = await UserNotificationModel.create({
+        type: success ? UserNotificationType.MY_VIDEO_IMPORT_SUCCESS : UserNotificationType.MY_VIDEO_IMPORT_ERROR,
+        userId: user.id,
+        videoImportId: videoImport.id
+      })
+      notification.VideoImport = videoImport
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return success
+        ? Emailer.Instance.myVideoImportSuccessNotification(emails, videoImport)
+        : Emailer.Instance.myVideoImportErrorNotification(emails, videoImport)
     }
 
     return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })

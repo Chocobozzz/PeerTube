@@ -52,6 +52,18 @@ describe('Test user notifications API validators', function () {
       await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
+    it('Should fail with an incorrect unread parameter', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: {
+          unread: 'toto'
+        },
+        token: server.accessToken,
+        statusCodeExpected: 200
+      })
+    })
+
     it('Should fail with a non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,
@@ -125,7 +137,9 @@ describe('Test user notifications API validators', function () {
       newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION,
       newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
       videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION,
-      blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION
+      blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
+      myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION,
+      myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION
     }
 
     it('Should fail with missing fields', async function () {

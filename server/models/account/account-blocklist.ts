@@ -72,6 +72,21 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
   })
   BlockedAccount: AccountModel
 
+  static isAccountMutedBy (accountId: number, targetAccountId: number) {
+    const query = {
+      attributes: [ 'id' ],
+      where: {
+        accountId,
+        targetAccountId
+      },
+      raw: true
+    }
+
+    return AccountBlocklistModel.unscoped()
+                                .findOne(query)
+                                .then(a => !!a)
+  }
+
   static loadByAccountAndTarget (accountId: number, targetAccountId: number) {
     const query = {
       where: {

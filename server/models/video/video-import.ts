@@ -144,6 +144,10 @@ export class VideoImportModel extends Model<VideoImportModel> {
                            })
   }
 
+  getTargetIdentifier () {
+    return this.targetUrl || this.magnetUri || this.torrentName
+  }
+
   toFormattedJSON (): VideoImport {
     const videoFormatOptions = {
       completeDescription: true,
