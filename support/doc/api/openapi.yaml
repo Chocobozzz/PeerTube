@@ -492,7 +492,8 @@ paths:
     get:
       summary: Get current user information
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       responses:
@@ -507,7 +508,8 @@ paths:
     put:
       summary: Update current user information
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       responses:
@@ -523,7 +525,8 @@ paths:
     get:
       summary: Get current user used quota
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       responses:
@@ -558,7 +561,8 @@ paths:
     get:
       summary: Get videos of the current user
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       parameters:
@@ -574,6 +578,94 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Video'
+  /users/me/subscriptions:
+    get:
+      summary: Get subscriptions of the current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+    post:
+      summary: Add subscription to the current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
+  /users/me/subscriptions/exist:
+    get:
+      summary: Get if subscriptions exist for the current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/subscriptionsUris'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /users/me/subscriptions/videos:
+    get:
+      summary: Get videos of subscriptions of the current user
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+  '/users/me/subscriptions/{uri}':
+    get:
+      summary: Get subscription of the current user for a given uri
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannel'
+    delete:
+      summary: Delete subscription of the current user for a given uri
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
   /users/register:
     post:
       summary: Register a user
@@ -1511,6 +1603,15 @@ components:
         enum:
         - local
         - all-local
+    subscriptionsUris:
+      name: uris
+      in: query
+      required: true
+      description: list of uris to check if each is part of the user subscriptions
+      schema:
+        type: array
+        items:
+          type: string
   requestBodies:
     VideoChannelInput:
       content:
