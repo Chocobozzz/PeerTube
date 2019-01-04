@@ -10,7 +10,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { ActorModel } from '../models/activitypub/actor'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
-import { UserNotificationSettingValue } from '../../shared/models/users'
+import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
 
 async function createUserAccountAndChannel (userToCreate: UserModel, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
@@ -96,13 +96,18 @@ export {
 // ---------------------------------------------------------------------------
 
 function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Transaction | undefined) {
-  return UserNotificationSettingModel.create({
+  const values: UserNotificationSetting & { userId: number } = {
     userId: user.id,
     newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION,
     newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
     myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION,
     myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION,
     videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
-  }, { transaction: t })
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB_NOTIFICATION,
+    commentMention: UserNotificationSettingValue.WEB_NOTIFICATION,
+    newFollow: UserNotificationSettingValue.WEB_NOTIFICATION
+  }
+
+  return UserNotificationSettingModel.create(values, { transaction: t })
 }

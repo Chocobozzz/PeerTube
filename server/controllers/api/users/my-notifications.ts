@@ -18,7 +18,7 @@ import {
   markAsReadUserNotificationsValidator,
   updateNotificationSettingsValidator
 } from '../../../middlewares/validators/user-notifications'
-import { UserNotificationSetting, UserNotificationSettingValue } from '../../../../shared/models/users'
+import { UserNotificationSetting } from '../../../../shared/models/users'
 import { UserNotificationSettingModel } from '../../../models/account/user-notification-setting'
 
 const myNotificationsRouter = express.Router()
@@ -53,7 +53,7 @@ export {
 
 async function updateNotificationSettings (req: express.Request, res: express.Response) {
   const user: UserModel = res.locals.oauth.token.User
-  const body: UserNotificationSetting = req.body
+  const body = req.body
 
   const query = {
     where: {
@@ -61,14 +61,19 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     }
   }
 
-  await UserNotificationSettingModel.update({
+  const values: UserNotificationSetting = {
     newVideoFromSubscription: body.newVideoFromSubscription,
     newCommentOnMyVideo: body.newCommentOnMyVideo,
     videoAbuseAsModerator: body.videoAbuseAsModerator,
     blacklistOnMyVideo: body.blacklistOnMyVideo,
     myVideoPublished: body.myVideoPublished,
-    myVideoImportFinished: body.myVideoImportFinished
-  }, query)
+    myVideoImportFinished: body.myVideoImportFinished,
+    newFollow: body.newFollow,
+    newUserRegistration: body.newUserRegistration,
+    commentMention: body.commentMention,
+  }
+
+  await UserNotificationSettingModel.update(values, query)
 
   return res.status(204).end()
 }

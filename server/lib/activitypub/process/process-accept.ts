@@ -2,6 +2,7 @@ import { ActivityAccept } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { addFetchOutboxJob } from '../actor'
+import { Notifier } from '../../notifier'
 
 async function processAcceptActivity (activity: ActivityAccept, targetActor: ActorModel, inboxActor?: ActorModel) {
   if (inboxActor === undefined) throw new Error('Need to accept on explicit inbox.')
@@ -24,6 +25,7 @@ async function processAccept (actor: ActorModel, targetActor: ActorModel) {
   if (follow.state !== 'accepted') {
     follow.set('state', 'accepted')
     await follow.save()
+
     await addFetchOutboxJob(targetActor)
   }
 }

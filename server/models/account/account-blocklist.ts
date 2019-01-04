@@ -2,6 +2,7 @@ import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, Updated
 import { AccountModel } from './account'
 import { getSort } from '../utils'
 import { AccountBlock } from '../../../shared/models/blocklist'
+import { Op } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS'
@@ -73,18 +74,33 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
   BlockedAccount: AccountModel
 
   static isAccountMutedBy (accountId: number, targetAccountId: number) {
+    return AccountBlocklistModel.isAccountMutedByMulti([ accountId ], targetAccountId)
+      .then(result => result[accountId])
+  }
+
+  static isAccountMutedByMulti (accountIds: number[], targetAccountId: number) {
     const query = {
-      attributes: [ 'id' ],
+      attributes: [ 'accountId', 'id' ],
       where: {
-        accountId,
+        accountId: {
+          [Op.any]: accountIds
+        },
         targetAccountId
       },
       raw: true
     }
 
     return AccountBlocklistModel.unscoped()
-                                .findOne(query)
-                                .then(a => !!a)
+                                .findAll(query)
+                                .then(rows => {
+                                  const result: { [accountId: number]: boolean } = {}
+
+                                  for (const accountId of accountIds) {
+                                    result[accountId] = !!rows.find(r => r.accountId === accountId)
+                                  }
+
+                                  return result
+                                })
   }
 
   static loadByAccountAndTarget (accountId: number, targetAccountId: number) {

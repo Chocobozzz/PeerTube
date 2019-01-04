@@ -139,7 +139,10 @@ describe('Test user notifications API validators', function () {
       videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION,
       blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
       myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION,
-      myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION
+      myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION,
+      commentMention: UserNotificationSettingValue.WEB_NOTIFICATION,
+      newFollow: UserNotificationSettingValue.WEB_NOTIFICATION,
+      newUserRegistration: UserNotificationSettingValue.WEB_NOTIFICATION
     }
 
     it('Should fail with missing fields', async function () {

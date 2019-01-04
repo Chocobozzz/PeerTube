@@ -330,6 +330,16 @@ export class UserModel extends Model<UserModel> {
     return UserModel.unscoped().findAll(query)
   }
 
+  static listByUsernames (usernames: string[]) {
+    const query = {
+      where: {
+        username: usernames
+      }
+    }
+
+    return UserModel.findAll(query)
+  }
+
   static loadById (id: number) {
     return UserModel.findById(id)
   }
@@ -416,6 +426,47 @@ export class UserModel extends Model<UserModel> {
           model: VideoImportModel.unscoped(),
           where: {
             id: videoImportId
+          }
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByChannelActorId (videoChannelActorId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          include: [
+            {
+              required: true,
+              attributes: [ 'id' ],
+              model: VideoChannelModel.unscoped(),
+              where: {
+                actorId: videoChannelActorId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByAccountActorId (accountActorId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          where: {
+            actorId: accountActorId
           }
         }
       ]

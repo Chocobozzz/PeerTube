@@ -40,6 +40,7 @@ import { deleteUserToken } from '../../../lib/oauth-model'
 import { myBlocklistRouter } from './my-blocklist'
 import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
+import { Notifier } from '../../../lib/notifier'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -212,6 +213,8 @@ async function registerUser (req: express.Request, res: express.Response) {
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
     await sendVerifyUserEmail(user)
   }
+
+  Notifier.Instance.notifyOnNewUserRegistration(user)
 
   return res.type('json').status(204).end()
 }

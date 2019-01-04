@@ -13,6 +13,8 @@ import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import * as Bluebird from 'bluebird'
 import { VideoImportModel } from '../models/video/video-import'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
+import { ActorFollowModel } from '../models/activitypub/actor-follow'
+import { AccountModel } from '../models/account/account'
 
 class Notifier {
 
@@ -38,7 +40,10 @@ class Notifier {
 
   notifyOnNewComment (comment: VideoCommentModel): void {
     this.notifyVideoOwnerOfNewComment(comment)
-        .catch(err => logger.error('Cannot notify of new comment %s.', comment.url, { err }))
+        .catch(err => logger.error('Cannot notify video owner of new comment %s.', comment.url, { err }))
+
+    this.notifyOfCommentMention(comment)
+        .catch(err => logger.error('Cannot notify mentions of comment %s.', comment.url, { err }))
   }
 
   notifyOnNewVideoAbuse (videoAbuse: VideoAbuseModel): void {
@@ -59,6 +64,23 @@ class Notifier {
   notifyOnFinishedVideoImport (videoImport: VideoImportModel, success: boolean): void {
     this.notifyOwnerVideoImportIsFinished(videoImport, success)
       .catch(err => logger.error('Cannot notify owner that its video import %s is finished.', videoImport.getTargetIdentifier(), { err }))
+  }
+
+  notifyOnNewUserRegistration (user: UserModel): void {
+    this.notifyModeratorsOfNewUserRegistration(user)
+        .catch(err => logger.error('Cannot notify moderators of new user registration (%s).', user.username, { err }))
+  }
+
+  notifyOfNewFollow (actorFollow: ActorFollowModel): void {
+    this.notifyUserOfNewActorFollow(actorFollow)
+      .catch(err => {
+        logger.error(
+          'Cannot notify owner of channel %s of a new follow by %s.',
+          actorFollow.ActorFollowing.VideoChannel.getDisplayName(),
+          actorFollow.ActorFollower.Account.getDisplayName(),
+          err
+        )
+      })
   }
 
   private async notifySubscribersOfNewVideo (video: VideoModel) {
@@ -90,6 +112,8 @@ class Notifier {
   }
 
   private async notifyVideoOwnerOfNewComment (comment: VideoCommentModel) {
+    if (comment.Video.isOwned() === false) return
+
     const user = await UserModel.loadByVideoId(comment.videoId)
 
     // Not our user or user comments its own video
@@ -122,11 +146,100 @@ class Notifier {
     return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyModeratorsOfNewVideoAbuse (videoAbuse: VideoAbuseModel) {
-    const users = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_ABUSES)
+  private async notifyOfCommentMention (comment: VideoCommentModel) {
+    const usernames = comment.extractMentions()
+    let users = await UserModel.listByUsernames(usernames)
+
+    if (comment.Video.isOwned()) {
+      const userException = await UserModel.loadByVideoId(comment.videoId)
+      users = users.filter(u => u.id !== userException.id)
+    }
+
+    // Don't notify if I mentioned myself
+    users = users.filter(u => u.Account.id !== comment.accountId)
+
     if (users.length === 0) return
 
-    logger.info('Notifying %s user/moderators of new video abuse %s.', users.length, videoAbuse.Video.url)
+    const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(users.map(u => u.Account.id), comment.accountId)
+
+    logger.info('Notifying %d users of new comment %s.', users.length, comment.url)
+
+    function settingGetter (user: UserModel) {
+      if (accountMutedHash[user.Account.id] === true) return UserNotificationSettingValue.NONE
+
+      return user.NotificationSetting.commentMention
+    }
+
+    async function notificationCreator (user: UserModel) {
+      const notification = await UserNotificationModel.create({
+        type: UserNotificationType.COMMENT_MENTION,
+        userId: user.id,
+        commentId: comment.id
+      })
+      notification.Comment = comment
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addNewCommentMentionNotification(emails, comment)
+    }
+
+    return this.notify({ users, settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyUserOfNewActorFollow (actorFollow: ActorFollowModel) {
+    if (actorFollow.ActorFollowing.isOwned() === false) return
+
+    // Account follows one of our account?
+    let followType: 'account' | 'channel' = 'channel'
+    let user = await UserModel.loadByChannelActorId(actorFollow.ActorFollowing.id)
+
+    // Account follows one of our channel?
+    if (!user) {
+      user = await UserModel.loadByAccountActorId(actorFollow.ActorFollowing.id)
+      followType = 'account'
+    }
+
+    if (!user) return
+
+    if (!actorFollow.ActorFollower.Account || !actorFollow.ActorFollower.Account.name) {
+      actorFollow.ActorFollower.Account = await actorFollow.ActorFollower.$get('Account') as AccountModel
+    }
+    const followerAccount = actorFollow.ActorFollower.Account
+
+    const accountMuted = await AccountBlocklistModel.isAccountMutedBy(user.Account.id, followerAccount.id)
+    if (accountMuted) return
+
+    logger.info('Notifying user %s of new follower: %s.', user.username, followerAccount.getDisplayName())
+
+    function settingGetter (user: UserModel) {
+      return user.NotificationSetting.newFollow
+    }
+
+    async function notificationCreator (user: UserModel) {
+      const notification = await UserNotificationModel.create({
+        type: UserNotificationType.NEW_FOLLOW,
+        userId: user.id,
+        actorFollowId: actorFollow.id
+      })
+      notification.ActorFollow = actorFollow
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addNewFollowNotification(emails, actorFollow, followType)
+    }
+
+    return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyModeratorsOfNewVideoAbuse (videoAbuse: VideoAbuseModel) {
+    const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_ABUSES)
+    if (moderators.length === 0) return
+
+    logger.info('Notifying %s user/moderators of new video abuse %s.', moderators.length, videoAbuse.Video.url)
 
     function settingGetter (user: UserModel) {
       return user.NotificationSetting.videoAbuseAsModerator
@@ -147,7 +260,7 @@ class Notifier {
       return Emailer.Instance.addVideoAbuseModeratorsNotification(emails, videoAbuse)
     }
 
-    return this.notify({ users, settingGetter, notificationCreator, emailSender })
+    return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
   }
 
   private async notifyVideoOwnerOfBlacklist (videoBlacklist: VideoBlacklistModel) {
@@ -262,6 +375,37 @@ class Notifier {
     }
 
     return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyModeratorsOfNewUserRegistration (registeredUser: UserModel) {
+    const moderators = await UserModel.listWithRight(UserRight.MANAGE_USERS)
+    if (moderators.length === 0) return
+
+    logger.info(
+      'Notifying %s moderators of new user registration of %s.',
+      moderators.length, registeredUser.Account.Actor.preferredUsername
+    )
+
+    function settingGetter (user: UserModel) {
+      return user.NotificationSetting.newUserRegistration
+    }
+
+    async function notificationCreator (user: UserModel) {
+      const notification = await UserNotificationModel.create({
+        type: UserNotificationType.NEW_USER_REGISTRATION,
+        userId: user.id,
+        accountId: registeredUser.Account.id
+      })
+      notification.Account = registeredUser.Account
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addNewUserRegistrationNotification(emails, registeredUser)
+    }
+
+    return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
   }
 
   private async notify (options: {

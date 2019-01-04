@@ -29,7 +29,8 @@ const userRoleRights: { [ id: number ]: UserRight[] } = {
     UserRight.UPDATE_ANY_VIDEO,
     UserRight.SEE_ALL_VIDEOS,
     UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
-    UserRight.MANAGE_SERVERS_BLOCKLIST
+    UserRight.MANAGE_SERVERS_BLOCKLIST,
+    UserRight.MANAGE_USERS
   ],
 
   [UserRole.USER]: []

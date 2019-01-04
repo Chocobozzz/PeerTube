@@ -11,6 +11,7 @@ import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { VideoImportModel } from '../models/video/video-import'
+import { ActorFollowModel } from '../models/activitypub/actor-follow'
 
 class Emailer {
 
@@ -103,6 +104,25 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
+  addNewFollowNotification (to: string[], actorFollow: ActorFollowModel, followType: 'account' | 'channel') {
+    const followerName = actorFollow.ActorFollower.Account.getDisplayName()
+    const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
+
+    const text = `Hi dear user,\n\n` +
+      `Your ${followType} ${followingName} has a new subscriber: ${followerName}` +
+      `\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: 'New follower on your channel ' + followingName,
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
   myVideoPublishedNotification (to: string[], video: VideoModel) {
     const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 
@@ -185,7 +205,29 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  async addVideoAbuseModeratorsNotification (to: string[], videoAbuse: VideoAbuseModel) {
+  addNewCommentMentionNotification (to: string[], comment: VideoCommentModel) {
+    const accountName = comment.Account.getDisplayName()
+    const video = comment.Video
+    const commentUrl = CONFIG.WEBSERVER.URL + comment.getCommentStaticPath()
+
+    const text = `Hi dear user,\n\n` +
+      `${accountName} mentioned you on video ${video.name}` +
+      `\n\n` +
+      `You can view the comment on ${commentUrl} ` +
+      `\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: 'Mention on video ' + video.name,
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addVideoAbuseModeratorsNotification (to: string[], videoAbuse: VideoAbuseModel) {
     const videoUrl = CONFIG.WEBSERVER.URL + videoAbuse.Video.getWatchStaticPath()
 
     const text = `Hi,\n\n` +
@@ -202,7 +244,22 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  async addVideoBlacklistNotification (to: string[], videoBlacklist: VideoBlacklistModel) {
+  addNewUserRegistrationNotification (to: string[], user: UserModel) {
+    const text = `Hi,\n\n` +
+      `User ${user.username} just registered on ${CONFIG.WEBSERVER.HOST} PeerTube instance.\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: '[PeerTube] New user registration on ' + CONFIG.WEBSERVER.HOST,
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addVideoBlacklistNotification (to: string[], videoBlacklist: VideoBlacklistModel) {
     const videoName = videoBlacklist.Video.name
     const videoUrl = CONFIG.WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
@@ -224,7 +281,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  async addVideoUnblacklistNotification (to: string[], video: VideoModel) {
+  addVideoUnblacklistNotification (to: string[], video: VideoModel) {
     const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 
     const text = 'Hi,\n\n' +
