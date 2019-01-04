@@ -15,6 +15,9 @@ CREATE TABLE IF NOT EXISTS "userNotificationSetting" ("id" SERIAL,
 "blacklistOnMyVideo" INTEGER NOT NULL DEFAULT NULL,
 "myVideoPublished" INTEGER NOT NULL DEFAULT NULL,
 "myVideoImportFinished" INTEGER NOT NULL DEFAULT NULL,
+"newUserRegistration" INTEGER NOT NULL DEFAULT NULL,
+"newFollow" INTEGER NOT NULL DEFAULT NULL,
+"commentMention" INTEGER NOT NULL DEFAULT NULL,
 "userId" INTEGER REFERENCES "user" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
 "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL,
 "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -26,8 +29,9 @@ PRIMARY KEY ("id"))
   {
     const query = 'INSERT INTO "userNotificationSetting" ' +
       '("newVideoFromSubscription", "newCommentOnMyVideo", "videoAbuseAsModerator", "blacklistOnMyVideo", ' +
-      '"myVideoPublished", "myVideoImportFinished", "userId", "createdAt", "updatedAt") ' +
-      '(SELECT 2, 2, 4, 4, 2, 2, id, NOW(), NOW() FROM "user")'
+      '"myVideoPublished", "myVideoImportFinished", "newUserRegistration", "newFollow", "commentMention", ' +
+      '"userId", "createdAt", "updatedAt") ' +
+      '(SELECT 2, 2, 4, 4, 2, 2, 2, 2, 2, id, NOW(), NOW() FROM "user")'
 
     await utils.sequelize.query(query)
   }

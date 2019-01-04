@@ -10,9 +10,12 @@ import {
   flushTests,
   getMyUserInformation,
   immutableAssign,
+  registerUser,
   removeVideoFromBlacklist,
   reportVideoAbuse,
+  updateMyUser,
   updateVideo,
+  updateVideoChannel,
   userLogin,
   wait
 } from '../../../../shared/utils'
@@ -21,16 +24,20 @@ import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { getUserNotificationSocket } from '../../../../shared/utils/socket/socket-io'
 import {
+  checkCommentMention,
   CheckerBaseParams,
+  checkMyVideoImportIsFinished,
+  checkNewActorFollow,
   checkNewBlacklistOnMyVideo,
   checkNewCommentOnMyVideo,
   checkNewVideoAbuseForModerators,
   checkNewVideoFromSubscription,
+  checkUserRegistered,
+  checkVideoIsPublished,
   getLastNotification,
   getUserNotifications,
   markAsReadNotifications,
-  updateMyNotificationSettings,
-  checkVideoIsPublished, checkMyVideoImportIsFinished
+  updateMyNotificationSettings
 } from '../../../../shared/utils/users/user-notifications'
 import {
   User,
@@ -40,9 +47,9 @@ import {
   UserNotificationType
 } from '../../../../shared/models/users'
 import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
-import { addUserSubscription } from '../../../../shared/utils/users/user-subscriptions'
+import { addUserSubscription, removeUserSubscription } from '../../../../shared/utils/users/user-subscriptions'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { getYoutubeVideoUrl, importVideo, getBadVideoUrl } from '../../../../shared/utils/videos/video-imports'
+import { getBadVideoUrl, getYoutubeVideoUrl, importVideo } from '../../../../shared/utils/videos/video-imports'
 import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/utils/videos/video-comments'
 import * as uuidv4 from 'uuid/v4'
 import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/utils/users/blocklist'
@@ -81,12 +88,15 @@ describe('Test users notifications', function () {
   let channelId: number
 
   const allNotificationSettings: UserNotificationSetting = {
-    myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
     newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
     videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    commentMention: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    newFollow: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
   }
 
   before(async function () {
@@ -424,6 +434,114 @@ describe('Test users notifications', function () {
     })
   })
 
+  describe('Mention notifications', function () {
+    let baseParams: CheckerBaseParams
+
+    before(async () => {
+      baseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: userNotifications,
+        token: userAccessToken
+      }
+
+      await updateMyUser({
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
+        displayName: 'super root name'
+      })
+
+      await updateMyUser({
+        url: servers[1].url,
+        accessToken: servers[1].accessToken,
+        displayName: 'super root 2 name'
+      })
+    })
+
+    it('Should not send a new mention comment notification if I mention the video owner', async function () {
+      this.timeout(10000)
+
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
+      const uuid = resVideo.body.video.uuid
+
+      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello')
+      const commentId = resComment.body.comment.id
+
+      await wait(500)
+      await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
+    })
+
+    it('Should not send a new mention comment notification if I mention myself', async function () {
+      this.timeout(10000)
+
+      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
+      const uuid = resVideo.body.video.uuid
+
+      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, uuid, '@user_1 hello')
+      const commentId = resComment.body.comment.id
+
+      await wait(500)
+      await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
+    })
+
+    it('Should not send a new mention notification if the account is muted', async function () {
+      this.timeout(10000)
+
+      await addAccountToAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
+
+      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
+      const uuid = resVideo.body.video.uuid
+
+      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello')
+      const commentId = resComment.body.comment.id
+
+      await wait(500)
+      await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
+
+      await removeAccountFromAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
+    })
+
+    it('Should send a new mention notification after local comments', async function () {
+      this.timeout(10000)
+
+      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
+      const uuid = resVideo.body.video.uuid
+
+      const resThread = await addVideoCommentThread(servers[0].url, servers[0].accessToken, uuid, '@user_1 hello 1')
+      const threadId = resThread.body.comment.id
+
+      await wait(500)
+      await checkCommentMention(baseParams, uuid, threadId, threadId, 'super root name', 'presence')
+
+      const resComment = await addVideoCommentReply(servers[0].url, servers[0].accessToken, uuid, threadId, 'hello 2 @user_1')
+      const commentId = resComment.body.comment.id
+
+      await wait(500)
+      await checkCommentMention(baseParams, uuid, commentId, threadId, 'super root name', 'presence')
+    })
+
+    it('Should send a new mention notification after remote comments', async function () {
+      this.timeout(20000)
+
+      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
+      const uuid = resVideo.body.video.uuid
+
+      await waitJobs(servers)
+      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'hello @user_1@localhost:9001 1')
+      const threadId = resThread.body.comment.id
+
+      await waitJobs(servers)
+      await checkCommentMention(baseParams, uuid, threadId, threadId, 'super root 2 name', 'presence')
+
+      const text = '@user_1@localhost:9001 hello 2 @root@localhost:9001'
+      const resComment = await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, threadId, text)
+      const commentId = resComment.body.comment.id
+
+      await waitJobs(servers)
+      await checkCommentMention(baseParams, uuid, commentId, threadId, 'super root 2 name', 'presence')
+    })
+  })
+
   describe('Video abuse for moderators notification' , function () {
     let baseParams: CheckerBaseParams
 
@@ -642,6 +760,101 @@ describe('Test users notifications', function () {
 
       await waitJobs(servers)
       await checkMyVideoImportIsFinished(baseParams, name, uuid, getYoutubeVideoUrl(), true, 'presence')
+    })
+  })
+
+  describe('New registration', function () {
+    let baseParams: CheckerBaseParams
+
+    before(() => {
+      baseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: adminNotifications,
+        token: servers[0].accessToken
+      }
+    })
+
+    it('Should send a notification only to moderators when a user registers on the instance', async function () {
+      await registerUser(servers[0].url, 'user_45', 'password')
+
+      await waitJobs(servers)
+
+      await checkUserRegistered(baseParams, 'user_45', 'presence')
+
+      const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
+      await checkUserRegistered(immutableAssign(baseParams, userOverride), 'user_45', 'absence')
+    })
+  })
+
+  describe('New actor follow', function () {
+    let baseParams: CheckerBaseParams
+    let myChannelName = 'super channel name'
+    let myUserName = 'super user name'
+
+    before(async () => {
+      baseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: userNotifications,
+        token: userAccessToken
+      }
+
+      await updateMyUser({
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
+        displayName: 'super root name'
+      })
+
+      await updateMyUser({
+        url: servers[0].url,
+        accessToken: userAccessToken,
+        displayName: myUserName
+      })
+
+      await updateMyUser({
+        url: servers[1].url,
+        accessToken: servers[1].accessToken,
+        displayName: 'super root 2 name'
+      })
+
+      await updateVideoChannel(servers[0].url, userAccessToken, 'user_1_channel', { displayName: myChannelName })
+    })
+
+    it('Should notify when a local channel is following one of our channel', async function () {
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+
+      await waitJobs(servers)
+
+      await checkNewActorFollow(baseParams, 'channel', 'root', 'super root name', myChannelName, 'presence')
+
+      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+    })
+
+    it('Should notify when a remote channel is following one of our channel', async function () {
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+
+      await waitJobs(servers)
+
+      await checkNewActorFollow(baseParams, 'channel', 'root', 'super root 2 name', myChannelName, 'presence')
+
+      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+    })
+
+    it('Should notify when a local account is following one of our channel', async function () {
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:9001')
+
+      await waitJobs(servers)
+
+      await checkNewActorFollow(baseParams, 'account', 'root', 'super root name', myUserName, 'presence')
+    })
+
+    it('Should notify when a remote account is following one of our channel', async function () {
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:9001')
+
+      await waitJobs(servers)
+
+      await checkNewActorFollow(baseParams, 'account', 'root', 'super root 2 name', myUserName, 'presence')
     })
   })
 

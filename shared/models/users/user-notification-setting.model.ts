@@ -12,4 +12,7 @@ export interface UserNotificationSetting {
   blacklistOnMyVideo: UserNotificationSettingValue
   myVideoPublished: UserNotificationSettingValue
   myVideoImportFinished: UserNotificationSettingValue
+  newUserRegistration: UserNotificationSettingValue
+  newFollow: UserNotificationSettingValue
+  commentMention: UserNotificationSettingValue
 }

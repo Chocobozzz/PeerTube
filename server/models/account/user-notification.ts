@@ -25,6 +25,8 @@ import { AccountModel } from './account'
 import { VideoAbuseModel } from '../video/video-abuse'
 import { VideoBlacklistModel } from '../video/video-blacklist'
 import { VideoImportModel } from '../video/video-import'
+import { ActorModel } from '../activitypub/actor'
+import { ActorFollowModel } from '../activitypub/actor-follow'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'
@@ -38,17 +40,17 @@ function buildVideoInclude (required: boolean) {
   }
 }
 
-function buildChannelInclude () {
+function buildChannelInclude (required: boolean) {
   return {
-    required: true,
+    required,
     attributes: [ 'id', 'name' ],
     model: () => VideoChannelModel.unscoped()
   }
 }
 
-function buildAccountInclude () {
+function buildAccountInclude (required: boolean) {
   return {
-    required: true,
+    required,
     attributes: [ 'id', 'name' ],
     model: () => AccountModel.unscoped()
   }
@@ -58,14 +60,14 @@ function buildAccountInclude () {
   [ScopeNames.WITH_ALL]: {
     include: [
       Object.assign(buildVideoInclude(false), {
-        include: [ buildChannelInclude() ]
+        include: [ buildChannelInclude(true) ]
       }),
       {
         attributes: [ 'id', 'originCommentId' ],
         model: () => VideoCommentModel.unscoped(),
         required: false,
         include: [
-          buildAccountInclude(),
+          buildAccountInclude(true),
           buildVideoInclude(true)
         ]
       },
@@ -86,6 +88,42 @@ function buildAccountInclude () {
         model: () => VideoImportModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(false) ]
+      },
+      {
+        attributes: [ 'id', 'name' ],
+        model: () => AccountModel.unscoped(),
+        required: false,
+        include: [
+          {
+            attributes: [ 'id', 'preferredUsername' ],
+            model: () => ActorModel.unscoped(),
+            required: true
+          }
+        ]
+      },
+      {
+        attributes: [ 'id' ],
+        model: () => ActorFollowModel.unscoped(),
+        required: false,
+        include: [
+          {
+            attributes: [ 'preferredUsername' ],
+            model: () => ActorModel.unscoped(),
+            required: true,
+            as: 'ActorFollower',
+            include: [ buildAccountInclude(true) ]
+          },
+          {
+            attributes: [ 'preferredUsername' ],
+            model: () => ActorModel.unscoped(),
+            required: true,
+            as: 'ActorFollowing',
+            include: [
+              buildChannelInclude(false),
+              buildAccountInclude(false)
+            ]
+          }
+        ]
       }
     ]
   }
@@ -193,6 +231,30 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
   })
   VideoImport: VideoImportModel
 
+  @ForeignKey(() => AccountModel)
+  @Column
+  accountId: number
+
+  @BelongsTo(() => AccountModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  Account: AccountModel
+
+  @ForeignKey(() => ActorFollowModel)
+  @Column
+  actorFollowId: number
+
+  @BelongsTo(() => ActorFollowModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  ActorFollow: ActorFollowModel
+
   static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
     const query: IFindOptions<UserNotificationModel> = {
       offset: start,
@@ -264,6 +326,25 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       video: this.formatVideo(this.VideoBlacklist.Video)
     } : undefined
 
+    const account = this.Account ? {
+      id: this.Account.id,
+      displayName: this.Account.getDisplayName(),
+      name: this.Account.Actor.preferredUsername
+    } : undefined
+
+    const actorFollow = this.ActorFollow ? {
+      id: this.ActorFollow.id,
+      follower: {
+        displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
+        name: this.ActorFollow.ActorFollower.preferredUsername
+      },
+      following: {
+        type: this.ActorFollow.ActorFollowing.VideoChannel ? 'channel' as 'channel' : 'account' as 'account',
+        displayName: (this.ActorFollow.ActorFollowing.VideoChannel || this.ActorFollow.ActorFollowing.Account).getDisplayName(),
+        name: this.ActorFollow.ActorFollowing.preferredUsername
+      }
+    } : undefined
+
     return {
       id: this.id,
       type: this.type,
@@ -273,6 +354,8 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       comment,
       videoAbuse,
       videoBlacklist,
+      account,
+      actorFollow,
       createdAt: this.createdAt.toISOString(),
       updatedAt: this.updatedAt.toISOString()
     }

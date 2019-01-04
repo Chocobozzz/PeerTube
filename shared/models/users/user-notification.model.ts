@@ -6,7 +6,10 @@ export enum UserNotificationType {
   UNBLACKLIST_ON_MY_VIDEO = 5,
   MY_VIDEO_PUBLISHED = 6,
   MY_VIDEO_IMPORT_SUCCESS = 7,
-  MY_VIDEO_IMPORT_ERROR = 8
+  MY_VIDEO_IMPORT_ERROR = 8,
+  NEW_USER_REGISTRATION = 9,
+  NEW_FOLLOW = 10,
+  COMMENT_MENTION = 11
 }
 
 export interface VideoInfo {
@@ -53,6 +56,25 @@ export interface UserNotification {
   videoBlacklist?: {
     id: number
     video: VideoInfo
+  }
+
+  account?: {
+    id: number
+    displayName: string
+    name: string
+  }
+
+  actorFollow?: {
+    id: number
+    follower: {
+      name: string
+      displayName: string
+    }
+    following: {
+      type: 'account' | 'channel'
+      name: string
+      displayName: string
+    }
   }
 
   createdAt: string

@@ -83,6 +83,33 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
   @Column
   myVideoImportFinished: UserNotificationSettingValue
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingNewUserRegistration',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'newUserRegistration')
+  )
+  @Column
+  newUserRegistration: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingNewFollow',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'newFollow')
+  )
+  @Column
+  newFollow: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingCommentMention',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'commentMention')
+  )
+  @Column
+  commentMention: UserNotificationSettingValue
+
   @ForeignKey(() => UserModel)
   @Column
   userId: number
@@ -114,7 +141,10 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
       videoAbuseAsModerator: this.videoAbuseAsModerator,
       blacklistOnMyVideo: this.blacklistOnMyVideo,
       myVideoPublished: this.myVideoPublished,
-      myVideoImportFinished: this.myVideoImportFinished
+      myVideoImportFinished: this.myVideoImportFinished,
+      newUserRegistration: this.newUserRegistration,
+      commentMention: this.commentMention,
+      newFollow: this.newFollow
     }
   }
 }
