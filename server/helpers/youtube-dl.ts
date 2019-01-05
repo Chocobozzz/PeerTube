@@ -175,7 +175,7 @@ function normalizeObject (obj: any) {
 
 function buildVideoInfo (obj: any) {
 
-  const date = obj.upload_date.slice(0,4)+","+obj.upload_date.slice(4,6)+","+obj.upload_date.slice(6,8)
+  const date = obj.upload_date.slice(0,4) + ',' + obj.upload_date.slice(4,6) + ',' + obj.upload_date.slice(6,8)
 
   return {
     name: titleTruncation(obj.title),
