@@ -204,6 +204,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     }, thumbnailfile)
   }
 
+  const date = videoInfo.upload_date.slice(0,4) + ',' + videoInfo.upload_date.slice(4,6) + ',' + videoInfo.upload_date.slice(6,8)
+
   const videoAttributes = {
     name: truncate(videoInfo.title, {
       'length': CONSTRAINTS_FIELDS.VIDEOS.NAME.max,
@@ -222,7 +224,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     privacy: VideoPrivacy.PUBLIC,
     fixture: videoPath,
     thumbnailfile,
-    previewfile: thumbnailfile
+    previewfile: thumbnailfile,
+    originallyPublishedAt: new Date(date).toISOString()
   }
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)

@@ -40,6 +40,7 @@ type VideoAttributes = {
     updateAt: string
     privacy?: VideoPrivacy
   }
+  originallyPublishedAt?: string
 }
 
 function getVideoCategories (url: string) {
@@ -355,6 +356,10 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     if (attributes.scheduleUpdate.privacy) {
       req.field('scheduleUpdate[privacy]', attributes.scheduleUpdate.privacy)
     }
+  }
+
+  if (attributes.originallyPublishedAt !== undefined) {
+    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
   }
 
   return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
