@@ -46,6 +46,7 @@ services:
 
   postgres:
     image: postgres:10-alpine
+    container_name: db
     environment:
       POSTGRES_USER: ${PEERTUBE_DB_USERNAME}
       POSTGRES_PASSWORD: ${PEERTUBE_DB_PASSWORD}
