@@ -83,11 +83,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
             this.highlightedThread = new VideoComment(res.comment)
 
             // Scroll to the highlighted thread
-            setTimeout(() => {
-              // -60 because of the fixed header
-              const scrollY = this.commentHighlightBlock.nativeElement.offsetTop - 60
-              window.scroll(0, scrollY)
-            }, 500)
+            setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
           }
         },
 

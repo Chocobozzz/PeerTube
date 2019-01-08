@@ -375,7 +375,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.remoteServerDown = false
 
     let startTime = urlOptions.startTime || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
-    // Don't start the video if we are at the end
+    // If we are at the end of the video, reset the timer
     if (this.video.duration - startTime <= 1) startTime = 0
 
     if (this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())) {
