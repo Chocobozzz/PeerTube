@@ -7,7 +7,7 @@ import { VideoChannelAboutComponent } from './video-channel-about/video-channel-
 
 const videoChannelsRoutes: Routes = [
   {
-    path: ':videoChannelId',
+    path: ':videoChannelName',
     component: VideoChannelsComponent,
     canActivateChild: [ MetaGuard ],
     children: [

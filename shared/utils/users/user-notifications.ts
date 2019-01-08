@@ -54,6 +54,16 @@ function markAsReadNotifications (url: string, token: string, ids: number[], sta
     statusCodeExpected
   })
 }
+function markAsReadAllNotifications (url: string, token: string, statusCodeExpected = 204) {
+  const path = '/api/v1/users/me/notifications/read-all'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
 
 async function getLastNotification (serverUrl: string, accessToken: string) {
   const res = await getUserNotifications(serverUrl, accessToken, 0, 1, undefined, '-createdAt')
@@ -409,6 +419,7 @@ export {
   CheckerBaseParams,
   CheckerType,
   checkNotification,
+  markAsReadAllNotifications,
   checkMyVideoImportIsFinished,
   checkUserRegistered,
   checkVideoIsPublished,

@@ -485,11 +485,10 @@ describe('Test users API validators', function () {
         email: 'email@example.com',
         emailVerified: true,
         videoQuota: 42,
-        role: UserRole.MODERATOR
+        role: UserRole.USER
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields, statusCodeExpected: 204 })
-      userAccessToken = await userLogin(server, user)
     })
   })
 

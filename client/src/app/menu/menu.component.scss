@@ -39,13 +39,6 @@ menu {
     justify-content: center;
     margin-bottom: 35px;
 
-    img {
-      @include avatar(34px);
-
-      margin-left: 20px;
-      margin-right: 10px;
-    }
-
     .logged-in-info {
       flex-grow: 1;
 

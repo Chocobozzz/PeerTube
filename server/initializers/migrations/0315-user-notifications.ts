@@ -31,7 +31,7 @@ PRIMARY KEY ("id"))
       '("newVideoFromSubscription", "newCommentOnMyVideo", "videoAbuseAsModerator", "blacklistOnMyVideo", ' +
       '"myVideoPublished", "myVideoImportFinished", "newUserRegistration", "newFollow", "commentMention", ' +
       '"userId", "createdAt", "updatedAt") ' +
-      '(SELECT 2, 2, 4, 4, 2, 2, 2, 2, 2, id, NOW(), NOW() FROM "user")'
+      '(SELECT 1, 1, 3, 3, 1, 1, 1, 1, 1, id, NOW(), NOW() FROM "user")'
 
     await utils.sequelize.query(query)
   }

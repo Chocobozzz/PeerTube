@@ -436,11 +436,11 @@ class Notifier {
   private isEmailEnabled (user: UserModel, value: UserNotificationSettingValue) {
     if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION === true && user.emailVerified !== true) return false
 
-    return value === UserNotificationSettingValue.EMAIL || value === UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
+    return value & UserNotificationSettingValue.EMAIL
   }
 
   private isWebNotificationEnabled (value: UserNotificationSettingValue) {
-    return value === UserNotificationSettingValue.WEB_NOTIFICATION || value === UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
+    return value & UserNotificationSettingValue.WEB
   }
 
   static get Instance () {

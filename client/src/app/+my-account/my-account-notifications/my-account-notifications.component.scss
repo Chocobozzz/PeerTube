@@ -1,0 +1,23 @@
+@import '_variables';
+@import '_mixins';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 10px;
+
+  a {
+    @include peertube-button-link;
+    @include grey-button;
+  }
+
+  button {
+    @include peertube-button;
+    @include grey-button;
+  }
+}
+
+my-user-notifications {
+  font-size: 15px;
+}

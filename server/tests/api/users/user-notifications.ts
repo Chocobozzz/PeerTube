@@ -37,7 +37,8 @@ import {
   getLastNotification,
   getUserNotifications,
   markAsReadNotifications,
-  updateMyNotificationSettings
+  updateMyNotificationSettings,
+  markAsReadAllNotifications
 } from '../../../../shared/utils/users/user-notifications'
 import {
   User,
@@ -88,15 +89,15 @@ describe('Test users notifications', function () {
   let channelId: number
 
   const allNotificationSettings: UserNotificationSetting = {
-    newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    commentMention: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    newFollow: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    newUserRegistration: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
+    newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoImportFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    commentMention: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 
   before(async function () {
@@ -174,7 +175,10 @@ describe('Test users notifications', function () {
     })
 
     it('Should send a new video notification if the user follows the local video publisher', async function () {
+      this.timeout(10000)
+
       await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:9001')
+      await waitJobs(servers)
 
       const { name, uuid } = await uploadVideoByLocalAccount(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
@@ -184,6 +188,7 @@ describe('Test users notifications', function () {
       this.timeout(50000) // Server 2 has transcoding enabled
 
       await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:9002')
+      await waitJobs(servers)
 
       const { name, uuid } = await uploadVideoByRemoteAccount(servers)
       await checkNewVideoFromSubscription(baseParams, name, uuid, 'presence')
@@ -822,8 +827,9 @@ describe('Test users notifications', function () {
     })
 
     it('Should notify when a local channel is following one of our channel', async function () {
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+      this.timeout(10000)
 
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root name', myChannelName, 'presence')
@@ -832,8 +838,9 @@ describe('Test users notifications', function () {
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+      this.timeout(10000)
 
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root 2 name', myChannelName, 'presence')
@@ -895,6 +902,15 @@ describe('Test users notifications', function () {
         expect(notification.read).to.be.false
       }
     })
+
+    it('Should mark as read all notifications', async function () {
+      await markAsReadAllNotifications(servers[ 0 ].url, userAccessToken)
+
+      const res = await getUserNotifications(servers[ 0 ].url, userAccessToken, 0, 10, true)
+
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.have.lengthOf(0)
+    })
   })
 
   describe('Notification settings', function () {
@@ -928,13 +944,13 @@ describe('Test users notifications', function () {
 
     it('Should only have web notifications', async function () {
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
-        newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION
+        newVideoFromSubscription: UserNotificationSettingValue.WEB
       }))
 
       {
         const res = await getMyUserInformation(servers[0].url, userAccessToken)
         const info = res.body as User
-        expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.WEB_NOTIFICATION)
+        expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.WEB)
       }
 
       const { name, uuid } = await uploadVideoByLocalAccount(servers)
@@ -976,13 +992,15 @@ describe('Test users notifications', function () {
 
     it('Should have email and web notifications', async function () {
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
-        newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL
+        newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
       }))
 
       {
         const res = await getMyUserInformation(servers[0].url, userAccessToken)
         const info = res.body as User
-        expect(info.notificationSettings.newVideoFromSubscription).to.equal(UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL)
+        expect(info.notificationSettings.newVideoFromSubscription).to.equal(
+          UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+        )
       }
 
       const { name, uuid } = await uploadVideoByLocalAccount(servers)

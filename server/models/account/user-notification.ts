@@ -290,6 +290,12 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     return UserNotificationModel.update({ read: true }, query)
   }
 
+  static markAllAsRead (userId: number) {
+    const query = { where: { userId } }
+
+    return UserNotificationModel.update({ read: true }, query)
+  }
+
   toFormattedJSON (): UserNotification {
     const video = this.Video ? Object.assign(this.formatVideo(this.Video), {
       channel: {

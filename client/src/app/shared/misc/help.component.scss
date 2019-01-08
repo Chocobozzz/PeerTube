@@ -12,19 +12,21 @@
 }
 
 /deep/ {
-  .popover-body {
-    text-align: left;
-    padding: 10px;
+  .popover-help.popover {
     max-width: 300px;
 
-    font-size: 13px;
-    font-family: $main-fonts;
-    background-color: #fff;
-    color: #000;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    .popover-body {
+      text-align: left;
+      padding: 10px;
+      font-size: 13px;
+      font-family: $main-fonts;
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
 
-    ul {
-      padding-left: 20px;
+      ul {
+        padding-left: 20px;
+      }
     }
   }
 }

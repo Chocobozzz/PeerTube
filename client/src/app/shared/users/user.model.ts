@@ -1,4 +1,4 @@
-import { hasUserRight, User as UserServerModel, UserRight, UserRole, VideoChannel } from '../../../../../shared'
+import { hasUserRight, User as UserServerModel, UserNotificationSetting, UserRight, UserRole, VideoChannel } from '../../../../../shared'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
@@ -24,6 +24,8 @@ export class User implements UserServerModel {
   blocked: boolean
   blockedReason?: string
 
+  notificationSettings?: UserNotificationSetting
+
   constructor (hash: Partial<UserServerModel>) {
     this.id = hash.id
     this.username = hash.username
@@ -40,6 +42,8 @@ export class User implements UserServerModel {
     this.createdAt = hash.createdAt
     this.blocked = hash.blocked
     this.blockedReason = hash.blockedReason
+
+    this.notificationSettings = hash.notificationSettings
 
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)

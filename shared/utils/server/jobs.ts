@@ -29,6 +29,7 @@ function getJobsListPaginationAndSort (url: string, accessToken: string, state: 
 }
 
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
+  const pendingJobWait = process.env.NODE_PENDING_JOB_WAIT ? parseInt(process.env.NODE_PENDING_JOB_WAIT, 10) : 2000
   let servers: ServerInfo[]
 
   if (Array.isArray(serversArg) === false) servers = [ serversArg as ServerInfo ]
@@ -62,7 +63,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
 
     // Retry, in case of new jobs were created
     if (pendingRequests === false) {
-      await wait(2000)
+      await wait(pendingJobWait)
       await Promise.all(tasksBuilder())
     }
 
