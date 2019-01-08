@@ -1,21 +1,19 @@
-import * as child from 'child_process'
+import { fork, ChildProcess } from 'child_process'
 
 class MockSmtpServer {
 
   private static instance: MockSmtpServer
   private started = false
-  private emailChildProcess: child.ChildProcess
+  private emailChildProcess: ChildProcess
   private emails: object[]
 
   private constructor () {
-    this.emailChildProcess = child.fork(`${__dirname}/email-child-process`, [], { silent: true })
+    this.emailChildProcess = fork(`${__dirname}/email-child-process`, [])
+
     this.emailChildProcess.on('message', (msg) => {
       if (msg.email) {
         return this.emails.push(msg.email)
       }
-    })
-    process.on('exit', () => {
-      this.emailChildProcess.kill()
     })
   }
 
@@ -41,6 +39,13 @@ class MockSmtpServer {
         return res()
       })
     })
+  }
+
+  kill () {
+    process.kill(this.emailChildProcess.pid)
+
+    this.emailChildProcess = null
+    MockSmtpServer.instance = null
   }
 
   static get Instance () {

@@ -175,7 +175,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should send a new video notification if the user follows the local video publisher', async function () {
-      this.timeout(10000)
+      this.timeout(15000)
 
       await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:9001')
       await waitJobs(servers)
@@ -1010,6 +1010,8 @@ describe('Test users notifications', function () {
   })
 
   after(async function () {
+    MockSmtpServer.Instance.kill()
+
     killallServers(servers)
   })
 })

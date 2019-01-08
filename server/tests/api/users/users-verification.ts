@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   registerUser, flushTests, getUserInformation, getMyUserInformation, killallServers,
-  userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig
+  userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig, wait
 } from '../../../../shared/utils'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
 import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
@@ -123,6 +123,7 @@ describe('Test users account verification', function () {
   })
 
   after(async function () {
+    MockSmtpServer.Instance.kill()
     killallServers([ server ])
 
     // Keep the logs if the test failed
