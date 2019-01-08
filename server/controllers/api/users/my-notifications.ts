@@ -45,6 +45,11 @@ myNotificationsRouter.post('/me/notifications/read',
   asyncMiddleware(markAsReadUserNotifications)
 )
 
+myNotificationsRouter.post('/me/notifications/read-all',
+  authenticate,
+  asyncMiddleware(markAsReadAllUserNotifications)
+)
+
 export {
   myNotificationsRouter
 }
@@ -70,7 +75,7 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     myVideoImportFinished: body.myVideoImportFinished,
     newFollow: body.newFollow,
     newUserRegistration: body.newUserRegistration,
-    commentMention: body.commentMention,
+    commentMention: body.commentMention
   }
 
   await UserNotificationSettingModel.update(values, query)
@@ -90,6 +95,14 @@ async function markAsReadUserNotifications (req: express.Request, res: express.R
   const user: UserModel = res.locals.oauth.token.User
 
   await UserNotificationModel.markAsRead(user.id, req.body.ids)
+
+  return res.status(204).end()
+}
+
+async function markAsReadAllUserNotifications (req: express.Request, res: express.Response) {
+  const user: UserModel = res.locals.oauth.token.User
+
+  await UserNotificationModel.markAllAsRead(user.id)
 
   return res.status(204).end()
 }

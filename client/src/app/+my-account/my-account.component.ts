@@ -68,6 +68,10 @@ export class MyAccountComponent {
         label: this.i18n('My settings'),
         routerLink: '/my-account/settings'
       },
+      {
+        label: this.i18n('My notifications'),
+        routerLink: '/my-account/notifications'
+      },
       libraryEntries,
       miscEntries
     ]

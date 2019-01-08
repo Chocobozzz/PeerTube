@@ -4,7 +4,7 @@ import { ConfirmService, Notifier } from '@app/core'
 import { Subscription } from 'rxjs'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
-import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
+import { ComponentPagination, hasMoreItems } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
 import { VideoSortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
@@ -165,20 +165,9 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   onNearOfBottom () {
     this.componentPagination.currentPage++
 
-    if (this.hasMoreComments()) {
+    if (hasMoreItems(this.componentPagination)) {
       this.loadMoreComments()
     }
-  }
-
-  private hasMoreComments () {
-    // No results
-    if (this.componentPagination.totalItems === 0) return false
-
-    // Not loaded yet
-    if (!this.componentPagination.totalItems) return true
-
-    const maxPage = this.componentPagination.totalItems / this.componentPagination.itemsPerPage
-    return maxPage > this.componentPagination.currentPage
   }
 
   private deleteLocalCommentThread (parentComment: VideoCommentThreadTree, commentToDelete: VideoComment) {

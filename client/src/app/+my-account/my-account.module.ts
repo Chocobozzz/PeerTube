@@ -23,6 +23,8 @@ import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-sub
 import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
 import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
+import { MyAccountNotificationsComponent } from '@app/+my-account/my-account-notifications/my-account-notifications.component'
+import { MyAccountNotificationPreferencesComponent } from '@app/+my-account/my-account-settings/my-account-notification-preferences'
 
 @NgModule({
   imports: [
@@ -53,7 +55,9 @@ import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/m
     MyAccountSubscriptionsComponent,
     MyAccountBlocklistComponent,
     MyAccountServerBlocklistComponent,
-    MyAccountHistoryComponent
+    MyAccountHistoryComponent,
+    MyAccountNotificationsComponent,
+    MyAccountNotificationPreferencesComponent
   ],
 
   exports: [

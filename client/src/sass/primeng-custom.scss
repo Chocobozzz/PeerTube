@@ -326,6 +326,8 @@ p-toast {
 
     .notification-block {
       display: flex;
+      align-items: center;
+      padding: 5px;
 
       .message {
         flex-grow: 1;
@@ -336,12 +338,12 @@ p-toast {
 
         p {
           font-size: 15px;
+          margin-bottom: 0;
         }
       }
 
       .glyphicon {
         font-size: 32px;
-        margin-top: 15px;
         margin-right: 5px;
       }
     }

@@ -12,13 +12,12 @@ import { AppComponent } from './app.component'
 import { CoreModule } from './core'
 import { HeaderComponent } from './header'
 import { LoginModule } from './login'
-import { MenuComponent } from './menu'
+import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
 import { SharedModule } from './shared'
 import { SignupModule } from './signup'
 import { VideosModule } from './videos'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
-import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { SearchModule } from '@app/search'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
@@ -40,6 +39,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
 
     MenuComponent,
     LanguageChooserComponent,
+    AvatarNotificationComponent,
     HeaderComponent
   ],
   imports: [

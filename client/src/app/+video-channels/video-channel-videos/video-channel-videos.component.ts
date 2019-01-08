@@ -55,7 +55,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
-        this.currentRoute = '/video-channels/' + this.videoChannel.uuid + '/videos'
+        this.currentRoute = '/video-channels/' + this.videoChannel.nameWithHost + '/videos'
 
         this.reloadVideos()
         this.generateSyndicationList()

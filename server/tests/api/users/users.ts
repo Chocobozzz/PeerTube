@@ -501,10 +501,6 @@ describe('Test users', function () {
     accessTokenUser = await userLogin(server, user)
   })
 
-  it('Should not be able to delete a user by a moderator', async function () {
-    await removeUser(server.url, 2, accessTokenUser, 403)
-  })
-
   it('Should be able to list video blacklist by a moderator', async function () {
     await getBlacklistedVideosList(server.url, accessTokenUser)
   })

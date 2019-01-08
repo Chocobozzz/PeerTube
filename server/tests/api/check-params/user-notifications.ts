@@ -100,6 +100,16 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         fields: {
+          ids: [ ]
+        },
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        fields: {
           ids: 5
         },
         token: server.accessToken,
@@ -131,18 +141,39 @@ describe('Test user notifications API validators', function () {
     })
   })
 
+  describe('When marking as read my notifications', function () {
+    const path = '/api/v1/users/me/notifications/read-all'
+
+    it('Should fail with a non authenticated user', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        statusCodeExpected: 204
+      })
+    })
+  })
+
   describe('When updating my notification settings', function () {
     const path = '/api/v1/users/me/notification-settings'
     const correctFields: UserNotificationSetting = {
-      newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION,
-      newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
-      videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION,
-      blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
-      myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION,
-      myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION,
-      commentMention: UserNotificationSettingValue.WEB_NOTIFICATION,
-      newFollow: UserNotificationSettingValue.WEB_NOTIFICATION,
-      newUserRegistration: UserNotificationSettingValue.WEB_NOTIFICATION
+      newVideoFromSubscription: UserNotificationSettingValue.WEB,
+      newCommentOnMyVideo: UserNotificationSettingValue.WEB,
+      videoAbuseAsModerator: UserNotificationSettingValue.WEB,
+      blacklistOnMyVideo: UserNotificationSettingValue.WEB,
+      myVideoImportFinished: UserNotificationSettingValue.WEB,
+      myVideoPublished: UserNotificationSettingValue.WEB,
+      commentMention: UserNotificationSettingValue.WEB,
+      newFollow: UserNotificationSettingValue.WEB,
+      newUserRegistration: UserNotificationSettingValue.WEB
     }
 
     it('Should fail with missing fields', async function () {
@@ -150,7 +181,7 @@ describe('Test user notifications API validators', function () {
         url: server.url,
         path,
         token: server.accessToken,
-        fields: { newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION },
+        fields: { newVideoFromSubscription: UserNotificationSettingValue.WEB },
         statusCodeExpected: 400
       })
     })

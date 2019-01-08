@@ -1,0 +1,30 @@
+.notification {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: inherit;
+  padding: 15px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+
+  .mark-as-read {
+    min-width: 35px;
+
+    .glyphicon {
+      display: none;
+      cursor: pointer;
+      color: rgba(20, 20, 20, 0.5)
+    }
+  }
+
+  &.unread {
+    background-color: rgba(0, 0, 0, 0.05);
+
+    &:hover .mark-as-read .glyphicon {
+      display: block;
+
+      &:hover {
+        color: rgba(20, 20, 20, 0.8);
+      }
+    }
+  }
+}

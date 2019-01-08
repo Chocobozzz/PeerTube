@@ -98,15 +98,15 @@ export {
 function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Transaction | undefined) {
   const values: UserNotificationSetting & { userId: number } = {
     userId: user.id,
-    newVideoFromSubscription: UserNotificationSettingValue.WEB_NOTIFICATION,
-    newCommentOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION,
-    myVideoImportFinished: UserNotificationSettingValue.WEB_NOTIFICATION,
-    myVideoPublished: UserNotificationSettingValue.WEB_NOTIFICATION,
-    videoAbuseAsModerator: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    blacklistOnMyVideo: UserNotificationSettingValue.WEB_NOTIFICATION_AND_EMAIL,
-    newUserRegistration: UserNotificationSettingValue.WEB_NOTIFICATION,
-    commentMention: UserNotificationSettingValue.WEB_NOTIFICATION,
-    newFollow: UserNotificationSettingValue.WEB_NOTIFICATION
+    newVideoFromSubscription: UserNotificationSettingValue.WEB,
+    newCommentOnMyVideo: UserNotificationSettingValue.WEB,
+    myVideoImportFinished: UserNotificationSettingValue.WEB,
+    myVideoPublished: UserNotificationSettingValue.WEB,
+    videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB,
+    commentMention: UserNotificationSettingValue.WEB,
+    newFollow: UserNotificationSettingValue.WEB
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })

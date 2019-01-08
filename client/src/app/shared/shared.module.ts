@@ -63,6 +63,8 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
 import { BlocklistService } from '@app/shared/blocklist'
 import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
 import { UserHistoryService } from '@app/shared/users/user-history.service'
+import { UserNotificationService } from '@app/shared/users/user-notification.service'
+import { UserNotificationsComponent } from '@app/shared/users/user-notifications.component'
 
 @NgModule({
   imports: [
@@ -105,7 +107,8 @@ import { UserHistoryService } from '@app/shared/users/user-history.service'
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
-    TopMenuDropdownComponent
+    TopMenuDropdownComponent,
+    UserNotificationsComponent
   ],
 
   exports: [
@@ -145,6 +148,7 @@ import { UserHistoryService } from '@app/shared/users/user-history.service'
     UserBanModalComponent,
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
+    UserNotificationsComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -186,6 +190,8 @@ import { UserHistoryService } from '@app/shared/users/user-history.service'
 
     I18nPrimengCalendarService,
     ScreenService,
+
+    UserNotificationService,
 
     I18n
   ]
