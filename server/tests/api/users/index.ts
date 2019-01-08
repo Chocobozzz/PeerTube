@@ -1,6 +1,6 @@
+import './users-verification'
+import './user-notifications'
 import './blocklist'
 import './user-subscriptions'
-import './user-notifications'
 import './users'
 import './users-multiple-servers'
-import './users-verification'

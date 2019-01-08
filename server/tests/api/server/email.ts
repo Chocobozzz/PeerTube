@@ -251,6 +251,7 @@ describe('Test emails', function () {
   })
 
   after(async function () {
+    MockSmtpServer.Instance.kill()
     killallServers([ server ])
   })
 })
