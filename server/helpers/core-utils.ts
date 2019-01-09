@@ -11,6 +11,25 @@ import * as pem from 'pem'
 import { URL } from 'url'
 import { truncate } from 'lodash'
 import { exec } from 'child_process'
+import { isArray } from './custom-validators/misc'
+
+const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
+  if (!oldObject || typeof oldObject !== 'object') {
+    return valueConverter(oldObject)
+  }
+
+  if (isArray(oldObject)) {
+    return oldObject.map(e => objectConverter(e, keyConverter, valueConverter))
+  }
+
+  const newObject = {}
+  Object.keys(oldObject).forEach(oldKey => {
+    const newKey = keyConverter(oldKey)
+    newObject[ newKey ] = objectConverter(oldObject[ oldKey ], keyConverter, valueConverter)
+  })
+
+  return newObject
+}
 
 const timeTable = {
   ms:           1,
@@ -235,6 +254,7 @@ export {
   isTestInstance,
   isProdInstance,
 
+  objectConverter,
   root,
   escapeHTML,
   pageToStartAndCount,

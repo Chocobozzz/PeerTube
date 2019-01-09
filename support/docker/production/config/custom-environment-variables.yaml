@@ -50,6 +50,11 @@ user:
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"
 
+contact_form:
+  enabled:
+    __name: "PEERTUBE_CONTACT_FORM_ENABLED"
+    __format: "json"
+
 signup:
   enabled:
     __name: "PEERTUBE_SIGNUP_ENABLED"

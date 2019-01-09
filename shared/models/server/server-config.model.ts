@@ -19,6 +19,10 @@ export interface ServerConfig {
     enabled: boolean
   }
 
+  contactForm: {
+    enabled: boolean
+  }
+
   signup: {
     allowed: boolean,
     allowedForCurrentIP: boolean,

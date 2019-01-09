@@ -15,6 +15,8 @@ class MockSmtpServer {
         return this.emails.push(msg.email)
       }
     })
+
+    process.on('exit', () => this.kill())
   }
 
   collectEmails (emailsCollection: object[]) {
@@ -42,6 +44,8 @@ class MockSmtpServer {
   }
 
   kill () {
+    if (!this.emailChildProcess) return
+
     process.kill(this.emailChildProcess.pid)
 
     this.emailChildProcess = null

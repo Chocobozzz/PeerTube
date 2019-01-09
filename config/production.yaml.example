@@ -115,7 +115,12 @@ cache:
     size: 500 # Max number of video captions/subtitles you want to cache
 
 admin:
+  # Used to generate the root user at first startup
+  # And to receive emails from the contact form
   email: 'admin@example.com'
+
+contact_form:
+  enabled: true
 
 signup:
   enabled: false

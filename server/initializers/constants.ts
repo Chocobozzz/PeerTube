@@ -231,6 +231,9 @@ const CONFIG = {
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
+  CONTACT_FORM: {
+    get ENABLED () { return config.get<boolean>('contact_form.enabled') }
+  },
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
     get LIMIT () { return config.get<number>('signup.limit') },
@@ -394,6 +397,10 @@ let CONSTRAINTS_FIELDS = {
   },
   VIDEO_SHARE: {
     URL: { min: 3, max: 2000 } // Length
+  },
+  CONTACT_FORM: {
+    FROM_NAME: { min: 1, max: 120 }, // Length
+    BODY: { min: 3, max: 5000 } // Length
   }
 }
 
@@ -409,6 +416,8 @@ const RATES_LIMIT = {
 }
 
 let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
+let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
+
 const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MIN: 10,
   AVERAGE: 30,
@@ -685,6 +694,7 @@ if (isTestInstance() === true) {
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
+  CONTACT_FORM_LIFETIME = 1000 // 1 second
 
   JOB_ATTEMPTS['email'] = 1
 
@@ -756,6 +766,7 @@ export {
   HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
+  CONTACT_FORM_LIFETIME,
   buildLanguages
 }
 

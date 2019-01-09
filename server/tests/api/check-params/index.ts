@@ -1,7 +1,7 @@
-// Order of the tests we want to execute
 import './accounts'
 import './blocklist'
 import './config'
+import './contact-form'
 import './follows'
 import './jobs'
 import './redundancy'

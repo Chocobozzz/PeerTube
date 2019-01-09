@@ -41,6 +41,10 @@ export interface CustomConfig {
     email: string
   }
 
+  contactForm: {
+    enabled: boolean
+  }
+
   user: {
     videoQuota: number
     videoQuotaDaily: number

@@ -1,4 +1,5 @@
 import './config'
+import './contact-form'
 import './email'
 import './follow-constraints'
 import './follows'

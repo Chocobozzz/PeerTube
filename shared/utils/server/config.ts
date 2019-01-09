@@ -80,6 +80,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
     admin: {
       email: 'superadmin1@example.com'
     },
+    contactForm: {
+      enabled: true
+    },
     user: {
       videoQuota: 5242881,
       videoQuotaDaily: 318742

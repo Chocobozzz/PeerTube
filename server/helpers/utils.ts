@@ -7,6 +7,7 @@ import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
+import { isArray } from './custom-validators/misc'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -19,10 +20,7 @@ async function generateRandomString (size: number) {
   return raw.toString('hex')
 }
 
-interface FormattableToJSON {
-  toFormattedJSON (args?: any)
-}
-
+interface FormattableToJSON { toFormattedJSON (args?: any) }
 function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number, formattedArg?: any) {
   const formattedObjects: U[] = []
 

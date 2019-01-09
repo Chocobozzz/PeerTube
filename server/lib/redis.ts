@@ -2,7 +2,13 @@ import * as express from 'express'
 import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
-import { CONFIG, USER_PASSWORD_RESET_LIFETIME, USER_EMAIL_VERIFY_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
+import {
+  CONFIG,
+  CONTACT_FORM_LIFETIME,
+  USER_EMAIL_VERIFY_LIFETIME,
+  USER_PASSWORD_RESET_LIFETIME,
+  VIDEO_VIEW_LIFETIME
+} from '../initializers'
 
 type CachedRoute = {
   body: string,
@@ -74,6 +80,16 @@ class Redis {
 
   async getVerifyEmailLink (userId: number) {
     return this.getValue(this.generateVerifyEmailKey(userId))
+  }
+
+  /************* Contact form per IP *************/
+
+  async setContactFormIp (ip: string) {
+    return this.setValue(this.generateContactFormKey(ip), '1', CONTACT_FORM_LIFETIME)
+  }
+
+  async isContactFormIpExists (ip: string) {
+    return this.exists(this.generateContactFormKey(ip))
   }
 
   /************* Views per IP *************/
@@ -175,7 +191,11 @@ class Redis {
   }
 
   private generateViewKey (ip: string, videoUUID: string) {
-    return videoUUID + '-' + ip
+    return `views-${videoUUID}-${ip}`
+  }
+
+  private generateContactFormKey (ip: string) {
+    return 'contact-form-' + ip
   }
 
   /************* Redis helpers *************/

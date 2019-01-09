@@ -354,13 +354,32 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  sendMail (to: string[], subject: string, text: string) {
+  addContactFormJob (fromEmail: string, fromName: string, body: string) {
+    const text = 'Hello dear admin,\n\n' +
+      fromName + ' sent you a message' +
+      '\n\n---------------------------------------\n\n' +
+      body +
+      '\n\n---------------------------------------\n\n' +
+      'Cheers,\n' +
+      'PeerTube.'
+
+    const emailPayload: EmailPayload = {
+      from: fromEmail,
+      to: [ CONFIG.ADMIN.EMAIL ],
+      subject: '[PeerTube] Contact form submitted',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  sendMail (to: string[], subject: string, text: string, from?: string) {
     if (!this.enabled) {
       throw new Error('Cannot send mail because SMTP is not configured.')
     }
 
     return this.transporter.sendMail({
-      from: CONFIG.SMTP.FROM_ADDRESS,
+      from: from || CONFIG.SMTP.FROM_ADDRESS,
       to: to.join(','),
       subject,
       text

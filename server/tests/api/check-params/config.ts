@@ -48,6 +48,9 @@ describe('Test config API validators', function () {
     admin: {
       email: 'superadmin1@example.com'
     },
+    contactForm: {
+      enabled: false
+    },
     user: {
       videoQuota: 5242881,
       videoQuotaDaily: 318742

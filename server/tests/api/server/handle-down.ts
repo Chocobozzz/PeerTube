@@ -8,18 +8,17 @@ import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-c
 
 import {
   completeVideoCheck,
-  getVideo,
-  immutableAssign,
-  reRunServer,
-  unfollow,
-  viewVideo,
   flushAndRunMultipleServers,
+  getVideo,
   getVideosList,
+  immutableAssign,
   killallServers,
+  reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
+  unfollow,
   updateVideo,
+  uploadVideo,
   wait
 } from '../../../../shared/utils'
 import { follow, getFollowersListPaginationAndSort } from '../../../../shared/utils/server/follows'
