@@ -23,7 +23,7 @@ info:
 
     # Authentication
     When you sign up for an account, you are given the possibility to generate
-    sessions, and authenticate using this session token. One session token can 
+    sessions, and authenticate using this session token. One session token can
     currently be used at a time.
 
     # Errors
@@ -61,7 +61,7 @@ tags:
     description: >
       Managing servers which the instance interacts with is crucial to the
       concept of federation in PeerTube and external video indexation. The PeerTube
-      server then deals with inter-server ActivityPub operations and propagates 
+      server then deals with inter-server ActivityPub operations and propagates
       information across its social graph by posting activities to actors' inbox
       endpoints.
   - name: Video Abuse
@@ -843,7 +843,9 @@ paths:
                   type: string
                 tags:
                   description: Video tags
-                  type: string
+                  type: array
+                  items:
+                    type: string
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
@@ -1050,7 +1052,9 @@ paths:
                   type: string
                 tags:
                   description: Video tags
-                  type: string
+                  type: array
+                  items:
+                    type: string
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
