@@ -13,6 +13,8 @@
 - [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
 - [Which container formats can I use for the videos I want to upload?](#which-container-formats-can-i-use-for-the-videos-i-want-to-upload)
 - [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
+- [Why do we have to put our Twitter username in PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-peertube-configuration)
+- [How video views are calculated?](#how-video-views-are-calculated)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
 - [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
@@ -87,6 +89,18 @@ WEBM, MP4 or OGV videos.
 ## I want to change my domain name, how can I do that?
 
 You can't. You'll need to reinstall an instance and reupload your videos.
+
+
+## Why do we have to put our Twitter username in PeerTube configuration?
+
+You don't have to: we set a default value if you don't have a Twitter account.
+We need this information because Twitter requires an account for links share/videos embed on their platform.
+
+
+## How video views are calculated?
+
+Your web browser sends a view to the server after 30 seconds of playback. Then, the IP cannot send another view in the next hour.
+Views are buffered, so don't panic if the view counter stays the same after you watched a video.
 
 
 ## Should I have a big server to run PeerTube?
