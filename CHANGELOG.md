@@ -4,6 +4,9 @@
 
 ***Since v1.0.1***
 
+### BREAKING CHANGES
+ * **Docker:** `PEERTUBE_TRUST_PROXY` env variable is now an array ([LecygneNoir](https://github.com/LecygneNoir))
+
 ### Maintenance
 
  * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
@@ -26,7 +29,6 @@
    * Add postfix image
    * Redirect HTTP -> HTTPS
    * Disable Træfik web UI
- * Add ability to set an array in `PEERTUBE_TRUST_PROXY` ([LecygneNoir](https://github.com/LecygneNoir))
 
 ### Features
  
