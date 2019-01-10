@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as Bluebird from 'bluebird'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, STATIC_PATHS } from '../initializers'
+import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE } from '../initializers'
 import { join } from 'path'
 import { escapeHTML } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
@@ -187,8 +187,8 @@ export class ClientHtml {
     // Schema.org
     tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
 
-    // SEO
-    tagsString += `<link rel="canonical" href="${videoUrl}" />`
+    // SEO, use origin video url so Google does not index remote videos
+    tagsString += `<link rel="canonical" href="${video.url}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.OPENGRAPH_AND_OEMBED, tagsString)
   }
