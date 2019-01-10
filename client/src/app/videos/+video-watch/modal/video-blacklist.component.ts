@@ -34,9 +34,12 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
+    const defaultValues = { unfederate: 'true' }
+
     this.buildForm({
-      reason: this.videoBlacklistValidatorsService.VIDEO_BLACKLIST_REASON
-    })
+      reason: this.videoBlacklistValidatorsService.VIDEO_BLACKLIST_REASON,
+      unfederate: null
+    }, defaultValues)
   }
 
   show () {
@@ -50,8 +53,9 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
 
   blacklist () {
     const reason = this.form.value[ 'reason' ] || undefined
+    const unfederate = this.video.isLocal ? this.form.value[ 'unfederate' ] : undefined
 
-    this.videoBlacklistService.blacklistVideo(this.video.id, reason)
+    this.videoBlacklistService.blacklistVideo(this.video.id, reason, unfederate)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Video blacklisted.'))

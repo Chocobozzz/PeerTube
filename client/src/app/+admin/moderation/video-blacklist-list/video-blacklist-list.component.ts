@@ -46,6 +46,12 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
     return Video.buildClientUrl(videoBlacklist.video.uuid)
   }
 
+  booleanToText (value: boolean) {
+    if (value === true) return this.i18n('yes')
+
+    return this.i18n('no')
+  }
+
   async removeVideoFromBlacklist (entry: VideoBlacklist) {
     const confirmMessage = this.i18n(
       'Do you really want to remove this video from the blacklist? It will be available again in the videos list.'

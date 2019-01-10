@@ -364,7 +364,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
-      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
+
+      // Don't send update if the video was unfederated
+      if (!videoInstanceUpdated.VideoBlacklist || videoInstanceUpdated.VideoBlacklist.unfederated === false) {
+        await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
+      }
 
       auditLogger.update(
         getAuditIdFromRes(res),

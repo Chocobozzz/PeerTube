@@ -1,11 +1,18 @@
 import * as request from 'supertest'
 
-function addVideoToBlacklist (url: string, token: string, videoId: number | string, reason?: string, specialStatus = 204) {
+function addVideoToBlacklist (
+  url: string,
+  token: string,
+  videoId: number | string,
+  reason?: string,
+  unfederate?: boolean,
+  specialStatus = 204
+) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)
           .post(path)
-          .send({ reason })
+          .send({ reason, unfederate })
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + token)
           .expect(specialStatus)

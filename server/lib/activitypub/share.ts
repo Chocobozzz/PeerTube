@@ -78,7 +78,7 @@ async function shareByServer (video: VideoModel, t: Transaction) {
   const serverActor = await getServerActor()
 
   const serverShareUrl = getVideoAnnounceActivityPubUrl(serverActor, video)
-  return VideoShareModel.findOrCreate({
+  const [ serverShare ] = await VideoShareModel.findOrCreate({
     defaults: {
       actorId: serverActor.id,
       videoId: video.id,
@@ -88,16 +88,14 @@ async function shareByServer (video: VideoModel, t: Transaction) {
       url: serverShareUrl
     },
     transaction: t
-  }).then(([ serverShare, created ]) => {
-    if (created) return sendVideoAnnounce(serverActor, serverShare, video, t)
-
-    return undefined
   })
+
+  return sendVideoAnnounce(serverActor, serverShare, video, t)
 }
 
 async function shareByVideoChannel (video: VideoModel, t: Transaction) {
   const videoChannelShareUrl = getVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
-  return VideoShareModel.findOrCreate({
+  const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
     defaults: {
       actorId: video.VideoChannel.actorId,
       videoId: video.id,
@@ -107,11 +105,9 @@ async function shareByVideoChannel (video: VideoModel, t: Transaction) {
       url: videoChannelShareUrl
     },
     transaction: t
-  }).then(([ videoChannelShare, created ]) => {
-    if (created) return sendVideoAnnounce(video.VideoChannel.Actor, videoChannelShare, video, t)
-
-    return undefined
   })
+
+  return sendVideoAnnounce(video.VideoChannel.Actor, videoChannelShare, video, t)
 }
 
 async function undoShareByVideoChannel (video: VideoModel, oldVideoChannel: VideoChannelModel, t: Transaction) {

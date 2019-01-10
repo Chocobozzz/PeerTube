@@ -18,6 +18,8 @@ import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
 import { Notifier } from '../../../lib/notifier'
 import { VideoModel } from '../../../models/video/video'
+import { sendCreateVideo, sendDeleteVideo, sendUpdateVideo } from '../../../lib/activitypub/send'
+import { federateVideoIfNeeded } from '../../../lib/activitypub'
 
 const blacklistRouter = express.Router()
 
@@ -66,11 +68,16 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response)
 
   const toCreate = {
     videoId: videoInstance.id,
+    unfederated: body.unfederate === true,
     reason: body.reason
   }
 
   const blacklist = await VideoBlacklistModel.create(toCreate)
   blacklist.Video = videoInstance
+
+  if (body.unfederate === true) {
+    await sendDeleteVideo(videoInstance, undefined)
+  }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)
 
@@ -101,8 +108,14 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
   const videoBlacklist = res.locals.videoBlacklist as VideoBlacklistModel
   const video: VideoModel = res.locals.video
 
-  await sequelizeTypescript.transaction(t => {
-    return videoBlacklist.destroy({ transaction: t })
+  await sequelizeTypescript.transaction(async t => {
+    const unfederated = videoBlacklist.unfederated
+    await videoBlacklist.destroy({ transaction: t })
+
+    // Re federate the video
+    if (unfederated === true) {
+      await federateVideoIfNeeded(video, true, t)
+    }
   })
 
   Notifier.Instance.notifyOnVideoUnblacklist(video)

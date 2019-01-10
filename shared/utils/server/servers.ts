@@ -145,8 +145,12 @@ function runServer (serverNumber: number, configOverride?: Object, args = []) {
       if (dontContinue === true) return
 
       server.app.stdout.removeListener('data', onStdout)
+
+      process.on('exit', () => process.kill(server.app.pid))
+
       res(server)
     })
+
   })
 }
 

@@ -1,21 +1,7 @@
-import {
-  AfterCreate,
-  AfterDestroy,
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  Is,
-  Model,
-  Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoBlacklistReasonValid } from '../../helpers/custom-validators/video-blacklist'
-import { Emailer } from '../../lib/emailer'
 import { VideoBlacklist } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 
@@ -34,6 +20,10 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_BLACKLIST.REASON.max))
   reason: string
+
+  @AllowNull(false)
+  @Column
+  unfederated: boolean
 
   @CreatedAt
   createdAt: Date
@@ -93,6 +83,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       reason: this.reason,
+      unfederated: this.unfederated,
 
       video: {
         id: video.id,
