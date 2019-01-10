@@ -18,7 +18,6 @@ class Emailer {
   private static instance: Emailer
   private initialized = false
   private transporter: Transporter
-  private enabled = false
 
   private constructor () {}
 
@@ -27,7 +26,7 @@ class Emailer {
     if (this.initialized === true) return
     this.initialized = true
 
-    if (CONFIG.SMTP.HOSTNAME && CONFIG.SMTP.PORT) {
+    if (Emailer.isEnabled()) {
       logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
 
       let tls
@@ -55,8 +54,6 @@ class Emailer {
         tls,
         auth
       })
-
-      this.enabled = true
     } else {
       if (!isTestInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
@@ -64,8 +61,8 @@ class Emailer {
     }
   }
 
-  isEnabled () {
-    return this.enabled
+  static isEnabled () {
+    return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
   }
 
   async checkConnectionOrDie () {
@@ -374,7 +371,7 @@ class Emailer {
   }
 
   sendMail (to: string[], subject: string, text: string, from?: string) {
-    if (!this.enabled) {
+    if (!Emailer.isEnabled()) {
       throw new Error('Cannot send mail because SMTP is not configured.')
     }
 

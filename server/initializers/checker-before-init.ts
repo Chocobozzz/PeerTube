@@ -15,7 +15,7 @@ function checkMissedConfig () {
     'storage.redundancy', 'storage.tmp',
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
-    'cache.previews.size', 'admin.email',
+    'cache.previews.size', 'admin.email', 'contact_form.enabled',
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
     'redundancy.videos.strategies', 'redundancy.videos.check_interval',

@@ -37,6 +37,7 @@ import {
   LoginValidatorsService,
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
+  InstanceValidatorsService,
   TextareaAutoResizeDirective,
   UserValidatorsService,
   VideoAbuseValidatorsService,
@@ -65,6 +66,7 @@ import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.com
 import { UserHistoryService } from '@app/shared/users/user-history.service'
 import { UserNotificationService } from '@app/shared/users/user-notification.service'
 import { UserNotificationsComponent } from '@app/shared/users/user-notifications.component'
+import { InstanceService } from '@app/shared/instance/instance.service'
 
 @NgModule({
   imports: [
@@ -185,8 +187,10 @@ import { UserNotificationsComponent } from '@app/shared/users/user-notifications
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
+    InstanceValidatorsService,
     BlocklistService,
     UserHistoryService,
+    InstanceService,
 
     I18nPrimengCalendarService,
     ScreenService,

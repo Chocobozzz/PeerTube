@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-md-12 col-xl-6">
-    <div i18n class="about-instance-title">
-      About {{ instanceName }} instance
+    <div class="about-instance-title">
+      <div i18n>About {{ instanceName }} instance</div>
+
+      <div *ngIf="isContactFormEnabled" (click)="openContactModal()" i18n role="button" class="contact-admin">Contact administrator</div>
     </div>
 
     <div class="short-description">
@@ -46,3 +48,5 @@
     <my-instance-features-table></my-instance-features-table>
   </div>
 </div>
+
+<my-contact-admin-modal #contactAdminModal></my-contact-admin-modal>

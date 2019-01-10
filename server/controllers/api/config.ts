@@ -65,7 +65,7 @@ async function getConfig (req: express.Request, res: express.Response) {
       }
     },
     email: {
-      enabled: Emailer.Instance.isEnabled()
+      enabled: Emailer.isEnabled()
     },
     contactForm: {
       enabled: CONFIG.CONTACT_FORM.ENABLED

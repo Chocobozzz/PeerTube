@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { MarkdownService } from '@app/videos/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
+import { InstanceService } from '@app/shared/instance/instance.service'
 
 @Component({
   selector: 'my-about-instance',
@@ -9,6 +11,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './about-instance.component.scss' ]
 })
 export class AboutInstanceComponent implements OnInit {
+  @ViewChild('contactAdminModal') contactAdminModal: ContactAdminModalComponent
+
   shortDescription = ''
   descriptionHTML = ''
   termsHTML = ''
@@ -16,6 +20,7 @@ export class AboutInstanceComponent implements OnInit {
   constructor (
     private notifier: Notifier,
     private serverService: ServerService,
+    private instanceService: InstanceService,
     private markdownService: MarkdownService,
     private i18n: I18n
   ) {}
@@ -32,8 +37,12 @@ export class AboutInstanceComponent implements OnInit {
     return this.serverService.getConfig().signup.allowed
   }
 
+  get isContactFormEnabled () {
+    return this.serverService.getConfig().email.enabled && this.serverService.getConfig().contactForm.enabled
+  }
+
   ngOnInit () {
-    this.serverService.getAbout()
+    this.instanceService.getAbout()
       .subscribe(
         res => {
           this.shortDescription = res.instance.shortDescription
@@ -43,6 +52,10 @@ export class AboutInstanceComponent implements OnInit {
 
         () => this.notifier.error(this.i18n('Cannot get about information from server'))
       )
+  }
+
+  openContactModal () {
+    return this.contactAdminModal.show()
   }
 
 }

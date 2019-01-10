@@ -50,7 +50,7 @@ const contactAdministratorValidator = [
         .end()
     }
 
-    if (Emailer.Instance.isEnabled() === false) {
+    if (Emailer.isEnabled() === false) {
       return res
         .status(409)
         .send({ error: 'Emailer is not enabled on this instance.' })
