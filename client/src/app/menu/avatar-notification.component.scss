@@ -11,6 +11,7 @@
       font-family: $main-fonts;
       overflow-y: auto;
       max-height: 500px;
+      min-width: 200px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
 
       .notifications-header {
