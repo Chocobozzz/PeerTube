@@ -70,7 +70,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   }
 
   onValidKey () {
-    this.onValueChanged()
+    this.check()
     if (!this.form.valid) return
 
     this.formValidated()

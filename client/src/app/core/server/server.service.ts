@@ -40,6 +40,9 @@ export class ServerService {
     email: {
       enabled: false
     },
+    contactForm: {
+      enabled: false
+    },
     serverVersion: 'Unknown',
     signup: {
       allowed: false,
