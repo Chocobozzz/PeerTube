@@ -30,6 +30,8 @@ describe('Test contact form', function () {
   })
 
   it('Should send a contact form', async function () {
+    this.timeout(10000)
+
     await sendContactForm({
       url: server.url,
       fromEmail: 'toto@example.com',

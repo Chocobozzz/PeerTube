@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -24,10 +24,15 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private instanceValidatorsService: InstanceValidatorsService,
     private instanceService: InstanceService,
+    private serverService: ServerService,
     private notifier: Notifier,
     private i18n: I18n
   ) {
     super()
+  }
+
+  get instanceName () {
+    return this.serverService.getConfig().instance.name
   }
 
   ngOnInit () {

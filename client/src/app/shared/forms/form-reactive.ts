@@ -11,7 +11,7 @@ export abstract class FormReactive {
   protected formChanged = false
 
   form: FormGroup
-  formErrors: FormReactiveErrors
+  formErrors: any // To avoid casting in template because of string | FormReactiveErrors
   validationMessages: FormReactiveValidationMessages
 
   buildForm (obj: BuildFormArgument, defaultValues: BuildFormDefaultValues = {}) {
