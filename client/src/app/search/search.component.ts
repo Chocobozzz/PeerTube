@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, Notifier } from '@app/core'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -41,7 +41,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private metaService: MetaService,
     private notifier: Notifier,
     private searchService: SearchService,
-    private authService: AuthService
+    private authService: AuthService,
+    private serverService: ServerService
   ) { }
 
   ngOnInit () {
@@ -73,6 +74,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     if (this.subActivatedRoute) this.subActivatedRoute.unsubscribe()
+  }
+
+  isVideoBlur (video: Video) {
+    return video.isVideoNSFWForUser(this.authService.getUser(), this.serverService.getConfig())
   }
 
   isVideoChannel (d: VideoChannel | Video): d is VideoChannel {
