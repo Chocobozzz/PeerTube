@@ -48,6 +48,19 @@ class SettingsMenuItem extends MenuItem {
         // Update on rate change
         player.on('ratechange', this.submenuClickHandler)
 
+        if (subMenuName === 'CaptionsButton') {
+          // Hack to regenerate captions on HTTP fallback
+          player.on('captionsChanged', () => {
+            setTimeout(() => {
+              this.settingsSubMenuEl_.innerHTML = ''
+              this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
+              this.update()
+              this.bindClickEvents()
+
+            }, 0)
+          })
+        }
+
         this.reset()
       }, 0)
     })

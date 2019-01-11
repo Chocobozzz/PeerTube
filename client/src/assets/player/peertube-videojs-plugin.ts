@@ -620,6 +620,9 @@ class PeerTubePlugin extends Plugin {
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
 
+    // We changed the source, so reinit captions
+    this.initCaptions()
+
     return this.tryToPlay(err => {
       if (err && done) return done(err)
 
@@ -720,6 +723,8 @@ class PeerTubePlugin extends Plugin {
         default: this.defaultSubtitle === caption.language
       }, false)
     }
+
+    this.player.trigger('captionsChanged')
   }
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657

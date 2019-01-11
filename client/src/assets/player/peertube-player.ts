@@ -254,6 +254,10 @@ function loadLocaleInVideoJS (serverUrl: string, videojs: any, locale: string) {
         loadLocaleInVideoJS.cache[path] = json
         return json
       })
+      .catch(err => {
+        console.error('Cannot get player translations', err)
+        return undefined
+      })
   }
 
   const completeLocale = getCompleteLocale(locale)
@@ -270,6 +274,10 @@ function getServerTranslations (serverUrl: string, locale: string) {
 
   return fetch(path + '/server.json')
     .then(res => res.json())
+    .catch(err => {
+      console.error('Cannot get server translations', err)
+      return undefined
+    })
 }
 
 // ############################################################################
