@@ -33,7 +33,6 @@
           <div>
             <div class="d-block d-sm-none"> <!-- only shown on small devices, has its conterpart for larger viewports below -->
               <h1 class="video-info-name">{{ video.name }}</h1>
-
               <div i18n class="video-info-date-views">
                 Published {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
               </div>
@@ -158,6 +157,14 @@
           <div class="video-attribute">
             <span i18n class="video-attribute-label">Privacy</span>
             <span class="video-attribute-value">{{ video.privacy.label }}</span>
+          </div>
+
+          <div class="video-attribute">
+            <span i18n class="video-attribute-label">Published on</span>
+            <span *ngIf="!video.originallyPublishedAt" class="video-attribute-value">Unknown</span>
+            <span *ngIf="video.originallyPublishedAt" class="video-attribute-value"> 
+              {{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}
+            </span>
           </div>
 
           <div class="video-attribute">
