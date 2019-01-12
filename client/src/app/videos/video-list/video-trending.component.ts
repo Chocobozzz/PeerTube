@@ -38,6 +38,9 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
     this.titlePage = this.i18n('Trending for the last ')
     this.trendingDays === 1 ? this.titlePage += '24 hours' : this.titlePage += this.trendingDays + ' days'
+
+    this.titleTooltip = this.i18n('trending videos are those totalizing the greatest number of views during the last ')
+    this.trendingDays === 1 ? this.titleTooltip += '24 hours.' : this.titleTooltip += this.trendingDays + ' days.'
   }
 
   ngOnInit () {

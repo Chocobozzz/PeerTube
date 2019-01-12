@@ -40,6 +40,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   firstLoadedPage: number
   displayModerationBlock = false
   trendingDays: number
+  titleTooltip: string
 
   protected baseVideoWidth = 215
   protected baseVideoHeight = 205
