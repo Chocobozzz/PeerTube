@@ -13,7 +13,7 @@ import {
   VIDEO_STATES
 } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
-import { exists, isArray, isFileValid } from './misc'
+import { exists, isArray, isDateValid, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { UserModel } from '../../models/account/user'
 import * as magnetUtil from 'magnet-uri'
@@ -113,6 +113,10 @@ function isScheduleVideoUpdatePrivacyValid (value: number) {
       value === VideoPrivacy.UNLISTED ||
       value === VideoPrivacy.PUBLIC
     )
+}
+
+function isVideoOriginallyPublishedAtValid (value: string | null) {
+  return value === null || isDateValid(value)
 }
 
 function isVideoFileInfoHashValid (value: string | null | undefined) {
@@ -220,6 +224,7 @@ export {
   isVideoTagsValid,
   isVideoFPSResolutionValid,
   isScheduleVideoUpdatePrivacyValid,
+  isVideoOriginallyPublishedAtValid,
   isVideoFile,
   isVideoMagnetUriValid,
   isVideoStateValid,

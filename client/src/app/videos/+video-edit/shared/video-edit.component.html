@@ -114,6 +114,20 @@
               </div>
             </div>
 
+            <div class="form-group">
+              <label i18n for="originallyPublishedAt">Original publication date</label>
+              <my-help i18n-preHtml preHtml="This is the date when the content was originally published (e.g. the release date for a film)"></my-help>
+              <p-calendar
+                id="originallyPublishedAt" formControlName="originallyPublishedAt" [dateFormat]="calendarDateFormat"
+                [locale]="calendarLocale" [showTime]="true" [hideOnDateTimeSelect]="true" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="myYearRange"
+              >
+              </p-calendar>
+
+              <div *ngIf="formErrors.originallyPublishedAt" class="form-error">
+                {{ formErrors.originallyPublishedAt }}
+              </div>
+            </div>
+
             <my-peertube-checkbox
               inputName="nsfw" formControlName="nsfw"
               i18n-labelText labelText="This video contains mature or explicit content"
