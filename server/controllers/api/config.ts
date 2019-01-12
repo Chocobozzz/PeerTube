@@ -115,6 +115,11 @@ async function getConfig (req: express.Request, res: express.Response) {
     user: {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+    },
+    trending: {
+      videos: {
+        intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+      }
     }
   }
 

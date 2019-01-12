@@ -8,7 +8,7 @@ import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-videos-trending',
@@ -19,6 +19,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   titlePage: string
   currentRoute = '/videos/trending'
   defaultSort: VideoSortField = '-trending'
+  trendingDays: number
 
   constructor (
     protected router: Router,
@@ -27,12 +28,14 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     protected authService: AuthService,
     protected location: Location,
     protected screenService: ScreenService,
+    private serverService: ServerService,
     protected i18n: I18n,
     private videoService: VideoService
   ) {
     super()
 
     this.titlePage = i18n('Trending')
+    this.trendingDays = this.serverService.getConfig().trending.videos.intervalDays
   }
 
   ngOnInit () {
