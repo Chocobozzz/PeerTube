@@ -43,6 +43,7 @@ export interface Video {
   createdAt: Date | string
   updatedAt: Date | string
   publishedAt: Date | string
+  originallyPublishedAt: Date | string
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<string>

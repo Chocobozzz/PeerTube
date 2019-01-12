@@ -15,4 +15,5 @@ export interface VideoCreate {
   commentsEnabled?: boolean
   privacy: VideoPrivacy
   scheduleUpdate?: VideoScheduleUpdate
+  originallyPublishedAt: Date | string
 }
