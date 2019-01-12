@@ -34,8 +34,10 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   ) {
     super()
 
-    this.titlePage = i18n('Trending')
     this.trendingDays = this.serverService.getConfig().trending.videos.intervalDays
+
+    this.titlePage = this.i18n('Trending for the last ')
+    this.trendingDays === 1 ? this.titlePage += '24 hours' : this.titlePage += this.trendingDays + ' days'
   }
 
   ngOnInit () {
