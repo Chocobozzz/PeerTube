@@ -19,7 +19,6 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   titlePage: string
   currentRoute = '/videos/trending'
   defaultSort: VideoSortField = '-trending'
-  trendingDays: number
 
   constructor (
     protected router: Router,
@@ -33,20 +32,25 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     private videoService: VideoService
   ) {
     super()
-
-    this.trendingDays = this.serverService.getConfig().trending.videos.intervalDays
-
-    this.titlePage = this.i18n('Trending for the last ')
-    this.trendingDays === 1 ? this.titlePage += '24 hours' : this.titlePage += this.trendingDays + ' days'
-
-    this.titleTooltip = this.i18n('trending videos are those totalizing the greatest number of views during the last ')
-    this.trendingDays === 1 ? this.titleTooltip += '24 hours.' : this.titleTooltip += this.trendingDays + ' days.'
   }
 
   ngOnInit () {
     super.ngOnInit()
 
     this.generateSyndicationList()
+
+    const trendingDays = this.serverService.getConfig().trending.videos.intervalDays
+
+    if (trendingDays === 1) {
+      this.titlePage = this.i18n('Trending for the last 24 hours')
+      this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours.')
+    } else {
+      this.titlePage = this.i18n('Trending for the last {{days}} days', { days: trendingDays })
+      this.titleTooltip = this.i18n(
+        'Trending videos are those totalizing the greatest number of views during the last {{days}} days.',
+        { days: trendingDays }
+      )
+    }
   }
 
   ngOnDestroy () {

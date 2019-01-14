@@ -39,7 +39,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   ownerDisplayType: OwnerDisplayType = 'account'
   firstLoadedPage: number
   displayModerationBlock = false
-  trendingDays: number
   titleTooltip: string
 
   protected baseVideoWidth = 215
