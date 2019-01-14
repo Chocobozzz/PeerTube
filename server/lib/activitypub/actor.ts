@@ -211,7 +211,14 @@ async function refreshActorIfNeeded (
   const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
 
   try {
-    const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
+    let actorUrl: string
+    try {
+      actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
+    } catch (err) {
+      logger.warn('Cannot get actor URL from webfinger, keeping the old one.', err)
+      actorUrl = actor.url
+    }
+
     const { result, statusCode } = await fetchRemoteActor(actorUrl)
 
     if (statusCode === 404) {
@@ -429,5 +436,3 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
 
   return videoChannelCreated
 }
-
-
