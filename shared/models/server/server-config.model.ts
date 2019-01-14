@@ -78,4 +78,10 @@ export interface ServerConfig {
     videoQuota: number
     videoQuotaDaily: number
   }
+
+  trending: {
+    videos: {
+      intervalDays: number
+    }
+  }
 }

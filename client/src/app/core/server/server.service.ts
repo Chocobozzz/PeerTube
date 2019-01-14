@@ -87,6 +87,11 @@ export class ServerService {
           enabled: false
         }
       }
+    },
+    trending: {
+      videos: {
+        intervalDays: 0
+      }
     }
   }
   private videoCategories: Array<VideoConstant<number>> = []
