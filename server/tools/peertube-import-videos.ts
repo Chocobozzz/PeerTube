@@ -78,7 +78,11 @@ getSettings()
     password: program['password']
   }
 
-  run(user, program['url']).catch(err => console.error(err))
+  run(user, program['url'])
+    .catch(err => {
+      console.error(err)
+      process.exit(-1)
+    })
 })
 
 async function promptPassword () {
@@ -112,8 +116,12 @@ async function run (user, url: string) {
     secret: res.body.client_secret
   }
 
-  const res2 = await login(url, client, user)
-  accessToken = res2.body.access_token
+  try {
+    const res = await login(program[ 'url' ], client, user)
+    accessToken = res.body.access_token
+  } catch (err) {
+    throw new Error('Cannot authenticate. Please check your username/password.')
+  }
 
   const youtubeDL = await safeGetYoutubeDL()
 
