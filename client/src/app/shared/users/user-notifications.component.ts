@@ -13,6 +13,7 @@ import { UserNotification } from '@app/shared/users/user-notification.model'
 export class UserNotificationsComponent implements OnInit {
   @Input() ignoreLoadingBar = false
   @Input() infiniteScroll = true
+  @Input() itemsPerPage = 20
 
   notifications: UserNotification[] = []
 
@@ -21,7 +22,7 @@ export class UserNotificationsComponent implements OnInit {
 
   componentPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 20,
+    itemsPerPage: this.itemsPerPage,
     totalItems: null
   }
 

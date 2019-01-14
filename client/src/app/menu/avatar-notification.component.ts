@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { User } from '../shared/users/user.model'
 import { UserNotificationService } from '@app/shared/users/user-notification.service'
 import { Subscription } from 'rxjs'
-import { Notifier } from '@app/core'
+import { Notifier, UserNotificationSocket } from '@app/core'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { NavigationEnd, Router } from '@angular/router'
 import { filter } from 'rxjs/operators'
@@ -23,6 +23,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
 
   constructor (
     private userNotificationService: UserNotificationService,
+    private userNotificationSocket: UserNotificationSocket,
     private notifier: Notifier,
     private router: Router
   ) {}
@@ -53,7 +54,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToNotifications () {
-    this.notificationSub = this.userNotificationService.getMyNotificationsSocket()
+    this.notificationSub = this.userNotificationSocket.getMyNotificationsSocket()
                                .subscribe(data => {
                                  if (data.type === 'new') return this.unreadNotifications++
                                  if (data.type === 'read') return this.unreadNotifications--

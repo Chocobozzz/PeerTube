@@ -18,6 +18,7 @@ import { CheatSheetComponent } from './hotkeys'
 import { ToastModule } from 'primeng/toast'
 import { Notifier } from './notification'
 import { MessageService } from 'primeng/api'
+import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { MessageService } from 'primeng/api'
     UserRightGuard,
     RedirectService,
     Notifier,
-    MessageService
+    MessageService,
+    UserNotificationSocket
   ]
 })
 export class CoreModule {
