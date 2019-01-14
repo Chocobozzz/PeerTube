@@ -9,6 +9,7 @@ import { DropdownAction } from '../../../shared/buttons/action-dropdown.componen
 import { ConfirmService } from '../../../core/index'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { Video } from '../../../shared/video/video.model'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -30,7 +31,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     private notifier: Notifier,
     private videoAbuseService: VideoAbuseService,
     private confirmService: ConfirmService,
-    private i18n: I18n
+    private i18n: I18n,
+    private markdownRenderer: MarkdownService
   ) {
     super()
 
@@ -106,6 +108,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
         err => this.notifier.error(err.message)
       )
 
+  }
+
+  toHtml (text: string) {
+    return this.markdownRenderer.textMarkdownToHTML(text)
   }
 
   protected loadData () {

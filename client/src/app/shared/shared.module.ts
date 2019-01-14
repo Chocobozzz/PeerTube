@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
 import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
-import { MarkdownService } from '@app/videos/shared'
 
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
@@ -34,10 +33,10 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import {
   CustomConfigValidatorsService,
+  InstanceValidatorsService,
   LoginValidatorsService,
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
-  InstanceValidatorsService,
   TextareaAutoResizeDirective,
   UserValidatorsService,
   VideoAbuseValidatorsService,
@@ -67,6 +66,7 @@ import { UserHistoryService } from '@app/shared/users/user-history.service'
 import { UserNotificationService } from '@app/shared/users/user-notification.service'
 import { UserNotificationsComponent } from '@app/shared/users/user-notifications.component'
 import { InstanceService } from '@app/shared/instance/instance.service'
+import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
 
 @NgModule({
   imports: [
@@ -167,7 +167,6 @@ import { InstanceService } from '@app/shared/instance/instance.service'
     UserService,
     VideoService,
     AccountService,
-    MarkdownService,
     VideoChannelService,
     VideoCaptionService,
     VideoImportService,
@@ -191,6 +190,10 @@ import { InstanceService } from '@app/shared/instance/instance.service'
     BlocklistService,
     UserHistoryService,
     InstanceService,
+
+    MarkdownService,
+    LinkifierService,
+    HtmlRendererService,
 
     I18nPrimengCalendarService,
     ScreenService,

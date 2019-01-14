@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 320
+const LAST_MIGRATION_VERSION = 325
 
 // ---------------------------------------------------------------------------
 
@@ -316,8 +316,8 @@ let CONSTRAINTS_FIELDS = {
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
-    REASON: { min: 2, max: 300 }, // Length
-    MODERATION_COMMENT: { min: 2, max: 300 } // Length
+    REASON: { min: 2, max: 3000 }, // Length
+    MODERATION_COMMENT: { min: 2, max: 3000 } // Length
   },
   VIDEO_BLACKLIST: {
     REASON: { min: 2, max: 300 } // Length
