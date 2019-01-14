@@ -41,6 +41,7 @@ import { myBlocklistRouter } from './my-blocklist'
 import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { Notifier } from '../../../lib/notifier'
+import { mySubscriptionsRouter } from './my-subscriptions'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -58,6 +59,7 @@ const askSendEmailLimiter = new RateLimit({
 
 const usersRouter = express.Router()
 usersRouter.use('/', myNotificationsRouter)
+usersRouter.use('/', mySubscriptionsRouter)
 usersRouter.use('/', myBlocklistRouter)
 usersRouter.use('/', myVideosHistoryRouter)
 usersRouter.use('/', meRouter)
