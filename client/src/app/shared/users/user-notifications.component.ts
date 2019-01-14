@@ -21,7 +21,7 @@ export class UserNotificationsComponent implements OnInit {
 
   componentPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 20,
     totalItems: null
   }
 
