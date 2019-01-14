@@ -42,6 +42,12 @@ values(VIDEO_CATEGORIES)
   .concat(values(VIDEO_PRIVACIES))
   .concat(values(VIDEO_STATES))
   .concat(values(VIDEO_IMPORT_STATES))
+  .concat([
+    'This video does not exist.',
+    'We cannot fetch the video. Please try again later.',
+    'Sorry',
+    'This video is not available because the remote instance is not responding.'
+  ])
   .forEach(v => serverKeys[v] = v)
 
 // More keys
