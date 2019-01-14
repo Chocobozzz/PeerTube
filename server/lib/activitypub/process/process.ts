@@ -35,7 +35,7 @@ async function processActivities (
   const actorsCache: { [ url: string ]: ActorModel } = {}
 
   for (const activity of activities) {
-    if (!options.signatureActor && [ 'Create', 'Announce', 'Like' ].indexOf(activity.type) === -1) {
+    if (!options.signatureActor && [ 'Create', 'Announce', 'Like' ].includes(activity.type) === false) {
       logger.error('Cannot process activity %s (type: %s) without the actor signature.', activity.id, activity.type)
       continue
     }

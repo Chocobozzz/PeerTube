@@ -296,7 +296,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   const actorJSON: ActivityPubActor = requestResult.body
   if (isActorObjectValid(actorJSON) === false) {
-    logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
+    logger.debug('Remote actor JSON is not valid.', { actorJSON })
     return { result: undefined, statusCode: requestResult.response.statusCode }
   }
 
