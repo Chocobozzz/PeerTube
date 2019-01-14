@@ -179,7 +179,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
       }
 
       if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
-      else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoFromDatabase.url } })
+      else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: videoFromDatabase.url } })
     }
 
     return { video: videoFromDatabase, created: false }

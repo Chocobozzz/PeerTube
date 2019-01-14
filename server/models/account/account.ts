@@ -288,6 +288,10 @@ export class AccountModel extends Model<AccountModel> {
     return this.Actor.isOwned()
   }
 
+  isOutdated () {
+    return this.Actor.isOutdated()
+  }
+
   getDisplayName () {
     return this.name
   }

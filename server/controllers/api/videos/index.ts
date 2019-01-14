@@ -399,7 +399,7 @@ function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
   if (videoInstance.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoInstance.url } })
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: videoInstance.url } })
       .catch(err => logger.error('Cannot create AP refresher job for video %s.', videoInstance.url, { err }))
   }
 
