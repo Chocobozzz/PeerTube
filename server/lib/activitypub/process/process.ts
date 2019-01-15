@@ -1,5 +1,5 @@
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { checkUrlsSameHost, getAPUrl } from '../../../helpers/activitypub'
+import { checkUrlsSameHost, getAPId } from '../../../helpers/activitypub'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { processAcceptActivity } from './process-accept'
@@ -12,6 +12,9 @@ import { processRejectActivity } from './process-reject'
 import { processUndoActivity } from './process-undo'
 import { processUpdateActivity } from './process-update'
 import { getOrCreateActorAndServerAndModel } from '../actor'
+import { processDislikeActivity } from './process-dislike'
+import { processFlagActivity } from './process-flag'
+import { processViewActivity } from './process-view'
 
 const processActivity: { [ P in ActivityType ]: (activity: Activity, byActor: ActorModel, inboxActor?: ActorModel) => Promise<any> } = {
   Create: processCreateActivity,
@@ -22,7 +25,10 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, byActor: Ac
   Reject: processRejectActivity,
   Announce: processAnnounceActivity,
   Undo: processUndoActivity,
-  Like: processLikeActivity
+  Like: processLikeActivity,
+  Dislike: processDislikeActivity,
+  Flag: processFlagActivity,
+  View: processViewActivity
 }
 
 async function processActivities (
@@ -40,7 +46,7 @@ async function processActivities (
       continue
     }
 
-    const actorUrl = getAPUrl(activity.actor)
+    const actorUrl = getAPId(activity.actor)
 
     // When we fetch remote data, we don't have signature
     if (options.signatureActor && actorUrl !== options.signatureActor.url) {

@@ -75,6 +75,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
     expect(data.totalLocalVideoViews).to.equal(0)
+    expect(data.totalLocalVideoFilesSize).to.equal(0)
     expect(data.totalUsers).to.equal(1)
     expect(data.totalVideoComments).to.equal(1)
     expect(data.totalVideos).to.equal(1)

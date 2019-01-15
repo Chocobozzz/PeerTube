@@ -28,7 +28,7 @@ import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
-import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { Notifier } from '../notifier'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
@@ -155,7 +155,7 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
 }
 
 async function getOrCreateVideoAndAccountAndChannel (options: {
-  videoObject: VideoTorrentObject | string,
+  videoObject: { id: string } | string,
   syncParam?: SyncParam,
   fetchType?: VideoFetchByUrlType,
   allowRefresh?: boolean // true by default
@@ -166,7 +166,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
   const allowRefresh = options.allowRefresh !== false
 
   // Get video url
-  const videoUrl = getAPUrl(options.videoObject)
+  const videoUrl = getAPId(options.videoObject)
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {

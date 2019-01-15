@@ -14,25 +14,9 @@ import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from
 import { VideoState } from '../../../../shared/models/videos'
 import { isVideoAbuseReasonValid } from '../video-abuses'
 
-function sanitizeAndCheckVideoTorrentCreateActivity (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    sanitizeAndCheckVideoTorrentObject(activity.object)
-}
-
 function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     sanitizeAndCheckVideoTorrentObject(activity.object)
-}
-
-function isVideoTorrentDeleteActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Delete')
-}
-
-function isVideoFlagValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    activity.object.type === 'Flag' &&
-    isVideoAbuseReasonValid(activity.object.content) &&
-    isActivityPubUrlValid(activity.object.object)
 }
 
 function isActivityPubVideoDurationValid (value: string) {
@@ -103,11 +87,8 @@ function isRemoteVideoUrlValid (url: any) {
 // ---------------------------------------------------------------------------
 
 export {
-  sanitizeAndCheckVideoTorrentCreateActivity,
   sanitizeAndCheckVideoTorrentUpdateActivity,
-  isVideoTorrentDeleteActivityValid,
   isRemoteStringIdentifierValid,
-  isVideoFlagValid,
   sanitizeAndCheckVideoTorrentObject,
   isRemoteVideoUrlValid
 }

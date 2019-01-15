@@ -1,26 +1,14 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import {
-  isActorAcceptActivityValid,
-  isActorDeleteActivityValid,
-  isActorFollowActivityValid,
-  isActorRejectActivityValid,
-  isActorUpdateActivityValid
-} from './actor'
-import { isAnnounceActivityValid } from './announce'
-import { isActivityPubUrlValid } from './misc'
-import { isDislikeActivityValid, isLikeActivityValid } from './rate'
-import { isUndoActivityValid } from './undo'
-import { isVideoCommentCreateActivityValid, isVideoCommentDeleteActivityValid } from './video-comments'
-import {
-  isVideoFlagValid,
-  isVideoTorrentDeleteActivityValid,
-  sanitizeAndCheckVideoTorrentCreateActivity,
-  sanitizeAndCheckVideoTorrentUpdateActivity
-} from './videos'
+import { sanitizeAndCheckActorObject } from './actor'
+import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './misc'
+import { isDislikeActivityValid } from './rate'
+import { sanitizeAndCheckVideoCommentObject } from './video-comments'
+import { sanitizeAndCheckVideoTorrentObject } from './videos'
 import { isViewActivityValid } from './view'
 import { exists } from '../misc'
-import { isCacheFileCreateActivityValid, isCacheFileUpdateActivityValid } from './cache-file'
+import { isCacheFileObjectValid } from './cache-file'
+import { isFlagActivityValid } from './flag'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) && (
@@ -46,7 +34,10 @@ const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean
   Reject: checkRejectActivity,
   Announce: checkAnnounceActivity,
   Undo: checkUndoActivity,
-  Like: checkLikeActivity
+  Like: checkLikeActivity,
+  View: checkViewActivity,
+  Flag: checkFlagActivity,
+  Dislike: checkDislikeActivity
 }
 
 function isActivityValid (activity: any) {
@@ -66,47 +57,79 @@ export {
 
 // ---------------------------------------------------------------------------
 
+function checkViewActivity (activity: any) {
+  return isBaseActivityValid(activity, 'View') &&
+    isViewActivityValid(activity)
+}
+
+function checkFlagActivity (activity: any) {
+  return isBaseActivityValid(activity, 'Flag') &&
+    isFlagActivityValid(activity)
+}
+
+function checkDislikeActivity (activity: any) {
+  return isBaseActivityValid(activity, 'Dislike') &&
+    isDislikeActivityValid(activity)
+}
+
 function checkCreateActivity (activity: any) {
-  return isViewActivityValid(activity) ||
-    isDislikeActivityValid(activity) ||
-    sanitizeAndCheckVideoTorrentCreateActivity(activity) ||
-    isVideoFlagValid(activity) ||
-    isVideoCommentCreateActivityValid(activity) ||
-    isCacheFileCreateActivityValid(activity)
+  return isBaseActivityValid(activity, 'Create') &&
+    (
+      isViewActivityValid(activity.object) ||
+      isDislikeActivityValid(activity.object) ||
+      isFlagActivityValid(activity.object) ||
+
+      isCacheFileObjectValid(activity.object) ||
+      sanitizeAndCheckVideoCommentObject(activity.object) ||
+      sanitizeAndCheckVideoTorrentObject(activity.object)
+    )
 }
 
 function checkUpdateActivity (activity: any) {
-  return isCacheFileUpdateActivityValid(activity) ||
-    sanitizeAndCheckVideoTorrentUpdateActivity(activity) ||
-    isActorUpdateActivityValid(activity)
+  return isBaseActivityValid(activity, 'Update') &&
+    (
+      isCacheFileObjectValid(activity.object) ||
+      sanitizeAndCheckVideoTorrentObject(activity.object) ||
+      sanitizeAndCheckActorObject(activity.object)
+    )
 }
 
 function checkDeleteActivity (activity: any) {
-  return isVideoTorrentDeleteActivityValid(activity) ||
-    isActorDeleteActivityValid(activity) ||
-    isVideoCommentDeleteActivityValid(activity)
+  // We don't really check objects
+  return isBaseActivityValid(activity, 'Delete') &&
+    isObjectValid(activity.object)
 }
 
 function checkFollowActivity (activity: any) {
-  return isActorFollowActivityValid(activity)
+  return isBaseActivityValid(activity, 'Follow') &&
+    isObjectValid(activity.object)
 }
 
 function checkAcceptActivity (activity: any) {
-  return isActorAcceptActivityValid(activity)
+  return isBaseActivityValid(activity, 'Accept')
 }
 
 function checkRejectActivity (activity: any) {
-  return isActorRejectActivityValid(activity)
+  return isBaseActivityValid(activity, 'Reject')
 }
 
 function checkAnnounceActivity (activity: any) {
-  return isAnnounceActivityValid(activity)
+  return isBaseActivityValid(activity, 'Announce') &&
+    isObjectValid(activity.object)
 }
 
 function checkUndoActivity (activity: any) {
-  return isUndoActivityValid(activity)
+  return isBaseActivityValid(activity, 'Undo') &&
+    (
+      checkFollowActivity(activity.object) ||
+      checkLikeActivity(activity.object) ||
+      checkDislikeActivity(activity.object) ||
+      checkAnnounceActivity(activity.object) ||
+      checkCreateActivity(activity.object)
+    )
 }
 
 function checkLikeActivity (activity: any) {
-  return isLikeActivityValid(activity)
+  return isBaseActivityValid(activity, 'Like') &&
+    isObjectValid(activity.object)
 }

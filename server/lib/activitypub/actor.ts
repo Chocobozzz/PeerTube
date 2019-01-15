@@ -4,7 +4,7 @@ import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
@@ -42,7 +42,7 @@ async function getOrCreateActorAndServerAndModel (
   recurseIfNeeded = true,
   updateCollections = false
 ) {
-  const actorUrl = getAPUrl(activityActor)
+  const actorUrl = getAPId(activityActor)
   let created = false
 
   let actor = await fetchActorByUrl(actorUrl, fetchType)

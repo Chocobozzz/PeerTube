@@ -1,17 +1,7 @@
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid } from './misc'
 import { isRemoteVideoUrlValid } from './videos'
-import { isDateValid, exists } from '../misc'
+import { exists, isDateValid } from '../misc'
 import { CacheFileObject } from '../../../../shared/models/activitypub/objects'
-
-function isCacheFileCreateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    isCacheFileObjectValid(activity.object)
-}
-
-function isCacheFileUpdateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Update') &&
-    isCacheFileObjectValid(activity.object)
-}
 
 function isCacheFileObjectValid (object: CacheFileObject) {
   return exists(object) &&
@@ -22,7 +12,5 @@ function isCacheFileObjectValid (object: CacheFileObject) {
 }
 
 export {
-  isCacheFileUpdateActivityValid,
-  isCacheFileCreateActivityValid,
   isCacheFileObjectValid
 }

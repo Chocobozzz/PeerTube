@@ -26,6 +26,10 @@ async function processUndoActivity (activity: ActivityUndo, byActor: ActorModel)
     }
   }
 
+  if (activityToUndo.type === 'Dislike') {
+    return retryTransactionWrapper(processUndoDislike, byActor, activity)
+  }
+
   if (activityToUndo.type === 'Follow') {
     return retryTransactionWrapper(processUndoFollow, byActor, activityToUndo)
   }
@@ -72,7 +76,9 @@ async function processUndoLike (byActor: ActorModel, activity: ActivityUndo) {
 }
 
 async function processUndoDislike (byActor: ActorModel, activity: ActivityUndo) {
-  const dislike = activity.object.object as DislikeObject
+  const dislike = activity.object.type === 'Dislike'
+    ? activity.object
+    : activity.object.object as DislikeObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislike.object })
 

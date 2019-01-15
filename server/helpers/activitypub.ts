@@ -106,7 +106,7 @@ function buildSignedActivity (byActor: ActorModel, data: Object) {
   return signJsonLDObject(byActor, activity) as Promise<Activity>
 }
 
-function getAPUrl (activity: string | { id: string }) {
+function getAPId (activity: string | { id: string }) {
   if (typeof activity === 'string') return activity
 
   return activity.id
@@ -123,7 +123,7 @@ function checkUrlsSameHost (url1: string, url2: string) {
 
 export {
   checkUrlsSameHost,
-  getAPUrl,
+  getAPId,
   activityPubContextify,
   activityPubCollectionPagination,
   buildSignedActivity

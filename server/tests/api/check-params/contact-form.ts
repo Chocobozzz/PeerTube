@@ -46,6 +46,8 @@ describe('Test contact form API validators', function () {
   })
 
   it('Should not accept a contact form if it is disabled in the configuration', async function () {
+    this.timeout(10000)
+
     killallServers([ server ])
 
     // Contact form is disabled
@@ -54,6 +56,8 @@ describe('Test contact form API validators', function () {
   })
 
   it('Should not accept a contact form if from email is invalid', async function () {
+    this.timeout(10000)
+
     killallServers([ server ])
 
     // Email & contact form enabled
