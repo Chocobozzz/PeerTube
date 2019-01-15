@@ -3,22 +3,18 @@ import * as express from 'express'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
-import { buildAnnounceWithVideoAudience, buildDislikeActivity, buildLikeActivity } from '../../lib/activitypub/send'
+import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
 import {
   asyncMiddleware,
-  videosShareValidator,
   executeIfActivityPub,
   localAccountValidator,
   localVideoChannelValidator,
-  videosCustomGetValidator
+  videosCustomGetValidator,
+  videosShareValidator
 } from '../../middlewares'
-import {
-  getAccountVideoRateValidator,
-  videoCommentGetValidator,
-  videosGetValidator
-} from '../../middlewares/validators'
+import { getAccountVideoRateValidator, videoCommentGetValidator, videosGetValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
@@ -40,6 +36,7 @@ import { VideoCaptionModel } from '../../models/video/video-caption'
 import { videoRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { getServerActor } from '../../helpers/utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
+import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 
 const activityPubClientRouter = express.Router()
 
@@ -156,7 +153,7 @@ function getAccountVideoRate (rateType: VideoRateType) {
     const url = getRateUrl(rateType, byActor, accountVideoRate.Video)
     const APObject = rateType === 'like'
       ? buildLikeActivity(url, byActor, accountVideoRate.Video)
-      : buildCreateActivity(url, byActor, buildDislikeActivity(url, byActor, accountVideoRate.Video))
+      : buildDislikeActivity(url, byActor, accountVideoRate.Video)
 
     return activityPubResponse(activityPubContextify(APObject), res)
   }

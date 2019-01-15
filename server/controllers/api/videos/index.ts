@@ -23,7 +23,6 @@ import {
   fetchRemoteVideoDescription,
   getVideoActivityPubUrl
 } from '../../../lib/activitypub'
-import { sendCreateView } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
@@ -59,6 +58,7 @@ import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
 import { Notifier } from '../../../lib/notifier'
+import { sendView } from '../../../lib/activitypub/send/send-view'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -422,7 +422,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   ])
 
   const serverActor = await getServerActor()
-  await sendCreateView(serverActor, videoInstance, undefined)
+  await sendView(serverActor, videoInstance, undefined)
 
   return res.status(204).end()
 }
