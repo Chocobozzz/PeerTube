@@ -395,7 +395,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    return VideoRedundancyModel.find(query as any) // FIXME: typings
+    return VideoRedundancyModel.findOne(query as any) // FIXME: typings
       .then((r: any) => ({
         totalUsed: parseInt(r.totalUsed.toString(), 10),
         totalVideos: r.totalVideos,

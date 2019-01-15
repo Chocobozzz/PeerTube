@@ -120,6 +120,26 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return VideoFileModel.findById(id, options)
   }
 
+  static async getStats () {
+    let totalLocalVideoFilesSize = await VideoFileModel.sum('size', {
+      include: [
+        {
+          attributes: [],
+          model: VideoModel.unscoped(),
+          where: {
+            remote: false
+          }
+        }
+      ]
+    } as any)
+    // Sequelize could return null...
+    if (!totalLocalVideoFilesSize) totalLocalVideoFilesSize = 0
+
+    return {
+      totalLocalVideoFilesSize
+    }
+  }
+
   hasSameUniqueKeysThan (other: VideoFileModel) {
     return this.fps === other.fps &&
       this.resolution === other.resolution &&
