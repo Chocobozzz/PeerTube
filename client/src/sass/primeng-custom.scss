@@ -301,6 +301,11 @@ p-inputswitch {
 }
 
 p-toast {
+  .ui-toast {
+    // Modal is 10005
+    z-index: 10010 !important;
+  }
+
   .ui-toast-message {
     font-family: $main-fonts;
 
