@@ -2,13 +2,15 @@
 @import '_mixins';
 
 .help-tooltip-button {
-  @include icon(17px);
-
-  position: relative;
-  top: -2px;
-  background-image: url('../../../assets/images/global/help.svg');
+  cursor: pointer;
   border: none;
-  margin: 5px;
+
+  my-global-icon {
+    width: 17px;
+    position: relative;
+    top: -2px;
+    margin: 5px;
+  }
 }
 
 /deep/ {
@@ -24,8 +26,13 @@
       color: #000;
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
 
+      p:last-child {
+        margin-bottom: 0;
+      }
+
       ul {
         padding-left: 20px;
+        margin-bottom: 0;
       }
     }
   }

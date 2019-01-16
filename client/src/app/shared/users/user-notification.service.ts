@@ -15,8 +15,6 @@ export class UserNotificationService {
   static BASE_NOTIFICATIONS_URL = environment.apiUrl + '/api/v1/users/me/notifications'
   static BASE_NOTIFICATION_SETTINGS = environment.apiUrl + '/api/v1/users/me/notification-settings'
 
-  private socket: SocketIOClient.Socket
-
   constructor (
     private auth: AuthService,
     private authHttp: HttpClient,

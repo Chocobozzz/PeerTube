@@ -87,10 +87,10 @@
           text-overflow: ellipsis;
           white-space: nowrap;
           font-size: 14px;
-          color: #585858;
+          color: $grey-foreground-color;
 
           &:hover {
-            color: #303030;
+            color: $grey-foreground-hover-color;
           }
         }
       }

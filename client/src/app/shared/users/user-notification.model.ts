@@ -1,4 +1,5 @@
-import { UserNotification as UserNotificationServer, UserNotificationType, VideoInfo } from '../../../../../shared'
+import { UserNotification as UserNotificationServer, UserNotificationType, VideoInfo, ActorInfo } from '../../../../../shared'
+import { Actor } from '@app/shared/actor/actor.model'
 
 export class UserNotification implements UserNotificationServer {
   id: number
@@ -6,10 +7,7 @@ export class UserNotification implements UserNotificationServer {
   read: boolean
 
   video?: VideoInfo & {
-    channel: {
-      id: number
-      displayName: string
-    }
+    channel: ActorInfo & { avatarUrl?: string }
   }
 
   videoImport?: {
@@ -23,10 +21,7 @@ export class UserNotification implements UserNotificationServer {
   comment?: {
     id: number
     threadId: number
-    account: {
-      id: number
-      displayName: string
-    }
+    account: ActorInfo & { avatarUrl?: string }
     video: VideoInfo
   }
 
@@ -40,18 +35,11 @@ export class UserNotification implements UserNotificationServer {
     video: VideoInfo
   }
 
-  account?: {
-    id: number
-    displayName: string
-    name: string
-  }
+  account?: ActorInfo & { avatarUrl?: string }
 
   actorFollow?: {
     id: number
-    follower: {
-      name: string
-      displayName: string
-    }
+    follower: ActorInfo & { avatarUrl?: string }
     following: {
       type: 'account' | 'channel'
       name: string
@@ -76,12 +64,22 @@ export class UserNotification implements UserNotificationServer {
     this.read = hash.read
 
     this.video = hash.video
+    if (this.video) this.setAvatarUrl(this.video.channel)
+
     this.videoImport = hash.videoImport
+
     this.comment = hash.comment
+    if (this.comment) this.setAvatarUrl(this.comment.account)
+
     this.videoAbuse = hash.videoAbuse
+
     this.videoBlacklist = hash.videoBlacklist
+
     this.account = hash.account
+    if (this.account) this.setAvatarUrl(this.account)
+
     this.actorFollow = hash.actorFollow
+    if (this.actorFollow) this.setAvatarUrl(this.actorFollow.follower)
 
     this.createdAt = hash.createdAt
     this.updatedAt = hash.updatedAt
@@ -150,4 +148,7 @@ export class UserNotification implements UserNotificationServer {
     return videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
   }
 
+  private setAvatarUrl (actor: { avatarUrl?: string, avatar?: { path: string } }) {
+    actor.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(actor)
+  }
 }

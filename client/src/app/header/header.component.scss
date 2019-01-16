@@ -40,20 +40,12 @@
 .upload-button {
   @include peertube-button-link;
   @include orange-button;
+  @include button-with-icon(22px, 3px, -1px);
 
   margin-right: 25px;
 
   @media screen and (max-width: 800px) {
     margin-right: 0;
-  }
-
-  .icon.icon-upload {
-    @include icon(22px);
-
-    background-image: url('../../assets/images/header/upload-white.svg');
-    height: 24px;
-    vertical-align: middle;
-    margin-right: 6px;
   }
 
   @media screen and (max-width: 600px) {

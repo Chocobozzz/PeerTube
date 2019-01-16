@@ -67,6 +67,8 @@ import { UserNotificationService } from '@app/shared/users/user-notification.ser
 import { UserNotificationsComponent } from '@app/shared/users/user-notifications.component'
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
+import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
+import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
 
 @NgModule({
   imports: [
@@ -110,7 +112,9 @@ import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/sha
     UserBanModalComponent,
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
-    UserNotificationsComponent
+    UserNotificationsComponent,
+    ConfirmComponent,
+    GlobalIconComponent
   ],
 
   exports: [
@@ -151,6 +155,8 @@ import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/sha
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
     UserNotificationsComponent,
+    ConfirmComponent,
+    GlobalIconComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,

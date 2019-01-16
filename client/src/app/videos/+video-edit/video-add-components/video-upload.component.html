@@ -1,6 +1,6 @@
 <div *ngIf="!isUploadingVideo" class="upload-video-container">
-  <div class="upload-video">
-    <div class="icon icon-upload"></div>
+  <div class="first-step-block">
+    <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
 
     <div class="button-file">
       <span i18n>Select the file to upload</span>
@@ -61,7 +61,7 @@
        (click)="updateSecondStep()"
        [ngClass]="{ disabled: isPublishingButtonDisabled() }"
     >
-      <span class="icon icon-validate"></span>
+      <my-global-icon iconName="validate"></my-global-icon>
       <input [disabled]="isPublishingButtonDisabled()" type="button" i18n-value value="Publish" />
     </div>
   </div>

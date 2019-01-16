@@ -45,7 +45,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     })
   }
 
-  hideModerationCommentModal () {
+  hide () {
     this.abuseToComment = undefined
     this.openedModal.close()
     this.form.reset()
@@ -60,7 +60,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
             this.notifier.success(this.i18n('Comment updated.'))
 
             this.commentUpdated.emit(moderationComment)
-            this.hideModerationCommentModal()
+            this.hide()
           },
 
           err => this.notifier.error(err.message)

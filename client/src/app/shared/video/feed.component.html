@@ -1,8 +1,9 @@
 <div class="video-feed">
-  <span
+  <my-global-icon
     *ngIf="syndicationItems.length !== 0" [ngbPopover]="feedsList" [autoClose]="true" placement="bottom"
-    class="icon icon-syndication" role="button"
-  ></span>
+    class="icon-syndication" role="button" iconName="syndication"
+  >
+  </my-global-icon>
 
   <ng-template #feedsList>
     <a *ngFor="let item of syndicationItems" [href]="item.url" target="_blank" rel="noopener noreferrer">{{ item.label }}</a>

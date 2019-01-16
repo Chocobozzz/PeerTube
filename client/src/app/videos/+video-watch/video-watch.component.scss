@@ -183,6 +183,8 @@ $other-videos-width: 260px;
           .action-button {
             @include peertube-button;
             @include grey-button;
+            @include button-with-icon(21px, 0, -1px);
+            @include apply-svg-color($grey-foreground-color);
 
             font-size: 15px;
             font-weight: $font-semibold;
@@ -194,52 +196,24 @@ $other-videos-width: 260px;
               display: none;
             }
 
-            .icon {
-              @include icon(21px);
-
-              position: relative;
-              top: -2px;
-
-              &.icon-like {
-                background-image: url('../../../assets/images/video/like-grey.svg');
-              }
-
-              &.icon-dislike {
-                background-image: url('../../../assets/images/video/dislike-grey.svg');
-              }
-
-              &.icon-support {
-                background-image: url('../../../assets/images/video/heart.svg');
-              }
-
-              &.icon-share {
-                background-image: url('../../../assets/images/video/share.svg');
-              }
-
-              &.icon-more {
-                background-image: url('../../../assets/images/video/more.svg');
-                top: -1px;
-              }
-            }
-
-            .icon-text {
-              margin-left: 3px;
-            }
-
             &.action-button-like.activated {
               background-color: $green;
 
-              .icon-like {
-                background-image: url('../../../assets/images/video/like-white.svg');
+              my-global-icon {
+                @include apply-svg-color(#fff);
               }
             }
 
             &.action-button-dislike.activated {
               background-color: $red;
 
-              .icon-dislike {
-                background-image: url('../../../assets/images/video/dislike-white.svg');
+              my-global-icon {
+                @include apply-svg-color(#fff);
               }
+            }
+
+            .icon-text {
+              margin-left: 3px;
             }
           }
 
@@ -249,36 +223,12 @@ $other-videos-width: 260px;
             .dropdown-menu .dropdown-item {
               padding: 6px 24px;
 
-              .icon {
-                @include icon(24px);
+              my-global-icon {
+                width: 24px;
 
                 margin-right: 10px;
                 position: relative;
-                top: -1px;
-
-                &.icon-download {
-                  background-image: url('../../../assets/images/video/download-black.svg');
-                }
-
-                &.icon-edit {
-                  background-image: url('../../../assets/images/global/edit-black.svg');
-                }
-
-                &.icon-alert {
-                  background-image: url('../../../assets/images/video/alert.svg');
-                }
-
-                &.icon-blacklist {
-                  background-image: url('../../../assets/images/video/blacklist.svg');
-                }
-
-                &.icon-unblacklist {
-                  background-image: url('../../../assets/images/global/undo.svg');
-                }
-
-                &.icon-delete {
-                  background-image: url('../../../assets/images/global/delete-black.svg');
-                }
+                top: -2px;
               }
             }
           }
@@ -320,7 +270,7 @@ $other-videos-width: 260px;
       .video-info-description-more {
         cursor: pointer;
         font-weight: $font-semibold;
-        color: #585858;
+        color: $grey-foreground-color;
         font-size: 14px;
 
         .glyphicon {
@@ -339,7 +289,7 @@ $other-videos-width: 260px;
         min-width: 91px;
         padding-right: 5px;
         display: inline-block;
-        color: #585858;
+        color: $grey-foreground-color;
         font-weight: $font-bold;
       }
 

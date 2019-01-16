@@ -8,7 +8,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 
 import { AuthService } from './auth'
-import { ConfirmComponent, ConfirmService } from './confirm'
+import { ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
@@ -38,7 +38,6 @@ import { UserNotificationSocket } from '@app/core/notification/user-notification
   ],
 
   declarations: [
-    ConfirmComponent,
     CheatSheetComponent
   ],
 
@@ -48,7 +47,6 @@ import { UserNotificationSocket } from '@app/core/notification/user-notification
 
     ToastModule,
 
-    ConfirmComponent,
     CheatSheetComponent
   ],
 

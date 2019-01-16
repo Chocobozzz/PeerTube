@@ -18,7 +18,8 @@ import { scrollToTop } from '@app/shared/misc/utils'
   templateUrl: './video-import-torrent.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-import-torrent.component.scss'
+    './video-import-torrent.component.scss',
+    './video-send.scss'
   ]
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {

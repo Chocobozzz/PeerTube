@@ -20,11 +20,7 @@ export class UserNotificationsComponent implements OnInit {
   // So we can access it in the template
   UserNotificationType = UserNotificationType
 
-  componentPagination: ComponentPagination = {
-    currentPage: 1,
-    itemsPerPage: this.itemsPerPage,
-    totalItems: null
-  }
+  componentPagination: ComponentPagination
 
   constructor (
     private userNotificationService: UserNotificationService,
@@ -32,6 +28,12 @@ export class UserNotificationsComponent implements OnInit {
   ) { }
 
   ngOnInit () {
+    this.componentPagination = {
+      currentPage: 1,
+      itemsPerPage: this.itemsPerPage, // Reset items per page, because of the @Input() variable
+      totalItems: null
+    }
+
     this.loadMoreNotifications()
   }
 
@@ -58,6 +60,8 @@ export class UserNotificationsComponent implements OnInit {
   }
 
   markAsRead (notification: UserNotification) {
+    if (notification.read) return
+
     this.userNotificationService.markAsRead(notification)
         .subscribe(
           () => {

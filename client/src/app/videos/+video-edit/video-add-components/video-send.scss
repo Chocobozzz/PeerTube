@@ -3,10 +3,6 @@
 
 $width-size: 190px;
 
-.peertube-select-container {
-  @include peertube-select-container($width-size);
-}
-
 .alert.alert-danger {
   text-align: center;
 
@@ -15,17 +11,20 @@ $width-size: 190px;
   }
 }
 
-.import-video-url {
+.first-step-block {
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  .icon.icon-upload {
-    @include icon(90px);
+  .upload-icon {
+    width: 90px;
     margin-bottom: 25px;
-    cursor: default;
 
-    background-image: url('../../../../assets/images/video/upload.svg');
+    @include apply-svg-color(#C6C6C6);
+  }
+
+  .peertube-select-container {
+    @include peertube-select-container($width-size);
   }
 
   input[type=text] {
@@ -40,6 +39,16 @@ $width-size: 190px;
     width: $width-size;
     margin-top: 30px;
   }
+
+  .button-file {
+    @include peertube-button-file(auto);
+
+    min-width: 190px;
+  }
+
+  .button-file-extension {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+  }
 }
-
-

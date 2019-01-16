@@ -42,7 +42,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     this.openedModal = this.modalService.open(this.modal)
   }
 
-  hideBanUserModal () {
+  hide () {
     this.usersToBan = undefined
     this.openedModal.close()
   }
@@ -60,7 +60,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
           this.notifier.success(message)
 
           this.userBanned.emit(this.usersToBan)
-          this.hideBanUserModal()
+          this.hide()
         },
 
           err => this.notifier.error(err.message)
