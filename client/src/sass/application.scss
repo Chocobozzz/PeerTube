@@ -290,11 +290,11 @@ ngb-tabset.bootstrap {
       @include disable-default-a-behaviour;
 
       color: var(--mainForegroundColor) !important;
-
-      &.active {
-        color: #000 !important;
-      }
     }
+  }
+
+  .nav-pills .nav-link.active {
+    color: #000 !important;
   }
 }
 

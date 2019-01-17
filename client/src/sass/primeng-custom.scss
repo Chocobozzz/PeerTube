@@ -197,7 +197,7 @@ p-table {
         height: auto !important;
 
         a {
-          color: #000 !important;
+          color: var(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
           margin: 0 5px !important;
           outline: 0 !important;
@@ -234,6 +234,7 @@ p-calendar .ui-datepicker {
       @extend .glyphicon-chevron-right;
       @include glyphicon-light;
 
+      color: #000 !important;
       text-align: right;
 
       .pi.pi-chevron-right {
@@ -245,6 +246,7 @@ p-calendar .ui-datepicker {
       @extend .glyphicon-chevron-left;
       @include glyphicon-light;
 
+      color: #000 !important;
       text-align: left;
 
       .pi.pi-chevron-left {
@@ -258,11 +260,15 @@ p-calendar .ui-datepicker {
     .pi.pi-chevron-up {
       @extend .glyphicon-chevron-up;
       @include glyphicon-light;
+
+      color: #000 !important;
     }
 
     .pi.pi-chevron-down {
       @extend .glyphicon-chevron-down;
       @include glyphicon-light;
+
+      color: #000 !important;
     }
   }
 }
