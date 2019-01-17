@@ -14,7 +14,7 @@
 p-table {
   .ui-table-caption {
     border: none !important;
-    background-color: #fff !important;
+    background-color: var(--mainBackgroundColor) !important;
 
     .caption {
       height: 40px;
@@ -24,7 +24,7 @@ p-table {
   }
 
   th {
-    background-color: #fff !important;
+    background-color: var(--mainBackgroundColor) !important;
     outline: 0;
   }
 
@@ -122,10 +122,14 @@ p-table {
 
         &.pi-sort-up {
           @extend .glyphicon-triangle-top;
+
+          color: var(--mainForegroundColor) !important;
         }
 
         &.pi-sort-down {
           @extend .glyphicon-triangle-bottom;
+
+          color: var(--mainForegroundColor) !important;
         }
       }
     }

@@ -10,6 +10,8 @@
     position: relative;
     top: -2px;
     margin: 5px;
+
+    @include apply-svg-color(var(--mainForegroundColor))
   }
 }
 
@@ -18,15 +20,15 @@
     max-width: 300px;
 
     .popover-body {
+      font-family: $main-fonts;
       text-align: left;
       padding: 10px;
       font-size: 13px;
-      font-family: $main-fonts;
-      background-color: #fff;
-      color: #000;
+      background-color: var(--mainBackgroundColor);
+      color: var(--mainForegroundColor);
       box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
 
-      p:last-child {
+      p {
         margin-bottom: 0;
       }
 

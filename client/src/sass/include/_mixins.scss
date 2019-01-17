@@ -57,11 +57,11 @@
 
 @mixin apply-svg-color ($color) {
   /deep/ svg {
-    path[fill="#000000"], g[fill="#000000"], rect[fill="#000000"] {
+    path[fill="#000000"], g[fill="#000000"], rect[fill="#000000"], circle[fill="#000000"] {
       fill: $color;
     }
 
-    path[stroke="#000000"], g[stroke="#000000"], rect[stroke="#000000"] {
+    path[stroke="#000000"], g[stroke="#000000"], rect[stroke="#000000"], circle[stroke="#000000"] {
       stroke: $color;
     }
   }
