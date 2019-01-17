@@ -23,10 +23,6 @@ my-peertube-checkbox {
     display: block;
   }
 
-  input, select {
-    font-size: 15px
-  }
-
   .label-tags + span {
     font-size: 15px;
   }
@@ -167,10 +163,10 @@ p-calendar {
   }
 
   tag {
-    background-color: var(--inputColor) !important;
+    background-color: $grey-background-color !important;
+    color: #000 !important;
     border-radius: 3px !important;
     font-size: 15px !important;
-    color: var(--mainForegroundColor) !important;
     height: 30px !important;
     line-height: 30px !important;
     margin: 0 5px 0 0 !important;
@@ -193,7 +189,10 @@ p-calendar {
       top: -1px;
       height: auto !important;
       vertical-align: middle !important;
-      fill: $grey-foreground-color !important;
+
+      path  {
+        fill: $grey-foreground-color !important;
+      }
     }
 
     &:hover {
