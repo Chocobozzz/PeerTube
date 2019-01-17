@@ -41,7 +41,7 @@ async function getVideoFileResolution (path: string) {
 async function getVideoFileFPS (path: string) {
   const videoStream = await getVideoFileStream(path)
 
-  for (const key of [ 'r_frame_rate' , 'avg_frame_rate' ]) {
+  for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
     const valuesText: string = videoStream[key]
     if (!valuesText) continue
 
