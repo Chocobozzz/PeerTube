@@ -5,14 +5,14 @@
 ### BREAKING CHANGES
 
  * **Docker:** `PEERTUBE_TRUST_PROXY` env variable is now an array ([LecygneNoir](https://github.com/LecygneNoir))
- * **nginx:** Add redundancy endpoint in static file. **You should add it your nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx**
+ * **nginx:** Add redundancy endpoint in static file. **You should add it in your nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx**
  * Moderators can manage users now (add/delete/update/block)
  * Add `tmp` and `redundancy` directories in configuration file. **You should configure them in your production.yaml**
 
 ### Maintenance
 
  * Check free storage before upgrading in upgrade script ([@Nutomic](https://github.com/nutomic))
- * Explain that PeerTube must be stopped before running prune storage script
+ * Explain that PeerTube must be stopped in prune storage script
  * Add some security directives in the systemd unit configuration file ([@rigelk](https://github.com/rigelk) & [@mkoppmann](https://github.com/mkoppmann))
  * Update FreeBSD startup script ([@gegeweb](https://github.com/gegeweb))
 
@@ -22,6 +22,7 @@
 
 ### Features
 
+ * Add Russian, Polish and Italian languages
  * Add user notifications:
    * Notification types:
      * Comment on my video
@@ -38,14 +39,13 @@
      * Send an english email
  * Add contact form in about page (**enabled by default**)
  * Add ability to unfederate a local video in blacklist modal (**checkbox checked by default**)
- * Add Russian, Polish and Italian languages
  * Support additional video extensions if transcoding is enabled (**enabled by default**)
  * Redirect to the last url on login
  * Add ability to automatically set the video caption in URL. Example: https://peertube2.cpy.re/videos/watch/9c9de5e8-0a1e-484a-b099-e80766180a6d?subtitle=ru
+ * Automatically enable the last selected caption when watching a video
  * Add ability to disable, clear and list user videos history
- * Automatically enabled the last selected caption when watching a video
  * Add a button to help to translate peertube
- * Add text in the report modal to explain whom the report will be sent
+ * Add text in the report modal to explain to whom the report will be sent
  * Open my account menu entries on hover
  * Explain what features are enabled on the instance in the about page
  * Add an error message in the forgot password modal if the instance email system is not configured
@@ -56,9 +56,9 @@
  * Update title and description HTML tags when rendering video HTML page
  * Add webfinger support for remote follows ([@acid-chicken](https://github.com/acid-chicken))
  * Add tooltip to explain how the trending algorithm works ([@auberanger](https://github.com/auberanger))
- * Warn users when they want to delete a channel because they will not be able to create another channel with the same actor name
+ * Warn users when they want to delete a channel because they will not be able to create another channel with the same name
  * Warn users when they leave the video upload/update (on page refresh/tab close)
- * Set max username, user display name, channel name and channel display name lengths to 50 characters ([@McFlat](https://github.com/mcflat))
+ * Set max user name, user display name, channel name and channel display name lengths to 50 characters ([@McFlat](https://github.com/mcflat))
  * Increase video abuse length to 3000 characters
  * Add totalLocalVideoFilesSize in the stats endpoint
 
@@ -70,15 +70,15 @@
  * Add error message when trying to upload .ass subtitles
  * Fix default homepage in the progressive web application
  * Don't crash on queue error
- * Fix EXDEV if you have multiple mount points
- * Fix broken audio with transcoding with some videos
+ * Fix EXDEV errors if you have multiple mount points
+ * Fix broken audio in transcoding with some videos
  * Fix crash on getVideoFileStream issue
  * Fix followers search
  * Remove trailing `/` in CLI import script ([@HesioZ](https://github.com/HesioZ/))
  * Use origin video url in canonical tag
  * Fix captions in HTTP fallback
  * Automatically refresh remote actors to fix deleted remote actors that are still displayed on some instances
- * Add missing translations in embed template
+ * Add missing translations in video embed page
  * Fix some styling issues in dark mode
  * Fix transcoding issues with some videos
 
