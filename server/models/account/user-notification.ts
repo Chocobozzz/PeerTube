@@ -28,6 +28,7 @@ import { VideoImportModel } from '../video/video-import'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { AvatarModel } from '../avatar/avatar'
+import { ServerModel } from '../server/server'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'
@@ -42,6 +43,11 @@ function buildActorWithAvatarInclude () {
       {
         attributes: [ 'filename' ],
         model: () => AvatarModel.unscoped(),
+        required: false
+      },
+      {
+        attributes: [ 'host' ],
+        model: () => ServerModel.unscoped(),
         required: false
       }
     ]
@@ -131,6 +137,11 @@ function buildAccountInclude (required: boolean, withActor = false) {
               {
                 attributes: [ 'filename' ],
                 model: () => AvatarModel.unscoped(),
+                required: false
+              },
+              {
+                attributes: [ 'host' ],
+                model: () => ServerModel.unscoped(),
                 required: false
               }
             ]
@@ -411,7 +422,8 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
         id: this.ActorFollow.ActorFollower.Account.id,
         displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
         name: this.ActorFollow.ActorFollower.preferredUsername,
-        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getWebserverPath() } : undefined
+        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getWebserverPath() } : undefined,
+        host: this.ActorFollow.ActorFollower.getHost()
       },
       following: {
         type: this.ActorFollow.ActorFollowing.VideoChannel ? 'channel' as 'channel' : 'account' as 'account',
@@ -453,6 +465,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       id: accountOrChannel.id,
       displayName: accountOrChannel.getDisplayName(),
       name: accountOrChannel.Actor.preferredUsername,
+      host: accountOrChannel.Actor.getHost(),
       avatar
     }
   }

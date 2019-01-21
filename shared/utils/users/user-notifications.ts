@@ -146,6 +146,7 @@ function checkVideo (video: any, videoName?: string, videoUUID?: string) {
 function checkActor (actor: any) {
   expect(actor.displayName).to.be.a('string')
   expect(actor.displayName).to.not.be.empty
+  expect(actor.host).to.not.be.undefined
 }
 
 function checkComment (comment: any, commentId: number, threadId: number) {

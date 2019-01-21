@@ -26,6 +26,7 @@ export interface ActorInfo {
   id: number
   displayName: string
   name: string
+  host: string
   avatar?: {
     path: string
   }
