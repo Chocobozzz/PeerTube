@@ -39,18 +39,21 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
     this.generateSyndicationList()
 
-    const trendingDays = this.serverService.getConfig().trending.videos.intervalDays
+    this.serverService.configLoaded.subscribe(
+      () => {
+        const trendingDays = this.serverService.getConfig().trending.videos.intervalDays
 
-    if (trendingDays === 1) {
-      this.titlePage = this.i18n('Trending for the last 24 hours')
-      this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours.')
-    } else {
-      this.titlePage = this.i18n('Trending for the last {{days}} days', { days: trendingDays })
-      this.titleTooltip = this.i18n(
-        'Trending videos are those totalizing the greatest number of views during the last {{days}} days.',
-        { days: trendingDays }
-      )
-    }
+        if (trendingDays === 1) {
+          this.titlePage = this.i18n('Trending for the last 24 hours')
+          this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours.')
+        } else {
+          this.titlePage = this.i18n('Trending for the last {{days}} days', { days: trendingDays })
+          this.titleTooltip = this.i18n(
+            'Trending videos are those totalizing the greatest number of views during the last {{days}} days.',
+            { days: trendingDays }
+          )
+        }
+      })
   }
 
   ngOnDestroy () {
