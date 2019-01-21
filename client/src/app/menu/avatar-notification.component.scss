@@ -3,7 +3,7 @@
 
 /deep/ {
   .popover-notifications.popover {
-    max-width: 400px;
+    max-width: none;
 
     .popover-body {
       padding: 0;
@@ -11,9 +11,8 @@
       font-family: $main-fonts;
       overflow-y: auto;
       max-height: 500px;
-      min-width: 200px;
+      width: 400px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
-      overflow-y: auto;
 
       .notifications-header {
         display: flex;
@@ -80,5 +79,13 @@
     border-radius: 15px;
     width: 15px;
     height: 15px;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  /deep/ {
+    .popover-notifications.popover .popover-body {
+      width: 400px;
+    }
   }
 }
