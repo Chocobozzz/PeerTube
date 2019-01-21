@@ -149,7 +149,7 @@ let SCHEDULER_INTERVALS_MS = {
   actorFollowScores: 60000 * 60, // 1 hour
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
-  youtubeDLUpdate: 60000 * 60 * 24 // 1 day
+  youtubeDLUpdate: 60000 // 1 day
 }
 
 // ---------------------------------------------------------------------------

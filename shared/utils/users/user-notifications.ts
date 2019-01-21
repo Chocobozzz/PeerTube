@@ -274,8 +274,8 @@ async function checkNewActorFollow (
       checkActor(notification.actorFollow.follower)
       expect(notification.actorFollow.follower.displayName).to.equal(followerDisplayName)
       expect(notification.actorFollow.follower.name).to.equal(followerName)
+      expect(notification.actorFollow.follower.host).to.not.be.undefined
 
-      checkActor(notification.actorFollow.following)
       expect(notification.actorFollow.following.displayName).to.equal(followingDisplayName)
       expect(notification.actorFollow.following.type).to.equal(followType)
     } else {
