@@ -1,4 +1,4 @@
-import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
 // FIXME: something weird with our path definition in tsconfig and typings
 // @ts-ignore
 import { Player } from 'video.js'
@@ -27,7 +27,7 @@ class PeerTubeLoadProgressBar extends Component {
   }
 
   update () {
-    const torrent = this.player().peertube().getTorrent()
+    const torrent = this.player().webtorrent().getTorrent()
     if (!torrent) return
 
     this.el_.style.width = (torrent.progress * 100) + '%'

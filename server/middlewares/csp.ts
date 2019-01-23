@@ -16,7 +16,7 @@ const baseDirectives = Object.assign({},
     baseUri: ["'self'"],
     manifestSrc: ["'self'"],
     frameSrc: ["'self'"], // instead of deprecated child-src / self because of test-embed
-    workerSrc: ["'self'"] // instead of deprecated child-src
+    workerSrc: ["'self'", 'blob:'] // instead of deprecated child-src
   },
   CONFIG.SERVICES['CSP-LOGGER'] ? { reportUri: CONFIG.SERVICES['CSP-LOGGER'] } : {},
   CONFIG.WEBSERVER.SCHEME === 'https' ? { upgradeInsecureRequests: true } : {}

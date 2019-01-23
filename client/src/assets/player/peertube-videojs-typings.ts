@@ -3,11 +3,13 @@
 import * as videojs from 'video.js'
 
 import { VideoFile } from '../../../../shared/models/videos/video.model'
-import { PeerTubePlugin } from './peertube-videojs-plugin'
+import { PeerTubePlugin } from './peertube-plugin'
+import { WebTorrentPlugin } from './webtorrent-plugin'
 
 declare namespace videojs {
   interface Player {
     peertube (): PeerTubePlugin
+    webtorrent (): WebTorrentPlugin
   }
 }
 
@@ -30,26 +32,73 @@ type UserWatching = {
   authorizationHeader: string
 }
 
-type PeertubePluginOptions = {
-  videoFiles: VideoFile[]
-  playerElement: HTMLVideoElement
+type PeerTubePluginOptions = {
+  autoplay: boolean
   videoViewUrl: string
   videoDuration: number
   startTime: number | string
-  autoplay: boolean,
-  videoCaptions: VideoJSCaption[]
 
-  subtitle?: string
   userWatching?: UserWatching
+  subtitle?: string
+
+  videoCaptions: VideoJSCaption[]
+}
+
+type WebtorrentPluginOptions = {
+  playerElement: HTMLVideoElement
+
+  autoplay: boolean
+  videoDuration: number
+
+  videoFiles: VideoFile[]
+}
+
+type P2PMediaLoaderPluginOptions = {
+  type: string
+  src: string
+}
+
+type VideoJSPluginOptions = {
+  peertube: PeerTubePluginOptions
+
+  webtorrent?: WebtorrentPluginOptions
+
+  p2pMediaLoader?: P2PMediaLoaderPluginOptions
 }
 
 // videojs typings don't have some method we need
 const videojsUntyped = videojs as any
 
+type LoadedQualityData = {
+  qualitySwitchCallback: Function,
+  qualityData: {
+    video: {
+      id: number
+      label: string
+      selected: boolean
+    }[]
+  }
+}
+
+type ResolutionUpdateData = {
+  auto: boolean,
+  resolutionId: number
+}
+
+type AutoResolutionUpdateData = {
+  possible: boolean
+}
+
 export {
+  ResolutionUpdateData,
+  AutoResolutionUpdateData,
   VideoJSComponentInterface,
-  PeertubePluginOptions,
   videojsUntyped,
   VideoJSCaption,
-  UserWatching
+  UserWatching,
+  PeerTubePluginOptions,
+  WebtorrentPluginOptions,
+  P2PMediaLoaderPluginOptions,
+  VideoJSPluginOptions,
+  LoadedQualityData
 }

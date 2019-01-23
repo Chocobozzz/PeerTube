@@ -2,8 +2,8 @@
 // @ts-ignore
 import * as videojs from 'video.js'
 
-import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { saveTheaterInStore, getStoredTheater } from './peertube-player-local-storage'
+import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import { saveTheaterInStore, getStoredTheater } from '../peertube-player-local-storage'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
 class TheaterButton extends Button {

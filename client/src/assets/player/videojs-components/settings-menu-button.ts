@@ -6,8 +6,8 @@
 import * as videojs from 'video.js'
 
 import { SettingsMenuItem } from './settings-menu-item'
-import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { toTitleCase } from './utils'
+import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import { toTitleCase } from '../utils'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
 const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')

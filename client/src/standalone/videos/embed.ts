@@ -17,17 +17,13 @@ import 'core-js/es6/set'
 // For google bot that uses Chrome 41 and does not understand fetch
 import 'whatwg-fetch'
 
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as vjs from 'video.js'
-
 import * as Channel from 'jschannel'
 
 import { peertubeTranslate, ResultList, VideoDetails } from '../../../../shared'
-import { addContextMenu, getServerTranslations, getVideojsOptions, loadLocaleInVideoJS } from '../../assets/player/peertube-player'
 import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
+import { PeertubePlayerManager, PeertubePlayerManagerOptions } from '../../assets/player/peertube-player-manager'
 
 /**
  * Embed API exposes control of the embed player to the outside world via
@@ -73,16 +69,16 @@ class PeerTubeEmbedApi {
   }
 
   private setResolution (resolutionId: number) {
-    if (resolutionId === -1 && this.embed.player.peertube().isAutoResolutionForbidden()) return
+    if (resolutionId === -1 && this.embed.player.webtorrent().isAutoResolutionForbidden()) return
 
     // Auto resolution
     if (resolutionId === -1) {
-      this.embed.player.peertube().enableAutoResolution()
+      this.embed.player.webtorrent().enableAutoResolution()
       return
     }
 
-    this.embed.player.peertube().disableAutoResolution()
-    this.embed.player.peertube().updateResolution(resolutionId)
+    this.embed.player.webtorrent().disableAutoResolution()
+    this.embed.player.webtorrent().updateResolution(resolutionId)
   }
 
   /**
@@ -122,15 +118,17 @@ class PeerTubeEmbedApi {
 
     // PeerTube specific capabilities
 
-    this.embed.player.peertube().on('autoResolutionUpdate', () => this.loadResolutions())
-    this.embed.player.peertube().on('videoFileUpdate', () => this.loadResolutions())
+    if (this.embed.player.webtorrent) {
+      this.embed.player.webtorrent().on('autoResolutionUpdate', () => this.loadWebTorrentResolutions())
+      this.embed.player.webtorrent().on('videoFileUpdate', () => this.loadWebTorrentResolutions())
+    }
   }
 
-  private loadResolutions () {
+  private loadWebTorrentResolutions () {
     let resolutions = []
-    let currentResolutionId = this.embed.player.peertube().getCurrentResolutionId()
+    let currentResolutionId = this.embed.player.webtorrent().getCurrentResolutionId()
 
-    for (const videoFile of this.embed.player.peertube().videoFiles) {
+    for (const videoFile of this.embed.player.webtorrent().videoFiles) {
       let label = videoFile.resolution.label
       if (videoFile.fps && videoFile.fps >= 50) {
         label += videoFile.fps
@@ -266,9 +264,8 @@ class PeerTubeEmbed {
     const urlParts = window.location.pathname.split('/')
     const videoId = urlParts[ urlParts.length - 1 ]
 
-    const [ , serverTranslations, videoResponse, captionsResponse ] = await Promise.all([
-      loadLocaleInVideoJS(window.location.origin, vjs, navigator.language),
-      getServerTranslations(window.location.origin, navigator.language),
+    const [ serverTranslations, videoResponse, captionsResponse ] = await Promise.all([
+      PeertubePlayerManager.getServerTranslations(window.location.origin, navigator.language),
       this.loadVideoInfo(videoId),
       this.loadVideoCaptions(videoId)
     ])
@@ -292,43 +289,56 @@ class PeerTubeEmbed {
 
     this.loadParams()
 
-    const videojsOptions = getVideojsOptions({
-      autoplay: this.autoplay,
-      controls: this.controls,
-      muted: this.muted,
-      loop: this.loop,
-      startTime: this.startTime,
-      subtitle: this.subtitle,
+    const options: PeertubePlayerManagerOptions = {
+      common: {
+        autoplay: this.autoplay,
+        controls: this.controls,
+        muted: this.muted,
+        loop: this.loop,
+        captions: videoCaptions.length !== 0,
+        startTime: this.startTime,
+        subtitle: this.subtitle,
 
-      videoCaptions,
-      inactivityTimeout: 1500,
-      videoViewUrl: this.getVideoUrl(videoId) + '/views',
-      playerElement: this.videoElement,
-      videoFiles: videoInfo.files,
-      videoDuration: videoInfo.duration,
-      enableHotkeys: true,
-      peertubeLink: true,
-      poster: window.location.origin + videoInfo.previewPath,
-      theaterMode: false
-    })
+        videoCaptions,
+        inactivityTimeout: 1500,
+        videoViewUrl: this.getVideoUrl(videoId) + '/views',
+        playerElement: this.videoElement,
+        videoDuration: videoInfo.duration,
+        enableHotkeys: true,
+        peertubeLink: true,
+        poster: window.location.origin + videoInfo.previewPath,
+        theaterMode: false,
 
-    this.playerOptions = videojsOptions
-    this.player = vjs(this.videoContainerId, videojsOptions, () => {
-      this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
+        serverUrl: window.location.origin,
+        language: navigator.language,
+        embedUrl: window.location.origin + videoInfo.embedPath
+      },
 
-      window[ 'videojsPlayer' ] = this.player
-
-      if (this.controls) {
-        this.player.dock({
-          title: videoInfo.name,
-          description: this.player.localize('Uses P2P, others may know your IP is downloading this video.')
-        })
+      webtorrent: {
+        videoFiles: videoInfo.files
       }
 
-      addContextMenu(this.player, window.location.origin + videoInfo.embedPath)
+      // p2pMediaLoader: {
+      //   // playlistUrl: 'https://akamai-axtest.akamaized.net/routes/lapd-v1-acceptance/www_c4/Manifest.m3u8'
+      //   // playlistUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8'
+      //   playlistUrl: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'
+      // }
+    }
 
-      this.initializeApi()
-    })
+    this.player = await PeertubePlayerManager.initialize('webtorrent', options)
+
+    this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
+
+    window[ 'videojsPlayer' ] = this.player
+
+    if (this.controls) {
+      this.player.dock({
+        title: videoInfo.name,
+        description: this.player.localize('Uses P2P, others may know your IP is downloading this video.')
+      })
+    }
+
+    this.initializeApi()
   }
 
   private handleError (err: Error, translations?: { [ id: string ]: string }) {

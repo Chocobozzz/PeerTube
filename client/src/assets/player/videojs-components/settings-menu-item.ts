@@ -5,8 +5,8 @@
 // @ts-ignore
 import * as videojs from 'video.js'
 
-import { toTitleCase } from './utils'
-import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import { toTitleCase } from '../utils'
+import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
 
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
 const component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
@@ -220,12 +220,9 @@ class SettingsMenuItem extends MenuItem {
   }
 
   build () {
-    const saveUpdateLabel = this.subMenu.updateLabel
-    this.subMenu.updateLabel = () => {
+    this.subMenu.on('updateLabel', () => {
       this.update()
-
-      saveUpdateLabel.call(this.subMenu)
-    }
+    })
 
     this.settingsSubMenuTitleEl_.innerHTML = this.player_.localize(this.subMenu.controlText_)
     this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)

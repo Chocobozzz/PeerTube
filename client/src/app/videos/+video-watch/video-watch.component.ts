@@ -7,14 +7,9 @@ import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-supp
 import { MetaService } from '@ngx-meta/core'
 import { Notifier, ServerService } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import videojs from 'video.js'
-import 'videojs-hotkeys'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import * as WebTorrent from 'webtorrent'
 import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
-import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
@@ -24,12 +19,11 @@ import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { VideoBlacklistComponent } from './modal/video-blacklist.component'
 import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
-import { addContextMenu, getVideojsOptions, loadLocaleInVideoJS } from '../../../assets/player/peertube-player'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
-import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { MarkdownService } from '@app/shared/renderer'
+import { PeertubePlayerManager } from '../../../assets/player/peertube-player-manager'
 
 @Component({
   selector: 'my-video-watch',
@@ -46,7 +40,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
-  player: videojs.Player
+  player: any
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
   video: VideoDetails = null
@@ -61,7 +55,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
   hotkeys: Hotkey[]
 
-  private videojsLocaleLoaded = false
   private paramsSub: Subscription
 
   constructor (
@@ -402,41 +395,45 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       src: environment.apiUrl + c.captionPath
     }))
 
-    const videojsOptions = getVideojsOptions({
-      autoplay: this.isAutoplay(),
-      inactivityTimeout: 2500,
-      videoFiles: this.video.files,
-      videoCaptions: playerCaptions,
-      playerElement: this.playerElement,
-      videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
-      videoDuration: this.video.duration,
-      enableHotkeys: true,
-      peertubeLink: false,
-      poster: this.video.previewUrl,
-      startTime,
-      subtitle: urlOptions.subtitle,
-      theaterMode: true,
-      language: this.localeId,
+    const options = {
+      common: {
+        autoplay: this.isAutoplay(),
+        playerElement: this.playerElement,
+        videoDuration: this.video.duration,
+        enableHotkeys: true,
+        inactivityTimeout: 2500,
+        poster: this.video.previewUrl,
+        startTime,
 
-      userWatching: this.user && this.user.videosHistoryEnabled === true ? {
-        url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),
-        authorizationHeader: this.authService.getRequestHeaderValue()
-      } : undefined
-    })
+        theaterMode: true,
+        captions: videoCaptions.length !== 0,
+        peertubeLink: false,
 
-    if (this.videojsLocaleLoaded === false) {
-      await loadLocaleInVideoJS(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
-      this.videojsLocaleLoaded = true
+        videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
+        embedUrl: this.video.embedUrl,
+
+        language: this.localeId,
+
+        subtitle: urlOptions.subtitle,
+
+        userWatching: this.user && this.user.videosHistoryEnabled === true ? {
+          url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),
+          authorizationHeader: this.authService.getRequestHeaderValue()
+        } : undefined,
+
+        serverUrl: environment.apiUrl,
+
+        videoCaptions: playerCaptions
+      },
+
+      webtorrent: {
+        videoFiles: this.video.files
+      }
     }
 
-    const self = this
     this.zone.runOutsideAngular(async () => {
-      videojs(this.playerElement, videojsOptions, function (this: videojs.Player) {
-        self.player = this
-        this.on('customError', ({ err }: { err: any }) => self.handleError(err))
-
-        addContextMenu(self.player, self.video.embedUrl)
-      })
+      this.player = await PeertubePlayerManager.initialize('webtorrent', options)
+      this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
     })
 
     this.setVideoDescriptionHTML()
