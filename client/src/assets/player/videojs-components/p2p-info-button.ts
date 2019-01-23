@@ -1,8 +1,8 @@
-import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { bytes } from './utils'
+import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import { bytes } from '../utils'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
-class WebtorrentInfoButton extends Button {
+class P2pInfoButton extends Button {
 
   createEl () {
     const div = videojsUntyped.dom.createEl('div', {
@@ -65,7 +65,7 @@ class WebtorrentInfoButton extends Button {
     subDivHttp.appendChild(subDivHttpText)
     div.appendChild(subDivHttp)
 
-    this.player_.peertube().on('torrentInfo', (event: any, data: any) => {
+    this.player_.on('p2pInfo', (event: any, data: any) => {
       // We are in HTTP fallback
       if (!data) {
         subDivHttp.className = 'vjs-peertube-displayed'
@@ -99,4 +99,4 @@ class WebtorrentInfoButton extends Button {
     return div
   }
 }
-Button.registerComponent('WebTorrentButton', WebtorrentInfoButton)
+Button.registerComponent('P2PInfoButton', P2pInfoButton)

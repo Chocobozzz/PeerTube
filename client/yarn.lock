@@ -394,6 +394,11 @@
     semver "5.5.1"
     semver-intersect "1.4.0"
 
+"@streamroot/videojs-hlsjs-plugin@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@streamroot/videojs-hlsjs-plugin/-/videojs-hlsjs-plugin-1.0.7.tgz#581aecdf6a966162b404c60bd3ab8264eb89d334"
+  integrity sha512-7oAIOhEFxkfLOYWDfg7Oh3+OrnoTElRvUE3Jblg2B+SHmnrw4YXQnAwYJ0AHjNIBKoHnQubzZGttLaHAFJVspQ==
+
 "@types/bittorrent-protocol@*":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@types/bittorrent-protocol/-/bittorrent-protocol-2.2.2.tgz#169e9633e1bd18e6b830d11cf42e611b1972cb83"
@@ -1445,7 +1450,7 @@ bittorrent-protocol@^3.0.0:
     unordered-array-remove "^1.0.2"
     xtend "^4.0.0"
 
-bittorrent-tracker@^9.0.0:
+bittorrent-tracker@^9.0.0, bittorrent-tracker@^9.10.1:
   version "9.10.1"
   resolved "https://registry.yarnpkg.com/bittorrent-tracker/-/bittorrent-tracker-9.10.1.tgz#5de14aac012a287af394d3cc9eda1ec6cc956f11"
   integrity sha512-n5zTL/g6Wt0rb2EnkiyiaGYhth7I/N0/xMqGUpvGX/7g1scDGBVPhJnXR8lfp3/OMj681fv40o4q/otECMtZSA==
@@ -3305,6 +3310,11 @@ events@^1.0.0:
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
   integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
 
+events@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.0.0.tgz#9a0a0dfaf62893d92b875b8f2698ca4114973e88"
+  integrity sha512-Dc381HFWJzEOhQ+d8pkNon++bk9h6cdAoAj4iE6Q4y6xgTzySWXlKn05/TVNpjnfRqi/X0EpJEJohPjNI3zpVA==
+
 eventsource@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/eventsource/-/eventsource-1.0.7.tgz#8fbc72c93fcd34088090bc0a4e64f4b5cee6d8d0"
@@ -3900,7 +3910,7 @@ genfun@^5.0.0:
   resolved "https://registry.yarnpkg.com/genfun/-/genfun-5.0.0.tgz#9dd9710a06900a5c4a5bf57aca5da4e52fe76537"
   integrity sha512-KGDOARWVga7+rnB3z9Sd2Letx515owfk0hSxHGuqjANb1M+x2bGZGqHLiozPsYMdM2OubeMni/Hpwmjq6qIUhA==
 
-get-browser-rtc@^1.0.0:
+get-browser-rtc@^1.0.0, get-browser-rtc@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-browser-rtc/-/get-browser-rtc-1.0.2.tgz#bbcd40c8451a7ed4ef5c373b8169a409dd1d11d9"
   integrity sha1-u81AyEUaftTvXDc7gWmkCd0dEdk=
@@ -6108,6 +6118,13 @@ m3u8-parser@4.2.0:
   resolved "https://registry.yarnpkg.com/m3u8-parser/-/m3u8-parser-4.2.0.tgz#c8e0785fd17f741f4408b49466889274a9e36447"
   integrity sha512-LVHw0U6IPJjwk9i9f7Xe26NqaUHTNlIt4SSWoEfYFROeVKHN6MIjOhbRheI3dg8Jbq5WCuMFQ0QU3EgZpmzFPg==
 
+m3u8-parser@^4.2.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/m3u8-parser/-/m3u8-parser-4.3.0.tgz#4b4e988f87b6d8b2401d209a1d17798285a9da04"
+  integrity sha512-bVbjuBMoVIgFL1vpXVIxjeaoB5TPDJRb0m5qiTdM738SGqv/LAmsnVVPlKjM4fulm/rr1XZsKM+owHm+zvqxYA==
+  dependencies:
+    global "^4.3.2"
+
 magic-string@^0.25.0:
   version "0.25.1"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.1.tgz#b1c248b399cd7485da0fe7385c2fc7011843266e"
@@ -7213,6 +7230,26 @@ p-try@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.0.0.tgz#85080bb87c64688fa47996fe8f7dfbe8211760b1"
   integrity sha512-hMp0onDKIajHfIkdRk3P4CdCmErkYAxxDtP3Wx/4nZ3aGlau2VKh3mZpcuFkH27WQkL/3WBCPOktzA9ZOAnMQQ==
+
+p2p-media-loader-core@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/p2p-media-loader-core/-/p2p-media-loader-core-0.3.0.tgz#75687d7d7bee835d5c6c2f17d346add2dbe43b83"
+  integrity sha512-WKB9ONdA0kDQHXr6nixIL8t0UZuTD9Pqi/BIuaTiPUGDwYXUS/Mf5YynLAUupniLkIaDYD7/jmSLWqpZUDsAyw==
+  dependencies:
+    bittorrent-tracker "^9.10.1"
+    debug "^4.1.0"
+    events "^3.0.0"
+    get-browser-rtc "^1.0.2"
+    sha.js "^2.4.11"
+
+p2p-media-loader-hlsjs@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-0.3.0.tgz#4ee15d4d1a23aa0322a5be2bc6c329b6c913028d"
+  integrity sha512-U7PzMG5X7CVQ15OtMPRQjW68Msu0fuw8Pp0PRznX5uK0p26tSYMT/ZYCNeYCoDg3wGgJHM+327ed3M7TRJ4lcw==
+  dependencies:
+    events "^3.0.0"
+    m3u8-parser "^4.2.0"
+    p2p-media-loader-core "^0.3.0"
 
 package-json-versionify@^1.0.2:
   version "1.0.4"
@@ -8699,7 +8736,7 @@ setprototypeof@1.1.0:
   resolved "https://registry.yarnpkg.com/setprototypeof/-/setprototypeof-1.1.0.tgz#d0bd85536887b6fe7c0d818cb962d9d91c54e656"
   integrity sha512-BvE/TwpZX4FXExxOxZyRGQQv651MSwmWKZGqvmPcRIjDqWub67kTKuIMx43cZZrS/cBBzwBcNDWoFxt2XEFIpQ==
 
-sha.js@^2.4.0, sha.js@^2.4.8:
+sha.js@^2.4.0, sha.js@^2.4.11, sha.js@^2.4.8:
   version "2.4.11"
   resolved "https://registry.yarnpkg.com/sha.js/-/sha.js-2.4.11.tgz#37a5cf0b81ecbc6943de109ba2960d1b26584ae7"
   integrity sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==
@@ -10086,6 +10123,14 @@ videojs-contextmenu-ui@^5.0.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/videojs-contextmenu-ui/-/videojs-contextmenu-ui-5.1.0.tgz#60834d94ce590a8dc3a31d82a301fd394379034a"
   integrity sha512-pDRPh+SJBnrCG7Q95JogbPRtfODMcteJ3lubEZmLkpMu1G0Nlw2igdBcHVH4HZ/ZaM+cX+EBPVl8kz6TEtZKTw==
+  dependencies:
+    global "^4.3.2"
+    video.js "^6 || ^7"
+
+videojs-contrib-quality-levels@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/videojs-contrib-quality-levels/-/videojs-contrib-quality-levels-2.0.9.tgz#b5d533d5092a6fc7d29eae1b43e4597d89bd527b"
+  integrity sha512-HJeaJJQdSufi9Y5T7jlyyhkeq+mWPCog86q6ypoTi66boBMMJTo2abiOSHS9KaOGAJjH72gfvrjVY5FRdjlxYA==
   dependencies:
     global "^4.3.2"
     video.js "^6 || ^7"
