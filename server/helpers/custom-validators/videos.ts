@@ -88,8 +88,8 @@ function isVideoFileExtnameValid (value: string) {
 
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
   const videoFileTypesRegex = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
-                               .map(m => `(${m})`)
-                               .join('|')
+                                    .map(m => `(${m})`)
+                                    .join('|')
 
   return isFileValid(files, videoFileTypesRegex, 'videofile', null)
 }
