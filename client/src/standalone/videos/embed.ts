@@ -323,6 +323,7 @@ class PeerTubeEmbed {
         p2pMediaLoader: {
           // playlistUrl: 'https://akamai-axtest.akamaized.net/routes/lapd-v1-acceptance/www_c4/Manifest.m3u8'
           // playlistUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8'
+          // trackerAnnounce: [ window.location.origin.replace(/^http/, 'ws') + '/tracker/socket' ],
           playlistUrl: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'
         }
       })
