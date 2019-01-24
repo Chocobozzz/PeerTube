@@ -5,10 +5,9 @@ import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo, VideoJSComponentInterfa
 
 // videojs-hlsjs-plugin needs videojs in window
 window['videojs'] = videojs
-import '@streamroot/videojs-hlsjs-plugin'
+require('@streamroot/videojs-hlsjs-plugin')
 
 import { Engine, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
-import * as Hls from 'hls.js'
 import { Events } from 'p2p-media-loader-core'
 
 const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
@@ -18,7 +17,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     INFO_SCHEDULER: 1000 // Don't change this
   }
 
-  private hlsjs: Hls
+  private hlsjs: any // Don't type hlsjs to not bundle the module
   private p2pEngine: Engine
   private statsP2PBytes = {
     pendingDownload: [] as number[],
@@ -33,7 +32,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   constructor (player: videojs.Player, options: P2PMediaLoaderPluginOptions) {
     super(player, options)
 
-    videojs.Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: Hls) => {
+    videojs.Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
       this.hlsjs = hlsjs
 
       this.initialize()
@@ -54,7 +53,9 @@ class P2pMediaLoaderPlugin extends Plugin {
   private initialize () {
     this.p2pEngine = this.player.tech_.options_.hlsjsConfig.loader.getEngine()
 
-    this.hlsjs.on(Hls.Events.LEVEL_SWITCHING, (_, data: Hls.levelSwitchingData) => {
+    // Avoid using constants to not import hls.hs
+    // https://github.com/video-dev/hls.js/blob/master/src/events.js#L37
+    this.hlsjs.on('hlsLevelSwitching', (_: any, data: any) => {
       this.trigger('resolutionChange', { auto: this.hlsjs.autoLevelEnabled, resolutionId: data.height })
     })
 

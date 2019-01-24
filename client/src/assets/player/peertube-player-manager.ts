@@ -15,7 +15,6 @@ import './videojs-components/theater-button'
 import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions, videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
-import { Engine } from 'p2p-media-loader-hlsjs'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -32,6 +31,7 @@ export type WebtorrentOptions = {
 
 export type P2PMediaLoaderOptions = {
   playlistUrl: string
+  trackerAnnounce: string[]
 }
 
 export type CommonOptions = {
@@ -88,10 +88,17 @@ export class PeertubePlayerManager {
   }
 
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
-    if (mode === 'webtorrent') await import('./webtorrent-plugin')
-    if (mode === 'p2p-media-loader') await import('./p2p-media-loader-plugin')
+    let p2pMediaLoader: any
 
-    const videojsOptions = this.getVideojsOptions(mode, options)
+    if (mode === 'webtorrent') await import('./webtorrent-plugin')
+    if (mode === 'p2p-media-loader') {
+      [ p2pMediaLoader ] = await Promise.all([
+        import('p2p-media-loader-hlsjs'),
+        import('./p2p-media-loader-plugin')
+      ])
+    }
+
+    const videojsOptions = this.getVideojsOptions(mode, options, p2pMediaLoader)
 
     await this.loadLocaleInVideoJS(options.common.serverUrl, options.common.language)
 
@@ -133,7 +140,7 @@ export class PeertubePlayerManager {
     return p.then(json => videojs.addLanguage(getShortLocale(completeLocale), json))
   }
 
-  private static getVideojsOptions (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
+  private static getVideojsOptions (mode: PlayerMode, options: PeertubePlayerManagerOptions, p2pMediaLoaderModule?: any) {
     const commonOptions = options.common
     const webtorrentOptions = options.webtorrent
     const p2pMediaLoaderOptions = options.p2pMediaLoader
@@ -157,16 +164,19 @@ export class PeertubePlayerManager {
         src: p2pMediaLoaderOptions.playlistUrl
       }
 
-      const config = {
+      const p2pMediaLoaderConfig = {
+        // loader: {
+        //   trackerAnnounce: p2pMediaLoaderOptions.trackerAnnounce
+        // },
         segments: {
-          swarmId: 'swarm' // TODO: choose swarm id
+          swarmId: p2pMediaLoaderOptions.playlistUrl
         }
       }
       const streamrootHls = {
         html5: {
           hlsjsConfig: {
             liveSyncDurationCount: 7,
-            loader: new Engine(config).createLoaderClass()
+            loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
           }
         }
       }
