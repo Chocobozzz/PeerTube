@@ -14,11 +14,9 @@ class ResolutionMenuButton extends MenuButton {
     super(player, options)
     this.player = player
 
-    player.on('loadedqualitydata', (e: any, data: any) => this.buildQualities(data))
+    player.tech_.on('loadedqualitydata', (e: any, data: any) => this.buildQualities(data))
 
-    if (player.webtorrent) {
-      player.webtorrent().on('videoFileUpdate', () => setTimeout(() => this.trigger('updateLabel'), 0))
-    }
+    player.peertube().on('resolutionChange', () => setTimeout(() => this.trigger('updateLabel'), 0))
   }
 
   createEl () {
@@ -49,11 +47,32 @@ class ResolutionMenuButton extends MenuButton {
     return 'vjs-resolution-control ' + super.buildWrapperCSSClass()
   }
 
+  private addClickListener (component: any) {
+    component.on('click', () => {
+      let children = this.menu.children()
+
+      for (const child of children) {
+        if (component !== child) {
+          child.selected(false)
+        }
+      }
+    })
+  }
+
   private buildQualities (data: LoadedQualityData) {
     // The automatic resolution item will need other labels
     const labels: { [ id: number ]: string } = {}
 
+    data.qualityData.video.sort((a, b) => {
+      if (a.id > b.id) return -1
+      if (a.id === b.id) return 0
+      return 1
+    })
+
     for (const d of data.qualityData.video) {
+      // Skip auto resolution, we'll add it ourselves
+      if (d.id === -1) continue
+
       this.menu.addChild(new ResolutionMenuItem(
         this.player_,
         {
@@ -77,6 +96,12 @@ class ResolutionMenuButton extends MenuButton {
         selected: true // By default, in auto mode
       }
     ))
+
+    for (const m of this.menu.children()) {
+      this.addClickListener(m)
+    }
+
+    this.trigger('menuChanged')
   }
 }
 ResolutionMenuButton.prototype.controlText_ = 'Quality'

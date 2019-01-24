@@ -23,7 +23,7 @@ import { peertubeTranslate, ResultList, VideoDetails } from '../../../../shared'
 import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
-import { PeertubePlayerManager, PeertubePlayerManagerOptions } from '../../assets/player/peertube-player-manager'
+import { PeertubePlayerManager, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
 
 /**
  * Embed API exposes control of the embed player to the outside world via
@@ -162,6 +162,7 @@ class PeerTubeEmbed {
   subtitle: string
   enableApi = false
   startTime: number | string = 0
+  mode: PlayerMode
   scope = 'peertube'
 
   static async main () {
@@ -255,6 +256,8 @@ class PeerTubeEmbed {
       this.scope = this.getParamString(params, 'scope', this.scope)
       this.subtitle = this.getParamString(params, 'subtitle')
       this.startTime = this.getParamString(params, 'start')
+
+      this.mode = this.getParamToggle(params, 'p2p-media-loader') ? 'p2p-media-loader' : 'webtorrent'
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
@@ -312,20 +315,26 @@ class PeerTubeEmbed {
         serverUrl: window.location.origin,
         language: navigator.language,
         embedUrl: window.location.origin + videoInfo.embedPath
-      },
-
-      webtorrent: {
-        videoFiles: videoInfo.files
       }
-
-      // p2pMediaLoader: {
-      //   // playlistUrl: 'https://akamai-axtest.akamaized.net/routes/lapd-v1-acceptance/www_c4/Manifest.m3u8'
-      //   // playlistUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8'
-      //   playlistUrl: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'
-      // }
     }
 
-    this.player = await PeertubePlayerManager.initialize('webtorrent', options)
+    if (this.mode === 'p2p-media-loader') {
+      Object.assign(options, {
+        p2pMediaLoader: {
+          // playlistUrl: 'https://akamai-axtest.akamaized.net/routes/lapd-v1-acceptance/www_c4/Manifest.m3u8'
+          // playlistUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8'
+          playlistUrl: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'
+        }
+      })
+    } else {
+      Object.assign(options, {
+        webtorrent: {
+          videoFiles: videoInfo.files
+        }
+      })
+    }
+
+    this.player = await PeertubePlayerManager.initialize(this.mode, options)
 
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 

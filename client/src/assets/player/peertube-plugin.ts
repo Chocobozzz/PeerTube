@@ -2,7 +2,14 @@
 // @ts-ignore
 import * as videojs from 'video.js'
 import './videojs-components/settings-menu-button'
-import { PeerTubePluginOptions, UserWatching, VideoJSCaption, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import {
+  PeerTubePluginOptions,
+  ResolutionUpdateData,
+  UserWatching,
+  VideoJSCaption,
+  VideoJSComponentInterface,
+  videojsUntyped
+} from './peertube-videojs-typings'
 import { isMobile, timeToInt } from './utils'
 import {
   getStoredLastSubtitle,
@@ -30,6 +37,7 @@ class PeerTubePlugin extends Plugin {
   private videoViewInterval: any
   private userWatchingVideoInterval: any
   private qualityObservationTimer: any
+  private lastResolutionChange: ResolutionUpdateData
 
   constructor (player: videojs.Player, options: PeerTubePluginOptions) {
     super(player, options)
@@ -43,6 +51,22 @@ class PeerTubePlugin extends Plugin {
 
     this.player.ready(() => {
       const playerOptions = this.player.options_
+
+      if (this.player.webtorrent) {
+        this.player.webtorrent().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
+        this.player.webtorrent().on('autoResolutionChange', (_: any, d: any) => this.trigger('autoResolutionChange', d))
+      }
+
+      if (this.player.p2pMediaLoader) {
+        this.player.p2pMediaLoader().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
+      }
+
+      this.player.tech_.on('loadedqualitydata', () => {
+        setTimeout(() => {
+          // Replay a resolution change, now we loaded all quality data
+          if (this.lastResolutionChange) this.handleResolutionChange(this.lastResolutionChange)
+        }, 0)
+      })
 
       const volume = getStoredVolume()
       if (volume !== undefined) this.player.volume(volume)
@@ -156,6 +180,21 @@ class PeerTubePlugin extends Plugin {
     const headers = new Headers({ 'Authorization': authorizationHeader })
 
     return fetch(url, { method: 'PUT', body, headers })
+  }
+
+  private handleResolutionChange (data: ResolutionUpdateData) {
+    this.lastResolutionChange = data
+
+    const qualityLevels = this.player.qualityLevels()
+
+    for (let i = 0; i < qualityLevels.length; i++) {
+      if (qualityLevels[i].height === data.resolutionId) {
+        data.id = qualityLevels[i].id
+        break
+      }
+    }
+
+    this.trigger('resolutionChange', data)
   }
 
   private alterInactivity () {

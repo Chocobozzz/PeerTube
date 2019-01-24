@@ -1,4 +1,4 @@
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import { PlayerNetworkInfo, VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
 import { bytes } from '../utils'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
@@ -65,7 +65,7 @@ class P2pInfoButton extends Button {
     subDivHttp.appendChild(subDivHttpText)
     div.appendChild(subDivHttp)
 
-    this.player_.on('p2pInfo', (event: any, data: any) => {
+    this.player_.on('p2pInfo', (event: any, data: PlayerNetworkInfo) => {
       // We are in HTTP fallback
       if (!data) {
         subDivHttp.className = 'vjs-peertube-displayed'
@@ -74,11 +74,13 @@ class P2pInfoButton extends Button {
         return
       }
 
-      const downloadSpeed = bytes(data.downloadSpeed)
-      const uploadSpeed = bytes(data.uploadSpeed)
-      const totalDownloaded = bytes(data.downloaded)
-      const totalUploaded = bytes(data.uploaded)
-      const numPeers = data.numPeers
+      const p2pStats = data.p2p
+
+      const downloadSpeed = bytes(p2pStats.downloadSpeed)
+      const uploadSpeed = bytes(p2pStats.uploadSpeed)
+      const totalDownloaded = bytes(p2pStats.downloaded)
+      const totalUploaded = bytes(p2pStats.uploaded)
+      const numPeers = p2pStats.numPeers
 
       subDivWebtorrent.title = this.player_.localize('Total downloaded: ') + totalDownloaded.join(' ') + '\n' +
         this.player_.localize('Total uploaded: ' + totalUploaded.join(' '))

@@ -28,16 +28,12 @@ class ResolutionMenuItem extends MenuItem {
     this.id = options.id
     this.callback = options.callback
 
-    if (player.webtorrent) {
-      player.webtorrent().on('videoFileUpdate', (_: any, data: ResolutionUpdateData) => this.updateSelection(data))
+    player.peertube().on('resolutionChange', (_: any, data: ResolutionUpdateData) => this.updateSelection(data))
 
-      // We only want to disable the "Auto" item
-      if (this.id === -1) {
-        player.webtorrent().on('autoResolutionUpdate', (_: any, data: AutoResolutionUpdateData) => this.updateAutoResolution(data))
-      }
+    // We only want to disable the "Auto" item
+    if (this.id === -1) {
+      player.peertube().on('autoResolutionChange', (_: any, data: AutoResolutionUpdateData) => this.updateAutoResolution(data))
     }
-
-    // TODO: update on HLS change
   }
 
   handleClick (event: any) {
@@ -46,12 +42,12 @@ class ResolutionMenuItem extends MenuItem {
 
     super.handleClick(event)
 
-    this.callback(this.id)
+    this.callback(this.id, 'video')
   }
 
   updateSelection (data: ResolutionUpdateData) {
     if (this.id === -1) {
-      this.currentResolutionLabel = this.labels[data.resolutionId]
+      this.currentResolutionLabel = this.labels[data.id]
     }
 
     // Automatic resolution only
@@ -60,7 +56,7 @@ class ResolutionMenuItem extends MenuItem {
       return
     }
 
-    this.selected(this.id === data.resolutionId)
+    this.selected(this.id === data.id)
   }
 
   updateAutoResolution (data: AutoResolutionUpdateData) {
