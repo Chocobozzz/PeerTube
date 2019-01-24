@@ -24,17 +24,17 @@ videojsUntyped.getComponent('CaptionsButton').prototype.controlText_ = 'Subtitle
 // We just want to display 'Off' instead of 'captions off', keep a space so the variable == true (hacky I know)
 videojsUntyped.getComponent('CaptionsButton').prototype.label_ = ' '
 
-type PlayerMode = 'webtorrent' | 'p2p-media-loader'
+export type PlayerMode = 'webtorrent' | 'p2p-media-loader'
 
-type WebtorrentOptions = {
+export type WebtorrentOptions = {
   videoFiles: VideoFile[]
 }
 
-type P2PMediaLoaderOptions = {
+export type P2PMediaLoaderOptions = {
   playlistUrl: string
 }
 
-type CommonOptions = {
+export type CommonOptions = {
   playerElement: HTMLVideoElement
 
   autoplay: boolean
@@ -137,6 +137,7 @@ export class PeertubePlayerManager {
     const commonOptions = options.common
     const webtorrentOptions = options.webtorrent
     const p2pMediaLoaderOptions = options.p2pMediaLoader
+    let html5 = {}
 
     const plugins: VideoJSPluginOptions = {
       peertube: {
@@ -171,6 +172,7 @@ export class PeertubePlayerManager {
       }
 
       Object.assign(plugins, { p2pMediaLoader, streamrootHls })
+      html5 = streamrootHls.html5
     }
 
     if (webtorrentOptions) {
@@ -184,6 +186,8 @@ export class PeertubePlayerManager {
     }
 
     const videojsOptions = {
+      html5,
+
       // We don't use text track settings for now
       textTrackSettings: false,
       controls: commonOptions.controls !== undefined ? commonOptions.controls : true,

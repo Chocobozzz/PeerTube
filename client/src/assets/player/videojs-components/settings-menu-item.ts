@@ -223,6 +223,11 @@ class SettingsMenuItem extends MenuItem {
     this.subMenu.on('updateLabel', () => {
       this.update()
     })
+    this.subMenu.on('menuChanged', () => {
+      this.bindClickEvents()
+      this.setSize()
+      this.update()
+    })
 
     this.settingsSubMenuTitleEl_.innerHTML = this.player_.localize(this.subMenu.controlText_)
     this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
@@ -230,7 +235,7 @@ class SettingsMenuItem extends MenuItem {
     this.update()
 
     this.createBackButton()
-    this.getSize()
+    this.setSize()
     this.bindClickEvents()
 
     // prefixed event listeners for CSS TransitionEnd
@@ -292,8 +297,9 @@ class SettingsMenuItem extends MenuItem {
 
   // save size of submenus on first init
   // if number of submenu items change dynamically more logic will be needed
-  getSize () {
+  setSize () {
     this.dialog.removeClass('vjs-hidden')
+    videojsUntyped.dom.removeClass(this.settingsSubMenuEl_, 'vjs-hidden')
     this.size = this.settingsButton.getComponentSize(this.settingsSubMenuEl_)
     this.setMargin()
     this.dialog.addClass('vjs-hidden')

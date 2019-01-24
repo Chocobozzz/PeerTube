@@ -5,7 +5,7 @@ import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './webtorrent/video-renderer'
-import { LoadedQualityData, VideoJSComponentInterface, WebtorrentPluginOptions } from './peertube-videojs-typings'
+import { LoadedQualityData, PlayerNetworkInfo, VideoJSComponentInterface, WebtorrentPluginOptions } from './peertube-videojs-typings'
 import { videoFileMaxByResolution, videoFileMinByResolution } from './utils'
 import { PeertubeChunkStore } from './webtorrent/peertube-chunk-store'
 import {
@@ -180,7 +180,7 @@ class WebTorrentPlugin extends Plugin {
     })
 
     this.changeQuality()
-    this.trigger('videoFileUpdate', { auto: this.autoResolution, resolutionId: this.currentVideoFile.resolution.id })
+    this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.currentVideoFile.resolution.id })
   }
 
   updateResolution (resolutionId: number, delay = 0) {
@@ -216,15 +216,15 @@ class WebTorrentPlugin extends Plugin {
 
   enableAutoResolution () {
     this.autoResolution = true
-    this.trigger('videoFileUpdate', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
+    this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
   }
 
   disableAutoResolution (forbid = false) {
     if (forbid === true) this.autoResolutionPossible = false
 
     this.autoResolution = false
-    this.trigger('autoResolutionUpdate', { possible: this.autoResolutionPossible })
-    this.trigger('videoFileUpdate', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
+    this.trigger('autoResolutionChange', { possible: this.autoResolutionPossible })
+    this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
   }
 
   getTorrent () {
@@ -472,12 +472,14 @@ class WebTorrentPlugin extends Plugin {
       if (this.webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(this.webtorrent.downloadSpeed)
 
       return this.player.trigger('p2pInfo', {
-        downloadSpeed: this.torrent.downloadSpeed,
-        numPeers: this.torrent.numPeers,
-        uploadSpeed: this.torrent.uploadSpeed,
-        downloaded: this.torrent.downloaded,
-        uploaded: this.torrent.uploaded
-      })
+        p2p: {
+          downloadSpeed: this.torrent.downloadSpeed,
+          numPeers: this.torrent.numPeers,
+          uploadSpeed: this.torrent.uploadSpeed,
+          downloaded: this.torrent.downloaded,
+          uploaded: this.torrent.uploaded
+        }
+      } as PlayerNetworkInfo)
     }, this.CONSTANTS.INFO_SCHEDULER)
   }
 
@@ -597,7 +599,7 @@ class WebTorrentPlugin extends Plugin {
         video: qualityLevelsPayload
       }
     }
-    this.player.trigger('loadedqualitydata', payload)
+    this.player.tech_.trigger('loadedqualitydata', payload)
   }
 
   private buildQualityLabel (file: VideoFile) {

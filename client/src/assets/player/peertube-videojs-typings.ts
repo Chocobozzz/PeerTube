@@ -83,13 +83,25 @@ type LoadedQualityData = {
 type ResolutionUpdateData = {
   auto: boolean,
   resolutionId: number
+  id?: number
 }
 
 type AutoResolutionUpdateData = {
   possible: boolean
 }
 
+type PlayerNetworkInfo = {
+  p2p: {
+    downloadSpeed: number
+    uploadSpeed: number
+    downloaded: number
+    uploaded: number
+    numPeers: number
+  }
+}
+
 export {
+  PlayerNetworkInfo,
   ResolutionUpdateData,
   AutoResolutionUpdateData,
   VideoJSComponentInterface,
