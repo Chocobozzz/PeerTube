@@ -16,7 +16,7 @@ menu {
   height: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: auto;
   color: var(--menuForegroundColor);
   display: flex;
   flex-direction: column;
