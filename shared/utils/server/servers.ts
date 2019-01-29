@@ -166,9 +166,13 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
 }
 
 async function checkTmpIsEmpty (server: ServerInfo) {
+  return checkDirectoryIsEmpty(server, 'tmp')
+}
+
+async function checkDirectoryIsEmpty (server: ServerInfo, directory: string) {
   const testDirectory = 'test' + server.serverNumber
 
-  const directoryPath = join(root(), testDirectory, 'tmp')
+  const directoryPath = join(root(), testDirectory, directory)
 
   const directoryExists = existsSync(directoryPath)
   expect(directoryExists).to.be.true
@@ -199,6 +203,7 @@ async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
 // ---------------------------------------------------------------------------
 
 export {
+  checkDirectoryIsEmpty,
   checkTmpIsEmpty,
   ServerInfo,
   flushAndRunMultipleServers,

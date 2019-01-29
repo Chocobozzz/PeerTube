@@ -193,8 +193,12 @@ function peertubeTruncate (str: string, maxLength: number) {
   return truncate(str, options)
 }
 
-function sha256 (str: string, encoding: HexBase64Latin1Encoding = 'hex') {
+function sha256 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
   return createHash('sha256').update(str).digest(encoding)
+}
+
+function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
+  return createHash('sha1').update(str).digest(encoding)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
@@ -262,7 +266,9 @@ export {
   sanitizeHost,
   buildPath,
   peertubeTruncate,
+
   sha256,
+  sha1,
 
   promisify0,
   promisify1,

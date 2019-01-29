@@ -15,7 +15,7 @@ function activityPubContextify <T> (data: T) {
       'https://w3id.org/security/v1',
       {
         RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
-        pt: 'https://joinpeertube.org/ns',
+        pt: 'https://joinpeertube.org/ns#',
         sc: 'http://schema.org#',
         Hashtag: 'as:Hashtag',
         uuid: 'sc:identifier',
@@ -32,7 +32,8 @@ function activityPubContextify <T> (data: T) {
         waitTranscoding: 'sc:Boolean',
         expires: 'sc:expires',
         support: 'sc:Text',
-        CacheFile: 'pt:CacheFile'
+        CacheFile: 'pt:CacheFile',
+        Infohash: 'pt:Infohash'
       },
       {
         likes: {

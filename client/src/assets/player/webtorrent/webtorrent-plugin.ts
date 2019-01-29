@@ -3,18 +3,18 @@
 import * as videojs from 'video.js'
 
 import * as WebTorrent from 'webtorrent'
-import { VideoFile } from '../../../../shared/models/videos/video.model'
-import { renderVideo } from './webtorrent/video-renderer'
-import { LoadedQualityData, PlayerNetworkInfo, VideoJSComponentInterface, WebtorrentPluginOptions } from './peertube-videojs-typings'
-import { videoFileMaxByResolution, videoFileMinByResolution } from './utils'
-import { PeertubeChunkStore } from './webtorrent/peertube-chunk-store'
+import { VideoFile } from '../../../../../shared/models/videos/video.model'
+import { renderVideo } from './video-renderer'
+import { LoadedQualityData, PlayerNetworkInfo, VideoJSComponentInterface, WebtorrentPluginOptions } from '../peertube-videojs-typings'
+import { getRtcConfig, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
+import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
   getStoredMute,
   getStoredVolume,
   getStoredWebTorrentEnabled,
   saveAverageBandwidth
-} from './peertube-player-local-storage'
+} from '../peertube-player-local-storage'
 
 const CacheChunkStore = require('cache-chunk-store')
 
@@ -44,16 +44,7 @@ class WebTorrentPlugin extends Plugin {
 
   private readonly webtorrent = new WebTorrent({
     tracker: {
-      rtcConfig: {
-        iceServers: [
-          {
-            urls: 'stun:stun.stunprotocol.org'
-          },
-          {
-            urls: 'stun:stun.framasoft.org'
-          }
-        ]
-      }
+      rtcConfig: getRtcConfig()
     },
     dht: false
   })
@@ -472,6 +463,12 @@ class WebTorrentPlugin extends Plugin {
       if (this.webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(this.webtorrent.downloadSpeed)
 
       return this.player.trigger('p2pInfo', {
+        http: {
+          downloadSpeed: 0,
+          uploadSpeed: 0,
+          downloaded: 0,
+          uploaded: 0
+        },
         p2p: {
           downloadSpeed: this.torrent.downloadSpeed,
           numPeers: this.torrent.numPeers,

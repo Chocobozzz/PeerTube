@@ -2641,6 +2641,13 @@ debug@^3.1.0, debug@^3.2.5:
   dependencies:
     ms "^2.1.1"
 
+debug@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
+  dependencies:
+    ms "^2.1.1"
+
 decamelize@^1.1.1, decamelize@^1.1.2, decamelize@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -6131,7 +6138,7 @@ m3u8-parser@4.2.0:
   resolved "https://registry.yarnpkg.com/m3u8-parser/-/m3u8-parser-4.2.0.tgz#c8e0785fd17f741f4408b49466889274a9e36447"
   integrity sha512-LVHw0U6IPJjwk9i9f7Xe26NqaUHTNlIt4SSWoEfYFROeVKHN6MIjOhbRheI3dg8Jbq5WCuMFQ0QU3EgZpmzFPg==
 
-m3u8-parser@^4.2.0:
+m3u8-parser@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/m3u8-parser/-/m3u8-parser-4.3.0.tgz#4b4e988f87b6d8b2401d209a1d17798285a9da04"
   integrity sha512-bVbjuBMoVIgFL1vpXVIxjeaoB5TPDJRb0m5qiTdM738SGqv/LAmsnVVPlKjM4fulm/rr1XZsKM+owHm+zvqxYA==
@@ -7244,25 +7251,25 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.0.0.tgz#85080bb87c64688fa47996fe8f7dfbe8211760b1"
   integrity sha512-hMp0onDKIajHfIkdRk3P4CdCmErkYAxxDtP3Wx/4nZ3aGlau2VKh3mZpcuFkH27WQkL/3WBCPOktzA9ZOAnMQQ==
 
-p2p-media-loader-core@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/p2p-media-loader-core/-/p2p-media-loader-core-0.3.0.tgz#75687d7d7bee835d5c6c2f17d346add2dbe43b83"
-  integrity sha512-WKB9ONdA0kDQHXr6nixIL8t0UZuTD9Pqi/BIuaTiPUGDwYXUS/Mf5YynLAUupniLkIaDYD7/jmSLWqpZUDsAyw==
+p2p-media-loader-core@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/p2p-media-loader-core/-/p2p-media-loader-core-0.4.0.tgz#767d56785545bc9c0d8c1a04eb7b67a33e40d0c8"
+  integrity sha512-llcFqEDs19o916g2OSIPHPjZweO5caHUm/7P18Qu+qb3swYQYSPNwMLoHnpXROHiH5I+00K8w5enz31oUwiCgA==
   dependencies:
     bittorrent-tracker "^9.10.1"
-    debug "^4.1.0"
+    debug "^4.1.1"
     events "^3.0.0"
     get-browser-rtc "^1.0.2"
     sha.js "^2.4.11"
 
-p2p-media-loader-hlsjs@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-0.3.0.tgz#4ee15d4d1a23aa0322a5be2bc6c329b6c913028d"
-  integrity sha512-U7PzMG5X7CVQ15OtMPRQjW68Msu0fuw8Pp0PRznX5uK0p26tSYMT/ZYCNeYCoDg3wGgJHM+327ed3M7TRJ4lcw==
+p2p-media-loader-hlsjs@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/p2p-media-loader-hlsjs/-/p2p-media-loader-hlsjs-0.4.0.tgz#1b90c88580503d4c3d8017c813abe41803b613ed"
+  integrity sha512-IWRs/aGasKD//+dtQkYWAjD/cQx3LMaLkMn0EzLhLpeBj4SLNjlbwOPlbx36M4i39X04Y3WZe9YUeIciId3G5Q==
   dependencies:
     events "^3.0.0"
-    m3u8-parser "^4.2.0"
-    p2p-media-loader-core "^0.3.0"
+    m3u8-parser "^4.3.0"
+    p2p-media-loader-core "^0.4.0"
 
 package-json-versionify@^1.0.2:
   version "1.0.4"

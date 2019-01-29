@@ -134,7 +134,7 @@
     "ngx-qrcode2": "^0.0.9",
     "node-sass": "^4.9.3",
     "npm-font-source-sans-pro": "^1.0.2",
-    "p2p-media-loader-hlsjs": "^0.3.0",
+    "p2p-media-loader-hlsjs": "^0.4.0",
     "path-browserify": "^1.0.0",
     "primeng": "^7.0.0",
     "process": "^0.11.10",

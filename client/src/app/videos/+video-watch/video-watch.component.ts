@@ -23,7 +23,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { MarkdownService } from '@app/shared/renderer'
-import { PeertubePlayerManager } from '../../../assets/player/peertube-player-manager'
+import { P2PMediaLoaderOptions, PeertubePlayerManager, PlayerMode, WebtorrentOptions } from '../../../assets/player/peertube-player-manager'
 
 @Component({
   selector: 'my-video-watch',
@@ -424,15 +424,33 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         serverUrl: environment.apiUrl,
 
         videoCaptions: playerCaptions
-      },
-
-      webtorrent: {
-        videoFiles: this.video.files
       }
     }
 
+    let mode: PlayerMode
+    const hlsPlaylist = this.video.getHlsPlaylist()
+    if (hlsPlaylist) {
+      mode = 'p2p-media-loader'
+      const p2pMediaLoader = {
+        playlistUrl: hlsPlaylist.playlistUrl,
+        segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
+        redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
+        trackerAnnounce: this.video.trackerUrls,
+        videoFiles: this.video.files
+      } as P2PMediaLoaderOptions
+
+      Object.assign(options, { p2pMediaLoader })
+    } else {
+      mode = 'webtorrent'
+      const webtorrent = {
+        videoFiles: this.video.files
+      } as WebtorrentOptions
+
+      Object.assign(options, { webtorrent })
+    }
+
     this.zone.runOutsideAngular(async () => {
-      this.player = await PeertubePlayerManager.initialize('webtorrent', options)
+      this.player = await PeertubePlayerManager.initialize(mode, options)
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
     })
 

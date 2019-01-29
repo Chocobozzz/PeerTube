@@ -23,12 +23,15 @@ const playerKeys = {
   'Speed': 'Speed',
   'Subtitles/CC': 'Subtitles/CC',
   'peers': 'peers',
+  'peer': 'peer',
   'Go to the video page': 'Go to the video page',
   'Settings': 'Settings',
   'Uses P2P, others may know you are watching this video.': 'Uses P2P, others may know you are watching this video.',
   'Copy the video URL': 'Copy the video URL',
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
-  'Copy embed code': 'Copy embed code'
+  'Copy embed code': 'Copy embed code',
+  'Total downloaded: ': 'Total downloaded: ',
+  'Total uploaded: ': 'Total uploaded: '
 }
 const playerTranslations = {
   target: join(__dirname, '../../../client/src/locale/source/player_en_US.xml'),

@@ -1,10 +1,17 @@
 import * as request from 'supertest'
 import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
+import { parse } from 'url'
+
+function makeRawRequest (url: string, statusCodeExpected?: number) {
+  const { host, protocol, pathname } = parse(url)
+
+  return makeGetRequest({ url: `${protocol}//${host}`, path: pathname, statusCodeExpected })
+}
 
 function makeGetRequest (options: {
   url: string,
-  path: string,
+  path?: string,
   query?: any,
   token?: string,
   statusCodeExpected?: number,
@@ -13,8 +20,7 @@ function makeGetRequest (options: {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
   if (options.contentType === undefined) options.contentType = 'application/json'
 
-  const req = request(options.url)
-    .get(options.path)
+  const req = request(options.url).get(options.path)
 
   if (options.contentType) req.set('Accept', options.contentType)
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
@@ -164,5 +170,6 @@ export {
   makePostBodyRequest,
   makePutBodyRequest,
   makeDeleteRequest,
+  makeRawRequest,
   updateAvatarRequest
 }

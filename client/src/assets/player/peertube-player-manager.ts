@@ -13,8 +13,10 @@ import './videojs-components/p2p-info-button'
 import './videojs-components/peertube-load-progress-bar'
 import './videojs-components/theater-button'
 import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions, videojsUntyped } from './peertube-videojs-typings'
-import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
+import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig } from './utils'
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
+import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
+import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -31,7 +33,10 @@ export type WebtorrentOptions = {
 
 export type P2PMediaLoaderOptions = {
   playlistUrl: string
+  segmentsSha256Url: string
   trackerAnnounce: string[]
+  redundancyBaseUrls: string[]
+  videoFiles: VideoFile[]
 }
 
 export type CommonOptions = {
@@ -90,11 +95,11 @@ export class PeertubePlayerManager {
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
     let p2pMediaLoader: any
 
-    if (mode === 'webtorrent') await import('./webtorrent-plugin')
+    if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
       [ p2pMediaLoader ] = await Promise.all([
         import('p2p-media-loader-hlsjs'),
-        import('./p2p-media-loader-plugin')
+        import('./p2p-media-loader/p2p-media-loader-plugin')
       ])
     }
 
@@ -144,11 +149,14 @@ export class PeertubePlayerManager {
     const commonOptions = options.common
     const webtorrentOptions = options.webtorrent
     const p2pMediaLoaderOptions = options.p2pMediaLoader
+
+    let autoplay = options.common.autoplay
     let html5 = {}
 
     const plugins: VideoJSPluginOptions = {
       peertube: {
-        autoplay: commonOptions.autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
+        mode,
+        autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
         videoViewUrl: commonOptions.videoViewUrl,
         videoDuration: commonOptions.videoDuration,
         startTime: commonOptions.startTime,
@@ -160,19 +168,35 @@ export class PeertubePlayerManager {
 
     if (p2pMediaLoaderOptions) {
       const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
+        redundancyBaseUrls: options.p2pMediaLoader.redundancyBaseUrls,
         type: 'application/x-mpegURL',
         src: p2pMediaLoaderOptions.playlistUrl
       }
 
+      const trackerAnnounce = p2pMediaLoaderOptions.trackerAnnounce
+        .filter(t => t.startsWith('ws'))
+
       const p2pMediaLoaderConfig = {
-        // loader: {
-        //   trackerAnnounce: p2pMediaLoaderOptions.trackerAnnounce
-        // },
+        loader: {
+          trackerAnnounce,
+          segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
+          rtcConfig: getRtcConfig(),
+          requiredSegmentsPriority: 5,
+          segmentUrlBuilder: segmentUrlBuilderFactory(options.p2pMediaLoader.redundancyBaseUrls)
+        },
         segments: {
           swarmId: p2pMediaLoaderOptions.playlistUrl
         }
       }
       const streamrootHls = {
+        levelLabelHandler: (level: { height: number, width: number }) => {
+          const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === level.height)
+
+          let label = file.resolution.label
+          if (file.fps >= 50) label += file.fps
+
+          return label
+        },
         html5: {
           hlsjsConfig: {
             liveSyncDurationCount: 7,
@@ -187,12 +211,15 @@ export class PeertubePlayerManager {
 
     if (webtorrentOptions) {
       const webtorrent = {
-        autoplay: commonOptions.autoplay,
+        autoplay,
         videoDuration: commonOptions.videoDuration,
         playerElement: commonOptions.playerElement,
         videoFiles: webtorrentOptions.videoFiles
       }
       Object.assign(plugins, { webtorrent })
+
+      // WebTorrent plugin handles autoplay, because we do some hackish stuff in there
+      autoplay = false
     }
 
     const videojsOptions = {
@@ -208,7 +235,7 @@ export class PeertubePlayerManager {
         : undefined, // Undefined so the player knows it has to check the local storage
 
       poster: commonOptions.poster,
-      autoplay: false,
+      autoplay,
       inactivityTimeout: commonOptions.inactivityTimeout,
       playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 2 ],
       plugins,

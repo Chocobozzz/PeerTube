@@ -52,12 +52,12 @@ class PeerTubePlugin extends Plugin {
     this.player.ready(() => {
       const playerOptions = this.player.options_
 
-      if (this.player.webtorrent) {
+      if (options.mode === 'webtorrent') {
         this.player.webtorrent().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
         this.player.webtorrent().on('autoResolutionChange', (_: any, d: any) => this.trigger('autoResolutionChange', d))
       }
 
-      if (this.player.p2pMediaLoader) {
+      if (options.mode === 'p2p-media-loader') {
         this.player.p2pMediaLoader().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
       }
 

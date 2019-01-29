@@ -8,9 +8,19 @@ function isCacheFileObjectValid (object: CacheFileObject) {
     object.type === 'CacheFile' &&
     isDateValid(object.expires) &&
     isActivityPubUrlValid(object.object) &&
-    isRemoteVideoUrlValid(object.url)
+    (isRemoteVideoUrlValid(object.url) || isPlaylistRedundancyUrlValid(object.url))
 }
+
+// ---------------------------------------------------------------------------
 
 export {
   isCacheFileObjectValid
+}
+
+// ---------------------------------------------------------------------------
+
+function isPlaylistRedundancyUrlValid (url: any) {
+  return url.type === 'Link' &&
+    (url.mediaType || url.mimeType) === 'application/x-mpegURL' &&
+    isActivityPubUrlValid(url.href)
 }

@@ -7,6 +7,7 @@ import { Server as WebSocketServer } from 'ws'
 import { CONFIG, TRACKER_RATE_LIMITS } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
 import { parse } from 'url'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 
 const TrackerServer = bitTorrentTracker.Server
 
@@ -21,7 +22,7 @@ const trackerServer = new TrackerServer({
   udp: false,
   ws: false,
   dht: false,
-  filter: function (infoHash, params, cb) {
+  filter: async function (infoHash, params, cb) {
     let ip: string
 
     if (params.type === 'ws') {
@@ -32,19 +33,25 @@ const trackerServer = new TrackerServer({
 
     const key = ip + '-' + infoHash
 
-    peersIps[ip] = peersIps[ip] ? peersIps[ip] + 1 : 1
-    peersIpInfoHash[key] = peersIpInfoHash[key] ? peersIpInfoHash[key] + 1 : 1
+    peersIps[ ip ] = peersIps[ ip ] ? peersIps[ ip ] + 1 : 1
+    peersIpInfoHash[ key ] = peersIpInfoHash[ key ] ? peersIpInfoHash[ key ] + 1 : 1
 
-    if (peersIpInfoHash[key] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
+    if (peersIpInfoHash[ key ] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
       return cb(new Error(`Too many requests (${peersIpInfoHash[ key ]} of ip ${ip} for torrent ${infoHash}`))
     }
 
-    VideoFileModel.isInfohashExists(infoHash)
-      .then(exists => {
-        if (exists === false) return cb(new Error(`Unknown infoHash ${infoHash}`))
+    try {
+      const videoFileExists = await VideoFileModel.doesInfohashExist(infoHash)
+      if (videoFileExists === true) return cb()
 
-        return cb()
-      })
+      const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExist(infoHash)
+      if (playlistExists === true) return cb()
+
+      return cb(new Error(`Unknown infoHash ${infoHash}`))
+    } catch (err) {
+      logger.error('Error in tracker filter.', { err })
+      return cb(err)
+    }
   }
 })
 

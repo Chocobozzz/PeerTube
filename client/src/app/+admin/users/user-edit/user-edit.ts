@@ -22,13 +22,17 @@ export abstract class UserEdit extends FormReactive {
   }
 
   computeQuotaWithTranscoding () {
-    const resolutions = this.serverService.getConfig().transcoding.enabledResolutions
+    const transcodingConfig = this.serverService.getConfig().transcoding
+
+    const resolutions = transcodingConfig.enabledResolutions
     const higherResolution = VideoResolution.H_1080P
     let multiplier = 0
 
     for (const resolution of resolutions) {
       multiplier += resolution / higherResolution
     }
+
+    if (transcodingConfig.hls.enabled) multiplier *= 2
 
     return multiplier * parseInt(this.form.value['videoQuota'], 10)
   }

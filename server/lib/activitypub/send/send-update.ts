@@ -61,7 +61,7 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
 async function sendUpdateCacheFile (byActor: ActorModel, redundancyModel: VideoRedundancyModel) {
   logger.info('Creating job to update cache file %s.', redundancyModel.url)
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.VideoFile.Video.id)
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.getVideo().id)
 
   const activityBuilder = (audience: ActivityAudience) => {
     const redundancyObject = redundancyModel.toActivityPubObject()

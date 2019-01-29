@@ -25,11 +25,15 @@ export interface ServerConfig {
 
   signup: {
     allowed: boolean,
-    allowedForCurrentIP: boolean,
+    allowedForCurrentIP: boolean
     requiresEmailVerification: boolean
   }
 
   transcoding: {
+    hls: {
+      enabled: boolean
+    }
+
     enabledResolutions: number[]
   }
 
@@ -48,7 +52,7 @@ export interface ServerConfig {
     file: {
       size: {
         max: number
-      },
+      }
       extensions: string[]
     }
   }

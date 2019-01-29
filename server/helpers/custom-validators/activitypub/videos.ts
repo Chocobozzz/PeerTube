@@ -1,7 +1,7 @@
 import * as validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
 import { peertubeTruncate } from '../../core-utils'
-import { exists, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
+import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
   isVideoDurationValid,
   isVideoNameValid,
@@ -12,7 +12,6 @@ import {
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { VideoState } from '../../../../shared/models/videos'
-import { isVideoAbuseReasonValid } from '../video-abuses'
 
 function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
@@ -81,6 +80,11 @@ function isRemoteVideoUrlValid (url: any) {
       ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mediaType || url.mimeType) !== -1 &&
       validator.isLength(url.href, { min: 5 }) &&
       validator.isInt(url.height + '', { min: 0 })
+    ) ||
+    (
+      (url.mediaType || url.mimeType) === 'application/x-mpegURL' &&
+      isActivityPubUrlValid(url.href) &&
+      isArray(url.tag)
     )
 }
 

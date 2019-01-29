@@ -51,7 +51,10 @@ export class ServerService {
       requiresEmailVerification: false
     },
     transcoding: {
-      enabledResolutions: []
+      enabledResolutions: [],
+      hls: {
+        enabled: false
+      }
     },
     avatar: {
       file: {

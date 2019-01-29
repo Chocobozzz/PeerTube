@@ -49,6 +49,7 @@ storage:
   tmp: '/var/www/peertube/storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
   avatars: '/var/www/peertube/storage/avatars/'
   videos: '/var/www/peertube/storage/videos/'
+  playlists: '/var/www/peertube/storage/playlists/'
   redundancy: '/var/www/peertube/storage/videos/'
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
@@ -151,6 +152,14 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+  # /!\ EXPERIMENTAL /!\
+  # Generate HLS playlist/segments. Better playback than with WebTorrent:
+  #     * Resolution change is smoother
+  #     * Faster playback in particular with long videos
+  #     * More stable playback (less bugs/infinite loading)
+  # /!\ Multiply videos storage by two /!\
+  hls:
+    enabled: false
 
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)

@@ -117,6 +117,7 @@
     "fluent-ffmpeg": "^2.1.0",
     "fs-extra": "^7.0.0",
     "helmet": "^3.12.1",
+    "hlsdownloader": "https://github.com/Chocobozzz/hlsdownloader#build",
     "http-signature": "^1.2.0",
     "ip-anonymize": "^0.0.6",
     "ipaddr.js": "1.8.1",

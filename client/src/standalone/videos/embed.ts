@@ -23,7 +23,13 @@ import { peertubeTranslate, ResultList, VideoDetails } from '../../../../shared'
 import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
-import { PeertubePlayerManager, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
+import {
+  P2PMediaLoaderOptions,
+  PeertubePlayerManager,
+  PeertubePlayerManagerOptions,
+  PlayerMode
+} from '../../assets/player/peertube-player-manager'
+import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 
 /**
  * Embed API exposes control of the embed player to the outside world via
@@ -319,13 +325,16 @@ class PeerTubeEmbed {
     }
 
     if (this.mode === 'p2p-media-loader') {
+      const hlsPlaylist = videoInfo.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
+
       Object.assign(options, {
         p2pMediaLoader: {
-          // playlistUrl: 'https://akamai-axtest.akamaized.net/routes/lapd-v1-acceptance/www_c4/Manifest.m3u8'
-          // playlistUrl: 'https://d2zihajmogu5jn.cloudfront.net/bipbop-advanced/bipbop_16x9_variant.m3u8'
-          // trackerAnnounce: [ window.location.origin.replace(/^http/, 'ws') + '/tracker/socket' ],
-          playlistUrl: 'https://cdn.theoplayer.com/video/elephants-dream/playlist.m3u8'
-        }
+          playlistUrl: hlsPlaylist.playlistUrl,
+          segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
+          redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
+          trackerAnnounce: videoInfo.trackerUrls,
+          videoFiles: videoInfo.files
+        } as P2PMediaLoaderOptions
       })
     } else {
       Object.assign(options, {

@@ -5,6 +5,7 @@ import { VideoChannel } from './channel/video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoConstant } from './video-constant.model'
+import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 
 export interface VideoFile {
   magnetUri: string
@@ -86,4 +87,8 @@ export interface VideoDetails extends Video {
   // Not optional in details (unlike in Video)
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
+
+  trackerUrls: string[]
+
+  streamingPlaylists: VideoStreamingPlaylist[]
 }
