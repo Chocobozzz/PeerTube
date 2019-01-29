@@ -4,12 +4,15 @@ import * as videojs from 'video.js'
 
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { PeerTubePlugin } from './peertube-plugin'
-import { WebTorrentPlugin } from './webtorrent-plugin'
+import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
+import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
+import { PlayerMode } from './peertube-player-manager'
 
 declare namespace videojs {
   interface Player {
     peertube (): PeerTubePlugin
     webtorrent (): WebTorrentPlugin
+    p2pMediaLoader (): P2pMediaLoaderPlugin
   }
 }
 
@@ -33,6 +36,8 @@ type UserWatching = {
 }
 
 type PeerTubePluginOptions = {
+  mode: PlayerMode
+
   autoplay: boolean
   videoViewUrl: string
   videoDuration: number
@@ -54,6 +59,7 @@ type WebtorrentPluginOptions = {
 }
 
 type P2PMediaLoaderPluginOptions = {
+  redundancyBaseUrls: string[]
   type: string
   src: string
 }
@@ -91,6 +97,13 @@ type AutoResolutionUpdateData = {
 }
 
 type PlayerNetworkInfo = {
+  http: {
+    downloadSpeed: number
+    uploadSpeed: number
+    downloaded: number
+    uploaded: number
+  }
+
   p2p: {
     downloadSpeed: number
     uploadSpeed: number

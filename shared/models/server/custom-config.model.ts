@@ -61,6 +61,9 @@ export interface CustomConfig {
       '720p': boolean
       '1080p': boolean
     }
+    hls: {
+      enabled: boolean
+    }
   }
 
   import: {

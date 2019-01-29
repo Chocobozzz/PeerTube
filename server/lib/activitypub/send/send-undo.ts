@@ -73,7 +73,8 @@ async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Trans
 async function sendUndoCacheFile (byActor: ActorModel, redundancyModel: VideoRedundancyModel, t: Transaction) {
   logger.info('Creating job to undo cache file %s.', redundancyModel.url)
 
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.VideoFile.Video.id)
+  const videoId = redundancyModel.getVideo().id
+  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
   const createActivity = buildCreateActivity(redundancyModel.url, byActor, redundancyModel.toActivityPubObject())
 
   return sendUndoVideoRelatedActivity({ byActor, video, url: redundancyModel.url, activity: createActivity, transaction: t })

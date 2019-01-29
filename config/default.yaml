@@ -48,6 +48,7 @@ storage:
   tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
+  playlists: 'storage/playlists/'
   redundancy: 'storage/redundancy/'
   logs: 'storage/logs/'
   previews: 'storage/previews/'
@@ -138,6 +139,14 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+  # /!\ EXPERIMENTAL /!\
+  # Generate HLS playlist/segments. Better playback than with WebTorrent:
+  #     * Resolution change is smoother
+  #     * Faster playback in particular with long videos
+  #     * More stable playback (less bugs/infinite loading)
+  # /!\ Multiply videos storage by two /!\
+  hls:
+    enabled: false
 
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)

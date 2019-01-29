@@ -65,6 +65,9 @@ describe('Test config API validators', function () {
         '480p': true,
         '720p': false,
         '1080p': false
+      },
+      hls: {
+        enabled: false
       }
     },
     import: {

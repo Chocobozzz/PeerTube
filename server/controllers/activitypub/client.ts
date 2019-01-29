@@ -37,7 +37,7 @@ import {
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
 import { VideoCaptionModel } from '../../models/video/video-caption'
-import { videoRedundancyGetValidator } from '../../middlewares/validators/redundancy'
+import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { getServerActor } from '../../helpers/utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 
@@ -66,11 +66,11 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
 
 activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS))),
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video-with-rights'))),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
 activityPubClientRouter.get('/videos/watch/:id/activity',
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video-with-rights'))),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
@@ -116,7 +116,11 @@ activityPubClientRouter.get('/video-channels/:name/following',
 )
 
 activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
-  executeIfActivityPub(asyncMiddleware(videoRedundancyGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoFileRedundancyGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoRedundancyController))
+)
+activityPubClientRouter.get('/redundancy/video-playlists/:streamingPlaylistType/:videoId',
+  executeIfActivityPub(asyncMiddleware(videoPlaylistRedundancyGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoRedundancyController))
 )
 
@@ -163,7 +167,8 @@ function getAccountVideoRate (rateType: VideoRateType) {
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  const video: VideoModel = res.locals.video
+  // We need more attributes
+  const video: VideoModel = await VideoModel.loadForGetAPI(res.locals.video.id)
 
   if (video.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(video.url)
 

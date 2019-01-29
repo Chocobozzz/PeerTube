@@ -75,11 +75,12 @@ class P2pInfoButton extends Button {
       }
 
       const p2pStats = data.p2p
+      const httpStats = data.http
 
-      const downloadSpeed = bytes(p2pStats.downloadSpeed)
-      const uploadSpeed = bytes(p2pStats.uploadSpeed)
-      const totalDownloaded = bytes(p2pStats.downloaded)
-      const totalUploaded = bytes(p2pStats.uploaded)
+      const downloadSpeed = bytes(p2pStats.downloadSpeed + httpStats.downloadSpeed)
+      const uploadSpeed = bytes(p2pStats.uploadSpeed + httpStats.uploadSpeed)
+      const totalDownloaded = bytes(p2pStats.downloaded + httpStats.downloaded)
+      const totalUploaded = bytes(p2pStats.uploaded + httpStats.uploaded)
       const numPeers = p2pStats.numPeers
 
       subDivWebtorrent.title = this.player_.localize('Total downloaded: ') + totalDownloaded.join(' ') + '\n' +
@@ -92,7 +93,7 @@ class P2pInfoButton extends Button {
       uploadSpeedUnit.textContent = ' ' + uploadSpeed[ 1 ]
 
       peersNumber.textContent = numPeers
-      peersText.textContent = ' ' + this.player_.localize('peers')
+      peersText.textContent = ' ' + (numPeers > 1 ? this.player_.localize('peers') : this.player_.localize('peer'))
 
       subDivHttp.className = 'vjs-peertube-hidden'
       subDivWebtorrent.className = 'vjs-peertube-displayed'

@@ -86,6 +86,13 @@ describe('Test update host scripts', function () {
       const { body } = await makeActivityPubGetRequest(server.url, '/videos/watch/' + video.uuid)
 
       expect(body.id).to.equal('http://localhost:9002/videos/watch/' + video.uuid)
+
+      const res = await getVideo(server.url, video.uuid)
+      const videoDetails: VideoDetails = res.body
+
+      expect(videoDetails.trackerUrls[0]).to.include(server.host)
+      expect(videoDetails.streamingPlaylists[0].playlistUrl).to.include(server.host)
+      expect(videoDetails.streamingPlaylists[0].segmentsSha256Url).to.include(server.host)
     }
   })
 
@@ -100,7 +107,7 @@ describe('Test update host scripts', function () {
     }
   })
 
-  it('Should have update accounts url', async function () {
+  it('Should have updated accounts url', async function () {
     const res = await getAccountsList(server.url)
     expect(res.body.total).to.equal(3)
 
@@ -112,7 +119,7 @@ describe('Test update host scripts', function () {
     }
   })
 
-  it('Should update torrent hosts', async function () {
+  it('Should have updated torrent hosts', async function () {
     this.timeout(30000)
 
     const res = await getVideosList(server.url)

@@ -271,7 +271,16 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
   serverNumber: number,
-  directories = [ 'redundancy', 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]
+  directories = [
+    'redundancy',
+    'videos',
+    'thumbnails',
+    'torrents',
+    'previews',
+    'captions',
+    join('playlists', 'hls'),
+    join('redundancy', 'hls')
+  ]
 ) {
   const testDirectory = 'test' + serverNumber
 
@@ -279,7 +288,7 @@ async function checkVideoFilesWereRemoved (
     const directoryPath = join(root(), testDirectory, directory)
 
     const directoryExists = existsSync(directoryPath)
-    expect(directoryExists).to.be.true
+    if (!directoryExists) continue
 
     const files = await readdir(directoryPath)
     for (const file of files) {

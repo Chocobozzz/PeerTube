@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
@@ -39,17 +39,14 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
   return unicastTo(createActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
-async function sendCreateCacheFile (byActor: ActorModel, fileRedundancy: VideoRedundancyModel) {
+async function sendCreateCacheFile (byActor: ActorModel, video: VideoModel, fileRedundancy: VideoRedundancyModel) {
   logger.info('Creating job to send file cache of %s.', fileRedundancy.url)
-
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(fileRedundancy.VideoFile.Video.id)
-  const redundancyObject = fileRedundancy.toActivityPubObject()
 
   return sendVideoRelatedCreateActivity({
     byActor,
     video,
     url: fileRedundancy.url,
-    object: redundancyObject
+    object: fileRedundancy.toActivityPubObject()
   })
 }
 

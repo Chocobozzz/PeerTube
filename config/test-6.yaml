@@ -13,6 +13,7 @@ storage:
   tmp: 'test6/tmp/'
   avatars: 'test6/avatars/'
   videos: 'test6/videos/'
+  playlists: 'test6/playlists/'
   redundancy: 'test6/redundancy/'
   logs: 'test6/logs/'
   previews: 'test6/previews/'

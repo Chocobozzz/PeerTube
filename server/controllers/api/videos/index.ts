@@ -37,6 +37,7 @@ import {
   setDefaultPagination,
   setDefaultSort,
   videosAddValidator,
+  videosCustomGetValidator,
   videosGetValidator,
   videosRemoveValidator,
   videosSortValidator,
@@ -123,9 +124,9 @@ videosRouter.get('/:id/description',
 )
 videosRouter.get('/:id',
   optionalAuthenticate,
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
   asyncMiddleware(checkVideoFollowConstraints),
-  getVideo
+  asyncMiddleware(getVideo)
 )
 videosRouter.post('/:id/views',
   asyncMiddleware(videosGetValidator),
@@ -395,15 +396,17 @@ async function updateVideo (req: express.Request, res: express.Response) {
   return res.type('json').status(204).end()
 }
 
-function getVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+async function getVideo (req: express.Request, res: express.Response) {
+  // We need more attributes
+  const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
+  const video: VideoModel = await VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId)
 
-  if (videoInstance.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: videoInstance.url } })
-      .catch(err => logger.error('Cannot create AP refresher job for video %s.', videoInstance.url, { err }))
+  if (video.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
+      .catch(err => logger.error('Cannot create AP refresher job for video %s.', video.url, { err }))
   }
 
-  return res.json(videoInstance.toFormattedDetailsJSON())
+  return res.json(video.toFormattedDetailsJSON())
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {

@@ -13,6 +13,7 @@ import { VideoCommentModel } from '../server/models/video/video-comment'
 import { getServerActor } from '../server/helpers/utils'
 import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
+import { VideoStreamingPlaylistModel } from '../server/models/video/video-streaming-playlist'
 
 run()
   .then(() => process.exit(0))
@@ -109,11 +110,9 @@ async function run () {
 
   console.log('Updating video and torrent files.')
 
-  const videos = await VideoModel.list()
+  const videos = await VideoModel.listLocal()
   for (const video of videos) {
-    if (video.isOwned() === false) continue
-
-    console.log('Updated video ' + video.uuid)
+    console.log('Updating video ' + video.uuid)
 
     video.url = getVideoActivityPubUrl(video)
     await video.save()
@@ -121,6 +120,13 @@ async function run () {
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
       await video.createTorrentAndSetInfoHash(file)
+    }
+
+    for (const playlist of video.VideoStreamingPlaylists) {
+      playlist.playlistUrl = CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
+      playlist.segmentsSha256Url = CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid)
+
+      await playlist.save()
     }
   }
 }

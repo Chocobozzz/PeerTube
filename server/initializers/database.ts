@@ -33,6 +33,7 @@ import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
 import { UserNotificationModel } from '../models/account/user-notification'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -99,7 +100,8 @@ async function initDatabaseModels (silent: boolean) {
     AccountBlocklistModel,
     ServerBlocklistModel,
     UserNotificationModel,
-    UserNotificationSettingModel
+    UserNotificationSettingModel,
+    VideoStreamingPlaylistModel
   ])
 
   // Check extensions exist in the database
