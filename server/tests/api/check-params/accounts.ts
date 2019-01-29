@@ -10,7 +10,7 @@ import {
 } from '../../../../shared/utils/requests/check-api-params'
 import { getAccount } from '../../../../shared/utils/users/accounts'
 
-describe('Test users API validators', function () {
+describe('Test accounts API validators', function () {
   const path = '/api/v1/accounts/'
   let server: ServerInfo
 

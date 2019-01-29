@@ -19,6 +19,7 @@ const icons = {
   'delete': require('../../../assets/images/global/delete.html'),
   'cross': require('../../../assets/images/global/cross.html'),
   'validate': require('../../../assets/images/global/validate.html'),
+  'tick': require('../../../assets/images/global/tick.html'),
   'dislike': require('../../../assets/images/video/dislike.html'),
   'heart': require('../../../assets/images/video/heart.html'),
   'like': require('../../../assets/images/video/like.html'),
