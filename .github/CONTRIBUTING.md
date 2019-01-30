@@ -57,8 +57,8 @@ before you start working on them :).
 
 First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead to crashes.
 
-Make sure that you have followed 
-[the steps](/support/doc/dependencies.md) 
+Make sure that you have followed
+[the steps](/support/doc/dependencies.md)
 to install the dependencies.
 
 Then clone the sources and install node modules:
@@ -92,6 +92,12 @@ $ sudo -u postgres psql -c "CREATE EXTENSION unaccent;" peertube_dev
 ```
 
 In dev mode, administrator username is **root** and password is **test**.
+
+### Online development
+
+You can get a complete PeerTube development setup with Gitpod, a free one-click online IDE for GitHub:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Chocobozzz/PeerTube)
 
 ### Server side
 
