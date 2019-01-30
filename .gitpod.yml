@@ -1,0 +1,16 @@
+image:
+  file: support/docker/gitpod/Dockerfile
+ports:
+- port: 3000
+  onOpen: open-preview
+- port: 5432
+  onOpen: ignore
+- port: 6379
+  onOpen: ignore
+- port: 9000
+  onOpen: ignore
+tasks:
+- command: redis-server
+- before: export NODE_CONFIG="{\"import\":{\"videos\":{\"torrent\":{\"enabled\":false}}},\"webserver\":{\"hostname\":\"$(gp url 3000 | cut -d/ -f3)\",\"port\":\"443\",\"https\":true}}"
+  init: yarn install --pure-lockfile
+  command: npm run dev
