@@ -1,12 +1,10 @@
-@import '_variables';
-@import '_mixins';
+@import "_variables";
+@import "_mixins";
 
 .video-miniature {
-  display: inline-block;
-  padding-right: 15px;
-  margin-bottom: 30px;
+  display: block;
   height: 175px;
-  vertical-align: top;
+  width: 200px;
 
   .video-miniature-information {
     width: 200px;

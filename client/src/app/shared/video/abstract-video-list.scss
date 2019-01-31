@@ -1,4 +1,4 @@
-@import '_mixins';
+@import "_mixins";
 
 .videos {
   text-align: center;
@@ -6,6 +6,13 @@
   my-video-miniature {
     text-align: left;
   }
+}
+
+.videos-page {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 200px);
+  grid-gap: 30px;
+  align-items: center;
 }
 
 .videos-header {
@@ -32,6 +39,9 @@
 }
 
 @media screen and (max-width: 500px) {
+  .videos-page {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
   .videos {
     @include video-miniature-small-screen;
   }
