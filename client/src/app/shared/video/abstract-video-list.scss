@@ -11,8 +11,7 @@
 .videos-page {
   display: grid;
   grid-template-columns: repeat(auto-fit, 200px);
-  grid-gap: 30px;
-  align-items: center;
+  grid-gap: 15px;
 }
 
 .videos-header {
