@@ -11,10 +11,12 @@ import { isMobile, timeToInt, videoFileMaxByResolution, videoFileMinByResolution
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
+  getStoredLastSubtitle,
   getStoredMute,
   getStoredVolume,
   getStoredWebTorrentEnabled,
   saveAverageBandwidth,
+  saveLastSubtitle,
   saveMuteInStore,
   saveVolumeInStore
 } from './peertube-player-local-storage'
@@ -67,10 +69,11 @@ class PeerTubePlugin extends Plugin {
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
   private videoCaptions: VideoJSCaption[]
+  private defaultSubtitle: string
 
   private renderer: any
   private fakeRenderer: any
-  private destoyingFakeRenderer = false
+  private destroyingFakeRenderer = false
 
   private autoResolution = true
   private forbidAutoResolution = false
@@ -106,10 +109,33 @@ class PeerTubePlugin extends Plugin {
     if (this.autoplay === true) this.player.addClass('vjs-has-autoplay')
 
     this.player.ready(() => {
+      const playerOptions = this.player.options_
+
       const volume = getStoredVolume()
       if (volume !== undefined) this.player.volume(volume)
-      const muted = getStoredMute()
+
+      const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
+
+      this.defaultSubtitle = options.subtitle || getStoredLastSubtitle()
+
+      this.player.on('volumechange', () => {
+        saveVolumeInStore(this.player.volume())
+        saveMuteInStore(this.player.muted())
+      })
+
+      this.player.textTracks().on('change', () => {
+        const showing = this.player.textTracks().tracks_.find((t: { kind: string, mode: string }) => {
+          return t.kind === 'captions' && t.mode === 'showing'
+        })
+
+        if (!showing) {
+          saveLastSubtitle('off')
+          return
+        }
+
+        saveLastSubtitle(showing.language)
+      })
 
       this.player.duration(options.videoDuration)
 
@@ -123,11 +149,6 @@ class PeerTubePlugin extends Plugin {
         // Don't run immediately scheduler, wait some seconds the TCP connections are made
         this.runAutoQualitySchedulerTimer = setTimeout(() => this.runAutoQualityScheduler(), this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
       })
-    })
-
-    this.player.on('volumechange', () => {
-      saveVolumeInStore(this.player.volume())
-      saveMuteInStore(this.player.muted())
     })
   }
 
@@ -599,6 +620,9 @@ class PeerTubePlugin extends Plugin {
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
 
+    // We changed the source, so reinit captions
+    this.initCaptions()
+
     return this.tryToPlay(err => {
       if (err && done) return done(err)
 
@@ -657,14 +681,14 @@ class PeerTubePlugin extends Plugin {
   }
 
   private renderFileInFakeElement (file: WebTorrent.TorrentFile, delay: number) {
-    this.destoyingFakeRenderer = false
+    this.destroyingFakeRenderer = false
 
     const fakeVideoElem = document.createElement('video')
     renderVideo(file, fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
       this.fakeRenderer = renderer
 
       // The renderer returns an error when we destroy it, so skip them
-      if (this.destoyingFakeRenderer === false && err) {
+      if (this.destroyingFakeRenderer === false && err) {
         console.error('Cannot render new torrent in fake video element.', err)
       }
 
@@ -675,7 +699,7 @@ class PeerTubePlugin extends Plugin {
 
   private destroyFakeRenderer () {
     if (this.fakeRenderer) {
-      this.destoyingFakeRenderer = true
+      this.destroyingFakeRenderer = true
 
       if (this.fakeRenderer.destroy) {
         try {
@@ -695,9 +719,12 @@ class PeerTubePlugin extends Plugin {
         label: caption.label,
         language: caption.language,
         id: caption.language,
-        src: caption.src
+        src: caption.src,
+        default: this.defaultSubtitle === caption.language
       }, false)
     }
+
+    this.player.trigger('captionsChanged')
   }
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657

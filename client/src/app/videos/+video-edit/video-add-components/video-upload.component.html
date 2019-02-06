@@ -1,12 +1,12 @@
 <div *ngIf="!isUploadingVideo" class="upload-video-container">
-  <div class="upload-video">
-    <div class="icon icon-upload"></div>
+  <div class="first-step-block">
+    <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
 
     <div class="button-file">
       <span i18n>Select the file to upload</span>
       <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" />
     </div>
-    <span class="button-file-extension">(.mp4, .webm, .ogv)</span>
+    <span class="button-file-extension">({{ videoExtensions }})</span>
 
     <div class="form-group form-group-channel">
       <label i18n for="first-step-channel">Channel</label>
@@ -42,11 +42,16 @@
   {{ error }}
 </div>
 
+<div *ngIf="videoUploaded && !error" class="alert alert-info" i18n>
+  Congratulations! Your video is now available in your private library.
+</div>
+
 <!-- Hidden because we want to load the component -->
 <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
     [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
+    [waitTranscodingEnabled]="waitTranscodingEnabled"
   ></my-video-edit>
 
   <div class="submit-container">
@@ -56,7 +61,7 @@
        (click)="updateSecondStep()"
        [ngClass]="{ disabled: isPublishingButtonDisabled() }"
     >
-      <span class="icon icon-validate"></span>
+      <my-global-icon iconName="validate"></my-global-icon>
       <input [disabled]="isPublishingButtonDisabled()" type="button" i18n-value value="Publish" />
     </div>
   </div>

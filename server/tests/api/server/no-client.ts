@@ -4,8 +4,8 @@ import {
   flushTests,
   killallServers,
   ServerInfo
-} from '../../utils/index'
-import { runServer } from '../../utils/server/servers'
+} from '../../../../shared/utils'
+import { runServer } from '../../../../shared/utils/server/servers'
 
 describe('Start and stop server without web client routes', function () {
   let server: ServerInfo

@@ -50,6 +50,11 @@ user:
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"
 
+contact_form:
+  enabled:
+    __name: "PEERTUBE_CONTACT_FORM_ENABLED"
+    __format: "json"
+
 signup:
   enabled:
     __name: "PEERTUBE_SIGNUP_ENABLED"
@@ -101,9 +106,11 @@ transcoding:
     1080:
       __name: "PEERTUBE_TRANSCODING_1080P"
       __format: "json"
-    
 
 instance:
   name: "PEERTUBE_INSTANCE_NAME"
   description: "PEERTUBE_INSTANCE_DESCRIPTION"
   terms: "PEERTUBE_INSTANCE_TERMS"
+
+services:
+  csp-logger: "PEERTUBE_SERVICES_CSPLOGGER"

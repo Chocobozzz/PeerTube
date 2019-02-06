@@ -29,7 +29,7 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
   }
 
   onValidKey () {
-    this.onValueChanged()
+    this.check()
     if (!this.form.valid) return
 
     this.formValidated()
@@ -37,7 +37,24 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
 
   formValidated () {
     const address = this.form.value['text']
-    const [ , hostname ] = address.split('@')
-    window.open(`https://${hostname}/authorize_interaction?acct=${this.account}`)
+    const [ username, hostname ] = address.split('@')
+
+    fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
+      .then(response => response.json())
+      .then(data => new Promise((resolve, reject) => {
+        if (data && Array.isArray(data.links)) {
+          const link: {
+            template: string
+          } = data.links.find((link: any) =>
+            link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe')
+
+          if (link && link.template.includes('{uri}')) {
+            resolve(link.template.replace('{uri}', `acct:${this.account}`))
+          }
+        }
+        reject()
+      }))
+      .then(window.open)
+      .catch(() => window.open(`https://${hostname}/authorize_interaction?acct=${this.account}`))
   }
 }

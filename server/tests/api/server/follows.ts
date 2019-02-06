@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { completeVideoCheck } from '../../utils'
+import { completeVideoCheck } from '../../../../shared/utils'
 import {
   flushAndRunMultipleServers,
   getVideosList,
@@ -12,21 +12,26 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../utils/index'
-import { dateIsValid } from '../../utils/miscs/miscs'
-import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
-import { expectAccountFollows } from '../../utils/users/accounts'
-import { userLogin } from '../../utils/users/login'
-import { createUser } from '../../utils/users/users'
+} from '../../../../shared/utils/index'
+import { dateIsValid } from '../../../../shared/utils/miscs/miscs'
+import {
+  follow,
+  getFollowersListPaginationAndSort,
+  getFollowingListPaginationAndSort,
+  unfollow
+} from '../../../../shared/utils/server/follows'
+import { expectAccountFollows } from '../../../../shared/utils/users/accounts'
+import { userLogin } from '../../../../shared/utils/users/login'
+import { createUser } from '../../../../shared/utils/users/users'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
-import { rateVideo } from '../../utils/videos/videos'
-import { waitJobs } from '../../utils/server/jobs'
-import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
+} from '../../../../shared/utils/videos/video-comments'
+import { rateVideo } from '../../../../shared/utils/videos/videos'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../../../shared/utils/videos/video-captions'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect

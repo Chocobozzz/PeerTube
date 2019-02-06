@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoImport, VideoImportState } from '../../../../../shared/models/videos'
 import { VideoImportService } from '@app/shared/video-import'
@@ -19,7 +19,7 @@ export class MyAccountVideoImportsComponent extends RestTable implements OnInit 
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private videoImportService: VideoImportService,
     private i18n: I18n
   ) {
@@ -58,7 +58,7 @@ export class MyAccountVideoImportsComponent extends RestTable implements OnInit 
             this.totalRecords = resultList.total
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 }

@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { RedirectService, ServerService } from '@app/core'
+import { Notifier, RedirectService, ServerService } from '@app/core'
 import { UserService } from '@app/shared'
-import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -19,7 +18,6 @@ import { Router } from '@angular/router'
 export class LoginComponent extends FormReactive implements OnInit {
   @ViewChild('emailInput') input: ElementRef
   @ViewChild('forgotPasswordModal') forgotPasswordModal: ElementRef
-  @ViewChild('forgotPasswordEmailInput') forgotPasswordEmailInput: ElementRef
 
   error: string = null
   forgotPasswordEmail = ''
@@ -35,7 +33,7 @@ export class LoginComponent extends FormReactive implements OnInit {
     private userService: UserService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private i18n: I18n
   ) {
     super()
@@ -43,6 +41,10 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   get signupAllowed () {
     return this.serverService.getConfig().signup.allowed === true
+  }
+
+  isEmailDisabled () {
+    return this.serverService.getConfig().email.enabled === false
   }
 
   ngOnInit () {
@@ -61,7 +63,7 @@ export class LoginComponent extends FormReactive implements OnInit {
 
     this.authService.login(username, password)
       .subscribe(
-        () => this.redirect(),
+        () => this.redirectService.redirectToPreviousRoute(),
 
         err => {
           if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
@@ -69,15 +71,6 @@ export class LoginComponent extends FormReactive implements OnInit {
           else this.error = err.message
         }
       )
-  }
-
-  redirect () {
-    const redirect = this.authService.redirectUrl
-    if (redirect) {
-      this.router.navigate([ redirect ])
-    } else {
-      this.redirectService.redirectToHomepage()
-    }
   }
 
   askResetPassword () {
@@ -88,16 +81,12 @@ export class LoginComponent extends FormReactive implements OnInit {
             'An email with the reset password instructions will be sent to {{email}}.',
             { email: this.forgotPasswordEmail }
           )
-          this.notificationsService.success(this.i18n('Success'), message)
+          this.notifier.success(message)
           this.hideForgotPasswordModal()
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
-  }
-
-  onForgotPasswordModalShown () {
-    this.forgotPasswordEmailInput.nativeElement.focus()
   }
 
   openForgotPasswordModal () {

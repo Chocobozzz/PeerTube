@@ -3,20 +3,25 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  checkBadCountPagination,
+  checkBadStartPagination,
   flushTests,
   killallServers,
+  makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   runServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../utils'
+} from '../../../../shared/utils'
 
 const expect = chai.expect
 
 describe('Test videos history API validator', function () {
-  let path: string
+  let watchingPath: string
+  let myHistoryPath = '/api/v1/users/me/history/videos'
+  let myHistoryRemove = myHistoryPath + '/remove'
   let server: ServerInfo
 
   // ---------------------------------------------------------------
@@ -33,14 +38,14 @@ describe('Test videos history API validator', function () {
     const res = await uploadVideo(server.url, server.accessToken, {})
     const videoUUID = res.body.video.uuid
 
-    path = '/api/v1/videos/' + videoUUID + '/watching'
+    watchingPath = '/api/v1/videos/' + videoUUID + '/watching'
   })
 
   describe('When notifying a user is watching a video', function () {
 
     it('Should fail with an unauthenticated user', async function () {
       const fields = { currentTime: 5 }
-      await makePutBodyRequest({ url: server.url, path, fields, statusCodeExpected: 401 })
+      await makePutBodyRequest({ url: server.url, path: watchingPath, fields, statusCodeExpected: 401 })
     })
 
     it('Should fail with an incorrect video id', async function () {
@@ -58,13 +63,68 @@ describe('Test videos history API validator', function () {
 
     it('Should fail with a bad current time', async function () {
       const fields = { currentTime: 'hello' }
-      await makePutBodyRequest({ url: server.url, path, fields, token: server.accessToken, statusCodeExpected: 400 })
+      await makePutBodyRequest({ url: server.url, path: watchingPath, fields, token: server.accessToken, statusCodeExpected: 400 })
     })
 
     it('Should succeed with the correct parameters', async function () {
       const fields = { currentTime: 5 }
 
-      await makePutBodyRequest({ url: server.url, path, fields, token: server.accessToken, statusCodeExpected: 204 })
+      await makePutBodyRequest({ url: server.url, path: watchingPath, fields, token: server.accessToken, statusCodeExpected: 204 })
+    })
+  })
+
+  describe('When listing user videos history', function () {
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, myHistoryPath, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, myHistoryPath, server.accessToken)
+    })
+
+    it('Should fail with an unauthenticated user', async function () {
+      await makeGetRequest({ url: server.url, path: myHistoryPath, statusCodeExpected: 401 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, token: server.accessToken, path: myHistoryPath, statusCodeExpected: 200 })
+    })
+  })
+
+  describe('When removing user videos history', function () {
+    it('Should fail with an unauthenticated user', async function () {
+      await makePostBodyRequest({ url: server.url, path: myHistoryPath + '/remove', statusCodeExpected: 401 })
+    })
+
+    it('Should fail with a bad beforeDate parameter', async function () {
+      const body = { beforeDate: '15' }
+      await makePostBodyRequest({
+        url: server.url,
+        token: server.accessToken,
+        path: myHistoryRemove,
+        fields: body,
+        statusCodeExpected: 400
+      })
+    })
+
+    it('Should succeed with a valid beforeDate param', async function () {
+      const body = { beforeDate: new Date().toISOString() }
+      await makePostBodyRequest({
+        url: server.url,
+        token: server.accessToken,
+        path: myHistoryRemove,
+        fields: body,
+        statusCodeExpected: 204
+      })
+    })
+
+    it('Should succeed without body', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        token: server.accessToken,
+        path: myHistoryRemove,
+        statusCodeExpected: 204
+      })
     })
   })
 

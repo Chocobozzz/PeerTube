@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { FormReactive, VideoAbuseService } from '../../../shared/index'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -27,10 +27,22 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     private modalService: NgbModal,
     private videoAbuseValidatorsService: VideoAbuseValidatorsService,
     private videoAbuseService: VideoAbuseService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private i18n: I18n
   ) {
     super()
+  }
+
+  get currentHost () {
+    return window.location.host
+  }
+
+  get originHost () {
+    if (this.isRemoteVideo()) {
+      return this.video.account.host
+    }
+
+    return ''
   }
 
   ngOnInit () {
@@ -54,11 +66,15 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     this.videoAbuseService.reportVideo(this.video.id, reason)
                           .subscribe(
                             () => {
-                              this.notificationsService.success(this.i18n('Success'), this.i18n('Video reported.'))
+                              this.notifier.success(this.i18n('Video reported.'))
                               this.hide()
                             },
 
-                            err => this.notificationsService.error(this.i18n('Error'), err.message)
+                            err => this.notifier.error(err.message)
                            )
+  }
+
+  isRemoteVideo () {
+    return !this.video.isLocal
   }
 }

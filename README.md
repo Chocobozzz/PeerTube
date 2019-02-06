@@ -17,6 +17,16 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 </p>
 
 <p align="center">
+  <strong>Developed with &#10084; by <a href="https://framasoft.org">Framasoft</a></strong>
+</p>
+
+<p align="center">
+  <a href="https://framasoft.org">
+    <img width="150px" src="http://lutim.cpy.re/Prd3ci7G.png" alt="Framasoft logo"/>
+  </a>
+</p>
+
+<p align="center">
   <strong>Client</strong>
 
   <br />
@@ -123,7 +133,7 @@ You can also join the cheerful bunch that makes our community:
 
 * Chat<a name="contact"></a>:
   * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
-  * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+  * Matrix (bridged on IRC and [Discord](https://discord.gg/wj8DDUT)) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
 * Forum:
   * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
     

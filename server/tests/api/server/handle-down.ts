@@ -5,24 +5,30 @@ import 'mocha'
 import { JobState, Video } from '../../../../shared/models'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { completeVideoCheck, getVideo, immutableAssign, reRunServer, unfollow, updateVideo, viewVideo } from '../../utils'
+
 import {
+  completeVideoCheck,
   flushAndRunMultipleServers,
+  getVideo,
   getVideosList,
+  immutableAssign,
   killallServers,
+  reRunServer,
   ServerInfo,
   setAccessTokensToServers,
+  unfollow,
+  updateVideo,
   uploadVideo,
   wait
-} from '../../utils/index'
-import { follow, getFollowersListPaginationAndSort } from '../../utils/server/follows'
-import { getJobsListPaginationAndSort, waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { follow, getFollowersListPaginationAndSort } from '../../../../shared/utils/server/follows'
+import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/utils/server/jobs'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
+} from '../../../../shared/utils/videos/video-comments'
 
 const expect = chai.expect
 

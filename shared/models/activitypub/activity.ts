@@ -5,12 +5,14 @@ import { DislikeObject } from './objects/dislike-object'
 import { VideoAbuseObject } from './objects/video-abuse-object'
 import { VideoCommentObject } from './objects/video-comment-object'
 import { ViewObject } from './objects/view-object'
+import { APObject } from './objects/object.model'
 
 export type Activity = ActivityCreate | ActivityUpdate |
   ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce |
-  ActivityUndo | ActivityLike | ActivityReject
+  ActivityUndo | ActivityLike | ActivityReject | ActivityView | ActivityDislike | ActivityFlag
 
-export type ActivityType = 'Create' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like' | 'Reject'
+export type ActivityType = 'Create' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like' | 'Reject' |
+  'View' | 'Dislike' | 'Flag'
 
 export interface ActivityAudience {
   to: string[]
@@ -59,15 +61,34 @@ export interface ActivityReject extends BaseActivity {
 
 export interface ActivityAnnounce extends BaseActivity {
   type: 'Announce'
-  object: string | { id: string }
+  object: APObject
 }
 
 export interface ActivityUndo extends BaseActivity {
   type: 'Undo',
-  object: ActivityFollow | ActivityLike | ActivityCreate | ActivityAnnounce
+  object: ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate | ActivityAnnounce
 }
 
 export interface ActivityLike extends BaseActivity {
   type: 'Like',
-  object: string
+  object: APObject
+}
+
+export interface ActivityView extends BaseActivity {
+  type: 'View',
+  actor: string
+  object: APObject
+}
+
+export interface ActivityDislike extends BaseActivity {
+  id: string
+  type: 'Dislike'
+  actor: string
+  object: APObject
+}
+
+export interface ActivityFlag extends BaseActivity {
+  type: 'Flag',
+  content: string,
+  object: APObject
 }

@@ -9,11 +9,15 @@ import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
   makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
   updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../utils/videos/video-imports'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/utils/videos/video-imports'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { waitJobs } from '../../utils/server/jobs'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { expect } from 'chai'
 
 describe('Test users API validators', function () {
@@ -99,13 +103,13 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'fi' })
+      const fields = immutableAssign(baseCorrectParams, { username: '' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -304,6 +308,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid videosHistoryEnabled attribute', async function () {
+      const fields = {
+        videosHistoryEnabled: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should fail with an non authenticated user', async function () {
       const fields = {
         currentPassword: 'my super password',
@@ -473,11 +485,10 @@ describe('Test users API validators', function () {
         email: 'email@example.com',
         emailVerified: true,
         videoQuota: 42,
-        role: UserRole.MODERATOR
+        role: UserRole.USER
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields, statusCodeExpected: 204 })
-      userAccessToken = await userLogin(server, user)
     })
   })
 
@@ -550,13 +561,13 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'ji' })
+      const fields = immutableAssign(baseCorrectParams, { username: '' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })

@@ -1,11 +1,11 @@
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid } from './misc'
 
 function isViewActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    activity.object.type === 'View' &&
-    isActivityPubUrlValid(activity.object.actor) &&
-    isActivityPubUrlValid(activity.object.object)
+  return activity.type === 'View' &&
+    isActivityPubUrlValid(activity.actor) &&
+    isActivityPubUrlValid(activity.object)
 }
+
 // ---------------------------------------------------------------------------
 
 export {

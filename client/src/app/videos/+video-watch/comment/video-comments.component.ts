@@ -1,11 +1,10 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ElementRef } from '@angular/core'
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ConfirmService } from '@app/core'
-import { NotificationsService } from 'angular2-notifications'
+import { ConfirmService, Notifier } from '@app/core'
 import { Subscription } from 'rxjs'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
-import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
+import { ComponentPagination, hasMoreItems } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
 import { VideoSortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
@@ -42,7 +41,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
@@ -84,15 +83,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
             this.highlightedThread = new VideoComment(res.comment)
 
             // Scroll to the highlighted thread
-            setTimeout(() => {
-              // -60 because of the fixed header
-              const scrollY = this.commentHighlightBlock.nativeElement.offsetTop - 60
-              window.scroll(0, scrollY)
-            }, 500)
+            setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
           }
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -104,7 +99,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.componentPagination.totalItems = res.totalComments
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -155,7 +150,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           if (this.highlightedThread.id === commentToDelete.id) this.highlightedThread = undefined
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -166,20 +161,9 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   onNearOfBottom () {
     this.componentPagination.currentPage++
 
-    if (this.hasMoreComments()) {
+    if (hasMoreItems(this.componentPagination)) {
       this.loadMoreComments()
     }
-  }
-
-  private hasMoreComments () {
-    // No results
-    if (this.componentPagination.totalItems === 0) return false
-
-    // Not loaded yet
-    if (!this.componentPagination.totalItems) return true
-
-    const maxPage = this.componentPagination.totalItems / this.componentPagination.itemsPerPage
-    return maxPage > this.componentPagination.currentPage
   }
 
   private deleteLocalCommentThread (parentComment: VideoCommentThreadTree, commentToDelete: VideoComment) {

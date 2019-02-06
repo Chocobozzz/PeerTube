@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { omit } from 'lodash'
+import { omit, snakeCase } from 'lodash'
 import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
@@ -11,6 +11,9 @@ import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { remove, writeJSON } from 'fs-extra'
 import { getServerCommit } from '../../helpers/utils'
+import { Emailer } from '../../lib/emailer'
+import { isNumeric } from 'validator'
+import { objectConverter } from '../../helpers/core-utils'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -60,6 +63,12 @@ async function getConfig (req: express.Request, res: express.Response) {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
+    },
+    email: {
+      enabled: Emailer.isEnabled()
+    },
+    contactForm: {
+      enabled: CONFIG.CONTACT_FORM.ENABLED
     },
     serverVersion: packageJSON.version,
     serverCommit,
@@ -111,6 +120,11 @@ async function getConfig (req: express.Request, res: express.Response) {
     user: {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+    },
+    trending: {
+      videos: {
+        intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+      }
     }
   }
 
@@ -150,32 +164,10 @@ async function deleteCustomConfig (req: express.Request, res: express.Response, 
 }
 
 async function updateCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const toUpdate: CustomConfig = req.body
   const oldCustomConfigAuditKeys = new CustomConfigAuditView(customConfig())
 
-  // Force number conversion
-  toUpdate.cache.previews.size = parseInt('' + toUpdate.cache.previews.size, 10)
-  toUpdate.cache.captions.size = parseInt('' + toUpdate.cache.captions.size, 10)
-  toUpdate.signup.limit = parseInt('' + toUpdate.signup.limit, 10)
-  toUpdate.user.videoQuota = parseInt('' + toUpdate.user.videoQuota, 10)
-  toUpdate.user.videoQuotaDaily = parseInt('' + toUpdate.user.videoQuotaDaily, 10)
-  toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
-
-  // camelCase to snake_case key
-  const toUpdateJSON = omit(
-    toUpdate,
-    'user.videoQuota',
-    'instance.defaultClientRoute',
-    'instance.shortDescription',
-    'cache.videoCaptions',
-    'signup.requiresEmailVerification'
-  )
-  toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
-  toUpdateJSON.user['video_quota_daily'] = toUpdate.user.videoQuotaDaily
-  toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
-  toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
-  toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
-  toUpdateJSON.signup['requires_email_verification'] = toUpdate.signup.requiresEmailVerification
+  // camelCase to snake_case key + Force number conversion
+  const toUpdateJSON = convertCustomConfigBody(req.body)
 
   await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
 
@@ -237,12 +229,16 @@ function customConfig (): CustomConfig {
     admin: {
       email: CONFIG.ADMIN.EMAIL
     },
+    contactForm: {
+      enabled: CONFIG.CONTACT_FORM.ENABLED
+    },
     user: {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
     },
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
+      allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
         '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
@@ -263,4 +259,21 @@ function customConfig (): CustomConfig {
       }
     }
   }
+}
+
+function convertCustomConfigBody (body: CustomConfig) {
+  function keyConverter (k: string) {
+    // Transcoding resolutions exception
+    if (/^\d{3,4}p$/.exec(k)) return k
+
+    return snakeCase(k)
+  }
+
+  function valueConverter (v: any) {
+    if (isNumeric(v + '')) return parseInt('' + v, 10)
+
+    return v
+  }
+
+  return objectConverter(body, keyConverter, valueConverter)
 }

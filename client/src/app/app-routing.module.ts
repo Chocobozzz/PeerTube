@@ -43,7 +43,8 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       useHash: Boolean(history.pushState) === false,
-      preloadingStrategy: PreloadSelectedModulesList
+      preloadingStrategy: PreloadSelectedModulesList,
+      anchorScrolling: 'enabled'
     })
   ],
   providers: [

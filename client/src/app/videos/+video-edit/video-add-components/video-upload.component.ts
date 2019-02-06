@@ -2,11 +2,10 @@ import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs'
 import { VideoPrivacy } from '../../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../../core'
+import { AuthService, Notifier, ServerService } from '../../../core'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -21,7 +20,8 @@ import { scrollToTop } from '@app/shared/misc/utils'
   templateUrl: './video-upload.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-upload.component.scss'
+    './video-upload.component.scss',
+    './video-send.scss'
   ]
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -44,6 +44,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+  waitTranscodingEnabled = true
 
   error: string
 
@@ -52,7 +53,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected authService: AuthService,
     protected serverService: ServerService,
     protected videoService: VideoService,
@@ -109,7 +110,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
       this.videoUploadObservable = null
-      this.notificationsService.info(this.i18n('Info'), this.i18n('Upload cancelled'))
+      this.notifier.info(this.i18n('Upload cancelled'))
     }
   }
 
@@ -117,12 +118,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const videofile = this.videofileInput.nativeElement.files[0]
     if (!videofile) return
 
-    // Cannot upload videos > 8GB for now
-    if (videofile.size > 8 * 1024 * 1024 * 1024) {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('We are sorry but PeerTube cannot handle videos > 8GB'))
-      return
-    }
-
+    // Check global user quota
     const bytePipes = new BytesPipe()
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
@@ -134,10 +130,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           videoQuota: bytePipes.transform(videoQuota, 0)
         }
       )
-      this.notificationsService.error(this.i18n('Error'), msg)
+      this.notifier.error(msg)
       return
     }
 
+    // Check daily user quota
     const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
     if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
       const msg = this.i18n(
@@ -148,16 +145,22 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
           quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
         }
       )
-      this.notificationsService.error(this.i18n('Error'), msg)
+      this.notifier.error(msg)
       return
     }
 
+    // Build name field
     const nameWithoutExtension = videofile.name.replace(/\.[^/.]+$/, '')
     let name: string
 
     // If the name of the file is very small, keep the extension
     if (nameWithoutExtension.length < 3) name = videofile.name
     else name = nameWithoutExtension
+
+    // Force user to wait transcoding for unsupported video types in web browsers
+    if (!videofile.name.endsWith('.mp4') && !videofile.name.endsWith('.webm') && !videofile.name.endsWith('.ogv')) {
+      this.waitTranscodingEnabled = false
+    }
 
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
@@ -206,7 +209,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
         this.videoUploadPercents = 0
         this.videoUploadObservable = null
         this.firstStepError.emit()
-        this.notificationsService.error(this.i18n('Error'), err.message)
+        this.notifier.error(err.message)
       }
     )
   }
@@ -235,7 +238,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             this.isUpdatingVideo = false
             this.isUploadingVideo = false
 
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
+            this.notifier.success(this.i18n('Video published.'))
             this.router.navigate([ '/videos/watch', video.uuid ])
           },
 

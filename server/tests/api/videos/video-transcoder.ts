@@ -19,9 +19,9 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   webtorrentAdd
-} from '../../utils'
-import { join } from 'path'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { extname, join } from 'path'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
@@ -317,6 +317,34 @@ describe('Test video transcoding', function () {
 
         expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
         expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+      }
+    }
+  })
+
+  it('Should accept and transcode additional extensions', async function () {
+    this.timeout(300000)
+
+    for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
+      const videoAttributes = {
+        name: fixture,
+        fixture
+      }
+
+      await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributes)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const res = await getVideosList(server.url)
+
+        const video = res.body.data.find(v => v.name === videoAttributes.name)
+        const res2 = await getVideo(server.url, video.id)
+        const videoDetails = res2.body
+
+        expect(videoDetails.files).to.have.lengthOf(4)
+
+        const magnetUri = videoDetails.files[ 0 ].magnetUri
+        expect(magnetUri).to.contain('.mp4')
       }
     }
   })

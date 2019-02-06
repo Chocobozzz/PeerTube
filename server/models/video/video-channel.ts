@@ -233,6 +233,27 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
+  static listLocalsForSitemap (sort: string) {
+    const query = {
+      attributes: [ ],
+      offset: 0,
+      order: getSort(sort),
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'serverId' ],
+          model: ActorModel.unscoped(),
+          where: {
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return VideoChannelModel
+      .unscoped()
+      .findAll(query)
+  }
+
   static searchForApi (options: {
     actorId: number
     search: string
@@ -448,5 +469,9 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   getDisplayName () {
     return this.name
+  }
+
+  isOutdated () {
+    return this.Actor.isOutdated()
   }
 }

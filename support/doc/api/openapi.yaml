@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: PeerTube
-  version: 1.1.0
+  version: 1.2.0
   contact:
     name: PeerTube Community
     url: 'https://joinpeertube.org'
@@ -23,7 +23,7 @@ info:
 
     # Authentication
     When you sign up for an account, you are given the possibility to generate
-    sessions, and authenticate using this session token. One session token can 
+    sessions, and authenticate using this session token. One session token can
     currently be used at a time.
 
     # Errors
@@ -61,7 +61,7 @@ tags:
     description: >
       Managing servers which the instance interacts with is crucial to the
       concept of federation in PeerTube and external video indexation. The PeerTube
-      server then deals with inter-server ActivityPub operations and propagates 
+      server then deals with inter-server ActivityPub operations and propagates
       information across its social graph by posting activities to actors' inbox
       endpoints.
   - name: Video Abuse
@@ -492,7 +492,8 @@ paths:
     get:
       summary: Get current user information
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       responses:
@@ -507,7 +508,8 @@ paths:
     put:
       summary: Update current user information
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       responses:
@@ -523,7 +525,8 @@ paths:
     get:
       summary: Get current user used quota
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       responses:
@@ -558,7 +561,8 @@ paths:
     get:
       summary: Get videos of the current user
       security:
-        - OAuth2: []
+        - OAuth2:
+          - user
       tags:
         - User
       parameters:
@@ -574,6 +578,94 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Video'
+  /users/me/subscriptions:
+    get:
+      summary: Get subscriptions of the current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+    post:
+      summary: Add subscription to the current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
+  /users/me/subscriptions/exist:
+    get:
+      summary: Get if subscriptions exist for the current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/subscriptionsUris'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+  /users/me/subscriptions/videos:
+    get:
+      summary: Get videos of subscriptions of the current user
+      security:
+        - OAuth2:
+          - user
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+  '/users/me/subscriptions/{uri}':
+    get:
+      summary: Get subscription of the current user for a given uri
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoChannel'
+    delete:
+      summary: Delete subscription of the current user for a given uri
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
   /users/register:
     post:
       summary: Register a user
@@ -751,7 +843,9 @@ paths:
                   type: string
                 tags:
                   description: Video tags
-                  type: string
+                  type: array
+                  items:
+                    type: string
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
@@ -820,7 +914,7 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/videos/{id}/watching':
     put:
-      summary: Indicate progress of in watching the video by its id for a user
+      summary: Set watching progress of a video by its id for a user
       tags:
         - Video
       security:
@@ -958,7 +1052,9 @@ paths:
                   type: string
                 tags:
                   description: Video tags
-                  type: string
+                  type: array
+                  items:
+                    type: string
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
@@ -1434,6 +1530,8 @@ components:
         - type: array
           items:
             type: number
+      style: form
+      explode: false
     tagsOneOf:
       name: tagsOneOf
       in: query
@@ -1445,6 +1543,8 @@ components:
         - type: array
           items:
             type: string
+      style: form
+      explode: false
     tagsAllOf:
       name: tagsAllOf
       in: query
@@ -1456,6 +1556,8 @@ components:
         - type: array
           items:
             type: string
+      style: form
+      explode: false
     languageOneOf:
       name: languageOneOf
       in: query
@@ -1463,10 +1565,12 @@ components:
       description: language id of the video
       schema:
         oneOf:
-        - type: number
+        - type: string
         - type: array
           items:
-            type: number
+            type: string
+      style: form
+      explode: false
     licenceOneOf:
       name: licenceOneOf
       in: query
@@ -1478,6 +1582,8 @@ components:
         - type: array
           items:
             type: number
+      style: form
+      explode: false
     nsfw:
       name: nsfw
       in: query
@@ -1501,6 +1607,15 @@ components:
         enum:
         - local
         - all-local
+    subscriptionsUris:
+      name: uris
+      in: query
+      required: true
+      description: list of uris to check if each is part of the user subscriptions
+      schema:
+        type: array
+        items:
+          type: string
   requestBodies:
     VideoChannelInput:
       content:

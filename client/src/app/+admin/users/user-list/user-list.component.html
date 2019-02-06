@@ -2,7 +2,7 @@
   <div i18n class="form-sub-title">Users list</div>
 
   <a class="add-button" routerLink="/admin/users/create">
-    <span class="icon icon-add"></span>
+    <my-global-icon iconName="add"></my-global-icon>
     <ng-container i18n>Create user</ng-container>
   </a>
 </div>
@@ -65,7 +65,9 @@
           <span i18n *ngIf="user.blocked" class="banned-info">(banned)</span>
         </a>
       </td>
+
       <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus">{{ user.email }}</td>
+
       <ng-template #emailWithVerificationStatus>
         <td *ngIf="user.emailVerified === false; else emailVerifiedNotFalse" i18n-title title="User's email must be verified to login">
           <em>? {{ user.email }}</em>
@@ -76,6 +78,7 @@
           </td>
         </ng-template>
       </ng-template>
+
       <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
       <td>{{ user.roleLabel }}</td>
       <td>{{ user.createdAt }}</td>

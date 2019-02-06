@@ -15,6 +15,14 @@ export interface ServerConfig {
     }
   }
 
+  email: {
+    enabled: boolean
+  }
+
+  contactForm: {
+    enabled: boolean
+  }
+
   signup: {
     allowed: boolean,
     allowedForCurrentIP: boolean,
@@ -69,5 +77,11 @@ export interface ServerConfig {
   user: {
     videoQuota: number
     videoQuotaDaily: number
+  }
+
+  trending: {
+    videos: {
+      intervalDays: number
+    }
   }
 }

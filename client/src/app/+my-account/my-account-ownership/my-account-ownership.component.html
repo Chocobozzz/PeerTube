@@ -40,10 +40,10 @@
       <td class="action-cell">
         <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
           <my-button i18n label="Accept"
-                     icon="icon-tick"
+                     icon="tick"
                      (click)="openAcceptModal(videoChangeOwnership)"></my-button>
           <my-button i18n label="Refuse"
-                     icon="icon-cross"
+                     icon="cross"
                      (click)="refuse(videoChangeOwnership)">Refuse</my-button>
         </ng-container>
       </td>

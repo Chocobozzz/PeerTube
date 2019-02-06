@@ -28,7 +28,7 @@ import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-be
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, CACHE, HTTP_SIGNATURE } from './server/initializers/constants'
+import { API_VERSION, CONFIG, CACHE } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -53,6 +53,9 @@ if (errorMessage !== null) {
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
 // Security middleware
+import { baseCSP } from './server/middlewares'
+
+app.use(baseCSP)
 app.use(helmet({
   frameguard: {
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
@@ -87,16 +90,17 @@ import {
   servicesRouter,
   webfingerRouter,
   trackerRouter,
-  createWebsocketServer
+  createWebsocketTrackerServer, botsRouter
 } from './server/controllers'
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
-import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
+import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
+import { PeerTubeSocket } from './server/lib/peertube-socket'
 
 // ----------- Command line -----------
 
@@ -133,7 +137,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb',
-  verify: (req: express.Request, _, buf: Buffer, encoding: string) => {
+  verify: (req: express.Request, _, buf: Buffer) => {
     const valid = isHTTPSignatureDigestValid(buf, req)
     if (valid !== true) throw new Error('Invalid digest')
   }
@@ -156,6 +160,7 @@ app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', webfingerRouter)
 app.use('/', trackerRouter)
+app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
@@ -185,7 +190,7 @@ app.use(function (err, req, res, next) {
   return res.status(err.status || 500).end()
 })
 
-const server = createWebsocketServer(app)
+const server = createWebsocketTrackerServer(app)
 
 // ----------- Run -----------
 
@@ -215,7 +220,7 @@ async function startApplication () {
   VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, CACHE.VIDEO_CAPTIONS.MAX_AGE)
 
   // Enable Schedulers
-  BadActorFollowScheduler.Instance.enable()
+  ActorFollowScheduler.Instance.enable()
   RemoveOldJobsScheduler.Instance.enable()
   UpdateVideosScheduler.Instance.enable()
   YoutubeDlUpdateScheduler.Instance.enable()
@@ -223,6 +228,8 @@ async function startApplication () {
 
   // Redis initialization
   Redis.Instance.init()
+
+  PeerTubeSocket.Instance.init(server)
 
   // Make server listening
   server.listen(port, hostname, () => {

@@ -18,6 +18,7 @@ const SORTABLE_FOLLOWING_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.FOLLOW
 const SORTABLE_USER_SUBSCRIPTIONS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USER_SUBSCRIPTIONS)
 const SORTABLE_ACCOUNTS_BLOCKLIST_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.ACCOUNTS_BLOCKLIST)
 const SORTABLE_SERVERS_BLOCKLIST_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.SERVERS_BLOCKLIST)
+const SORTABLE_USER_NOTIFICATIONS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USER_NOTIFICATIONS)
 
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
 const accountsSortValidator = checkSort(SORTABLE_ACCOUNTS_COLUMNS)
@@ -35,6 +36,7 @@ const followingSortValidator = checkSort(SORTABLE_FOLLOWING_COLUMNS)
 const userSubscriptionsSortValidator = checkSort(SORTABLE_USER_SUBSCRIPTIONS_COLUMNS)
 const accountsBlocklistSortValidator = checkSort(SORTABLE_ACCOUNTS_BLOCKLIST_COLUMNS)
 const serversBlocklistSortValidator = checkSort(SORTABLE_SERVERS_BLOCKLIST_COLUMNS)
+const userNotificationsSortValidator = checkSort(SORTABLE_USER_NOTIFICATIONS_COLUMNS)
 
 // ---------------------------------------------------------------------------
 
@@ -54,5 +56,6 @@ export {
   userSubscriptionsSortValidator,
   videoChannelsSearchSortValidator,
   accountsBlocklistSortValidator,
-  serversBlocklistSortValidator
+  serversBlocklistSortValidator,
+  userNotificationsSortValidator
 }

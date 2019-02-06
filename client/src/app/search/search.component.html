@@ -48,7 +48,7 @@
     </div>
 
     <div *ngIf="isVideo(result)" class="entry video">
-      <my-video-thumbnail [video]="result"></my-video-thumbnail>
+      <my-video-thumbnail [video]="result" [nsfw]="isVideoBlur(result)"></my-video-thumbnail>
 
       <div class="video-info">
         <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', result.uuid]" [attr.title]="result.name">{{ result.name }}</a>

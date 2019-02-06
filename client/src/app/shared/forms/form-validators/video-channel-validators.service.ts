@@ -14,28 +14,28 @@ export class VideoChannelValidatorsService {
     this.VIDEO_CHANNEL_NAME = {
       VALIDATORS: [
         Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(20),
-        Validators.pattern(/^[a-z0-9._]+$/)
+        Validators.minLength(1),
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-z0-9][a-z0-9._]*$/)
       ],
       MESSAGES: {
         'required': this.i18n('Name is required.'),
-        'minlength': this.i18n('Name must be at least 3 characters long.'),
-        'maxlength': this.i18n('Name cannot be more than 20 characters long.'),
-        'pattern': this.i18n('Name should be only lowercase alphanumeric characters.')
+        'minlength': this.i18n('Name must be at least 1 character long.'),
+        'maxlength': this.i18n('Name cannot be more than 50 characters long.'),
+        'pattern': this.i18n('Name should be lowercase alphanumeric; dots and underscores are allowed.')
       }
     }
 
     this.VIDEO_CHANNEL_DISPLAY_NAME = {
       VALIDATORS: [
         Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(120)
+        Validators.minLength(1),
+        Validators.maxLength(50)
       ],
       MESSAGES: {
         'required': i18n('Display name is required.'),
-        'minlength': i18n('Display name must be at least 3 characters long.'),
-        'maxlength': i18n('Display name cannot be more than 120 characters long.')
+        'minlength': i18n('Display name must be at least 1 character long.'),
+        'maxlength': i18n('Display name cannot be more than 50 characters long.')
       }
     }
 

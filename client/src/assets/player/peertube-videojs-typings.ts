@@ -39,6 +39,7 @@ type PeertubePluginOptions = {
   autoplay: boolean,
   videoCaptions: VideoJSCaption[]
 
+  subtitle?: string
   userWatching?: UserWatching
 }
 

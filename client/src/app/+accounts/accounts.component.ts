@@ -5,10 +5,9 @@ import { Account } from '@app/shared/account/account.model'
 import { RestExtractor, UserService } from '@app/shared'
 import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier, RedirectService } from '@app/core'
 import { User, UserRight } from '../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { AuthService, RedirectService } from '@app/core'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -24,11 +23,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private accountService: AccountService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
-    private authService: AuthService,
-    private i18n: I18n
+    private authService: AuthService
   ) {}
 
   ngOnInit () {
@@ -43,7 +41,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
       .subscribe(
         account => this.account = account,
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -69,7 +67,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
           .subscribe(
             user => this.user = user,
 
-            err => this.notificationsService.error(this.i18n('Error'), err.message)
+            err => this.notifier.error(err.message)
           )
     }
   }

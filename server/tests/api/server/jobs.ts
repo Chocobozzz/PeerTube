@@ -2,12 +2,12 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
-import { doubleFollow } from '../../utils/server/follows'
-import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../utils/server/jobs'
-import { flushAndRunMultipleServers } from '../../utils/server/servers'
-import { uploadVideo } from '../../utils/videos/videos'
-import { dateIsValid } from '../../utils/miscs/miscs'
+import { killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/utils/index'
+import { doubleFollow } from '../../../../shared/utils/server/follows'
+import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../../../shared/utils/server/jobs'
+import { flushAndRunMultipleServers } from '../../../../shared/utils/server/servers'
+import { uploadVideo } from '../../../../shared/utils/videos/videos'
+import { dateIsValid } from '../../../../shared/utils/miscs/miscs'
 
 const expect = chai.expect
 

@@ -38,6 +38,10 @@ import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../h
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
 import { myBlocklistRouter } from './my-blocklist'
+import { myVideosHistoryRouter } from './my-history'
+import { myNotificationsRouter } from './my-notifications'
+import { Notifier } from '../../../lib/notifier'
+import { mySubscriptionsRouter } from './my-subscriptions'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -54,7 +58,10 @@ const askSendEmailLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', myNotificationsRouter)
+usersRouter.use('/', mySubscriptionsRouter)
 usersRouter.use('/', myBlocklistRouter)
+usersRouter.use('/', myVideosHistoryRouter)
 usersRouter.use('/', meRouter)
 
 usersRouter.get('/autocomplete',
@@ -208,6 +215,8 @@ async function registerUser (req: express.Request, res: express.Response) {
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
     await sendVerifyUserEmail(user)
   }
+
+  Notifier.Instance.notifyOnNewUserRegistration(user)
 
   return res.type('json').status(204).end()
 }

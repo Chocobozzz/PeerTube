@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { User, UserUpdate } from '../../../../../../shared'
@@ -30,7 +30,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private i18n: I18n
   ) {
@@ -73,10 +73,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.userService.updateUser(this.userId, userUpdate).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('User {{username}} updated.', { username: this.username })
-        )
+        this.notifier.success(this.i18n('User {{username}} updated.', { username: this.username }))
         this.router.navigate([ '/admin/users/list' ])
       },
 

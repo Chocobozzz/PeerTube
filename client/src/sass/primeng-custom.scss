@@ -2,7 +2,7 @@
 @import '_mixins';
 
 @import '~primeng/resources/primeng.css';
-@import '~primeng/resources/themes/bootstrap/theme.css';
+@import '~primeng/resources/themes/nova-light/theme.css';
 
 @mixin glyphicon-light {
   font-family: 'Glyphicons Halflings';
@@ -12,16 +12,26 @@
 
 // data table customizations
 p-table {
-  font-size: 15px !important;
-
   .ui-table-caption {
-    border: none;
+    border: none !important;
+    background-color: var(--mainBackgroundColor) !important;
 
     .caption {
       height: 40px;
       display: flex;
       align-items: center;
     }
+  }
+
+  th {
+    background-color: var(--mainBackgroundColor) !important;
+    outline: 0;
+  }
+
+  td, th {
+    font-family: $main-fonts;
+    font-size: 15px !important;
+    color: var(--mainForegroundColor) !important;
   }
 
   td {
@@ -35,12 +45,16 @@ p-table {
   }
 
   tr {
+    outline: 0;
     background-color: var(--mainBackgroundColor) !important;
     height: 46px;
 
     &.ui-state-highlight {
-      background-color:var(--submenuColor) !important;
-      color:var(--mainForegroundColor) !important;
+      background-color: var(--submenuColor) !important;
+
+      td, td > a {
+        color: var(--mainForegroundColor) !important;
+      }
     }
   }
 
@@ -54,6 +68,10 @@ p-table {
         .action-cell * {
           display: none !important;
         }
+      }
+
+      td {
+        border: none !important;
       }
 
       &:first-child td {
@@ -93,21 +111,25 @@ p-table {
     }
 
     &.ui-state-highlight {
-      background-color:var(--submenuColor) !important;
+      background-color: var(--submenuColor) !important;
 
       .pi {
         @extend .glyphicon;
 
-        color: #000;
-        font-size: 11px;
-        top: 0;
+        color: #000 !important;
+        font-size: 11px !important;
+        top: 0 !important;
 
         &.pi-sort-up {
           @extend .glyphicon-triangle-top;
+
+          color: var(--mainForegroundColor) !important;
         }
 
         &.pi-sort-down {
           @extend .glyphicon-triangle-bottom;
+
+          color: var(--mainForegroundColor) !important;
         }
       }
     }
@@ -175,13 +197,14 @@ p-table {
         height: auto !important;
 
         a {
-          color: #000 !important;
+          color: var(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
-          margin: 0 10px !important;
+          margin: 0 5px !important;
           outline: 0 !important;
           border-radius: 3px !important;
           padding: 5px 2px !important;
           height: auto !important;
+          line-height: initial !important;
 
           &.ui-state-active {
             &, &:hover, &:active, &:focus {
@@ -210,11 +233,25 @@ p-calendar .ui-datepicker {
     .ui-datepicker-next {
       @extend .glyphicon-chevron-right;
       @include glyphicon-light;
+
+      color: #000 !important;
+      text-align: right;
+
+      .pi.pi-chevron-right {
+        display: none !important;
+      }
     }
 
     .ui-datepicker-prev {
       @extend .glyphicon-chevron-left;
       @include glyphicon-light;
+
+      color: #000 !important;
+      text-align: left;
+
+      .pi.pi-chevron-left {
+        display: none !important;
+      }
     }
   }
 
@@ -223,39 +260,118 @@ p-calendar .ui-datepicker {
     .pi.pi-chevron-up {
       @extend .glyphicon-chevron-up;
       @include glyphicon-light;
+
+      color: #000 !important;
     }
 
     .pi.pi-chevron-down {
       @extend .glyphicon-chevron-down;
       @include glyphicon-light;
+
+      color: #000 !important;
     }
   }
 }
 
-.ui-chkbox-box {
-  &.ui-state-active {
-    border-color: var(--mainColor) !important;
+.ui-chkbox {
+
+  &, .ui-chkbox-box {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .ui-chkbox-box {
+    &.ui-state-active {
+      border-color: var(--mainColor) !important;
+      background-color: var(--mainColor) !important;
+    }
+
+    .ui-chkbox-icon {
+      position: relative;
+      overflow: visible !important;
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 1px;
+        left: 6px;
+        width: 5px;
+        height: 12px;
+        opacity: 0;
+        transform: rotate(45deg) scale(0);
+        border-right: 2px solid var(--mainBackgroundColor);
+        border-bottom: 2px solid var(--mainBackgroundColor);
+      }
+
+      &.pi-check:after {
+        opacity: 1;
+        transform: rotate(45deg) scale(1);
+      }
+    }
+  }
+}
+
+p-inputswitch {
+  .ui-inputswitch-checked .ui-inputswitch-slider {
     background-color: var(--mainColor) !important;
   }
+}
 
-  .ui-chkbox-icon {
-    position: relative;
+p-toast {
+  .ui-toast {
+    // Modal is 10005
+    z-index: 10010 !important;
+  }
 
-    &:after {
-      content: '';
-      position: absolute;
-      left: 5px;
-      width: 5px;
-      height: 12px;
-      opacity: 0;
-      transform: rotate(45deg) scale(0);
-      border-right: 2px solid var(--mainBackgroundColor);
-      border-bottom: 2px solid var(--mainBackgroundColor);
+  .ui-toast-message {
+    font-family: $main-fonts;
+
+    &.ui-toast-message-success {
+      color: #fff !important;
+      background-color: #8BC34A !important;
     }
 
-    &.pi-check:after {
-      opacity: 1;
-      transform: rotate(45deg) scale(1);
+    &.ui-toast-message-error {
+      color: #fff !important;
+      background-color: #F44336 !important;
+    }
+
+    &.ui-toast-message-info {
+      color: #fff !important;
+      background-color: #03A9F4 !important;
+    }
+
+    &.ui-toast-message-info {
+      color: #fff !important;
+      background-color: #03A9F4 !important;
+    }
+
+    .notification-block {
+      display: flex;
+      align-items: center;
+      padding: 5px;
+
+      .message {
+        flex-grow: 1;
+
+        h3 {
+          font-size: 21px;
+        }
+
+        p {
+          font-size: 15px;
+          margin-bottom: 0;
+        }
+      }
+
+      .glyphicon {
+        font-size: 32px;
+        margin-right: 5px;
+      }
     }
   }
+}
+
+.ui-widget {
+  font-family: $main-fonts !important;
 }

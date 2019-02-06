@@ -1,7 +1,7 @@
 <ng-template #modal>
   <div class="modal-header">
     <h4 i18n class="modal-title">Blacklist video</h4>
-    <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
@@ -13,6 +13,13 @@
         <div *ngIf="formErrors.reason" class="form-error">
           {{ formErrors.reason }}
         </div>
+      </div>
+
+      <div class="form-group" *ngIf="video.isLocal">
+        <my-peertube-checkbox
+          inputName="unfederate" formControlName="unfederate"
+          i18n-labelText labelText="Unfederate the video (ask for its deletion from the remote instances)"
+        ></my-peertube-checkbox>
       </div>
 
       <div class="form-group inputs">

@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import {
   AllowNull,
   BelongsTo,
@@ -14,12 +13,12 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import {
+  isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
   isVideoFPSResolutionValid
 } from '../../helpers/custom-validators/videos'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import * as Sequelize from 'sequelize'
@@ -58,7 +57,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
   size: number
 
   @AllowNull(false)
-  @Column(DataType.ENUM(values(CONSTRAINTS_FIELDS.VIDEOS.EXTNAME)))
+  @Is('VideoFileExtname', value => throwIfNotValid(value, isVideoFileExtnameValid, 'extname'))
+  @Column
   extname: string
 
   @AllowNull(false)
@@ -118,6 +118,26 @@ export class VideoFileModel extends Model<VideoFileModel> {
     }
 
     return VideoFileModel.findById(id, options)
+  }
+
+  static async getStats () {
+    let totalLocalVideoFilesSize = await VideoFileModel.sum('size', {
+      include: [
+        {
+          attributes: [],
+          model: VideoModel.unscoped(),
+          where: {
+            remote: false
+          }
+        }
+      ]
+    } as any)
+    // Sequelize could return null...
+    if (!totalLocalVideoFilesSize) totalLocalVideoFilesSize = 0
+
+    return {
+      totalLocalVideoFilesSize
+    }
   }
 
   hasSameUniqueKeysThan (other: VideoFileModel) {

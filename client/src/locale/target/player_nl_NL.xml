@@ -347,6 +347,10 @@
         <source>Speed</source>
         <target>Snelheid</target>
       </trans-unit>
+      <trans-unit id="Subtitles/CC">
+        <source>Subtitles/CC</source>
+        <target>Ondertiteling/CC</target>
+      </trans-unit>
       <trans-unit id="peers">
         <source>peers</source>
         <target>peers</target>

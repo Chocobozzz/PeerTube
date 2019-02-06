@@ -1,8 +1,11 @@
+import { logger } from '../../helpers/logger'
+
 export abstract class AbstractScheduler {
 
   protected abstract schedulerIntervalMs: number
 
   private interval: NodeJS.Timer
+  private isRunning = false
 
   enable () {
     if (!this.schedulerIntervalMs) throw new Error('Interval is not correctly set.')
@@ -14,5 +17,18 @@ export abstract class AbstractScheduler {
     clearInterval(this.interval)
   }
 
-  abstract execute ()
+  async execute () {
+    if (this.isRunning === true) return
+    this.isRunning = true
+
+    try {
+      await this.internalExecute()
+    } catch (err) {
+      logger.error('Cannot execute %s scheduler.', this.constructor.name, { err })
+    } finally {
+      this.isRunning = false
+    }
+  }
+
+  protected abstract internalExecute (): Promise<any>
 }

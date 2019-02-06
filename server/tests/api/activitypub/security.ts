@@ -2,13 +2,19 @@
 
 import 'mocha'
 
-import { flushAndRunMultipleServers, flushTests, killallServers, ServerInfo } from '../../utils'
+import {
+  flushAndRunMultipleServers,
+  flushTests,
+  killallServers,
+  makeFollowRequest,
+  makePOSTAPRequest,
+  ServerInfo,
+  setActorField
+} from '../../../../shared/utils'
 import { HTTP_SIGNATURE } from '../../../initializers'
 import { buildDigest, buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as chai from 'chai'
-import { setActorField } from '../../utils/miscs/sql'
 import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
-import { makeFollowRequest, makePOSTAPRequest } from '../../utils/requests/activitypub'
 
 const expect = chai.expect
 

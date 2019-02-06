@@ -15,8 +15,12 @@ import {
   updateVideoAbuse,
   uploadVideo,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
 import { VideoAbuseState } from '../../../../shared/models/videos'
 
 describe('Test video abuses API validators', function () {
@@ -109,8 +113,8 @@ describe('Test video abuses API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
-    it('Should fail with a reason too big', async function () {
-      const fields = { reason: 'super'.repeat(61) }
+    it('Should fail with a too big reason', async function () {
+      const fields = { reason: 'super'.repeat(605) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -150,7 +154,7 @@ describe('Test video abuses API validators', function () {
     })
 
     it('Should fail with a bad moderation comment', async function () {
-      const body = { moderationComment: 'b'.repeat(305) }
+      const body = { moderationComment: 'b'.repeat(3001) }
       await updateVideoAbuse(server.url, server.accessToken, server.video.uuid, videoAbuseId, body, 400)
     })
 

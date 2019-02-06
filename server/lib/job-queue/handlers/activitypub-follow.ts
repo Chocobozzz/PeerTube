@@ -8,6 +8,7 @@ import { getOrCreateActorAndServerAndModel } from '../../activitypub/actor'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { Notifier } from '../../notifier'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
@@ -42,7 +43,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function follow (fromActor: ActorModel, targetActor: ActorModel) {
+async function follow (fromActor: ActorModel, targetActor: ActorModel) {
   if (fromActor.id === targetActor.id) {
     throw new Error('Follower is the same than target actor.')
   }
@@ -50,7 +51,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
   // Same server, direct accept
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
-  return sequelizeTypescript.transaction(async t => {
+  const actorFollow = await sequelizeTypescript.transaction(async t => {
     const [ actorFollow ] = await ActorFollowModel.findOrCreate({
       where: {
         actorId: fromActor.id,
@@ -68,5 +69,9 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
 
     // Send a notification to remote server if our follow is not already accepted
     if (actorFollow.state !== 'accepted') await sendFollow(actorFollow)
+
+    return actorFollow
   })
+
+  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewFollow(actorFollow)
 }

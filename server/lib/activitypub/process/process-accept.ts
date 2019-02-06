@@ -24,6 +24,7 @@ async function processAccept (actor: ActorModel, targetActor: ActorModel) {
   if (follow.state !== 'accepted') {
     follow.set('state', 'accepted')
     await follow.save()
+
     await addFetchOutboxJob(targetActor)
   }
 }

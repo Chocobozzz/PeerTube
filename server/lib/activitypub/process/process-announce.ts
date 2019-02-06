@@ -5,6 +5,8 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { VideoPrivacy } from '../../../../shared/models/videos'
+import { Notifier } from '../../notifier'
 
 async function processAnnounceActivity (activity: ActivityAnnounce, actorAnnouncer: ActorModel) {
   return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity)
@@ -21,9 +23,9 @@ export {
 async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: objectUri })
+  const { video, created: videoCreated } = await getOrCreateVideoAndAccountAndChannel({ videoObject: objectUri })
 
-  return sequelizeTypescript.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     // Add share entry
 
     const share = {
@@ -49,4 +51,6 @@ async function processVideoShare (actorAnnouncer: ActorModel, activity: Activity
 
     return undefined
   })
+
+  if (videoCreated) Notifier.Instance.notifyOnNewVideo(video)
 }

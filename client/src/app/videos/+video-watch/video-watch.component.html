@@ -53,55 +53,57 @@
                   <div
                     *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
                     class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
+                    i18n-title title="Like this video"
                   >
-                    <span class="icon icon-like" i18n-title title="Like this video" ></span>
+                    <my-global-icon iconName="like"></my-global-icon>
                   </div>
 
                   <div
                     *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
                     class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
+                    i18n-title title="Dislike this video"
                   >
-                    <span class="icon icon-dislike" i18n-title title="Dislike this video"></span>
+                    <my-global-icon iconName="dislike"></my-global-icon>
                   </div>
 
                   <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
-                    <span class="icon icon-support"></span>
+                    <my-global-icon iconName="heart"></my-global-icon>
                     <span class="icon-text" i18n>Support</span>
                   </div>
 
                   <div (click)="showShareModal()" class="action-button action-button-share" role="button">
-                    <span class="icon icon-share"></span>
+                    <my-global-icon iconName="share"></my-global-icon>
                     <span class="icon-text" i18n>Share</span>
                   </div>
 
                   <div class="action-more" ngbDropdown placement="top" role="button">
                     <div class="action-button" ngbDropdownToggle role="button">
-                      <span class="icon icon-more"></span>
+                      <my-global-icon class="more-icon" iconName="more"></my-global-icon>
                     </div>
 
                     <div ngbDropdownMenu>
                       <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
-                        <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
+                        <my-global-icon iconName="download"></my-global-icon> <ng-container i18n>Download</ng-container>
                       </a>
 
                       <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
-                        <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
+                        <my-global-icon iconName="alert"></my-global-icon> <ng-container i18n>Report</ng-container>
                       </a>
 
                       <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
-                        <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
+                        <my-global-icon iconName="edit"></my-global-icon> <ng-container i18n>Update</ng-container>
                       </a>
 
                       <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
-                        <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
+                        <my-global-icon iconName="no"></my-global-icon> <ng-container i18n>Blacklist</ng-container>
                       </a>
 
                       <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
-                        <span class="icon icon-unblacklist"></span> <ng-container i18n>Unblacklist</ng-container>
+                        <my-global-icon iconName="undo"></my-global-icon> <ng-container i18n>Unblacklist</ng-container>
                       </a>
 
                       <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
-                        <span class="icon icon-delete"></span> <ng-container i18n>Delete</ng-container>
+                        <my-global-icon iconName="delete"></my-global-icon> <ng-container i18n>Delete</ng-container>
                       </a>
                     </div>
                   </div>

@@ -41,7 +41,7 @@
       </td>
 
       <td class="action-cell">
-        <my-action-dropdown i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
+        <my-action-dropdown placement="bottom-right" i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
       </td>
     </tr>
   </ng-template>
@@ -51,11 +51,11 @@
         <td class="moderation-expanded" colspan="6">
           <div>
             <span i18n class="moderation-expanded-label">Reason:</span>
-            <span class="moderation-expanded-text">{{ videoAbuse.reason }}</span>
+            <span class="moderation-expanded-text" [innerHTML]="toHtml(videoAbuse.reason)"></span>
           </div>
           <div *ngIf="videoAbuse.moderationComment">
             <span i18n class="moderation-expanded-label">Moderation comment:</span>
-            <span class="moderation-expanded-text">{{ videoAbuse.moderationComment }}</span>
+            <span class="moderation-expanded-text" [innerHTML]="toHtml(videoAbuse.moderationComment)"></span>
           </div>
         </td>
       </tr>

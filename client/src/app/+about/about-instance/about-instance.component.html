@@ -1,39 +1,52 @@
-<div i18n class="about-instance-title">
-  About {{ instanceName }} instance
-</div>
+<div class="row">
+  <div class="col-md-12 col-xl-6">
+    <div class="about-instance-title">
+      <div i18n>About {{ instanceName }} instance</div>
 
-<div class="short-description">
-  <div>{{ shortDescription }}</div>
-</div>
+      <div *ngIf="isContactFormEnabled" (click)="openContactModal()" i18n role="button" class="contact-admin">Contact administrator</div>
+    </div>
 
-<div class="description">
-  <div i18n class="section-title">Description</div>
+    <div class="short-description">
+      <div>{{ shortDescription }}</div>
+    </div>
 
-  <div [innerHTML]="descriptionHTML"></div>
-</div>
+    <div class="description">
+      <div i18n class="section-title">Description</div>
 
-<div class="terms" id="terms-section">
-  <div i18n class="section-title">Terms</div>
+      <div [innerHTML]="descriptionHTML"></div>
+    </div>
 
-  <div [innerHTML]="termsHTML"></div>
-</div>
+    <div class="terms" id="terms-section">
+      <div i18n class="section-title">Terms</div>
 
-<div class="signup">
-  <div i18n class="section-title">Signup</div>
+      <div [innerHTML]="termsHTML"></div>
+    </div>
 
-  <div *ngIf="isSignupAllowed">
-    <ng-container i18n>User registration is allowed and</ng-container>
+    <div class="signup">
+      <div i18n class="section-title">Signup</div>
 
-    <ng-container i18n *ngIf="userVideoQuota !== -1">
-      this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
-    </ng-container>
+      <div *ngIf="isSignupAllowed">
+        <ng-container i18n>User registration is allowed and</ng-container>
 
-    <ng-container i18n *ngIf="userVideoQuota === -1">
-      this instance provides unlimited space for the videos of its users.
-    </ng-container>
+        <ng-container i18n *ngIf="userVideoQuota !== -1">
+          this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
+        </ng-container>
+
+        <ng-container i18n *ngIf="userVideoQuota === -1">
+          this instance provides unlimited space for the videos of its users.
+        </ng-container>
+      </div>
+
+      <div i18n *ngIf="isSignupAllowed === false">
+        User registration is currently not allowed.
+      </div>
+    </div>
   </div>
 
-  <div i18n *ngIf="isSignupAllowed === false">
-    User registration is currently not allowed.
+  <div class="col-md-12 col-xl-6">
+    <label>Features found on this instance</label>
+    <my-instance-features-table></my-instance-features-table>
   </div>
 </div>
+
+<my-contact-admin-modal #contactAdminModal></my-contact-admin-modal>

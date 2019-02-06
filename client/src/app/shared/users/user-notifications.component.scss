@@ -1,0 +1,51 @@
+@import '_variables';
+@import '_mixins';
+
+.no-notification {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.notification {
+  display: flex;
+  align-items: center;
+  font-size: inherit;
+  padding: 15px 5px 15px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+
+  &.unread {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  my-global-icon {
+    width: 24px;
+    margin-right: 11px;
+    margin-left: 3px;
+
+    @include apply-svg-color(#333);
+  }
+
+  .avatar {
+    @include avatar(30px);
+
+    margin-right: 10px;
+  }
+
+  .message {
+    flex-grow: 1;
+
+    a {
+      font-weight: $font-semibold;
+    }
+  }
+
+  .from-date {
+    font-size: 0.85em;
+    color: $grey-foreground-color;
+    padding-left: 5px;
+    min-width: 70px;
+    text-align: right;
+  }
+}

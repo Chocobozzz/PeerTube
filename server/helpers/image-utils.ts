@@ -1,6 +1,7 @@
 import 'multer'
 import * as sharp from 'sharp'
-import { move, remove } from 'fs-extra'
+import { readFile, remove } from 'fs-extra'
+import { logger } from './logger'
 
 async function processImage (
   physicalFile: { path: string },
@@ -11,14 +12,11 @@ async function processImage (
     throw new Error('Sharp needs an input path different that the output path.')
   }
 
-  const sharpInstance = sharp(physicalFile.path)
-  const metadata = await sharpInstance.metadata()
+  logger.debug('Processing image %s to %s.', physicalFile.path, destination)
 
-  // No need to resize
-  if (metadata.width === newSize.width && metadata.height === newSize.height) {
-    await move(physicalFile.path, destination, { overwrite: true })
-    return
-  }
+  // Avoid sharp cache
+  const buf = await readFile(physicalFile.path)
+  const sharpInstance = sharp(buf)
 
   await remove(destination)
 

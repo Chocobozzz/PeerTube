@@ -43,6 +43,10 @@
         <source>Entertainment</source>
         <target>Entertainment</target>
       </trans-unit>
+      <trans-unit id="News &amp; Politics">
+        <source>News &amp; Politics</source>
+        <target>Nieuws en Politiek</target>
+      </trans-unit>
       <trans-unit id="How To">
         <source>How To</source>
         <target>Tutorials</target>
@@ -57,7 +61,7 @@
       </trans-unit>
       <trans-unit id="Science &amp; Technology">
         <source>Science &amp; Technology</source>
-        <target>Wetenschap &amp; technologie</target>
+        <target>Wetenschap en technologie</target>
       </trans-unit>
       <trans-unit id="Animals">
         <source>Animals</source>
@@ -77,7 +81,7 @@
       </trans-unit>
       <trans-unit id="Attribution - Share Alike">
         <source>Attribution - Share Alike</source>
-        <target>Naamsvermelding – Gelijk Delen</target>
+        <target>Naamsvermelding – Gelijken Delen</target>
       </trans-unit>
       <trans-unit id="Attribution - No Derivatives">
         <source>Attribution - No Derivatives</source>
@@ -111,9 +115,33 @@
         <source>Private</source>
         <target>Privé</target>
       </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>Gepubliceerd</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>Transcoden</target>
+      </trans-unit>
+      <trans-unit id="To import">
+        <source>To import</source>
+        <target>Importeren</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>In behandeling</target>
+      </trans-unit>
+      <trans-unit id="Success">
+        <source>Success</source>
+        <target>Success</target>
+      </trans-unit>
+      <trans-unit id="Failed">
+        <source>Failed</source>
+        <target>Gefaald</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
-        <target>Diverse</target>
+        <target>Varia</target>
       </trans-unit>
       <trans-unit id="Unknown">
         <source>Unknown</source>

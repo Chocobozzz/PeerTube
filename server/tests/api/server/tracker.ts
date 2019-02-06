@@ -2,8 +2,8 @@
 
 import * as magnetUtil from 'magnet-uri'
 import 'mocha'
-import { getVideo, killallServers, runServer, ServerInfo, uploadVideo } from '../../utils'
-import { flushTests, setAccessTokensToServers } from '../../utils/index'
+import { getVideo, killallServers, runServer, ServerInfo, uploadVideo } from '../../../../shared/utils'
+import { flushTests, setAccessTokensToServers } from '../../../../shared/utils/index'
 import { VideoDetails } from '../../../../shared/models/videos'
 import * as WebTorrent from 'webtorrent'
 

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { AuthService, ConfirmService, RedirectService } from '../../../core'
 import { UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -15,7 +15,7 @@ export class MyAccountDangerZoneComponent {
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private confirmService: ConfirmService,
     private redirectService: RedirectService,
@@ -34,13 +34,13 @@ export class MyAccountDangerZoneComponent {
 
     this.userService.deleteMe().subscribe(
       () => {
-        this.notificationsService.success(this.i18n('Success'), this.i18n('Your account is deleted.'))
+        this.notifier.success(this.i18n('Your account is deleted.'))
 
         this.authService.logout()
         this.redirectService.redirectToHomepage()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 }

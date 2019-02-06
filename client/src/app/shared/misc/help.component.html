@@ -18,10 +18,13 @@
   container="body"
   title="Get help"
   i18n-title
+  popoverClass="help-popover"
   [attr.aria-pressed]="isPopoverOpened"
   [ngbPopover]="tooltipTemplate"
   [placement]="tooltipPlacement"
   [autoClose]="true"
   (onHidden)="onPopoverHidden()"
   (onShown)="onPopoverShown()"
-></span>
+>
+  <my-global-icon iconName="help"></my-global-icon>
+</span>

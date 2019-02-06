@@ -1,8 +1,9 @@
 import * as Bluebird from 'bluebird'
 import { createWriteStream } from 'fs-extra'
 import * as request from 'request'
-import { ACTIVITY_PUB } from '../initializers'
+import { ACTIVITY_PUB, CONFIG } from '../initializers'
 import { processImage } from './image-utils'
+import { join } from 'path'
 
 function doRequest <T> (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean }
@@ -28,11 +29,11 @@ function doRequestAndSaveToFile (requestOptions: request.CoreOptions & request.U
   })
 }
 
-async function downloadImage (url: string, destPath: string, size: { width: number, height: number }) {
-  const tmpPath = destPath + '.tmp'
-
+async function downloadImage (url: string, destDir: string, destName: string, size: { width: number, height: number }) {
+  const tmpPath = join(CONFIG.STORAGE.TMP_DIR, 'pending-' + destName)
   await doRequestAndSaveToFile({ method: 'GET', uri: url }, tmpPath)
 
+  const destPath = join(destDir, destName)
   await processImage({ path: tmpPath }, destPath, size)
 }
 

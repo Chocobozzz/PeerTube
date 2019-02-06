@@ -5,6 +5,7 @@ export interface ServerStats {
   totalLocalVideos: number
   totalLocalVideoViews: number
   totalLocalVideoComments: number
+  totalLocalVideoFilesSize: number
 
   totalVideos: number
   totalVideoComments: number

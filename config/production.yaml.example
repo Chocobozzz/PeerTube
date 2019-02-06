@@ -46,8 +46,10 @@ smtp:
 
 # From the project root directory
 storage:
+  tmp: '/var/www/peertube/storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
   avatars: '/var/www/peertube/storage/avatars/'
   videos: '/var/www/peertube/storage/videos/'
+  redundancy: '/var/www/peertube/storage/videos/'
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
   thumbnails: '/var/www/peertube/storage/thumbnails/'
@@ -76,7 +78,7 @@ trending:
 redundancy:
   videos:
     check_interval: '1 hour' # How often you want to check new videos to cache
-    strategies:
+    strategies: # Just uncomment strategies you want
 #      -
 #        size: '10GB'
 #        # Minimum time the video must remain in the cache. Only accept values > 10 hours (to not overload remote instances)
@@ -113,7 +115,12 @@ cache:
     size: 500 # Max number of video captions/subtitles you want to cache
 
 admin:
+  # Used to generate the root user at first startup
+  # And to receive emails from the contact form
   email: 'admin@example.com'
+
+contact_form:
+  enabled: true
 
 signup:
   enabled: false
@@ -135,6 +142,8 @@ user:
 # Please, do not disable transcoding since many uploaded videos will not work
 transcoding:
   enabled: true
+  # Allow your users to upload .mkv, .mov, .avi, .flv videos
+  allow_additional_extensions: true
   threads: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
@@ -173,6 +182,8 @@ instance:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
 
 services:
+  # You can provide a reporting endpoint for Content Security Policy violations
+  csp-logger:
   # Cards configuration to format video in Twitter
   twitter:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published

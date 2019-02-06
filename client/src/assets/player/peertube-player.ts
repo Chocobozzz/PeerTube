@@ -26,23 +26,24 @@ videojsUntyped.getComponent('CaptionsButton').prototype.controlText_ = 'Subtitle
 videojsUntyped.getComponent('CaptionsButton').prototype.label_ = ' '
 
 function getVideojsOptions (options: {
-  autoplay: boolean,
-  playerElement: HTMLVideoElement,
-  videoViewUrl: string,
-  videoDuration: number,
-  videoFiles: VideoFile[],
-  enableHotkeys: boolean,
-  inactivityTimeout: number,
-  peertubeLink: boolean,
-  poster: string,
+  autoplay: boolean
+  playerElement: HTMLVideoElement
+  videoViewUrl: string
+  videoDuration: number
+  videoFiles: VideoFile[]
+  enableHotkeys: boolean
+  inactivityTimeout: number
+  peertubeLink: boolean
+  poster: string
   startTime: number | string
-  theaterMode: boolean,
-  videoCaptions: VideoJSCaption[],
+  theaterMode: boolean
+  videoCaptions: VideoJSCaption[]
 
-  language?: string,
-  controls?: boolean,
-  muted?: boolean,
+  language?: string
+  controls?: boolean
+  muted?: boolean
   loop?: boolean
+  subtitle?: string
 
   userWatching?: UserWatching
 }) {
@@ -50,8 +51,10 @@ function getVideojsOptions (options: {
     // We don't use text track settings for now
     textTrackSettings: false,
     controls: options.controls !== undefined ? options.controls : true,
-    muted: options.controls !== undefined ? options.muted : false,
     loop: options.loop !== undefined ? options.loop : false,
+
+    muted: options.muted !== undefined ? options.muted : undefined, // Undefined so the player knows it has to check the local storage
+
     poster: options.poster,
     autoplay: false,
     inactivityTimeout: options.inactivityTimeout,
@@ -65,7 +68,8 @@ function getVideojsOptions (options: {
         videoViewUrl: options.videoViewUrl,
         videoDuration: options.videoDuration,
         startTime: options.startTime,
-        userWatching: options.userWatching
+        userWatching: options.userWatching,
+        subtitle: options.subtitle
       }
     },
     controlBar: {
@@ -250,6 +254,10 @@ function loadLocaleInVideoJS (serverUrl: string, videojs: any, locale: string) {
         loadLocaleInVideoJS.cache[path] = json
         return json
       })
+      .catch(err => {
+        console.error('Cannot get player translations', err)
+        return undefined
+      })
   }
 
   const completeLocale = getCompleteLocale(locale)
@@ -266,6 +274,10 @@ function getServerTranslations (serverUrl: string, locale: string) {
 
   return fetch(path + '/server.json')
     .then(res => res.json())
+    .catch(err => {
+      console.error('Cannot get server translations', err)
+      return undefined
+    })
 }
 
 // ############################################################################

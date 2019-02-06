@@ -6,6 +6,7 @@ import * as proxyAddr from 'proxy-addr'
 import { Server as WebSocketServer } from 'ws'
 import { CONFIG, TRACKER_RATE_LIMITS } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
+import { parse } from 'url'
 
 const TrackerServer = bitTorrentTracker.Server
 
@@ -59,14 +60,24 @@ const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
 trackerRouter.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
 trackerRouter.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
 
-function createWebsocketServer (app: express.Application) {
+function createWebsocketTrackerServer (app: express.Application) {
   const server = http.createServer(app)
-  const wss = new WebSocketServer({ server: server, path: '/tracker/socket' })
+  const wss = new WebSocketServer({ noServer: true })
+
   wss.on('connection', function (ws, req) {
-    const ip = proxyAddr(req, CONFIG.TRUST_PROXY)
-    ws['ip'] = ip
+    ws['ip'] = proxyAddr(req, CONFIG.TRUST_PROXY)
 
     trackerServer.onWebSocketConnection(ws)
+  })
+
+  server.on('upgrade', (request, socket, head) => {
+    const pathname = parse(request.url).pathname
+
+    if (pathname === '/tracker/socket') {
+      wss.handleUpgrade(request, socket, head, ws => wss.emit('connection', ws, request))
+    }
+
+    // Don't destroy socket, we have Socket.IO too
   })
 
   return server
@@ -76,7 +87,7 @@ function createWebsocketServer (app: express.Application) {
 
 export {
   trackerRouter,
-  createWebsocketServer
+  createWebsocketTrackerServer
 }
 
 // ---------------------------------------------------------------------------

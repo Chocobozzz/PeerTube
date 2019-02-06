@@ -1,7 +1,6 @@
 import * as Bluebird from 'bluebird'
 import * as sequelize from 'sequelize'
 import * as magnetUtil from 'magnet-uri'
-import { join } from 'path'
 import * as request from 'request'
 import { ActivityIconObject, ActivityUrlObject, ActivityVideoUrlObject, VideoState } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -11,7 +10,7 @@ import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, downloadImage } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { ACTIVITY_PUB, CONFIG, MIMETYPES, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE } from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -29,7 +28,8 @@ import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
-import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
+import { Notifier } from '../notifier'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -95,9 +95,8 @@ function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Fu
 
 function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
-  const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
 
-  return downloadImage(icon.url, thumbnailPath, THUMBNAILS_SIZE)
+  return downloadImage(icon.url, CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName, THUMBNAILS_SIZE)
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
@@ -156,29 +155,34 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
 }
 
 async function getOrCreateVideoAndAccountAndChannel (options: {
-  videoObject: VideoTorrentObject | string,
+  videoObject: { id: string } | string,
   syncParam?: SyncParam,
-  fetchType?: VideoFetchByUrlType
+  fetchType?: VideoFetchByUrlType,
+  allowRefresh?: boolean // true by default
 }) {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
+  const allowRefresh = options.allowRefresh !== false
 
   // Get video url
-  const videoUrl = getAPUrl(options.videoObject)
+  const videoUrl = getAPId(options.videoObject)
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
-    const refreshOptions = {
-      video: videoFromDatabase,
-      fetchedType: fetchType,
-      syncParam
+
+    if (allowRefresh === true) {
+      const refreshOptions = {
+        video: videoFromDatabase,
+        fetchedType: fetchType,
+        syncParam
+      }
+
+      if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
+      else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: videoFromDatabase.url } })
     }
 
-    if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
-    else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoFromDatabase.url } })
-
-    return { video: videoFromDatabase }
+    return { video: videoFromDatabase, created: false }
   }
 
   const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
@@ -189,7 +193,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 
   await syncVideoExternalAttributes(video, fetchedVideo, syncParam)
 
-  return { video }
+  return { video, created: true }
 }
 
 async function updateVideoFromAP (options: {
@@ -200,13 +204,14 @@ async function updateVideoFromAP (options: {
   overrideTo?: string[]
 }) {
   logger.debug('Updating remote video "%s".', options.videoObject.uuid)
+
   let videoFieldsSave: any
+  const wasPrivateVideo = options.video.privacy === VideoPrivacy.PRIVATE
+  const wasUnlistedVideo = options.video.privacy === VideoPrivacy.UNLISTED
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      const sequelizeOptions = {
-        transaction: t
-      }
+      const sequelizeOptions = { transaction: t }
 
       videoFieldsSave = options.video.toJSON()
 
@@ -275,6 +280,11 @@ async function updateVideoFromAP (options: {
         options.video.VideoCaptions = await Promise.all(videoCaptionsPromises)
       }
     })
+
+    // Notify our users?
+    if (wasPrivateVideo || wasUnlistedVideo) {
+      Notifier.Instance.notifyOnNewVideo(options.video)
+    }
 
     logger.info('Remote video with uuid %s updated', options.videoObject.uuid)
   } catch (err) {
@@ -358,7 +368,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function isActivityVideoUrlObject (url: ActivityUrlObject): url is ActivityVideoUrlObject {
-  const mimeTypes = Object.keys(VIDEO_MIMETYPE_EXT)
+  const mimeTypes = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
   const urlMediaType = url.mediaType || url.mimeType
   return mimeTypes.indexOf(urlMediaType) !== -1 && urlMediaType.startsWith('video/')
@@ -486,7 +496,7 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
 
     const mediaType = fileUrl.mediaType || fileUrl.mimeType
     const attribute = {
-      extname: VIDEO_MIMETYPE_EXT[ mediaType ],
+      extname: MIMETYPES.VIDEO.MIMETYPE_EXT[ mediaType ],
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,

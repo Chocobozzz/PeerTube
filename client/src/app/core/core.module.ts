@@ -7,16 +7,18 @@ import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 
-import { SimpleNotificationsModule } from 'angular2-notifications'
-
 import { AuthService } from './auth'
-import { ConfirmComponent, ConfirmService } from './confirm'
+import { ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
 import { ThemeService } from './theme'
 import { HotkeyModule } from 'angular2-hotkeys'
-import { CheatSheetComponent } from '@app/core/hotkeys'
+import { CheatSheetComponent } from './hotkeys'
+import { ToastModule } from 'primeng/toast'
+import { Notifier } from './notification'
+import { MessageService } from 'primeng/api'
+import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 
 @NgModule({
   imports: [
@@ -25,11 +27,10 @@ import { CheatSheetComponent } from '@app/core/hotkeys'
     FormsModule,
     BrowserAnimationsModule,
 
-    SimpleNotificationsModule.forRoot(),
-
     LoadingBarHttpClientModule,
     LoadingBarRouterModule,
-    LoadingBarModule.forRoot(),
+    LoadingBarModule,
+    ToastModule,
 
     HotkeyModule.forRoot({
       cheatSheetCloseEsc: true
@@ -37,16 +38,15 @@ import { CheatSheetComponent } from '@app/core/hotkeys'
   ],
 
   declarations: [
-    ConfirmComponent,
     CheatSheetComponent
   ],
 
   exports: [
-    SimpleNotificationsModule,
     LoadingBarHttpClientModule,
     LoadingBarModule,
 
-    ConfirmComponent,
+    ToastModule,
+
     CheatSheetComponent
   ],
 
@@ -57,7 +57,10 @@ import { CheatSheetComponent } from '@app/core/hotkeys'
     ThemeService,
     LoginGuard,
     UserRightGuard,
-    RedirectService
+    RedirectService,
+    Notifier,
+    MessageService,
+    UserNotificationSocket
   ]
 })
 export class CoreModule {

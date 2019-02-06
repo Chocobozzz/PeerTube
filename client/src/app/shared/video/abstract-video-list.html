@@ -1,8 +1,11 @@
 <div [ngClass]="{ 'margin-content': marginContent }">
   <div class="videos-header">
     <div *ngIf="titlePage" class="title-page title-page-single">
-      {{ titlePage }}
+      <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
+        {{ titlePage }}
+      </div>
     </div>
+
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">

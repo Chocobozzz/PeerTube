@@ -15,7 +15,7 @@ import {
 import { ActorModel } from '../activitypub/actor'
 import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers'
 import { VideoFileModel } from '../video/video-file'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
@@ -124,7 +124,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
     logger.info('Removing duplicated video file %s.', logIdentifier)
 
-    videoFile.Video.removeFile(videoFile)
+    videoFile.Video.removeFile(videoFile, true)
              .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
 
     return undefined
@@ -395,7 +395,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    return VideoRedundancyModel.find(query as any) // FIXME: typings
+    return VideoRedundancyModel.findOne(query as any) // FIXME: typings
       .then((r: any) => ({
         totalUsed: parseInt(r.totalUsed.toString(), 10),
         totalVideos: r.totalVideos,
@@ -415,8 +415,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       expires: this.expiresOn.toISOString(),
       url: {
         type: 'Link',
-        mimeType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
-        mediaType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mimeType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,
         size: this.VideoFile.size,

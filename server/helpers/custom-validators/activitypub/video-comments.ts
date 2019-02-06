@@ -3,11 +3,6 @@ import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
 import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
-function isVideoCommentCreateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    sanitizeAndCheckVideoCommentObject(activity.object)
-}
-
 function sanitizeAndCheckVideoCommentObject (comment: any) {
   if (!comment || comment.type !== 'Note') return false
 
@@ -25,15 +20,9 @@ function sanitizeAndCheckVideoCommentObject (comment: any) {
     ) // Only accept public comments
 }
 
-function isVideoCommentDeleteActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Delete')
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoCommentCreateActivityValid,
-  isVideoCommentDeleteActivityValid,
   sanitizeAndCheckVideoCommentObject
 }
 

@@ -22,7 +22,7 @@ import { createVideoChannel } from '../../lib/video-channel'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
-import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { CONFIG, MIMETYPES, sequelizeTypescript } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { updateAvatarValidator } from '../../middlewares/validators/avatar'
@@ -30,9 +30,10 @@ import { updateActorAvatarFile } from '../../lib/avatar'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
+import { JobQueue } from '../../lib/job-queue'
 
 const auditLogger = auditLoggerFactory('channels')
-const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
 const videoChannelRouter = express.Router()
 
@@ -197,15 +198,20 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
 async function getVideoChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelWithVideos = await VideoChannelModel.loadAndPopulateAccountAndVideos(res.locals.videoChannel.id)
 
+  if (videoChannelWithVideos.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannelWithVideos.Actor.url } })
+            .catch(err => logger.error('Cannot create AP refresher job for actor %s.', videoChannelWithVideos.Actor.url, { err }))
+  }
+
   return res.json(videoChannelWithVideos.toFormattedJSON())
 }
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
-  const actorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
-    actorId,
+    followerActorId,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,

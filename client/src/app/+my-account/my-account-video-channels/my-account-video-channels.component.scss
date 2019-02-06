@@ -2,7 +2,7 @@
 @import '_mixins';
 
 .create-button {
-  @include create-button('../../../assets/images/global/add.svg');
+  @include create-button;
 }
 
 /deep/ .action-button {

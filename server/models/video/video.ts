@@ -94,6 +94,7 @@ import {
 import * as validator from 'validator'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 import { UserModel } from '../account/user'
+import { VideoImportModel } from './video-import'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -102,16 +103,44 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
   { fields: [ 'createdAt' ] },
   { fields: [ 'publishedAt' ] },
   { fields: [ 'duration' ] },
-  { fields: [ 'category' ] },
-  { fields: [ 'licence' ] },
-  { fields: [ 'nsfw' ] },
-  { fields: [ 'language' ] },
-  { fields: [ 'waitTranscoding' ] },
-  { fields: [ 'state' ] },
-  { fields: [ 'remote' ] },
   { fields: [ 'views' ] },
-  { fields: [ 'likes' ] },
   { fields: [ 'channelId' ] },
+  {
+    fields: [ 'category' ], // We don't care videos with an unknown category
+    where: {
+      category: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
+  {
+    fields: [ 'licence' ], // We don't care videos with an unknown licence
+    where: {
+      licence: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
+  {
+    fields: [ 'language' ], // We don't care videos with an unknown language
+    where: {
+      language: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
+  {
+    fields: [ 'nsfw' ], // Most of the videos are not NSFW
+    where: {
+      nsfw: true
+    }
+  },
+  {
+    fields: [ 'remote' ], // Only index local videos
+    where: {
+      remote: false
+    }
+  },
   {
     fields: [ 'uuid' ],
     unique: true
@@ -140,7 +169,7 @@ type ForAPIOptions = {
 
 type AvailableForListIDsOptions = {
   serverAccountId: number
-  actorId: number
+  followerActorId: number
   includeLocalVideos: boolean
   filter?: VideoFilter
   categoryOneOf?: number[]
@@ -153,7 +182,8 @@ type AvailableForListIDsOptions = {
   accountId?: number
   videoChannelId?: number
   trendingDays?: number
-  user?: UserModel
+  user?: UserModel,
+  historyOfUser?: UserModel
 }
 
 @Scopes({
@@ -315,7 +345,7 @@ type AvailableForListIDsOptions = {
       query.include.push(videoChannelInclude)
     }
 
-    if (options.actorId) {
+    if (options.followerActorId) {
       let localVideosReq = ''
       if (options.includeLocalVideos === true) {
         localVideosReq = ' UNION ALL ' +
@@ -327,7 +357,7 @@ type AvailableForListIDsOptions = {
       }
 
       // Force actorId to be a number to avoid SQL injections
-      const actorIdNumber = parseInt(options.actorId.toString(), 10)
+      const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
       query.where[ 'id' ][ Sequelize.Op.and ].push({
         [ Sequelize.Op.in ]: Sequelize.literal(
           '(' +
@@ -413,6 +443,21 @@ type AvailableForListIDsOptions = {
     if (options.trendingDays) {
       query.include.push(VideoModel.buildTrendingQuery(options.trendingDays))
 
+      query.subQuery = false
+    }
+
+    if (options.historyOfUser) {
+      query.include.push({
+        model: UserVideoHistoryModel,
+        required: true,
+        where: {
+          userId: options.historyOfUser.id
+        }
+      })
+
+      // Even if the relation is n:m, we know that a user only have 0..1 video history
+      // So we won't have multiple rows for the same video
+      // Without this, we would not be able to sort on "updatedAt" column of UserVideoHistoryModel
       query.subQuery = false
     }
 
@@ -741,6 +786,15 @@ export class VideoModel extends Model<VideoModel> {
   })
   VideoBlacklist: VideoBlacklistModel
 
+  @HasOne(() => VideoImportModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: true
+    },
+    onDelete: 'set null'
+  })
+  VideoImport: VideoImportModel
+
   @HasMany(() => VideoCaptionModel, {
     foreignKey: {
       name: 'videoId',
@@ -985,9 +1039,10 @@ export class VideoModel extends Model<VideoModel> {
     filter?: VideoFilter,
     accountId?: number,
     videoChannelId?: number,
-    actorId?: number
+    followerActorId?: number
     trendingDays?: number,
-    user?: UserModel
+    user?: UserModel,
+    historyOfUser?: UserModel
   }, countVideos = true) {
     if (options.filter && options.filter === 'all-local' && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
@@ -1008,11 +1063,11 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
 
-    // actorId === null has a meaning, so just check undefined
-    const actorId = options.actorId !== undefined ? options.actorId : serverActor.id
+    // followerActorId === null has a meaning, so just check undefined
+    const followerActorId = options.followerActorId !== undefined ? options.followerActorId : serverActor.id
 
     const queryOptions = {
-      actorId,
+      followerActorId,
       serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
       categoryOneOf: options.categoryOneOf,
@@ -1026,6 +1081,7 @@ export class VideoModel extends Model<VideoModel> {
       videoChannelId: options.videoChannelId,
       includeLocalVideos: options.includeLocalVideos,
       user: options.user,
+      historyOfUser: options.historyOfUser,
       trendingDays
     }
 
@@ -1118,7 +1174,7 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
     const queryOptions = {
-      actorId: serverActor.id,
+      followerActorId: serverActor.id,
       serverAccountId: serverActor.Account.id,
       includeLocalVideos: options.includeLocalVideos,
       nsfw: options.nsfw,
@@ -1273,11 +1329,11 @@ export class VideoModel extends Model<VideoModel> {
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
     const serverActor = await getServerActor()
-    const actorId = serverActor.id
+    const followerActorId = serverActor.id
 
     const scopeOptions: AvailableForListIDsOptions = {
       serverAccountId: serverActor.Account.id,
-      actorId,
+      followerActorId,
       includeLocalVideos: true
     }
 
@@ -1341,7 +1397,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const [ count, rowsId ] = await Promise.all([
-      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve(undefined),
+      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve<number>(undefined),
       VideoModel.scope(idsScope).findAll(query)
     ])
     const ids = rowsId.map(r => r.id)
@@ -1481,6 +1537,10 @@ export class VideoModel extends Model<VideoModel> {
     videoFile.infoHash = parsedTorrent.infoHash
   }
 
+  getWatchStaticPath () {
+    return '/videos/watch/' + this.uuid
+  }
+
   getEmbedStaticPath () {
     return '/videos/embed/' + this.uuid
   }
@@ -1538,8 +1598,10 @@ export class VideoModel extends Model<VideoModel> {
       .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
-  removeFile (videoFile: VideoFileModel) {
-    const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
+  removeFile (videoFile: VideoFileModel, isRedundancy = false) {
+    const baseDir = isRedundancy ? CONFIG.STORAGE.REDUNDANCY_DIR : CONFIG.STORAGE.VIDEOS_DIR
+
+    const filePath = join(baseDir, this.getVideoFilename(videoFile))
     return remove(filePath)
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
@@ -1615,6 +1677,10 @@ export class VideoModel extends Model<VideoModel> {
 
   getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
     return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+  }
+
+  getVideoRedundancyUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + this.getVideoFilename(videoFile)
   }
 
   getVideoFileDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {

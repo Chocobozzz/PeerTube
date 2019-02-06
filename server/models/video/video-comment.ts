@@ -18,7 +18,7 @@ import { ActivityTagObject } from '../../../shared/models/activitypub/objects/co
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { sendDeleteVideoComment } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
@@ -29,6 +29,9 @@ import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { getServerActor } from '../../helpers/utils'
 import { UserModel } from '../account/user'
+import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
+import { regexpCapture } from '../../helpers/regexp'
+import { uniq } from 'lodash'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -370,9 +373,11 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         id: {
           [ Sequelize.Op.in ]: Sequelize.literal('(' +
             'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
-            'SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ' + comment.id + ' UNION ' +
-            'SELECT p.id, p."inReplyToCommentId" from "videoComment" p ' +
-            'INNER JOIN children c ON c."inReplyToCommentId" = p.id) ' +
+              `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${comment.id} ` +
+              'UNION ' +
+              'SELECT "parent"."id", "parent"."inReplyToCommentId" FROM "videoComment" "parent" ' +
+              'INNER JOIN "children" ON "children"."inReplyToCommentId" = "parent"."id"' +
+            ') ' +
             'SELECT id FROM children' +
           ')'),
           [ Sequelize.Op.ne ]: comment.id
@@ -448,12 +453,44 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
   }
 
+  getCommentStaticPath () {
+    return this.Video.getWatchStaticPath() + ';threadId=' + this.getThreadId()
+  }
+
   getThreadId (): number {
     return this.originCommentId || this.id
   }
 
   isOwned () {
     return this.Account.isOwned()
+  }
+
+  extractMentions () {
+    if (!this.text) return []
+
+    const localMention = `@(${actorNameAlphabet}+)`
+    const remoteMention = `${localMention}@${CONFIG.WEBSERVER.HOST}`
+
+    const remoteMentionsRegex = new RegExp(' ' + remoteMention + ' ', 'g')
+    const localMentionsRegex = new RegExp(' ' + localMention + ' ', 'g')
+    const firstMentionRegex = new RegExp('^(?:(?:' + remoteMention + ')|(?:' + localMention + ')) ', 'g')
+    const endMentionRegex = new RegExp(' (?:(?:' + remoteMention + ')|(?:' + localMention + '))$', 'g')
+
+    return uniq(
+      [].concat(
+        regexpCapture(this.text, remoteMentionsRegex)
+          .map(([ , username ]) => username),
+
+        regexpCapture(this.text, localMentionsRegex)
+          .map(([ , username ]) => username),
+
+        regexpCapture(this.text, firstMentionRegex)
+          .map(([ , username1, username2 ]) => username1 || username2),
+
+        regexpCapture(this.text, endMentionRegex)
+          .map(([ , username1, username2 ]) => username1 || username2)
+      )
+    )
   }
 
   toFormattedJSON () {

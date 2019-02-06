@@ -1,0 +1,91 @@
+@import '_variables';
+@import '_mixins';
+
+/deep/ {
+  .popover-notifications.popover {
+    max-width: none;
+
+    .popover-body {
+      padding: 0;
+      font-size: 14px;
+      font-family: $main-fonts;
+      overflow-y: auto;
+      max-height: 500px;
+      width: 400px;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
+
+      .notifications-header {
+        display: flex;
+        justify-content: space-between;
+
+        background-color: rgba(0, 0, 0, 0.10);
+        align-items: center;
+        padding: 0 10px;
+        font-size: 16px;
+        height: 50px;
+
+        a {
+          @include disable-default-a-behaviour;
+
+          color: rgba(20, 20, 20, 0.5);
+
+          &:hover {
+            color: rgba(20, 20, 20, 0.8);
+          }
+        }
+      }
+
+      .all-notifications {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: $font-semibold;
+        color: var(--mainForegroundColor);
+        padding: 7px 0;
+      }
+    }
+  }
+}
+
+.notification-avatar {
+  cursor: pointer;
+  position: relative;
+
+  img,
+  .unread-notifications {
+    margin-left: 20px;
+  }
+
+  img {
+    @include avatar(34px);
+
+    margin-right: 10px;
+  }
+
+  .unread-notifications {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: var(--mainColor);
+    color: var(#fff);
+    font-size: 10px;
+    font-weight: $font-semibold;
+
+    border-radius: 15px;
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  /deep/ {
+    .popover-notifications.popover .popover-body {
+      width: 400px;
+    }
+  }
+}

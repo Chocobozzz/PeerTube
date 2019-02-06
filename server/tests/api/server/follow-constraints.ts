@@ -2,11 +2,21 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { doubleFollow, getAccountVideos, getVideo, getVideoChannelVideos, getVideoWithToken } from '../../utils'
-import { flushAndRunMultipleServers, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
-import { unfollow } from '../../utils/server/follows'
-import { userLogin } from '../../utils/users/login'
-import { createUser } from '../../utils/users/users'
+import {
+  doubleFollow,
+  getAccountVideos,
+  getVideo,
+  getVideoChannelVideos,
+  getVideoWithToken,
+  flushAndRunMultipleServers,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo
+} from '../../../../shared/utils'
+import { unfollow } from '../../../../shared/utils/server/follows'
+import { userLogin } from '../../../../shared/utils/users/login'
+import { createUser } from '../../../../shared/utils/users/users'
 
 const expect = chai.expect
 

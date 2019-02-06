@@ -32,10 +32,10 @@ import {
   updateUser,
   uploadVideo,
   userLogin
-} from '../../utils/index'
-import { follow } from '../../utils/server/follows'
-import { setAccessTokensToServers } from '../../utils/users/login'
-import { getMyVideos } from '../../utils/videos/videos'
+} from '../../../../shared/utils/index'
+import { follow } from '../../../../shared/utils/server/follows'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
+import { getMyVideos } from '../../../../shared/utils/videos/videos'
 
 const expect = chai.expect
 
@@ -499,10 +499,6 @@ describe('Test users', function () {
     await getMyUserVideoQuotaUsed(server.url, accessTokenUser, 401)
 
     accessTokenUser = await userLogin(server, user)
-  })
-
-  it('Should not be able to delete a user by a moderator', async function () {
-    await removeUser(server.url, 2, accessTokenUser, 403)
   })
 
   it('Should be able to list video blacklist by a moderator', async function () {

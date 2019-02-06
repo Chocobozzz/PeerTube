@@ -21,6 +21,9 @@ smtp:
 log:
   level: 'debug'
 
+contact_form:
+  enabled: true
+
 redundancy:
   videos:
     check_interval: '10 minutes'
@@ -51,6 +54,7 @@ signup:
 
 transcoding:
   enabled: true
+  allow_additional_extensions: false
   threads: 2
   resolutions:
     240p: true

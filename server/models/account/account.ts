@@ -241,6 +241,27 @@ export class AccountModel extends Model<AccountModel> {
       })
   }
 
+  static listLocalsForSitemap (sort: string) {
+    const query = {
+      attributes: [ ],
+      offset: 0,
+      order: getSort(sort),
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'serverId' ],
+          model: ActorModel.unscoped(),
+          where: {
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return AccountModel
+      .unscoped()
+      .findAll(query)
+  }
+
   toFormattedJSON (): Account {
     const actor = this.Actor.toFormattedJSON()
     const account = {
@@ -265,6 +286,10 @@ export class AccountModel extends Model<AccountModel> {
 
   isOwned () {
     return this.Actor.isOwned()
+  }
+
+  isOutdated () {
+    return this.Actor.isOutdated()
   }
 
   getDisplayName () {

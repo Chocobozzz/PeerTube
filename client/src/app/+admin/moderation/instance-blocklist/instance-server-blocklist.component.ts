@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/components/common/sortmeta'
@@ -19,7 +19,7 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private blocklistService: BlocklistService,
     private i18n: I18n
   ) {
@@ -36,10 +36,7 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
     this.blocklistService.unblockServerByInstance(host)
       .subscribe(
         () => {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('Instance {{host}} unmuted by your instance.', { host })
-          )
+          this.notifier.success(this.i18n('Instance {{host}} unmuted by your instance.', { host }))
 
           this.loadData()
         }
@@ -54,7 +51,7 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
           this.totalRecords = resultList.total
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

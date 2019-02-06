@@ -3,41 +3,18 @@
 
 .action-button {
   @include peertube-button-link;
+  @include button-with-icon(21px, 0, -2px);
 
-  font-size: 15px;
   font-weight: $font-semibold;
-  color: #585858;
-  background-color: #E5E5E5;
+  color: $grey-foreground-color;
+  background-color: $grey-background-color;
 
   &:hover {
-    background-color: #EFEFEF;
+    background-color: $grey-background-hover-color;
   }
 
-  .icon {
-    @include icon(21px);
-
-    position: relative;
-    top: -2px;
-
-    &.icon-edit {
-      background-image: url('../../../assets/images/global/edit-grey.svg');
-    }
-
-    &.icon-delete-grey {
-      background-image: url('../../../assets/images/global/delete-grey.svg');
-    }
-
-    &.icon-im-with-her {
-      background-image: url('../../../assets/images/global/im-with-her.svg');
-    }
-
-    &.icon-tick {
-      background-image: url('../../../assets/images/global/tick.svg');
-    }
-
-    &.icon-cross {
-      background-image: url('../../../assets/images/global/cross.svg');
-    }
+  my-global-icon {
+    @include apply-svg-color($grey-foreground-color);
   }
 }
 

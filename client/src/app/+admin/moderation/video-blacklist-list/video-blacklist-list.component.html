@@ -7,6 +7,7 @@
       <th style="width: 40px"></th>
       <th i18n pSortableColumn="name">Video name <p-sortIcon field="name"></p-sortIcon></th>
       <th i18n>Sensitive</th>
+      <th i18n>Unfederated</th>
       <th i18n pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 120px;"></th>
     </tr>
@@ -26,20 +27,21 @@
         </a>
       </td>
 
-      <td>{{ videoBlacklist.video.nsfw }}</td>
+      <td>{{ booleanToText(videoBlacklist.video.nsfw) }}</td>
+      <td>{{ booleanToText(videoBlacklist.unfederated) }}</td>
       <td>{{ videoBlacklist.createdAt }}</td>
 
       <td class="action-cell">
-        <my-action-dropdown i18n-label label="Actions" [actions]="videoBlacklistActions" [entry]="videoBlacklist"></my-action-dropdown>
+        <my-action-dropdown i18n-label  placement="bottom-right" label="Actions" [actions]="videoBlacklistActions" [entry]="videoBlacklist"></my-action-dropdown>
       </td>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-videoBlacklist>
     <tr>
-      <td class="moderation-expanded" colspan="5">
+      <td class="moderation-expanded" colspan="6">
         <span i18n class="moderation-expanded-label">Blacklist reason:</span>
-        <span class="moderation-expanded-text">{{ videoBlacklist.reason }}</span>
+        <span class="moderation-expanded-text" [innerHTML]="toHtml(videoBlacklist.reason)"></span>
       </td>
     </tr>
   </ng-template>

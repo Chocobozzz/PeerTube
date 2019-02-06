@@ -1,10 +1,15 @@
 <ng-template #modal>
   <div class="modal-header">
     <h4 i18n class="modal-title">Report video</h4>
-    <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
+
+    <div i18n class="information">
+      Your report will be sent to moderators of {{ currentHost }}.
+      <ng-container *ngIf="isRemoteVideo()"> It will be forwarded to origin instance {{ originHost }} too.</ng-container>
+    </div>
 
     <form novalidate [formGroup]="form" (ngSubmit)="report()">
       <div class="form-group">

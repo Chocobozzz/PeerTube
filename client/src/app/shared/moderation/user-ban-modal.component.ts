@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -23,7 +23,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private userValidatorsService: UserValidatorsService,
     private i18n: I18n
@@ -42,7 +42,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     this.openedModal = this.modalService.open(this.modal)
   }
 
-  hideBanUserModal () {
+  hide () {
     this.usersToBan = undefined
     this.openedModal.close()
   }
@@ -57,13 +57,13 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
             ? this.i18n('{{num}} users banned.', { num: this.usersToBan.length })
             : this.i18n('User {{username}} banned.', { username: this.usersToBan.username })
 
-          this.notificationsService.success(this.i18n('Success'), message)
+          this.notifier.success(message)
 
           this.userBanned.emit(this.usersToBan)
-          this.hideBanUserModal()
+          this.hide()
         },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
       )
   }
 

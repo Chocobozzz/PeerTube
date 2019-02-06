@@ -56,7 +56,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   // Adding video items to the feed, one at a time
   comments.forEach(comment => {
-    const link = CONFIG.WEBSERVER.URL + '/videos/watch/' + comment.Video.uuid + ';threadId=' + comment.getThreadId()
+    const link = CONFIG.WEBSERVER.URL + comment.getCommentStaticPath()
 
     feed.addItem({
       title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,

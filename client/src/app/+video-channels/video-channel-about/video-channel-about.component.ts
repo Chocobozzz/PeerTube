@@ -3,7 +3,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
-import { MarkdownService } from '@app/videos/shared'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-channel-about',

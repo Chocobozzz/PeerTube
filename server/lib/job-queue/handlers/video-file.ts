@@ -8,7 +8,8 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { importVideoFile, transcodeOriginalVideofile, optimizeVideofile } from '../../video-transcoding'
+import { importVideoFile, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
+import { Notifier } from '../../notifier'
 
 export type VideoFilePayload = {
   videoUUID: string
@@ -67,17 +68,17 @@ async function processVideoFile (job: Bull.Job) {
 async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
   if (video === undefined) return undefined
 
-  return sequelizeTypescript.transaction(async t => {
+  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
-    let isNewVideo = false
+    let videoPublished = false
 
     // We transcoded the video file in another format, now we can publish it
     if (videoDatabase.state !== VideoState.PUBLISHED) {
-      isNewVideo = true
+      videoPublished = true
 
       videoDatabase.state = VideoState.PUBLISHED
       videoDatabase.publishedAt = new Date()
@@ -85,21 +86,26 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
     }
 
     // If the video was not published, we consider it is a new one for other instances
-    await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+    await federateVideoIfNeeded(videoDatabase, videoPublished, t)
 
-    return undefined
+    return { videoDatabase, videoPublished }
   })
+
+  if (videoPublished) {
+    Notifier.Instance.notifyOnNewVideo(videoDatabase)
+    Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
+  }
 }
 
-async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boolean) {
-  if (video === undefined) return undefined
+async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: boolean) {
+  if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
-  const { videoFileResolution } = await video.getOriginalFileResolution()
+  const { videoFileResolution } = await videoArg.getOriginalFileResolution()
 
-  return sequelizeTypescript.transaction(async t => {
+  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+    let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
@@ -110,8 +116,10 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
       { resolutions: resolutionsEnabled }
     )
 
+    let videoPublished = false
+
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Bluebird<any>[] = []
+      const tasks: Bluebird<Bull.Job<any>>[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {
@@ -127,15 +135,22 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
 
       logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
     } else {
-      // No transcoding to do, it's now published
-      video.state = VideoState.PUBLISHED
-      video = await video.save({ transaction: t })
+      videoPublished = true
 
-      logger.info('No transcoding jobs created for video %s (no resolutions).', video.uuid)
+      // No transcoding to do, it's now published
+      videoDatabase.state = VideoState.PUBLISHED
+      videoDatabase = await videoDatabase.save({ transaction: t })
+
+      logger.info('No transcoding jobs created for video %s (no resolutions).', videoDatabase.uuid, { privacy: videoDatabase.privacy })
     }
 
-    return federateVideoIfNeeded(video, isNewVideo, t)
+    await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+
+    return { videoDatabase, videoPublished }
   })
+
+  if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+  if (videoPublished) Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
 }
 
 // ---------------------------------------------------------------------------

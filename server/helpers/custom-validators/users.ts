@@ -46,6 +46,10 @@ function isUserWebTorrentEnabledValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserVideosHistoryEnabledValid (value: any) {
+  return isBooleanValid(value)
+}
+
 function isUserAutoPlayVideoValid (value: any) {
   return isBooleanValid(value)
 }
@@ -73,6 +77,7 @@ function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } |
 // ---------------------------------------------------------------------------
 
 export {
+  isUserVideosHistoryEnabledValid,
   isUserBlockedValid,
   isUserPasswordValid,
   isUserBlockedReasonValid,

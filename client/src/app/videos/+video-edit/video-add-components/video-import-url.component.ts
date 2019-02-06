@@ -1,8 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
 import { VideoPrivacy, VideoUpdate } from '../../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../../core'
+import { AuthService, Notifier, ServerService } from '../../../core'
 import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { LoadingBarService } from '@ngx-loading-bar/core'
@@ -19,7 +18,7 @@ import { scrollToTop } from '@app/shared/misc/utils'
   templateUrl: './video-import-url.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-import-url.component.scss'
+    './video-send.scss'
   ]
 })
 export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
@@ -40,7 +39,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected authService: AuthService,
     protected serverService: ServerService,
     protected videoService: VideoService,
@@ -99,7 +98,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
         this.loadingBar.complete()
         this.isImportingVideo = false
         this.firstStepError.emit()
-        this.notificationsService.error(this.i18n('Error'), err.message)
+        this.notifier.error(err.message)
       }
     )
   }
@@ -118,7 +117,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
         .subscribe(
           () => {
             this.isUpdatingVideo = false
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video to import updated.'))
+            this.notifier.success(this.i18n('Video to import updated.'))
 
             this.router.navigate([ '/my-account', 'video-imports' ])
           },

@@ -4,8 +4,11 @@ import 'mocha'
 import * as chai from 'chai'
 import { About } from '../../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-import { deleteCustomConfig, getAbout, killallServers, reRunServer } from '../../utils'
 import {
+  deleteCustomConfig,
+  getAbout,
+  killallServers,
+  reRunServer,
   flushTests,
   getConfig,
   getCustomConfig,
@@ -13,7 +16,8 @@ import {
   runServer,
   setAccessTokensToServers,
   updateCustomConfig
-} from '../../utils/index'
+} from '../../../../shared/utils'
+import { ServerConfig } from '../../../../shared/models'
 
 const expect = chai.expect
 
@@ -29,17 +33,24 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.instance.defaultNSFWPolicy).to.equal('display')
   expect(data.instance.customizations.css).to.be.empty
   expect(data.instance.customizations.javascript).to.be.empty
+
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
   expect(data.services.twitter.whitelisted).to.be.false
+
   expect(data.cache.previews.size).to.equal(1)
   expect(data.cache.captions.size).to.equal(1)
+
   expect(data.signup.enabled).to.be.true
   expect(data.signup.limit).to.equal(4)
   expect(data.signup.requiresEmailVerification).to.be.false
+
   expect(data.admin.email).to.equal('admin1@example.com')
+  expect(data.contactForm.enabled).to.be.true
+
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
   expect(data.transcoding.enabled).to.be.false
+  expect(data.transcoding.allowAdditionalExtensions).to.be.false
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
@@ -59,23 +70,32 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.defaultNSFWPolicy).to.equal('blur')
   expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
   expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
+
   expect(data.services.twitter.username).to.equal('@Kuja')
   expect(data.services.twitter.whitelisted).to.be.true
+
   expect(data.cache.previews.size).to.equal(2)
   expect(data.cache.captions.size).to.equal(3)
+
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
   expect(data.signup.requiresEmailVerification).to.be.true
+
   expect(data.admin.email).to.equal('superadmin1@example.com')
+  expect(data.contactForm.enabled).to.be.false
+
   expect(data.user.videoQuota).to.equal(5242881)
   expect(data.user.videoQuotaDaily).to.equal(318742)
+
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
+  expect(data.transcoding.allowAdditionalExtensions).to.be.true
   expect(data.transcoding.resolutions['240p']).to.be.false
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.false
   expect(data.transcoding.resolutions['1080p']).to.be.false
+
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
 }
@@ -93,7 +113,7 @@ describe('Test config', function () {
 
   it('Should have a correct config on a server with registration enabled', async function () {
     const res = await getConfig(server.url)
-    const data = res.body
+    const data: ServerConfig = res.body
 
     expect(data.signup.allowed).to.be.true
   })
@@ -108,9 +128,21 @@ describe('Test config', function () {
     ])
 
     const res = await getConfig(server.url)
-    const data = res.body
+    const data: ServerConfig = res.body
 
     expect(data.signup.allowed).to.be.false
+  })
+
+  it('Should have the correct video allowed extensions', async function () {
+    const res = await getConfig(server.url)
+    const data: ServerConfig = res.body
+
+    expect(data.video.file.extensions).to.have.lengthOf(3)
+    expect(data.video.file.extensions).to.contain('.mp4')
+    expect(data.video.file.extensions).to.contain('.webm')
+    expect(data.video.file.extensions).to.contain('.ogv')
+
+    expect(data.contactForm.enabled).to.be.true
   })
 
   it('Should get the customized configuration', async function () {
@@ -156,12 +188,16 @@ describe('Test config', function () {
       admin: {
         email: 'superadmin1@example.com'
       },
+      contactForm: {
+        enabled: false
+      },
       user: {
         videoQuota: 5242881,
         videoQuotaDaily: 318742
       },
       transcoding: {
         enabled: true,
+        allowAdditionalExtensions: true,
         threads: 1,
         resolutions: {
           '240p': false,
@@ -188,6 +224,18 @@ describe('Test config', function () {
     const data = res.body
 
     checkUpdatedConfig(data)
+  })
+
+  it('Should have the correct updated video allowed extensions', async function () {
+    const res = await getConfig(server.url)
+    const data: ServerConfig = res.body
+
+    expect(data.video.file.extensions).to.have.length.above(3)
+    expect(data.video.file.extensions).to.contain('.mp4')
+    expect(data.video.file.extensions).to.contain('.webm')
+    expect(data.video.file.extensions).to.contain('.ogv')
+    expect(data.video.file.extensions).to.contain('.flv')
+    expect(data.video.file.extensions).to.contain('.mkv')
   })
 
   it('Should have the configuration updated after a restart', async function () {

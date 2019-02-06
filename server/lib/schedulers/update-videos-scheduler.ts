@@ -5,6 +5,8 @@ import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { federateVideoIfNeeded } from '../activitypub'
 import { SCHEDULER_INTERVALS_MS, sequelizeTypescript } from '../../initializers'
 import { VideoPrivacy } from '../../../shared/models/videos'
+import { Notifier } from '../notifier'
+import { VideoModel } from '../../models/video/video'
 
 export class UpdateVideosScheduler extends AbstractScheduler {
 
@@ -12,30 +14,20 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
   protected schedulerIntervalMs = SCHEDULER_INTERVALS_MS.updateVideos
 
-  private isRunning = false
-
   private constructor () {
     super()
   }
 
-  async execute () {
-    if (this.isRunning === true) return
-    this.isRunning = true
-
-    try {
-      await retryTransactionWrapper(this.updateVideos.bind(this))
-    } catch (err) {
-      logger.error('Cannot execute update videos scheduler.', { err })
-    } finally {
-      this.isRunning = false
-    }
+  protected async internalExecute () {
+    return retryTransactionWrapper(this.updateVideos.bind(this))
   }
 
   private async updateVideos () {
     if (!await ScheduleVideoUpdateModel.areVideosToUpdate()) return undefined
 
-    return sequelizeTypescript.transaction(async t => {
+    const publishedVideos = await sequelizeTypescript.transaction(async t => {
       const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate(t)
+      const publishedVideos: VideoModel[] = []
 
       for (const schedule of schedules) {
         const video = schedule.Video
@@ -50,11 +42,23 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
           await video.save({ transaction: t })
           await federateVideoIfNeeded(video, isNewVideo, t)
+
+          if (oldPrivacy === VideoPrivacy.UNLISTED || oldPrivacy === VideoPrivacy.PRIVATE) {
+            video.ScheduleVideoUpdate = schedule
+            publishedVideos.push(video)
+          }
         }
 
         await schedule.destroy({ transaction: t })
       }
+
+      return publishedVideos
     })
+
+    for (const v of publishedVideos) {
+      Notifier.Instance.notifyOnNewVideo(v)
+      Notifier.Instance.notifyOnPendingVideoPublished(v)
+    }
   }
 
   static get Instance () {

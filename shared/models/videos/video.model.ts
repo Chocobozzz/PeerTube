@@ -24,7 +24,7 @@ export interface VideoChannelAttribute {
   displayName: string
   url: string
   host: string
-  avatar: Avatar
+  avatar?: Avatar
 }
 
 export interface AccountAttribute {
@@ -34,7 +34,7 @@ export interface AccountAttribute {
   displayName: string
   url: string
   host: string
-  avatar: Avatar
+  avatar?: Avatar
 }
 
 export interface Video {

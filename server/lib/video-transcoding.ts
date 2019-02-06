@@ -1,7 +1,7 @@
 import { CONFIG } from '../initializers'
 import { extname, join } from 'path'
 import { getVideoFileFPS, getVideoFileResolution, transcode } from '../helpers/ffmpeg-utils'
-import { copy, remove, rename, stat } from 'fs-extra'
+import { copy, remove, move, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
@@ -30,7 +30,7 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
     inputVideoFile.set('extname', newExtname)
 
     const videoOutputPath = video.getVideoFilePath(inputVideoFile)
-    await rename(videoTranscodedPath, videoOutputPath)
+    await move(videoTranscodedPath, videoOutputPath)
     const stats = await stat(videoOutputPath)
     const fps = await getVideoFileFPS(videoOutputPath)
 

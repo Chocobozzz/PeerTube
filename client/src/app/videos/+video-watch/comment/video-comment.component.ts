@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.service'
-import * as sanitizeHtml from 'sanitize-html'
 import { UserRight } from '../../../../../../shared/models/users'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
+import { HtmlRendererService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-comment',
@@ -29,7 +28,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   newParentComments: VideoComment[] = []
 
   constructor (
-    private linkifierService: LinkifierService,
+    private htmlRenderer: HtmlRendererService,
     private authService: AuthService
   ) {}
 
@@ -87,27 +86,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   private init () {
-    // Convert possible markdown to html
-    const html = this.linkifierService.linkify(this.comment.text)
-
-    this.sanitizedCommentHTML = sanitizeHtml(html, {
-      allowedTags: [ 'a', 'p', 'span', 'br' ],
-      allowedSchemes: [ 'http', 'https' ],
-      allowedAttributes: {
-        'a': [ 'href', 'class', 'target' ]
-      },
-      transformTags: {
-        a: (tagName, attribs) => {
-          return {
-            tagName,
-            attribs: Object.assign(attribs, {
-              target: '_blank',
-              rel: 'noopener noreferrer'
-            })
-          }
-        }
-      }
-    })
+    this.sanitizedCommentHTML = this.htmlRenderer.toSafeHtml(this.comment.text)
 
     this.newParentComments = this.parentComments.concat([ this.comment ])
   }

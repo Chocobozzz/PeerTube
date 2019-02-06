@@ -5,10 +5,9 @@ import 'multer'
 import * as validator from 'validator'
 import { UserRight, VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
-  CONSTRAINTS_FIELDS,
+  CONSTRAINTS_FIELDS, MIMETYPES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
-  VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
   VIDEO_STATES
@@ -83,10 +82,15 @@ function isVideoRatingTypeValid (value: string) {
   return value === 'none' || values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
 }
 
-const videoFileTypes = Object.keys(VIDEO_MIMETYPE_EXT).map(m => `(${m})`)
-const videoFileTypesRegex = videoFileTypes.join('|')
+function isVideoFileExtnameValid (value: string) {
+  return exists(value) && MIMETYPES.VIDEO.EXT_MIMETYPE[value] !== undefined
+}
 
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
+  const videoFileTypesRegex = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
+                                    .map(m => `(${m})`)
+                                    .join('|')
+
   return isFileValid(files, videoFileTypesRegex, 'videofile', null)
 }
 
@@ -221,6 +225,7 @@ export {
   isVideoStateValid,
   isVideoViewsValid,
   isVideoRatingTypeValid,
+  isVideoFileExtnameValid,
   isVideoDurationValid,
   isVideoTagValid,
   isVideoPrivacyValid,

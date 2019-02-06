@@ -11,7 +11,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../utils'
+} from '../../../../shared/utils'
 import { UserRole } from '../../../../shared/models/users'
 
 const expect = chai.expect

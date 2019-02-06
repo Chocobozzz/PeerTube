@@ -48,12 +48,12 @@ matrix:
   - env: TEST_SUITE=jest
 
 script:
-  - travis_retry npm run travis -- "$TEST_SUITE"
+  - NODE_PENDING_JOB_WAIT=1000 travis_retry npm run travis -- "$TEST_SUITE"
 
 after_failure:
-  - cat test1/logs/all-logs.log
-  - cat test2/logs/all-logs.log
-  - cat test3/logs/all-logs.log
-  - cat test4/logs/all-logs.log
-  - cat test5/logs/all-logs.log
-  - cat test6/logs/all-logs.log
+  - cat test1/logs/peertube.log
+  - cat test2/logs/peertube.log
+  - cat test3/logs/peertube.log
+  - cat test4/logs/peertube.log
+  - cat test5/logs/peertube.log
+  - cat test6/logs/peertube.log

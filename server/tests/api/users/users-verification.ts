@@ -4,11 +4,11 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   registerUser, flushTests, getUserInformation, getMyUserInformation, killallServers,
-  userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig
-} from '../../utils'
-import { setAccessTokensToServers } from '../../utils/users/login'
-import { mockSmtpServer } from '../../utils/miscs/email'
-import { waitJobs } from '../../utils/server/jobs'
+  userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig, wait
+} from '../../../../shared/utils'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
+import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 
@@ -30,7 +30,7 @@ describe('Test users account verification', function () {
   before(async function () {
     this.timeout(30000)
 
-    await mockSmtpServer(emails)
+    await MockSmtpServer.Instance.collectEmails(emails)
 
     await flushTests()
 
@@ -123,6 +123,7 @@ describe('Test users account verification', function () {
   })
 
   after(async function () {
+    MockSmtpServer.Instance.kill()
     killallServers([ server ])
 
     // Keep the logs if the test failed

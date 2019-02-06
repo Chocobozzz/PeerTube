@@ -10,8 +10,10 @@ database:
 
 # From the project root directory
 storage:
+  tmp: 'test2/tmp/'
   avatars: 'test2/avatars/'
   videos: 'test2/videos/'
+  redundancy: 'test2/redundancy/'
   logs: 'test2/logs/'
   previews: 'test2/previews/'
   thumbnails: 'test2/thumbnails/'
@@ -27,3 +29,4 @@ signup:
 
 transcoding:
   enabled: true
+  allow_additional_extensions: true

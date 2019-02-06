@@ -4,13 +4,13 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  
 
-- [CLI wrapper](#cli-wrapper)
 - [Remote Tools](#remote-tools)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
-  - [peertube-import-videos.js](#peertube-import-videosjs)
-  - [peertube-upload.js](#peertube-uploadjs)
-  - [peertube-watch.js](#peertube-watchjs)
+  - [CLI wrapper](#cli-wrapper)
+    - [peertube-import-videos.js](#peertube-import-videosjs)
+    - [peertube-upload.js](#peertube-uploadjs)
+    - [peertube-watch.js](#peertube-watchjs)
 - [Server tools](#server-tools)
   - [parse-log](#parse-log)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
@@ -26,9 +26,41 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## CLI wrapper
+## Remote Tools
 
-The wrapper provides a convenient interface to most scripts, and requires the [same dependencies](#dependencies). You can access it as `peertube` via an alias in your `.bashrc` like `alias peertube="node ${PEERTUBE_PATH}/dist/server/tools/peertube.js"`:
+You need at least 512MB RAM to run the script.
+Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
+You need to follow all the following steps even if you are on a PeerTube server (including cloning the git repository in a different directory than your production installation because the scripts utilize non-production dependencies).
+
+### Dependencies
+
+Install the [PeerTube dependencies](dependencies.md).
+
+### Installation
+
+Clone the PeerTube repo to get the latest version (even if you are on your PeerTube server):
+
+```
+$ git clone https://github.com/Chocobozzz/PeerTube.git
+$ CLONE="$(pwd)/PeerTube"
+```
+
+Run ``yarn install --pure-lockfile``
+```
+$ cd ${CLONE}
+$ yarn install --pure-lockfile
+```
+
+Build server tools:
+```
+$ cd ${CLONE}
+$ npm run build:server
+```
+
+### CLI wrapper
+
+The wrapper provides a convenient interface to the following scripts.
+You can access it as `peertube` via an alias in your `.bashrc` like `alias peertube="cd /your/peertube/directory/ && node ./dist/server/tools/peertube.js"` (you have to keep the `cd` command):
 
 ```
   Usage: peertube [command] [options]
@@ -51,12 +83,12 @@ The wrapper provides a convenient interface to most scripts, and requires the [s
 The wrapper can keep track of instances you have an account on. We limit to one account per instance for now.
 
 ```bash
-$ peertube auth add -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"
+$ peertube auth add -u 'PEERTUBE_URL' -U 'PEERTUBE_USER' --password 'PEERTUBE_PASSWORD'
 $ peertube auth list
 ┌──────────────────────────────┬──────────────────────────────┐
 │ instance                     │ login                        │
 ├──────────────────────────────┼──────────────────────────────┤
-│ "PEERTUBE_URL"               │ "PEERTUBE_USER"              │
+│ 'PEERTUBE_URL'               │ 'PEERTUBE_USER'              │
 └──────────────────────────────┴──────────────────────────────┘
 ```
 
@@ -72,53 +104,22 @@ And now that your video is online, you can watch it from the confort of your ter
 $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10
 ```
 
-## Remote Tools
-
-You need at least 512MB RAM to run the script.
-Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
-You need to follow all the following steps even if you are on a PeerTube server (including cloning the git repository in a different directory than your production installation because the scripts utilize non-production dependencies).
-
-### Dependencies
-
-Install the [PeerTube dependencies](dependencies.md).
-
-### Installation
-
-Clone the PeerTube repo to get the latest version (even if you are on your PeerTube server):
-
-```
-$ git clone https://github.com/Chocobozzz/PeerTube.git
-$ CLONE="$(pwd)/PeerTube"
-```
-
-Run ``yarn install``
-```
-$ cd ${CLONE}
-$ yarn install
-```
-
-Build server tools:
-```
-$ cd ${CLONE}
-$ npm run build:server
-```
-
-### peertube-import-videos.js
+#### peertube-import-videos.js
 
 You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
 Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
 $ node dist/server/tools/peertube-import-videos.js \
-    -u "PEERTUBE_URL" \
-    -U "PEERTUBE_USER" \
-    --password "PEERTUBE_PASSWORD" \
-    -t "TARGET_URL"
+    -u 'PEERTUBE_URL' \
+    -U 'PEERTUBE_USER' \
+    --password 'PEERTUBE_PASSWORD' \
+    -t 'TARGET_URL'
 ```
 
 * `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
 * `PEERTUBE_USER` : your PeerTube account where videos will be uploaded
-* `PEERTUBE_PASSWORD` : password of your PeerTube account (if omitted, you will be prompted for it)
+* `PEERTUBE_PASSWORD` : password of your PeerTube account (if `PEERTUBE_PASSWORD` is omitted, you will be prompted for it)
 * `TARGET_URL` : the target url you want to import. Examples:
   * YouTube:
     * Channel: https://www.youtube.com/channel/ChannelId
@@ -133,7 +134,7 @@ Already downloaded videos will not be uploaded twice, so you can run and re-run 
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
 
-### peertube-upload.js
+#### peertube-upload.js
 
 You can use this script to import videos directly from the CLI.
 
@@ -144,7 +145,7 @@ $ cd ${CLONE}
 $ node dist/server/tools/peertube-upload.js --help
 ```
 
-### peertube-watch.js
+#### peertube-watch.js
 
 You can use this script to play videos directly from the CLI.
 
@@ -198,10 +199,10 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 ### prune-storage.js
 
 Some transcoded videos or shutdown at a bad time can leave some unused files on your storage.
-To delete them (a confirmation will be demanded first):
+Stop PeerTube and delete these files (a confirmation will be demanded first):
 
 ```
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
+$ sudo systemctl stop peertube && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run prune-storage
 ```
 
 ### optimize-old-videos.js

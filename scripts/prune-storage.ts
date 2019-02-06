@@ -19,7 +19,8 @@ async function run () {
 
   const storageOnlyOwnedToPrune = [
     CONFIG.STORAGE.VIDEOS_DIR,
-    CONFIG.STORAGE.TORRENTS_DIR
+    CONFIG.STORAGE.TORRENTS_DIR,
+    CONFIG.STORAGE.REDUNDANCY_DIR
   ]
 
   const storageForAllToPrune = [
@@ -35,6 +36,9 @@ async function run () {
   for (const directory of storageForAllToPrune) {
     toDelete = toDelete.concat(await pruneDirectory(directory, false))
   }
+
+  const tmpFiles = await readdir(CONFIG.STORAGE.TMP_DIR)
+  toDelete = toDelete.concat(tmpFiles.map(t => join(CONFIG.STORAGE.TMP_DIR, t)))
 
   if (toDelete.length === 0) {
     console.log('No files to delete.')
@@ -91,6 +95,7 @@ async function askConfirmation () {
         confirm: {
           type: 'string',
           description: 'These following unused files can be deleted, but please check your backups first (bugs happen).' +
+            ' Notice PeerTube must have been stopped when your ran this script.' +
             ' Can we delete these files?',
           default: 'n',
           required: true

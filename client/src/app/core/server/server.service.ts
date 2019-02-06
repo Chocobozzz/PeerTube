@@ -13,6 +13,7 @@ import { sortBy } from '@app/shared/misc/utils'
 
 @Injectable()
 export class ServerService {
+  private static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server/'
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
@@ -36,6 +37,12 @@ export class ServerService {
         javascript: '',
         css: ''
       }
+    },
+    email: {
+      enabled: false
+    },
+    contactForm: {
+      enabled: false
     },
     serverVersion: 'Unknown',
     signup: {
@@ -79,6 +86,11 @@ export class ServerService {
         torrent: {
           enabled: false
         }
+      }
+    },
+    trending: {
+      videos: {
+        intervalDays: 0
       }
     }
   }
@@ -139,10 +151,6 @@ export class ServerService {
 
   getVideoPrivacies () {
     return this.videoPrivacies
-  }
-
-  getAbout () {
-    return this.http.get<About>(ServerService.BASE_CONFIG_URL + '/about')
   }
 
   private loadVideoAttributeEnum (

@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
 import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
-import { MarkdownService } from '@app/videos/shared'
 
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
@@ -34,6 +33,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import {
   CustomConfigValidatorsService,
+  InstanceValidatorsService,
   LoginValidatorsService,
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
@@ -61,6 +61,14 @@ import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
 import { BlocklistService } from '@app/shared/blocklist'
+import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
+import { UserHistoryService } from '@app/shared/users/user-history.service'
+import { UserNotificationService } from '@app/shared/users/user-notification.service'
+import { UserNotificationsComponent } from '@app/shared/users/user-notifications.component'
+import { InstanceService } from '@app/shared/instance/instance.service'
+import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
+import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
+import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
 
 @NgModule({
   imports: [
@@ -102,7 +110,11 @@ import { BlocklistService } from '@app/shared/blocklist'
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
-    UserModerationDropdownComponent
+    UserModerationDropdownComponent,
+    TopMenuDropdownComponent,
+    UserNotificationsComponent,
+    ConfirmComponent,
+    GlobalIconComponent
   ],
 
   exports: [
@@ -141,6 +153,10 @@ import { BlocklistService } from '@app/shared/blocklist'
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
+    TopMenuDropdownComponent,
+    UserNotificationsComponent,
+    ConfirmComponent,
+    GlobalIconComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -157,7 +173,6 @@ import { BlocklistService } from '@app/shared/blocklist'
     UserService,
     VideoService,
     AccountService,
-    MarkdownService,
     VideoChannelService,
     VideoCaptionService,
     VideoImportService,
@@ -177,10 +192,19 @@ import { BlocklistService } from '@app/shared/blocklist'
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
+    InstanceValidatorsService,
     BlocklistService,
+    UserHistoryService,
+    InstanceService,
+
+    MarkdownService,
+    LinkifierService,
+    HtmlRendererService,
 
     I18nPrimengCalendarService,
     ScreenService,
+
+    UserNotificationService,
 
     I18n
   ]

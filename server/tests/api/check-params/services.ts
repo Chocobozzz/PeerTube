@@ -2,7 +2,15 @@
 
 import 'mocha'
 
-import { flushTests, killallServers, makeGetRequest, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils'
+import {
+  flushTests,
+  killallServers,
+  makeGetRequest,
+  runServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo
+} from '../../../../shared/utils'
 
 describe('Test services API validators', function () {
   let server: ServerInfo

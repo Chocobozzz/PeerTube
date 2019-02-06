@@ -9,6 +9,10 @@ function isArray (value: any) {
   return Array.isArray(value)
 }
 
+function isNotEmptyIntArray (value: any) {
+  return Array.isArray(value) && value.every(v => validator.isInt('' + v)) && value.length !== 0
+}
+
 function isDateValid (value: string) {
   return exists(value) && validator.isISO8601(value)
 }
@@ -78,6 +82,7 @@ function isFileValid (
 
 export {
   exists,
+  isNotEmptyIntArray,
   isArray,
   isIdValid,
   isUUIDValid,

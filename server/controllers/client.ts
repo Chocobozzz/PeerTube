@@ -2,7 +2,7 @@ import * as express from 'express'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
 import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers'
-import { asyncMiddleware } from '../middlewares'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
 import { ClientHtml } from '../lib/client-html'
 import { logger } from '../helpers/logger'
@@ -16,21 +16,20 @@ const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
-clientsRouter.use('/videos/watch/:id',
-  asyncMiddleware(generateWatchHtmlPage)
-)
+clientsRouter.use('/videos/watch/:id', asyncMiddleware(generateWatchHtmlPage))
 
-clientsRouter.use('' +
+clientsRouter.use(
   '/videos/embed',
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  embedCSP,
+  (req: express.Request, res: express.Response) => {
     res.removeHeader('X-Frame-Options')
     res.sendFile(embedPath)
   }
 )
-clientsRouter.use('' +
-  '/videos/test-embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  res.sendFile(testEmbedPath)
-})
+clientsRouter.use(
+  '/videos/test-embed',
+  (req: express.Request, res: express.Response) => res.sendFile(testEmbedPath)
+)
 
 // Static HTML/CSS/JS client files
 
@@ -89,7 +88,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
-  const html = await ClientHtml.getIndexHTML(req, res, paramLang)
+  const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
 
   return sendHTML(html, res)
 }

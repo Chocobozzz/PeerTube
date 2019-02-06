@@ -6,7 +6,7 @@ import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { VideoFileModel } from '../../models/video/video-file'
 import { downloadWebTorrentVideo } from '../../helpers/webtorrent'
 import { join } from 'path'
-import { rename } from 'fs-extra'
+import { move } from 'fs-extra'
 import { getServerActor } from '../../helpers/utils'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send'
 import { getVideoCacheFileActivityPubUrl } from '../activitypub/url'
@@ -16,7 +16,6 @@ import { getOrCreateVideoAndAccountAndChannel } from '../activitypub'
 export class VideosRedundancyScheduler extends AbstractScheduler {
 
   private static instance: AbstractScheduler
-  private executing = false
 
   protected schedulerIntervalMs = CONFIG.REDUNDANCY.VIDEOS.CHECK_INTERVAL
 
@@ -24,11 +23,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     super()
   }
 
-  async execute () {
-    if (this.executing) return
-
-    this.executing = true
-
+  protected async internalExecute () {
     for (const obj of CONFIG.REDUNDANCY.VIDEOS.STRATEGIES) {
       logger.info('Running redundancy scheduler for strategy %s.', obj.strategy)
 
@@ -57,8 +52,6 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     await this.extendsLocalExpiration()
 
     await this.purgeRemoteExpired()
-
-    this.executing = false
   }
 
   static get Instance () {
@@ -145,13 +138,13 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
       const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
-      const destPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(file))
-      await rename(tmpPath, destPath)
+      const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, video.getVideoFilename(file))
+      await move(tmpPath, destPath)
 
       const createdModel = await VideoRedundancyModel.create({
         expiresOn: this.buildNewExpiration(redundancy.minLifetime),
         url: getVideoCacheFileActivityPubUrl(file),
-        fileUrl: video.getVideoFileUrl(file, CONFIG.WEBSERVER.URL),
+        fileUrl: video.getVideoRedundancyUrl(file, CONFIG.WEBSERVER.URL),
         strategy: redundancy.strategy,
         videoFileId: file.id,
         actorId: serverActor.id

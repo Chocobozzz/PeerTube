@@ -3,18 +3,18 @@ import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core/notification/notifier.service'
 import { OAuthClientLocal, User as UserServerModel, UserRefreshToken } from '../../../../../shared'
 import { User } from '../../../../../shared/models/users'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
 import { environment } from '../../../environments/environment'
-import { RestExtractor } from '../../shared/rest'
+import { RestExtractor } from '../../shared/rest/rest-extractor.service'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 import { objectToUrlEncoded } from '@app/shared/misc/utils'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { HotkeysService, Hotkey } from 'angular2-hotkeys'
+import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -38,7 +38,6 @@ export class AuthService {
   loginChangedSource: Observable<AuthStatus>
   userInformationLoaded = new ReplaySubject<boolean>(1)
   hotkeys: Hotkey[]
-  redirectUrl: string
 
   private clientId: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
   private clientSecret: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
@@ -48,7 +47,7 @@ export class AuthService {
 
   constructor (
     private http: HttpClient,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private hotkeysService: HotkeysService,
     private restExtractor: RestExtractor,
     private router: Router,
@@ -106,9 +105,8 @@ export class AuthService {
               )
             }
 
-            // We put a bigger timeout
-            // This is an important message
-            this.notificationsService.error(this.i18n('Error'), errorMessage, { timeOut: 7000 })
+            // We put a bigger timeout: this is an important message
+            this.notifier.error(errorMessage, this.i18n('Error'), 7000)
           }
         )
   }
@@ -178,8 +176,6 @@ export class AuthService {
     this.setStatus(AuthStatus.LoggedOut)
 
     this.hotkeysService.remove(this.hotkeys)
-
-    this.redirectUrl = null
   }
 
   refreshAccessToken () {

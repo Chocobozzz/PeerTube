@@ -1,0 +1,21 @@
+<div class="sub-menu">
+  <ng-container *ngFor="let menuEntry of menuEntries">
+
+    <a *ngIf="menuEntry.routerLink" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page">{{ menuEntry.label }}</a>
+
+    <div *ngIf="!menuEntry.routerLink" ngbDropdown class="parent-entry" #dropdown="ngbDropdown" (mouseleave)="closeDropdownIfHovered(dropdown)">
+      <span
+        (mouseenter)="openDropdownOnHover(dropdown)" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }" ngbDropdownAnchor
+        (click)="dropdownAnchorClicked(dropdown)" role="button" class="title-page"
+      >
+        <ng-container i18n>{{ menuEntry.label }}</ng-container>
+        <ng-container *ngIf="!!suffixLabels[menuEntry.label]"> - {{ suffixLabels[menuEntry.label] }}</ng-container>
+      </span>
+
+      <div ngbDropdownMenu>
+        <a *ngFor="let menuChild of menuEntry.children" class="dropdown-item" [routerLink]="menuChild.routerLink">{{ menuChild.label }}</a>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

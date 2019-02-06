@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { ServerService } from '../../../core/server'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { map } from 'rxjs/operators'
@@ -27,6 +27,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: VideoCaptionEdit[] = []
+  @Input() waitTranscodingEnabled = true
 
   @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
 
@@ -58,7 +59,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private serverService: ServerService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService
   ) {

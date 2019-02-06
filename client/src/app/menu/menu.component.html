@@ -2,9 +2,7 @@
   <menu>
     <div class="top-menu">
       <div *ngIf="isLoggedIn" class="logged-in-block">
-        <a routerLink="/my-account/settings">
-          <img [src]="user.accountAvatarUrl" alt="Avatar" />
-        </a>
+        <my-avatar-notification [user]="user"></my-avatar-notification>
 
         <div class="logged-in-info">
           <a routerLink="/my-account/settings" class="logged-in-username">{{ user.account?.displayName }}</a>

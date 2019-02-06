@@ -10,6 +10,7 @@ import { getServerActor } from '../helpers/utils'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isArray } from '../helpers/custom-validators/misc'
 import { uniq } from 'lodash'
+import { Emailer } from '../lib/emailer'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -32,9 +33,19 @@ async function checkActivityPubUrls () {
 // Some checks on configuration files
 // Return an error message, or null if everything is okay
 function checkConfig () {
-  const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
+
+  if (!Emailer.isEnabled()) {
+    if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
+      return 'Emailer is disabled but you require signup email verification.'
+    }
+
+    if (CONFIG.CONTACT_FORM.ENABLED) {
+      logger.warn('Emailer is disabled so the contact form will not work.')
+    }
+  }
 
   // NSFW policy
+  const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
   {
     const available = [ 'do_not_list', 'blur', 'display' ]
     if (available.indexOf(defaultNSFWPolicy) === -1) {
@@ -68,6 +79,7 @@ function checkConfig () {
     }
   }
 
+  // Check storage directory locations
   if (isProdInstance()) {
     const configStorage = config.get('storage')
     for (const key of Object.keys(configStorage)) {

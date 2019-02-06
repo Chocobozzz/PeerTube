@@ -7,6 +7,7 @@ import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
+import { isArray } from './custom-validators/misc'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -19,10 +20,7 @@ async function generateRandomString (size: number) {
   return raw.toString('hex')
 }
 
-interface FormattableToJSON {
-  toFormattedJSON (args?: any)
-}
-
+interface FormattableToJSON { toFormattedJSON (args?: any) }
 function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number, formattedArg?: any) {
   const formattedObjects: U[] = []
 
@@ -46,11 +44,11 @@ const getServerActor = memoizee(async function () {
   return actor
 })
 
-function generateVideoTmpPath (target: string | ParseTorrent) {
+function generateVideoImportTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash
 
   const hash = sha256(id)
-  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+  return join(CONFIG.STORAGE.TMP_DIR, hash + '-import.mp4')
 }
 
 function getSecureTorrentName (originalName: string) {
@@ -103,6 +101,6 @@ export {
   getSecureTorrentName,
   getServerActor,
   getServerCommit,
-  generateVideoTmpPath,
+  generateVideoImportTmpPath,
   getUUIDFromFilename
 }

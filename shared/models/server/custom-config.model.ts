@@ -41,6 +41,10 @@ export interface CustomConfig {
     email: string
   }
 
+  contactForm: {
+    enabled: boolean
+  }
+
   user: {
     videoQuota: number
     videoQuotaDaily: number
@@ -48,6 +52,7 @@ export interface CustomConfig {
 
   transcoding: {
     enabled: boolean
+    allowAdditionalExtensions: boolean
     threads: number
     resolutions: {
       '240p': boolean

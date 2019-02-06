@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
@@ -20,7 +20,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoChannelService: VideoChannelService,
     private i18n: I18n
@@ -35,10 +35,14 @@ export class MyAccountVideoChannelsComponent implements OnInit {
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithInput(
       this.i18n(
-        'Do you really want to delete {{videoChannelName}}? It will delete all videos uploaded in this channel too.',
-        { videoChannelName: videoChannel.displayName }
+        'Do you really want to delete {{channelDisplayName}}? It will delete all videos uploaded in this channel, ' +
+        'and you will not be able to create another channel with the same name ({{channelName}})!',
+        { channelDisplayName: videoChannel.displayName, channelName: videoChannel.name }
       ),
-      this.i18n('Please type the name of the video channel to confirm'),
+      this.i18n(
+        'Please type the display name of the video channel ({{displayName}}) to confirm',
+        { displayName: videoChannel.displayName }
+      ),
       videoChannel.displayName,
       this.i18n('Delete')
     )
@@ -46,15 +50,14 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
     this.videoChannelService.removeVideoChannel(videoChannel)
       .subscribe(
-        status => {
+        () => {
           this.loadVideoChannels()
-          this.notificationsService.success(
-            this.i18n('Success'),
+          this.notifier.success(
             this.i18n('Video channel {{videoChannelName}} deleted.', { videoChannelName: videoChannel.displayName })
           )
         },
 
-        error => this.notificationsService.error(this.i18n('Error'), error.message)
+        error => this.notifier.error(error.message)
       )
   }
 

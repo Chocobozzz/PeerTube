@@ -1,40 +1,5 @@
 <div class="row">
-  <div class="sub-menu">
-    <a i18n routerLink="/my-account/settings" routerLinkActive="active" class="title-page">My settings</a>
-
-    <div ngbDropdown class="my-library">
-      <span role="button" class="title-page" [ngClass]="{ active: libraryLabel !== '' }" ngbDropdownToggle>
-        <ng-container i18n>My library</ng-container>
-        <ng-container *ngIf="libraryLabel"> - {{ libraryLabel }}</ng-container>
-      </span>
-
-      <div ngbDropdownMenu>
-        <a class="dropdown-item" i18n routerLink="/my-account/video-channels">My channels</a>
-
-        <a class="dropdown-item" i18n routerLink="/my-account/videos">My videos</a>
-
-        <a class="dropdown-item" i18n routerLink="/my-account/subscriptions">My subscriptions</a>
-
-        <a class="dropdown-item" *ngIf="isVideoImportEnabled()" i18n routerLink="/my-account/video-imports">My imports</a>
-      </div>
-    </div>
-
-    <div ngbDropdown class="misc">
-      <span role="button" class="title-page" [ngClass]="{ active: miscLabel !== '' }" ngbDropdownToggle>
-        <ng-container i18n>Misc</ng-container>
-        <ng-container *ngIf="miscLabel"> - {{ miscLabel }}</ng-container>
-      </span>
-
-      <div ngbDropdownMenu>
-        <a class="dropdown-item" i18n routerLink="/my-account/blocklist/accounts">Muted accounts</a>
-
-        <a class="dropdown-item" i18n routerLink="/my-account/blocklist/servers">Muted instances</a>
-
-        <a class="dropdown-item" i18n routerLink="/my-account/ownership">Ownership changes</a>
-      </div>
-    </div>
-
-  </div>
+  <my-top-menu-dropdown [menuEntries]="menuEntries"></my-top-menu-dropdown>
 
   <div class="margin-content">
     <router-outlet></router-outlet>

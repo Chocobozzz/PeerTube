@@ -3,6 +3,8 @@ import * as OAuthServer from 'express-oauth-server'
 import 'express-validator'
 import { OAUTH_LIFETIME } from '../initializers'
 import { logger } from '../helpers/logger'
+import { Socket } from 'socket.io'
+import { getAccessToken } from '../lib/oauth-model'
 
 const oAuthServer = new OAuthServer({
   useErrorHandler: true,
@@ -26,6 +28,25 @@ function authenticate (req: express.Request, res: express.Response, next: expres
 
     return next()
   })
+}
+
+function authenticateSocket (socket: Socket, next: (err?: any) => void) {
+  const accessToken = socket.handshake.query.accessToken
+
+  logger.debug('Checking socket access token %s.', accessToken)
+
+  getAccessToken(accessToken)
+    .then(tokenDB => {
+      const now = new Date()
+
+      if (!tokenDB || tokenDB.accessTokenExpiresAt < now || tokenDB.refreshTokenExpiresAt < now) {
+        return next(new Error('Invalid access token.'))
+      }
+
+      socket.handshake.query.user = tokenDB.User
+
+      return next()
+    })
 }
 
 function authenticatePromiseIfNeeded (req: express.Request, res: express.Response) {
@@ -68,6 +89,7 @@ function token (req: express.Request, res: express.Response, next: express.NextF
 
 export {
   authenticate,
+  authenticateSocket,
   authenticatePromiseIfNeeded,
   optionalAuthenticate,
   token

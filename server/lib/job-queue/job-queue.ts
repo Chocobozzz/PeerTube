@@ -88,7 +88,6 @@ class JobQueue {
 
       queue.on('error', err => {
         logger.error('Error in job queue %s.', handlerName, { err })
-        process.exit(-1)
       })
 
       this.queues[handlerName] = queue
@@ -166,10 +165,10 @@ class JobQueue {
     return total
   }
 
-  removeOldJobs () {
+  async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
       const queue = this.queues[key]
-      queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
+      await queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
     }
   }
 

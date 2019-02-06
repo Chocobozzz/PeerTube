@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core'
-import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.service'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { ClipboardModule } from 'ngx-clipboard'
 import { SharedModule } from '../../shared'
-import { MarkdownService } from '../shared'
 import { VideoCommentAddComponent } from './comment/video-comment-add.component'
 import { VideoCommentComponent } from './comment/video-comment.component'
 import { VideoCommentService } from './comment/video-comment.service'
@@ -46,8 +44,6 @@ import { RecommendationsModule } from '@app/videos/recommendations/recommendatio
   ],
 
   providers: [
-    MarkdownService,
-    LinkifierService,
     VideoCommentService
   ]
 })

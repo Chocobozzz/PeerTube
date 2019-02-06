@@ -32,7 +32,7 @@
           </span>
 
           <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
-            <span class="icon icon-delete-white"></span>
+            <my-global-icon iconName="delete"></my-global-icon>
             <ng-container i18n>Delete</ng-container>
           </span>
         </div>
@@ -45,7 +45,7 @@
 
         <my-button i18n-label label="Change ownership"
                    className="action-button-change-ownership"
-                   icon="icon-im-with-her"
+                   icon="im-with-her"
                    (click)="changeOwnership($event, video)"
         ></my-button>
       </div>

@@ -8,6 +8,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import {
   addVideoChannel,
+  checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   completeVideoCheck,
   createUser,
@@ -31,15 +32,15 @@ import {
   viewVideo,
   wait,
   webtorrentAdd
-} from '../../utils'
+} from '../../../../shared/utils'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 
@@ -1004,6 +1005,14 @@ describe('Test multiple servers', function () {
           ]
         }
         await completeVideoCheck(server.url, video, checkAttributes)
+      }
+    })
+  })
+
+  describe('TMP directory', function () {
+    it('Should have an empty tmp directory', async function () {
+      for (const server of servers) {
+        await checkTmpIsEmpty(server)
       }
     })
   })

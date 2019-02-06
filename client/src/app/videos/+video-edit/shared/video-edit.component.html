@@ -126,6 +126,7 @@
             ></my-peertube-checkbox>
 
             <my-peertube-checkbox
+              *ngIf="waitTranscodingEnabled"
               inputName="waitTranscoding" formControlName="waitTranscoding"
               i18n-labelText labelText="Wait transcoding before publishing the video"
               i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
@@ -142,7 +143,7 @@
 
           <div class="captions-header">
             <a (click)="openAddCaptionModal()" class="create-caption">
-              <span class="icon icon-add"></span>
+              <my-global-icon iconName="add"></my-global-icon>
               <ng-container i18n>Add another caption</ng-container>
             </a>
           </div>

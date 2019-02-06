@@ -1,8 +1,8 @@
 import { map, switchMap } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
+import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { FormReactive } from '../../shared'
@@ -12,6 +12,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { VideoDetails } from '@app/shared/video/video-details.model'
 
 @Component({
   selector: 'my-videos-update',
@@ -26,6 +27,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
+  waitTranscodingEnabled = true
 
   private updateDone = false
 
@@ -33,7 +35,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     protected formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private serverService: ServerService,
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
@@ -65,25 +67,42 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
           this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
 
+          const videoFiles = (video as VideoDetails).files
+          if (videoFiles.length > 1) { // Already transcoded
+            this.waitTranscodingEnabled = false
+          }
+
           // FIXME: Angular does not detect the change inside this subscription, so use the patched setTimeout
           setTimeout(() => this.hydrateFormFromVideo())
         },
 
         err => {
           console.error(err)
-          this.notificationsService.error(this.i18n('Error'), err.message)
+          this.notifier.error(err.message)
         }
       )
   }
 
-  canDeactivate () {
+  @HostListener('window:beforeunload', [ '$event' ])
+  onUnload (event: any) {
+    const { text, canDeactivate } = this.canDeactivate()
+
+    if (canDeactivate) return
+
+    event.returnValue = text
+    return text
+  }
+
+  canDeactivate (): { canDeactivate: boolean, text?: string } {
     if (this.updateDone === true) return { canDeactivate: true }
 
+    const text = this.i18n('You have unsaved changes! If you leave, your changes will be lost.')
+
     for (const caption of this.videoCaptions) {
-      if (caption.action) return { canDeactivate: false }
+      if (caption.action) return { canDeactivate: false, text }
     }
 
-    return { canDeactivate: this.formChanged === false }
+    return { canDeactivate: this.formChanged === false, text }
   }
 
   checkForm () {
@@ -114,14 +133,14 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.updateDone = true
             this.isUpdatingVideo = false
             this.loadingBar.complete()
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))
+            this.notifier.success(this.i18n('Video updated.'))
             this.router.navigate([ '/videos/watch', this.video.uuid ])
           },
 
           err => {
             this.loadingBar.complete()
             this.isUpdatingVideo = false
-            this.notificationsService.error(this.i18n('Error'), err.message)
+            this.notifier.error(err.message)
             console.error(err)
           }
         )

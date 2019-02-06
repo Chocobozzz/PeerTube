@@ -39,6 +39,7 @@ function buildVideoLink (time?: number, url?: string) {
 }
 
 function timeToInt (time: number | string) {
+  if (!time) return 0
   if (typeof time === 'number') return time
 
   const reg = /^((\d+)h)?((\d+)m)?((\d+)s?)?$/

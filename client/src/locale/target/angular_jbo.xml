@@ -33,7 +33,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month">
         <source>Next month</source>
-        <target>la bavla'ima'i</target>
+        <target>lo bavla'ima'i</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
@@ -53,9 +53,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first">
-        <source>««</source>
-        <target>««</target>
-        <context-group name="null">
+        <source>««</source><target>««</target><context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
@@ -67,9 +65,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous">
-        <source>«</source>
-        <target>«</target>
-        <context-group name="null">
+        <source>«</source><target>«</target><context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
@@ -81,9 +77,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next">
-        <source>»</source>
-        <target>»</target>
-        <context-group name="null">
+        <source>»</source><target>»</target><context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
@@ -95,9 +89,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last">
-        <source>»»</source>
-        <target>»»</target>
-        <context-group name="null">
+        <source>»»</source><target>»»</target><context-group name="null">
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
@@ -237,6 +229,48 @@ sisti lo nu jersi pe'a</target>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="76e1f485e6ead4c84b606f46d413878881d66ad3">
+        <source>User registration is not allowed on this instance, but you can register on many others!</source>
+        <target>.i le samtcise'u cu curmi no nu cmiveigau .i ku'i do cmeveigau fo so'i drata ka'e</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407">
+        <source>Password</source>
+        <target>lo lerpoijaspu</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
+        <source>I forgot my password</source>
+        <target>.i mi nalmo'i le mi lerpoijaspu</target>
+        <context-group name="null">
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
+        <source>Login</source>
+        <target>co'a cmisau</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
+        <source>Forgot your password</source>
+        <target>.i mi nalmo'i le mi lerpoijaspu</target>
+        <context-group name="null">
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
+        <source>Email</source>
+        <target>lo ve samymri</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529">
         <source>Email address</source>
         <target>lo ve samymri</target>
@@ -248,7 +282,7 @@ sisti lo nu jersi pe'a</target>
         <source>Send me an email to reset my password</source>
         <target>samymri fi mi te zu'e lo nu galfi le mi japyvla</target>
         <context-group name="null">
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -299,6 +333,13 @@ zbasu lo pilno</target>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
+        <source>Signup</source>
+        <target>cmiveigau</target>
+        <context-group name="null">
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9167c6d3c4c3b74373cf1e90997e4966844ded1a">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> results</source>
         <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> lo te facki</target>
@@ -327,7 +368,7 @@ zbasu lo pilno</target>
         <source>Change the language</source>
         <target>galfi lo bangu</target>
         <context-group name="null">
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8c654f49714163eb2991b264e9fd4858e72c04c6">
@@ -337,7 +378,7 @@ zbasu lo pilno</target>
         <target>
 lo predatni be mi be'o poi gubni</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="01d7a5f4ca6470b564031481bc16485b53a8d4fb">
@@ -347,7 +388,7 @@ lo predatni be mi be'o poi gubni</target>
         <target>
 lo mi pilno</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fa9f3da5641dbd73d83395a0bde61bb6d5cefb10">
@@ -357,14 +398,14 @@ lo mi pilno</target>
         <target>
 lo mi vidvi</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>zbasu lo pilno</target>
         <context-group name="null">
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238">
@@ -378,28 +419,28 @@ lo mi vidvi</target>
         <source>Subscriptions</source>
         <target>lo se jersi pe'a</target>
         <context-group name="null">
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
         <source>Trending</source>
         <target>lo cabna misno</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
         <source>Local</source>
         <target>lo diklo</target>
         <context-group name="null">
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac0f81713a84217c9bd1d9bb460245d8190b073f">
         <source>More</source>
         <target>lo drata</target>
         <context-group name="null">
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -476,7 +517,7 @@ lo mi vidvi</target>
         <source>No results.</source>
         <target>.i facki fi no da</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
@@ -496,26 +537,6 @@ lo mi vidvi</target>
         <target>lo ve skicu</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae">
-        <source>
-      this instance provides unlimited space for the videos of its users.
-    </source>
-        <target>
-    .i le vi samtcise'u cu sabji lo na'e se jimte ke vidvi datni canlu lo pilno be sy.</target>
-        <context-group name="null">
-          <context context-type="linenumber">31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1">
-        <source>
-    User registration is currently not allowed.
-  </source>
-        <target>
-    .i ca na'e curmi lo nu zbasu lo pilno</target>
-        <context-group name="null">
-          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
@@ -638,28 +659,28 @@ lo mi vidvi</target>
         <source>Short description</source>
         <target>lo cmalu ve skicu</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>lo diklo vidvi</target>
         <context-group name="null">
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
         <source>Policy on videos containing sensitive content</source>
         <target>loi javni be tu'a lo vidvi poi vasru lo ganvi poi te kajde</target>
         <context-group name="null">
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>la .djavascript.</target>
         <context-group name="null">
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">294</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -686,53 +707,18 @@ lo pilno</target>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
-        <source>My settings</source>
-        <target>lo mi se cuxna</target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f">
-        <source>My channels</source>
-        <target>lo mi te tivni</target>
-        <context-group name="null">
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
-        <source>My videos</source>
-        <target>lo mi vidvi</target>
-        <context-group name="null">
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9">
-        <source>My subscriptions</source>
-        <target>lo se jersi pe'a be mi</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bd751145ec934c2839fd6acffee05fbf439782ed">
-        <source>My imports</source>
-        <target>lo se nerbei be mi</target>
-        <context-group name="null">
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="994363f08f9fbfa3b3994ff7b35c6904fdff18d8">
         <source>Profile</source>
         <target>lo predatni</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925">
         <source>Video settings</source>
         <target>lo se cuxna pe lo vidvi</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="73c1cefc348a6f361497210dea1ed79499fd1260">
@@ -942,14 +928,14 @@ lo pilno</target>
         <source>Cancel create</source>
         <target>co'u zbasu</target>
         <context-group name="null">
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>co'u vimcu</target>
         <context-group name="null">
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -963,7 +949,7 @@ lo pilno</target>
         <source>Advanced settings</source>
         <target>lo certu se cuxna</target>
         <context-group name="null">
-          <context context-type="linenumber">190</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611">
@@ -1104,13 +1090,6 @@ lo pilno</target>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
-        <source>Error</source>
-        <target>.i srera</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="54adc67482fdaa0d361a2992bc91e064dc61cc9a">
         <source>100MB</source>
         <target>pa no no lo megbivysamsle</target>
@@ -1195,6 +1174,27 @@ lo pilno</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="586bee8c27a761611eb05661524cc7ca944b5978">
+        <source>Delete this report</source>
+        <target>vimcu le notci</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73b70e37cddaa6494d8a666b6cba90dc80595599">
+        <source>Do you really want to delete this abuse report?</source>
+        <target>.i .au ju'o pei vimcu le malpli notci</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a7938b8780c27540ea70cc0f8f4d928c8916cf9">
+        <source>Abuse deleted.</source>
+        <target>.i mo'u vimcu le malpli notci</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="19508af0dfbc685cbf10cf02061bb5a0f423b6fc">
         <source>Password updated.</source>
         <target>.i mo'u galfi lo japyvla</target>
@@ -1237,6 +1237,20 @@ lo pilno</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645">
+        <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
+        <target>.i mo'u zbasu la'o ly. <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> .ly. noi vidvi te tivni</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47">
+        <source>This name already exists on this instance.</source>
+        <target>.i le cmene xa'o zasti ci'e le mupli</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795">
         <source>Create</source>
         <target>zbasu</target>
@@ -1244,16 +1258,9 @@ lo pilno</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="d5adc9efad0469fc3e1503d68c4ec2ff4453a814">
-        <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/>? It will delete all videos uploaded in this channel too.</source>
-        <target>.i .au ju'o pei do vimcu la'o ly. <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> .ly. .i la'e di'u vimcu ro lo vidvi ji'a poi se kibdu'a fi le vi te tivni</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="703dee7f3e693f9c77ef17c46f9fa71999609f8e">
-        <source>Please type the name of the video channel to confirm</source>
-        <target>.i .e'o ko ciska le cmene be le vidvi te zu'e lo nu birti</target>
+      <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559">
+        <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
+        <target>.i mo'u galfi la'o ly. <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> .ly. noi vidvi te tivni</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1261,6 +1268,13 @@ lo pilno</target>
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
         <target>.i mo'u vimcu la'o ly. <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> .ly. noi vidvi te tivni</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
+        <source>My videos</source>
+        <target>lo mi vidvi</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1279,16 +1293,23 @@ lo pilno</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="807cf11e6ac1cde912496f764c176bdfdd6b7e19">
-        <source>Channels</source>
-        <target>lo te tivni</target>
+      <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f">
+        <source>My channels</source>
+        <target>lo mi te tivni</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4bc7db3e3f8ae777dd480e2019af97fd8c1be47d">
-        <source>Video imports</source>
-        <target>lo vidvi poi se nerbei</target>
+      <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9">
+        <source>My subscriptions</source>
+        <target>lo se jersi pe'a be mi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
+        <source>My settings</source>
+        <target>lo mi se cuxna</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1335,9 +1356,30 @@ lo pilno</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
+        <source>Error</source>
+        <target>.i srera</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b0f24b7136e551a0deba831f1525711245b31a26">
         <source>Your password has been successfully reset!</source>
         <target>.i snada lo nu mo'u galfi le do japyvla</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="94b831c7e3684258f88e099c6cd3b8f73f8a2de6">
+        <source>The channel is required.</source>
+        <target>.i le vidvi te tivni cu sarcu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16">
+        <source>Video channel is required.</source>
+        <target>.i le vidvi te tivni cu sarcu</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
