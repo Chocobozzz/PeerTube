@@ -23,7 +23,13 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { MarkdownService } from '@app/shared/renderer'
-import { P2PMediaLoaderOptions, PeertubePlayerManager, PlayerMode, WebtorrentOptions } from '../../../assets/player/peertube-player-manager'
+import {
+  P2PMediaLoaderOptions,
+  PeertubePlayerManager,
+  PeertubePlayerManagerOptions,
+  PlayerMode,
+  WebtorrentOptions
+} from '../../../assets/player/peertube-player-manager'
 
 @Component({
   selector: 'my-video-watch',
@@ -395,10 +401,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       src: environment.apiUrl + c.captionPath
     }))
 
-    const options = {
+    const options: PeertubePlayerManagerOptions = {
       common: {
         autoplay: this.isAutoplay(),
+
         playerElement: this.playerElement,
+        onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
+
         videoDuration: this.video.duration,
         enableHotkeys: true,
         inactivityTimeout: 2500,
@@ -424,6 +433,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         serverUrl: environment.apiUrl,
 
         videoCaptions: playerCaptions
+      },
+
+      webtorrent: {
+        videoFiles: this.video.files
       }
     }
 
@@ -431,6 +444,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const hlsPlaylist = this.video.getHlsPlaylist()
     if (hlsPlaylist) {
       mode = 'p2p-media-loader'
+
       const p2pMediaLoader = {
         playlistUrl: hlsPlaylist.playlistUrl,
         segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
@@ -442,11 +456,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       Object.assign(options, { p2pMediaLoader })
     } else {
       mode = 'webtorrent'
-      const webtorrent = {
-        videoFiles: this.video.files
-      } as WebtorrentOptions
-
-      Object.assign(options, { webtorrent })
     }
 
     this.zone.runOutsideAngular(async () => {

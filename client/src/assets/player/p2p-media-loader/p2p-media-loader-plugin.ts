@@ -51,17 +51,25 @@ class P2pMediaLoaderPlugin extends Plugin {
       src: options.src
     })
 
+    player.on('play', () => {
+      player.addClass('vjs-has-big-play-button-clicked')
+    })
+
     player.ready(() => this.initialize())
   }
 
   dispose () {
+    if (this.hlsjs) this.hlsjs.destroy()
+    if (this.p2pEngine) this.p2pEngine.destroy()
+
     clearInterval(this.networkInfoInterval)
   }
 
   private initialize () {
     initHlsJsPlayer(this.hlsjs)
 
-    this.p2pEngine = this.player.tech_.options_.hlsjsConfig.loader.getEngine()
+    const tech = this.player.tech_
+    this.p2pEngine = tech.options_.hlsjsConfig.loader.getEngine()
 
     // Avoid using constants to not import hls.hs
     // https://github.com/video-dev/hls.js/blob/master/src/events.js#L37

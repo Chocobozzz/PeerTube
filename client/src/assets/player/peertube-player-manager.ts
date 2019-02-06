@@ -41,6 +41,7 @@ export type P2PMediaLoaderOptions = {
 
 export type CommonOptions = {
   playerElement: HTMLVideoElement
+  onPlayerElementChange: (element: HTMLVideoElement) => void
 
   autoplay: boolean
   videoDuration: number
@@ -71,13 +72,14 @@ export type CommonOptions = {
 
 export type PeertubePlayerManagerOptions = {
   common: CommonOptions,
-  webtorrent?: WebtorrentOptions,
+  webtorrent: WebtorrentOptions,
   p2pMediaLoader?: P2PMediaLoaderOptions
 }
 
 export class PeertubePlayerManager {
 
   private static videojsLocaleCache: { [ path: string ]: any } = {}
+  private static playerElementClassName: string
 
   static getServerTranslations (serverUrl: string, locale: string) {
     const path = PeertubePlayerManager.getLocalePath(serverUrl, locale)
@@ -94,6 +96,8 @@ export class PeertubePlayerManager {
 
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
     let p2pMediaLoader: any
+
+    this.playerElementClassName = options.common.playerElement.className
 
     if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
     if (mode === 'p2p-media-loader') {
@@ -112,10 +116,43 @@ export class PeertubePlayerManager {
       videojs(options.common.playerElement, videojsOptions, function (this: any) {
         const player = this
 
+        player.tech_.on('error', () => {
+          // Fallback to webtorrent?
+          if (mode === 'p2p-media-loader') {
+            self.fallbackToWebTorrent(player, options)
+          }
+        })
+
         self.addContextMenu(mode, player, options.common.embedUrl)
 
         return res(player)
       })
+    })
+  }
+
+  private static async fallbackToWebTorrent (player: any, options: PeertubePlayerManagerOptions) {
+    const newVideoElement = document.createElement('video')
+    newVideoElement.className = this.playerElementClassName
+
+    // VideoJS wraps our video element inside a div
+    const currentParentPlayerElement = options.common.playerElement.parentNode
+    currentParentPlayerElement.parentNode.insertBefore(newVideoElement, currentParentPlayerElement)
+
+    options.common.playerElement = newVideoElement
+    options.common.onPlayerElementChange(newVideoElement)
+
+    player.dispose()
+
+    await import('./webtorrent/webtorrent-plugin')
+
+    const mode = 'webtorrent'
+    const videojsOptions = this.getVideojsOptions(mode, options)
+
+    const self = this
+    videojs(newVideoElement, videojsOptions, function (this: any) {
+      const player = this
+
+      self.addContextMenu(mode, player, options.common.embedUrl)
     })
   }
 
@@ -166,7 +203,7 @@ export class PeertubePlayerManager {
       }
     }
 
-    if (p2pMediaLoaderOptions) {
+    if (mode === 'p2p-media-loader') {
       const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
         redundancyBaseUrls: options.p2pMediaLoader.redundancyBaseUrls,
         type: 'application/x-mpegURL',
@@ -209,7 +246,7 @@ export class PeertubePlayerManager {
       html5 = streamrootHls.html5
     }
 
-    if (webtorrentOptions) {
+    if (mode === 'webtorrent') {
       const webtorrent = {
         autoplay,
         videoDuration: commonOptions.videoDuration,
@@ -235,7 +272,7 @@ export class PeertubePlayerManager {
         : undefined, // Undefined so the player knows it has to check the local storage
 
       poster: commonOptions.poster,
-      autoplay,
+      autoplay: autoplay === true ? 'any' : autoplay, // Use 'any' instead of true to get notifier by videojs if autoplay fails
       inactivityTimeout: commonOptions.inactivityTimeout,
       playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 2 ],
       plugins,
