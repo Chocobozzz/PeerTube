@@ -1,11 +1,13 @@
 # Changelog
 
-## v1.2.0-rc.1
+## v1.2.0
 
 ### BREAKING CHANGES
 
  * **Docker:** `PEERTUBE_TRUST_PROXY` env variable is now an array ([LecygneNoir](https://github.com/LecygneNoir))
+ * **Docker:** Check you have all the storage fields in your `/config/production.yaml` file: https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml#L34
  * **nginx:** Add redundancy endpoint in static file. **You should add it in your nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx**
+ * **nginx:** Add socket io endpoint. **You should add it in your nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx**
  * Moderators can manage users now (add/delete/update/block)
  * Add `tmp` and `redundancy` directories in configuration file. **You should configure them in your production.yaml**
 
@@ -81,6 +83,9 @@
  * Add missing translations in video embed page
  * Fix some styling issues in dark mode
  * Fix transcoding issues with some videos
+ * Fix Mac OS mkv/avi upload
+ * Fix menu overflow on mobile
+ * Fix ownership button icons ([@joshmorel](https://github.com/joshmorel))
 
 
 ## v1.1.0
