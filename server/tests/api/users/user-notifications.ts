@@ -79,7 +79,7 @@ async function uploadVideoByLocalAccount (servers: ServerInfo[], additionalParam
   return { uuid: res.body.video.uuid, name }
 }
 
-describe('Test users notifications', function () {
+describe.only('Test users notifications', function () {
   let servers: ServerInfo[] = []
   let userAccessToken: string
   let userNotifications: UserNotification[] = []
@@ -165,6 +165,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should not send notifications if the user does not follow the video publisher', async function () {
+      this.timeout(10000)
+
       await uploadVideoByLocalAccount(servers)
 
       const notification = await getLastNotification(servers[ 0 ].url, userAccessToken)
@@ -644,6 +646,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should not send a notification if transcoding is not enabled', async function () {
+      this.timeout(10000)
+
       const { name, uuid } = await uploadVideoByLocalAccount(servers)
       await waitJobs(servers)
 
@@ -717,6 +721,24 @@ describe('Test users notifications', function () {
       await wait(6000)
       await checkVideoIsPublished(baseParams, name, uuid, 'presence')
     })
+
+    it('Should not send a notification before the video is published', async function () {
+      this.timeout(20000)
+
+      let updateAt = new Date(new Date().getTime() + 100000)
+
+      const data = {
+        privacy: VideoPrivacy.PRIVATE,
+        scheduleUpdate: {
+          updateAt: updateAt.toISOString(),
+          privacy: VideoPrivacy.PUBLIC
+        }
+      }
+      const { name, uuid } = await uploadVideoByRemoteAccount(servers, data)
+
+      await wait(6000)
+      await checkVideoIsPublished(baseParams, name, uuid, 'absence')
+    })
   })
 
   describe('My video is imported', function () {
@@ -781,6 +803,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should send a notification only to moderators when a user registers on the instance', async function () {
+      this.timeout(10000)
+
       await registerUser(servers[0].url, 'user_45', 'password')
 
       await waitJobs(servers)
@@ -849,6 +873,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should notify when a local account is following one of our channel', async function () {
+      this.timeout(10000)
+
       await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:9001')
 
       await waitJobs(servers)
@@ -857,6 +883,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should notify when a remote account is following one of our channel', async function () {
+      this.timeout(10000)
+
       await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:9001')
 
       await waitJobs(servers)
@@ -926,6 +954,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should not have notifications', async function () {
+      this.timeout(10000)
+
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.NONE
       }))
@@ -943,6 +973,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should only have web notifications', async function () {
+      this.timeout(10000)
+
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.WEB
       }))
@@ -967,6 +999,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should only have mail notifications', async function () {
+      this.timeout(10000)
+
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.EMAIL
       }))
@@ -991,6 +1025,8 @@ describe('Test users notifications', function () {
     })
 
     it('Should have email and web notifications', async function () {
+      this.timeout(10000)
+
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
       }))

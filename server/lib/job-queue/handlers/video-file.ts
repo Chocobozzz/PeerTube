@@ -91,7 +91,8 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
     return { videoDatabase, videoPublished }
   })
 
-  if (videoPublished) {
+  // don't notify prior to scheduled video update
+  if (videoPublished && !videoDatabase.ScheduleVideoUpdate) {
     Notifier.Instance.notifyOnNewVideo(videoDatabase)
     Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
   }
@@ -149,8 +150,11 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, isNewVideo: bo
     return { videoDatabase, videoPublished }
   })
 
-  if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
-  if (videoPublished) Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
+  // don't notify prior to scheduled video update
+  if (!videoDatabase.ScheduleVideoUpdate) {
+    if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+    if (videoPublished) Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
+  }
 }
 
 // ---------------------------------------------------------------------------
