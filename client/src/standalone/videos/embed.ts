@@ -311,7 +311,10 @@ class PeerTubeEmbed {
         videoCaptions,
         inactivityTimeout: 1500,
         videoViewUrl: this.getVideoUrl(videoId) + '/views',
+
         playerElement: this.videoElement,
+        onPlayerElementChange: (element: HTMLVideoElement) => this.videoElement = element,
+
         videoDuration: videoInfo.duration,
         enableHotkeys: true,
         peertubeLink: true,
@@ -321,6 +324,10 @@ class PeerTubeEmbed {
         serverUrl: window.location.origin,
         language: navigator.language,
         embedUrl: window.location.origin + videoInfo.embedPath
+      },
+
+      webtorrent: {
+        videoFiles: videoInfo.files
       }
     }
 
@@ -335,12 +342,6 @@ class PeerTubeEmbed {
           trackerAnnounce: videoInfo.trackerUrls,
           videoFiles: videoInfo.files
         } as P2PMediaLoaderOptions
-      })
-    } else {
-      Object.assign(options, {
-        webtorrent: {
-          videoFiles: videoInfo.files
-        }
       })
     }
 

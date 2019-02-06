@@ -47,7 +47,11 @@ class PeerTubePlugin extends Plugin {
     this.videoDuration = options.videoDuration
     this.videoCaptions = options.videoCaptions
 
-    if (this.autoplay === true) this.player.addClass('vjs-has-autoplay')
+    if (options.autoplay === true) this.player.addClass('vjs-has-autoplay')
+
+    this.player.on('autoplay-failure', () => {
+      this.player.removeClass('vjs-has-autoplay')
+    })
 
     this.player.ready(() => {
       const playerOptions = this.player.options_
