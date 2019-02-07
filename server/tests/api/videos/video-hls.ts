@@ -4,13 +4,12 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   checkDirectoryIsEmpty,
+  checkSegmentHash,
   checkTmpIsEmpty,
   doubleFollow,
   flushAndRunMultipleServers,
   flushTests,
   getPlaylist,
-  getSegment,
-  getSegmentSha256,
   getVideo,
   killallServers,
   removeVideo,
@@ -22,7 +21,6 @@ import {
 } from '../../../../shared/utils'
 import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
-import { sha256 } from '../../../helpers/core-utils'
 import { join } from 'path'
 
 const expect = chai.expect
@@ -56,19 +54,15 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
         const res2 = await getPlaylist(`http://localhost:9001/static/playlists/hls/${videoUUID}/${resolution}.m3u8`)
 
         const subPlaylist = res2.text
-        expect(subPlaylist).to.contain(resolution + '_000.ts')
+        expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
       }
     }
 
     {
+      const baseUrl = 'http://localhost:9001/static/playlists/hls'
+
       for (const resolution of resolutions) {
-
-        const res2 = await getSegment(`http://localhost:9001/static/playlists/hls/${videoUUID}/${resolution}_000.ts`)
-
-        const resSha = await getSegmentSha256(hlsPlaylist.segmentsSha256Url)
-
-        const sha256Server = resSha.body[ resolution + '_000.ts' ]
-        expect(sha256(res2.body)).to.equal(sha256Server)
+        await checkSegmentHash(baseUrl, baseUrl, videoUUID, resolution, hlsPlaylist)
       }
     }
   }

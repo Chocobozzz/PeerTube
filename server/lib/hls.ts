@@ -1,13 +1,14 @@
 import { VideoModel } from '../models/video/video'
-import { basename, dirname, join } from 'path'
-import { HLS_PLAYLIST_DIRECTORY, CONFIG } from '../initializers'
-import { outputJSON, pathExists, readdir, readFile, remove, writeFile, move } from 'fs-extra'
+import { basename, join, dirname } from 'path'
+import { CONFIG, HLS_PLAYLIST_DIRECTORY } from '../initializers'
+import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
 import { getVideoFileSize } from '../helpers/ffmpeg-utils'
 import { sha256 } from '../helpers/core-utils'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
-import HLSDownloader from 'hlsdownloader'
 import { logger } from '../helpers/logger'
-import { parse } from 'url'
+import { doRequest, doRequestAndSaveToFile } from '../helpers/requests'
+import { generateRandomString } from '../helpers/utils'
+import { flatten, uniq } from 'lodash'
 
 async function updateMasterHLSPlaylist (video: VideoModel) {
   const directory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
@@ -37,21 +38,54 @@ async function updateMasterHLSPlaylist (video: VideoModel) {
 }
 
 async function updateSha256Segments (video: VideoModel) {
-  const directory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
-  const files = await readdir(directory)
-  const json: { [filename: string]: string} = {}
+  const json: { [filename: string]: { [range: string]: string } } = {}
 
-  for (const file of files) {
-    if (file.endsWith('.ts') === false) continue
+  const playlistDirectory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
 
-    const buffer = await readFile(join(directory, file))
-    const filename = basename(file)
+  // For all the resolutions available for this video
+  for (const file of video.VideoFiles) {
+    const rangeHashes: { [range: string]: string } = {}
 
-    json[filename] = sha256(buffer)
+    const videoPath = join(playlistDirectory, VideoStreamingPlaylistModel.getHlsVideoName(video.uuid, file.resolution))
+    const playlistPath = join(playlistDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))
+
+    // Maybe the playlist is not generated for this resolution yet
+    if (!await pathExists(playlistPath)) continue
+
+    const playlistContent = await readFile(playlistPath)
+    const ranges = getRangesFromPlaylist(playlistContent.toString())
+
+    const fd = await open(videoPath, 'r')
+    for (const range of ranges) {
+      const buf = Buffer.alloc(range.length)
+      await read(fd, buf, 0, range.length, range.offset)
+
+      rangeHashes[`${range.offset}-${range.offset + range.length - 1}`] = sha256(buf)
+    }
+    await close(fd)
+
+    const videoFilename = VideoStreamingPlaylistModel.getHlsVideoName(video.uuid, file.resolution)
+    json[videoFilename] = rangeHashes
   }
 
-  const outputPath = join(directory, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
+  const outputPath = join(playlistDirectory, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
   await outputJSON(outputPath, json)
+}
+
+function getRangesFromPlaylist (playlistContent: string) {
+  const ranges: { offset: number, length: number }[] = []
+  const lines = playlistContent.split('\n')
+  const regex = /^#EXT-X-BYTERANGE:(\d+)@(\d+)$/
+
+  for (const line of lines) {
+    const captured = regex.exec(line)
+
+    if (captured) {
+      ranges.push({ length: parseInt(captured[1], 10), offset: parseInt(captured[2], 10) })
+    }
+  }
+
+  return ranges
 }
 
 function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, timeout: number) {
@@ -59,44 +93,64 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
 
   logger.info('Importing HLS playlist %s', playlistUrl)
 
-  const params = {
-    playlistURL: playlistUrl,
-    destination: CONFIG.STORAGE.TMP_DIR
-  }
-  const downloader = new HLSDownloader(params)
-
-  const hlsDestinationDir = join(CONFIG.STORAGE.TMP_DIR, dirname(parse(playlistUrl).pathname))
-
   return new Promise<string>(async (res, rej) => {
-    downloader.startDownload(err => {
-      clearTimeout(timer)
+    const tmpDirectory = join(CONFIG.STORAGE.TMP_DIR, await generateRandomString(10))
 
-      if (err) {
-        deleteTmpDirectory(hlsDestinationDir)
-
-        return rej(err)
-      }
-
-      move(hlsDestinationDir, destinationDir, { overwrite: true })
-        .then(() => res())
-        .catch(err => {
-          deleteTmpDirectory(hlsDestinationDir)
-
-          return rej(err)
-        })
-    })
+    await ensureDir(tmpDirectory)
 
     timer = setTimeout(() => {
-      deleteTmpDirectory(hlsDestinationDir)
+      deleteTmpDirectory(tmpDirectory)
 
       return rej(new Error('HLS download timeout.'))
     }, timeout)
 
-    function deleteTmpDirectory (directory: string) {
-      remove(directory)
-        .catch(err => logger.error('Cannot delete path on HLS download error.', { err }))
+    try {
+      // Fetch master playlist
+      const subPlaylistUrls = await fetchUniqUrls(playlistUrl)
+
+      const subRequests = subPlaylistUrls.map(u => fetchUniqUrls(u))
+      const fileUrls = uniq(flatten(await Promise.all(subRequests)))
+
+      logger.debug('Will download %d HLS files.', fileUrls.length, { fileUrls })
+
+      for (const fileUrl of fileUrls) {
+        const destPath = join(tmpDirectory, basename(fileUrl))
+
+        await doRequestAndSaveToFile({ uri: fileUrl }, destPath)
+      }
+
+      clearTimeout(timer)
+
+      await move(tmpDirectory, destinationDir, { overwrite: true })
+
+      return res()
+    } catch (err) {
+      deleteTmpDirectory(tmpDirectory)
+
+      return rej(err)
     }
   })
+
+  function deleteTmpDirectory (directory: string) {
+    remove(directory)
+      .catch(err => logger.error('Cannot delete path on HLS download error.', { err }))
+  }
+
+  async function fetchUniqUrls (playlistUrl: string) {
+    const { body } = await doRequest<string>({ uri: playlistUrl })
+
+    if (!body) return []
+
+    const urls = body.split('\n')
+      .filter(line => line.endsWith('.m3u8') || line.endsWith('.mp4'))
+      .map(url => {
+        if (url.startsWith('http://') || url.startsWith('https://')) return url
+
+        return `${dirname(playlistUrl)}/${url}`
+      })
+
+    return uniq(urls)
+  }
 }
 
 // ---------------------------------------------------------------------------

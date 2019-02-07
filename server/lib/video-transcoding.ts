@@ -100,7 +100,10 @@ async function generateHlsPlaylist (video: VideoModel, resolution: VideoResoluti
     outputPath,
     resolution,
     isPortraitMode,
-    generateHlsPlaylist: true
+
+    hlsPlaylist: {
+      videoFilename: VideoStreamingPlaylistModel.getHlsVideoName(video.uuid, resolution)
+    }
   }
 
   await transcode(transcodeOptions)

@@ -125,6 +125,10 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     return 'segments-sha256.json'
   }
 
+  static getHlsVideoName (uuid: string, resolution: number) {
+    return `${uuid}-${resolution}-fragmented.mp4`
+  }
+
   static getHlsMasterPlaylistStaticPath (videoUUID: string) {
     return join(STATIC_PATHS.PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
   }

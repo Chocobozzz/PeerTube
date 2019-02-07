@@ -3,18 +3,25 @@ import { basename } from 'path'
 
 function segmentValidatorFactory (segmentsSha256Url: string) {
   const segmentsJSON = fetchSha256Segments(segmentsSha256Url)
+  const regex = /bytes=(\d+)-(\d+)/
 
   return async function segmentValidator (segment: Segment) {
-    const segmentName = basename(segment.url)
+    const filename = basename(segment.url)
+    const captured = regex.exec(segment.range)
 
-    const hashShouldBe = (await segmentsJSON)[segmentName]
+    const range = captured[1] + '-' + captured[2]
+
+    const hashShouldBe = (await segmentsJSON)[filename][range]
     if (hashShouldBe === undefined) {
-      throw new Error(`Unknown segment name ${segmentName} in segment validator`)
+      throw new Error(`Unknown segment name ${filename}/${range} in segment validator`)
     }
 
     const calculatedSha = bufferToEx(await sha256(segment.data))
     if (calculatedSha !== hashShouldBe) {
-      throw new Error(`Hashes does not correspond for segment ${segmentName} (expected: ${hashShouldBe} instead of ${calculatedSha})`)
+      throw new Error(
+        `Hashes does not correspond for segment ${filename}/${range}` +
+        `(expected: ${hashShouldBe} instead of ${calculatedSha})`
+      )
     }
   }
 }
