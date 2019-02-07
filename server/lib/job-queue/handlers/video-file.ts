@@ -172,7 +172,7 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Video
 
   // don't notify prior to scheduled video update
   if (!videoDatabase.ScheduleVideoUpdate) {
-    if (isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+    if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
     if (videoPublished) Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
   }
 
