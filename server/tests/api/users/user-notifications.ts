@@ -79,7 +79,7 @@ async function uploadVideoByLocalAccount (servers: ServerInfo[], additionalParam
   return { uuid: res.body.video.uuid, name }
 }
 
-describe.only('Test users notifications', function () {
+describe('Test users notifications', function () {
   let servers: ServerInfo[] = []
   let userAccessToken: string
   let userNotifications: UserNotification[] = []
