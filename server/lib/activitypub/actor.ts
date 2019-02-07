@@ -355,10 +355,10 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  const requestResult = await doRequest(options)
+  const requestResult = await doRequest<ActivityPubActor>(options)
   normalizeActor(requestResult.body)
 
-  const actorJSON: ActivityPubActor = requestResult.body
+  const actorJSON = requestResult.body
   if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON })
     return { result: undefined, statusCode: requestResult.response.statusCode }

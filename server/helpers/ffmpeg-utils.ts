@@ -122,7 +122,9 @@ type TranscodeOptions = {
   resolution: VideoResolution
   isPortraitMode?: boolean
 
-  generateHlsPlaylist?: boolean
+  hlsPlaylist?: {
+    videoFilename: string
+  }
 }
 
 function transcode (options: TranscodeOptions) {
@@ -161,14 +163,16 @@ function transcode (options: TranscodeOptions) {
         command = command.withFPS(fps)
       }
 
-      if (options.generateHlsPlaylist) {
-        const segmentFilename = `${dirname(options.outputPath)}/${options.resolution}_%03d.ts`
+      if (options.hlsPlaylist) {
+        const videoPath = `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
 
         command = command.outputOption('-hls_time 4')
                          .outputOption('-hls_list_size 0')
                          .outputOption('-hls_playlist_type vod')
-                         .outputOption('-hls_segment_filename ' + segmentFilename)
+                         .outputOption('-hls_segment_filename ' + videoPath)
+                         .outputOption('-hls_segment_type fmp4')
                          .outputOption('-f hls')
+                         .outputOption('-hls_flags single_file')
       }
 
       command

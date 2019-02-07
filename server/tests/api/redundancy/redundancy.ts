@@ -17,7 +17,7 @@ import {
   viewVideo,
   wait,
   waitUntilLog,
-  checkVideoFilesWereRemoved, removeVideo, getVideoWithToken, reRunServer
+  checkVideoFilesWereRemoved, removeVideo, getVideoWithToken, reRunServer, checkSegmentHash
 } from '../../../../shared/utils'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
 
@@ -178,20 +178,24 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     expect(redundancy.baseUrl).to.equal(servers[0].url + '/static/redundancy/hls/' + videoUUID)
   }
 
-  await makeGetRequest({
-    url: servers[0].url,
-    statusCodeExpected: 200,
-    path: `/static/redundancy/hls/${videoUUID}/360_000.ts`,
-    contentType: null
-  })
+  const baseUrlPlaylist = servers[1].url + '/static/playlists/hls'
+  const baseUrlSegment = servers[0].url + '/static/redundancy/hls'
+
+  const res = await getVideo(servers[0].url, videoUUID)
+  const hlsPlaylist = (res.body as VideoDetails).streamingPlaylists[0]
+
+  for (const resolution of [ 240, 360, 480, 720 ]) {
+    await checkSegmentHash(baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist)
+  }
 
   for (const directory of [ 'test1/redundancy/hls', 'test2/playlists/hls' ]) {
     const files = await readdir(join(root(), directory, videoUUID))
     expect(files).to.have.length.at.least(4)
 
     for (const resolution of [ 240, 360, 480, 720 ]) {
-      expect(files.find(f => f === `${resolution}_000.ts`)).to.not.be.undefined
-      expect(files.find(f => f === `${resolution}_001.ts`)).to.not.be.undefined
+      const filename = `${videoUUID}-${resolution}-fragmented.mp4`
+
+      expect(files.find(f => f === filename)).to.not.be.undefined
     }
   }
 }

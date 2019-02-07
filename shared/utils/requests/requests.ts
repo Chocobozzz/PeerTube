@@ -3,10 +3,10 @@ import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
 import { parse } from 'url'
 
-function makeRawRequest (url: string, statusCodeExpected?: number) {
+function makeRawRequest (url: string, statusCodeExpected?: number, range?: string) {
   const { host, protocol, pathname } = parse(url)
 
-  return makeGetRequest({ url: `${protocol}//${host}`, path: pathname, statusCodeExpected })
+  return makeGetRequest({ url: `${protocol}//${host}`, path: pathname, statusCodeExpected, range })
 }
 
 function makeGetRequest (options: {
@@ -15,7 +15,8 @@ function makeGetRequest (options: {
   query?: any,
   token?: string,
   statusCodeExpected?: number,
-  contentType?: string
+  contentType?: string,
+  range?: string
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
   if (options.contentType === undefined) options.contentType = 'application/json'
@@ -25,6 +26,7 @@ function makeGetRequest (options: {
   if (options.contentType) req.set('Accept', options.contentType)
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
   if (options.query) req.query(options.query)
+  if (options.range) req.set('Range', options.range)
 
   return req.expect(options.statusCodeExpected)
 }

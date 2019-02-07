@@ -41,7 +41,7 @@ async function run () {
 }
 
 function get (url: string, headers: any = {}) {
-  return doRequest({
+  return doRequest<any>({
     uri: url,
     json: true,
     headers: Object.assign(headers, {
