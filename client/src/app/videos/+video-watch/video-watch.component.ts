@@ -27,8 +27,7 @@ import {
   P2PMediaLoaderOptions,
   PeertubePlayerManager,
   PeertubePlayerManagerOptions,
-  PlayerMode,
-  WebtorrentOptions
+  PlayerMode
 } from '../../../assets/player/peertube-player-manager'
 
 @Component({
@@ -117,8 +116,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         .subscribe(([ video, captionsResult ]) => {
           const startTime = this.route.snapshot.queryParams.start
           const subtitle = this.route.snapshot.queryParams.subtitle
+          const playerMode = this.route.snapshot.queryParams.mode
 
-          this.onVideoFetched(video, captionsResult.data, { startTime, subtitle })
+          this.onVideoFetched(video, captionsResult.data, { startTime, subtitle, playerMode })
               .catch(err => this.handleError(err))
         })
     })
@@ -365,7 +365,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
   }
 
-  private async onVideoFetched (video: VideoDetails, videoCaptions: VideoCaption[], urlOptions: { startTime: number, subtitle: string }) {
+  private async onVideoFetched (
+    video: VideoDetails,
+    videoCaptions: VideoCaption[],
+    urlOptions: { startTime?: number, subtitle?: string, playerMode?: string }
+  ) {
     this.video = video
 
     // Re init attributes
@@ -440,10 +444,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }
     }
 
-    let mode: PlayerMode
-    const hlsPlaylist = this.video.getHlsPlaylist()
-    if (hlsPlaylist) {
-      mode = 'p2p-media-loader'
+    const mode: PlayerMode = urlOptions.playerMode === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
+
+    if (mode === 'p2p-media-loader') {
+      const hlsPlaylist = this.video.getHlsPlaylist()
 
       const p2pMediaLoader = {
         playlistUrl: hlsPlaylist.playlistUrl,
@@ -454,8 +458,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       } as P2PMediaLoaderOptions
 
       Object.assign(options, { p2pMediaLoader })
-    } else {
-      mode = 'webtorrent'
     }
 
     this.zone.runOutsideAngular(async () => {

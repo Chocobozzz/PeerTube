@@ -263,7 +263,7 @@ class PeerTubeEmbed {
       this.subtitle = this.getParamString(params, 'subtitle')
       this.startTime = this.getParamString(params, 'start')
 
-      this.mode = this.getParamToggle(params, 'p2p-media-loader') ? 'p2p-media-loader' : 'webtorrent'
+      this.mode = this.getParamString(params, 'mode') === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
