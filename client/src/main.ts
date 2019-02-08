@@ -34,7 +34,7 @@ const bootstrap = () => platformBrowserDynamic()
     //     .catch(err => console.error('Cannot register service worker.', err))
     // }
 
-    if (navigator.serviceWorker) {
+    if (navigator.serviceWorker && typeof navigator.serviceWorker.getRegistrations === 'function') {
       navigator.serviceWorker.getRegistrations()
         .then(registrations => {
           for (const registration of registrations) {
