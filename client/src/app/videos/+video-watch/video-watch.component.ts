@@ -8,7 +8,6 @@ import { MetaService } from '@ngx-meta/core'
 import { Notifier, ServerService } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import * as WebTorrent from 'webtorrent'
 import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
@@ -90,7 +89,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     if (
-      WebTorrent.WEBRTC_SUPPORT === false ||
+      !!((window as any).RTCPeerConnection || (window as any).mozRTCPeerConnection || (window as any).webkitRTCPeerConnection) === false ||
       peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
     ) {
       this.hasAlreadyAcceptedPrivacyConcern = true
