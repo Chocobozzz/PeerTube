@@ -41,7 +41,7 @@ server {
   # It might be nice to compress JSON, but leaving that out to protect against potential
   # compression+encryption information leak attacks like BREACH.
   gzip on;
-  gzip_types text/css text/html application/javascript;
+  gzip_types text/css application/javascript;
   gzip_vary on;
 
   # Enable HSTS
