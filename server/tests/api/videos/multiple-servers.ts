@@ -98,6 +98,7 @@ describe('Test multiple servers', function () {
         nsfw: true,
         description: 'my super description for server 1',
         support: 'my super support text for server 1',
+        originallyPublishedAt: '2019-02-10T13:38:14.449Z',
         tags: [ 'tag1p1', 'tag2p1' ],
         channelId: videoChannelId,
         fixture: 'video_short1.webm'
@@ -118,6 +119,7 @@ describe('Test multiple servers', function () {
           nsfw: true,
           description: 'my super description for server 1',
           support: 'my super support text for server 1',
+          originallyPublishedAt: '2019-02-10T13:38:14.449Z',
           account: {
             name: 'root',
             host: 'localhost:9001'
@@ -625,6 +627,7 @@ describe('Test multiple servers', function () {
         support: 'my super support text updated',
         tags: [ 'tag_up_1', 'tag_up_2' ],
         thumbnailfile: 'thumbnail.jpg',
+        originallyPublishedAt: '2019-02-11T13:38:14.449Z',
         previewfile: 'preview.jpg'
       }
 
@@ -652,6 +655,7 @@ describe('Test multiple servers', function () {
           nsfw: true,
           description: 'my super description updated',
           support: 'my super support text updated',
+          originallyPublishedAt: '2019-02-11T13:38:14.449Z',
           account: {
             name: 'root',
             host: 'localhost:9003'
@@ -983,7 +987,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: false,
-          downloadEnabled: false,
+          downloadEnabled: true,
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {

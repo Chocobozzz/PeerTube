@@ -34,7 +34,8 @@ function activityPubContextify <T> (data: T) {
         expires: 'sc:expires',
         support: 'sc:Text',
         CacheFile: 'pt:CacheFile',
-        Infohash: 'pt:Infohash'
+        Infohash: 'pt:Infohash',
+        originallyPublishedAt: 'sc:DateTime'
       },
       {
         likes: {

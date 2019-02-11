@@ -249,6 +249,7 @@ async function updateVideoFromAP (options: {
       options.video.set('duration', videoData.duration)
       options.video.set('createdAt', videoData.createdAt)
       options.video.set('publishedAt', videoData.publishedAt)
+      options.video.set('originallyPublishedAt', videoData.originallyPublishedAt)
       options.video.set('privacy', videoData.privacy)
       options.video.set('channelId', videoData.channelId)
       options.video.set('views', videoData.views)
@@ -511,6 +512,7 @@ async function videoActivityObjectToDBAttributes (
     duration: parseInt(duration, 10),
     createdAt: new Date(videoObject.published),
     publishedAt: new Date(videoObject.published),
+    originallyPublishedAt: videoObject.originallyPublishedAt ? new Date(videoObject.originallyPublishedAt) : null,
     // FIXME: updatedAt does not seems to be considered by Sequelize
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,

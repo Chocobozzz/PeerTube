@@ -40,7 +40,7 @@ import {
   isVideoDurationValid,
   isVideoLanguageValid,
   isVideoLicenceValid,
-  isVideoNameValid,
+  isVideoNameValid, isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
   isVideoStateValid,
   isVideoSupportValid
@@ -103,10 +103,17 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
 
   { fields: [ 'createdAt' ] },
   { fields: [ 'publishedAt' ] },
-  { fields: [ 'originallyPublishedAt' ] },
   { fields: [ 'duration' ] },
   { fields: [ 'views' ] },
   { fields: [ 'channelId' ] },
+  {
+    fields: [ 'originallyPublishedAt' ],
+    where: {
+      originallyPublishedAt: {
+        [Sequelize.Op.ne]: null
+      }
+    }
+  },
   {
     fields: [ 'category' ], // We don't care videos with an unknown category
     where: {
@@ -741,6 +748,8 @@ export class VideoModel extends Model<VideoModel> {
   @Column
   publishedAt: Date
 
+  @AllowNull(true)
+  @Default(null)
   @Column
   originallyPublishedAt: Date
 

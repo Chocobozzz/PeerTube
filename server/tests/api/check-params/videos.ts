@@ -185,7 +185,8 @@ describe('Test videos API validator', function () {
         support: 'my super support text',
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
-        channelId: channelId
+        channelId: channelId,
+        originallyPublishedAt: new Date().toISOString()
       }
     })
 
@@ -308,6 +309,13 @@ describe('Test videos API validator', function () {
         'scheduleUpdate[privacy]': VideoPrivacy.PUBLIC,
         'scheduleUpdate[updateAt]': 'toto'
       })
+      const attaches = baseCorrectAttaches
+
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a bad originally published at attribute', async function () {
+      const fields = immutableAssign(baseCorrectParams, { 'originallyPublishedAt': 'toto' })
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -530,6 +538,12 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a bad schedule update (wrong updateAt)', async function () {
       const fields = immutableAssign(baseCorrectParams, { scheduleUpdate: { updateAt: 'toto', privacy: VideoPrivacy.PUBLIC } })
+
+      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad originally published at param', async function () {
+      const fields = immutableAssign(baseCorrectParams, { originallyPublishedAt: 'toto' })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

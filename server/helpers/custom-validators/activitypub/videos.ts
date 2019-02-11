@@ -54,6 +54,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     isBooleanValid(video.downloadEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
+    (!video.originallyPublishedAt || isDateValid(video.originallyPublishedAt)) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     isRemoteVideoIconValid(video.icon) &&
     video.url.length !== 0 &&

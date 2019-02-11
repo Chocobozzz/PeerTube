@@ -31,6 +31,7 @@ type VideoAttributes = {
   downloadEnabled?: boolean
   waitTranscoding?: boolean
   description?: string
+  originallyPublishedAt?: string
   tags?: string[]
   channelId?: number
   privacy?: VideoPrivacy
@@ -349,6 +350,9 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
   if (attributes.licence !== undefined) {
     req.field('licence', attributes.licence.toString())
   }
+  if (attributes.originallyPublishedAt !== undefined) {
+    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
+  }
 
   for (let i = 0; i < attributes.tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])
@@ -384,6 +388,7 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.nsfw !== undefined) body['nsfw'] = JSON.stringify(attributes.nsfw)
   if (attributes.commentsEnabled !== undefined) body['commentsEnabled'] = JSON.stringify(attributes.commentsEnabled)
   if (attributes.downloadEnabled !== undefined) body['downloadEnabled'] = JSON.stringify(attributes.downloadEnabled)
+  if (attributes.originallyPublishedAt !== undefined) body['originallyPublishedAt'] = attributes.originallyPublishedAt
   if (attributes.description) body['description'] = attributes.description
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
@@ -453,6 +458,7 @@ async function completeVideoCheck (
     description: string
     publishedAt?: string
     support: string
+    originallyPublishedAt?: string,
     account: {
       name: string
       host: string
@@ -508,6 +514,12 @@ async function completeVideoCheck (
 
   if (attributes.publishedAt) {
     expect(video.publishedAt).to.equal(attributes.publishedAt)
+  }
+
+  if (attributes.originallyPublishedAt) {
+    expect(video.originallyPublishedAt).to.equal(attributes.originallyPublishedAt)
+  } else {
+    expect(video.originallyPublishedAt).to.be.null
   }
 
   const res = await getVideo(url, video.uuid)
