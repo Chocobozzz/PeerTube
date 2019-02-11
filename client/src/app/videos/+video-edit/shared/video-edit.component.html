@@ -121,16 +121,6 @@
             ></my-peertube-checkbox>
 
             <my-peertube-checkbox
-              inputName="commentsEnabled" formControlName="commentsEnabled"
-              i18n-labelText labelText="Enable video comments"
-            ></my-peertube-checkbox>
-
-            <my-peertube-checkbox
-              inputName="downloadEnabled" formControlName="downloadEnabled"
-              i18n-labelText labelText="Download enabled"
-            ></my-peertube-checkbox>
-
-            <my-peertube-checkbox
               *ngIf="waitTranscodingEnabled"
               inputName="waitTranscoding" formControlName="waitTranscoding"
               i18n-labelText labelText="Wait transcoding before publishing the video"
@@ -221,6 +211,16 @@
               {{ formErrors.support }}
             </div>
           </div>
+
+          <my-peertube-checkbox
+            inputName="commentsEnabled" formControlName="commentsEnabled"
+            i18n-labelText labelText="Enable video comments"
+          ></my-peertube-checkbox>
+
+          <my-peertube-checkbox
+            inputName="downloadEnabled" formControlName="downloadEnabled"
+            i18n-labelText labelText="Enable download"
+          ></my-peertube-checkbox>
         </div>
       </ng-template>
     </ngb-tab>
