@@ -57,7 +57,7 @@ export class VideoEdit implements VideoUpdate {
       this.previewUrl = video.previewUrl
 
       this.scheduleUpdate = video.scheduledUpdate
-      this.originallyPublishedAt = new Date(video.originallyPublishedAt)
+      this.originallyPublishedAt = video.originallyPublishedAt ? new Date(video.originallyPublishedAt) : null
     }
   }
 

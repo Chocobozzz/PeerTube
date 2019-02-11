@@ -6,19 +6,13 @@ async function up (utils: {
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
 
-  {
-    const data = {
-      type: Sequelize.DATE,
-      allowNull: true,
-      defaultValue: Sequelize.NOW
-    }
-    await utils.queryInterface.addColumn('video', 'originallyPublishedAt', data)
+  const data = {
+    type: Sequelize.DATE,
+    allowNull: true,
+    defaultValue: null
   }
+  await utils.queryInterface.addColumn('video', 'originallyPublishedAt', data)
 
-  {
-    const query = 'UPDATE video SET "originallyPublishedAt" = video."publishedAt"'
-    await utils.sequelize.query(query)
-  }
 }
 
 function down (options) {
