@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
-import { sendCreateDislike, sendLike, sendUndoDislike, sendUndoLike } from './send'
+import { sendLike, sendUndoDislike, sendUndoLike } from './send'
 import { VideoRateType } from '../../../shared/models/videos'
 import * as Bluebird from 'bluebird'
 import { getOrCreateActorAndServerAndModel } from './actor'
@@ -12,6 +12,7 @@ import { doRequest } from '../../helpers/requests'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { ActorModel } from '../../models/activitypub/actor'
 import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from './url'
+import { sendDislike } from './send/send-dislike'
 
 async function createRates (ratesUrl: string[], video: VideoModel, rate: VideoRateType) {
   let rateCounts = 0
@@ -82,7 +83,7 @@ async function sendVideoRateChange (account: AccountModel,
   // Like
   if (likes > 0) await sendLike(actor, video, t)
   // Dislike
-  if (dislikes > 0) await sendCreateDislike(actor, video, t)
+  if (dislikes > 0) await sendDislike(actor, video, t)
 }
 
 function getRateUrl (rateType: VideoRateType, actor: ActorModel, video: VideoModel) {
