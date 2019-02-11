@@ -9,7 +9,7 @@ export class FromNowPipe implements PipeTransform {
 
   transform (arg: number | Date | string) {
     const argDate = new Date(arg)
-    const seconds = Math.max(0, Math.floor((Date.now() - argDate.getTime()) / 1000))
+    const seconds = Math.floor((Date.now() - argDate.getTime()) / 1000)
 
     let interval = Math.floor(seconds / 31536000)
     if (interval > 1) {
@@ -35,6 +35,6 @@ export class FromNowPipe implements PipeTransform {
     interval = Math.floor(seconds / 60)
     if (interval >= 1) return this.i18n('{{interval}} min ago', { interval })
 
-    return this.i18n('{{interval}} sec ago', { interval: Math.floor(seconds) })
+    return this.i18n('{{interval}} sec ago', { interval: Math.max(0, seconds) })
   }
 }
