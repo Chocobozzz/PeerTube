@@ -17,6 +17,7 @@
 /config/local*
 /ffmpeg/
 /ffmpeg-4/
+/ffmpeg-3/
 /thumbnails/
 /torrents/
 /videos/

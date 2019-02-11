@@ -5,7 +5,7 @@ import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/cons
 import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
-import { remove } from 'fs-extra'
+import { remove, readFile, writeFile } from 'fs-extra'
 
 function computeResolutionsToTranscode (videoFileHeight: number) {
   const resolutionsEnabled: number[] = []
@@ -164,7 +164,7 @@ function transcode (options: TranscodeOptions) {
       }
 
       if (options.hlsPlaylist) {
-        const videoPath = `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
+        const videoPath = getHLSVideoPath(options)
 
         command = command.outputOption('-hls_time 4')
                          .outputOption('-hls_list_size 0')
@@ -180,7 +180,11 @@ function transcode (options: TranscodeOptions) {
           logger.error('Error in transcoding job.', { stdout, stderr })
           return rej(err)
         })
-        .on('end', res)
+        .on('end', () => {
+          return onTranscodingSuccess(options)
+            .then(() => res())
+            .catch(err => rej(err))
+        })
         .run()
     } catch (err) {
       return rej(err)
@@ -203,6 +207,25 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function getHLSVideoPath (options: TranscodeOptions) {
+  return `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
+}
+
+async function onTranscodingSuccess (options: TranscodeOptions) {
+  if (!options.hlsPlaylist) return
+
+  // Fix wrong mapping with some ffmpeg versions
+  const fileContent = await readFile(options.outputPath)
+
+  const videoFileName = options.hlsPlaylist.videoFilename
+  const videoFilePath = getHLSVideoPath(options)
+
+  const newContent = fileContent.toString()
+                                .replace(`#EXT-X-MAP:URI="${videoFilePath}",`, `#EXT-X-MAP:URI="${videoFileName}",`)
+
+  await writeFile(options.outputPath, newContent)
+}
 
 function getVideoFileStream (path: string) {
   return new Promise<any>((res, rej) => {

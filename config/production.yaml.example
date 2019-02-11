@@ -153,12 +153,12 @@ transcoding:
     720p: false
     1080p: false
   # /!\ EXPERIMENTAL /!\
-  # /!\ Requires ffmpeg >= 3.4
-  # Generate HLS playlist/segments. Better playback than with WebTorrent:
+  # /!\ Requires ffmpeg >= 4
+  # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
   #     * Resolution change is smoother
   #     * Faster playback in particular with long videos
   #     * More stable playback (less bugs/infinite loading)
-  # /!\ Multiply videos storage by two /!\
+  # /!\ Multiply videos storage by 2 /!\
   hls:
     enabled: false
 
