@@ -1,10 +1,11 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
-import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
 import { isVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { isVideoBlacklistExist, isVideoBlacklistReasonValid } from '../../../helpers/custom-validators/video-blacklist'
+import { VideoModel } from '../../../models/video/video'
 
 const videosBlacklistRemoveValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -22,6 +23,10 @@ const videosBlacklistRemoveValidator = [
 
 const videosBlacklistAddValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  body('unfederate')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid unfederate boolean'),
   body('reason')
     .optional()
     .custom(isVideoBlacklistReasonValid).withMessage('Should have a valid reason'),
@@ -31,6 +36,14 @@ const videosBlacklistAddValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.videoId, res)) return
+
+    const video: VideoModel = res.locals.video
+    if (req.body.unfederate === true && video.remote === true) {
+      return res
+        .status(409)
+        .send({ error: 'You cannot unfederate a remote video.' })
+        .end()
+    }
 
     return next()
   }

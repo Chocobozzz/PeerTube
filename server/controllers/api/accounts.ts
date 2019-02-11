@@ -14,6 +14,8 @@ import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
+import { JobQueue } from '../../lib/job-queue'
+import { logger } from '../../helpers/logger'
 
 const accountsRouter = express.Router()
 
@@ -56,6 +58,11 @@ export {
 
 function getAccount (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
+
+  if (account.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
+            .catch(err => logger.error('Cannot create AP refresher job for actor %s.', account.Actor.url, { err }))
+  }
 
   return res.json(account.toFormattedJSON())
 }

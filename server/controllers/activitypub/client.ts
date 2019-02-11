@@ -3,22 +3,18 @@ import * as express from 'express'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
-import { buildAnnounceWithVideoAudience, buildDislikeActivity, buildLikeActivity } from '../../lib/activitypub/send'
+import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
 import {
   asyncMiddleware,
-  videosShareValidator,
   executeIfActivityPub,
   localAccountValidator,
   localVideoChannelValidator,
-  videosCustomGetValidator
+  videosCustomGetValidator,
+  videosShareValidator
 } from '../../middlewares'
-import {
-  getAccountVideoRateValidator,
-  videoCommentGetValidator,
-  videosGetValidator
-} from '../../middlewares/validators'
+import { getAccountVideoRateValidator, videoCommentGetValidator, videosGetValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
@@ -37,9 +33,10 @@ import {
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
 import { VideoCaptionModel } from '../../models/video/video-caption'
-import { videoRedundancyGetValidator } from '../../middlewares/validators/redundancy'
+import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { getServerActor } from '../../helpers/utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
+import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 
 const activityPubClientRouter = express.Router()
 
@@ -66,11 +63,11 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
 
 activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS))),
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video-with-rights'))),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
 activityPubClientRouter.get('/videos/watch/:id/activity',
-  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video-with-rights'))),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
@@ -116,7 +113,11 @@ activityPubClientRouter.get('/video-channels/:name/following',
 )
 
 activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
-  executeIfActivityPub(asyncMiddleware(videoRedundancyGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoFileRedundancyGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoRedundancyController))
+)
+activityPubClientRouter.get('/redundancy/video-playlists/:streamingPlaylistType/:videoId',
+  executeIfActivityPub(asyncMiddleware(videoPlaylistRedundancyGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoRedundancyController))
 )
 
@@ -156,14 +157,15 @@ function getAccountVideoRate (rateType: VideoRateType) {
     const url = getRateUrl(rateType, byActor, accountVideoRate.Video)
     const APObject = rateType === 'like'
       ? buildLikeActivity(url, byActor, accountVideoRate.Video)
-      : buildCreateActivity(url, byActor, buildDislikeActivity(url, byActor, accountVideoRate.Video))
+      : buildDislikeActivity(url, byActor, accountVideoRate.Video)
 
     return activityPubResponse(activityPubContextify(APObject), res)
   }
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  const video: VideoModel = res.locals.video
+  // We need more attributes
+  const video: VideoModel = await VideoModel.loadForGetAPI(res.locals.video.id)
 
   if (video.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(video.url)
 

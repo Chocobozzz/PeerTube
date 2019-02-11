@@ -62,6 +62,8 @@ transcoding:
     480p: true
     720p: true
     1080p: true
+  hls:
+    enabled: true
 
 import:
   videos:

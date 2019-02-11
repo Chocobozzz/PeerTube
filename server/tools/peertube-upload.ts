@@ -30,6 +30,7 @@ if (!program['tags']) program['tags'] = []
 if (!program['nsfw']) program['nsfw'] = false
 if (!program['privacy']) program['privacy'] = VideoPrivacy.PUBLIC
 if (!program['commentsEnabled']) program['commentsEnabled'] = false
+if (!program['downloadEnabled']) program['downloadEnabled'] = true
 
 getSettings()
   .then(settings => {
@@ -116,6 +117,7 @@ async function run () {
     description: program['videoDescription'],
     tags: program['tags'],
     commentsEnabled: program['commentsEnabled'],
+    downloadEnabled: program['downloadEnabled'],
     fixture: program['file'],
     thumbnailfile: program['thumbnail'],
     previewfile: program['preview'],

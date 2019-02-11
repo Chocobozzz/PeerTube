@@ -55,6 +55,18 @@
   hyphens: auto;
 }
 
+@mixin apply-svg-color ($color) {
+  /deep/ svg {
+    path[fill="#000000"], g[fill="#000000"], rect[fill="#000000"], circle[fill="#000000"] {
+      fill: $color;
+    }
+
+    path[stroke="#000000"], g[stroke="#000000"], rect[stroke="#000000"], circle[stroke="#000000"] {
+      stroke: $color;
+    }
+  }
+}
+
 @mixin peertube-input-text($width) {
   display: inline-block;
   height: $button-height;
@@ -64,6 +76,7 @@
   border-radius: 3px;
   padding-left: 15px;
   padding-right: 15px;
+  font-size: 15px;
 
   &::placeholder {
     color: var(--inputPlaceholderColor);
@@ -110,21 +123,29 @@
     color: #fff;
     background-color: #C6C6C6;
   }
+
+  my-global-icon {
+    @include apply-svg-color(#fff)
+  }
 }
 
 @mixin grey-button {
   &, &:active, &:focus {
-    background-color: $grey-color;
-    color: #585858;
+    background-color: $grey-background-color;
+    color: $grey-foreground-color;
   }
 
   &:hover, &:active, &:focus, &[disabled], &.disabled {
-    color: #585858;
-    background-color: $grey-hoover-color;
+    color: $grey-foreground-color;
+    background-color: $grey-background-hover-color;
   }
 
   &[disabled], &.disabled {
     cursor: default;
+  }
+
+  my-global-icon {
+    @include apply-svg-color($grey-foreground-color)
   }
 }
 
@@ -146,6 +167,15 @@
 
   @include disable-default-a-behaviour;
   @include peertube-button;
+}
+
+@mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
+  my-global-icon {
+    position: relative;
+    width: $width;
+    margin-right: $margin-right;
+    top: $top;
+  }
 }
 
 @mixin peertube-button-file ($width) {
@@ -230,6 +260,10 @@
     &:-moz-focusring {
       color: transparent;
       text-shadow: 0 0 0 #000;
+    }
+
+    option {
+      color: #000;
     }
   }
 }
@@ -455,18 +489,10 @@
   }
 }
 
-@mixin create-button ($imageUrl) {
+@mixin create-button {
   @include peertube-button-link;
   @include orange-button;
-
-  .icon.icon-add {
-    @include icon(20px);
-
-    position: relative;
-    top: -1px;
-    margin-right: 5px;
-    background-image: url($imageUrl);
-  }
+  @include button-with-icon(20px, 5px, -1px);
 }
 
 @mixin row-blocks {

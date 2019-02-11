@@ -97,6 +97,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
         '480p': true,
         '720p': false,
         '1080p': false
+      },
+      hls: {
+        enabled: false
       }
     },
     import: {

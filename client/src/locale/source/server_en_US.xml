@@ -137,6 +137,22 @@
         <source>Failed</source>
         <target>undefined</target>
       </trans-unit>
+      <trans-unit id="This video does not exist.">
+        <source>This video does not exist.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="We cannot fetch the video. Please try again later.">
+        <source>We cannot fetch the video. Please try again later.</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="Sorry">
+        <source>Sorry</source>
+        <target>undefined</target>
+      </trans-unit>
+      <trans-unit id="This video is not available because the remote instance is not responding.">
+        <source>This video is not available because the remote instance is not responding.</source>
+        <target>undefined</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
         <target>undefined</target>

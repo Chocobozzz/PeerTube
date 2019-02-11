@@ -1,7 +1,12 @@
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoModel } from './video'
 import { VideoFileModel } from './video-file'
-import { ActivityUrlObject, VideoTorrentObject } from '../../../shared/models/activitypub/objects'
+import {
+  ActivityPlaylistInfohashesObject,
+  ActivityPlaylistSegmentHashesObject,
+  ActivityUrlObject,
+  VideoTorrentObject
+} from '../../../shared/models/activitypub/objects'
 import { CONFIG, MIMETYPES, THUMBNAILS_SIZE } from '../../initializers'
 import { VideoCaptionModel } from './video-caption'
 import {
@@ -11,6 +16,8 @@ import {
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
 import { isArray } from '../../helpers/custom-validators/misc'
+import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
+import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
@@ -121,7 +128,12 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
     }
   })
 
+  const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
+
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
+
+  const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
+
   const detailsJson = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
@@ -129,18 +141,42 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,
     commentsEnabled: video.commentsEnabled,
+    downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
     state: {
       id: video.state,
       label: VideoModel.getStateLabel(video.state)
     },
-    files: []
+
+    trackerUrls: video.getTrackerUrls(baseUrlHttp, baseUrlWs),
+
+    files: [],
+    streamingPlaylists
   }
 
   // Format and sort video files
   detailsJson.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
 
   return Object.assign(formattedJson, detailsJson)
+}
+
+function streamingPlaylistsModelToFormattedJSON (video: VideoModel, playlists: VideoStreamingPlaylistModel[]): VideoStreamingPlaylist[] {
+  if (isArray(playlists) === false) return []
+
+  return playlists
+    .map(playlist => {
+      const redundancies = isArray(playlist.RedundancyVideos)
+        ? playlist.RedundancyVideos.map(r => ({ baseUrl: r.fileUrl }))
+        : []
+
+      return {
+        id: playlist.id,
+        type: playlist.type,
+        playlistUrl: playlist.playlistUrl,
+        segmentsSha256Url: playlist.segmentsSha256Url,
+        redundancies
+      } as VideoStreamingPlaylist
+    })
 }
 
 function videoFilesModelToFormattedJSON (video: VideoModel, videoFiles: VideoFileModel[]): VideoFile[] {
@@ -233,6 +269,28 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     })
   }
 
+  for (const playlist of (video.VideoStreamingPlaylists || [])) {
+    let tag: (ActivityPlaylistSegmentHashesObject | ActivityPlaylistInfohashesObject)[]
+
+    tag = playlist.p2pMediaLoaderInfohashes
+                  .map(i => ({ type: 'Infohash' as 'Infohash', name: i }))
+    tag.push({
+      type: 'Link',
+      name: 'sha256',
+      mimeType: 'application/json' as 'application/json',
+      mediaType: 'application/json' as 'application/json',
+      href: playlist.segmentsSha256Url
+    })
+
+    url.push({
+      type: 'Link',
+      mimeType: 'application/x-mpegURL' as 'application/x-mpegURL',
+      mediaType: 'application/x-mpegURL' as 'application/x-mpegURL',
+      href: playlist.playlistUrl,
+      tag
+    })
+  }
+
   // Add video url too
   url.push({
     type: 'Link',
@@ -264,6 +322,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     waitTranscoding: video.waitTranscoding,
     state: video.state,
     commentsEnabled: video.commentsEnabled,
+    downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),
     originallyPublishedAt: video.originallyPublishedAt ?
       video.originallyPublishedAt.toISOString() :

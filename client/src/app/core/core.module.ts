@@ -8,7 +8,7 @@ import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 
 import { AuthService } from './auth'
-import { ConfirmComponent, ConfirmService } from './confirm'
+import { ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
@@ -18,6 +18,7 @@ import { CheatSheetComponent } from './hotkeys'
 import { ToastModule } from 'primeng/toast'
 import { Notifier } from './notification'
 import { MessageService } from 'primeng/api'
+import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 
 @NgModule({
   imports: [
@@ -37,7 +38,6 @@ import { MessageService } from 'primeng/api'
   ],
 
   declarations: [
-    ConfirmComponent,
     CheatSheetComponent
   ],
 
@@ -47,7 +47,6 @@ import { MessageService } from 'primeng/api'
 
     ToastModule,
 
-    ConfirmComponent,
     CheatSheetComponent
   ],
 
@@ -60,7 +59,8 @@ import { MessageService } from 'primeng/api'
     UserRightGuard,
     RedirectService,
     Notifier,
-    MessageService
+    MessageService,
+    UserNotificationSocket
   ]
 })
 export class CoreModule {

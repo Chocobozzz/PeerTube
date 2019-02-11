@@ -501,6 +501,22 @@ describe('Test users', function () {
     accessTokenUser = await userLogin(server, user)
   })
 
+  it('Should be able to update another user password', async function () {
+    await updateUser({
+      url: server.url,
+      userId,
+      accessToken,
+      password: 'password updated'
+    })
+
+    await getMyUserVideoQuotaUsed(server.url, accessTokenUser, 401)
+
+    await userLogin(server, user, 400)
+
+    user.password = 'password updated'
+    accessTokenUser = await userLogin(server, user)
+  })
+
   it('Should be able to list video blacklist by a moderator', async function () {
     await getBlacklistedVideosList(server.url, accessTokenUser)
   })

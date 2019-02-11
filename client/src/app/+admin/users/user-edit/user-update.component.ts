@@ -19,6 +19,7 @@ import { UserService } from '@app/shared'
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   error: string
   userId: number
+  userEmail: string
   username: string
 
   private paramsSub: Subscription
@@ -89,9 +90,22 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     return this.i18n('Update user')
   }
 
+  resetPassword () {
+    this.userService.askResetPassword(this.userEmail).subscribe(
+      () => {
+        this.notifier.success(
+          this.i18n('An email asking for password reset has been sent to {{username}}.', { username: this.username })
+        )
+      },
+
+      err => this.error = err.message
+    )
+  }
+
   private onUserFetched (userJson: User) {
     this.userId = userJson.id
     this.username = userJson.username
+    this.userEmail = userJson.email
 
     this.form.patchValue({
       email: userJson.email,

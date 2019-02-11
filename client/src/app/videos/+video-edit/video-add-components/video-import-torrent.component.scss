@@ -1,64 +1,13 @@
 @import 'variables';
 @import 'mixins';
 
-$width-size: 190px;
-
-.peertube-select-container {
-  @include peertube-select-container($width-size);
-}
-
-.alert.alert-danger {
-  text-align: center;
-
-  & > div {
-    font-weight: $font-semibold;
-  }
-}
-
-.import-video-torrent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  .icon.icon-upload {
-    @include icon(90px);
-    margin-bottom: 25px;
-    cursor: default;
-
-    background-image: url('../../../../assets/images/video/upload.svg');
-  }
-
-  .button-file {
-    @include peertube-button-file(auto);
-
-    min-width: 190px;
-  }
-
-  .button-file-extension {
-    display: block;
-    font-size: 12px;
-    margin-top: 5px;
-  }
-
+.first-step-block {
   .torrent-or-magnet {
     margin: 10px 0;
   }
 
   .form-group-magnet-uri {
     margin-bottom: 40px;
-  }
-
-  input[type=text] {
-    @include peertube-input-text($width-size);
-    display: block;
-  }
-
-  input[type=button] {
-    @include peertube-button;
-    @include orange-button;
-
-    width: $width-size;
-    margin-top: 30px;
   }
 }
 

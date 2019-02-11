@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
-import { MarkdownService } from '@app/videos/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { InstanceService } from '@app/shared/instance/instance.service'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-about-instance',

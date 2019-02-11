@@ -59,7 +59,8 @@ $ npm run build:server
 
 ### CLI wrapper
 
-The wrapper provides a convenient interface to the following scripts. You can access it as `peertube` via an alias in your `.bashrc` like `alias peertube="node /your/peertube/directory/dist/server/tools/peertube.js"`:
+The wrapper provides a convenient interface to the following scripts.
+You can access it as `peertube` via an alias in your `.bashrc` like `alias peertube="cd /your/peertube/directory/ && node ./dist/server/tools/peertube.js"` (you have to keep the `cd` command):
 
 ```
   Usage: peertube [command] [options]

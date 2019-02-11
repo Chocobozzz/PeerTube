@@ -7,7 +7,6 @@ import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
-import { isArray } from './custom-validators/misc'
 
 function deleteFileAsync (path: string) {
   remove(path)

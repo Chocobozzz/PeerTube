@@ -55,6 +55,7 @@ describe('Test a single server', function () {
     tags: [ 'tag1', 'tag2', 'tag3' ],
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
+    downloadEnabled: true,
     channel: {
       displayName: 'Main root channel',
       name: 'root_channel',
@@ -87,6 +88,7 @@ describe('Test a single server', function () {
     privacy: VideoPrivacy.PUBLIC,
     duration: 5,
     commentsEnabled: false,
+    downloadEnabled: false,
     channel: {
       name: 'root_channel',
       displayName: 'Main root channel',
@@ -356,6 +358,7 @@ describe('Test a single server', function () {
       nsfw: false,
       description: 'my super description updated',
       commentsEnabled: false,
+      downloadEnabled: false,
       tags: [ 'tagup1', 'tagup2' ]
     }
     await updateVideo(server.url, server.accessToken, videoId, attributes)

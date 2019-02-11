@@ -30,6 +30,7 @@ import { updateActorAvatarFile } from '../../lib/avatar'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
+import { JobQueue } from '../../lib/job-queue'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
@@ -196,6 +197,11 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
 
 async function getVideoChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannelWithVideos = await VideoChannelModel.loadAndPopulateAccountAndVideos(res.locals.videoChannel.id)
+
+  if (videoChannelWithVideos.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannelWithVideos.Actor.url } })
+            .catch(err => logger.error('Cannot create AP refresher job for actor %s.', videoChannelWithVideos.Actor.url, { err }))
+  }
 
   return res.json(videoChannelWithVideos.toFormattedJSON())
 }

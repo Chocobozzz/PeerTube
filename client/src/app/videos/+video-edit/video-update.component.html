@@ -13,7 +13,7 @@
 
     <div class="submit-container">
       <div class="submit-button" (click)="update()" [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true }">
-        <span class="icon icon-validate"></span>
+        <my-global-icon iconName="validate"></my-global-icon>
         <input type="button" i18n-value value="Update" />
       </div>
     </div>

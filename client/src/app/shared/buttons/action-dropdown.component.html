@@ -3,7 +3,7 @@
     class="action-button" [ngClass]="{ small: buttonSize === 'small', grey: theme === 'grey', orange: theme === 'orange' }"
     ngbDropdownToggle role="button"
   >
-    <span *ngIf="!label" class="icon icon-action"></span>
+    <my-global-icon *ngIf="!label" class="more-icon" iconName="more"></my-global-icon>
     <span *ngIf="label" class="dropdown-toggle">{{ label }}</span>
   </div>
 

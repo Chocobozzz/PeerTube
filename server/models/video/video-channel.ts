@@ -470,4 +470,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   getDisplayName () {
     return this.name
   }
+
+  isOutdated () {
+    return this.Actor.isOutdated()
+  }
 }

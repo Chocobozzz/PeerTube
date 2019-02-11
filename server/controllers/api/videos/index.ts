@@ -23,7 +23,6 @@ import {
   fetchRemoteVideoDescription,
   getVideoActivityPubUrl
 } from '../../../lib/activitypub'
-import { sendCreateView } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
@@ -37,6 +36,7 @@ import {
   setDefaultPagination,
   setDefaultSort,
   videosAddValidator,
+  videosCustomGetValidator,
   videosGetValidator,
   videosRemoveValidator,
   videosSortValidator,
@@ -59,6 +59,7 @@ import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
 import { Notifier } from '../../../lib/notifier'
+import { sendView } from '../../../lib/activitypub/send/send-view'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -123,9 +124,9 @@ videosRouter.get('/:id/description',
 )
 videosRouter.get('/:id',
   optionalAuthenticate,
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
   asyncMiddleware(checkVideoFollowConstraints),
-  getVideo
+  asyncMiddleware(getVideo)
 )
 videosRouter.post('/:id/views',
   asyncMiddleware(videosGetValidator),
@@ -181,6 +182,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     licence: videoInfo.licence,
     language: videoInfo.language,
     commentsEnabled: videoInfo.commentsEnabled || false,
+    downloadEnabled: videoInfo.downloadEnabled || true,
     waitTranscoding: videoInfo.waitTranscoding || false,
     state: CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED,
     nsfw: videoInfo.nsfw || false,
@@ -326,8 +328,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
       if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
-      if (videoInfoToUpdate.originallyPublishedAt !== undefined &&
-          videoInfoToUpdate.originallyPublishedAt !== null) {
+      if (videoInfoToUpdate.downloadEnabled !== undefined) videoInstance.set('downloadEnabled', videoInfoToUpdate.downloadEnabled)
+
+      if (videoInfoToUpdate.originallyPublishedAt !== undefined && videoInfoToUpdate.originallyPublishedAt !== null) {
         videoInstance.set('originallyPublishedAt', videoInfoToUpdate.originallyPublishedAt)
       }
 
@@ -370,7 +373,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
-      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
+
+      // Don't send update if the video was unfederated
+      if (!videoInstanceUpdated.VideoBlacklist || videoInstanceUpdated.VideoBlacklist.unfederated === false) {
+        await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
+      }
 
       auditLogger.update(
         getAuditIdFromRes(res),
@@ -397,15 +404,17 @@ async function updateVideo (req: express.Request, res: express.Response) {
   return res.type('json').status(204).end()
 }
 
-function getVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+async function getVideo (req: express.Request, res: express.Response) {
+  // We need more attributes
+  const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
+  const video: VideoModel = await VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId)
 
-  if (videoInstance.isOutdated()) {
-    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', videoUrl: videoInstance.url } })
-      .catch(err => logger.error('Cannot create AP refresher job for video %s.', videoInstance.url, { err }))
+  if (video.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
+      .catch(err => logger.error('Cannot create AP refresher job for video %s.', video.url, { err }))
   }
 
-  return res.json(videoInstance.toFormattedDetailsJSON())
+  return res.json(video.toFormattedDetailsJSON())
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {
@@ -424,7 +433,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   ])
 
   const serverActor = await getServerActor()
-  await sendCreateView(serverActor, videoInstance, undefined)
+  await sendView(serverActor, videoInstance, undefined)
 
   return res.status(204).end()
 }

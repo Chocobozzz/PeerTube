@@ -76,6 +76,7 @@ describe('Test handle downs', function () {
     tags: [ 'tag1p1', 'tag2p1' ],
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
+    downloadEnabled: true,
     channel: {
       name: 'root_channel',
       displayName: 'Main root channel',

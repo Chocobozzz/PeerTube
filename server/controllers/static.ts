@@ -1,6 +1,6 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import { CONFIG, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
+import { CONFIG, HLS_PLAYLIST_DIRECTORY, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
 import { VideosPreviewCache } from '../lib/cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
@@ -49,6 +49,13 @@ staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(downloadVideoFile)
+)
+
+// HLS
+staticRouter.use(
+  STATIC_PATHS.PLAYLISTS.HLS,
+  cors(),
+  express.static(HLS_PLAYLIST_DIRECTORY, { fallthrough: false }) // 404 if the file does not exist
 )
 
 // Thumbnails path for express

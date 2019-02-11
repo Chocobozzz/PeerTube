@@ -113,6 +113,7 @@ const deleteMeValidator = [
 
 const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
@@ -233,6 +234,7 @@ const usersAskResetPasswordValidator = [
     logger.debug('Checking usersAskResetPassword parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
     const exists = await checkUserEmailExist(req.body.email, res, false)
     if (!exists) {
       logger.debug('User with email %s does not exist (asking reset password).', req.body.email)

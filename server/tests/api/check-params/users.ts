@@ -464,6 +464,24 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
     })
 
+    it('Should fail with a too small password', async function () {
+      const fields = {
+        currentPassword: 'my super password',
+        password: 'bla'
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a too long password', async function () {
+      const fields = {
+        currentPassword: 'my super password',
+        password: 'super'.repeat(61)
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
     it('Should fail with an non authenticated user', async function () {
       const fields = {
         videoQuota: 42

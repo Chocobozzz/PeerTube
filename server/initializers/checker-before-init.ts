@@ -12,7 +12,7 @@ function checkMissedConfig () {
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password', 'database.pool.max',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
-    'storage.redundancy', 'storage.tmp',
+    'storage.redundancy', 'storage.tmp', 'storage.playlists',
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
     'cache.previews.size', 'admin.email', 'contact_form.enabled',

@@ -4,7 +4,7 @@ import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { checkUrlsSameHost, getAPUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
@@ -42,7 +42,7 @@ async function getOrCreateActorAndServerAndModel (
   recurseIfNeeded = true,
   updateCollections = false
 ) {
-  const actorUrl = getAPUrl(activityActor)
+  const actorUrl = getAPId(activityActor)
   let created = false
 
   let actor = await fetchActorByUrl(actorUrl, fetchType)
@@ -201,6 +201,69 @@ async function addFetchOutboxJob (actor: ActorModel) {
   return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
 }
 
+async function refreshActorIfNeeded (
+  actorArg: ActorModel,
+  fetchedType: ActorFetchByUrlType
+): Promise<{ actor: ActorModel, refreshed: boolean }> {
+  if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
+
+  // We need more attributes
+  const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
+
+  try {
+    let actorUrl: string
+    try {
+      actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
+    } catch (err) {
+      logger.warn('Cannot get actor URL from webfinger, keeping the old one.', err)
+      actorUrl = actor.url
+    }
+
+    const { result, statusCode } = await fetchRemoteActor(actorUrl)
+
+    if (statusCode === 404) {
+      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
+      actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
+      return { actor: undefined, refreshed: false }
+    }
+
+    if (result === undefined) {
+      logger.warn('Cannot fetch remote actor in refresh actor.')
+      return { actor, refreshed: false }
+    }
+
+    return sequelizeTypescript.transaction(async t => {
+      updateInstanceWithAnother(actor, result.actor)
+
+      if (result.avatarName !== undefined) {
+        await updateActorAvatarInstance(actor, result.avatarName, t)
+      }
+
+      // Force update
+      actor.setDataValue('updatedAt', new Date())
+      await actor.save({ transaction: t })
+
+      if (actor.Account) {
+        actor.Account.set('name', result.name)
+        actor.Account.set('description', result.summary)
+
+        await actor.Account.save({ transaction: t })
+      } else if (actor.VideoChannel) {
+        actor.VideoChannel.set('name', result.name)
+        actor.VideoChannel.set('description', result.summary)
+        actor.VideoChannel.set('support', result.support)
+
+        await actor.VideoChannel.save({ transaction: t })
+      }
+
+      return { refreshed: true, actor }
+    })
+  } catch (err) {
+    logger.warn('Cannot refresh actor.', { err })
+    return { actor, refreshed: false }
+  }
+}
+
 export {
   getOrCreateActorAndServerAndModel,
   buildActorInstance,
@@ -208,6 +271,7 @@ export {
   fetchActorTotalItems,
   fetchAvatarIfExists,
   updateActorInstance,
+  refreshActorIfNeeded,
   updateActorAvatarInstance,
   addFetchOutboxJob
 }
@@ -291,12 +355,12 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  const requestResult = await doRequest(options)
+  const requestResult = await doRequest<ActivityPubActor>(options)
   normalizeActor(requestResult.body)
 
-  const actorJSON: ActivityPubActor = requestResult.body
+  const actorJSON = requestResult.body
   if (isActorObjectValid(actorJSON) === false) {
-    logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
+    logger.debug('Remote actor JSON is not valid.', { actorJSON })
     return { result: undefined, statusCode: requestResult.response.statusCode }
   }
 
@@ -371,60 +435,4 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
   })
 
   return videoChannelCreated
-}
-
-async function refreshActorIfNeeded (
-  actorArg: ActorModel,
-  fetchedType: ActorFetchByUrlType
-): Promise<{ actor: ActorModel, refreshed: boolean }> {
-  if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
-
-  // We need more attributes
-  const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
-
-  try {
-    const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
-    const { result, statusCode } = await fetchRemoteActor(actorUrl)
-
-    if (statusCode === 404) {
-      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
-      actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
-      return { actor: undefined, refreshed: false }
-    }
-
-    if (result === undefined) {
-      logger.warn('Cannot fetch remote actor in refresh actor.')
-      return { actor, refreshed: false }
-    }
-
-    return sequelizeTypescript.transaction(async t => {
-      updateInstanceWithAnother(actor, result.actor)
-
-      if (result.avatarName !== undefined) {
-        await updateActorAvatarInstance(actor, result.avatarName, t)
-      }
-
-      // Force update
-      actor.setDataValue('updatedAt', new Date())
-      await actor.save({ transaction: t })
-
-      if (actor.Account) {
-        actor.Account.set('name', result.name)
-        actor.Account.set('description', result.summary)
-
-        await actor.Account.save({ transaction: t })
-      } else if (actor.VideoChannel) {
-        actor.VideoChannel.set('name', result.name)
-        actor.VideoChannel.set('description', result.summary)
-        actor.VideoChannel.set('support', result.support)
-
-        await actor.VideoChannel.save({ transaction: t })
-      }
-
-      return { refreshed: true, actor }
-    })
-  } catch (err) {
-    logger.warn('Cannot refresh actor.', { err })
-    return { actor, refreshed: false }
-  }
 }

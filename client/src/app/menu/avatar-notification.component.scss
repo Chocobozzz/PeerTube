@@ -3,7 +3,7 @@
 
 /deep/ {
   .popover-notifications.popover {
-    max-width: 400px;
+    max-width: none;
 
     .popover-body {
       padding: 0;
@@ -11,6 +11,7 @@
       font-family: $main-fonts;
       overflow-y: auto;
       max-height: 500px;
+      width: 400px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
 
       .notifications-header {
@@ -40,7 +41,7 @@
         justify-content: center;
         font-weight: $font-semibold;
         color: var(--mainForegroundColor);
-        height: 30px;
+        padding: 7px 0;
       }
     }
   }
@@ -71,12 +72,20 @@
     justify-content: center;
 
     background-color: var(--mainColor);
-    color: var(--mainBackgroundColor);
+    color: var(#fff);
     font-size: 10px;
     font-weight: $font-semibold;
 
     border-radius: 15px;
     width: 15px;
     height: 15px;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  /deep/ {
+    .popover-notifications.popover .popover-body {
+      width: 400px;
+    }
   }
 }

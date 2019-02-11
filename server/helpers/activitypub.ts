@@ -15,7 +15,7 @@ function activityPubContextify <T> (data: T) {
       'https://w3id.org/security/v1',
       {
         RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
-        pt: 'https://joinpeertube.org/ns',
+        pt: 'https://joinpeertube.org/ns#',
         sc: 'http://schema.org#',
         Hashtag: 'as:Hashtag',
         uuid: 'sc:identifier',
@@ -29,10 +29,12 @@ function activityPubContextify <T> (data: T) {
         size: 'sc:Number',
         fps: 'sc:Number',
         commentsEnabled: 'sc:Boolean',
+        downloadEnabled: 'sc:Boolean',
         waitTranscoding: 'sc:Boolean',
         expires: 'sc:expires',
         support: 'sc:Text',
-        CacheFile: 'pt:CacheFile'
+        CacheFile: 'pt:CacheFile',
+        Infohash: 'pt:Infohash'
       },
       {
         likes: {
@@ -106,7 +108,7 @@ function buildSignedActivity (byActor: ActorModel, data: Object) {
   return signJsonLDObject(byActor, activity) as Promise<Activity>
 }
 
-function getAPUrl (activity: string | { id: string }) {
+function getAPId (activity: string | { id: string }) {
   if (typeof activity === 'string') return activity
 
   return activity.id
@@ -123,7 +125,7 @@ function checkUrlsSameHost (url1: string, url2: string) {
 
 export {
   checkUrlsSameHost,
-  getAPUrl,
+  getAPId,
   activityPubContextify,
   activityPubCollectionPagination,
   buildSignedActivity

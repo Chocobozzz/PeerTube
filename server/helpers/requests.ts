@@ -7,7 +7,7 @@ import { join } from 'path'
 
 function doRequest <T> (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean }
-): Bluebird<{ response: request.RequestResponse, body: any }> {
+): Bluebird<{ response: request.RequestResponse, body: T }> {
   if (requestOptions.activityPub === true) {
     if (!Array.isArray(requestOptions.headers)) requestOptions.headers = {}
     requestOptions.headers['accept'] = ACTIVITY_PUB.ACCEPT_HEADER

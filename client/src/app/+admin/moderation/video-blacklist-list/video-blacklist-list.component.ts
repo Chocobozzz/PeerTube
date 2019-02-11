@@ -7,6 +7,7 @@ import { VideoBlacklist } from '../../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
 import { Video } from '../../../shared/video/video.model'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-blacklist-list',
@@ -26,6 +27,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoBlacklistService: VideoBlacklistService,
+    private markdownRenderer: MarkdownService,
     private i18n: I18n
   ) {
     super()
@@ -44,6 +46,16 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
 
   getVideoUrl (videoBlacklist: VideoBlacklist) {
     return Video.buildClientUrl(videoBlacklist.video.uuid)
+  }
+
+  booleanToText (value: boolean) {
+    if (value === true) return this.i18n('yes')
+
+    return this.i18n('no')
+  }
+
+  toHtml (text: string) {
+    return this.markdownRenderer.textMarkdownToHTML(text)
   }
 
   async removeVideoFromBlacklist (entry: VideoBlacklist) {

@@ -1,5 +1,5 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { join } from 'path'
+import { dirname, join } from 'path'
 import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
 import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
@@ -29,19 +29,28 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
-async function getVideoFileResolution (path: string) {
+async function getVideoFileSize (path: string) {
   const videoStream = await getVideoFileStream(path)
 
   return {
-    videoFileResolution: Math.min(videoStream.height, videoStream.width),
-    isPortraitMode: videoStream.height > videoStream.width
+    width: videoStream.width,
+    height: videoStream.height
+  }
+}
+
+async function getVideoFileResolution (path: string) {
+  const size = await getVideoFileSize(path)
+
+  return {
+    videoFileResolution: Math.min(size.height, size.width),
+    isPortraitMode: size.height > size.width
   }
 }
 
 async function getVideoFileFPS (path: string) {
   const videoStream = await getVideoFileStream(path)
 
-  for (const key of [ 'r_frame_rate' , 'avg_frame_rate' ]) {
+  for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
     const valuesText: string = videoStream[key]
     if (!valuesText) continue
 
@@ -110,8 +119,12 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 type TranscodeOptions = {
   inputPath: string
   outputPath: string
-  resolution?: VideoResolution
+  resolution: VideoResolution
   isPortraitMode?: boolean
+
+  hlsPlaylist?: {
+    videoFilename: string
+  }
 }
 
 function transcode (options: TranscodeOptions) {
@@ -150,6 +163,18 @@ function transcode (options: TranscodeOptions) {
         command = command.withFPS(fps)
       }
 
+      if (options.hlsPlaylist) {
+        const videoPath = `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
+
+        command = command.outputOption('-hls_time 4')
+                         .outputOption('-hls_list_size 0')
+                         .outputOption('-hls_playlist_type vod')
+                         .outputOption('-hls_segment_filename ' + videoPath)
+                         .outputOption('-hls_segment_type fmp4')
+                         .outputOption('-f hls')
+                         .outputOption('-hls_flags single_file')
+      }
+
       command
         .on('error', (err, stdout, stderr) => {
           logger.error('Error in transcoding job.', { stdout, stderr })
@@ -166,6 +191,7 @@ function transcode (options: TranscodeOptions) {
 // ---------------------------------------------------------------------------
 
 export {
+  getVideoFileSize,
   getVideoFileResolution,
   getDurationFromVideoFile,
   generateImageFromVideoFile,

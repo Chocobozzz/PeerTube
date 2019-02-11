@@ -14,7 +14,7 @@
 p-table {
   .ui-table-caption {
     border: none !important;
-    background-color: #fff !important;
+    background-color: var(--mainBackgroundColor) !important;
 
     .caption {
       height: 40px;
@@ -24,7 +24,7 @@ p-table {
   }
 
   th {
-    background-color: #fff !important;
+    background-color: var(--mainBackgroundColor) !important;
     outline: 0;
   }
 
@@ -122,10 +122,14 @@ p-table {
 
         &.pi-sort-up {
           @extend .glyphicon-triangle-top;
+
+          color: var(--mainForegroundColor) !important;
         }
 
         &.pi-sort-down {
           @extend .glyphicon-triangle-bottom;
+
+          color: var(--mainForegroundColor) !important;
         }
       }
     }
@@ -193,7 +197,7 @@ p-table {
         height: auto !important;
 
         a {
-          color: #000 !important;
+          color: var(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
           margin: 0 5px !important;
           outline: 0 !important;
@@ -230,6 +234,7 @@ p-calendar .ui-datepicker {
       @extend .glyphicon-chevron-right;
       @include glyphicon-light;
 
+      color: #000 !important;
       text-align: right;
 
       .pi.pi-chevron-right {
@@ -241,6 +246,7 @@ p-calendar .ui-datepicker {
       @extend .glyphicon-chevron-left;
       @include glyphicon-light;
 
+      color: #000 !important;
       text-align: left;
 
       .pi.pi-chevron-left {
@@ -254,42 +260,53 @@ p-calendar .ui-datepicker {
     .pi.pi-chevron-up {
       @extend .glyphicon-chevron-up;
       @include glyphicon-light;
+
+      color: #000 !important;
     }
 
     .pi.pi-chevron-down {
       @extend .glyphicon-chevron-down;
       @include glyphicon-light;
+
+      color: #000 !important;
     }
   }
 }
 
+.ui-chkbox {
 
-.ui-chkbox-box {
-  &.ui-state-active {
-    border-color: var(--mainColor) !important;
-    background-color: var(--mainColor) !important;
+  &, .ui-chkbox-box {
+    width: 18px !important;
+    height: 18px !important;
   }
 
-  .ui-chkbox-icon {
-    position: relative;
-    overflow: visible !important;
-
-    &:after {
-      content: '';
-      position: absolute;
-      top: 1px;
-      left: 7px;
-      width: 5px;
-      height: 13px;
-      opacity: 0;
-      transform: rotate(45deg) scale(0);
-      border-right: 2px solid var(--mainBackgroundColor);
-      border-bottom: 2px solid var(--mainBackgroundColor);
+  .ui-chkbox-box {
+    &.ui-state-active {
+      border-color: var(--mainColor) !important;
+      background-color: var(--mainColor) !important;
     }
 
-    &.pi-check:after {
-      opacity: 1;
-      transform: rotate(45deg) scale(1);
+    .ui-chkbox-icon {
+      position: relative;
+      overflow: visible !important;
+
+      &:after {
+        content: '';
+        position: absolute;
+        top: 1px;
+        left: 6px;
+        width: 5px;
+        height: 12px;
+        opacity: 0;
+        transform: rotate(45deg) scale(0);
+        border-right: 2px solid var(--mainBackgroundColor);
+        border-bottom: 2px solid var(--mainBackgroundColor);
+      }
+
+      &.pi-check:after {
+        opacity: 1;
+        transform: rotate(45deg) scale(1);
+      }
     }
   }
 }
@@ -301,6 +318,11 @@ p-inputswitch {
 }
 
 p-toast {
+  .ui-toast {
+    // Modal is 10005
+    z-index: 10010 !important;
+  }
+
   .ui-toast-message {
     font-family: $main-fonts;
 
@@ -348,4 +370,8 @@ p-toast {
       }
     }
   }
+}
+
+.ui-widget {
+  font-family: $main-fonts !important;
 }

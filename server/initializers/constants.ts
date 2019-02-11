@@ -16,7 +16,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 315
+const LAST_MIGRATION_VERSION = 340
 
 // ---------------------------------------------------------------------------
 
@@ -192,6 +192,7 @@ const CONFIG = {
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
+    PLAYLISTS_DIR: buildPath(config.get<string>('storage.playlists')),
     REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
@@ -259,6 +260,9 @@ const CONFIG = {
       get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
       get '720p' () { return config.get<boolean>('transcoding.resolutions.720p') },
       get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') }
+    },
+    HLS: {
+      get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') }
     }
   },
   IMPORT: {
@@ -316,8 +320,8 @@ let CONSTRAINTS_FIELDS = {
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
-    REASON: { min: 2, max: 300 }, // Length
-    MODERATION_COMMENT: { min: 2, max: 300 } // Length
+    REASON: { min: 2, max: 3000 }, // Length
+    MODERATION_COMMENT: { min: 2, max: 3000 } // Length
   },
   VIDEO_BLACKLIST: {
     REASON: { min: 2, max: 300 } // Length
@@ -590,6 +594,9 @@ const STATIC_PATHS = {
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',
+  PLAYLISTS: {
+    HLS: '/static/playlists/hls'
+  },
   AVATARS: '/static/avatars/',
   VIDEO_CAPTIONS: '/static/video-captions/'
 }
@@ -631,6 +638,9 @@ const CACHE = {
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
   }
 }
+
+const HLS_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.PLAYLISTS_DIR, 'hls')
+const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4 // 4 hours
@@ -701,6 +711,8 @@ if (isTestInstance() === true) {
   CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
   MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
   ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0ms'
+
+  RATES_LIMIT.LOGIN.MAX = 20
 }
 
 updateWebserverUrls()
@@ -709,6 +721,7 @@ updateWebserverUrls()
 
 export {
   API_VERSION,
+  HLS_REDUNDANCY_DIRECTORY,
   AVATARS_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
@@ -733,6 +746,7 @@ export {
   PRIVATE_RSA_KEY_SIZE,
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
+  HLS_PLAYLIST_DIRECTORY,
   FEEDS,
   JOB_TTL,
   NSFW_POLICY_TYPES,
@@ -795,7 +809,9 @@ function buildVideoMimetypeExt () {
       'video/quicktime': '.mov',
       'video/x-msvideo': '.avi',
       'video/x-flv': '.flv',
-      'video/x-matroska': '.mkv'
+      'video/x-matroska': '.mkv',
+      'application/octet-stream': '.mkv',
+      'video/avi': '.avi'
     })
   }
 

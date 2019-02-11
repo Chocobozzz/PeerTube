@@ -3,6 +3,8 @@ import { AuthUser } from '../../core'
 import { Video } from '../../shared/video/video.model'
 import { Account } from '@app/shared/account/account.model'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { VideoStreamingPlaylist } from '../../../../../shared/models/videos/video-streaming-playlist.model'
+import { VideoStreamingPlaylistType } from '../../../../../shared/models/videos/video-streaming-playlist.type'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
   descriptionPath: string
@@ -12,12 +14,17 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
+  downloadEnabled: boolean
 
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
 
   likesPercent: number
   dislikesPercent: number
+
+  trackerUrls: string[]
+
+  streamingPlaylists: VideoStreamingPlaylist[]
 
   constructor (hash: VideoDetailsServerModel, translations = {}) {
     super(hash, translations)
@@ -29,6 +36,10 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.tags = hash.tags
     this.support = hash.support
     this.commentsEnabled = hash.commentsEnabled
+    this.downloadEnabled = hash.downloadEnabled
+
+    this.trackerUrls = hash.trackerUrls
+    this.streamingPlaylists = hash.streamingPlaylists
 
     this.buildLikeAndDislikePercents()
   }
@@ -52,5 +63,9 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   buildLikeAndDislikePercents () {
     this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
     this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100
+  }
+
+  getHlsPlaylist () {
+    return this.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
   }
 }

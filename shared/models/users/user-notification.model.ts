@@ -22,16 +22,23 @@ export interface VideoInfo {
   name: string
 }
 
+export interface ActorInfo {
+  id: number
+  displayName: string
+  name: string
+  host: string
+  avatar?: {
+    path: string
+  }
+}
+
 export interface UserNotification {
   id: number
   type: UserNotificationType
   read: boolean
 
   video?: VideoInfo & {
-    channel: {
-      id: number
-      displayName: string
-    }
+    channel: ActorInfo
   }
 
   videoImport?: {
@@ -45,10 +52,7 @@ export interface UserNotification {
   comment?: {
     id: number
     threadId: number
-    account: {
-      id: number
-      displayName: string
-    }
+    account: ActorInfo
     video: VideoInfo
   }
 
@@ -62,18 +66,11 @@ export interface UserNotification {
     video: VideoInfo
   }
 
-  account?: {
-    id: number
-    displayName: string
-    name: string
-  }
+  account?: ActorInfo
 
   actorFollow?: {
     id: number
-    follower: {
-      name: string
-      displayName: string
-    }
+    follower: ActorInfo
     following: {
       type: 'account' | 'channel'
       name: string

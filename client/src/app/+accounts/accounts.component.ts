@@ -26,8 +26,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private notifier: Notifier,
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
-    private authService: AuthService,
-    private i18n: I18n
+    private authService: AuthService
   ) {}
 
   ngOnInit () {

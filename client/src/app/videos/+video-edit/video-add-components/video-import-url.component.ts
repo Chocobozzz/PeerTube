@@ -18,7 +18,7 @@ import { scrollToTop } from '@app/shared/misc/utils'
   templateUrl: './video-import-url.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-import-url.component.scss'
+    './video-send.scss'
   ]
 })
 export class VideoImportUrlComponent extends VideoSend implements OnInit, CanComponentDeactivate {
@@ -70,6 +70,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
       privacy: this.firstStepPrivacyId,
       waitTranscoding: false,
       commentsEnabled: true,
+      downloadEnabled: true,
       channelId: this.firstStepChannelId
     }
 
@@ -84,6 +85,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
 
         this.video = new VideoEdit(Object.assign(res.video, {
           commentsEnabled: videoUpdate.commentsEnabled,
+          downloadEnabled: videoUpdate.downloadEnabled,
           support: null,
           thumbnailUrl: null,
           previewUrl: null

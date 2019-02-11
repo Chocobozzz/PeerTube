@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { omit, snakeCase } from 'lodash'
+import { snakeCase } from 'lodash'
 import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
@@ -78,6 +78,9 @@ async function getConfig (req: express.Request, res: express.Response) {
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     },
     transcoding: {
+      hls: {
+        enabled: CONFIG.TRANSCODING.HLS.ENABLED
+      },
       enabledResolutions
     },
     import: {
@@ -120,6 +123,11 @@ async function getConfig (req: express.Request, res: express.Response) {
     user: {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
       videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+    },
+    trending: {
+      videos: {
+        intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+      }
     }
   }
 
@@ -241,6 +249,9 @@ function customConfig (): CustomConfig {
         '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ]
+      },
+      hls: {
+        enabled: CONFIG.TRANSCODING.HLS.ENABLED
       }
     },
     import: {

@@ -62,7 +62,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
   extname: string
 
   @AllowNull(false)
-  @Is('VideoFileSize', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash'))
+  @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash'))
   @Column
   infoHash: string
 
@@ -86,14 +86,14 @@ export class VideoFileModel extends Model<VideoFileModel> {
 
   @HasMany(() => VideoRedundancyModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'CASCADE',
     hooks: true
   })
   RedundancyVideos: VideoRedundancyModel[]
 
-  static isInfohashExists (infoHash: string) {
+  static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
     const options = {
       type: Sequelize.QueryTypes.SELECT,
@@ -118,6 +118,26 @@ export class VideoFileModel extends Model<VideoFileModel> {
     }
 
     return VideoFileModel.findById(id, options)
+  }
+
+  static async getStats () {
+    let totalLocalVideoFilesSize = await VideoFileModel.sum('size', {
+      include: [
+        {
+          attributes: [],
+          model: VideoModel.unscoped(),
+          where: {
+            remote: false
+          }
+        }
+      ]
+    } as any)
+    // Sequelize could return null...
+    if (!totalLocalVideoFilesSize) totalLocalVideoFilesSize = 0
+
+    return {
+      totalLocalVideoFilesSize
+    }
   }
 
   hasSameUniqueKeysThan (other: VideoFileModel) {

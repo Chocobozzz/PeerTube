@@ -146,6 +146,7 @@ function checkVideo (video: any, videoName?: string, videoUUID?: string) {
 function checkActor (actor: any) {
   expect(actor.displayName).to.be.a('string')
   expect(actor.displayName).to.not.be.empty
+  expect(actor.host).to.not.be.undefined
 }
 
 function checkComment (comment: any, commentId: number, threadId: number) {
@@ -273,8 +274,8 @@ async function checkNewActorFollow (
       checkActor(notification.actorFollow.follower)
       expect(notification.actorFollow.follower.displayName).to.equal(followerDisplayName)
       expect(notification.actorFollow.follower.name).to.equal(followerName)
+      expect(notification.actorFollow.follower.host).to.not.be.undefined
 
-      checkActor(notification.actorFollow.following)
       expect(notification.actorFollow.following.displayName).to.equal(followingDisplayName)
       expect(notification.actorFollow.following.type).to.equal(followType)
     } else {

@@ -128,6 +128,7 @@ describe('Test multiple servers', function () {
           tags: [ 'tag1p1', 'tag2p1' ],
           privacy: VideoPrivacy.PUBLIC,
           commentsEnabled: true,
+          downloadEnabled: true,
           channel: {
             displayName: 'my channel',
             name: 'super_channel_name',
@@ -199,6 +200,7 @@ describe('Test multiple servers', function () {
           },
           isLocal,
           commentsEnabled: true,
+          downloadEnabled: true,
           duration: 5,
           tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -307,6 +309,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: true,
+          downloadEnabled: true,
           tags: [ 'tag1p3' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
@@ -338,6 +341,7 @@ describe('Test multiple servers', function () {
             host: 'localhost:9003'
           },
           commentsEnabled: true,
+          downloadEnabled: true,
           isLocal,
           duration: 5,
           tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
@@ -655,6 +659,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: true,
+          downloadEnabled: true,
           tags: [ 'tag_up_1', 'tag_up_2' ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
@@ -914,11 +919,12 @@ describe('Test multiple servers', function () {
       }
     })
 
-    it('Should disable comments', async function () {
+    it('Should disable comments and download', async function () {
       this.timeout(20000)
 
       const attributes = {
-        commentsEnabled: false
+        commentsEnabled: false,
+        downloadEnabled: false
       }
 
       await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, attributes)
@@ -928,6 +934,7 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const res = await getVideo(server.url, videoUUID)
         expect(res.body.commentsEnabled).to.be.false
+        expect(res.body.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
         await addVideoCommentThread(server.url, server.accessToken, videoUUID, text, 409)
@@ -976,6 +983,7 @@ describe('Test multiple servers', function () {
           isLocal,
           duration: 5,
           commentsEnabled: false,
+          downloadEnabled: false,
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
           channel: {

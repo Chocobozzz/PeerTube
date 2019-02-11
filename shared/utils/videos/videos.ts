@@ -28,6 +28,7 @@ type VideoAttributes = {
   language?: string
   nsfw?: boolean
   commentsEnabled?: boolean
+  downloadEnabled?: boolean
   waitTranscoding?: boolean
   description?: string
   tags?: string[]
@@ -271,7 +272,16 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
   serverNumber: number,
-  directories = [ 'redundancy', 'videos', 'thumbnails', 'torrents', 'previews', 'captions' ]
+  directories = [
+    'redundancy',
+    'videos',
+    'thumbnails',
+    'torrents',
+    'previews',
+    'captions',
+    join('playlists', 'hls'),
+    join('redundancy', 'hls')
+  ]
 ) {
   const testDirectory = 'test' + serverNumber
 
@@ -279,7 +289,7 @@ async function checkVideoFilesWereRemoved (
     const directoryPath = join(root(), testDirectory, directory)
 
     const directoryExists = existsSync(directoryPath)
-    expect(directoryExists).to.be.true
+    if (!directoryExists) continue
 
     const files = await readdir(directoryPath)
     for (const file of files) {
@@ -311,6 +321,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     tags: [ 'tag' ],
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
+    downloadEnabled: true,
     fixture: 'video_short.webm'
   }, videoAttributesArg)
 
@@ -321,6 +332,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('name', attributes.name)
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
+              .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
               .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
@@ -371,6 +383,7 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.language) body['language'] = attributes.language
   if (attributes.nsfw !== undefined) body['nsfw'] = JSON.stringify(attributes.nsfw)
   if (attributes.commentsEnabled !== undefined) body['commentsEnabled'] = JSON.stringify(attributes.commentsEnabled)
+  if (attributes.downloadEnabled !== undefined) body['downloadEnabled'] = JSON.stringify(attributes.downloadEnabled)
   if (attributes.description) body['description'] = attributes.description
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
@@ -436,6 +449,7 @@ async function completeVideoCheck (
     language: string
     nsfw: boolean
     commentsEnabled: boolean
+    downloadEnabled: boolean
     description: string
     publishedAt?: string
     support: string
@@ -510,6 +524,7 @@ async function completeVideoCheck (
   expect(dateIsValid(videoDetails.channel.createdAt.toString())).to.be.true
   expect(dateIsValid(videoDetails.channel.updatedAt.toString())).to.be.true
   expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
+  expect(videoDetails.downloadEnabled).to.equal(attributes.downloadEnabled)
 
   for (const attributeFile of attributes.files) {
     const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)

@@ -6,9 +6,10 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { sendAccept } from '../send'
 import { Notifier } from '../../notifier'
+import { getAPId } from '../../../helpers/activitypub'
 
 async function processFollowActivity (activity: ActivityFollow, byActor: ActorModel) {
-  const activityObject = activity.object
+  const activityObject = getAPId(activity.object)
 
   return retryTransactionWrapper(processFollow, byActor, activityObject)
 }

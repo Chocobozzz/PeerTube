@@ -27,9 +27,31 @@ import { VideoBlacklistModel } from '../video/video-blacklist'
 import { VideoImportModel } from '../video/video-import'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
+import { AvatarModel } from '../avatar/avatar'
+import { ServerModel } from '../server/server'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'
+}
+
+function buildActorWithAvatarInclude () {
+  return {
+    attributes: [ 'preferredUsername' ],
+    model: () => ActorModel.unscoped(),
+    required: true,
+    include: [
+      {
+        attributes: [ 'filename' ],
+        model: () => AvatarModel.unscoped(),
+        required: false
+      },
+      {
+        attributes: [ 'host' ],
+        model: () => ServerModel.unscoped(),
+        required: false
+      }
+    ]
+  }
 }
 
 function buildVideoInclude (required: boolean) {
@@ -40,19 +62,21 @@ function buildVideoInclude (required: boolean) {
   }
 }
 
-function buildChannelInclude (required: boolean) {
+function buildChannelInclude (required: boolean, withActor = false) {
   return {
     required,
     attributes: [ 'id', 'name' ],
-    model: () => VideoChannelModel.unscoped()
+    model: () => VideoChannelModel.unscoped(),
+    include: withActor === true ? [ buildActorWithAvatarInclude() ] : []
   }
 }
 
-function buildAccountInclude (required: boolean) {
+function buildAccountInclude (required: boolean, withActor = false) {
   return {
     required,
     attributes: [ 'id', 'name' ],
-    model: () => AccountModel.unscoped()
+    model: () => AccountModel.unscoped(),
+    include: withActor === true ? [ buildActorWithAvatarInclude() ] : []
   }
 }
 
@@ -60,47 +84,40 @@ function buildAccountInclude (required: boolean) {
   [ScopeNames.WITH_ALL]: {
     include: [
       Object.assign(buildVideoInclude(false), {
-        include: [ buildChannelInclude(true) ]
+        include: [ buildChannelInclude(true, true) ]
       }),
+
       {
         attributes: [ 'id', 'originCommentId' ],
         model: () => VideoCommentModel.unscoped(),
         required: false,
         include: [
-          buildAccountInclude(true),
+          buildAccountInclude(true, true),
           buildVideoInclude(true)
         ]
       },
+
       {
         attributes: [ 'id' ],
         model: () => VideoAbuseModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(true) ]
       },
+
       {
         attributes: [ 'id' ],
         model: () => VideoBlacklistModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(true) ]
       },
+
       {
         attributes: [ 'id', 'magnetUri', 'targetUrl', 'torrentName' ],
         model: () => VideoImportModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(false) ]
       },
-      {
-        attributes: [ 'id', 'name' ],
-        model: () => AccountModel.unscoped(),
-        required: false,
-        include: [
-          {
-            attributes: [ 'id', 'preferredUsername' ],
-            model: () => ActorModel.unscoped(),
-            required: true
-          }
-        ]
-      },
+
       {
         attributes: [ 'id' ],
         model: () => ActorFollowModel.unscoped(),
@@ -111,7 +128,23 @@ function buildAccountInclude (required: boolean) {
             model: () => ActorModel.unscoped(),
             required: true,
             as: 'ActorFollower',
-            include: [ buildAccountInclude(true) ]
+            include: [
+              {
+                attributes: [ 'id', 'name' ],
+                model: () => AccountModel.unscoped(),
+                required: true
+              },
+              {
+                attributes: [ 'filename' ],
+                model: () => AvatarModel.unscoped(),
+                required: false
+              },
+              {
+                attributes: [ 'host' ],
+                model: () => ServerModel.unscoped(),
+                required: false
+              }
+            ]
           },
           {
             attributes: [ 'preferredUsername' ],
@@ -124,7 +157,9 @@ function buildAccountInclude (required: boolean) {
             ]
           }
         ]
-      }
+      },
+
+      buildAccountInclude(false, true)
     ]
   }
 })
@@ -132,10 +167,63 @@ function buildAccountInclude (required: boolean) {
   tableName: 'userNotification',
   indexes: [
     {
-      fields: [ 'videoId' ]
+      fields: [ 'userId' ]
     },
     {
-      fields: [ 'commentId' ]
+      fields: [ 'videoId' ],
+      where: {
+        videoId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'commentId' ],
+      where: {
+        commentId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'videoAbuseId' ],
+      where: {
+        videoAbuseId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'videoBlacklistId' ],
+      where: {
+        videoBlacklistId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'videoImportId' ],
+      where: {
+        videoImportId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'accountId' ],
+      where: {
+        accountId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'actorFollowId' ],
+      where: {
+        actorFollowId: {
+          [Op.ne]: null
+        }
+      }
     }
   ]
 })
@@ -297,12 +385,9 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
   }
 
   toFormattedJSON (): UserNotification {
-    const video = this.Video ? Object.assign(this.formatVideo(this.Video), {
-      channel: {
-        id: this.Video.VideoChannel.id,
-        displayName: this.Video.VideoChannel.getDisplayName()
-      }
-    }) : undefined
+    const video = this.Video
+      ? Object.assign(this.formatVideo(this.Video),{ channel: this.formatActor(this.Video.VideoChannel) })
+      : undefined
 
     const videoImport = this.VideoImport ? {
       id: this.VideoImport.id,
@@ -315,10 +400,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     const comment = this.Comment ? {
       id: this.Comment.id,
       threadId: this.Comment.getThreadId(),
-      account: {
-        id: this.Comment.Account.id,
-        displayName: this.Comment.Account.getDisplayName()
-      },
+      account: this.formatActor(this.Comment.Account),
       video: this.formatVideo(this.Comment.Video)
     } : undefined
 
@@ -332,17 +414,16 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       video: this.formatVideo(this.VideoBlacklist.Video)
     } : undefined
 
-    const account = this.Account ? {
-      id: this.Account.id,
-      displayName: this.Account.getDisplayName(),
-      name: this.Account.Actor.preferredUsername
-    } : undefined
+    const account = this.Account ? this.formatActor(this.Account) : undefined
 
     const actorFollow = this.ActorFollow ? {
       id: this.ActorFollow.id,
       follower: {
+        id: this.ActorFollow.ActorFollower.Account.id,
         displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
-        name: this.ActorFollow.ActorFollower.preferredUsername
+        name: this.ActorFollow.ActorFollower.preferredUsername,
+        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getWebserverPath() } : undefined,
+        host: this.ActorFollow.ActorFollower.getHost()
       },
       following: {
         type: this.ActorFollow.ActorFollowing.VideoChannel ? 'channel' as 'channel' : 'account' as 'account',
@@ -372,6 +453,20 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       id: video.id,
       uuid: video.uuid,
       name: video.name
+    }
+  }
+
+  private formatActor (accountOrChannel: AccountModel | VideoChannelModel) {
+    const avatar = accountOrChannel.Actor.Avatar
+      ? { path: accountOrChannel.Actor.Avatar.getWebserverPath() }
+      : undefined
+
+    return {
+      id: accountOrChannel.id,
+      displayName: accountOrChannel.getDisplayName(),
+      name: accountOrChannel.Actor.preferredUsername,
+      host: accountOrChannel.Actor.getHost(),
+      avatar
     }
   }
 }

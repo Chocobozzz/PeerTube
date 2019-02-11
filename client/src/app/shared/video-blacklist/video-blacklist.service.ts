@@ -36,8 +36,11 @@ export class VideoBlacklistService {
                )
   }
 
-  blacklistVideo (videoId: number, reason?: string) {
-    const body = reason ? { reason } : {}
+  blacklistVideo (videoId: number, reason: string, unfederate: boolean) {
+    const body = {
+      unfederate,
+      reason
+    }
 
     return this.authHttp.post(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
                .pipe(

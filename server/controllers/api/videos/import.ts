@@ -164,6 +164,7 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     licence: body.licence || importData.licence,
     language: body.language || undefined,
     commentsEnabled: body.commentsEnabled || true,
+    downloadEnabled: body.downloadEnabled || true,
     waitTranscoding: body.waitTranscoding || false,
     state: VideoState.TO_IMPORT,
     nsfw: body.nsfw || importData.nsfw || false,

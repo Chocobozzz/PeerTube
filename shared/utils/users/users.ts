@@ -213,11 +213,13 @@ function updateUser (options: {
   emailVerified?: boolean,
   videoQuota?: number,
   videoQuotaDaily?: number,
+  password?: string,
   role?: UserRole
 }) {
   const path = '/api/v1/users/' + options.userId
 
   const toSend = {}
+  if (options.password !== undefined && options.password !== null) toSend['password'] = options.password
   if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
   if (options.emailVerified !== undefined && options.emailVerified !== null) toSend['emailVerified'] = options.emailVerified
   if (options.videoQuota !== undefined && options.videoQuota !== null) toSend['videoQuota'] = options.videoQuota

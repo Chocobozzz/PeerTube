@@ -51,7 +51,10 @@ export class ServerService {
       requiresEmailVerification: false
     },
     transcoding: {
-      enabledResolutions: []
+      enabledResolutions: [],
+      hls: {
+        enabled: false
+      }
     },
     avatar: {
       file: {
@@ -86,6 +89,11 @@ export class ServerService {
         torrent: {
           enabled: false
         }
+      }
+    },
+    trending: {
+      videos: {
+        intervalDays: 0
       }
     }
   }

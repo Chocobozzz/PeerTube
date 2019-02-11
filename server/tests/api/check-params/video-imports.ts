@@ -88,6 +88,7 @@ describe('Test video imports API validator', function () {
         language: 'pt',
         nsfw: false,
         commentsEnabled: true,
+        downloadEnabled: true,
         waitTranscoding: true,
         description: 'my super description',
         support: 'my super support text',

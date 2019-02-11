@@ -1,5 +1,5 @@
 import { map, switchMap } from 'rxjs/operators'
-import { Component, OnInit } from '@angular/core'
+import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { Notifier } from '@app/core'
@@ -83,14 +83,26 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       )
   }
 
-  canDeactivate () {
+  @HostListener('window:beforeunload', [ '$event' ])
+  onUnload (event: any) {
+    const { text, canDeactivate } = this.canDeactivate()
+
+    if (canDeactivate) return
+
+    event.returnValue = text
+    return text
+  }
+
+  canDeactivate (): { canDeactivate: boolean, text?: string } {
     if (this.updateDone === true) return { canDeactivate: true }
 
+    const text = this.i18n('You have unsaved changes! If you leave, your changes will be lost.')
+
     for (const caption of this.videoCaptions) {
-      if (caption.action) return { canDeactivate: false }
+      if (caption.action) return { canDeactivate: false, text }
     }
 
-    return { canDeactivate: this.formChanged === false }
+    return { canDeactivate: this.formChanged === false, text }
   }
 
   checkForm () {

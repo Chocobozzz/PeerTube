@@ -341,11 +341,14 @@ function getCommonVideoAttributes () {
       .optional()
       .toBoolean()
       .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
-    body('originallyPublishedAt')
+    body('downloadEnabled')
       .optional()
-      .customSanitizer(toValueOrNull)
-      .custom(isVideoOriginallyPublishedAtValid).withMessage('Should have a valid original publication date'),
-
+      .toBoolean()
+      .custom(isBooleanValid).withMessage('Should have downloading enabled boolean'),
+    body('originallyPublishedAt')
+        .optional()
+        .customSanitizer(toValueOrNull)
+        .custom(isVideoOriginallyPublishedAtValid).withMessage('Should have a valid original publication date'),
     body('scheduleUpdate')
       .optional()
       .customSanitizer(toValueOrNull),

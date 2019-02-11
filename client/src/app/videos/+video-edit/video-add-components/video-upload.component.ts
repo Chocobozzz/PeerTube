@@ -20,7 +20,8 @@ import { scrollToTop } from '@app/shared/misc/utils'
   templateUrl: './video-upload.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-upload.component.scss'
+    './video-upload.component.scss',
+    './video-send.scss'
   ]
 })
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
@@ -165,6 +166,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     const nsfw = false
     const waitTranscoding = true
     const commentsEnabled = true
+    const downloadEnabled = true
     const channelId = this.firstStepChannelId.toString()
 
     const formData = new FormData()
@@ -173,6 +175,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('commentsEnabled', '' + commentsEnabled)
+    formData.append('downloadEnabled', '' + downloadEnabled)
     formData.append('waitTranscoding', '' + waitTranscoding)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)

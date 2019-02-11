@@ -8,7 +8,7 @@ import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-videos-trending',
@@ -27,18 +27,33 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     protected authService: AuthService,
     protected location: Location,
     protected screenService: ScreenService,
+    private serverService: ServerService,
     protected i18n: I18n,
     private videoService: VideoService
   ) {
     super()
-
-    this.titlePage = i18n('Trending')
   }
 
   ngOnInit () {
     super.ngOnInit()
 
     this.generateSyndicationList()
+
+    this.serverService.configLoaded.subscribe(
+      () => {
+        const trendingDays = this.serverService.getConfig().trending.videos.intervalDays
+
+        if (trendingDays === 1) {
+          this.titlePage = this.i18n('Trending for the last 24 hours')
+          this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours.')
+        } else {
+          this.titlePage = this.i18n('Trending for the last {{days}} days', { days: trendingDays })
+          this.titleTooltip = this.i18n(
+            'Trending videos are those totalizing the greatest number of views during the last {{days}} days.',
+            { days: trendingDays }
+          )
+        }
+      })
   }
 
   ngOnDestroy () {

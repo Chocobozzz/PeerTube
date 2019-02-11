@@ -13,7 +13,7 @@ import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { SERVER_ACTOR_NAME } from '../../initializers'
 import { ServerModel } from '../../models/server/server'
 
-const videoRedundancyGetValidator = [
+const videoFileRedundancyGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
   param('resolution')
     .customSanitizer(toIntOrNull)
@@ -24,7 +24,7 @@ const videoRedundancyGetValidator = [
     .custom(exists).withMessage('Should have a valid fps'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoRedundancyGetValidator parameters', { parameters: req.params })
+    logger.debug('Checking videoFileRedundancyGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.videoId, res)) return
@@ -38,7 +38,31 @@ const videoRedundancyGetValidator = [
     res.locals.videoFile = videoFile
 
     const videoRedundancy = await VideoRedundancyModel.loadLocalByFileId(videoFile.id)
-    if (!videoRedundancy)return res.status(404).json({ error: 'Video redundancy not found.' })
+    if (!videoRedundancy) return res.status(404).json({ error: 'Video redundancy not found.' })
+    res.locals.videoRedundancy = videoRedundancy
+
+    return next()
+  }
+]
+
+const videoPlaylistRedundancyGetValidator = [
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('streamingPlaylistType').custom(exists).withMessage('Should have a valid streaming playlist type'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
+
+    const video: VideoModel = res.locals.video
+    const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p === req.params.streamingPlaylistType)
+
+    if (!videoStreamingPlaylist) return res.status(404).json({ error: 'Video playlist not found.' })
+    res.locals.videoStreamingPlaylist = videoStreamingPlaylist
+
+    const videoRedundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(videoStreamingPlaylist.id)
+    if (!videoRedundancy) return res.status(404).json({ error: 'Video redundancy not found.' })
     res.locals.videoRedundancy = videoRedundancy
 
     return next()
@@ -75,6 +99,7 @@ const updateServerRedundancyValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  videoRedundancyGetValidator,
+  videoFileRedundancyGetValidator,
+  videoPlaylistRedundancyGetValidator,
   updateServerRedundancyValidator
 }
