@@ -16,7 +16,7 @@ menu {
   height: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: auto;
   color: var(--menuForegroundColor);
   display: flex;
   flex-direction: column;
@@ -38,13 +38,6 @@ menu {
     align-items: center;
     justify-content: center;
     margin-bottom: 35px;
-
-    img {
-      @include avatar(34px);
-
-      margin-left: 20px;
-      margin-right: 10px;
-    }
 
     .logged-in-info {
       flex-grow: 1;
@@ -131,8 +124,12 @@ menu {
       transition: background-color .1s ease-in-out;
       @include disable-default-a-behaviour;
 
-      &:hover, &.focus-visible {
+      &.active {
         background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      &:hover, &.focus-visible {
+        background-color: rgba(255, 255, 255, 0.10);
       }
 
       .icon {
@@ -246,7 +243,7 @@ menu {
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: $mobile-view) {
   .menu-wrapper {
     width: 100% !important;
   }

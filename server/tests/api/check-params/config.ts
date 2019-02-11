@@ -7,7 +7,7 @@ import { CustomConfig } from '../../../../shared/models/server/custom-config.mod
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, runServer, ServerInfo,
   setAccessTokensToServers, userLogin, immutableAssign
-} from '../../utils'
+} from '../../../../shared/utils'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -48,12 +48,16 @@ describe('Test config API validators', function () {
     admin: {
       email: 'superadmin1@example.com'
     },
+    contactForm: {
+      enabled: false
+    },
     user: {
       videoQuota: 5242881,
       videoQuotaDaily: 318742
     },
     transcoding: {
       enabled: true,
+      allowAdditionalExtensions: true,
       threads: 1,
       resolutions: {
         '240p': false,
@@ -61,6 +65,9 @@ describe('Test config API validators', function () {
         '480p': true,
         '720p': false,
         '1080p': false
+      },
+      hls: {
+        enabled: false
       }
     },
     import: {

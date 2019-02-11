@@ -2,6 +2,15 @@
   [value]="followers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
 >
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <input
+        type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+        (keyup)="onSearch($event.target.value)"
+      >
+    </div>
+  </ng-template>
+
   <ng-template pTemplate="header">
     <tr>
       <th i18n style="width: 60px">ID</th>

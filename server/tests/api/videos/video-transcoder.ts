@@ -3,13 +3,13 @@
 import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
-import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoDetails, VideoState } from '../../../../shared/models/videos'
-import { getVideoFileFPS, audio } from '../../../helpers/ffmpeg-utils'
+import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
+import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   doubleFollow,
   flushAndRunMultipleServers,
+  generateHighBitrateVideo,
   getMyVideos,
   getVideo,
   getVideosList,
@@ -19,9 +19,10 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   webtorrentAdd
-} from '../../utils'
-import { join } from 'path'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { extname, join } from 'path'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
 
@@ -121,7 +122,7 @@ describe('Test video transcoding', function () {
       expect(videoDetails.files).to.have.lengthOf(4)
 
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(ffmpeg, path)
+      const probe = await audio.get(path)
 
       if (probe.audioStream) {
         expect(probe.audioStream[ 'codec_name' ]).to.be.equal('aac')
@@ -152,7 +153,7 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const probe = await audio.get(ffmpeg, path)
+      const probe = await audio.get(path)
       expect(probe).to.not.have.property('audioStream')
     }
   })
@@ -177,9 +178,9 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
       const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
-      const fixtureVideoProbe = await audio.get(ffmpeg, fixturePath)
+      const fixtureVideoProbe = await audio.get(fixturePath)
       const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
-      const videoProbe = await audio.get(ffmpeg, path)
+      const videoProbe = await audio.get(path)
       if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
         const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
         expect(omit(videoProbe.audioStream, toOmit)).to.be.deep.equal(omit(fixtureVideoProbe.audioStream, toOmit))
@@ -228,7 +229,7 @@ describe('Test video transcoding', function () {
     }
   })
 
-  it('Should wait transcoding before publishing the video', async function () {
+  it('Should wait for transcoding before publishing the video', async function () {
     this.timeout(80000)
 
     {
@@ -278,6 +279,73 @@ describe('Test video transcoding', function () {
       expect(videoDetails.state.id).to.equal(VideoState.PUBLISHED)
       expect(videoDetails.state.label).to.equal('Published')
       expect(videoDetails.waitTranscoding).to.be.true
+    }
+  })
+
+  it('Should respect maximum bitrate values', async function () {
+    this.timeout(160000)
+
+    let tempFixturePath: string
+
+    {
+      tempFixturePath = await generateHighBitrateVideo()
+
+      const bitrate = await getVideoFileBitrate(tempFixturePath)
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
+    }
+
+    const videoAttributes = {
+      name: 'high bitrate video',
+      description: 'high bitrate video',
+      fixture: tempFixturePath
+    }
+
+    await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+
+      for (const resolution of ['240', '360', '480', '720', '1080']) {
+        const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+        const bitrate = await getVideoFileBitrate(path)
+        const fps = await getVideoFileFPS(path)
+        const resolution2 = await getVideoFileResolution(path)
+
+        expect(resolution2.videoFileResolution.toString()).to.equal(resolution)
+        expect(bitrate).to.be.below(getMaxBitrate(resolution2.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+      }
+    }
+  })
+
+  it('Should accept and transcode additional extensions', async function () {
+    this.timeout(300000)
+
+    for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
+      const videoAttributes = {
+        name: fixture,
+        fixture
+      }
+
+      await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributes)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const res = await getVideosList(server.url)
+
+        const video = res.body.data.find(v => v.name === videoAttributes.name)
+        const res2 = await getVideo(server.url, video.id)
+        const videoDetails = res2.body
+
+        expect(videoDetails.files).to.have.lengthOf(4)
+
+        const magnetUri = videoDetails.files[ 0 ].magnetUri
+        expect(magnetUri).to.contain('.mp4')
+      }
     }
   })
 

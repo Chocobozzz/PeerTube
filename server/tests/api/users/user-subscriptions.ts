@@ -2,18 +2,27 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { createUser, doubleFollow, flushAndRunMultipleServers, follow, getVideosList, unfollow, updateVideo, userLogin } from '../../utils'
-import { killallServers, ServerInfo, uploadVideo } from '../../utils/index'
-import { setAccessTokensToServers } from '../../utils/users/login'
+import {
+  createUser,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  follow,
+  getVideosList,
+  unfollow,
+  updateVideo,
+  userLogin
+} from '../../../../shared/utils'
+import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
+import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
 import { Video, VideoChannel } from '../../../../shared/models/videos'
-import { waitJobs } from '../../utils/server/jobs'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 import {
   addUserSubscription,
   listUserSubscriptions,
   listUserSubscriptionVideos,
   removeUserSubscription,
   getUserSubscription, areSubscriptionsExist
-} from '../../utils/users/user-subscriptions'
+} from '../../../../shared/utils/users/user-subscriptions'
 
 const expect = chai.expect
 

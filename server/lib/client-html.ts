@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as Bluebird from 'bluebird'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, STATIC_PATHS } from '../initializers'
+import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE } from '../initializers'
 import { join } from 'path'
 import { escapeHTML } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
@@ -18,21 +18,13 @@ export class ClientHtml {
     ClientHtml.htmlCache = {}
   }
 
-  static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
-    const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+  static async getDefaultHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
+    const html = await ClientHtml.getIndexHTML(req, res, paramLang)
 
-    const buffer = await readFile(path)
+    let customHtml = ClientHtml.addTitleTag(html)
+    customHtml = ClientHtml.addDescriptionTag(customHtml)
 
-    let html = buffer.toString()
-
-    html = ClientHtml.addTitleTag(html)
-    html = ClientHtml.addDescriptionTag(html)
-    html = ClientHtml.addCustomCSS(html)
-
-    ClientHtml.htmlCache[path] = html
-
-    return html
+    return customHtml
   }
 
   static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
@@ -55,7 +47,26 @@ export class ClientHtml {
       return ClientHtml.getIndexHTML(req, res)
     }
 
-    return ClientHtml.addOpenGraphAndOEmbedTags(html, video)
+    let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
+    customHtml = ClientHtml.addOpenGraphAndOEmbedTags(customHtml, video)
+
+    return customHtml
+  }
+
+  private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
+    const path = ClientHtml.getIndexPath(req, res, paramLang)
+    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+
+    const buffer = await readFile(path)
+
+    let html = buffer.toString()
+
+    html = ClientHtml.addCustomCSS(html)
+
+    ClientHtml.htmlCache[path] = html
+
+    return html
   }
 
   private static getIndexPath (req: express.Request, res: express.Response, paramLang?: string) {
@@ -81,14 +92,18 @@ export class ClientHtml {
     return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
   }
 
-  private static addTitleTag (htmlStringPage: string) {
-    const titleTag = '<title>' + CONFIG.INSTANCE.NAME + '</title>'
+  private static addTitleTag (htmlStringPage: string, title?: string) {
+    let text = title || CONFIG.INSTANCE.NAME
+    if (title) text += ` - ${CONFIG.INSTANCE.NAME}`
+
+    const titleTag = `<title>${text}</title>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.TITLE, titleTag)
   }
 
-  private static addDescriptionTag (htmlStringPage: string) {
-    const descriptionTag = `<meta name="description" content="${CONFIG.INSTANCE.SHORT_DESCRIPTION}" />`
+  private static addDescriptionTag (htmlStringPage: string, description?: string) {
+    const content = description || CONFIG.INSTANCE.SHORT_DESCRIPTION
+    const descriptionTag = `<meta name="description" content="${content}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
   }
@@ -100,8 +115,8 @@ export class ClientHtml {
   }
 
   private static addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
-    const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
-    const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+    const previewUrl = CONFIG.WEBSERVER.URL + video.getPreviewStaticPath()
+    const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 
     const videoNameEscaped = escapeHTML(video.name)
     const videoDescriptionEscaped = escapeHTML(video.description)
@@ -172,8 +187,8 @@ export class ClientHtml {
     // Schema.org
     tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
 
-    // SEO
-    tagsString += `<link rel="canonical" href="${videoUrl}" />`
+    // SEO, use origin video url so Google does not index remote videos
+    tagsString += `<link rel="canonical" href="${video.url}" />`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.OPENGRAPH_AND_OEMBED, tagsString)
   }

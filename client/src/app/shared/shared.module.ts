@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
 import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
-import { MarkdownService } from '@app/videos/shared'
 
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
@@ -25,7 +24,7 @@ import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
 import { VideoOwnershipService } from './video-ownership'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
-import { VideoFeedComponent } from './video/video-feed.component'
+import { FeedComponent } from './video/feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 import { AccountService } from '@app/shared/account/account.service'
@@ -34,16 +33,19 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import {
   CustomConfigValidatorsService,
+  InstanceValidatorsService,
   LoginValidatorsService,
   ReactiveFileComponent,
   ResetPasswordValidatorsService,
+  TextareaAutoResizeDirective,
   UserValidatorsService,
   VideoAbuseValidatorsService,
+  VideoAcceptOwnershipValidatorsService,
   VideoBlacklistValidatorsService,
+  VideoChangeOwnershipValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
-  VideoValidatorsService,
-  VideoChangeOwnershipValidatorsService, VideoAcceptOwnershipValidatorsService
+  VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -53,11 +55,20 @@ import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.c
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
 import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { SubscribeButtonComponent, RemoteSubscribeComponent, UserSubscriptionService } from '@app/shared/user-subscription'
+import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
+import { BlocklistService } from '@app/shared/blocklist'
+import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
+import { UserHistoryService } from '@app/shared/users/user-history.service'
+import { UserNotificationService } from '@app/shared/users/user-notification.service'
+import { UserNotificationsComponent } from '@app/shared/users/user-notifications.component'
+import { InstanceService } from '@app/shared/instance/instance.service'
+import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
+import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
+import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
 
 @NgModule({
   imports: [
@@ -81,7 +92,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
@@ -91,6 +102,7 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     FromNowPipe,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    TextareaAutoResizeDirective,
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
@@ -98,7 +110,11 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
-    UserModerationDropdownComponent
+    UserModerationDropdownComponent,
+    TopMenuDropdownComponent,
+    UserNotificationsComponent,
+    ConfirmComponent,
+    GlobalIconComponent
   ],
 
   exports: [
@@ -121,13 +137,14 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
-    VideoFeedComponent,
+    FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    TextareaAutoResizeDirective,
     HelpComponent,
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
@@ -136,6 +153,10 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     InstanceFeaturesTableComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
+    TopMenuDropdownComponent,
+    UserNotificationsComponent,
+    ConfirmComponent,
+    GlobalIconComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -152,7 +173,6 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     UserService,
     VideoService,
     AccountService,
-    MarkdownService,
     VideoChannelService,
     VideoCaptionService,
     VideoImportService,
@@ -172,9 +192,19 @@ import { UserModerationDropdownComponent } from '@app/shared/moderation/user-mod
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,
+    InstanceValidatorsService,
+    BlocklistService,
+    UserHistoryService,
+    InstanceService,
+
+    MarkdownService,
+    LinkifierService,
+    HtmlRendererService,
 
     I18nPrimengCalendarService,
     ScreenService,
+
+    UserNotificationService,
 
     I18n
   ]

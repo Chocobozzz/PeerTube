@@ -29,6 +29,11 @@ import { VideoViewModel } from '../models/video/video-views'
 import { VideoChangeOwnershipModel } from '../models/video/video-change-ownership'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { UserVideoHistoryModel } from '../models/account/user-video-history'
+import { AccountBlocklistModel } from '../models/account/account-blocklist'
+import { ServerBlocklistModel } from '../models/server/server-blocklist'
+import { UserNotificationModel } from '../models/account/user-notification'
+import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -91,7 +96,12 @@ async function initDatabaseModels (silent: boolean) {
     VideoImportModel,
     VideoViewModel,
     VideoRedundancyModel,
-    UserVideoHistoryModel
+    UserVideoHistoryModel,
+    AccountBlocklistModel,
+    ServerBlocklistModel,
+    UserNotificationModel,
+    UserNotificationSettingModel,
+    VideoStreamingPlaylistModel
   ])
 
   // Check extensions exist in the database
@@ -115,25 +125,27 @@ export {
 // ---------------------------------------------------------------------------
 
 async function checkPostgresExtensions () {
-  const extensions = [
-    'pg_trgm',
-    'unaccent'
+  const promises = [
+    checkPostgresExtension('pg_trgm'),
+    checkPostgresExtension('unaccent')
   ]
 
-  for (const extension of extensions) {
-    const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
-    const [ res ] = await sequelizeTypescript.query(query, { raw: true })
+  return Promise.all(promises)
+}
 
-    if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
-      // Try to create the extension ourself
-      try {
-        await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
+async function checkPostgresExtension (extension: string) {
+  const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
+  const [ res ] = await sequelizeTypescript.query(query, { raw: true })
 
-      } catch {
-        const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
-          `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`
-        throw new Error(errorMessage)
-      }
+  if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
+    // Try to create the extension ourself
+    try {
+      await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
+
+    } catch {
+      const errorMessage = `You need to enable ${extension} extension in PostgreSQL. ` +
+        `You can do so by running 'CREATE EXTENSION ${extension};' as a PostgreSQL super user in ${CONFIG.DATABASE.DBNAME} database.`
+      throw new Error(errorMessage)
     }
   }
 }

@@ -1,7 +1,7 @@
 import * as validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
 import { peertubeTruncate } from '../../core-utils'
-import { exists, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
+import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
   isVideoDurationValid,
   isVideoNameValid,
@@ -12,27 +12,10 @@ import {
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { VideoState } from '../../../../shared/models/videos'
-import { isVideoAbuseReasonValid } from '../video-abuses'
-
-function sanitizeAndCheckVideoTorrentCreateActivity (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    sanitizeAndCheckVideoTorrentObject(activity.object)
-}
 
 function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     sanitizeAndCheckVideoTorrentObject(activity.object)
-}
-
-function isVideoTorrentDeleteActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Delete')
-}
-
-function isVideoFlagValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    activity.object.type === 'Flag' &&
-    isVideoAbuseReasonValid(activity.object.content) &&
-    isActivityPubUrlValid(activity.object.object)
 }
 
 function isActivityPubVideoDurationValid (value: string) {
@@ -83,32 +66,35 @@ function isRemoteVideoUrlValid (url: any) {
 
   return url.type === 'Link' &&
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
+      // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
+      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mediaType || url.mimeType) !== -1 &&
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.height + '', { min: 0 }) &&
       validator.isInt(url.size + '', { min: 0 }) &&
       (!url.fps || validator.isInt(url.fps + '', { min: -1 }))
     ) ||
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
+      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mediaType || url.mimeType) !== -1 &&
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.height + '', { min: 0 })
     ) ||
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mimeType) !== -1 &&
+      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mediaType || url.mimeType) !== -1 &&
       validator.isLength(url.href, { min: 5 }) &&
       validator.isInt(url.height + '', { min: 0 })
+    ) ||
+    (
+      (url.mediaType || url.mimeType) === 'application/x-mpegURL' &&
+      isActivityPubUrlValid(url.href) &&
+      isArray(url.tag)
     )
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  sanitizeAndCheckVideoTorrentCreateActivity,
   sanitizeAndCheckVideoTorrentUpdateActivity,
-  isVideoTorrentDeleteActivityValid,
   isRemoteStringIdentifierValid,
-  isVideoFlagValid,
   sanitizeAndCheckVideoTorrentObject,
   isRemoteVideoUrlValid
 }

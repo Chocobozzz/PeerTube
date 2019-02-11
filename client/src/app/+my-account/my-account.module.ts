@@ -1,6 +1,7 @@
 import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
 import { AutoCompleteModule } from 'primeng/autocomplete'
+import { InputSwitchModule } from 'primeng/inputswitch'
 import { SharedModule } from '../shared'
 import { MyAccountRoutingModule } from './my-account-routing.module'
 import { MyAccountChangePasswordComponent } from './my-account-settings/my-account-change-password/my-account-change-password.component'
@@ -19,6 +20,11 @@ import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-i
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settings/my-account-danger-zone'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
+import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
+import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
+import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
+import { MyAccountNotificationsComponent } from '@app/+my-account/my-account-notifications/my-account-notifications.component'
+import { MyAccountNotificationPreferencesComponent } from '@app/+my-account/my-account-settings/my-account-notification-preferences'
 
 @NgModule({
   imports: [
@@ -26,7 +32,8 @@ import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-sub
     MyAccountRoutingModule,
     AutoCompleteModule,
     SharedModule,
-    TableModule
+    TableModule,
+    InputSwitchModule
   ],
 
   declarations: [
@@ -45,7 +52,12 @@ import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-sub
     ActorAvatarInfoComponent,
     MyAccountVideoImportsComponent,
     MyAccountDangerZoneComponent,
-    MyAccountSubscriptionsComponent
+    MyAccountSubscriptionsComponent,
+    MyAccountBlocklistComponent,
+    MyAccountServerBlocklistComponent,
+    MyAccountHistoryComponent,
+    MyAccountNotificationsComponent,
+    MyAccountNotificationPreferencesComponent
   ],
 
   exports: [

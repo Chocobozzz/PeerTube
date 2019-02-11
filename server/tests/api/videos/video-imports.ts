@@ -14,9 +14,9 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
-import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../utils/videos/video-imports'
+} from '../../../../shared/utils'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../../../shared/utils/videos/video-imports'
 
 const expect = chai.expect
 
@@ -30,7 +30,7 @@ describe('Test video imports', function () {
     const videoHttp: VideoDetails = resHttp.body
 
     expect(videoHttp.name).to.equal('small video - youtube')
-    expect(videoHttp.category.label).to.equal('News')
+    expect(videoHttp.category.label).to.equal('News & Politics')
     expect(videoHttp.licence.label).to.equal('Attribution')
     expect(videoHttp.language.label).to.equal('Unknown')
     expect(videoHttp.nsfw).to.be.false

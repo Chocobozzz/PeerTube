@@ -6,10 +6,11 @@ import { join } from 'path'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
-import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../tests/utils'
+import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/utils/index'
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
+import { sha256 } from '../helpers/core-utils'
 import { safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { getSettings, netrc } from './cli'
 
@@ -57,6 +58,7 @@ getSettings()
         settings.remotes[settings.default] :
         settings.remotes[0]
     }
+
     if (!program['username']) program['username'] = netrc.machines[program['url']].login
     if (!program['password']) program['password'] = netrc.machines[program['url']].password
   }
@@ -68,12 +70,19 @@ getSettings()
     process.exit(-1)
   }
 
+  removeEndSlashes(program['url'])
+  removeEndSlashes(program['targetUrl'])
+
   const user = {
     username: program['username'],
     password: program['password']
   }
 
-  run(user, program['url']).catch(err => console.error(err))
+  run(user, program['url'])
+    .catch(err => {
+      console.error(err)
+      process.exit(-1)
+    })
 })
 
 async function promptPassword () {
@@ -107,8 +116,12 @@ async function run (user, url: string) {
     secret: res.body.client_secret
   }
 
-  const res2 = await login(url, client, user)
-  accessToken = res2.body.access_token
+  try {
+    const res = await login(program[ 'url' ], client, user)
+    accessToken = res.body.access_token
+  } catch (err) {
+    throw new Error('Cannot authenticate. Please check your username/password.')
+  }
 
   const youtubeDL = await safeGetYoutubeDL()
 
@@ -133,8 +146,7 @@ async function run (user, url: string) {
       await processVideo(info, program['language'], processOptions.cwd, url, user)
     }
 
-    // https://www.youtube.com/watch?v=2Upx39TBc1s
-    console.log('I\'m finished!')
+    console.log('Video/s for user %s imported: %s', program['username'], program['targetUrl'])
     process.exit(0)
   })
 }
@@ -155,7 +167,7 @@ function processVideo (info: any, languageCode: string, cwd: string, url: string
       return res()
     }
 
-    const path = join(cwd, new Date().getTime() + '.mp4')
+    const path = join(cwd, sha256(videoInfo.url) + '.mp4')
 
     console.log('Downloading video "%s"...', videoInfo.title)
 
@@ -192,7 +204,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
 
   let thumbnailfile
   if (videoInfo.thumbnail) {
-    thumbnailfile = join(cwd, 'thumbnail.jpg')
+    thumbnailfile = join(cwd, sha256(videoInfo.thumbnail) + '.jpg')
 
     await doRequestAndSaveToFile({
       method: 'GET',
@@ -321,4 +333,10 @@ function isNSFW (info: any) {
   if (info.age_limit && info.age_limit >= 16) return true
 
   return false
+}
+
+function removeEndSlashes (url: string) {
+  while (url.endsWith('/')) {
+    url.slice(0, -1)
+  }
 }

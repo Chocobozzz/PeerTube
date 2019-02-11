@@ -1,5 +1,6 @@
 export interface DislikeObject {
-  type: 'Dislike',
+  id: string
+  type: 'Dislike'
   actor: string
   object: string
 }

@@ -8,7 +8,7 @@ import { hmrBootstrap } from './hmr'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { buildFileLocale } from '../../shared'
 
-let providers = []
+let providers: any[] = []
 if (environment.production) {
   enableProdMode()
 }
@@ -34,7 +34,7 @@ const bootstrap = () => platformBrowserDynamic()
     //     .catch(err => console.error('Cannot register service worker.', err))
     // }
 
-    if (navigator.serviceWorker) {
+    if (navigator.serviceWorker && typeof navigator.serviceWorker.getRegistrations === 'function') {
       navigator.serviceWorker.getRegistrations()
         .then(registrations => {
           for (const registration of registrations) {

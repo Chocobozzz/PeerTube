@@ -1,38 +1,20 @@
-import {
-  Account as AccountServerModel,
-  hasUserRight,
-  User as UserServerModel,
-  UserRight,
-  UserRole,
-  VideoChannel
-} from '../../../../../shared'
+import { hasUserRight, User as UserServerModel, UserNotificationSetting, UserRight, UserRole, VideoChannel } from '../../../../../shared'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 
-export type UserConstructorHash = {
-  id: number,
-  username: string,
-  email: string,
-  role: UserRole,
-  videoQuota?: number,
-  videoQuotaDaily?: number,
-  nsfwPolicy?: NSFWPolicyType,
-  autoPlayVideo?: boolean,
-  createdAt?: Date,
-  account?: AccountServerModel,
-  videoChannels?: VideoChannel[]
-
-  blocked?: boolean
-  blockedReason?: string
-}
 export class User implements UserServerModel {
   id: number
   username: string
   email: string
+  emailVerified: boolean
   role: UserRole
   nsfwPolicy: NSFWPolicyType
+
+  webTorrentEnabled: boolean
   autoPlayVideo: boolean
+  videosHistoryEnabled: boolean
+
   videoQuota: number
   videoQuotaDaily: number
   account: Account
@@ -42,7 +24,9 @@ export class User implements UserServerModel {
   blocked: boolean
   blockedReason?: string
 
-  constructor (hash: UserConstructorHash) {
+  notificationSettings?: UserNotificationSetting
+
+  constructor (hash: Partial<UserServerModel>) {
     this.id = hash.id
     this.username = hash.username
     this.email = hash.email
@@ -52,10 +36,14 @@ export class User implements UserServerModel {
     this.videoQuota = hash.videoQuota
     this.videoQuotaDaily = hash.videoQuotaDaily
     this.nsfwPolicy = hash.nsfwPolicy
+    this.webTorrentEnabled = hash.webTorrentEnabled
+    this.videosHistoryEnabled = hash.videosHistoryEnabled
     this.autoPlayVideo = hash.autoPlayVideo
     this.createdAt = hash.createdAt
     this.blocked = hash.blocked
     this.blockedReason = hash.blockedReason
+
+    this.notificationSettings = hash.notificationSettings
 
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)

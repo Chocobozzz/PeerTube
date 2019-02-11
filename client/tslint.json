@@ -7,10 +7,18 @@
     "max-line-length": [true, 140],
     "no-floating-promises": false,
     "no-unused-variable": false, // Memory issues
-    "member-ordering": [true,
-      "public-before-private",
-      "static-before-instance",
-      "variables-before-functions"
+    "member-ordering": [true, {
+      "order": [
+        "public-static-field",
+        "private-static-field",
+        "public-instance-field",
+        "private-instance-field",
+        "public-constructor",
+        "private-constructor",
+        "public-instance-method",
+        "protected-instance-method",
+        "private-instance-method"
+        ]}
     ],
 
     "angular-whitespace": [true, "check-interpolation", "check-semicolon"],

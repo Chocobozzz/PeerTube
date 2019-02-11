@@ -88,7 +88,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
   })
   Video: VideoModel
 
-  static load (actorId: number, videoId: number, t: Sequelize.Transaction) {
+  static load (actorId: number, videoId: number, t?: Sequelize.Transaction) {
     return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
       where: {
         actorId,

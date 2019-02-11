@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { Location } from '@angular/common'
-import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoSortField } from '../../shared/video/sort-field.type'
@@ -10,6 +9,8 @@ import { VideoService } from '../../shared/video/video.service'
 import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { UserRight } from '../../../../../shared/models/users'
+import { Notifier } from '@app/core'
 
 @Component({
   selector: 'my-videos-local',
@@ -25,7 +26,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   constructor (
     protected router: Router,
     protected route: ActivatedRoute,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected authService: AuthService,
     protected location: Location,
     protected i18n: I18n,
@@ -39,6 +40,11 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
 
   ngOnInit () {
     super.ngOnInit()
+
+    if (this.authService.isLoggedIn()) {
+      const user = this.authService.getUser()
+      this.displayModerationBlock = user.hasRight(UserRight.SEE_ALL_VIDEOS)
+    }
 
     this.generateSyndicationList()
   }
@@ -55,5 +61,11 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
 
   generateSyndicationList () {
     this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, this.filter, this.categoryOneOf)
+  }
+
+  toggleModerationDisplay () {
+    this.filter = this.filter === 'local' ? 'all-local' as 'all-local' : 'local' as 'local'
+
+    this.reloadVideos()
   }
 }

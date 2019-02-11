@@ -1,6 +1,6 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import { CONFIG, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
+import { CONFIG, HLS_PLAYLIST_DIRECTORY, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
 import { VideosPreviewCache } from '../lib/cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
@@ -34,16 +34,28 @@ staticRouter.use(
 )
 
 // Videos path for webseeding
-const videosPhysicalPath = CONFIG.STORAGE.VIDEOS_DIR
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(videosPhysicalPath)
+  express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
 )
+staticRouter.use(
+  STATIC_PATHS.REDUNDANCY,
+  cors(),
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
+)
+
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(downloadVideoFile)
+)
+
+// HLS
+staticRouter.use(
+  STATIC_PATHS.PLAYLISTS.HLS,
+  cors(),
+  express.static(HLS_PLAYLIST_DIRECTORY, { fallthrough: false }) // 404 if the file does not exist
 )
 
 // Thumbnails path for express
@@ -128,6 +140,12 @@ staticRouter.use('/.well-known/dnt-policy.txt',
 staticRouter.use('/.well-known/dnt/',
   (_, res: express.Response) => {
     res.json({ tracking: 'N' })
+  }
+)
+
+staticRouter.use('/.well-known/change-password',
+  (_, res: express.Response) => {
+    res.redirect('/my-account/settings')
   }
 )
 

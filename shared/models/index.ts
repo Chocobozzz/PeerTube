@@ -1,6 +1,7 @@
 export * from './activitypub'
 export * from './actors'
 export * from './avatars'
+export * from './blocklist'
 export * from './redundancy'
 export * from './users'
 export * from './videos'

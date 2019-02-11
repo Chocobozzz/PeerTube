@@ -32,8 +32,10 @@ redis:
 
 # From the project root directory
 storage:
+  tmp: '../data/tmp/'
   avatars: '../data/avatars/'
   videos: '../data/videos/'
+  redundancy: '../data/redundancy/'
   logs: '../data/logs/'
   previews: '../data/previews/'
   thumbnails: '../data/thumbnails/'

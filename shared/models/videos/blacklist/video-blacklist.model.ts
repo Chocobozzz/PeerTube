@@ -2,6 +2,7 @@ export interface VideoBlacklist {
   id: number
   createdAt: Date
   updatedAt: Date
+  unfederated: boolean
   reason?: string
 
   video: {

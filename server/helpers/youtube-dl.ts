@@ -1,7 +1,7 @@
 import { truncate } from 'lodash'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers'
 import { logger } from './logger'
-import { generateVideoTmpPath } from './utils'
+import { generateVideoImportTmpPath } from './utils'
 import { join } from 'path'
 import { root } from './core-utils'
 import { ensureDir, writeFile, remove } from 'fs-extra'
@@ -24,10 +24,10 @@ const processOptions = {
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>(async (res, rej) => {
-    const options = opts || [ '-j', '--flat-playlist' ]
+    const args = opts || [ '-j', '--flat-playlist' ]
 
     const youtubeDL = await safeGetYoutubeDL()
-    youtubeDL.getInfo(url, options, (err, info) => {
+    youtubeDL.getInfo(url, args, processOptions, (err, info) => {
       if (err) return rej(err)
       if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
 
@@ -40,7 +40,7 @@ function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo>
 }
 
 function downloadYoutubeDLVideo (url: string, timeout: number) {
-  const path = generateVideoTmpPath(url)
+  const path = generateVideoImportTmpPath(url)
   let timer
 
   logger.info('Importing youtubeDL video %s', url)

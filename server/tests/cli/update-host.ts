@@ -3,8 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
-import { waitJobs } from '../utils/server/jobs'
-import { addVideoCommentThread } from '../utils/videos/video-comments'
+import { waitJobs } from '../../../shared/utils/server/jobs'
+import { addVideoCommentThread } from '../../../shared/utils/videos/video-comments'
 import {
   addVideoChannel,
   createUser,
@@ -21,8 +21,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../utils'
-import { getAccountsList } from '../utils/users/accounts'
+} from '../../../shared/utils'
+import { getAccountsList } from '../../../shared/utils/users/accounts'
 
 const expect = chai.expect
 
@@ -86,6 +86,13 @@ describe('Test update host scripts', function () {
       const { body } = await makeActivityPubGetRequest(server.url, '/videos/watch/' + video.uuid)
 
       expect(body.id).to.equal('http://localhost:9002/videos/watch/' + video.uuid)
+
+      const res = await getVideo(server.url, video.uuid)
+      const videoDetails: VideoDetails = res.body
+
+      expect(videoDetails.trackerUrls[0]).to.include(server.host)
+      expect(videoDetails.streamingPlaylists[0].playlistUrl).to.include(server.host)
+      expect(videoDetails.streamingPlaylists[0].segmentsSha256Url).to.include(server.host)
     }
   })
 
@@ -100,7 +107,7 @@ describe('Test update host scripts', function () {
     }
   })
 
-  it('Should have update accounts url', async function () {
+  it('Should have updated accounts url', async function () {
     const res = await getAccountsList(server.url)
     expect(res.body.total).to.equal(3)
 
@@ -112,7 +119,7 @@ describe('Test update host scripts', function () {
     }
   })
 
-  it('Should update torrent hosts', async function () {
+  it('Should have updated torrent hosts', async function () {
     this.timeout(30000)
 
     const res = await getVideosList(server.url)

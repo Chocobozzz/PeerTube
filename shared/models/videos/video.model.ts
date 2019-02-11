@@ -5,6 +5,7 @@ import { VideoChannel } from './channel/video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoConstant } from './video-constant.model'
+import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 
 export interface VideoFile {
   magnetUri: string
@@ -24,7 +25,7 @@ export interface VideoChannelAttribute {
   displayName: string
   url: string
   host: string
-  avatar: Avatar
+  avatar?: Avatar
 }
 
 export interface AccountAttribute {
@@ -34,7 +35,7 @@ export interface AccountAttribute {
   displayName: string
   url: string
   host: string
-  avatar: Avatar
+  avatar?: Avatar
 }
 
 export interface Video {
@@ -87,4 +88,8 @@ export interface VideoDetails extends Video {
   // Not optional in details (unlike in Video)
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
+
+  trackerUrls: string[]
+
+  streamingPlaylists: VideoStreamingPlaylist[]
 }

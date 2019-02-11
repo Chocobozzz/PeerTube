@@ -5,16 +5,18 @@ import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript, CONFIG } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { importVideoFile, transcodeOriginalVideofile, optimizeOriginalVideofile } from '../../video-transcoding'
+import { generateHlsPlaylist, importVideoFile, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
+import { Notifier } from '../../notifier'
 
 export type VideoFilePayload = {
   videoUUID: string
-  isNewVideo?: boolean
   resolution?: VideoResolution
+  isNewVideo?: boolean
   isPortraitMode?: boolean
+  generateHlsPlaylist?: boolean
 }
 
 export type VideoFileImportPayload = {
@@ -50,34 +52,51 @@ async function processVideoFile (job: Bull.Job) {
     return undefined
   }
 
-  // Transcoding in other resolution
-  if (payload.resolution) {
+  if (payload.generateHlsPlaylist) {
+    await generateHlsPlaylist(video, payload.resolution, payload.isPortraitMode || false)
+
+    await retryTransactionWrapper(onHlsPlaylistGenerationSuccess, video)
+  } else if (payload.resolution) { // Transcoding in other resolution
     await transcodeOriginalVideofile(video, payload.resolution, payload.isPortraitMode || false)
 
-    await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video)
+    await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video, payload)
   } else {
-    await optimizeOriginalVideofile(video)
+    await optimizeVideofile(video)
 
-    await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload.isNewVideo)
+    await retryTransactionWrapper(onVideoFileOptimizerSuccess, video, payload)
   }
 
   return video
 }
 
-async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
+async function onHlsPlaylistGenerationSuccess (video: VideoModel) {
   if (video === undefined) return undefined
 
-  return sequelizeTypescript.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
-    let isNewVideo = false
+    // If the video was not published, we consider it is a new one for other instances
+    await federateVideoIfNeeded(videoDatabase, false, t)
+  })
+}
+
+async function onVideoFileTranscoderOrImportSuccess (video: VideoModel, payload?: VideoFilePayload) {
+  if (video === undefined) return undefined
+
+  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
+    // Maybe the video changed in database, refresh it
+    let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+    // Video does not exist anymore
+    if (!videoDatabase) return undefined
+
+    let videoPublished = false
 
     // We transcoded the video file in another format, now we can publish it
     if (videoDatabase.state !== VideoState.PUBLISHED) {
-      isNewVideo = true
+      videoPublished = true
 
       videoDatabase.state = VideoState.PUBLISHED
       videoDatabase.publishedAt = new Date()
@@ -85,21 +104,29 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
     }
 
     // If the video was not published, we consider it is a new one for other instances
-    await federateVideoIfNeeded(videoDatabase, isNewVideo, t)
+    await federateVideoIfNeeded(videoDatabase, videoPublished, t)
 
-    return undefined
+    return { videoDatabase, videoPublished }
   })
+
+  // don't notify prior to scheduled video update
+  if (videoPublished && !videoDatabase.ScheduleVideoUpdate) {
+    Notifier.Instance.notifyOnNewVideo(videoDatabase)
+    Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
+  }
+
+  await createHlsJobIfEnabled(payload)
 }
 
-async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boolean) {
-  if (video === undefined) return undefined
+async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: VideoFilePayload) {
+  if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
-  const { videoFileResolution } = await video.getOriginalFileResolution()
+  const { videoFileResolution } = await videoArg.getOriginalFileResolution()
 
-  return sequelizeTypescript.transaction(async t => {
+  const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
+    let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
@@ -110,8 +137,10 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
       { resolutions: resolutionsEnabled }
     )
 
+    let videoPublished = false
+
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Bluebird<any>[] = []
+      const tasks: Bluebird<Bull.Job<any>>[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {
@@ -127,15 +156,27 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
 
       logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
     } else {
-      // No transcoding to do, it's now published
-      video.state = VideoState.PUBLISHED
-      video = await video.save({ transaction: t })
+      videoPublished = true
 
-      logger.info('No transcoding jobs created for video %s (no resolutions).', video.uuid)
+      // No transcoding to do, it's now published
+      videoDatabase.state = VideoState.PUBLISHED
+      videoDatabase = await videoDatabase.save({ transaction: t })
+
+      logger.info('No transcoding jobs created for video %s (no resolutions).', videoDatabase.uuid, { privacy: videoDatabase.privacy })
     }
 
-    return federateVideoIfNeeded(video, isNewVideo, t)
+    await federateVideoIfNeeded(videoDatabase, payload.isNewVideo, t)
+
+    return { videoDatabase, videoPublished }
   })
+
+  // don't notify prior to scheduled video update
+  if (!videoDatabase.ScheduleVideoUpdate) {
+    if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+    if (videoPublished) Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
+  }
+
+  await createHlsJobIfEnabled(Object.assign({}, payload, { resolution: videoDatabase.getOriginalFile().resolution }))
 }
 
 // ---------------------------------------------------------------------------
@@ -143,4 +184,21 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
 export {
   processVideoFile,
   processVideoFileImport
+}
+
+// ---------------------------------------------------------------------------
+
+function createHlsJobIfEnabled (payload?: VideoFilePayload) {
+  // Generate HLS playlist?
+  if (payload && CONFIG.TRANSCODING.HLS.ENABLED) {
+    const hlsTranscodingPayload = {
+      videoUUID: payload.videoUUID,
+      resolution: payload.resolution,
+      isPortraitMode: payload.isPortraitMode,
+
+      generateHlsPlaylist: true
+    }
+
+    return JobQueue.Instance.createJob({ type: 'video-file', payload: hlsTranscodingPayload })
+  }
 }

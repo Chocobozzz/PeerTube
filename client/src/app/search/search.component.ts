@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, RedirectService } from '@app/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -40,10 +39,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private metaService: MetaService,
-    private redirectService: RedirectService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private searchService: SearchService,
-    private authService: AuthService
+    private authService: AuthService,
+    private serverService: ServerService
   ) { }
 
   ngOnInit () {
@@ -69,12 +68,16 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.search()
       },
 
-      err => this.notificationsService.error('Error', err.text)
+      err => this.notifier.error(err.text)
     )
   }
 
   ngOnDestroy () {
     if (this.subActivatedRoute) this.subActivatedRoute.unsubscribe()
+  }
+
+  isVideoBlur (video: Video) {
+    return video.isVideoNSFWForUser(this.authService.getUser(), this.serverService.getConfig())
   }
 
   isVideoChannel (d: VideoChannel | Video): d is VideoChannel {
@@ -113,9 +116,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.firstSearch = false
         },
 
-        error => {
-          this.notificationsService.error(this.i18n('Error'), error.message)
-        }
+        err => this.notifier.error(err.message)
       )
 
   }
@@ -147,7 +148,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private updateTitle () {
-    this.metaService.setTitle(this.i18n('Search') + ' ' + this.currentSearch)
+    const suffix = this.currentSearch ? ' ' + this.currentSearch : ''
+    this.metaService.setTitle(this.i18n('Search') + suffix)
   }
 
   private updateUrlFromAdvancedSearch () {

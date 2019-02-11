@@ -23,7 +23,7 @@ async function getSettings () {
       if (err) {
         return rej(err)
       }
-      return res(data || settings)
+      return res(Object.keys(data).length === 0 ? settings : data)
     })
   })
 }

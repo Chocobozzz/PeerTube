@@ -127,22 +127,6 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static updateActorFollowsScore (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction | undefined) {
-    if (goodInboxes.length === 0 && badInboxes.length === 0) return
-
-    logger.info('Updating %d good actor follows and %d bad actor follows scores.', goodInboxes.length, badInboxes.length)
-
-    if (goodInboxes.length !== 0) {
-      ActorFollowModel.incrementScores(goodInboxes, ACTOR_FOLLOW_SCORE.BONUS, t)
-        .catch(err => logger.error('Cannot increment scores of good actor follows.', { err }))
-    }
-
-    if (badInboxes.length !== 0) {
-      ActorFollowModel.incrementScores(badInboxes, ACTOR_FOLLOW_SCORE.PENALTY, t)
-        .catch(err => logger.error('Cannot decrement scores of bad actor follows.', { err }))
-    }
-  }
-
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Sequelize.Transaction) {
     const query = {
       where: {
@@ -280,7 +264,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  static listFollowingForApi (id: number, start: number, count: number, sort: string) {
+  static listFollowingForApi (id: number, start: number, count: number, sort: string, search?: string) {
     const query = {
       distinct: true,
       offset: start,
@@ -299,7 +283,17 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
-          include: [ ServerModel ]
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: search ? {
+                host: {
+                  [Sequelize.Op.iLike]: '%' + search + '%'
+                }
+              } : undefined
+            }
+          ]
         }
       ]
     }
@@ -313,7 +307,50 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listSubscriptionsForApi (id: number, start: number, count: number, sort: string) {
+  static listFollowersForApi (actorId: number, start: number, count: number, sort: string, search?: string) {
+    const query = {
+      distinct: true,
+      offset: start,
+      limit: count,
+      order: getSort(sort),
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          as: 'ActorFollower',
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: search ? {
+                host: {
+                  [ Sequelize.Op.iLike ]: '%' + search + '%'
+                }
+              } : undefined
+            }
+          ]
+        },
+        {
+          model: ActorModel,
+          as: 'ActorFollowing',
+          required: true,
+          where: {
+            id: actorId
+          }
+        }
+      ]
+    }
+
+    return ActorFollowModel.findAndCountAll(query)
+                           .then(({ rows, count }) => {
+                             return {
+                               data: rows,
+                               total: count
+                             }
+                           })
+  }
+
+  static listSubscriptionsForApi (actorId: number, start: number, count: number, sort: string) {
     const query = {
       attributes: [],
       distinct: true,
@@ -321,7 +358,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       limit: count,
       order: getSort(sort),
       where: {
-        actorId: id
+        actorId: actorId
       },
       include: [
         {
@@ -370,39 +407,6 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                            })
   }
 
-  static listFollowersForApi (id: number, start: number, count: number, sort: string) {
-    const query = {
-      distinct: true,
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollower',
-          include: [ ServerModel ]
-        },
-        {
-          model: ActorModel,
-          as: 'ActorFollowing',
-          required: true,
-          where: {
-            id
-          }
-        }
-      ]
-    }
-
-    return ActorFollowModel.findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
-  }
-
   static listAcceptedFollowerUrlsForApi (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('followers', actorIds, t, start, count)
   }
@@ -442,6 +446,22 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       totalInstanceFollowing,
       totalInstanceFollowers
     }
+  }
+
+  static updateFollowScore (inboxUrl: string, value: number, t?: Sequelize.Transaction) {
+    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
+      'WHERE id IN (' +
+        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
+        `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+      ')'
+
+    const options = {
+      type: Sequelize.QueryTypes.BULKUPDATE,
+      transaction: t
+    }
+
+    return ActorFollowModel.sequelize.query(query, options)
   }
 
   private static async createListAcceptedFollowForApiQuery (
@@ -489,31 +509,13 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       tasks.push(ActorFollowModel.sequelize.query(query, options))
     }
 
-    const [ followers, [ { total } ] ] = await Promise.all(tasks)
+    const [ followers, [ dataTotal ] ] = await Promise.all(tasks)
     const urls: string[] = followers.map(f => f.url)
 
     return {
       data: urls,
-      total: parseInt(total, 10)
+      total: dataTotal ? parseInt(dataTotal.total, 10) : 0
     }
-  }
-
-  private static incrementScores (inboxUrls: string[], value: number, t: Sequelize.Transaction | undefined) {
-    const inboxUrlsString = inboxUrls.map(url => `'${url}'`).join(',')
-
-    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
-      'WHERE id IN (' +
-        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
-        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
-        'WHERE "actor"."inboxUrl" IN (' + inboxUrlsString + ') OR "actor"."sharedInboxUrl" IN (' + inboxUrlsString + ')' +
-      ')'
-
-    const options = t ? {
-      type: Sequelize.QueryTypes.BULKUPDATE,
-      transaction: t
-    } : undefined
-
-    return ActorFollowModel.sequelize.query(query, options)
   }
 
   private static listBadActorFollows () {

@@ -1,8 +1,7 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
 import { VideoPrivacy, VideoUpdate } from '../../../../../../shared/models/videos'
-import { AuthService, ServerService } from '../../../core'
+import { AuthService, Notifier, ServerService } from '../../../core'
 import { VideoService } from '../../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { LoadingBarService } from '@ngx-loading-bar/core'
@@ -12,20 +11,22 @@ import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { FormValidatorService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoImportService } from '@app/shared/video-import'
+import { scrollToTop } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-import-torrent',
   templateUrl: './video-import-torrent.component.html',
   styleUrls: [
     '../shared/video-edit.component.scss',
-    './video-import-torrent.component.scss'
+    './video-import-torrent.component.scss',
+    './video-send.scss'
   ]
 })
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
-  @ViewChild('torrentfileInput') torrentfileInput
+  @Output() firstStepError = new EventEmitter<void>()
+  @ViewChild('torrentfileInput') torrentfileInput: ElementRef<HTMLInputElement>
 
-  videoFileName: string
   magnetUri = ''
 
   isImportingVideo = false
@@ -33,13 +34,14 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
   isUpdatingVideo = false
 
   video: VideoEdit
+  error: string
 
   protected readonly DEFAULT_VIDEO_PRIVACY = VideoPrivacy.PUBLIC
 
   constructor (
     protected formValidatorService: FormValidatorService,
     protected loadingBar: LoadingBarService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected authService: AuthService,
     protected serverService: ServerService,
     protected videoService: VideoService,
@@ -64,7 +66,7 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
   }
 
   fileChange () {
-    const torrentfile = this.torrentfileInput.nativeElement.files[0] as File
+    const torrentfile = this.torrentfileInput.nativeElement.files[0]
     if (!torrentfile) return
 
     this.importVideo(torrentfile)
@@ -106,7 +108,8 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
       err => {
         this.loadingBar.complete()
         this.isImportingVideo = false
-        this.notificationsService.error(this.i18n('Error'), err.message)
+        this.firstStepError.emit()
+        this.notifier.error(err.message)
       }
     )
   }
@@ -125,14 +128,14 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
         .subscribe(
           () => {
             this.isUpdatingVideo = false
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Video to import updated.'))
+            this.notifier.success(this.i18n('Video to import updated.'))
 
             this.router.navigate([ '/my-account', 'video-imports' ])
           },
 
           err => {
-            this.isUpdatingVideo = false
-            this.notificationsService.error(this.i18n('Error'), err.message)
+            this.error = err.message
+            scrollToTop()
             console.error(err)
           }
         )

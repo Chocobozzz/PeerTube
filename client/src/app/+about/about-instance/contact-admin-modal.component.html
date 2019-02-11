@@ -1,0 +1,50 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Contact {{ instanceName }} administrator</h4>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+
+    <form novalidate [formGroup]="form" (ngSubmit)="sendForm()">
+      <div class="form-group">
+        <label i18n for="fromName">Your name</label>
+        <input
+          type="text" id="fromName"
+          formControlName="fromName" [ngClass]="{ 'input-error': formErrors.fromName }"
+        >
+        <div *ngIf="formErrors.fromName" class="form-error">{{ formErrors.fromName }}</div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="fromEmail">Your email</label>
+        <input
+          type="text" id="fromEmail"
+          formControlName="fromEmail" [ngClass]="{ 'input-error': formErrors['fromEmail'] }"
+        >
+        <div *ngIf="formErrors.fromEmail" class="form-error">{{ formErrors.fromEmail }}</div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="body">Your message</label>
+        <textarea id="body" formControlName="body" [ngClass]="{ 'input-error': formErrors['body'] }">
+        </textarea>
+        <div *ngIf="formErrors.body" class="form-error">{{ formErrors.body }}</div>
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+      <div class="form-group inputs">
+        <span i18n class="action-button action-button-cancel" (click)="hide()">
+          Cancel
+        </span>
+
+        <input
+          type="submit" i18n-value value="Submit" class="action-button-submit"
+          [disabled]="!form.valid"
+        >
+      </div>
+    </form>
+
+  </div>
+</ng-template>

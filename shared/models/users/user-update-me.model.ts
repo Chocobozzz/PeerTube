@@ -4,7 +4,11 @@ export interface UserUpdateMe {
   displayName?: string
   description?: string
   nsfwPolicy?: NSFWPolicyType
+
+  webTorrentEnabled?: boolean
   autoPlayVideo?: boolean
+  videosHistoryEnabled?: boolean
+
   email?: string
   currentPassword?: string
   password?: string

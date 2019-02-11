@@ -13,11 +13,11 @@ import {
   uploadVideo,
   viewVideo,
   wait
-} from '../../utils'
-import { flushTests, setAccessTokensToServers } from '../../utils/index'
-import { getStats } from '../../utils/server/stats'
-import { addVideoCommentThread } from '../../utils/videos/video-comments'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/utils'
+import { flushTests, setAccessTokensToServers } from '../../../../shared/utils/index'
+import { getStats } from '../../../../shared/utils/server/stats'
+import { addVideoCommentThread } from '../../../../shared/utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 
@@ -39,7 +39,7 @@ describe('Test stats (excluding redundancy)', function () {
     }
     await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
 
-    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, {})
+    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
     const videoUUID = resVideo.body.video.uuid
 
     await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'comment')
@@ -60,6 +60,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalLocalVideoComments).to.equal(1)
     expect(data.totalLocalVideos).to.equal(1)
     expect(data.totalLocalVideoViews).to.equal(1)
+    expect(data.totalLocalVideoFilesSize).to.equal(218910)
     expect(data.totalUsers).to.equal(2)
     expect(data.totalVideoComments).to.equal(1)
     expect(data.totalVideos).to.equal(1)
@@ -74,6 +75,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
     expect(data.totalLocalVideoViews).to.equal(0)
+    expect(data.totalLocalVideoFilesSize).to.equal(0)
     expect(data.totalUsers).to.equal(1)
     expect(data.totalVideoComments).to.equal(1)
     expect(data.totalVideos).to.equal(1)

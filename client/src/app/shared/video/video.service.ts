@@ -6,11 +6,11 @@ import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } fr
 import { ResultList } from '../../../../../shared/models/result-list.model'
 import {
   UserVideoRate,
+  UserVideoRateType,
   UserVideoRateUpdate,
   VideoConstant,
   VideoFilter,
   VideoPrivacy,
-  VideoRateType,
   VideoUpdate
 } from '../../../../../shared/models/videos'
 import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
@@ -275,9 +275,9 @@ export class VideoService implements VideosProvider {
 
   loadCompleteDescription (descriptionPath: string) {
     return this.authHttp
-               .get(environment.apiUrl + descriptionPath)
+               .get<{ description: string }>(environment.apiUrl + descriptionPath)
                .pipe(
-                 map(res => res[ 'description' ]),
+                 map(res => res.description),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -333,7 +333,7 @@ export class VideoService implements VideosProvider {
     return privacies
   }
 
-  private setVideoRate (id: number, rateType: VideoRateType) {
+  private setVideoRate (id: number, rateType: UserVideoRateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate'
     const body: UserVideoRateUpdate = {
       rating: rateType

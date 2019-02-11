@@ -8,9 +8,13 @@ import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enu
 import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
   makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, runServer, ServerInfo, setAccessTokensToServers, userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getAccountsList } from '../../utils/users/accounts'
+} from '../../../../shared/utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/utils/requests/check-api-params'
+import { getAccountsList } from '../../../../shared/utils/users/accounts'
 
 const expect = chai.expect
 
@@ -234,7 +238,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(150) })
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -317,8 +321,13 @@ describe('Test videos API validator', function () {
 
     it('Should fail without an incorrect input file', async function () {
       const fields = baseCorrectParams
-      const attaches = {
+      let attaches = {
         'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
+      }
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+
+      attaches = {
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.mkv')
       }
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
@@ -484,7 +493,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long support text', async function () {
-      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(150) })
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

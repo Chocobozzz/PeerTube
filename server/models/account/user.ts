@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import {
-  AfterDelete,
+  AfterDestroy,
   AfterUpdate,
   AllowNull,
   BeforeCreate,
@@ -31,7 +31,9 @@ import {
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserVideosHistoryEnabledValid,
+  isUserWebTorrentEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -42,6 +44,11 @@ import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
 import { NSFW_POLICY_TYPES } from '../../initializers'
 import { clearCacheByUserId } from '../../lib/oauth-model'
+import { UserNotificationSettingModel } from './user-notification-setting'
+import { VideoModel } from '../video/video'
+import { ActorModel } from '../activitypub/actor'
+import { ActorFollowModel } from '../activitypub/actor-follow'
+import { VideoImportModel } from '../video/video-import'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -51,6 +58,10 @@ enum ScopeNames {
   include: [
     {
       model: () => AccountModel,
+      required: true
+    },
+    {
+      model: () => UserNotificationSettingModel,
       required: true
     }
   ]
@@ -62,6 +73,10 @@ enum ScopeNames {
         model: () => AccountModel,
         required: true,
         include: [ () => VideoChannelModel ]
+      },
+      {
+        model: () => UserNotificationSettingModel,
+        required: true
       }
     ]
   }
@@ -109,6 +124,18 @@ export class UserModel extends Model<UserModel> {
 
   @AllowNull(false)
   @Default(true)
+  @Is('UserWebTorrentEnabled', value => throwIfNotValid(value, isUserWebTorrentEnabledValid, 'WebTorrent enabled'))
+  @Column
+  webTorrentEnabled: boolean
+
+  @AllowNull(false)
+  @Default(true)
+  @Is('UserVideosHistoryEnabled', value => throwIfNotValid(value, isUserVideosHistoryEnabledValid, 'Videos history enabled'))
+  @Column
+  videosHistoryEnabled: boolean
+
+  @AllowNull(false)
+  @Default(true)
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
@@ -153,6 +180,19 @@ export class UserModel extends Model<UserModel> {
   })
   Account: AccountModel
 
+  @HasOne(() => UserNotificationSettingModel, {
+    foreignKey: 'userId',
+    onDelete: 'cascade',
+    hooks: true
+  })
+  NotificationSetting: UserNotificationSettingModel
+
+  @HasMany(() => VideoImportModel, {
+    foreignKey: 'userId',
+    onDelete: 'cascade'
+  })
+  VideoImports: VideoImportModel[]
+
   @HasMany(() => OAuthTokenModel, {
     foreignKey: 'userId',
     onDelete: 'cascade'
@@ -172,7 +212,7 @@ export class UserModel extends Model<UserModel> {
   }
 
   @AfterUpdate
-  @AfterDelete
+  @AfterDestroy
   static removeTokenCache (instance: UserModel) {
     return clearCacheByUserId(instance.id)
   }
@@ -181,7 +221,25 @@ export class UserModel extends Model<UserModel> {
     return this.count()
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static listForApi (start: number, count: number, sort: string, search?: string) {
+    let where = undefined
+    if (search) {
+      where = {
+        [Sequelize.Op.or]: [
+          {
+            email: {
+              [Sequelize.Op.iLike]: '%' + search + '%'
+            }
+          },
+          {
+            username: {
+              [ Sequelize.Op.iLike ]: '%' + search + '%'
+            }
+          }
+        ]
+      }
+    }
+
     const query = {
       attributes: {
         include: [
@@ -204,7 +262,8 @@ export class UserModel extends Model<UserModel> {
       },
       offset: start,
       limit: count,
-      order: getSort(sort)
+      order: getSort(sort),
+      where
     }
 
     return UserModel.findAndCountAll(query)
@@ -216,13 +275,12 @@ export class UserModel extends Model<UserModel> {
       })
   }
 
-  static listEmailsWithRight (right: UserRight) {
+  static listWithRight (right: UserRight) {
     const roles = Object.keys(USER_ROLE_LABELS)
       .map(k => parseInt(k, 10) as UserRole)
       .filter(role => hasUserRight(role, right))
 
     const query = {
-      attribute: [ 'email' ],
       where: {
         role: {
           [Sequelize.Op.in]: roles
@@ -230,9 +288,56 @@ export class UserModel extends Model<UserModel> {
       }
     }
 
-    return UserModel.unscoped()
-      .findAll(query)
-      .then(u => u.map(u => u.email))
+    return UserModel.findAll(query)
+  }
+
+  static listUserSubscribersOf (actorId: number) {
+    const query = {
+      include: [
+        {
+          model: UserNotificationSettingModel.unscoped(),
+          required: true
+        },
+        {
+          attributes: [ 'userId' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ ],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: {
+                serverId: null
+              },
+              include: [
+                {
+                  attributes: [ ],
+                  as: 'ActorFollowings',
+                  model: ActorFollowModel.unscoped(),
+                  required: true,
+                  where: {
+                    targetActorId: actorId
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return UserModel.unscoped().findAll(query)
+  }
+
+  static listByUsernames (usernames: string[]) {
+    const query = {
+      where: {
+        username: usernames
+      }
+    }
+
+    return UserModel.findAll(query)
   }
 
   static loadById (id: number) {
@@ -276,6 +381,95 @@ export class UserModel extends Model<UserModel> {
       where: {
         [ Sequelize.Op.or ]: [ { username }, { email } ]
       }
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByVideoId (videoId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          include: [
+            {
+              required: true,
+              attributes: [ 'id' ],
+              model: VideoChannelModel.unscoped(),
+              include: [
+                {
+                  required: true,
+                  attributes: [ 'id' ],
+                  model: VideoModel.unscoped(),
+                  where: {
+                    id: videoId
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByVideoImportId (videoImportId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: VideoImportModel.unscoped(),
+          where: {
+            id: videoImportId
+          }
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByChannelActorId (videoChannelActorId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          include: [
+            {
+              required: true,
+              attributes: [ 'id' ],
+              model: VideoChannelModel.unscoped(),
+              where: {
+                actorId: videoChannelActorId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByAccountActorId (accountActorId: number) {
+    const query = {
+      include: [
+        {
+          required: true,
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          where: {
+            actorId: accountActorId
+          }
+        }
+      ]
     }
 
     return UserModel.findOne(query)
@@ -336,6 +530,8 @@ export class UserModel extends Model<UserModel> {
       email: this.email,
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
+      webTorrentEnabled: this.webTorrentEnabled,
+      videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
@@ -345,6 +541,7 @@ export class UserModel extends Model<UserModel> {
       blocked: this.blocked,
       blockedReason: this.blockedReason,
       account: this.Account.toFormattedJSON(),
+      notificationSettings: this.NotificationSetting ? this.NotificationSetting.toFormattedJSON() : undefined,
       videoChannels: [],
       videoQuotaUsed: videoQuotaUsed !== undefined
             ? parseInt(videoQuotaUsed, 10)

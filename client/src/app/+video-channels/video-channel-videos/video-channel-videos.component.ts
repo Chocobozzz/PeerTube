@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
-import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -13,6 +12,7 @@ import { tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { Notifier } from '@app/core'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -25,7 +25,7 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   marginContent = false // Disable margin
-  currentRoute = '/video-channel/videos'
+  currentRoute = '/video-channels/videos'
   loadOnInit = false
 
   private videoChannel: VideoChannel
@@ -35,7 +35,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     protected router: Router,
     protected route: ActivatedRoute,
     protected authService: AuthService,
-    protected notificationsService: NotificationsService,
+    protected notifier: Notifier,
     protected confirmService: ConfirmService,
     protected location: Location,
     protected screenService: ScreenService,
@@ -55,7 +55,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
-        this.currentRoute = '/video-channel/' + this.videoChannel.uuid + '/videos'
+        this.currentRoute = '/video-channels/' + this.videoChannel.nameWithHost + '/videos'
 
         this.reloadVideos()
         this.generateSyndicationList()

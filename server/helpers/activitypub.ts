@@ -1,11 +1,12 @@
 import * as Bluebird from 'bluebird'
 import * as validator from 'validator'
 import { ResultList } from '../../shared/models'
-import { Activity, ActivityPubActor } from '../../shared/models/activitypub'
+import { Activity } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
-import { signObject } from './peertube-crypto'
+import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
+import { parse } from 'url'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data, {
@@ -14,25 +15,26 @@ function activityPubContextify <T> (data: T) {
       'https://w3id.org/security/v1',
       {
         RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
-        pt: 'https://joinpeertube.org/ns',
-        schema: 'http://schema.org#',
+        pt: 'https://joinpeertube.org/ns#',
+        sc: 'http://schema.org#',
         Hashtag: 'as:Hashtag',
-        uuid: 'schema:identifier',
-        category: 'schema:category',
-        licence: 'schema:license',
-        subtitleLanguage: 'schema:subtitleLanguage',
+        uuid: 'sc:identifier',
+        category: 'sc:category',
+        licence: 'sc:license',
+        subtitleLanguage: 'sc:subtitleLanguage',
         sensitive: 'as:sensitive',
-        language: 'schema:inLanguage',
-        views: 'schema:Number',
-        stats: 'schema:Number',
-        size: 'schema:Number',
-        fps: 'schema:Number',
-        commentsEnabled: 'schema:Boolean',
-        downloadEnabled: 'schema:Boolean',
-        waitTranscoding: 'schema:Boolean',
-        expires: 'schema:expires',
-        support: 'schema:Text',
-        CacheFile: 'pt:CacheFile'
+        language: 'sc:inLanguage',
+        views: 'sc:Number',
+        state: 'sc:Number',
+        size: 'sc:Number',
+        fps: 'sc:Number',
+        commentsEnabled: 'sc:Boolean',
+        downloadEnabled: 'sc:Boolean',
+        waitTranscoding: 'sc:Boolean',
+        expires: 'sc:expires',
+        support: 'sc:Text',
+        CacheFile: 'pt:CacheFile',
+        Infohash: 'pt:Infohash'
       },
       {
         likes: {
@@ -57,16 +59,16 @@ function activityPubContextify <T> (data: T) {
 }
 
 type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Bluebird<ResultList<any>> | Promise<ResultList<any>>
-async function activityPubCollectionPagination (url: string, handler: ActivityPubCollectionPaginationHandler, page?: any) {
+async function activityPubCollectionPagination (baseUrl: string, handler: ActivityPubCollectionPaginationHandler, page?: any) {
   if (!page || !validator.isInt(page)) {
     // We just display the first page URL, we only need the total items
     const result = await handler(0, 1)
 
     return {
-      id: url,
+      id: baseUrl,
       type: 'OrderedCollection',
       totalItems: result.total,
-      first: url + '?page=1'
+      first: baseUrl + '?page=1'
     }
   }
 
@@ -81,19 +83,19 @@ async function activityPubCollectionPagination (url: string, handler: ActivityPu
 
   // There are more results
   if (result.total > page * ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE) {
-    next = url + '?page=' + (page + 1)
+    next = baseUrl + '?page=' + (page + 1)
   }
 
   if (page > 1) {
-    prev = url + '?page=' + (page - 1)
+    prev = baseUrl + '?page=' + (page - 1)
   }
 
   return {
-    id: url + '?page=' + page,
+    id: baseUrl + '?page=' + page,
     type: 'OrderedCollectionPage',
     prev,
     next,
-    partOf: url,
+    partOf: baseUrl,
     orderedItems: result.data,
     totalItems: result.total
   }
@@ -103,19 +105,27 @@ async function activityPubCollectionPagination (url: string, handler: ActivityPu
 function buildSignedActivity (byActor: ActorModel, data: Object) {
   const activity = activityPubContextify(data)
 
-  return signObject(byActor, activity) as Promise<Activity>
+  return signJsonLDObject(byActor, activity) as Promise<Activity>
 }
 
-function getActorUrl (activityActor: string | ActivityPubActor) {
-  if (typeof activityActor === 'string') return activityActor
+function getAPId (activity: string | { id: string }) {
+  if (typeof activity === 'string') return activity
 
-  return activityActor.id
+  return activity.id
+}
+
+function checkUrlsSameHost (url1: string, url2: string) {
+  const idHost = parse(url1).host
+  const actorHost = parse(url2).host
+
+  return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  getActorUrl,
+  checkUrlsSameHost,
+  getAPId,
   activityPubContextify,
   activityPubCollectionPagination,
   buildSignedActivity

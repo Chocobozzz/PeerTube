@@ -38,11 +38,39 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.datepicker.select-month">
+        <source>Select month</source>
+        <target>أختر الشهر</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.datepicker.select-year">
+        <source>Select year</source>
+        <target>أختر السنة</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.pagination.first">
+        <source>««</source>
+        <target>»»</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.first-aria">
         <source>First</source>
         <target>الأول</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.pagination.previous">
+        <source>«</source>
+        <target>»</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria">
@@ -52,11 +80,25 @@
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.pagination.next">
+        <source>»</source>
+        <target>«</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.next-aria">
         <source>Next</source>
         <target>التالي</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.pagination.last">
+        <source>»»</source>
+        <target>««</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria">
@@ -66,11 +108,25 @@
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.progressbar.value">
+        <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source>
+        <target><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours">
         <source>Increment hours</source>
         <target>زيادة الساعات</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.timepicker.HH">
+        <source>HH</source>
+        <target>ساعة</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours">
@@ -94,6 +150,13 @@
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.timepicker.MM">
+        <source>MM</source>
+        <target>دقيقة</target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.minutes">
         <source>Minutes</source>
         <target>دقائق</target>
@@ -113,6 +176,13 @@
         <target>زيادة الثواني</target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.timepicker.SS">
+        <source>SS</source>
+        <target>ثانية</target>
+        <context-group name="null">
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds">
@@ -150,11 +220,32 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
+        <target>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
+        <source>Unlisted</source>
+        <target>غير مفهرس</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddd8a4986d2d1717a274a5a0fbed04988a819e69">
+        <source>Private</source>
+        <target>خاص</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9d5f16f0233b39fa2cd843321407a7358c323ad8">
         <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> مشاهدة</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -168,7 +259,7 @@
         <source>Edit</source>
         <target>تحرير</target>
         <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -192,11 +283,92 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="450025269732888db1f04cfe6033843110ab65ee">
+        <source>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      Subscribe
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </source>
+        <target>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      Subscribe
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
+      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
+    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
+        <source>
+    Unsubscribe
+  </source>
+        <target>
+    إلغاء الإشتراك
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66">
+        <source>Using an ActivityPub account</source>
+        <target>مستخدماً حساب ActivityPub</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60251958d9e05c8cc00abf9645bb0026ebbe4dc3">
+        <source>Subscribe with an account on <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></source>
+        <target>إشتراك بإستخدام حسابك علي <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
+        <source>Subscribe with your local account</source>
+        <target>إشترك مستخدماً حسابك المحلي</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed">
+        <source>Subscribe with a Mastodon account:</source>
+        <target>إشترك مستخدما حسابك علي Mastodon</target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>حصة الفيديو</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
+        <source>Ban</source>
+        <target>حظر</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>السبب…</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
+        <source>Ban this user</source>
+        <target>حظر هذا المستخدم</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -258,7 +430,7 @@
         <source>Password</source>
         <target>الكلمة السرية</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
@@ -272,7 +444,7 @@
         <source>Login</source>
         <target>تسجيل الدخول</target>
         <context-group name="null">
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
@@ -300,7 +472,7 @@
         <source>Send me an email to reset my password</source>
         <target>أرسل لي رسالة لإعادة تعيين كلمتي السرية</target>
         <context-group name="null">
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -353,28 +525,21 @@
         <source>Example: jane_doe</source>
         <target>مثال: jane_doe</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2ac776627e18565d7ae85cd7f4cd033bc5d0c88b">
-        <source>I have read and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
-        <target>قرأت و وافقت على&lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;شروط&lt;/a&gt; مثيل الخادوم</target>
-        <context-group name="null">
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>سجل</target>
         <context-group name="null">
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
         <source>Features found on this instance</source>
         <target>مميزات مثيل الخادوم</target>
         <context-group name="null">
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9167c6d3c4c3b74373cf1e90997e4966844ded1a">
@@ -384,41 +549,34 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1298c1d2bbbb7415f5494e800f6775fdb70f4df6">
-        <source>Filters</source>
-        <target>عوامل التصفية</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
   </source>
         <target>لم يتم العثور على أية نتيجة</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> مشترك</target>
         <context-group name="null">
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="602281e45fe8b79748e3fbf21c432379fcb58883">
         <source><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> مشاهدة</target>
         <context-group name="null">
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
         <source>Change the language</source>
         <target>تغيير اللغة</target>
         <context-group name="null">
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8c654f49714163eb2991b264e9fd4858e72c04c6">
@@ -427,7 +585,7 @@
             </source>
         <target>صفحتي العمومية</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="01d7a5f4ca6470b564031481bc16485b53a8d4fb">
@@ -436,7 +594,7 @@
             </source>
         <target>حسابي</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fa9f3da5641dbd73d83395a0bde61bb6d5cefb10">
@@ -445,7 +603,7 @@
             </source>
         <target>فيديوهاتي</target>
         <context-group name="null">
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b795a1acb4a57ee68e6c5114daa280bf6e0f70e1">
@@ -454,14 +612,14 @@
             </source>
         <target>الخروج</target>
         <context-group name="null">
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
         <source>Create an account</source>
         <target>إنشاء حساب</target>
         <context-group name="null">
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238">
@@ -475,49 +633,49 @@
         <source>Subscriptions</source>
         <target>الإشتراكات</target>
         <context-group name="null">
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e95ae009d0bdb45fcc656e8b65248cf7396080d5">
         <source>Overview</source>
         <target>نظرة شاملة</target>
         <context-group name="null">
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
         <source>Trending</source>
         <target>الشائعة</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
         <source>Recently added</source>
         <target>التي تم إضافتها حديثًا</target>
         <context-group name="null">
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
         <source>Local</source>
         <target>المحلية</target>
         <context-group name="null">
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac0f81713a84217c9bd1d9bb460245d8190b073f">
         <source>More</source>
         <target>المزيد</target>
         <context-group name="null">
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>الإدارة</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -531,7 +689,7 @@
         <source>Toggle dark interface</source>
         <target>الإنتقال إلى الواجهة الداكنة</target>
         <context-group name="null">
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -636,14 +794,14 @@
         <source>No results.</source>
         <target>لا نتائج</target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
         <target>مثيل الخادوم</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -653,15 +811,20 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5849c589454817c1e991639d3091d8da0e8d6bd2">
+      <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb">
         <source>
-  About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instance
-</source>
-        <target>
-  حول مثيل الخدوم <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>
-</target>
+          Cancel
+        </source>
+        <target>إلغاء</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
+        <source>Submit</source>
+        <target>إرسال</target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -675,44 +838,14 @@
         <source>Terms</source>
         <target>الشروط</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9c6e6db693ab265457c6578df179c65694141d27">
         <source>User registration is allowed and</source>
         <target>التسجيل مسموح و</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ac324b07e7c3c972f1c33894eda02dc2917eda5e">
-        <source>
-      this instance provides a baseline quota of <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> space for the videos of its users.
-    </source>
-        <target>
-مثيل الخادوم هذا يوفر مساحة <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/>  لفيديوهات المستخدمين.</target>
-        <context-group name="null">
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a6865ec6abf6af58f808501d84c8ed6ff8ce46ae">
-        <source>
-      this instance provides unlimited space for the videos of its users.
-    </source>
-        <target>
-مثيل الخادوم هذا يوفر مساحة غير محددة لفيديوهات المستخدمين.</target>
-        <context-group name="null">
-          <context context-type="linenumber">31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5c856a6a233b6f6c4cc8eed46436d31d2da63fc1">
-        <source>
-    User registration is currently not allowed.
-  </source>
-        <target>
-التسجيل غير مسموح حاليا.</target>
-        <context-group name="null">
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
@@ -725,8 +858,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
-        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <context-group name="null">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source><target>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</target><context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
@@ -821,18 +953,46 @@
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605">
+        <source>Banned</source>
+        <target>تم حظره</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
+        <source>Muted</source>
+        <target>تم كتمه</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48bbf6dbdb22e0ef4bd257eae2ab356f2ea66c89">
+        <source>Muted by your instance</source>
+        <target>تم كتمه عبر مثيل خادومك</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="44bd08a7ec1e407356620967d65d8fe2d8639d0a">
+        <source>Instance muted</source>
+        <target>مثيل الخادوم مكتوم</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a835d8a12e14eb96919245a0bbafd8069c146578">
         <source><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> مشترك</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8">
         <source>Video channels</source>
         <target>قنوات الفيديو</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -867,42 +1027,42 @@
         <source>Short description</source>
         <target>الوصف القصير</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3fae5a310387c065757fde11f22689b45a7b6f2d">
         <source>Videos Overview</source>
         <target>نظرة شاملة عن الفيديوهات</target>
         <context-group name="null">
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
         <source>Videos Trending</source>
         <target>الفيديوهات الشائعة</target>
         <context-group name="null">
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1861c96217213992e02dcb77e15ea69e718c9883">
         <source>Videos Recently Added</source>
         <target>الفيديوهات المُضافة حديثًا</target>
         <context-group name="null">
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>الفيديوهات المحلية</target>
         <context-group name="null">
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
         <source>Policy on videos containing sensitive content</source>
         <target>سياسة الفيديوهات التي تحتوي على محتوى حساس</target>
         <context-group name="null">
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -923,21 +1083,42 @@
         <source>Signup enabled</source>
         <target>التسجيل مُفعل</target>
         <context-group name="null">
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7">
         <source>Signup requires email verification</source>
         <target>يتطلب التسجيل رسالة تأكيد</target>
         <context-group name="null">
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="68bda70e0dd4f7f91549462e55f1b2a1602d8402">
         <source>Signup limit</source>
         <target>حد التسجيل</target>
         <context-group name="null">
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
+        <source>Users</source>
+        <target>المستخدِمون</target>
+        <context-group name="null">
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
+        <source>User default video quota</source>
+        <target>حصة الفيديو الافتراضية للمستخدم</target>
+        <context-group name="null">
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5528147716c4d3286c89defbe63ee0b75da5ffe">
+        <source>User default daily upload limit</source>
+        <target>حد الرفع الإفتراضي للمستخدِم</target>
+        <context-group name="null">
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -947,46 +1128,18 @@
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e9964673c94eb0b4ff8088c84018217c031f31ce">
-        <source>Video import with HTTP enabled</source>
-        <target>إستيراد الملف باستخدام HTTP مفعل</target>
-        <context-group name="null">
-          <context context-type="linenumber">115</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>المدير</target>
         <context-group name="null">
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
       <trans-unit id="55a0f51e38679d3141841e8333da5779d349c587">
         <source>Admin email</source>
         <target>البريد الإلكتروني للمدير</target>
         <context-group name="null">
-          <context context-type="linenumber">126</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
-        <source>Users</source>
-        <target>المستخدِمون</target>
-        <context-group name="null">
-          <context context-type="linenumber">136</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
-        <source>User default video quota</source>
-        <target>حصة الفيديو الافتراضية للمستخدم</target>
-        <context-group name="null">
-          <context context-type="linenumber">139</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f5528147716c4d3286c89defbe63ee0b75da5ffe">
-        <source>User default daily upload limit</source>
-        <target>حد الرفع الإفتراضي للمستخدِم</target>
-        <context-group name="null">
-          <context context-type="linenumber">153</context>
+          <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5">
@@ -1000,42 +1153,42 @@
         <source>Twitter</source>
         <target>تويتر</target>
         <context-group name="null">
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>اسم المستخدِم الخاص بك على تويتر</target>
         <context-group name="null">
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
         <source>Services</source>
         <target>الخدمات</target>
         <context-group name="null">
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>التخصيصات</target>
         <context-group name="null">
-          <context context-type="linenumber">264</context>
+          <context context-type="linenumber">289</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>الجافا سكريبت</target>
         <context-group name="null">
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">294</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
         <source>Advanced configuration</source>
         <target>الإعدادات المتقدمة</target>
         <context-group name="null">
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1065,6 +1218,15 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7bea88c54fdccfdc9f687b0ffe9bf6a653d19368">
+        <source>
+      Jobs
+    </source>
+        <target>الإجراءات</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9c6ce37623b626a102002901ca12c37e7a3a7f13">
         <source>
       Configuration
@@ -1074,11 +1236,18 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="25925fc5826bc5b3eeae7c45b08b0ed74b9e2954">
+        <source>Filter...</source>
+        <target>تصفية...</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
         <source>Host</source>
         <target>المضيف</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
@@ -1086,6 +1255,20 @@
         <target>الحالة</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7823909fb1d8d313382f6f4bd842f1a7ef6f08d1">
+        <source>Accepted</source>
+        <target>تم القبول</target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e6a27066251ca1e04c5be86ad758380856df2506">
+        <source>Pending</source>
+        <target>معلق</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5fccee488a9ea908c16d2ab9dbdaf264f1aac479">
@@ -1114,6 +1297,13 @@
         <target>المُتابِعون</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a9f2501fcb2ff71f1376c2d2fbbbd49f200e6c8f">
+        <source>Jobs list</source>
+        <target>قائمة الإجراءات</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
@@ -1148,7 +1338,7 @@
         <source>Role</source>
         <target>الدور</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
@@ -1158,13 +1348,6 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>السبب…</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
         <source>Users list</source>
         <target>قائمة المستخدِمون</target>
@@ -1172,11 +1355,18 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
-        <source>Actions</source>
-        <target>الإجراءات</target>
+      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
+        <source>Go to the account page</source>
+        <target>الإنتقال إلى صفحة الحساب</target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
+        <source>Ban reason:</source>
+        <target>سبب الحظر:</target>
+        <context-group name="null">
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f">
@@ -1221,6 +1411,13 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
+        <source>Actions</source>
+        <target>الإجراءات</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e330cbadca2d8639aabf525d5fe7e5b62d324ee2">
         <source>Reason:</source>
         <target>السبب:</target>
@@ -1246,7 +1443,7 @@
         <source>Blacklist reason:</source>
         <target>سبب الحجب:</target>
         <context-group name="null">
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="90868353e7e6f5994109ee1011131cefa992116c">
@@ -1263,46 +1460,18 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
-        <source>My settings</source>
-        <target>إعداداتي</target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4ef4f031c147fb9ee0168bc6eacb78de180d7432">
-        <source>My library</source>
-        <target>مكتبتي</target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f">
-        <source>My channels</source>
-        <target>قنواتي</target>
+      <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92">
+        <source>Account</source>
+        <target>الحساب</target>
         <context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
-        <source>My videos</source>
-        <target>فيديوهاتي</target>
+      <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
+        <source>Unmute</source>
+        <target>إلغاء الكتم</target>
         <context-group name="null">
-          <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9">
-        <source>My subscriptions</source>
-        <target>اشتراكاتي</target>
-        <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bd751145ec934c2839fd6acffee05fbf439782ed">
-        <source>My imports</source>
-        <target>وارداتي</target>
-        <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -1316,21 +1485,21 @@
         <source>Profile</source>
         <target>الملف الشخصي</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925">
         <source>Video settings</source>
         <target>إعدادات الفيديو</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
         <source>Danger zone</source>
         <target>منطقة الخطر</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf">
@@ -1354,13 +1523,6 @@
         <target>إلغاء</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
-        <source>Submit</source>
-        <target>إرسال</target>
-        <context-group name="null">
-          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d">
@@ -1421,6 +1583,13 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4570c754149df06f31096510abfc925968c35562">
+        <source>Select the target channel</source>
+        <target>اختيار القناة الهدف</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1">
         <source>Status</source>
         <target>الحالة</target>
@@ -1442,11 +1611,25 @@
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2bc7533f8c8e7d183950ba1094a0acd9efc22e5e">
+        <source>Muted instances</source>
+        <target>مثيلات الخوادم المكتومة</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
         <source>Change password</source>
         <target>تغيير الكلمة السرية</target>
         <context-group name="null">
           <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0dd390d056411e1709ec97ec51c46d78600e3f7b">
+        <source>Current password</source>
+        <target>الكلمة السرية الحالية</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e70e209561583f360b1e9cefd2cbb1fe434b6229">
@@ -1467,14 +1650,14 @@
         <source>Automatically plays video</source>
         <target>التشغيل التلقائي للفيديو</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe">
         <source>Save</source>
         <target>حفظ</target>
         <context-group name="null">
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2fa66a905b6b7f691c83be681d18188cbe4a8ba">
@@ -1540,11 +1723,39 @@
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
+        <source>Sorry, but something went wrong</source>
+        <target>عذرا، لقد حدث خلل ما</target>
+        <context-group name="null">
+          <context context-type="linenumber">49</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
+        <source>Update</source>
+        <target>تحديث</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
+        <source>Select the file to upload</source>
+        <target>اختر الملف الذي تريد ارساله</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5e420747842373fa99a75a7a18df068cc81e46fb">
+        <source>Scheduled</source>
+        <target>مبرمجة</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3">
         <source>Publish</source>
         <target>أنشر</target>
         <context-group name="null">
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
@@ -1552,6 +1763,13 @@
         <target>إختر التورنت الذي تريد استيراده</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1b518e7f8c067fa55ea797bb1b35b4a2d31dccbc">
+        <source>Or</source>
+        <target>أو</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
@@ -1568,6 +1786,13 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="752c401d7dcd708944eef60e411187f71d882340">
+        <source>Import with torrent</source>
+        <target>استيراد عبر التورنت</target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e">
         <source>Title</source>
         <target>العنوان</target>
@@ -1580,6 +1805,20 @@
         <target>الوسوم</target>
         <context-group name="null">
           <context context-type="linenumber">191</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf">
+        <source>+ Tag</source>
+        <target>+ وسم</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
+        <source>Enter a new tag</source>
+        <target>أدخل وسمًا جديدا</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
@@ -1600,14 +1839,28 @@
         <source>Cancel create</source>
         <target>إلغاء الإنشاء</target>
         <context-group name="null">
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>إلغاء الحذف</target>
         <context-group name="null">
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">178</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
+        <source>Upload thumbnail</source>
+        <target>تحديث الصورة المصغرة</target>
+        <context-group name="null">
+          <context context-type="linenumber">196</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639">
+        <source>Upload preview</source>
+        <target>إرسال معاينة</target>
+        <context-group name="null">
+          <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -1621,7 +1874,7 @@
         <source>Advanced settings</source>
         <target>الإعدادات المتقدمة</target>
         <context-group name="null">
-          <context context-type="linenumber">190</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611">
@@ -1675,20 +1928,18 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb">
-        <source>
-          Cancel
-        </source>
-        <target>إلغاء</target>
-        <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
         <source>Share</source>
         <target>شارك</target>
         <context-group name="null">
           <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
+        <source>QR-Code</source>
+        <target>رمز الاستجابة السريعة</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
@@ -1719,6 +1970,13 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509">
+        <source>Dislike this video</source>
+        <target>إلغاء الإعجاب بهذه الفيديو</target>
+        <context-group name="null">
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="144fff5c40b85414d59e644d8dee7cfefba925a2">
         <source>Download the video</source>
         <target>تنزيل الفيديو</target>
@@ -1745,6 +2003,13 @@
         <target>تحديث هذه الفيديو</target>
         <context-group name="null">
           <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
+        <source>Blacklist</source>
+        <target>حجب في القائمة السوداء</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037">
@@ -1782,13 +2047,6 @@
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
-        <source>Go to the account page</source>
-        <target>الإنتقال إلى صفحة الحساب</target>
-        <context-group name="null">
-          <context context-type="linenumber">133</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>عرض المزيد</target>
@@ -1801,6 +2059,36 @@
         <target>عرض القليل</target>
         <context-group name="null">
           <context context-type="linenumber">152</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4c0ba3cde3b3c58b855ffb4beaa5804a2fc3826b">
+        <source>Friendly Reminder: </source>
+        <target>تذكير أخوي:</target>
+        <context-group name="null">
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
+        <source>More information</source>
+        <target>المزيد من التفاصيل</target>
+        <context-group name="null">
+          <context context-type="linenumber">212</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
+        <source>Get more information</source>
+        <target>احصل على معلومات أكثر</target>
+        <context-group name="null">
+          <context context-type="linenumber">212</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
+        <source>
+      OK
+    </source>
+        <target>نعم</target>
+        <context-group name="null">
+          <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
@@ -1825,7 +2113,7 @@
         <source>No comments.</source>
         <target>ليس هناك تعليقات.</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
@@ -1834,7 +2122,7 @@
   </source>
         <target>تم تعطيل التعليقات.</target>
         <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -1851,6 +2139,13 @@
         <target>إرسال التعليق</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="afe0ad39fee662489f1033e53aea3e16a7e89228">
+        <source>login to comment</source>
+        <target>قم بتسجيل الدخول للتعليق</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cb23d4d98007aa4d7123837f4c17a671848377d6">
@@ -1874,16 +2169,44 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
-        <source>Error</source>
-        <target>خطأ</target>
+      <trans-unit id="d9fc2b03f04056671d7d4ffcac7197189d959cd6">
+        <source>240p</source>
+        <target>240p</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba">
-        <source>Success</source>
-        <target>تم بنجاح</target>
+      <trans-unit id="c8cfad7e7a16c57c42535331b65cb7de40d8402e">
+        <source>360p</source>
+        <target>360p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48f0af5a0d0bea4e84b27eaf41b19c85a531c2a5">
+        <source>480p</source>
+        <target>480p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6f06138daf6363746ff26bfc0cb2491c09cdfdf2">
+        <source>720p</source>
+        <target>720p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="65c94f9beb6fe957808c40060da280cc7ace7ab9">
+        <source>1080p</source>
+        <target>1080p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b9e64712e3e5c342ce9cd32eec6cd7d6c00f4048">
+        <source>Configuration updated.</source>
+        <target>تم تحديث الإعدادات</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1909,9 +2232,30 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4d8f527638f3e0b518a96e07d41d886bcce01246">
+        <source>enabled</source>
+        <target>مفعّل</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="795733aac948794cadeb3be6386882efac2c38ad">
+        <source>disabled</source>
+        <target>خامل</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="800cd3cdf47751b576587259ba3a1bc0a7f435b6">
         <source>Comment updated.</source>
         <target>تم تحديث التعليق.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="586bee8c27a761611eb05661524cc7ca944b5978">
+        <source>Delete this report</source>
+        <target>حذف هذا التقرير</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1937,13 +2281,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
-        <source>Ban</source>
-        <target>حظر</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8">
         <source>Unban</source>
         <target>ألغ الحظر</target>
@@ -1958,13 +2295,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
-        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
-        <target>هل تريد إلغاء الحظر عن <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>لا يمكنك حذف المسخدم الجذر</target>
@@ -1972,9 +2302,23 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="507192ee1fa84aefed02d603caada2d84927023e">
+        <source>Ownership accepted</source>
+        <target>تم قبول الملكية</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="19508af0dfbc685cbf10cf02061bb5a0f423b6fc">
         <source>Password updated.</source>
         <target>تم تحديث الكلمة السرية.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c">
+        <source>You current password is invalid.</source>
+        <target>كلمتك السرية الحالية غير صالحة. </target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2028,6 +2372,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47">
+        <source>This name already exists on this instance.</source>
+        <target>هذا الإسم موجود على مثيل الخادوم هذا.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795">
         <source>Create</source>
         <target>إنشاء</target>
@@ -2035,16 +2386,149 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="703dee7f3e693f9c77ef17c46f9fa71999609f8e">
-        <source>Please type the name of the video channel to confirm</source>
-        <target>رجاء أدخل اسم القنات للتأكيد</target>
+      <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
+        <source>My videos</source>
+        <target>فيديوهاتي</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="807cf11e6ac1cde912496f764c176bdfdd6b7e19">
-        <source>Channels</source>
-        <target>القنوات</target>
+      <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3">
+        <source>Published</source>
+        <target>المنشورة</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392">
+        <source>To import</source>
+        <target>للاستيراد</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4ef4f031c147fb9ee0168bc6eacb78de180d7432">
+        <source>My library</source>
+        <target>مكتبتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f">
+        <source>My channels</source>
+        <target>قنواتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9">
+        <source>My subscriptions</source>
+        <target>اشتراكاتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="46aa32e581922d6d2c3d7bc4c87209ad5808b029">
+        <source>Misc</source>
+        <target>أخرى</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
+        <source>My settings</source>
+        <target>إعداداتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ff6becacbce7fc0943b0af0df4dd67e5e11bf598">
+        <source>Subscribe to the account</source>
+        <target>الاشتراك في الحساب</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b19ee83cbd2b735fd081b9aa483a890578019099">
+        <source>Toggle the left menu</source>
+        <target>الانتقال إلى القائمة اليسرى</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b54759e30f7c1983940cdacb8eb03f102a869084">
+        <source>Go to the videos overview page</source>
+        <target>الذهاب إلى صفحة معاينة الفيديوهات</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0">
+        <source>Go to the trending videos page</source>
+        <target>الذهاب إلى صفحة الفيديوهات الشائعة</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d">
+        <source>Go to the recently added videos page</source>
+        <target>الذهاب إلى صفحةالفيديوهات المضافة حديثا</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5">
+        <source>Go to the local videos page</source>
+        <target>الذهاب إلى صفحة الفيديوهات المحلية</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1fb6204f39a7338e5110b2f113643c9288496ba">
+        <source>Go to the videos upload page</source>
+        <target>الذهاب إلى صفحة إرسال الفيديوهات</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0ed7b40c11da9d4565af9c041df20c15bc6be97e">
+        <source>Toggle Dark theme</source>
+        <target>التغيير إلى السمة الداكنة</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2">
+        <source>Go to my subscriptions</source>
+        <target>الذهاب إلى اشتراكاتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1">
+        <source>Go to my videos</source>
+        <target>الذهاب إلى فيديوهاتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7">
+        <source>Go to my imports</source>
+        <target>الذهاب إلى استيراداتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cfe3c51f0ae9385dc2ce6df740d87e5514aa9390">
+        <source>Go to my channels</source>
+        <target>الذهاب إلى قنواتي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
+        <source>Error</source>
+        <target>خطأ</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2063,9 +2547,44 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452">
+        <source>Keyboard Shortcuts:</source>
+        <target>اختصارات لوحة المفاتيح:</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">
+        <source>Info</source>
+        <target>معلومات</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba">
+        <source>Success</source>
+        <target>تم بنجاح</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="247071f6c9233b7e5bc1d8f46795ab6b032f1fbe">
+        <source>Incorrect username or password.</source>
+        <target>اسم المستخدم أو كلمة المرور خاطئة.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="39980cc1cf8df621d43f5480d001bdf5d4139338">
         <source>You account is blocked.</source>
         <target>إنّ حسابك مُقفَل.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b0f24b7136e551a0deba831f1525711245b31a26">
+        <source>Your password has been successfully reset!</source>
+        <target>لقد تم إعادة تعيين كلمتك السرية بنجاح!</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2147,6 +2666,20 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0">
+        <source>Email is required.</source>
+        <target>البريد الإلكتروني مطلوب.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1">
+        <source>Email must be valid.</source>
+        <target>يجب أن يكون عنوان البريد الإلكتروني عنوانًا صالحًا.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5db300f6fba918a35597160183205ede13e8e149">
         <source>Username is required.</source>
         <target>اسم المستخدم مطلوب.</target>
@@ -2168,23 +2701,93 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="05ad6b99d9bf7b51968aa0b0b939e8627a329bea">
-        <source>Username must be at least 3 characters long.</source>
-        <target>يجب أن يكون طول اسم المستخدِم أكبر مِن 3 أحرف. </target>
+      <trans-unit id="545e77fd5d9526228a2133109447c23225ed9c85">
+        <source>User role is required.</source>
+        <target>دور المستخدم مطلوب.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0">
-        <source>Email is required.</source>
-        <target>البريد الإلكتروني مطلوب.</target>
+      <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4">
+        <source>Display name is required.</source>
+        <target>عرض الاسم لازم.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1">
-        <source>Email must be valid.</source>
-        <target>يجب أن يكون عنوان البريد الإلكتروني عنوانًا صالحًا.</target>
+      <trans-unit id="d531c2261dc0c2739bd7cbb2bb175946b7eeb3ae">
+        <source>Description must be at least 3 characters long.</source>
+        <target>طول الوصف يجب أن يتعدى 3حروف.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6">
+        <source>Report reason is required.</source>
+        <target>سبب الإبلاغ لازم.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fa41debd17a206d4a2a5e8d14bcd7055f6e5118">
+        <source>Moderation comment is required.</source>
+        <target>تعليق الإشراف لازم.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="94b831c7e3684258f88e099c6cd3b8f73f8a2de6">
+        <source>The channel is required.</source>
+        <target>القناة لازمة.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd7fc070c728dc6dbf3959d49fe5bb27ce15d294">
+        <source>The username is required.</source>
+        <target>اسم المستخدم مطلوب.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8465c3773699dd075e0147e264d2e232f605803">
+        <source>You can only transfer ownership to a local account</source>
+        <target>لا يمكن نقل الملكية إلى حساب محلي</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="541087322c34e8b26954fd67ff4fc80d1a6c1b33">
+        <source>Name is required.</source>
+        <target>الاسم مطلوب.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ca60e0f6dfbc0073b0514bce7d273150b0b9e79">
+        <source>Comment is required.</source>
+        <target>التعليق مطلوب.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1">
+        <source>Video name is required.</source>
+        <target>اسم الفيديو مطلوب.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
+        <source>Video privacy is required.</source>
+        <target>خصوصية لافيديو مطلوبة.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea">
+        <source>A tag should be less than 30 characters long.</source>
+        <target>طول الوسم لا يجب أن يتجاوز 30 حرفا.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2511,6 +3114,20 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46">
+        <source>Clear</source>
+        <target>مسح</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a">
+        <source>Torrent import</source>
+        <target>استيراد تورنت</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dc60677d5a906e69f38a5cf9da7f2eb03931bea0">
         <source>Links</source>
         <target>الروابط</target>
@@ -2539,6 +3156,55 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
+        <target>هل تريد إلغاء الحظر عن <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a09bf8724e7659fbb5ec33647529cdef7614bdc">
+        <source>Mute this account</source>
+        <target>أكتم هذا الحساب</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d666ca3261aef72b2ddcd649d7b32af488f59952">
+        <source>Unmute this account</source>
+        <target>إلغاء الكتم عن هذا الحساب</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e17218983b1de76e5a920b04e1c2ecbdb6e3e06d">
+        <source>Mute the instance</source>
+        <target>كتم مثيل الخادوم</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a23514d8aca2f8633622dda0e86b399dc576a2b9">
+        <source>Unmute the instance</source>
+        <target>الغاء الكتم عن مثيل الخادوم</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ab783a52f2df9ff7a20139cab0da6d0764f3cc5d">
+        <source>Too many attempts, please try again later.</source>
+        <target>محاولات كثيرة، يرجى العودة لاحقا.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f286a597f0053c3578a52e044769c204ee516fc">
+        <source>Server error. Please retry later.</source>
+        <target>خطأ على السيرفر. يرجى إعادة المحاولة لاحقا.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
         <source>Subscribed</source>
         <target>مشترك</target>
@@ -2546,9 +3212,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="65cc4ab3b4c438e07c89be2b677d08369fb62da2">
-        <source>Welcome</source>
-        <target>مرحبًا</target>
+      <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf">
+        <source>Moderator</source>
+        <target>مشرف</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2577,6 +3243,27 @@
       <trans-unit id="73c33d602da89a33d353d686f36c2fff39f0aee3">
         <source>Video blacklisted.</source>
         <target>تم حجب الفيديو.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>تم نسخه</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>فيديو تم الإبلاغ عنها.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e65067fdcc9d8725a41896cb1e229d1415a45f6">
+        <source>Like the video</source>
+        <target>الإعجاب بالفيديو</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

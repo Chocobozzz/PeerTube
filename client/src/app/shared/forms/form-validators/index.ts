@@ -1,6 +1,7 @@
 export * from './custom-config-validators.service'
 export * from './form-validator.service'
 export * from './host'
+export * from './instance-validators.service'
 export * from './login-validators.service'
 export * from './reset-password-validators.service'
 export * from './user-validators.service'

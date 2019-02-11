@@ -14,11 +14,14 @@ import {
   unblockUser,
   uploadVideo,
   userLogin,
-  verifyEmail
-} from '../../utils'
-import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
-import { mockSmtpServer } from '../../utils/miscs/email'
-import { waitJobs } from '../../utils/server/jobs'
+  verifyEmail,
+  flushTests,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers
+} from '../../../../shared/utils'
+import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
+import { waitJobs } from '../../../../shared/utils/server/jobs'
 
 const expect = chai.expect
 
@@ -38,7 +41,7 @@ describe('Test emails', function () {
   before(async function () {
     this.timeout(30000)
 
-    await mockSmtpServer(emails)
+    await MockSmtpServer.Instance.collectEmails(emails)
 
     await flushTests()
 
@@ -248,6 +251,7 @@ describe('Test emails', function () {
   })
 
   after(async function () {
+    MockSmtpServer.Instance.kill()
     killallServers([ server ])
   })
 })

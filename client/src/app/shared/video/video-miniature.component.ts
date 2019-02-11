@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 import { User } from '../users'
 import { Video } from './video.model'
 import { ServerService } from '@app/core'
+import { VideoPrivacy } from '../../../../../shared'
 
 export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 
@@ -48,5 +49,13 @@ export class VideoMiniatureComponent implements OnInit {
 
   displayOwnerVideoChannel () {
     return this.ownerDisplayTypeChosen === 'videoChannel'
+  }
+
+  isUnlistedVideo () {
+    return this.video.privacy.id === VideoPrivacy.UNLISTED
+  }
+
+  isPrivateVideo () {
+    return this.video.privacy.id === VideoPrivacy.PRIVATE
   }
 }

@@ -11,7 +11,7 @@ import {
   runServer,
   ServerInfo,
   setAccessTokensToServers
-} from '../utils'
+} from '../../../shared/utils'
 
 describe('Test CLI wrapper', function () {
   let server: ServerInfo
@@ -44,6 +44,8 @@ describe('Test CLI wrapper', function () {
   })
 
   after(async function () {
+    this.timeout(10000)
+
     await execCLI(cmd + ` auth del ${server.url}`)
 
     killallServers([ server ])

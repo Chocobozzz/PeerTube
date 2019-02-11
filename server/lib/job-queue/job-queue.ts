@@ -10,7 +10,8 @@ import { EmailPayload, processEmail } from './handlers/email'
 import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 import { processVideoImport, VideoImportPayload } from './handlers/video-import'
-import { processVideosViewsViews } from './handlers/video-views'
+import { processVideosViews } from './handlers/video-views'
+import { refreshAPObject, RefreshPayload } from './handlers/activitypub-refresher'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -21,6 +22,7 @@ type CreateJobArgument =
   { type: 'video-file', payload: VideoFilePayload } |
   { type: 'email', payload: EmailPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
+  { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} }
 
 const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
@@ -32,7 +34,8 @@ const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'video-file': processVideoFile,
   'email': processEmail,
   'video-import': processVideoImport,
-  'videos-views': processVideosViewsViews
+  'videos-views': processVideosViews,
+  'activitypub-refresher': refreshAPObject
 }
 
 const jobTypes: JobType[] = [
@@ -44,7 +47,8 @@ const jobTypes: JobType[] = [
   'video-file',
   'video-file-import',
   'video-import',
-  'videos-views'
+  'videos-views',
+  'activitypub-refresher'
 ]
 
 class JobQueue {
@@ -84,7 +88,6 @@ class JobQueue {
 
       queue.on('error', err => {
         logger.error('Error in job queue %s.', handlerName, { err })
-        process.exit(-1)
       })
 
       this.queues[handlerName] = queue
@@ -162,10 +165,10 @@ class JobQueue {
     return total
   }
 
-  removeOldJobs () {
+  async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
       const queue = this.queues[key]
-      queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
+      await queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
     }
   }
 

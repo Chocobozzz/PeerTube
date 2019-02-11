@@ -10,6 +10,14 @@ function getStoredVolume () {
   return undefined
 }
 
+function getStoredWebTorrentEnabled (): boolean {
+  const value = getLocalStorage('webtorrent_enabled')
+  if (value !== null && value !== undefined) return value === 'true'
+
+  // By default webtorrent is enabled
+  return true
+}
+
 function getStoredMute () {
   const value = getLocalStorage('mute')
   if (value !== null && value !== undefined) return value === 'true'
@@ -52,17 +60,28 @@ function getAverageBandwidthInStore () {
   return undefined
 }
 
+function saveLastSubtitle (language: string) {
+  return setLocalStorage('last-subtitle', language)
+}
+
+function getStoredLastSubtitle () {
+  return getLocalStorage('last-subtitle')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getStoredVolume,
+  getStoredWebTorrentEnabled,
   getStoredMute,
   getStoredTheater,
   saveVolumeInStore,
   saveMuteInStore,
   saveTheaterInStore,
   saveAverageBandwidth,
-  getAverageBandwidthInStore
+  getAverageBandwidthInStore,
+  saveLastSubtitle,
+  getStoredLastSubtitle
 }
 
 // ---------------------------------------------------------------------------

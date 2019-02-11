@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core'
+import { GlobalIconName } from '@app/shared/icons/global-icon.component'
 
 @Component({
   selector: 'my-button',
@@ -8,9 +9,9 @@ import { Component, Input } from '@angular/core'
 
 export class ButtonComponent {
   @Input() label = ''
-  @Input() className = undefined
-  @Input() icon = undefined
-  @Input() title = undefined
+  @Input() className: string = undefined
+  @Input() icon: GlobalIconName = undefined
+  @Input() title: string = undefined
 
   getTitle () {
     return this.title || this.label

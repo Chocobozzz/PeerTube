@@ -15,7 +15,7 @@ import {
   userLogin,
   viewVideo,
   wait
-} from '../../utils'
+} from '../../../../shared/utils'
 const expect = chai.expect
 
 import {
@@ -23,7 +23,7 @@ import {
   flushTests,
   runServer,
   registerUser, getCustomConfig, setAccessTokensToServers, updateCustomConfig
-} from '../../utils/index'
+} from '../../../../shared/utils/index'
 
 describe('Test application behind a reverse proxy', function () {
   let server = null
@@ -95,7 +95,7 @@ describe('Test application behind a reverse proxy', function () {
   it('Should rate limit logins', async function () {
     const user = { username: 'root', password: 'fail' }
 
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 19; i++) {
       await userLogin(server, user, 400)
     }
 

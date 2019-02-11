@@ -23,14 +23,11 @@
     .action-button-delete-selection {
       @include peertube-button;
       @include orange-button;
-    }
+      @include button-with-icon(21px);
 
-    .icon.icon-delete-white {
-      @include icon(21px);
-
-      position: relative;
-      top: -2px;
-      background-image: url('../../../assets/images/global/delete-white.svg');
+      my-global-icon {
+        @include apply-svg-color(#fff);
+      }
     }
   }
 }
@@ -97,7 +94,7 @@
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: $small-view) {
   .video {
     flex-direction: column;
     height: auto;

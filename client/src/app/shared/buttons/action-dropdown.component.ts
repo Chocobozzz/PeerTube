@@ -2,9 +2,9 @@ import { Component, Input } from '@angular/core'
 
 export type DropdownAction<T> = {
   label?: string
-  handler?: (T) => any
-  linkBuilder?: (T) => (string | number)[]
-  isDisplayed?: (T) => boolean
+  handler?: (a: T) => any
+  linkBuilder?: (a: T) => (string | number)[]
+  isDisplayed?: (a: T) => boolean
 }
 
 @Component({
@@ -14,8 +14,16 @@ export type DropdownAction<T> = {
 })
 
 export class ActionDropdownComponent<T> {
-  @Input() actions: DropdownAction<T>[] = []
+  @Input() actions: DropdownAction<T>[] | DropdownAction<T>[][] = []
   @Input() entry: T
-  @Input() placement = 'left'
+  @Input() placement = 'bottom-left'
   @Input() buttonSize: 'normal' | 'small' = 'normal'
+  @Input() label: string
+  @Input() theme: 'orange' | 'grey' = 'grey'
+
+  getActions () {
+    if (this.actions.length !== 0 && Array.isArray(this.actions[0])) return this.actions
+
+    return [ this.actions ]
+  }
 }

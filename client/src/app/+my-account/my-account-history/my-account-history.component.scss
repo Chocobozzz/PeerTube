@@ -1,0 +1,99 @@
+@import '_variables';
+@import '_mixins';
+
+.no-history {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  font-weight: $font-semibold;
+  font-size: 16px;
+}
+
+.top-buttons {
+  margin-bottom: 20px;
+  display: flex;
+
+  .history-switch {
+    display: flex;
+    flex-grow: 1;
+
+    label {
+      margin: 0 0 0 5px;
+    }
+  }
+
+  .delete-history {
+    font-size: 15px;
+
+    button {
+      @include peertube-button;
+      @include grey-button;
+    }
+  }
+}
+
+.video {
+  @include row-blocks;
+
+  my-video-thumbnail {
+    margin-right: 10px;
+  }
+
+  .video-info {
+    flex-grow: 1;
+
+    .video-info-name {
+      @include disable-default-a-behaviour;
+
+      color: var(--mainForegroundColor);
+      display: block;
+      width: fit-content;
+      font-size: 18px;
+      font-weight: $font-semibold;
+    }
+
+    .video-info-date-views {
+      font-size: 14px;
+    }
+
+    .video-info-account {
+      @include disable-default-a-behaviour;
+
+      display: block;
+      width: fit-content;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+      color: $grey-foreground-color;
+
+      &:hover {
+        color: $grey-foreground-hover-color;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  .video {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+
+    .video-info-name {
+      margin: auto;
+    }
+
+    input[type=checkbox] {
+      display: none;
+    }
+
+    my-video-thumbnail {
+      margin-right: 0;
+    }
+
+    .video-buttons {
+      margin-top: 10px;
+    }
+  }
+}

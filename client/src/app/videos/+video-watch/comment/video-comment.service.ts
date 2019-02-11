@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { lineFeedToHtml } from '@app/shared/misc/utils'
+import { objectLineFeedToHtml } from '@app/shared/misc/utils'
 import { Observable } from 'rxjs'
 import { ResultList, FeedFormat } from '../../../../../../shared/models'
 import {
@@ -28,22 +28,22 @@ export class VideoCommentService {
 
   addCommentThread (videoId: number | string, comment: VideoCommentCreate) {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
-    const normalizedComment = lineFeedToHtml(comment, 'text')
+    const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
                .pipe(
-                  map(data => this.extractVideoComment(data['comment'])),
+                  map(data => this.extractVideoComment(data.comment)),
                   catchError(err => this.restExtractor.handleError(err))
                )
   }
 
   addCommentReply (videoId: number | string, inReplyToCommentId: number, comment: VideoCommentCreate) {
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comments/' + inReplyToCommentId
-    const normalizedComment = lineFeedToHtml(comment, 'text')
+    const normalizedComment = objectLineFeedToHtml(comment, 'text')
 
-    return this.authHttp.post(url, normalizedComment)
+    return this.authHttp.post<{ comment: VideoCommentServerModel }>(url, normalizedComment)
                .pipe(
-                 map(data => this.extractVideoComment(data[ 'comment' ])),
+                 map(data => this.extractVideoComment(data.comment)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }

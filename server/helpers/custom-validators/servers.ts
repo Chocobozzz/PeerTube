@@ -3,6 +3,7 @@ import 'express-validator'
 
 import { isArray, exists } from './misc'
 import { isTestInstance } from '../core-utils'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 function isHostValid (host: string) {
   const isURLOptions = {
@@ -26,9 +27,19 @@ function isEachUniqueHostValid (hosts: string[]) {
     })
 }
 
+function isValidContactBody (value: any) {
+  return exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.BODY)
+}
+
+function isValidContactFromName (value: any) {
+  return exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.CONTACT_FORM.FROM_NAME)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  isValidContactBody,
+  isValidContactFromName,
   isEachUniqueHostValid,
   isHostValid
 }

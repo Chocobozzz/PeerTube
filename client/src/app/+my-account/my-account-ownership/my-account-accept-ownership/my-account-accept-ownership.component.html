@@ -1,7 +1,8 @@
 <ng-template #modal let-close="close" let-dismiss="dismiss">
   <div class="modal-header">
     <h4 i18n class="modal-title">Accept ownership</h4>
-    <span class="close" aria-label="Close" role="button" (click)="dismiss()"></span>
+
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="dismiss()"></my-global-icon>
   </div>
 
   <div class="modal-body" [formGroup]="form">

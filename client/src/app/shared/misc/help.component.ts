@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core'
-import { MarkdownService } from '@app/videos/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-help',

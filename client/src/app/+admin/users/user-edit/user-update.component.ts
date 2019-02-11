@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { User, UserUpdate } from '../../../../../../shared'
@@ -19,6 +19,7 @@ import { UserService } from '@app/shared'
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   error: string
   userId: number
+  userEmail: string
   username: string
 
   private paramsSub: Subscription
@@ -30,7 +31,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private i18n: I18n
   ) {
@@ -73,10 +74,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.userService.updateUser(this.userId, userUpdate).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('User {{username}} updated.', { username: this.username })
-        )
+        this.notifier.success(this.i18n('User {{username}} updated.', { username: this.username }))
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -92,9 +90,22 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     return this.i18n('Update user')
   }
 
+  resetPassword () {
+    this.userService.askResetPassword(this.userEmail).subscribe(
+      () => {
+        this.notifier.success(
+          this.i18n('An email asking for password reset has been sent to {{username}}.', { username: this.username })
+        )
+      },
+
+      err => this.error = err.message
+    )
+  }
+
   private onUserFetched (userJson: User) {
     this.userId = userJson.id
     this.username = userJson.username
+    this.userEmail = userJson.email
 
     this.form.patchValue({
       email: userJson.email,

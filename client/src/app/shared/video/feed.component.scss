@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+.video-feed {
+  a {
+    color: black;
+    display: block;
+  }
+
+  my-global-icon {
+    cursor: pointer;
+    width: 12px;
+    position: relative;
+    top: -2px;
+
+    @include apply-svg-color(var(--mainForegroundColor))
+  }
+}

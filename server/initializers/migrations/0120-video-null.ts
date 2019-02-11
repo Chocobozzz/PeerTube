@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { CONSTRAINTS_FIELDS } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
@@ -28,7 +27,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max),
+      type: Sequelize.STRING(10000),
       allowNull: true,
       defaultValue: null
     }

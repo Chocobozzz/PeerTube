@@ -23,7 +23,7 @@ body {
   // now beware node-sass requires interpolation
   // for css custom properties #{$var}
   --mainColor: #{$orange-color};
-  --mainHoverColor: #{$orange-hoover-color};
+  --mainHoverColor: #{$orange-hover-color};
   --mainBackgroundColor: #{$bg-color};
   --mainForegroundColor: #{$fg-color};
   --menuBackgroundColor: #{$menu-background};
@@ -229,13 +229,12 @@ label {
       font-weight: $font-semibold;
     }
 
-    .close {
+    my-global-icon {
       @include icon(24px);
 
       position: relative;
       top: 3px;
       float: right;
-      background-image: url('../assets/images/global/cross.svg');
 
       margin: 0;
       padding: 0;
@@ -293,6 +292,10 @@ ngb-tabset.bootstrap {
       color: var(--mainForegroundColor) !important;
     }
   }
+
+  .nav-pills .nav-link.active {
+    color: #000 !important;
+  }
 }
 
 .nav-tabs .nav-link.active {
@@ -324,7 +327,7 @@ ngb-tabset.bootstrap {
 table {
   .action-button-edit, .action-button-delete {
     &:hover, &:active, &:focus, &[disabled], &.disabled {
-      background-color: $grey-color !important;
+      background-color: $grey-background-color !important;
     }
   }
 }

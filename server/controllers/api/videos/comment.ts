@@ -8,7 +8,7 @@ import { buildFormattedCommentTree, createVideoComment } from '../../../lib/vide
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate,
+  authenticate, optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
@@ -26,6 +26,7 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { AccountModel } from '../../../models/account/account'
 import { UserModel } from '../../../models/account/user'
+import { Notifier } from '../../../lib/notifier'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -36,10 +37,12 @@ videoCommentRouter.get('/:videoId/comment-threads',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listVideoCommentThreadsValidator),
+  optionalAuthenticate,
   asyncMiddleware(listVideoThreads)
 )
 videoCommentRouter.get('/:videoId/comment-threads/:threadId',
   asyncMiddleware(listVideoThreadCommentsValidator),
+  optionalAuthenticate,
   asyncMiddleware(listVideoThreadComments)
 )
 
@@ -69,10 +72,12 @@ export {
 
 async function listVideoThreads (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video = res.locals.video as VideoModel
+  const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+
   let resultList: ResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
-    resultList = await VideoCommentModel.listThreadsForApi(video.id, req.query.start, req.query.count, req.query.sort)
+    resultList = await VideoCommentModel.listThreadsForApi(video.id, req.query.start, req.query.count, req.query.sort, user)
   } else {
     resultList = {
       total: 0,
@@ -85,10 +90,12 @@ async function listVideoThreads (req: express.Request, res: express.Response, ne
 
 async function listVideoThreadComments (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video = res.locals.video as VideoModel
+  const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+
   let resultList: ResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
-    resultList = await VideoCommentModel.listThreadCommentsForApi(video.id, res.locals.videoCommentThread.id)
+    resultList = await VideoCommentModel.listThreadCommentsForApi(video.id, res.locals.videoCommentThread.id, user)
   } else {
     resultList = {
       total: 0,
@@ -113,6 +120,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
     }, t)
   })
 
+  Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({
@@ -134,6 +142,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
     }, t)
   })
 
+  Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({ comment: comment.toFormattedJSON() }).end()

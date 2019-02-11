@@ -11,6 +11,10 @@ import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-accoun
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
 import { MyAccountOwnershipComponent } from '@app/+my-account/my-account-ownership/my-account-ownership.component'
+import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-blocklist.component'
+import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
+import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
+import { MyAccountNotificationsComponent } from '@app/+my-account/my-account-notifications/my-account-notifications.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -92,6 +96,42 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Ownership changes'
+          }
+        }
+      },
+      {
+        path: 'blocklist/accounts',
+        component: MyAccountBlocklistComponent,
+        data: {
+          meta: {
+            title: 'Muted accounts'
+          }
+        }
+      },
+      {
+        path: 'blocklist/servers',
+        component: MyAccountServerBlocklistComponent,
+        data: {
+          meta: {
+            title: 'Muted instances'
+          }
+        }
+      },
+      {
+        path: 'history/videos',
+        component: MyAccountHistoryComponent,
+        data: {
+          meta: {
+            title: 'Videos history'
+          }
+        }
+      },
+      {
+        path: 'notifications',
+        component: MyAccountNotificationsComponent,
+        data: {
+          meta: {
+            title: 'Notifications'
           }
         }
       }

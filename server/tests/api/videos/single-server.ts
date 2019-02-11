@@ -28,7 +28,7 @@ import {
   uploadVideo,
   viewVideo,
   wait
-} from '../../utils'
+} from '../../../../shared/utils'
 
 const expect = chai.expect
 
@@ -120,7 +120,7 @@ describe('Test a single server', function () {
     const categories = res.body
     expect(Object.keys(categories)).to.have.length.above(10)
 
-    expect(categories[11]).to.equal('News')
+    expect(categories[11]).to.equal('News & Politics')
   })
 
   it('Should list video licences', async function () {

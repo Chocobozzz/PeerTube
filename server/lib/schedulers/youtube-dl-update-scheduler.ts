@@ -12,7 +12,7 @@ export class YoutubeDlUpdateScheduler extends AbstractScheduler {
     super()
   }
 
-  execute () {
+  protected internalExecute () {
     return updateYoutubeDLBinary()
   }
 

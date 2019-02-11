@@ -3,14 +3,7 @@ import * as magnetUtil from 'magnet-uri'
 import 'multer'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import {
-  CONFIG,
-  IMAGE_MIMETYPE_EXT,
-  PREVIEWS_SIZE,
-  sequelizeTypescript,
-  THUMBNAILS_SIZE,
-  TORRENT_MIMETYPE_EXT
-} from '../../../initializers'
+import { CONFIG, MIMETYPES, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE } from '../../../initializers'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -28,18 +21,18 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { readFile, rename } from 'fs-extra'
+import { readFile, move } from 'fs-extra'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
 
 const reqVideoFileImport = createReqFiles(
   [ 'thumbnailfile', 'previewfile', 'torrentfile' ],
-  Object.assign({}, TORRENT_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
+  Object.assign({}, MIMETYPES.TORRENT.MIMETYPE_EXT, MIMETYPES.IMAGE.MIMETYPE_EXT),
   {
-    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
-    previewfile: CONFIG.STORAGE.PREVIEWS_DIR,
-    torrentfile: CONFIG.STORAGE.TORRENTS_DIR
+    thumbnailfile: CONFIG.STORAGE.TMP_DIR,
+    previewfile: CONFIG.STORAGE.TMP_DIR,
+    torrentfile: CONFIG.STORAGE.TMP_DIR
   }
 )
 
@@ -78,7 +71,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
 
     // Rename the torrent to a secured name
     const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
-    await rename(torrentfile.path, newTorrentPath)
+    await move(torrentfile.path, newTorrentPath)
     torrentfile.path = newTorrentPath
 
     const buf = await readFile(torrentfile.path)

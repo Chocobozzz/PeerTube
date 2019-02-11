@@ -1,8 +1,9 @@
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-
 import { RestPagination } from './rest-pagination'
+import { Subject } from 'rxjs'
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 
 export abstract class RestTable {
 
@@ -11,9 +12,14 @@ export abstract class RestTable {
   abstract sort: SortMeta
   abstract pagination: RestPagination
 
+  protected search: string
+  private searchStream: Subject<string>
   private sortLocalStorageKey = 'rest-table-sort-' + this.constructor.name
 
-  protected abstract loadData (): void
+  initialize () {
+    this.loadSort()
+    this.initSearch()
+  }
 
   loadSort () {
     const result = peertubeLocalStorage.getItem(this.sortLocalStorageKey)
@@ -46,4 +52,23 @@ export abstract class RestTable {
     peertubeLocalStorage.setItem(this.sortLocalStorageKey, JSON.stringify(this.sort))
   }
 
+  initSearch () {
+    this.searchStream = new Subject()
+
+    this.searchStream
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(search => {
+        this.search = search
+        this.loadData()
+      })
+  }
+
+  onSearch (search: string) {
+    this.searchStream.next(search)
+  }
+
+  protected abstract loadData (): void
 }

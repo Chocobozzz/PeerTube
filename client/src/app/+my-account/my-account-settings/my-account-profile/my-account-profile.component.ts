@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { FormReactive, UserService } from '../../../shared'
 import { User } from '@app/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -21,7 +21,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private userValidatorsService: UserValidatorsService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private i18n: I18n
   ) {
@@ -53,7 +53,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
         this.user.account.displayName = displayName
         this.user.account.description = description
 
-        this.notificationsService.success(this.i18n('Success'), this.i18n('Profile updated.'))
+        this.notifier.success(this.i18n('Profile updated.'))
       },
 
       err => this.error = err.message

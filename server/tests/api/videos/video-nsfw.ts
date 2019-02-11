@@ -2,10 +2,17 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
-import { userLogin } from '../../utils/users/login'
-import { createUser } from '../../utils/users/users'
-import { getMyVideos } from '../../utils/videos/videos'
+import {
+  flushTests,
+  getVideosList,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo
+} from '../../../../shared/utils/index'
+import { userLogin } from '../../../../shared/utils/users/login'
+import { createUser } from '../../../../shared/utils/users/users'
+import { getMyVideos } from '../../../../shared/utils/videos/videos'
 import {
   getAccountVideos,
   getConfig,
@@ -18,7 +25,7 @@ import {
   searchVideoWithToken,
   updateCustomConfig,
   updateMyUser
-} from '../../utils'
+} from '../../../../shared/utils'
 import { ServerConfig } from '../../../../shared/models'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import { User } from '../../../../shared/models/users'

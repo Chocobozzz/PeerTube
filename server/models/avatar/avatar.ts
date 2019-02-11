@@ -23,7 +23,10 @@ export class AvatarModel extends Model<AvatarModel> {
   @AfterDestroy
   static removeFilesAndSendDelete (instance: AvatarModel) {
     logger.info('Removing avatar file %s.', instance.filename)
-    return instance.removeAvatar()
+
+    // Don't block the transaction
+    instance.removeAvatar()
+      .catch(err => logger.error('Cannot remove avatar file %s.', instance.filename, err))
   }
 
   toFormattedJSON (): Avatar {

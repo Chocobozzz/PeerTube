@@ -19,6 +19,7 @@ function cacheRoute (lifetimeArg: string | number) {
           logger.debug('No cached results for route %s.', req.originalUrl)
 
           const sendSave = res.send.bind(res)
+          const redirectSave = res.redirect.bind(res)
 
           res.send = (body) => {
             if (res.statusCode >= 200 && res.statusCode < 400) {
@@ -36,6 +37,12 @@ function cacheRoute (lifetimeArg: string | number) {
             }
 
             return sendSave(body)
+          }
+
+          res.redirect = url => {
+            done()
+
+            return redirectSave(url)
           }
 
           return next()

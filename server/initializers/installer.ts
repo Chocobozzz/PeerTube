@@ -6,18 +6,27 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
-import { CACHE, CONFIG, LAST_MIGRATION_VERSION } from './constants'
+import { CACHE, CONFIG, HLS_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 import { remove, ensureDir } from 'fs-extra'
 
 async function installApplication () {
   try {
-    await sequelizeTypescript.sync()
-    await removeCacheDirectories()
-    await createDirectoriesIfNotExist()
-    await createApplicationIfNotExist()
-    await createOAuthClientIfNotExist()
-    await createOAuthAdminIfNotExist()
+    await Promise.all([
+      // Database related
+      sequelizeTypescript.sync()
+        .then(() => {
+          return Promise.all([
+            createApplicationIfNotExist(),
+            createOAuthClientIfNotExist(),
+            createOAuthAdminIfNotExist()
+          ])
+        }),
+
+      // Directories
+      removeCacheDirectories()
+        .then(() => createDirectoriesIfNotExist())
+    ])
   } catch (err) {
     logger.error('Cannot install application.', { err })
     process.exit(-1)
@@ -63,6 +72,9 @@ function createDirectoriesIfNotExist () {
     const dir = cacheDirectories[key]
     tasks.push(ensureDir(dir))
   }
+
+  // Playlist directories
+  tasks.push(ensureDir(HLS_PLAYLIST_DIRECTORY))
 
   return Promise.all(tasks)
 }

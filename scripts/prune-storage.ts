@@ -5,6 +5,7 @@ import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
 import { remove, readdir } from 'fs-extra'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
+import { getUUIDFromFilename } from '../server/helpers/utils'
 
 run()
   .then(() => process.exit(0))
@@ -18,7 +19,8 @@ async function run () {
 
   const storageOnlyOwnedToPrune = [
     CONFIG.STORAGE.VIDEOS_DIR,
-    CONFIG.STORAGE.TORRENTS_DIR
+    CONFIG.STORAGE.TORRENTS_DIR,
+    CONFIG.STORAGE.REDUNDANCY_DIR
   ]
 
   const storageForAllToPrune = [
@@ -34,6 +36,9 @@ async function run () {
   for (const directory of storageForAllToPrune) {
     toDelete = toDelete.concat(await pruneDirectory(directory, false))
   }
+
+  const tmpFiles = await readdir(CONFIG.STORAGE.TMP_DIR)
+  toDelete = toDelete.concat(tmpFiles.map(t => join(CONFIG.STORAGE.TMP_DIR, t)))
 
   if (toDelete.length === 0) {
     console.log('No files to delete.')
@@ -82,15 +87,6 @@ async function pruneDirectory (directory: string, onlyOwned = false) {
   return toDelete
 }
 
-function getUUIDFromFilename (filename: string) {
-  const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
-  const result = filename.match(regex)
-
-  if (!result || Array.isArray(result) === false) return null
-
-  return result[0]
-}
-
 async function askConfirmation () {
   return new Promise((res, rej) => {
     prompt.start()
@@ -99,6 +95,7 @@ async function askConfirmation () {
         confirm: {
           type: 'string',
           description: 'These following unused files can be deleted, but please check your backups first (bugs happen).' +
+            ' Notice PeerTube must have been stopped when your ran this script.' +
             ' Can we delete these files?',
           default: 'n',
           required: true

@@ -4,10 +4,11 @@
   <span i18n class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
 </div>
 
-<ng-template [ngIf]="user && user.account">
-  <div i18n class="account-title">Profile</div>
-  <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
-</ng-template>
+<div i18n class="account-title">Profile</div>
+<my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
+
+<div i18n class="account-title" id="notifications">Notifications</div>
+<my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
 
 <div i18n class="account-title">Password</div>
 <my-account-change-password></my-account-change-password>

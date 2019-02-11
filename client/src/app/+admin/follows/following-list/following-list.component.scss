@@ -1,13 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
-my-redundancy-checkbox /deep/ my-peertube-checkbox {
-  .form-group {
-    margin-bottom: 0;
-    align-items: center;
-  }
+.caption {
+  justify-content: flex-end;
 
-  label {
-    margin: 0;
+  input {
+    @include peertube-input-text(250px);
   }
 }

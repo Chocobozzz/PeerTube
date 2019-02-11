@@ -3,7 +3,6 @@ import { UserRight, VideoAbuseCreate, VideoAbuseState } from '../../../../shared
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
-import { sendVideoAbuse } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -22,6 +21,8 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
 import { UserModel } from '../../../models/account/user'
+import { Notifier } from '../../../lib/notifier'
+import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -116,6 +117,8 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
     if (videoInstance.isOwned() === false) {
       await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance)
     }
+
+    Notifier.Instance.notifyOnNewVideoAbuse(videoAbuseInstance)
 
     auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseInstance.toFormattedJSON()))
 

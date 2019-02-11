@@ -2,8 +2,8 @@ import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript, VIDEO_RATE_TYPES } from '../../../initializers'
-import { sendVideoRateChange } from '../../../lib/activitypub'
-import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoRateValidator } from '../../../middlewares'
+import { getRateUrl, sendVideoRateChange } from '../../../lib/activitypub'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUpdateRateValidator } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoModel } from '../../../models/video/video'
@@ -12,7 +12,7 @@ const rateVideoRouter = express.Router()
 
 rateVideoRouter.put('/:id/rate',
   authenticate,
-  asyncMiddleware(videoRateValidator),
+  asyncMiddleware(videoUpdateRateValidator),
   asyncRetryTransactionMiddleware(rateVideo)
 )
 
@@ -28,11 +28,12 @@ async function rateVideo (req: express.Request, res: express.Response) {
   const body: UserVideoRateUpdate = req.body
   const rateType = body.rating
   const videoInstance: VideoModel = res.locals.video
+  const userAccount: AccountModel = res.locals.oauth.token.User.Account
 
   await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    const accountInstance = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
+    const accountInstance = await AccountModel.load(userAccount.id, t)
     const previousRate = await AccountVideoRateModel.load(accountInstance.id, videoInstance.id, t)
 
     let likesToIncrement = 0
@@ -44,20 +45,22 @@ async function rateVideo (req: express.Request, res: express.Response) {
     // There was a previous rate, update it
     if (previousRate) {
       // We will remove the previous rate, so we will need to update the video count attribute
-      if (previousRate.type === VIDEO_RATE_TYPES.LIKE) likesToIncrement--
-      else if (previousRate.type === VIDEO_RATE_TYPES.DISLIKE) dislikesToIncrement--
+      if (previousRate.type === 'like') likesToIncrement--
+      else if (previousRate.type === 'dislike') dislikesToIncrement--
 
       if (rateType === 'none') { // Destroy previous rate
         await previousRate.destroy(sequelizeOptions)
       } else { // Update previous rate
         previousRate.type = rateType
+        previousRate.url = getRateUrl(rateType, userAccount.Actor, videoInstance)
         await previousRate.save(sequelizeOptions)
       }
     } else if (rateType !== 'none') { // There was not a previous rate, insert a new one if there is a rate
       const query = {
         accountId: accountInstance.id,
         videoId: videoInstance.id,
-        type: rateType
+        type: rateType,
+        url: getRateUrl(rateType, userAccount.Actor, videoInstance)
       }
 
       await AccountVideoRateModel.create(query, sequelizeOptions)

@@ -8,12 +8,12 @@
     <my-video-edit
       [form]="form" [formErrors]="formErrors" [schedulePublicationPossible]="schedulePublicationPossible"
       [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
-      [videoCaptions]="videoCaptions"
+      [videoCaptions]="videoCaptions" [waitTranscodingEnabled]="waitTranscodingEnabled"
     ></my-video-edit>
 
     <div class="submit-container">
       <div class="submit-button" (click)="update()" [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true }">
-        <span class="icon icon-validate"></span>
+        <my-global-icon iconName="validate"></my-global-icon>
         <input type="button" i18n-value value="Update" />
       </div>
     </div>

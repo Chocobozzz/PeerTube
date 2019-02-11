@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core'
-import {
-  ActivatedRouteSnapshot,
-  CanActivateChild,
-  RouterStateSnapshot,
-  CanActivate,
-  Router
-} from '@angular/router'
+import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router'
 
 import { AuthService } from '../auth/auth.service'
 
@@ -19,8 +13,6 @@ export class LoginGuard implements CanActivate, CanActivateChild {
 
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (this.auth.isLoggedIn() === true) return true
-
-    this.auth.redirectUrl = state.url
 
     this.router.navigate([ '/login' ])
     return false

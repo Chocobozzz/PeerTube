@@ -7,10 +7,10 @@ export type BuildFormValidator = {
   MESSAGES: { [ name: string ]: string }
 }
 export type BuildFormArgument = {
-  [ id: string ]: BuildFormValidator
+  [ id: string ]: BuildFormValidator | BuildFormArgument
 }
 export type BuildFormDefaultValues = {
-  [ name: string ]: string | string[]
+  [ name: string ]: string | string[] | BuildFormDefaultValues
 }
 
 @Injectable()
@@ -29,7 +29,16 @@ export class FormValidatorService {
       formErrors[name] = ''
 
       const field = obj[name]
-      if (field && field.MESSAGES) validationMessages[name] = field.MESSAGES
+      if (this.isRecursiveField(field)) {
+        const result = this.buildForm(field as BuildFormArgument, defaultValues[name] as BuildFormDefaultValues)
+        group[name] = result.form
+        formErrors[name] = result.formErrors
+        validationMessages[name] = result.validationMessages
+
+        continue
+      }
+
+      if (field && field.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
       const defaultValue = defaultValues[name] || ''
 
@@ -52,13 +61,27 @@ export class FormValidatorService {
       formErrors[name] = ''
 
       const field = obj[name]
-      if (field && field.MESSAGES) validationMessages[name] = field.MESSAGES
+      if (this.isRecursiveField(field)) {
+        this.updateForm(
+          form[name],
+          formErrors[name] as FormReactiveErrors,
+          validationMessages[name] as FormReactiveValidationMessages,
+          obj[name] as BuildFormArgument,
+          defaultValues[name] as BuildFormDefaultValues
+        )
+        continue
+      }
+
+      if (field && field.MESSAGES) validationMessages[name] = field.MESSAGES as { [ name: string ]: string }
 
       const defaultValue = defaultValues[name] || ''
 
-      if (field && field.VALIDATORS) form.addControl(name, new FormControl(defaultValue, field.VALIDATORS))
+      if (field && field.VALIDATORS) form.addControl(name, new FormControl(defaultValue, field.VALIDATORS as ValidatorFn[]))
       else form.addControl(name, new FormControl(defaultValue))
     }
   }
 
+  private isRecursiveField (field: any) {
+    return field && typeof field === 'object' && !field.MESSAGES && !field.VALIDATORS
+  }
 }

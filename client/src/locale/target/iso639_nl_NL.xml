@@ -5,7 +5,7 @@
     <body>
       <trans-unit id="Afar">
         <source>Afar</source>
-        <target>Afar</target>
+        <target>Ver</target>
       </trans-unit>
       <trans-unit id="Abkhazian">
         <source>Abkhazian</source>
@@ -42,6 +42,10 @@
       <trans-unit id="Avaric">
         <source>Avaric</source>
         <target>Avaars</target>
+      </trans-unit>
+      <trans-unit id="Kotava">
+        <source>Kotava</source>
+        <target>Kotava</target>
       </trans-unit>
       <trans-unit id="Aymara">
         <source>Aymara</source>
@@ -166,6 +170,10 @@
       <trans-unit id="English">
         <source>English</source>
         <target>Engels</target>
+      </trans-unit>
+      <trans-unit id="Esperanto">
+        <source>Esperanto</source>
+        <target>Esperanto</target>
       </trans-unit>
       <trans-unit id="Estonian">
         <source>Estonian</source>
@@ -310,6 +318,10 @@
       <trans-unit id="Javanese">
         <source>Javanese</source>
         <target>Javaans</target>
+      </trans-unit>
+      <trans-unit id="Lojban">
+        <source>Lojban</source>
+        <target>Lojban</target>
       </trans-unit>
       <trans-unit id="Japanese">
         <source>Japanese</source>
@@ -495,6 +507,10 @@
         <source>Nyanja</source>
         <target>Nyanja</target>
       </trans-unit>
+      <trans-unit id="Occitan">
+        <source>Occitan</source>
+        <target>Occitan</target>
+      </trans-unit>
       <trans-unit id="Ojibwa">
         <source>Ojibwa</source>
         <target>Ojibwe</target>
@@ -670,6 +686,10 @@
       <trans-unit id="Tigrinya">
         <source>Tigrinya</source>
         <target>Tigrinya</target>
+      </trans-unit>
+      <trans-unit id="Klingon">
+        <source>Klingon</source>
+        <target>Klingon</target>
       </trans-unit>
       <trans-unit id="Tonga (Tonga Islands)">
         <source>Tonga (Tonga Islands)</source>

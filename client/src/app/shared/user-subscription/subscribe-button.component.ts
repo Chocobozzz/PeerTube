@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoService } from '@app/shared/video/video.service'
 import { FeedFormat } from '../../../../../shared/models/feeds'
@@ -23,7 +22,7 @@ export class SubscribeButtonComponent implements OnInit {
   constructor (
     private authService: AuthService,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userSubscriptionService: UserSubscriptionService,
     private i18n: I18n,
     private videoService: VideoService
@@ -43,18 +42,17 @@ export class SubscribeButtonComponent implements OnInit {
         .subscribe(
           res => this.subscribed = res[this.uri],
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
     }
   }
 
   subscribe () {
     if (this.isUserLoggedIn()) {
-      this.localSubscribe()
-    } else {
-      this.authService.redirectUrl = this.router.url
-      this.gotoLogin()
+      return this.localSubscribe()
     }
+
+    return this.gotoLogin()
   }
 
   localSubscribe () {
@@ -63,13 +61,13 @@ export class SubscribeButtonComponent implements OnInit {
         () => {
           this.subscribed = true
 
-          this.notificationsService.success(
-            this.i18n('Subscribed'),
-            this.i18n('Subscribed to {{nameWithHost}}', { nameWithHost: this.videoChannel.displayName })
+          this.notifier.success(
+            this.i18n('Subscribed to {{nameWithHost}}', { nameWithHost: this.videoChannel.displayName }),
+            this.i18n('Subscribed')
           )
         },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
       )
   }
 
@@ -85,13 +83,13 @@ export class SubscribeButtonComponent implements OnInit {
           () => {
             this.subscribed = false
 
-            this.notificationsService.success(
-              this.i18n('Unsubscribed'),
-              this.i18n('Unsubscribed from {{nameWithHost}}', { nameWithHost: this.videoChannel.displayName })
+            this.notifier.success(
+              this.i18n('Unsubscribed from {{nameWithHost}}', { nameWithHost: this.videoChannel.displayName }),
+              this.i18n('Unsubscribed')
             )
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 

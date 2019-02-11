@@ -37,6 +37,11 @@ import { UserModel } from '../../../models/account/user'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
+import { myBlocklistRouter } from './my-blocklist'
+import { myVideosHistoryRouter } from './my-history'
+import { myNotificationsRouter } from './my-notifications'
+import { Notifier } from '../../../lib/notifier'
+import { mySubscriptionsRouter } from './my-subscriptions'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -53,6 +58,10 @@ const askSendEmailLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', myNotificationsRouter)
+usersRouter.use('/', mySubscriptionsRouter)
+usersRouter.use('/', myBlocklistRouter)
+usersRouter.use('/', myVideosHistoryRouter)
 usersRouter.use('/', meRouter)
 
 usersRouter.get('/autocomplete',
@@ -207,6 +216,8 @@ async function registerUser (req: express.Request, res: express.Response) {
     await sendVerifyUserEmail(user)
   }
 
+  Notifier.Instance.notifyOnNewUserRegistration(user)
+
   return res.type('json').status(204).end()
 }
 
@@ -218,7 +229,7 @@ async function unblockUser (req: express.Request, res: express.Response, next: e
   return res.status(204).end()
 }
 
-async function blockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function blockUser (req: express.Request, res: express.Response) {
   const user: UserModel = res.locals.user
   const reason = req.body.reason
 
@@ -227,23 +238,23 @@ async function blockUser (req: express.Request, res: express.Response, next: exp
   return res.status(204).end()
 }
 
-function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getUser (req: express.Request, res: express.Response) {
   return res.json((res.locals.user as UserModel).toFormattedJSON())
 }
 
-async function autocompleteUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function autocompleteUsers (req: express.Request, res: express.Response) {
   const resultList = await UserModel.autoComplete(req.query.search as string)
 
   return res.json(resultList)
 }
 
-async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort)
+async function listUsers (req: express.Request, res: express.Response) {
+  const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.search)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function removeUser (req: express.Request, res: express.Response) {
   const user: UserModel = res.locals.user
 
   await user.destroy()
@@ -253,13 +264,15 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
   return res.sendStatus(204)
 }
 
-async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateUser (req: express.Request, res: express.Response) {
   const body: UserUpdate = req.body
   const userToUpdate = res.locals.user as UserModel
   const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
   const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
+  if (body.password !== undefined) userToUpdate.password = body.password
   if (body.email !== undefined) userToUpdate.email = body.email
+  if (body.emailVerified !== undefined) userToUpdate.emailVerified = body.emailVerified
   if (body.videoQuota !== undefined) userToUpdate.videoQuota = body.videoQuota
   if (body.videoQuotaDaily !== undefined) userToUpdate.videoQuotaDaily = body.videoQuotaDaily
   if (body.role !== undefined) userToUpdate.role = body.role
@@ -267,11 +280,11 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged) await deleteUserToken(userToUpdate.id)
+  if (roleChanged || body.password !== undefined) await deleteUserToken(userToUpdate.id)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
 
-  // Don't need to send this update to followers, these attributes are not propagated
+  // Don't need to send this update to followers, these attributes are not federated
 
   return res.sendStatus(204)
 }
@@ -281,7 +294,7 @@ async function askResetUserPassword (req: express.Request, res: express.Response
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
   const url = CONFIG.WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
-  await Emailer.Instance.addForgetPasswordEmailJob(user.email, url)
+  await Emailer.Instance.addPasswordResetEmailJob(user.email, url)
 
   return res.status(204).end()
 }

@@ -3,7 +3,6 @@ import { ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
-import { NotificationsService } from 'angular2-notifications'
 import { fromEvent, Observable, Subscription } from 'rxjs'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
@@ -12,6 +11,8 @@ import { Video } from './video.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
+import { Syndication } from '@app/shared/video/syndication.model'
+import { Notifier } from '@app/core'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private static LINES_PER_PAGE = 4
@@ -27,7 +28,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   sort: VideoSortField = '-publishedAt'
   categoryOneOf?: number
   defaultSort: VideoSortField = '-publishedAt'
-  syndicationItems = []
+  syndicationItems: Syndication[] = []
 
   loadOnInit = true
   marginContent = true
@@ -37,11 +38,13 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   videoPages: Video[][] = []
   ownerDisplayType: OwnerDisplayType = 'account'
   firstLoadedPage: number
+  displayModerationBlock = false
+  titleTooltip: string
 
   protected baseVideoWidth = 215
   protected baseVideoHeight = 205
 
-  protected abstract notificationsService: NotificationsService
+  protected abstract notifier: Notifier
   protected abstract authService: AuthService
   protected abstract router: Router
   protected abstract route: ActivatedRoute
@@ -58,7 +61,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private resizeSubscription: Subscription
 
   abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number}>
-  abstract generateSyndicationList ()
+  abstract generateSyndicationList (): void
 
   get user () {
     return this.authService.getUser()
@@ -155,9 +158,13 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
       },
       error => {
         this.loadingPage[page] = false
-        this.notificationsService.error(this.i18n('Error'), error.message)
+        this.notifier.error(error.message)
       }
     )
+  }
+
+  toggleModerationDisplay () {
+    throw new Error('toggleModerationDisplay is not implemented')
   }
 
   protected hasMoreVideos () {
@@ -206,7 +213,9 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected setNewRouteParams () {
     const paramsObject = this.buildRouteParams()
 
-    const queryParams = Object.keys(paramsObject).map(p => p + '=' + paramsObject[p]).join('&')
+    const queryParams = Object.keys(paramsObject)
+                              .map(p => p + '=' + paramsObject[p])
+                              .join('&')
     this.location.replaceState(this.currentRoute, queryParams)
   }
 

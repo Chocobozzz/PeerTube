@@ -7,8 +7,9 @@ export class FromNowPipe implements PipeTransform {
 
   constructor (private i18n: I18n) { }
 
-  transform (value: number) {
-    const seconds = Math.floor((Date.now() - value) / 1000)
+  transform (arg: number | Date | string) {
+    const argDate = new Date(arg)
+    const seconds = Math.floor((Date.now() - argDate.getTime()) / 1000)
 
     let interval = Math.floor(seconds / 31536000)
     if (interval > 1) {

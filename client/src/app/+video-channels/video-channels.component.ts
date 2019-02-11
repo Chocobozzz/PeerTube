@@ -34,9 +34,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.routeSub = this.route.params
                         .pipe(
-                          map(params => params[ 'videoChannelId' ]),
+                          map(params => params[ 'videoChannelName' ]),
                           distinctUntilChanged(),
-                          switchMap(videoChannelId => this.videoChannelService.getVideoChannel(videoChannelId)),
+                          switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
                           catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
                         )
                         .subscribe(videoChannel => this.videoChannel = videoChannel)

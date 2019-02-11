@@ -1,22 +1,27 @@
-import { CONFIG } from '../initializers'
-import { join, extname } from 'path'
+import { CONFIG, HLS_PLAYLIST_DIRECTORY } from '../initializers'
+import { extname, join } from 'path'
 import { getVideoFileFPS, getVideoFileResolution, transcode } from '../helpers/ffmpeg-utils'
-import { copy, remove, rename, stat } from 'fs-extra'
+import { copy, ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoModel } from '../models/video/video'
+import { updateMasterHLSPlaylist, updateSha256Segments } from './hls'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
 
-async function optimizeOriginalVideofile (video: VideoModel) {
+async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFileModel) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const newExtname = '.mp4'
-  const inputVideoFile = video.getOriginalFile()
+
+  const inputVideoFile = inputVideoFileArg ? inputVideoFileArg : video.getOriginalFile()
   const videoInputPath = join(videosDirectory, video.getVideoFilename(inputVideoFile))
   const videoTranscodedPath = join(videosDirectory, video.id + '-transcoded' + newExtname)
 
   const transcodeOptions = {
     inputPath: videoInputPath,
-    outputPath: videoTranscodedPath
+    outputPath: videoTranscodedPath,
+    resolution: inputVideoFile.resolution
   }
 
   // Could be very long!
@@ -29,7 +34,7 @@ async function optimizeOriginalVideofile (video: VideoModel) {
     inputVideoFile.set('extname', newExtname)
 
     const videoOutputPath = video.getVideoFilePath(inputVideoFile)
-    await rename(videoTranscodedPath, videoOutputPath)
+    await move(videoTranscodedPath, videoOutputPath)
     const stats = await stat(videoOutputPath)
     const fps = await getVideoFileFPS(videoOutputPath)
 
@@ -46,7 +51,7 @@ async function optimizeOriginalVideofile (video: VideoModel) {
   }
 }
 
-async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
+async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoResolution, isPortrait: boolean) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const extname = '.mp4'
 
@@ -59,13 +64,13 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
     size: 0,
     videoId: video.id
   })
-  const videoOutputPath = join(videosDirectory, video.getVideoFilename(newVideoFile))
+  const videoOutputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(newVideoFile))
 
   const transcodeOptions = {
     inputPath: videoInputPath,
     outputPath: videoOutputPath,
     resolution,
-    isPortraitMode
+    isPortraitMode: isPortrait
   }
 
   await transcode(transcodeOptions)
@@ -81,6 +86,41 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
   await newVideoFile.save()
 
   video.VideoFiles.push(newVideoFile)
+}
+
+async function generateHlsPlaylist (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
+  const baseHlsDirectory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
+  await ensureDir(join(HLS_PLAYLIST_DIRECTORY, video.uuid))
+
+  const videoInputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(video.getOriginalFile()))
+  const outputPath = join(baseHlsDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
+
+  const transcodeOptions = {
+    inputPath: videoInputPath,
+    outputPath,
+    resolution,
+    isPortraitMode,
+
+    hlsPlaylist: {
+      videoFilename: VideoStreamingPlaylistModel.getHlsVideoName(video.uuid, resolution)
+    }
+  }
+
+  await transcode(transcodeOptions)
+
+  await updateMasterHLSPlaylist(video)
+  await updateSha256Segments(video)
+
+  const playlistUrl = CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
+
+  await VideoStreamingPlaylistModel.upsert({
+    videoId: video.id,
+    playlistUrl,
+    segmentsSha256Url: CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid),
+    p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, video.VideoFiles),
+
+    type: VideoStreamingPlaylistType.HLS
+  })
 }
 
 async function importVideoFile (video: VideoModel, inputFilePath: string) {
@@ -124,7 +164,8 @@ async function importVideoFile (video: VideoModel, inputFilePath: string) {
 }
 
 export {
-  optimizeOriginalVideofile,
+  generateHlsPlaylist,
+  optimizeVideofile,
   transcodeOriginalVideofile,
   importVideoFile
 }

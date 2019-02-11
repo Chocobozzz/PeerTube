@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
@@ -15,15 +15,15 @@ import { User } from '../../../../../shared'
 })
 export class UserBanModalComponent extends FormReactive implements OnInit {
   @ViewChild('modal') modal: NgbModal
-  @Output() userBanned = new EventEmitter<User>()
+  @Output() userBanned = new EventEmitter<User | User[]>()
 
-  private userToBan: User
+  private usersToBan: User | User[]
   private openedModal: NgbModalRef
 
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private userValidatorsService: UserValidatorsService,
     private i18n: I18n
@@ -37,32 +37,33 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
     })
   }
 
-  openModal (user: User) {
-    this.userToBan = user
+  openModal (user: User | User[]) {
+    this.usersToBan = user
     this.openedModal = this.modalService.open(this.modal)
   }
 
-  hideBanUserModal () {
-    this.userToBan = undefined
+  hide () {
+    this.usersToBan = undefined
     this.openedModal.close()
   }
 
   async banUser () {
     const reason = this.form.value['reason'] || undefined
 
-    this.userService.banUser(this.userToBan, reason)
+    this.userService.banUsers(this.usersToBan, reason)
       .subscribe(
         () => {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('User {{username}} banned.', { username: this.userToBan.username })
-          )
+          const message = Array.isArray(this.usersToBan)
+            ? this.i18n('{{num}} users banned.', { num: this.usersToBan.length })
+            : this.i18n('User {{username}} banned.', { username: this.usersToBan.username })
 
-          this.userBanned.emit(this.userToBan)
-          this.hideBanUserModal()
+          this.notifier.success(message)
+
+          this.userBanned.emit(this.usersToBan)
+          this.hide()
         },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
       )
   }
 

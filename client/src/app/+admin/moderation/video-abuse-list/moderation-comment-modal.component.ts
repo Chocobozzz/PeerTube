@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { FormReactive, VideoAbuseService, VideoAbuseValidatorsService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -22,7 +22,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private videoAbuseService: VideoAbuseService,
     private videoAbuseValidatorsService: VideoAbuseValidatorsService,
     private i18n: I18n
@@ -45,29 +45,26 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     })
   }
 
-  hideModerationCommentModal () {
+  hide () {
     this.abuseToComment = undefined
     this.openedModal.close()
     this.form.reset()
   }
 
   async banUser () {
-    const moderationComment: string = this.form.value['moderationComment']
+    const moderationComment: string = this.form.value[ 'moderationComment' ]
 
     this.videoAbuseService.updateVideoAbuse(this.abuseToComment, { moderationComment })
-      .subscribe(
-        () => {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('Comment updated.')
-          )
+        .subscribe(
+          () => {
+            this.notifier.success(this.i18n('Comment updated.'))
 
-          this.commentUpdated.emit(moderationComment)
-          this.hideModerationCommentModal()
-        },
+            this.commentUpdated.emit(moderationComment)
+            this.hide()
+          },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
-      )
+          err => this.notifier.error(err.message)
+        )
   }
 
 }

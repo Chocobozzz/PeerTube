@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 
 @Component({
   selector: 'my-video-download',
@@ -18,7 +18,7 @@ export class VideoDownloadComponent implements OnInit {
   resolutionId: number | string = -1
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private modalService: NgbModal,
     private i18n: I18n
   ) { }
@@ -63,6 +63,6 @@ export class VideoDownloadComponent implements OnInit {
   }
 
   activateCopiedMessage () {
-    this.notificationsService.success(this.i18n('Success'), this.i18n('Copied'))
+    this.notifier.success(this.i18n('Copied'))
   }
 }

@@ -1,5 +1,317 @@
 # Changelog
 
+## v1.2.0
+
+### BREAKING CHANGES
+
+ * **Docker:** `PEERTUBE_TRUST_PROXY` env variable is now an array ([LecygneNoir](https://github.com/LecygneNoir))
+ * **Docker:** Check you have all the storage fields in your `/config/production.yaml` file: https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/production.yaml#L34
+ * **nginx:** Add redundancy endpoint in static file. **You should add it in your nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx**
+ * **nginx:** Add socket io endpoint. **You should add it in your nginx configuration: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx**
+ * Moderators can manage users now (add/delete/update/block)
+ * Add `tmp` and `redundancy` directories in configuration file. **You should configure them in your production.yaml**
+
+### Maintenance
+
+ * Check free storage before upgrading in upgrade script ([@Nutomic](https://github.com/nutomic))
+ * Explain that PeerTube must be stopped in prune storage script
+ * Add some security directives in the systemd unit configuration file ([@rigelk](https://github.com/rigelk) & [@mkoppmann](https://github.com/mkoppmann))
+ * Update FreeBSD startup script ([@gegeweb](https://github.com/gegeweb))
+
+### Docker
+
+ * Patch docker entrypoint to speed up the chown at startup ([LecygneNoir](https://github.com/LecygneNoir))
+
+### Features
+
+ * Add Russian, Polish and Italian languages
+ * Add user notifications:
+   * Notification types:
+     * Comment on my video
+     * New video from my subscriptions
+     * New video abuses (for moderators)
+     * Blacklist/Unblacklist on my video
+     * Video import finished (error or success)
+     * Pending video published (after transcoding or a scheduled update)
+     * My account or one of my channel has a new follower
+     * Someone (except muted accounts) mentioned me in comments
+     * A user registered on the instance (for moderators)
+   * Notification actions:
+     * Add a web notification
+     * Send an english email
+ * Add contact form in about page (**enabled by default**)
+ * Add ability to unfederate a local video in blacklist modal (**checkbox checked by default**)
+ * Support additional video extensions if transcoding is enabled (**enabled by default**)
+ * Redirect to the last url on login
+ * Add ability to automatically set the video caption in URL. Example: https://peertube2.cpy.re/videos/watch/9c9de5e8-0a1e-484a-b099-e80766180a6d?subtitle=ru
+ * Automatically enable the last selected caption when watching a video
+ * Add ability to disable, clear and list user videos history
+ * Add a button to help to translate peertube
+ * Add text in the report modal to explain to whom the report will be sent
+ * Open my account menu entries on hover
+ * Explain what features are enabled on the instance in the about page
+ * Add an error message in the forgot password modal if the instance email system is not configured
+ * Add sitemap
+ * Add well known url to change password ([@rigelk](https://github.com/rigelk))
+ * Remove 8GB video upload limit on client side. There may still be such limit depending on the reverse proxy configuration ([@scanlime](https://github.com/scanlime))
+ * Add CSP ([@rigelk](https://github.com/rigelk) & [@Nutomic](https://github.com/nutomic))
+ * Update title and description HTML tags when rendering video HTML page
+ * Add webfinger support for remote follows ([@acid-chicken](https://github.com/acid-chicken))
+ * Add tooltip to explain how the trending algorithm works ([@auberanger](https://github.com/auberanger))
+ * Warn users when they want to delete a channel because they will not be able to create another channel with the same name
+ * Warn users when they leave the video upload/update (on page refresh/tab close)
+ * Set max user name, user display name, channel name and channel display name lengths to 50 characters ([@McFlat](https://github.com/mcflat))
+ * Increase video abuse length to 3000 characters
+ * Add totalLocalVideoFilesSize in the stats endpoint
+
+## Bug fixes
+
+ * Fix the addition of captions to a video
+ * Fix federation of some videos
+ * Fix NSFW blur on search
+ * Add error message when trying to upload .ass subtitles
+ * Fix default homepage in the progressive web application
+ * Don't crash on queue error
+ * Fix EXDEV errors if you have multiple mount points
+ * Fix broken audio in transcoding with some videos
+ * Fix crash on getVideoFileStream issue
+ * Fix followers search
+ * Remove trailing `/` in CLI import script ([@HesioZ](https://github.com/HesioZ/))
+ * Use origin video url in canonical tag
+ * Fix captions in HTTP fallback
+ * Automatically refresh remote actors to fix deleted remote actors that are still displayed on some instances
+ * Add missing translations in video embed page
+ * Fix some styling issues in dark mode
+ * Fix transcoding issues with some videos
+ * Fix Mac OS mkv/avi upload
+ * Fix menu overflow on mobile
+ * Fix ownership button icons ([@joshmorel](https://github.com/joshmorel))
+
+
+## v1.1.0
+
+***Since v1.0.1***
+
+### BREAKING CHANGES
+
+ * **Docker:** `PEERTUBE_TRUST_PROXY` env variable is now an array ([LecygneNoir](https://github.com/LecygneNoir))
+
+### Maintenance
+
+ * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
+ * Add basic ActivityPub documentation: https://docs.joinpeertube.org/lang/en/devdocs/federation.html ([@rigelk](https://github.com/rigelk))
+ * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
+ * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
+ * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
+ * Allow peertube-import-videos.ts CLI script to run concurrently ([@McFlat](https://github.com/mcflat))
+
+### Scripts
+
+ * Use DB information from config/production.yaml in upgrade script ([@ldidry](https://github.com/ldidry))
+ * Add REPL script ([@McFlat](https://github.com/mcflat))
+
+### Docker
+
+ * Add search and import settings env settings env variables ([@kaiyou](https://github.com/kaiyou))
+ * Add docker dev image ([@am97](https://github.com/am97))
+ * Improve docker compose template ([@Nutomic](https://github.com/nutomic))
+   * Add postfix image
+   * Redirect HTTP -> HTTPS
+   * Disable Træfik web UI
+
+### Features
+ 
+ * Automatically resume videos if the user is logged in
+ * Hide automatically the menu when the window is resized ([@BO41](https://github.com/BO41))
+ * Remove confirm modal for JavaScript/CSS injection ([@scanlime](https://github.com/scanlime))
+ * Set bitrate limits for transcoding ([@Nutomic](https://github.com/nutomic))
+ * Add moderation tools in the account page
+ * Add bulk actions in users table (Delete/Ban for now)
+ * Add search filter in admin users table
+ * Add search filter in admin following
+ * Add search filter in admin followers
+ * Add ability to list all local videos
+ * Add ability for users to mute an account or an instance
+ * Add ability for administrators to mute an account or an instance
+ * Rename "News" category to "News & Politics" ([@daker](https://github.com/daker))
+ * Add explicit error message when changing video ownership ([@lucas-dclrcq](https://github.com/lucas-dclrcq))
+ * Improve description of the HTTP video import feature ([@rigelk](https://github.com/rigelk))
+ * Set shorter keyframe interval for transcoding (2 seconds) ([@Nutomic](https://github.com/nutomic))
+ * Add ability to disable webtorrent (as a user) ([@rigelk](https://github.com/rigelk))
+ * Make abuse-delete clearer ([@barbeque](https://github.com/barbeque))
+ * Adding minimum signup age conforming to ceiling GPDR age ([@rigelk](https://github.com/rigelk))
+ * Feature/description support fields length 1000 ([@McFlat](https://github.com/mcflat))
+ * Add background effect to activated menu entry
+ * Improve video upload error handling
+ * Improve message visibility on signup
+ * Auto login user on signup if email verification is disabled
+ * Speed up PeerTube startup (in particular the first one)
+ * Delete invalid or deleted remote videos
+ * Add ability to admin to set email as verified ([@joshmorel](https://github.com/joshmorel))
+ * Add separators in user moderation dropdown
+
+### Bug fixes
+
+ * AP mimeType -> mediaType
+ * PeerTube is not in beta anymore
+ * PeerTube is not in alpha anymore :p
+ * Fix optimize old videos script
+ * Check follow constraints when getting a video
+ * Fix application-config initialization in CLI tools ([Yetangitu](https://github.com/Yetangitu))
+ * Fix video pixel format compatibility (using yuv420p) ([@rigelk](https://github.com/rigelk))
+ * Fix video `state` AP context  ([tcitworld](https://github.com/tcitworld))
+ * Fix Linked Signature compatibility
+ * Fix AP collections pagination
+ * Fix too big thumbnails (when using URL import)
+ * Do not host remote AP objects: use redirection instead
+ * Fix video miniature with a long name
+ * Fix video views inconsistencies inside the federation
+ * Fix video embed in Wordpress Gutenberg
+ * Fix video channel videos url when scrolling
+ * Fix player progress bar/seeking when changing resolution
+ * Fix search tab title with no search
+ * Fix YouTube video import with some videos
+
+***Since v1.1.0-rc.1***
+
+### Bug fixes
+
+ * Fix AP infinite redirection
+ * Fix trending page
+
+
+## v1.1.0-rc.1 (since v1.1.0-alpha.2)
+
+### Maintenance
+
+ * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
+ * Add basic ActivityPub documentation: https://docs.joinpeertube.org/lang/en/devdocs/federation.html ([@rigelk](https://github.com/rigelk))
+ * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
+ * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
+ * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
+ * Allow peertube-import-videos.ts CLI script to run concurrently ([@McFlat](https://github.com/mcflat))
+
+### Docker
+
+ * Improve docker compose template ([@Nutomic](https://github.com/nutomic))
+   * Add postfix image
+   * Redirect HTTP -> HTTPS
+   * Disable Træfik web UI
+ * Add ability to set an array in `PEERTUBE_TRUST_PROXY` ([LecygneNoir](https://github.com/LecygneNoir))
+
+### Features
+
+ * Add background effect to activated menu entry
+ * Improve video upload error handling
+ * Improve message visibility on signup
+ * Auto login user on signup if email verification is disabled
+ * Speed up PeerTube startup (in particular the first one)
+ * Delete invalid or deleted remote videos
+ * Add ability to admin to set email as verified ([@joshmorel](https://github.com/joshmorel))
+ * Add separators in user moderation dropdown
+
+### Bug fixes
+
+ * Check follow constraints when getting a video
+ * Fix application-config initialization in CLI tools ([Yetangitu](https://github.com/Yetangitu))
+ * Fix video pixel format compatibility (using yuv420p) ([@rigelk](https://github.com/rigelk))
+ * Fix video `state` AP context  ([tcitworld](https://github.com/tcitworld))
+ * Fix Linked Signature compatibility
+ * Fix AP collections pagination
+ * Fix too big thumbnails (when using URL import)
+ * Do not host remote AP objects: use redirection instead
+ * Fix video miniature with a long name
+ * Fix video views inconsistencies inside the federation
+ * Fix video embed in Wordpress Gutenberg
+ * Fix video channel videos url when scrolling
+ * Fix player progress bar/seeking when changing resolution
+ * Fix search tab title with no search
+ * Fix YouTube video import with some videos
+    
+
+## v1.1.0-alpha.2 (since v1.1.0-alpha.1)
+
+### Security/Maintenance/Federation
+ 
+ * Add HTTP Signature in addition to Linked Signature:
+    * It's faster
+    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation 
+ 
+### Features
+
+ * Set shorter keyframe interval for transcoding (2 seconds) ([@Nutomic](https://github.com/nutomic))
+ * Add ability to disable webtorrent (as a user) ([@rigelk](https://github.com/rigelk))
+ * Make abuse-delete clearer ([@barbeque](https://github.com/barbeque))
+ * Adding minimum signup age conforming to ceiling GPDR age ([@rigelk](https://github.com/rigelk))
+ * Feature/description support fields length 1000 ([@McFlat](https://github.com/mcflat))
+
+### Bug fixes
+
+ * Scale bitrate linearly with FPS ([@Nutomic](https://github.com/nutomic))
+ * AP mimeType -> mediaType
+ * PeerTube is not in beta anymore
+ * PeerTube is not in alpha anymore :p
+ * Fix optimize old videos script
+
+
+## v1.0.1
+
+### Security/Maintenance/Federation
+ 
+ * Add HTTP Signature in addition to Linked Signature:
+    * It's faster
+    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation
+
+
+## v1.1.0-alpha.1
+
+We released this alpha version because some admins/users need some moderation tools we implemented in recent weeks.
+This release could contain bugs. Don't expect a stable v1.1.0 until December :)
+
+### Scripts
+
+ * Use DB information from config/production.yaml in upgrade script ([@ldidry](https://github.com/ldidry))
+ * Add REPL script ([@McFlat](https://github.com/mcflat))
+
+### Docker
+
+ * Add search and import settings env settings env variables ([@kaiyou](https://github.com/kaiyou))
+ * Add docker dev image ([@am97](https://github.com/am97))
+
+### Features
+ 
+ * Automatically resume videos if the user is logged in
+ * Hide automatically the menu when the window is resized ([@BO41](https://github.com/BO41))
+ * Remove confirm modal for JavaScript/CSS injection ([@scanlime](https://github.com/scanlime))
+ * Set bitrate limits for transcoding ([@Nutomic](https://github.com/nutomic))
+ * Add moderation tools in the account page
+ * Add bulk actions in users table (Delete/Ban for now)
+ * Add search filter in admin users table
+ * Add search filter in admin following
+ * Add search filter in admin followers
+ * Add ability to list all local videos
+ * Add ability for users to mute an account or an instance
+ * Add ability for administrators to mute an account or an instance
+ * Rename "News" category to "News & Politics" ([@daker](https://github.com/daker))
+ * Add explicit error message when changing video ownership ([@lucas-dclrcq](https://github.com/lucas-dclrcq))
+ * Improve description of the HTTP video import feature ([@rigelk](https://github.com/rigelk))
+
+
+## v1.0.0
+
+### SECURITY
+
+ * Add more headers to HTTP signature to avoid actor impersonation by replaying modified signed HTTP requests (thanks Thibaut Girka)
+
+### Bug fixes
+
+ * Check video exists before extending expiration
+ * Correctly delete redundancy files
+ * Fix account URI in remote comment modal ([@rigelk](https://github.com/rigelk))
+ * Fix avatar update
+ * Avoid old issue regarding duplicated hosts in database
+
+
 ## v1.0.0-rc.2
 
 ### Bug fixes
@@ -87,7 +399,7 @@
 
 ### Features
 
- * Video redundancy system (experimental, see [the doc](/support/doc/redundancy.md))
+ * Video redundancy system (experimental, see [the doc](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances))
  * Add peertube script (see [the doc](/support/doc/tools.md#cli-wrapper)) ([@rigelk](https://github.com/rigelk))
  * Improve download modal ([@rigelk](https://github.com/rigelk))
  * Add redirect after login ([@BO41](https://github.com/BO41))

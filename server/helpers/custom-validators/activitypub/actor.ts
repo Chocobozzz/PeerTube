@@ -27,7 +27,8 @@ function isActorPublicKeyValid (publicKey: string) {
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
-const actorNameRegExp = new RegExp('^[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_\.]+$')
+const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.]'
+const actorNameRegExp = new RegExp(`^${actorNameAlphabet}+$`)
 function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
 }
@@ -72,24 +73,10 @@ function isActorDeleteActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Delete')
 }
 
-function isActorFollowActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Follow') &&
-    isActivityPubUrlValid(activity.object)
-}
+function sanitizeAndCheckActorObject (object: any) {
+  normalizeActor(object)
 
-function isActorAcceptActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Accept')
-}
-
-function isActorRejectActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Reject')
-}
-
-function isActorUpdateActivityValid (activity: any) {
-  normalizeActor(activity.object)
-
-  return isBaseActivityValid(activity, 'Update') &&
-    isActorObjectValid(activity.object)
+  return isActorObjectValid(object)
 }
 
 function normalizeActor (actor: any) {
@@ -127,6 +114,7 @@ function areValidActorHandles (handles: string[]) {
 
 export {
   normalizeActor,
+  actorNameAlphabet,
   areValidActorHandles,
   isActorEndpointsObjectValid,
   isActorPublicKeyObjectValid,
@@ -137,10 +125,7 @@ export {
   isActorObjectValid,
   isActorFollowingCountValid,
   isActorFollowersCountValid,
-  isActorFollowActivityValid,
-  isActorAcceptActivityValid,
-  isActorRejectActivityValid,
   isActorDeleteActivityValid,
-  isActorUpdateActivityValid,
+  sanitizeAndCheckActorObject,
   isValidActorHandle
 }

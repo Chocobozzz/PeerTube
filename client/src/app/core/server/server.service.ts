@@ -13,6 +13,7 @@ import { sortBy } from '@app/shared/misc/utils'
 
 @Injectable()
 export class ServerService {
+  private static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server/'
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
@@ -37,6 +38,12 @@ export class ServerService {
         css: ''
       }
     },
+    email: {
+      enabled: false
+    },
+    contactForm: {
+      enabled: false
+    },
     serverVersion: 'Unknown',
     signup: {
       allowed: false,
@@ -44,7 +51,10 @@ export class ServerService {
       requiresEmailVerification: false
     },
     transcoding: {
-      enabledResolutions: []
+      enabledResolutions: [],
+      hls: {
+        enabled: false
+      }
     },
     avatar: {
       file: {
@@ -79,6 +89,11 @@ export class ServerService {
         torrent: {
           enabled: false
         }
+      }
+    },
+    trending: {
+      videos: {
+        intervalDays: 0
       }
     }
   }
@@ -141,10 +156,6 @@ export class ServerService {
     return this.videoPrivacies
   }
 
-  getAbout () {
-    return this.http.get<About>(ServerService.BASE_CONFIG_URL + '/about')
-  }
-
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
     hashToPopulate: VideoConstant<string | number>[],
@@ -154,7 +165,7 @@ export class ServerService {
     this.localeObservable
         .pipe(
           switchMap(translations => {
-            return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
+            return this.http.get<{ [id: string]: string }>(ServerService.BASE_VIDEO_URL + attributeName)
                        .pipe(map(data => ({ data, translations })))
           })
         )

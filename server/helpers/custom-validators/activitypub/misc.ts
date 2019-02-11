@@ -28,15 +28,20 @@ function isBaseActivityValid (activity: any, type: string) {
   return (activity['@context'] === undefined || Array.isArray(activity['@context'])) &&
     activity.type === type &&
     isActivityPubUrlValid(activity.id) &&
-    exists(activity.actor) &&
-    (isActivityPubUrlValid(activity.actor) || isActivityPubUrlValid(activity.actor.id)) &&
+    isObjectValid(activity.actor) &&
+    isUrlCollectionValid(activity.to) &&
+    isUrlCollectionValid(activity.cc)
+}
+
+function isUrlCollectionValid (collection: any) {
+  return collection === undefined ||
+    (Array.isArray(collection) && collection.every(t => isActivityPubUrlValid(t)))
+}
+
+function isObjectValid (object: any) {
+  return exists(object) &&
     (
-      activity.to === undefined ||
-      (Array.isArray(activity.to) && activity.to.every(t => isActivityPubUrlValid(t)))
-    ) &&
-    (
-      activity.cc === undefined ||
-      (Array.isArray(activity.cc) && activity.cc.every(t => isActivityPubUrlValid(t)))
+      isActivityPubUrlValid(object) || isActivityPubUrlValid(object.id)
     )
 }
 
@@ -57,5 +62,6 @@ export {
   isUrlValid,
   isActivityPubUrlValid,
   isBaseActivityValid,
-  setValidAttributedTo
+  setValidAttributedTo,
+  isObjectValid
 }

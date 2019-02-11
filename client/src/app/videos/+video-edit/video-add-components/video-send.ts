@@ -1,18 +1,17 @@
 import { EventEmitter, OnInit } from '@angular/core'
 import { LoadingBarService } from '@ngx-loading-bar/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { catchError, switchMap, tap } from 'rxjs/operators'
 import { FormReactive } from '@app/shared'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
-import { AuthService, ServerService } from '@app/core'
 import { VideoService } from '@app/shared/video/video.service'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
+import { CanComponentDeactivateResult } from '@app/shared/guards/can-deactivate-guard.service'
 
-export abstract class VideoSend extends FormReactive implements OnInit, CanComponentDeactivate {
+export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
@@ -21,16 +20,17 @@ export abstract class VideoSend extends FormReactive implements OnInit, CanCompo
   firstStepChannelId = 0
 
   abstract firstStepDone: EventEmitter<string>
+  abstract firstStepError: EventEmitter<void>
   protected abstract readonly DEFAULT_VIDEO_PRIVACY: VideoPrivacy
 
   protected loadingBar: LoadingBarService
-  protected notificationsService: NotificationsService
+  protected notifier: Notifier
   protected authService: AuthService
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
 
-  abstract canDeactivate ()
+  abstract canDeactivate (): CanComponentDeactivateResult
 
   ngOnInit () {
     this.buildForm({})

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { Observable } from 'rxjs'
 import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
 import { FormReactive } from '../../../shared'
@@ -29,14 +29,14 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
 
   @ViewChild('visitorModal') visitorModal: NgbModal
-  @ViewChild('textarea') private textareaElement: ElementRef
+  @ViewChild('textarea') textareaElement: ElementRef
 
-  private addingComment = false
+  addingComment = false
 
   constructor (
     protected formValidatorService: FormValidatorService,
     private videoCommentValidatorsService: VideoCommentValidatorsService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private videoCommentService: VideoCommentService,
     private authService: AuthService,
     private modalService: NgbModal,
@@ -70,13 +70,13 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   }
 
   onValidKey () {
-    this.onValueChanged()
+    this.check()
     if (!this.form.valid) return
 
     this.formValidated()
   }
 
-  openVisitorModal (event) {
+  openVisitorModal (event: any) {
     if (this.user === null) { // we only open it for visitors
       // fixing ng-bootstrap ModalService and the "Expression Changed After It Has Been Checked" Error
       event.srcElement.blur()
@@ -115,7 +115,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
       err => {
         this.addingComment = false
 
-        this.notificationsService.error(this.i18n('Error'), err.text)
+        this.notifier.error(err.text)
       }
     )
   }
@@ -135,7 +135,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   gotoLogin () {
     this.hideVisitorModal()
-    this.authService.redirectUrl = this.router.url
     this.router.navigate([ '/login' ])
   }
 

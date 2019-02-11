@@ -9,6 +9,8 @@ import { createVideoChannel } from './video-channel'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { ActorModel } from '../models/activitypub/actor'
+import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
+import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
 
 async function createUserAccountAndChannel (userToCreate: UserModel, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
@@ -18,7 +20,9 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
     }
 
     const userCreated = await userToCreate.save(userOptions)
-    const accountCreated = await createLocalAccountWithoutKeys(userToCreate.username, userToCreate.id, null, t)
+    userCreated.NotificationSetting = await createDefaultUserNotificationSettings(userCreated, t)
+
+    const accountCreated = await createLocalAccountWithoutKeys(userCreated.username, userCreated.id, null, t)
     userCreated.Account = accountCreated
 
     let channelName = userCreated.username + '_channel'
@@ -37,8 +41,13 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
     return { user: userCreated, account: accountCreated, videoChannel }
   })
 
-  account.Actor = await setAsyncActorKeys(account.Actor)
-  videoChannel.Actor = await setAsyncActorKeys(videoChannel.Actor)
+  const [ accountKeys, channelKeys ] = await Promise.all([
+    setAsyncActorKeys(account.Actor),
+    setAsyncActorKeys(videoChannel.Actor)
+  ])
+
+  account.Actor = accountKeys
+  videoChannel.Actor = channelKeys
 
   return { user, account, videoChannel } as { user: UserModel, account: AccountModel, videoChannel: VideoChannelModel }
 }
@@ -82,4 +91,23 @@ export {
   createApplicationActor,
   createUserAccountAndChannel,
   createLocalAccountWithoutKeys
+}
+
+// ---------------------------------------------------------------------------
+
+function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Transaction | undefined) {
+  const values: UserNotificationSetting & { userId: number } = {
+    userId: user.id,
+    newVideoFromSubscription: UserNotificationSettingValue.WEB,
+    newCommentOnMyVideo: UserNotificationSettingValue.WEB,
+    myVideoImportFinished: UserNotificationSettingValue.WEB,
+    myVideoPublished: UserNotificationSettingValue.WEB,
+    videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB,
+    commentMention: UserNotificationSettingValue.WEB,
+    newFollow: UserNotificationSettingValue.WEB
+  }
+
+  return UserNotificationSettingModel.create(values, { transaction: t })
 }

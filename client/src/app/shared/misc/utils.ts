@@ -102,10 +102,16 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   return fd
 }
 
-function lineFeedToHtml (obj: object, keyToNormalize: string) {
+function objectLineFeedToHtml (obj: any, keyToNormalize: string) {
   return immutableAssign(obj, {
-    [keyToNormalize]: obj[keyToNormalize].replace(/\r?\n|\r/g, '<br />')
+    [keyToNormalize]: lineFeedToHtml(obj[keyToNormalize])
   })
+}
+
+function lineFeedToHtml (text: string) {
+  if (!text) return text
+
+  return text.replace(/\r?\n|\r/g, '<br />')
 }
 
 function removeElementFromArray <T> (arr: T[], elem: T) {
@@ -124,9 +130,14 @@ function sortBy (obj: any[], key1: string, key2?: string) {
   })
 }
 
+function scrollToTop () {
+  window.scroll(0, 0)
+}
+
 export {
   sortBy,
   durationToString,
+  lineFeedToHtml,
   objectToUrlEncoded,
   getParameterByName,
   populateAsyncUserVideoChannels,
@@ -134,6 +145,7 @@ export {
   dateToHuman,
   immutableAssign,
   objectToFormData,
-  lineFeedToHtml,
-  removeElementFromArray
+  objectLineFeedToHtml,
+  removeElementFromArray,
+  scrollToTop
 }

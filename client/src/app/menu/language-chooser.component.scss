@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+.help-to-translate {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
 .modal-body {
   text-align: center;
 

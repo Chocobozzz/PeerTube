@@ -19,10 +19,7 @@ async function generateRandomString (size: number) {
   return raw.toString('hex')
 }
 
-interface FormattableToJSON {
-  toFormattedJSON (args?: any)
-}
-
+interface FormattableToJSON { toFormattedJSON (args?: any) }
 function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number, formattedArg?: any) {
   const formattedObjects: U[] = []
 
@@ -40,21 +37,24 @@ const getServerActor = memoizee(async function () {
   const application = await ApplicationModel.load()
   if (!application) throw Error('Could not load Application from database.')
 
-  return application.Account.Actor
+  const actor = application.Account.Actor
+  actor.Account = application.Account
+
+  return actor
 })
 
-function generateVideoTmpPath (target: string | ParseTorrent) {
+function generateVideoImportTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash
 
   const hash = sha256(id)
-  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+  return join(CONFIG.STORAGE.TMP_DIR, hash + '-import.mp4')
 }
 
 function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
-async function getVersion () {
+async function getServerCommit () {
   try {
     const tag = await execPromise2(
       '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
@@ -74,7 +74,21 @@ async function getVersion () {
     logger.debug('Cannot get version from git HEAD.', { err })
   }
 
-  return require('../../../package.json').version
+  return ''
+}
+
+/**
+ * From a filename like "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3.mp4", returns
+ * only the "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3" part. If the filename does
+ * not contain a UUID, returns null.
+ */
+function getUUIDFromFilename (filename: string) {
+  const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
+  const result = filename.match(regex)
+
+  if (!result || Array.isArray(result) === false) return null
+
+  return result[0]
 }
 
 // ---------------------------------------------------------------------------
@@ -85,6 +99,7 @@ export {
   getFormattedObjects,
   getSecureTorrentName,
   getServerActor,
-  getVersion,
-  generateVideoTmpPath
+  getServerCommit,
+  generateVideoImportTmpPath,
+  getUUIDFromFilename
 }
