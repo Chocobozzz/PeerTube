@@ -918,11 +918,12 @@ describe('Test multiple servers', function () {
       }
     })
 
-    it('Should disable comments', async function () {
+    it('Should disable comments and download', async function () {
       this.timeout(20000)
 
       const attributes = {
-        commentsEnabled: false
+        commentsEnabled: false,
+        downloadEnabled: false
       }
 
       await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, attributes)
@@ -932,6 +933,7 @@ describe('Test multiple servers', function () {
       for (const server of servers) {
         const res = await getVideo(server.url, videoUUID)
         expect(res.body.commentsEnabled).to.be.false
+        expect(res.body.downloadEnabled).to.be.false
 
         const text = 'my super forbidden comment'
         await addVideoCommentThread(server.url, server.accessToken, videoUUID, text, 409)
