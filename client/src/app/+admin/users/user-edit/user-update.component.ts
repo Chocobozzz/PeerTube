@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { Notifier } from '@app/core'
@@ -93,8 +93,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   resetPassword () {
     this.userService.askResetPassword(this.userEmail).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
+        this.notifier.success(
           this.i18n('An email asking for password reset has been sent to {{username}}.', { username: this.username })
         )
       },

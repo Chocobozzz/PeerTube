@@ -167,7 +167,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
   return res.sendStatus(204)
 }
 
-async function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateMe (req: express.Request, res: express.Response) {
   const body: UserUpdateMe = req.body
 
   const user: UserModel = res.locals.oauth.token.user

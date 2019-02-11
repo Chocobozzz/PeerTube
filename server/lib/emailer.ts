@@ -101,22 +101,6 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addForceResetPasswordEmailJob (to: string, resetPasswordUrl: string) {
-    const text = `Hi dear user,\n\n` +
-      `Your password has been reset on ${CONFIG.WEBSERVER.HOST}! ` +
-      `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
-      `Cheers,\n` +
-      `PeerTube.`
-
-    const emailPayload: EmailPayload = {
-      to: [ to ],
-      subject: 'Reset of your PeerTube password',
-      text
-    }
-
-    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
-  }
-
   addNewFollowNotification (to: string[], actorFollow: ActorFollowModel, followType: 'account' | 'channel') {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
@@ -312,9 +296,9 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addForgetPasswordEmailJob (to: string, resetPasswordUrl: string) {
+  addPasswordResetEmailJob (to: string, resetPasswordUrl: string) {
     const text = `Hi dear user,\n\n` +
-      `It seems you forgot your password on ${CONFIG.WEBSERVER.HOST}! ` +
+      `A reset password procedure for your account ${to} has been requested on ${CONFIG.WEBSERVER.HOST} ` +
       `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
       `If you are not the person who initiated this request, please ignore this email.\n\n` +
       `Cheers,\n` +

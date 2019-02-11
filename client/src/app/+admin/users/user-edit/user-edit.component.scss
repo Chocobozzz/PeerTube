@@ -32,3 +32,16 @@ input[type=submit], button {
   margin-top: 55px;
   margin-bottom: 30px;
 }
+
+.danger-zone {
+  .reset-password-email {
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    button {
+      display: block;
+      margin-top: 0;
+    }
+  }
+}

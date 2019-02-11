@@ -8,6 +8,7 @@ export abstract class UserEdit extends FormReactive {
   videoQuotaDailyOptions: { value: string, label: string }[] = []
   roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
   username: string
+  userId: number
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
@@ -35,6 +36,10 @@ export abstract class UserEdit extends FormReactive {
     if (transcodingConfig.hls.enabled) multiplier *= 2
 
     return multiplier * parseInt(this.form.value['videoQuota'], 10)
+  }
+
+  resetPassword () {
+    return
   }
 
   protected buildQuotaOptions () {

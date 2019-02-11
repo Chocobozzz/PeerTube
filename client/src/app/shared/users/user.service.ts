@@ -103,11 +103,6 @@ export class UserService {
                )
   }
 
-  resetUserPassword (userId: number) {
-    return this.authHttp.post(UserService.BASE_USERS_URL + userId + '/reset-password', {})
-               .pipe(catchError(err => this.restExtractor.handleError(err)))
-  }
-
   verifyEmail (userId: number, verificationString: string) {
     const url = `${UserService.BASE_USERS_URL}/${userId}/verify-email`
     const body = {
