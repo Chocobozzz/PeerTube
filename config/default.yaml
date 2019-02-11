@@ -140,6 +140,7 @@ transcoding:
     720p: false
     1080p: false
   # /!\ EXPERIMENTAL /!\
+  # /!\ Requires ffmpeg >= 3.4
   # Generate HLS playlist/segments. Better playback than with WebTorrent:
   #     * Resolution change is smoother
   #     * Faster playback in particular with long videos
