@@ -11,7 +11,7 @@ import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
-import { safeGetYoutubeDL } from '../helpers/youtube-dl'
+import { safeGetYoutubeDL, buildOriginallyPublishedAt } from '../helpers/youtube-dl'
 import { getSettings, netrc } from './cli'
 
 let accessToken: string
@@ -212,7 +212,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     }, thumbnailfile)
   }
 
-  const date = videoInfo.upload_date.slice(0,4) + ',' + videoInfo.upload_date.slice(4,6) + ',' + videoInfo.upload_date.slice(6,8)
+  const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
 
   const videoAttributes = {
     name: truncate(videoInfo.title, {
@@ -234,7 +234,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     fixture: videoPath,
     thumbnailfile,
     previewfile: thumbnailfile,
-    originallyPublishedAt: new Date(date).toISOString()
+    originallyPublishedAt: originallyPublishedAt ? originallyPublishedAt.toISOString() : null
   }
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)

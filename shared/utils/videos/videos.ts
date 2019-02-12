@@ -42,7 +42,6 @@ type VideoAttributes = {
     updateAt: string
     privacy?: VideoPrivacy
   }
-  originallyPublishedAt?: string
 }
 
 function getVideoCategories (url: string) {

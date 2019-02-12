@@ -16,7 +16,7 @@ export type YoutubeDLInfo = {
   nsfw?: boolean
   tags?: string[]
   thumbnailUrl?: string
-  originallyPublishedAt?: string
+  originallyPublishedAt?: Date
 }
 
 const processOptions = {
@@ -143,13 +143,33 @@ async function safeGetYoutubeDL () {
   return youtubeDL
 }
 
+function buildOriginallyPublishedAt (obj: any) {
+  let originallyPublishedAt: Date = null
+
+  const uploadDateMatcher = /^(\d{4})(\d{2})(\d{2})$/.exec(obj.upload_date)
+  if (uploadDateMatcher) {
+    originallyPublishedAt = new Date()
+    originallyPublishedAt.setHours(0, 0, 0, 0)
+
+    const year = parseInt(uploadDateMatcher[1], 10)
+    // Month starts from 0
+    const month = parseInt(uploadDateMatcher[2], 10) - 1
+    const day = parseInt(uploadDateMatcher[3], 10)
+
+    originallyPublishedAt.setFullYear(year, month, day)
+  }
+
+  return originallyPublishedAt
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   updateYoutubeDLBinary,
   downloadYoutubeDLVideo,
   getYoutubeDLInfo,
-  safeGetYoutubeDL
+  safeGetYoutubeDL,
+  buildOriginallyPublishedAt
 }
 
 // ---------------------------------------------------------------------------
@@ -174,9 +194,6 @@ function normalizeObject (obj: any) {
 }
 
 function buildVideoInfo (obj: any) {
-
-  const date = obj.upload_date.slice(0,4) + ',' + obj.upload_date.slice(4,6) + ',' + obj.upload_date.slice(6,8)
-
   return {
     name: titleTruncation(obj.title),
     description: descriptionTruncation(obj.description),
@@ -185,7 +202,7 @@ function buildVideoInfo (obj: any) {
     nsfw: isNSFW(obj),
     tags: getTags(obj.tags),
     thumbnailUrl: obj.thumbnail || undefined,
-    originallyPublishedAt: new Date(date).toISOString()
+    originallyPublishedAt: buildOriginallyPublishedAt(obj)
   }
 }
 
