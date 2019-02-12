@@ -35,6 +35,6 @@ export class FromNowPipe implements PipeTransform {
     interval = Math.floor(seconds / 60)
     if (interval >= 1) return this.i18n('{{interval}} min ago', { interval })
 
-    return this.i18n('{{interval}} sec ago', { interval: Math.floor(seconds) })
+    return this.i18n('{{interval}} sec ago', { interval: Math.max(0, seconds) })
   }
 }
