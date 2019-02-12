@@ -1,4 +1,5 @@
 import { FindOptions, literal, Op, QueryTypes } from 'sequelize'
+import { Ldap } from '../../lib/ldap'
 import {
   AfterDestroy,
   AfterUpdate,
@@ -44,7 +45,9 @@ import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
 import { NSFW_POLICY_TYPES } from '../../initializers/constants'
+import { CONFIG } from '../../initializers/config'
 import { clearCacheByUserId } from '../../lib/oauth-model'
+import { createUserAccountAndChannelAndPlaylist } from '../../lib/user'
 import { UserNotificationSettingModel } from './user-notification-setting'
 import { VideoModel } from '../video/video'
 import { ActorModel } from '../activitypub/actor'
@@ -112,6 +115,11 @@ export class UserModel extends Model<UserModel> {
   @IsEmail
   @Column(DataType.STRING(400))
   email: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  ldapDn: string
 
   @AllowNull(true)
   @Default(null)
@@ -362,6 +370,48 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
+  static loadByLdapDn (ldapDn: string) {
+    const query = {
+      where: {
+        ldapDn
+      }
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static async findOrCreateLDAPUser (username: string) {
+    try {
+      const userInfos = await Ldap.Instance.findUser(username)
+      const user = await UserModel.loadByLdapDn(userInfos['dn'])
+      if (user) {
+        return user
+      } else {
+        return await UserModel.createLDAPUser(username, userInfos)
+      }
+    } catch (e) {
+      return null
+    }
+  }
+
+  static async createLDAPUser (username: string, userInfos: {}) {
+    const userToCreate = new UserModel({
+      username,
+      password: 'SomeInvalidPassword',
+      email: userInfos[CONFIG.AUTH.LDAP.MAIL_ENTRY],
+      ldapDn: userInfos['dn'],
+      nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+      autoPlayVideo: true,
+      role: UserRole.USER,
+      videoQuota: CONFIG.USER.VIDEO_QUOTA,
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+      emailVerified: true,
+      adminFlags: UserAdminFlag.NONE
+    })
+    const { user } = await createUserAccountAndChannelAndPlaylist(userToCreate)
+    return user
+  }
+
   static loadByUsernameAndPopulateChannels (username: string) {
     const query = {
       where: {
@@ -529,7 +579,11 @@ export class UserModel extends Model<UserModel> {
   }
 
   isPasswordMatch (password: string) {
-    return comparePassword(password, this.password)
+    if (this.ldapDn === null) {
+      return comparePassword(password, this.password)
+    } else {
+      return Ldap.Instance.checkUser(this.ldapDn, password)
+    }
   }
 
   toFormattedJSON (parameters: { withAdminFlags?: boolean } = {}): User {

@@ -75,7 +75,13 @@ function getRefreshToken (refreshToken: string) {
 async function getUser (usernameOrEmail: string, password: string) {
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
-  const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
+  let user : UserModel
+  if (CONFIG.AUTH.LDAP.ENABLED) {
+    user = await UserModel.findOrCreateLDAPUser(usernameOrEmail)
+  }
+  if (!user && CONFIG.AUTH.LOCAL.ENABLED) {
+    user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
+  }
   if (!user) return null
 
   const passwordMatch = await user.isPasswordMatch(password)

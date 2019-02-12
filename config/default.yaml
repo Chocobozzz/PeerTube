@@ -43,6 +43,19 @@ redis:
   auth: null
   db: 0
 
+auth:
+  local:
+    enabled: true
+  ldap:
+    enabled: true
+    url: ldap://localhost:389/dc=example,dc=com
+    insecure_tls: false
+    bind_dn: cn=admin,dc=example,dc=com
+    bind_password: adminPass
+    base: dc=example,dc=com
+    mail_entry: "mail"
+    user_filter: "(|(email=%username%)(uid=%username%))"
+
 smtp:
   hostname: null
   port: 465

@@ -34,6 +34,21 @@ const CONFIG = {
     AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
     DB: config.has('redis.db') ? config.get<number>('redis.db') : null
   },
+  AUTH: {
+    LOCAL: {
+      ENABLED: config.has('auth.local.enabled') ? config.get<boolean>('auth.local.enabled') : true,
+    },
+    LDAP: {
+      ENABLED: config.has('auth.ldap.enabled') ? config.get<boolean>('auth.ldap.enabled') : false,
+      URL: config.has('auth.ldap.url') ? config.get<string>('auth.ldap.url') : null,
+      INSECURE_TLS: config.has('auth.ldap.insecure_tls') ? config.get<boolean>('auth.ldap.insecure_tls') : false,
+      BIND_DN: config.has('auth.ldap.bind_dn') ? config.get<string>('auth.ldap.bind_dn') : null,
+      BIND_PASSWORD: config.has('auth.ldap.bind_password') ? config.get<string>('auth.ldap.bind_password') : null,
+      BASE: config.has('auth.ldap.base') ? config.get<string>('auth.ldap.base') : null,
+      MAIL_ENTRY: config.has('auth.ldap.mail_entry') ? config.get<string>('auth.ldap.mail_entry') : 'mail',
+      USER_FILTER: config.has('auth.ldap.user_filter') ? config.get<string>('auth.ldap.user_filter') : null
+    },
+  },
   SMTP: {
     HOSTNAME: config.get<string>('smtp.hostname'),
     PORT: config.get<number>('smtp.port'),
