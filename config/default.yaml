@@ -52,6 +52,10 @@ redis:
   db: 0
 
 smtp:
+  # smtp or sendmail
+  transport: smtp
+  # Path to sendmail command. Required if you use sendmail transport
+  sendmail: null
   hostname: null
   port: 465
   username: null

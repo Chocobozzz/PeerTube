@@ -53,6 +53,10 @@ redis:
 
 # SMTP server to send emails
 smtp:
+  # smtp or sendmail
+  transport: smtp
+  # Path to sendmail command. Required if you use sendmail transport
+  sendmail: null
   hostname: null
   port: 465 # If you use StartTLS: 587
   username: null
