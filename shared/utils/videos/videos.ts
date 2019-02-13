@@ -350,9 +350,6 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
   if (attributes.licence !== undefined) {
     req.field('licence', attributes.licence.toString())
   }
-  if (attributes.originallyPublishedAt !== undefined) {
-    req.field('originallyPublishedAt', attributes.originallyPublishedAt)
-  }
 
   for (let i = 0; i < attributes.tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])
