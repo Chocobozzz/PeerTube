@@ -41,33 +41,43 @@ class Emailer {
     this.initialized = true
 
     if (isEmailEnabled()) {
-      logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
+      if (CONFIG.SMTP.TRANSPORT === 'smtp') {
+        logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
 
-      let tls
-      if (CONFIG.SMTP.CA_FILE) {
-        tls = {
-          ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
+        let tls
+        if (CONFIG.SMTP.CA_FILE) {
+          tls = {
+            ca: [ readFileSync(CONFIG.SMTP.CA_FILE) ]
+          }
         }
-      }
 
-      let auth
-      if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
-        auth = {
-          user: CONFIG.SMTP.USERNAME,
-          pass: CONFIG.SMTP.PASSWORD
+        let auth
+        if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
+          auth = {
+            user: CONFIG.SMTP.USERNAME,
+            pass: CONFIG.SMTP.PASSWORD
+          }
         }
-      }
 
-      this.transporter = createTransport({
-        host: CONFIG.SMTP.HOSTNAME,
-        port: CONFIG.SMTP.PORT,
-        secure: CONFIG.SMTP.TLS,
-        debug: CONFIG.LOG.LEVEL === 'debug',
-        logger: bunyanLogger as any,
-        ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
-        tls,
-        auth
-      })
+        this.transporter = createTransport({
+          host: CONFIG.SMTP.HOSTNAME,
+          port: CONFIG.SMTP.PORT,
+          secure: CONFIG.SMTP.TLS,
+          debug: CONFIG.LOG.LEVEL === 'debug',
+          logger: bunyanLogger as any,
+          ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
+          tls,
+          auth
+        })
+      } else { // sendmail
+        logger.info('Using sendmail to send emails')
+
+        this.transporter = createTransport({
+          sendmail: true,
+          newline: 'unix',
+          path: CONFIG.SMTP.SENDMAIL,
+        })
+      }
     } else {
       if (!isTestInstance()) {
         logger.error('Cannot use SMTP server because of lack of configuration. PeerTube will not be able to send mails!')
@@ -76,11 +86,17 @@ class Emailer {
   }
 
   static isEnabled () {
-    return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
+    if (CONFIG.SMTP.TRANSPORT === 'sendmail') {
+      return !!CONFIG.SMTP.SENDMAIL
+    } else if (CONFIG.SMTP.TRANSPORT === 'smtp') {
+      return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
+    } else {
+      return false
+    }
   }
 
   async checkConnectionOrDie () {
-    if (!this.transporter) return
+    if (!this.transporter || CONFIG.SMTP.TRANSPORT !== 'smtp') return
 
     logger.info('Testing SMTP server...')
 

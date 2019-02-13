@@ -36,6 +36,8 @@ const CONFIG = {
     DB: config.has('redis.db') ? config.get<number>('redis.db') : null
   },
   SMTP: {
+    TRANSPORT: config.has('smtp.transport') ? config.get<string>('smtp.transport') : 'smtp',
+    SENDMAIL: config.has('smtp.sendmail') ? config.get<string>('smtp.sendmail') : null,
     HOSTNAME: config.get<string>('smtp.hostname'),
     PORT: config.get<number>('smtp.port'),
     USERNAME: config.get<string>('smtp.username'),
