@@ -45,7 +45,8 @@ describe('Test contact form', function () {
 
     const email = emails[0]
 
-    expect(email['from'][0]['address']).equal('toto@example.com')
+    expect(email['from'][0]['address']).equal('test-admin@localhost')
+    expect(email['from'][0]['name']).equal('toto@example.com')
     expect(email['to'][0]['address']).equal('admin1@example.com')
     expect(email['subject']).contains('Contact form')
     expect(email['text']).contains('my super message')
