@@ -1,6 +1,7 @@
 import * as program from 'commander'
 import { initDatabaseModels } from '../server/initializers'
 import { UserModel } from '../server/models/account/user'
+import { isUserPasswordValid } from '../server/helpers/custom-validators/users'
 
 program
   .option('-u, --user [user]', 'User')
@@ -36,6 +37,11 @@ initDatabaseModels(true)
 
     console.log('New password?')
     rl.on('line', function (password) {
+      if (!isUserPasswordValid(password)) {
+        console.error('New password is invalid.')
+        process.exit(-1)
+      }
+
       user.password = password
 
       user.save()
