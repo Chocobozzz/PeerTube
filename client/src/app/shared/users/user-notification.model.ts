@@ -63,73 +63,79 @@ export class UserNotification implements UserNotificationServer {
     this.type = hash.type
     this.read = hash.read
 
-    this.video = hash.video
-    if (this.video) this.setAvatarUrl(this.video.channel)
+    // We assume that some fields exist
+    // To prevent a notification popup crash in case of bug, wrap it inside a try/catch
+    try {
+      this.video = hash.video
+      if (this.video) this.setAvatarUrl(this.video.channel)
 
-    this.videoImport = hash.videoImport
+      this.videoImport = hash.videoImport
 
-    this.comment = hash.comment
-    if (this.comment) this.setAvatarUrl(this.comment.account)
+      this.comment = hash.comment
+      if (this.comment) this.setAvatarUrl(this.comment.account)
 
-    this.videoAbuse = hash.videoAbuse
+      this.videoAbuse = hash.videoAbuse
 
-    this.videoBlacklist = hash.videoBlacklist
+      this.videoBlacklist = hash.videoBlacklist
 
-    this.account = hash.account
-    if (this.account) this.setAvatarUrl(this.account)
+      this.account = hash.account
+      if (this.account) this.setAvatarUrl(this.account)
 
-    this.actorFollow = hash.actorFollow
-    if (this.actorFollow) this.setAvatarUrl(this.actorFollow.follower)
+      this.actorFollow = hash.actorFollow
+      if (this.actorFollow) this.setAvatarUrl(this.actorFollow.follower)
 
-    this.createdAt = hash.createdAt
-    this.updatedAt = hash.updatedAt
+      this.createdAt = hash.createdAt
+      this.updatedAt = hash.updatedAt
 
-    switch (this.type) {
-      case UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION:
-        this.videoUrl = this.buildVideoUrl(this.video)
-        break
+      switch (this.type) {
+        case UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION:
+          this.videoUrl = this.buildVideoUrl(this.video)
+          break
 
-      case UserNotificationType.UNBLACKLIST_ON_MY_VIDEO:
-        this.videoUrl = this.buildVideoUrl(this.video)
-        break
+        case UserNotificationType.UNBLACKLIST_ON_MY_VIDEO:
+          this.videoUrl = this.buildVideoUrl(this.video)
+          break
 
-      case UserNotificationType.NEW_COMMENT_ON_MY_VIDEO:
-      case UserNotificationType.COMMENT_MENTION:
-        this.accountUrl = this.buildAccountUrl(this.comment.account)
-        this.commentUrl = [ this.buildVideoUrl(this.comment.video), { threadId: this.comment.threadId } ]
-        break
+        case UserNotificationType.NEW_COMMENT_ON_MY_VIDEO:
+        case UserNotificationType.COMMENT_MENTION:
+          this.accountUrl = this.buildAccountUrl(this.comment.account)
+          this.commentUrl = [ this.buildVideoUrl(this.comment.video), { threadId: this.comment.threadId } ]
+          break
 
-      case UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS:
-        this.videoAbuseUrl = '/admin/moderation/video-abuses/list'
-        this.videoUrl = this.buildVideoUrl(this.videoAbuse.video)
-        break
+        case UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS:
+          this.videoAbuseUrl = '/admin/moderation/video-abuses/list'
+          this.videoUrl = this.buildVideoUrl(this.videoAbuse.video)
+          break
 
-      case UserNotificationType.BLACKLIST_ON_MY_VIDEO:
-        this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
-        break
+        case UserNotificationType.BLACKLIST_ON_MY_VIDEO:
+          this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
+          break
 
-      case UserNotificationType.MY_VIDEO_PUBLISHED:
-        this.videoUrl = this.buildVideoUrl(this.video)
-        break
+        case UserNotificationType.MY_VIDEO_PUBLISHED:
+          this.videoUrl = this.buildVideoUrl(this.video)
+          break
 
-      case UserNotificationType.MY_VIDEO_IMPORT_SUCCESS:
-        this.videoImportUrl = this.buildVideoImportUrl()
-        this.videoImportIdentifier = this.buildVideoImportIdentifier(this.videoImport)
-        this.videoUrl = this.buildVideoUrl(this.videoImport.video)
-        break
+        case UserNotificationType.MY_VIDEO_IMPORT_SUCCESS:
+          this.videoImportUrl = this.buildVideoImportUrl()
+          this.videoImportIdentifier = this.buildVideoImportIdentifier(this.videoImport)
+          this.videoUrl = this.buildVideoUrl(this.videoImport.video)
+          break
 
-      case UserNotificationType.MY_VIDEO_IMPORT_ERROR:
-        this.videoImportUrl = this.buildVideoImportUrl()
-        this.videoImportIdentifier = this.buildVideoImportIdentifier(this.videoImport)
-        break
+        case UserNotificationType.MY_VIDEO_IMPORT_ERROR:
+          this.videoImportUrl = this.buildVideoImportUrl()
+          this.videoImportIdentifier = this.buildVideoImportIdentifier(this.videoImport)
+          break
 
-      case UserNotificationType.NEW_USER_REGISTRATION:
-        this.accountUrl = this.buildAccountUrl(this.account)
-        break
+        case UserNotificationType.NEW_USER_REGISTRATION:
+          this.accountUrl = this.buildAccountUrl(this.account)
+          break
 
-      case UserNotificationType.NEW_FOLLOW:
-        this.accountUrl = this.buildAccountUrl(this.actorFollow.follower)
-        break
+        case UserNotificationType.NEW_FOLLOW:
+          this.accountUrl = this.buildAccountUrl(this.actorFollow.follower)
+          break
+      }
+    } catch (err) {
+      console.error(err)
     }
   }
 
