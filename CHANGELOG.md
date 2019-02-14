@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.1
+
+## Bug fixes
+
+ * **Important** Fix invalid `From` email header in contact form that could lead to the blacklisting of your SMTP server
+ * Fix too long display name overflow in menu
+ * Fix mention notification when a remote account mention a local account that has the same username than yours
+ * Fix access to muted servers table for moderators
+ * Don't crash notification popup on bug
+ * Fix reset password script that leaks password on invalid value
+
+
 ## v1.2.0
 
 ### BREAKING CHANGES
