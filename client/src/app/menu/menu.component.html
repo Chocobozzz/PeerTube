@@ -5,8 +5,8 @@
         <my-avatar-notification [user]="user"></my-avatar-notification>
 
         <div class="logged-in-info">
-          <a routerLink="/my-account/settings" class="logged-in-username">{{ user.account?.displayName }}</a>
-          <div class="logged-in-email">{{ user.username }}</div>
+          <a routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
+          <div class="logged-in-username">{{ user.username }}</div>
         </div>
 
         <div class="logged-in-more" ngbDropdown placement="bottom-right">

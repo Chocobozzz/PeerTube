@@ -10,6 +10,8 @@ class CommentMock {
   text: string
 
   extractMentions = VideoCommentModel.prototype.extractMentions
+
+  isOwned = () => true
 }
 
 describe('Comment model', function () {

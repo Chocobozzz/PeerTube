@@ -64,7 +64,7 @@ export const ModerationRoutes: Routes = [
         component: InstanceServerBlocklistComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_SERVER_REDUNDANCY,
+          userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
           meta: {
             title: 'Muted instances'
           }

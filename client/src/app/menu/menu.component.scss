@@ -41,8 +41,11 @@ menu {
 
     .logged-in-info {
       flex-grow: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-      .logged-in-username {
+      .logged-in-display-name {
         font-size: 16px;
         font-weight: $font-semibold;
         color: var(--menuForegroundColor);
@@ -51,7 +54,7 @@ menu {
         @include disable-default-a-behaviour;
       }
 
-      .logged-in-email {
+      .logged-in-username {
         font-size: 13px;
         color: #C6C6C6;
         white-space: nowrap;
