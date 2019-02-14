@@ -361,7 +361,8 @@ class Emailer {
       'PeerTube.'
 
     const emailPayload: EmailPayload = {
-      from: fromEmail,
+      fromDisplayName: fromEmail,
+      replyTo: fromEmail,
       to: [ CONFIG.ADMIN.EMAIL ],
       subject: '[PeerTube] Contact form submitted',
       text
@@ -370,16 +371,21 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  sendMail (to: string[], subject: string, text: string, from?: string) {
+  sendMail (options: EmailPayload) {
     if (!Emailer.isEnabled()) {
       throw new Error('Cannot send mail because SMTP is not configured.')
     }
 
+    const fromDisplayName = options.fromDisplayName
+      ? options.fromDisplayName
+      : CONFIG.WEBSERVER.HOST
+
     return this.transporter.sendMail({
-      from: from || CONFIG.SMTP.FROM_ADDRESS,
-      to: to.join(','),
-      subject,
-      text
+      from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`,
+      replyTo: options.replyTo,
+      to: options.to.join(','),
+      subject: options.subject,
+      text: options.text
     })
   }
 
