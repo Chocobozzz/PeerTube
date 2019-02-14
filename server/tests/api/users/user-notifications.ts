@@ -508,6 +508,20 @@ describe('Test users notifications', function () {
       await removeAccountFromAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
     })
 
+    it('Should not send a new mention notification if the remote account mention a local account', async function () {
+      this.timeout(20000)
+
+      const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
+      const uuid = resVideo.body.video.uuid
+
+      await waitJobs(servers)
+      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, '@user_1 hello')
+      const threadId = resThread.body.comment.id
+
+      await waitJobs(servers)
+      await checkCommentMention(baseParams, uuid, threadId, threadId, 'super root 2 name', 'absence')
+    })
+
     it('Should send a new mention notification after local comments', async function () {
       this.timeout(10000)
 

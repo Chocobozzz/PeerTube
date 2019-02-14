@@ -466,31 +466,41 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }
 
   extractMentions () {
-    if (!this.text) return []
+    let result: string[] = []
 
     const localMention = `@(${actorNameAlphabet}+)`
     const remoteMention = `${localMention}@${CONFIG.WEBSERVER.HOST}`
 
+    const mentionRegex = this.isOwned()
+      ? '(?:(?:' + remoteMention + ')|(?:' + localMention + '))' // Include local mentions?
+      : '(?:' + remoteMention + ')'
+
+    const firstMentionRegex = new RegExp(`^${mentionRegex} `, 'g')
+    const endMentionRegex = new RegExp(` ${mentionRegex}$`, 'g')
     const remoteMentionsRegex = new RegExp(' ' + remoteMention + ' ', 'g')
-    const localMentionsRegex = new RegExp(' ' + localMention + ' ', 'g')
-    const firstMentionRegex = new RegExp('^(?:(?:' + remoteMention + ')|(?:' + localMention + ')) ', 'g')
-    const endMentionRegex = new RegExp(' (?:(?:' + remoteMention + ')|(?:' + localMention + '))$', 'g')
 
-    return uniq(
-      [].concat(
-        regexpCapture(this.text, remoteMentionsRegex)
-          .map(([ , username ]) => username),
+    result = result.concat(
+      regexpCapture(this.text, firstMentionRegex)
+        .map(([ , username1, username2 ]) => username1 || username2),
 
-        regexpCapture(this.text, localMentionsRegex)
-          .map(([ , username ]) => username),
+      regexpCapture(this.text, endMentionRegex)
+        .map(([ , username1, username2 ]) => username1 || username2),
 
-        regexpCapture(this.text, firstMentionRegex)
-          .map(([ , username1, username2 ]) => username1 || username2),
-
-        regexpCapture(this.text, endMentionRegex)
-          .map(([ , username1, username2 ]) => username1 || username2)
-      )
+      regexpCapture(this.text, remoteMentionsRegex)
+        .map(([ , username ]) => username)
     )
+
+    // Include local mentions
+    if (this.isOwned()) {
+      const localMentionsRegex = new RegExp(' ' + localMention + ' ', 'g')
+
+      result = result.concat(
+        regexpCapture(this.text, localMentionsRegex)
+          .map(([ , username ]) => username)
+      )
+    }
+
+    return uniq(result)
   }
 
   toFormattedJSON () {
