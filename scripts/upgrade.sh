@@ -73,3 +73,7 @@ cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/defa
 echo "Differences in configuration files..."
 diff -u $PEERTUBE_PATH/config/production.yaml "$PEERTUBE_PATH/versions/peertube-${VERSION}/config/production.yaml.example"
 
+echo ""
+echo "==========================================="
+echo "==   Don’t forget to restart PeerTube!   =="
+echo "==========================================="
