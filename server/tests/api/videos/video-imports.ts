@@ -37,7 +37,11 @@ describe('Test video imports', function () {
     expect(videoHttp.description).to.equal('this is a super description')
     expect(videoHttp.tags).to.deep.equal([ 'tag1', 'tag2' ])
     expect(videoHttp.files).to.have.lengthOf(1)
-    expect(videoHttp.originallyPublishedAt).to.equal('2019-01-13T23:00:00.000Z')
+
+    const originallyPublishedAt = new Date(videoHttp.originallyPublishedAt)
+    expect(originallyPublishedAt.getDate()).to.equal(14)
+    expect(originallyPublishedAt.getMonth()).to.equal(0)
+    expect(originallyPublishedAt.getFullYear()).to.equal(2019)
 
     const resMagnet = await getVideo(url, idMagnet)
     const videoMagnet: VideoDetails = resMagnet.body
