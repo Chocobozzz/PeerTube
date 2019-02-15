@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core'
 import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
-// FIXME: use @types/linkify when https://github.com/DefinitelyTyped/DefinitelyTyped/pull/29682/files is merged?
-const linkify = require('linkifyjs')
-const linkifyHtml = require('linkifyjs/html')
+import * as linkify from 'linkifyjs'
+import linkifyHtml from 'linkifyjs/html'
 
 @Injectable()
 export class LinkifierService {

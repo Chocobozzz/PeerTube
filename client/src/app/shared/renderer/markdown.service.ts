@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 
-import * as MarkdownIt from 'markdown-it'
+import { MarkdownIt } from 'markdown-it'
 
 @Injectable()
 export class MarkdownService {
@@ -14,30 +14,36 @@ export class MarkdownService {
   ]
   static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
 
-  private textMarkdownIt: MarkdownIt.MarkdownIt
-  private enhancedMarkdownIt: MarkdownIt.MarkdownIt
+  private textMarkdownIt: MarkdownIt
+  private enhancedMarkdownIt: MarkdownIt
 
-  constructor () {
-    this.textMarkdownIt = this.createMarkdownIt(MarkdownService.TEXT_RULES)
-    this.enhancedMarkdownIt = this.createMarkdownIt(MarkdownService.ENHANCED_RULES)
-  }
-
-  textMarkdownToHTML (markdown: string) {
+  async textMarkdownToHTML (markdown: string) {
     if (!markdown) return ''
+
+    if (!this.textMarkdownIt) {
+      this.textMarkdownIt = await this.createMarkdownIt(MarkdownService.TEXT_RULES)
+    }
 
     const html = this.textMarkdownIt.render(markdown)
     return this.avoidTruncatedTags(html)
   }
 
-  enhancedMarkdownToHTML (markdown: string) {
+  async enhancedMarkdownToHTML (markdown: string) {
     if (!markdown) return ''
+
+    if (!this.enhancedMarkdownIt) {
+      this.enhancedMarkdownIt = await this.createMarkdownIt(MarkdownService.ENHANCED_RULES)
+    }
 
     const html = this.enhancedMarkdownIt.render(markdown)
     return this.avoidTruncatedTags(html)
   }
 
-  private createMarkdownIt (rules: string[]) {
-    const markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
+  private async createMarkdownIt (rules: string[]) {
+    // FIXME: import('..') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
+    const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
+
+    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true })
 
     for (let rule of rules) {
       markdownIt.enable(rule)
@@ -48,7 +54,7 @@ export class MarkdownService {
     return markdownIt
   }
 
-  private setTargetToLinks (markdownIt: MarkdownIt.MarkdownIt) {
+  private setTargetToLinks (markdownIt: MarkdownIt) {
     // Snippet from markdown-it documentation: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
     const defaultRender = markdownIt.renderer.rules.link_open || function (tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options)

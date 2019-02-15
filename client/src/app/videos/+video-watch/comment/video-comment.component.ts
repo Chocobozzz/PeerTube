@@ -85,8 +85,8 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       )
   }
 
-  private init () {
-    this.sanitizedCommentHTML = this.htmlRenderer.toSafeHtml(this.comment.text)
+  private async init () {
+    this.sanitizedCommentHTML = await this.htmlRenderer.toSafeHtml(this.comment.text)
 
     this.newParentComments = this.parentComments.concat([ this.comment ])
   }

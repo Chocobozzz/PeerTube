@@ -22,7 +22,6 @@ import {
 
 const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
-  private readonly autoplay: boolean = false
   private readonly startTime: number = 0
   private readonly videoViewUrl: string
   private readonly videoDuration: number

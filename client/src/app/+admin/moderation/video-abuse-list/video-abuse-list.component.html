@@ -51,11 +51,11 @@
         <td class="moderation-expanded" colspan="6">
           <div>
             <span i18n class="moderation-expanded-label">Reason:</span>
-            <span class="moderation-expanded-text" [innerHTML]="toHtml(videoAbuse.reason)"></span>
+            <span class="moderation-expanded-text" [innerHTML]="videoAbuse.reasonHtml"></span>
           </div>
           <div *ngIf="videoAbuse.moderationComment">
             <span i18n class="moderation-expanded-label">Moderation comment:</span>
-            <span class="moderation-expanded-text" [innerHTML]="toHtml(videoAbuse.moderationComment)"></span>
+            <span class="moderation-expanded-text" [innerHTML]="videoAbuse.moderationCommentHtml"></span>
           </div>
         </td>
       </tr>

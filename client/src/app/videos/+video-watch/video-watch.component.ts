@@ -325,8 +325,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setVideoDescriptionHTML()
   }
 
-  private setVideoDescriptionHTML () {
-    this.videoHTMLDescription = this.markdownService.textMarkdownToHTML(this.video.description)
+  private async setVideoDescriptionHTML () {
+    this.videoHTMLDescription = await this.markdownService.textMarkdownToHTML(this.video.description)
   }
 
   private setVideoLikesBarTooltipText () {

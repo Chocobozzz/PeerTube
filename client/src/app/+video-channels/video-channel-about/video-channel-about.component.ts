@@ -26,11 +26,11 @@ export class VideoChannelAboutComponent implements OnInit, OnDestroy {
   ngOnInit () {
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
-      .subscribe(videoChannel => {
+      .subscribe(async videoChannel => {
         this.videoChannel = videoChannel
 
-        this.descriptionHTML = this.markdownService.textMarkdownToHTML(this.videoChannel.description)
-        this.supportHTML = this.markdownService.enhancedMarkdownToHTML(this.videoChannel.support)
+        this.descriptionHTML = await this.markdownService.textMarkdownToHTML(this.videoChannel.description)
+        this.supportHTML = await this.markdownService.enhancedMarkdownToHTML(this.videoChannel.support)
       })
   }
 

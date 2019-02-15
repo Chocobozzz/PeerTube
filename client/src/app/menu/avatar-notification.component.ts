@@ -26,18 +26,19 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
     private userNotificationSocket: UserNotificationSocket,
     private notifier: Notifier,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit () {
     this.userNotificationService.countUnreadNotifications()
-      .subscribe(
-        result => {
-          this.unreadNotifications = Math.min(result, 99) // Limit number to 99
-          this.subscribeToNotifications()
-        },
+        .subscribe(
+          result => {
+            this.unreadNotifications = Math.min(result, 99) // Limit number to 99
+            this.subscribeToNotifications()
+          },
 
-        err => this.notifier.error(err.message)
-      )
+          err => this.notifier.error(err.message)
+        )
 
     this.routeSub = this.router.events
                         .pipe(filter(event => event instanceof NavigationEnd))
@@ -53,13 +54,14 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
     this.popover.close()
   }
 
-  private subscribeToNotifications () {
-    this.notificationSub = this.userNotificationSocket.getMyNotificationsSocket()
-                               .subscribe(data => {
-                                 if (data.type === 'new') return this.unreadNotifications++
-                                 if (data.type === 'read') return this.unreadNotifications--
-                                 if (data.type === 'read-all') return this.unreadNotifications = 0
-                               })
+  private async subscribeToNotifications () {
+    const obs = await this.userNotificationSocket.getMyNotificationsSocket()
+
+    this.notificationSub = obs.subscribe(data => {
+      if (data.type === 'new') return this.unreadNotifications++
+      if (data.type === 'read') return this.unreadNotifications--
+      if (data.type === 'read-all') return this.unreadNotifications = 0
+    })
   }
 
 }

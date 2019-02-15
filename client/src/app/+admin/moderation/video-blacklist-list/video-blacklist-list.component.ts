@@ -15,7 +15,7 @@ import { MarkdownService } from '@app/shared/renderer'
   styleUrls: [ '../moderation.component.scss' ]
 })
 export class VideoBlacklistListComponent extends RestTable implements OnInit {
-  blacklist: VideoBlacklist[] = []
+  blacklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -79,9 +79,14 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   protected loadData () {
     this.videoBlacklistService.listBlacklist(this.pagination, this.sort)
       .subscribe(
-        resultList => {
-          this.blacklist = resultList.data
+        async resultList => {
           this.totalRecords = resultList.total
+
+          this.blacklist = resultList.data
+
+          for (const element of this.blacklist) {
+            Object.assign(element, { reasonHtml: await this.toHtml(element.reason) })
+          }
         },
 
         err => this.notifier.error(err.message)

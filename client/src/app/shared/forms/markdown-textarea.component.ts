@@ -82,11 +82,11 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     return this.screenService.isInSmallView() === false
   }
 
-  private updatePreviews () {
+  private async updatePreviews () {
     if (this.content === null || this.content === undefined) return
 
-    this.truncatedPreviewHTML = this.markdownRender(truncate(this.content, { length: this.truncate }))
-    this.previewHTML = this.markdownRender(this.content)
+    this.truncatedPreviewHTML = await this.markdownRender(truncate(this.content, { length: this.truncate }))
+    this.previewHTML = await this.markdownRender(this.content)
   }
 
   private markdownRender (text: string) {

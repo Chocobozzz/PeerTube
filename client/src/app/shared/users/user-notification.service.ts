@@ -7,7 +7,7 @@ import { ResultList, UserNotification as UserNotificationServer, UserNotificatio
 import { UserNotification } from './user-notification.model'
 import { AuthService } from '../../core'
 import { ComponentPagination } from '../rest/component-pagination.model'
-import { User } from '..'
+import { User } from '../users/user.model'
 import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 
 @Injectable()

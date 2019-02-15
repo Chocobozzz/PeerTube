@@ -147,10 +147,13 @@ class Notifier {
   }
 
   private async notifyOfCommentMention (comment: VideoCommentModel) {
-    const usernames = comment.extractMentions()
-    logger.debug('Extracted %d username from comment %s.', usernames.length, comment.url, { usernames, text: comment.text })
+    const extractedUsernames = comment.extractMentions()
+    logger.debug(
+      'Extracted %d username from comment %s.', extractedUsernames.length, comment.url,
+      { usernames: extractedUsernames, text: comment.text }
+    )
 
-    let users = await UserModel.listByUsernames(usernames)
+    let users = await UserModel.listByUsernames(extractedUsernames)
 
     if (comment.Video.isOwned()) {
       const userException = await UserModel.loadByVideoId(comment.videoId)

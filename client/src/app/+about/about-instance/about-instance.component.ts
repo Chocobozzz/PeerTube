@@ -44,10 +44,11 @@ export class AboutInstanceComponent implements OnInit {
   ngOnInit () {
     this.instanceService.getAbout()
       .subscribe(
-        res => {
+        async res => {
           this.shortDescription = res.instance.shortDescription
-          this.descriptionHTML = this.markdownService.textMarkdownToHTML(res.instance.description)
-          this.termsHTML = this.markdownService.textMarkdownToHTML(res.instance.terms)
+
+          this.descriptionHTML = await this.markdownService.textMarkdownToHTML(res.instance.description)
+          this.termsHTML = await this.markdownService.textMarkdownToHTML(res.instance.terms)
         },
 
         () => this.notifier.error(this.i18n('Cannot get about information from server'))

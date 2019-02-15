@@ -25,9 +25,9 @@ export class AccountAboutComponent implements OnInit, OnDestroy {
   ngOnInit () {
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
-      .subscribe(account => {
+      .subscribe(async account => {
         this.account = account
-        this.descriptionHTML = this.markdownService.textMarkdownToHTML(this.account.description)
+        this.descriptionHTML = await this.markdownService.textMarkdownToHTML(this.account.description)
       })
   }
 

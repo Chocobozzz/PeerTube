@@ -19,7 +19,7 @@ import { MarkdownService } from '@app/shared/renderer'
 export class VideoAbuseListComponent extends RestTable implements OnInit {
   @ViewChild('moderationCommentModal') moderationCommentModal: ModerationCommentModalComponent
 
-  videoAbuses: VideoAbuse[] = []
+  videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -110,19 +110,28 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
   }
 
-  toHtml (text: string) {
-    return this.markdownRenderer.textMarkdownToHTML(text)
-  }
-
   protected loadData () {
     return this.videoAbuseService.getVideoAbuses(this.pagination, this.sort)
                .subscribe(
-                 resultList => {
-                   this.videoAbuses = resultList.data
+                 async resultList => {
                    this.totalRecords = resultList.total
+
+                   this.videoAbuses = resultList.data
+
+                   for (const abuse of this.videoAbuses) {
+                     Object.assign(abuse, {
+                       reasonHtml: await this.toHtml(abuse.reason),
+                       moderationCommentHtml: await this.toHtml(abuse.moderationComment)
+                     })
+                   }
+
                  },
 
                  err => this.notifier.error(err.message)
                )
+  }
+
+  private toHtml (text: string) {
+    return this.markdownRenderer.textMarkdownToHTML(text)
   }
 }

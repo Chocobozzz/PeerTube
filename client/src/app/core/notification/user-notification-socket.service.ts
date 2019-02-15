@@ -21,21 +21,22 @@ export class UserNotificationSocket {
     this.notificationSubject.next({ type, notification })
   }
 
-  getMyNotificationsSocket () {
-    const socket = this.getSocket()
-
-    socket.on('new-notification', (n: UserNotificationServer) => this.dispatch('new', n))
+  async getMyNotificationsSocket () {
+    await this.initSocket()
 
     return this.notificationSubject.asObservable()
   }
 
-  private getSocket () {
-    if (this.socket) return this.socket
+  private async initSocket () {
+    if (this.socket) return
+
+    // FIXME: import('..') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
+    const io: typeof import ('socket.io-client') = (await import('socket.io-client') as any).default
 
     this.socket = io(environment.apiUrl + '/user-notifications', {
       query: { accessToken: this.auth.getAccessToken() }
     })
 
-    return this.socket
+    this.socket.on('new-notification', (n: UserNotificationServer) => this.dispatch('new', n))
   }
 }
