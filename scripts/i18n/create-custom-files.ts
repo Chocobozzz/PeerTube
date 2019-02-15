@@ -30,6 +30,7 @@ const playerKeys = {
   'Copy the video URL': 'Copy the video URL',
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
   'Copy embed code': 'Copy embed code',
+  'Copy magnet URI': 'Copy magnet URI',
   'Total downloaded: ': 'Total downloaded: ',
   'Total uploaded: ': 'Total uploaded: '
 }
