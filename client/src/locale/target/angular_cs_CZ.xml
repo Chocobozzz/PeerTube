@@ -213,18 +213,18 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
-        <source>Cancel</source>
-        <target>Zrušit</target>
-        <context-group name="null">
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
         <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <target>(doplňky: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, maximální velikost: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytů }}"/>)</target>
+        <target>(doplňky: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, maximální velikost: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
+        <source>You don't have notifications.</source>
+        <target>Nemáte oznámení.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
@@ -324,7 +324,7 @@
       </trans-unit>
       <trans-unit id="60251958d9e05c8cc00abf9645bb0026ebbe4dc3">
         <source>Subscribe with an account on <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></source>
-        <target>Odebírat účtem na <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></target>
+        <target>Odebírat přes účet na <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">39</context>
         </context-group>
@@ -345,7 +345,7 @@
       </trans-unit>
       <trans-unit id="d8758664cadd6452256ca25ca0c7259074f427c1">
         <source>Using a syndication feed</source>
-        <target>Použít syndikační proud</target>
+        <target>Pomocí syndikačního proudu</target>
         <context-group name="null">
           <context context-type="linenumber">48</context>
         </context-group>
@@ -396,7 +396,7 @@
           Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
         </source>
         <target>
-          Neomezeno <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytů: 0 }}"/> za den)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+          Neomezeno <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> za den)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
         </target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
@@ -421,16 +421,31 @@
         A banned user will no longer be able to login.
       </source>
         <target>
-Blokovaný uživatel se už nebude moci přihlásit.</target>
+        Blokovaný uživatel se už nebude moci přihlásit.
+      </target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
+        <source>Cancel</source>
+        <target>Zrušit</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
         <source>Ban this user</source>
         <target>Zablokovat tohoto uživatele</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7">
+        <source><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -438,7 +453,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
     Login
   </source>
         <target>
-    Přihlášení
+    Přihlásit
   </target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
@@ -503,7 +518,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
         <source>I forgot my password</source>
-        <target>Zapomněl jsem heslo</target>
+        <target>Zapomněl/a jsem heslo</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
         </context-group>
@@ -540,7 +555,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
         <source>Send me an email to reset my password</source>
         <target>Poslat e-mail pro resetování hesla</target>
         <context-group name="null">
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -570,7 +585,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="8bdf8db5eeeaef83184b489b80c1557b516fb3c3">
         <source>Reset my password</source>
-        <target>Resetovat moje heslo</target>
+        <target>Obnovit moje heslo</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -602,7 +617,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="7fe213724c4c0a4112c40c673884acb98a0a3b92">
         <source>I am at least 16 years old and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
-        <target>Je mi alespoň 16let a souhlasím s &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Podmínkami&lt;/a&gt; této instance</target>
+        <target>Je mi alespoň 16 let a souhlasím s &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Podmínkami&lt;/a&gt; této instance</target>
         <context-group name="null">
           <context context-type="linenumber">55</context>
         </context-group>
@@ -682,6 +697,17 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
         <target>Změnit jazyk</target>
         <context-group name="null">
           <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28">
+        <source>
+    Help to translate PeerTube!
+  </source>
+        <target>
+    Pomozte nám přeložit PeerTube!
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8c654f49714163eb2991b264e9fd4858e72c04c6">
@@ -793,7 +819,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
         <source>About</source>
-        <target>O službě</target>
+        <target>O nás</target>
         <context-group name="null">
           <context context-type="linenumber">25</context>
         </context-group>
@@ -810,6 +836,20 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
         <target>Přepnout tmavé rozhraní</target>
         <context-group name="null">
           <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
+        <source>View your notifications</source>
+        <target>Zobrazit vaše oznámení</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8bcabdf6b16cad0313a86c7e940c5e3ad7f9f8ab">
+        <source>Notifications</source>
+        <target>Oznámení</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
@@ -844,70 +884,70 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
         <source>Duration</source>
         <target>Trvání</target>
         <context-group name="null">
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dc67060f94f0f2b58549f54a5c07925dffd20238">
         <source>Display sensitive content</source>
         <target>Zobrazit citlivý obsah</target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4f20f2d5a6882190892e58b85f6ccbedfa737952">
         <source>Yes</source>
         <target>Ano</target>
         <context-group name="null">
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd">
         <source>No</source>
         <target>Ne</target>
         <context-group name="null">
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="607de17c2a755f65775881c19e276e7c933bcf94">
         <source>Category</source>
         <target>Kategorie</target>
         <context-group name="null">
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>Licence</target>
         <context-group name="null">
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>Jazyk</target>
         <context-group name="null">
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
         <source>All of these tags</source>
         <target>Všechny tyto štítky</target>
         <context-group name="null">
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="492d2bd18db0cba03f6d9e3b0c42b8639fbe51ab">
         <source>One of these tags</source>
         <target>Jeden z těchto štítků</target>
         <context-group name="null">
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
         <source>Filter</source>
         <target>Filtr</target>
         <context-group name="null">
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="41ed53a3f1d4dfc57011d0aba13b8b074e8b41b6">
@@ -979,11 +1019,57 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="533b2b9a76ee1335cb44c01f0bfd50d43e9400b0">
+        <source>Your name</source>
+        <target>Vaše jméno</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b892c7805a1c5afc0b7c21c3449760860fe7f3d">
+        <source>Your email</source>
+        <target>Váš e-mail</target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2815c9b510b8172d8cac4008b9709df69d636df">
+        <source>Your message</source>
+        <target>Vaše zpráva</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb">
+        <source>
+          Cancel
+        </source>
+        <target>
+          Zrušit
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
         <source>Submit</source>
         <target>Odeslat</target>
         <context-group name="null">
           <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="89e55a86cb300f06139ff398c9c8bb7376f78b07">
+        <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instance</source>
+        <target>O instanci <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c">
+        <source>Contact administrator</source>
+        <target>Kontaktovat administrátora</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
@@ -1007,12 +1093,45 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7a0a7b5a5bc9ee7b7e415f87ecc404145fb51dff">
+        <source>
+          this instance provides a baseline quota of <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> space for the videos of its users.
+        </source>
+        <target>
+          tato instance poskytuje základní limit prostoru <x id="INTERPOLATION" equiv-text="{{ userVideoQuota | bytes: 0 }}"/> pro videa svých uživatelů.
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bee5dd41c0007820f150ee33b8257dc1aac281b">
+        <source>
+          this instance provides unlimited space for the videos of its users.
+        </source>
+        <target>
+          tato instance poskytuje neomezený prostor pro videa svých uživatelů.
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6e2ede24a2ee0f6ba2f1924ede2ae408ffc2574">
+        <source>
+        User registration is currently not allowed.
+      </source>
+        <target>
+        Registrace uživatelů aktuálně není povolena.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
         <source>
   About PeerTube
 </source>
         <target>
-  O PeerTube
+  O PeerTubu
 </target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
@@ -1020,7 +1139,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
         <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>PeerTube je federovaná (ActivityPub) platforma pro video streaming používající P2P (WebTorrent) přímo v prohlížeči uživatele.</target>
+        <target>PeerTube je federovaná (ActivityPub) platforma pro streamování videí používající P2P (WebTorrent) přímo ve webovém prohlížeči.</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -1030,7 +1149,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
     It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </source>
         <target>
-    Jde o svobodný software zveřejněný pod <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licencí<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+    Jde o svobodný a otevřený software zveřejněný pod <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>licencí AGPLv3<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
@@ -1041,7 +1160,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
     For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </source>
         <target>
-    Pro více informací navštivte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+    Pro více informací prosím navštivte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </target>
         <context-group name="null">
           <context context-type="linenumber">12</context>
@@ -1061,7 +1180,8 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
   </source>
         <target>
     PeerTube používá protokol BitTorrent pro sdílení přenosu mezi uživateli.
-    To znamená, že vaše IP adresa je uložena v trackeru BitTorrent této instance po dobu stahování nebo sledování videa.</target>
+    To znamená, že vaše IP adresa je uložena v trackeru BitTorrent této instance po dobu stahování nebo sledování videa.
+  </target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
         </context-group>
@@ -1079,8 +1199,9 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
     In practice, this is much more difficult because:
   </source>
         <target>
-    Teoreticky, někdo s dostatečným technickým vzdělání může vytvořit skript sledující, jaká IP adresa stahuje které video.
-    V praxi to však není tak jednoduché, protože:</target>
+    Teoreticky může někdo s dostatečným technickým vzdělání vytvořit skript sledující, jaká IP adresa stahuje které video.
+    V praxi to však není tak jednoduché, protože:
+  </target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
@@ -1091,8 +1212,9 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
     </source>
         <target>
-      na každý tracker musí být zaslán HTTP požadavek za každé špehované video.
-      Pokud bychom chtěli špehovat všechna videa na PeerTube, museli bychom poslat tolik požadavků, kolik je na PeerTube videí (tedy potenciálně hodně)</target>
+      Na každý tracker musí být zaslán HTTP požadavek za každé špehované video.
+      Pokud bychom chtěli špehovat všechna videa na PeerTube, museli bychom poslat tolik požadavků, kolik je na PeerTubu videí (tedy potenciálně hodně)
+    </target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
@@ -1103,8 +1225,9 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm
     </source>
         <target>
-      Pro každý odeslaný požadavek vrátí tracker limitovaný počet náhodných peerů.
-      Například, pokud je zde 1000 peerů ve skupině a tracker pošle pouze 20 peerů pro každý požadavek, muselo být odesláno alespoň 50 požadavků na získání všech peerů ve skupině</target>
+      Pro každý odeslaný požadavek vrátí tracker omezený počet náhodných peerů.
+      Pokud je například celkem 1000 peerů a tracker pošle pouze 20 peerů pro každý požadavek, muselo by být pro objevení všech peerů odesláno alespoň 50 požadavků
+    </target>
         <context-group name="null">
           <context context-type="linenumber">38</context>
         </context-group>
@@ -1114,7 +1237,8 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
     </source>
         <target>
-    Pro zjištění, kdo začíná nebo končí sledování videa, musí být tyto požadavky odesílány pravidelně. Takové chování je jednoduše detekováno</target>
+    Pro zjištění, kdo začíná nebo končí sledování videa, musí být tyto požadavky odesílány pravidelně. Je jednoduché detekovat takové chování
+    </target>
         <context-group name="null">
           <context context-type="linenumber">43</context>
         </context-group>
@@ -1124,7 +1248,8 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video
     </source>
         <target>
-      Pokud je IP adresa uložena v trackeru, neznamená to, že osoba za IP adresou (pokud nějaká existuje) opravdu zhlédla dané video</target>
+      Pokud je IP adresa uložena v trackeru, neznamená to, že osoba za IP adresou (pokud nějaká existuje) opravdu zhlédla dané video
+    </target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
         </context-group>
@@ -1134,7 +1259,8 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
     </source>
         <target>
-      IP adresa je nedostatečná informace : obyčejně se pravidelně mění a může za ní tak vystupovat více osob nebo entit</target>
+      IP adresa je nedostatečná informace : obyčejně se pravidelně mění a může za ní tak vystupovat více osob nebo entit
+    </target>
         <context-group name="null">
           <context context-type="linenumber">51</context>
         </context-group>
@@ -1169,7 +1295,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
         <source>How does PeerTube compare with YouTube?</source>
-        <target>Jaký je PeerTube v porovnání s YouTube?</target>
+        <target>Jaký je PeerTube v porovnání s YouTubem?</target>
         <context-group name="null">
           <context context-type="linenumber">67</context>
         </context-group>
@@ -1213,7 +1339,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
         <source>What will be done to mitigate this problem?</source>
-        <target>Co budete dělat pro zmírnění tohoto problému?</target>
+        <target>Co můžete udělat pro zmírnění tohoto problému?</target>
         <context-group name="null">
           <context context-type="linenumber">83</context>
         </context-group>
@@ -1261,7 +1387,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6">
         <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source>
-        <target>Automatické rozpoznávání redundantních videií: nelze poznat, zda byly nahrány záměrně člověkem nebo šlo o automatizovaný útok</target>
+        <target>Automatické rozpoznávání redundantních videí: nelze poznat, zda IP adresa stáhla video záměrně, nebo zda šlo o automatizovaný program</target>
         <context-group name="null">
           <context context-type="linenumber">95</context>
         </context-group>
@@ -1296,7 +1422,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="8bc634cd9d8c9b684dbfaaf17a522f894bedbffc">
         <source>Joined <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></source>
-        <target>Registrován od <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></target>
+        <target>Registrován/a od <x id="INTERPOLATION" equiv-text="{{ account.createdAt | date }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -1310,7 +1436,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="f36bd6a1570cb9b0a5023870f35160957cad2a8f">
         <source>See this video channel</source>
-        <target>Zobrazit tento video kanál</target>
+        <target>Zobrazit tento videokanál</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -1331,7 +1457,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="554488d11165f38b27b8fe230aba8a2e30d57003">
         <source>Default client route</source>
-        <target>Výchozí hlavní stránka</target>
+        <target>Výchozí klientská cesta</target>
         <context-group name="null">
           <context context-type="linenumber">48</context>
         </context-group>
@@ -1485,7 +1611,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c">
         <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
-        <target>Uveďte Twitter účet stránky nebo služby, na které byl obsah publikován.</target>
+        <target>Ukazuje na Twitterový účet stránky nebo služby, na které byl obsah publikován.</target>
         <context-group name="null">
           <context context-type="linenumber">187</context>
         </context-group>
@@ -1495,6 +1621,17 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
         <target>Twitter povolil tuto instanci</target>
         <context-group name="null">
           <context context-type="linenumber">199</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1276a50033dfc7a71290086d0f57d89e3438e6b">
+        <source>If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.&lt;br /&gt;
+        If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.&lt;br /&gt;&lt;br /&gt;
+        Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; to see if you instance is whitelisted.</source>
+        <target>Je-li vaše instance povolena Twitterem, bude v Twitterovém proudu u sdílení videa na PeerTubu vložen videopřehrávač.&lt;br /&gt;
+        Není-li vaše instance povolena, použijeme klikatelnou kartu s obrázkem, která pošle lidi na vaši instanci PeerTubu.&lt;br /&gt;&lt;br /&gt;
+        Zaškrtněte tuto možnost, uložte nastavení a vyzkoušejte na &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; adresu videa na vaší instanci PeerTubu (https://priklad.cz/videos/watch/blabla) a zjistěte, jestli je vaše instance povolena.</target>
+        <context-group name="null">
+          <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
@@ -1577,7 +1714,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="fda2339a6e6ba017ee43b560caf660ed4022333c">
         <source>Write directly JavaScript code.&lt;br /&gt;Example: &lt;pre&gt;console.log('my instance is amazing');&lt;/pre&gt;</source>
-        <target>Pište přímo JavaScript kód.&lt;br /&gt;Například: &lt;pre&gt;console.log('moje instance je úžasná');&lt;/pre&gt;</target>
+        <target>Pište přímo kód JavaScript.&lt;br /&gt;Například: &lt;pre&gt;console.log('moje instance je úžasná');&lt;/pre&gt;</target>
         <context-group name="null">
           <context context-type="linenumber">297</context>
         </context-group>
@@ -1660,7 +1797,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
         <source>1 host (without "http://") per line</source>
-        <target>1 host (bez "http://") na řádek</target>
+        <target>1 host (bez "http://") na každý řádek</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -1670,7 +1807,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
     It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
   </source>
         <target>
-    Zdá se, že nejste na HTTPS serveru. Pokud chcete odebírat jiné servery, váš webserver musí mít aktivováno TLS.
+    Zdá se, že nejste na HTTPS serveru. Pokud chcete odebírat jiné servery, musí mít váš webový server aktivováno TLS.
   </target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
@@ -1790,7 +1927,7 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05">
         <source>mail@example.com</source>
-        <target>mail@example.com</target>
+        <target>email@priklad.cz</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -1808,8 +1945,8 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
     </source>
         <target>
-      Překódování je povoleno. Limit videí na tomto účtu je <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-      Nejvíce může tento uživatel použít ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+      Překódování je povoleno. Limit videí bere v ůvahu pouze <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>původní<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      Tento uživatel může nanajvýš použít ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
     </target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
@@ -1838,9 +1975,9 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
         <source>Go to the account page</source>
-        <target>Přejít na stránku kanálu</target>
+        <target>Přejít na stránku účtu</target>
         <context-group name="null">
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
@@ -1858,14 +1995,14 @@ Blokovaný uživatel se už nebude moci přihlásit.</target>
         Tento komentář můžete vidět pouze vy nebo ostatní moderátoři.
       </target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0562e455c88234829f3c27a38f3039f027bfd5d2">
         <source>Update this comment</source>
         <target>Aktualizovat tento komentář</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2">
@@ -2113,14 +2250,14 @@ When you will upload a video in this channel, the video support field will be au
         <source>Privacy</source>
         <target>Soukromí</target>
         <context-group name="null">
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
         <source>Update</source>
         <target>Aktualizovat</target>
         <context-group name="null">
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
@@ -2144,6 +2281,38 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
+        <source>Add caption</source>
+        <target>Přidat titulek</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8">
+        <source>Select the caption file</source>
+        <target>Vyberte soubor s titulky</target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c34c61401151c29fb3679638a7d0b95258145ec3">
+        <source>
+        This will replace an existing caption!
+      </source>
+        <target>
+        Tohle nahradí existující titulek!
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c">
+        <source>Add this caption</source>
+        <target>Přidat tento titulek</target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e">
         <source>Title</source>
         <target>Nadpis</target>
@@ -2155,7 +2324,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Tags</source>
         <target>Štítky</target>
         <context-group name="null">
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="457b1cff4d8d7fad0c8742f69c413ecf5e443851">
@@ -2193,18 +2362,11 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
-        <source>Enable video comments</source>
-        <target>Povolit komentáře</target>
-        <context-group name="null">
-          <context context-type="linenumber">125</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
         <target>Čekat na překódování před publikováním videa</target>
         <context-group name="null">
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -2214,39 +2376,71 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="92bcfd1d237a2bfe48dc9f46d074ed26abc8df22">
+        <source>Add another caption</source>
+        <target>Přidat další titulek</target>
+        <context-group name="null">
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
+        <source>
+            No captions for now.
+          </source>
+        <target>
+            Prozatím tu nejsou žádné titulky.
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">178</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
+        <source>Captions</source>
+        <target>Titulky</target>
+        <context-group name="null">
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
         <source>Upload thumbnail</source>
         <target>Nahrát miniaturu</target>
         <context-group name="null">
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">192</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639">
         <source>Upload preview</source>
         <target>Nahrát náhled</target>
         <context-group name="null">
-          <context context-type="linenumber">203</context>
+          <context context-type="linenumber">199</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
         <source>Support</source>
         <target>Podpora</target>
         <context-group name="null">
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target>Krátký text, co řekne lidem, jak vás mohou podpořit.</target>
+        <target>Krátký text, co řekne lidem, jak vás mohou podpořit (členská platforma...).</target>
         <context-group name="null">
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">206</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
+        <source>Enable video comments</source>
+        <target>Povolit komentáře</target>
+        <context-group name="null">
+          <context context-type="linenumber">234</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>Rozšířená nastavení</target>
         <context-group name="null">
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2335f0bd17c63d835b50cfbbcea6c459cb1314c0">
@@ -2278,7 +2472,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Download</source>
         <target>Stáhnout</target>
         <context-group name="null">
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b">
@@ -2292,7 +2486,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Share</source>
         <target>Sdílet</target>
         <context-group name="null">
-          <context context-type="linenumber">74</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
@@ -2317,105 +2511,105 @@ When you will upload a video in this channel, the video support field will be au
         <source>Like this video</source>
         <target>To se mi líbí</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509">
         <source>Dislike this video</source>
         <target>To se mi nelíbí</target>
         <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="144fff5c40b85414d59e644d8dee7cfefba925a2">
         <source>Download the video</source>
         <target>Stáhnout video</target>
         <context-group name="null">
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
         <source>Report</source>
         <target>Nahlásit</target>
         <context-group name="null">
-          <context context-type="linenumber">88</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2f4894617d9c44010f87473e583bd4604b7d6ecf">
         <source>Report this video</source>
         <target>Nahlásit toto video</target>
         <context-group name="null">
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cd27f761b923a5bdb16ba9844da632edd878f1b1">
         <source>Update this video</source>
         <target>Aktualizovat video</target>
         <context-group name="null">
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
       <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
         <source>Blacklist</source>
         <target>Černá listina</target>
         <context-group name="null">
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="803c6317abd2dbafcc93226c4e273c62932e3037">
         <source>Blacklist this video</source>
         <target>Přidat toto video na černou listinu</target>
         <context-group name="null">
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="86f26b106c67be3c2e98b82766656e5d9da86dff">
         <source>Unblacklist</source>
         <target>Odebrat z černé listiny</target>
         <context-group name="null">
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3dbfdc68f83d91cb360172eb65578cae94e7cbe5">
         <source>Delete this video</source>
-        <target>Odstranit video</target>
+        <target>Odstranit toto video</target>
         <context-group name="null">
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33">
         <source>Go the channel page</source>
         <target>Přejít na stránku kanálu</target>
         <context-group name="null">
-          <context context-type="linenumber">123</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
         <target>Zobrazit více</target>
         <context-group name="null">
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
         <source>Show less</source>
         <target>Zobrazit méně</target>
         <context-group name="null">
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
         <source>More information</source>
         <target>Více informací</target>
         <context-group name="null">
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
         <target>Získat více informací</target>
         <context-group name="null">
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
@@ -2426,7 +2620,7 @@ When you will upload a video in this channel, the video support field will be au
       OK
     </target>
         <context-group name="null">
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7">
@@ -2459,7 +2653,7 @@ When you will upload a video in this channel, the video support field will be au
     Comments are disabled.
   </source>
         <target>
-    Komentáře k tomuto video nejsou povoleny.
+    Komentáře nejsou povoleny.
   </target>
         <context-group name="null">
           <context context-type="linenumber">63</context>
@@ -2576,7 +2770,7 @@ When you will upload a video in this channel, the video support field will be au
       </trans-unit>
       <trans-unit id="5729c34a858c78daa1aa606f62a3665527cf97e6">
         <source>Do you really want to unfollow <x id="INTERPOLATION" equiv-text="{{host}}"/>?</source>
-        <target>Opravdu chcete zrušit odběr <x id="INTERPOLATION" equiv-text="{{host}}"/>?</target>
+        <target>Opravdu chcete zrušit odběr kanálu <x id="INTERPOLATION" equiv-text="{{host}}"/>?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2695,14 +2889,14 @@ When you will upload a video in this channel, the video support field will be au
       </trans-unit>
       <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
-        <target>Video kanál <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> aktualizován.</target>
+        <target>Videokanál <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> aktualizován.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
-        <target>Video kanál <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> odstraněn.</target>
+        <target>Videokanál <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> odstraněn.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2798,6 +2992,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b54759e30f7c1983940cdacb8eb03f102a869084">
+        <source>Go to the videos overview page</source>
+        <target>Přejít na stránku přehledu videí</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7">
         <source>Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>.
 </source>
@@ -2824,13 +3025,6 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="e31bbf15d6ba5c7c0f17f89a98029cff0bd40b87">
         <source>You need to reconnect.</source>
         <target>Musíte se znovu připojit.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
-        <source>Confirm</source>
-        <target>Potvrdit</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2866,6 +3060,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
         <source>Search</source>
         <target>Hledat</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
+        <source>Confirm</source>
+        <target>Potvrdit</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3495,7 +3696,7 @@ When you will upload a video in this channel, the video support field will be au
       </trans-unit>
       <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5">
         <source>yy-mm-dd </source>
-        <target>dd.mm.yyyy</target>
+        <target>dd. mm. yyyy</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3759,6 +3960,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
+        <source>Your video was uploaded to your account and is private.</source>
+        <target>Vaše video bylo nahráno na váš účet a je soukromé.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="24840228f2826b66252cfcaab9820b1c7e0da264">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
         <target>Ovšem přidružená data (štítky, popis...) budou ztraceny, opravdu chcete opustit tuto stránku?</target>
@@ -3787,6 +3995,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bfdf9de4bd9140f77feb6a5fe2b51f3f0565eaa4">
+        <source>You have unsaved changes! If you leave, your changes will be lost.</source>
+        <target>Máte neuložené změny! Pokud odejdete, budou vaše změny ztraceny.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="757e9c083c8f3d578bd74f055cc337c72417e187">
         <source>Video updated.</source>
         <target>Video aktualizováno.</target>
@@ -3801,6 +4016,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="73c33d602da89a33d353d686f36c2fff39f0aee3">
+        <source>Video blacklisted.</source>
+        <target>Video přidáno na černou listinu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
         <source>Copied</source>
         <target>Zkopírováno</target>
@@ -3811,6 +4033,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
         <source>Video reported.</source>
         <target>Video nahlášeno.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aca77c42f255d4bc6e95c12c5d656070726c6c2f">
+        <source>Start at <x id="INTERPOLATION" equiv-text="{{timestamp}}"/></source>
+        <target>Začít na <x id="INTERPOLATION" equiv-text="{{timestamp}}"/></target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3838,7 +4067,7 @@ When you will upload a video in this channel, the video support field will be au
       </trans-unit>
       <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e">
         <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source>
-        <target><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> se to líbí / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> lidem se to nelíbí</target>
+        <target><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> lidem se tohle líbí / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> lidem se tohle nelíbí</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3853,6 +4082,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="5ba3d522e4146eefcbd5c222247c1e2423d27cd8">
         <source>Mature or explicit content</source>
         <target>Obsahuje citlivý materiál</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054">
+        <source>Trending for the last 24 hours</source>
+        <target>Trendy posledních 24 hodin</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
