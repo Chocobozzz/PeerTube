@@ -1137,7 +1137,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should not have notifications', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.NONE
@@ -1156,7 +1156,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should only have web notifications', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.WEB
@@ -1182,7 +1182,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should only have mail notifications', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.EMAIL
@@ -1208,7 +1208,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should have email and web notifications', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await updateMyNotificationSettings(servers[0].url, userAccessToken, immutableAssign(allNotificationSettings, {
         newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
