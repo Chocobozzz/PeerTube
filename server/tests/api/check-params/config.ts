@@ -167,6 +167,25 @@ describe('Test config API validators', function () {
       })
     })
 
+    it('Should fail if email disabled and signup requires email verification', async function () {
+      // opposite scenario - succcess when enable enabled - covered via tests/api/users/user-verification.ts
+      const newUpdateParams = immutableAssign(updateParams, {
+        signup: {
+          enabled: true,
+          limit: 5,
+          requiresEmailVerification: true
+        }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+    })
+
     it('Should success with the correct parameters', async function () {
       await makePutBodyRequest({
         url: server.url,

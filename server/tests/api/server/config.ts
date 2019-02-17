@@ -81,7 +81,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.signup.enabled).to.be.false
   expect(data.signup.limit).to.equal(5)
-  expect(data.signup.requiresEmailVerification).to.be.true
+  expect(data.signup.requiresEmailVerification).to.be.false
 
   expect(data.admin.email).to.equal('superadmin1@example.com')
   expect(data.contactForm.enabled).to.be.false
@@ -186,7 +186,7 @@ describe('Test config', function () {
       signup: {
         enabled: false,
         limit: 5,
-        requiresEmailVerification: true
+        requiresEmailVerification: false
       },
       admin: {
         email: 'superadmin1@example.com'
