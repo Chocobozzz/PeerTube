@@ -152,7 +152,7 @@ describe('Test video quarantine', function () {
       await follow(followingServer.url, [ server.url ], followingServer.accessToken)
     })
 
-    it('Should not propogate the quarantined video to following server', async function () {
+    it('Should not propagate the quarantined video to following server', async function () {
       this.timeout(50000)
 
       const res = await uploadVideo(server.url, user1AccessToken, {})
@@ -165,7 +165,7 @@ describe('Test video quarantine', function () {
       expect(videos.length).to.equal(releasedVideosCount)
     })
 
-    it('Should propogate the released video to following server', async function () {
+    it('Should propagate the released video to following server', async function () {
       this.timeout(50000)
 
       await releaseVideoQuarantine(server.url, moderatorAccessToken, videoId)
