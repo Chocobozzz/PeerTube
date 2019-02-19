@@ -34,7 +34,7 @@
 
 ```
 $ sudo apt update
-$ sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git
+$ sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
 $ ffmpeg -version # Should be >= 3.x
 $ g++ -v # Should be >= 5.x
 ```
