@@ -1,7 +1,13 @@
 @import '_variables';
 @import '_mixins';
 
+$play-overlay-transition: 0.2s ease;
+$play-overlay-height: 26px;
+$play-overlay-width: 18px;
+
 .video-thumbnail {
+  @include disable-outline;
+
   display: inline-block;
   position: relative;
   border-radius: 3px;
@@ -9,12 +15,20 @@
   width: $video-thumbnail-width;
   height: $video-thumbnail-height;
   background-color: #ececec;
+  transition: filter $play-overlay-transition;
 
   &:hover {
     text-decoration: none !important;
+
+    filter: brightness(85%);
+
+    .play-overlay {
+      opacity: 1;
+
+      transform: translate(-50%, -50%) scale(1);
+    }
   }
 
-  @include disable-outline;
   &.focus-visible {
     box-shadow: 0 0 0 2px var(--mainColor);
   }
@@ -27,6 +41,25 @@
       filter: blur(5px);
       transform : scale(1.03);
     }
+  }
+
+  .play-overlay {
+    width: 0;
+    height: 0;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+
+    transition: all $play-overlay-transition;
+
+    border-top: calc(#{$play-overlay-height} / 2) solid transparent;
+    border-bottom: calc(#{$play-overlay-height} / 2) solid transparent;
+
+    border-left: $play-overlay-width solid rgba(255, 255, 255, 0.95);
+
+    opacity: 0;
   }
 
   .progress-bar {

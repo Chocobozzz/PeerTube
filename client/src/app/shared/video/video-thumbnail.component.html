@@ -6,6 +6,8 @@
 
   <div class="video-thumbnail-overlay">{{ video.durationLabel }}</div>
 
+  <div class="play-overlay"></div>
+
   <div class="progress-bar" *ngIf="video.userHistory?.currentTime">
     <div [ngStyle]="{ 'width.%': getProgressPercent() }"></div>
   </div>
