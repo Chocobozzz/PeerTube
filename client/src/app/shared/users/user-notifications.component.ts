@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { UserNotificationService } from '@app/shared/users/user-notification.service'
 import { UserNotificationType } from '../../../../../shared'
 import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
@@ -14,6 +14,8 @@ export class UserNotificationsComponent implements OnInit {
   @Input() ignoreLoadingBar = false
   @Input() infiniteScroll = true
   @Input() itemsPerPage = 20
+
+  @Output() notificationsLoaded = new EventEmitter()
 
   notifications: UserNotification[] = []
 
@@ -43,6 +45,8 @@ export class UserNotificationsComponent implements OnInit {
           result => {
             this.notifications = this.notifications.concat(result.data)
             this.componentPagination.totalItems = result.total
+
+            this.notificationsLoaded.emit()
           },
 
           err => this.notifier.error(err.message)

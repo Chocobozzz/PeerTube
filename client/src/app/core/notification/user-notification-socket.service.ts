@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { environment } from '../../../environments/environment'
 import { UserNotification as UserNotificationServer } from '../../../../../shared'
 import { Subject } from 'rxjs'
-import * as io from 'socket.io-client'
 import { AuthService } from '../auth'
 
 export type NotificationEvent = 'new' | 'read' | 'read-all'

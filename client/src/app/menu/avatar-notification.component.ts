@@ -17,6 +17,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
   @Input() user: User
 
   unreadNotifications = 0
+  loaded = false
 
   private notificationSub: Subscription
   private routeSub: Subscription
@@ -52,6 +53,14 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
 
   closePopover () {
     this.popover.close()
+  }
+
+  onPopoverHidden () {
+    this.loaded = false
+  }
+
+  onNotificationLoaded () {
+    this.loaded = true
   }
 
   private async subscribeToNotifications () {

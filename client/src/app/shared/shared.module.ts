@@ -69,6 +69,7 @@ import { InstanceService } from '@app/shared/instance/instance.service'
 import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
 import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
+import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
 
 @NgModule({
   imports: [
@@ -90,6 +91,7 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
 
   declarations: [
     LoaderComponent,
+    SmallLoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     FeedComponent,
@@ -135,6 +137,7 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     KeysPipe,
 
     LoaderComponent,
+    SmallLoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     FeedComponent,
