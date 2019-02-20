@@ -40,8 +40,8 @@ $other-videos-width: 260px;
   }
 
   /deep/ .video-js {
-    width: 888px;
-    height: 500px;
+    width: calc(66vh * 1.77);
+    height: 66vh;
 
     &.vjs-theater-enabled {
       height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
