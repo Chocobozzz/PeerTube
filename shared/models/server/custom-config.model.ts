@@ -6,6 +6,7 @@ export interface CustomConfig {
     shortDescription: string
     description: string
     terms: string
+    isNSFW: boolean
     defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
     customizations: {

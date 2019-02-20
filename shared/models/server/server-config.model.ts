@@ -8,6 +8,7 @@ export interface ServerConfig {
     name: string
     shortDescription: string
     defaultClientRoute: string
+    isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
     customizations: {
       javascript: string

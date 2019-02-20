@@ -23,7 +23,7 @@ function checkMissedConfig () {
     'import.videos.http.enabled', 'import.videos.torrent.enabled',
     'trending.videos.interval_days',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
-    'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
+    'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
     'services.twitter.username', 'services.twitter.whitelisted'
   ]
   const requiredAlternatives = [

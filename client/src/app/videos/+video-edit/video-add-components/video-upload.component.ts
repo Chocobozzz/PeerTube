@@ -163,7 +163,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
 
     const privacy = this.firstStepPrivacyId.toString()
-    const nsfw = false
+    const nsfw = this.serverService.getConfig().instance.isNSFW
     const waitTranscoding = true
     const commentsEnabled = true
     const downloadEnabled = true

@@ -52,6 +52,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
       description: 'my super description',
       terms: 'my super terms',
       defaultClientRoute: '/videos/recently-added',
+      isNSFW: true,
       defaultNSFWPolicy: 'blur',
       customizations: {
         javascript: 'alert("coucou")',

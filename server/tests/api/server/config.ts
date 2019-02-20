@@ -30,6 +30,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
   expect(data.instance.terms).to.equal('No terms for now.')
   expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
+  expect(data.instance.isNSFW).to.be.false
   expect(data.instance.defaultNSFWPolicy).to.equal('display')
   expect(data.instance.customizations.css).to.be.empty
   expect(data.instance.customizations.javascript).to.be.empty
@@ -69,6 +70,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.description).to.equal('my super description')
   expect(data.instance.terms).to.equal('my super terms')
   expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
+  expect(data.instance.isNSFW).to.be.true
   expect(data.instance.defaultNSFWPolicy).to.equal('blur')
   expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
   expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
@@ -163,6 +165,7 @@ describe('Test config', function () {
         description: 'my super description',
         terms: 'my super terms',
         defaultClientRoute: '/videos/recently-added',
+        isNSFW: true,
         defaultNSFWPolicy: 'blur' as 'blur',
         customizations: {
           javascript: 'alert("coucou")',

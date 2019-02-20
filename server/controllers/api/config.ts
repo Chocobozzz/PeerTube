@@ -58,6 +58,7 @@ async function getConfig (req: express.Request, res: express.Response) {
       name: CONFIG.INSTANCE.NAME,
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+      isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
@@ -134,7 +135,7 @@ async function getConfig (req: express.Request, res: express.Response) {
   return res.json(json)
 }
 
-function getAbout (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getAbout (req: express.Request, res: express.Response) {
   const about: About = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
@@ -147,13 +148,13 @@ function getAbout (req: express.Request, res: express.Response, next: express.Ne
   return res.json(about).end()
 }
 
-async function getCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getCustomConfig (req: express.Request, res: express.Response) {
   const data = customConfig()
 
   return res.json(data).end()
 }
 
-async function deleteCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function deleteCustomConfig (req: express.Request, res: express.Response) {
   await remove(CONFIG.CUSTOM_FILE)
 
   auditLogger.delete(getAuditIdFromRes(res), new CustomConfigAuditView(customConfig()))
@@ -166,7 +167,7 @@ async function deleteCustomConfig (req: express.Request, res: express.Response, 
   return res.json(data).end()
 }
 
-async function updateCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateCustomConfig (req: express.Request, res: express.Response) {
   const oldCustomConfigAuditKeys = new CustomConfigAuditView(customConfig())
 
   // camelCase to snake_case key + Force number conversion
@@ -203,6 +204,7 @@ function customConfig (): CustomConfig {
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
+      isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
       customizations: {

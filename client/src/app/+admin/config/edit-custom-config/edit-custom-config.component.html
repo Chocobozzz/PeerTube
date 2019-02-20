@@ -45,6 +45,15 @@
           </div>
 
           <div class="form-group">
+            <my-peertube-checkbox
+              inputName="instanceIsNSFW" formControlName="isNSFW"
+              i18n-labelText labelText="Dedicated to sensitive or NSFW content"
+              i18n-helpHtml helpHtml="Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
+              Moreover, the NSFW checkbox on video upload will be automatically checked by default."
+            ></my-peertube-checkbox>
+          </div>
+
+          <div class="form-group">
             <label i18n for="instanceDefaultClientRoute">Default client route</label>
             <div class="peertube-select-container">
               <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">

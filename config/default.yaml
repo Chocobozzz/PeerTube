@@ -163,6 +163,10 @@ instance:
   description: 'Welcome to this PeerTube instance!' # Support markdown
   terms: 'No terms for now.' # Support markdown
   default_client_route: '/videos/trending'
+  # Whether or not the instance is dedicated to NSFW content
+  # Enabling it will allow other administrators to know that you are mainly federating sensitive content
+  # Moreover, the NSFW checkbox on video upload will be automatically checked by default
+  is_nsfw: false
   # By default, "do_not_list" or "blur" or "display" NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
