@@ -41,8 +41,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   displayModerationBlock = false
   titleTooltip: string
 
-  protected baseVideoWidth = 215
-  protected baseVideoHeight = 205
+  protected baseVideoWidth = 238
+  protected baseVideoHeight = 225
 
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
