@@ -116,12 +116,8 @@ export class PeertubePlayerManager {
       videojs(options.common.playerElement, videojsOptions, function (this: any) {
         const player = this
 
-        player.tech_.on('error', () => {
-          // Fallback to webtorrent?
-          if (mode === 'p2p-media-loader') {
-            self.fallbackToWebTorrent(player, options)
-          }
-        })
+        player.tech_.one('error', () => self.maybeFallbackToWebTorrent(mode, player, options))
+        player.one('error', () => self.maybeFallbackToWebTorrent(mode, player, options))
 
         self.addContextMenu(mode, player, options.common.embedUrl)
 
@@ -130,12 +126,19 @@ export class PeertubePlayerManager {
     })
   }
 
-  private static async fallbackToWebTorrent (player: any, options: PeertubePlayerManagerOptions) {
+  private static async maybeFallbackToWebTorrent (currentMode: PlayerMode, player: any, options: PeertubePlayerManagerOptions) {
+    if (currentMode === 'webtorrent') return
+
+    console.log('Fallback to webtorrent.')
+
     const newVideoElement = document.createElement('video')
     newVideoElement.className = this.playerElementClassName
 
     // VideoJS wraps our video element inside a div
-    const currentParentPlayerElement = options.common.playerElement.parentNode
+    let currentParentPlayerElement = options.common.playerElement.parentNode
+    // Fix on IOS, don't ask me why
+    if (!currentParentPlayerElement) currentParentPlayerElement = document.getElementById(options.common.playerElement.id).parentNode
+
     currentParentPlayerElement.parentNode.insertBefore(newVideoElement, currentParentPlayerElement)
 
     options.common.playerElement = newVideoElement

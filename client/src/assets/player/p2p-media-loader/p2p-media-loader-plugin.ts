@@ -40,6 +40,14 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.options = options
 
+    if (!videojs.Html5Hlsjs) {
+      const message = 'HLS.js does not seem to be supported.'
+      console.warn(message)
+
+      player.ready(() => player.trigger('error', new Error(message)))
+      return
+    }
+
     videojs.Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
       this.hlsjs = hlsjs
     })
