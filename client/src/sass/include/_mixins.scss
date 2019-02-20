@@ -18,6 +18,12 @@
   }
 }
 
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /**
  *  This mixin will crop text in block for needed amount of lines and put ellipsis at the end
  *

@@ -44,11 +44,9 @@
     .video-miniature-account,
     .video-miniature-channel {
       @include disable-default-a-behaviour;
+      @include ellipsis;
 
       display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       font-size: 13px;
       color: $grey-foreground-color;
 

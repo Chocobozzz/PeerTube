@@ -10,12 +10,12 @@
 }
 
 menu {
+  @include ellipsis;
+
   background-color: var(--menuBackgroundColor);
   margin: 0;
   padding: 0;
   height: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: auto;
   color: var(--menuForegroundColor);
   display: flex;
@@ -40,10 +40,9 @@ menu {
     margin-bottom: 35px;
 
     .logged-in-info {
+      @include ellipsis;
+
       flex-grow: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
 
       .logged-in-display-name {
         font-size: 16px;
@@ -55,11 +54,10 @@ menu {
       }
 
       .logged-in-username {
+        @include ellipsis;
+
         font-size: 13px;
         color: #C6C6C6;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         max-width: 140px;
       }
     }
