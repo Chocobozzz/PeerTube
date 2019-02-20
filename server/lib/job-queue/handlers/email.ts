@@ -1,15 +1,8 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
-import { Emailer } from '../../emailer'
+import { Emailer, SendEmailOptions } from '../../emailer'
 
-export type EmailPayload = {
-  to: string[]
-  subject: string
-  text: string
-
-  fromDisplayName?: string
-  replyTo?: string
-}
+export type EmailPayload = SendEmailOptions
 
 async function processEmail (job: Bull.Job) {
   const payload = job.data as EmailPayload
