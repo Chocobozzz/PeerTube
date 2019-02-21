@@ -28,7 +28,7 @@ import { AccountModel } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { ServerModel } from '../server/server'
 import { DefineIndexesOptions } from 'sequelize'
 
@@ -376,6 +376,14 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel
       .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
+  }
+
+  static loadByNameWithHostAndPopulateAccount (nameWithHost: string) {
+    const [ name, host ] = nameWithHost.split('@')
+
+    if (!host || host === CONFIG.WEBSERVER.HOST) return VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
+
+    return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
   static loadLocalByNameAndPopulateAccount (name: string) {

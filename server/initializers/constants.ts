@@ -661,7 +661,7 @@ const CUSTOM_HTML_TAG_COMMENTS = {
   TITLE: '<!-- title tag -->',
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
-  OPENGRAPH_AND_OEMBED: '<!-- open graph and oembed tags -->'
+  META_TAGS: '<!-- meta tags -->'
 }
 
 // ---------------------------------------------------------------------------

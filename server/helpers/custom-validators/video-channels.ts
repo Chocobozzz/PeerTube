@@ -38,11 +38,7 @@ async function isVideoChannelIdExist (id: string, res: express.Response) {
 }
 
 async function isVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
-  const [ name, host ] = nameWithDomain.split('@')
-  let videoChannel: VideoChannelModel
-
-  if (!host || host === CONFIG.WEBSERVER.HOST) videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
-  else videoChannel = await VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
+  const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithDomain)
 
   return processVideoChannelExist(videoChannel, res)
 }

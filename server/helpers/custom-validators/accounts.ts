@@ -38,13 +38,7 @@ function isLocalAccountNameExist (name: string, res: Response, sendNotFound = tr
 }
 
 function isAccountNameWithHostExist (nameWithDomain: string, res: Response, sendNotFound = true) {
-  const [ accountName, host ] = nameWithDomain.split('@')
-
-  let promise: Bluebird<AccountModel>
-  if (!host || host === CONFIG.WEBSERVER.HOST) promise = AccountModel.loadLocalByName(accountName)
-  else promise = AccountModel.loadByNameAndHost(accountName, host)
-
-  return isAccountExist(promise, res, sendNotFound)
+  return isAccountExist(AccountModel.loadByNameWithHost(nameWithDomain), res, sendNotFound)
 }
 
 async function isAccountExist (p: Bluebird<AccountModel>, res: Response, sendNotFound: boolean) {

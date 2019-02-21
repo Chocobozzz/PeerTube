@@ -24,6 +24,8 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
+import * as Bluebird from '../../helpers/custom-validators/accounts'
+import { CONFIG } from '../../initializers'
 
 @DefaultScope({
   include: [
@@ -151,6 +153,14 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return AccountModel.findOne(query)
+  }
+
+  static loadByNameWithHost (nameWithHost: string) {
+    const [ accountName, host ] = nameWithHost.split('@')
+
+    if (!host || host === CONFIG.WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
+
+    return AccountModel.loadByNameAndHost(accountName, host)
   }
 
   static loadLocalByName (name: string) {
