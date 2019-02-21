@@ -341,7 +341,7 @@ export class UserModel extends Model<UserModel> {
   }
 
   static loadById (id: number) {
-    return UserModel.findById(id)
+    return UserModel.findByPk(id)
   }
 
   static loadByUsername (username: string) {

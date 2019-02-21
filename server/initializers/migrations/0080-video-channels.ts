@@ -74,7 +74,7 @@ async function up (utils: {
   for (const rawVideo of rawVideos) {
     const videoChannel = await utils.db.VideoChannel.findOne({ where: { authorId: rawVideo.authorId } })
 
-    const video = await utils.db.Video.findById(rawVideo.id)
+    const video = await utils.db.Video.findByPk(rawVideo.id)
     video.channelId = videoChannel.id
     await video.save()
   }

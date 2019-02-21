@@ -110,7 +110,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
       ]
     }
 
-    return VideoStreamingPlaylistModel.findById(id, options)
+    return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
   static getHlsPlaylistFilename (resolution: number) {

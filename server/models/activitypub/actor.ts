@@ -265,7 +265,7 @@ export class ActorModel extends Model<ActorModel> {
   VideoChannel: VideoChannelModel
 
   static load (id: number) {
-    return ActorModel.unscoped().findById(id)
+    return ActorModel.unscoped().findByPk(id)
   }
 
   static loadAccountActorByVideoId (videoId: number, transaction: Sequelize.Transaction) {

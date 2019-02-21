@@ -1313,7 +1313,7 @@ export class VideoModel extends Model<VideoModel> {
 
   static loadWithFiles (id: number, t?: Sequelize.Transaction, logging?: boolean) {
     return VideoModel.scope([ ScopeNames.WITH_FILES, ScopeNames.WITH_STREAMING_PLAYLISTS ])
-                     .findById(id, { transaction: t, logging })
+                     .findByPk(id, { transaction: t, logging })
   }
 
   static loadByUUIDWithFile (uuid: string) {

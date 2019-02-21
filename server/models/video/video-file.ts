@@ -117,7 +117,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
       ]
     }
 
-    return VideoFileModel.findById(id, options)
+    return VideoFileModel.findByPk(id, options)
   }
 
   static async getStats () {

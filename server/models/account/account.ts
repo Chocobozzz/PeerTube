@@ -24,7 +24,6 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
-import * as Bluebird from '../../helpers/custom-validators/accounts'
 import { CONFIG } from '../../initializers'
 
 @DefaultScope({
@@ -136,7 +135,7 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   static load (id: number, transaction?: Sequelize.Transaction) {
-    return AccountModel.findById(id, { transaction })
+    return AccountModel.findByPk(id, { transaction })
   }
 
   static loadByUUID (uuid: string) {

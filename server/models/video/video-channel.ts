@@ -320,7 +320,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadByIdAndPopulateAccount (id: number) {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findById(id)
+      .findByPk(id)
   }
 
   static loadByIdAndAccount (id: number, accountId: number) {
@@ -339,7 +339,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadAndPopulateAccount (id: number) {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findById(id)
+      .findByPk(id)
   }
 
   static loadByUUIDAndPopulateAccount (uuid: string) {
@@ -439,7 +439,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findById(id, options)
+      .findByPk(id, options)
   }
 
   toFormattedJSON (): VideoChannel {

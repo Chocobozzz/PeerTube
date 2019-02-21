@@ -7488,10 +7488,10 @@ send@0.16.2:
     range-parser "~1.2.0"
     statuses "~1.4.0"
 
-sequelize-typescript@0.6.6:
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-0.6.6.tgz#926037b542dae9f4eff20609d095cc5e3a3640f3"
-  integrity sha512-WGJTaNuHyYwUM8itxZvMVLeNEb7xSjisbVN1Q5rxLaIf2w67Xaf1GX6Jb+9840bjcNPvMsKgC2aR88zmw7UlcQ==
+sequelize-typescript@0.6.7:
+  version "0.6.7"
+  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-0.6.7.tgz#372be979cbae060c554fdbaf2c2d8c93a0283303"
+  integrity sha512-ae21Gq9VOVXlIjnh2vLdL42Kev6r4LC82xOQ2fXo0lHzQvjFeH8/GaWUlpvYv57AOgc+ZnElbYFbSLKdT9ue0w==
   dependencies:
     "@types/bluebird" "3.5.18"
     "@types/node" "6.0.41"
@@ -7499,10 +7499,10 @@ sequelize-typescript@0.6.6:
     es6-shim "0.35.3"
     glob "7.1.2"
 
-sequelize@4.41.2:
-  version "4.41.2"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.41.2.tgz#bb9ba30d72e9eeb883c9861cd0e2cac672010883"
-  integrity sha512-8vPf2R0o9iEmtzkqNzwFdblO+0Mu+RNxOdLeYGGqWGlp3cushLpQucAeSGPQgf2hQVZP5yOCM1ouZKTQ5FTlvA==
+sequelize@4.42.0:
+  version "4.42.0"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.42.0.tgz#439467ba7bfe7d5afcc56d62b3e091860fbf18f3"
+  integrity sha512-qxAYnX4rcv7PbNtEidb56REpxNJCdbN0qyk1jb3+e6sE7OrmS0nYMU+MFVbNTJtZfSpOEEL1TX0TkMw+wzZBxg==
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"

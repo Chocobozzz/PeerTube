@@ -241,7 +241,7 @@ describe('Test follows', function () {
     expect(res.body.data[0].name).to.equal('server3')
   })
 
-  describe('Should propagate data on a new following', async function () {
+  describe('Should propagate data on a new following', function () {
     let video4: Video
 
     before(async function () {
