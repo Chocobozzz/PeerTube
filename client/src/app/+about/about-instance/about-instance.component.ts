@@ -29,14 +29,6 @@ export class AboutInstanceComponent implements OnInit {
     return this.serverService.getConfig().instance.name
   }
 
-  get userVideoQuota () {
-    return this.serverService.getConfig().user.videoQuota
-  }
-
-  get isSignupAllowed () {
-    return this.serverService.getConfig().signup.allowed
-  }
-
   get isContactFormEnabled () {
     return this.serverService.getConfig().email.enabled && this.serverService.getConfig().contactForm.enabled
   }

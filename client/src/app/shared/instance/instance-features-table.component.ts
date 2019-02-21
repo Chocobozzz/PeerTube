@@ -38,6 +38,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
 
     this.features = [
       {
+        label: this.i18n('User registration allowed'),
+        value: config.signup.allowed
+      },
+      {
         label: this.i18n('Transcode your videos in multiple resolutions'),
         value: config.transcoding.enabledResolutions.length !== 0
       },
@@ -50,7 +54,6 @@ export class InstanceFeaturesTableComponent implements OnInit {
         value: config.import.videos.torrent.enabled
       }
     ]
-
   }
 
   private getApproximateTime (seconds: number) {
