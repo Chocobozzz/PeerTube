@@ -47,14 +47,12 @@ const auditLogger = auditLoggerFactory('users')
 
 const loginRateLimiter = new RateLimit({
   windowMs: RATES_LIMIT.LOGIN.WINDOW_MS,
-  max: RATES_LIMIT.LOGIN.MAX,
-  delayMs: 0
+  max: RATES_LIMIT.LOGIN.MAX
 })
 
 const askSendEmailLimiter = new RateLimit({
   windowMs: RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: RATES_LIMIT.ASK_SEND_EMAIL.MAX,
-  delayMs: 0
+  max: RATES_LIMIT.ASK_SEND_EMAIL.MAX
 })
 
 const usersRouter = express.Router()

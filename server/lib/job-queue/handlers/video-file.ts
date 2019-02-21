@@ -140,7 +140,7 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Video
     let videoPublished = false
 
     if (resolutionsEnabled.length !== 0) {
-      const tasks: Bluebird<Bull.Job<any>>[] = []
+      const tasks: (Bluebird<Bull.Job<any>> | Promise<Bull.Job<any>>)[] = []
 
       for (const resolution of resolutionsEnabled) {
         const dataInput = {
