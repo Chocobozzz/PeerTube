@@ -1,6 +1,12 @@
 <div class="feature-table">
 
   <table class="table">
+    <tr>
+      <td i18n class="label">Default NSFW/sensitive videos policy (can be redefined by the users)</td>
+
+      <td class="value">{{ buildNSFWLabel() }}</td>
+    </tr>
+
     <tr *ngFor="let feature of features">
       <td class="label">{{ feature.label }}</td>
       <td>

@@ -3,6 +3,7 @@
 import 'mocha'
 
 import {
+  closeAllSequelize,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -78,6 +79,8 @@ describe('Test ActivityPub fetcher', function () {
 
   after(async function () {
     killallServers(servers)
+
+    await closeAllSequelize(servers)
 
     // Keep the logs if the test failed
     if (this['ok']) {

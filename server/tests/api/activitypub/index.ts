@@ -1,5 +1,5 @@
 import './client'
 import './fetch'
-import './helpers'
 import './refresher'
+import './helpers'
 import './security'

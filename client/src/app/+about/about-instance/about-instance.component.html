@@ -8,6 +8,8 @@
 
     <div class="short-description">
       <div>{{ shortDescription }}</div>
+
+      <div *ngIf="isNSFW" class="dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
     </div>
 
     <div class="description">

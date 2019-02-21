@@ -26,3 +26,8 @@
 .short-description, .description, .terms, .signup {
   margin-bottom: 30px;
 }
+
+.short-description .dedicated-to-nsfw {
+  margin-top: 20px;
+  font-weight: $font-semibold;
+}

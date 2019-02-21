@@ -33,6 +33,10 @@ export class AboutInstanceComponent implements OnInit {
     return this.serverService.getConfig().email.enabled && this.serverService.getConfig().contactForm.enabled
   }
 
+  get isNSFW () {
+    return this.serverService.getConfig().instance.isNSFW
+  }
+
   ngOnInit () {
     this.instanceService.getAbout()
       .subscribe(

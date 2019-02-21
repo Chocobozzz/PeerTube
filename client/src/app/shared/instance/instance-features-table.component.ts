@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ServerConfig } from '../../../../../shared'
 
 @Component({
   selector: 'my-instance-features-table',
@@ -31,6 +32,14 @@ export class InstanceFeaturesTableComponent implements OnInit {
           this.buildFeatures()
           this.buildQuotaHelpIndication()
         })
+  }
+
+  buildNSFWLabel () {
+    const policy = this.serverService.getConfig().instance.defaultNSFWPolicy
+
+    if (policy === 'do_not_list') return this.i18n('Hidden')
+    if (policy === 'blur') return this.i18n('Blurred with confirmation request')
+    if (policy === 'display') return this.i18n('Displayed')
   }
 
   private buildFeatures () {
@@ -87,5 +96,4 @@ export class InstanceFeaturesTableComponent implements OnInit {
 
     this.quotaHelpIndication = lines.join('<br />')
   }
-
 }
