@@ -7,20 +7,21 @@ exports.config = {
   allScriptsTimeout: 25000,
   specs: ['./src/**/*.e2e-spec.ts'],
 
-  seleniumAddress: 'http://localhost:4444/wd/hub',
+  directConnect: true,
 
   capabilities: {
     'browserName': 'firefox',
     'moz:firefoxOptions': {
-      'args': ["-headless"],
-      "log": {
+      binary: '/usr/bin/firefox-esr',
+      // args: ["-headless"],
+      log: {
         "level": "info" // default is "info"
       }
     }
   },
 
   // maxSessions: 1,
-  baseUrl: 'http://localhost:3333/',
+  baseUrl: 'http://localhost:3000/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

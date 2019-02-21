@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { environment } from '../../../environments/environment'
 import { UserNotification as UserNotificationServer } from '../../../../../shared'
 import { Subject } from 'rxjs'
@@ -13,7 +13,8 @@ export class UserNotificationSocket {
   private socket: SocketIOClient.Socket
 
   constructor (
-    private auth: AuthService
+    private auth: AuthService,
+    private ngZone: NgZone
   ) {}
 
   dispatch (type: NotificationEvent, notification?: UserNotificationServer) {
@@ -32,10 +33,12 @@ export class UserNotificationSocket {
     // FIXME: import('..') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
     const io: typeof import ('socket.io-client') = (await import('socket.io-client') as any).default
 
-    this.socket = io(environment.apiUrl + '/user-notifications', {
-      query: { accessToken: this.auth.getAccessToken() }
-    })
+    this.ngZone.runOutsideAngular(() => {
+      this.socket = io(environment.apiUrl + '/user-notifications', {
+        query: { accessToken: this.auth.getAccessToken() }
+      })
 
-    this.socket.on('new-notification', (n: UserNotificationServer) => this.dispatch('new', n))
+      this.socket.on('new-notification', (n: UserNotificationServer) => this.dispatch('new', n))
+    })
   }
 }

@@ -54,8 +54,8 @@ $play-overlay-width: 18px;
 
     transition: all $play-overlay-transition;
 
-    border-top: calc(#{$play-overlay-height} / 2) solid transparent;
-    border-bottom: calc(#{$play-overlay-height} / 2) solid transparent;
+    border-top: ($play-overlay-height / 2) solid transparent;
+    border-bottom: ($play-overlay-height / 2) solid transparent;
 
     border-left: $play-overlay-width solid rgba(255, 255, 255, 0.95);
 
