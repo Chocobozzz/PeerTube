@@ -55,13 +55,15 @@ app.set('trust proxy', CONFIG.TRUST_PROXY)
 // Security middleware
 import { baseCSP } from './server/middlewares'
 
-app.use(baseCSP)
-app.use(helmet({
-  frameguard: {
-    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-  },
-  hsts: false
-}))
+if (CONFIG.CSP.ENABLED) {
+  app.use(baseCSP)
+  app.use(helmet({
+    frameguard: {
+      action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
+    },
+    hsts: false
+  }))
+}
 
 // ----------- Database -----------
 

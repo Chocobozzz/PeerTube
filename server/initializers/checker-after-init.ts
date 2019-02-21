@@ -34,6 +34,12 @@ async function checkActivityPubUrls () {
 // Return an error message, or null if everything is okay
 function checkConfig () {
 
+  // Moved configuration keys
+  if (config.has('services.csp-logger')) {
+    logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
+  }
+
+  // Email verification
   if (!Emailer.isEnabled()) {
     if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
       return 'Emailer is disabled but you require signup email verification.'

@@ -97,6 +97,12 @@ redundancy:
 #        strategy: 'recently-added' # Cache recently added videos
 #        min_views: 10 # Having at least x views
 
+csp:
+  enabled: false
+  report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
+  report_uri:
+
+
 ###############################################################################
 #
 # From this point, all the following keys can be overridden by the web interface

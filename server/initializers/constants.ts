@@ -229,6 +229,11 @@ const CONFIG = {
       STRATEGIES: buildVideosRedundancy(config.get<any[]>('redundancy.videos.strategies'))
     }
   },
+  CSP: {
+    ENABLED: config.get<boolean>('csp.enabled'),
+    REPORT_ONLY: config.get<boolean>('csp.report_only'),
+    REPORT_URI: config.get<boolean>('csp.report_uri')
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -300,7 +305,6 @@ const CONFIG = {
     get SECURITYTXT_CONTACT () { return config.get<string>('admin.email') }
   },
   SERVICES: {
-    get 'CSP-LOGGER' () { return config.get<string>('services.csp-logger') },
     TWITTER: {
       get USERNAME () { return config.get<string>('services.twitter.username') },
       get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }

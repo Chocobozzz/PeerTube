@@ -96,6 +96,11 @@ redundancy:
 #        strategy: 'recently-added' # Cache recently added videos
 #        min_views: 10 # Having at least x views
 
+csp:
+  enabled: false
+  report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
+  report_uri:
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
@@ -182,8 +187,6 @@ instance:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
 
 services:
-  # You can provide a reporting endpoint for Content Security Policy violations
-  csp-logger:
   # Cards configuration to format video in Twitter
   twitter:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published

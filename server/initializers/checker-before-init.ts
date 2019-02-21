@@ -15,6 +15,7 @@ function checkMissedConfig () {
     'storage.redundancy', 'storage.tmp', 'storage.playlists',
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
+    'csp.enabled', 'csp.report_only', 'csp.report_uri',
     'cache.previews.size', 'admin.email', 'contact_form.enabled',
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
