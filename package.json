@@ -53,7 +53,7 @@
     "parse-log": "node ./dist/scripts/parse-log.js",
     "prune-storage": "node ./dist/scripts/prune-storage.js",
     "optimize-old-videos": "node ./dist/scripts/optimize-old-videos.js",
-    "postinstall": "cd client && yarn install --pure-lockfile",
+    "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",
     "tsc": "tsc",
     "commander": "commander",
     "ng": "ng",
