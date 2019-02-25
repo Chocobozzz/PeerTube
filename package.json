@@ -3,6 +3,9 @@
   "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
   "version": "1.2.1",
   "private": true,
+  "workspaces": [
+    "server/tools"
+  ],
   "licence": "AGPLv3",
   "engines": {
     "node": ">=8.x"
@@ -91,7 +94,6 @@
     "@types/bluebird": "3.5.21"
   },
   "dependencies": {
-    "application-config": "^1.0.1",
     "async": "^2.0.0",
     "async-lock": "^1.1.2",
     "async-lru": "^1.1.1",
@@ -148,7 +150,6 @@
     "sitemap": "^2.1.0",
     "socket.io": "^2.2.0",
     "srt-to-vtt": "^1.1.2",
-    "summon-install": "^0.4.3",
     "useragent": "^2.3.0",
     "uuid": "^3.1.0",
     "validator": "^10.2.0",
@@ -216,9 +217,6 @@
     "xliff": "^4.0.0"
   },
   "scripty": {
-    "silent": true
-  },
-  "summon": {
     "silent": true
   },
   "sasslintConfig": "client/.sass-lint.yml"

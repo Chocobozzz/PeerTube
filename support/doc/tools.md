@@ -30,7 +30,6 @@
 
 You need at least 512MB RAM to run the script.
 Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
-You need to follow all the following steps even if you are on a PeerTube server (including cloning the git repository in a different directory than your production installation because the scripts utilize non-production dependencies).
 
 ### Dependencies
 
@@ -42,20 +41,13 @@ Clone the PeerTube repo to get the latest version (even if you are on your PeerT
 
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube.git
-$ CLONE="$(pwd)/PeerTube"
+$ CLONE="$(pwd)/PeerTube && cd $CLONE"
 ```
 
-Run ``yarn install --pure-lockfile``
-```
-$ cd ${CLONE}
-$ yarn install --pure-lockfile
-```
+Run `NOCLIENT=1 yarn install --pure-lockfile`.
+If you are on a production installation that has already its server compiled, you may add the `--production` flag and skip the next command.
 
-Build server tools:
-```
-$ cd ${CLONE}
-$ npm run build:server
-```
+Build server tools with `npm run build:server`
 
 ### CLI wrapper
 

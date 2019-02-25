@@ -1,0 +1,19 @@
+{
+  "name": "@peertube/remote",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "application-config": "^1.0.1",
+    "bluebird": "^3.5.3",
+    "commander": "^2.19.0",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.11",
+    "prompt": "^1.0.0",
+    "request": "^2.88.0",
+    "summon-install": "^0.4.6",
+    "supertest": "^3.4.2"
+  },
+  "summon": {
+    "silent": true
+  }
+}
