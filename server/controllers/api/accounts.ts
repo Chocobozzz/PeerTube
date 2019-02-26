@@ -1,21 +1,23 @@
 import * as express from 'express'
-import { getFormattedObjects } from '../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
-  listVideoAccountChannelsValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
-  setDefaultSort
+  setDefaultSort,
+  videoPlaylistsSortValidator
 } from '../../middlewares'
-import { accountsNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
+import { accountNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../../lib/job-queue'
 import { logger } from '../../helpers/logger'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { UserModel } from '../../models/account/user'
 
 const accountsRouter = express.Router()
 
@@ -28,12 +30,12 @@ accountsRouter.get('/',
 )
 
 accountsRouter.get('/:accountName',
-  asyncMiddleware(accountsNameWithHostGetValidator),
+  asyncMiddleware(accountNameWithHostGetValidator),
   getAccount
 )
 
 accountsRouter.get('/:accountName/videos',
-  asyncMiddleware(accountsNameWithHostGetValidator),
+  asyncMiddleware(accountNameWithHostGetValidator),
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
@@ -44,8 +46,18 @@ accountsRouter.get('/:accountName/videos',
 )
 
 accountsRouter.get('/:accountName/video-channels',
-  asyncMiddleware(listVideoAccountChannelsValidator),
-  asyncMiddleware(listVideoAccountChannels)
+  asyncMiddleware(accountNameWithHostGetValidator),
+  asyncMiddleware(listAccountChannels)
+)
+
+accountsRouter.get('/:accountName/video-playlists',
+  optionalAuthenticate,
+  asyncMiddleware(accountNameWithHostGetValidator),
+  paginationValidator,
+  videoPlaylistsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAccountPlaylists)
 )
 
 // ---------------------------------------------------------------------------
@@ -56,7 +68,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getAccount (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getAccount (req: express.Request, res: express.Response) {
   const account: AccountModel = res.locals.account
 
   if (account.isOutdated()) {
@@ -67,19 +79,40 @@ function getAccount (req: express.Request, res: express.Response, next: express.
   return res.json(account.toFormattedJSON())
 }
 
-async function listAccounts (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listAccounts (req: express.Request, res: express.Response) {
   const resultList = await AccountModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listVideoAccountChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listAccountChannels (req: express.Request, res: express.Response) {
   const resultList = await VideoChannelModel.listByAccount(res.locals.account.id)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listAccountVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listAccountPlaylists (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
+  // Allow users to see their private/unlisted video playlists
+  let privateAndUnlisted = false
+  if (res.locals.oauth && (res.locals.oauth.token.User as UserModel).Account.id === res.locals.account.id) {
+    privateAndUnlisted = true
+  }
+
+  const resultList = await VideoPlaylistModel.listForApi({
+    followerActorId: serverActor.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    accountId: res.locals.account.id,
+    privateAndUnlisted
+  })
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function listAccountVideos (req: express.Request, res: express.Response) {
   const account: AccountModel = res.locals.account
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 

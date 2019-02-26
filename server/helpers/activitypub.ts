@@ -28,6 +28,9 @@ function activityPubContextify <T> (data: T) {
         state: 'sc:Number',
         size: 'sc:Number',
         fps: 'sc:Number',
+        startTimestamp: 'sc:Number',
+        stopTimestamp: 'sc:Number',
+        position: 'sc:Number',
         commentsEnabled: 'sc:Boolean',
         downloadEnabled: 'sc:Boolean',
         waitTranscoding: 'sc:Boolean',
@@ -44,6 +47,10 @@ function activityPubContextify <T> (data: T) {
         },
         dislikes: {
           '@id': 'as:dislikes',
+          '@type': '@id'
+        },
+        playlists: {
+          '@id': 'pt:playlists',
           '@type': '@id'
         },
         shares: {
@@ -67,7 +74,7 @@ async function activityPubCollectionPagination (baseUrl: string, handler: Activi
 
     return {
       id: baseUrl,
-      type: 'OrderedCollection',
+      type: 'OrderedCollectionPage',
       totalItems: result.total,
       first: baseUrl + '?page=1'
     }

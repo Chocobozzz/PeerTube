@@ -9,6 +9,7 @@ import { isViewActivityValid } from './view'
 import { exists } from '../misc'
 import { isCacheFileObjectValid } from './cache-file'
 import { isFlagActivityValid } from './flag'
+import { isPlaylistObjectValid } from './playlist'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) && (
@@ -78,6 +79,7 @@ function checkCreateActivity (activity: any) {
       isViewActivityValid(activity.object) ||
       isDislikeActivityValid(activity.object) ||
       isFlagActivityValid(activity.object) ||
+      isPlaylistObjectValid(activity.object) ||
 
       isCacheFileObjectValid(activity.object) ||
       sanitizeAndCheckVideoCommentObject(activity.object) ||
@@ -89,6 +91,7 @@ function checkUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     (
       isCacheFileObjectValid(activity.object) ||
+      isPlaylistObjectValid(activity.object) ||
       sanitizeAndCheckVideoTorrentObject(activity.object) ||
       sanitizeAndCheckActorObject(activity.object)
     )

@@ -7,9 +7,19 @@ import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoFileModel } from '../../models/video/video-file'
 import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
 function getVideoActivityPubUrl (video: VideoModel) {
   return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+}
+
+function getVideoPlaylistActivityPubUrl (videoPlaylist: VideoPlaylistModel) {
+  return CONFIG.WEBSERVER.URL + '/video-playlists/' + videoPlaylist.uuid
+}
+
+function getVideoPlaylistElementActivityPubUrl (videoPlaylist: VideoPlaylistModel, video: VideoModel) {
+  return CONFIG.WEBSERVER.URL + '/video-playlists/' + videoPlaylist.uuid + '/' + video.uuid
 }
 
 function getVideoCacheFileActivityPubUrl (videoFile: VideoFileModel) {
@@ -98,6 +108,8 @@ function getUndoActivityPubUrl (originalUrl: string) {
 
 export {
   getVideoActivityPubUrl,
+  getVideoPlaylistElementActivityPubUrl,
+  getVideoPlaylistActivityPubUrl,
   getVideoCacheStreamingPlaylistActivityPubUrl,
   getVideoChannelActivityPubUrl,
   getAccountActivityPubUrl,

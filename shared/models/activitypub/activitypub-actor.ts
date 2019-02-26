@@ -8,6 +8,7 @@ export interface ActivityPubActor {
   id: string
   following: string
   followers: string
+  playlists?: string
   inbox: string
   outbox: string
   preferredUsername: string

@@ -444,6 +444,7 @@ export class ActorModel extends Model<ActorModel> {
       id: this.url,
       following: this.getFollowingUrl(),
       followers: this.getFollowersUrl(),
+      playlists: this.getPlaylistsUrl(),
       inbox: this.inboxUrl,
       outbox: this.outboxUrl,
       preferredUsername: this.preferredUsername,
@@ -492,6 +493,10 @@ export class ActorModel extends Model<ActorModel> {
 
   getFollowersUrl () {
     return this.url + '/followers'
+  }
+
+  getPlaylistsUrl () {
+    return this.url + '/playlists'
   }
 
   getPublicKeyUrl () {

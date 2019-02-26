@@ -1,8 +1,8 @@
-import { Video, VideoChannelAttribute, VideoConstant } from '../videos'
+import { Video, VideoChannelSummary, VideoConstant } from '../videos'
 
 export interface VideosOverview {
   channels: {
-    channel: VideoChannelAttribute
+    channel: VideoChannelSummary
     videos: Video[]
   }[]
 

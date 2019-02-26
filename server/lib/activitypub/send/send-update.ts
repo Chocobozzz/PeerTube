@@ -12,8 +12,13 @@ import { audiencify, getActorsInvolvedInVideo, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { getServerActor } from '../../../helpers/utils'
 
 async function sendUpdateVideo (video: VideoModel, t: Transaction, overrodeByActor?: ActorModel) {
+  if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+
   logger.info('Creating job to update video %s.', video.url)
 
   const byActor = overrodeByActor ? overrodeByActor : video.VideoChannel.Account.Actor
@@ -73,12 +78,35 @@ async function sendUpdateCacheFile (byActor: ActorModel, redundancyModel: VideoR
   return sendVideoRelatedActivity(activityBuilder, { byActor, video })
 }
 
+async function sendUpdateVideoPlaylist (videoPlaylist: VideoPlaylistModel, t: Transaction) {
+  if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
+
+  const byActor = videoPlaylist.OwnerAccount.Actor
+
+  logger.info('Creating job to update video playlist %s.', videoPlaylist.url)
+
+  const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
+
+  const object = await videoPlaylist.toActivityPubObject()
+  const audience = getAudience(byActor, videoPlaylist.privacy === VideoPlaylistPrivacy.PUBLIC)
+
+  const updateActivity = buildUpdateActivity(url, byActor, object, audience)
+
+  const serverActor = await getServerActor()
+  const toFollowersOf = [ byActor, serverActor ]
+
+  if (videoPlaylist.VideoChannel) toFollowersOf.push(videoPlaylist.VideoChannel.Actor)
+
+  return broadcastToFollowers(updateActivity, byActor, toFollowersOf, t)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   sendUpdateActor,
   sendUpdateVideo,
-  sendUpdateCacheFile
+  sendUpdateCacheFile,
+  sendUpdateVideoPlaylist
 }
 
 // ---------------------------------------------------------------------------

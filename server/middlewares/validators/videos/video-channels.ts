@@ -16,19 +16,6 @@ import { areValidationErrors } from '../utils'
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { ActorModel } from '../../../models/activitypub/actor'
 
-const listVideoAccountChannelsValidator = [
-  param('accountName').exists().withMessage('Should have a valid account name'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listVideoAccountChannelsValidator parameters', { parameters: req.body })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isAccountNameWithHostExist(req.params.accountName, res)) return
-
-    return next()
-  }
-]
-
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
   body('displayName').custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
@@ -127,7 +114,6 @@ const localVideoChannelValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  listVideoAccountChannelsValidator,
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
