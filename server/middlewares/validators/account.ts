@@ -17,7 +17,7 @@ const localAccountValidator = [
   }
 ]
 
-const accountsNameWithHostGetValidator = [
+const accountNameWithHostGetValidator = [
   param('accountName').exists().withMessage('Should have an account name with host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -34,5 +34,5 @@ const accountsNameWithHostGetValidator = [
 
 export {
   localAccountValidator,
-  accountsNameWithHostGetValidator
+  accountNameWithHostGetValidator
 }

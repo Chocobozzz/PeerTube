@@ -46,7 +46,7 @@ import { VideoFetchType } from '../../../helpers/video'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { getServerActor } from '../../../helpers/utils'
 
-const videosAddValidator = getCommonVideoAttributes().concat([
+const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
     .custom((value, { req }) => isVideoFile(req.files)).withMessage(
       'This file is not supported or too large. Please, make sure it is of the following type: '
@@ -94,7 +94,7 @@ const videosAddValidator = getCommonVideoAttributes().concat([
   }
 ])
 
-const videosUpdateValidator = getCommonVideoAttributes().concat([
+const videosUpdateValidator = getCommonVideoEditAttributes().concat([
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('name')
     .optional()
@@ -288,7 +288,7 @@ const videosAcceptChangeOwnershipValidator = [
   }
 ]
 
-function getCommonVideoAttributes () {
+function getCommonVideoEditAttributes () {
   return [
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
@@ -421,7 +421,7 @@ export {
   videosTerminateChangeOwnershipValidator,
   videosAcceptChangeOwnershipValidator,
 
-  getCommonVideoAttributes,
+  getCommonVideoEditAttributes,
 
   commonVideosFiltersValidator
 }

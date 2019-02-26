@@ -12,7 +12,8 @@ import {
   videoChannelsAddValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
-  videoChannelsUpdateValidator
+  videoChannelsUpdateValidator,
+  videoPlaylistsSortValidator
 } from '../../middlewares'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
@@ -31,6 +32,7 @@ import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '..
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
 import { JobQueue } from '../../lib/job-queue'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
@@ -75,6 +77,15 @@ videoChannelRouter.delete('/:nameWithHost',
 videoChannelRouter.get('/:nameWithHost',
   asyncMiddleware(videoChannelsNameWithHostValidator),
   asyncMiddleware(getVideoChannel)
+)
+
+videoChannelRouter.get('/:nameWithHost/video-playlists',
+  asyncMiddleware(videoChannelsNameWithHostValidator),
+  paginationValidator,
+  videoPlaylistsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listVideoChannelPlaylists)
 )
 
 videoChannelRouter.get('/:nameWithHost/videos',
@@ -204,6 +215,20 @@ async function getVideoChannel (req: express.Request, res: express.Response, nex
   }
 
   return res.json(videoChannelWithVideos.toFormattedJSON())
+}
+
+async function listVideoChannelPlaylists (req: express.Request, res: express.Response) {
+  const serverActor = await getServerActor()
+
+  const resultList = await VideoPlaylistModel.listForApi({
+    followerActorId: serverActor.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    videoChannelId: res.locals.videoChannel.id
+  })
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {

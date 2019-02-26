@@ -1,4 +1,4 @@
-import { ActivityPlaylistUrlObject, ActivityVideoUrlObject, CacheFileObject } from '../../../shared/index'
+import { CacheFileObject } from '../../../shared/index'
 import { VideoModel } from '../../models/video/video'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { Transaction } from 'sequelize'

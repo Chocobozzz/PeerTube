@@ -40,7 +40,7 @@ import {
   isVideoDurationValid,
   isVideoLanguageValid,
   isVideoLicenceValid,
-  isVideoNameValid, isVideoOriginallyPublishedAtValid,
+  isVideoNameValid,
   isVideoPrivacyValid,
   isVideoStateValid,
   isVideoSupportValid
@@ -52,7 +52,9 @@ import {
   ACTIVITY_PUB,
   API_VERSION,
   CONFIG,
-  CONSTRAINTS_FIELDS, HLS_PLAYLIST_DIRECTORY, HLS_REDUNDANCY_DIRECTORY,
+  CONSTRAINTS_FIELDS,
+  HLS_PLAYLIST_DIRECTORY,
+  HLS_REDUNDANCY_DIRECTORY,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   STATIC_DOWNLOAD_PATHS,
@@ -70,10 +72,17 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { buildBlockedAccountSQL, buildTrigramSearchIndex, createSimilarityAttribute, getVideoSort, throwIfNotValid } from '../utils'
+import {
+  buildBlockedAccountSQL,
+  buildTrigramSearchIndex,
+  buildWhereIdOrUUID,
+  createSimilarityAttribute,
+  getVideoSort,
+  throwIfNotValid
+} from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
-import { VideoChannelModel } from './video-channel'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel'
 import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
@@ -91,11 +100,11 @@ import {
   videoModelToFormattedDetailsJSON,
   videoModelToFormattedJSON
 } from './video-format-utils'
-import * as validator from 'validator'
 import { UserVideoHistoryModel } from '../account/user-video-history'
 import { UserModel } from '../account/user'
 import { VideoImportModel } from './video-import'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { VideoPlaylistElementModel } from './video-playlist-element'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -175,6 +184,9 @@ export enum ScopeNames {
 
 type ForAPIOptions = {
   ids: number[]
+
+  videoPlaylistId?: number
+
   withFiles?: boolean
 }
 
@@ -182,6 +194,7 @@ type AvailableForListIDsOptions = {
   serverAccountId: number
   followerActorId: number
   includeLocalVideos: boolean
+
   filter?: VideoFilter
   categoryOneOf?: number[]
   nsfw?: boolean
@@ -189,9 +202,14 @@ type AvailableForListIDsOptions = {
   languageOneOf?: string[]
   tagsOneOf?: string[]
   tagsAllOf?: string[]
+
   withFiles?: boolean
+
   accountId?: number
   videoChannelId?: number
+
+  videoPlaylistId?: number
+
   trendingDays?: number
   user?: UserModel,
   historyOfUser?: UserModel
@@ -199,67 +217,29 @@ type AvailableForListIDsOptions = {
 
 @Scopes({
   [ ScopeNames.FOR_API ]: (options: ForAPIOptions) => {
-    const accountInclude = {
-      attributes: [ 'id', 'name' ],
-      model: AccountModel.unscoped(),
-      required: true,
-      include: [
-        {
-          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-          model: ActorModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
-            {
-              model: AvatarModel.unscoped(),
-              required: false
-            }
-          ]
-        }
-      ]
-    }
-
-    const videoChannelInclude = {
-      attributes: [ 'name', 'description', 'id' ],
-      model: VideoChannelModel.unscoped(),
-      required: true,
-      include: [
-        {
-          attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-          model: ActorModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
-            {
-              model: AvatarModel.unscoped(),
-              required: false
-            }
-          ]
-        },
-        accountInclude
-      ]
-    }
-
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
           [ Sequelize.Op.any ]: options.ids
         }
       },
-      include: [ videoChannelInclude ]
+      include: [
+        {
+          model: VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY)
+        }
+      ]
     }
 
     if (options.withFiles === true) {
       query.include.push({
         model: VideoFileModel.unscoped(),
+        required: true
+      })
+    }
+
+    if (options.videoPlaylistId) {
+      query.include.push({
+        model: VideoPlaylistElementModel.unscoped(),
         required: true
       })
     }
@@ -313,6 +293,17 @@ type AvailableForListIDsOptions = {
       }
 
       Object.assign(query.where, privacyWhere)
+    }
+
+    if (options.videoPlaylistId) {
+      query.include.push({
+        attributes: [],
+        model: VideoPlaylistElementModel.unscoped(),
+        required: true,
+        where: {
+          videoPlaylistId: options.videoPlaylistId
+        }
+      })
     }
 
     if (options.filter || options.accountId || options.videoChannelId) {
@@ -772,6 +763,15 @@ export class VideoModel extends Model<VideoModel> {
   })
   Tags: TagModel[]
 
+  @HasMany(() => VideoPlaylistElementModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoPlaylistElements: VideoPlaylistElementModel[]
+
   @HasMany(() => VideoAbuseModel, {
     foreignKey: {
       name: 'videoId',
@@ -1118,6 +1118,7 @@ export class VideoModel extends Model<VideoModel> {
     accountId?: number,
     videoChannelId?: number,
     followerActorId?: number
+    videoPlaylistId?: number,
     trendingDays?: number,
     user?: UserModel,
     historyOfUser?: UserModel
@@ -1157,6 +1158,7 @@ export class VideoModel extends Model<VideoModel> {
       withFiles: options.withFiles,
       accountId: options.accountId,
       videoChannelId: options.videoChannelId,
+      videoPlaylistId: options.videoPlaylistId,
       includeLocalVideos: options.includeLocalVideos,
       user: options.user,
       historyOfUser: options.historyOfUser,
@@ -1280,7 +1282,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static load (id: number | string, t?: Sequelize.Transaction) {
-    const where = VideoModel.buildWhereIdOrUUID(id)
+    const where = buildWhereIdOrUUID(id)
     const options = {
       where,
       transaction: t
@@ -1290,7 +1292,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static loadWithRights (id: number | string, t?: Sequelize.Transaction) {
-    const where = VideoModel.buildWhereIdOrUUID(id)
+    const where = buildWhereIdOrUUID(id)
     const options = {
       where,
       transaction: t
@@ -1300,7 +1302,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static loadOnlyId (id: number | string, t?: Sequelize.Transaction) {
-    const where = VideoModel.buildWhereIdOrUUID(id)
+    const where = buildWhereIdOrUUID(id)
 
     const options = {
       attributes: [ 'id' ],
@@ -1353,7 +1355,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Sequelize.Transaction, userId?: number) {
-    const where = VideoModel.buildWhereIdOrUUID(id)
+    const where = buildWhereIdOrUUID(id)
 
     const options = {
       order: [ [ 'Tags', 'name', 'ASC' ] ],
@@ -1380,7 +1382,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static loadForGetAPI (id: number | string, t?: Sequelize.Transaction, userId?: number) {
-    const where = VideoModel.buildWhereIdOrUUID(id)
+    const where = buildWhereIdOrUUID(id)
 
     const options = {
       order: [ [ 'Tags', 'name', 'ASC' ] ],
@@ -1582,10 +1584,6 @@ export class VideoModel extends Model<VideoModel> {
     return VIDEO_STATES[ id ] || 'Unknown'
   }
 
-  static buildWhereIdOrUUID (id: number | string) {
-    return validator.isInt('' + id) ? { id } : { uuid: id }
-  }
-
   getOriginalFile () {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
@@ -1598,7 +1596,6 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   getThumbnailName () {
-    // We always have a copy of the thumbnail
     const extension = '.jpg'
     return this.uuid + extension
   }

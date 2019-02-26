@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'
+import * as validator from 'validator'
 
 type SortType = { sortModel: any, sortValue: string }
 
@@ -74,13 +75,25 @@ function buildBlockedAccountSQL (serverAccountId: number, userAccountId?: number
 
   const blockerIdsString = blockerIds.join(', ')
 
-  const query = 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
+  return 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
     ' UNION ALL ' +
     'SELECT "account"."id" AS "id" FROM account INNER JOIN "actor" ON account."actorId" = actor.id ' +
     'INNER JOIN "serverBlocklist" ON "actor"."serverId" = "serverBlocklist"."targetServerId" ' +
     'WHERE "serverBlocklist"."accountId" IN (' + blockerIdsString + ')'
+}
 
-  return query
+function buildServerIdsFollowedBy (actorId: any) {
+  const actorIdNumber = parseInt(actorId + '', 10)
+
+  return '(' +
+    'SELECT "actor"."serverId" FROM "actorFollow" ' +
+    'INNER JOIN "actor" ON actor.id = "actorFollow"."targetActorId" ' +
+    'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+  ')'
+}
+
+function buildWhereIdOrUUID (id: number | string) {
+  return validator.isInt('' + id) ? { id } : { uuid: id }
 }
 
 // ---------------------------------------------------------------------------
@@ -93,7 +106,9 @@ export {
   getSortOnModel,
   createSimilarityAttribute,
   throwIfNotValid,
-  buildTrigramSearchIndex
+  buildServerIdsFollowedBy,
+  buildTrigramSearchIndex,
+  buildWhereIdOrUUID
 }
 
 // ---------------------------------------------------------------------------

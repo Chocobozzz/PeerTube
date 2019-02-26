@@ -14,7 +14,7 @@ import {
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
-import { getAccountVideoRateValidator, videoCommentGetValidator, videosGetValidator } from '../../middlewares/validators'
+import { getAccountVideoRateValidator, videoCommentGetValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
@@ -37,6 +37,10 @@ import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } 
 import { getServerActor } from '../../helpers/utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
+import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
+import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
+import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 
 const activityPubClientRouter = express.Router()
 
@@ -51,6 +55,10 @@ activityPubClientRouter.get('/accounts?/:name/followers',
 activityPubClientRouter.get('/accounts?/:name/following',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
+)
+activityPubClientRouter.get('/accounts?/:name/playlists',
+  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
+  executeIfActivityPub(asyncMiddleware(accountPlaylistsController))
 )
 activityPubClientRouter.get('/accounts?/:name/likes/:videoId',
   executeIfActivityPub(asyncMiddleware(getAccountVideoRateValidator('like'))),
@@ -121,6 +129,15 @@ activityPubClientRouter.get('/redundancy/video-playlists/:streamingPlaylistType/
   executeIfActivityPub(asyncMiddleware(videoRedundancyController))
 )
 
+activityPubClientRouter.get('/video-playlists/:playlistId',
+  executeIfActivityPub(asyncMiddleware(videoPlaylistsGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoPlaylistController))
+)
+activityPubClientRouter.get('/video-playlists/:playlistId/:videoId',
+  executeIfActivityPub(asyncMiddleware(videoPlaylistElementAPGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoPlaylistElementController))
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -129,22 +146,29 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
+function accountController (req: express.Request, res: express.Response) {
   const account: AccountModel = res.locals.account
 
   return activityPubResponse(activityPubContextify(account.toActivityPubObject()), res)
 }
 
-async function accountFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function accountFollowersController (req: express.Request, res: express.Response) {
   const account: AccountModel = res.locals.account
   const activityPubResult = await actorFollowers(req, account.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
-async function accountFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function accountFollowingController (req: express.Request, res: express.Response) {
   const account: AccountModel = res.locals.account
   const activityPubResult = await actorFollowing(req, account.Actor)
+
+  return activityPubResponse(activityPubContextify(activityPubResult), res)
+}
+
+async function accountPlaylistsController (req: express.Request, res: express.Response) {
+  const account: AccountModel = res.locals.account
+  const activityPubResult = await actorPlaylists(req, account)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
@@ -293,6 +317,23 @@ async function videoRedundancyController (req: express.Request, res: express.Res
   return activityPubResponse(activityPubContextify(object), res)
 }
 
+async function videoPlaylistController (req: express.Request, res: express.Response) {
+  const playlist: VideoPlaylistModel = res.locals.videoPlaylist
+
+  const json = await playlist.toActivityPubObject()
+  const audience = getAudience(playlist.OwnerAccount.Actor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
+  const object = audiencify(json, audience)
+
+  return activityPubResponse(activityPubContextify(object), res)
+}
+
+async function videoPlaylistElementController (req: express.Request, res: express.Response) {
+  const videoPlaylistElement: VideoPlaylistElementModel = res.locals.videoPlaylistElement
+
+  const json = videoPlaylistElement.toActivityPubObject()
+  return activityPubResponse(activityPubContextify(json), res)
+}
+
 // ---------------------------------------------------------------------------
 
 async function actorFollowing (req: express.Request, actor: ActorModel) {
@@ -305,7 +346,15 @@ async function actorFollowing (req: express.Request, actor: ActorModel) {
 
 async function actorFollowers (req: express.Request, actor: ActorModel) {
   const handler = (start: number, count: number) => {
-    return ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
+    return ActorFollowModel.listAcceptedFollowerUrlsForAP([ actor.id ], undefined, start, count)
+  }
+
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
+}
+
+async function actorPlaylists (req: express.Request, account: AccountModel) {
+  const handler = (start: number, count: number) => {
+    return VideoPlaylistModel.listUrlsOfForAP(account.id, start, count)
   }
 
   return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)

@@ -6,6 +6,7 @@ import { VideoAbuseObject } from './objects/video-abuse-object'
 import { VideoCommentObject } from './objects/video-comment-object'
 import { ViewObject } from './objects/view-object'
 import { APObject } from './objects/object.model'
+import { PlaylistObject } from './objects/playlist-object'
 
 export type Activity = ActivityCreate | ActivityUpdate |
   ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce |
@@ -31,12 +32,12 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject | VideoCommentObject | CacheFileObject
+  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject | VideoCommentObject | CacheFileObject | PlaylistObject
 }
 
 export interface ActivityUpdate extends BaseActivity {
   type: 'Update'
-  object: VideoTorrentObject | ActivityPubActor | CacheFileObject
+  object: VideoTorrentObject | ActivityPubActor | CacheFileObject | PlaylistObject
 }
 
 export interface ActivityDelete extends BaseActivity {

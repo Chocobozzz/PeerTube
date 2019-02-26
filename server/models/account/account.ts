@@ -10,11 +10,11 @@ import {
   ForeignKey,
   HasMany,
   Is,
-  Model,
+  Model, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Account } from '../../../shared/models/actors'
+import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
@@ -25,6 +25,13 @@ import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
 import { CONFIG } from '../../initializers'
+import { AvatarModel } from '../avatar/avatar'
+import { WhereOptions } from 'sequelize'
+import { VideoPlaylistModel } from '../video/video-playlist'
+
+export enum ScopeNames {
+  SUMMARY = 'SUMMARY'
+}
 
 @DefaultScope({
   include: [
@@ -33,6 +40,32 @@ import { CONFIG } from '../../initializers'
       required: true
     }
   ]
+})
+@Scopes({
+  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions<ActorModel>) => {
+    return {
+      attributes: [ 'id', 'name' ],
+      include: [
+        {
+          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          where: whereActor,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+  }
 })
 @Table({
   tableName: 'account',
@@ -111,6 +144,15 @@ export class AccountModel extends Model<AccountModel> {
     hooks: true
   })
   VideoChannels: VideoChannelModel[]
+
+  @HasMany(() => VideoPlaylistModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoPlaylists: VideoPlaylistModel[]
 
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
@@ -283,6 +325,20 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return Object.assign(actor, account)
+  }
+
+  toFormattedSummaryJSON (): AccountSummary {
+    const actor = this.Actor.toFormattedJSON()
+
+    return {
+      id: this.id,
+      uuid: actor.uuid,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
   }
 
   toActivityPubObject () {

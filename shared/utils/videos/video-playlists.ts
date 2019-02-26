@@ -1,51 +1,185 @@
-import { makeRawRequest } from '../requests/requests'
-import { sha256 } from '../../../server/helpers/core-utils'
-import { VideoStreamingPlaylist } from '../../models/videos/video-streaming-playlist.model'
-import { expect } from 'chai'
+import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
+import { VideoPlaylistCreate } from '../../models/videos/playlist/video-playlist-create.model'
+import { omit } from 'lodash'
+import { VideoPlaylistUpdate } from '../../models/videos/playlist/video-playlist-update.model'
+import { VideoPlaylistElementCreate } from '../../models/videos/playlist/video-playlist-element-create.model'
+import { VideoPlaylistElementUpdate } from '../../models/videos/playlist/video-playlist-element-update.model'
 
-function getPlaylist (url: string, statusCodeExpected = 200) {
-  return makeRawRequest(url, statusCodeExpected)
+function getVideoPlaylistsList (url: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/video-playlists'
+
+  const query = {
+    start,
+    count,
+    sort
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    query
+  })
 }
 
-function getSegment (url: string, statusCodeExpected = 200, range?: string) {
-  return makeRawRequest(url, statusCodeExpected, range)
+function getVideoPlaylist (url: string, playlistId: number | string, statusCodeExpected = 200) {
+  const path = '/api/v1/video-playlists/' + playlistId
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected
+  })
 }
 
-function getSegmentSha256 (url: string, statusCodeExpected = 200) {
-  return makeRawRequest(url, statusCodeExpected)
+function deleteVideoPlaylist (url: string, token: string, playlistId: number | string, statusCodeExpected = 200) {
+  const path = '/api/v1/video-playlists/' + playlistId
+
+  return makeDeleteRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
 }
 
-async function checkSegmentHash (
-  baseUrlPlaylist: string,
-  baseUrlSegment: string,
-  videoUUID: string,
-  resolution: number,
-  hlsPlaylist: VideoStreamingPlaylist
-) {
-  const res = await getPlaylist(`${baseUrlPlaylist}/${videoUUID}/${resolution}.m3u8`)
-  const playlist = res.text
+function createVideoPlaylist (options: {
+  url: string,
+  token: string,
+  playlistAttrs: VideoPlaylistCreate,
+  expectedStatus: number
+}) {
+  const path = '/api/v1/video-playlists/'
 
-  const videoName = `${videoUUID}-${resolution}-fragmented.mp4`
+  const fields = omit(options.playlistAttrs, 'thumbnailfile')
 
-  const matches = /#EXT-X-BYTERANGE:(\d+)@(\d+)/.exec(playlist)
+  const attaches = options.playlistAttrs.thumbnailfile
+    ? { thumbnailfile: options.playlistAttrs.thumbnailfile }
+    : {}
 
-  const length = parseInt(matches[1], 10)
-  const offset = parseInt(matches[2], 10)
-  const range = `${offset}-${offset + length - 1}`
+  return makeUploadRequest({
+    method: 'POST',
+    url: options.url,
+    path,
+    token: options.token,
+    fields,
+    attaches,
+    statusCodeExpected: options.expectedStatus
+  })
+}
 
-  const res2 = await getSegment(`${baseUrlSegment}/${videoUUID}/${videoName}`, 206, `bytes=${range}`)
+function updateVideoPlaylist (options: {
+  url: string,
+  token: string,
+  playlistAttrs: VideoPlaylistUpdate,
+  expectedStatus: number
+}) {
+  const path = '/api/v1/video-playlists/'
 
-  const resSha = await getSegmentSha256(hlsPlaylist.segmentsSha256Url)
+  const fields = omit(options.playlistAttrs, 'thumbnailfile')
 
-  const sha256Server = resSha.body[ videoName ][range]
-  expect(sha256(res2.body)).to.equal(sha256Server)
+  const attaches = options.playlistAttrs.thumbnailfile
+    ? { thumbnailfile: options.playlistAttrs.thumbnailfile }
+    : {}
+
+  return makeUploadRequest({
+    method: 'PUT',
+    url: options.url,
+    path,
+    token: options.token,
+    fields,
+    attaches,
+    statusCodeExpected: options.expectedStatus
+  })
+}
+
+function addVideoInPlaylist (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  elementAttrs: VideoPlaylistElementCreate
+  expectedStatus: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
+
+  return makePostBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    fields: options.elementAttrs,
+    statusCodeExpected: options.expectedStatus
+  })
+}
+
+function updateVideoPlaylistElement (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  videoId: number | string,
+  elementAttrs: VideoPlaylistElementUpdate,
+  expectedStatus: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+
+  return makePutBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    fields: options.elementAttrs,
+    statusCodeExpected: options.expectedStatus
+  })
+}
+
+function removeVideoFromPlaylist (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  videoId: number | string,
+  expectedStatus: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+
+  return makeDeleteRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    statusCodeExpected: options.expectedStatus
+  })
+}
+
+function reorderVideosPlaylist (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  elementAttrs: {
+    startPosition: number,
+    insertAfter: number,
+    reorderLength?: number
+  },
+  expectedStatus: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
+
+  return makePutBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    fields: options.elementAttrs,
+    statusCodeExpected: options.expectedStatus
+  })
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  getPlaylist,
-  getSegment,
-  getSegmentSha256,
-  checkSegmentHash
+  getVideoPlaylistsList,
+  getVideoPlaylist,
+
+  createVideoPlaylist,
+  updateVideoPlaylist,
+  deleteVideoPlaylist,
+
+  addVideoInPlaylist,
+  removeVideoFromPlaylist,
+
+  reorderVideosPlaylist
 }

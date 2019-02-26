@@ -165,7 +165,7 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   return true
 }
 
-async function isVideoExist (id: string, res: Response, fetchType: VideoFetchType = 'all') {
+async function isVideoExist (id: number | string, res: Response, fetchType: VideoFetchType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
 
   const video = await fetchVideo(id, fetchType, userId)

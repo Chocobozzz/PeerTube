@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { VideoBlacklist, UserRight, VideoBlacklistCreate } from '../../../../shared'
+import { UserRight, VideoBlacklist, VideoBlacklistCreate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import {
@@ -18,7 +18,7 @@ import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
 import { Notifier } from '../../../lib/notifier'
 import { VideoModel } from '../../../models/video/video'
-import { sendCreateVideo, sendDeleteVideo, sendUpdateVideo } from '../../../lib/activitypub/send'
+import { sendDeleteVideo } from '../../../lib/activitypub/send'
 import { federateVideoIfNeeded } from '../../../lib/activitypub'
 
 const blacklistRouter = express.Router()

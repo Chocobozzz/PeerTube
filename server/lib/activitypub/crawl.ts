@@ -4,7 +4,7 @@ import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 
-async function crawlCollectionPage <T> (uri: string, handler: (items: T[]) => Promise<any> | Bluebird<any>) {
+async function crawlCollectionPage <T> (uri: string, handler: (items: T[]) => (Promise<any> | Bluebird<any>)) {
   logger.info('Crawling ActivityPub data on %s.', uri)
 
   const options = {

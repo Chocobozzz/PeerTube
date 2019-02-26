@@ -407,7 +407,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                            })
   }
 
-  static listAcceptedFollowerUrlsForApi (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+  static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('followers', actorIds, t, start, count)
   }
 

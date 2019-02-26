@@ -12,6 +12,8 @@ import { Notifier } from '../../notifier'
 import { processViewActivity } from './process-view'
 import { processDislikeActivity } from './process-dislike'
 import { processFlagActivity } from './process-flag'
+import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
+import { createOrUpdateVideoPlaylist } from '../playlist'
 
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
@@ -38,7 +40,11 @@ async function processCreateActivity (activity: ActivityCreate, byActor: ActorMo
   }
 
   if (activityType === 'CacheFile') {
-    return retryTransactionWrapper(processCacheFile, activity, byActor)
+    return retryTransactionWrapper(processCreateCacheFile, activity, byActor)
+  }
+
+  if (activityType === 'Playlist') {
+    return retryTransactionWrapper(processCreatePlaylist, activity, byActor)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -63,7 +69,7 @@ async function processCreateVideo (activity: ActivityCreate) {
   return video
 }
 
-async function processCacheFile (activity: ActivityCreate, byActor: ActorModel) {
+async function processCreateCacheFile (activity: ActivityCreate, byActor: ActorModel) {
   const cacheFile = activity.object as CacheFileObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
@@ -97,4 +103,13 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
   }
 
   if (created === true) Notifier.Instance.notifyOnNewComment(comment)
+}
+
+async function processCreatePlaylist (activity: ActivityCreate, byActor: ActorModel) {
+  const playlistObject = activity.object as PlaylistObject
+  const byAccount = byActor.Account
+
+  if (!byAccount) throw new Error('Cannot create video playlist with the non account actor ' + byActor.url)
+
+  await createOrUpdateVideoPlaylist(playlistObject, byAccount, activity.to)
 }

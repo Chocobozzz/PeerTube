@@ -10,6 +10,7 @@ import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import * as bytes from 'bytes'
+import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -52,7 +53,9 @@ const SORTABLE_COLUMNS = {
   ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
   SERVERS_BLOCKLIST: [ 'createdAt' ],
 
-  USER_NOTIFICATIONS: [ 'createdAt' ]
+  USER_NOTIFICATIONS: [ 'createdAt' ],
+
+  VIDEO_PLAYLISTS: [ 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -386,6 +389,17 @@ let CONSTRAINTS_FIELDS = {
     FILE_SIZE: { min: 10 },
     URL: { min: 3, max: 2000 } // Length
   },
+  VIDEO_PLAYLISTS: {
+    NAME: { min: 1, max: 120 }, // Length
+    DESCRIPTION: { min: 3, max: 1000 }, // Length
+    URL: { min: 3, max: 2000 }, // Length
+    IMAGE: {
+      EXTNAME: [ '.jpg', '.jpeg' ],
+      FILE_SIZE: {
+        max: 2 * 1024 * 1024 // 2MB
+      }
+    }
+  },
   ACTORS: {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
@@ -500,6 +514,12 @@ const VIDEO_ABUSE_STATES = {
   [VideoAbuseState.PENDING]: 'Pending',
   [VideoAbuseState.REJECTED]: 'Rejected',
   [VideoAbuseState.ACCEPTED]: 'Accepted'
+}
+
+const VIDEO_PLAYLIST_PRIVACIES = {
+  [VideoPlaylistPrivacy.PUBLIC]: 'Public',
+  [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
+  [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
 const MIMETYPES = {
@@ -786,6 +806,7 @@ export {
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   CONTACT_FORM_LIFETIME,
+  VIDEO_PLAYLIST_PRIVACIES,
   buildLanguages
 }
 

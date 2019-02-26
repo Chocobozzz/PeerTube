@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { CONFIG, EMBED_SIZE, PREVIEWS_SIZE } from '../initializers'
 import { asyncMiddleware, oembedValidator } from '../middlewares'
-import { accountsNameWithHostGetValidator } from '../middlewares/validators'
+import { accountNameWithHostGetValidator } from '../middlewares/validators'
 import { VideoModel } from '../models/video/video'
 
 const servicesRouter = express.Router()
@@ -11,7 +11,7 @@ servicesRouter.use('/oembed',
   generateOEmbed
 )
 servicesRouter.use('/redirect/accounts/:accountName',
-  asyncMiddleware(accountsNameWithHostGetValidator),
+  asyncMiddleware(accountNameWithHostGetValidator),
   redirectToAccountUrl
 )
 
