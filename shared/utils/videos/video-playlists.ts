@@ -31,7 +31,7 @@ function getVideoPlaylist (url: string, playlistId: number | string, statusCodeE
   })
 }
 
-function deleteVideoPlaylist (url: string, token: string, playlistId: number | string, statusCodeExpected = 200) {
+function deleteVideoPlaylist (url: string, token: string, playlistId: number | string, statusCodeExpected = 204) {
   const path = '/api/v1/video-playlists/' + playlistId
 
   return makeDeleteRequest({
@@ -46,7 +46,7 @@ function createVideoPlaylist (options: {
   url: string,
   token: string,
   playlistAttrs: VideoPlaylistCreate,
-  expectedStatus: number
+  expectedStatus?: number
 }) {
   const path = '/api/v1/video-playlists/'
 
@@ -63,7 +63,7 @@ function createVideoPlaylist (options: {
     token: options.token,
     fields,
     attaches,
-    statusCodeExpected: options.expectedStatus
+    statusCodeExpected: options.expectedStatus || 200
   })
 }
 
@@ -71,9 +71,10 @@ function updateVideoPlaylist (options: {
   url: string,
   token: string,
   playlistAttrs: VideoPlaylistUpdate,
-  expectedStatus: number
+  playlistId: number | string,
+  expectedStatus?: number
 }) {
-  const path = '/api/v1/video-playlists/'
+  const path = '/api/v1/video-playlists/' + options.playlistId
 
   const fields = omit(options.playlistAttrs, 'thumbnailfile')
 
@@ -88,7 +89,7 @@ function updateVideoPlaylist (options: {
     token: options.token,
     fields,
     attaches,
-    statusCodeExpected: options.expectedStatus
+    statusCodeExpected: options.expectedStatus || 204
   })
 }
 
@@ -97,7 +98,7 @@ function addVideoInPlaylist (options: {
   token: string,
   playlistId: number | string,
   elementAttrs: VideoPlaylistElementCreate
-  expectedStatus: number
+  expectedStatus?: number
 }) {
   const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
 
@@ -106,7 +107,7 @@ function addVideoInPlaylist (options: {
     path,
     token: options.token,
     fields: options.elementAttrs,
-    statusCodeExpected: options.expectedStatus
+    statusCodeExpected: options.expectedStatus || 200
   })
 }
 
@@ -116,7 +117,7 @@ function updateVideoPlaylistElement (options: {
   playlistId: number | string,
   videoId: number | string,
   elementAttrs: VideoPlaylistElementUpdate,
-  expectedStatus: number
+  expectedStatus?: number
 }) {
   const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
 
@@ -125,7 +126,7 @@ function updateVideoPlaylistElement (options: {
     path,
     token: options.token,
     fields: options.elementAttrs,
-    statusCodeExpected: options.expectedStatus
+    statusCodeExpected: options.expectedStatus || 204
   })
 }
 
@@ -142,7 +143,7 @@ function removeVideoFromPlaylist (options: {
     url: options.url,
     path,
     token: options.token,
-    statusCodeExpected: options.expectedStatus
+    statusCodeExpected: options.expectedStatus || 204
   })
 }
 
@@ -152,14 +153,14 @@ function reorderVideosPlaylist (options: {
   playlistId: number | string,
   elementAttrs: {
     startPosition: number,
-    insertAfter: number,
+    insertAfterPosition: number,
     reorderLength?: number
   },
   expectedStatus: number
 }) {
-  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/reorder'
 
-  return makePutBodyRequest({
+  return makePostBodyRequest({
     url: options.url,
     path,
     token: options.token,
@@ -179,6 +180,7 @@ export {
   deleteVideoPlaylist,
 
   addVideoInPlaylist,
+  updateVideoPlaylistElement,
   removeVideoFromPlaylist,
 
   reorderVideosPlaylist

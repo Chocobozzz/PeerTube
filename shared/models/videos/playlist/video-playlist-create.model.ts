@@ -2,10 +2,10 @@ import { VideoPlaylistPrivacy } from './video-playlist-privacy.model'
 
 export interface VideoPlaylistCreate {
   displayName: string
-  description: string
   privacy: VideoPlaylistPrivacy
 
+  description?: string
   videoChannelId?: number
 
-  thumbnailfile?: Blob
+  thumbnailfile?: any
 }
