@@ -4,7 +4,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
+  commonVideosFiltersValidator, optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
@@ -31,12 +31,14 @@ import { processImage } from '../../helpers/image-utils'
 import { join } from 'path'
 import { UserModel } from '../../models/account/user'
 import {
-  getVideoPlaylistActivityPubUrl,
-  getVideoPlaylistElementActivityPubUrl,
   sendCreateVideoPlaylist,
   sendDeleteVideoPlaylist,
   sendUpdateVideoPlaylist
-} from '../../lib/activitypub'
+} from '../../lib/activitypub/send'
+import {
+  getVideoPlaylistActivityPubUrl,
+  getVideoPlaylistElementActivityPubUrl
+} from '../../lib/activitypub/url'
 import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
 import { VideoModel } from '../../models/video/video'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
@@ -85,6 +87,7 @@ videoPlaylistRouter.get('/:playlistId/videos',
   asyncMiddleware(videoPlaylistsGetValidator),
   paginationValidator,
   setDefaultPagination,
+  optionalAuthenticate,
   commonVideosFiltersValidator,
   asyncMiddleware(getVideoPlaylistVideos)
 )
@@ -95,7 +98,7 @@ videoPlaylistRouter.post('/:playlistId/videos',
   asyncRetryTransactionMiddleware(addVideoInPlaylist)
 )
 
-videoPlaylistRouter.put('/:playlistId/videos',
+videoPlaylistRouter.post('/:playlistId/videos/reorder',
   authenticate,
   asyncMiddleware(videoPlaylistsReorderVideosValidator),
   asyncRetryTransactionMiddleware(reorderVideosPlaylist)
@@ -168,6 +171,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistCreated: VideoPlaylistModel = await sequelizeTypescript.transaction(async t => {
     const videoPlaylistCreated = await videoPlaylist.save({ transaction: t })
 
+    videoPlaylistCreated.OwnerAccount = user.Account
     await sendCreateVideoPlaylist(videoPlaylistCreated, t)
 
     return videoPlaylistCreated
@@ -349,7 +353,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
   const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
 
   const start: number = req.body.startPosition
-  const insertAfter: number = req.body.insertAfter
+  const insertAfter: number = req.body.insertAfterPosition
   const reorderLength: number = req.body.reorderLength || 1
 
   if (start === insertAfter) {

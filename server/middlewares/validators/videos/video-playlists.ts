@@ -6,7 +6,7 @@ import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
 import { isVideoExist, isVideoImage } from '../../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { isIdOrUUIDValid, toValueOrNull } from '../../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, isUUIDValid, toValueOrNull } from '../../../helpers/custom-validators/misc'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistExist,
@@ -43,8 +43,17 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
     if (!await isVideoPlaylistExist(req.params.playlistId, res)) return cleanUpReqFiles(req)
+
+    const videoPlaylist = res.locals.videoPlaylist
+
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, res.locals.videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
       return cleanUpReqFiles(req)
+    }
+
+    if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PRIVATE && req.body.privacy === VideoPlaylistPrivacy.PRIVATE) {
+      cleanUpReqFiles(req)
+      return res.status(409)
+                .json({ error: 'Cannot set "private" a video playlist that was not private.' })
     }
 
     if (req.body.videoChannelId && !await isVideoChannelIdExist(req.body.videoChannelId, res)) return cleanUpReqFiles(req)
@@ -83,6 +92,14 @@ const videoPlaylistsGetValidator = [
     if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+
+    // Video is unlisted, check we used the uuid to fetch it
+    if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
+      if (isUUIDValid(req.params.playlistId)) return next()
+
+      return res.status(404).end()
+    }
+
     if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
       await authenticatePromiseIfNeeded(req, res)
 
@@ -121,7 +138,7 @@ const videoPlaylistsAddVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
-    if (!await isVideoExist(req.body.videoId, res, 'id')) return
+    if (!await isVideoExist(req.body.videoId, res, 'only-video')) return
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
     const video: VideoModel = res.locals.video
@@ -161,7 +178,7 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
-    if (!await isVideoExist(req.params.playlistId, res, 'id')) return
+    if (!await isVideoExist(req.params.videoId, res, 'id')) return
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
     const video: VideoModel = res.locals.video
@@ -232,6 +249,27 @@ const videoPlaylistsReorderVideosValidator = [
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) return
+
+    const nextPosition = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id)
+    const startPosition: number = req.body.startPosition
+    const insertAfterPosition: number = req.body.insertAfterPosition
+    const reorderLength: number = req.body.reorderLength
+
+    if (startPosition >= nextPosition || insertAfterPosition >= nextPosition) {
+      res.status(400)
+         .json({ error: `Start position or insert after position exceed the playlist limits (max: ${nextPosition - 1})` })
+         .end()
+
+      return
+    }
+
+    if (reorderLength && reorderLength + startPosition > nextPosition) {
+      res.status(400)
+         .json({ error: `Reorder length with this start position exceeds the playlist limits (max: ${nextPosition - startPosition})` })
+         .end()
+
+      return
+    }
 
     return next()
   }

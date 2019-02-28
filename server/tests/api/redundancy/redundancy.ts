@@ -4,20 +4,26 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoDetails } from '../../../../shared/models/videos'
 import {
+  checkSegmentHash,
+  checkVideoFilesWereRemoved,
   doubleFollow,
   flushAndRunMultipleServers,
   getFollowingListPaginationAndSort,
   getVideo,
+  getVideoWithToken,
   immutableAssign,
-  killallServers, makeGetRequest,
+  killallServers,
+  makeGetRequest,
+  removeVideo,
+  reRunServer,
   root,
   ServerInfo,
-  setAccessTokensToServers, unfollow,
+  setAccessTokensToServers,
+  unfollow,
   uploadVideo,
   viewVideo,
   wait,
-  waitUntilLog,
-  checkVideoFilesWereRemoved, removeVideo, getVideoWithToken, reRunServer, checkSegmentHash
+  waitUntilLog
 } from '../../../../shared/utils'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
 

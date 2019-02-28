@@ -223,7 +223,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   @HasMany(() => VideoPlaylistModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'cascade',
     hooks: true

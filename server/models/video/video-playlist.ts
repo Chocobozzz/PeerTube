@@ -197,7 +197,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'CASCADE'
   })
@@ -351,7 +351,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       updatedAt: this.updatedAt,
 
       ownerAccount: this.OwnerAccount.toFormattedSummaryJSON(),
-      videoChannel: this.VideoChannel.toFormattedSummaryJSON()
+      videoChannel: this.VideoChannel ? this.VideoChannel.toFormattedSummaryJSON() : null
     }
   }
 

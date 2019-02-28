@@ -188,7 +188,8 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
           [Sequelize.Op.lte]: endPosition
         }
       },
-      transaction
+      transaction,
+      validate: false // We use a literal to update the position
     }
 
     return VideoPlaylistElementModel.update({ position: Sequelize.literal(`${newPosition} + "position" - ${firstPosition}`) }, query)

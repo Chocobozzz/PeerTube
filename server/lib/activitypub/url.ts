@@ -5,10 +5,8 @@ import { VideoModel } from '../../models/video/video'
 import { VideoAbuseModel } from '../../models/video/video-abuse'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoFileModel } from '../../models/video/video-file'
-import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
 function getVideoActivityPubUrl (video: VideoModel) {
   return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
