@@ -42,7 +42,6 @@ type VideoAttributes = {
     updateAt: string
     privacy?: VideoPrivacy
   }
-  quarantined?: boolean
 }
 
 function getVideoCategories (url: string) {
@@ -271,15 +270,6 @@ function removeVideo (url: string, token: string, id: number | string, expectedS
           .expect(expectedStatus)
 }
 
-function releaseVideoQuarantine (url: string, token: string, id: number | string, expectedStatus = 204) {
-  const path = '/api/v1/videos/' + id + '/quarantine'
-
-  return request(url)
-    .delete(path)
-    .set('Authorization', 'Bearer ' + token)
-    .expect(expectedStatus)
-}
-
 async function checkVideoFilesWereRemoved (
   videoUUID: string,
   serverNumber: number,
@@ -405,7 +395,6 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.privacy) body['privacy'] = attributes.privacy
   if (attributes.channelId) body['channelId'] = attributes.channelId
   if (attributes.scheduleUpdate) body['scheduleUpdate'] = attributes.scheduleUpdate
-  if (attributes.quarantined) body['quarantined'] = attributes.quarantined
 
   // Upload request
   if (attributes.thumbnailfile || attributes.previewfile) {
@@ -603,7 +592,6 @@ export {
   getVideosListPagination,
   getVideosListSort,
   removeVideo,
-  releaseVideoQuarantine,
   getVideosListWithToken,
   uploadVideo,
   getVideosWithFilters,

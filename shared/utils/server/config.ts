@@ -112,9 +112,11 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
         }
       }
     },
-    quarantine: {
+    autoBlacklist: {
       videos: {
-        enabled: false
+        ofUsers: {
+          enabled: false
+        }
       }
     }
   }

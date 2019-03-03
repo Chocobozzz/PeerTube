@@ -29,9 +29,9 @@
             Cancel
           </span>
 
-          <span class="action-button action-button-release-selection" (click)="releaseSelectedVideosFromQuarantine()">
+          <span class="action-button action-button-release-selection" (click)="removeSelectedVideosFromBlacklist()">
             <my-global-icon iconName="tick"></my-global-icon>
-            <ng-container i18n>Release</ng-container>
+            <ng-container i18n>Unblacklist</ng-container>
           </span>
         </div>
       </div>
@@ -39,9 +39,9 @@
       <div class="video-buttons" *ngIf="isInSelectionMode() === false">
         <my-button
           i18n-label
-          label="Release"
+          label="Publish"
           icon="tick"
-          (click)="releaseVideoFromQuarantine(video)"
+          (click)="removeVideoFromBlacklist(video)"
         >Release</my-button>
       </div>
     </div>

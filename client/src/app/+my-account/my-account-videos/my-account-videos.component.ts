@@ -138,9 +138,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
   getStateLabel (video: Video) {
     let suffix: string
 
-    if (video.quarantined) {
-      suffix = this.i18n('Quarantined')
-    } else if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
+    if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
       suffix = this.i18n('Published')
     } else if (video.scheduledUpdate) {
       const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)

@@ -93,9 +93,11 @@ async function getConfig (req: express.Request, res: express.Response) {
         }
       }
     },
-    quarantine: {
+    autoBlacklist: {
       videos: {
-        enabled: CONFIG.QUARANTINE.VIDEOS.ENABLED
+        ofUsers: {
+          enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
+        }
       }
     },
     avatar: {
@@ -269,9 +271,11 @@ function customConfig (): CustomConfig {
         }
       }
     },
-    quarantine: {
+    autoBlacklist: {
       videos: {
-        enabled: CONFIG.QUARANTINE.VIDEOS.ENABLED
+        ofUsers: {
+          enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
+        }
       }
     }
   }

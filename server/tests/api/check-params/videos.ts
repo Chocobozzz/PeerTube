@@ -7,7 +7,7 @@ import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
-  makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, uploadVideo, releaseVideoQuarantine,
+  makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, uploadVideo,
   runServer, ServerInfo, setAccessTokensToServers, userLogin, updateCustomSubConfig
 } from '../../../../shared/utils'
 import {
@@ -727,43 +727,6 @@ describe('Test videos API validator', function () {
 
     it('Should succeed with the correct parameters', async function () {
       await removeVideo(server.url, server.accessToken, videoId)
-    })
-  })
-
-  describe('When releasing a video quarantine', function () {
-    let quarantinedVideoId
-
-    before(async function () {
-      const overrideConfig = {
-        quarantine: {
-          videos: {
-            enabled: true
-          }
-        }
-      }
-      await updateCustomSubConfig(server.url, server.accessToken, overrideConfig)
-      const res = await uploadVideo(server.url, userAccessToken, {})
-      quarantinedVideoId = res.body.video.id
-    })
-
-    it('Should fail without a correct uuid', async function () {
-      await releaseVideoQuarantine(server.url, server.accessToken, 'hello', 400)
-    })
-
-    it('Should fail with a video which does not exist', async function () {
-      await releaseVideoQuarantine(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', 404)
-    })
-
-    it('Should fail without the appropriate right', async function () {
-      await releaseVideoQuarantine(server.url, userAccessToken, quarantinedVideoId, 403)
-    })
-
-    it('Should succeed with the correct parameters', async function () {
-      await releaseVideoQuarantine(server.url, server.accessToken, quarantinedVideoId)
-    })
-
-    it('Should fail with a video that is not quarantined', async function () {
-      await releaseVideoQuarantine(server.url, server.accessToken, quarantinedVideoId, 409)
     })
   })
 

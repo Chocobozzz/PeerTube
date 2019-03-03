@@ -6,7 +6,7 @@ import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
-import { shouldVideoBeQuarantined } from '../../../helpers/video'
+import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   CONFIG,
   MIMETYPES,
@@ -59,7 +59,6 @@ import { videoImportsRouter } from './import'
 import { resetSequelizeInstance } from '../../../helpers/database-utils'
 import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
-import { quarantineRouter } from './quarantine'
 import { Notifier } from '../../../lib/notifier'
 import { sendView } from '../../../lib/activitypub/send/send-view'
 
@@ -92,7 +91,6 @@ videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
 videosRouter.use('/', watchingRouter)
-videosRouter.use('/', quarantineRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -194,9 +192,9 @@ async function addVideo (req: express.Request, res: express.Response) {
     privacy: videoInfo.privacy,
     duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
     channelId: res.locals.videoChannel.id,
-    originallyPublishedAt: videoInfo.originallyPublishedAt,
-    quarantined: shouldVideoBeQuarantined(res.locals.oauth.token.User)
+    originallyPublishedAt: videoInfo.originallyPublishedAt
   }
+
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
@@ -241,7 +239,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Create the torrent file
   await video.createTorrentAndSetInfoHash(videoFile)
 
-  const videoCreated = await sequelizeTypescript.transaction(async t => {
+  const { videoCreated, videoWasAutoBlacklisted } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoCreated = await video.save(sequelizeOptions)
@@ -270,16 +268,20 @@ async function addVideo (req: express.Request, res: express.Response) {
       }, { transaction: t })
     }
 
-    await federateVideoIfNeeded(video, true, t)
+    const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded(video, res.locals.oauth.token.User, t)
+
+    if (!videoWasAutoBlacklisted) {
+      await federateVideoIfNeeded(video, true, t)
+    }
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
-    return videoCreated
+    return { videoCreated, videoWasAutoBlacklisted }
   })
 
-  if (videoCreated.quarantined) {
-    Notifier.Instance.notifyOnVideoQuarantine(videoCreated)
+  if (videoWasAutoBlacklisted) {
+    Notifier.Instance.notifyOnVideoAutoBlacklist(videoCreated)
   } else {
     Notifier.Instance.notifyOnNewVideo(videoCreated)
   }

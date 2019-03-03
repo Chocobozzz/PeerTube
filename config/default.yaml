@@ -157,10 +157,11 @@ import:
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 
-quarantine:
-  # Require moderator review and release before videos can be viewed by users
+auto_blacklist:
+  # New videos automatically blacklisted so moderators can review before publishing
   videos:
-    enabled: false
+    of_users:
+      enabled: false
 
 instance:
   name: 'PeerTube'

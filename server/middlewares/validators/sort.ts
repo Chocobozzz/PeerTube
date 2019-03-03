@@ -12,7 +12,6 @@ const SORTABLE_VIDEO_CHANNELS_SEARCH_COLUMNS = createSortableColumns(SORTABLE_CO
 const SORTABLE_VIDEO_IMPORTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_IMPORTS)
 const SORTABLE_VIDEO_COMMENT_THREADS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
 const SORTABLE_BLACKLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.BLACKLISTS)
-const SORTABLE_VIDEO_QUARANTINES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_QUARANTINES)
 const SORTABLE_VIDEO_CHANNELS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_CHANNELS)
 const SORTABLE_FOLLOWERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.FOLLOWERS)
 const SORTABLE_FOLLOWING_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.FOLLOWING)
@@ -31,7 +30,6 @@ const videosSearchSortValidator = checkSort(SORTABLE_VIDEOS_SEARCH_COLUMNS)
 const videoChannelsSearchSortValidator = checkSort(SORTABLE_VIDEO_CHANNELS_SEARCH_COLUMNS)
 const videoCommentThreadsSortValidator = checkSort(SORTABLE_VIDEO_COMMENT_THREADS_COLUMNS)
 const blacklistSortValidator = checkSort(SORTABLE_BLACKLISTS_COLUMNS)
-const videoQuarantinesSortValidator = checkSort(SORTABLE_VIDEO_QUARANTINES_COLUMNS)
 const videoChannelsSortValidator = checkSort(SORTABLE_VIDEO_CHANNELS_COLUMNS)
 const followersSortValidator = checkSort(SORTABLE_FOLLOWERS_COLUMNS)
 const followingSortValidator = checkSort(SORTABLE_FOLLOWING_COLUMNS)
@@ -50,7 +48,6 @@ export {
   videosSearchSortValidator,
   videosSortValidator,
   blacklistSortValidator,
-  videoQuarantinesSortValidator,
   accountsSortValidator,
   followersSortValidator,
   followingSortValidator,

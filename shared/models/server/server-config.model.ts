@@ -48,9 +48,11 @@ export interface ServerConfig {
     }
   }
 
-  quarantine: {
+  autoBlacklist: {
     videos: {
-      enabled: boolean
+      ofUsers: {
+        enabled: boolean
+      }
     }
   }
 

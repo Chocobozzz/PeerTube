@@ -51,6 +51,18 @@ function getBlacklistedVideosList (url: string, token: string, specialStatus = 2
           .expect('Content-Type', /json/)
 }
 
+function getBlacklistedVideosListWithTypeFilter (url: string, token: string, type: number, specialStatus = 200) {
+  const path = '/api/v1/videos/blacklist/'
+
+  return request(url)
+          .get(path)
+          .query({ sort: 'createdAt', type })
+          .set('Accept', 'application/json')
+          .set('Authorization', 'Bearer ' + token)
+          .expect(specialStatus)
+          .expect('Content-Type', /json/)
+}
+
 function getSortedBlacklistedVideosList (url: string, token: string, sort: string, specialStatus = 200) {
   const path = '/api/v1/videos/blacklist/'
 
@@ -69,6 +81,7 @@ export {
   addVideoToBlacklist,
   removeVideoFromBlacklist,
   getBlacklistedVideosList,
+  getBlacklistedVideosListWithTypeFilter,
   getSortedBlacklistedVideosList,
   updateVideoBlacklist
 }

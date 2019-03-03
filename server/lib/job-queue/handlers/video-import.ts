@@ -198,8 +198,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
     Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
 
-    if (videoImportUpdated.Video.quarantined) {
-      Notifier.Instance.notifyOnVideoQuarantine(videoImportUpdated.Video)
+    if (videoImportUpdated.Video.VideoBlacklist) {
+      Notifier.Instance.notifyOnVideoAutoBlacklist(videoImportUpdated.Video)
     } else {
       Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
     }

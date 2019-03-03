@@ -117,9 +117,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         allowAdditionalExtensions: null,
         resolutions: {}
       },
-      quarantine: {
+      autoBlacklist: {
         videos: {
-          enabled: null
+          ofUsers: {
+            enabled: null
+          }
         }
       }
     }

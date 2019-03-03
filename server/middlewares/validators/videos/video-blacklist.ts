@@ -1,10 +1,14 @@
 import * as express from 'express'
-import { body, param } from 'express-validator/check'
+import { body, param, query } from 'express-validator/check'
 import { isBooleanValid, isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
 import { isVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
-import { isVideoBlacklistExist, isVideoBlacklistReasonValid } from '../../../helpers/custom-validators/video-blacklist'
+import {
+  isVideoBlacklistExist,
+  isVideoBlacklistReasonValid,
+  isVideoBlacklistTypeValid
+} from '../../../helpers/custom-validators/video-blacklist'
 import { VideoModel } from '../../../models/video/video'
 
 const videosBlacklistRemoveValidator = [
@@ -66,10 +70,25 @@ const videosBlacklistUpdateValidator = [
   }
 ]
 
+const videosBlacklistFiltersValidator = [
+  query('type')
+    .optional()
+    .custom(isVideoBlacklistTypeValid).withMessage('Should have a valid video blacklist type attribute'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videos blacklist filters query', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   videosBlacklistAddValidator,
   videosBlacklistRemoveValidator,
-  videosBlacklistUpdateValidator
+  videosBlacklistUpdateValidator,
+  videosBlacklistFiltersValidator
 }

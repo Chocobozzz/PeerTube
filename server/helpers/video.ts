@@ -22,14 +22,9 @@ function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType) {
   if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
 }
 
-function shouldVideoBeQuarantined (user: UserModel) {
-  return CONFIG.QUARANTINE.VIDEOS.ENABLED && !user.hasRight(UserRight.BYPASS_VIDEO_QUARANTINE)
-}
-
 export {
   VideoFetchType,
   VideoFetchByUrlType,
   fetchVideo,
-  fetchVideoByUrl,
-  shouldVideoBeQuarantined
+  fetchVideoByUrl
 }

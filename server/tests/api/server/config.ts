@@ -61,7 +61,7 @@ function checkInitialConfig (data: CustomConfig) {
 
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
-  expect(data.quarantine.videos.enabled).to.be.false
+  expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -102,10 +102,10 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
-  expect(data.quarantine.videos.enabled).to.be.true
+  expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
 }
 
-describe('Test config', function () {
+describe.only('Test config', function () {
   let server = null
 
   before(async function () {
@@ -225,9 +225,11 @@ describe('Test config', function () {
           }
         }
       },
-      quarantine: {
+      autoBlacklist: {
         videos: {
-          enabled: true
+          ofUsers: {
+            enabled: true
+          }
         }
       }
     }

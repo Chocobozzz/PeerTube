@@ -15,7 +15,7 @@ import {
   ModerationCommentModalComponent,
   VideoAbuseListComponent,
   VideoBlacklistListComponent,
-  VideoQuarantineListComponent
+  VideoAutoBlacklistListComponent
 } from './moderation'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
@@ -47,7 +47,7 @@ import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } f
     ModerationComponent,
     VideoBlacklistListComponent,
     VideoAbuseListComponent,
-    VideoQuarantineListComponent,
+    VideoAutoBlacklistListComponent,
     ModerationCommentModalComponent,
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,

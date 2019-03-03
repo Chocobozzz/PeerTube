@@ -390,8 +390,8 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
   await checkNotification(base, notificationChecker, emailFinder, type)
 }
 
-async function checkNewVideoQuarantineForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
-  const notificationType = UserNotificationType.NEW_VIDEO_QUARANTINE_FOR_MODERATORS
+async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
+  const notificationType = UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
 
   function notificationChecker (notification: UserNotification, type: CheckerType) {
     if (type === 'presence') {
@@ -409,7 +409,7 @@ async function checkNewVideoQuarantineForModerators (base: CheckerBaseParams, vi
 
   function emailFinder (email: object) {
     const text = email[ 'text' ]
-    return text.indexOf(videoUUID) !== -1 && email[ 'text' ].indexOf('video-quarantine/list') !== -1
+    return text.indexOf(videoUUID) !== -1 && email[ 'text' ].indexOf('video-auto-blacklist/list') !== -1
   }
 
   await checkNotification(base, notificationChecker, emailFinder, type)
@@ -459,7 +459,7 @@ export {
   checkCommentMention,
   updateMyNotificationSettings,
   checkNewVideoAbuseForModerators,
-  checkNewVideoQuarantineForModerators,
+  checkVideoAutoBlacklistForModerators,
   getUserNotifications,
   markAsReadNotifications,
   getLastNotification

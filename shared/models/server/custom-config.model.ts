@@ -77,9 +77,11 @@ export interface CustomConfig {
     }
   }
 
-  quarantine: {
+  autoBlacklist: {
     videos: {
-      enabled: boolean
+      ofUsers: {
+        enabled: boolean
+      }
     }
   }
 

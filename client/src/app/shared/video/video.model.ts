@@ -43,7 +43,6 @@ export class Video implements VideoServerModel {
 
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
-  quarantined?: boolean
   scheduledUpdate?: VideoScheduleUpdate
   blacklisted?: boolean
   blacklistedReason?: string
@@ -87,7 +86,6 @@ export class Video implements VideoServerModel {
     this.privacy = hash.privacy
     this.waitTranscoding = hash.waitTranscoding
     this.state = hash.state
-    this.quarantined = hash.quarantined
     this.description = hash.description
     this.duration = hash.duration
     this.durationLabel = durationToString(hash.duration)

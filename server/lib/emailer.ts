@@ -241,23 +241,23 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoQuarantineModeratorsNotification (to: string[], video: VideoModel) {
-    const VIDEO_QUARANTINE_URL = CONFIG.WEBSERVER.URL + '/admin/moderation/video-quarantine/list'
+  addVideoAutoBlacklistModeratorsNotification (to: string[], video: VideoModel) {
+    const VIDEO_AUTO_BLACKLIST_URL = CONFIG.WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 
     const text = `Hi,\n\n` +
-      `A recently added video is quarantined and requires moderator release before other users can view it.` +
+      `A recently added video was auto-blacklisted and requires moderator review before publishing.` +
       `\n\n` +
       `You can view it and take appropriate action on ${videoUrl}` +
       `\n\n` +
-      `A full list of quarantined videos can be reviewed here: ${VIDEO_QUARANTINE_URL}` +
+      `A full list of auto-blacklisted videos can be reviewed here: ${VIDEO_AUTO_BLACKLIST_URL}` +
       `\n\n` +
       `Cheers,\n` +
       `PeerTube.`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: '[PeerTube] A quarantined video is awaiting release',
+      subject: '[PeerTube] An auto-blacklisted video is awaiting review',
       text
     }
 

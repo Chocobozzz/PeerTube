@@ -19,8 +19,7 @@ import {
   userLogin,
   wait,
   getCustomConfig,
-  updateCustomConfig,
-  releaseVideoQuarantine
+  updateCustomConfig
 } from '../../../../shared/utils'
 import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
@@ -34,7 +33,7 @@ import {
   checkNewBlacklistOnMyVideo,
   checkNewCommentOnMyVideo,
   checkNewVideoAbuseForModerators,
-  checkNewVideoQuarantineForModerators,
+  checkVideoAutoBlacklistForModerators,
   checkNewVideoFromSubscription,
   checkUserRegistered,
   checkVideoIsPublished,
@@ -97,7 +96,7 @@ describe('Test users notifications', function () {
     newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    videoQuarantineAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoImportFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
@@ -913,7 +912,7 @@ describe('Test users notifications', function () {
     })
   })
 
-  describe('Video-related notifications when video quarantine is enabled', function () {
+  describe('Video-related notifications when video auto-blacklist is enabled', function () {
     let userBaseParams: CheckerBaseParams
     let adminBaseParamsServer1: CheckerBaseParams
     let adminBaseParamsServer2: CheckerBaseParams
@@ -946,68 +945,68 @@ describe('Test users notifications', function () {
 
       const resCustomConfig = await getCustomConfig(servers[0].url, servers[0].accessToken)
       currentCustomConfig = resCustomConfig.body
-      const quarantineTestsCustomConfig = immutableAssign(currentCustomConfig, {
-        quarantine: {
+      const autoBlacklistTestsCustomConfig = immutableAssign(currentCustomConfig, {
+        autoBlacklist: {
           videos: {
             enabled: true
           }
         }
       })
       // enable transcoding otherwise own publish notification after transcoding not expected
-      quarantineTestsCustomConfig.transcoding.enabled = true
-      await updateCustomConfig(servers[0].url, servers[0].accessToken, quarantineTestsCustomConfig)
+      autoBlacklistTestsCustomConfig.transcoding.enabled = true
+      await updateCustomConfig(servers[0].url, servers[0].accessToken, autoBlacklistTestsCustomConfig)
 
       await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
       await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
 
     })
 
-    it('Should send notification to moderators on new video with quarantine', async function () {
+    it('Should send notification to moderators on new video with auto-blacklist', async function () {
       this.timeout(20000)
 
-      videoName = 'video with quarantine ' + uuidv4()
+      videoName = 'video with auto-blacklist ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: videoName })
       videoUUID = resVideo.body.video.uuid
 
       await waitJobs(servers)
-      await checkNewVideoQuarantineForModerators(adminBaseParamsServer1, videoUUID, videoName, 'presence')
+      await checkVideoAutoBlacklistForModerators(adminBaseParamsServer1, videoUUID, videoName, 'presence')
     })
 
-    it('Should not send video publish notification if quarantined', async function () {
+    it('Should not send video publish notification if auto-blacklisted', async function () {
       await checkVideoIsPublished(userBaseParams, videoName, videoUUID, 'absence')
     })
 
-    it('Should not send a local user subscription notification if quarantined', async function () {
+    it('Should not send a local user subscription notification if auto-blacklisted', async function () {
       await checkNewVideoFromSubscription(adminBaseParamsServer1, videoName, videoUUID, 'absence')
     })
 
-    it('Should not send a remote user subscription notification if quarantined', async function () {
+    it('Should not send a remote user subscription notification if auto-blacklisted', async function () {
       await checkNewVideoFromSubscription(adminBaseParamsServer2, videoName, videoUUID, 'absence')
     })
 
-    it('Should send video publish notification after video quarantine released', async function () {
+    it('Should send video publish notification after video removed from blacklist', async function () {
       this.timeout(20000)
 
-      await releaseVideoQuarantine(servers[0].url, servers[0].accessToken, videoUUID)
+      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, videoUUID)
 
       await waitJobs(servers)
       await checkVideoIsPublished(userBaseParams, videoName, videoUUID, 'presence')
     })
 
-    it('Should send a local user subscription notification after video quarantine released', async function () {
+    it('Should send a local user subscription notification after removed from blacklist', async function () {
       await checkNewVideoFromSubscription(adminBaseParamsServer1, videoName, videoUUID, 'presence')
     })
 
-    it('Should send a remote user subscription notification after video quarantined released', async function () {
+    it('Should send a remote user subscription notification after removed from blacklist', async function () {
       await checkNewVideoFromSubscription(adminBaseParamsServer2, videoName, videoUUID, 'presence')
     })
 
-    it('Should not send notifications after video quarantine released if scheduled update pending', async function () {
+    it('Should not send notifications after video removed from auto-blacklist if scheduled update pending', async function () {
       this.timeout(20000)
 
       let updateAt = new Date(new Date().getTime() + 100000)
 
-      const name = 'video with quarantine and future schedule ' + uuidv4()
+      const name = 'video with auto-blacklist and future schedule ' + uuidv4()
 
       const data = {
         name,
@@ -1021,7 +1020,7 @@ describe('Test users notifications', function () {
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, data)
       const uuid = resVideo.body.video.uuid
 
-      await releaseVideoQuarantine(servers[0].url, servers[0].accessToken, uuid)
+      await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, uuid)
 
       await waitJobs(servers)
       await checkVideoIsPublished(userBaseParams, name, uuid, 'absence')
@@ -1029,13 +1028,13 @@ describe('Test users notifications', function () {
       await checkNewVideoFromSubscription(adminBaseParamsServer2, name, uuid, 'absence')
     })
 
-    it('Should not send notifications after scheduled update if video still quarantined', async function () {
+    it('Should not send notifications after scheduled update if video still auto-blacklisted', async function () {
       this.timeout(20000)
 
       // In 2 seconds
       let updateAt = new Date(new Date().getTime() + 2000)
 
-      const name = 'video with schedule done and still quarantined ' + uuidv4()
+      const name = 'video with schedule done and still auto-blacklisted ' + uuidv4()
 
       const data = {
         name,
@@ -1055,17 +1054,17 @@ describe('Test users notifications', function () {
       await checkNewVideoFromSubscription(adminBaseParamsServer2, name, uuid, 'absence')
     })
 
-    it('Should not send a notification to moderators on new video without quarantine', async function () {
+    it('Should not send a notification to moderators on new video without auto-blacklist', async function () {
       this.timeout(20000)
 
-      const name = 'video without quarantine ' + uuidv4()
+      const name = 'video without auto-blacklist ' + uuidv4()
 
-      // admin will have bypass quarantine right
+      // admin will have bypass auto-blacklist right
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name })
       const uuid = resVideo.body.video.uuid
 
       await waitJobs(servers)
-      await checkNewVideoQuarantineForModerators(adminBaseParamsServer1, uuid, name, 'absence')
+      await checkVideoAutoBlacklistForModerators(adminBaseParamsServer1, uuid, name, 'absence')
     })
 
     after(async () => {

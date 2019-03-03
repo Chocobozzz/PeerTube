@@ -96,9 +96,11 @@ export class ServerService {
         intervalDays: 0
       }
     },
-    quarantine: {
+    autoBlacklist: {
       videos: {
-        enabled: false
+        ofUsers: {
+          enabled: false
+        }
       }
     }
   }

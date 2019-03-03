@@ -80,9 +80,11 @@ describe('Test config API validators', function () {
         }
       }
     },
-    quarantine: {
+    autoBlacklist: {
       videos: {
-        enabled: false
+        ofUsers: {
+          enabled: false
+        }
       }
     }
   }

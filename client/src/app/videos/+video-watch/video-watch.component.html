@@ -25,18 +25,6 @@
     {{ video.blacklistedReason }}
   </div>
 
-  <div class="alert alert-warning" *ngIf="isVideoQuarantined() && !isVideoToImport() && !isVideoToTranscode()">
-    <div i18n>This video is quarantined.</div>
-    <div *ngIf="isQuarantinedVideoReleasable(); else quarantineMessageForUser">
-      <span class="release-quarantine-button" role="button" (click)="releaseQuarantinedVideo()">
-      ✔️ <span class="release-quarantine-button-label" i18n>Release</span>
-      </span>
-    </div>
-    <ng-template #quarantineMessageForUser>
-      <div i18n>A moderator must release it before others can view it.</div>
-    </ng-template>
-  </div>
-
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
     <div class="row fullWidth">

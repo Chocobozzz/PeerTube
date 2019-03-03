@@ -54,7 +54,7 @@ export class UserNotification implements UserNotificationServer {
   videoUrl?: string
   commentUrl?: any[]
   videoAbuseUrl?: string
-  videoQuarantineUrl?: string
+  videoAutoBlacklistUrl?: string
   accountUrl?: string
   videoImportIdentifier?: string
   videoImportUrl?: string
@@ -108,8 +108,8 @@ export class UserNotification implements UserNotificationServer {
           this.videoUrl = this.buildVideoUrl(this.videoAbuse.video)
           break
 
-        case UserNotificationType.NEW_VIDEO_QUARANTINE_FOR_MODERATORS:
-          this.videoQuarantineUrl = '/admin/moderation/video-quarantine/list'
+        case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
+          this.videoAutoBlacklistUrl = '/admin/moderation/video-auto-blacklist/list'
           this.videoUrl = this.buildVideoUrl(this.video)
           break
 

@@ -152,18 +152,20 @@
           </ng-container>
         </ng-container>
 
-        <div i18n class="inner-form-title">Quarantine</div>
+        <div i18n class="inner-form-title">Auto-blacklist</div>
 
-        <ng-container formGroupName="quarantine">
+        <ng-container formGroupName="autoBlacklist">
           <ng-container formGroupName="videos">
+            <ng-container formGroupName="ofUsers">
 
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="quarantineVideosEnabled" formControlName="enabled"
-                i18n-labelText labelText="Require moderator review and release before videos can be viewed by users"
-              ></my-peertube-checkbox>
-            </div>
+              <div class="form-group">
+                <my-peertube-checkbox
+                  inputName="autoBlacklistVideosOfUsersEnabled" formControlName="enabled"
+                  i18n-labelText labelText="New videos of users automatically blacklisted enabled"
+                ></my-peertube-checkbox>
+              </div>
 
+            </ng-container>
           </ng-container>
         </ng-container>
 

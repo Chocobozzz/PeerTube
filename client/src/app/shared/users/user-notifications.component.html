@@ -36,11 +36,11 @@
         </div>
       </ng-container>
 
-      <ng-container i18n *ngSwitchCase="UserNotificationType.NEW_VIDEO_QUARANTINE_FOR_MODERATORS">
+      <ng-container i18n *ngSwitchCase="UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS">
         <my-global-icon iconName="no"></my-global-icon>
 
         <div class="message">
-          <a (click)="markAsRead(notification)" [routerLink]="notification.videoQuarantineUrl">There is a new quarantine</a> on the recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
+          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blacklisted</a>
         </div>
       </ng-container>
 

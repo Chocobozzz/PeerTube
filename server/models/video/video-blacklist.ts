@@ -1,8 +1,20 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  Is, Model,
+  Table,
+  UpdatedAt,
+  IFindOptions
+} from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { isVideoBlacklistReasonValid } from '../../helpers/custom-validators/video-blacklist'
-import { VideoBlacklist } from '../../../shared/models/videos'
+import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
+import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 @Table({
@@ -25,6 +37,12 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   @Column
   unfederated: boolean
 
+  @AllowNull(false)
+  @Default(null)
+  @Is('VideoBlacklistType', value => throwIfNotValid(value, isVideoBlacklistTypeValid, 'type'))
+  @Column
+  type: VideoBlacklistType
+
   @CreatedAt
   createdAt: Date
 
@@ -43,8 +61,8 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   })
   Video: VideoModel
 
-  static listForApi (start: number, count: number, sort: SortType) {
-    const query = {
+  static listForApi (start: number, count: number, sort: SortType, type?: VideoBlacklistType) {
+    const query: IFindOptions<VideoBlacklistModel> = {
       offset: start,
       limit: count,
       order: getSortOnModel(sort.sortModel, sort.sortValue),
@@ -54,6 +72,10 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
           required: true
         }
       ]
+    }
+
+    if (type) {
+      query.where = { type }
     }
 
     return VideoBlacklistModel.findAndCountAll(query)
@@ -84,6 +106,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       updatedAt: this.updatedAt,
       reason: this.reason,
       unfederated: this.unfederated,
+      type: this.type,
 
       video: {
         id: video.id,

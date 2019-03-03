@@ -18,7 +18,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
-  quarantined: boolean
 
   likesPercent: number
   dislikesPercent: number
@@ -55,10 +54,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   isUnblacklistableBy (user: AuthUser) {
     return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
-  }
-
-  isQuarantineReleasableBy (user: AuthUser) {
-    return user && this.isLocal === true && user.hasRight(UserRight.MANAGE_VIDEO_QUARANTINE) === true
   }
 
   isUpdatableBy (user: AuthUser) {

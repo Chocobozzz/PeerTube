@@ -293,11 +293,9 @@ type AvailableForListIDsOptions = {
       include: []
     }
 
-    // Only list public/published videos which are not quarantined
+    // Only list public/published videos
     if (!options.filter || options.filter !== 'all-local') {
       const privacyWhere = {
-        // Never list quarantined
-        quarantined: false,
         // Always list public videos
         privacy: VideoPrivacy.PUBLIC,
         // Always list published videos, or videos that are being transcoded but on which we don't want to wait for transcoding
@@ -755,11 +753,6 @@ export class VideoModel extends Model<VideoModel> {
   @Column
   originallyPublishedAt: Date
 
-  @AllowNull(false)
-  @Default(false)
-  @Column
-  quarantined: boolean
-
   @ForeignKey(() => VideoChannelModel)
   @Column
   channelId: number
@@ -1171,36 +1164,6 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel.getAvailableForApi(query, queryOptions, countVideos)
-  }
-
-  static listQuarantinedForApi (start: number, count: number, sort: string) {
-    const query: IFindOptions<VideoModel> = {
-      offset: start,
-      limit: count,
-      order: getVideoSort(sort),
-      include: [
-        {
-          model: VideoChannelModel,
-          required: true,
-          include: [
-            {
-              model: AccountModel,
-              required: true
-            }
-          ]
-        }
-      ],
-      where: {
-        quarantined: true
-      }
-    }
-
-    return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
-      return {
-        data: rows,
-        total: count
-      }
-    })
   }
 
   static async searchAndPopulateAccountAndServer (options: {

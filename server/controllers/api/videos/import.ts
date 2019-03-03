@@ -22,8 +22,8 @@ import { UserModel } from '../../../models/account/user'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { shouldVideoBeQuarantined } from '../../../helpers/video'
 import { readFile, move } from 'fs-extra'
+import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -175,8 +175,7 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     privacy: body.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
     channelId: channelId,
-    originallyPublishedAt: importData.originallyPublishedAt,
-    quarantined: shouldVideoBeQuarantined(user)
+    originallyPublishedAt: importData.originallyPublishedAt
   }
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video)
@@ -220,6 +219,8 @@ function insertIntoDB (
     // Save video object in database
     const videoCreated = await video.save(sequelizeOptions)
     videoCreated.VideoChannel = videoChannel
+
+    await autoBlacklistVideoIfNeeded(video, videoChannel.Account.User, t)
 
     // Set tags to the video
     if (tags) {

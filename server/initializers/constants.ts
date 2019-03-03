@@ -41,7 +41,6 @@ const SORTABLE_COLUMNS = {
   VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
-  VIDEO_QUARANTINES: [ 'publishedAt' ],
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ],
 
@@ -276,9 +275,11 @@ const CONFIG = {
       }
     }
   },
-  QUARANTINE: {
+  AUTO_BLACKLIST: {
     VIDEOS: {
-      get ENABLED () { return config.get<boolean>('quarantine.videos.enabled') }
+      OF_USERS: {
+        get ENABLED () { return config.get<boolean>('auto_blacklist.videos.of_users.enabled') }
+      }
     }
   },
   CACHE: {

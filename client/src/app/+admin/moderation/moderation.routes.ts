@@ -3,7 +3,7 @@ import { UserRight } from '../../../../../shared'
 import { UserRightGuard } from '@app/core'
 import { VideoAbuseListComponent } from '@app/+admin/moderation/video-abuse-list'
 import { VideoBlacklistListComponent } from '@app/+admin/moderation/video-blacklist-list'
-import { VideoQuarantineListComponent } from '@app/+admin/moderation/video-quarantine-list'
+import { VideoAutoBlacklistListComponent } from '@app/+admin/moderation/video-auto-blacklist-list'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 
@@ -28,8 +28,8 @@ export const ModerationRoutes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'video-quarantine',
-        redirectTo: 'video-quarantine/list',
+        path: 'video-auto-blacklist',
+        redirectTo: 'video-auto-blacklist/list',
         pathMatch: 'full'
       },
       {
@@ -44,6 +44,17 @@ export const ModerationRoutes: Routes = [
         }
       },
       {
+        path: 'video-auto-blacklist/list',
+        component: VideoAutoBlacklistListComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
+          meta: {
+            title: 'Auto-blacklisted videos'
+          }
+        }
+      },
+      {
         path: 'video-blacklist/list',
         component: VideoBlacklistListComponent,
         canActivate: [ UserRightGuard ],
@@ -51,17 +62,6 @@ export const ModerationRoutes: Routes = [
           userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
           meta: {
             title: 'Blacklisted videos'
-          }
-        }
-      },
-      {
-        path: 'video-quarantine/list',
-        component: VideoQuarantineListComponent,
-        canActivate: [ UserRightGuard ],
-        data: {
-          userRight: UserRight.MANAGE_VIDEO_QUARANTINE,
-          meta: {
-            title: 'Quarantined videos'
           }
         }
       },
