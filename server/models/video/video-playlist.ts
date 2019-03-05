@@ -47,7 +47,8 @@ enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
   WITH_ACCOUNT_AND_CHANNEL_SUMMARY = 'WITH_ACCOUNT_AND_CHANNEL_SUMMARY',
-  WITH_ACCOUNT = 'WITH_ACCOUNT'
+  WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_ACCOUNT_AND_CHANNEL = 'WITH_ACCOUNT_AND_CHANNEL'
 }
 
 type AvailableForListOptions = {
@@ -85,6 +86,18 @@ type AvailableForListOptions = {
       },
       {
         model: () => VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY),
+        required: false
+      }
+    ]
+  },
+  [ ScopeNames.WITH_ACCOUNT_AND_CHANNEL ]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
+      },
+      {
+        model: () => VideoChannelModel,
         required: false
       }
     ]
@@ -317,7 +330,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static loadWithAccountAndChannel (id: number | string, transaction: Sequelize.Transaction) {
+  static loadWithAccountAndChannelSummary (id: number | string, transaction: Sequelize.Transaction) {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -327,6 +340,19 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
     return VideoPlaylistModel
       .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY, ScopeNames.WITH_VIDEOS_LENGTH ])
+      .findOne(query)
+  }
+
+  static loadWithAccountAndChannel (id: number | string, transaction: Sequelize.Transaction) {
+    const where = buildWhereIdOrUUID(id)
+
+    const query = {
+      where,
+      transaction
+    }
+
+    return VideoPlaylistModel
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH ])
       .findOne(query)
   }
 

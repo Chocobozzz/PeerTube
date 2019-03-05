@@ -45,7 +45,7 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    if (!await isVideoPlaylistExist(req.params.playlistId, res)) return cleanUpReqFiles(req)
+    if (!await isVideoPlaylistExist(req.params.playlistId, res, 'all')) return cleanUpReqFiles(req)
 
     const videoPlaylist = res.locals.videoPlaylist
 
@@ -153,7 +153,7 @@ const videoPlaylistsAddVideoValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
+    if (!await isVideoPlaylistExist(req.params.playlistId, res, 'all')) return
     if (!await isVideoExist(req.body.videoId, res, 'only-video')) return
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
@@ -193,7 +193,7 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
+    if (!await isVideoPlaylistExist(req.params.playlistId, res, 'all')) return
     if (!await isVideoExist(req.params.videoId, res, 'id')) return
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
@@ -261,7 +261,7 @@ const videoPlaylistsReorderVideosValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
+    if (!await isVideoPlaylistExist(req.params.playlistId, res, 'all')) return
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) return
