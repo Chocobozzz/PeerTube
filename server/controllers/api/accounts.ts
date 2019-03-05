@@ -18,6 +18,7 @@ import { JobQueue } from '../../lib/job-queue'
 import { logger } from '../../helpers/logger'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { UserModel } from '../../models/account/user'
+import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 
 const accountsRouter = express.Router()
 
@@ -57,6 +58,7 @@ accountsRouter.get('/:accountName/video-playlists',
   videoPlaylistsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
   asyncMiddleware(listAccountPlaylists)
 )
 
@@ -106,7 +108,8 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
     count: req.query.count,
     sort: req.query.sort,
     accountId: res.locals.account.id,
-    privateAndUnlisted
+    privateAndUnlisted,
+    type: req.query.playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

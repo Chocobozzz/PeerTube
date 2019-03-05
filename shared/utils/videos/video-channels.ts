@@ -1,6 +1,8 @@
 import * as request from 'supertest'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../models/videos'
 import { updateAvatarRequest } from '../requests/requests'
+import { getMyUserInformation, ServerInfo } from '..'
+import { User } from '../..'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-channels'
@@ -105,6 +107,19 @@ function updateVideoChannelAvatar (options: {
   return updateAvatarRequest(Object.assign(options, { path }))
 }
 
+function setDefaultVideoChannel (servers: ServerInfo[]) {
+  const tasks: Promise<any>[] = []
+
+  for (const server of servers) {
+    const p = getMyUserInformation(server.url, server.accessToken)
+      .then(res => server.videoChannel = (res.body as User).videoChannels[0])
+
+    tasks.push(p)
+  }
+
+  return Promise.all(tasks)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -114,5 +129,6 @@ export {
   addVideoChannel,
   updateVideoChannel,
   deleteVideoChannel,
-  getVideoChannel
+  getVideoChannel,
+  setDefaultVideoChannel
 }

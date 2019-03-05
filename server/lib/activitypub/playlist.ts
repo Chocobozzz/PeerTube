@@ -28,7 +28,9 @@ function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount
     url: playlistObject.id,
     uuid: playlistObject.uuid,
     ownerAccountId: byAccount.id,
-    videoChannelId: null
+    videoChannelId: null,
+    createdAt: new Date(playlistObject.published),
+    updatedAt: new Date(playlistObject.updated)
   }
 }
 

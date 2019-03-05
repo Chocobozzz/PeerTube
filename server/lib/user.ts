@@ -11,8 +11,9 @@ import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { ActorModel } from '../models/activitypub/actor'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
+import { createWatchLaterPlaylist } from './video-playlist'
 
-async function createUserAccountAndChannel (userToCreate: UserModel, validateUser = true) {
+async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
     const userOptions = {
       transaction: t,
@@ -38,7 +39,9 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
     }
     const videoChannel = await createVideoChannel(videoChannelInfo, accountCreated, t)
 
-    return { user: userCreated, account: accountCreated, videoChannel }
+    const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
+
+    return { user: userCreated, account: accountCreated, videoChannel, videoPlaylist }
   })
 
   const [ accountKeys, channelKeys ] = await Promise.all([
@@ -89,7 +92,7 @@ async function createApplicationActor (applicationId: number) {
 
 export {
   createApplicationActor,
-  createUserAccountAndChannel,
+  createUserAccountAndChannelAndPlaylist,
   createLocalAccountWithoutKeys
 }
 

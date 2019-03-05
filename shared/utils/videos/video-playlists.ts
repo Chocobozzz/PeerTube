@@ -4,6 +4,12 @@ import { omit } from 'lodash'
 import { VideoPlaylistUpdate } from '../../models/videos/playlist/video-playlist-update.model'
 import { VideoPlaylistElementCreate } from '../../models/videos/playlist/video-playlist-element-create.model'
 import { VideoPlaylistElementUpdate } from '../../models/videos/playlist/video-playlist-element-update.model'
+import { videoUUIDToId } from './videos'
+import { join } from 'path'
+import { root } from '..'
+import { readdir } from 'fs-extra'
+import { expect } from 'chai'
+import { VideoPlaylistType } from '../../models/videos/playlist/video-playlist-type.model'
 
 function getVideoPlaylistsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-playlists'
@@ -17,7 +23,67 @@ function getVideoPlaylistsList (url: string, start: number, count: number, sort?
   return makeGetRequest({
     url,
     path,
-    query
+    query,
+    statusCodeExpected: 200
+  })
+}
+
+function getVideoChannelPlaylistsList (url: string, videoChannelName: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/video-channels/' + videoChannelName + '/video-playlists'
+
+  const query = {
+    start,
+    count,
+    sort
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    statusCodeExpected: 200
+  })
+}
+
+function getAccountPlaylistsList (url: string, accountName: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/accounts/' + accountName + '/video-playlists'
+
+  const query = {
+    start,
+    count,
+    sort
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    statusCodeExpected: 200
+  })
+}
+
+function getAccountPlaylistsListWithToken (
+  url: string,
+  token: string,
+  accountName: string,
+  start: number,
+  count: number,
+  playlistType?: VideoPlaylistType
+) {
+  const path = '/api/v1/accounts/' + accountName + '/video-playlists'
+
+  const query = {
+    start,
+    count,
+    playlistType
+  }
+
+  return makeGetRequest({
+    url,
+    token,
+    path,
+    query,
+    statusCodeExpected: 200
   })
 }
 
@@ -26,6 +92,17 @@ function getVideoPlaylist (url: string, playlistId: number | string, statusCodeE
 
   return makeGetRequest({
     url,
+    path,
+    statusCodeExpected
+  })
+}
+
+function getVideoPlaylistWithToken (url: string, token: string, playlistId: number | string, statusCodeExpected = 200) {
+  const path = '/api/v1/video-playlists/' + playlistId
+
+  return makeGetRequest({
+    url,
+    token,
     path,
     statusCodeExpected
   })
@@ -93,13 +170,15 @@ function updateVideoPlaylist (options: {
   })
 }
 
-function addVideoInPlaylist (options: {
+async function addVideoInPlaylist (options: {
   url: string,
   token: string,
   playlistId: number | string,
-  elementAttrs: VideoPlaylistElementCreate
+  elementAttrs: VideoPlaylistElementCreate | { videoId: string }
   expectedStatus?: number
 }) {
+  options.elementAttrs.videoId = await videoUUIDToId(options.url, options.elementAttrs.videoId)
+
   const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
 
   return makePostBodyRequest({
@@ -135,7 +214,7 @@ function removeVideoFromPlaylist (options: {
   token: string,
   playlistId: number | string,
   videoId: number | string,
-  expectedStatus: number
+  expectedStatus?: number
 }) {
   const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
 
@@ -156,7 +235,7 @@ function reorderVideosPlaylist (options: {
     insertAfterPosition: number,
     reorderLength?: number
   },
-  expectedStatus: number
+  expectedStatus?: number
 }) {
   const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/reorder'
 
@@ -165,15 +244,37 @@ function reorderVideosPlaylist (options: {
     path,
     token: options.token,
     fields: options.elementAttrs,
-    statusCodeExpected: options.expectedStatus
+    statusCodeExpected: options.expectedStatus || 204
   })
+}
+
+async function checkPlaylistFilesWereRemoved (
+  playlistUUID: string,
+  serverNumber: number,
+  directories = [ 'thumbnails' ]
+) {
+  const testDirectory = 'test' + serverNumber
+
+  for (const directory of directories) {
+    const directoryPath = join(root(), testDirectory, directory)
+
+    const files = await readdir(directoryPath)
+    for (const file of files) {
+      expect(file).to.not.contain(playlistUUID)
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   getVideoPlaylistsList,
+  getVideoChannelPlaylistsList,
+  getAccountPlaylistsList,
+  getAccountPlaylistsListWithToken,
+
   getVideoPlaylist,
+  getVideoPlaylistWithToken,
 
   createVideoPlaylist,
   updateVideoPlaylist,
@@ -183,5 +284,7 @@ export {
   updateVideoPlaylistElement,
   removeVideoFromPlaylist,
 
-  reorderVideosPlaylist
+  reorderVideosPlaylist,
+
+  checkPlaylistFilesWereRemoved
 }

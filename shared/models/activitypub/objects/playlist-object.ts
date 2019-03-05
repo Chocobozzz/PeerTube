@@ -13,6 +13,9 @@ export interface PlaylistObject {
 
   icon: ActivityIconObject
 
+  published: string
+  updated: string
+
   orderedItems?: string[]
 
   partOf?: string

@@ -1,6 +1,6 @@
 import * as express from 'express'
-import { body, param, ValidationChain } from 'express-validator/check'
-import { UserRight, VideoPrivacy } from '../../../../shared'
+import { body, param, query, ValidationChain } from 'express-validator/check'
+import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
@@ -11,7 +11,9 @@ import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistExist,
   isVideoPlaylistNameValid,
-  isVideoPlaylistPrivacyValid
+  isVideoPlaylistPrivacyValid,
+  isVideoPlaylistTimestampValid,
+  isVideoPlaylistTypeValid
 } from '../../../helpers/custom-validators/video-playlists'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -20,6 +22,7 @@ import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-
 import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -56,6 +59,12 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
                 .json({ error: 'Cannot set "private" a video playlist that was not private.' })
     }
 
+    if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
+      cleanUpReqFiles(req)
+      return res.status(409)
+                .json({ error: 'Cannot update a watch later playlist.' })
+    }
+
     if (req.body.videoChannelId && !await isVideoChannelIdExist(req.body.videoChannelId, res)) return cleanUpReqFiles(req)
 
     return next()
@@ -72,6 +81,13 @@ const videoPlaylistsDeleteValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await isVideoPlaylistExist(req.params.playlistId, res)) return
+
+    const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+    if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
+      return res.status(409)
+                .json({ error: 'Cannot delete a watch later playlist.' })
+    }
+
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, res.locals.videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
       return
     }
@@ -127,10 +143,10 @@ const videoPlaylistsAddVideoValidator = [
     .custom(isIdOrUUIDValid).withMessage('Should have a valid video id/uuid'),
   body('startTimestamp')
     .optional()
-    .isInt({ min: 0 }).withMessage('Should have a valid start timestamp'),
+    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid start timestamp'),
   body('stopTimestamp')
     .optional()
-    .isInt({ min: 0 }).withMessage('Should have a valid stop timestamp'),
+    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid stop timestamp'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsAddVideoValidator parameters', { parameters: req.params })
@@ -167,10 +183,10 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
     .custom(isIdOrUUIDValid).withMessage('Should have an video id/uuid'),
   body('startTimestamp')
     .optional()
-    .isInt({ min: 0 }).withMessage('Should have a valid start timestamp'),
+    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid start timestamp'),
   body('stopTimestamp')
     .optional()
-    .isInt({ min: 0 }).withMessage('Should have a valid stop timestamp'),
+    .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid stop timestamp'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsRemoveVideoValidator parameters', { parameters: req.params })
@@ -275,6 +291,20 @@ const videoPlaylistsReorderVideosValidator = [
   }
 ]
 
+const commonVideoPlaylistFiltersValidator = [
+  query('playlistType')
+    .optional()
+    .custom(isVideoPlaylistTypeValid).withMessage('Should have a valid playlist type'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking commonVideoPlaylistFiltersValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -287,7 +317,9 @@ export {
   videoPlaylistsUpdateOrRemoveVideoValidator,
   videoPlaylistsReorderVideosValidator,
 
-  videoPlaylistElementAPGetValidator
+  videoPlaylistElementAPGetValidator,
+
+  commonVideoPlaylistFiltersValidator
 }
 
 // ---------------------------------------------------------------------------

@@ -67,9 +67,9 @@ type AvailableForListOptions = {
   ]
 })
 @Scopes({
-  [ScopeNames.SUMMARY]: (required: boolean, withAccount: boolean) => {
+  [ScopeNames.SUMMARY]: (withAccount = false) => {
     const base: IFindOptions<VideoChannelModel> = {
-      attributes: [ 'name', 'description', 'id' ],
+      attributes: [ 'name', 'description', 'id', 'actorId' ],
       include: [
         {
           attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
@@ -225,7 +225,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade',
+    onDelete: 'CASCADE',
     hooks: true
   })
   VideoPlaylists: VideoPlaylistModel[]

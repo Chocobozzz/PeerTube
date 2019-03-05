@@ -6,6 +6,7 @@ import { root, wait } from '../miscs/miscs'
 import { readdir, readFile } from 'fs-extra'
 import { existsSync } from 'fs'
 import { expect } from 'chai'
+import { VideoChannel } from '../../models/videos'
 
 interface ServerInfo {
   app: ChildProcess,
@@ -25,6 +26,7 @@ interface ServerInfo {
   }
 
   accessToken?: string
+  videoChannel?: VideoChannel
 
   video?: {
     id: number
@@ -39,6 +41,8 @@ interface ServerInfo {
     id: number
     uuid: string
   }
+
+  videos?: { id: number, uuid: string }[]
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {

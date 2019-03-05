@@ -31,7 +31,12 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
   const url = getDeleteActivityPubUrl(byActor.url)
   const activity = buildDeleteActivity(url, byActor.url, byActor)
 
-  const actorsInvolved = await VideoShareModel.loadActorsByVideoOwner(byActor.id, t)
+  const actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, t)
+
+  // In case the actor did not have any videos
+  const serverActor = await getServerActor()
+  actorsInvolved.push(serverActor)
+
   actorsInvolved.push(byActor)
 
   return broadcastToFollowers(activity, byActor, actorsInvolved, t)

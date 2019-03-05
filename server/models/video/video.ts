@@ -225,7 +225,7 @@ type AvailableForListIDsOptions = {
       },
       include: [
         {
-          model: VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY)
+          model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] })
         }
       ]
     }
@@ -1535,18 +1535,7 @@ export class VideoModel extends Model<VideoModel> {
 
     if (ids.length === 0) return { data: [], total: count }
 
-    // FIXME: typings
-    const apiScope: any[] = [
-      {
-        method: [ ScopeNames.FOR_API, { ids, withFiles: options.withFiles } as ForAPIOptions ]
-      }
-    ]
-
-    if (options.user) {
-      apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })
-    }
-
-    const secondQuery = {
+    const secondQuery: IFindOptions<VideoModel> = {
       offset: 0,
       limit: query.limit,
       attributes: query.attributes,
@@ -1556,6 +1545,29 @@ export class VideoModel extends Model<VideoModel> {
         )
       ]
     }
+
+    // FIXME: typing
+    const apiScope: any[] = []
+
+    if (options.user) {
+      apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })
+
+      // Even if the relation is n:m, we know that a user only have 0..1 video history
+      // So we won't have multiple rows for the same video
+      // A subquery adds some bugs in our query so disable it
+      secondQuery.subQuery = false
+    }
+
+    apiScope.push({
+      method: [
+        ScopeNames.FOR_API, {
+          ids, withFiles:
+          options.withFiles,
+          videoPlaylistId: options.videoPlaylistId
+        } as ForAPIOptions
+      ]
+    })
+
     const rows = await VideoModel.scope(apiScope).findAll(secondQuery)
 
     return {

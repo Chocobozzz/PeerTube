@@ -125,7 +125,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .then(res => res.map(r => r.Actor))
   }
 
-  static loadActorsByVideoOwner (actorOwnerId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
+  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
     const query = {
       attributes: [],
       include: [

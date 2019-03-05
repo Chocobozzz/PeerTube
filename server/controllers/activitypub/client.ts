@@ -320,7 +320,10 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 async function videoPlaylistController (req: express.Request, res: express.Response) {
   const playlist: VideoPlaylistModel = res.locals.videoPlaylist
 
-  const json = await playlist.toActivityPubObject()
+  // We need more attributes
+  playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
+
+  const json = await playlist.toActivityPubObject(req.query.page, null)
   const audience = getAudience(playlist.OwnerAccount.Actor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
   const object = audiencify(json, audience)
 

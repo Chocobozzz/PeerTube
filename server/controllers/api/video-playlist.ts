@@ -17,6 +17,7 @@ import { logger } from '../../helpers/logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import {
+  commonVideoPlaylistFiltersValidator,
   videoPlaylistsAddValidator,
   videoPlaylistsAddVideoValidator,
   videoPlaylistsDeleteValidator,
@@ -45,6 +46,7 @@ import { VideoPlaylistElementModel } from '../../models/video/video-playlist-ele
 import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
 import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
 import { copy, pathExists } from 'fs-extra'
+import { AccountModel } from '../../models/account/account'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -55,6 +57,7 @@ videoPlaylistRouter.get('/',
   videoPlaylistsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
   asyncMiddleware(listVideoPlaylists)
 )
 
@@ -130,7 +133,8 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
     followerActorId: serverActor.id,
     start: req.query.start,
     count: req.query.count,
-    sort: req.query.sort
+    sort: req.query.sort,
+    type: req.query.type
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -171,7 +175,8 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistCreated: VideoPlaylistModel = await sequelizeTypescript.transaction(async t => {
     const videoPlaylistCreated = await videoPlaylist.save({ transaction: t })
 
-    videoPlaylistCreated.OwnerAccount = user.Account
+    // We need more attributes for the federation
+    videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
     await sendCreateVideoPlaylist(videoPlaylistCreated, t)
 
     return videoPlaylistCreated
@@ -216,6 +221,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
           const videoChannel = res.locals.videoChannel as VideoChannelModel
 
           videoPlaylistInstance.videoChannelId = videoChannel.id
+          videoPlaylistInstance.VideoChannel = videoChannel
         }
       }
 
@@ -227,6 +233,8 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
       }
 
       const playlistUpdated = await videoPlaylistInstance.save(sequelizeOptions)
+      // We need more attributes for the federation
+      playlistUpdated.OwnerAccount = await AccountModel.load(playlistUpdated.OwnerAccount.id, t)
 
       const isNewPlaylist = wasPrivatePlaylist && playlistUpdated.privacy !== VideoPlaylistPrivacy.PRIVATE
 
@@ -290,11 +298,15 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
       const playlistThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoPlaylist.getThumbnailName())
 
       if (await pathExists(playlistThumbnailPath) === false) {
+        logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
+
         const videoThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
         await copy(videoThumbnailPath, playlistThumbnailPath)
       }
     }
 
+    // We need more attributes for the federation
+    videoPlaylist.OwnerAccount = await AccountModel.load(videoPlaylist.OwnerAccount.id, t)
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
     return playlistElement
@@ -320,6 +332,8 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
 
     const element = await videoPlaylistElement.save({ transaction: t })
 
+    // We need more attributes for the federation
+    videoPlaylist.OwnerAccount = await AccountModel.load(videoPlaylist.OwnerAccount.id, t)
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
     return element
@@ -341,6 +355,8 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
     // Decrease position of the next elements
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, positionToDelete, null, -1, t)
 
+    // We need more attributes for the federation
+    videoPlaylist.OwnerAccount = await AccountModel.load(videoPlaylist.OwnerAccount.id, t)
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
     logger.info('Video playlist element %d of playlist %s deleted.', videoPlaylistElement.position, videoPlaylist.uuid)
@@ -382,6 +398,8 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
     // Decrease positions of elements after the old position of our ordered elements (decrease)
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, null, -reorderLength, t)
 
+    // We need more attributes for the federation
+    videoPlaylist.OwnerAccount = await AccountModel.load(videoPlaylist.OwnerAccount.id, t)
     await sendUpdateVideoPlaylist(videoPlaylist, t)
   })
 
@@ -415,5 +433,6 @@ async function getVideoPlaylistVideos (req: express.Request, res: express.Respon
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   })
 
-  return res.json(getFormattedObjects(resultList.data, resultList.total))
+  const additionalAttributes = { playlistInfo: true }
+  return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }

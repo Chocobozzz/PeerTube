@@ -6,7 +6,7 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG, RATES_LIMIT, sequelizeTypescript } from '../../../initializers'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
-import { createUserAccountAndChannel } from '../../../lib/user'
+import { createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -174,7 +174,7 @@ async function createUser (req: express.Request, res: express.Response) {
     videoQuotaDaily: body.videoQuotaDaily
   })
 
-  const { user, account } = await createUserAccountAndChannel(userToCreate)
+  const { user, account } = await createUserAccountAndChannelAndPlaylist(userToCreate)
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
@@ -205,7 +205,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
-  const { user } = await createUserAccountAndChannel(userToCreate)
+  const { user } = await createUserAccountAndChannelAndPlaylist(userToCreate)
 
   auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account registered.', body.username)

@@ -33,6 +33,7 @@ import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { UserModel } from '../../models/account/user'
 import { JobQueue } from '../../lib/job-queue'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
@@ -85,6 +86,7 @@ videoChannelRouter.get('/:nameWithHost/video-playlists',
   videoPlaylistsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
   asyncMiddleware(listVideoChannelPlaylists)
 )
 
@@ -197,6 +199,8 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
 
   await sequelizeTypescript.transaction(async t => {
+    await VideoPlaylistModel.resetPlaylistsOfChannel(videoChannelInstance.id, t)
+
     await videoChannelInstance.destroy({ transaction: t })
 
     auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
@@ -225,7 +229,8 @@ async function listVideoChannelPlaylists (req: express.Request, res: express.Res
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    videoChannelId: res.locals.videoChannel.id
+    videoChannelId: res.locals.videoChannel.id,
+    type: req.query.playlistType
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
