@@ -27,7 +27,7 @@ function getVideoCacheFileActivityPubUrl (videoFile: VideoFileModel) {
 }
 
 function getVideoCacheStreamingPlaylistActivityPubUrl (video: VideoModel, playlist: VideoStreamingPlaylistModel) {
-  return `${CONFIG.WEBSERVER.URL}/redundancy/video-playlists/${playlist.getStringType()}/${video.uuid}`
+  return `${CONFIG.WEBSERVER.URL}/redundancy/streaming-playlists/${playlist.getStringType()}/${video.uuid}`
 }
 
 function getVideoCommentActivityPubUrl (video: VideoModel, videoComment: VideoCommentModel) {

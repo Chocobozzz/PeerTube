@@ -53,7 +53,7 @@ import {
   API_VERSION,
   CONFIG,
   CONSTRAINTS_FIELDS,
-  HLS_PLAYLIST_DIRECTORY,
+  HLS_STREAMING_PLAYLIST_DIRECTORY,
   HLS_REDUNDANCY_DIRECTORY,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
@@ -1751,7 +1751,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   removeStreamingPlaylist (isRedundancy = false) {
-    const baseDir = isRedundancy ? HLS_REDUNDANCY_DIRECTORY : HLS_PLAYLIST_DIRECTORY
+    const baseDir = isRedundancy ? HLS_REDUNDANCY_DIRECTORY : HLS_STREAMING_PLAYLIST_DIRECTORY
 
     const filePath = join(baseDir, this.uuid)
     return remove(filePath)

@@ -1,4 +1,4 @@
-import { CONFIG, HLS_PLAYLIST_DIRECTORY } from '../initializers'
+import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY } from '../initializers'
 import { extname, join } from 'path'
 import { getVideoFileFPS, getVideoFileResolution, transcode } from '../helpers/ffmpeg-utils'
 import { copy, ensureDir, move, remove, stat } from 'fs-extra'
@@ -89,8 +89,8 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
 }
 
 async function generateHlsPlaylist (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
-  const baseHlsDirectory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
-  await ensureDir(join(HLS_PLAYLIST_DIRECTORY, video.uuid))
+  const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
+  await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
 
   const videoInputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(video.getOriginalFile()))
   const outputPath = join(baseHlsDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))

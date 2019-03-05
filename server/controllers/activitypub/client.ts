@@ -124,7 +124,7 @@ activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:f
   executeIfActivityPub(asyncMiddleware(videoFileRedundancyGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoRedundancyController))
 )
-activityPubClientRouter.get('/redundancy/video-playlists/:streamingPlaylistType/:videoId',
+activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistType/:videoId',
   executeIfActivityPub(asyncMiddleware(videoPlaylistRedundancyGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoRedundancyController))
 )

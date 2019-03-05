@@ -196,7 +196,7 @@ const CONFIG = {
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
     LOG_DIR: buildPath(config.get<string>('storage.logs')),
     VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
-    PLAYLISTS_DIR: buildPath(config.get<string>('storage.playlists')),
+    STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),
     REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
@@ -625,8 +625,8 @@ const STATIC_PATHS = {
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',
-  PLAYLISTS: {
-    HLS: '/static/playlists/hls'
+  STREAMING_PLAYLISTS: {
+    HLS: '/static/streaming-playlists/hls'
   },
   AVATARS: '/static/avatars/',
   VIDEO_CAPTIONS: '/static/video-captions/'
@@ -670,7 +670,7 @@ const CACHE = {
   }
 }
 
-const HLS_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.PLAYLISTS_DIR, 'hls')
+const HLS_STREAMING_PLAYLIST_DIRECTORY = join(CONFIG.STORAGE.STREAMING_PLAYLISTS_DIR, 'hls')
 const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
 const MEMOIZE_TTL = {
@@ -777,7 +777,7 @@ export {
   PRIVATE_RSA_KEY_SIZE,
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
-  HLS_PLAYLIST_DIRECTORY,
+  HLS_STREAMING_PLAYLIST_DIRECTORY,
   FEEDS,
   JOB_TTL,
   NSFW_POLICY_TYPES,

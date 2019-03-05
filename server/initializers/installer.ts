@@ -6,7 +6,7 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
-import { CACHE, CONFIG, HLS_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
+import { CACHE, CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 import { remove, ensureDir } from 'fs-extra'
 
@@ -74,7 +74,7 @@ function createDirectoriesIfNotExist () {
   }
 
   // Playlist directories
-  tasks.push(ensureDir(HLS_PLAYLIST_DIRECTORY))
+  tasks.push(ensureDir(HLS_STREAMING_PLAYLIST_DIRECTORY))
 
   return Promise.all(tasks)
 }
