@@ -24,7 +24,14 @@ import {
   isVideoPlaylistPrivacyValid
 } from '../../helpers/custom-validators/video-playlists'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS, STATIC_PATHS, THUMBNAILS_SIZE, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers'
+import {
+  CONFIG,
+  CONSTRAINTS_FIELDS,
+  STATIC_PATHS,
+  THUMBNAILS_SIZE,
+  VIDEO_PLAYLIST_PRIVACIES,
+  VIDEO_PLAYLIST_TYPES
+} from '../../initializers'
 import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
@@ -34,22 +41,25 @@ import { PlaylistObject } from '../../../shared/models/activitypub/objects/playl
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
+import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
-  WITH_ACCOUNT_AND_CHANNEL = 'WITH_ACCOUNT_AND_CHANNEL'
+  WITH_ACCOUNT_AND_CHANNEL_SUMMARY = 'WITH_ACCOUNT_AND_CHANNEL_SUMMARY',
+  WITH_ACCOUNT = 'WITH_ACCOUNT'
 }
 
 type AvailableForListOptions = {
   followerActorId: number
-  accountId?: number,
+  type?: VideoPlaylistType
+  accountId?: number
   videoChannelId?: number
   privateAndUnlisted?: boolean
 }
 
 @Scopes({
-  [ScopeNames.WITH_VIDEOS_LENGTH]: {
+  [ ScopeNames.WITH_VIDEOS_LENGTH ]: {
     attributes: {
       include: [
         [
@@ -59,7 +69,15 @@ type AvailableForListOptions = {
       ]
     }
   },
-  [ScopeNames.WITH_ACCOUNT_AND_CHANNEL]: {
+  [ ScopeNames.WITH_ACCOUNT ]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
+      }
+    ]
+  },
+  [ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY ]: {
     include: [
       {
         model: () => AccountModel.scope(AccountScopeNames.SUMMARY),
@@ -71,7 +89,7 @@ type AvailableForListOptions = {
       }
     ]
   },
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
+  [ ScopeNames.AVAILABLE_FOR_LIST ]: (options: AvailableForListOptions) => {
     // Only list local playlists OR playlists that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
     const actorWhere = {
@@ -104,6 +122,12 @@ type AvailableForListOptions = {
     if (options.videoChannelId) {
       whereAnd.push({
         videoChannelId: options.videoChannelId
+      })
+    }
+
+    if (options.type) {
+      whereAnd.push({
+        type: options.type
       })
     }
 
@@ -179,6 +203,11 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   @Column(DataType.UUID)
   uuid: string
 
+  @AllowNull(false)
+  @Default(VideoPlaylistType.REGULAR)
+  @Column
+  type: VideoPlaylistType
+
   @ForeignKey(() => AccountModel)
   @Column
   ownerAccountId: number
@@ -208,12 +237,9 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       name: 'videoPlaylistId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'CASCADE'
   })
   VideoPlaylistElements: VideoPlaylistElementModel[]
-
-  // Calculated field
-  videosLength?: number
 
   @BeforeDestroy
   static async removeFiles (instance: VideoPlaylistModel) {
@@ -227,6 +253,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     start: number,
     count: number,
     sort: string,
+    type?: VideoPlaylistType,
     accountId?: number,
     videoChannelId?: number,
     privateAndUnlisted?: boolean
@@ -242,6 +269,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
         method: [
           ScopeNames.AVAILABLE_FOR_LIST,
           {
+            type: options.type,
             followerActorId: options.followerActorId,
             accountId: options.accountId,
             videoChannelId: options.videoChannelId,
@@ -289,7 +317,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static load (id: number | string, transaction: Sequelize.Transaction) {
+  static loadWithAccountAndChannel (id: number | string, transaction: Sequelize.Transaction) {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -298,12 +326,37 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
 
     return VideoPlaylistModel
-      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH ])
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY, ScopeNames.WITH_VIDEOS_LENGTH ])
       .findOne(query)
+  }
+
+  static loadByUrlAndPopulateAccount (url: string) {
+    const query = {
+      where: {
+        url
+      }
+    }
+
+    return VideoPlaylistModel.scope(ScopeNames.WITH_ACCOUNT).findOne(query)
   }
 
   static getPrivacyLabel (privacy: VideoPlaylistPrivacy) {
     return VIDEO_PLAYLIST_PRIVACIES[privacy] || 'Unknown'
+  }
+
+  static getTypeLabel (type: VideoPlaylistType) {
+    return VIDEO_PLAYLIST_TYPES[type] || 'Unknown'
+  }
+
+  static resetPlaylistsOfChannel (videoChannelId: number, transaction: Sequelize.Transaction) {
+    const query = {
+      where: {
+        videoChannelId
+      },
+      transaction
+    }
+
+    return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
   }
 
   getThumbnailName () {
@@ -345,7 +398,12 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
       thumbnailPath: this.getThumbnailStaticPath(),
 
-      videosLength: this.videosLength,
+      type: {
+        id: this.type,
+        label: VideoPlaylistModel.getTypeLabel(this.type)
+      },
+
+      videosLength: this.get('videosLength'),
 
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
@@ -355,18 +413,20 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
   }
 
-  toActivityPubObject (): Promise<PlaylistObject> {
+  toActivityPubObject (page: number, t: Sequelize.Transaction): Promise<PlaylistObject> {
     const handler = (start: number, count: number) => {
-      return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count)
+      return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count, t)
     }
 
-    return activityPubCollectionPagination(this.url, handler, null)
+    return activityPubCollectionPagination(this.url, handler, page)
       .then(o => {
         return Object.assign(o, {
           type: 'Playlist' as 'Playlist',
           name: this.name,
           content: this.description,
           uuid: this.uuid,
+          published: this.createdAt.toISOString(),
+          updated: this.updatedAt.toISOString(),
           attributedTo: this.VideoChannel ? [ this.VideoChannel.Actor.url ] : [],
           icon: {
             type: 'Image' as 'Image',

@@ -1,9 +1,8 @@
 import { exists } from './misc'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers'
 import * as express from 'express'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 
 const PLAYLISTS_CONSTRAINT_FIELDS = CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS
 
@@ -19,8 +18,16 @@ function isVideoPlaylistPrivacyValid (value: number) {
   return validator.isInt(value + '') && VIDEO_PLAYLIST_PRIVACIES[ value ] !== undefined
 }
 
+function isVideoPlaylistTimestampValid (value: any) {
+  return value === null || (exists(value) && validator.isInt('' + value, { min: 0 }))
+}
+
+function isVideoPlaylistTypeValid (value: any) {
+  return exists(value) && VIDEO_PLAYLIST_TYPES[ value ] !== undefined
+}
+
 async function isVideoPlaylistExist (id: number | string, res: express.Response) {
-  const videoPlaylist = await VideoPlaylistModel.load(id, undefined)
+  const videoPlaylist = await VideoPlaylistModel.loadWithAccountAndChannel(id, undefined)
 
   if (!videoPlaylist) {
     res.status(404)
@@ -40,5 +47,7 @@ export {
   isVideoPlaylistExist,
   isVideoPlaylistNameValid,
   isVideoPlaylistDescriptionValid,
-  isVideoPlaylistPrivacyValid
+  isVideoPlaylistPrivacyValid,
+  isVideoPlaylistTimestampValid,
+  isVideoPlaylistTypeValid
 }

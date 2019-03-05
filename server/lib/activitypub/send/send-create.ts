@@ -45,7 +45,7 @@ async function sendCreateVideoPlaylist (playlist: VideoPlaylistModel, t: Transac
   const byActor = playlist.OwnerAccount.Actor
   const audience = getAudience(byActor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
 
-  const object = await playlist.toActivityPubObject()
+  const object = await playlist.toActivityPubObject(null, t)
   const createActivity = buildCreateActivity(playlist.url, byActor, object, audience)
 
   const serverActor = await getServerActor()

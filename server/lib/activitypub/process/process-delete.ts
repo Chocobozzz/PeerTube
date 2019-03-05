@@ -8,6 +8,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 
 async function processDeleteActivity (activity: ActivityDelete, byActor: ActorModel) {
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
@@ -45,6 +46,15 @@ async function processDeleteActivity (activity: ActivityDelete, byActor: ActorMo
     }
   }
 
+  {
+    const videoPlaylist = await VideoPlaylistModel.loadByUrlAndPopulateAccount(objectUrl)
+    if (videoPlaylist) {
+      if (videoPlaylist.isOwned()) throw new Error(`Remote instance cannot delete owned playlist ${videoPlaylist.url}.`)
+
+      return retryTransactionWrapper(processDeleteVideoPlaylist, byActor, videoPlaylist)
+    }
+  }
+
   return undefined
 }
 
@@ -68,6 +78,20 @@ async function processDeleteVideo (actor: ActorModel, videoToDelete: VideoModel)
   })
 
   logger.info('Remote video with uuid %s removed.', videoToDelete.uuid)
+}
+
+async function processDeleteVideoPlaylist (actor: ActorModel, playlistToDelete: VideoPlaylistModel) {
+  logger.debug('Removing remote video playlist "%s".', playlistToDelete.uuid)
+
+  await sequelizeTypescript.transaction(async t => {
+    if (playlistToDelete.OwnerAccount.Actor.id !== actor.id) {
+      throw new Error('Account ' + actor.url + ' does not own video playlist ' + playlistToDelete.url)
+    }
+
+    await playlistToDelete.destroy({ transaction: t })
+  })
+
+  logger.info('Remote video playlist with uuid %s removed.', playlistToDelete.uuid)
 }
 
 async function processDeleteAccount (accountToRemove: AccountModel) {

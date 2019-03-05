@@ -20,6 +20,7 @@ import { getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
+import * as validator from 'validator'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -32,10 +33,6 @@ import { PlaylistElementObject } from '../../../shared/models/activitypub/object
     },
     {
       fields: [ 'videoPlaylistId', 'videoId' ],
-      unique: true
-    },
-    {
-      fields: [ 'videoPlaylistId', 'position' ],
       unique: true
     },
     {
@@ -143,7 +140,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findOne(query)
   }
 
-  static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number) {
+  static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number, t?: Sequelize.Transaction) {
     const query = {
       attributes: [ 'url' ],
       offset: start,
@@ -151,7 +148,8 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
       order: getSort('position'),
       where: {
         videoPlaylistId
-      }
+      },
+      transaction: t
     }
 
     return VideoPlaylistElementModel

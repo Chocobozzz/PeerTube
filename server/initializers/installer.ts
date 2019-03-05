@@ -1,7 +1,7 @@
 import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
 import { logger } from '../helpers/logger'
-import { createApplicationActor, createUserAccountAndChannel } from '../lib/user'
+import { createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
@@ -141,7 +141,7 @@ async function createOAuthAdminIfNotExist () {
   }
   const user = new UserModel(userData)
 
-  await createUserAccountAndChannel(user, validatePassword)
+  await createUserAccountAndChannelAndPlaylist(user, validatePassword)
   logger.info('Username: ' + username)
   logger.info('User password: ' + password)
 }

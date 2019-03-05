@@ -3,6 +3,7 @@ import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '..
 
 import { UserRole } from '../../index'
 import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
+import { ServerInfo, userLogin } from '..'
 
 function createUser (
   url: string,
@@ -30,6 +31,13 @@ function createUser (
           .set('Authorization', 'Bearer ' + accessToken)
           .send(body)
           .expect(specialStatus)
+}
+
+async function generateUserAccessToken (server: ServerInfo, username: string) {
+  const password = 'my super password'
+  await createUser(server.url, server.accessToken, username, password)
+
+  return userLogin(server, { username, password })
 }
 
 function registerUser (url: string, username: string, password: string, specialStatus = 204) {
@@ -300,5 +308,6 @@ export {
   resetPassword,
   updateMyAvatar,
   askSendVerifyEmail,
+  generateUserAccessToken,
   verifyEmail
 }

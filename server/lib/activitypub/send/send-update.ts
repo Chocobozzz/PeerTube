@@ -52,7 +52,7 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
   let actorsInvolved: ActorModel[]
   if (accountOrChannel instanceof AccountModel) {
     // Actors that shared my videos are involved too
-    actorsInvolved = await VideoShareModel.loadActorsByVideoOwner(byActor.id, t)
+    actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, t)
   } else {
     // Actors that shared videos of my channel are involved too
     actorsInvolved = await VideoShareModel.loadActorsByVideoChannel(accountOrChannel.id, t)
@@ -87,7 +87,7 @@ async function sendUpdateVideoPlaylist (videoPlaylist: VideoPlaylistModel, t: Tr
 
   const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
 
-  const object = await videoPlaylist.toActivityPubObject()
+  const object = await videoPlaylist.toActivityPubObject(null, t)
   const audience = getAudience(byActor, videoPlaylist.privacy === VideoPlaylistPrivacy.PUBLIC)
 
   const updateActivity = buildUpdateActivity(url, byActor, object, audience)

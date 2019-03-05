@@ -11,6 +11,7 @@ import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
 import * as bytes from 'bytes'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -522,6 +523,11 @@ const VIDEO_PLAYLIST_PRIVACIES = {
   [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
+const VIDEO_PLAYLIST_TYPES = {
+  [VideoPlaylistType.REGULAR]: 'Regular',
+  [VideoPlaylistType.WATCH_LATER]: 'Watch later'
+}
+
 const MIMETYPES = {
   VIDEO: {
     MIMETYPE_EXT: buildVideoMimetypeExt(),
@@ -778,6 +784,7 @@ export {
   STATIC_MAX_AGE,
   STATIC_PATHS,
   VIDEO_IMPORT_TIMEOUT,
+  VIDEO_PLAYLIST_TYPES,
   ACTIVITY_PUB,
   ACTIVITY_PUB_ACTOR_TYPES,
   THUMBNAILS_SIZE,

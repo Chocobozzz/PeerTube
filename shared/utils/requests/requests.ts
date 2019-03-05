@@ -77,6 +77,8 @@ function makeUploadRequest (options: {
   Object.keys(options.fields).forEach(field => {
     const value = options.fields[field]
 
+    if (value === undefined) return
+
     if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
         req.field(field + '[' + i + ']', value[i])

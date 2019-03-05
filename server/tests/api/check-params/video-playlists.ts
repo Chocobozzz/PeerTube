@@ -2,20 +2,24 @@
 
 import 'mocha'
 import {
-  createUser,
+  addVideoInPlaylist,
   createVideoPlaylist,
   deleteVideoPlaylist,
   flushTests,
+  generateUserAccessToken,
+  getAccountPlaylistsListWithToken,
   getVideoPlaylist,
   immutableAssign,
   killallServers,
   makeGetRequest,
+  removeVideoFromPlaylist,
+  reorderVideosPlaylist,
   runServer,
   ServerInfo,
   setAccessTokensToServers,
   updateVideoPlaylist,
-  userLogin,
-  addVideoInPlaylist, uploadVideo, updateVideoPlaylistElement, removeVideoFromPlaylist, reorderVideosPlaylist
+  updateVideoPlaylistElement,
+  uploadVideoAndGetId
 } from '../../../../shared/utils'
 import {
   checkBadCountPagination,
@@ -23,11 +27,13 @@ import {
   checkBadStartPagination
 } from '../../../../shared/utils/requests/check-api-params'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 
 describe('Test video playlists API validator', function () {
   let server: ServerInfo
-  let userAccessToken = ''
+  let userAccessToken: string
   let playlistUUID: string
+  let watchLaterPlaylistId: number
   let videoId: number
   let videoId2: number
 
@@ -42,19 +48,13 @@ describe('Test video playlists API validator', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const username = 'user1'
-    const password = 'my super password'
-    await createUser(server.url, server.accessToken, username, password)
-    userAccessToken = await userLogin(server, { username, password })
+    userAccessToken = await generateUserAccessToken(server, 'user1')
+    videoId = (await uploadVideoAndGetId({ server, videoName: 'video 1' })).id
+    videoId2 = (await uploadVideoAndGetId({ server, videoName: 'video 2' })).id
 
     {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'video 1' })
-      videoId = res.body.video.id
-    }
-
-    {
-      const res = await uploadVideo(server.url, server.accessToken, { name: 'video 2' })
-      videoId2 = res.body.video.id
+      const res = await getAccountPlaylistsListWithToken(server.url, server.accessToken, 'root',0, 5, VideoPlaylistType.WATCH_LATER)
+      watchLaterPlaylistId = res.body.data[0].id
     }
 
     {
@@ -91,6 +91,12 @@ describe('Test video playlists API validator', function () {
       await checkBadSortPagination(server.url, globalPath, server.accessToken)
       await checkBadSortPagination(server.url, accountPath, server.accessToken)
       await checkBadSortPagination(server.url, videoChannelPath, server.accessToken)
+    })
+
+    it('Should fail with a bad playlist type', async function () {
+      await makeGetRequest({ url: server.url, path: globalPath, query: { playlistType: 3 } })
+      await makeGetRequest({ url: server.url, path: accountPath, query: { playlistType: 3 } })
+      await makeGetRequest({ url: server.url, path: videoChannelPath, query: { playlistType: 3 } })
     })
 
     it('Should fail with a bad account parameter', async function () {
@@ -158,410 +164,250 @@ describe('Test video playlists API validator', function () {
   })
 
   describe('When creating/updating a video playlist', function () {
-
-    it('Should fail with an unauthenticated user', async function () {
-      const baseParams = {
-        url: server.url,
-        token: null,
-        playlistAttrs: {
-          displayName: 'super playlist',
-          privacy: VideoPlaylistPrivacy.PUBLIC
-        },
-        expectedStatus: 401
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail without displayName', async function () {
-      const baseParams = {
+    const getBase = (playlistAttrs: any = {}, wrapper: any = {}) => {
+      return Object.assign({
+        expectedStatus: 400,
         url: server.url,
         token: server.accessToken,
-        playlistAttrs: {
-          privacy: VideoPlaylistPrivacy.PUBLIC
-        } as any,
-        expectedStatus: 400
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail with an incorrect display name', async function () {
-      const baseParams = {
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
-          displayName: 's'.repeat(300),
-          privacy: VideoPlaylistPrivacy.PUBLIC
-        },
-        expectedStatus: 400
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail with an incorrect description', async function () {
-      const baseParams = {
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: VideoPlaylistPrivacy.PUBLIC,
-          description: 't'
-        },
-        expectedStatus: 400
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail with an incorrect privacy', async function () {
-      const baseParams = {
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: 45
-        } as any,
-        expectedStatus: 400
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail with an unknown video channel id', async function () {
-      const baseParams = {
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: 42
-        },
-        expectedStatus: 404
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail with an incorrect thumbnail file', async function () {
-      const baseParams = {
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: VideoPlaylistPrivacy.PUBLIC,
-          thumbnailfile: 'avatar.png'
-        },
-        expectedStatus: 400
-      }
-
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
-    })
-
-    it('Should fail with an unknown playlist to update', async function () {
-      await updateVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: 42,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: VideoPlaylistPrivacy.PUBLIC
-        },
-        expectedStatus: 404
-      })
-    })
-
-    it('Should fail to update a playlist of another user', async function () {
-      await updateVideoPlaylist({
-        url: server.url,
-        token: userAccessToken,
-        playlistId: playlistUUID,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: VideoPlaylistPrivacy.PUBLIC
-        },
-        expectedStatus: 403
-      })
-    })
-
-    it('Should fail to update to private a public/unlisted playlist', async function () {
-      const res = await createVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
-          displayName: 'super playlist',
-          privacy: VideoPlaylistPrivacy.PUBLIC
-        }
-      })
-      const playlist = res.body.videoPlaylist
-
-      await updateVideoPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlist.id,
-        playlistAttrs: {
-          displayName: 'display name',
-          privacy: VideoPlaylistPrivacy.PRIVATE
-        },
-        expectedStatus: 409
-      })
-    })
-
-    it('Should succeed with the correct params', async function () {
-      const baseParams = {
-        url: server.url,
-        token: server.accessToken,
-        playlistAttrs: {
+        playlistAttrs: Object.assign({
           displayName: 'display name',
           privacy: VideoPlaylistPrivacy.UNLISTED,
           thumbnailfile: 'thumbnail.jpg'
-        }
+        }, playlistAttrs)
+      }, wrapper)
+    }
+    const getUpdate = (params: any, playlistId: number | string) => {
+      return immutableAssign(params, { playlistId: playlistId })
+    }
+
+    it('Should fail with an unauthenticated user', async function () {
+      const params = getBase({}, { token: null, expectedStatus: 401 })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail without displayName', async function () {
+      const params = getBase({ displayName: undefined })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with an incorrect display name', async function () {
+      const params = getBase({ displayName: 's'.repeat(300) })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with an incorrect description', async function () {
+      const params = getBase({ description: 't' })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with an incorrect privacy', async function () {
+      const params = getBase({ privacy: 45 })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with an unknown video channel id', async function () {
+      const params = getBase({ videoChannelId: 42 }, { expectedStatus: 404 })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with an incorrect thumbnail file', async function () {
+      const params = getBase({ thumbnailfile: 'avatar.png' })
+
+      await createVideoPlaylist(params)
+      await updateVideoPlaylist(getUpdate(params, playlistUUID))
+    })
+
+    it('Should fail with an unknown playlist to update', async function () {
+      await updateVideoPlaylist(getUpdate(
+        getBase({}, { expectedStatus: 404 }),
+        42
+      ))
+    })
+
+    it('Should fail to update a playlist of another user', async function () {
+      await updateVideoPlaylist(getUpdate(
+        getBase({}, { token: userAccessToken, expectedStatus: 403 }),
+        playlistUUID
+      ))
+    })
+
+    it('Should fail to update to private a public/unlisted playlist', async function () {
+      const params = getBase({ privacy: VideoPlaylistPrivacy.PUBLIC }, { expectedStatus: 200 })
+
+      const res = await createVideoPlaylist(params)
+      const playlist = res.body.videoPlaylist
+
+      const paramsUpdate = getBase({ privacy: VideoPlaylistPrivacy.PRIVATE }, { expectedStatus: 409 })
+
+      await updateVideoPlaylist(getUpdate(paramsUpdate, playlist.id))
+    })
+
+    it('Should fail to update the watch later playlist', async function () {
+      await updateVideoPlaylist(getUpdate(
+        getBase({}, { expectedStatus: 409 }),
+        watchLaterPlaylistId
+      ))
+    })
+
+    it('Should succeed with the correct params', async function () {
+      {
+        const params = getBase({}, { expectedStatus: 200 })
+        await createVideoPlaylist(params)
       }
 
-      await createVideoPlaylist(baseParams)
-      await updateVideoPlaylist(immutableAssign(baseParams, { playlistId: playlistUUID }))
+      {
+        const params = getBase({}, { expectedStatus: 204 })
+        await updateVideoPlaylist(getUpdate(params, playlistUUID))
+      }
     })
   })
 
   describe('When adding an element in a playlist', function () {
-    it('Should fail with an unauthenticated user', async function () {
-      await addVideoInPlaylist({
+    const getBase = (elementAttrs: any = {}, wrapper: any = {}) => {
+      return Object.assign({
+        expectedStatus: 400,
         url: server.url,
-        token: null,
-        elementAttrs: {
-          videoId: videoId
-        },
+        token: server.accessToken,
         playlistId: playlistUUID,
-        expectedStatus: 401
-      })
+        elementAttrs: Object.assign({
+          videoId: videoId,
+          startTimestamp: 2,
+          stopTimestamp: 3
+        }, elementAttrs)
+      }, wrapper)
+    }
+
+    it('Should fail with an unauthenticated user', async function () {
+      const params = getBase({}, { token: null, expectedStatus: 401 })
+      await addVideoInPlaylist(params)
     })
 
     it('Should fail with the playlist of another user', async function () {
-      await addVideoInPlaylist({
-        url: server.url,
-        token: userAccessToken,
-        elementAttrs: {
-          videoId: videoId
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 403
-      })
+      const params = getBase({}, { token: userAccessToken, expectedStatus: 403 })
+      await addVideoInPlaylist(params)
     })
 
     it('Should fail with an unknown or incorrect playlist id', async function () {
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: videoId
-        },
-        playlistId: 'toto',
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({}, { playlistId: 'toto' })
+        await addVideoInPlaylist(params)
+      }
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: videoId
-        },
-        playlistId: 42,
-        expectedStatus: 404
-      })
+      {
+        const params = getBase({}, { playlistId: 42, expectedStatus: 404 })
+        await addVideoInPlaylist(params)
+      }
     })
 
     it('Should fail with an unknown or incorrect video id', async function () {
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: 'toto' as any
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
-
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: 42
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 404
-      })
+      const params = getBase({ videoId: 42 }, { expectedStatus: 404 })
+      await addVideoInPlaylist(params)
     })
 
     it('Should fail with a bad start/stop timestamp', async function () {
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: videoId,
-          startTimestamp: -42
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({ startTimestamp: -42 })
+        await addVideoInPlaylist(params)
+      }
 
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: videoId,
-          stopTimestamp: 'toto' as any
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({ stopTimestamp: 'toto' as any })
+        await addVideoInPlaylist(params)
+      }
     })
 
     it('Succeed with the correct params', async function () {
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: videoId,
-          stopTimestamp: 3
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 200
-      })
+      const params = getBase({}, { expectedStatus: 200 })
+      await addVideoInPlaylist(params)
     })
 
     it('Should fail if the video was already added in the playlist', async function () {
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          videoId: videoId,
-          stopTimestamp: 3
-        },
-        playlistId: playlistUUID,
-        expectedStatus: 409
-      })
+      const params = getBase({}, { expectedStatus: 409 })
+      await addVideoInPlaylist(params)
     })
   })
 
   describe('When updating an element in a playlist', function () {
-    it('Should fail with an unauthenticated user', async function () {
-      await updateVideoPlaylistElement({
+    const getBase = (elementAttrs: any = {}, wrapper: any = {}) => {
+      return Object.assign({
         url: server.url,
-        token: null,
-        elementAttrs: { },
+        token: server.accessToken,
+        elementAttrs: Object.assign({
+          startTimestamp: 1,
+          stopTimestamp: 2
+        }, elementAttrs),
         videoId: videoId,
         playlistId: playlistUUID,
-        expectedStatus: 401
-      })
+        expectedStatus: 400
+      }, wrapper)
+    }
+
+    it('Should fail with an unauthenticated user', async function () {
+      const params = getBase({}, { token: null, expectedStatus: 401 })
+      await updateVideoPlaylistElement(params)
     })
 
     it('Should fail with the playlist of another user', async function () {
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: userAccessToken,
-        elementAttrs: { },
-        videoId: videoId,
-        playlistId: playlistUUID,
-        expectedStatus: 403
-      })
+      const params = getBase({}, { token: userAccessToken, expectedStatus: 403 })
+      await updateVideoPlaylistElement(params)
     })
 
     it('Should fail with an unknown or incorrect playlist id', async function () {
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: { },
-        videoId: videoId,
-        playlistId: 'toto',
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({}, { playlistId: 'toto' })
+        await updateVideoPlaylistElement(params)
+      }
 
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: { },
-        videoId: videoId,
-        playlistId: 42,
-        expectedStatus: 404
-      })
+      {
+        const params = getBase({}, { playlistId: 42, expectedStatus: 404 })
+        await updateVideoPlaylistElement(params)
+      }
     })
 
     it('Should fail with an unknown or incorrect video id', async function () {
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: { },
-        videoId: 'toto',
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({}, { videoId: 'toto' })
+        await updateVideoPlaylistElement(params)
+      }
 
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: { },
-        videoId: 42,
-        playlistId: playlistUUID,
-        expectedStatus: 404
-      })
+      {
+        const params = getBase({}, { videoId: 42, expectedStatus: 404 })
+        await updateVideoPlaylistElement(params)
+      }
     })
 
     it('Should fail with a bad start/stop timestamp', async function () {
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          startTimestamp: 'toto' as any
-        },
-        videoId: videoId,
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({ startTimestamp: 'toto' as any })
+        await updateVideoPlaylistElement(params)
+      }
 
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          stopTimestamp: -42
-        },
-        videoId: videoId,
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
+      {
+        const params = getBase({ stopTimestamp: -42 })
+        await updateVideoPlaylistElement(params)
+      }
     })
 
     it('Should fail with an unknown element', async function () {
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          stopTimestamp: 2
-        },
-        videoId: videoId2,
-        playlistId: playlistUUID,
-        expectedStatus: 404
-      })
+      const params = getBase({}, { videoId: videoId2, expectedStatus: 404 })
+      await updateVideoPlaylistElement(params)
     })
 
     it('Succeed with the correct params', async function () {
-      await updateVideoPlaylistElement({
-        url: server.url,
-        token: server.accessToken,
-        elementAttrs: {
-          stopTimestamp: 2
-        },
-        videoId: videoId,
-        playlistId: playlistUUID,
-        expectedStatus: 204
-      })
+      const params = getBase({}, { expectedStatus: 204 })
+      await updateVideoPlaylistElement(params)
     })
   })
 
@@ -569,280 +415,166 @@ describe('Test video playlists API validator', function () {
     let videoId3: number
     let videoId4: number
 
-    before(async function () {
-      {
-        const res = await uploadVideo(server.url, server.accessToken, { name: 'video 3' })
-        videoId3 = res.body.video.id
-      }
-
-      {
-        const res = await uploadVideo(server.url, server.accessToken, { name: 'video 4' })
-        videoId4 = res.body.video.id
-      }
-
-      await addVideoInPlaylist({
+    const getBase = (elementAttrs: any = {}, wrapper: any = {}) => {
+      return Object.assign({
         url: server.url,
         token: server.accessToken,
         playlistId: playlistUUID,
-        elementAttrs: { videoId: videoId3 }
-      })
-
-      await addVideoInPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: { videoId: videoId4 }
-      })
-    })
-
-    it('Should fail with an unauthenticated user', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: null,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 401
-      })
-    })
-
-    it('Should fail with the playlist of another user', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: userAccessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 403
-      })
-    })
-
-    it('Should fail with an invalid playlist', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: 'toto',
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: 42,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 404
-      })
-    })
-
-    it('Should fail with an invalid start position', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: -1,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 'toto' as any,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 42,
-          insertAfterPosition: 2
-        },
-        expectedStatus: 400
-      })
-    })
-
-    it('Should fail with an invalid insert after position', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 'toto' as any
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: -2
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 42
-        },
-        expectedStatus: 400
-      })
-    })
-
-    it('Should fail with an invalid reorder length', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2,
-          reorderLength: 'toto' as any
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2,
-          reorderLength: -1
-        },
-        expectedStatus: 400
-      })
-
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
-          startPosition: 1,
-          insertAfterPosition: 2,
-          reorderLength: 4
-        },
-        expectedStatus: 400
-      })
-    })
-
-    it('Succeed with the correct params', async function () {
-      await reorderVideosPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        playlistId: playlistUUID,
-        elementAttrs: {
+        elementAttrs: Object.assign({
           startPosition: 1,
           insertAfterPosition: 2,
           reorderLength: 3
-        },
-        expectedStatus: 204
-      })
+        }, elementAttrs),
+        expectedStatus: 400
+      }, wrapper)
+    }
+
+    before(async function () {
+      videoId3 = (await uploadVideoAndGetId({ server, videoName: 'video 3' })).id
+      videoId4 = (await uploadVideoAndGetId({ server, videoName: 'video 4' })).id
+
+      for (let id of [ videoId3, videoId4 ]) {
+        await addVideoInPlaylist({
+          url: server.url,
+          token: server.accessToken,
+          playlistId: playlistUUID,
+          elementAttrs: { videoId: id }
+        })
+      }
+    })
+
+    it('Should fail with an unauthenticated user', async function () {
+      const params = getBase({}, { token: null, expectedStatus: 401 })
+      await reorderVideosPlaylist(params)
+    })
+
+    it('Should fail with the playlist of another user', async function () {
+      const params = getBase({}, { token: userAccessToken, expectedStatus: 403 })
+      await reorderVideosPlaylist(params)
+    })
+
+    it('Should fail with an invalid playlist', async function () {
+      {
+        const params = getBase({}, { playlistId: 'toto' })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({}, {  playlistId: 42, expectedStatus: 404 })
+        await reorderVideosPlaylist(params)
+      }
+    })
+
+    it('Should fail with an invalid start position', async function () {
+      {
+        const params = getBase({ startPosition: -1 })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({ startPosition: 'toto' as any })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({ startPosition: 42 })
+        await reorderVideosPlaylist(params)
+      }
+    })
+
+    it('Should fail with an invalid insert after position', async function () {
+      {
+        const params = getBase({ insertAfterPosition: 'toto' as any })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({ insertAfterPosition: -2 })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({ insertAfterPosition: 42 })
+        await reorderVideosPlaylist(params)
+      }
+    })
+
+    it('Should fail with an invalid reorder length', async function () {
+      {
+        const params = getBase({ reorderLength: 'toto' as any })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({ reorderLength: -2 })
+        await reorderVideosPlaylist(params)
+      }
+
+      {
+        const params = getBase({ reorderLength: 42 })
+        await reorderVideosPlaylist(params)
+      }
+    })
+
+    it('Succeed with the correct params', async function () {
+      const params = getBase({}, { expectedStatus: 204 })
+      await reorderVideosPlaylist(params)
     })
   })
 
   describe('When deleting an element in a playlist', function () {
-    it('Should fail with an unauthenticated user', async function () {
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: null,
-        videoId,
-        playlistId: playlistUUID,
-        expectedStatus: 401
-      })
-    })
-
-    it('Should fail with the playlist of another user', async function () {
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: userAccessToken,
-        videoId,
-        playlistId: playlistUUID,
-        expectedStatus: 403
-      })
-    })
-
-    it('Should fail with an unknown or incorrect playlist id', async function () {
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        videoId,
-        playlistId: 'toto',
-        expectedStatus: 400
-      })
-
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        videoId,
-        playlistId: 42,
-        expectedStatus: 404
-      })
-    })
-
-    it('Should fail with an unknown or incorrect video id', async function () {
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        videoId: 'toto',
-        playlistId: playlistUUID,
-        expectedStatus: 400
-      })
-
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        videoId: 42,
-        playlistId: playlistUUID,
-        expectedStatus: 404
-      })
-    })
-
-    it('Should fail with an unknown element', async function () {
-      await removeVideoFromPlaylist({
-        url: server.url,
-        token: server.accessToken,
-        videoId: videoId2,
-        playlistId: playlistUUID,
-        expectedStatus: 404
-      })
-    })
-
-    it('Succeed with the correct params', async function () {
-      await removeVideoFromPlaylist({
+    const getBase = (wrapper: any = {}) => {
+      return Object.assign({
         url: server.url,
         token: server.accessToken,
         videoId: videoId,
         playlistId: playlistUUID,
-        expectedStatus: 204
-      })
+        expectedStatus: 400
+      }, wrapper)
+    }
+
+    it('Should fail with an unauthenticated user', async function () {
+      const params = getBase({ token: null, expectedStatus: 401 })
+      await removeVideoFromPlaylist(params)
+    })
+
+    it('Should fail with the playlist of another user', async function () {
+      const params = getBase({ token: userAccessToken, expectedStatus: 403 })
+      await removeVideoFromPlaylist(params)
+    })
+
+    it('Should fail with an unknown or incorrect playlist id', async function () {
+      {
+        const params = getBase({ playlistId: 'toto' })
+        await removeVideoFromPlaylist(params)
+      }
+
+      {
+        const params = getBase({ playlistId: 42, expectedStatus: 404 })
+        await removeVideoFromPlaylist(params)
+      }
+    })
+
+    it('Should fail with an unknown or incorrect video id', async function () {
+      {
+        const params = getBase({ videoId: 'toto' })
+        await removeVideoFromPlaylist(params)
+      }
+
+      {
+        const params = getBase({ videoId: 42, expectedStatus: 404 })
+        await removeVideoFromPlaylist(params)
+      }
+    })
+
+    it('Should fail with an unknown element', async function () {
+      const params = getBase({ videoId: videoId2, expectedStatus: 404 })
+      await removeVideoFromPlaylist(params)
+    })
+
+    it('Succeed with the correct params', async function () {
+      const params = getBase({ expectedStatus: 204 })
+      await removeVideoFromPlaylist(params)
     })
   })
 
@@ -853,6 +585,10 @@ describe('Test video playlists API validator', function () {
 
     it('Should fail with a playlist of another user', async function () {
       await deleteVideoPlaylist(server.url, userAccessToken, playlistUUID, 403)
+    })
+
+    it('Should fail with the watch later playlist', async function () {
+      await deleteVideoPlaylist(server.url, server.accessToken, watchLaterPlaylistId, 409)
     })
 
     it('Should succeed with the correct params', async function () {
