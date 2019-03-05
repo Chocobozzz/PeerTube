@@ -10,7 +10,8 @@ import {
   ForeignKey,
   HasMany,
   Is,
-  Model, Scopes,
+  Model,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -26,7 +27,6 @@ import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
 import { CONFIG } from '../../initializers'
 import { AvatarModel } from '../avatar/avatar'
-import { WhereOptions } from 'sequelize'
 import { VideoPlaylistModel } from '../video/video-playlist'
 
 export enum ScopeNames {
@@ -42,7 +42,7 @@ export enum ScopeNames {
   ]
 })
 @Scopes({
-  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions<ActorModel>) => {
+  [ ScopeNames.SUMMARY ]: (whereActor?: Sequelize.WhereOptions<ActorModel>) => {
     return {
       attributes: [ 'id', 'name' ],
       include: [
