@@ -18,6 +18,7 @@ import {
   getPlaylistVideos,
   getVideoChannelPlaylistsList,
   getVideoPlaylist,
+  getVideoPlaylistPrivacies,
   getVideoPlaylistsList,
   getVideoPlaylistWithToken,
   killallServers,
@@ -93,6 +94,15 @@ describe('Test video playlists', function () {
     nsfwVideoServer1 = (await uploadVideoAndGetId({ server: servers[ 0 ], videoName: 'NSFW video', nsfw: true })).id
 
     await waitJobs(servers)
+  })
+
+  it('Should list video playlist privacies', async function () {
+    const res = await getVideoPlaylistPrivacies(servers[0].url)
+
+    const privacies = res.body
+    expect(Object.keys(privacies)).to.have.length.at.least(3)
+
+    expect(privacies[3]).to.equal('Private')
   })
 
   it('Should list watch later playlist', async function () {

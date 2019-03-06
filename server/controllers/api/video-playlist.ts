@@ -13,7 +13,7 @@ import {
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
-import { CONFIG, MIMETYPES, sequelizeTypescript, THUMBNAILS_SIZE } from '../../initializers'
+import { CONFIG, MIMETYPES, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
@@ -45,6 +45,8 @@ import { AccountModel } from '../../models/account/account'
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
 const videoPlaylistRouter = express.Router()
+
+videoPlaylistRouter.get('/privacies', listVideoPlaylistPrivacies)
 
 videoPlaylistRouter.get('/',
   paginationValidator,
@@ -121,6 +123,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
+function listVideoPlaylistPrivacies (req: express.Request, res: express.Response) {
+  res.json(VIDEO_PLAYLIST_PRIVACIES)
+}
+
 async function listVideoPlaylists (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await VideoPlaylistModel.listForApi({
@@ -153,7 +159,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   videoPlaylist.url = getVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
 
-  if (videoPlaylistInfo.videoChannelId !== undefined) {
+  if (videoPlaylistInfo.videoChannelId) {
     const videoChannel = res.locals.videoChannel as VideoChannelModel
 
     videoPlaylist.videoChannelId = videoChannel.id
