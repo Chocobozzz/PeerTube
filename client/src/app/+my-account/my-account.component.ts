@@ -28,6 +28,10 @@ export class MyAccountComponent {
           routerLink: '/my-account/videos'
         },
         {
+          label: this.i18n('My playlists'),
+          routerLink: '/my-account/video-playlists'
+        },
+        {
           label: this.i18n('My subscriptions'),
           routerLink: '/my-account/subscriptions'
         },

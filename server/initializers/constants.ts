@@ -642,7 +642,7 @@ let STATIC_MAX_AGE = '2h'
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
   width: 223,
-  height: 112
+  height: 122
 }
 const PREVIEWS_SIZE = {
   width: 560,

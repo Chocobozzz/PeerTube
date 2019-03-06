@@ -117,9 +117,8 @@ export class Video implements VideoServerModel {
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
 
     this.scheduledUpdate = hash.scheduledUpdate
-    this.originallyPublishedAt = hash.originallyPublishedAt ?
-    new Date(hash.originallyPublishedAt.toString())
-    : null
+    this.originallyPublishedAt = hash.originallyPublishedAt ? new Date(hash.originallyPublishedAt.toString()) : null
+
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
     this.blacklisted = hash.blacklisted

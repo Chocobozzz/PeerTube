@@ -45,6 +45,7 @@ import {
   VideoChangeOwnershipValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
+  VideoPlaylistValidatorsService,
   VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
@@ -68,8 +69,11 @@ import { UserNotificationsComponent } from '@app/shared/users/user-notifications
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
-import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
 import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
+import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
+import { ImageUploadComponent } from '@app/shared/images/image-upload.component'
+import { GlobalIconComponent } from '@app/shared/images/global-icon.component'
+import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
 
 @NgModule({
   imports: [
@@ -92,8 +96,11 @@ import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
   declarations: [
     LoaderComponent,
     SmallLoaderComponent,
+
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    VideoPlaylistMiniatureComponent,
+
     FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
@@ -116,7 +123,9 @@ import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
-    GlobalIconComponent
+
+    GlobalIconComponent,
+    ImageUploadComponent
   ],
 
   exports: [
@@ -138,8 +147,11 @@ import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
 
     LoaderComponent,
     SmallLoaderComponent,
+
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    VideoPlaylistMiniatureComponent,
+
     FeedComponent,
     ButtonComponent,
     DeleteButtonComponent,
@@ -159,7 +171,9 @@ import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
+
     GlobalIconComponent,
+    ImageUploadComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -177,6 +191,7 @@ import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
     VideoService,
     AccountService,
     VideoChannelService,
+    VideoPlaylistService,
     VideoCaptionService,
     VideoImportService,
     UserSubscriptionService,
@@ -186,6 +201,7 @@ import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
     LoginValidatorsService,
     ResetPasswordValidatorsService,
     UserValidatorsService,
+    VideoPlaylistValidatorsService,
     VideoAbuseValidatorsService,
     VideoChannelValidatorsService,
     VideoCommentValidatorsService,

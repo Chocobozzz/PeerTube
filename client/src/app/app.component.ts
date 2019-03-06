@@ -74,6 +74,7 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoLanguages()
     this.serverService.loadVideoLicences()
     this.serverService.loadVideoPrivacies()
+    this.serverService.loadVideoPlaylistPrivacies()
 
     // Do not display menu on small screens
     if (this.screenService.isInSmallView()) {

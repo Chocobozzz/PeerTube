@@ -4,9 +4,11 @@
 >
   <img alt="" [attr.aria-labelledby]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 
-  <div class="video-thumbnail-overlay">{{ video.durationLabel }}</div>
+  <div class="video-thumbnail-duration-overlay">{{ video.durationLabel }}</div>
 
-  <div class="play-overlay"></div>
+  <div class="play-overlay">
+    <div class="icon"></div>
+  </div>
 
   <div class="progress-bar" *ngIf="video.userHistory?.currentTime">
     <div [ngStyle]="{ 'width.%': getProgressPercent() }"></div>

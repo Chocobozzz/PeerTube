@@ -21,6 +21,6 @@ export interface VideoPlaylist {
   createdAt: Date | string
   updatedAt: Date | string
 
-  ownerAccount?: AccountSummary
+  ownerAccount: AccountSummary
   videoChannel?: VideoChannelSummary
 }

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { GlobalIconName } from '@app/shared/icons/global-icon.component'
+import { GlobalIconName } from '@app/shared/images/global-icon.component'
 
 @Component({
   selector: 'my-button',
