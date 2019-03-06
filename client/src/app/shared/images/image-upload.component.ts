@@ -4,18 +4,18 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
 
 @Component({
-  selector: 'my-video-image',
-  styleUrls: [ './video-image.component.scss' ],
-  templateUrl: './video-image.component.html',
+  selector: 'my-image-upload',
+  styleUrls: [ './image-upload.component.scss' ],
+  templateUrl: './image-upload.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => VideoImageComponent),
+      useExisting: forwardRef(() => ImageUploadComponent),
       multi: true
     }
   ]
 })
-export class VideoImageComponent implements ControlValueAccessor {
+export class ImageUploadComponent implements ControlValueAccessor {
   @Input() inputLabel: string
   @Input() inputName: string
   @Input() previewWidth: string

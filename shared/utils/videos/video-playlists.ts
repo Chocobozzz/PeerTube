@@ -265,9 +265,21 @@ async function checkPlaylistFilesWereRemoved (
   }
 }
 
+function getVideoPlaylistPrivacies (url: string) {
+  const path = '/api/v1/video-playlists/privacies'
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: 200
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  getVideoPlaylistPrivacies,
+
   getVideoPlaylistsList,
   getVideoChannelPlaylistsList,
   getAccountPlaylistsList,

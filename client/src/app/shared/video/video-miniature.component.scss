@@ -1,5 +1,6 @@
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
 .video-miniature {
   display: inline-block;
@@ -14,26 +15,7 @@
     line-height: normal;
 
     .video-miniature-name {
-      @include ellipsis-multiline(
-        $font-size: 1rem,
-        $line-height: 1,
-        $lines-to-show: 2
-      );
-      transition: color 0.2s;
-      font-size: 16px;
-      font-weight: $font-semibold;
-      color: var(--mainForegroundColor);
-      margin-top: 5px;
-      margin-bottom: 5px;
-
-      &:hover {
-        text-decoration: none;
-      }
-
-      &.blur-filter {
-        filter: blur(3px);
-        padding-left: 4px;
-      }
+      @include miniature-name;
     }
 
     .video-miniature-created-at-views {

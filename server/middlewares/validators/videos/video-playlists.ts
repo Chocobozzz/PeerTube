@@ -344,6 +344,7 @@ function getCommonPlaylistEditAttributes () {
       .custom(isVideoPlaylistPrivacyValid).withMessage('Should have correct playlist privacy'),
     body('videoChannelId')
       .optional()
+      .customSanitizer(toValueOrNull)
       .toInt()
   ] as (ValidationChain | express.Handler)[]
 }

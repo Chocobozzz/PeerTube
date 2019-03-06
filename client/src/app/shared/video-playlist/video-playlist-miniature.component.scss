@@ -1,0 +1,34 @@
+@import '_variables';
+@import '_mixins';
+@import '_miniature';
+
+.miniature {
+  display: inline-block;
+
+  .miniature-thumbnail {
+    @include miniature-thumbnail;
+
+    .miniature-playlist-info-overlay {
+      @include static-thumbnail-overlay;
+
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: $video-thumbnail-height;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+    }
+  }
+
+  .miniature-bottom {
+    width: 200px;
+    margin-top: 2px;
+    line-height: normal;
+
+    .miniature-name {
+      @include miniature-name;
+    }
+  }
+}
