@@ -7,7 +7,16 @@ import { VideoWatchComponent } from './video-watch.component'
 
 const videoWatchRoutes: Routes = [
   {
-    path: '',
+    path: 'playlist/:uuid',
+    component: VideoWatchComponent,
+    canActivate: [ MetaGuard ]
+  },
+  {
+    path: ':uuid/comments/:commentId',
+    redirectTo: ':uuid'
+  },
+  {
+    path: ':uuid',
     component: VideoWatchComponent,
     canActivate: [ MetaGuard ]
   }

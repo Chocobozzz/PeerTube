@@ -5,10 +5,10 @@
   </a>
 </div>
 
-<div class="video-playlists">
+<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()">
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
     <div class="miniature-wrapper">
-      <my-video-playlist-miniature [playlist]="playlist"></my-video-playlist-miniature>
+      <my-video-playlist-miniature [playlist]="playlist" [toManage]="true"></my-video-playlist-miniature>
     </div>
 
     <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">

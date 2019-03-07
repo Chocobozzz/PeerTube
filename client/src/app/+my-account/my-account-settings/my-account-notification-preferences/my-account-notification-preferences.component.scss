@@ -4,7 +4,7 @@
 .custom-row {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+  border-bottom: 1px solid $separator-border-color;
 
   &:first-child {
     font-size: 16px;

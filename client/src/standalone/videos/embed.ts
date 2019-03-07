@@ -168,6 +168,7 @@ class PeerTubeEmbed {
   subtitle: string
   enableApi = false
   startTime: number | string = 0
+  stopTime: number | string
   mode: PlayerMode
   scope = 'peertube'
 
@@ -262,6 +263,7 @@ class PeerTubeEmbed {
       this.scope = this.getParamString(params, 'scope', this.scope)
       this.subtitle = this.getParamString(params, 'subtitle')
       this.startTime = this.getParamString(params, 'start')
+      this.stopTime = this.getParamString(params, 'stop')
 
       this.mode = this.getParamString(params, 'mode') === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
     } catch (err) {
@@ -306,6 +308,7 @@ class PeerTubeEmbed {
         loop: this.loop,
         captions: videoCaptions.length !== 0,
         startTime: this.startTime,
+        stopTime: this.stopTime,
         subtitle: this.subtitle,
 
         videoCaptions,

@@ -59,6 +59,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
   hotkeys: Hotkey[]
 
+  private currentTime: number
   private paramsSub: Subscription
 
   constructor (
@@ -114,10 +115,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
         .subscribe(([ video, captionsResult ]) => {
           const startTime = this.route.snapshot.queryParams.start
+          const stopTime = this.route.snapshot.queryParams.stop
           const subtitle = this.route.snapshot.queryParams.subtitle
           const playerMode = this.route.snapshot.queryParams.mode
 
-          this.onVideoFetched(video, captionsResult.data, { startTime, subtitle, playerMode })
+          this.onVideoFetched(video, captionsResult.data, { startTime, stopTime, subtitle, playerMode })
               .catch(err => this.handleError(err))
         })
     })
@@ -219,7 +221,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   showShareModal () {
     const currentTime = this.player ? this.player.currentTime() : undefined
 
-    this.videoShareModal.show(currentTime)
+    this.videoShareModal.show(this.currentTime)
   }
 
   showDownloadModal (event: Event) {
@@ -371,7 +373,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private async onVideoFetched (
     video: VideoDetails,
     videoCaptions: VideoCaption[],
-    urlOptions: { startTime?: number, subtitle?: string, playerMode?: string }
+    urlOptions: { startTime?: number, stopTime?: number, subtitle?: string, playerMode?: string }
   ) {
     this.video = video
 
@@ -379,6 +381,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.descriptionLoading = false
     this.completeDescriptionShown = false
     this.remoteServerDown = false
+    this.currentTime = undefined
 
     let startTime = urlOptions.startTime || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
     // If we are at the end of the video, reset the timer
@@ -420,6 +423,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         inactivityTimeout: 2500,
         poster: this.video.previewUrl,
         startTime,
+        stopTime: urlOptions.stopTime,
 
         theaterMode: true,
         captions: videoCaptions.length !== 0,
@@ -466,6 +470,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(mode, options)
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
+
+      this.player.on('timeupdate', () => {
+        this.currentTime = Math.floor(this.player.currentTime())
+      })
     })
 
     this.setVideoDescriptionHTML()

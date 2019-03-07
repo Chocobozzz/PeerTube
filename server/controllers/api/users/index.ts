@@ -38,6 +38,7 @@ import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../h
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
 import { myBlocklistRouter } from './my-blocklist'
+import { myVideoPlaylistsRouter } from './my-video-playlists'
 import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { Notifier } from '../../../lib/notifier'
@@ -60,6 +61,7 @@ usersRouter.use('/', myNotificationsRouter)
 usersRouter.use('/', mySubscriptionsRouter)
 usersRouter.use('/', myBlocklistRouter)
 usersRouter.use('/', myVideosHistoryRouter)
+usersRouter.use('/', myVideoPlaylistsRouter)
 usersRouter.use('/', meRouter)
 
 usersRouter.get('/autocomplete',

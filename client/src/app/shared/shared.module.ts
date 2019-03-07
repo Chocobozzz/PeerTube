@@ -9,6 +9,7 @@ import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.d
 
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
+import { KeyFilterModule } from 'primeng/keyfilter'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ButtonComponent } from './buttons/button.component'
@@ -49,6 +50,7 @@ import {
   VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
+import { InputMaskModule } from 'primeng/inputmask'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
@@ -74,6 +76,8 @@ import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.
 import { ImageUploadComponent } from '@app/shared/images/image-upload.component'
 import { GlobalIconComponent } from '@app/shared/images/global-icon.component'
 import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
+import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
+import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.component'
 
 @NgModule({
   imports: [
@@ -90,6 +94,8 @@ import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/vide
     NgbTooltipModule,
 
     PrimeSharedModule,
+    InputMaskModule,
+    KeyFilterModule,
     NgPipesModule
   ],
 
@@ -100,11 +106,14 @@ import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/vide
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     VideoPlaylistMiniatureComponent,
+    VideoAddToPlaylistComponent,
 
     FeedComponent,
+
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+
     ActionDropdownComponent,
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -113,8 +122,11 @@ import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/vide
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
+    TimestampInputComponent,
+
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
@@ -142,6 +154,8 @@ import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/vide
     NgbTooltipModule,
 
     PrimeSharedModule,
+    InputMaskModule,
+    KeyFilterModule,
     BytesPipe,
     KeysPipe,
 
@@ -151,18 +165,24 @@ import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/vide
     VideoThumbnailComponent,
     VideoMiniatureComponent,
     VideoPlaylistMiniatureComponent,
+    VideoAddToPlaylistComponent,
 
     FeedComponent,
+
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+
     ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
+    TimestampInputComponent,
+
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,

@@ -317,6 +317,29 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
                              })
   }
 
+  static listPlaylistIdsOf (accountId: number, videoIds: number[]) {
+    const query = {
+      attributes: [ 'id' ],
+      where: {
+        ownerAccountId: accountId
+      },
+      include: [
+        {
+          attributes: [ 'videoId', 'startTimestamp', 'stopTimestamp' ],
+          model: VideoPlaylistElementModel.unscoped(),
+          where: {
+            videoId: {
+              [Sequelize.Op.any]: videoIds
+            }
+          },
+          required: true
+        }
+      ]
+    }
+
+    return VideoPlaylistModel.findAll(query)
+  }
+
   static doesPlaylistExist (url: string) {
     const query = {
       attributes: [],

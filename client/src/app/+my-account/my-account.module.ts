@@ -32,6 +32,9 @@ import {
   MyAccountVideoPlaylistUpdateComponent
 } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component'
 import { MyAccountVideoPlaylistsComponent } from '@app/+my-account/my-account-video-playlists/my-account-video-playlists.component'
+import {
+  MyAccountVideoPlaylistElementsComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
 
 @NgModule({
   imports: [
@@ -68,7 +71,8 @@ import { MyAccountVideoPlaylistsComponent } from '@app/+my-account/my-account-vi
 
     MyAccountVideoPlaylistCreateComponent,
     MyAccountVideoPlaylistUpdateComponent,
-    MyAccountVideoPlaylistsComponent
+    MyAccountVideoPlaylistsComponent,
+    MyAccountVideoPlaylistElementsComponent
   ],
 
   exports: [

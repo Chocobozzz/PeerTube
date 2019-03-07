@@ -22,6 +22,9 @@ import {
 import {
   MyAccountVideoPlaylistUpdateComponent
 } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component'
+import {
+  MyAccountVideoPlaylistElementsComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -78,6 +81,15 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Account playlists'
+          }
+        }
+      },
+      {
+        path: 'video-playlists/:videoPlaylistId',
+        component: MyAccountVideoPlaylistElementsComponent,
+        data: {
+          meta: {
+            title: 'Playlist elements'
           }
         }
       },

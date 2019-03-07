@@ -22,7 +22,6 @@ import {
 
 const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
-  private readonly startTime: number = 0
   private readonly videoViewUrl: string
   private readonly videoDuration: number
   private readonly CONSTANTS = {
@@ -35,13 +34,11 @@ class PeerTubePlugin extends Plugin {
 
   private videoViewInterval: any
   private userWatchingVideoInterval: any
-  private qualityObservationTimer: any
   private lastResolutionChange: ResolutionUpdateData
 
   constructor (player: videojs.Player, options: PeerTubePluginOptions) {
     super(player, options)
 
-    this.startTime = timeToInt(options.startTime)
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
     this.videoCaptions = options.videoCaptions
@@ -84,6 +81,14 @@ class PeerTubePlugin extends Plugin {
         saveMuteInStore(this.player.muted())
       })
 
+      if (options.stopTime) {
+        const stopTime = timeToInt(options.stopTime)
+
+        this.player.on('timeupdate', () => {
+          if (this.player.currentTime() > stopTime) this.player.pause()
+        })
+      }
+
       this.player.textTracks().on('change', () => {
         const showing = this.player.textTracks().tracks_.find((t: { kind: string, mode: string }) => {
           return t.kind === 'captions' && t.mode === 'showing'
@@ -109,10 +114,7 @@ class PeerTubePlugin extends Plugin {
   }
 
   dispose () {
-    clearTimeout(this.qualityObservationTimer)
-
-    clearInterval(this.videoViewInterval)
-
+    if (this.videoViewInterval) clearInterval(this.videoViewInterval)
     if (this.userWatchingVideoInterval) clearInterval(this.userWatchingVideoInterval)
   }
 

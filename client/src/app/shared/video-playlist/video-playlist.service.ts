@@ -1,9 +1,9 @@
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { bufferTime, catchError, filter, first, map, share, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, ReplaySubject, Subject } from 'rxjs'
 import { RestExtractor } from '../rest/rest-extractor.service'
-import { HttpClient } from '@angular/common/http'
-import { ResultList } from '../../../../../shared'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { ResultList, VideoPlaylistElementCreate, VideoPlaylistElementUpdate } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { VideoPlaylist as VideoPlaylistServerModel } from '@shared/models/videos/playlist/video-playlist.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
@@ -15,16 +15,31 @@ import { ServerService } from '@app/core'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { Account } from '@app/shared/account/account.model'
+import { RestService } from '@app/shared/rest'
+import { VideoExistInPlaylist } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
 
 @Injectable()
 export class VideoPlaylistService {
   static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
+  static MY_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/users/me/video-playlists/'
+
+  // Use a replay subject because we "next" a value before subscribing
+  private videoExistsInPlaylistSubject: Subject<number> = new ReplaySubject(1)
+  private readonly videoExistsInPlaylistObservable: Observable<VideoExistInPlaylist>
 
   constructor (
     private authHttp: HttpClient,
     private serverService: ServerService,
-    private restExtractor: RestExtractor
-  ) { }
+    private restExtractor: RestExtractor,
+    private restService: RestService
+  ) {
+    this.videoExistsInPlaylistObservable = this.videoExistsInPlaylistSubject.pipe(
+      bufferTime(500),
+      filter(videoIds => videoIds.length !== 0),
+      switchMap(videoIds => this.doVideosExistInPlaylist(videoIds)),
+      share()
+    )
+  }
 
   listChannelPlaylists (videoChannel: VideoChannel): Observable<ResultList<VideoPlaylist>> {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
@@ -36,10 +51,13 @@ export class VideoPlaylistService {
                )
   }
 
-  listAccountPlaylists (account: Account): Observable<ResultList<VideoPlaylist>> {
+  listAccountPlaylists (account: Account, sort: string): Observable<ResultList<VideoPlaylist>> {
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
 
-    return this.authHttp.get<ResultList<VideoPlaylist>>(url)
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, undefined, sort)
+
+    return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
                .pipe(
                  switchMap(res => this.extractPlaylists(res)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -59,9 +77,8 @@ export class VideoPlaylistService {
   createVideoPlaylist (body: VideoPlaylistCreate) {
     const data = objectToFormData(body)
 
-    return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL, data)
+    return this.authHttp.post<{ videoPlaylist: { id: number } }>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL, data)
                .pipe(
-                 map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -84,6 +101,36 @@ export class VideoPlaylistService {
                )
   }
 
+  addVideoInPlaylist (playlistId: number, body: VideoPlaylistElementCreate) {
+    return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos', body)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  updateVideoOfPlaylist (playlistId: number, videoId: number, body: VideoPlaylistElementUpdate) {
+    return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + videoId, body)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  removeVideoFromPlaylist (playlistId: number, videoId: number) {
+    return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + videoId)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  doesVideoExistInPlaylist (videoId: number) {
+    this.videoExistsInPlaylistSubject.next(videoId)
+
+    return this.videoExistsInPlaylistObservable.pipe(first())
+  }
+
   extractPlaylists (result: ResultList<VideoPlaylistServerModel>) {
     return this.serverService.localeObservable
                .pipe(
@@ -104,5 +151,15 @@ export class VideoPlaylistService {
   extractPlaylist (playlist: VideoPlaylistServerModel) {
     return this.serverService.localeObservable
                .pipe(map(translations => new VideoPlaylist(playlist, translations)))
+  }
+
+  private doVideosExistInPlaylist (videoIds: number[]): Observable<VideoExistInPlaylist> {
+    const url = VideoPlaylistService.MY_VIDEO_PLAYLIST_URL + 'videos-exist'
+    let params = new HttpParams()
+
+    params = this.restService.addObjectParams(params, { videoIds })
+
+    return this.authHttp.get<VideoExistInPlaylist>(url, { params })
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

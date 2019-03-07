@@ -206,6 +206,9 @@
 
 # Design
 
-By [Olivier Massain](https://twitter.com/omassain)
+ * [Olivier Massain](https://twitter.com/omassain)
 
-Icons from [Robbie Pearce](https://robbiepearce.com/softies/)
+# Icons
+
+ * [Robbie Pearce](https://robbiepearce.com/softies/)
+ * playlist add by Google

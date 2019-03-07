@@ -31,6 +31,8 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
+import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 export interface VideosProvider {
   getVideos (
@@ -164,6 +166,23 @@ export class VideoService implements VideosProvider {
 
     return this.authHttp
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
+               .pipe(
+                 switchMap(res => this.extractVideos(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getPlaylistVideos (
+    videoPlaylistId: number | string,
+    videoPagination: ComponentPagination
+  ): Observable<{ videos: Video[], totalVideos: number }> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    return this.authHttp
+               .get<ResultList<Video>>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))

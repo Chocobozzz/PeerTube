@@ -1,6 +1,6 @@
-<div class="miniature">
+<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage }">
   <a
-    [routerLink]="[ '/videos/watch' ]" [attr.title]="playlist.displayName"
+    [routerLink]="getPlaylistUrl()" [attr.title]="playlist.displayName"
     class="miniature-thumbnail"
   >
     <img alt="" [attr.aria-labelledby]="playlist.displayName" [attr.src]="playlist.thumbnailUrl" />
@@ -15,7 +15,7 @@
   </a>
 
   <div class="miniature-bottom">
-    <a tabindex="-1" class="miniature-name" [routerLink]="[ '/videos/watch' ]" [attr.title]="playlist.displayName">
+    <a tabindex="-1" class="miniature-name" [routerLink]="getPlaylistUrl()" [attr.title]="playlist.displayName">
       {{ playlist.displayName }}
     </a>
   </div>

@@ -38,7 +38,7 @@ export class SubscribeButtonComponent implements OnInit {
 
   ngOnInit () {
     if (this.isUserLoggedIn()) {
-      this.userSubscriptionService.isSubscriptionExists(this.uri)
+      this.userSubscriptionService.doesSubscriptionExist(this.uri)
         .subscribe(
           res => this.subscribed = res[this.uri],
 
