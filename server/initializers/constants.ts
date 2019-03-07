@@ -56,7 +56,7 @@ const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt' ],
 
-  VIDEO_PLAYLISTS: [ 'createdAt' ]
+  VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ]
 }
 
 const OAUTH_LIFETIME = {

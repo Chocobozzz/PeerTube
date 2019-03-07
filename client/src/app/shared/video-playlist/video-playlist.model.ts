@@ -46,6 +46,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.isLocal = hash.isLocal
 
     this.displayName = hash.displayName
+
     this.description = hash.description
     this.privacy = hash.privacy
 
@@ -70,5 +71,9 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     }
 
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
+
+    if (this.type.id === VideoPlaylistType.WATCH_LATER) {
+      this.displayName = peertubeTranslate(this.displayName, translations)
+    }
   }
 }

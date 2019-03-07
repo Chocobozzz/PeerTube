@@ -6,7 +6,7 @@ import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import { LoadedQualityData, PlayerNetworkInfo, VideoJSComponentInterface, WebtorrentPluginOptions } from '../peertube-videojs-typings'
-import { getRtcConfig, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
+import { getRtcConfig, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
@@ -72,6 +72,8 @@ class WebTorrentPlugin extends Plugin {
 
   constructor (player: videojs.Player, options: WebtorrentPluginOptions) {
     super(player, options)
+
+    this.startTime = timeToInt(options.startTime)
 
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false

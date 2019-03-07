@@ -1,0 +1,16 @@
+<div class="no-results">No videos in this playlist.</div>
+
+<div class="videos" myInfiniteScroller (nearOfBottom)="onNearOfBottom()">
+  <div *ngFor="let video of videos" class="video">
+    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+
+    <div class="video-info">
+      <div class="position">{{ video.playlistElement.position }}</div>
+
+      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+
+      <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+      <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', video.byAccount ]">{{ video.byAccount }}</a>
+    </div>
+  </div>
+</div>

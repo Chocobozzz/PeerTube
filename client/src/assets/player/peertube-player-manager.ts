@@ -49,6 +49,7 @@ export type CommonOptions = {
   inactivityTimeout: number
   poster: string
   startTime: number | string
+  stopTime: number | string
 
   theaterMode: boolean
   captions: boolean
@@ -199,10 +200,10 @@ export class PeertubePlayerManager {
         autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
         videoViewUrl: commonOptions.videoViewUrl,
         videoDuration: commonOptions.videoDuration,
-        startTime: commonOptions.startTime,
         userWatching: commonOptions.userWatching,
         subtitle: commonOptions.subtitle,
-        videoCaptions: commonOptions.videoCaptions
+        videoCaptions: commonOptions.videoCaptions,
+        stopTime: commonOptions.stopTime
       }
     }
 
@@ -210,6 +211,7 @@ export class PeertubePlayerManager {
       const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
         redundancyBaseUrls: options.p2pMediaLoader.redundancyBaseUrls,
         type: 'application/x-mpegURL',
+        startTime: commonOptions.startTime,
         src: p2pMediaLoaderOptions.playlistUrl
       }
 
@@ -254,7 +256,8 @@ export class PeertubePlayerManager {
         autoplay,
         videoDuration: commonOptions.videoDuration,
         playerElement: commonOptions.playerElement,
-        videoFiles: webtorrentOptions.videoFiles
+        videoFiles: webtorrentOptions.videoFiles,
+        startTime: commonOptions.startTime
       }
       Object.assign(plugins, { webtorrent })
 

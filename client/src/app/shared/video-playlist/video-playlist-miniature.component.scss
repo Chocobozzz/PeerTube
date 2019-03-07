@@ -5,6 +5,17 @@
 .miniature {
   display: inline-block;
 
+  &.no-videos:not(.to-manage){
+    a {
+      cursor: default !important;
+    }
+  }
+
+  &.to-manage .play-overlay,
+  &.no-videos {
+    display: none;
+  }
+
   .miniature-thumbnail {
     @include miniature-thumbnail;
 

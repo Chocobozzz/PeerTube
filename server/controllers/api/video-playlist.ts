@@ -291,22 +291,25 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
       videoId: video.id
     }, { transaction: t })
 
-    // If the user did not set a thumbnail, automatically take the video thumbnail
-    if (playlistElement.position === 1) {
-      const playlistThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoPlaylist.getThumbnailName())
-
-      if (await pathExists(playlistThumbnailPath) === false) {
-        logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
-
-        const videoThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
-        await copy(videoThumbnailPath, playlistThumbnailPath)
-      }
-    }
+    videoPlaylist.updatedAt = new Date()
+    await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
     return playlistElement
   })
+
+  // If the user did not set a thumbnail, automatically take the video thumbnail
+  if (playlistElement.position === 1) {
+    const playlistThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoPlaylist.getThumbnailName())
+
+    if (await pathExists(playlistThumbnailPath) === false) {
+      logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
+
+      const videoThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
+      await copy(videoThumbnailPath, playlistThumbnailPath)
+    }
+  }
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
 
@@ -328,6 +331,9 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
 
     const element = await videoPlaylistElement.save({ transaction: t })
 
+    videoPlaylist.updatedAt = new Date()
+    await videoPlaylist.save({ transaction: t })
+
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
     return element
@@ -348,6 +354,9 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
 
     // Decrease position of the next elements
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, positionToDelete, null, -1, t)
+
+    videoPlaylist.updatedAt = new Date()
+    await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
 
@@ -389,6 +398,9 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
     // Decrease positions of elements after the old position of our ordered elements (decrease)
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, null, -reorderLength, t)
+
+    videoPlaylist.updatedAt = new Date()
+    await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
   })

@@ -49,10 +49,17 @@ function toValueOrNull (value: string) {
   return value
 }
 
-function toArray (value: string) {
+function toArray (value: any) {
   if (value && isArray(value) === false) return [ value ]
 
   return value
+}
+
+function toIntArray (value: any) {
+  if (!value) return []
+  if (isArray(value) === false) return [ validator.toInt(value) ]
+
+  return value.map(v => validator.toInt(v))
 }
 
 function isFileValid (
@@ -97,5 +104,6 @@ export {
   isBooleanValid,
   toIntOrNull,
   toArray,
+  toIntArray,
   isFileValid
 }

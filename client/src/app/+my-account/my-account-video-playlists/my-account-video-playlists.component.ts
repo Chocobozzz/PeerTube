@@ -69,17 +69,20 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
     return playlist.type.id === VideoPlaylistType.REGULAR
   }
 
-  private loadVideoPlaylists () {
-    this.authService.userInformationLoaded
-        .pipe(flatMap(() => this.videoPlaylistService.listAccountPlaylists(this.user.account)))
-        .subscribe(res => this.videoPlaylists = res.data)
-  }
-
-  private ofNearOfBottom () {
+  onNearOfBottom () {
     // Last page
     if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
 
     this.pagination.currentPage += 1
     this.loadVideoPlaylists()
+  }
+
+  private loadVideoPlaylists () {
+    this.authService.userInformationLoaded
+        .pipe(flatMap(() => this.videoPlaylistService.listAccountPlaylists(this.user.account, '-updatedAt')))
+        .subscribe(res => {
+          this.videoPlaylists = this.videoPlaylists.concat(res.data)
+          this.pagination.totalItems = res.total
+        })
   }
 }

@@ -41,12 +41,13 @@ type PeerTubePluginOptions = {
   autoplay: boolean
   videoViewUrl: string
   videoDuration: number
-  startTime: number | string
 
   userWatching?: UserWatching
   subtitle?: string
 
   videoCaptions: VideoJSCaption[]
+
+  stopTime: number | string
 }
 
 type WebtorrentPluginOptions = {
@@ -56,12 +57,16 @@ type WebtorrentPluginOptions = {
   videoDuration: number
 
   videoFiles: VideoFile[]
+
+  startTime: number | string
 }
 
 type P2PMediaLoaderPluginOptions = {
   redundancyBaseUrls: string[]
   type: string
   src: string
+
+  startTime: number | string
 }
 
 type VideoJSPluginOptions = {

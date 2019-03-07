@@ -176,7 +176,7 @@ $other-videos-width: 260px;
           display: flex;
           align-items: center;
 
-          .action-button:not(:first-child), .action-more {
+          .action-button:not(:first-child), .action-dropdown {
             margin-left: 10px;
           }
 
@@ -212,12 +212,19 @@ $other-videos-width: 260px;
               }
             }
 
+            &.action-button-save {
+              my-global-icon {
+                top: 0 !important;
+                right: -1px;
+              }
+            }
+
             .icon-text {
               margin-left: 3px;
             }
           }
 
-          .action-more {
+          .action-dropdown {
             display: inline-block;
 
             .dropdown-menu .dropdown-item {

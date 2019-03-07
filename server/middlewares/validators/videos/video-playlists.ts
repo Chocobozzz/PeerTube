@@ -4,9 +4,9 @@ import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
-import { isVideoExist, isVideoImage } from '../../../helpers/custom-validators/videos'
+import { isVideoExist, isVideoFileInfoHashValid, isVideoImage } from '../../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { isIdOrUUIDValid, isUUIDValid, toValueOrNull } from '../../../helpers/custom-validators/misc'
+import { isArrayOf, isIdOrUUIDValid, isIdValid, isUUIDValid, toArray, toValueOrNull, toIntArray } from '../../../helpers/custom-validators/misc'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistExist,
@@ -23,6 +23,7 @@ import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
+import { areValidActorHandles } from '../../../helpers/custom-validators/activitypub/actor'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -305,6 +306,20 @@ const commonVideoPlaylistFiltersValidator = [
   }
 ]
 
+const doVideosInPlaylistExistValidator = [
+  query('videoIds')
+    .customSanitizer(toIntArray)
+    .custom(v => isArrayOf(v, isIdValid)).withMessage('Should have a valid video ids array'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking areVideosInPlaylistExistValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -319,7 +334,9 @@ export {
 
   videoPlaylistElementAPGetValidator,
 
-  commonVideoPlaylistFiltersValidator
+  commonVideoPlaylistFiltersValidator,
+
+  doVideosInPlaylistExistValidator
 }
 
 // ---------------------------------------------------------------------------

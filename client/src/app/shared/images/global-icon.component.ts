@@ -25,7 +25,8 @@ const icons = {
   'like': require('../../../assets/images/video/like.html'),
   'more': require('../../../assets/images/video/more.html'),
   'share': require('../../../assets/images/video/share.html'),
-  'upload': require('../../../assets/images/video/upload.html')
+  'upload': require('../../../assets/images/video/upload.html'),
+  'playlist-add': require('../../../assets/images/video/playlist-add.html')
 }
 
 export type GlobalIconName = keyof typeof icons
