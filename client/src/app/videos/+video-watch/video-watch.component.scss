@@ -228,15 +228,7 @@ $other-videos-width: 260px;
             display: inline-block;
 
             .dropdown-menu .dropdown-item {
-              padding: 6px 24px;
-
-              my-global-icon {
-                width: 24px;
-
-                margin-right: 10px;
-                position: relative;
-                top: -2px;
-              }
+              @include dropdown-with-icon-item;
             }
           }
         }

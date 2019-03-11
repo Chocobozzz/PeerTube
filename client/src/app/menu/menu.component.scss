@@ -65,9 +65,10 @@ menu {
     .logged-in-more {
       margin-right: 20px;
 
-      .glyphicon {
+      my-global-icon {
+        @include apply-svg-color(var(--mainBackgroundColor));
+
         cursor: pointer;
-        font-size: 18px;
 
         &::after {
           border: none;

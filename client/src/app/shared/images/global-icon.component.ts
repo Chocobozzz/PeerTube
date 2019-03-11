@@ -23,7 +23,8 @@ const icons = {
   'dislike': require('../../../assets/images/video/dislike.html'),
   'heart': require('../../../assets/images/video/heart.html'),
   'like': require('../../../assets/images/video/like.html'),
-  'more': require('../../../assets/images/video/more.html'),
+  'more-horizontal': require('../../../assets/images/global/more-horizontal.html'),
+  'more-vertical': require('../../../assets/images/global/more-vertical.html'),
   'share': require('../../../assets/images/video/share.html'),
   'upload': require('../../../assets/images/video/upload.html'),
   'playlist-add': require('../../../assets/images/video/playlist-add.html')
