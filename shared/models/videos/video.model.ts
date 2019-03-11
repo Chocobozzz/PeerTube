@@ -18,6 +18,12 @@ export interface VideoFile {
   fps: number
 }
 
+export interface PlaylistElement {
+  position: number
+  startTimestamp: number
+  stopTimestamp: number
+}
+
 export interface Video {
   id: number
   uuid: string
@@ -55,11 +61,7 @@ export interface Video {
     currentTime: number
   }
 
-  playlistElement?: {
-    position: number
-    startTimestamp: number
-    stopTimestamp: number
-  }
+  playlistElement?: PlaylistElement
 }
 
 export interface VideoDetails extends Video {

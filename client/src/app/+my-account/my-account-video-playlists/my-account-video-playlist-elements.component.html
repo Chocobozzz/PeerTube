@@ -1,16 +1,61 @@
-<div class="no-results">No videos in this playlist.</div>
+<div i18n class="no-results" *ngIf="pagination.totalItems === 0">No videos in this playlist.</div>
 
 <div class="videos" myInfiniteScroller (nearOfBottom)="onNearOfBottom()">
   <div *ngFor="let video of videos" class="video">
-    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+    <div class="position">{{ video.playlistElement.position }}</div>
+
+    <my-video-thumbnail [video]="video" [nsfw]="isVideoBlur(video)"></my-video-thumbnail>
 
     <div class="video-info">
-      <div class="position">{{ video.playlistElement.position }}</div>
-
-      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-
       <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
       <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', video.byAccount ]">{{ video.byAccount }}</a>
+      <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(video)}}</span>
+    </div>
+
+    <div class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="bottom-right" (openChange)="onDropdownOpenChange()" autoClose="outside">
+      <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button" class="icon-more"></my-global-icon>
+
+      <div ngbDropdownMenu>
+        <div class="dropdown-item" (click)="toggleDisplayTimestampsOptions($event, video)">
+          <my-global-icon iconName="edit"></my-global-icon> <ng-container i18n>Edit starts/stops at</ng-container>
+        </div>
+
+        <div class="timestamp-options" *ngIf="displayTimestampOptions">
+          <div>
+            <my-peertube-checkbox
+              inputName="startAt" [(ngModel)]="timestampOptions.startTimestampEnabled"
+              i18n-labelText labelText="Start at"
+            ></my-peertube-checkbox>
+
+            <my-timestamp-input
+              [timestamp]="timestampOptions.startTimestamp"
+              [maxTimestamp]="video.duration"
+              [disabled]="!timestampOptions.startTimestampEnabled"
+              [(ngModel)]="timestampOptions.startTimestamp"
+            ></my-timestamp-input>
+          </div>
+
+          <div>
+            <my-peertube-checkbox
+              inputName="stopAt" [(ngModel)]="timestampOptions.stopTimestampEnabled"
+              i18n-labelText labelText="Stop at"
+            ></my-peertube-checkbox>
+
+            <my-timestamp-input
+              [timestamp]="timestampOptions.stopTimestamp"
+              [maxTimestamp]="video.duration"
+              [disabled]="!timestampOptions.stopTimestampEnabled"
+              [(ngModel)]="timestampOptions.stopTimestamp"
+            ></my-timestamp-input>
+          </div>
+
+          <input type="submit" i18n-value value="Save" (click)="updateTimestamps(video)">
+        </div>
+
+        <span class="dropdown-item" (click)="removeFromPlaylist(video)">
+          <my-global-icon iconName="delete"></my-global-icon> <ng-container i18n>Delete from {{playlist?.displayName}}</ng-container>
+        </span>
+      </div>
     </div>
   </div>
 </div>

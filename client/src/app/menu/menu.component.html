@@ -10,7 +10,7 @@
         </div>
 
         <div class="logged-in-more" ngbDropdown placement="bottom-right">
-          <span class="glyphicon glyphicon-option-vertical" ngbDropdownToggle role="button"></span>
+          <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
 
           <div ngbDropdownMenu>
             <a *ngIf="user.account" i18n [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="dropdown-item">

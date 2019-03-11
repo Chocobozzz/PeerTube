@@ -62,11 +62,9 @@ p-table {
     tr {
       &:hover {
         background-color: var(--submenuColor) !important;
-      }
 
-      &:not(:hover) {
-        .action-cell * {
-          display: none !important;
+        .action-cell .dropdown-root {
+          display: block !important;
         }
       }
 
@@ -139,6 +137,14 @@ p-table {
     width: 250px !important;
     padding: 0 !important;
     text-align: center;
+
+    .dropdown-root {
+      display: none !important;
+
+      &.show {
+        display: block !important;
+      }
+    }
 
     my-edit-button + my-delete-button {
       margin-left: 5px;

@@ -18,6 +18,8 @@
     }
 
     .options {
+      display: flex;
+      align-items: center;
       font-size: 14px;
       cursor: pointer;
 
@@ -25,7 +27,8 @@
         @include apply-svg-color(#333);
 
         width: 16px;
-        height: 16px;
+        height: 23px;
+        margin-right: 3px;
       }
     }
   }
