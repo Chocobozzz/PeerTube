@@ -35,6 +35,7 @@ import { MyAccountVideoPlaylistsComponent } from '@app/+my-account/my-account-vi
 import {
   MyAccountVideoPlaylistElementsComponent
 } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import {
     AutoCompleteModule,
     SharedModule,
     TableModule,
-    InputSwitchModule
+    InputSwitchModule,
+    DragDropModule
   ],
 
   declarations: [

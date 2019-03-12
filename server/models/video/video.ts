@@ -240,7 +240,10 @@ type AvailableForListIDsOptions = {
     if (options.videoPlaylistId) {
       query.include.push({
         model: VideoPlaylistElementModel.unscoped(),
-        required: true
+        required: true,
+        where: {
+          videoPlaylistId: options.videoPlaylistId
+        }
       })
     }
 
@@ -304,6 +307,8 @@ type AvailableForListIDsOptions = {
           videoPlaylistId: options.videoPlaylistId
         }
       })
+
+      query.subQuery = false
     }
 
     if (options.filter || options.accountId || options.videoChannelId) {
