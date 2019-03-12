@@ -17,6 +17,7 @@ import { AccountService } from '@app/shared/account/account.service'
 import { Account } from '@app/shared/account/account.model'
 import { RestService } from '@app/shared/rest'
 import { VideoExistInPlaylist } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
+import { VideoPlaylistReorder } from '@shared/models/videos/playlist/video-playlist-reorder.model'
 
 @Injectable()
 export class VideoPlaylistService {
@@ -119,6 +120,19 @@ export class VideoPlaylistService {
 
   removeVideoFromPlaylist (playlistId: number, videoId: number) {
     return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + videoId)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  reorderPlaylist (playlistId: number, oldPosition: number, newPosition: number) {
+    const body: VideoPlaylistReorder = {
+      startPosition: oldPosition,
+      insertAfterPosition: newPosition
+    }
+
+    return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/reorder', body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))

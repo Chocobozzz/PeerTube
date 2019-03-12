@@ -9,7 +9,6 @@ import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.d
 
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
-import { KeyFilterModule } from 'primeng/keyfilter'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ButtonComponent } from './buttons/button.component'
@@ -95,7 +94,6 @@ import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.compo
 
     PrimeSharedModule,
     InputMaskModule,
-    KeyFilterModule,
     NgPipesModule
   ],
 
@@ -155,7 +153,6 @@ import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.compo
 
     PrimeSharedModule,
     InputMaskModule,
-    KeyFilterModule,
     BytesPipe,
     KeysPipe,
 

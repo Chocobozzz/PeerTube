@@ -41,6 +41,7 @@ import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playli
 import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
 import { copy, pathExists } from 'fs-extra'
 import { AccountModel } from '../../models/account/account'
+import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -368,10 +369,11 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
 
 async function reorderVideosPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+  const body: VideoPlaylistReorder = req.body
 
-  const start: number = req.body.startPosition
-  const insertAfter: number = req.body.insertAfterPosition
-  const reorderLength: number = req.body.reorderLength || 1
+  const start: number = body.startPosition
+  const insertAfter: number = body.insertAfterPosition
+  const reorderLength: number = body.reorderLength || 1
 
   if (start === insertAfter) {
     return res.status(204).end()
