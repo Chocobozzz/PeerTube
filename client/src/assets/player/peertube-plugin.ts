@@ -83,9 +83,15 @@ class PeerTubePlugin extends Plugin {
 
       if (options.stopTime) {
         const stopTime = timeToInt(options.stopTime)
+        const self = this
 
-        this.player.on('timeupdate', () => {
-          if (this.player.currentTime() > stopTime) this.player.pause()
+        this.player.on('timeupdate', function onTimeUpdate () {
+          if (self.player.currentTime() > stopTime) {
+            self.player.pause()
+            self.player.trigger('stopped')
+
+            self.player.off('timeupdate', onTimeUpdate)
+          }
         })
       }
 

@@ -1,10 +1,38 @@
 <div class="root-row row">
   <!-- We need the video container for videojs so we just hide it -->
-  <div id="video-element-wrapper">
+  <div id="video-wrapper">
     <div *ngIf="remoteServerDown" class="remote-server-down">
       Sorry, but this video is not available because the remote instance is not responding.
       <br />
       Please try again later.
+    </div>
+
+    <div id="videojs-wrapper"></div>
+
+    <div *ngIf="playlist && video" class="playlist">
+      <div class="playlist-info">
+        <div class="playlist-display-name">
+          {{ playlist.displayName }}
+
+          <span *ngIf="isUnlistedPlaylist()" class="badge badge-warning" i18n>Unlisted</span>
+          <span *ngIf="isPrivatePlaylist()" class="badge badge-danger" i18n>Private</span>
+          <span *ngIf="isPublicPlaylist()" class="badge badge-info" i18n>Public</span>
+        </div>
+
+        <div class="playlist-by-index">
+          <div class="playlist-by">{{ playlist.ownerBy }}</div>
+          <div class="playlist-index">
+            <span>{{currentPlaylistPosition}}</span><span>{{playlistPagination.totalItems}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngFor="let playlistVideo of playlistVideos" myInfiniteScroller [autoInit]="true" #elem [container]="elem" (nearOfBottom)="onPlaylistVideosNearOfBottom()">
+        <my-video-playlist-element-miniature
+          [video]="playlistVideo" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
+          [playing]="currentPlaylistPosition === playlistVideo.playlistElement.position" [accountLink]="false"
+        ></my-video-playlist-element-miniature>
+      </div>
     </div>
   </div>
 
@@ -18,6 +46,10 @@
 
   <div i18n class="alert alert-info" *ngIf="hasVideoScheduledPublication()">
     This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
+  </div>
+
+  <div i18n class="alert alert-info" *ngIf="noPlaylistVideos">
+    This playlist does not have videos.
   </div>
 
   <div class="alert alert-danger" *ngIf="video?.blacklisted">

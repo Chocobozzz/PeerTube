@@ -1,6 +1,7 @@
 @import '_variables';
 @import '_mixins';
 @import '_bootstrap-variables';
+@import '_miniature';
 
 $other-videos-width: 260px;
 
@@ -12,7 +13,7 @@ $other-videos-width: 260px;
   font-weight: $font-semibold;
 }
 
-#video-element-wrapper {
+#video-wrapper {
   background-color: #000;
   display: flex;
   justify-content: center;
@@ -36,6 +37,57 @@ $other-videos-width: 260px;
 
     @media screen and (max-width: 600px) {
       font-size: 16px;
+    }
+  }
+
+  .playlist {
+    width: 400px;
+    height: 66vh;
+    background-color: #e4e4e4;
+    overflow-y: auto;
+
+    .playlist-info {
+      padding: 5px 30px;
+
+      .playlist-display-name {
+        font-size: 18px;
+        font-weight: $font-semibold;
+        margin-bottom: 5px;
+      }
+
+      .playlist-by-index {
+        color: $grey-foreground-color;
+        display: flex;
+
+        .playlist-by {
+          margin-right: 5px;
+        }
+
+        .playlist-index span:first-child::after {
+          content: '/';
+          margin: 0 3px;
+        }
+      }
+    }
+
+    my-video-playlist-element-miniature {
+      /deep/ {
+        .video {
+          .position {
+            margin-right: 0;
+          }
+
+          .video-info {
+            .video-info-name {
+              font-size: 15px;
+            }
+          }
+        }
+
+        my-video-thumbnail {
+          @include thumbnail-size-component(90px, 50px);
+        }
+      }
     }
   }
 
