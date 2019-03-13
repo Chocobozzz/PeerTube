@@ -10,7 +10,7 @@ import {
   createVideoPlaylist,
   deleteVideoChannel,
   deleteVideoPlaylist,
-  doubleFollow,
+  doubleFollow, doVideosExistInMyPlaylist,
   flushAndRunMultipleServers,
   flushTests,
   getAccountPlaylistsList,
@@ -41,6 +41,7 @@ import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/
 import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-playlist.model'
 import { Video } from '../../../../shared/models/videos'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
+import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
 
 const expect = chai.expect
 
@@ -622,6 +623,45 @@ describe('Test video playlists', function () {
       expect(videos[5].playlistElement.startTimestamp).to.equal(45)
       expect(videos[5].playlistElement.stopTimestamp).to.be.null
     }
+  })
+
+  it('Should check videos existence in my playlist', async function () {
+    const videoIds = [
+      servers[0].videos[0].id,
+      42000,
+      servers[0].videos[3].id,
+      43000,
+      servers[0].videos[4].id
+    ]
+    const res = await doVideosExistInMyPlaylist(servers[ 0 ].url, servers[ 0 ].accessToken, videoIds)
+    const obj = res.body as VideoExistInPlaylist
+
+    {
+      const elem = obj[servers[0].videos[0].id]
+      expect(elem).to.have.lengthOf(1)
+      expect(elem[ 0 ].playlistId).to.equal(playlistServer1Id)
+      expect(elem[ 0 ].startTimestamp).to.equal(15)
+      expect(elem[ 0 ].stopTimestamp).to.equal(28)
+    }
+
+    {
+      const elem = obj[servers[0].videos[3].id]
+      expect(elem).to.have.lengthOf(1)
+      expect(elem[ 0 ].playlistId).to.equal(playlistServer1Id)
+      expect(elem[ 0 ].startTimestamp).to.equal(1)
+      expect(elem[ 0 ].stopTimestamp).to.equal(35)
+    }
+
+    {
+      const elem = obj[servers[0].videos[4].id]
+      expect(elem).to.have.lengthOf(1)
+      expect(elem[ 0 ].playlistId).to.equal(playlistServer1Id)
+      expect(elem[ 0 ].startTimestamp).to.equal(45)
+      expect(elem[ 0 ].stopTimestamp).to.equal(null)
+    }
+
+    expect(obj[42000]).to.have.lengthOf(0)
+    expect(obj[43000]).to.have.lengthOf(0)
   })
 
   it('Should delete some elements', async function () {

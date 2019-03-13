@@ -301,13 +301,14 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       })
   }
 
-  static listUrlsOfForAP (accountId: number, start: number, count: number) {
+  static listPublicUrlsOfForAP (accountId: number, start: number, count: number) {
     const query = {
       attributes: [ 'url' ],
       offset: start,
       limit: count,
       where: {
-        ownerAccountId: accountId
+        ownerAccountId: accountId,
+        privacy: VideoPlaylistPrivacy.PUBLIC
       }
     }
 

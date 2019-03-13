@@ -22,7 +22,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function doVideosInPlaylistExist (req: express.Request, res: express.Response) {
-  const videoIds = req.query.videoIds as number[]
+  const videoIds = req.query.videoIds.map(i => parseInt(i + '', 10))
   const user = res.locals.oauth.token.User as UserModel
 
   const results = await VideoPlaylistModel.listPlaylistIdsOf(user.Account.id, videoIds)

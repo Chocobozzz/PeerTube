@@ -275,6 +275,18 @@ function getVideoPlaylistPrivacies (url: string) {
   })
 }
 
+function doVideosExistInMyPlaylist (url: string, token: string, videoIds: number[]) {
+  const path = '/api/v1/users/me/video-playlists/videos-exist'
+
+  return makeGetRequest({
+    url,
+    token,
+    path,
+    query: { videoIds },
+    statusCodeExpected: 200
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -298,5 +310,7 @@ export {
 
   reorderVideosPlaylist,
 
-  checkPlaylistFilesWereRemoved
+  checkPlaylistFilesWereRemoved,
+
+  doVideosExistInMyPlaylist
 }

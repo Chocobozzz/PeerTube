@@ -357,7 +357,7 @@ async function actorFollowers (req: express.Request, actor: ActorModel) {
 
 async function actorPlaylists (req: express.Request, account: AccountModel) {
   const handler = (start: number, count: number) => {
-    return VideoPlaylistModel.listUrlsOfForAP(account.id, start, count)
+    return VideoPlaylistModel.listPublicUrlsOfForAP(account.id, start, count)
   }
 
   return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
