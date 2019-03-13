@@ -225,7 +225,8 @@ type AvailableForListIDsOptions = {
       },
       include: [
         {
-          model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] })
+          model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] }),
+          required: true
         }
       ]
     }
@@ -1566,8 +1567,8 @@ export class VideoModel extends Model<VideoModel> {
     apiScope.push({
       method: [
         ScopeNames.FOR_API, {
-          ids, withFiles:
-          options.withFiles,
+          ids,
+          withFiles: options.withFiles,
           videoPlaylistId: options.videoPlaylistId
         } as ForAPIOptions
       ]
