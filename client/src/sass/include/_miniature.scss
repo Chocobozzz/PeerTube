@@ -28,15 +28,15 @@ $play-overlay-transition: 0.2s ease;
 $play-overlay-height: 26px;
 $play-overlay-width: 18px;
 
-@mixin miniature-thumbnail($width: $video-thumbnail-width, $height: $video-thumbnail-height) {
+@mixin miniature-thumbnail {
   @include disable-outline;
 
   display: inline-block;
   position: relative;
   border-radius: 3px;
   overflow: hidden;
-  width: $width;
-  height: $height;
+  width: $video-thumbnail-width;
+  height: $video-thumbnail-height;
   background-color: #ececec;
   transition: filter $play-overlay-transition;
 
@@ -94,6 +94,13 @@ $play-overlay-width: 18px;
       filter: blur(5px);
       transform : scale(1.03);
     }
+  }
+}
+
+@mixin thumbnail-size-component ($width, $height) {
+  /deep/ .video-thumbnail {
+    width: $width;
+    height: $height;
   }
 }
 

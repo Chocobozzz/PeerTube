@@ -10,8 +10,11 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
+  @Input() routerLink: any[]
+  @Input() queryParams: any[]
 
-  constructor (private screenService: ScreenService) {}
+  constructor (private screenService: ScreenService) {
+  }
 
   getImageUrl () {
     if (!this.video) return ''
@@ -29,5 +32,11 @@ export class VideoThumbnailComponent {
     const currentTime = this.video.userHistory.currentTime
 
     return (currentTime / this.video.duration) * 100
+  }
+
+  getVideoRouterLink () {
+    if (this.routerLink) return this.routerLink
+
+    return [ '/videos/watch', this.video.uuid ]
   }
 }

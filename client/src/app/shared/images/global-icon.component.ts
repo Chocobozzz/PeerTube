@@ -27,7 +27,8 @@ const icons = {
   'more-vertical': require('../../../assets/images/global/more-vertical.html'),
   'share': require('../../../assets/images/video/share.html'),
   'upload': require('../../../assets/images/video/upload.html'),
-  'playlist-add': require('../../../assets/images/video/playlist-add.html')
+  'playlist-add': require('../../../assets/images/video/playlist-add.html'),
+  'play': require('../../../assets/images/global/play.html')
 }
 
 export type GlobalIconName = keyof typeof icons

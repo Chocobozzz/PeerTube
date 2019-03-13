@@ -77,6 +77,7 @@ import { GlobalIconComponent } from '@app/shared/images/global-icon.component'
 import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
 import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
 import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.component'
+import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playlist/video-playlist-element-miniature.component'
 
 @NgModule({
   imports: [
@@ -105,6 +106,7 @@ import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.compo
     VideoMiniatureComponent,
     VideoPlaylistMiniatureComponent,
     VideoAddToPlaylistComponent,
+    VideoPlaylistElementMiniatureComponent,
 
     FeedComponent,
 
@@ -163,6 +165,7 @@ import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.compo
     VideoMiniatureComponent,
     VideoPlaylistMiniatureComponent,
     VideoAddToPlaylistComponent,
+    VideoPlaylistElementMiniatureComponent,
 
     FeedComponent,
 

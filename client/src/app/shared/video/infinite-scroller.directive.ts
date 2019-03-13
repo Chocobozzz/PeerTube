@@ -11,6 +11,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   @Input() firstLoadedPage = 1
   @Input() percentLimit = 70
   @Input() autoInit = false
+  @Input() container = document.body
 
   @Output() nearOfBottom = new EventEmitter<void>()
   @Output() nearOfTop = new EventEmitter<void>()
@@ -48,7 +49,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
       .pipe(
         startWith(null),
         throttleTime(200, undefined, throttleOptions),
-        map(() => ({ current: window.scrollY, maximumScroll: document.body.clientHeight - window.innerHeight })),
+        map(() => ({ current: window.scrollY, maximumScroll: this.container.clientHeight - window.innerHeight })),
         distinctUntilChanged((o1, o2) => o1.current === o2.current),
         share()
       )
