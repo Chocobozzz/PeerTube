@@ -522,6 +522,52 @@ describe('Test video playlists API validator', function () {
     })
   })
 
+  describe('When checking exists in playlist endpoint', function () {
+    const path = '/api/v1/users/me/video-playlists/videos-exist'
+
+    it('Should fail with an unauthenticated user', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path,
+        query: { videoIds: [ 1, 2 ] },
+        statusCodeExpected: 401
+      })
+    })
+
+    it('Should fail with invalid video ids', async function () {
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { videoIds: 'toto' }
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { videoIds: [ 'toto' ] }
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { videoIds: [ 1, 'toto' ] }
+      })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path,
+        query: { videoIds: [ 1, 2 ] },
+        statusCodeExpected: 200
+      })
+    })
+  })
+
   describe('When deleting an element in a playlist', function () {
     const getBase = (wrapper: any = {}) => {
       return Object.assign({

@@ -49,7 +49,7 @@ storage:
   tmp: '/var/www/peertube/storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
   avatars: '/var/www/peertube/storage/avatars/'
   videos: '/var/www/peertube/storage/videos/'
-  playlists: '/var/www/peertube/storage/playlists/'
+  streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
   redundancy: '/var/www/peertube/storage/videos/'
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
