@@ -20,8 +20,7 @@
     "postinstall": "npm rebuild node-sass",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
     "webdriver-manager": "webdriver-manager",
-    "ngx-extractor": "ngx-extractor",
-    "test": "jest --no-cache"
+    "ngx-extractor": "ngx-extractor"
   },
   "license": "GPLv3",
   "typings": "*.d.ts",
@@ -30,38 +29,6 @@
     "webtorrent/create-torrent/junk": "^1",
     "simple-get": "^2.8.1",
     "punycode": "^1.4.1"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsConfigFile": "<rootDir>/src/tsconfig.spec.json"
-      },
-      "__TRANSFORM_HTML__": true
-    },
-    "transform": {
-      "^.+\\.(ts|js|html)$": "<rootDir>/node_modules/jest-preset-angular/preprocessor.js"
-    },
-    "moduleNameMapper": {
-      "^@app/(.*)": "<rootDir>/src/app/$1",
-      "environments/(.*)": "<rootDir>/src/environments/$1"
-    },
-    "testMatch": [
-      "**/__tests__/**/*.+(ts|js)?(x)",
-      "**/+(*.)+(spec|test).+(ts|js)?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!lodash-es/)"
-    ],
-    "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/src/setupJest.ts"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.1",
@@ -92,7 +59,6 @@
     "@types/hls.js": "^0.12.0",
     "@types/jasmine": "^2.8.7",
     "@types/jasminewd2": "^2.0.3",
-    "@types/jest": "^23.3.1",
     "@types/jschannel": "^1.0.0",
     "@types/linkifyjs": "^2.1.1",
     "@types/lodash-es": "^4.17.0",
@@ -120,8 +86,6 @@
     "https-browserify": "^1.0.0",
     "jasmine-core": "^3.1.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "jest": "^23.5.0",
-    "jest-preset-angular": "^6.0.0",
     "jschannel": "^1.0.2",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
@@ -153,7 +117,6 @@
     "stream-browserify": "^2.0.1",
     "stream-http": "^3.0.0",
     "terser-webpack-plugin": "^1.1.0",
-    "ts-jest": "^23.1.4",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^8.0.1",
     "typescript": "3.2",

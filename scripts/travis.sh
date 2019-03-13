@@ -36,8 +36,4 @@ elif [ "$1" = "lint" ]; then
     ( cd client
       npm run lint
     )
-elif [ "$1" = "jest" ]; then
-    ( cd client
-      npm run test
-    )
 fi
