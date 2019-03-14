@@ -14,7 +14,7 @@ import {
   flushAndRunMultipleServers,
   flushTests,
   getAccountPlaylistsList,
-  getAccountPlaylistsListWithToken,
+  getAccountPlaylistsListWithToken, getMyUserInformation,
   getPlaylistVideos,
   getVideoChannelPlaylistsList,
   getVideoPlaylist,
@@ -42,6 +42,7 @@ import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-p
 import { Video } from '../../../../shared/models/videos'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
+import { User } from '../../../../shared/models/users'
 
 const expect = chai.expect
 
@@ -195,7 +196,8 @@ describe('Test video playlists', function () {
         token: servers[1].accessToken,
         playlistAttrs: {
           displayName: 'playlist 2',
-          privacy: VideoPlaylistPrivacy.PUBLIC
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: servers[1].videoChannel.id
         }
       })
       playlistServer2Id1 = res.body.videoPlaylist.id
@@ -208,7 +210,8 @@ describe('Test video playlists', function () {
         playlistAttrs: {
           displayName: 'playlist 3',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          thumbnailfile: 'thumbnail.jpg'
+          thumbnailfile: 'thumbnail.jpg',
+          videoChannelId: servers[1].videoChannel.id
         }
       })
 
@@ -422,7 +425,8 @@ describe('Test video playlists', function () {
       token: servers[ 0 ].accessToken,
       playlistAttrs: {
         displayName: 'playlist 4',
-        privacy: VideoPlaylistPrivacy.PUBLIC
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        videoChannelId: servers[0].videoChannel.id
       }
     })
 
@@ -816,12 +820,16 @@ describe('Test video playlists', function () {
     const userId = res.body.user.id
     const userAccessToken = await userLogin(servers[0], user)
 
+    const resChannel = await getMyUserInformation(servers[0].url, userAccessToken)
+    const userChannel = (resChannel.body as User).videoChannels[0]
+
     await createVideoPlaylist({
       url: servers[0].url,
       token: userAccessToken,
       playlistAttrs: {
         displayName: 'playlist to be deleted',
-        privacy: VideoPlaylistPrivacy.PUBLIC
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        videoChannelId: userChannel.id
       }
     })
 
