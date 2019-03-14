@@ -292,7 +292,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
       videoId: video.id
     }, { transaction: t })
 
-    videoPlaylist.updatedAt = new Date()
+    videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
@@ -332,7 +332,7 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
 
     const element = await videoPlaylistElement.save({ transaction: t })
 
-    videoPlaylist.updatedAt = new Date()
+    videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
@@ -356,7 +356,7 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
     // Decrease position of the next elements
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, positionToDelete, null, -1, t)
 
-    videoPlaylist.updatedAt = new Date()
+    videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
@@ -401,7 +401,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
     // Decrease positions of elements after the old position of our ordered elements (decrease)
     await VideoPlaylistElementModel.increasePositionOf(videoPlaylist.id, oldPosition, null, -reorderLength, t)
 
-    videoPlaylist.updatedAt = new Date()
+    videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
 
     await sendUpdateVideoPlaylist(videoPlaylist, t)
