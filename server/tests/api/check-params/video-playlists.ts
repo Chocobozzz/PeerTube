@@ -16,7 +16,7 @@ import {
   reorderVideosPlaylist,
   runServer,
   ServerInfo,
-  setAccessTokensToServers,
+  setAccessTokensToServers, setDefaultVideoChannel,
   updateVideoPlaylist,
   updateVideoPlaylistElement,
   uploadVideoAndGetId
@@ -33,6 +33,7 @@ describe('Test video playlists API validator', function () {
   let server: ServerInfo
   let userAccessToken: string
   let playlistUUID: string
+  let privatePlaylistUUID: string
   let watchLaterPlaylistId: number
   let videoId: number
   let videoId2: number
@@ -47,6 +48,7 @@ describe('Test video playlists API validator', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     userAccessToken = await generateUserAccessToken(server, 'user1')
     videoId = (await uploadVideoAndGetId({ server, videoName: 'video 1' })).id
@@ -63,10 +65,23 @@ describe('Test video playlists API validator', function () {
         token: server.accessToken,
         playlistAttrs: {
           displayName: 'super playlist',
-          privacy: VideoPlaylistPrivacy.PUBLIC
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: server.videoChannel.id
         }
       })
       playlistUUID = res.body.videoPlaylist.uuid
+    }
+
+    {
+      const res = await createVideoPlaylist({
+        url: server.url,
+        token: server.accessToken,
+        playlistAttrs: {
+          displayName: 'private',
+          privacy: VideoPlaylistPrivacy.PRIVATE
+        }
+      })
+      privatePlaylistUUID = res.body.videoPlaylist.uuid
     }
   })
 
@@ -172,7 +187,8 @@ describe('Test video playlists API validator', function () {
         playlistAttrs: Object.assign({
           displayName: 'display name',
           privacy: VideoPlaylistPrivacy.UNLISTED,
-          thumbnailfile: 'thumbnail.jpg'
+          thumbnailfile: 'thumbnail.jpg',
+          videoChannelId: server.videoChannel.id
         }, playlistAttrs)
       }, wrapper)
     }
@@ -229,6 +245,18 @@ describe('Test video playlists API validator', function () {
       await updateVideoPlaylist(getUpdate(params, playlistUUID))
     })
 
+    it('Should fail to set "public" a playlist not assigned to a channel', async function () {
+      const params = getBase({ privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: undefined })
+      const params2 = getBase({ privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: 'null' })
+      const params3 = getBase({ privacy: undefined, videoChannelId: 'null' })
+
+      await createVideoPlaylist(params)
+      await createVideoPlaylist(params2)
+      await updateVideoPlaylist(getUpdate(params, privatePlaylistUUID))
+      await updateVideoPlaylist(getUpdate(params2, playlistUUID))
+      await updateVideoPlaylist(getUpdate(params3, playlistUUID))
+    })
+
     it('Should fail with an unknown playlist to update', async function () {
       await updateVideoPlaylist(getUpdate(
         getBase({}, { expectedStatus: 404 }),
@@ -249,14 +277,14 @@ describe('Test video playlists API validator', function () {
       const res = await createVideoPlaylist(params)
       const playlist = res.body.videoPlaylist
 
-      const paramsUpdate = getBase({ privacy: VideoPlaylistPrivacy.PRIVATE }, { expectedStatus: 409 })
+      const paramsUpdate = getBase({ privacy: VideoPlaylistPrivacy.PRIVATE }, { expectedStatus: 400 })
 
       await updateVideoPlaylist(getUpdate(paramsUpdate, playlist.id))
     })
 
     it('Should fail to update the watch later playlist', async function () {
       await updateVideoPlaylist(getUpdate(
-        getBase({}, { expectedStatus: 409 }),
+        getBase({}, { expectedStatus: 400 }),
         watchLaterPlaylistId
       ))
     })
@@ -634,7 +662,7 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail with the watch later playlist', async function () {
-      await deleteVideoPlaylist(server.url, server.accessToken, watchLaterPlaylistId, 409)
+      await deleteVideoPlaylist(server.url, server.accessToken, watchLaterPlaylistId, 400)
     })
 
     it('Should succeed with the correct params', async function () {

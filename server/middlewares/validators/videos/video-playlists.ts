@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator/check'
-import { UserRight } from '../../../../shared'
+import { UserRight, VideoPlaylistCreate, VideoPlaylistUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
@@ -30,7 +30,14 @@ const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    if (req.body.videoChannelId && !await isVideoChannelIdExist(req.body.videoChannelId, res)) return cleanUpReqFiles(req)
+    const body: VideoPlaylistCreate = req.body
+    if (body.videoChannelId && !await isVideoChannelIdExist(body.videoChannelId, res)) return cleanUpReqFiles(req)
+
+    if (body.privacy === VideoPlaylistPrivacy.PUBLIC && !body.videoChannelId) {
+      cleanUpReqFiles(req)
+      return res.status(400)
+                .json({ error: 'Cannot set "public" a playlist that is not assigned to a channel.' })
+    }
 
     return next()
   }
@@ -53,19 +60,33 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PRIVATE && req.body.privacy === VideoPlaylistPrivacy.PRIVATE) {
+    const body: VideoPlaylistUpdate = req.body
+
+    if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PRIVATE && body.privacy === VideoPlaylistPrivacy.PRIVATE) {
       cleanUpReqFiles(req)
-      return res.status(409)
+      return res.status(400)
                 .json({ error: 'Cannot set "private" a video playlist that was not private.' })
+    }
+
+    const newPrivacy = body.privacy || videoPlaylist.privacy
+    if (newPrivacy === VideoPlaylistPrivacy.PUBLIC &&
+      (
+        (!videoPlaylist.videoChannelId && !body.videoChannelId) ||
+        body.videoChannelId === null
+      )
+    ) {
+      cleanUpReqFiles(req)
+      return res.status(400)
+                .json({ error: 'Cannot set "public" a playlist that is not assigned to a channel.' })
     }
 
     if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
       cleanUpReqFiles(req)
-      return res.status(409)
+      return res.status(400)
                 .json({ error: 'Cannot update a watch later playlist.' })
     }
 
-    if (req.body.videoChannelId && !await isVideoChannelIdExist(req.body.videoChannelId, res)) return cleanUpReqFiles(req)
+    if (body.videoChannelId && !await isVideoChannelIdExist(body.videoChannelId, res)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -84,7 +105,7 @@ const videoPlaylistsDeleteValidator = [
 
     const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
     if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
-      return res.status(409)
+      return res.status(400)
                 .json({ error: 'Cannot delete a watch later playlist.' })
     }
 
