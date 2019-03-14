@@ -1,7 +1,8 @@
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Validators } from '@angular/forms'
+import { AbstractControl, FormControl, Validators } from '@angular/forms'
 import { Injectable } from '@angular/core'
 import { BuildFormValidator } from '@app/shared'
+import { VideoPlaylistPrivacy } from '@shared/models'
 
 @Injectable()
 export class VideoPlaylistValidatorsService {
@@ -46,7 +47,20 @@ export class VideoPlaylistValidatorsService {
 
     this.VIDEO_PLAYLIST_CHANNEL_ID = {
       VALIDATORS: [ ],
-      MESSAGES: { }
+      MESSAGES: {
+        'required': this.i18n('The channel is required when the playlist is public.')
+      }
     }
+  }
+
+  setChannelValidator (channelControl: AbstractControl, privacy: VideoPlaylistPrivacy) {
+    if (privacy.toString() === VideoPlaylistPrivacy.PUBLIC.toString()) {
+      channelControl.setValidators([ Validators.required ])
+    } else {
+      channelControl.setValidators(null)
+    }
+
+    channelControl.markAsDirty()
+    channelControl.updateValueAndValidity()
   }
 }

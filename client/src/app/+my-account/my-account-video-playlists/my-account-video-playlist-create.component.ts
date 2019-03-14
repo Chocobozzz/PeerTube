@@ -35,11 +35,15 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
 
   ngOnInit () {
     this.buildForm({
-      'display-name': this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME,
+      displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME,
       privacy: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_PRIVACY,
       description: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DESCRIPTION,
       videoChannelId: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_CHANNEL_ID,
       thumbnailfile: null
+    })
+
+    this.form.get('privacy').valueChanges.subscribe(privacy => {
+      this.videoPlaylistValidatorsService.setChannelValidator(this.form.get('videoChannelId'), privacy)
     })
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
@@ -60,7 +64,7 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
 
     const body = this.form.value
     const videoPlaylistCreate: VideoPlaylistCreate = {
-      displayName: body['display-name'],
+      displayName: body.displayName,
       privacy: body.privacy,
       description: body.description || null,
       videoChannelId: body.videoChannelId || null,
