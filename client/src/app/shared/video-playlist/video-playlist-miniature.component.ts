@@ -9,6 +9,9 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 export class VideoPlaylistMiniatureComponent {
   @Input() playlist: VideoPlaylist
   @Input() toManage = false
+  @Input() displayChannel = false
+  @Input() displayDescription = false
+  @Input() displayPrivacy = false
 
   getPlaylistUrl () {
     if (this.toManage) return [ '/my-account/video-playlists', this.playlist.uuid ]

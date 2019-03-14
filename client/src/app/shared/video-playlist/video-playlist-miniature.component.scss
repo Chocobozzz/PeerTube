@@ -11,9 +11,11 @@
     }
   }
 
-  &.to-manage .play-overlay,
+  &.to-manage,
   &.no-videos {
-    display: none;
+    .play-overlay {
+      display: none;
+    }
   }
 
   .miniature-thumbnail {
@@ -34,13 +36,41 @@
     }
   }
 
-  .miniature-bottom {
+  .miniature-info {
     width: 200px;
     margin-top: 2px;
     line-height: normal;
 
     .miniature-name {
       @include miniature-name;
+    }
+
+    .video-info-by-date {
+      display: flex;
+      font-size: 13px;
+      margin: 5px 0;
+
+      .by {
+        @include disable-default-a-behaviour;
+
+        display: block;
+        color: var(--mainForegroundColor);
+
+        &::after {
+          content: '-';
+          margin: 0 3px;
+        }
+      }
+    }
+
+    .video-info-privacy {
+      font-size: 13px;
+      font-weight: $font-semibold;
+    }
+
+    .video-info-description {
+      margin-top: 10px;
+      color: $grey-foreground-color;
     }
   }
 }

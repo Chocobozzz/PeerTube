@@ -85,20 +85,20 @@ const myAccountRoutes: Routes = [
         }
       },
       {
-        path: 'video-playlists/:videoPlaylistId',
-        component: MyAccountVideoPlaylistElementsComponent,
-        data: {
-          meta: {
-            title: 'Playlist elements'
-          }
-        }
-      },
-      {
         path: 'video-playlists/create',
         component: MyAccountVideoPlaylistCreateComponent,
         data: {
           meta: {
             title: 'Create new playlist'
+          }
+        }
+      },
+      {
+        path: 'video-playlists/:videoPlaylistId',
+        component: MyAccountVideoPlaylistElementsComponent,
+        data: {
+          meta: {
+            title: 'Playlist elements'
           }
         }
       },

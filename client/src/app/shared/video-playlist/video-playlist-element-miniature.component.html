@@ -2,7 +2,7 @@
   <a [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()">
     <div class="position">
       <my-global-icon *ngIf="playing" iconName="play"></my-global-icon>
-      <ng-container *ngIf="!playing">{{ video.playlistElement.position }}</ng-container>
+      <ng-container *ngIf="!playing">{{ position }}</ng-container>
     </div>
 
     <my-video-thumbnail

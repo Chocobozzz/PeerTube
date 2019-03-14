@@ -24,7 +24,7 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 30,
     totalItems: null
   }
 
@@ -121,6 +121,10 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
     this.pagination.currentPage += 1
     this.loadElements()
+  }
+
+  trackByFn (index: number, elem: Video) {
+    return elem.id
   }
 
   private loadElements () {

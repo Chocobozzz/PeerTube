@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/video/video.model'
 import { VideoPlaylistElementUpdate } from '@shared/models'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
@@ -13,7 +13,8 @@ import { secondsToTime } from '../../../assets/player/utils'
 @Component({
   selector: 'my-video-playlist-element-miniature',
   styleUrls: [ './video-playlist-element-miniature.component.scss' ],
-  templateUrl: './video-playlist-element-miniature.component.html'
+  templateUrl: './video-playlist-element-miniature.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoPlaylistElementMiniatureComponent {
   @ViewChild('moreDropdown') moreDropdown: NgbDropdown
@@ -24,6 +25,7 @@ export class VideoPlaylistElementMiniatureComponent {
   @Input() playing = false
   @Input() rowLink = false
   @Input() accountLink = true
+  @Input() position: number
 
   @Output() elementRemoved = new EventEmitter<Video>()
 
@@ -44,7 +46,8 @@ export class VideoPlaylistElementMiniatureComponent {
     private route: ActivatedRoute,
     private i18n: I18n,
     private videoService: VideoService,
-    private videoPlaylistService: VideoPlaylistService
+    private videoPlaylistService: VideoPlaylistService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   buildRouterLink () {
@@ -95,6 +98,8 @@ export class VideoPlaylistElementMiniatureComponent {
 
             video.playlistElement.startTimestamp = body.startTimestamp
             video.playlistElement.stopTimestamp = body.stopTimestamp
+
+            this.cdr.detectChanges()
           },
 
           err => this.notifier.error(err.message)
@@ -145,5 +150,10 @@ export class VideoPlaylistElementMiniatureComponent {
         this.timestampOptions.stopTimestamp = video.playlistElement.stopTimestamp
       }
     }
+
+    // FIXME: why do we have to use setTimeout here?
+    setTimeout(() => {
+      this.cdr.detectChanges()
+    })
   }
 }
