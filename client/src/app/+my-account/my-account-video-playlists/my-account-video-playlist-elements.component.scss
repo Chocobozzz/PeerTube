@@ -2,6 +2,17 @@
 @import '_mixins';
 @import '_miniature';
 
+.playlist-info {
+  background-color: var(--submenuColor);
+  margin-left: -15px;
+  margin-top: -$sub-menu-margin-bottom;
+
+  padding: $sub-menu-margin-bottom 0;
+
+  display: flex;
+  justify-content: center;
+}
+
 // Thanks Angular CDK <3 https://material.angular.io/cdk/drag-drop/examples
 .cdk-drag-preview {
   box-sizing: border-box;

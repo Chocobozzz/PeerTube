@@ -34,7 +34,7 @@
       font-weight: $font-semibold;
       margin-right: 10px;
       color: $grey-foreground-color;
-      min-width: 20px;
+      min-width: 25px;
 
       my-global-icon {
         @include apply-svg-color($grey-foreground-color);
@@ -59,7 +59,7 @@
 
       a {
         color: var(--mainForegroundColor);
-        width: fit-content;
+        width: auto;
 
         &:hover {
           text-decoration: underline !important;

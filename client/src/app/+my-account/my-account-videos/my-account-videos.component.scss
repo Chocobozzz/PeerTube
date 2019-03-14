@@ -64,11 +64,11 @@
     }
 
     .video-info-date-views,
-    .video-info-private,
+    .video-info-privacy,
     .video-info-blacklisted {
       font-size: 13px;
 
-      &.video-info-private,
+      &.video-info-privacy,
       &.video-info-blacklisted .blacklisted-label {
         font-weight: $font-semibold;
       }

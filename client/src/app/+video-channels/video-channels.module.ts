@@ -4,6 +4,7 @@ import { VideoChannelsRoutingModule } from './video-channels-routing.module'
 import { VideoChannelsComponent } from './video-channels.component'
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelAboutComponent } from './video-channel-about/video-channel-about.component'
+import { VideoChannelPlaylistsComponent } from '@app/+video-channels/video-channel-playlists/video-channel-playlists.component'
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { VideoChannelAboutComponent } from './video-channel-about/video-channel-
   declarations: [
     VideoChannelsComponent,
     VideoChannelVideosComponent,
-    VideoChannelAboutComponent
+    VideoChannelAboutComponent,
+    VideoChannelPlaylistsComponent
   ],
 
   exports: [

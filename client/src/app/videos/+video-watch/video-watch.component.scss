@@ -43,11 +43,12 @@ $other-videos-width: 260px;
   .playlist {
     width: 400px;
     height: 66vh;
-    background-color: #e4e4e4;
+    background-color: var(--mainBackgroundColor);
     overflow-y: auto;
 
     .playlist-info {
       padding: 5px 30px;
+      background-color: #e4e4e4;
 
       .playlist-display-name {
         font-size: 18px;

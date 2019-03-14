@@ -58,7 +58,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playlistVideos: Video[] = []
   playlistPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 30,
     totalItems: null
   }
   noPlaylistVideos = false
@@ -401,7 +401,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private loadPlaylistElements (redirectToFirst = false) {
-    this.videoService.getPlaylistVideos(this.playlist.id, this.playlistPagination)
+    this.videoService.getPlaylistVideos(this.playlist.uuid, this.playlistPagination)
         .subscribe(({ totalVideos, videos }) => {
           this.playlistVideos = this.playlistVideos.concat(videos)
           this.playlistPagination.totalItems = totalVideos
