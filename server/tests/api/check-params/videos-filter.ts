@@ -9,7 +9,7 @@ import {
   makeGetRequest,
   runServer,
   ServerInfo,
-  setAccessTokensToServers,
+  setAccessTokensToServers, setDefaultVideoChannel,
   userLogin
 } from '../../../../shared/utils'
 import { UserRole } from '../../../../shared/models/users'
@@ -53,6 +53,7 @@ describe('Test videos filters', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     const user = { username: 'user1', password: 'my super password' }
     await createUser(server.url, server.accessToken, user.username, user.password)
@@ -75,7 +76,8 @@ describe('Test videos filters', function () {
       token: server.accessToken,
       playlistAttrs: {
         displayName: 'super playlist',
-        privacy: VideoPlaylistPrivacy.PUBLIC
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        videoChannelId: server.videoChannel.id
       }
     })
     playlistUUID = res.body.videoPlaylist.uuid
