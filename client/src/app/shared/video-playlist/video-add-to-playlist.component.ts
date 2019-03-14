@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs'
 import { Video, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy } from '@shared/models'
 import { FormReactive, FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/forms'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { secondsToTime, timeToInt } from '../../../assets/player/utils'
+import { secondsToTime } from '../../../assets/player/utils'
 
 type PlaylistSummary = {
   id: number
@@ -54,7 +54,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
     this.resetOptions(true)
 
     this.buildForm({
-      'display-name': this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
+      displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
     })
 
     forkJoin([
@@ -105,7 +105,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
   }
 
   createPlaylist () {
-    const displayName = this.form.value[ 'display-name' ]
+    const displayName = this.form.value[ 'displayName' ]
 
     const videoPlaylistCreate: VideoPlaylistCreate = {
       displayName,

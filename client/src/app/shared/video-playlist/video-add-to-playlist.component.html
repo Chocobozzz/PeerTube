@@ -60,13 +60,13 @@
 
 <form class="new-playlist-block dropdown-item" *ngIf="isNewPlaylistBlockOpened" (ngSubmit)="createPlaylist()" [formGroup]="form">
   <div class="form-group">
-    <label i18n for="display-name">Display name</label>
+    <label i18n for="displayName">Display name</label>
     <input
-      type="text" id="display-name"
-      formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
+      type="text" id="displayName"
+      formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
     >
-    <div *ngIf="formErrors['display-name']" class="form-error">
-      {{ formErrors['display-name'] }}
+    <div *ngIf="formErrors['displayName']" class="form-error">
+      {{ formErrors['displayName'] }}
     </div>
   </div>
 

@@ -6,13 +6,13 @@
   <div class="row">
     <div class="col-md-12 col-xl-6">
       <div class="form-group">
-        <label i18n for="display-name">Display name</label>
+        <label i18n for="displayName">Display name</label>
         <input
-          type="text" id="display-name"
-          formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
+          type="text" id="displayName"
+          formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
         >
-        <div *ngIf="formErrors['display-name']" class="form-error">
-          {{ formErrors['display-name'] }}
+        <div *ngIf="formErrors['displayName']" class="form-error">
+          {{ formErrors['displayName'] }}
         </div>
       </div>
 
@@ -49,6 +49,10 @@
             <option></option>
             <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
           </select>
+        </div>
+
+        <div *ngIf="formErrors['videoChannelId']" class="form-error">
+          {{ formErrors['videoChannelId'] }}
         </div>
       </div>
 
