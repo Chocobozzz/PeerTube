@@ -664,6 +664,37 @@ describe('Test video playlists', function () {
     expect(obj[43000]).to.have.lengthOf(0)
   })
 
+  it('Should automatically update updatedAt field of playlists', async function () {
+    const server = servers[1]
+    const videoId = servers[1].videos[5].id
+
+    async function getPlaylistNames () {
+      const res = await getAccountPlaylistsListWithToken(server.url, server.accessToken, 'root', 0, 5, undefined, '-updatedAt')
+
+      return (res.body.data as VideoPlaylist[]).map(p => p.displayName)
+    }
+
+    const elementAttrs = { videoId }
+    await addVideoInPlaylist({ url: server.url, token: server.accessToken, playlistId: playlistServer2Id1, elementAttrs })
+    await addVideoInPlaylist({ url: server.url, token: server.accessToken, playlistId: playlistServer2Id2, elementAttrs })
+
+    const names1 = await getPlaylistNames()
+    expect(names1[0]).to.equal('playlist 3 updated')
+    expect(names1[1]).to.equal('playlist 2')
+
+    await removeVideoFromPlaylist({ url: server.url, token: server.accessToken, playlistId: playlistServer2Id1, videoId })
+
+    const names2 = await getPlaylistNames()
+    expect(names2[0]).to.equal('playlist 2')
+    expect(names2[1]).to.equal('playlist 3 updated')
+
+    await removeVideoFromPlaylist({ url: server.url, token: server.accessToken, playlistId: playlistServer2Id2, videoId })
+
+    const names3 = await getPlaylistNames()
+    expect(names3[0]).to.equal('playlist 3 updated')
+    expect(names3[1]).to.equal('playlist 2')
+  })
+
   it('Should delete some elements', async function () {
     this.timeout(30000)
 

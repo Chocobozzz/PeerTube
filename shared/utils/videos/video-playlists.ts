@@ -68,14 +68,16 @@ function getAccountPlaylistsListWithToken (
   accountName: string,
   start: number,
   count: number,
-  playlistType?: VideoPlaylistType
+  playlistType?: VideoPlaylistType,
+  sort?: string
 ) {
   const path = '/api/v1/accounts/' + accountName + '/video-playlists'
 
   const query = {
     start,
     count,
-    playlistType
+    playlistType,
+    sort
   }
 
   return makeGetRequest({
