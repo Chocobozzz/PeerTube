@@ -16,8 +16,11 @@ class TheaterButton extends Button {
     const enabled = getStoredTheater()
     if (enabled === true) {
       this.player_.addClass(TheaterButton.THEATER_MODE_CLASS)
+
       this.handleTheaterChange()
     }
+
+    this.player_.theaterEnabled = enabled
   }
 
   buildCSSClass () {
@@ -25,13 +28,17 @@ class TheaterButton extends Button {
   }
 
   handleTheaterChange () {
-    if (this.isTheaterEnabled()) {
+    const theaterEnabled = this.isTheaterEnabled()
+
+    if (theaterEnabled) {
       this.controlText('Normal mode')
     } else {
       this.controlText('Theater mode')
     }
 
-    saveTheaterInStore(this.isTheaterEnabled())
+    saveTheaterInStore(theaterEnabled)
+
+    this.player_.trigger('theaterChange', theaterEnabled)
   }
 
   handleClick () {
