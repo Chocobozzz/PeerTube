@@ -216,7 +216,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should send a new video notification on a remote scheduled publication', async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       // In 2 seconds
       let updateAt = new Date(new Date().getTime() + 2000)
@@ -238,7 +238,7 @@ describe('Test users notifications', function () {
     it('Should not send a notification before the video is published', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 100000)
+      let updateAt = new Date(new Date().getTime() + 1000000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,

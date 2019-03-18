@@ -50,6 +50,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   player: any
   playerElement: HTMLVideoElement
+  theaterEnabled = false
   userRating: UserVideoRateType = null
   video: VideoDetails = null
   descriptionLoading = false
@@ -572,6 +573,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(mode, options)
+      this.theaterEnabled = this.player.theaterEnabled
+
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 
       this.player.on('timeupdate', () => {
@@ -588,6 +591,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         if (this.playlist) {
           this.zone.run(() => this.navigateToNextPlaylistVideo())
         }
+      })
+
+      this.player.on('theaterChange', (_: any, enabled: boolean) => {
+        this.zone.run(() => this.theaterEnabled = enabled)
       })
     })
 
