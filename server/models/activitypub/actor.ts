@@ -34,7 +34,7 @@ import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONFIG, CONSTRAINTS_FIELDS } fr
 import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { throwIfNotValid } from '../utils'
+import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
 import { VideoModel } from '../video/video'
@@ -532,11 +532,6 @@ export class ActorModel extends Model<ActorModel> {
   isOutdated () {
     if (this.isOwned()) return false
 
-    const now = Date.now()
-    const createdAtTime = this.createdAt.getTime()
-    const updatedAtTime = this.updatedAt.getTime()
-
-    return (now - createdAtTime) > ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL &&
-      (now - updatedAtTime) > ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL
+    return isOutdated(this, ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL)
   }
 }

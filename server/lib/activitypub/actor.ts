@@ -375,7 +375,8 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
   }
 
   if (checkUrlsSameHost(actorJSON.id, actorUrl) !== true) {
-    throw new Error('Actor url ' + actorUrl + ' has not the same host than its AP id ' + actorJSON.id)
+    logger.warn('Actor url %s has not the same host than its AP id %s', actorUrl, actorJSON.id)
+    return { result: undefined, statusCode: requestResult.response.statusCode }
   }
 
   const followersCount = await fetchActorTotalItems(actorJSON.followers)

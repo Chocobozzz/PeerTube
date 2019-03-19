@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
+import { ACTIVITY_PUB } from '../initializers'
 
 type SortType = { sortModel: any, sortValue: string }
 
@@ -42,6 +43,14 @@ function getSortOnModel (model: any, value: string, lastSort: string[] = [ 'id',
 
   if (model) return [ [ model, firstSort[0], firstSort[1] ], lastSort ]
   return [ firstSort, lastSort ]
+}
+
+function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
+  const now = Date.now()
+  const createdAtTime = model.createdAt.getTime()
+  const updatedAtTime = model.updatedAt.getTime()
+
+  return (now - createdAtTime) > refreshInterval && (now - updatedAtTime) > refreshInterval
 }
 
 function throwIfNotValid (value: any, validator: (value: any) => boolean, fieldName = 'value') {
@@ -108,7 +117,8 @@ export {
   throwIfNotValid,
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
-  buildWhereIdOrUUID
+  buildWhereIdOrUUID,
+  isOutdated
 }
 
 // ---------------------------------------------------------------------------

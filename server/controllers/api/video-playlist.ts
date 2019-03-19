@@ -40,6 +40,7 @@ import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playli
 import { copy, pathExists } from 'fs-extra'
 import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
+import { JobQueue } from '../../lib/job-queue'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -141,6 +142,11 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
 
 function getVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylist = res.locals.videoPlaylist
+
+  if (videoPlaylist.isOutdated()) {
+    JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: videoPlaylist.url } })
+            .catch(err => logger.error('Cannot create AP refresher job for playlist %s.', videoPlaylist.url, { err }))
+  }
 
   return res.json(videoPlaylist.toFormattedJSON())
 }

@@ -77,7 +77,7 @@ import {
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
   createSimilarityAttribute,
-  getVideoSort,
+  getVideoSort, isOutdated,
   throwIfNotValid
 } from '../utils'
 import { TagModel } from './tag'
@@ -1547,7 +1547,7 @@ export class VideoModel extends Model<VideoModel> {
       attributes: query.attributes,
       order: [ // Keep original order
         Sequelize.literal(
-          ids.map(id => `"VideoModel".id = ${id} DESC`).join(', ')
+          ids.map(id => `"VideoModel".id = ${id}`).join(', ')
         )
       ]
     }
@@ -1767,12 +1767,7 @@ export class VideoModel extends Model<VideoModel> {
   isOutdated () {
     if (this.isOwned()) return false
 
-    const now = Date.now()
-    const createdAtTime = this.createdAt.getTime()
-    const updatedAtTime = this.updatedAt.getTime()
-
-    return (now - createdAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL &&
-      (now - updatedAtTime) > ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL
+    return isOutdated(this, ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL)
   }
 
   setAsRefreshed () {

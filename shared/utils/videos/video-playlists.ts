@@ -127,7 +127,7 @@ function createVideoPlaylist (options: {
   playlistAttrs: VideoPlaylistCreate,
   expectedStatus?: number
 }) {
-  const path = '/api/v1/video-playlists/'
+  const path = '/api/v1/video-playlists'
 
   const fields = omit(options.playlistAttrs, 'thumbnailfile')
 

@@ -40,6 +40,14 @@ function setVideoField (serverNumber: number, uuid: string, field: string, value
   return seq.query(`UPDATE video SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
 }
 
+function setPlaylistField (serverNumber: number, uuid: string, field: string, value: string) {
+  const seq = getSequelize(serverNumber)
+
+  const options = { type: Sequelize.QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "videoPlaylist" SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
+}
+
 async function closeAllSequelize (servers: any[]) {
   for (let i = 1; i <= servers.length; i++) {
     if (sequelizes[ i ]) {
@@ -51,6 +59,7 @@ async function closeAllSequelize (servers: any[]) {
 
 export {
   setVideoField,
+  setPlaylistField,
   setActorField,
   closeAllSequelize
 }

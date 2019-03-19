@@ -95,7 +95,7 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     return Promise.resolve()
   })
 
-  // Empty playlists generally do not have a miniature, so skip it
+  // Empty playlists generally do not have a miniature, so skip this
   if (accItems.length !== 0) {
     try {
       await generateThumbnailFromUrl(playlist, playlistObject.icon)
@@ -107,13 +107,45 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
   return resetVideoPlaylistElements(accItems, playlist)
 }
 
+async function refreshVideoPlaylistIfNeeded (videoPlaylist: VideoPlaylistModel): Promise<VideoPlaylistModel> {
+  if (!videoPlaylist.isOutdated()) return videoPlaylist
+
+  try {
+    const { statusCode, playlistObject } = await fetchRemoteVideoPlaylist(videoPlaylist.url)
+    if (statusCode === 404) {
+      logger.info('Cannot refresh remote video playlist %s: it does not exist anymore. Deleting it.', videoPlaylist.url)
+
+      await videoPlaylist.destroy()
+      return undefined
+    }
+
+    if (playlistObject === undefined) {
+      logger.warn('Cannot refresh remote playlist %s: invalid body.', videoPlaylist.url)
+
+      await videoPlaylist.setAsRefreshed()
+      return videoPlaylist
+    }
+
+    const byAccount = videoPlaylist.OwnerAccount
+    await createOrUpdateVideoPlaylist(playlistObject, byAccount, playlistObject.to)
+
+    return videoPlaylist
+  } catch (err) {
+    logger.warn('Cannot refresh video playlist %s.', videoPlaylist.url, { err })
+
+    await videoPlaylist.setAsRefreshed()
+    return videoPlaylist
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   createAccountPlaylists,
   playlistObjectToDBAttributes,
   playlistElementObjectToDBAttributes,
-  createOrUpdateVideoPlaylist
+  createOrUpdateVideoPlaylist,
+  refreshVideoPlaylistIfNeeded
 }
 
 // ---------------------------------------------------------------------------
@@ -161,4 +193,24 @@ function generateThumbnailFromUrl (playlist: VideoPlaylistModel, icon: ActivityI
   const thumbnailName = playlist.getThumbnailName()
 
   return downloadImage(icon.url, CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName, THUMBNAILS_SIZE)
+}
+
+async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {
+  const options = {
+    uri: playlistUrl,
+    method: 'GET',
+    json: true,
+    activityPub: true
+  }
+
+  logger.info('Fetching remote playlist %s.', playlistUrl)
+
+  const { response, body } = await doRequest(options)
+
+  if (isPlaylistObjectValid(body) === false || checkUrlsSameHost(body.id, playlistUrl) !== true) {
+    logger.debug('Remote video playlist JSON is not valid.', { body })
+    return { statusCode: response.statusCode, playlistObject: undefined }
+  }
+
+  return { statusCode: response.statusCode, playlistObject: body }
 }

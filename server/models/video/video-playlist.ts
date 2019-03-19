@@ -17,7 +17,7 @@ import {
 } from 'sequelize-typescript'
 import * as Sequelize from 'sequelize'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, throwIfNotValid } from '../utils'
+import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -25,6 +25,7 @@ import {
 } from '../../helpers/custom-validators/video-playlists'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
+  ACTIVITY_PUB,
   CONFIG,
   CONSTRAINTS_FIELDS,
   STATIC_PATHS,
@@ -429,8 +430,20 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
   }
 
+  setAsRefreshed () {
+    this.changed('updatedAt', true)
+
+    return this.save()
+  }
+
   isOwned () {
     return this.OwnerAccount.isOwned()
+  }
+
+  isOutdated () {
+    if (this.isOwned()) return false
+
+    return isOutdated(this, ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL)
   }
 
   toFormattedJSON (): VideoPlaylist {

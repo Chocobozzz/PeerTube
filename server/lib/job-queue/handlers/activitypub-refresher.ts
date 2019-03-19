@@ -1,11 +1,12 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { fetchVideoByUrl } from '../../../helpers/video'
-import { refreshVideoIfNeeded, refreshActorIfNeeded } from '../../activitypub'
+import { refreshActorIfNeeded, refreshVideoIfNeeded, refreshVideoPlaylistIfNeeded } from '../../activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 
 export type RefreshPayload = {
-  type: 'video' | 'actor'
+  type: 'video' | 'video-playlist' | 'actor'
   url: string
 }
 
@@ -15,13 +16,13 @@ async function refreshAPObject (job: Bull.Job) {
   logger.info('Processing AP refresher in job %d for %s.', job.id, payload.url)
 
   if (payload.type === 'video') return refreshVideo(payload.url)
+  if (payload.type === 'video-playlist') return refreshVideoPlaylist(payload.url)
   if (payload.type === 'actor') return refreshActor(payload.url)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  refreshActor,
   refreshAPObject
 }
 
@@ -50,5 +51,12 @@ async function refreshActor (actorUrl: string) {
   if (actor) {
     await refreshActorIfNeeded(actor, fetchType)
   }
+}
 
+async function refreshVideoPlaylist (playlistUrl: string) {
+  const playlist = await VideoPlaylistModel.loadByUrlAndPopulateAccount(playlistUrl)
+
+  if (playlist) {
+    await refreshVideoPlaylistIfNeeded(playlist)
+  }
 }

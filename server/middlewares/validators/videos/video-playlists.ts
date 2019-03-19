@@ -8,8 +8,8 @@ import { doesVideoExist, isVideoImage } from '../../../helpers/custom-validators
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { isArrayOf, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntArray, toValueOrNull } from '../../../helpers/custom-validators/misc'
 import {
-  isVideoPlaylistDescriptionValid,
   doesVideoPlaylistExist,
+  isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
   isVideoPlaylistPrivacyValid,
   isVideoPlaylistTimestampValid,
@@ -19,7 +19,6 @@ import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { doesVideoChannelIdExist } from '../../../helpers/custom-validators/video-channels'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
-import { VideoModel } from '../../../models/video/video'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
