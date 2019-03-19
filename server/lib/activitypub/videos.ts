@@ -180,8 +180,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
   if (videoFromDatabase) {
-
-    if (allowRefresh === true) {
+    if (videoFromDatabase.isOutdated() && allowRefresh === true) {
       const refreshOptions = {
         video: videoFromDatabase,
         fetchedType: fetchType,
