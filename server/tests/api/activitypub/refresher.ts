@@ -8,7 +8,7 @@ import {
   generateUserAccessToken,
   getVideo,
   getVideoPlaylist,
-  killallServers,
+  killallServers, rateVideo,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,

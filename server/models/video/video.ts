@@ -1547,7 +1547,7 @@ export class VideoModel extends Model<VideoModel> {
       attributes: query.attributes,
       order: [ // Keep original order
         Sequelize.literal(
-          ids.map(id => `"VideoModel".id = ${id}`).join(', ')
+          ids.map(id => `"VideoModel".id = ${id} DESC`).join(', ')
         )
       ]
     }

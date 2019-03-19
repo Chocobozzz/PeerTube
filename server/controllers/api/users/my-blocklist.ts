@@ -17,11 +17,9 @@ import {
   serversBlocklistSortValidator,
   unblockServerByAccountValidator
 } from '../../../middlewares/validators'
-import { AccountModel } from '../../../models/account/account'
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
-import { ServerModel } from '../../../models/server/server'
 
 const myBlocklistRouter = express.Router()
 
@@ -83,7 +81,7 @@ async function listBlockedAccounts (req: express.Request, res: express.Response)
 
 async function blockAccount (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
-  const accountToBlock  = res.locals.account
+  const accountToBlock = res.locals.account
 
   await addAccountInBlocklist(user.Account.id, accountToBlock.id)
 

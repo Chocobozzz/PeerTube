@@ -34,8 +34,7 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
     accountId: actor.Account.id,
     inReplyToCommentId,
     originCommentId,
-    createdAt: new Date(comment.published),
-    updatedAt: new Date(comment.updated)
+    createdAt: new Date(comment.published)
   }
 }
 
@@ -74,12 +73,7 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
   const entry = await videoCommentActivityObjectToDBAttributes(videoInstance, actor, body)
   if (!entry) return { created: false }
 
-  const [ comment, created ] = await VideoCommentModel.findOrCreate({
-    where: {
-      url: body.id
-    },
-    defaults: entry
-  })
+  const [ comment, created ] = await VideoCommentModel.upsert<VideoCommentModel>(entry, { returning: true })
   comment.Account = actor.Account
   comment.Video = videoInstance
 

@@ -1,5 +1,5 @@
 import { values } from 'lodash'
-import { Transaction } from 'sequelize'
+import { Transaction, Op } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
 import { VideoRateType } from '../../../shared/models/videos'
@@ -157,5 +157,32 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     }
 
     return AccountVideoRateModel.findAndCountAll(query)
+  }
+
+  static cleanOldRatesOf (videoId: number, type: VideoRateType, beforeUpdatedAt: Date) {
+    return AccountVideoRateModel.sequelize.transaction(async t => {
+      const query = {
+        where: {
+          updatedAt: {
+            [Op.lt]: beforeUpdatedAt
+          },
+          videoId,
+          type
+        },
+        transaction: t
+      }
+
+      const deleted = await AccountVideoRateModel.destroy(query)
+
+      const options = {
+        transaction: t,
+        where: {
+          id: videoId
+        }
+      }
+
+      if (type === 'like') await VideoModel.increment({ likes: -deleted }, options)
+      else if (type === 'dislike') await VideoModel.increment({ dislikes: -deleted }, options)
+    })
   }
 }

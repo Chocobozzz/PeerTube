@@ -40,6 +40,9 @@ import { Notifier } from '../notifier'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
+import { VideoShareModel } from '../../models/video/video-share'
+import { VideoCommentModel } from '../../models/video/video-comment'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and published, we federate it
@@ -134,31 +137,43 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
   const jobPayloads: ActivitypubHttpFetcherPayload[] = []
 
   if (syncParam.likes === true) {
-    await crawlCollectionPage<string>(fetchedVideo.likes, items => createRates(items, video, 'like'))
+    const handler = items => createRates(items, video, 'like')
+    const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'like' as 'like', crawlStartDate)
+
+    await crawlCollectionPage<string>(fetchedVideo.likes, handler, cleaner)
       .catch(err => logger.error('Cannot add likes of video %s.', video.uuid, { err }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.likes, videoId: video.id, type: 'video-likes' as 'video-likes' })
   }
 
   if (syncParam.dislikes === true) {
-    await crawlCollectionPage<string>(fetchedVideo.dislikes, items => createRates(items, video, 'dislike'))
+    const handler = items => createRates(items, video, 'dislike')
+    const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'dislike' as 'dislike', crawlStartDate)
+
+    await crawlCollectionPage<string>(fetchedVideo.dislikes, handler, cleaner)
       .catch(err => logger.error('Cannot add dislikes of video %s.', video.uuid, { err }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.dislikes, videoId: video.id, type: 'video-dislikes' as 'video-dislikes' })
   }
 
   if (syncParam.shares === true) {
-    await crawlCollectionPage<string>(fetchedVideo.shares, items => addVideoShares(items, video))
+    const handler = items => addVideoShares(items, video)
+    const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
+
+    await crawlCollectionPage<string>(fetchedVideo.shares, handler, cleaner)
       .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' as 'video-shares' })
   }
 
   if (syncParam.comments === true) {
-    await crawlCollectionPage<string>(fetchedVideo.comments, items => addVideoComments(items, video))
+    const handler = items => addVideoComments(items, video)
+    const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
+
+    await crawlCollectionPage<string>(fetchedVideo.comments, handler, cleaner)
       .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err }))
   } else {
-    jobPayloads.push({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' as 'video-shares' })
+    jobPayloads.push({ uri: fetchedVideo.comments, videoId: video.id, type: 'video-comments' as 'video-comments' })
   }
 
   await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload }))

@@ -54,12 +54,7 @@ async function addVideoShares (shareUrls: string[], instance: VideoModel) {
         url: shareUrl
       }
 
-      await VideoShareModel.findOrCreate({
-        where: {
-          url: shareUrl
-        },
-        defaults: entry
-      })
+      await VideoShareModel.upsert(entry)
     } catch (err) {
       logger.warn('Cannot add share %s.', shareUrl, { err })
     }

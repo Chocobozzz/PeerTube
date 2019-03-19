@@ -160,7 +160,7 @@ const usersUpdateMeValidator = [
                   .end()
       }
 
-      const user= res.locals.oauth.token.User
+      const user = res.locals.oauth.token.User
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.status(401)
                   .send({ error: 'currentPassword is invalid.' })

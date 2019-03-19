@@ -1,4 +1,5 @@
 import * as Bull from 'bull'
+import * as Bluebird from 'bluebird'
 import { logger } from '../../../helpers/logger'
 import { processActivities } from '../../activitypub/process'
 import { addVideoComments } from '../../activitypub/video-comments'
@@ -7,6 +8,9 @@ import { VideoModel } from '../../../models/video/video'
 import { addVideoShares, createRates } from '../../activitypub'
 import { createAccountPlaylists } from '../../activitypub/playlist'
 import { AccountModel } from '../../../models/account/account'
+import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { VideoShareModel } from '../../../models/video/video-share'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 
 type FetchType = 'activity' | 'video-likes' | 'video-dislikes' | 'video-shares' | 'video-comments' | 'account-playlists'
 
@@ -37,7 +41,14 @@ async function processActivityPubHttpFetcher (job: Bull.Job) {
     'account-playlists': items => createAccountPlaylists(items, account)
   }
 
-  return crawlCollectionPage(payload.uri, fetcherType[payload.type])
+  const cleanerType: { [ id in FetchType ]?: (crawlStartDate: Date) => Bluebird<any> } = {
+    'video-likes': crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'like' as 'like', crawlStartDate),
+    'video-dislikes': crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'dislike' as 'dislike', crawlStartDate),
+    'video-shares': crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate),
+    'video-comments': crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
+  }
+
+  return crawlCollectionPage(payload.uri, fetcherType[payload.type], cleanerType[payload.type])
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize'
+import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -199,5 +200,18 @@ export class VideoShareModel extends Model<VideoShareModel> {
     }
 
     return VideoShareModel.findAndCountAll(query)
+  }
+
+  static cleanOldSharesOf (videoId: number, beforeUpdatedAt: Date) {
+    const query = {
+      where: {
+        updatedAt: {
+          [Op.lt]: beforeUpdatedAt
+        },
+        videoId
+      }
+    }
+
+    return VideoShareModel.destroy(query)
   }
 }
