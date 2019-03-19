@@ -45,97 +45,119 @@ import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/vid
 const activityPubClientRouter = express.Router()
 
 activityPubClientRouter.get('/accounts?/:name',
-  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
-  executeIfActivityPub(accountController)
+  executeIfActivityPub,
+  asyncMiddleware(localAccountValidator),
+  accountController
 )
 activityPubClientRouter.get('/accounts?/:name/followers',
-  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
-  executeIfActivityPub(asyncMiddleware(accountFollowersController))
+  executeIfActivityPub,
+  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountFollowersController)
 )
 activityPubClientRouter.get('/accounts?/:name/following',
-  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
-  executeIfActivityPub(asyncMiddleware(accountFollowingController))
+  executeIfActivityPub,
+  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountFollowingController)
 )
 activityPubClientRouter.get('/accounts?/:name/playlists',
-  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
-  executeIfActivityPub(asyncMiddleware(accountPlaylistsController))
+  executeIfActivityPub,
+  asyncMiddleware(localAccountValidator),
+  asyncMiddleware(accountPlaylistsController)
 )
 activityPubClientRouter.get('/accounts?/:name/likes/:videoId',
-  executeIfActivityPub(asyncMiddleware(getAccountVideoRateValidator('like'))),
-  executeIfActivityPub(getAccountVideoRate('like'))
+  executeIfActivityPub,
+  asyncMiddleware(getAccountVideoRateValidator('like')),
+  getAccountVideoRate('like')
 )
 activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
-  executeIfActivityPub(asyncMiddleware(getAccountVideoRateValidator('dislike'))),
-  executeIfActivityPub(getAccountVideoRate('dislike'))
+  executeIfActivityPub,
+  asyncMiddleware(getAccountVideoRateValidator('dislike')),
+  getAccountVideoRate('dislike')
 )
 
 activityPubClientRouter.get('/videos/watch/:id',
-  executeIfActivityPub(asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS))),
-  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video-with-rights'))),
-  executeIfActivityPub(asyncMiddleware(videoController))
+  executeIfActivityPub,
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
+  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/activity',
-  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video-with-rights'))),
-  executeIfActivityPub(asyncMiddleware(videoController))
+  executeIfActivityPub,
+  asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
+  asyncMiddleware(videoController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
-  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
-  executeIfActivityPub(asyncMiddleware(videoAnnouncesController))
+  executeIfActivityPub,
+  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videoAnnouncesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces/:actorId',
-  executeIfActivityPub(asyncMiddleware(videosShareValidator)),
-  executeIfActivityPub(asyncMiddleware(videoAnnounceController))
+  executeIfActivityPub,
+  asyncMiddleware(videosShareValidator),
+  asyncMiddleware(videoAnnounceController)
 )
 activityPubClientRouter.get('/videos/watch/:id/likes',
-  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
-  executeIfActivityPub(asyncMiddleware(videoLikesController))
+  executeIfActivityPub,
+  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videoLikesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/dislikes',
-  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
-  executeIfActivityPub(asyncMiddleware(videoDislikesController))
+  executeIfActivityPub,
+  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videoDislikesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/comments',
-  executeIfActivityPub(asyncMiddleware(videosCustomGetValidator('only-video'))),
-  executeIfActivityPub(asyncMiddleware(videoCommentsController))
+  executeIfActivityPub,
+  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videoCommentsController)
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
-  executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
-  executeIfActivityPub(asyncMiddleware(videoCommentController))
+  executeIfActivityPub,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentController)
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
-  executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
-  executeIfActivityPub(asyncMiddleware(videoCommentController))
+  executeIfActivityPub,
+  asyncMiddleware(videoCommentGetValidator),
+  asyncMiddleware(videoCommentController)
 )
 
 activityPubClientRouter.get('/video-channels/:name',
-  executeIfActivityPub(asyncMiddleware(localVideoChannelValidator)),
-  executeIfActivityPub(asyncMiddleware(videoChannelController))
+  executeIfActivityPub,
+  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelController)
 )
 activityPubClientRouter.get('/video-channels/:name/followers',
-  executeIfActivityPub(asyncMiddleware(localVideoChannelValidator)),
-  executeIfActivityPub(asyncMiddleware(videoChannelFollowersController))
+  executeIfActivityPub,
+  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelFollowersController)
 )
 activityPubClientRouter.get('/video-channels/:name/following',
-  executeIfActivityPub(asyncMiddleware(localVideoChannelValidator)),
-  executeIfActivityPub(asyncMiddleware(videoChannelFollowingController))
+  executeIfActivityPub,
+  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelFollowingController)
 )
 
 activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
-  executeIfActivityPub(asyncMiddleware(videoFileRedundancyGetValidator)),
-  executeIfActivityPub(asyncMiddleware(videoRedundancyController))
+  executeIfActivityPub,
+  asyncMiddleware(videoFileRedundancyGetValidator),
+  asyncMiddleware(videoRedundancyController)
 )
 activityPubClientRouter.get('/redundancy/streaming-playlists/:streamingPlaylistType/:videoId',
-  executeIfActivityPub(asyncMiddleware(videoPlaylistRedundancyGetValidator)),
-  executeIfActivityPub(asyncMiddleware(videoRedundancyController))
+  executeIfActivityPub,
+  asyncMiddleware(videoPlaylistRedundancyGetValidator),
+  asyncMiddleware(videoRedundancyController)
 )
 
 activityPubClientRouter.get('/video-playlists/:playlistId',
-  executeIfActivityPub(asyncMiddleware(videoPlaylistsGetValidator)),
-  executeIfActivityPub(asyncMiddleware(videoPlaylistController))
+  executeIfActivityPub,
+  asyncMiddleware(videoPlaylistsGetValidator),
+  asyncMiddleware(videoPlaylistController)
 )
 activityPubClientRouter.get('/video-playlists/:playlistId/:videoId',
-  executeIfActivityPub(asyncMiddleware(videoPlaylistElementAPGetValidator)),
-  executeIfActivityPub(asyncMiddleware(videoPlaylistElementController))
+  executeIfActivityPub,
+  asyncMiddleware(videoPlaylistElementAPGetValidator),
+  asyncMiddleware(videoPlaylistElementController)
 )
 
 // ---------------------------------------------------------------------------

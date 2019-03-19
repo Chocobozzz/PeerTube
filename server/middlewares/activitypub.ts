@@ -1,5 +1,4 @@
-import { eachSeries } from 'async'
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
@@ -30,23 +29,16 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const accepted = req.accepts(ACCEPT_HEADERS)
-    if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.indexOf(accepted) === -1) {
-      return next()
-    }
-
-    logger.debug('ActivityPub request for %s.', req.url)
-
-    if (Array.isArray(fun) === true) {
-      return eachSeries(fun as RequestHandler[], (f, cb) => {
-        f(req, res, cb)
-      }, next)
-    }
-
-    return (fun as RequestHandler)(req, res, next)
+function executeIfActivityPub (req: Request, res: Response, next: NextFunction) {
+  const accepted = req.accepts(ACCEPT_HEADERS)
+  if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.indexOf(accepted) === -1) {
+    // Bypass this route
+    return next('route')
   }
+
+  logger.debug('ActivityPub request for %s.', req.url)
+
+  return next()
 }
 
 // ---------------------------------------------------------------------------
