@@ -881,6 +881,8 @@ function buildVideosExtname () {
 function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
   if (!objs) return []
 
+  if (!Array.isArray(objs)) return objs
+
   return objs.map(obj => {
     return Object.assign({}, obj, {
       minLifetime: parseDuration(obj.min_lifetime),

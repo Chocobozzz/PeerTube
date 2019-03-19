@@ -1,6 +1,5 @@
 import * as config from 'config'
 import { promisify0 } from '../helpers/core-utils'
-import { isArray } from '../helpers/custom-validators/misc'
 
 // ONLY USE CORE MODULES IN THIS FILE!
 
@@ -42,7 +41,8 @@ function checkMissedConfig () {
   }
 
   const redundancyVideos = config.get<any>('redundancy.videos.strategies')
-  if (isArray(redundancyVideos)) {
+
+  if (Array.isArray(redundancyVideos)) {
     for (const r of redundancyVideos) {
       if (!r.size) miss.push('redundancy.videos.strategies.size')
       if (!r.min_lifetime) miss.push('redundancy.videos.strategies.min_lifetime')

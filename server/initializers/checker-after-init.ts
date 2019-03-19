@@ -61,6 +61,7 @@ function checkConfig () {
 
   // Redundancies
   const redundancyVideos = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
+  console.log(redundancyVideos)
   if (isArray(redundancyVideos)) {
     const available = [ 'most-views', 'trending', 'recently-added' ]
     for (const r of redundancyVideos) {
@@ -83,6 +84,8 @@ function checkConfig () {
     if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
       return 'Min views in recently added strategy is not a number'
     }
+  } else {
+    return 'Videos redundancy should be an array (you must uncomment lines containing - too)'
   }
 
   // Check storage directory locations
