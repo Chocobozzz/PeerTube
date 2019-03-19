@@ -583,8 +583,8 @@ const ACTIVITY_PUB = {
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
   MAX_RECURSION_COMMENTS: 100,
-  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000, // 1 day
-  VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 // 1 day
+  ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2, // 2 days
+  VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2 // 2 days
 }
 
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
