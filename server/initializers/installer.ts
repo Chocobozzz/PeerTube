@@ -24,7 +24,7 @@ async function installApplication () {
         }),
 
       // Directories
-      removeCacheDirectories()
+      removeCacheAndTmpDirectories()
         .then(() => createDirectoriesIfNotExist())
     ])
   } catch (err) {
@@ -41,7 +41,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function removeCacheDirectories () {
+function removeCacheAndTmpDirectories () {
   const cacheDirectories = Object.keys(CACHE)
     .map(k => CACHE[k].DIRECTORY)
 
@@ -52,6 +52,8 @@ function removeCacheDirectories () {
     const dir = cacheDirectories[key]
     tasks.push(remove(dir))
   }
+
+  tasks.push(remove(CONFIG.STORAGE.TMP_DIR))
 
   return Promise.all(tasks)
 }
