@@ -100,36 +100,40 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
-const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
+// TODO: remove 'video-file'
+const JOB_ATTEMPTS: { [ id in (JobType | 'video-file') ]: number } = {
   'activitypub-http-broadcast': 5,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
   'activitypub-follow': 5,
   'video-file-import': 1,
+  'video-transcoding': 1,
   'video-file': 1,
   'video-import': 1,
   'email': 5,
   'videos-views': 1,
   'activitypub-refresher': 1
 }
-const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
+const JOB_CONCURRENCY: { [ id in (JobType | 'video-file') ]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
   'activitypub-follow': 3,
   'video-file-import': 1,
+  'video-transcoding': 1,
   'video-file': 1,
   'video-import': 1,
   'email': 5,
   'videos-views': 1,
   'activitypub-refresher': 1
 }
-const JOB_TTL: { [ id in JobType ]: number } = {
+const JOB_TTL: { [ id in (JobType | 'video-file') ]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
   'activitypub-http-fetcher': 60000 * 10, // 10 minutes
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
+  'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes

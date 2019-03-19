@@ -11,7 +11,7 @@ import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 import { generateHlsPlaylist, importVideoFile, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
 
-export type VideoFilePayload = {
+export type VideoTranscodingPayload = {
   videoUUID: string
   resolution?: VideoResolution
   isNewVideo?: boolean
@@ -41,8 +41,8 @@ async function processVideoFileImport (job: Bull.Job) {
   return video
 }
 
-async function processVideoFile (job: Bull.Job) {
-  const payload = job.data as VideoFilePayload
+async function processVideoTranscoding (job: Bull.Job) {
+  const payload = job.data as VideoTranscodingPayload
   logger.info('Processing video file in job %d.', job.id)
 
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
@@ -83,7 +83,7 @@ async function onHlsPlaylistGenerationSuccess (video: VideoModel) {
   })
 }
 
-async function onVideoFileTranscoderOrImportSuccess (video: VideoModel, payload?: VideoFilePayload) {
+async function onVideoFileTranscoderOrImportSuccess (video: VideoModel, payload?: VideoTranscodingPayload) {
   if (video === undefined) return undefined
 
   const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
@@ -118,7 +118,7 @@ async function onVideoFileTranscoderOrImportSuccess (video: VideoModel, payload?
   await createHlsJobIfEnabled(payload)
 }
 
-async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: VideoFilePayload) {
+async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: VideoTranscodingPayload) {
   if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)
@@ -148,7 +148,7 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Video
           resolution
         }
 
-        const p = JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
+        const p = JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
         tasks.push(p)
       }
 
@@ -182,13 +182,13 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Video
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoFile,
+  processVideoTranscoding,
   processVideoFileImport
 }
 
 // ---------------------------------------------------------------------------
 
-function createHlsJobIfEnabled (payload?: VideoFilePayload) {
+function createHlsJobIfEnabled (payload?: VideoTranscodingPayload) {
   // Generate HLS playlist?
   if (payload && CONFIG.TRANSCODING.HLS.ENABLED) {
     const hlsTranscodingPayload = {
@@ -199,6 +199,6 @@ function createHlsJobIfEnabled (payload?: VideoFilePayload) {
       generateHlsPlaylist: true
     }
 
-    return JobQueue.Instance.createJob({ type: 'video-file', payload: hlsTranscodingPayload })
+    return JobQueue.Instance.createJob({ type: 'video-transcoding', payload: hlsTranscodingPayload })
   }
 }

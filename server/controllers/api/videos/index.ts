@@ -283,7 +283,7 @@ async function addVideo (req: express.Request, res: express.Response) {
       isNewVideo: true
     }
 
-    await JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
+    await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
   }
 
   return res.json({
