@@ -20,13 +20,13 @@ function isVideoChannelSupportValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.SUPPORT))
 }
 
-async function isLocalVideoChannelNameExist (name: string, res: express.Response) {
+async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
 
   return processVideoChannelExist(videoChannel, res)
 }
 
-async function isVideoChannelIdExist (id: number | string, res: express.Response) {
+async function doesVideoChannelIdExist (id: number | string, res: express.Response) {
   let videoChannel: VideoChannelModel
   if (validator.isInt('' + id)) {
     videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
@@ -37,7 +37,7 @@ async function isVideoChannelIdExist (id: number | string, res: express.Response
   return processVideoChannelExist(videoChannel, res)
 }
 
-async function isVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
+async function doesVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithDomain)
 
   return processVideoChannelExist(videoChannel, res)
@@ -46,12 +46,12 @@ async function isVideoChannelNameWithHostExist (nameWithDomain: string, res: exp
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoChannelNameWithHostExist,
-  isLocalVideoChannelNameExist,
+  doesVideoChannelNameWithHostExist,
+  doesLocalVideoChannelNameExist,
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelSupportValid,
-  isVideoChannelIdExist
+  doesVideoChannelIdExist
 }
 
 function processVideoChannelExist (videoChannel: VideoChannelModel, res: express.Response) {

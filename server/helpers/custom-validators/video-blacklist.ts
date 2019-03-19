@@ -9,7 +9,7 @@ function isVideoBlacklistReasonValid (value: string) {
   return value === null || validator.isLength(value, VIDEO_BLACKLIST_CONSTRAINTS_FIELDS.REASON)
 }
 
-async function isVideoBlacklistExist (videoId: number, res: Response) {
+async function doesVideoBlacklistExist (videoId: number, res: Response) {
   const videoBlacklist = await VideoBlacklistModel.loadByVideoId(videoId)
 
   if (videoBlacklist === null) {
@@ -28,5 +28,5 @@ async function isVideoBlacklistExist (videoId: number, res: Response) {
 
 export {
   isVideoBlacklistReasonValid,
-  isVideoBlacklistExist
+  doesVideoBlacklistExist
 }

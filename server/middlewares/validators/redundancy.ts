@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import { param, body } from 'express-validator/check'
 import { exists, isBooleanValid, isIdOrUUIDValid, toIntOrNull } from '../../helpers/custom-validators/misc'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { VideoModel } from '../../models/video/video'
@@ -27,7 +27,7 @@ const videoFileRedundancyGetValidator = [
     logger.debug('Checking videoFileRedundancyGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
 
     const video: VideoModel = res.locals.video
     const videoFile = video.VideoFiles.find(f => {
@@ -53,7 +53,7 @@ const videoPlaylistRedundancyGetValidator = [
     logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
 
     const video: VideoModel = res.locals.video
     const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p === req.params.streamingPlaylistType)

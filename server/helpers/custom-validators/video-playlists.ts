@@ -26,7 +26,7 @@ function isVideoPlaylistTypeValid (value: any) {
   return exists(value) && VIDEO_PLAYLIST_TYPES[ value ] !== undefined
 }
 
-async function isVideoPlaylistExist (id: number | string, res: express.Response, fetchType: 'summary' | 'all' = 'summary') {
+async function doesVideoPlaylistExist (id: number | string, res: express.Response, fetchType: 'summary' | 'all' = 'summary') {
   const videoPlaylist = fetchType === 'summary'
     ? await VideoPlaylistModel.loadWithAccountAndChannelSummary(id, undefined)
     : await VideoPlaylistModel.loadWithAccountAndChannel(id, undefined)
@@ -46,7 +46,7 @@ async function isVideoPlaylistExist (id: number | string, res: express.Response,
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoPlaylistExist,
+  doesVideoPlaylistExist,
   isVideoPlaylistNameValid,
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistPrivacyValid,

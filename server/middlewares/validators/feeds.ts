@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { param, query } from 'express-validator/check'
-import { isAccountIdExist, isAccountNameValid, isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
+import { doesAccountIdExist, isAccountNameValid, doesAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
-import { isVideoChannelIdExist, isVideoChannelNameWithHostExist } from '../../helpers/custom-validators/video-channels'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoChannelIdExist, doesVideoChannelNameWithHostExist } from '../../helpers/custom-validators/video-channels'
+import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 
 const videoFeedsValidator = [
@@ -22,10 +22,10 @@ const videoFeedsValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    if (req.query.accountId && !await isAccountIdExist(req.query.accountId, res)) return
-    if (req.query.videoChannelId && !await isVideoChannelIdExist(req.query.videoChannelId, res)) return
-    if (req.query.accountName && !await isAccountNameWithHostExist(req.query.accountName, res)) return
-    if (req.query.videoChannelName && !await isVideoChannelNameWithHostExist(req.query.videoChannelName, res)) return
+    if (req.query.accountId && !await doesAccountIdExist(req.query.accountId, res)) return
+    if (req.query.videoChannelId && !await doesVideoChannelIdExist(req.query.videoChannelId, res)) return
+    if (req.query.accountName && !await doesAccountNameWithHostExist(req.query.accountName, res)) return
+    if (req.query.videoChannelName && !await doesVideoChannelNameWithHostExist(req.query.videoChannelName, res)) return
 
     return next()
   }
@@ -41,7 +41,7 @@ const videoCommentsFeedsValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    if (req.query.videoId && !await isVideoExist(req.query.videoId, res)) return
+    if (req.query.videoId && !await doesVideoExist(req.query.videoId, res)) return
 
     return next()
   }

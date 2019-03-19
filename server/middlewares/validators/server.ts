@@ -57,7 +57,7 @@ const contactAdministratorValidator = [
         .end()
     }
 
-    if (await Redis.Instance.isContactFormIpExists(req.ip)) {
+    if (await Redis.Instance.doesContactFormIpExist(req.ip)) {
       logger.info('Refusing a contact form by %s: already sent one recently.', req.ip)
 
       return res

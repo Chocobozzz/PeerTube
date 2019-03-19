@@ -17,9 +17,9 @@ import {
   isVideoOriginallyPublishedAtValid,
   isScheduleVideoUpdatePrivacyValid,
   isVideoCategoryValid,
-  isVideoChannelOfAccountExist,
+  doesVideoChannelOfAccountExist,
   isVideoDescriptionValid,
-  isVideoExist,
+  doesVideoExist,
   isVideoFile,
   isVideoFilterValid,
   isVideoImage,
@@ -66,7 +66,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     const isAble = await user.isAbleToUploadVideo(videoFile)
     if (isAble === false) {
@@ -109,7 +109,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
-    if (!await isVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
     const video = res.locals.video
 
@@ -123,7 +123,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
         .json({ error: 'Cannot set "private" a video that was not private.' })
     }
 
-    if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (req.body.channelId && !await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -162,7 +162,7 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
       logger.debug('Checking videosGet parameters', { parameters: req.params })
 
       if (areValidationErrors(req, res)) return
-      if (!await isVideoExist(req.params.id, res, fetchType)) return
+      if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
       const video: VideoModel = res.locals.video
 
@@ -207,7 +207,7 @@ const videosRemoveValidator = [
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
+    if (!await doesVideoExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to delete the video
     if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.REMOVE_ANY_VIDEO, res)) return
@@ -223,7 +223,7 @@ const videosChangeOwnershipValidator = [
     logger.debug('Checking changeOwnership parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
 
     // Check if the user who did the request is able to change the ownership of the video
     if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
@@ -272,7 +272,7 @@ const videosTerminateChangeOwnershipValidator = [
 const videosAcceptChangeOwnershipValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const body = req.body as VideoChangeOwnershipAccept
-    if (!await isVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
+    if (!await doesVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
 
     const user = res.locals.oauth.token.User
     const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel

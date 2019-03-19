@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param } from 'express-validator/check'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
-import { isVideoExist, isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
+import { doesVideoExist, isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
@@ -17,7 +17,7 @@ const videoUpdateRateValidator = [
     logger.debug('Checking videoRate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.id, res)) return
+    if (!await doesVideoExist(req.params.id, res)) return
 
     return next()
   }

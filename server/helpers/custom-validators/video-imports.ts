@@ -30,7 +30,7 @@ function isVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multe
   return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
 }
 
-async function isVideoImportExist (id: number, res: express.Response) {
+async function doesVideoImportExist (id: number, res: express.Response) {
   const videoImport = await VideoImportModel.loadAndPopulateVideo(id)
 
   if (!videoImport) {
@@ -50,6 +50,6 @@ async function isVideoImportExist (id: number, res: express.Response) {
 export {
   isVideoImportStateValid,
   isVideoImportTargetUrlValid,
-  isVideoImportExist,
+  doesVideoImportExist,
   isVideoImportTorrentFile
 }

@@ -6,7 +6,7 @@ import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { isVideoChannelOfAccountExist, isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { doesVideoChannelOfAccountExist, isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { CONFIG } from '../../../initializers/constants'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
 
@@ -51,7 +51,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
                 .end()
     }
 
-    if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     // Check we have at least 1 required param
     if (!req.body.targetUrl && !req.body.magnetUri && !torrentFile) {

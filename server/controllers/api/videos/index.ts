@@ -421,7 +421,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
   const ip = req.ip
-  const exists = await Redis.Instance.isVideoIPViewExists(ip, videoInstance.uuid)
+  const exists = await Redis.Instance.doesVideoIPViewExist(ip, videoInstance.uuid)
   if (exists) {
     logger.debug('View for ip %s and video %s already exists.', ip, videoInstance.uuid)
     return res.status(204).end()

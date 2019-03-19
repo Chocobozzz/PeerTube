@@ -88,7 +88,7 @@ class Redis {
     return this.setValue(this.generateContactFormKey(ip), '1', CONTACT_FORM_LIFETIME)
   }
 
-  async isContactFormIpExists (ip: string) {
+  async doesContactFormIpExist (ip: string) {
     return this.exists(this.generateContactFormKey(ip))
   }
 
@@ -98,7 +98,7 @@ class Redis {
     return this.setValue(this.generateViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
   }
 
-  async isVideoIPViewExists (ip: string, videoUUID: string) {
+  async doesVideoIPViewExist (ip: string, videoUUID: string) {
     return this.exists(this.generateViewKey(ip, videoUUID))
   }
 

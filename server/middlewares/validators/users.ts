@@ -16,7 +16,7 @@ import {
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid, isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { Redis } from '../../lib/redis'
@@ -194,7 +194,7 @@ const usersVideoRatingValidator = [
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res, 'id')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
     return next()
   }
