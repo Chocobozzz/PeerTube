@@ -5,10 +5,10 @@ import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { sequelizeTypescript, CONFIG } from '../../../initializers'
+import { CONFIG, sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
-import { generateHlsPlaylist, importVideoFile, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
+import { generateHlsPlaylist, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
 
 export type VideoTranscodingPayload = {
@@ -17,28 +17,6 @@ export type VideoTranscodingPayload = {
   isNewVideo?: boolean
   isPortraitMode?: boolean
   generateHlsPlaylist?: boolean
-}
-
-export type VideoFileImportPayload = {
-  videoUUID: string,
-  filePath: string
-}
-
-async function processVideoFileImport (job: Bull.Job) {
-  const payload = job.data as VideoFileImportPayload
-  logger.info('Processing video file import in job %d.', job.id)
-
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(payload.videoUUID)
-  // No video, maybe deleted?
-  if (!video) {
-    logger.info('Do not process job %d, video does not exist.', job.id)
-    return undefined
-  }
-
-  await importVideoFile(video, payload.filePath)
-
-  await onVideoFileTranscoderOrImportSuccess(video)
-  return video
 }
 
 async function processVideoTranscoding (job: Bull.Job) {
@@ -59,7 +37,7 @@ async function processVideoTranscoding (job: Bull.Job) {
   } else if (payload.resolution) { // Transcoding in other resolution
     await transcodeOriginalVideofile(video, payload.resolution, payload.isPortraitMode || false)
 
-    await retryTransactionWrapper(onVideoFileTranscoderOrImportSuccess, video, payload)
+    await retryTransactionWrapper(publishVideoIfNeeded, video, payload)
   } else {
     await optimizeVideofile(video)
 
@@ -83,9 +61,7 @@ async function onHlsPlaylistGenerationSuccess (video: VideoModel) {
   })
 }
 
-async function onVideoFileTranscoderOrImportSuccess (video: VideoModel, payload?: VideoTranscodingPayload) {
-  if (video === undefined) return undefined
-
+async function publishVideoIfNeeded (video: VideoModel, payload?: VideoTranscodingPayload) {
   const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
@@ -183,7 +159,7 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Video
 
 export {
   processVideoTranscoding,
-  processVideoFileImport
+  publishVideoIfNeeded
 }
 
 // ---------------------------------------------------------------------------

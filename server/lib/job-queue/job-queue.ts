@@ -7,16 +7,12 @@ import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { EmailPayload, processEmail } from './handlers/email'
-import {
-  processVideoFileImport,
-  processVideoTranscoding,
-  VideoFileImportPayload,
-  VideoTranscodingPayload
-} from './handlers/video-transcoding'
+import { processVideoTranscoding, VideoTranscodingPayload } from './handlers/video-transcoding'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 import { processVideoImport, VideoImportPayload } from './handlers/video-import'
 import { processVideosViews } from './handlers/video-views'
 import { refreshAPObject, RefreshPayload } from './handlers/activitypub-refresher'
+import { processVideoFileImport, VideoFileImportPayload } from './handlers/video-file-import'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
