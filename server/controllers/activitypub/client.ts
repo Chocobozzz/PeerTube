@@ -169,27 +169,27 @@ export {
 // ---------------------------------------------------------------------------
 
 function accountController (req: express.Request, res: express.Response) {
-  const account: AccountModel = res.locals.account
+  const account = res.locals.account
 
   return activityPubResponse(activityPubContextify(account.toActivityPubObject()), res)
 }
 
 async function accountFollowersController (req: express.Request, res: express.Response) {
-  const account: AccountModel = res.locals.account
+  const account = res.locals.account
   const activityPubResult = await actorFollowers(req, account.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function accountFollowingController (req: express.Request, res: express.Response) {
-  const account: AccountModel = res.locals.account
+  const account = res.locals.account
   const activityPubResult = await actorFollowing(req, account.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function accountPlaylistsController (req: express.Request, res: express.Response) {
-  const account: AccountModel = res.locals.account
+  const account = res.locals.account
   const activityPubResult = await actorPlaylists(req, account)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
@@ -197,7 +197,7 @@ async function accountPlaylistsController (req: express.Request, res: express.Re
 
 function getAccountVideoRate (rateType: VideoRateType) {
   return (req: express.Request, res: express.Response) => {
-    const accountVideoRate: AccountVideoRateModel = res.locals.accountVideoRate
+    const accountVideoRate = res.locals.accountVideoRate
 
     const byActor = accountVideoRate.Account.Actor
     const url = getRateUrl(rateType, byActor, accountVideoRate.Video)
@@ -211,7 +211,7 @@ function getAccountVideoRate (rateType: VideoRateType) {
 
 async function videoController (req: express.Request, res: express.Response) {
   // We need more attributes
-  const video: VideoModel = await VideoModel.loadForGetAPI(res.locals.video.id)
+  const video = await VideoModel.loadForGetAPI(res.locals.video.id)
 
   if (video.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(video.url)
 
@@ -230,7 +230,7 @@ async function videoController (req: express.Request, res: express.Response) {
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response) {
-  const share = res.locals.videoShare as VideoShareModel
+  const share = res.locals.videoShare
 
   if (share.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(share.url)
 
@@ -240,7 +240,7 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response) {
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
 
   const handler = async (start: number, count: number) => {
     const result = await VideoShareModel.listAndCountByVideoId(video.id, start, count)
@@ -255,21 +255,21 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
   const json = await videoRates(req, 'like', video, getVideoLikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
   const json = await videoRates(req, 'dislike', video, getVideoDislikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
 
   const handler = async (start: number, count: number) => {
     const result = await VideoCommentModel.listAndCountByVideoId(video.id, start, count)
@@ -284,27 +284,27 @@ async function videoCommentsController (req: express.Request, res: express.Respo
 }
 
 async function videoChannelController (req: express.Request, res: express.Response) {
-  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const videoChannel = res.locals.videoChannel
 
   return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject()), res)
 }
 
 async function videoChannelFollowersController (req: express.Request, res: express.Response) {
-  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const videoChannel = res.locals.videoChannel
   const activityPubResult = await actorFollowers(req, videoChannel.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function videoChannelFollowingController (req: express.Request, res: express.Response) {
-  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const videoChannel = res.locals.videoChannel
   const activityPubResult = await actorFollowing(req, videoChannel.Actor)
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function videoCommentController (req: express.Request, res: express.Response) {
-  const videoComment: VideoCommentModel = res.locals.videoComment
+  const videoComment = res.locals.videoComment
 
   if (videoComment.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(videoComment.url)
 
@@ -323,7 +323,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
 }
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
-  const videoRedundancy: VideoRedundancyModel = res.locals.videoRedundancy
+  const videoRedundancy = res.locals.videoRedundancy
   if (videoRedundancy.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(videoRedundancy.url)
 
   const serverActor = await getServerActor()
@@ -340,7 +340,7 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 }
 
 async function videoPlaylistController (req: express.Request, res: express.Response) {
-  const playlist: VideoPlaylistModel = res.locals.videoPlaylist
+  const playlist = res.locals.videoPlaylist
 
   // We need more attributes
   playlist.OwnerAccount = await AccountModel.load(playlist.ownerAccountId)
@@ -353,7 +353,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
 }
 
 async function videoPlaylistElementController (req: express.Request, res: express.Response) {
-  const videoPlaylistElement: VideoPlaylistElementModel = res.locals.videoPlaylistElement
+  const videoPlaylistElement = res.locals.videoPlaylistElement
 
   const json = videoPlaylistElement.toActivityPubObject()
   return activityPubResponse(activityPubContextify(json), res)

@@ -1,6 +1,5 @@
 import * as express from 'express'
 import { asyncMiddleware, authenticate } from '../../../middlewares'
-import { UserModel } from '../../../models/account/user'
 import { doVideosInPlaylistExistValidator } from '../../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
@@ -23,7 +22,7 @@ export {
 
 async function doVideosInPlaylistExist (req: express.Request, res: express.Response) {
   const videoIds = req.query.videoIds.map(i => parseInt(i + '', 10))
-  const user = res.locals.oauth.token.User as UserModel
+  const user = res.locals.oauth.token.User
 
   const results = await VideoPlaylistModel.listPlaylistIdsOf(user.Account.id, videoIds)
 

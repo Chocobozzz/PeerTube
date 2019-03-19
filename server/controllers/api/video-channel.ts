@@ -30,7 +30,6 @@ import { updateAvatarValidator } from '../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../lib/avatar'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../helpers/audit-logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
-import { UserModel } from '../../models/account/user'
 import { JobQueue } from '../../lib/job-queue'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
@@ -109,16 +108,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listVideoChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listVideoChannels (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await VideoChannelModel.listForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function updateVideoChannelAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
-  const videoChannel = res.locals.videoChannel as VideoChannelModel
+  const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
   const avatar = await updateActorAvatarFile(avatarPhysicalFile, videoChannel)
@@ -136,7 +135,7 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
 
   const videoChannelCreated: VideoChannelModel = await sequelizeTypescript.transaction(async t => {
-    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+    const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     return createVideoChannel(videoChannelInfo, account, t)
   })
@@ -156,7 +155,7 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
 }
 
 async function updateVideoChannel (req: express.Request, res: express.Response) {
-  const videoChannelInstance = res.locals.videoChannel as VideoChannelModel
+  const videoChannelInstance = res.locals.videoChannel
   const videoChannelFieldsSave = videoChannelInstance.toJSON()
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
   const videoChannelInfoToUpdate = req.body as VideoChannelUpdate
@@ -196,7 +195,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 }
 
 async function removeVideoChannel (req: express.Request, res: express.Response) {
-  const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
+  const videoChannelInstance = res.locals.videoChannel
 
   await sequelizeTypescript.transaction(async t => {
     await VideoPlaylistModel.resetPlaylistsOfChannel(videoChannelInstance.id, t)
@@ -210,7 +209,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
   return res.type('json').status(204).end()
 }
 
-async function getVideoChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelWithVideos = await VideoChannelModel.loadAndPopulateAccountAndVideos(res.locals.videoChannel.id)
 
   if (videoChannelWithVideos.isOutdated()) {
@@ -236,8 +235,8 @@ async function listVideoChannelPlaylists (req: express.Request, res: express.Res
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listVideoChannelVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
+async function listVideoChannelVideos (req: express.Request, res: express.Response) {
+  const videoChannelInstance = res.locals.videoChannel
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({

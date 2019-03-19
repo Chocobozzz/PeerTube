@@ -5,7 +5,6 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidActorHandles, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
-import { UserModel } from '../../models/account/user'
 import { CONFIG } from '../../initializers'
 import { toArray } from '../../helpers/custom-validators/misc'
 
@@ -46,7 +45,7 @@ const userSubscriptionGetValidator = [
     let [ name, host ] = req.params.uri.split('@')
     if (host === CONFIG.WEBSERVER.HOST) host = null
 
-    const user: UserModel = res.locals.oauth.token.User
+    const user = res.locals.oauth.token.User
     const subscription = await ActorFollowModel.loadByActorAndTargetNameAndHostForAPI(user.Account.Actor.id, name, host)
 
     if (!subscription || !subscription.ActorFollowing.VideoChannel) {

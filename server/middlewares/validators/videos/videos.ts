@@ -130,7 +130,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 ])
 
 async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
 
   // Anybody can watch local videos
   if (video.isOwned() === true) return next()
@@ -164,13 +164,13 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
       if (areValidationErrors(req, res)) return
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
-      const video: VideoModel = res.locals.video
+      const video = res.locals.video
 
       // Video private or blacklisted
       if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
         await authenticatePromiseIfNeeded(req, res)
 
-        const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : null
+        const user = res.locals.oauth ? res.locals.oauth.token.User : null
 
         // Only the owner or a user that have blacklist rights can see the video
         if (
@@ -256,7 +256,7 @@ const videosTerminateChangeOwnershipValidator = [
     return next()
   },
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+    const videoChangeOwnership = res.locals.videoChangeOwnership
 
     if (videoChangeOwnership.status === VideoChangeOwnershipStatus.WAITING) {
       return next()
@@ -275,7 +275,7 @@ const videosAcceptChangeOwnershipValidator = [
     if (!await doesVideoChannelOfAccountExist(body.channelId, res.locals.oauth.token.User, res)) return
 
     const user = res.locals.oauth.token.User
-    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+    const videoChangeOwnership = res.locals.videoChangeOwnership
     const isAble = await user.isAbleToUploadVideo(videoChangeOwnership.Video.getOriginalFile())
     if (isAble === false) {
       res.status(403)
@@ -395,7 +395,7 @@ const commonVideosFiltersValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+    const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
     if (req.query.filter === 'all-local' && (!user || user.hasRight(UserRight.SEE_ALL_VIDEOS) === false)) {
       res.status(401)
          .json({ error: 'You are not allowed to see all local videos.' })

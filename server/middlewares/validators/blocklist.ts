@@ -20,7 +20,7 @@ const blockAccountValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesAccountNameWithHostExist(req.body.accountName, res)) return
 
-    const user = res.locals.oauth.token.User as UserModel
+    const user = res.locals.oauth.token.User
     const accountToBlock = res.locals.account
 
     if (user.Account.id === accountToBlock.id) {
@@ -44,7 +44,7 @@ const unblockAccountByAccountValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
 
-    const user = res.locals.oauth.token.User as UserModel
+    const user = res.locals.oauth.token.User
     const targetAccount = res.locals.account
     if (!await doesUnblockAccountExist(user.Account.id, targetAccount.id, res)) return
 
@@ -106,7 +106,7 @@ const unblockServerByAccountValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const user = res.locals.oauth.token.User as UserModel
+    const user = res.locals.oauth.token.User
     if (!await doesUnblockServerExist(user.Account.id, req.params.host, res)) return
 
     return next()

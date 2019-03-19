@@ -14,7 +14,6 @@ import {
   userSubscriptionGetValidator
 } from '../../../middlewares'
 import { areSubscriptionsExistValidator, userSubscriptionsSortValidator, videosSortValidator } from '../../../middlewares/validators'
-import { UserModel } from '../../../models/account/user'
 import { VideoModel } from '../../../models/video/video'
 import { buildNSFWFilter } from '../../../helpers/express-utils'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
@@ -77,7 +76,7 @@ export {
 
 async function areSubscriptionsExist (req: express.Request, res: express.Response) {
   const uris = req.query.uris as string[]
-  const user = res.locals.oauth.token.User as UserModel
+  const user = res.locals.oauth.token.User
 
   const handles = uris.map(u => {
     let [ name, host ] = u.split('@')
@@ -107,7 +106,7 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
 }
 
 async function addUserSubscription (req: express.Request, res: express.Response) {
-  const user = res.locals.oauth.token.User as UserModel
+  const user = res.locals.oauth.token.User
   const [ name, host ] = req.body.uri.split('@')
 
   const payload = {
@@ -123,13 +122,13 @@ async function addUserSubscription (req: express.Request, res: express.Response)
 }
 
 function getUserSubscription (req: express.Request, res: express.Response) {
-  const subscription: ActorFollowModel = res.locals.subscription
+  const subscription = res.locals.subscription
 
   return res.json(subscription.ActorFollowing.VideoChannel.toFormattedJSON())
 }
 
 async function deleteUserSubscription (req: express.Request, res: express.Response) {
-  const subscription: ActorFollowModel = res.locals.subscription
+  const subscription = res.locals.subscription
 
   await sequelizeTypescript.transaction(async t => {
     return subscription.destroy({ transaction: t })
@@ -139,7 +138,7 @@ async function deleteUserSubscription (req: express.Request, res: express.Respon
 }
 
 async function getUserSubscriptions (req: express.Request, res: express.Response) {
-  const user = res.locals.oauth.token.User as UserModel
+  const user = res.locals.oauth.token.User
   const actorId = user.Account.Actor.id
 
   const resultList = await ActorFollowModel.listSubscriptionsForApi(actorId, req.query.start, req.query.count, req.query.sort)
@@ -147,8 +146,8 @@ async function getUserSubscriptions (req: express.Request, res: express.Response
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function getUserSubscriptionVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.User as UserModel
+async function getUserSubscriptionVideos (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.User
   const resultList = await VideoModel.listForApi({
     start: req.query.start,
     count: req.query.count,

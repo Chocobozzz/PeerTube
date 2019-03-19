@@ -10,7 +10,6 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
-import { VideoChannelModel } from '../../models/video/video-channel'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { CONFIG, MIMETYPES, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers'
@@ -31,7 +30,6 @@ import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/vide
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { processImage } from '../../helpers/image-utils'
 import { join } from 'path'
-import { UserModel } from '../../models/account/user'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getVideoPlaylistActivityPubUrl, getVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
 import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
@@ -142,14 +140,14 @@ async function listVideoPlaylists (req: express.Request, res: express.Response) 
 }
 
 function getVideoPlaylist (req: express.Request, res: express.Response) {
-  const videoPlaylist = res.locals.videoPlaylist as VideoPlaylistModel
+  const videoPlaylist = res.locals.videoPlaylist
 
   return res.json(videoPlaylist.toFormattedJSON())
 }
 
 async function addVideoPlaylist (req: express.Request, res: express.Response) {
   const videoPlaylistInfo: VideoPlaylistCreate = req.body
-  const user: UserModel = res.locals.oauth.token.User
+  const user = res.locals.oauth.token.User
 
   const videoPlaylist = new VideoPlaylistModel({
     name: videoPlaylistInfo.displayName,
@@ -161,7 +159,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   videoPlaylist.url = getVideoPlaylistActivityPubUrl(videoPlaylist) // We use the UUID, so set the URL after building the object
 
   if (videoPlaylistInfo.videoChannelId) {
-    const videoChannel = res.locals.videoChannel as VideoChannelModel
+    const videoChannel = res.locals.videoChannel
 
     videoPlaylist.videoChannelId = videoChannel.id
     videoPlaylist.VideoChannel = videoChannel
@@ -194,7 +192,7 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 }
 
 async function updateVideoPlaylist (req: express.Request, res: express.Response) {
-  const videoPlaylistInstance = res.locals.videoPlaylist as VideoPlaylistModel
+  const videoPlaylistInstance = res.locals.videoPlaylist
   const videoPlaylistFieldsSave = videoPlaylistInstance.toJSON()
   const videoPlaylistInfoToUpdate = req.body as VideoPlaylistUpdate
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
@@ -219,7 +217,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
         if (videoPlaylistInfoToUpdate.videoChannelId === null) {
           videoPlaylistInstance.videoChannelId = null
         } else {
-          const videoChannel = res.locals.videoChannel as VideoChannelModel
+          const videoChannel = res.locals.videoChannel
 
           videoPlaylistInstance.videoChannelId = videoChannel.id
           videoPlaylistInstance.VideoChannel = videoChannel
@@ -262,7 +260,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 }
 
 async function removeVideoPlaylist (req: express.Request, res: express.Response) {
-  const videoPlaylistInstance: VideoPlaylistModel = res.locals.videoPlaylist
+  const videoPlaylistInstance = res.locals.videoPlaylist
 
   await sequelizeTypescript.transaction(async t => {
     await videoPlaylistInstance.destroy({ transaction: t })
@@ -277,8 +275,8 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
 
 async function addVideoInPlaylist (req: express.Request, res: express.Response) {
   const body: VideoPlaylistElementCreate = req.body
-  const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
-  const video: VideoModel = res.locals.video
+  const videoPlaylist = res.locals.videoPlaylist
+  const video = res.locals.video
 
   const playlistElement: VideoPlaylistElementModel = await sequelizeTypescript.transaction(async t => {
     const position = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id, t)
@@ -323,8 +321,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
 
 async function updateVideoPlaylistElement (req: express.Request, res: express.Response) {
   const body: VideoPlaylistElementUpdate = req.body
-  const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
-  const videoPlaylistElement: VideoPlaylistElementModel = res.locals.videoPlaylistElement
+  const videoPlaylist = res.locals.videoPlaylist
+  const videoPlaylistElement = res.locals.videoPlaylistElement
 
   const playlistElement: VideoPlaylistElementModel = await sequelizeTypescript.transaction(async t => {
     if (body.startTimestamp !== undefined) videoPlaylistElement.startTimestamp = body.startTimestamp
@@ -346,8 +344,8 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
 }
 
 async function removeVideoFromPlaylist (req: express.Request, res: express.Response) {
-  const videoPlaylistElement: VideoPlaylistElementModel = res.locals.videoPlaylistElement
-  const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+  const videoPlaylistElement = res.locals.videoPlaylistElement
+  const videoPlaylist = res.locals.videoPlaylist
   const positionToDelete = videoPlaylistElement.position
 
   await sequelizeTypescript.transaction(async t => {
@@ -368,7 +366,7 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
 }
 
 async function reorderVideosPlaylist (req: express.Request, res: express.Response) {
-  const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+  const videoPlaylist = res.locals.videoPlaylist
   const body: VideoPlaylistReorder = req.body
 
   const start: number = body.startPosition
@@ -416,7 +414,7 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 }
 
 async function getVideoPlaylistVideos (req: express.Request, res: express.Response) {
-  const videoPlaylistInstance: VideoPlaylistModel = res.locals.videoPlaylist
+  const videoPlaylistInstance = res.locals.videoPlaylist
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({

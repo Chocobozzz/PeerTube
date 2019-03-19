@@ -41,6 +41,6 @@ export { apiRouter }
 
 // ---------------------------------------------------------------------------
 
-function pong (req: express.Request, res: express.Response, next: express.NextFunction) {
+function pong (req: express.Request, res: express.Response) {
   return res.send('pong').status(200).end()
 }

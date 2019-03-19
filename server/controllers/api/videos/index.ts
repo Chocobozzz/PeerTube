@@ -295,7 +295,7 @@ async function addVideo (req: express.Request, res: express.Response) {
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoInstance: VideoModel = res.locals.video
+  const videoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
   const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
@@ -407,7 +407,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 async function getVideo (req: express.Request, res: express.Response) {
   // We need more attributes
   const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
-  const video: VideoModel = await VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId)
+  const video = await VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId)
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
@@ -472,7 +472,7 @@ async function listVideos (req: express.Request, res: express.Response) {
 }
 
 async function removeVideo (req: express.Request, res: express.Response) {
-  const videoInstance: VideoModel = res.locals.video
+  const videoInstance = res.locals.video
 
   await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })

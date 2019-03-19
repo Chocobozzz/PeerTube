@@ -5,7 +5,6 @@ import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { doesVideoBlacklistExist, isVideoBlacklistReasonValid } from '../../../helpers/custom-validators/video-blacklist'
-import { VideoModel } from '../../../models/video/video'
 
 const videosBlacklistRemoveValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -37,7 +36,7 @@ const videosBlacklistAddValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video: VideoModel = res.locals.video
+    const video = res.locals.video
     if (req.body.unfederate === true && video.remote === true) {
       return res
         .status(409)

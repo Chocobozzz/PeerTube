@@ -245,7 +245,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response, n
 
 function getVideoAndFile (req: express.Request, res: express.Response) {
   const resolution = parseInt(req.params.resolution, 10)
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
 
   const videoFile = video.VideoFiles.find(f => f.resolution === resolution)
 

@@ -4,7 +4,6 @@ import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers'
 import { getOrCreateActorAndServerAndModel } from '../lib/activitypub'
-import { ActorModel } from '../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
@@ -12,7 +11,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
     const httpSignatureChecked = await checkHttpSignature(req, res)
     if (httpSignatureChecked !== true) return
 
-    const actor: ActorModel = res.locals.signature.actor
+    const actor = res.locals.signature.actor
 
     // Forwarded activity
     const bodyActor = req.body.actor

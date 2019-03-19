@@ -6,7 +6,6 @@ import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { areValidationErrors } from '../utils'
-import { VideoModel } from '../../../models/video/video'
 
 const videosShareValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -18,7 +17,7 @@ const videosShareValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
 
-    const video: VideoModel = res.locals.video
+    const video = res.locals.video
 
     const share = await VideoShareModel.load(req.params.actorId, video.id)
     if (!share) {

@@ -14,7 +14,8 @@ import {
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
-  isUserVideoQuotaValid, isUserVideosHistoryEnabledValid
+  isUserVideoQuotaValid,
+  isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
 import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
@@ -100,7 +101,7 @@ const usersBlockingValidator = [
 
 const deleteMeValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: UserModel = res.locals.oauth.token.User
+    const user = res.locals.oauth.token.User
     if (user.username === 'root') {
       return res.status(400)
                 .send({ error: 'You cannot delete your root account.' })
@@ -159,8 +160,7 @@ const usersUpdateMeValidator = [
                   .end()
       }
 
-      const user: UserModel = res.locals.oauth.token.User
-
+      const user= res.locals.oauth.token.User
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.status(401)
                   .send({ error: 'currentPassword is invalid.' })
@@ -257,7 +257,7 @@ const usersResetPasswordValidator = [
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
-    const user = res.locals.user as UserModel
+    const user = res.locals.user
     const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
@@ -299,7 +299,7 @@ const usersVerifyEmailValidator = [
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
-    const user = res.locals.user as UserModel
+    const user = res.locals.user
     const redisVerificationString = await Redis.Instance.getVerifyEmailLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {

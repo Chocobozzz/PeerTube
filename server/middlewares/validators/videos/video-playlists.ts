@@ -103,7 +103,7 @@ const videoPlaylistsDeleteValidator = [
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res)) return
 
-    const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+    const videoPlaylist = res.locals.videoPlaylist
     if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
       return res.status(400)
                 .json({ error: 'Cannot delete a watch later playlist.' })
@@ -128,7 +128,7 @@ const videoPlaylistsGetValidator = [
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res)) return
 
-    const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+    const videoPlaylist = res.locals.videoPlaylist
 
     // Video is unlisted, check we used the uuid to fetch it
     if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
@@ -140,8 +140,7 @@ const videoPlaylistsGetValidator = [
     if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
       await authenticatePromiseIfNeeded(req, res)
 
-      const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : null
-
+      const user = res.locals.oauth ? res.locals.oauth.token.User : null
       if (
         !user ||
         (videoPlaylist.OwnerAccount.userId !== user.id && !user.hasRight(UserRight.UPDATE_ANY_VIDEO_PLAYLIST))
@@ -177,8 +176,8 @@ const videoPlaylistsAddVideoValidator = [
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
     if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
 
-    const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
-    const video: VideoModel = res.locals.video
+    const videoPlaylist = res.locals.videoPlaylist
+    const video = res.locals.video
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndVideo(videoPlaylist.id, video.id)
     if (videoPlaylistElement) {
@@ -217,8 +216,8 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
     if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
-    const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
-    const video: VideoModel = res.locals.video
+    const videoPlaylist = res.locals.videoPlaylist
+    const video = res.locals.video
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndVideo(videoPlaylist.id, video.id)
     if (!videoPlaylistElement) {
@@ -284,7 +283,7 @@ const videoPlaylistsReorderVideosValidator = [
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
 
-    const videoPlaylist: VideoPlaylistModel = res.locals.videoPlaylist
+    const videoPlaylist = res.locals.videoPlaylist
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) return
 
     const nextPosition = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id)

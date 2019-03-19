@@ -17,7 +17,6 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../../lib/job-queue'
 import { logger } from '../../helpers/logger'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { UserModel } from '../../models/account/user'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 
 const accountsRouter = express.Router()
@@ -71,7 +70,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function getAccount (req: express.Request, res: express.Response) {
-  const account: AccountModel = res.locals.account
+  const account = res.locals.account
 
   if (account.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
@@ -98,7 +97,7 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 
   // Allow users to see their private/unlisted video playlists
   let privateAndUnlisted = false
-  if (res.locals.oauth && (res.locals.oauth.token.User as UserModel).Account.id === res.locals.account.id) {
+  if (res.locals.oauth && res.locals.oauth.token.User.Account.id === res.locals.account.id) {
     privateAndUnlisted = true
   }
 
@@ -116,7 +115,7 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 }
 
 async function listAccountVideos (req: express.Request, res: express.Response) {
-  const account: AccountModel = res.locals.account
+  const account = res.locals.account
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
 
   const resultList = await VideoModel.listForApi({
