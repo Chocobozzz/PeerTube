@@ -3,7 +3,7 @@ import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 import { JOB_REQUEST_TIMEOUT } from '../../../initializers'
-import { ActorFollowScoreCache } from '../../cache'
+import { ActorFollowScoreCache } from '../../files-cache'
 
 export type ActivitypubHttpUnicastPayload = {
   uri: string

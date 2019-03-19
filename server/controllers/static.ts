@@ -8,11 +8,10 @@ import {
   STATIC_MAX_AGE,
   STATIC_PATHS
 } from '../initializers'
-import { VideosPreviewCache } from '../lib/cache'
+import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
-import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
 import { UserModel } from '../models/account/user'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'

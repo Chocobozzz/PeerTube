@@ -660,7 +660,7 @@ const EMBED_SIZE = {
 }
 
 // Sub folders of cache directory
-const CACHE = {
+const FILES_CACHE = {
   PREVIEWS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'previews'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
@@ -668,6 +668,12 @@ const CACHE = {
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
     MAX_AGE: 1000 * 3600 * 3 // 3 hours
+  }
+}
+
+const CACHE = {
+  USER_TOKENS: {
+    MAX_SIZE: 10000
   }
 }
 
@@ -741,7 +747,7 @@ if (isTestInstance() === true) {
 
   JOB_ATTEMPTS['email'] = 1
 
-  CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
+  FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
   MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
   ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0ms'
 
@@ -759,7 +765,7 @@ export {
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   TRACKER_RATE_LIMITS,
-  CACHE,
+  FILES_CACHE,
   CONFIG,
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
@@ -799,6 +805,7 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   VIDEO_ABUSE_STATES,
+  CACHE,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   MEMOIZE_TTL,

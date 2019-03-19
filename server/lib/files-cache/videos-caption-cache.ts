@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { CACHE, CONFIG } from '../../initializers'
+import { FILES_CACHE, CONFIG } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
@@ -42,7 +42,7 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <GetPathParam> {
     if (!video) return undefined
 
     const remoteStaticPath = videoCaption.getCaptionStaticPath()
-    const destPath = join(CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.getCaptionName())
+    const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.getCaptionName())
 
     return this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
   }

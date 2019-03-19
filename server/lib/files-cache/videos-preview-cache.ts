@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { CACHE, CONFIG, STATIC_PATHS } from '../../initializers'
+import { FILES_CACHE, CONFIG, STATIC_PATHS } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
 
@@ -31,7 +31,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     if (video.isOwned()) throw new Error('Cannot load remote preview of owned video.')
 
     const remoteStaticPath = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
-    const destPath = join(CACHE.PREVIEWS.DIRECTORY, video.getPreviewName())
+    const destPath = join(FILES_CACHE.PREVIEWS.DIRECTORY, video.getPreviewName())
 
     return this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
   }

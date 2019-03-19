@@ -3,7 +3,7 @@ import { logger } from '../../helpers/logger'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers'
-import { ActorFollowScoreCache } from '../cache'
+import { ActorFollowScoreCache } from '../files-cache'
 
 export class ActorFollowScheduler extends AbstractScheduler {
 

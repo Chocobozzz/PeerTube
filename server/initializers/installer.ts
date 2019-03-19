@@ -6,7 +6,7 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
-import { CACHE, CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
+import { FILES_CACHE, CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 import { remove, ensureDir } from 'fs-extra'
 
@@ -42,8 +42,8 @@ export {
 // ---------------------------------------------------------------------------
 
 function removeCacheAndTmpDirectories () {
-  const cacheDirectories = Object.keys(CACHE)
-    .map(k => CACHE[k].DIRECTORY)
+  const cacheDirectories = Object.keys(FILES_CACHE)
+    .map(k => FILES_CACHE[k].DIRECTORY)
 
   const tasks: Promise<any>[] = []
 
@@ -60,8 +60,8 @@ function removeCacheAndTmpDirectories () {
 
 function createDirectoriesIfNotExist () {
   const storage = CONFIG.STORAGE
-  const cacheDirectories = Object.keys(CACHE)
-                                 .map(k => CACHE[k].DIRECTORY)
+  const cacheDirectories = Object.keys(FILES_CACHE)
+                                 .map(k => FILES_CACHE[k].DIRECTORY)
 
   const tasks: Promise<void>[] = []
   for (const key of Object.keys(storage)) {
