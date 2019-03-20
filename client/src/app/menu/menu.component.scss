@@ -10,12 +10,12 @@
 }
 
 menu {
+  @include ellipsis;
+
   background-color: var(--menuBackgroundColor);
   margin: 0;
   padding: 0;
   height: 100%;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: auto;
   color: var(--menuForegroundColor);
   display: flex;
@@ -24,6 +24,16 @@ menu {
 
   &:focus, &:hover {
     overflow-y: auto;
+  }
+
+  &.logged-in {
+    .panel-block {
+      margin-bottom: 25px;
+    }
+
+    .block-title {
+      margin-bottom: 15px;
+    }
   }
 
   .top-menu {
@@ -37,13 +47,12 @@ menu {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 35px;
+    margin-bottom: 20px;
 
     .logged-in-info {
+      @include ellipsis;
+
       flex-grow: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
 
       .logged-in-display-name {
         font-size: 16px;
@@ -55,11 +64,10 @@ menu {
       }
 
       .logged-in-username {
+        @include ellipsis;
+
         font-size: 13px;
         color: #C6C6C6;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
         max-width: 140px;
       }
     }
@@ -67,12 +75,31 @@ menu {
     .logged-in-more {
       margin-right: 20px;
 
-      .glyphicon {
+      my-global-icon {
+        @include apply-svg-color(var(--mainBackgroundColor));
+
         cursor: pointer;
-        font-size: 18px;
 
         &::after {
           border: none;
+        }
+      }
+
+      .dropdown-item {
+        @include dropdown-with-icon-item;
+
+        my-global-icon {
+          @include apply-svg-color(var(--mainForegroundColor));
+
+          width: 22px;
+          height: 22px;
+
+          &[iconName="sign-out"] {
+            position: relative;
+            right: -1px;
+            height: 21px;
+            width: 21px;
+          }
         }
       }
     }
@@ -135,57 +162,31 @@ menu {
         background-color: rgba(255, 255, 255, 0.10);
       }
 
+      my-global-icon {
+        @include apply-svg-color(#808080);
+
+        display: flex;
+        width: 22px;
+        height: 22px;
+        margin-right: 18px;
+
+        &[iconName="playlists"] {
+          height: 24px;
+          width: 24px;
+
+          margin-right: 16px;
+        }
+
+        &[iconName="videos"] {
+          position: relative;
+          right: -1px;
+        }
+      }
+
       .icon {
         @include icon(22px);
 
         margin-right: 18px;
-
-        &.icon-videos-subscriptions {
-          position: relative;
-          top: -1px;
-          background-image: url('../../assets/images/menu/subscriptions.svg');
-        }
-
-        &.icon-videos-overview {
-          position: relative;
-          background-image: url('../../assets/images/menu/globe.svg');
-        }
-
-        &.icon-videos-trending {
-          position: relative;
-          top: -1px;
-          background-image: url('../../assets/images/menu/trending.svg');
-        }
-
-        &.icon-videos-recently-added {
-          width: 23px;
-          height: 23px;
-          background-image: url('../../assets/images/menu/recently-added.svg');
-        }
-
-        &.icon-videos-local {
-          width: 23px;
-          height: 23px;
-
-          position: relative;
-          top: -1px;
-
-          background-image: url('../../assets/images/menu/home.svg');
-        }
-
-        &.icon-administration {
-          width: 23px;
-          height: 23px;
-
-          background-image: url('../../assets/images/menu/administration.svg');
-        }
-
-        &.icon-about  {
-          width: 23px;
-          height: 23px;
-
-          background-image: url('../../assets/images/menu/about.svg');
-        }
       }
     }
   }

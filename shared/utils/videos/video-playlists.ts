@@ -1,51 +1,318 @@
-import { makeRawRequest } from '../requests/requests'
-import { sha256 } from '../../../server/helpers/core-utils'
-import { VideoStreamingPlaylist } from '../../models/videos/video-streaming-playlist.model'
+import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest, makeUploadRequest } from '../requests/requests'
+import { VideoPlaylistCreate } from '../../models/videos/playlist/video-playlist-create.model'
+import { omit } from 'lodash'
+import { VideoPlaylistUpdate } from '../../models/videos/playlist/video-playlist-update.model'
+import { VideoPlaylistElementCreate } from '../../models/videos/playlist/video-playlist-element-create.model'
+import { VideoPlaylistElementUpdate } from '../../models/videos/playlist/video-playlist-element-update.model'
+import { videoUUIDToId } from './videos'
+import { join } from 'path'
+import { root } from '..'
+import { readdir } from 'fs-extra'
 import { expect } from 'chai'
+import { VideoPlaylistType } from '../../models/videos/playlist/video-playlist-type.model'
 
-function getPlaylist (url: string, statusCodeExpected = 200) {
-  return makeRawRequest(url, statusCodeExpected)
+function getVideoPlaylistsList (url: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/video-playlists'
+
+  const query = {
+    start,
+    count,
+    sort
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    statusCodeExpected: 200
+  })
 }
 
-function getSegment (url: string, statusCodeExpected = 200, range?: string) {
-  return makeRawRequest(url, statusCodeExpected, range)
+function getVideoChannelPlaylistsList (url: string, videoChannelName: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/video-channels/' + videoChannelName + '/video-playlists'
+
+  const query = {
+    start,
+    count,
+    sort
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    statusCodeExpected: 200
+  })
 }
 
-function getSegmentSha256 (url: string, statusCodeExpected = 200) {
-  return makeRawRequest(url, statusCodeExpected)
+function getAccountPlaylistsList (url: string, accountName: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/accounts/' + accountName + '/video-playlists'
+
+  const query = {
+    start,
+    count,
+    sort
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    statusCodeExpected: 200
+  })
 }
 
-async function checkSegmentHash (
-  baseUrlPlaylist: string,
-  baseUrlSegment: string,
-  videoUUID: string,
-  resolution: number,
-  hlsPlaylist: VideoStreamingPlaylist
+function getAccountPlaylistsListWithToken (
+  url: string,
+  token: string,
+  accountName: string,
+  start: number,
+  count: number,
+  playlistType?: VideoPlaylistType,
+  sort?: string
 ) {
-  const res = await getPlaylist(`${baseUrlPlaylist}/${videoUUID}/${resolution}.m3u8`)
-  const playlist = res.text
+  const path = '/api/v1/accounts/' + accountName + '/video-playlists'
 
-  const videoName = `${videoUUID}-${resolution}-fragmented.mp4`
+  const query = {
+    start,
+    count,
+    playlistType,
+    sort
+  }
 
-  const matches = /#EXT-X-BYTERANGE:(\d+)@(\d+)/.exec(playlist)
+  return makeGetRequest({
+    url,
+    token,
+    path,
+    query,
+    statusCodeExpected: 200
+  })
+}
 
-  const length = parseInt(matches[1], 10)
-  const offset = parseInt(matches[2], 10)
-  const range = `${offset}-${offset + length - 1}`
+function getVideoPlaylist (url: string, playlistId: number | string, statusCodeExpected = 200) {
+  const path = '/api/v1/video-playlists/' + playlistId
 
-  const res2 = await getSegment(`${baseUrlSegment}/${videoUUID}/${videoName}`, 206, `bytes=${range}`)
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected
+  })
+}
 
-  const resSha = await getSegmentSha256(hlsPlaylist.segmentsSha256Url)
+function getVideoPlaylistWithToken (url: string, token: string, playlistId: number | string, statusCodeExpected = 200) {
+  const path = '/api/v1/video-playlists/' + playlistId
 
-  const sha256Server = resSha.body[ videoName ][range]
-  expect(sha256(res2.body)).to.equal(sha256Server)
+  return makeGetRequest({
+    url,
+    token,
+    path,
+    statusCodeExpected
+  })
+}
+
+function deleteVideoPlaylist (url: string, token: string, playlistId: number | string, statusCodeExpected = 204) {
+  const path = '/api/v1/video-playlists/' + playlistId
+
+  return makeDeleteRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
+
+function createVideoPlaylist (options: {
+  url: string,
+  token: string,
+  playlistAttrs: VideoPlaylistCreate,
+  expectedStatus?: number
+}) {
+  const path = '/api/v1/video-playlists'
+
+  const fields = omit(options.playlistAttrs, 'thumbnailfile')
+
+  const attaches = options.playlistAttrs.thumbnailfile
+    ? { thumbnailfile: options.playlistAttrs.thumbnailfile }
+    : {}
+
+  return makeUploadRequest({
+    method: 'POST',
+    url: options.url,
+    path,
+    token: options.token,
+    fields,
+    attaches,
+    statusCodeExpected: options.expectedStatus || 200
+  })
+}
+
+function updateVideoPlaylist (options: {
+  url: string,
+  token: string,
+  playlistAttrs: VideoPlaylistUpdate,
+  playlistId: number | string,
+  expectedStatus?: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId
+
+  const fields = omit(options.playlistAttrs, 'thumbnailfile')
+
+  const attaches = options.playlistAttrs.thumbnailfile
+    ? { thumbnailfile: options.playlistAttrs.thumbnailfile }
+    : {}
+
+  return makeUploadRequest({
+    method: 'PUT',
+    url: options.url,
+    path,
+    token: options.token,
+    fields,
+    attaches,
+    statusCodeExpected: options.expectedStatus || 204
+  })
+}
+
+async function addVideoInPlaylist (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  elementAttrs: VideoPlaylistElementCreate | { videoId: string }
+  expectedStatus?: number
+}) {
+  options.elementAttrs.videoId = await videoUUIDToId(options.url, options.elementAttrs.videoId)
+
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos'
+
+  return makePostBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    fields: options.elementAttrs,
+    statusCodeExpected: options.expectedStatus || 200
+  })
+}
+
+function updateVideoPlaylistElement (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  videoId: number | string,
+  elementAttrs: VideoPlaylistElementUpdate,
+  expectedStatus?: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+
+  return makePutBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    fields: options.elementAttrs,
+    statusCodeExpected: options.expectedStatus || 204
+  })
+}
+
+function removeVideoFromPlaylist (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  videoId: number | string,
+  expectedStatus?: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+
+  return makeDeleteRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    statusCodeExpected: options.expectedStatus || 204
+  })
+}
+
+function reorderVideosPlaylist (options: {
+  url: string,
+  token: string,
+  playlistId: number | string,
+  elementAttrs: {
+    startPosition: number,
+    insertAfterPosition: number,
+    reorderLength?: number
+  },
+  expectedStatus?: number
+}) {
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/reorder'
+
+  return makePostBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+    fields: options.elementAttrs,
+    statusCodeExpected: options.expectedStatus || 204
+  })
+}
+
+async function checkPlaylistFilesWereRemoved (
+  playlistUUID: string,
+  serverNumber: number,
+  directories = [ 'thumbnails' ]
+) {
+  const testDirectory = 'test' + serverNumber
+
+  for (const directory of directories) {
+    const directoryPath = join(root(), testDirectory, directory)
+
+    const files = await readdir(directoryPath)
+    for (const file of files) {
+      expect(file).to.not.contain(playlistUUID)
+    }
+  }
+}
+
+function getVideoPlaylistPrivacies (url: string) {
+  const path = '/api/v1/video-playlists/privacies'
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: 200
+  })
+}
+
+function doVideosExistInMyPlaylist (url: string, token: string, videoIds: number[]) {
+  const path = '/api/v1/users/me/video-playlists/videos-exist'
+
+  return makeGetRequest({
+    url,
+    token,
+    path,
+    query: { videoIds },
+    statusCodeExpected: 200
+  })
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  getPlaylist,
-  getSegment,
-  getSegmentSha256,
-  checkSegmentHash
+  getVideoPlaylistPrivacies,
+
+  getVideoPlaylistsList,
+  getVideoChannelPlaylistsList,
+  getAccountPlaylistsList,
+  getAccountPlaylistsListWithToken,
+
+  getVideoPlaylist,
+  getVideoPlaylistWithToken,
+
+  createVideoPlaylist,
+  updateVideoPlaylist,
+  deleteVideoPlaylist,
+
+  addVideoInPlaylist,
+  updateVideoPlaylistElement,
+  removeVideoFromPlaylist,
+
+  reorderVideosPlaylist,
+
+  checkPlaylistFilesWereRemoved,
+
+  doVideosExistInMyPlaylist
 }

@@ -11,10 +11,11 @@ import {
   HasMany,
   Is,
   Model,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Account } from '../../../shared/models/actors'
+import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
@@ -24,6 +25,13 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
+import { CONFIG } from '../../initializers'
+import { AvatarModel } from '../avatar/avatar'
+import { VideoPlaylistModel } from '../video/video-playlist'
+
+export enum ScopeNames {
+  SUMMARY = 'SUMMARY'
+}
 
 @DefaultScope({
   include: [
@@ -32,6 +40,32 @@ import { UserModel } from './user'
       required: true
     }
   ]
+})
+@Scopes({
+  [ ScopeNames.SUMMARY ]: (whereActor?: Sequelize.WhereOptions<ActorModel>) => {
+    return {
+      attributes: [ 'id', 'name' ],
+      include: [
+        {
+          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          where: whereActor,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+  }
 })
 @Table({
   tableName: 'account',
@@ -111,6 +145,15 @@ export class AccountModel extends Model<AccountModel> {
   })
   VideoChannels: VideoChannelModel[]
 
+  @HasMany(() => VideoPlaylistModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoPlaylists: VideoPlaylistModel[]
+
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
       allowNull: false
@@ -134,7 +177,7 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   static load (id: number, transaction?: Sequelize.Transaction) {
-    return AccountModel.findById(id, { transaction })
+    return AccountModel.findByPk(id, { transaction })
   }
 
   static loadByUUID (uuid: string) {
@@ -151,6 +194,14 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return AccountModel.findOne(query)
+  }
+
+  static loadByNameWithHost (nameWithHost: string) {
+    const [ accountName, host ] = nameWithHost.split('@')
+
+    if (!host || host === CONFIG.WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
+
+    return AccountModel.loadByNameAndHost(accountName, host)
   }
 
   static loadLocalByName (name: string) {
@@ -274,6 +325,20 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return Object.assign(actor, account)
+  }
+
+  toFormattedSummaryJSON (): AccountSummary {
+    const actor = this.Actor.toFormattedJSON()
+
+    return {
+      id: this.id,
+      uuid: actor.uuid,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
   }
 
   toActivityPubObject () {

@@ -5,7 +5,7 @@ import {
   buildLanguages,
   VIDEO_CATEGORIES,
   VIDEO_IMPORT_STATES,
-  VIDEO_LICENCES,
+  VIDEO_LICENCES, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../server/initializers/constants'
@@ -46,6 +46,8 @@ values(VIDEO_CATEGORIES)
   .concat(values(VIDEO_PRIVACIES))
   .concat(values(VIDEO_STATES))
   .concat(values(VIDEO_IMPORT_STATES))
+  .concat(values(VIDEO_PLAYLIST_PRIVACIES))
+  .concat(values(VIDEO_PLAYLIST_TYPES))
   .concat([
     'This video does not exist.',
     'We cannot fetch the video. Please try again later.',

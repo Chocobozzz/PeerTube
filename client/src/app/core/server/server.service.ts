@@ -4,23 +4,25 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { Observable, of, ReplaySubject } from 'rxjs'
 import { getCompleteLocale, ServerConfig } from '../../../../../shared'
-import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { sortBy } from '@app/shared/misc/utils'
+import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
 
 @Injectable()
 export class ServerService {
   private static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server/'
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
   configLoaded = new ReplaySubject<boolean>(1)
   videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
+  videoPlaylistPrivaciesLoaded = new ReplaySubject<boolean>(1)
   videoCategoriesLoaded = new ReplaySubject<boolean>(1)
   videoLicencesLoaded = new ReplaySubject<boolean>(1)
   videoLanguagesLoaded = new ReplaySubject<boolean>(1)
@@ -32,6 +34,7 @@ export class ServerService {
       shortDescription: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
                         'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.',
       defaultClientRoute: '',
+      isNSFW: false,
       defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
       customizations: {
         javascript: '',
@@ -108,6 +111,7 @@ export class ServerService {
   private videoLicences: Array<VideoConstant<number>> = []
   private videoLanguages: Array<VideoConstant<string>> = []
   private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
+  private videoPlaylistPrivacies: Array<VideoConstant<VideoPlaylistPrivacy>> = []
 
   constructor (
     private http: HttpClient,
@@ -128,19 +132,28 @@ export class ServerService {
   }
 
   loadVideoCategories () {
-    return this.loadVideoAttributeEnum('categories', this.videoCategories, this.videoCategoriesLoaded, true)
+    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'categories', this.videoCategories, this.videoCategoriesLoaded, true)
   }
 
   loadVideoLicences () {
-    return this.loadVideoAttributeEnum('licences', this.videoLicences, this.videoLicencesLoaded)
+    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'licences', this.videoLicences, this.videoLicencesLoaded)
   }
 
   loadVideoLanguages () {
-    return this.loadVideoAttributeEnum('languages', this.videoLanguages, this.videoLanguagesLoaded, true)
+    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'languages', this.videoLanguages, this.videoLanguagesLoaded, true)
   }
 
   loadVideoPrivacies () {
-    return this.loadVideoAttributeEnum('privacies', this.videoPrivacies, this.videoPrivaciesLoaded)
+    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'privacies', this.videoPrivacies, this.videoPrivaciesLoaded)
+  }
+
+  loadVideoPlaylistPrivacies () {
+    return this.loadAttributeEnum(
+      ServerService.BASE_VIDEO_PLAYLIST_URL,
+      'privacies',
+      this.videoPlaylistPrivacies,
+      this.videoPlaylistPrivaciesLoaded
+    )
   }
 
   getConfig () {
@@ -163,7 +176,12 @@ export class ServerService {
     return this.videoPrivacies
   }
 
-  private loadVideoAttributeEnum (
+  getVideoPlaylistPrivacies () {
+    return this.videoPlaylistPrivacies
+  }
+
+  private loadAttributeEnum (
+    baseUrl: string,
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
     hashToPopulate: VideoConstant<string | number>[],
     notifier: ReplaySubject<boolean>,
@@ -172,7 +190,7 @@ export class ServerService {
     this.localeObservable
         .pipe(
           switchMap(translations => {
-            return this.http.get<{ [id: string]: string }>(ServerService.BASE_VIDEO_URL + attributeName)
+            return this.http.get<{ [id: string]: string }>(baseUrl + attributeName)
                        .pipe(map(data => ({ data, translations })))
           })
         )

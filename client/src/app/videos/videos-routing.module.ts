@@ -78,11 +78,7 @@ const videosRoutes: Routes = [
         }
       },
       {
-        path: 'watch/:uuid/comments/:commentId',
-        redirectTo: 'watch/:uuid'
-      },
-      {
-        path: 'watch/:uuid',
+        path: 'watch',
         loadChildren: 'app/videos/+video-watch/video-watch.module#VideoWatchModule',
         data: {
           preload: 3000

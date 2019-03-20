@@ -1,0 +1,69 @@
+<div i18n class="form-sub-title" *ngIf="isCreation() === true">Create a new playlist</div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+  <div class="row">
+    <div class="col-md-12 col-xl-6">
+      <div class="form-group">
+        <label i18n for="displayName">Display name</label>
+        <input
+          type="text" id="displayName"
+          formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+        >
+        <div *ngIf="formErrors['displayName']" class="form-error">
+          {{ formErrors['displayName'] }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="description">Description</label>
+        <textarea
+          id="description" formControlName="description"
+          [ngClass]="{ 'input-error': formErrors['description'] }"
+        ></textarea>
+        <div *ngIf="formErrors.description" class="form-error">
+          {{ formErrors.description }}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 col-xl-6">
+      <div class="form-group">
+        <label i18n for="privacy">Privacy</label>
+        <div class="peertube-select-container">
+          <select id="privacy" formControlName="privacy">
+            <option *ngFor="let privacy of videoPlaylistPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formErrors.privacy" class="form-error">
+          {{ formErrors.privacy }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n>Channel</label>
+        <div class="peertube-select-container">
+          <select formControlName="videoChannelId">
+            <option></option>
+            <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formErrors['videoChannelId']" class="form-error">
+          {{ formErrors['videoChannelId'] }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <my-image-upload
+          i18n-inputLabel inputLabel="Upload thumbnail" inputName="thumbnailfile" formControlName="thumbnailfile"
+          previewWidth="200px" previewHeight="110px"
+        ></my-image-upload>
+      </div>
+    </div>
+  </div>
+
+  <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+</form>

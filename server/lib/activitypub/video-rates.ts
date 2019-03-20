@@ -38,19 +38,14 @@ async function createRates (ratesUrl: string[], video: VideoModel, rate: VideoRa
 
       const actor = await getOrCreateActorAndServerAndModel(actorUrl)
 
-      const [ , created ] = await AccountVideoRateModel
-        .findOrCreate({
-          where: {
-            videoId: video.id,
-            accountId: actor.Account.id
-          },
-          defaults: {
-            videoId: video.id,
-            accountId: actor.Account.id,
-            type: rate,
-            url: body.id
-          }
-        })
+      const entry = {
+        videoId: video.id,
+        accountId: actor.Account.id,
+        type: rate,
+        url: body.id
+      }
+
+      const created = await AccountVideoRateModel.upsert(entry)
 
       if (created) rateCounts += 1
     } catch (err) {

@@ -3,6 +3,10 @@ import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
 import { parse } from 'url'
 
+function get4KFileUrl () {
+  return 'https://download.cpy.re/peertube/4k_file.txt'
+}
+
 function makeRawRequest (url: string, statusCodeExpected?: number, range?: string) {
   const { host, protocol, pathname } = parse(url)
 
@@ -72,6 +76,8 @@ function makeUploadRequest (options: {
 
   Object.keys(options.fields).forEach(field => {
     const value = options.fields[field]
+
+    if (value === undefined) return
 
     if (Array.isArray(value)) {
       for (let i = 0; i < value.length; i++) {
@@ -166,6 +172,7 @@ function updateAvatarRequest (options: {
 // ---------------------------------------------------------------------------
 
 export {
+  get4KFileUrl,
   makeHTMLRequest,
   makeGetRequest,
   makeUploadRequest,

@@ -15,6 +15,16 @@ import { MyAccountBlocklistComponent } from '@app/+my-account/my-account-blockli
 import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-blocklist/my-account-server-blocklist.component'
 import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
 import { MyAccountNotificationsComponent } from '@app/+my-account/my-account-notifications/my-account-notifications.component'
+import { MyAccountVideoPlaylistsComponent } from '@app/+my-account/my-account-video-playlists/my-account-video-playlists.component'
+import {
+  MyAccountVideoPlaylistCreateComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component'
+import {
+  MyAccountVideoPlaylistUpdateComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component'
+import {
+  MyAccountVideoPlaylistElementsComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
 
 const myAccountRoutes: Routes = [
   {
@@ -36,6 +46,7 @@ const myAccountRoutes: Routes = [
           }
         }
       },
+
       {
         path: 'video-channels',
         component: MyAccountVideoChannelsComponent,
@@ -63,6 +74,44 @@ const myAccountRoutes: Routes = [
           }
         }
       },
+
+      {
+        path: 'video-playlists',
+        component: MyAccountVideoPlaylistsComponent,
+        data: {
+          meta: {
+            title: 'Account playlists'
+          }
+        }
+      },
+      {
+        path: 'video-playlists/create',
+        component: MyAccountVideoPlaylistCreateComponent,
+        data: {
+          meta: {
+            title: 'Create new playlist'
+          }
+        }
+      },
+      {
+        path: 'video-playlists/:videoPlaylistId',
+        component: MyAccountVideoPlaylistElementsComponent,
+        data: {
+          meta: {
+            title: 'Playlist elements'
+          }
+        }
+      },
+      {
+        path: 'video-playlists/update/:videoPlaylistId',
+        component: MyAccountVideoPlaylistUpdateComponent,
+        data: {
+          meta: {
+            title: 'Update playlist'
+          }
+        }
+      },
+
       {
         path: 'videos',
         component: MyAccountVideosComponent,

@@ -8,6 +8,8 @@
 
     <div class="short-description">
       <div>{{ shortDescription }}</div>
+
+      <div *ngIf="isNSFW" class="dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
     </div>
 
     <div class="description">
@@ -20,26 +22,6 @@
       <div i18n class="section-title">Terms</div>
 
       <div [innerHTML]="termsHTML"></div>
-    </div>
-
-    <div class="signup">
-      <div i18n class="section-title">Signup</div>
-
-      <div *ngIf="isSignupAllowed">
-        <ng-container i18n>User registration is allowed and</ng-container>
-
-        <ng-container i18n *ngIf="userVideoQuota !== -1">
-          this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
-        </ng-container>
-
-        <ng-container i18n *ngIf="userVideoQuota === -1">
-          this instance provides unlimited space for the videos of its users.
-        </ng-container>
-      </div>
-
-      <div i18n *ngIf="isSignupAllowed === false">
-        User registration is currently not allowed.
-      </div>
     </div>
   </div>
 

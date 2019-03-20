@@ -23,12 +23,11 @@
   }
 
   .delete-history {
-    font-size: 15px;
+    @include peertube-button;
+    @include grey-button;
+    @include button-with-icon;
 
-    button {
-      @include peertube-button;
-      @include grey-button;
-    }
+    font-size: 15px;
   }
 }
 
@@ -58,12 +57,10 @@
 
     .video-info-account {
       @include disable-default-a-behaviour;
+      @include ellipsis;
 
       display: block;
       width: fit-content;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       font-size: 14px;
       color: $grey-foreground-color;
 

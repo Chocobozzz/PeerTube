@@ -9,10 +9,26 @@
       padding: 0;
       font-size: 14px;
       font-family: $main-fonts;
-      overflow-y: auto;
-      max-height: 500px;
+      overflow-y: scroll;
       width: 400px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
+
+      .loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 5px 0;
+      }
+
+      .content {
+        max-height: 150px;
+        transition: max-height 0.15s ease-out;
+
+        &.loaded {
+          max-height: 500px;
+        }
+      }
 
       .notifications-header {
         display: flex;

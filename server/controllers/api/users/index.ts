@@ -6,7 +6,7 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { CONFIG, RATES_LIMIT, sequelizeTypescript } from '../../../initializers'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
-import { createUserAccountAndChannel } from '../../../lib/user'
+import { createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -38,6 +38,7 @@ import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../h
 import { meRouter } from './me'
 import { deleteUserToken } from '../../../lib/oauth-model'
 import { myBlocklistRouter } from './my-blocklist'
+import { myVideoPlaylistsRouter } from './my-video-playlists'
 import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { Notifier } from '../../../lib/notifier'
@@ -47,14 +48,12 @@ const auditLogger = auditLoggerFactory('users')
 
 const loginRateLimiter = new RateLimit({
   windowMs: RATES_LIMIT.LOGIN.WINDOW_MS,
-  max: RATES_LIMIT.LOGIN.MAX,
-  delayMs: 0
+  max: RATES_LIMIT.LOGIN.MAX
 })
 
 const askSendEmailLimiter = new RateLimit({
   windowMs: RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: RATES_LIMIT.ASK_SEND_EMAIL.MAX,
-  delayMs: 0
+  max: RATES_LIMIT.ASK_SEND_EMAIL.MAX
 })
 
 const usersRouter = express.Router()
@@ -62,6 +61,7 @@ usersRouter.use('/', myNotificationsRouter)
 usersRouter.use('/', mySubscriptionsRouter)
 usersRouter.use('/', myBlocklistRouter)
 usersRouter.use('/', myVideosHistoryRouter)
+usersRouter.use('/', myVideoPlaylistsRouter)
 usersRouter.use('/', meRouter)
 
 usersRouter.get('/autocomplete',
@@ -176,7 +176,7 @@ async function createUser (req: express.Request, res: express.Response) {
     videoQuotaDaily: body.videoQuotaDaily
   })
 
-  const { user, account } = await createUserAccountAndChannel(userToCreate)
+  const { user, account } = await createUserAccountAndChannelAndPlaylist(userToCreate)
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
@@ -207,7 +207,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
-  const { user } = await createUserAccountAndChannel(userToCreate)
+  const { user } = await createUserAccountAndChannelAndPlaylist(userToCreate)
 
   auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account registered.', body.username)
@@ -221,8 +221,8 @@ async function registerUser (req: express.Request, res: express.Response) {
   return res.type('json').status(204).end()
 }
 
-async function unblockUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user: UserModel = res.locals.user
+async function unblockUser (req: express.Request, res: express.Response) {
+  const user = res.locals.user
 
   await changeUserBlock(res, user, false)
 
@@ -230,7 +230,7 @@ async function unblockUser (req: express.Request, res: express.Response, next: e
 }
 
 async function blockUser (req: express.Request, res: express.Response) {
-  const user: UserModel = res.locals.user
+  const user = res.locals.user
   const reason = req.body.reason
 
   await changeUserBlock(res, user, true, reason)
@@ -239,7 +239,7 @@ async function blockUser (req: express.Request, res: express.Response) {
 }
 
 function getUser (req: express.Request, res: express.Response) {
-  return res.json((res.locals.user as UserModel).toFormattedJSON())
+  return res.json(res.locals.user.toFormattedJSON())
 }
 
 async function autocompleteUsers (req: express.Request, res: express.Response) {
@@ -255,7 +255,7 @@ async function listUsers (req: express.Request, res: express.Response) {
 }
 
 async function removeUser (req: express.Request, res: express.Response) {
-  const user: UserModel = res.locals.user
+  const user = res.locals.user
 
   await user.destroy()
 
@@ -266,7 +266,7 @@ async function removeUser (req: express.Request, res: express.Response) {
 
 async function updateUser (req: express.Request, res: express.Response) {
   const body: UserUpdate = req.body
-  const userToUpdate = res.locals.user as UserModel
+  const userToUpdate = res.locals.user
   const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
   const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
@@ -289,8 +289,8 @@ async function updateUser (req: express.Request, res: express.Response) {
   return res.sendStatus(204)
 }
 
-async function askResetUserPassword (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.user as UserModel
+async function askResetUserPassword (req: express.Request, res: express.Response) {
+  const user = res.locals.user
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
   const url = CONFIG.WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
@@ -299,8 +299,8 @@ async function askResetUserPassword (req: express.Request, res: express.Response
   return res.status(204).end()
 }
 
-async function resetUserPassword (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.user as UserModel
+async function resetUserPassword (req: express.Request, res: express.Response) {
+  const user = res.locals.user
   user.password = req.body.password
 
   await user.save()
@@ -315,16 +315,16 @@ async function sendVerifyUserEmail (user: UserModel) {
   return
 }
 
-async function askSendVerifyUserEmail (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.user as UserModel
+async function askSendVerifyUserEmail (req: express.Request, res: express.Response) {
+  const user = res.locals.user
 
   await sendVerifyUserEmail(user)
 
   return res.status(204).end()
 }
 
-async function verifyUserEmail (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.user as UserModel
+async function verifyUserEmail (req: express.Request, res: express.Response) {
+  const user = res.locals.user
   user.emailVerified = true
 
   await user.save()
@@ -332,7 +332,7 @@ async function verifyUserEmail (req: express.Request, res: express.Response, nex
   return res.status(204).end()
 }
 
-function success (req: express.Request, res: express.Response, next: express.NextFunction) {
+function success (req: express.Request, res: express.Response) {
   res.end()
 }
 

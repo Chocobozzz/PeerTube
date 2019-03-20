@@ -45,7 +45,6 @@ matrix:
   - env: TEST_SUITE=api-4
   - env: TEST_SUITE=cli
   - env: TEST_SUITE=lint
-  - env: TEST_SUITE=jest
 
 script:
   - NODE_PENDING_JOB_WAIT=1000 travis_retry npm run travis -- "$TEST_SUITE"

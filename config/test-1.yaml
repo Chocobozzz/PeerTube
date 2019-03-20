@@ -13,7 +13,7 @@ storage:
   tmp: 'test1/tmp/'
   avatars: 'test1/avatars/'
   videos: 'test1/videos/'
-  playlists: 'test1/playlists/'
+  streaming_playlists: 'test1/streaming-playlists/'
   redundancy: 'test1/redundancy/'
   logs: 'test1/logs/'
   previews: 'test1/previews/'

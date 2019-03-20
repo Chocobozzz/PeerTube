@@ -4,6 +4,7 @@ import * as videojs from 'video.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo, VideoJSComponentInterface } from '../peertube-videojs-typings'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
 import { Events } from 'p2p-media-loader-core'
+import { timeToInt } from '../utils'
 
 // videojs-hlsjs-plugin needs videojs in window
 window['videojs'] = videojs
@@ -32,6 +33,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     totalDownload: 0,
     totalUpload: 0
   }
+  private startTime: number
 
   private networkInfoInterval: any
 
@@ -40,18 +42,28 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.options = options
 
+    if (!videojs.Html5Hlsjs) {
+      const message = 'HLS.js does not seem to be supported.'
+      console.warn(message)
+
+      player.ready(() => player.trigger('error', new Error(message)))
+      return
+    }
+
     videojs.Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
       this.hlsjs = hlsjs
     })
 
     initVideoJsContribHlsJsPlayer(player)
 
+    this.startTime = timeToInt(options.startTime)
+
     player.src({
       type: options.type,
       src: options.src
     })
 
-    player.on('play', () => {
+    player.one('play', () => {
       player.addClass('vjs-has-big-play-button-clicked')
     })
 
@@ -84,6 +96,12 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.statsP2PBytes.numPeers = 1 + this.options.redundancyBaseUrls.length
 
     this.runStats()
+
+    this.hlsjs.on('hlsLevelLoaded', () => {
+      if (this.startTime) this.player.currentTime(this.startTime)
+
+      this.hlsjs.off('hlsLevelLoaded', this)
+    })
   }
 
   private runStats () {

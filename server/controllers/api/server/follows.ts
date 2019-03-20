@@ -59,7 +59,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listFollowing (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await ActorFollowModel.listFollowingForApi(
     serverActor.id,
@@ -72,7 +72,7 @@ async function listFollowing (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listFollowers (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   const resultList = await ActorFollowModel.listFollowersForApi(
     serverActor.id,
@@ -85,7 +85,7 @@ async function listFollowers (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function followInstance (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function followInstance (req: express.Request, res: express.Response) {
   const hosts = req.body.hosts as string[]
   const follower = await getServerActor()
 
@@ -103,8 +103,8 @@ async function followInstance (req: express.Request, res: express.Response, next
   return res.status(204).end()
 }
 
-async function removeFollow (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const follow: ActorFollowModel = res.locals.follow
+async function removeFollow (req: express.Request, res: express.Response) {
+  const follow = res.locals.follow
 
   await sequelizeTypescript.transaction(async t => {
     if (follow.state === 'accepted') await sendUndoFollow(follow, t)

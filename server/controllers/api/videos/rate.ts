@@ -6,7 +6,6 @@ import { getRateUrl, sendVideoRateChange } from '../../../lib/activitypub'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUpdateRateValidator } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { VideoModel } from '../../../models/video/video'
 
 const rateVideoRouter = express.Router()
 
@@ -27,8 +26,8 @@ export {
 async function rateVideo (req: express.Request, res: express.Response) {
   const body: UserVideoRateUpdate = req.body
   const rateType = body.rating
-  const videoInstance: VideoModel = res.locals.video
-  const userAccount: AccountModel = res.locals.oauth.token.User.Account
+  const videoInstance = res.locals.video
+  const userAccount = res.locals.oauth.token.User.Account
 
   await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }

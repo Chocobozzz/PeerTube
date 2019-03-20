@@ -142,7 +142,8 @@ describe('Test emails', function () {
     })
   })
 
-  describe('When blocking/unblocking user', async function () {
+  describe('When blocking/unblocking user', function () {
+
     it('Should send the notification email when blocking a user', async function () {
       this.timeout(10000)
 

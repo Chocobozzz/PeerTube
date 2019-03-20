@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize'
+import { Op } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -451,6 +452,19 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       totalLocalVideoComments,
       totalVideoComments
     }
+  }
+
+  static cleanOldCommentsOf (videoId: number, beforeUpdatedAt: Date) {
+    const query = {
+      where: {
+        updatedAt: {
+          [Op.lt]: beforeUpdatedAt
+        },
+        videoId
+      }
+    }
+
+    return VideoCommentModel.destroy(query)
   }
 
   getCommentStaticPath () {

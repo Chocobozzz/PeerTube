@@ -20,29 +20,25 @@ function isVideoChannelSupportValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.SUPPORT))
 }
 
-async function isLocalVideoChannelNameExist (name: string, res: express.Response) {
+async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
 
   return processVideoChannelExist(videoChannel, res)
 }
 
-async function isVideoChannelIdExist (id: string, res: express.Response) {
+async function doesVideoChannelIdExist (id: number | string, res: express.Response) {
   let videoChannel: VideoChannelModel
-  if (validator.isInt(id)) {
+  if (validator.isInt('' + id)) {
     videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
   } else { // UUID
-    videoChannel = await VideoChannelModel.loadByUUIDAndPopulateAccount(id)
+    videoChannel = await VideoChannelModel.loadByUUIDAndPopulateAccount('' + id)
   }
 
   return processVideoChannelExist(videoChannel, res)
 }
 
-async function isVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
-  const [ name, host ] = nameWithDomain.split('@')
-  let videoChannel: VideoChannelModel
-
-  if (!host || host === CONFIG.WEBSERVER.HOST) videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
-  else videoChannel = await VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
+async function doesVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
+  const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithDomain)
 
   return processVideoChannelExist(videoChannel, res)
 }
@@ -50,12 +46,12 @@ async function isVideoChannelNameWithHostExist (nameWithDomain: string, res: exp
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoChannelNameWithHostExist,
-  isLocalVideoChannelNameExist,
+  doesVideoChannelNameWithHostExist,
+  doesLocalVideoChannelNameExist,
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelSupportValid,
-  isVideoChannelIdExist
+  doesVideoChannelIdExist
 }
 
 function processVideoChannelExist (videoChannel: VideoChannelModel, res: express.Response) {

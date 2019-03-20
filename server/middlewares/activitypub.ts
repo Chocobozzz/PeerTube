@@ -1,11 +1,9 @@
-import { eachSeries } from 'async'
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers'
 import { getOrCreateActorAndServerAndModel } from '../lib/activitypub'
-import { ActorModel } from '../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
@@ -13,7 +11,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
     const httpSignatureChecked = await checkHttpSignature(req, res)
     if (httpSignatureChecked !== true) return
 
-    const actor: ActorModel = res.locals.signature.actor
+    const actor = res.locals.signature.actor
 
     // Forwarded activity
     const bodyActor = req.body.actor
@@ -30,23 +28,16 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const accepted = req.accepts(ACCEPT_HEADERS)
-    if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.indexOf(accepted) === -1) {
-      return next()
-    }
-
-    logger.debug('ActivityPub request for %s.', req.url)
-
-    if (Array.isArray(fun) === true) {
-      return eachSeries(fun as RequestHandler[], (f, cb) => {
-        f(req, res, cb)
-      }, next)
-    }
-
-    return (fun as RequestHandler)(req, res, next)
+function executeIfActivityPub (req: Request, res: Response, next: NextFunction) {
+  const accepted = req.accepts(ACCEPT_HEADERS)
+  if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.indexOf(accepted) === -1) {
+    // Bypass this route
+    return next('route')
   }
+
+  logger.debug('ActivityPub request for %s.', req.url)
+
+  return next()
 }
 
 // ---------------------------------------------------------------------------

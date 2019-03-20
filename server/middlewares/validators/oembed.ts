@@ -3,7 +3,7 @@ import { query } from 'express-validator/check'
 import { join } from 'path'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers'
 import { areValidationErrors } from './utils'
@@ -52,7 +52,7 @@ const oembedValidator = [
                 .end()
     }
 
-    if (!await isVideoExist(videoId, res)) return
+    if (!await doesVideoExist(videoId, res)) return
 
     return next()
   }

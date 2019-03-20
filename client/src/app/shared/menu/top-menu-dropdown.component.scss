@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 .parent-entry {
   span[role=button] {
     cursor: pointer;
@@ -15,4 +18,10 @@
 
 /deep/ .dropdown-menu {
   margin-top: 0 !important;
+}
+
+.icon {
+  @include dropdown-with-icon-item;
+
+  top: -1px;
 }

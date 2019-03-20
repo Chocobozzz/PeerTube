@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserSubscriptionService } from '@app/shared/user-subscription'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 
@@ -21,8 +20,7 @@ export class MyAccountSubscriptionsComponent implements OnInit {
 
   constructor (
     private userSubscriptionService: UserSubscriptionService,
-    private notifier: Notifier,
-    private i18n: I18n
+    private notifier: Notifier
   ) {}
 
   ngOnInit () {

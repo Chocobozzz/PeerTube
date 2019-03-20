@@ -8,6 +8,9 @@ import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unic
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { getServerActor } from '../../../helpers/utils'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
@@ -32,6 +35,25 @@ async function sendCreateCacheFile (byActor: ActorModel, video: VideoModel, file
     url: fileRedundancy.url,
     object: fileRedundancy.toActivityPubObject()
   })
+}
+
+async function sendCreateVideoPlaylist (playlist: VideoPlaylistModel, t: Transaction) {
+  if (playlist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
+
+  logger.info('Creating job to send create video playlist of %s.', playlist.url)
+
+  const byActor = playlist.OwnerAccount.Actor
+  const audience = getAudience(byActor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
+
+  const object = await playlist.toActivityPubObject(null, t)
+  const createActivity = buildCreateActivity(playlist.url, byActor, object, audience)
+
+  const serverActor = await getServerActor()
+  const toFollowersOf = [ byActor, serverActor ]
+
+  if (playlist.VideoChannel) toFollowersOf.push(playlist.VideoChannel.Actor)
+
+  return broadcastToFollowers(createActivity, byActor, toFollowersOf, t)
 }
 
 async function sendCreateVideoComment (comment: VideoCommentModel, t: Transaction) {
@@ -92,6 +114,7 @@ export {
   sendCreateVideo,
   buildCreateActivity,
   sendCreateVideoComment,
+  sendCreateVideoPlaylist,
   sendCreateCacheFile
 }
 

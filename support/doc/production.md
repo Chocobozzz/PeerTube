@@ -210,6 +210,7 @@ Now your instance is up you can:
  
  * Subscribe to the mailing list for PeerTube administrators: https://framalistes.org/sympa/subscribe/peertube-admin
  * Add you instance to the public PeerTube instances index if you want to: https://instances.peertu.be/
+ * Check [available CLI tools](/support/doc/tools.md)
 
 ## Upgrade
 

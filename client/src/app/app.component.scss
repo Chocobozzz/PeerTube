@@ -48,9 +48,8 @@
       overflow: hidden;
 
       .instance-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        @include ellipsis;
+
         width: 100%;
       }
 

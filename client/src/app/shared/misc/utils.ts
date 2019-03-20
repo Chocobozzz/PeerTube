@@ -17,7 +17,7 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function populateAsyncUserVideoChannels (authService: AuthService, channel: { id: number, label: string, support: string }[]) {
+function populateAsyncUserVideoChannels (authService: AuthService, channel: { id: number, label: string, support?: string }[]) {
   return new Promise(res => {
     authService.userInformationLoaded
       .subscribe(

@@ -11,8 +11,6 @@ import {
   videosChangeOwnershipValidator,
   videosTerminateChangeOwnershipValidator
 } from '../../../middlewares'
-import { AccountModel } from '../../../models/account/account'
-import { VideoModel } from '../../../models/video/video'
 import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
 import { VideoChangeOwnershipStatus, VideoPrivacy, VideoState } from '../../../../shared/models/videos'
 import { VideoChannelModel } from '../../../models/video/video-channel'
@@ -58,9 +56,9 @@ export {
 // ---------------------------------------------------------------------------
 
 async function giveVideoOwnership (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video as VideoModel
-  const initiatorAccountId = (res.locals.oauth.token.User as UserModel).Account.id
-  const nextOwner = res.locals.nextOwner as AccountModel
+  const videoInstance = res.locals.video
+  const initiatorAccountId = res.locals.oauth.token.User.Account.id
+  const nextOwner = res.locals.nextOwner
 
   await sequelizeTypescript.transaction(t => {
     return VideoChangeOwnershipModel.findOrCreate({
@@ -85,7 +83,7 @@ async function giveVideoOwnership (req: express.Request, res: express.Response) 
 }
 
 async function listVideoOwnership (req: express.Request, res: express.Response) {
-  const currentAccountId = (res.locals.oauth.token.User as UserModel).Account.id
+  const currentAccountId = res.locals.oauth.token.User.Account.id
 
   const resultList = await VideoChangeOwnershipModel.listForApi(
     currentAccountId,
@@ -99,9 +97,9 @@ async function listVideoOwnership (req: express.Request, res: express.Response) 
 
 async function acceptOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
-    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+    const videoChangeOwnership = res.locals.videoChangeOwnership
     const targetVideo = videoChangeOwnership.Video
-    const channel = res.locals.videoChannel as VideoChannelModel
+    const channel = res.locals.videoChannel
 
     const oldVideoChannel = await VideoChannelModel.loadByIdAndPopulateAccount(targetVideo.channelId)
 
@@ -123,7 +121,7 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
 
 async function refuseOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
-    const videoChangeOwnership = res.locals.videoChangeOwnership as VideoChangeOwnershipModel
+    const videoChangeOwnership = res.locals.videoChangeOwnership
 
     videoChangeOwnership.set('status', VideoChangeOwnershipStatus.REFUSED)
     await videoChangeOwnership.save({ transaction: t })

@@ -16,7 +16,7 @@ function isVideoCaptionFile (files: { [ fieldname: string ]: Express.Multer.File
   return isFileValid(files, videoCaptionTypesRegex, field, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)
 }
 
-async function isVideoCaptionExist (video: VideoModel, language: string, res: Response) {
+async function doesVideoCaptionExist (video: VideoModel, language: string, res: Response) {
   const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
 
   if (!videoCaption) {
@@ -36,5 +36,5 @@ async function isVideoCaptionExist (video: VideoModel, language: string, res: Re
 export {
   isVideoCaptionFile,
   isVideoCaptionLanguageValid,
-  isVideoCaptionExist
+  doesVideoCaptionExist
 }

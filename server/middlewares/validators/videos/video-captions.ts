@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { areValidationErrors } from '../utils'
-import { checkUserCanManageVideo, isVideoExist } from '../../../helpers/custom-validators/videos'
+import { checkUserCanManageVideo, doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
 import { body, param } from 'express-validator/check'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { isVideoCaptionExist, isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
+import { doesVideoCaptionExist, isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 
 const addVideoCaptionValidator = [
@@ -22,7 +22,7 @@ const addVideoCaptionValidator = [
     logger.debug('Checking addVideoCaption parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
-    if (!await isVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
+    if (!await doesVideoExist(req.params.videoId, res)) return cleanUpReqFiles(req)
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
@@ -40,8 +40,8 @@ const deleteVideoCaptionValidator = [
     logger.debug('Checking deleteVideoCaption parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
-    if (!await isVideoCaptionExist(res.locals.video, req.params.captionLanguage, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoCaptionExist(res.locals.video, req.params.captionLanguage, res)) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
@@ -58,7 +58,7 @@ const listVideoCaptionsValidator = [
     logger.debug('Checking listVideoCaptions parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res, 'id')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
     return next()
   }

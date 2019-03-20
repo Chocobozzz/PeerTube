@@ -7,11 +7,12 @@ import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { EmailPayload, processEmail } from './handlers/email'
-import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
+import { processVideoTranscoding, VideoTranscodingPayload } from './handlers/video-transcoding'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 import { processVideoImport, VideoImportPayload } from './handlers/video-import'
 import { processVideosViews } from './handlers/video-views'
 import { refreshAPObject, RefreshPayload } from './handlers/activitypub-refresher'
+import { processVideoFileImport, VideoFileImportPayload } from './handlers/video-file-import'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -19,19 +20,20 @@ type CreateJobArgument =
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
-  { type: 'video-file', payload: VideoFilePayload } |
+  { type: 'video-transcoding', payload: VideoTranscodingPayload } |
   { type: 'email', payload: EmailPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
   { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} }
 
-const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
+const handlers: { [ id in (JobType | 'video-file') ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
-  'video-file': processVideoFile,
+  'video-transcoding': processVideoTranscoding,
+  'video-file': processVideoTranscoding, // TODO: remove it (changed in 1.3)
   'email': processEmail,
   'video-import': processVideoImport,
   'videos-views': processVideosViews,
@@ -44,7 +46,7 @@ const jobTypes: JobType[] = [
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
   'email',
-  'video-file',
+  'video-transcoding',
   'video-file-import',
   'video-import',
   'videos-views',

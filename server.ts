@@ -28,7 +28,7 @@ import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-be
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, CACHE } from './server/initializers/constants'
+import { API_VERSION, CONFIG, FILES_CACHE } from './server/initializers/constants'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -53,15 +53,17 @@ if (errorMessage !== null) {
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
 // Security middleware
-import { baseCSP } from './server/middlewares'
+import { baseCSP } from './server/middlewares/csp'
 
-app.use(baseCSP)
-app.use(helmet({
-  frameguard: {
-    action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
-  },
-  hsts: false
-}))
+if (CONFIG.CSP.ENABLED) {
+  app.use(baseCSP)
+  app.use(helmet({
+    frameguard: {
+      action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
+    },
+    hsts: false
+  }))
+}
 
 // ----------- Database -----------
 
@@ -80,7 +82,7 @@ migrate()
 import { installApplication } from './server/initializers'
 import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
-import { VideosPreviewCache, VideosCaptionCache } from './server/lib/cache'
+import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache'
 import {
   activityPubRouter,
   apiRouter,
@@ -216,8 +218,8 @@ async function startApplication () {
   ])
 
   // Caches initializations
-  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, CACHE.PREVIEWS.MAX_AGE)
-  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, CACHE.VIDEO_CAPTIONS.MAX_AGE)
+  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE, FILES_CACHE.PREVIEWS.MAX_AGE)
+  VideosCaptionCache.Instance.init(CONFIG.CACHE.VIDEO_CAPTIONS.SIZE, FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE)
 
   // Enable Schedulers
   ActorFollowScheduler.Instance.enable()

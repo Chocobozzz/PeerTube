@@ -5,7 +5,7 @@ export type JobType = 'activitypub-http-unicast' |
   'activitypub-http-fetcher' |
   'activitypub-follow' |
   'video-file-import' |
-  'video-file' |
+  'video-transcoding' |
   'email' |
   'video-import' |
   'videos-views' |

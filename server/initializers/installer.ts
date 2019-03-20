@@ -1,12 +1,12 @@
 import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
 import { logger } from '../helpers/logger'
-import { createApplicationActor, createUserAccountAndChannel } from '../lib/user'
+import { createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
-import { CACHE, CONFIG, HLS_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
+import { FILES_CACHE, CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 import { remove, ensureDir } from 'fs-extra'
 
@@ -24,7 +24,7 @@ async function installApplication () {
         }),
 
       // Directories
-      removeCacheDirectories()
+      removeCacheAndTmpDirectories()
         .then(() => createDirectoriesIfNotExist())
     ])
   } catch (err) {
@@ -41,9 +41,9 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function removeCacheDirectories () {
-  const cacheDirectories = Object.keys(CACHE)
-    .map(k => CACHE[k].DIRECTORY)
+function removeCacheAndTmpDirectories () {
+  const cacheDirectories = Object.keys(FILES_CACHE)
+    .map(k => FILES_CACHE[k].DIRECTORY)
 
   const tasks: Promise<any>[] = []
 
@@ -53,13 +53,15 @@ function removeCacheDirectories () {
     tasks.push(remove(dir))
   }
 
+  tasks.push(remove(CONFIG.STORAGE.TMP_DIR))
+
   return Promise.all(tasks)
 }
 
 function createDirectoriesIfNotExist () {
   const storage = CONFIG.STORAGE
-  const cacheDirectories = Object.keys(CACHE)
-                                 .map(k => CACHE[k].DIRECTORY)
+  const cacheDirectories = Object.keys(FILES_CACHE)
+                                 .map(k => FILES_CACHE[k].DIRECTORY)
 
   const tasks: Promise<void>[] = []
   for (const key of Object.keys(storage)) {
@@ -74,7 +76,7 @@ function createDirectoriesIfNotExist () {
   }
 
   // Playlist directories
-  tasks.push(ensureDir(HLS_PLAYLIST_DIRECTORY))
+  tasks.push(ensureDir(HLS_STREAMING_PLAYLIST_DIRECTORY))
 
   return Promise.all(tasks)
 }
@@ -141,7 +143,7 @@ async function createOAuthAdminIfNotExist () {
   }
   const user = new UserModel(userData)
 
-  await createUserAccountAndChannel(user, validatePassword)
+  await createUserAccountAndChannelAndPlaylist(user, validatePassword)
   logger.info('Username: ' + username)
   logger.info('User password: ' + password)
 }

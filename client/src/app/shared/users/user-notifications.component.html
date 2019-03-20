@@ -64,7 +64,7 @@
         <my-global-icon iconName="cloud-download"></my-global-icon>
 
         <div class="message">
-          <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">Your video import</a> {{ notification.videoImportIdentifier }} succeeded
+          <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl || notification.videoImportUrl">Your video import</a> {{ notification.videoImportIdentifier }} succeeded
         </div>
       </ng-container>
 

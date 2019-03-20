@@ -1,6 +1,6 @@
 import { VideoModel } from '../models/video/video'
 import { basename, join, dirname } from 'path'
-import { CONFIG, HLS_PLAYLIST_DIRECTORY } from '../initializers'
+import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY } from '../initializers'
 import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
 import { getVideoFileSize } from '../helpers/ffmpeg-utils'
 import { sha256 } from '../helpers/core-utils'
@@ -11,7 +11,7 @@ import { generateRandomString } from '../helpers/utils'
 import { flatten, uniq } from 'lodash'
 
 async function updateMasterHLSPlaylist (video: VideoModel) {
-  const directory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
+  const directory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   const masterPlaylists: string[] = [ '#EXTM3U', '#EXT-X-VERSION:3' ]
   const masterPlaylistPath = join(directory, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
 
@@ -40,7 +40,7 @@ async function updateMasterHLSPlaylist (video: VideoModel) {
 async function updateSha256Segments (video: VideoModel) {
   const json: { [filename: string]: { [range: string]: string } } = {}
 
-  const playlistDirectory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
+  const playlistDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
 
   // For all the resolutions available for this video
   for (const file of video.VideoFiles) {
@@ -116,7 +116,8 @@ function downloadPlaylistSegments (playlistUrl: string, destinationDir: string, 
       for (const fileUrl of fileUrls) {
         const destPath = join(tmpDirectory, basename(fileUrl))
 
-        await doRequestAndSaveToFile({ uri: fileUrl }, destPath)
+        const bodyKBLimit = 10 * 1000 * 1000 // 10GB
+        await doRequestAndSaveToFile({ uri: fileUrl }, destPath, bodyKBLimit)
       }
 
       clearTimeout(timer)

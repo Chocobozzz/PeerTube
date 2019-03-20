@@ -1,7 +1,7 @@
-import { CONFIG, HLS_PLAYLIST_DIRECTORY } from '../initializers'
-import { extname, join } from 'path'
-import { getVideoFileFPS, getVideoFileResolution, transcode } from '../helpers/ffmpeg-utils'
-import { copy, ensureDir, move, remove, stat } from 'fs-extra'
+import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY } from '../initializers'
+import { join } from 'path'
+import { getVideoFileFPS, transcode } from '../helpers/ffmpeg-utils'
+import { ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
@@ -89,8 +89,8 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
 }
 
 async function generateHlsPlaylist (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
-  const baseHlsDirectory = join(HLS_PLAYLIST_DIRECTORY, video.uuid)
-  await ensureDir(join(HLS_PLAYLIST_DIRECTORY, video.uuid))
+  const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
+  await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
 
   const videoInputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(video.getOriginalFile()))
   const outputPath = join(baseHlsDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
@@ -123,49 +123,8 @@ async function generateHlsPlaylist (video: VideoModel, resolution: VideoResoluti
   })
 }
 
-async function importVideoFile (video: VideoModel, inputFilePath: string) {
-  const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
-  const { size } = await stat(inputFilePath)
-  const fps = await getVideoFileFPS(inputFilePath)
-
-  let updatedVideoFile = new VideoFileModel({
-    resolution: videoFileResolution,
-    extname: extname(inputFilePath),
-    size,
-    fps,
-    videoId: video.id
-  })
-
-  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
-
-  if (currentVideoFile) {
-    // Remove old file and old torrent
-    await video.removeFile(currentVideoFile)
-    await video.removeTorrent(currentVideoFile)
-    // Remove the old video file from the array
-    video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
-
-    // Update the database
-    currentVideoFile.set('extname', updatedVideoFile.extname)
-    currentVideoFile.set('size', updatedVideoFile.size)
-    currentVideoFile.set('fps', updatedVideoFile.fps)
-
-    updatedVideoFile = currentVideoFile
-  }
-
-  const outputPath = video.getVideoFilePath(updatedVideoFile)
-  await copy(inputFilePath, outputPath)
-
-  await video.createTorrentAndSetInfoHash(updatedVideoFile)
-
-  await updatedVideoFile.save()
-
-  video.VideoFiles.push(updatedVideoFile)
-}
-
 export {
   generateHlsPlaylist,
   optimizeVideofile,
-  transcodeOriginalVideofile,
-  importVideoFile
+  transcodeOriginalVideofile
 }

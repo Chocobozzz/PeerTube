@@ -115,7 +115,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
   }
 
   static loadAndPopulateVideo (id: number) {
-    return VideoImportModel.findById(id)
+    return VideoImportModel.findByPk(id)
   }
 
   static listUserVideoImportsForApi (userId: number, start: number, count: number, sort: string) {

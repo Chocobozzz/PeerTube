@@ -1,11 +1,17 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import { CONFIG, HLS_PLAYLIST_DIRECTORY, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
-import { VideosPreviewCache } from '../lib/cache'
+import {
+  CONFIG,
+  HLS_STREAMING_PLAYLIST_DIRECTORY,
+  ROUTE_CACHE_LIFETIME,
+  STATIC_DOWNLOAD_PATHS,
+  STATIC_MAX_AGE,
+  STATIC_PATHS
+} from '../initializers'
+import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
-import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
 import { UserModel } from '../models/account/user'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
@@ -53,9 +59,9 @@ staticRouter.use(
 
 // HLS
 staticRouter.use(
-  STATIC_PATHS.PLAYLISTS.HLS,
+  STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
   cors(),
-  express.static(HLS_PLAYLIST_DIRECTORY, { fallthrough: false }) // 404 if the file does not exist
+  express.static(HLS_STREAMING_PLAYLIST_DIRECTORY, { fallthrough: false }) // 404 if the file does not exist
 )
 
 // Thumbnails path for express
@@ -238,7 +244,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response, n
 
 function getVideoAndFile (req: express.Request, res: express.Response) {
   const resolution = parseInt(req.params.resolution, 10)
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
 
   const videoFile = video.VideoFiles.find(f => f.resolution === resolution)
 

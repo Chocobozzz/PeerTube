@@ -1,6 +1,6 @@
 <div
   [ngbPopover]="popContent" autoClose="outside" placement="bottom-left" container="body" popoverClass="popover-notifications"
-  i18n-title title="View your notifications" class="notification-avatar" #popover="ngbPopover"
+  i18n-title title="View your notifications" class="notification-avatar" #popover="ngbPopover" (hidden)="onPopoverHidden()"
 >
   <div *ngIf="unreadNotifications > 0" class="unread-notifications">{{ unreadNotifications }}</div>
 
@@ -8,16 +8,25 @@
 </div>
 
 <ng-template #popContent>
-  <div class="notifications-header">
-    <div i18n>Notifications</div>
+  <div class="content" [ngClass]="{ loaded: loaded }">
+    <div class="notifications-header">
+      <div i18n>Notifications</div>
 
-    <a
-      i18n-title title="Update your notification preferences" class="glyphicon glyphicon-cog"
-      routerLink="/my-account/settings" fragment="notifications"
-    ></a>
+      <a
+        i18n-title title="Update your notification preferences" class="glyphicon glyphicon-cog"
+        routerLink="/my-account/settings" fragment="notifications"
+      ></a>
+    </div>
+
+    <div *ngIf="!loaded" class="loader">
+      <my-loader [loading]="!loaded"></my-loader>
+    </div>
+
+    <my-user-notifications
+      [ignoreLoadingBar]="true" [infiniteScroll]="false" itemsPerPage="10"
+      (notificationsLoaded)="onNotificationLoaded()"
+    ></my-user-notifications>
+
+    <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications" i18n>See all your notifications</a>
   </div>
-
-  <my-user-notifications [ignoreLoadingBar]="true" [infiniteScroll]="false" itemsPerPage="10"></my-user-notifications>
-
-  <a class="all-notifications" routerLink="/my-account/notifications" i18n>See all your notifications</a>
 </ng-template>

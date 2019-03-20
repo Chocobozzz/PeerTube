@@ -22,7 +22,7 @@
   [attr.aria-pressed]="isPopoverOpened"
   [ngbPopover]="tooltipTemplate"
   [placement]="tooltipPlacement"
-  [autoClose]="true"
+  autoClose="outside"
   (onHidden)="onPopoverHidden()"
   (onShown)="onPopoverShown()"
 >

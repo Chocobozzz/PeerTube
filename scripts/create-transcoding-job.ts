@@ -42,6 +42,6 @@ async function run () {
   }
 
   await JobQueue.Instance.init()
-  await JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
+  await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
   console.log('Transcoding job for video %s created.', video.uuid)
 }

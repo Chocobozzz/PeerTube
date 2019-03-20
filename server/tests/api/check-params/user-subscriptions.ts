@@ -212,7 +212,7 @@ describe('Test user subscriptions API validators', function () {
     })
   })
 
-  describe('When checking if subscriptions exist', async function () {
+  describe('When checking if subscriptions exist', function () {
     const existPath = path + '/exist'
 
     it('Should fail with a non authenticated user', async function () {

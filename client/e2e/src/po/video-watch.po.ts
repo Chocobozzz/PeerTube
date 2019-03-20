@@ -44,7 +44,7 @@ export class VideoWatchPage {
       .then(seconds => parseInt(seconds, 10))
   }
 
-  async pauseVideo (isAutoplay: boolean, isMobileDevice: boolean) {
+  async playAndPauseVideo (isAutoplay: boolean, isMobileDevice: boolean) {
     if (isAutoplay === false) {
       const playButton = element(by.css('.vjs-big-play-button'))
       await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
@@ -96,5 +96,9 @@ export class VideoWatchPage {
     url = url.replace(':3333', ':9001')
 
     return browser.get(url)
+  }
+
+  async goOnP2PMediaLoaderEmbed () {
+    return browser.get('https://peertube2.cpy.re/videos/embed/4b997fc0-e106-42d9-bff9-ae9d64902bbb?mode=p2p-media-loader')
   }
 }

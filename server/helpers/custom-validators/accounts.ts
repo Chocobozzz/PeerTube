@@ -5,7 +5,6 @@ import * as validator from 'validator'
 import { AccountModel } from '../../models/account/account'
 import { isUserDescriptionValid, isUserUsernameValid } from './users'
 import { exists } from './misc'
-import { CONFIG } from '../../initializers'
 
 function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
@@ -19,7 +18,7 @@ function isAccountDescriptionValid (value: string) {
   return isUserDescriptionValid(value)
 }
 
-function isAccountIdExist (id: number | string, res: Response, sendNotFound = true) {
+function doesAccountIdExist (id: number | string, res: Response, sendNotFound = true) {
   let promise: Bluebird<AccountModel>
 
   if (validator.isInt('' + id)) {
@@ -28,26 +27,20 @@ function isAccountIdExist (id: number | string, res: Response, sendNotFound = tr
     promise = AccountModel.loadByUUID('' + id)
   }
 
-  return isAccountExist(promise, res, sendNotFound)
+  return doesAccountExist(promise, res, sendNotFound)
 }
 
-function isLocalAccountNameExist (name: string, res: Response, sendNotFound = true) {
+function doesLocalAccountNameExist (name: string, res: Response, sendNotFound = true) {
   const promise = AccountModel.loadLocalByName(name)
 
-  return isAccountExist(promise, res, sendNotFound)
+  return doesAccountExist(promise, res, sendNotFound)
 }
 
-function isAccountNameWithHostExist (nameWithDomain: string, res: Response, sendNotFound = true) {
-  const [ accountName, host ] = nameWithDomain.split('@')
-
-  let promise: Bluebird<AccountModel>
-  if (!host || host === CONFIG.WEBSERVER.HOST) promise = AccountModel.loadLocalByName(accountName)
-  else promise = AccountModel.loadByNameAndHost(accountName, host)
-
-  return isAccountExist(promise, res, sendNotFound)
+function doesAccountNameWithHostExist (nameWithDomain: string, res: Response, sendNotFound = true) {
+  return doesAccountExist(AccountModel.loadByNameWithHost(nameWithDomain), res, sendNotFound)
 }
 
-async function isAccountExist (p: Bluebird<AccountModel>, res: Response, sendNotFound: boolean) {
+async function doesAccountExist (p: Bluebird<AccountModel>, res: Response, sendNotFound: boolean) {
   const account = await p
 
   if (!account) {
@@ -69,9 +62,9 @@ async function isAccountExist (p: Bluebird<AccountModel>, res: Response, sendNot
 
 export {
   isAccountIdValid,
-  isAccountIdExist,
-  isLocalAccountNameExist,
+  doesAccountIdExist,
+  doesLocalAccountNameExist,
   isAccountDescriptionValid,
-  isAccountNameWithHostExist,
+  doesAccountNameWithHostExist,
   isAccountNameValid
 }

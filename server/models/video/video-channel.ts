@@ -8,7 +8,7 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  HasMany,
+  HasMany, IFindOptions,
   Is,
   Model,
   Scopes,
@@ -17,20 +17,22 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
-import { VideoChannel } from '../../../shared/models/videos'
+import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel } from '../account/account'
+import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { ServerModel } from '../server/server'
 import { DefineIndexesOptions } from 'sequelize'
+import { AvatarModel } from '../avatar/avatar'
+import { VideoPlaylistModel } from './video-playlist'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: DefineIndexesOptions[] = [
@@ -44,11 +46,12 @@ const indexes: DefineIndexesOptions[] = [
   }
 ]
 
-enum ScopeNames {
+export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
-  WITH_VIDEOS = 'WITH_VIDEOS'
+  WITH_VIDEOS = 'WITH_VIDEOS',
+  SUMMARY = 'SUMMARY'
 }
 
 type AvailableForListOptions = {
@@ -64,15 +67,41 @@ type AvailableForListOptions = {
   ]
 })
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
-    const actorIdNumber = parseInt(options.actorId + '', 10)
+  [ScopeNames.SUMMARY]: (withAccount = false) => {
+    const base: IFindOptions<VideoChannelModel> = {
+      attributes: [ 'name', 'description', 'id', 'actorId' ],
+      include: [
+        {
+          attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
 
+    if (withAccount === true) {
+      base.include.push({
+        model: AccountModel.scope(AccountModelScopeNames.SUMMARY),
+        required: true
+      })
+    }
+
+    return base
+  },
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
     // Only list local channels OR channels that are on an instance followed by actorId
-    const inQueryInstanceFollow = '(' +
-      'SELECT "actor"."serverId" FROM "actorFollow" ' +
-      'INNER JOIN "actor" ON actor.id=  "actorFollow"."targetActorId" ' +
-      'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-    ')'
+    const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
 
     return {
       include: [
@@ -191,6 +220,15 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     hooks: true
   })
   Videos: VideoModel[]
+
+  @HasMany(() => VideoPlaylistModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'CASCADE',
+    hooks: true
+  })
+  VideoPlaylists: VideoPlaylistModel[]
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
@@ -320,7 +358,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadByIdAndPopulateAccount (id: number) {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findById(id)
+      .findByPk(id)
   }
 
   static loadByIdAndAccount (id: number, accountId: number) {
@@ -339,7 +377,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadAndPopulateAccount (id: number) {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findById(id)
+      .findByPk(id)
   }
 
   static loadByUUIDAndPopulateAccount (uuid: string) {
@@ -376,6 +414,14 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel
       .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
+  }
+
+  static loadByNameWithHostAndPopulateAccount (nameWithHost: string) {
+    const [ name, host ] = nameWithHost.split('@')
+
+    if (!host || host === CONFIG.WEBSERVER.HOST) return VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
+
+    return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
   static loadLocalByNameAndPopulateAccount (name: string) {
@@ -431,7 +477,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findById(id, options)
+      .findByPk(id, options)
   }
 
   toFormattedJSON (): VideoChannel {
@@ -450,6 +496,20 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
 
     return Object.assign(actor, videoChannel)
+  }
+
+  toFormattedSummaryJSON (): VideoChannelSummary {
+    const actor = this.Actor.toFormattedJSON()
+
+    return {
+      id: this.id,
+      uuid: actor.uuid,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
   }
 
   toActivityPubObject (): ActivityPubActor {

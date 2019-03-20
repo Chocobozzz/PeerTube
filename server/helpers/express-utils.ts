@@ -5,7 +5,6 @@ import { logger } from './logger'
 import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
-import { UserModel } from '../models/account/user'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -13,7 +12,7 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'both') return undefined
 
   if (res && res.locals.oauth) {
-    const user: UserModel = res.locals.oauth.token.User
+    const user = res.locals.oauth.token.User
 
     // User does not want NSFW videos
     if (user.nsfwPolicy === 'do_not_list') return false
@@ -100,7 +99,7 @@ function createReqFiles (
 }
 
 function isUserAbleToSearchRemoteURI (res: express.Response) {
-  const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+  const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   return CONFIG.SEARCH.REMOTE_URI.ANONYMOUS === true ||
     (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)

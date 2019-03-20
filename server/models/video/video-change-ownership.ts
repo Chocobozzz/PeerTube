@@ -110,7 +110,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
   }
 
   static load (id: number) {
-    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findById(id)
+    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findByPk(id)
   }
 
   toFormattedJSON (): VideoChangeOwnership {

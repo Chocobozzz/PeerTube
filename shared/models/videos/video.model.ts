@@ -1,4 +1,4 @@
-import { VideoResolution, VideoState } from '../../index'
+import { AccountSummary, VideoChannelSummary, VideoResolution, VideoState } from '../../index'
 import { Account } from '../actors'
 import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './channel/video-channel.model'
@@ -18,24 +18,10 @@ export interface VideoFile {
   fps: number
 }
 
-export interface VideoChannelAttribute {
-  id: number
-  uuid: string
-  name: string
-  displayName: string
-  url: string
-  host: string
-  avatar?: Avatar
-}
-
-export interface AccountAttribute {
-  id: number
-  uuid: string
-  name: string
-  displayName: string
-  url: string
-  host: string
-  avatar?: Avatar
+export interface PlaylistElement {
+  position: number
+  startTimestamp: number
+  stopTimestamp: number
 }
 
 export interface Video {
@@ -68,12 +54,14 @@ export interface Video {
   blacklisted?: boolean
   blacklistedReason?: string
 
-  account: AccountAttribute
-  channel: VideoChannelAttribute
+  account: AccountSummary
+  channel: VideoChannelSummary
 
   userHistory?: {
     currentTime: number
   }
+
+  playlistElement?: PlaylistElement
 }
 
 export interface VideoDetails extends Video {

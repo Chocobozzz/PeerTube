@@ -44,6 +44,7 @@ async function getOrCreateActorAndServerAndModel (
 ) {
   const actorUrl = getAPId(activityActor)
   let created = false
+  let accountPlaylistsUrl: string
 
   let actor = await fetchActorByUrl(actorUrl, fetchType)
   // Orphan actor (not associated to an account of channel) so recreate it
@@ -70,7 +71,8 @@ async function getOrCreateActorAndServerAndModel (
 
       try {
         // Don't recurse another time
-        ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', false)
+        const recurseIfNeeded = false
+        ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', recurseIfNeeded)
       } catch (err) {
         logger.error('Cannot get or create account attributed to video channel ' + actor.url)
         throw new Error(err)
@@ -79,6 +81,7 @@ async function getOrCreateActorAndServerAndModel (
 
     actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, result, ownerActor)
     created = true
+    accountPlaylistsUrl = result.playlists
   }
 
   if (actor.Account) actor.Account.Actor = actor
@@ -89,6 +92,12 @@ async function getOrCreateActorAndServerAndModel (
 
   if ((created === true || refreshed === true) && updateCollections === true) {
     const payload = { uri: actor.outboxUrl, type: 'activity' as 'activity' }
+    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+  }
+
+  // We created a new account: fetch the playlists
+  if (created === true && actor.Account && accountPlaylistsUrl) {
+    const payload = { uri: accountPlaylistsUrl, accountId: actor.Account.id, type: 'account-playlists' as 'account-playlists' }
     await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
   }
 
@@ -342,6 +351,7 @@ type FetchRemoteActorResult = {
   name: string
   summary: string
   support?: string
+  playlists?: string
   avatarName?: string
   attributedTo: ActivityPubAttributedTo[]
 }
@@ -365,7 +375,8 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
   }
 
   if (checkUrlsSameHost(actorJSON.id, actorUrl) !== true) {
-    throw new Error('Actor url ' + actorUrl + ' has not the same host than its AP id ' + actorJSON.id)
+    logger.warn('Actor url %s has not the same host than its AP id %s', actorUrl, actorJSON.id)
+    return { result: undefined, statusCode: requestResult.response.statusCode }
   }
 
   const followersCount = await fetchActorTotalItems(actorJSON.followers)
@@ -398,6 +409,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
       avatarName,
       summary: actorJSON.summary,
       support: actorJSON.support,
+      playlists: actorJSON.playlists,
       attributedTo: actorJSON.attributedTo
     }
   }

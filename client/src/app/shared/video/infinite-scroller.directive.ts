@@ -1,5 +1,5 @@
 import { distinct, distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
-import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { fromEvent, Subscription } from 'rxjs'
 
 @Directive({
@@ -11,6 +11,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   @Input() firstLoadedPage = 1
   @Input() percentLimit = 70
   @Input() autoInit = false
+  @Input() onItself = false
 
   @Output() nearOfBottom = new EventEmitter<void>()
   @Output() nearOfTop = new EventEmitter<void>()
@@ -23,8 +24,9 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   private scrollUpSub: Subscription
   private pageChangeSub: Subscription
   private middleScreen: number
+  private container: HTMLElement
 
-  constructor () {
+  constructor (private el: ElementRef) {
     this.decimalLimit = this.percentLimit / 100
   }
 
@@ -39,16 +41,20 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   }
 
   initialize () {
+    if (this.onItself) {
+      this.container = this.el.nativeElement
+    }
+
     this.middleScreen = window.innerHeight / 2
 
     // Emit the last value
     const throttleOptions = { leading: true, trailing: true }
 
-    const scrollObservable = fromEvent(window, 'scroll')
+    const scrollObservable = fromEvent(this.container || window, 'scroll')
       .pipe(
         startWith(null),
         throttleTime(200, undefined, throttleOptions),
-        map(() => ({ current: window.scrollY, maximumScroll: document.body.clientHeight - window.innerHeight })),
+        map(() => this.getScrollInfo()),
         distinctUntilChanged((o1, o2) => o1.current === o2.current),
         share()
       )
@@ -100,5 +106,13 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
 
     // Offset page
     return page + (this.firstLoadedPage - 1)
+  }
+
+  private getScrollInfo () {
+    if (this.container) {
+      return { current: this.container.scrollTop, maximumScroll: this.container.scrollHeight }
+    }
+
+    return { current: window.scrollY, maximumScroll: document.body.clientHeight - window.innerHeight }
   }
 }

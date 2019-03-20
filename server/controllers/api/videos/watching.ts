@@ -2,7 +2,6 @@ import * as express from 'express'
 import { UserWatchingVideo } from '../../../../shared'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoWatchingValidator } from '../../../middlewares'
 import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
-import { UserModel } from '../../../models/account/user'
 
 const watchingRouter = express.Router()
 
@@ -21,7 +20,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function userWatchVideo (req: express.Request, res: express.Response) {
-  const user = res.locals.oauth.token.User as UserModel
+  const user = res.locals.oauth.token.User
 
   const body: UserWatchingVideo = req.body
   const { id: videoId } = res.locals.video as { id: number }

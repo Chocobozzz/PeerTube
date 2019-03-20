@@ -99,7 +99,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     state: VideoImportState.PENDING,
     userId: user.id
   }
-  const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
+  const videoImport = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
 
   // Create job to import the video
   const payload = {
@@ -141,7 +141,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     state: VideoImportState.PENDING,
     userId: user.id
   }
-  const videoImport: VideoImportModel = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
+  const videoImport = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
 
   // Create job to import the video
   const payload = {

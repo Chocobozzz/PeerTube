@@ -3,6 +3,7 @@
 import 'mocha'
 
 import {
+  closeAllSequelize,
   flushAndRunMultipleServers,
   flushTests,
   killallServers,
@@ -178,6 +179,8 @@ describe('Test ActivityPub security', function () {
 
   after(async function () {
     killallServers(servers)
+
+    await closeAllSequelize(servers)
 
     // Keep the logs if the test failed
     if (this['ok']) {

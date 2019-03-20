@@ -37,7 +37,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     this.labelNotifications = {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
       newCommentOnMyVideo: this.i18n('New comment on your video'),
-      videoAbuseAsModerator: this.i18n('New video abuse on local video'),
+      videoAbuseAsModerator: this.i18n('New video abuse'),
       videoAutoBlacklistAsModerator: this.i18n('Video auto-blacklisted waiting review'),
       blacklistOnMyVideo: this.i18n('One of your video is blacklisted/unblacklisted'),
       myVideoPublished: this.autoBlacklistVideosEnabled ?

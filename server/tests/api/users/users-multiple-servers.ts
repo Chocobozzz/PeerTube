@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Account } from '../../../../shared/models/actors'
 import {
+  checkTmpIsEmpty,
   checkVideoFilesWereRemoved,
   createUser,
   doubleFollow,
@@ -213,6 +214,12 @@ describe('Test users with multiple servers', function () {
   it('Should not have video files', async () => {
     for (const server of servers) {
       await checkVideoFilesWereRemoved(videoUUID, server.serverNumber)
+    }
+  })
+
+  it('Should have an empty tmp directory', async function () {
+    for (const server of servers) {
+      await checkTmpIsEmpty(server)
     }
   })
 

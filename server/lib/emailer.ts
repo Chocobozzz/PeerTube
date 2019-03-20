@@ -13,6 +13,15 @@ import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { VideoImportModel } from '../models/video/video-import'
 import { ActorFollowModel } from '../models/activitypub/actor-follow'
 
+type SendEmailOptions = {
+  to: string[]
+  subject: string
+  text: string
+
+  fromDisplayName?: string
+  replyTo?: string
+}
+
 class Emailer {
 
   private static instance: Emailer
@@ -425,5 +434,6 @@ class Emailer {
 // ---------------------------------------------------------------------------
 
 export {
-  Emailer
+  Emailer,
+  SendEmailOptions
 }

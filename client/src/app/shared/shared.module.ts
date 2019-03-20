@@ -45,9 +45,11 @@ import {
   VideoChangeOwnershipValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
+  VideoPlaylistValidatorsService,
   VideoValidatorsService
 } from '@app/shared/forms'
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
+import { InputMaskModule } from 'primeng/inputmask'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
@@ -68,7 +70,14 @@ import { UserNotificationsComponent } from '@app/shared/users/user-notifications
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
-import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
+import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
+import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
+import { ImageUploadComponent } from '@app/shared/images/image-upload.component'
+import { GlobalIconComponent } from '@app/shared/images/global-icon.component'
+import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
+import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
+import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.component'
+import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playlist/video-playlist-element-miniature.component'
 
 @NgModule({
   imports: [
@@ -85,17 +94,26 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     NgbTooltipModule,
 
     PrimeSharedModule,
+    InputMaskModule,
     NgPipesModule
   ],
 
   declarations: [
     LoaderComponent,
+    SmallLoaderComponent,
+
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    VideoPlaylistMiniatureComponent,
+    VideoAddToPlaylistComponent,
+    VideoPlaylistElementMiniatureComponent,
+
     FeedComponent,
+
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+
     ActionDropdownComponent,
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -104,8 +122,11 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
+    TimestampInputComponent,
+
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
@@ -114,7 +135,9 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
-    GlobalIconComponent
+
+    GlobalIconComponent,
+    ImageUploadComponent
   ],
 
   exports: [
@@ -131,23 +154,35 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     NgbTooltipModule,
 
     PrimeSharedModule,
+    InputMaskModule,
     BytesPipe,
     KeysPipe,
 
     LoaderComponent,
+    SmallLoaderComponent,
+
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    VideoPlaylistMiniatureComponent,
+    VideoAddToPlaylistComponent,
+    VideoPlaylistElementMiniatureComponent,
+
     FeedComponent,
+
     ButtonComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+
     ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
+    TimestampInputComponent,
+
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
@@ -156,7 +191,9 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
+
     GlobalIconComponent,
+    ImageUploadComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -174,6 +211,7 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     VideoService,
     AccountService,
     VideoChannelService,
+    VideoPlaylistService,
     VideoCaptionService,
     VideoImportService,
     UserSubscriptionService,
@@ -183,6 +221,7 @@ import { GlobalIconComponent } from '@app/shared/icons/global-icon.component'
     LoginValidatorsService,
     ResetPasswordValidatorsService,
     UserValidatorsService,
+    VideoPlaylistValidatorsService,
     VideoAbuseValidatorsService,
     VideoChannelValidatorsService,
     VideoCommentValidatorsService,

@@ -5,7 +5,6 @@ import { createReqFiles } from '../../../helpers/express-utils'
 import { CONFIG, MIMETYPES, sequelizeTypescript } from '../../../initializers'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { VideoModel } from '../../../models/video/video'
 import { logger } from '../../../helpers/logger'
 import { federateVideoIfNeeded } from '../../../lib/activitypub'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
@@ -52,7 +51,7 @@ async function listVideoCaptions (req: express.Request, res: express.Response) {
 
 async function addVideoCaption (req: express.Request, res: express.Response) {
   const videoCaptionPhysicalFile = req.files['captionfile'][0]
-  const video = res.locals.video as VideoModel
+  const video = res.locals.video
 
   const videoCaption = new VideoCaptionModel({
     videoId: video.id,
@@ -74,8 +73,8 @@ async function addVideoCaption (req: express.Request, res: express.Response) {
 }
 
 async function deleteVideoCaption (req: express.Request, res: express.Response) {
-  const video = res.locals.video as VideoModel
-  const videoCaption = res.locals.videoCaption as VideoCaptionModel
+  const video = res.locals.video
+  const videoCaption = res.locals.videoCaption
 
   await sequelizeTypescript.transaction(async t => {
     await videoCaption.destroy({ transaction: t })

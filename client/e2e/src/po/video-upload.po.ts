@@ -14,12 +14,13 @@ export class VideoUploadPage {
 
     const fileToUpload = join(__dirname, '../../fixtures/video.mp4')
     const fileInputSelector = '.upload-video-container input[type=file]'
-    const parentFileInput = '.upload-video .button-file'
+    const parentFileInput = '.upload-video-container .button-file'
 
     // Avoid sending keys on non visible element
     await browser.executeScript(`document.querySelector('${fileInputSelector}').style.opacity = 1`)
-    // await browser.executeScript(`document.querySelector('${fileInputSelector}').style.opacity = 1`)
     await browser.executeScript(`document.querySelector('${parentFileInput}').style.overflow = 'initial'`)
+
+    await browser.sleep(1000)
 
     const elem = element(by.css(fileInputSelector))
     await elem.sendKeys(fileToUpload)

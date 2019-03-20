@@ -18,6 +18,12 @@
   }
 }
 
+
+@mixin ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /**
  *  This mixin will crop text in block for needed amount of lines and put ellipsis at the end
  *
@@ -57,12 +63,24 @@
 
 @mixin apply-svg-color ($color) {
   /deep/ svg {
-    path[fill="#000000"], g[fill="#000000"], rect[fill="#000000"], circle[fill="#000000"] {
+    path[fill="#000000"],
+    g[fill="#000000"],
+    rect[fill="#000000"],
+    circle[fill="#000000"],
+    polygon[fill="#000000"] {
       fill: $color;
     }
 
-    path[stroke="#000000"], g[stroke="#000000"], rect[stroke="#000000"], circle[stroke="#000000"] {
+    path[stroke="#000000"],
+    g[stroke="#000000"],
+    rect[stroke="#000000"],
+    circle[stroke="#000000"],
+    polygon[stroke="#000000"] {
       stroke: $color;
+    }
+
+    stop[stop-color="#000000"] {
+      stop-color: $color;
     }
   }
 }
@@ -510,31 +528,14 @@
   }
 }
 
-@mixin video-miniature-small-screen {
-  text-align: center;
+@mixin dropdown-with-icon-item {
+  padding: 6px 24px;
 
-  /deep/ .video-miniature {
-    padding-right: 0;
-    height: auto;
-    width: 100%;
-    margin-bottom: 20px;
+  my-global-icon {
+    width: 24px;
 
-    .video-miniature-information {
-      width: 100% !important;
-
-      span {
-        width: 100%;
-      }
-    }
-
-    .video-thumbnail {
-      width: 100%;
-      height: auto;
-
-      img {
-        width: 100%;
-        height: auto;
-      }
-    }
+    margin-right: 10px;
+    position: relative;
+    top: -2px;
   }
 }

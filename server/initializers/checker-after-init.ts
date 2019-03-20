@@ -34,6 +34,12 @@ async function checkActivityPubUrls () {
 // Return an error message, or null if everything is okay
 function checkConfig () {
 
+  // Moved configuration keys
+  if (config.has('services.csp-logger')) {
+    logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
+  }
+
+  // Email verification
   if (!Emailer.isEnabled()) {
     if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
       return 'Emailer is disabled but you require signup email verification.'
@@ -77,6 +83,8 @@ function checkConfig () {
     if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
       return 'Min views in recently added strategy is not a number'
     }
+  } else {
+    return 'Videos redundancy should be an array (you must uncomment lines containing - too)'
   }
 
   // Check storage directory locations

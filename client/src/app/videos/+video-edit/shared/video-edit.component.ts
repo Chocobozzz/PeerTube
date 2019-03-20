@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
@@ -62,7 +62,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private router: Router,
     private notifier: Notifier,
     private serverService: ServerService,
-    private i18nPrimengCalendarService: I18nPrimengCalendarService
+    private i18nPrimengCalendarService: I18nPrimengCalendarService,
+    private ngZone: NgZone
   ) {
     this.tagValidators = this.videoValidatorsService.VIDEO_TAGS.VALIDATORS
     this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
@@ -132,9 +133,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
 
-    this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
-
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
+
+    this.ngZone.runOutsideAngular(() => {
+      this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+    })
   }
 
   ngOnDestroy () {

@@ -2,89 +2,155 @@
 
 import 'mocha'
 import {
+  createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
+  generateUserAccessToken,
   getVideo,
-  killallServers,
+  getVideoPlaylist,
+  killallServers, rateVideo,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo,
-  wait,
+  setActorField,
+  setDefaultVideoChannel,
+  setPlaylistField,
   setVideoField,
+  uploadVideo,
+  uploadVideoAndGetId,
+  wait,
   waitJobs
 } from '../../../../shared/utils'
+import { getAccount } from '../../../../shared/utils/users/accounts'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos'
 
 describe('Test AP refresher', function () {
   let servers: ServerInfo[] = []
   let videoUUID1: string
   let videoUUID2: string
   let videoUUID3: string
+  let playlistUUID1: string
+  let playlistUUID2: string
 
   before(async function () {
     this.timeout(60000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await flushAndRunMultipleServers(2, { transcoding: { enabled: false } })
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
+    await setDefaultVideoChannel(servers)
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video1' })
-      videoUUID1 = res.body.video.uuid
+      videoUUID1 = (await uploadVideoAndGetId({ server: servers[ 1 ], videoName: 'video1' })).uuid
+      videoUUID2 = (await uploadVideoAndGetId({ server: servers[ 1 ], videoName: 'video2' })).uuid
+      videoUUID3 = (await uploadVideoAndGetId({ server: servers[ 1 ], videoName: 'video3' })).uuid
     }
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video2' })
-      videoUUID2 = res.body.video.uuid
+      const a1 = await generateUserAccessToken(servers[1], 'user1')
+      await uploadVideo(servers[1].url, a1, { name: 'video4' })
+
+      const a2 = await generateUserAccessToken(servers[1], 'user2')
+      await uploadVideo(servers[1].url, a2, { name: 'video5' })
     }
 
     {
-      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video3' })
-      videoUUID3 = res.body.video.uuid
+      const playlistAttrs = { displayName: 'playlist1', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
+      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs })
+      playlistUUID1 = res.body.videoPlaylist.uuid
+    }
+
+    {
+      const playlistAttrs = { displayName: 'playlist2', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
+      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs })
+      playlistUUID2 = res.body.videoPlaylist.uuid
     }
 
     await doubleFollow(servers[0], servers[1])
   })
 
-  it('Should remove a deleted remote video', async function () {
-    this.timeout(60000)
+  describe('Videos refresher', function () {
 
-    await wait(10000)
+    it('Should remove a deleted remote video', async function () {
+      this.timeout(60000)
 
-    // Change UUID so the remote server returns a 404
-    await setVideoField(2, videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
+      await wait(10000)
 
-    await getVideo(servers[0].url, videoUUID1)
-    await getVideo(servers[0].url, videoUUID2)
+      // Change UUID so the remote server returns a 404
+      await setVideoField(2, videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
 
-    await waitJobs(servers)
+      await getVideo(servers[ 0 ].url, videoUUID1)
+      await getVideo(servers[ 0 ].url, videoUUID2)
 
-    await getVideo(servers[0].url, videoUUID1, 404)
-    await getVideo(servers[0].url, videoUUID2, 200)
+      await waitJobs(servers)
+
+      await getVideo(servers[ 0 ].url, videoUUID1, 404)
+      await getVideo(servers[ 0 ].url, videoUUID2, 200)
+    })
+
+    it('Should not update a remote video if the remote instance is down', async function () {
+      this.timeout(60000)
+
+      killallServers([ servers[ 1 ] ])
+
+      await setVideoField(2, videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
+
+      // Video will need a refresh
+      await wait(10000)
+
+      await getVideo(servers[ 0 ].url, videoUUID3)
+      // The refresh should fail
+      await waitJobs([ servers[ 0 ] ])
+
+      await reRunServer(servers[ 1 ])
+
+      // Should not refresh the video, even if the last refresh failed (to avoir a loop on dead instances)
+      await getVideo(servers[ 0 ].url, videoUUID3)
+      await waitJobs(servers)
+
+      await getVideo(servers[ 0 ].url, videoUUID3, 200)
+    })
   })
 
-  it('Should not update a remote video if the remote instance is down', async function () {
-    this.timeout(60000)
+  describe('Actors refresher', function () {
 
-    killallServers([ servers[1] ])
+    it('Should remove a deleted actor', async function () {
+      this.timeout(60000)
 
-    await setVideoField(2, videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
+      await wait(10000)
 
-    // Video will need a refresh
-    await wait(10000)
+      // Change actor name so the remote server returns a 404
+      await setActorField(2, 'http://localhost:9002/accounts/user2', 'preferredUsername', 'toto')
 
-    await getVideo(servers[0].url, videoUUID3)
-    // The refresh should fail
-    await waitJobs([ servers[0] ])
+      await getAccount(servers[ 0 ].url, 'user1@localhost:9002')
+      await getAccount(servers[ 0 ].url, 'user2@localhost:9002')
 
-    await reRunServer(servers[1])
+      await waitJobs(servers)
 
-    // Should not refresh the video, even if the last refresh failed (to avoir a loop on dead instances)
-    await getVideo(servers[0].url, videoUUID3)
-    await waitJobs(servers)
+      await getAccount(servers[ 0 ].url, 'user1@localhost:9002', 200)
+      await getAccount(servers[ 0 ].url, 'user2@localhost:9002', 404)
+    })
+  })
 
-    await getVideo(servers[0].url, videoUUID3, 200)
+  describe('Playlist refresher', function () {
+
+    it('Should remove a deleted playlist', async function () {
+      this.timeout(60000)
+
+      await wait(10000)
+
+      // Change UUID so the remote server returns a 404
+      await setPlaylistField(2, playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
+
+      await getVideoPlaylist(servers[ 0 ].url, playlistUUID1)
+      await getVideoPlaylist(servers[ 0 ].url, playlistUUID2)
+
+      await waitJobs(servers)
+
+      await getVideoPlaylist(servers[ 0 ].url, playlistUUID1, 200)
+      await getVideoPlaylist(servers[ 0 ].url, playlistUUID2, 404)
+    })
   })
 
   after(async function () {

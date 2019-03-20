@@ -45,11 +45,11 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
         if (trendingDays === 1) {
           this.titlePage = this.i18n('Trending for the last 24 hours')
-          this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours.')
+          this.titleTooltip = this.i18n('Trending videos are those totalizing the greatest number of views during the last 24 hours')
         } else {
           this.titlePage = this.i18n('Trending for the last {{days}} days', { days: trendingDays })
           this.titleTooltip = this.i18n(
-            'Trending videos are those totalizing the greatest number of views during the last {{days}} days.',
+            'Trending videos are those totalizing the greatest number of views during the last {{days}} days',
             { days: trendingDays }
           )
         }

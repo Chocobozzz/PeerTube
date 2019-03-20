@@ -25,6 +25,17 @@ import { MyAccountServerBlocklistComponent } from '@app/+my-account/my-account-b
 import { MyAccountHistoryComponent } from '@app/+my-account/my-account-history/my-account-history.component'
 import { MyAccountNotificationsComponent } from '@app/+my-account/my-account-notifications/my-account-notifications.component'
 import { MyAccountNotificationPreferencesComponent } from '@app/+my-account/my-account-settings/my-account-notification-preferences'
+import {
+  MyAccountVideoPlaylistCreateComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component'
+import {
+  MyAccountVideoPlaylistUpdateComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component'
+import { MyAccountVideoPlaylistsComponent } from '@app/+my-account/my-account-video-playlists/my-account-video-playlists.component'
+import {
+  MyAccountVideoPlaylistElementsComponent
+} from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 @NgModule({
   imports: [
@@ -33,7 +44,8 @@ import { MyAccountNotificationPreferencesComponent } from '@app/+my-account/my-a
     AutoCompleteModule,
     SharedModule,
     TableModule,
-    InputSwitchModule
+    InputSwitchModule,
+    DragDropModule
   ],
 
   declarations: [
@@ -57,7 +69,12 @@ import { MyAccountNotificationPreferencesComponent } from '@app/+my-account/my-a
     MyAccountServerBlocklistComponent,
     MyAccountHistoryComponent,
     MyAccountNotificationsComponent,
-    MyAccountNotificationPreferencesComponent
+    MyAccountNotificationPreferencesComponent,
+
+    MyAccountVideoPlaylistCreateComponent,
+    MyAccountVideoPlaylistUpdateComponent,
+    MyAccountVideoPlaylistsComponent,
+    MyAccountVideoPlaylistElementsComponent
   ],
 
   exports: [

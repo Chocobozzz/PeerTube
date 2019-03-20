@@ -18,8 +18,7 @@ import {
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
 import { Notifier } from '../../../lib/notifier'
-import { VideoModel } from '../../../models/video/video'
-import { sendCreateVideo, sendDeleteVideo, sendUpdateVideo } from '../../../lib/activitypub/send'
+import { sendDeleteVideo } from '../../../lib/activitypub/send'
 import { federateVideoIfNeeded } from '../../../lib/activitypub'
 
 const blacklistRouter = express.Router()
@@ -90,7 +89,7 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response)
 }
 
 async function updateVideoBlacklistController (req: express.Request, res: express.Response) {
-  const videoBlacklist = res.locals.videoBlacklist as VideoBlacklistModel
+  const videoBlacklist = res.locals.videoBlacklist
 
   if (req.body.reason !== undefined) videoBlacklist.reason = req.body.reason
 
@@ -108,8 +107,8 @@ async function listBlacklist (req: express.Request, res: express.Response, next:
 }
 
 async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoBlacklist = res.locals.videoBlacklist as VideoBlacklistModel
-  const video: VideoModel = res.locals.video
+  const videoBlacklist = res.locals.videoBlacklist
+  const video = res.locals.video
 
   await sequelizeTypescript.transaction(async t => {
     const unfederated = videoBlacklist.unfederated

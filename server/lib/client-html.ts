@@ -1,5 +1,4 @@
 import * as express from 'express'
-import * as Bluebird from 'bluebird'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
 import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE } from '../initializers'
 import { join } from 'path'
@@ -9,10 +8,13 @@ import * as validator from 'validator'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { readFile } from 'fs-extra'
 import { getActivityStreamDuration } from '../models/video/video-format-utils'
+import { AccountModel } from '../models/account/account'
+import { VideoChannelModel } from '../models/video/video-channel'
+import * as Bluebird from 'bluebird'
 
 export class ClientHtml {
 
-  private static htmlCache: { [path: string]: string } = {}
+  private static htmlCache: { [ path: string ]: string } = {}
 
   static invalidCache () {
     ClientHtml.htmlCache = {}
@@ -28,18 +30,14 @@ export class ClientHtml {
   }
 
   static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
-    let videoPromise: Bluebird<VideoModel>
-
     // Let Angular application handle errors
-    if (validator.isInt(videoId) || validator.isUUID(videoId, 4)) {
-      videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
-    } else {
+    if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
       return ClientHtml.getIndexHTML(req, res)
     }
 
     const [ html, video ] = await Promise.all([
       ClientHtml.getIndexHTML(req, res),
-      videoPromise
+      VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
     ])
 
     // Let Angular application handle errors
@@ -49,14 +47,44 @@ export class ClientHtml {
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
-    customHtml = ClientHtml.addOpenGraphAndOEmbedTags(customHtml, video)
+    customHtml = ClientHtml.addVideoOpenGraphAndOEmbedTags(customHtml, video)
+
+    return customHtml
+  }
+
+  static async getAccountHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
+    return this.getAccountOrChannelHTMLPage(() => AccountModel.loadByNameWithHost(nameWithHost), req, res)
+  }
+
+  static async getVideoChannelHTMLPage (nameWithHost: string, req: express.Request, res: express.Response) {
+    return this.getAccountOrChannelHTMLPage(() => VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithHost), req, res)
+  }
+
+  private static async getAccountOrChannelHTMLPage (
+    loader: () => Bluebird<AccountModel | VideoChannelModel>,
+    req: express.Request,
+    res: express.Response
+  ) {
+    const [ html, entity ] = await Promise.all([
+      ClientHtml.getIndexHTML(req, res),
+      loader()
+    ])
+
+    // Let Angular application handle errors
+    if (!entity) {
+      return ClientHtml.getIndexHTML(req, res)
+    }
+
+    let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
+    customHtml = ClientHtml.addAccountOrChannelMetaTags(customHtml, entity)
 
     return customHtml
   }
 
   private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
+    if (ClientHtml.htmlCache[ path ]) return ClientHtml.htmlCache[ path ]
 
     const buffer = await readFile(path)
 
@@ -64,7 +92,7 @@ export class ClientHtml {
 
     html = ClientHtml.addCustomCSS(html)
 
-    ClientHtml.htmlCache[path] = html
+    ClientHtml.htmlCache[ path ] = html
 
     return html
   }
@@ -114,7 +142,7 @@ export class ClientHtml {
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
   }
 
-  private static addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
+  private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
     const previewUrl = CONFIG.WEBSERVER.URL + video.getPreviewStaticPath()
     const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 
@@ -174,7 +202,7 @@ export class ClientHtml {
 
     // Opengraph
     Object.keys(openGraphMetaTags).forEach(tagName => {
-      const tagValue = openGraphMetaTags[tagName]
+      const tagValue = openGraphMetaTags[ tagName ]
 
       tagsString += `<meta property="${tagName}" content="${tagValue}" />`
     })
@@ -190,6 +218,17 @@ export class ClientHtml {
     // SEO, use origin video url so Google does not index remote videos
     tagsString += `<link rel="canonical" href="${video.url}" />`
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.OPENGRAPH_AND_OEMBED, tagsString)
+    return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
+  }
+
+  private static addAccountOrChannelMetaTags (htmlStringPage: string, entity: AccountModel | VideoChannelModel) {
+    // SEO, use origin account or channel URL
+    const metaTags = `<link rel="canonical" href="${entity.Actor.url}" />`
+
+    return this.addOpenGraphAndOEmbedTags(htmlStringPage, metaTags)
+  }
+
+  private static addOpenGraphAndOEmbedTags (htmlStringPage: string, metaTags: string) {
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, metaTags)
   }
 }

@@ -1,16 +1,12 @@
 import * as express from 'express'
 import 'express-validator'
-import { param, body } from 'express-validator/check'
+import { body, param } from 'express-validator/check'
 import { exists, isBooleanValid, isIdOrUUIDValid, toIntOrNull } from '../../helpers/custom-validators/misc'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
-import { VideoModel } from '../../models/video/video'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { isHostValid } from '../../helpers/custom-validators/servers'
-import { getServerActor } from '../../helpers/utils'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
-import { SERVER_ACTOR_NAME } from '../../initializers'
 import { ServerModel } from '../../models/server/server'
 
 const videoFileRedundancyGetValidator = [
@@ -27,9 +23,9 @@ const videoFileRedundancyGetValidator = [
     logger.debug('Checking videoFileRedundancyGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video: VideoModel = res.locals.video
+    const video = res.locals.video
     const videoFile = video.VideoFiles.find(f => {
       return f.resolution === req.params.resolution && (!req.params.fps || f.fps === req.params.fps)
     })
@@ -53,9 +49,9 @@ const videoPlaylistRedundancyGetValidator = [
     logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video: VideoModel = res.locals.video
+    const video = res.locals.video
     const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p === req.params.streamingPlaylistType)
 
     if (!videoStreamingPlaylist) return res.status(404).json({ error: 'Video playlist not found.' })

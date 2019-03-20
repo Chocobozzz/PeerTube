@@ -1,11 +1,12 @@
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
 .video-miniature {
   display: inline-block;
   padding-right: 15px;
   margin-bottom: 30px;
-  height: 175px;
+  height: 195px;
   vertical-align: top;
 
   .video-miniature-information {
@@ -14,26 +15,7 @@
     line-height: normal;
 
     .video-miniature-name {
-      @include ellipsis-multiline(
-        $font-size: 1rem,
-        $line-height: 1,
-        $lines-to-show: 2
-      );
-      transition: color 0.2s;
-      font-size: 16px;
-      font-weight: $font-semibold;
-      color: var(--mainForegroundColor);
-      margin-top: 5px;
-      margin-bottom: 5px;
-
-      &:hover {
-        text-decoration: none;
-      }
-
-      &.blur-filter {
-        filter: blur(3px);
-        padding-left: 4px;
-      }
+      @include miniature-name;
     }
 
     .video-miniature-created-at-views {
@@ -44,11 +26,9 @@
     .video-miniature-account,
     .video-miniature-channel {
       @include disable-default-a-behaviour;
+      @include ellipsis;
 
       display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       font-size: 13px;
       color: $grey-foreground-color;
 

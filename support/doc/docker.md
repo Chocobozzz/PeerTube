@@ -59,6 +59,8 @@ See the production guide ["What now" section](/support/doc/production.md#what-no
 
 ### Upgrade
 
+**Important:** Before upgrading, check you have all the `storage` fields in your [production.yaml file](/support/docker/production/config/production.yaml). 
+
 Pull the latest images and rerun PeerTube:
 
 ```shell
@@ -66,7 +68,6 @@ $ cd /your/peertube/directory
 $ docker-compose pull
 $ docker-compose up -d
 ```
-
 
 ## Build your own Docker image
 

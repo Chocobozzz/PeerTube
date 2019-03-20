@@ -17,6 +17,8 @@ const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
 clientsRouter.use('/videos/watch/:id', asyncMiddleware(generateWatchHtmlPage))
+clientsRouter.use('/accounts/:nameWithHost', asyncMiddleware(generateAccountHtmlPage))
+clientsRouter.use('/video-channels/:nameWithHost', asyncMiddleware(generateVideoChannelHtmlPage))
 
 clientsRouter.use(
   '/videos/embed',
@@ -95,6 +97,18 @@ async function generateHTMLPage (req: express.Request, res: express.Response, pa
 
 async function generateWatchHtmlPage (req: express.Request, res: express.Response) {
   const html = await ClientHtml.getWatchHTMLPage(req.params.id + '', req, res)
+
+  return sendHTML(html, res)
+}
+
+async function generateAccountHtmlPage (req: express.Request, res: express.Response) {
+  const html = await ClientHtml.getAccountHTMLPage(req.params.nameWithHost, req, res)
+
+  return sendHTML(html, res)
+}
+
+async function generateVideoChannelHtmlPage (req: express.Request, res: express.Response) {
+  const html = await ClientHtml.getVideoChannelHTMLPage(req.params.nameWithHost, req, res)
 
   return sendHTML(html, res)
 }

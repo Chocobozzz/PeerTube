@@ -21,19 +21,28 @@ export class MyAccountComponent {
       children: [
         {
           label: this.i18n('My channels'),
-          routerLink: '/my-account/video-channels'
+          routerLink: '/my-account/video-channels',
+          iconName: 'folder'
         },
         {
           label: this.i18n('My videos'),
-          routerLink: '/my-account/videos'
+          routerLink: '/my-account/videos',
+          iconName: 'videos'
+        },
+        {
+          label: this.i18n('My playlists'),
+          routerLink: '/my-account/video-playlists',
+          iconName: 'playlists'
         },
         {
           label: this.i18n('My subscriptions'),
-          routerLink: '/my-account/subscriptions'
+          routerLink: '/my-account/subscriptions',
+          iconName: 'subscriptions'
         },
         {
           label: this.i18n('My history'),
-          routerLink: '/my-account/history/videos'
+          routerLink: '/my-account/history/videos',
+          iconName: 'history'
         }
       ]
     }
@@ -41,7 +50,8 @@ export class MyAccountComponent {
     if (this.isVideoImportEnabled()) {
       libraryEntries.children.push({
         label: 'My imports',
-        routerLink: '/my-account/video-imports'
+        routerLink: '/my-account/video-imports',
+        iconName: 'cloud-download'
       })
     }
 
@@ -50,15 +60,18 @@ export class MyAccountComponent {
       children: [
         {
           label: this.i18n('Muted accounts'),
-          routerLink: '/my-account/blocklist/accounts'
+          routerLink: '/my-account/blocklist/accounts',
+          iconName: 'user'
         },
         {
           label: this.i18n('Muted instances'),
-          routerLink: '/my-account/blocklist/servers'
+          routerLink: '/my-account/blocklist/servers',
+          iconName: 'server'
         },
         {
           label: this.i18n('Ownership changes'),
-          routerLink: '/my-account/ownership'
+          routerLink: '/my-account/ownership',
+          iconName: 'im-with-her'
         }
       ]
     }

@@ -1089,6 +1089,83 @@ paths:
               channelId=$CHANNEL_ID \
               name=$NAME \
               "Authorization:Bearer $token"
+  /videos/imports:
+    post:
+      summary: Import a torrent or magnetURI or HTTP ressource (if enabled by the instance administrator)
+      security:
+        - OAuth2: []
+      tags:
+        - Video
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                torrentfile:
+                  description: Torrent File
+                  type: string
+                  format: binary
+                targetUrl:
+                  description: HTTP target URL
+                  type: string
+                magnetUri:
+                  description: Magnet URI
+                  type: string
+                channelId:
+                  description: Channel id that will contain this video
+                  type: number
+                thumbnailfile:
+                  description: Video thumbnail file
+                  type: string
+                previewfile:
+                  description: Video preview file
+                  type: string
+                privacy:
+                  $ref: '#/components/schemas/VideoPrivacy'
+                category:
+                  description: Video category
+                  type: string
+                licence:
+                  description: Video licence
+                  type: string
+                language:
+                  description: Video language
+                  type: string
+                description:
+                  description: Video description
+                  type: string
+                waitTranscoding:
+                  description: Whether or not we wait transcoding before publish the video
+                  type: string
+                support:
+                  description: Text describing how to support the video uploader
+                  type: string
+                nsfw:
+                  description: Whether or not this video contains sensitive content
+                  type: string
+                name:
+                  description: Video name
+                  type: string
+                tags:
+                  description: Video tags
+                  type: array
+                  items:
+                    type: string
+                commentsEnabled:
+                  description: Enable or disable comments for this video
+                  type: string
+                scheduleUpdate: *ref_0
+              required:
+                - channelId
+                - name
   /videos/abuse:
     get:
       summary: Get list of reported video abuses

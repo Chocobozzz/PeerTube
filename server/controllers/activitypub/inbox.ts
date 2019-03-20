@@ -5,8 +5,6 @@ import { logger } from '../../helpers/logger'
 import { processActivities } from '../../lib/activitypub/process/process'
 import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChannelValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
-import { VideoChannelModel } from '../../models/video/video-channel'
-import { AccountModel } from '../../models/account/account'
 import { queue } from 'async'
 import { ActorModel } from '../../models/activitypub/actor'
 
@@ -66,12 +64,7 @@ function inboxController (req: express.Request, res: express.Response) {
   activities = activities.filter(a => isActivityValid(a))
   logger.debug('We keep %d activities.', activities.length, { activities })
 
-  let accountOrChannel: VideoChannelModel | AccountModel
-  if (res.locals.account) {
-    accountOrChannel = res.locals.account
-  } else if (res.locals.videoChannel) {
-    accountOrChannel = res.locals.videoChannel
-  }
+  const accountOrChannel = res.locals.account || res.locals.videoChannel
 
   logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor.url)
 

@@ -26,12 +26,10 @@ export type VideoFormattingJSONOptions = {
     waitTranscoding?: boolean,
     scheduledUpdate?: boolean,
     blacklistInfo?: boolean
+    playlistInfo?: boolean
   }
 }
 function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormattingJSONOptions): Video {
-  const formattedAccount = video.VideoChannel.Account.toFormattedJSON()
-  const formattedVideoChannel = video.VideoChannel.toFormattedJSON()
-
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -68,24 +66,9 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
     updatedAt: video.updatedAt,
     publishedAt: video.publishedAt,
     originallyPublishedAt: video.originallyPublishedAt,
-    account: {
-      id: formattedAccount.id,
-      uuid: formattedAccount.uuid,
-      name: formattedAccount.name,
-      displayName: formattedAccount.displayName,
-      url: formattedAccount.url,
-      host: formattedAccount.host,
-      avatar: formattedAccount.avatar
-    },
-    channel: {
-      id: formattedVideoChannel.id,
-      uuid: formattedVideoChannel.uuid,
-      name: formattedVideoChannel.name,
-      displayName: formattedVideoChannel.displayName,
-      url: formattedVideoChannel.url,
-      host: formattedVideoChannel.host,
-      avatar: formattedVideoChannel.avatar
-    },
+
+    account: video.VideoChannel.Account.toFormattedSummaryJSON(),
+    channel: video.VideoChannel.toFormattedSummaryJSON(),
 
     userHistory: userHistory ? {
       currentTime: userHistory.currentTime
@@ -116,6 +99,16 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
       videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
     }
 
+    if (options.additionalAttributes.playlistInfo === true) {
+      // We filtered on a specific videoId/videoPlaylistId, that is unique
+      const playlistElement = video.VideoPlaylistElements[0]
+
+      videoObject.playlistElement = {
+        position: playlistElement.position,
+        startTimestamp: playlistElement.startTimestamp,
+        stopTimestamp: playlistElement.stopTimestamp
+      }
+    }
   }
 
   return videoObject

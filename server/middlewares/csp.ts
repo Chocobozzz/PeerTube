@@ -18,22 +18,20 @@ const baseDirectives = Object.assign({},
     frameSrc: ["'self'"], // instead of deprecated child-src / self because of test-embed
     workerSrc: ["'self'", 'blob:'] // instead of deprecated child-src
   },
-  CONFIG.SERVICES['CSP-LOGGER'] ? { reportUri: CONFIG.SERVICES['CSP-LOGGER'] } : {},
+  CONFIG.CSP.REPORT_URI ? { reportUri: CONFIG.CSP.REPORT_URI } : {},
   CONFIG.WEBSERVER.SCHEME === 'https' ? { upgradeInsecureRequests: true } : {}
 )
 
 const baseCSP = helmet.contentSecurityPolicy({
   directives: baseDirectives,
   browserSniff: false,
-  reportOnly: true
+  reportOnly: CONFIG.CSP.REPORT_ONLY
 })
 
 const embedCSP = helmet.contentSecurityPolicy({
-  directives: Object.assign(baseDirectives, {
-    frameAncestors: ['*']
-  }),
+  directives: Object.assign({}, baseDirectives, { frameAncestors: ['*'] }),
   browserSniff: false, // assumes a modern browser, but allows CDN in front
-  reportOnly: true
+  reportOnly: CONFIG.CSP.REPORT_ONLY
 })
 
 // ---------------------------------------------------------------------------

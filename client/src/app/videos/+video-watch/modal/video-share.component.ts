@@ -16,10 +16,8 @@ export class VideoShareComponent {
 
   @Input() video: VideoDetails = null
 
+  currentVideoTimestamp: number
   startAtCheckbox = false
-  currentVideoTimestampString: string
-
-  private currentVideoTimestamp: number
 
   constructor (
     private modalService: NgbModal,
@@ -28,8 +26,7 @@ export class VideoShareComponent {
   ) { }
 
   show (currentVideoTimestamp?: number) {
-    this.currentVideoTimestamp = Math.floor(currentVideoTimestamp)
-    this.currentVideoTimestampString = durationToString(this.currentVideoTimestamp)
+    this.currentVideoTimestamp = currentVideoTimestamp ? Math.floor(currentVideoTimestamp) : 0
 
     this.modalService.open(this.modal)
   }
@@ -50,10 +47,6 @@ export class VideoShareComponent {
 
   activateCopiedMessage () {
     this.notifier.success(this.i18n('Copied'))
-  }
-
-  getStartCheckboxLabel () {
-    return this.i18n('Start at {{timestamp}}', { timestamp: this.currentVideoTimestampString })
   }
 
   private getVideoTimestampIfEnabled () {

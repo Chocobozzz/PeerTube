@@ -93,8 +93,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.User as UserModel
+async function getUserVideos (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.User
   const resultList = await VideoModel.listUserVideosForApi(
     user.Account.id,
     req.query.start as number,
@@ -111,8 +111,8 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
 }
 
-async function getUserVideoImports (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.User as UserModel
+async function getUserVideoImports (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.User
   const resultList = await VideoImportModel.listUserVideoImportsForApi(
     user.id,
     req.query.start as number,
@@ -123,14 +123,14 @@ async function getUserVideoImports (req: express.Request, res: express.Response,
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getUserInformation (req: express.Request, res: express.Response) {
   // We did not load channels in res.locals.user
   const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
 
   return res.json(user.toFormattedJSON())
 }
 
-async function getUserVideoQuotaUsed (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
   // We did not load channels in res.locals.user
   const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
   const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
@@ -143,7 +143,7 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
   return res.json(data)
 }
 
-async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getUserVideoRating (req: express.Request, res: express.Response) {
   const videoId = res.locals.video.id
   const accountId = +res.locals.oauth.token.User.Account.id
 
@@ -158,7 +158,7 @@ async function getUserVideoRating (req: express.Request, res: express.Response, 
 }
 
 async function deleteMe (req: express.Request, res: express.Response) {
-  const user: UserModel = res.locals.oauth.token.User
+  const user = res.locals.oauth.token.User
 
   await user.destroy()
 
@@ -170,7 +170,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
 async function updateMe (req: express.Request, res: express.Response) {
   const body: UserUpdateMe = req.body
 
-  const user: UserModel = res.locals.oauth.token.user
+  const user = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
 
   if (body.password !== undefined) user.password = body.password
@@ -199,7 +199,7 @@ async function updateMe (req: express.Request, res: express.Response) {
 
 async function updateMyAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
-  const user: UserModel = res.locals.oauth.token.user
+  const user = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
 
   const userAccount = await AccountModel.load(user.Account.id)

@@ -110,7 +110,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
       ]
     }
 
-    return VideoStreamingPlaylistModel.findById(id, options)
+    return VideoStreamingPlaylistModel.findByPk(id, options)
   }
 
   static getHlsPlaylistFilename (resolution: number) {
@@ -130,15 +130,15 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
   }
 
   static getHlsMasterPlaylistStaticPath (videoUUID: string) {
-    return join(STATIC_PATHS.PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
   }
 
   static getHlsPlaylistStaticPath (videoUUID: string, resolution: number) {
-    return join(STATIC_PATHS.PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
   }
 
   static getHlsSha256SegmentsStaticPath (videoUUID: string) {
-    return join(STATIC_PATHS.PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
+    return join(STATIC_PATHS.STREAMING_PLAYLISTS.HLS, videoUUID, VideoStreamingPlaylistModel.getHlsSha256SegmentsFilename())
   }
 
   getStringType () {

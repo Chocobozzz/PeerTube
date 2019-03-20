@@ -66,6 +66,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         description: null,
         terms: null,
         defaultClientRoute: null,
+        isNSFW: false,
         defaultNSFWPolicy: null,
         customizations: {
           javascript: null,

@@ -11,9 +11,7 @@ import {
 } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
-import { AccountModel } from '../models/account/account'
 import { cacheRoute } from '../middlewares/cache'
-import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { buildNSFWFilter } from '../helpers/express-utils'
 
@@ -42,10 +40,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function generateVideoCommentsFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateVideoCommentsFeed (req: express.Request, res: express.Response) {
   const start = 0
 
-  const video = res.locals.video as VideoModel
+  const video = res.locals.video
   const videoId: number = video ? video.id : undefined
 
   const comments = await VideoCommentModel.listForFeed(start, FEEDS.COUNT, videoId)
@@ -77,11 +75,11 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   return sendFeed(feed, req, res)
 }
 
-async function generateVideoFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateVideoFeed (req: express.Request, res: express.Response) {
   const start = 0
 
-  const account: AccountModel = res.locals.account
-  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const account = res.locals.account
+  const videoChannel = res.locals.videoChannel
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
 
   let name: string

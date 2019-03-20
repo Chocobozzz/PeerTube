@@ -1,5 +1,5 @@
 import { User } from '../'
-import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
+import { PlaylistElement, Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { durationToString, getAbsoluteAPIUrl } from '../misc/utils'
@@ -46,6 +46,8 @@ export class Video implements VideoServerModel {
   scheduledUpdate?: VideoScheduleUpdate
   blacklisted?: boolean
   blacklistedReason?: string
+
+  playlistElement?: PlaylistElement
 
   account: {
     id: number
@@ -117,15 +119,16 @@ export class Video implements VideoServerModel {
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
 
     this.scheduledUpdate = hash.scheduledUpdate
-    this.originallyPublishedAt = hash.originallyPublishedAt ?
-    new Date(hash.originallyPublishedAt.toString())
-    : null
+    this.originallyPublishedAt = hash.originallyPublishedAt ? new Date(hash.originallyPublishedAt.toString()) : null
+
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
     this.blacklisted = hash.blacklisted
     this.blacklistedReason = hash.blacklistedReason
 
     this.userHistory = hash.userHistory
+
+    this.playlistElement = hash.playlistElement
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

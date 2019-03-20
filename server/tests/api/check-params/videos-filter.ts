@@ -1,27 +1,27 @@
 /* tslint:disable:no-unused-expression */
 
-import * as chai from 'chai'
 import 'mocha'
 import {
   createUser,
+  createVideoPlaylist,
   flushTests,
   killallServers,
   makeGetRequest,
   runServer,
   ServerInfo,
-  setAccessTokensToServers,
+  setAccessTokensToServers, setDefaultVideoChannel,
   userLogin
 } from '../../../../shared/utils'
 import { UserRole } from '../../../../shared/models/users'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 
-const expect = chai.expect
-
-async function testEndpoints (server: ServerInfo, token: string, filter: string, statusCodeExpected: number) {
+async function testEndpoints (server: ServerInfo, token: string, filter: string, playlistUUID: string, statusCodeExpected: number) {
   const paths = [
     '/api/v1/video-channels/root_channel/videos',
     '/api/v1/accounts/root/videos',
     '/api/v1/videos',
-    '/api/v1/search/videos'
+    '/api/v1/search/videos',
+    '/api/v1/video-playlists/' + playlistUUID + '/videos'
   ]
 
   for (const path of paths) {
@@ -41,6 +41,7 @@ describe('Test videos filters', function () {
   let server: ServerInfo
   let userAccessToken: string
   let moderatorAccessToken: string
+  let playlistUUID: string
 
   // ---------------------------------------------------------------
 
@@ -52,6 +53,7 @@ describe('Test videos filters', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     const user = { username: 'user1', password: 'my super password' }
     await createUser(server.url, server.accessToken, user.username, user.password)
@@ -68,28 +70,39 @@ describe('Test videos filters', function () {
       UserRole.MODERATOR
     )
     moderatorAccessToken = await userLogin(server, moderator)
+
+    const res = await createVideoPlaylist({
+      url: server.url,
+      token: server.accessToken,
+      playlistAttrs: {
+        displayName: 'super playlist',
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        videoChannelId: server.videoChannel.id
+      }
+    })
+    playlistUUID = res.body.videoPlaylist.uuid
   })
 
   describe('When setting a video filter', function () {
 
     it('Should fail with a bad filter', async function () {
-      await testEndpoints(server, server.accessToken, 'bad-filter', 400)
+      await testEndpoints(server, server.accessToken, 'bad-filter', playlistUUID, 400)
     })
 
     it('Should succeed with a good filter', async function () {
-      await testEndpoints(server, server.accessToken,'local', 200)
+      await testEndpoints(server, server.accessToken,'local', playlistUUID, 200)
     })
 
     it('Should fail to list all-local with a simple user', async function () {
-      await testEndpoints(server, userAccessToken, 'all-local', 401)
+      await testEndpoints(server, userAccessToken, 'all-local', playlistUUID, 401)
     })
 
     it('Should succeed to list all-local with a moderator', async function () {
-      await testEndpoints(server, moderatorAccessToken, 'all-local', 200)
+      await testEndpoints(server, moderatorAccessToken, 'all-local', playlistUUID, 200)
     })
 
     it('Should succeed to list all-local with an admin', async function () {
-      await testEndpoints(server, server.accessToken, 'all-local', 200)
+      await testEndpoints(server, server.accessToken, 'all-local', playlistUUID, 200)
     })
 
     // Because we cannot authenticate the user on the RSS endpoint
@@ -104,7 +117,7 @@ describe('Test videos filters', function () {
       })
     })
 
-    it('Should succed on the feeds endpoint with the local filter', async function () {
+    it('Should succeed on the feeds endpoint with the local filter', async function () {
       await makeGetRequest({
         url: server.url,
         path: '/feeds/videos.json',

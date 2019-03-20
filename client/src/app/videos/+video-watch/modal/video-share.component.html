@@ -6,11 +6,19 @@
 
   <div class="modal-body">
 
-    <div *ngIf="currentVideoTimestampString" class="start-at">
+    <div class="start-at">
       <my-peertube-checkbox
         inputName="startAt" [(ngModel)]="startAtCheckbox"
-        i18n-labelText [labelText]="getStartCheckboxLabel()"
+        i18n-labelText labelText="Start at"
       ></my-peertube-checkbox>
+
+      <my-timestamp-input
+        [timestamp]="currentVideoTimestamp"
+        [maxTimestamp]="video.duration"
+        [disabled]="!startAtCheckbox"
+        [(ngModel)]="currentVideoTimestamp"
+      >
+      </my-timestamp-input>
     </div>
 
     <div class="form-group">

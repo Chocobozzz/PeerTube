@@ -18,11 +18,9 @@ import {
   unblockAccountByServerValidator,
   unblockServerByServerValidator
 } from '../../../middlewares/validators'
-import { AccountModel } from '../../../models/account/account'
 import { AccountBlocklistModel } from '../../../models/account/account-blocklist'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
-import { ServerModel } from '../../../models/server/server'
 import { UserRight } from '../../../../shared/models/users'
 
 const serverBlocklistRouter = express.Router()
@@ -91,7 +89,7 @@ async function listBlockedAccounts (req: express.Request, res: express.Response)
 
 async function blockAccount (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const accountToBlock: AccountModel = res.locals.account
+  const accountToBlock = res.locals.account
 
   await addAccountInBlocklist(serverActor.Account.id, accountToBlock.id)
 
@@ -99,7 +97,7 @@ async function blockAccount (req: express.Request, res: express.Response) {
 }
 
 async function unblockAccount (req: express.Request, res: express.Response) {
-  const accountBlock: AccountBlocklistModel = res.locals.accountBlock
+  const accountBlock = res.locals.accountBlock
 
   await removeAccountFromBlocklist(accountBlock)
 
@@ -116,7 +114,7 @@ async function listBlockedServers (req: express.Request, res: express.Response) 
 
 async function blockServer (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const serverToBlock: ServerModel = res.locals.server
+  const serverToBlock = res.locals.server
 
   await addServerInBlocklist(serverActor.Account.id, serverToBlock.id)
 
@@ -124,7 +122,7 @@ async function blockServer (req: express.Request, res: express.Response) {
 }
 
 async function unblockServer (req: express.Request, res: express.Response) {
-  const serverBlock: ServerBlocklistModel = res.locals.serverBlock
+  const serverBlock = res.locals.serverBlock
 
   await removeServerFromBlocklist(serverBlock)
 
