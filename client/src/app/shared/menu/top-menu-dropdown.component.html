@@ -13,7 +13,11 @@
       </span>
 
       <div ngbDropdownMenu>
-        <a *ngFor="let menuChild of menuEntry.children" class="dropdown-item" [routerLink]="menuChild.routerLink">{{ menuChild.label }}</a>
+        <a *ngFor="let menuChild of menuEntry.children" class="dropdown-item" [ngClass]="{ icon: hasIcons }" [routerLink]="menuChild.routerLink">
+          <my-global-icon *ngIf="menuChild.iconName" [iconName]="menuChild.iconName"></my-global-icon>
+
+          {{ menuChild.label }}
+        </a>
       </div>
     </div>
 
