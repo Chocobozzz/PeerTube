@@ -4,9 +4,10 @@
     <label i18n>History enabled</label>
   </div>
 
-  <div class="delete-history">
-    <button (click)="deleteHistory()" i18n>Delete history</button>
-  </div>
+  <button class="delete-history" (click)="deleteHistory()" i18n>
+    <my-global-icon iconName="delete"></my-global-icon>
+    Delete history
+  </button>
 </div>
 
 

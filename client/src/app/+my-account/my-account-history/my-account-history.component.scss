@@ -23,12 +23,11 @@
   }
 
   .delete-history {
-    font-size: 15px;
+    @include peertube-button;
+    @include grey-button;
+    @include button-with-icon;
 
-    button {
-      @include peertube-button;
-      @include grey-button;
-    }
+    font-size: 15px;
   }
 }
 
