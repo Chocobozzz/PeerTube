@@ -121,8 +121,15 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
+
     if (commentToDelete.totalReplies !== 0) {
       message += this.i18n(' {{totalReplies}} replies will be deleted too.', { totalReplies: commentToDelete.totalReplies })
+    }
+
+    if (commentToDelete.isLocal) {
+      message += this.i18n(' The deletion will be sent to remote instances so they remove the comment too.')
+    } else {
+      message += this.i18n(' It is a remote comment, so the deletion will only be effective on your instance.')
     }
 
     const res = await this.confirmService.confirm(message, this.i18n('Delete'))

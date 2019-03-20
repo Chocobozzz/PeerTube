@@ -1,6 +1,7 @@
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { VideoComment as VideoCommentServerModel } from '../../../../../../shared/models/videos/video-comment.model'
 import { Actor } from '@app/shared/actor/actor.model'
+import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 
 export class VideoComment implements VideoCommentServerModel {
   id: number
@@ -16,6 +17,8 @@ export class VideoComment implements VideoCommentServerModel {
   by: string
   accountAvatarUrl: string
 
+  isLocal: boolean
+
   constructor (hash: VideoCommentServerModel) {
     this.id = hash.id
     this.url = hash.url
@@ -30,5 +33,9 @@ export class VideoComment implements VideoCommentServerModel {
 
     this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
     this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
+    const thisHost = new URL(absoluteAPIUrl).host
+    this.isLocal = this.account.host.trim() === thisHost
   }
 }
