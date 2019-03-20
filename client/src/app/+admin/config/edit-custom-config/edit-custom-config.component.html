@@ -318,18 +318,18 @@
                   helpType="custom"
                   i18n-customHtml
                   customHtml="
-                    Write directly CSS code. Example:<br />
+                    Write directly CSS code. Example:<br /><br />
                     <pre>
-          body {{ '{' }}
-            background-color: red;
-          {{ '}' }}
+  #custom-css {{ '{' }}
+    color: red;
+  {{ '}' }}
                     </pre>
 
-                    Prepend with <em>#custom-css</em> to override styles. Example:
+                    Prepend with <em>#custom-css</em> to override styles. Example:<br /><br />
                     <pre>
-          #custom-css .logged-in-email {{ '{' }}
-            color: red;
-          {{ '}' }}
+  #custom-css .logged-in-email {{ '{' }}
+    color: red;
+  {{ '}' }}
                     </pre>
                   "
               ></my-help>
