@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -17,18 +16,16 @@ import { Notifier, ServerService } from '@app/core'
 })
 export class VideoTrendingComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  currentRoute = '/videos/trending'
   defaultSort: VideoSortField = '-trending'
 
   constructor (
     protected router: Router,
+    protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
-    protected location: Location,
     protected screenService: ScreenService,
-    private serverService: ServerService,
-    protected i18n: I18n,
+    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

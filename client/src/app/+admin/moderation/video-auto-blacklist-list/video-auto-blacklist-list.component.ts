@@ -4,7 +4,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Router, ActivatedRoute } from '@angular/router'
 import { AbstractVideoList } from '@app/shared/video/abstract-video-list'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { Notifier, AuthService } from '@app/core'
+import { Notifier, AuthService, ServerService } from '@app/core'
 import { Video } from '@shared/models'
 import { VideoBlacklistService } from '@app/shared'
 import { immutableAssign } from '@app/shared/misc/utils'
@@ -17,7 +17,6 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 })
 export class VideoAutoBlacklistListComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  currentRoute = '/admin/moderation/video-auto-blacklist/list'
   checkedVideos: { [ id: number ]: boolean } = {}
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -25,18 +24,15 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
     totalItems: null
   }
 
-  protected baseVideoWidth = -1
-  protected baseVideoHeight = 155
-
   constructor (
     protected router: Router,
     protected route: ActivatedRoute,
-    protected i18n: I18n,
     protected notifier: Notifier,
-    protected location: Location,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private videoBlacklistService: VideoBlacklistService,
+    protected serverService: ServerService,
+    private i18n: I18n,
+    private videoBlacklistService: VideoBlacklistService
   ) {
     super()
 
@@ -96,5 +92,4 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
       error => this.notifier.error(error.message)
     )
   }
-
 }

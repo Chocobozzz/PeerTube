@@ -19,13 +19,10 @@
 
   <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div
-    myInfiniteScroller
-    [pageHeight]="pageHeight" [firstLoadedPage]="firstLoadedPage"
-    (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
-    class="videos" #videosElement
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true"
+    class="videos"
   >
-    <div *ngFor="let videos of videoPages; trackBy: pageByVideoId" class="videos-page">
-      <my-video-miniature *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"></my-video-miniature>
-    </div>
+    <my-video-miniature *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType">
+    </my-video-miniature>
   </div>
 </div>

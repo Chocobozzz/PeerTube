@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { Op } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -458,7 +457,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const query = {
       where: {
         updatedAt: {
-          [Op.lt]: beforeUpdatedAt
+          [Sequelize.Op.lt]: beforeUpdatedAt
         },
         videoId
       }

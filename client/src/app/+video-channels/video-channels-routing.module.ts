@@ -23,6 +23,10 @@ const videoChannelsRoutes: Routes = [
         data: {
           meta: {
             title: 'Video channel videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'video-channel-videos-list'
           }
         }
       },

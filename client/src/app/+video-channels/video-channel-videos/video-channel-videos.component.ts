@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
@@ -12,7 +11,7 @@ import { tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -25,7 +24,6 @@ import { Notifier } from '@app/core'
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   marginContent = false // Disable margin
-  currentRoute = '/video-channels/videos'
   loadOnInit = false
 
   private videoChannel: VideoChannel
@@ -33,13 +31,13 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
   constructor (
     protected router: Router,
+    protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected authService: AuthService,
     protected notifier: Notifier,
     protected confirmService: ConfirmService,
-    protected location: Location,
     protected screenService: ScreenService,
-    protected i18n: I18n,
+    private i18n: I18n,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService
   ) {
@@ -55,7 +53,6 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
-        this.currentRoute = '/video-channels/' + this.videoChannel.nameWithHost + '/videos'
 
         this.reloadVideos()
         this.generateSyndicationList()

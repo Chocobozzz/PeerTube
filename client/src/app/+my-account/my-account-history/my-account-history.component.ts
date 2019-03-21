@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { AuthService } from '../../core/auth'
@@ -11,7 +10,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { UserHistoryService } from '@app/shared/users/user-history.service'
 import { UserService } from '@app/shared'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-account-history',
@@ -20,7 +19,6 @@ import { Notifier } from '@app/core'
 })
 export class MyAccountHistoryComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  currentRoute = '/my-account/history/videos'
   pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 5,
@@ -28,16 +26,13 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
   }
   videosHistoryEnabled: boolean
 
-  protected baseVideoWidth = -1
-  protected baseVideoHeight = 155
-
   constructor (
     protected router: Router,
+    protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected authService: AuthService,
     protected userService: UserService,
     protected notifier: Notifier,
-    protected location: Location,
     protected screenService: ScreenService,
     protected i18n: I18n,
     private confirmService: ConfirmService,

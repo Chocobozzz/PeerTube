@@ -1,11 +1,10 @@
-import { from as observableFrom, Observable } from 'rxjs'
-import { concatAll, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit, Inject, LOCALE_ID, ViewChild } from '@angular/core'
+import { concat, Observable } from 'rxjs'
+import { tap, toArray } from 'rxjs/operators'
+import { Component, Inject, LOCALE_ID, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -22,8 +21,9 @@ import { VideoChangeOwnershipComponent } from './video-change-ownership/video-ch
   styleUrls: [ './my-account-videos.component.scss' ]
 })
 export class MyAccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
+
   titlePage: string
-  currentRoute = '/my-account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -31,19 +31,14 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     totalItems: null
   }
 
-  protected baseVideoWidth = -1
-  protected baseVideoHeight = 155
-
-  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
-
   constructor (
     protected router: Router,
+    protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected authService: AuthService,
     protected notifier: Notifier,
-    protected location: Location,
     protected screenService: ScreenService,
-    protected i18n: I18n,
+    private i18n: I18n,
     private confirmService: ConfirmService,
     private videoService: VideoService,
     @Inject(LOCALE_ID) private localeId: string
@@ -93,19 +88,18 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     const observables: Observable<any>[] = []
     for (const videoId of toDeleteVideosIds) {
       const o = this.videoService.removeVideo(videoId)
-                    .pipe(tap(() => this.spliceVideosById(videoId)))
+                    .pipe(tap(() => this.removeVideoFromArray(videoId)))
 
       observables.push(o)
     }
 
-    observableFrom(observables)
-      .pipe(concatAll())
+    concat(...observables)
+      .pipe(toArray())
       .subscribe(
-        res => {
+        () => {
           this.notifier.success(this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length }))
 
           this.abortSelectionMode()
-          this.reloadVideos()
         },
 
         err => this.notifier.error(err.message)
@@ -156,20 +150,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     return ' - ' + suffix
   }
 
-  protected buildVideoHeight () {
-    // In account videos, the video height is fixed
-    return this.baseVideoHeight
-  }
-
-  private spliceVideosById (id: number) {
-    for (const key of Object.keys(this.loadedPages)) {
-      const videos: Video[] = this.loadedPages[ key ]
-      const index = videos.findIndex(v => v.id === id)
-
-      if (index !== -1) {
-        videos.splice(index, 1)
-        return
-      }
-    }
+  private removeVideoFromArray (id: number) {
+    this.videos = this.videos.filter(v => v.id !== id)
   }
 }

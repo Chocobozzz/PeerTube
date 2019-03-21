@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -206,7 +205,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
     const query = {
       where: {
         updatedAt: {
-          [Op.lt]: beforeUpdatedAt
+          [Sequelize.Op.lt]: beforeUpdatedAt
         },
         videoId
       }

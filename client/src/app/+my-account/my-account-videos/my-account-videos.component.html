@@ -1,54 +1,47 @@
 <div i18n *ngIf="pagination.totalItems === 0">No results.</div>
 
-<div
-  myInfiniteScroller
-  [pageHeight]="pageHeight"
-  (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
-  class="videos" #videosElement
->
-  <div *ngFor="let videos of videoPages; let i = index" class="videos-page">
-    <div class="video" *ngFor="let video of videos; let j = index">
-      <div class="checkbox-container">
-        <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
+<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" class="videos">
+  <div class="video" *ngFor="let video of videos; let i = index">
+    <div class="checkbox-container">
+      <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
+    </div>
+
+    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+
+    <div class="video-info">
+      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+      <span i18n class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+      <div class="video-info-privacy">{{ video.privacy.label }}{{ getStateLabel(video) }}</div>
+      <div *ngIf="video.blacklisted" class="video-info-blacklisted">
+        <span class="blacklisted-label" i18n>Blacklisted</span>
+        <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
       </div>
+    </div>
 
-      <my-video-thumbnail [video]="video"></my-video-thumbnail>
+    <!-- Display only once -->
+    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
+      <div class="action-selection-mode-child">
+        <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
+          Cancel
+        </span>
 
-      <div class="video-info">
-        <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-        <span i18n class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
-        <div class="video-info-privacy">{{ video.privacy.label }}{{ getStateLabel(video) }}</div>
-        <div *ngIf="video.blacklisted" class="video-info-blacklisted">
-          <span class="blacklisted-label" i18n>Blacklisted</span>
-          <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
-        </div>
+        <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+          <my-global-icon iconName="delete"></my-global-icon>
+          <ng-container i18n>Delete</ng-container>
+        </span>
       </div>
+    </div>
 
-      <!-- Display only once -->
-      <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0 && j === 0">
-        <div class="action-selection-mode-child">
-          <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
-            Cancel
-          </span>
+    <div class="video-buttons" *ngIf="isInSelectionMode() === false">
+      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
-          <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
-            <my-global-icon iconName="delete"></my-global-icon>
-            <ng-container i18n>Delete</ng-container>
-          </span>
-        </div>
-      </div>
+      <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
-      <div class="video-buttons" *ngIf="isInSelectionMode() === false">
-        <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
-
-        <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
-
-        <my-button i18n-label label="Change ownership"
-                   className="action-button-change-ownership"
-                   icon="im-with-her"
-                   (click)="changeOwnership($event, video)"
-        ></my-button>
-      </div>
+      <my-button i18n-label label="Change ownership"
+                 className="action-button-change-ownership"
+                 icon="im-with-her"
+                 (click)="changeOwnership($event, video)"
+      ></my-button>
     </div>
   </div>
 </div>

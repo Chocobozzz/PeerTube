@@ -13,16 +13,14 @@
 
 <div class="no-history" i18n *ngIf="pagination.totalItems === 0">You don't have videos history yet.</div>
 
-<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" class="videos" #videosElement>
-  <div *ngFor="let videos of videoPages;" class="videos-page">
-    <div class="video" *ngFor="let video of videos">
-      <my-video-thumbnail [video]="video"></my-video-thumbnail>
+<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" class="videos">
+  <div class="video" *ngFor="let video of videos">
+    <my-video-thumbnail [video]="video"></my-video-thumbnail>
 
-      <div class="video-info">
-        <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-        <span i18n class="video-info-date-views">{{ video.views | myNumberFormatter }} views</span>
-        <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', video.byAccount ]">{{ video.byAccount }}</a>
-      </div>
+    <div class="video-info">
+      <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+      <span i18n class="video-info-date-views">{{ video.views | myNumberFormatter }} views</span>
+      <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', video.byAccount ]">{{ video.byAccount }}</a>
     </div>
   </div>
 </div>

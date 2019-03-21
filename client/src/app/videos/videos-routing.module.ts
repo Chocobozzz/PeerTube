@@ -29,6 +29,10 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: 'Trending videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'trending-videos-list'
           }
         }
       },
@@ -38,6 +42,10 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: 'Recently added videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'recently-added-videos-list'
           }
         }
       },
@@ -47,6 +55,10 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: 'Subscriptions'
+          },
+          reuse: {
+            enabled: true,
+            key: 'subscription-videos-list'
           }
         }
       },
@@ -56,6 +68,10 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: 'Local videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'local-videos-list'
           }
         }
       },

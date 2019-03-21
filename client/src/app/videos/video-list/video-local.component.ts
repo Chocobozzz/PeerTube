@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
-import { Location } from '@angular/common'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoSortField } from '../../shared/video/sort-field.type'
@@ -10,7 +9,7 @@ import { VideoFilter } from '../../../../../shared/models/videos/video-query.typ
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { UserRight } from '../../../../../shared/models/users'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-videos-local',
@@ -19,18 +18,17 @@ import { Notifier } from '@app/core'
 })
 export class VideoLocalComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  currentRoute = '/videos/local'
   sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
   constructor (
     protected router: Router,
+    protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
-    protected location: Location,
-    protected i18n: I18n,
     protected screenService: ScreenService,
+    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -8,7 +7,7 @@ import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-videos-recently-added',
@@ -17,17 +16,16 @@ import { Notifier } from '@app/core'
 })
 export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  currentRoute = '/videos/recently-added'
   sort: VideoSortField = '-publishedAt'
 
   constructor (
-    protected router: Router,
     protected route: ActivatedRoute,
-    protected location: Location,
+    protected serverService: ServerService,
+    protected router: Router,
     protected notifier: Notifier,
     protected authService: AuthService,
-    protected i18n: I18n,
     protected screenService: ScreenService,
+    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

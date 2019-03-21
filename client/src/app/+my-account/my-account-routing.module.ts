@@ -118,6 +118,10 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Account videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'my-account-videos-list'
           }
         }
       },
@@ -172,6 +176,10 @@ const myAccountRoutes: Routes = [
         data: {
           meta: {
             title: 'Videos history'
+          },
+          reuse: {
+            enabled: true,
+            key: 'my-videos-history-list'
           }
         }
       },
