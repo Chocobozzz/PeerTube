@@ -339,22 +339,6 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  // getQuarantinedVideos (videoPagination: ComponentPagination, sort: VideoSortField):
-  // Observable<{ videos: Video[], totalVideos: number }> {
-
-  //   const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-
-  //   let params = new HttpParams()
-  //   params = this.restService.addRestGetParams(params, pagination, sort)
-
-  //   return this.authHttp
-  //     .get<ResultList<Video>>(VideoService.BASE_VIDEO_URL + 'quarantine', { params })
-  //     .pipe(
-  //       switchMap(res => this.extractVideos(res)),
-  //       catchError(res => this.restExtractor.handleError(res))
-  //     )
-  // }
-
   explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
     const newPrivacies = privacies.slice()
 

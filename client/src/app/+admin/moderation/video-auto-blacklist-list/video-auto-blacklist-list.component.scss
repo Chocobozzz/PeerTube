@@ -2,7 +2,7 @@
 @import '_mixins';
 
 .action-selection-mode {
-  width: 174px;
+  width: 194px;
   display: flex;
   justify-content: flex-end;
 
@@ -20,7 +20,7 @@
       margin-right: 10px;
     }
 
-    .action-button-release-selection {
+    .action-button-unblacklist-selection {
       @include peertube-button;
       @include orange-button;
       @include button-with-icon(21px);

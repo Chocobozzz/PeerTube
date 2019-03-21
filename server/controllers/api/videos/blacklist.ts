@@ -110,24 +110,28 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
   const videoBlacklist = res.locals.videoBlacklist
   const video = res.locals.video
 
-  await sequelizeTypescript.transaction(async t => {
+  const videoBlacklistType = await sequelizeTypescript.transaction(async t => {
     const unfederated = videoBlacklist.unfederated
+    const videoBlacklistType = videoBlacklist.type
+
     await videoBlacklist.destroy({ transaction: t })
 
     // Re federate the video
     if (unfederated === true) {
       await federateVideoIfNeeded(video, true, t)
     }
+
+    return videoBlacklistType
   })
 
-  if (videoBlacklist.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED) {
-    Notifier.Instance.notifyOnVideoPublishedAfterRemovedFromBlacklist(video)
+  Notifier.Instance.notifyOnVideoUnblacklist(video)
+
+  if (videoBlacklistType === VideoBlacklistType.AUTO_BEFORE_PUBLISHED) {
+    Notifier.Instance.notifyOnVideoPublishedAfterRemovedFromAutoBlacklist(video)
 
     // Delete on object so new video notifications will send
     delete video.VideoBlacklist
     Notifier.Instance.notifyOnNewVideo(video)
-  } else {
-    Notifier.Instance.notifyOnVideoUnblacklist(video)
   }
 
   logger.info('Video %s removed from blacklist.', res.locals.video.uuid)

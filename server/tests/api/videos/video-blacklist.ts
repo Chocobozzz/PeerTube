@@ -27,7 +27,7 @@ import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/vi
 
 const expect = chai.expect
 
-describe.only('Test video blacklist management', function () {
+describe('Test video blacklist management', function () {
   let servers: ServerInfo[] = []
   let videoId: number
 

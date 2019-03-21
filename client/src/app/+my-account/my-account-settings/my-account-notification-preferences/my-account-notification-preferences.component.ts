@@ -22,7 +22,6 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   labelNotifications: { [ id in keyof UserNotificationSetting ]: string } = {} as any
   rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]: UserRight } = {} as any
   emailEnabled: boolean
-  autoBlacklistVideosEnabled: boolean
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
 
@@ -32,7 +31,6 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private serverService: ServerService,
     private notifier: Notifier
   ) {
-    this.autoBlacklistVideosEnabled = this.serverService.getConfig().autoBlacklist.videos.ofUsers.enabled
 
     this.labelNotifications = {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
@@ -40,9 +38,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       videoAbuseAsModerator: this.i18n('New video abuse'),
       videoAutoBlacklistAsModerator: this.i18n('Video auto-blacklisted waiting review'),
       blacklistOnMyVideo: this.i18n('One of your video is blacklisted/unblacklisted'),
-      myVideoPublished: this.autoBlacklistVideosEnabled ?
-        this.i18n('Video published (after transcoding/scheduled update/unblacklisted)') :
-        this.i18n('Video published (after transcoding/scheduled update)'),
+      myVideoPublished: this.i18n('Video published (after transcoding/scheduled update)'),
       myVideoImportFinished: this.i18n('Video import finished'),
       newUserRegistration: this.i18n('A new user registered on your instance'),
       newFollow: this.i18n('You or your channel(s) has a new follower'),

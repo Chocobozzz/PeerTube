@@ -107,7 +107,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
 }
 
-describe.only('Test config', function () {
+describe('Test config', function () {
   let server = null
 
   before(async function () {

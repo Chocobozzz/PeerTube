@@ -46,12 +46,12 @@ class Notifier {
         .catch(err => logger.error('Cannot notify owner that its video %s has been published after scheduled update.', video.url, { err }))
   }
 
-  notifyOnVideoPublishedAfterRemovedFromBlacklist (video: VideoModel): void {
+  notifyOnVideoPublishedAfterRemovedFromAutoBlacklist (video: VideoModel): void {
     // don't notify if video is still waiting for transcoding or scheduled update
     if (video.ScheduleVideoUpdate || (video.waitTranscoding && video.state !== VideoState.PUBLISHED)) return
 
     this.notifyOwnedVideoHasBeenPublished(video)
-        .catch(err => logger.error('Cannot notify owner that its video %s has been published after removed from blacklist.', video.url, { err })) // tslint:disable-line:max-line-length
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after removed from auto-blacklist.', video.url, { err })) // tslint:disable-line:max-line-length
   }
 
   notifyOnNewComment (comment: VideoCommentModel): void {
@@ -79,7 +79,7 @@ class Notifier {
 
   notifyOnVideoUnblacklist (video: VideoModel): void {
     this.notifyVideoOwnerOfUnblacklist(video)
-        .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', video.url, { err }))
+        .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
   }
 
   notifyOnFinishedVideoImport (videoImport: VideoImportModel, success: boolean): void {

@@ -13,6 +13,7 @@ import {
 } from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
@@ -69,7 +70,13 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       include: [
         {
           model: VideoModel,
-          required: true
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] }),
+              required: true
+            }
+          ]
         }
       ]
     }
@@ -98,8 +105,6 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   }
 
   toFormattedJSON (): VideoBlacklist {
-    const video = this.Video
-
     return {
       id: this.id,
       createdAt: this.createdAt,
@@ -108,17 +113,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       unfederated: this.unfederated,
       type: this.type,
 
-      video: {
-        id: video.id,
-        name: video.name,
-        uuid: video.uuid,
-        description: video.description,
-        duration: video.duration,
-        views: video.views,
-        likes: video.likes,
-        dislikes: video.dislikes,
-        nsfw: video.nsfw
-      }
+      video: this.Video.toFormattedJSON()
     }
   }
 }

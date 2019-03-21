@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { RestPagination, RestTable, VideoBlacklistService } from '../../../shared'
 import { VideoBlacklist, VideoBlacklistType } from '../../../../../../shared'
@@ -20,18 +20,24 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-  listBlacklistTypeFilter = VideoBlacklistType.MANUAL
+  listBlacklistTypeFilter: VideoBlacklistType = undefined
 
   videoBlacklistActions: DropdownAction<VideoBlacklist>[] = []
 
   constructor (
     private notifier: Notifier,
+    private serverService: ServerService,
     private confirmService: ConfirmService,
     private videoBlacklistService: VideoBlacklistService,
     private markdownRenderer: MarkdownService,
     private i18n: I18n
   ) {
     super()
+
+    // don't filter if auto-blacklist not enabled as this will be only list
+    if (this.serverService.getConfig().autoBlacklist.videos.ofUsers.enabled) {
+      this.listBlacklistTypeFilter = VideoBlacklistType.MANUAL
+    }
 
     this.videoBlacklistActions = [
       {

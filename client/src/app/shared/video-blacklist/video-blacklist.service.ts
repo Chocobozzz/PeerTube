@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { from as observableFrom, Observable } from 'rxjs'
 import { VideoBlacklist, VideoBlacklistType, ResultList } from '../../../../../shared'
+import { Video } from '../video/video.model'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
-// import { ComponentPagination } from '../rest/component-pagination.model'
-// import { VideoSortField } from '../video/sort-field.type'
+import { ComponentPagination } from '../rest/component-pagination.model'
 
 @Injectable()
 export class VideoBlacklistService {
@@ -19,16 +19,41 @@ export class VideoBlacklistService {
     private restExtractor: RestExtractor
   ) {}
 
-  listBlacklist (pagination: RestPagination, sort: SortMeta, type: VideoBlacklistType): Observable<ResultList<VideoBlacklist>> {
+  listBlacklist (pagination: RestPagination, sort: SortMeta, type?: VideoBlacklistType): Observable<ResultList<VideoBlacklist>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    params = params.set('type', type.toString())
+
+    if (type) {
+      params = params.set('type', type.toString())
+    }
 
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))
                )
+  }
+
+  getAutoBlacklistedAsVideoList (videoPagination: ComponentPagination): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    // prioritize first created since waiting longest
+    const AUTO_BLACKLIST_SORT = 'createdAt'
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, AUTO_BLACKLIST_SORT)
+
+    params = params.set('type', VideoBlacklistType.AUTO_BEFORE_PUBLISHED.toString())
+
+    return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
+              .pipe(
+                map(res => {
+                  const videos = res.data.map(videoBlacklist => new Video(videoBlacklist.video))
+                  const totalVideos = res.total
+                  return { videos, totalVideos }
+                }),
+                catchError(res => this.restExtractor.handleError(res))
+              )
   }
 
   removeVideoFromBlacklist (videoIdArgs: number | number[]) {

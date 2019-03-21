@@ -2,15 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 import { Location } from '@angular/common'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Router, ActivatedRoute } from '@angular/router'
-
 import { AbstractVideoList } from '@app/shared/video/abstract-video-list'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Notifier, AuthService } from '@app/core'
-import { Video } from '../../../../../../shared'
+import { Video } from '@shared/models'
 import { VideoBlacklistService } from '@app/shared'
 import { immutableAssign } from '@app/shared/misc/utils'
-import { VideoService } from '@app/shared/video/video.service'
-import { VideoSortField } from '@app/shared/video/sort-field.type'
 import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
@@ -21,7 +18,6 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 export class VideoAutoBlacklistListComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   currentRoute = '/admin/moderation/video-auto-blacklist/list'
-  defaultSort: VideoSortField = 'publishedAt' // prioritize first "published" (to moderators) since waiting longest
   checkedVideos: { [ id: number ]: boolean } = {}
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -41,7 +37,6 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
     protected authService: AuthService,
     protected screenService: ScreenService,
     private videoBlacklistService: VideoBlacklistService,
-    private videoService: VideoService
   ) {
     super()
 
@@ -67,7 +62,7 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideos(newPagination, this.sort)
+    return this.videoBlacklistService.getAutoBlacklistedAsVideoList(newPagination)
   }
 
   generateSyndicationList () {
