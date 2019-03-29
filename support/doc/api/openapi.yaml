@@ -842,7 +842,7 @@ paths:
                   description: Video name
                   type: string
                 tags:
-                  description: Video tags
+                  description: Video tags (maximum 5 tags each between 2 and 30 characters)
                   type: array
                   items:
                     type: string
