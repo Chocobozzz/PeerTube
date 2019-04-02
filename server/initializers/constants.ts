@@ -18,7 +18,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 345
+const LAST_MIGRATION_VERSION = 350
 
 // ---------------------------------------------------------------------------
 
@@ -285,6 +285,13 @@ const CONFIG = {
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }
+      }
+    }
+  },
+  AUTO_BLACKLIST: {
+    VIDEOS: {
+      OF_USERS: {
+        get ENABLED () { return config.get<boolean>('auto_blacklist.videos.of_users.enabled') }
       }
     }
   },

@@ -1,6 +1,6 @@
 import * as request from 'supertest'
 
-function changeVideoOwnership (url: string, token: string, videoId: number | string, username) {
+function changeVideoOwnership (url: string, token: string, videoId: number | string, username, expectedStatus = 204) {
   const path = '/api/v1/videos/' + videoId + '/give-ownership'
 
   return request(url)
@@ -8,7 +8,7 @@ function changeVideoOwnership (url: string, token: string, videoId: number | str
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + token)
     .send({ username })
-    .expect(204)
+    .expect(expectedStatus)
 }
 
 function getVideoChangeOwnershipList (url: string, token: string) {

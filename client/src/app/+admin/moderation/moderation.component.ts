@@ -1,13 +1,20 @@
 import { Component } from '@angular/core'
 import { UserRight } from '../../../../../shared'
-import { AuthService } from '@app/core/auth/auth.service'
+import { AuthService, ServerService } from '@app/core'
 
 @Component({
   templateUrl: './moderation.component.html',
   styleUrls: [ './moderation.component.scss' ]
 })
 export class ModerationComponent {
-  constructor (private auth: AuthService) {}
+  autoBlacklistVideosEnabled: boolean
+
+  constructor (
+    private auth: AuthService,
+    private serverService: ServerService
+  ) {
+    this.autoBlacklistVideosEnabled = this.serverService.getConfig().autoBlacklist.videos.ofUsers.enabled
+  }
 
   hasVideoAbusesRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_ABUSES)

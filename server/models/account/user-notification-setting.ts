@@ -59,6 +59,15 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
   @AllowNull(false)
   @Default(null)
   @Is(
+    'UserNotificationSettingVideoAutoBlacklistAsModerator',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'videoAutoBlacklistAsModerator')
+  )
+  @Column
+  videoAutoBlacklistAsModerator: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
     'UserNotificationSettingBlacklistOnMyVideo',
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'blacklistOnMyVideo')
   )
@@ -139,6 +148,7 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
       newCommentOnMyVideo: this.newCommentOnMyVideo,
       newVideoFromSubscription: this.newVideoFromSubscription,
       videoAbuseAsModerator: this.videoAbuseAsModerator,
+      videoAutoBlacklistAsModerator: this.videoAutoBlacklistAsModerator,
       blacklistOnMyVideo: this.blacklistOnMyVideo,
       myVideoPublished: this.myVideoPublished,
       myVideoImportFinished: this.myVideoImportFinished,

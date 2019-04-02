@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { UserRight, VideoBlacklist, VideoBlacklistCreate } from '../../../../shared'
+import { VideoBlacklist, UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import {
@@ -12,7 +12,8 @@ import {
   setDefaultPagination,
   videosBlacklistAddValidator,
   videosBlacklistRemoveValidator,
-  videosBlacklistUpdateValidator
+  videosBlacklistUpdateValidator,
+  videosBlacklistFiltersValidator
 } from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
@@ -36,6 +37,7 @@ blacklistRouter.get('/blacklist',
   blacklistSortValidator,
   setBlacklistSort,
   setDefaultPagination,
+  videosBlacklistFiltersValidator,
   asyncMiddleware(listBlacklist)
 )
 
@@ -68,7 +70,8 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response)
   const toCreate = {
     videoId: videoInstance.id,
     unfederated: body.unfederate === true,
-    reason: body.reason
+    reason: body.reason,
+    type: VideoBlacklistType.MANUAL
   }
 
   const blacklist = await VideoBlacklistModel.create(toCreate)
@@ -98,7 +101,7 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
 }
 
 async function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.type)
 
   return res.json(getFormattedObjects<VideoBlacklist, VideoBlacklistModel>(resultList.data, resultList.total))
 }
@@ -107,17 +110,29 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
   const videoBlacklist = res.locals.videoBlacklist
   const video = res.locals.video
 
-  await sequelizeTypescript.transaction(async t => {
+  const videoBlacklistType = await sequelizeTypescript.transaction(async t => {
     const unfederated = videoBlacklist.unfederated
+    const videoBlacklistType = videoBlacklist.type
+
     await videoBlacklist.destroy({ transaction: t })
 
     // Re federate the video
     if (unfederated === true) {
       await federateVideoIfNeeded(video, true, t)
     }
+
+    return videoBlacklistType
   })
 
   Notifier.Instance.notifyOnVideoUnblacklist(video)
+
+  if (videoBlacklistType === VideoBlacklistType.AUTO_BEFORE_PUBLISHED) {
+    Notifier.Instance.notifyOnVideoPublishedAfterRemovedFromAutoBlacklist(video)
+
+    // Delete on object so new video notifications will send
+    delete video.VideoBlacklist
+    Notifier.Instance.notifyOnNewVideo(video)
+  }
 
   logger.info('Video %s removed from blacklist.', res.locals.video.uuid)
 

@@ -85,10 +85,9 @@ async function publishVideoIfNeeded (video: VideoModel, payload?: VideoTranscodi
     return { videoDatabase, videoPublished }
   })
 
-  // don't notify prior to scheduled video update
-  if (videoPublished && !videoDatabase.ScheduleVideoUpdate) {
+  if (videoPublished) {
     Notifier.Instance.notifyOnNewVideo(videoDatabase)
-    Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
+    Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
   }
 
   await createHlsJobIfEnabled(payload)
@@ -146,11 +145,8 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Video
     return { videoDatabase, videoPublished }
   })
 
-  // don't notify prior to scheduled video update
-  if (!videoDatabase.ScheduleVideoUpdate) {
-    if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
-    if (videoPublished) Notifier.Instance.notifyOnPendingVideoPublished(videoDatabase)
-  }
+  if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+  if (videoPublished) Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
 
   await createHlsJobIfEnabled(Object.assign({}, payload, { resolution: videoDatabase.getOriginalFile().resolution }))
 }

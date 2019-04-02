@@ -106,6 +106,7 @@ function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Tr
     myVideoImportFinished: UserNotificationSettingValue.WEB,
     myVideoPublished: UserNotificationSettingValue.WEB,
     videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newUserRegistration: UserNotificationSettingValue.WEB,
     commentMention: UserNotificationSettingValue.WEB,

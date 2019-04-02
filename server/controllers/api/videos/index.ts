@@ -6,6 +6,7 @@ import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
+import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   CONFIG,
   MIMETYPES,
@@ -193,6 +194,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     channelId: res.locals.videoChannel.id,
     originallyPublishedAt: videoInfo.originallyPublishedAt
   }
+
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
@@ -237,7 +239,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Create the torrent file
   await video.createTorrentAndSetInfoHash(videoFile)
 
-  const videoCreated = await sequelizeTypescript.transaction(async t => {
+  const { videoCreated, videoWasAutoBlacklisted } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoCreated = await video.save(sequelizeOptions)
@@ -266,15 +268,23 @@ async function addVideo (req: express.Request, res: express.Response) {
       }, { transaction: t })
     }
 
-    await federateVideoIfNeeded(video, true, t)
+    const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded(video, res.locals.oauth.token.User, t)
+
+    if (!videoWasAutoBlacklisted) {
+      await federateVideoIfNeeded(video, true, t)
+    }
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
-    return videoCreated
+    return { videoCreated, videoWasAutoBlacklisted }
   })
 
-  Notifier.Instance.notifyOnNewVideo(videoCreated)
+  if (videoWasAutoBlacklisted) {
+    Notifier.Instance.notifyOnVideoAutoBlacklist(videoCreated)
+  } else {
+    Notifier.Instance.notifyOnNewVideo(videoCreated)
+  }
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now

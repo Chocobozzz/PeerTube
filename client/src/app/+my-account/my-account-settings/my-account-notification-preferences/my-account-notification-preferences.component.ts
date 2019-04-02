@@ -31,10 +31,12 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private serverService: ServerService,
     private notifier: Notifier
   ) {
+
     this.labelNotifications = {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
       newCommentOnMyVideo: this.i18n('New comment on your video'),
       videoAbuseAsModerator: this.i18n('New video abuse'),
+      videoAutoBlacklistAsModerator: this.i18n('Video auto-blacklisted waiting review'),
       blacklistOnMyVideo: this.i18n('One of your video is blacklisted/unblacklisted'),
       myVideoPublished: this.i18n('Video published (after transcoding/scheduled update)'),
       myVideoImportFinished: this.i18n('Video import finished'),
@@ -46,6 +48,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
 
     this.rightNotifications = {
       videoAbuseAsModerator: UserRight.MANAGE_VIDEO_ABUSES,
+      videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLACKLIST,
       newUserRegistration: UserRight.MANAGE_USERS
     }
 

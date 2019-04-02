@@ -8,6 +8,7 @@ import {
   flushAndRunMultipleServers,
   flushTests,
   getBlacklistedVideosList,
+  getBlacklistedVideosListWithTypeFilter,
   getVideo,
   getVideoWithToken,
   killallServers,
@@ -24,7 +25,7 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/utils/requests/check-api-params'
-import { VideoDetails } from '../../../../shared/models/videos'
+import { VideoDetails, VideoBlacklistType } from '../../../../shared/models/videos'
 import { expect } from 'chai'
 
 describe('Test video blacklist API validators', function () {
@@ -237,6 +238,14 @@ describe('Test video blacklist API validators', function () {
 
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(servers[0].url, basePath, servers[0].accessToken)
+    })
+
+    it('Should fail with an invalid type', async function () {
+      await getBlacklistedVideosListWithTypeFilter(servers[0].url, servers[0].accessToken, 0, 400)
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await getBlacklistedVideosListWithTypeFilter(servers[0].url, servers[0].accessToken, VideoBlacklistType.MANUAL)
     })
   })
 

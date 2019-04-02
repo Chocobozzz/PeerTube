@@ -98,6 +98,13 @@ export class ServerService {
       videos: {
         intervalDays: 0
       }
+    },
+    autoBlacklist: {
+      videos: {
+        ofUsers: {
+          enabled: false
+        }
+      }
     }
   }
   private videoCategories: Array<VideoConstant<number>> = []

@@ -45,7 +45,7 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
-  // If the video is not private and published, we federate it
+  // If the video is not private and is published, we federate it
   if (video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {

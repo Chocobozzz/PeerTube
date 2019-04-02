@@ -176,6 +176,12 @@ import:
     torrent: # Magnet URI or torrent file (use classic TCP/UDP/WebSeed to download the file)
       enabled: false
 
+auto_blacklist:
+  # New videos automatically blacklisted so moderators can review before publishing
+  videos:
+    of_users:
+      enabled: false 
+ 
 # Instance settings
 instance:
   name: 'PeerTube'

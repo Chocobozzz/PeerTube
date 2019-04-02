@@ -7,6 +7,7 @@ import {
   addVideoToBlacklist,
   flushAndRunMultipleServers,
   getBlacklistedVideosList,
+  getBlacklistedVideosListWithTypeFilter,
   getMyVideos,
   getSortedBlacklistedVideosList,
   getVideosList,
@@ -22,7 +23,7 @@ import {
 } from '../../../../shared/utils/index'
 import { doubleFollow } from '../../../../shared/utils/server/follows'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
-import { VideoBlacklist } from '../../../../shared/models/videos'
+import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -101,7 +102,7 @@ describe('Test video blacklist management', function () {
     })
   })
 
-  describe('When listing blacklisted videos', function () {
+  describe('When listing manually blacklisted videos', function () {
     it('Should display all the blacklisted videos', async function () {
       const res = await getBlacklistedVideosList(servers[0].url, servers[0].accessToken)
 
@@ -115,6 +116,26 @@ describe('Test video blacklist management', function () {
         expect(blacklistedVideo.reason).to.equal('super reason')
         videoId = blacklistedVideo.video.id
       }
+    })
+
+    it('Should display all the blacklisted videos when applying manual type filter', async function () {
+      const res = await getBlacklistedVideosListWithTypeFilter(servers[0].url, servers[0].accessToken, VideoBlacklistType.MANUAL)
+
+      expect(res.body.total).to.equal(2)
+
+      const blacklistedVideos = res.body.data
+      expect(blacklistedVideos).to.be.an('array')
+      expect(blacklistedVideos.length).to.equal(2)
+    })
+
+    it('Should display nothing when applying automatic type filter', async function () {
+      const res = await getBlacklistedVideosListWithTypeFilter(servers[0].url, servers[0].accessToken, VideoBlacklistType.AUTO_BEFORE_PUBLISHED) // tslint:disable:max-line-length
+
+      expect(res.body.total).to.equal(0)
+
+      const blacklistedVideos = res.body.data
+      expect(blacklistedVideos).to.be.an('array')
+      expect(blacklistedVideos.length).to.equal(0)
     })
 
     it('Should get the correct sort when sorting by descending id', async function () {

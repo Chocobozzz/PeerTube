@@ -94,6 +94,13 @@ async function getConfig (req: express.Request, res: express.Response) {
         }
       }
     },
+    autoBlacklist: {
+      videos: {
+        ofUsers: {
+          enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
+        }
+      }
+    },
     avatar: {
       file: {
         size: {
@@ -263,6 +270,13 @@ function customConfig (): CustomConfig {
         },
         torrent: {
           enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
+        }
+      }
+    },
+    autoBlacklist: {
+      videos: {
+        ofUsers: {
+          enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
         }
       }
     }

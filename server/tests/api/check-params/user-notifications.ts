@@ -168,6 +168,7 @@ describe('Test user notifications API validators', function () {
       newVideoFromSubscription: UserNotificationSettingValue.WEB,
       newCommentOnMyVideo: UserNotificationSettingValue.WEB,
       videoAbuseAsModerator: UserNotificationSettingValue.WEB,
+      videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB,
       blacklistOnMyVideo: UserNotificationSettingValue.WEB,
       myVideoImportFinished: UserNotificationSettingValue.WEB,
       myVideoPublished: UserNotificationSettingValue.WEB,

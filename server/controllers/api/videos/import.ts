@@ -18,10 +18,12 @@ import { join } from 'path'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoChannelModel } from '../../../models/video/video-channel'
+import { UserModel } from '../../../models/account/user'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { readFile, move } from 'fs-extra'
+import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -85,7 +87,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoName = isArray(parsed.name) ? parsed.name[ 0 ] : parsed.name as string
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
+  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName }, user)
 
   await processThumbnail(req, video)
   await processPreview(req, video)
@@ -128,7 +130,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     }).end()
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
+  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo, user)
 
   const downloadThumbnail = !await processThumbnail(req, video)
   const downloadPreview = !await processPreview(req, video)
@@ -156,7 +158,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
-function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo) {
+function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo, user: UserModel) {
   const videoData = {
     name: body.name || importData.name || 'Unknown name',
     remote: false,
@@ -217,6 +219,8 @@ function insertIntoDB (
     // Save video object in database
     const videoCreated = await video.save(sequelizeOptions)
     videoCreated.VideoChannel = videoChannel
+
+    await autoBlacklistVideoIfNeeded(video, videoChannel.Account.User, t)
 
     // Set tags to the video
     if (tags) {

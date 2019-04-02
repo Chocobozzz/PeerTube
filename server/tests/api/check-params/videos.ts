@@ -7,7 +7,8 @@ import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
-  makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, runServer, ServerInfo, setAccessTokensToServers, userLogin
+  makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, uploadVideo,
+  runServer, ServerInfo, setAccessTokensToServers, userLogin, updateCustomSubConfig
 } from '../../../../shared/utils'
 import {
   checkBadCountPagination,

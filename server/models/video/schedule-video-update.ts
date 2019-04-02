@@ -72,7 +72,8 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
           model: VideoModel.scope(
             [
               VideoScopeNames.WITH_FILES,
-              VideoScopeNames.WITH_ACCOUNT_DETAILS
+              VideoScopeNames.WITH_ACCOUNT_DETAILS,
+              VideoScopeNames.WITH_BLACKLISTED
             ]
           )
         }

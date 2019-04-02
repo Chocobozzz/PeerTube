@@ -49,6 +49,14 @@ export interface ServerConfig {
     }
   }
 
+  autoBlacklist: {
+    videos: {
+      ofUsers: {
+        enabled: boolean
+      }
+    }
+  }
+
   avatar: {
     file: {
       size: {

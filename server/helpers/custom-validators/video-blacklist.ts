@@ -1,7 +1,9 @@
 import { Response } from 'express'
 import * as validator from 'validator'
+import { exists } from './misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { VideoBlacklistModel } from '../../models/video/video-blacklist'
+import { VideoBlacklistType } from '../../../shared/models/videos'
 
 const VIDEO_BLACKLIST_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_BLACKLIST
 
@@ -24,9 +26,14 @@ async function doesVideoBlacklistExist (videoId: number, res: Response) {
   return true
 }
 
+function isVideoBlacklistTypeValid (value: any) {
+  return exists(value) && validator.isInt('' + value) && VideoBlacklistType[value] !== undefined
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   isVideoBlacklistReasonValid,
+  isVideoBlacklistTypeValid,
   doesVideoBlacklistExist
 }

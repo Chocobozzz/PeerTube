@@ -112,6 +112,13 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
           enabled: false
         }
       }
+    },
+    autoBlacklist: {
+      videos: {
+        ofUsers: {
+          enabled: false
+        }
+      }
     }
   }
 

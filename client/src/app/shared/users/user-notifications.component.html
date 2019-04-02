@@ -36,6 +36,14 @@
         </div>
       </ng-container>
 
+      <ng-container i18n *ngSwitchCase="UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS">
+        <my-global-icon iconName="no"></my-global-icon>
+
+        <div class="message">
+          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blacklisted</a>
+        </div>
+      </ng-container>
+
       <ng-container i18n *ngSwitchCase="UserNotificationType.NEW_COMMENT_ON_MY_VIDEO">
         <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
 

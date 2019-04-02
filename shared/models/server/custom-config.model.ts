@@ -77,4 +77,13 @@ export interface CustomConfig {
       }
     }
   }
+
+  autoBlacklist: {
+    videos: {
+      ofUsers: {
+        enabled: boolean
+      }
+    }
+  }
+
 }

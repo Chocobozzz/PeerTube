@@ -1,11 +1,13 @@
-import { catchError, map } from 'rxjs/operators'
+import { catchError, map, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import { Observable } from 'rxjs'
-import { VideoBlacklist, ResultList } from '../../../../../shared'
+import { from as observableFrom, Observable } from 'rxjs'
+import { VideoBlacklist, VideoBlacklistType, ResultList } from '../../../../../shared'
+import { Video } from '../video/video.model'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
+import { ComponentPagination } from '../rest/component-pagination.model'
 
 @Injectable()
 export class VideoBlacklistService {
@@ -17,9 +19,13 @@ export class VideoBlacklistService {
     private restExtractor: RestExtractor
   ) {}
 
-  listBlacklist (pagination: RestPagination, sort: SortMeta): Observable<ResultList<VideoBlacklist>> {
+  listBlacklist (pagination: RestPagination, sort: SortMeta, type?: VideoBlacklistType): Observable<ResultList<VideoBlacklist>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (type) {
+      params = params.set('type', type.toString())
+    }
 
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
                .pipe(
@@ -28,12 +34,37 @@ export class VideoBlacklistService {
                )
   }
 
-  removeVideoFromBlacklist (videoId: number) {
-    return this.authHttp.delete(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist')
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(res => this.restExtractor.handleError(res))
-               )
+  getAutoBlacklistedAsVideoList (videoPagination: ComponentPagination): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    // prioritize first created since waiting longest
+    const AUTO_BLACKLIST_SORT = 'createdAt'
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, AUTO_BLACKLIST_SORT)
+
+    params = params.set('type', VideoBlacklistType.AUTO_BEFORE_PUBLISHED.toString())
+
+    return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
+              .pipe(
+                map(res => {
+                  const videos = res.data.map(videoBlacklist => new Video(videoBlacklist.video))
+                  const totalVideos = res.total
+                  return { videos, totalVideos }
+                }),
+                catchError(res => this.restExtractor.handleError(res))
+              )
+  }
+
+  removeVideoFromBlacklist (videoIdArgs: number | number[]) {
+    const videoIds = Array.isArray(videoIdArgs) ? videoIdArgs : [ videoIdArgs ]
+
+    return observableFrom(videoIds)
+      .pipe(
+        concatMap(id => this.authHttp.delete(VideoBlacklistService.BASE_VIDEOS_URL + id + '/blacklist')),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   blacklistVideo (videoId: number, reason: string, unfederate: boolean) {

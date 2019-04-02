@@ -18,7 +18,7 @@ function updateMyNotificationSettings (url: string, token: string, settings: Use
   })
 }
 
-function getUserNotifications (
+async function getUserNotifications (
   url: string,
   token: string,
   start: number,
@@ -165,12 +165,15 @@ async function checkNewVideoFromSubscription (base: CheckerBaseParams, videoName
       checkVideo(notification.video, videoName, videoUUID)
       checkActor(notification.video.channel)
     } else {
-      expect(notification.video).to.satisfy(v => v === undefined || v.name !== videoName)
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.type !== UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION || n.video.name !== videoName
+      })
     }
   }
 
   function emailFinder (email: object) {
-    return email[ 'text' ].indexOf(videoUUID) !== -1
+    const text = email[ 'text' ]
+    return text.indexOf(videoUUID) !== -1 && text.indexOf('Your subscription') !== -1
   }
 
   await checkNotification(base, notificationChecker, emailFinder, type)
@@ -387,6 +390,31 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
   await checkNotification(base, notificationChecker, emailFinder, type)
 }
 
+async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
+  const notificationType = UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.video.id).to.be.a('number')
+      checkVideo(notification.video, videoName, videoUUID)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.video === undefined || n.video.uuid !== videoUUID
+      })
+    }
+  }
+
+  function emailFinder (email: object) {
+    const text = email[ 'text' ]
+    return text.indexOf(videoUUID) !== -1 && email[ 'text' ].indexOf('video-auto-blacklist/list') !== -1
+  }
+
+  await checkNotification(base, notificationChecker, emailFinder, type)
+}
+
 async function checkNewBlacklistOnMyVideo (
   base: CheckerBaseParams,
   videoUUID: string,
@@ -431,6 +459,7 @@ export {
   checkCommentMention,
   updateMyNotificationSettings,
   checkNewVideoAbuseForModerators,
+  checkVideoAutoBlacklistForModerators,
   getUserNotifications,
   markAsReadNotifications,
   getLastNotification

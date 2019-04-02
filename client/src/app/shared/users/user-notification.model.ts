@@ -54,6 +54,7 @@ export class UserNotification implements UserNotificationServer {
   videoUrl?: string
   commentUrl?: any[]
   videoAbuseUrl?: string
+  videoAutoBlacklistUrl?: string
   accountUrl?: string
   videoImportIdentifier?: string
   videoImportUrl?: string
@@ -105,6 +106,11 @@ export class UserNotification implements UserNotificationServer {
         case UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS:
           this.videoAbuseUrl = '/admin/moderation/video-abuses/list'
           this.videoUrl = this.buildVideoUrl(this.videoAbuse.video)
+          break
+
+        case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
+          this.videoAutoBlacklistUrl = '/admin/moderation/video-auto-blacklist/list'
+          this.videoUrl = this.buildVideoUrl(this.video)
           break
 
         case UserNotificationType.BLACKLIST_ON_MY_VIDEO:

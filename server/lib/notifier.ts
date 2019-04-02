@@ -23,19 +23,35 @@ class Notifier {
   private constructor () {}
 
   notifyOnNewVideo (video: VideoModel): void {
-    // Only notify on public and published videos
-    if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED) return
+    // Only notify on public and published videos which are not blacklisted
+    if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED || video.VideoBlacklist) return
 
     this.notifySubscribersOfNewVideo(video)
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
   }
 
-  notifyOnPendingVideoPublished (video: VideoModel): void {
-    // Only notify on public videos that has been published while the user waited transcoding/scheduled update
-    if (video.waitTranscoding === false && !video.ScheduleVideoUpdate) return
+  notifyOnVideoPublishedAfterTranscoding (video: VideoModel): void {
+    // don't notify if didn't wait for transcoding or video is still blacklisted/waiting for scheduled update
+    if (!video.waitTranscoding || video.VideoBlacklist || video.ScheduleVideoUpdate) return
 
     this.notifyOwnedVideoHasBeenPublished(video)
-        .catch(err => logger.error('Cannot notify owner that its video %s has been published.', video.url, { err }))
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after transcoding.', video.url, { err }))
+  }
+
+  notifyOnVideoPublishedAfterScheduledUpdate (video: VideoModel): void {
+    // don't notify if video is still blacklisted or waiting for transcoding
+    if (video.VideoBlacklist || (video.waitTranscoding && video.state !== VideoState.PUBLISHED)) return
+
+    this.notifyOwnedVideoHasBeenPublished(video)
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after scheduled update.', video.url, { err }))
+  }
+
+  notifyOnVideoPublishedAfterRemovedFromAutoBlacklist (video: VideoModel): void {
+    // don't notify if video is still waiting for transcoding or scheduled update
+    if (video.ScheduleVideoUpdate || (video.waitTranscoding && video.state !== VideoState.PUBLISHED)) return
+
+    this.notifyOwnedVideoHasBeenPublished(video)
+        .catch(err => logger.error('Cannot notify owner that its video %s has been published after removed from auto-blacklist.', video.url, { err })) // tslint:disable-line:max-line-length
   }
 
   notifyOnNewComment (comment: VideoCommentModel): void {
@@ -51,6 +67,11 @@ class Notifier {
       .catch(err => logger.error('Cannot notify of new video abuse of video %s.', videoAbuse.Video.url, { err }))
   }
 
+  notifyOnVideoAutoBlacklist (video: VideoModel): void {
+    this.notifyModeratorsOfVideoAutoBlacklist(video)
+      .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', video.url, { err }))
+  }
+
   notifyOnVideoBlacklist (videoBlacklist: VideoBlacklistModel): void {
     this.notifyVideoOwnerOfBlacklist(videoBlacklist)
       .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
@@ -58,7 +79,7 @@ class Notifier {
 
   notifyOnVideoUnblacklist (video: VideoModel): void {
     this.notifyVideoOwnerOfUnblacklist(video)
-        .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', video.url, { err }))
+        .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
   }
 
   notifyOnFinishedVideoImport (videoImport: VideoImportModel, success: boolean): void {
@@ -263,6 +284,34 @@ class Notifier {
 
     function emailSender (emails: string[]) {
       return Emailer.Instance.addVideoAbuseModeratorsNotification(emails, videoAbuse)
+    }
+
+    return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
+  }
+
+  private async notifyModeratorsOfVideoAutoBlacklist (video: VideoModel) {
+    const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+    if (moderators.length === 0) return
+
+    logger.info('Notifying %s moderators of video auto-blacklist %s.', moderators.length, video.url)
+
+    function settingGetter (user: UserModel) {
+      return user.NotificationSetting.videoAutoBlacklistAsModerator
+    }
+    async function notificationCreator (user: UserModel) {
+
+      const notification = await UserNotificationModel.create({
+        type: UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS,
+        userId: user.id,
+        videoId: video.id
+      })
+      notification.Video = video
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addVideoAutoBlacklistModeratorsNotification(emails, video)
     }
 
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
