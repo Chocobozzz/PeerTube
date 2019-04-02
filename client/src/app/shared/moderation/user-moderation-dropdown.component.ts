@@ -10,8 +10,7 @@ import { BlocklistService } from '@app/shared/blocklist'
 
 @Component({
   selector: 'my-user-moderation-dropdown',
-  templateUrl: './user-moderation-dropdown.component.html',
-  styleUrls: [ './user-moderation-dropdown.component.scss' ]
+  templateUrl: './user-moderation-dropdown.component.html'
 })
 export class UserModerationDropdownComponent implements OnChanges {
   @ViewChild('userBanModal') userBanModal: UserBanModalComponent

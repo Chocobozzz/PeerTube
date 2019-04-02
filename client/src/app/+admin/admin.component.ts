@@ -3,8 +3,7 @@ import { UserRight } from '../../../../shared'
 import { AuthService } from '../core/auth/auth.service'
 
 @Component({
-  templateUrl: './admin.component.html',
-  styleUrls: [ './admin.component.scss' ]
+  templateUrl: './admin.component.html'
 })
 export class AdminComponent {
   constructor (private auth: AuthService) {}
