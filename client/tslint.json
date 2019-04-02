@@ -1,12 +1,12 @@
 {
-  "extends": "tslint-config-standard",
-  "rulesDirectory": ["./node_modules/codelyzer"],
+  "extends": [ "tslint-angular", "tslint-config-standard" ],
   "rules": {
     "no-inferrable-types": true,
     "eofline": true,
     "max-line-length": [true, 140],
     "no-floating-promises": false,
     "no-unused-variable": false, // Memory issues
+    "await-promise": [true, "PromiseLike"],
     "member-ordering": [true, {
       "order": [
         "public-static-field",
@@ -21,27 +21,9 @@
         ]}
     ],
 
-    "angular-whitespace": [true, "check-interpolation", "check-semicolon"],
-    "banana-in-box": true,
-    "templates-no-negated-async": true,
-    "directive-selector": [true, "attribute", "my", "camelCase"],
-    "component-selector": [true, "element", "my", "kebab-case"],
-    "use-input-property-decorator": true,
-    "use-output-property-decorator": true,
-    "use-host-property-decorator": true,
-    "use-view-encapsulation": true,
-    "no-attribute-parameter-decorator": true,
-    "no-input-rename": true,
-    "no-output-rename": true,
-    "no-output-on-prefix": true,
-    "no-forward-ref": false,
-    "use-life-cycle-interface": true,
-    "contextual-life-cycle": true,
-    "trackBy-function": false,
-    "use-pipe-transform-interface": true,
-    "pipe-prefix": [true, "my"],
-    "component-class-suffix": true,
-    "directive-class-suffix": true,
-    "pipe-impure": true
+    "no-shadowed-variable": false,
+    "no-bitwise": false,
+    "max-classes-per-file": false,
+    "interface-over-type-literal": false
   }
 }

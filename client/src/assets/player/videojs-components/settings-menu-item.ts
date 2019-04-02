@@ -167,7 +167,7 @@ class SettingsMenuItem extends MenuItem {
    * @method PrefixedEvent
    */
   PrefixedEvent (element: any, type: any, callback: any, action = 'addEvent') {
-    let prefix = ['webkit', 'moz', 'MS', 'o', '']
+    const prefix = ['webkit', 'moz', 'MS', 'o', '']
 
     for (let p = 0; p < prefix.length; p++) {
       if (!prefix[p]) {
@@ -249,7 +249,7 @@ class SettingsMenuItem extends MenuItem {
 
   update (event?: any) {
     let target: HTMLElement = null
-    let subMenu = this.subMenu.name()
+    const subMenu = this.subMenu.name()
 
     if (event && event.type === 'tap') {
       target = event.target
@@ -264,7 +264,7 @@ class SettingsMenuItem extends MenuItem {
       setTimeout(() => this.settingsSubMenuValueEl_.innerHTML = this.subMenu.labelEl_.innerHTML, 250)
     } else {
       // Loop trough the submenu items to find the selected child
-      for (let subMenuItem of this.subMenu.menu.children_) {
+      for (const subMenuItem of this.subMenu.menu.children_) {
         if (!(subMenuItem instanceof component)) {
           continue
         }
@@ -287,7 +287,7 @@ class SettingsMenuItem extends MenuItem {
   }
 
   bindClickEvents () {
-    for (let item of this.subMenu.menu.children()) {
+    for (const item of this.subMenu.menu.children()) {
       if (!(item instanceof component)) {
         continue
       }
@@ -307,7 +307,7 @@ class SettingsMenuItem extends MenuItem {
   }
 
   setMargin () {
-    let [width] = this.size
+    const [ width ] = this.size
 
     this.settingsSubMenuEl_.style.marginRight = `-${width}px`
   }

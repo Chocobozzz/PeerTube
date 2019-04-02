@@ -78,10 +78,10 @@ function objectToUrlEncoded (obj: any) {
 
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34
 function objectToFormData (obj: any, form?: FormData, namespace?: string) {
-  let fd = form || new FormData()
+  const fd = form || new FormData()
   let formKey
 
-  for (let key of Object.keys(obj)) {
+  for (const key of Object.keys(obj)) {
     if (namespace) formKey = `${namespace}[${key}]`
     else formKey = key
 

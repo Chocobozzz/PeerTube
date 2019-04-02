@@ -131,7 +131,7 @@ export class PeertubeChunkStore extends EventEmitter {
     // Chunk in store
     this.db.transaction('r', this.db.chunks, async () => {
       const result = await this.db.chunks.get({ id: index })
-      if (result === undefined) return cb(null, new Buffer(0))
+      if (result === undefined) return cb(null, Buffer.alloc(0))
 
       const buf = result.buf
       if (!opts) return this.nextTick(cb, null, buf)
@@ -162,13 +162,13 @@ export class PeertubeChunkStore extends EventEmitter {
       }
 
       if (this.db) {
-        await this.db.close()
+        this.db.close()
 
         await this.dropDatabase(this.databaseName)
       }
 
       if (this.expirationDB) {
-        await this.expirationDB.close()
+        this.expirationDB.close()
         this.expirationDB = null
       }
 

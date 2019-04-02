@@ -8,8 +8,8 @@ function segmentUrlBuilderFactory (baseUrls: string[]) {
 
     if (i === max - 1) return segment.url
 
-    let newBaseUrl = baseUrls[i]
-    let middlePart = newBaseUrl.endsWith('/') ? '' : '/'
+    const newBaseUrl = baseUrls[i]
+    const middlePart = newBaseUrl.endsWith('/') ? '' : '/'
 
     return newBaseUrl + middlePart + basename(segment.url)
   }

@@ -40,7 +40,7 @@ class PeerTubeEmbedApi {
   }
 
   private constructChannel () {
-    let channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.scope })
+    const channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.scope })
 
     channel.bind('play', (txn, params) => this.embed.player.play())
     channel.bind('pause', (txn, params) => this.embed.player.pause())
@@ -82,8 +82,8 @@ class PeerTubeEmbedApi {
     let currentState: 'playing' | 'paused' | 'unstarted' = 'unstarted'
 
     setInterval(() => {
-      let position = this.element.currentTime
-      let volume = this.element.volume
+      const position = this.element.currentTime
+      const volume = this.element.volume
 
       this.channel.notify({
         method: 'playbackStatusUpdate',
@@ -114,8 +114,8 @@ class PeerTubeEmbedApi {
   }
 
   private loadWebTorrentResolutions () {
-    let resolutions = []
-    let currentResolutionId = this.embed.player.webtorrent().getCurrentResolutionId()
+    const resolutions = []
+    const currentResolutionId = this.embed.player.webtorrent().getCurrentResolutionId()
 
     for (const videoFile of this.embed.player.webtorrent().videoFiles) {
       let label = videoFile.resolution.label
@@ -235,7 +235,7 @@ class PeerTubeEmbed {
 
   private loadParams () {
     try {
-      let params = new URL(window.location.toString()).searchParams
+      const params = new URL(window.location.toString()).searchParams
 
       this.autoplay = this.getParamToggle(params, 'autoplay')
       this.controls = this.getParamToggle(params, 'controls')

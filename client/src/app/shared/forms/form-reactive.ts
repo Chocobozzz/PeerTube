@@ -59,7 +59,7 @@ export abstract class FormReactive {
       const isDirty = control.dirty || forceCheck === true
       if (control && isDirty && !control.valid) {
         const messages = validationMessages[ field ]
-        for (const key in control.errors) {
+        for (const key of Object.keys(control.errors)) {
           formErrors[ field ] += messages[ key ] + ' '
         }
       }

@@ -19,7 +19,7 @@
       <a *ngIf="accountLink" tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', video.byAccount ]">{{ video.byAccount }}</a>
       <span *ngIf="!accountLink" tabindex="-1" class="video-info-account">{{ video.byAccount }}</span>
 
-      <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(video)}}</span>
+      <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(video) }}</span>
     </div>
   </a>
 
@@ -66,7 +66,7 @@
       </div>
 
       <span class="dropdown-item" (click)="removeFromPlaylist(video)">
-            <my-global-icon iconName="delete"></my-global-icon> <ng-container i18n>Delete from {{playlist?.displayName}}</ng-container>
+            <my-global-icon iconName="delete"></my-global-icon> <ng-container i18n>Delete from {{ playlist?.displayName }}</ng-container>
           </span>
     </div>
   </div>

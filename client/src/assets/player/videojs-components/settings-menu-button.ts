@@ -53,7 +53,7 @@ class SettingsButton extends Button {
 
   onDisposeSettingsItem (event: any, name: string) {
     if (name === undefined) {
-      let children = this.menu.children()
+      const children = this.menu.children()
 
       while (children.length > 0) {
         children[0].dispose()
@@ -62,7 +62,7 @@ class SettingsButton extends Button {
 
       this.addClass('vjs-hidden')
     } else {
-      let item = this.menu.getChild(name)
+      const item = this.menu.getChild(name)
 
       if (item) {
         item.dispose()
@@ -148,8 +148,8 @@ class SettingsButton extends Button {
       return
     }
 
-    let offset = this.options_.setup.maxHeightOffset
-    let maxHeight = this.playerComponent.el_.offsetHeight - offset
+    const offset = this.options_.setup.maxHeightOffset
+    const maxHeight = this.playerComponent.el_.offsetHeight - offset
 
     if (height > maxHeight) {
       height = maxHeight
@@ -166,7 +166,7 @@ class SettingsButton extends Button {
   buildMenu () {
     this.menu = new Menu(this.player())
     this.menu.addClass('vjs-main-menu')
-    let entries = this.options_.entries
+    const entries = this.options_.entries
 
     if (entries.length === 0) {
       this.addClass('vjs-hidden')
@@ -174,7 +174,7 @@ class SettingsButton extends Button {
       return
     }
 
-    for (let entry of entries) {
+    for (const entry of entries) {
       this.addMenuItem(entry, this.options_)
     }
 
@@ -191,7 +191,7 @@ class SettingsButton extends Button {
     }
 
     options.name = toTitleCase(entry)
-    let settingsMenuItem = new SettingsMenuItem(this.player(), options, entry, this as any)
+    const settingsMenuItem = new SettingsMenuItem(this.player(), options, entry, this as any)
 
     this.menu.addChild(settingsMenuItem)
 
@@ -204,7 +204,7 @@ class SettingsButton extends Button {
   }
 
   resetChildren () {
-    for (let menuChild of this.menu.children()) {
+    for (const menuChild of this.menu.children()) {
       menuChild.reset()
     }
   }
@@ -213,7 +213,7 @@ class SettingsButton extends Button {
    * Hide all the sub menus
    */
   hideChildren () {
-    for (let menuChild of this.menu.children()) {
+    for (const menuChild of this.menu.children()) {
       menuChild.hideSubMenu()
     }
   }

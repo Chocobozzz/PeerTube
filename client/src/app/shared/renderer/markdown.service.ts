@@ -45,7 +45,7 @@ export class MarkdownService {
 
     const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true })
 
-    for (let rule of rules) {
+    for (const rule of rules) {
       markdownIt.enable(rule)
     }
 

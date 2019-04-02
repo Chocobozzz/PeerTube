@@ -49,7 +49,7 @@ class ResolutionMenuButton extends MenuButton {
 
   private addClickListener (component: any) {
     component.on('click', () => {
-      let children = this.menu.children()
+      const children = this.menu.children()
 
       for (const child of children) {
         if (component !== child) {

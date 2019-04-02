@@ -13,13 +13,13 @@ export class EventRegistrar {
   private eventRegistrations: PlayerEventRegistrationMap = {}
 
   public bindToChannel (channel: Channel.MessagingChannel) {
-    for (let name of Object.keys(this.eventRegistrations)) {
+    for (const name of Object.keys(this.eventRegistrations)) {
       channel.bind(name, (txn, params) => this.fire(name, params))
     }
   }
 
   public registerTypes (names: string[]) {
-    for (let name of names) {
+    for (const name of names) {
       this.eventRegistrations[ name ] = { registrations: [] }
     }
   }

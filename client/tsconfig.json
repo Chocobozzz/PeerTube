@@ -43,6 +43,7 @@
     "fullTemplateTypeCheck": true
   },
   "include": [
+    "./src",
     "../../shared"
   ],
   "exclude": [

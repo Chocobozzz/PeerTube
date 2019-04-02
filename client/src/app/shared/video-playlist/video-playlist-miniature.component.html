@@ -6,7 +6,7 @@
     <img alt="" [attr.aria-labelledby]="playlist.displayName" [attr.src]="playlist.thumbnailUrl" />
 
     <div class="miniature-playlist-info-overlay">
-      <ng-container i18n>{playlist.videosLength, plural, =0 {No videos} =1 {1 video} other {{{playlist.videosLength}} videos}}</ng-container>
+      <ng-container i18n>{playlist.videosLength, plural, =0 {No videos} =1 {1 video} other {{{ playlist.videosLength }} videos}}</ng-container>
     </div>
 
     <div class="play-overlay">

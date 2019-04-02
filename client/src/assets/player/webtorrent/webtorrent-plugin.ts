@@ -347,7 +347,7 @@ class WebTorrentPlugin extends Plugin {
     if (!averageDownloadSpeed) averageDownloadSpeed = this.getAndSaveActualDownloadSpeed()
 
     // Limit resolution according to player height
-    const playerHeight = this.playerElement.offsetHeight as number
+    const playerHeight = this.playerElement.offsetHeight
 
     // We take the first resolution just above the player height
     // Example: player height is 530px, we want the 720p file instead of 480p

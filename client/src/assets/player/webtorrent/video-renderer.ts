@@ -29,7 +29,7 @@ function renderVideo (
 
 function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOptions, callback: (err: Error, renderer?: any) => void) {
   const extension = extname(file.name).toLowerCase()
-  let preparedElem: any = undefined
+  let preparedElem: any
   let currentTime = 0
   let renderer: any
 

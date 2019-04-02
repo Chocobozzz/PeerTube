@@ -61,12 +61,12 @@ function secondsToTime (seconds: number, full = false, symbol?: string) {
   const minuteSymbol = (symbol || 'm')
   const secondsSymbol = full ? '' : 's'
 
-  let hours = Math.floor(seconds / 3600)
+  const hours = Math.floor(seconds / 3600)
   if (hours >= 1) time = hours + hourSymbol
   else if (full) time = '0' + hourSymbol
 
   seconds %= 3600
-  let minutes = Math.floor(seconds / 60)
+  const minutes = Math.floor(seconds / 60)
   if (minutes >= 1 && minutes < 10 && full) time += '0' + minutes + minuteSymbol
   else if (minutes >= 1) time += minutes + minuteSymbol
   else if (full) time += '00' + minuteSymbol

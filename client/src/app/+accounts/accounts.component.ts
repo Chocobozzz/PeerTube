@@ -7,7 +7,6 @@ import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/oper
 import { Subscription } from 'rxjs'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { User, UserRight } from '../../../../shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   templateUrl: './accounts.component.html',
