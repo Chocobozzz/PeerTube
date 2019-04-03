@@ -121,6 +121,7 @@ $play-overlay-width: 18px;
 
     .video-miniature-information {
       width: 100% !important;
+      text-align: left;
 
       span {
         width: 100%;
@@ -128,8 +129,9 @@ $play-overlay-width: 18px;
     }
 
     .video-thumbnail {
-      width: 100%;
+      width: calc(100% + 30px);
       height: auto;
+      margin: 0 -15px;
 
       img {
         width: 100%;

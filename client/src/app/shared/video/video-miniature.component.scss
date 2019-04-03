@@ -3,8 +3,9 @@
 @import '_miniature';
 
 .video-miniature {
+  width: $video-miniature-width;
+
   display: inline-block;
-  padding-right: 15px;
   margin-bottom: 30px;
   height: 195px;
   vertical-align: top;

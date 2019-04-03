@@ -1,14 +1,6 @@
 @import '_mixins';
 @import '_miniature';
 
-.videos {
-  text-align: center;
-
-  my-video-miniature {
-    text-align: left;
-  }
-}
-
 .videos-header {
   display: flex;
   height: 80px;
@@ -32,8 +24,33 @@
   }
 }
 
-@media screen and (max-width: 500px) {
-  .videos {
-    @include video-miniature-small-screen;
+.margin-content {
+  width: $video-miniature-width * 6;
+  margin: auto;
+
+  @media screen and (max-width: 1800px) {
+    width: $video-miniature-width * 5;
+  }
+
+  @media screen and (max-width: 1800px - $video-miniature-width) {
+    width: $video-miniature-width * 4;
+  }
+
+  @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
+    width: $video-miniature-width * 3;
+  }
+
+  @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
+    width: $video-miniature-width * 2;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+    margin: 0 !important;
+
+    .videos {
+      @include video-miniature-small-screen;
+    }
   }
 }
+

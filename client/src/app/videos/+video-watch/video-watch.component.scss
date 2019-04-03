@@ -20,8 +20,6 @@ $player-factor: 1.7; // 16/9
 }
 
 .root {
-  margin: 0 -15px;
-
   &.theater-enabled #video-wrapper {
     flex-direction: column;
     justify-content: center;
@@ -51,6 +49,7 @@ $player-factor: 1.7; // 16/9
   background-color: #000;
   display: flex;
   justify-content: center;
+  margin: 0 -15px;
 
   .remote-server-down {
     color: #fff;
@@ -531,7 +530,7 @@ my-video-comments {
 
 @media screen and (max-width: 600px) {
   .video-bottom {
-    margin: 20px 0 0 0;
+    margin: 20px 0 0 0 !important;
 
     .video-info {
       padding: 0;
