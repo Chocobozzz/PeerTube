@@ -247,6 +247,10 @@
         <source>Font Size</source>
         <target>حجم الخط</target>
       </trans-unit>
+      <trans-unit id="Text Edge Style">
+        <source>Text Edge Style</source>
+        <target>نمط حواف النص</target>
+      </trans-unit>
       <trans-unit id="None">
         <source>None</source>
         <target>لا شيء</target>
@@ -270,6 +274,10 @@
       <trans-unit id="Caption Settings Dialog">
         <source>Caption Settings Dialog</source>
         <target>إعدادات التعليقات</target>
+      </trans-unit>
+      <trans-unit id="Beginning of dialog window. Escape will cancel and close the window.">
+        <source>Beginning of dialog window. Escape will cancel and close the window.</source>
+        <target>الضغط على زر Esc في بداية نافذة الحوار سيلغي ويقفل النافذة</target>
       </trans-unit>
       <trans-unit id="End of dialog window.">
         <source>End of dialog window.</source>
@@ -299,6 +307,10 @@
         <source>peers</source>
         <target>الأقران</target>
       </trans-unit>
+      <trans-unit id="peer">
+        <source>peer</source>
+        <target>نظير</target>
+      </trans-unit>
       <trans-unit id="Go to the video page">
         <source>Go to the video page</source>
         <target>الإنتقال إلى صفحة الفيديو</target>
@@ -322,6 +334,14 @@
       <trans-unit id="Copy embed code">
         <source>Copy embed code</source>
         <target>نسخ الرمز المدمج</target>
+      </trans-unit>
+      <trans-unit id="Total downloaded: ">
+        <source>Total downloaded: </source>
+        <target>التحميل الكلي</target>
+      </trans-unit>
+      <trans-unit id="Total uploaded: ">
+        <source>Total uploaded: </source>
+        <target>الرفع الكلي</target>
       </trans-unit>
     </body>
   </file></xliff>

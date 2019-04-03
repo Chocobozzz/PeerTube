@@ -35,8 +35,8 @@ export class MyAccountVideoChannelsComponent implements OnInit {
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithInput(
       this.i18n(
-        'Do you really want to delete {{channelDisplayName}}? It will delete all videos uploaded in this channel, ' +
-        'and you will not be able to create another channel with the same name ({{channelName}})!',
+        // tslint:disable
+        'Do you really want to delete {{channelDisplayName}}? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name ({{channelName}})!',
         { channelDisplayName: videoChannel.displayName, channelName: videoChannel.name }
       ),
       this.i18n(

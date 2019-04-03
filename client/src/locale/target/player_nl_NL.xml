@@ -89,11 +89,11 @@
       </trans-unit>
       <trans-unit id="Captions">
         <source>Captions</source>
-        <target>Ondertiteling met audiobeschrijving</target>
+        <target>Bijschriften</target>
       </trans-unit>
       <trans-unit id="captions off">
         <source>captions off</source>
-        <target>ondertiteling met audiobeschrijving uit</target>
+        <target>bijschriften uit</target>
       </trans-unit>
       <trans-unit id="Chapters">
         <source>Chapters</source>
@@ -137,7 +137,7 @@
       </trans-unit>
       <trans-unit id="The media is encrypted and we do not have the keys to decrypt it.">
         <source>The media is encrypted and we do not have the keys to decrypt it.</source>
-        <target>Deze media zijn versleuteld en er zijn geen sleutels voorhanden om ze te ontcijferen.</target>
+        <target>Deze media zijn versleuteld en er zijn geen sleutels voorhanden om ze te ontgrendelen.</target>
       </trans-unit>
       <trans-unit id="Play Video">
         <source>Play Video</source>
@@ -149,15 +149,15 @@
       </trans-unit>
       <trans-unit id="Close Modal Dialog">
         <source>Close Modal Dialog</source>
-        <target>Pop-up-venster sluiten</target>
+        <target>Sluit pop-up venster</target>
       </trans-unit>
       <trans-unit id="Modal Window">
         <source>Modal Window</source>
-        <target>Pop-up-venster</target>
+        <target>Pop-up venster</target>
       </trans-unit>
       <trans-unit id="This is a modal window">
         <source>This is a modal window</source>
-        <target>Dit is een pop-up-venster</target>
+        <target>Dit is een pop-up venster</target>
       </trans-unit>
       <trans-unit id="This modal can be closed by pressing the Escape key or activating the close button.">
         <source>This modal can be closed by pressing the Escape key or activating the close button.</source>
@@ -165,7 +165,7 @@
       </trans-unit>
       <trans-unit id=", opens captions settings dialog">
         <source>, opens captions settings dialog</source>
-        <target>, opent instellingen voor ondertiteling met audiobeschrijving</target>
+        <target>, opent instellingen voor bijschriften</target>
       </trans-unit>
       <trans-unit id=", opens subtitles settings dialog">
         <source>, opens subtitles settings dialog</source>
@@ -181,7 +181,7 @@
       </trans-unit>
       <trans-unit id="captions settings">
         <source>captions settings</source>
-        <target>instellingen voor ondertiteling met audiobeschrijving</target>
+        <target>instellingen voor bijschriften</target>
       </trans-unit>
       <trans-unit id="subtitles settings">
         <source>subititles settings</source>
@@ -261,7 +261,7 @@
       </trans-unit>
       <trans-unit id="Raised">
         <source>Raised</source>
-        <target>Uitpuilend</target>
+        <target>Verhoogd</target>
       </trans-unit>
       <trans-unit id="Depressed">
         <source>Depressed</source>
@@ -313,15 +313,15 @@
       </trans-unit>
       <trans-unit id="restore all settings to the default values">
         <source>restore all settings to the default values</source>
-        <target>Herstel alle instellingen naar hun standaardwaarden</target>
+        <target>herstel alle instellingen naar hun standaardwaarden</target>
       </trans-unit>
       <trans-unit id="Done">
         <source>Done</source>
-        <target>Oké</target>
+        <target>Klaar</target>
       </trans-unit>
       <trans-unit id="Caption Settings Dialog">
         <source>Caption Settings Dialog</source>
-        <target>Instellingen voor ondertiteling met audiobeschrijving</target>
+        <target>Bijschrift Instellingen</target>
       </trans-unit>
       <trans-unit id="Beginning of dialog window. Escape will cancel and close the window.">
         <source>Beginning of dialog window. Escape will cancel and close the window.</source>
@@ -355,6 +355,10 @@
         <source>peers</source>
         <target>peers</target>
       </trans-unit>
+      <trans-unit id="peer">
+        <source>peer</source>
+        <target>peer</target>
+      </trans-unit>
       <trans-unit id="Go to the video page">
         <source>Go to the video page</source>
         <target>Ga naar de videopagina</target>
@@ -365,11 +369,11 @@
       </trans-unit>
       <trans-unit id="Uses P2P, others may know you are watching this video.">
         <source>Uses P2P, others may know you are watching this video.</source>
-        <target>Maakt gebruik van P2P, anderen kunnen mogelijks zien dat je deze video bekijkt.</target>
+        <target>Maakt gebruik van P2P, anderen kunnen mogelijk zien dat je deze video bekijkt.</target>
       </trans-unit>
       <trans-unit id="Copy the video URL">
         <source>Copy the video URL</source>
-        <target>Video-URL kopiëren</target>
+        <target>Kopieer de video-URL</target>
       </trans-unit>
       <trans-unit id="Copy the video URL at the current time">
         <source>Copy the video URL at the current time</source>
@@ -377,7 +381,19 @@
       </trans-unit>
       <trans-unit id="Copy embed code">
         <source>Copy embed code</source>
-        <target>Insluitcode kopiëren</target>
+        <target>Kopieer insluitcode</target>
+      </trans-unit>
+      <trans-unit id="Copy magnet URI">
+        <source>Copy magnet URI</source>
+        <target>Kopieer magneet URI </target>
+      </trans-unit>
+      <trans-unit id="Total downloaded: ">
+        <source>Total downloaded: </source>
+        <target>Totaal gedownload:</target>
+      </trans-unit>
+      <trans-unit id="Total uploaded: ">
+        <source>Total uploaded: </source>
+        <target>Totaal geüpload:</target>
       </trans-unit>
     </body>
   </file></xliff>

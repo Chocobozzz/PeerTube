@@ -507,6 +507,10 @@
         <source>Nyanja</source>
         <target>Nyanja</target>
       </trans-unit>
+      <trans-unit id="Occitan">
+        <source>Occitan</source>
+        <target>Occitano</target>
+      </trans-unit>
       <trans-unit id="Ojibwa">
         <source>Ojibwa</source>
         <target>Ojibwa</target>

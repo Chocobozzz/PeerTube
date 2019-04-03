@@ -5,15 +5,15 @@
     <body>
       <trans-unit id="Audio Player">
         <source>Audio Player</source>
-        <target>Аудіо Плеер</target>
+        <target>Аудіо Плеєр</target>
       </trans-unit>
       <trans-unit id="Video Player">
         <source>Video Player</source>
-        <target>Відео Плеер</target>
+        <target>Відео Плеєр</target>
       </trans-unit>
       <trans-unit id="Play">
         <source>Play</source>
-        <target>Видтворити</target>
+        <target>Відтворити</target>
       </trans-unit>
       <trans-unit id="Pause">
         <source>Pause</source>
@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="Duration">
         <source>Duration</source>
-        <target>Тривалисть</target>
+        <target>Тривалість</target>
       </trans-unit>
       <trans-unit id="Remaining Time">
         <source>Remaining Time</source>
@@ -61,7 +61,7 @@
       </trans-unit>
       <trans-unit id="Fullscreen">
         <source>Fullscreen</source>
-        <target>Повноекраний режим</target>
+        <target>Повноекранний режим</target>
       </trans-unit>
       <trans-unit id="Non-Fullscreen">
         <source>Non-Fullscreen</source>
@@ -73,7 +73,7 @@
       </trans-unit>
       <trans-unit id="Unmute">
         <source>Unmute</source>
-        <target>Зі звуком</target>
+        <target>Із звуком</target>
       </trans-unit>
       <trans-unit id="Playback Rate">
         <source>Playback Rate</source>
@@ -105,7 +105,7 @@
       </trans-unit>
       <trans-unit id="descriptions off">
         <source>descriptions off</source>
-        <target>descriptions off</target>
+        <target>Без опису</target>
       </trans-unit>
       <trans-unit id="Audio Track">
         <source>Audio Track</source>
@@ -137,7 +137,7 @@
       </trans-unit>
       <trans-unit id="The media is encrypted and we do not have the keys to decrypt it.">
         <source>The media is encrypted and we do not have the keys to decrypt it.</source>
-        <target>Відео в зашифрованому вигляді, і ми не маємо ключі для розшифровки.</target>
+        <target>Відео в зашифрованому вигляді, і ми не маємо ключів для розшифровки.</target>
       </trans-unit>
       <trans-unit id="Play Video">
         <source>Play Video</source>
@@ -149,11 +149,11 @@
       </trans-unit>
       <trans-unit id="Close Modal Dialog">
         <source>Close Modal Dialog</source>
-        <target>Закрити_Модальне_Вікно</target>
+        <target>Закрити Модальне Вікно</target>
       </trans-unit>
       <trans-unit id="Modal Window">
         <source>Modal Window</source>
-        <target>Модальне_Вікно</target>
+        <target>Модальне Вікно</target>
       </trans-unit>
       <trans-unit id="This is a modal window">
         <source>This is a modal window</source>
@@ -197,11 +197,11 @@
       </trans-unit>
       <trans-unit id="White">
         <source>White</source>
-        <target>Біле</target>
+        <target>Білий</target>
       </trans-unit>
       <trans-unit id="Black">
         <source>Black</source>
-        <target>Чорне</target>
+        <target>Чорний</target>
       </trans-unit>
       <trans-unit id="Red">
         <source>Red</source>
@@ -237,7 +237,7 @@
       </trans-unit>
       <trans-unit id="Transparent">
         <source>Transparent</source>
-        <target>Прозорість</target>
+        <target>Прозорий</target>
       </trans-unit>
       <trans-unit id="Semi-Transparent">
         <source>Semi-Transparent</source>
@@ -325,7 +325,7 @@
       </trans-unit>
       <trans-unit id="Beginning of dialog window. Escape will cancel and close the window.">
         <source>Beginning of dialog window. Escape will cancel and close the window.</source>
-        <target>Початок діалоговго вікна. Кнопка Escape закриє або скасує вікно.</target>
+        <target>Початок діалогового вікна. Клавіша Esc скасує дію і закриє вікно.</target>
       </trans-unit>
       <trans-unit id="End of dialog window.">
         <source>End of dialog window.</source>
@@ -353,7 +353,11 @@
       </trans-unit>
       <trans-unit id="peers">
         <source>peers</source>
-        <target>пірі</target>
+        <target>піри</target>
+      </trans-unit>
+      <trans-unit id="peer">
+        <source>peer</source>
+        <target>пір</target>
       </trans-unit>
       <trans-unit id="Go to the video page">
         <source>Go to the video page</source>
@@ -361,7 +365,35 @@
       </trans-unit>
       <trans-unit id="Settings">
         <source>Settings</source>
-        <target>Налаштунки</target>
+        <target>Налаштування</target>
+      </trans-unit>
+      <trans-unit id="Uses P2P, others may know you are watching this video.">
+        <source>Uses P2P, others may know you are watching this video.</source>
+        <target>Використовує P2P, інші користувачі можуть дізнатися, що ви дивитесь дане відео.</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL">
+        <source>Copy the video URL</source>
+        <target>Скопіювати URL-адресу відео</target>
+      </trans-unit>
+      <trans-unit id="Copy the video URL at the current time">
+        <source>Copy the video URL at the current time</source>
+        <target>Скопіювати URL-адресу відео і поточний час</target>
+      </trans-unit>
+      <trans-unit id="Copy embed code">
+        <source>Copy embed code</source>
+        <target>Скопіювати вбудований код</target>
+      </trans-unit>
+      <trans-unit id="Copy magnet URI">
+        <source>Copy magnet URI</source>
+        <target>Скопіювати magnet-посилання</target>
+      </trans-unit>
+      <trans-unit id="Total downloaded: ">
+        <source>Total downloaded: </source>
+        <target>Всього завантажено:</target>
+      </trans-unit>
+      <trans-unit id="Total uploaded: ">
+        <source>Total uploaded: </source>
+        <target>Всього віддано:</target>
       </trans-unit>
     </body>
   </file></xliff>

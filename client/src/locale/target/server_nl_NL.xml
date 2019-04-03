@@ -45,7 +45,7 @@
       </trans-unit>
       <trans-unit id="News &amp; Politics">
         <source>News &amp; Politics</source>
-        <target>Nieuws en Politiek</target>
+        <target>Nieuws &amp; Politiek</target>
       </trans-unit>
       <trans-unit id="How To">
         <source>How To</source>
@@ -61,7 +61,7 @@
       </trans-unit>
       <trans-unit id="Science &amp; Technology">
         <source>Science &amp; Technology</source>
-        <target>Wetenschap en technologie</target>
+        <target>Wetenschap &amp; Technologie</target>
       </trans-unit>
       <trans-unit id="Animals">
         <source>Animals</source>
@@ -81,7 +81,7 @@
       </trans-unit>
       <trans-unit id="Attribution - Share Alike">
         <source>Attribution - Share Alike</source>
-        <target>Naamsvermelding – Gelijken Delen</target>
+        <target>Naamsvermelding - Gelijk Delen</target>
       </trans-unit>
       <trans-unit id="Attribution - No Derivatives">
         <source>Attribution - No Derivatives</source>
@@ -109,7 +109,7 @@
       </trans-unit>
       <trans-unit id="Unlisted">
         <source>Unlisted</source>
-        <target>Niet opgelijst</target>
+        <target>Geheim</target>
       </trans-unit>
       <trans-unit id="Private">
         <source>Private</source>
@@ -121,7 +121,7 @@
       </trans-unit>
       <trans-unit id="To transcode">
         <source>To transcode</source>
-        <target>Transcoden</target>
+        <target>Transcoderen</target>
       </trans-unit>
       <trans-unit id="To import">
         <source>To import</source>
@@ -133,11 +133,27 @@
       </trans-unit>
       <trans-unit id="Success">
         <source>Success</source>
-        <target>Success</target>
+        <target>Succes</target>
       </trans-unit>
       <trans-unit id="Failed">
         <source>Failed</source>
         <target>Gefaald</target>
+      </trans-unit>
+      <trans-unit id="This video does not exist.">
+        <source>This video does not exist.</source>
+        <target>Deze video bestaat niet.</target>
+      </trans-unit>
+      <trans-unit id="We cannot fetch the video. Please try again later.">
+        <source>We cannot fetch the video. Please try again later.</source>
+        <target>We kunnen de video niet ophalen. Probeer het later nog eens.</target>
+      </trans-unit>
+      <trans-unit id="Sorry">
+        <source>Sorry</source>
+        <target>Sorry</target>
+      </trans-unit>
+      <trans-unit id="This video is not available because the remote instance is not responding.">
+        <source>This video is not available because the remote instance is not responding.</source>
+        <target>Deze video is niet beschikbaar omdat de externe instantie niet reageert.</target>
       </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>

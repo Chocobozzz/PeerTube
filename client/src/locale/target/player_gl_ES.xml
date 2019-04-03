@@ -355,6 +355,10 @@
         <source>peers</source>
         <target>pares</target>
       </trans-unit>
+      <trans-unit id="peer">
+        <source>peer</source>
+        <target>parceiro</target>
+      </trans-unit>
       <trans-unit id="Go to the video page">
         <source>Go to the video page</source>
         <target>Ir a páxina do vídeo</target>
@@ -378,6 +382,18 @@
       <trans-unit id="Copy embed code">
         <source>Copy embed code</source>
         <target>Copiar código de inscrustado</target>
+      </trans-unit>
+      <trans-unit id="Copy magnet URI">
+        <source>Copy magnet URI</source>
+        <target>Copiar URI magnet</target>
+      </trans-unit>
+      <trans-unit id="Total downloaded: ">
+        <source>Total downloaded: </source>
+        <target>Total descargado:</target>
+      </trans-unit>
+      <trans-unit id="Total uploaded: ">
+        <source>Total uploaded: </source>
+        <target>Total subido:</target>
       </trans-unit>
     </body>
   </file></xliff>
