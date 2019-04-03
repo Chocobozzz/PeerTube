@@ -23,7 +23,6 @@ import { Notifier, ServerService } from '@app/core'
 })
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  marginContent = false // Disable margin
   loadOnInit = false
 
   private videoChannel: VideoChannel

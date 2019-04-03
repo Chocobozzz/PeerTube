@@ -6,15 +6,7 @@
       <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
     </div>
 
-    <my-video-thumbnail [video]="video"></my-video-thumbnail>
-
-    <div class="video-info">
-      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-      <div>{{ video.account.displayName }}</div>
-      <div>{{ video.publishedAt | myFromNow }}</div>
-      <div><span i18n>Privacy: </span><span>{{ video.privacy.label }}</span></div>
-      <div><span i18n>Sensitive: </span><span> {{ video.nsfw }}</span></div>
-    </div>
+    <my-video-miniature [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions"></my-video-miniature>
 
     <!-- Display only once -->
     <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
@@ -30,13 +22,12 @@
       </div>
     </div>
 
-    <div class="video-buttons" *ngIf="isInSelectionMode() === false">
-      <my-button
-        i18n-label
-        label="Unblacklist"
-        icon="tick"
-        (click)="removeVideoFromBlacklist(video)"
-      ></my-button>
-    </div>
+    <my-button
+      *ngIf="isInSelectionMode() === false"
+      i18n-label
+      label="Unblacklist"
+      icon="tick"
+      (click)="removeVideoFromBlacklist(video)"
+    ></my-button>
   </div>
 </div>

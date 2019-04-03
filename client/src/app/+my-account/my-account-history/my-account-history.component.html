@@ -15,12 +15,6 @@
 
 <div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" class="videos">
   <div class="video" *ngFor="let video of videos">
-    <my-video-thumbnail [video]="video"></my-video-thumbnail>
-
-    <div class="video-info">
-      <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-      <span i18n class="video-info-date-views">{{ video.views | myNumberFormatter }} views</span>
-      <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', video.byAccount ]">{{ video.byAccount }}</a>
-    </div>
+    <my-video-miniature [video]="video" [displayAsRow]="true"></my-video-miniature>
   </div>
 </div>

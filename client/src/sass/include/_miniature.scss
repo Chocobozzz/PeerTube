@@ -5,7 +5,6 @@
   @include ellipsis-multiline(1.1em, 2);
 
   transition: color 0.2s;
-  font-size: 16px;
   font-weight: $font-semibold;
   color: var(--mainForegroundColor);
   margin-top: 10px;

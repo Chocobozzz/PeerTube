@@ -14,6 +14,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPrivacy, VideoState } from '../../../../../shared/models/videos'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoChangeOwnershipComponent } from './video-change-ownership/video-change-ownership.component'
+import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
 
 @Component({
   selector: 'my-account-videos',
@@ -29,6 +30,15 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     currentPage: 1,
     itemsPerPage: 5,
     totalItems: null
+  }
+  miniatureDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: false,
+    privacyLabel: false,
+    privacyText: true,
+    state: true,
+    blacklistInfo: true
   }
 
   constructor (

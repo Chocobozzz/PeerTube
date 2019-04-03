@@ -46,26 +46,8 @@
     margin-left: 12px;
   }
 
-  my-video-thumbnail {
-    margin-right: 10px;
-  }
-
-  .video-info {
+  my-video-miniature {
     flex-grow: 1;
-
-    .video-info-name {
-      @include disable-default-a-behaviour;
-
-      color: var(--mainForegroundColor);
-      display: block;
-      width: fit-content;
-      font-size: 16px;
-      font-weight: $font-semibold;
-    }
-  }
-
-  .video-buttons {
-    min-width: 190px;
   }
 }
 
@@ -73,21 +55,12 @@
   .video {
     flex-direction: column;
     height: auto;
-    text-align: center;
 
-    .video-info-name {
-      margin: auto;
-    }
-
-    input[type=checkbox] {
+    .checkbox-container {
       display: none;
     }
 
-    my-video-thumbnail {
-      margin-right: 0;
-    }
-
-    .video-buttons {
+    my-button {
       margin-top: 10px;
     }
   }

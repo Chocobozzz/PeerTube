@@ -55,51 +55,14 @@
     padding-bottom: 20px;
     margin-bottom: 20px;
 
-    &.video {
-
-      my-video-thumbnail {
-        margin-right: 10px;
-      }
-
-      .video-info {
-        flex-grow: 1;
-
-        .video-info-name {
-          @include disable-default-a-behaviour;
-
-          color: var(--mainForegroundColor);
-          display: block;
-          width: fit-content;
-          font-size: 18px;
-          font-weight: $font-semibold;
-        }
-
-        .video-info-date-views {
-          font-size: 14px;
-        }
-
-        .video-info-account {
-          @include disable-default-a-behaviour;
-          @include ellipsis;
-
-          display: block;
-          width: fit-content;
-          font-size: 14px;
-          color: $grey-foreground-color;
-
-          &:hover {
-            color: $grey-foreground-hover-color;
-          }
-        }
-      }
-    }
-
     &.video-channel {
-
       img {
-        @include avatar(120px);
+        $image-size: 130px;
+        $margin-size: ($video-thumbnail-width - $image-size) / 2; // So we have the same width than the video miniature
 
-        margin: 0 50px 0 40px;
+        @include avatar($image-size);
+
+        margin: 0 ($margin-size + 10) 0 $margin-size;
       }
 
       .video-channel-info {

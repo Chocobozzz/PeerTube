@@ -34,63 +34,7 @@
 .video {
   @include row-blocks;
 
-  my-video-thumbnail {
-    margin-right: 10px;
-  }
-
-  .video-info {
+  .my-video-miniature {
     flex-grow: 1;
-
-    .video-info-name {
-      @include disable-default-a-behaviour;
-
-      color: var(--mainForegroundColor);
-      display: block;
-      width: fit-content;
-      font-size: 18px;
-      font-weight: $font-semibold;
-    }
-
-    .video-info-date-views {
-      font-size: 14px;
-    }
-
-    .video-info-account {
-      @include disable-default-a-behaviour;
-      @include ellipsis;
-
-      display: block;
-      width: fit-content;
-      font-size: 14px;
-      color: $grey-foreground-color;
-
-      &:hover {
-        color: $grey-foreground-hover-color;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  .video {
-    flex-direction: column;
-    height: auto;
-    text-align: center;
-
-    .video-info-name {
-      margin: auto;
-    }
-
-    input[type=checkbox] {
-      display: none;
-    }
-
-    my-video-thumbnail {
-      margin-right: 0;
-    }
-
-    .video-buttons {
-      margin-top: 10px;
-    }
   }
 }

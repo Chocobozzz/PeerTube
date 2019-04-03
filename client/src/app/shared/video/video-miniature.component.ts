@@ -1,10 +1,21 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core'
 import { User } from '../users'
 import { Video } from './video.model'
 import { ServerService } from '@app/core'
-import { VideoPrivacy } from '../../../../../shared'
+import { VideoPrivacy, VideoState } from '../../../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
+export type MiniatureDisplayOptions = {
+  date?: boolean
+  views?: boolean
+  by?: boolean
+  privacyLabel?: boolean
+  privacyText?: boolean
+  state?: boolean
+  blacklistInfo?: boolean
+  nsfw?: boolean
+}
 
 @Component({
   selector: 'my-video-miniature',
@@ -15,11 +26,26 @@ export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 export class VideoMiniatureComponent implements OnInit {
   @Input() user: User
   @Input() video: Video
+
   @Input() ownerDisplayType: OwnerDisplayType = 'account'
+  @Input() displayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: true,
+    privacyLabel: false,
+    privacyText: false,
+    state: false,
+    blacklistInfo: false
+  }
+  @Input() displayAsRow = false
 
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
-  constructor (private serverService: ServerService) { }
+  constructor (
+    private serverService: ServerService,
+    private i18n: I18n,
+    @Inject(LOCALE_ID) private localeId: string
+  ) { }
 
   get isVideoBlur () {
     return this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
@@ -57,5 +83,30 @@ export class VideoMiniatureComponent implements OnInit {
 
   isPrivateVideo () {
     return this.video.privacy.id === VideoPrivacy.PRIVATE
+  }
+
+  getStateLabel (video: Video) {
+    if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
+      return this.i18n('Published')
+    }
+
+    if (video.scheduledUpdate) {
+      const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
+      return this.i18n('Publication scheduled on ') + updateAt
+    }
+
+    if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
+      return this.i18n('Waiting transcoding')
+    }
+
+    if (video.state.id === VideoState.TO_TRANSCODE) {
+      return this.i18n('To transcode')
+    }
+
+    if (video.state.id === VideoState.TO_IMPORT) {
+      return this.i18n('To import')
+    }
+
+    return ''
   }
 }

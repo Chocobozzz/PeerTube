@@ -1,4 +1,4 @@
-<div class="video-miniature">
+<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow }">
   <my-video-thumbnail [video]="video" [nsfw]="isVideoBlur"></my-video-thumbnail>
 
   <div class="video-miniature-information">
@@ -7,19 +7,41 @@
       class="video-miniature-name"
       [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
     >
-      <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
-      <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
+      <ng-container *ngIf="displayOptions.privacyLabel">
+        <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
+        <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
+      </ng-container>
 
       {{ video.name }}
     </a>
 
-    <span i18n class="video-miniature-created-at-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+    <span class="video-miniature-created-at-views">
+      <ng-container *ngIf="displayOptions.date">{{ video.publishedAt | myFromNow }}</ng-container>
+      <ng-container *ngIf="displayOptions.date && displayOptions.views"> - </ng-container>
+      <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} views</ng-container>
+    </span>
 
-    <a tabindex="-1" *ngIf="displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
+    <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
       {{ video.byAccount }}
     </a>
-    <a tabindex="-1" *ngIf="displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
+    <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
       {{ video.byVideoChannel }}
     </a>
+
+    <div class="video-info-privacy">
+      <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
+      <ng-container *ngIf="displayOptions.privacyText && displayOptions.state"> - </ng-container>
+      <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
+    </div>
+
+    <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blacklisted">
+      <span class="blacklisted-label" i18n>Blacklisted</span>
+      <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+    </div>
+
+    <div i18n *ngIf="displayOptions.nsfw && video.nsfw" class="video-info-nsfw">
+      Sensitive
+    </div>
+
   </div>
 </div>

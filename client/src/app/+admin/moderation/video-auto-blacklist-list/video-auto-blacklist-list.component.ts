@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
-import { Location } from '@angular/common'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Router, ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { AbstractVideoList } from '@app/shared/video/abstract-video-list'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { Notifier, AuthService, ServerService } from '@app/core'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { Video } from '@shared/models'
 import { VideoBlacklistService } from '@app/shared'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
 
 @Component({
   selector: 'my-video-auto-blacklist-list',
@@ -22,6 +22,17 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
     currentPage: 1,
     itemsPerPage: 5,
     totalItems: null
+  }
+
+  miniatureDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: false,
+    by: true,
+    privacyLabel: false,
+    privacyText: true,
+    state: false,
+    blacklistInfo: false,
+    nsfw: true
   }
 
   constructor (

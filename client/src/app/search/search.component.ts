@@ -41,9 +41,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     private metaService: MetaService,
     private notifier: Notifier,
     private searchService: SearchService,
-    private authService: AuthService,
-    private serverService: ServerService
+    private authService: AuthService
   ) { }
+
+  get user () {
+    return this.authService.getUser()
+  }
 
   ngOnInit () {
     this.subActivatedRoute = this.route.queryParams.subscribe(
@@ -74,10 +77,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy () {
     if (this.subActivatedRoute) this.subActivatedRoute.unsubscribe()
-  }
-
-  isVideoBlur (video: Video) {
-    return video.isVideoNSFWForUser(this.authService.getUser(), this.serverService.getConfig())
   }
 
   isVideoChannel (d: VideoChannel | Video): d is VideoChannel {

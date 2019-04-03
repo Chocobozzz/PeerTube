@@ -4,15 +4,14 @@
 
 .video-miniature {
   width: $video-miniature-width;
-
-  display: inline-block;
+  display: inline-flex;
+  flex-direction: column;
   margin-bottom: 30px;
   height: 195px;
   vertical-align: top;
 
   .video-miniature-information {
     width: 200px;
-    margin-top: 2px;
     line-height: normal;
 
     .video-miniature-name {
@@ -35,6 +34,69 @@
 
       &:hover {
         color: $grey-foreground-hover-color;
+      }
+    }
+
+    .video-info-privacy,
+    .video-info-blacklisted .blacklisted-label,
+    .video-info-nsfw {
+      font-weight: $font-semibold;
+    }
+
+    .video-info-blacklisted {
+      color: red;
+
+      .blacklisted-reason::before {
+        content: ' - ';
+      }
+    }
+
+    .video-info-nsfw {
+      color: red;
+    }
+  }
+
+  &.display-as-row {
+    flex-direction: row;
+    margin-bottom: 0;
+    height: auto;
+    width: 100%;
+
+    my-video-thumbnail {
+      margin-right: 10px;
+    }
+
+    .video-miniature-information {
+      width: auto;
+
+      .video-miniature-name {
+        @include ellipsis-multiline(1.3em, 2);
+
+        margin-top: 2px;
+        margin-bottom: 5px;
+      }
+
+      .video-miniature-created-at-views,
+      .video-miniature-account,
+      .video-miniature-channel {
+        font-size: 14px;
+      }
+
+      .video-info-privacy {
+        margin-top: 5px;
+      }
+
+      .video-info-blacklisted {
+        margin-top: 3px;
+      }
+    }
+
+    @media screen and (max-width: $small-view) {
+      flex-direction: column;
+      height: auto;
+
+      my-video-thumbnail {
+        margin-right: 0;
       }
     }
   }

@@ -23,7 +23,6 @@ import { Notifier, ServerService } from '@app/core'
 })
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
-  marginContent = false // Disable margin
   loadOnInit = false
 
   private account: Account
