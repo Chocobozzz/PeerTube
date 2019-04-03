@@ -19,7 +19,7 @@ import {
   userLogin,
   wait,
   getCustomConfig,
-  updateCustomConfig
+  updateCustomConfig, getVideoThreadComments, getVideoCommentThreads
 } from '../../../../shared/utils'
 import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
@@ -58,6 +58,7 @@ import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/
 import * as uuidv4 from 'uuid/v4'
 import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/utils/users/blocklist'
 import { CustomConfig } from '../../../../shared/models/server'
+import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 const expect = chai.expect
 
@@ -405,10 +406,14 @@ describe('Test users notifications', function () {
 
       await waitJobs(servers)
 
-      const resComment = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'comment')
-      const commentId = resComment.body.comment.id
+      await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'comment')
 
       await waitJobs(servers)
+
+      const resComment = await getVideoCommentThreads(servers[0].url, uuid, 0, 5)
+      expect(resComment.body.data).to.have.lengthOf(1)
+      const commentId = resComment.body.data[0].id
+
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'presence')
     })
 
@@ -435,13 +440,24 @@ describe('Test users notifications', function () {
       const uuid = resVideo.body.video.uuid
       await waitJobs(servers)
 
-      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'comment')
-      const threadId = resThread.body.comment.id
-
-      const resComment = await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, threadId, 'reply')
-      const commentId = resComment.body.comment.id
+      {
+        const resThread = await addVideoCommentThread(servers[ 1 ].url, servers[ 1 ].accessToken, uuid, 'comment')
+        const threadId = resThread.body.comment.id
+        await addVideoCommentReply(servers[ 1 ].url, servers[ 1 ].accessToken, uuid, threadId, 'reply')
+      }
 
       await waitJobs(servers)
+
+      const resThread = await getVideoCommentThreads(servers[0].url, uuid, 0, 5)
+      expect(resThread.body.data).to.have.lengthOf(1)
+      const threadId = resThread.body.data[0].id
+
+      const resComments = await getVideoThreadComments(servers[0].url, uuid, threadId)
+      const tree = resComments.body as VideoCommentThreadTree
+
+      expect(tree.children).to.have.lengthOf(1)
+      const commentId = tree.children[0].comment.id
+
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, threadId, 'presence')
     })
   })
@@ -554,17 +570,27 @@ describe('Test users notifications', function () {
 
       await waitJobs(servers)
       const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'hello @user_1@localhost:9001 1')
-      const threadId = resThread.body.comment.id
+      const server2ThreadId = resThread.body.comment.id
 
       await waitJobs(servers)
-      await checkCommentMention(baseParams, uuid, threadId, threadId, 'super root 2 name', 'presence')
+
+      const resThread2 = await getVideoCommentThreads(servers[0].url, uuid, 0, 5)
+      expect(resThread2.body.data).to.have.lengthOf(1)
+      const server1ThreadId = resThread2.body.data[0].id
+      await checkCommentMention(baseParams, uuid, server1ThreadId, server1ThreadId, 'super root 2 name', 'presence')
 
       const text = '@user_1@localhost:9001 hello 2 @root@localhost:9001'
-      const resComment = await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, threadId, text)
-      const commentId = resComment.body.comment.id
+      await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, server2ThreadId, text)
 
       await waitJobs(servers)
-      await checkCommentMention(baseParams, uuid, commentId, threadId, 'super root 2 name', 'presence')
+
+      const resComments = await getVideoThreadComments(servers[0].url, uuid, server1ThreadId)
+      const tree = resComments.body as VideoCommentThreadTree
+
+      expect(tree.children).to.have.lengthOf(1)
+      const commentId = tree.children[0].comment.id
+
+      await checkCommentMention(baseParams, uuid, commentId, server1ThreadId, 'super root 2 name', 'presence')
     })
   })
 
