@@ -48,6 +48,11 @@ function downloadYoutubeDLVideo (url: string, timeout: number) {
 
   const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
 
+  if (process.env.FFMPEG_PATH) {
+    options.push('--ffmpeg-location')
+    options.push(process.env.FFMPEG_PATH)
+  }
+
   return new Promise<string>(async (res, rej) => {
     const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.exec(url, options, processOptions, err => {
