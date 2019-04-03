@@ -8,8 +8,8 @@
   .progress-bar {
     height: 3px;
     width: 100%;
-    position: relative;
-    top: -3px;
+    position: absolute;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.20);
 
     div {

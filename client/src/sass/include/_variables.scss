@@ -49,6 +49,7 @@ $separator-border-color: rgba(0, 0, 0, 0.10);
 $video-miniature-width: 238px;
 $video-thumbnail-height: 122px;
 $video-thumbnail-width: 223px;
+$video-thumbnail-ratio: $video-thumbnail-width / $video-thumbnail-height;
 
 $theater-bottom-space: 115px;
 

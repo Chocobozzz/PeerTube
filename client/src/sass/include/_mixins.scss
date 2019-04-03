@@ -32,9 +32,7 @@
   max-height: $font-size * $number-of-lines;
   /* Fallback for non-webkit */
   font-size: $font-size;
-  line-height: $font-size - 0.1;
-  -webkit-line-clamp: $number-of-lines;
-  -webkit-box-orient: vertical;
+  line-height: $font-size;
   overflow: hidden;
   text-overflow: ellipsis;
 }

@@ -2,13 +2,13 @@
 @import '_mixins';
 
 @mixin miniature-name {
-  @include ellipsis-multiline(16px, 2);
+  @include ellipsis-multiline(1.1em, 2);
 
   transition: color 0.2s;
   font-size: 16px;
   font-weight: $font-semibold;
   color: var(--mainForegroundColor);
-  margin-top: 5px;
+  margin-top: 10px;
   margin-bottom: 5px;
 
   &:hover {
@@ -28,7 +28,8 @@ $play-overlay-width: 18px;
 @mixin miniature-thumbnail {
   @include disable-outline;
 
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   position: relative;
   border-radius: 3px;
   overflow: hidden;
@@ -126,13 +127,13 @@ $play-overlay-width: 18px;
     }
 
     .video-thumbnail {
-      width: calc(100% + 30px);
-      height: auto;
-      margin: 0 -15px;
+      margin: 0 -15px 10px -15px;
+      width: 100vw;
+      height: calc(100vw / #{$video-thumbnail-ratio});
 
       img {
         width: 100%;
-        height: auto;
+        height: 100%;
       }
     }
   }
