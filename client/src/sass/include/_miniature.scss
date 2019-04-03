@@ -2,11 +2,8 @@
 @import '_mixins';
 
 @mixin miniature-name {
-  @include ellipsis-multiline(
-    $font-size: 1rem,
-    $line-height: 1,
-    $lines-to-show: 2
-  );
+  @include ellipsis-multiline(16px, 2);
+
   transition: color 0.2s;
   font-size: 16px;
   font-weight: $font-semibold;
