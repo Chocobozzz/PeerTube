@@ -9,10 +9,12 @@ export const I18N_LOCALES = {
   'eo': 'Esperanto',
   'de-DE': 'Deutsch',
   'it-IT': 'Italiano',
+  'nl-NL': 'Nederlands',
   'es-ES': 'Español',
   'oc': 'Occitan',
   'zh-Hant-TW': '繁體中文（台灣）',
   'pt-BR': 'Português (Brasil)',
+  'pt-PT': 'Português (Portugal)',
   'sv-SE': 'svenska',
   'pl-PL': 'Polski',
   'ru-RU': 'русский',
@@ -27,10 +29,12 @@ const I18N_LOCALE_ALIAS = {
   'cs': 'cs-CZ',
   'de': 'de-DE',
   'es': 'es-ES',
-  'pt': 'pt-BR',
+  'pt': 'pt-PT',
   'sv': 'sv-SE',
   'pl': 'pl-PL',
-  'ru': 'ru-RU'
+  'ru': 'ru-RU',
+  'nl': 'nl-NL',
+  'zh': 'zh-Hans-CN'
 }
 
 export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
