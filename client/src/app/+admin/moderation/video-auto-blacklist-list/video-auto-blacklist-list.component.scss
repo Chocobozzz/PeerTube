@@ -1,67 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
-.action-selection-mode {
-  width: 194px;
-  display: flex;
-  justify-content: flex-end;
+.action-button-unblacklist-selection {
+  display: inline-block;
 
-  .action-selection-mode-child {
-    position: fixed;
+  @include peertube-button;
+  @include orange-button;
+  @include button-with-icon(21px);
 
-    .action-button {
-      display: inline-block;
-    }
-
-    .action-button-cancel-selection {
-      @include peertube-button;
-      @include grey-button;
-
-      margin-right: 10px;
-    }
-
-    .action-button-unblacklist-selection {
-      @include peertube-button;
-      @include orange-button;
-      @include button-with-icon(21px);
-
-      my-global-icon {
-        @include apply-svg-color(#fff);
-      }
-    }
-  }
-}
-
-.video {
-  @include row-blocks;
-
-  &:first-child {
-    margin-top: 47px;
-  }
-
-  .checkbox-container {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-    margin-left: 12px;
-  }
-
-  my-video-miniature {
-    flex-grow: 1;
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  .video {
-    flex-direction: column;
-    height: auto;
-
-    .checkbox-container {
-      display: none;
-    }
-
-    my-button {
-      margin-top: 10px;
-    }
+  my-global-icon {
+    @include apply-svg-color(#fff);
   }
 }

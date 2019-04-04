@@ -14,10 +14,7 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ButtonComponent } from './buttons/button.component'
 import { DeleteButtonComponent } from './buttons/delete-button.component'
 import { EditButtonComponent } from './buttons/edit-button.component'
-import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
-import { NumberFormatterPipe } from './misc/number-formatter.pipe'
-import { ObjectLengthPipe } from './misc/object-length.pipe'
 import { RestExtractor, RestService } from './rest'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
@@ -78,6 +75,11 @@ import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/vide
 import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
 import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.component'
 import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playlist/video-playlist-element-miniature.component'
+import { VideosSelectionComponent } from '@app/shared/video/videos-selection.component'
+import { NumberFormatterPipe } from '@app/shared/angular/number-formatter.pipe'
+import { ObjectLengthPipe } from '@app/shared/angular/object-length.pipe'
+import { FromNowPipe } from '@app/shared/angular/from-now.pipe'
+import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
 
 @NgModule({
   imports: [
@@ -107,6 +109,7 @@ import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playli
     VideoPlaylistMiniatureComponent,
     VideoAddToPlaylistComponent,
     VideoPlaylistElementMiniatureComponent,
+    VideosSelectionComponent,
 
     FeedComponent,
 
@@ -114,10 +117,12 @@ import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playli
     DeleteButtonComponent,
     EditButtonComponent,
 
-    ActionDropdownComponent,
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
+    PeerTubeTemplateDirective,
+
+    ActionDropdownComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
@@ -166,6 +171,7 @@ import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playli
     VideoPlaylistMiniatureComponent,
     VideoAddToPlaylistComponent,
     VideoPlaylistElementMiniatureComponent,
+    VideosSelectionComponent,
 
     FeedComponent,
 
@@ -197,7 +203,8 @@ import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playli
 
     NumberFormatterPipe,
     ObjectLengthPipe,
-    FromNowPipe
+    FromNowPipe,
+    PeerTubeTemplateDirective
   ],
 
   providers: [

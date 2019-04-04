@@ -1,39 +1,30 @@
-<div i18n *ngIf="pagination.totalItems === 0">No results.</div>
+<my-videos-selection
+  [(selection)]="selection"
+  [(videosModel)]="videos"
+  [miniatureDisplayOptions]="miniatureDisplayOptions"
+  [titlePage]="titlePage"
+  [getVideosObservableFunction]="getVideosObservableFunction"
+  #videosSelection
+>
+  <ng-template ptTemplate="globalButtons">
+    <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+      <my-global-icon iconName="delete"></my-global-icon>
+      <ng-container i18n>Delete</ng-container>
+    </span>
+  </ng-template>
 
-<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" class="videos">
-  <div class="video" *ngFor="let video of videos; let i = index">
-    <div class="checkbox-container">
-      <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
-    </div>
+  <ng-template ptTemplate="rowButtons" let-video>
+    <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
-    <my-video-miniature [video]="video" [displayOptions]="miniatureDisplayOptions" [displayAsRow]="true"></my-video-miniature>
+    <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
-    <!-- Display only once -->
-    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
-      <div class="action-selection-mode-child">
-        <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
-          Cancel
-        </span>
+    <my-button i18n-label label="Change ownership"
+               className="action-button-change-ownership"
+               icon="im-with-her"
+               (click)="changeOwnership($event, video)"
+    ></my-button>
+  </ng-template>
+</my-videos-selection>
 
-        <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
-          <my-global-icon iconName="delete"></my-global-icon>
-          <ng-container i18n>Delete</ng-container>
-        </span>
-      </div>
-    </div>
-
-    <div class="video-buttons" *ngIf="isInSelectionMode() === false">
-      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
-
-      <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
-
-      <my-button i18n-label label="Change ownership"
-                 className="action-button-change-ownership"
-                 icon="im-with-her"
-                 (click)="changeOwnership($event, video)"
-      ></my-button>
-    </div>
-  </div>
-</div>
 
 <my-video-change-ownership #videoChangeOwnershipModal></my-video-change-ownership>

@@ -102,6 +102,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       ({ videos, totalVideos }) => {
         this.pagination.totalItems = totalVideos
         this.videos = this.videos.concat(videos)
+
+        this.onMoreVideos()
       },
 
       error => this.notifier.error(error.message)
@@ -117,6 +119,9 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   toggleModerationDisplay () {
     throw new Error('toggleModerationDisplay is not implemented')
   }
+
+  // On videos hook for children that want to do something
+  protected onMoreVideos () { /* empty */ }
 
   protected loadRouteParams (routeParams: { [ key: string ]: any }) {
     this.sort = routeParams[ 'sort' ] as VideoSortField || this.defaultSort

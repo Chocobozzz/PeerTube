@@ -1,33 +1,19 @@
-<div i18n *ngIf="pagination.totalItems === 0">No results.</div>
+<my-videos-selection
+  [(selection)]="selection"
+  [(videosModel)]="videos"
+  [miniatureDisplayOptions]="miniatureDisplayOptions"
+  [titlePage]="titlePage"
+  [getVideosObservableFunction]="getVideosObservableFunction"
+>
+  <ng-template ptTemplate="globalButtons">
+    <span class="action-button action-button-unblacklist-selection" (click)="removeSelectedVideosFromBlacklist()">
+      <my-global-icon iconName="tick"></my-global-icon>
+      <ng-container i18n>Unblacklist</ng-container>
+    </span>
+  </ng-template>
 
-<div myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" class="videos">
-  <div class="video" *ngFor="let video of videos; let i = index">
-    <div class="checkbox-container">
-      <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="checkedVideos[video.id]"></my-peertube-checkbox>
-    </div>
+  <ng-template ptTemplate="rowButtons" let-video>
+    <my-button i18n-label label="Unblacklist" icon="tick" (click)="removeVideoFromBlacklist(video)"></my-button>
+  </ng-template>
 
-    <my-video-miniature [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions"></my-video-miniature>
-
-    <!-- Display only once -->
-    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
-      <div class="action-selection-mode-child">
-        <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
-          Cancel
-        </span>
-
-        <span class="action-button action-button-unblacklist-selection" (click)="removeSelectedVideosFromBlacklist()">
-          <my-global-icon iconName="tick"></my-global-icon>
-          <ng-container i18n>Unblacklist</ng-container>
-        </span>
-      </div>
-    </div>
-
-    <my-button
-      *ngIf="isInSelectionMode() === false"
-      i18n-label
-      label="Unblacklist"
-      icon="tick"
-      (click)="removeVideoFromBlacklist(video)"
-    ></my-button>
-  </div>
-</div>
+</my-videos-selection>

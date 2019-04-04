@@ -1,29 +1,23 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AbstractVideoList } from '@app/shared/video/abstract-video-list'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { Video } from '@shared/models'
 import { VideoBlacklistService } from '@app/shared'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
+import { SelectionType } from '@app/shared/video/videos-selection.component'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-video-auto-blacklist-list',
   templateUrl: './video-auto-blacklist-list.component.html',
   styleUrls: [ './video-auto-blacklist-list.component.scss' ]
 })
-export class VideoAutoBlacklistListComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class VideoAutoBlacklistListComponent {
   titlePage: string
-  checkedVideos: { [ id: number ]: boolean } = {}
-  pagination: ComponentPagination = {
-    currentPage: 1,
-    itemsPerPage: 5,
-    totalItems: null
-  }
-
+  selection: SelectionType = {}
   miniatureDisplayOptions: MiniatureDisplayOptions = {
     date: true,
     views: false,
@@ -34,6 +28,13 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
     blacklistInfo: false,
     nsfw: true
   }
+  pagination: ComponentPagination = {
+    currentPage: 1,
+    itemsPerPage: 5,
+    totalItems: null
+  }
+  videos: Video[] = []
+  getVideosObservableFunction = this.getVideosObservable.bind(this)
 
   constructor (
     protected router: Router,
@@ -45,25 +46,7 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
     private i18n: I18n,
     private videoBlacklistService: VideoBlacklistService
   ) {
-    super()
-
     this.titlePage = this.i18n('Auto-blacklisted videos')
-  }
-
-  ngOnInit () {
-    super.ngOnInit()
-  }
-
-  ngOnDestroy () {
-    super.ngOnDestroy()
-  }
-
-  abortSelectionMode () {
-    this.checkedVideos = {}
-  }
-
-  isInSelectionMode () {
-    return Object.keys(this.checkedVideos).some(k => this.checkedVideos[k] === true)
   }
 
   getVideosObservable (page: number) {
@@ -72,15 +55,12 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
     return this.videoBlacklistService.getAutoBlacklistedAsVideoList(newPagination)
   }
 
-  generateSyndicationList () {
-    throw new Error('Method not implemented.')
-  }
-
   removeVideoFromBlacklist (entry: Video) {
     this.videoBlacklistService.removeVideoFromBlacklist(entry.id).subscribe(
       () => {
         this.notifier.success(this.i18n('Video {{name}} removed from blacklist.', { name: entry.name }))
-        this.reloadVideos()
+
+        this.videos = this.videos.filter(v => v.id !== entry.id)
       },
 
       error => this.notifier.error(error.message)
@@ -88,16 +68,16 @@ export class VideoAutoBlacklistListComponent extends AbstractVideoList implement
   }
 
   removeSelectedVideosFromBlacklist () {
-    const toReleaseVideosIds = Object.keys(this.checkedVideos)
-                                      .filter(k => this.checkedVideos[ k ] === true)
+    const toReleaseVideosIds = Object.keys(this.selection)
+                                      .filter(k => this.selection[ k ] === true)
                                       .map(k => parseInt(k, 10))
 
     this.videoBlacklistService.removeVideoFromBlacklist(toReleaseVideosIds).subscribe(
       () => {
         this.notifier.success(this.i18n('{{num}} videos removed from blacklist.', { num: toReleaseVideosIds.length }))
 
-        this.abortSelectionMode()
-        this.reloadVideos()
+        this.selection = {}
+        this.videos = this.videos.filter(v => toReleaseVideosIds.includes(v.id) === false)
       },
 
       error => this.notifier.error(error.message)
