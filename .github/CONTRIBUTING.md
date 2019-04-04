@@ -146,7 +146,7 @@ $ createdb -O peertube peertube_test{1,2,3}
 Build the application and flush the old tests data:
 
 ```
-$ npm run build
+$ npm run build -- --light
 $ npm run clean:server:test
 ```
 
