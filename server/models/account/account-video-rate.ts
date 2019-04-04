@@ -9,6 +9,7 @@ import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { UserVideoRate } from '../../../shared'
 
 /*
   Account rates per video.
@@ -86,6 +87,16 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     if (transaction) options.transaction = transaction
 
     return AccountVideoRateModel.findOne(options)
+  }
+
+  static listForAccount (accountId: number) {
+    const query = {
+      where: {
+        accountId
+      }
+    }
+
+    return AccountVideoRateModel.findAndCountAll(query)
   }
 
   static loadLocalAndPopulateVideo (rateType: VideoRateType, accountName: string, videoId: number, transaction?: Transaction) {
@@ -184,5 +195,12 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
       if (type === 'like') await VideoModel.increment({ likes: -deleted }, options)
       else if (type === 'dislike') await VideoModel.increment({ dislikes: -deleted }, options)
     })
+  }
+
+  toFormattedJSON (): UserVideoRate {
+    return {
+      videoId: this.videoId,
+      rating: this.type
+    }
   }
 }

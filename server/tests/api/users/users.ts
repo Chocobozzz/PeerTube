@@ -12,6 +12,7 @@ import {
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
   getMyUserVideoRating,
+  getMyUserVideoRatings,
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
@@ -135,6 +136,15 @@ describe('Test users', function () {
 
     expect(rating.videoId).to.equal(videoId)
     expect(rating.rating).to.equal('like')
+  })
+
+  it('Should retrieve ratings list', async function () {
+    await rateVideo(server.url, accessToken, videoId, 'like')
+    const res = await getMyUserVideoRatings(server.url, accessToken)
+    const ratings = res.body
+
+    expect(ratings.data[0].videoId).to.equal(videoId)
+    expect(ratings.data[0].rating).to.equal('like')
   })
 
   it('Should not be able to remove the video with an incorrect token', async function () {

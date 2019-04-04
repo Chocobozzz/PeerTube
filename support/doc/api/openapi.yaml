@@ -557,6 +557,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetMeVideoRating'
+  /users/me/videos/ratings:
+    get:
+      summary: Get current user ratings
+      security:
+        - OAuth2: []
+      tags:
+        - User
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetMeVideoRating'
   /users/me/videos:
     get:
       summary: Get videos of the current user
