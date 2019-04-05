@@ -48,7 +48,10 @@
     </div>
 
     <div *ngIf="isVideo(result)" class="entry video">
-      <my-video-miniature [video]="result" [user]="user" [displayAsRow]="true"></my-video-miniature>
+      <my-video-miniature
+        [video]="result" [user]="user" [displayAsRow]="true"
+        (videoBlacklisted)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
+      ></my-video-miniature>
     </div>
   </ng-container>
 

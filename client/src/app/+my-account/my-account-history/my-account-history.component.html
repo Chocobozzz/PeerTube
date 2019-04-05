@@ -15,6 +15,8 @@
 
 <div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" class="videos">
   <div class="video" *ngFor="let video of videos">
-    <my-video-miniature [video]="video" [displayAsRow]="true"></my-video-miniature>
+    <my-video-miniature
+      [video]="video" [displayAsRow]="true"
+      (videoRemoved)="removeVideoFromArray(video)" (videoBlacklisted)="removeVideoFromArray(video)"></my-video-miniature>
   </div>
 </div>

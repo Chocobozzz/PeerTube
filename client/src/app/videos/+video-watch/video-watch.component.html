@@ -120,37 +120,9 @@
                   </div>
                 </div>
 
-                <div class="action-dropdown" ngbDropdown placement="top" role="button">
-                  <div class="action-button" ngbDropdownToggle role="button">
-                    <my-global-icon class="more-icon" iconName="more-horizontal"></my-global-icon>
-                  </div>
-
-                  <div ngbDropdownMenu>
-                    <a *ngIf="isVideoDownloadable()" class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
-                      <my-global-icon iconName="download"></my-global-icon> <ng-container i18n>Download</ng-container>
-                    </a>
-
-                    <a *ngIf="isUserLoggedIn()" class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
-                      <my-global-icon iconName="alert"></my-global-icon> <ng-container i18n>Report</ng-container>
-                    </a>
-
-                    <a *ngIf="isVideoUpdatable()" class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
-                      <my-global-icon iconName="edit"></my-global-icon> <ng-container i18n>Update</ng-container>
-                    </a>
-
-                    <a *ngIf="isVideoBlacklistable()" class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="showBlacklistModal($event)">
-                      <my-global-icon iconName="no"></my-global-icon> <ng-container i18n>Blacklist</ng-container>
-                    </a>
-
-                    <a *ngIf="isVideoUnblacklistable()" class="dropdown-item" i18n-title title="Unblacklist this video" href="#" (click)="unblacklistVideo($event)">
-                      <my-global-icon iconName="undo"></my-global-icon> <ng-container i18n>Unblacklist</ng-container>
-                    </a>
-
-                    <a *ngIf="isVideoRemovable()" class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
-                      <my-global-icon iconName="delete"></my-global-icon> <ng-container i18n>Delete</ng-container>
-                    </a>
-                  </div>
-                </div>
+                <my-video-actions-dropdown
+                  placement="top" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" (videoRemoved)="onVideoRemoved()"
+                ></my-video-actions-dropdown>
               </div>
 
               <div
@@ -270,7 +242,4 @@
 <ng-template [ngIf]="video !== null">
   <my-video-support #videoSupportModal [video]="video"></my-video-support>
   <my-video-share #videoShareModal [video]="video"></my-video-share>
-  <my-video-download #videoDownloadModal [video]="video"></my-video-download>
-  <my-video-report #videoReportModal [video]="video"></my-video-report>
-  <my-video-blacklist #videoBlacklistModal [video]="video"></my-video-blacklist>
 </ng-template>

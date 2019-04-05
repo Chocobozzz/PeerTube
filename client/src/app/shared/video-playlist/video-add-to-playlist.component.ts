@@ -24,6 +24,7 @@ type PlaylistSummary = {
 export class VideoAddToPlaylistComponent extends FormReactive implements OnInit {
   @Input() video: Video
   @Input() currentVideoTimestamp: number
+  @Input() lazyLoad = false
 
   isNewPlaylistBlockOpened = false
   videoPlaylists: PlaylistSummary[] = []
@@ -57,6 +58,10 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
       displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
     })
 
+    if (this.lazyLoad !== true) this.load()
+  }
+
+  load () {
     forkJoin([
       this.videoPlaylistService.listAccountPlaylists(this.user.account, '-updatedAt'),
       this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)

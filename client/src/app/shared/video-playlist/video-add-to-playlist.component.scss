@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+.root {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .header {
   min-width: 240px;
   padding: 6px 24px 10px 24px;

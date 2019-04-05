@@ -13,10 +13,7 @@ import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
 import { VideoService } from '../../shared/video/video.service'
-import { VideoDownloadComponent } from './modal/video-download.component'
-import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
-import { VideoBlacklistComponent } from './modal/video-blacklist.component'
 import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
@@ -32,6 +29,7 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Video } from '@app/shared/video/video.model'
+import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
 
 @Component({
   selector: 'my-video-watch',
@@ -41,11 +39,8 @@ import { Video } from '@app/shared/video/video.model'
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
-  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
-  @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
   player: any
@@ -212,11 +207,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         )
   }
 
-  showReportModal (event: Event) {
-    event.preventDefault()
-    this.videoReportModal.show()
-  }
-
   showSupportModal () {
     this.videoSupportModal.show()
   }
@@ -225,52 +215,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoShareModal.show(this.currentTime)
   }
 
-  showDownloadModal (event: Event) {
-    event.preventDefault()
-    this.videoDownloadModal.show()
-  }
-
-  showBlacklistModal (event: Event) {
-    event.preventDefault()
-    this.videoBlacklistModal.show()
-  }
-
-  async unblacklistVideo (event: Event) {
-    event.preventDefault()
-
-    const confirmMessage = this.i18n(
-      'Do you really want to remove this video from the blacklist? It will be available again in the videos list.'
-    )
-
-    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Unblacklist'))
-    if (res === false) return
-
-    this.videoBlacklistService.removeVideoFromBlacklist(this.video.id).subscribe(
-      () => {
-        this.notifier.success(this.i18n('Video {{name}} removed from the blacklist.', { name: this.video.name }))
-
-        this.video.blacklisted = false
-        this.video.blacklistedReason = null
-      },
-
-      err => this.notifier.error(err.message)
-    )
-  }
-
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
-  }
-
-  isVideoUpdatable () {
-    return this.video.isUpdatableBy(this.authService.getUser())
-  }
-
-  isVideoBlacklistable () {
-    return this.video.isBlackistableBy(this.user)
-  }
-
-  isVideoUnblacklistable () {
-    return this.video.isUnblacklistableBy(this.user)
   }
 
   getVideoTags () {
@@ -283,23 +229,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.isRemovableBy(this.authService.getUser())
   }
 
-  async removeVideo (event: Event) {
-    event.preventDefault()
-
-    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this video?'), this.i18n('Delete'))
-    if (res === false) return
-
-    this.videoService.removeVideo(this.video.id)
-        .subscribe(
-          () => {
-            this.notifier.success(this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name }))
-
-            // Go back to the video-list.
-            this.redirectService.redirectToHomepage()
-          },
-
-          error => this.notifier.error(error.message)
-        )
+  onVideoRemoved () {
+    this.redirectService.redirectToHomepage()
   }
 
   acceptedPrivacyConcern () {

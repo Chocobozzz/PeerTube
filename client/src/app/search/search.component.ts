@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, Notifier, ServerService } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -136,6 +136,10 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   numberOfFilters () {
     return this.advancedSearch.size()
+  }
+
+  removeVideoFromArray (video: Video) {
+    this.results = this.results.filter(r => !this.isVideo(r) || r.id !== video.id)
   }
 
   private resetPagination () {

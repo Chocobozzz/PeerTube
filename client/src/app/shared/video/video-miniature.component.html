@@ -1,47 +1,56 @@
-<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow }">
+<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow }" (mouseenter)="loadActions()">
   <my-video-thumbnail [video]="video" [nsfw]="isVideoBlur"></my-video-thumbnail>
 
-  <div class="video-miniature-information">
-    <a
-      tabindex="-1"
-      class="video-miniature-name"
-      [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
-    >
-      <ng-container *ngIf="displayOptions.privacyLabel">
-        <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
-        <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
-      </ng-container>
+  <div class="video-bottom">
+    <div class="video-miniature-information">
+      <a
+        tabindex="-1"
+        class="video-miniature-name"
+        [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
+      >
+        <ng-container *ngIf="displayOptions.privacyLabel">
+          <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
+          <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
+        </ng-container>
 
-      {{ video.name }}
-    </a>
+        {{ video.name }}
+      </a>
 
-    <span class="video-miniature-created-at-views">
-      <ng-container *ngIf="displayOptions.date">{{ video.publishedAt | myFromNow }}</ng-container>
-      <ng-container *ngIf="displayOptions.date && displayOptions.views"> - </ng-container>
-      <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} views</ng-container>
-    </span>
+      <span class="video-miniature-created-at-views">
+        <ng-container *ngIf="displayOptions.date">{{ video.publishedAt | myFromNow }}</ng-container>
+        <ng-container *ngIf="displayOptions.date && displayOptions.views"> - </ng-container>
+        <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} views</ng-container>
+      </span>
 
-    <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
-      {{ video.byAccount }}
-    </a>
-    <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
-      {{ video.byVideoChannel }}
-    </a>
+      <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
+        {{ video.byAccount }}
+      </a>
+      <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
+        {{ video.byVideoChannel }}
+      </a>
 
-    <div class="video-info-privacy">
-      <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
-      <ng-container *ngIf="displayOptions.privacyText && displayOptions.state"> - </ng-container>
-      <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
+      <div class="video-info-privacy">
+        <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
+        <ng-container *ngIf="displayOptions.privacyText && displayOptions.state"> - </ng-container>
+        <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
+      </div>
+
+      <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blacklisted">
+        <span class="blacklisted-label" i18n>Blacklisted</span>
+        <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+      </div>
+
+      <div i18n *ngIf="displayOptions.nsfw && video.nsfw" class="video-info-nsfw">
+        Sensitive
+      </div>
     </div>
 
-    <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blacklisted">
-      <span class="blacklisted-label" i18n>Blacklisted</span>
-      <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+    <div class="video-actions">
+      <!-- FIXME: remove bottom placement when overflow is fixed in bootstrap dropdown -->
+      <my-video-actions-dropdown
+        *ngIf="showActions" [video]="video" [displayOptions]="videoActionsDisplayOptions" placement="bottom-left bottom-right left"
+        (videoRemoved)="onVideoRemoved()" (videoBlacklisted)="onVideoBlacklisted()" (videoUnblacklisted)="onVideoUnblacklisted()"
+      ></my-video-actions-dropdown>
     </div>
-
-    <div i18n *ngIf="displayOptions.nsfw && video.nsfw" class="video-info-nsfw">
-      Sensitive
-    </div>
-
   </div>
 </div>

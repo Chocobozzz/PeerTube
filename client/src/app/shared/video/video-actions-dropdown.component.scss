@@ -1,0 +1,12 @@
+.playlist-dropdown {
+  position: absolute;
+
+  .anchor {
+    display: block;
+    opacity: 0;
+  }
+}
+
+/deep/ .icon-playlist-add {
+  left: 2px;
+}

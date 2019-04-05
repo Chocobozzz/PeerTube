@@ -257,7 +257,9 @@ $player-factor: 1.7; // 16/9
           display: flex;
           align-items: center;
 
-          .action-button:not(:first-child), .action-dropdown {
+          .action-button:not(:first-child),
+          .action-dropdown,
+          my-video-actions-dropdown {
             margin-left: 10px;
           }
 
@@ -302,14 +304,6 @@ $player-factor: 1.7; // 16/9
 
             .icon-text {
               margin-left: 3px;
-            }
-          }
-
-          .action-dropdown {
-            display: inline-block;
-
-            .dropdown-menu .dropdown-item {
-              @include dropdown-with-icon-item;
             }
           }
         }

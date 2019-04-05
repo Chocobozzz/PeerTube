@@ -6,7 +6,7 @@
       <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="_selection[video.id]"></my-peertube-checkbox>
     </div>
 
-    <my-video-miniature [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions"></my-video-miniature>
+    <my-video-miniature [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions" [displayVideoActions]="false"></my-video-miniature>
 
     <!-- Display only once -->
     <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">

@@ -1,4 +1,4 @@
-<div [ngClass]="{ 'margin-content': marginContent }">
+<div class="margin-content">
   <div class="videos-header">
     <div *ngIf="titlePage" class="title-page title-page-single">
       <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
@@ -11,7 +11,7 @@
     <div class="moderation-block" *ngIf="displayModerationBlock">
       <my-peertube-checkbox
         (change)="toggleModerationDisplay()"
-        inputName="display-unlisted-private"  i18n-labelText labelText="Display unlisted and private videos"
+        inputName="display-unlisted-private" i18n-labelText labelText="Display unlisted and private videos"
       >
       </my-peertube-checkbox>
     </div>
@@ -22,7 +22,11 @@
     myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true"
     class="videos"
   >
-    <my-video-miniature *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType">
+    <my-video-miniature
+      *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
+      [displayVideoActions]="displayVideoActions"
+      (videoBlacklisted)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
+    >
     </my-video-miniature>
   </div>
 </div>

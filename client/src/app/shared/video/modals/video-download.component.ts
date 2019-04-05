@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -9,13 +9,13 @@ import { Notifier } from '@app/core'
   templateUrl: './video-download.component.html',
   styleUrls: [ './video-download.component.scss' ]
 })
-export class VideoDownloadComponent implements OnInit {
-  @Input() video: VideoDetails = null
-
+export class VideoDownloadComponent {
   @ViewChild('modal') modal: ElementRef
 
   downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
   resolutionId: number | string = -1
+
+  private video: VideoDetails
 
   constructor (
     private notifier: Notifier,
@@ -23,12 +23,18 @@ export class VideoDownloadComponent implements OnInit {
     private i18n: I18n
   ) { }
 
-  ngOnInit () {
+  show (video: VideoDetails) {
+    this.video = video
+
+    const m = this.modalService.open(this.modal)
+    m.result.then(() => this.onClose())
+     .catch(() => this.onClose())
+
     this.resolutionId = this.video.files[0].resolution.id
   }
 
-  show () {
-    this.modalService.open(this.modal)
+  onClose () {
+    this.video = undefined
   }
 
   download () {
@@ -45,21 +51,16 @@ export class VideoDownloadComponent implements OnInit {
       return
     }
 
-    const link = (() => {
-      switch (this.downloadType) {
-        case 'direct': {
-          return file.fileDownloadUrl
-        }
-        case 'torrent': {
-          return file.torrentDownloadUrl
-        }
-        case 'magnet': {
-          return file.magnetUri
-        }
-      }
-    })()
+    switch (this.downloadType) {
+      case 'direct':
+        return file.fileDownloadUrl
 
-    return link
+      case 'torrent':
+        return file.torrentDownloadUrl
+
+      case 'magnet':
+        return file.magnetUri
+    }
   }
 
   activateCopiedMessage () {

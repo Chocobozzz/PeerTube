@@ -26,11 +26,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   syndicationItems: Syndication[] = []
 
   loadOnInit = true
-  marginContent = true
   videos: Video[] = []
   ownerDisplayType: OwnerDisplayType = 'account'
   displayModerationBlock = false
   titleTooltip: string
+  displayVideoActions = true
 
   disabled = false
 
@@ -118,6 +118,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   toggleModerationDisplay () {
     throw new Error('toggleModerationDisplay is not implemented')
+  }
+
+  removeVideoFromArray (video: Video) {
+    this.videos = this.videos.filter(v => v.id !== video.id)
   }
 
   // On videos hook for children that want to do something

@@ -44,22 +44,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.buildLikeAndDislikePercents()
   }
 
-  isRemovableBy (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
-  }
-
-  isBlackistableBy (user: AuthUser) {
-    return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
-  }
-
-  isUnblacklistableBy (user: AuthUser) {
-    return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
-  }
-
-  isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
-  }
-
   buildLikeAndDislikePercents () {
     this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
     this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100

@@ -8,12 +8,19 @@
 .action-button {
   @include peertube-button;
 
-  &.grey {
-    @include grey-button;
-  }
+  &.button-styled {
 
-  &.orange {
-    @include orange-button;
+    &.grey {
+      @include grey-button;
+    }
+
+    &.orange {
+      @include orange-button;
+    }
+
+    &:hover, &:active, &:focus {
+      background-color: $grey-background-color;
+    }
   }
 
   display: inline-block;
@@ -21,10 +28,6 @@
 
   &::after {
     display: none;
-  }
-
-  &:hover, &:active, &:focus {
-    background-color: $grey-background-color;
   }
 
   .more-icon {
@@ -47,6 +50,10 @@
   .dropdown-item {
     cursor: pointer;
     color: #000 !important;
+
+    &.with-icon {
+      @include dropdown-with-icon-item;
+    }
 
     a, span {
       display: block;

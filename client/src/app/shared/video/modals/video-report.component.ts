@@ -1,12 +1,13 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormReactive, VideoAbuseService } from '../../../shared/index'
+import { FormReactive } from '../../../shared/forms'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoAbuseValidatorsService } from '@app/shared/forms/form-validators/video-abuse-validators.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { VideoAbuseService } from '@app/shared/video-abuse'
 
 @Component({
   selector: 'my-video-report',

@@ -80,6 +80,11 @@ import { NumberFormatterPipe } from '@app/shared/angular/number-formatter.pipe'
 import { ObjectLengthPipe } from '@app/shared/angular/object-length.pipe'
 import { FromNowPipe } from '@app/shared/angular/from-now.pipe'
 import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
+import { VideoActionsDropdownComponent } from '@app/shared/video/video-actions-dropdown.component'
+import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklist.component'
+import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.component'
+import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
+import { ClipboardModule } from 'ngx-clipboard'
 
 @NgModule({
   imports: [
@@ -94,6 +99,8 @@ import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template
     NgbPopoverModule,
     NgbTabsetModule,
     NgbTooltipModule,
+
+    ClipboardModule,
 
     PrimeSharedModule,
     InputMaskModule,
@@ -110,6 +117,11 @@ import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template
     VideoAddToPlaylistComponent,
     VideoPlaylistElementMiniatureComponent,
     VideosSelectionComponent,
+    VideoActionsDropdownComponent,
+
+    VideoDownloadComponent,
+    VideoReportComponent,
+    VideoBlacklistComponent,
 
     FeedComponent,
 
@@ -158,6 +170,8 @@ import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template
     NgbTabsetModule,
     NgbTooltipModule,
 
+    ClipboardModule,
+
     PrimeSharedModule,
     InputMaskModule,
     BytesPipe,
@@ -172,6 +186,11 @@ import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template
     VideoAddToPlaylistComponent,
     VideoPlaylistElementMiniatureComponent,
     VideosSelectionComponent,
+    VideoActionsDropdownComponent,
+
+    VideoDownloadComponent,
+    VideoReportComponent,
+    VideoBlacklistComponent,
 
     FeedComponent,
 

@@ -32,6 +32,8 @@ export class ScreenService {
   }
 
   private cacheWindowInnerWidthExpired () {
+    if (!this.lastFunctionCallTime) return true
+
     return new Date().getTime() > (this.lastFunctionCallTime + this.cacheForMs)
   }
 }

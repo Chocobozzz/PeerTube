@@ -1,9 +1,11 @@
-import { ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core'
 import { User } from '../users'
 import { Video } from './video.model'
 import { ServerService } from '@app/core'
 import { VideoPrivacy, VideoState } from '../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 export type MiniatureDisplayOptions = {
@@ -38,10 +40,26 @@ export class VideoMiniatureComponent implements OnInit {
     blacklistInfo: false
   }
   @Input() displayAsRow = false
+  @Input() displayVideoActions = true
+
+  @Output() videoBlacklisted = new EventEmitter()
+  @Output() videoUnblacklisted = new EventEmitter()
+  @Output() videoRemoved = new EventEmitter()
+
+  videoActionsDisplayOptions: VideoActionsDisplayType = {
+    playlist: true,
+    download: false,
+    update: true,
+    blacklist: true,
+    delete: true,
+    report: true
+  }
+  showActions = false
 
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
   constructor (
+    private screenService: ScreenService,
     private serverService: ServerService,
     private i18n: I18n,
     @Inject(LOCALE_ID) private localeId: string
@@ -52,20 +70,10 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   ngOnInit () {
-    if (this.ownerDisplayType === 'account' || this.ownerDisplayType === 'videoChannel') {
-      this.ownerDisplayTypeChosen = this.ownerDisplayType
-      return
-    }
+    this.setUpBy()
 
-    // If the video channel name an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
-    // -> Use the account name
-    if (
-      this.video.channel.name === `${this.video.account.name}_channel` ||
-      this.video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
-    ) {
-      this.ownerDisplayTypeChosen = 'account'
-    } else {
-      this.ownerDisplayTypeChosen = 'videoChannel'
+    if (this.screenService.isInSmallView()) {
+      this.showActions = true
     }
   }
 
@@ -108,5 +116,39 @@ export class VideoMiniatureComponent implements OnInit {
     }
 
     return ''
+  }
+
+  loadActions () {
+    if (this.displayVideoActions) this.showActions = true
+  }
+
+  onVideoBlacklisted () {
+    this.videoBlacklisted.emit()
+  }
+
+  onVideoUnblacklisted () {
+    this.videoUnblacklisted.emit()
+  }
+
+  onVideoRemoved () {
+    this.videoRemoved.emit()
+  }
+
+  private setUpBy () {
+    if (this.ownerDisplayType === 'account' || this.ownerDisplayType === 'videoChannel') {
+      this.ownerDisplayTypeChosen = this.ownerDisplayType
+      return
+    }
+
+    // If the video channel name an UUID (not really displayable, we changed this behaviour in v1.0.0-beta.12)
+    // -> Use the account name
+    if (
+      this.video.channel.name === `${this.video.account.name}_channel` ||
+      this.video.channel.name.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+    ) {
+      this.ownerDisplayTypeChosen = 'account'
+    } else {
+      this.ownerDisplayTypeChosen = 'videoChannel'
+    }
   }
 }

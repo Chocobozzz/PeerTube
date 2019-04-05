@@ -1,11 +1,12 @@
 import { User } from '../'
-import { PlaylistElement, Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
+import { PlaylistElement, UserRight, Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { durationToString, getAbsoluteAPIUrl } from '../misc/utils'
 import { peertubeTranslate, ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
+import { AuthUser } from '@app/core'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -140,5 +141,21 @@ export class Video implements VideoServerModel {
 
     // Return default instance config
     return serverConfig.instance.defaultNSFWPolicy !== 'display'
+  }
+
+  isRemovableBy (user: AuthUser) {
+    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
+  }
+
+  isBlackistableBy (user: AuthUser) {
+    return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
+  }
+
+  isUnblacklistableBy (user: AuthUser) {
+    return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
+  }
+
+  isUpdatableBy (user: AuthUser) {
+    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 }

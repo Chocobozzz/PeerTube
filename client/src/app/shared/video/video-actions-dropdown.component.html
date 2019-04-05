@@ -1,0 +1,21 @@
+<ng-container *ngIf="videoActions.length !== 0">
+
+  <div class="playlist-dropdown" ngbDropdown #playlistDropdown="ngbDropdown" role="button" autoClose="outside" [placement]="getPlaylistDropdownPlacement()"
+    *ngIf="isUserLoggedIn() && displayOptions.playlist" (openChange)="playlistAdd.openChange($event)"
+  >
+    <span class="anchor" ngbDropdownAnchor></span>
+
+    <div ngbDropdownMenu>
+      <my-video-add-to-playlist #playlistAdd [video]="video" [lazyLoad]="true"></my-video-add-to-playlist>
+    </div>
+  </div>
+
+  <my-action-dropdown
+    [actions]="videoActions" [label]="label" [entry]="{ video: video }" (mouseenter)="loadDropdownInformation()"
+    [buttonSize]="buttonSize" [placement]="placement" [buttonDirection]="buttonDirection" [buttonStyled]="buttonStyled"
+  ></my-action-dropdown>
+
+  <my-video-download #videoDownloadModal></my-video-download>
+  <my-video-report #videoReportModal [video]="video"></my-video-report>
+  <my-video-blacklist #videoBlacklistModal [video]="video" (videoBlacklisted)="onVideoBlacklisted()"></my-video-blacklist>
+</ng-container>
