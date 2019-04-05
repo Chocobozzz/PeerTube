@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core'
+import { ChangeDetectorRef, Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 
 @Component({
@@ -21,10 +21,19 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor {
   @Input() helpHtml: string
   @Input() disabled = false
 
+  // FIXME: https://github.com/angular/angular/issues/10816#issuecomment-307567836
+  @Input() onPushWorkaround = false
+
+  constructor (private cdr: ChangeDetectorRef) { }
+
   propagateChange = (_: any) => { /* empty */ }
 
   writeValue (checked: boolean) {
     this.checked = checked
+
+    if (this.onPushWorkaround) {
+      this.cdr.markForCheck()
+    }
   }
 
   registerOnChange (fn: (_: any) => void) {

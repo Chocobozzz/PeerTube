@@ -72,7 +72,8 @@ export class VideoMiniatureComponent implements OnInit {
   ngOnInit () {
     this.setUpBy()
 
-    if (this.screenService.isInSmallView()) {
+    // We rely on mouseenter to lazy load actions
+    if (this.screenService.isInTouchScreen()) {
       this.showActions = true
     }
   }

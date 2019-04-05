@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { AuthService, Notifier } from '@app/core'
 import { forkJoin } from 'rxjs'
@@ -19,7 +19,8 @@ type PlaylistSummary = {
 @Component({
   selector: 'my-video-add-to-playlist',
   styleUrls: [ './video-add-to-playlist.component.scss' ],
-  templateUrl: './video-add-to-playlist.component.html'
+  templateUrl: './video-add-to-playlist.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoAddToPlaylistComponent extends FormReactive implements OnInit {
   @Input() video: Video
@@ -42,7 +43,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
     private notifier: Notifier,
     private i18n: I18n,
     private videoPlaylistService: VideoPlaylistService,
-    private videoPlaylistValidatorsService: VideoPlaylistValidatorsService
+    private videoPlaylistValidatorsService: VideoPlaylistValidatorsService,
+    private cd: ChangeDetectorRef
   ) {
     super()
   }
@@ -79,6 +81,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
               stopTimestamp: existingPlaylist ? existingPlaylist.stopTimestamp : undefined
             })
           }
+
+          this.cd.markForCheck()
         }
       )
   }
@@ -107,6 +111,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
 
     playlist.inPlaylist = !playlist.inPlaylist
     this.resetOptions()
+
+    this.cd.markForCheck()
   }
 
   createPlaylist () {
@@ -126,6 +132,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
         })
 
         this.isNewPlaylistBlockOpened = false
+
+        this.cd.markForCheck()
       },
 
       err => this.notifier.error(err.message)
@@ -165,7 +173,9 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
             this.notifier.error(err.message)
 
             playlist.inPlaylist = true
-          }
+          },
+
+          () => this.cd.markForCheck()
         )
   }
 
@@ -194,7 +204,9 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
           this.notifier.error(err.message)
 
           playlist.inPlaylist = false
-        }
+        },
+
+        () => this.cd.markForCheck()
       )
   }
 }

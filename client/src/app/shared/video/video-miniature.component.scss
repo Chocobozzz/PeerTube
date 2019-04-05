@@ -99,6 +99,7 @@
 
     .video-miniature-information {
       width: auto;
+      min-width: 500px;
 
       .video-miniature-name {
         @include ellipsis-multiline(1.3em, 2);
@@ -111,6 +112,7 @@
       .video-miniature-account,
       .video-miniature-channel {
         font-size: 14px;
+        width: fit-content;
       }
 
       .video-info-privacy {
@@ -133,6 +135,10 @@
 
       my-video-thumbnail {
         margin-right: 0;
+      }
+
+      .video-miniature-information {
+        min-width: initial;
       }
     }
   }

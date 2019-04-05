@@ -46,7 +46,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     delete: true,
     report: true
   }
-  @Input() placement: string = 'left'
+  @Input() placement = 'left'
 
   @Input() label: string
 

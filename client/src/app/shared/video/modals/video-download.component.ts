@@ -15,7 +15,7 @@ export class VideoDownloadComponent {
   downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
   resolutionId: number | string = -1
 
-  private video: VideoDetails
+  video: VideoDetails
 
   constructor (
     private notifier: Notifier,

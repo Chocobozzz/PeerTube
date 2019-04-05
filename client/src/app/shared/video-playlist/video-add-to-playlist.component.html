@@ -42,7 +42,7 @@
   </div>
 
   <div class="playlist dropdown-item" *ngFor="let playlist of videoPlaylists" (click)="togglePlaylist($event, playlist)">
-    <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist"></my-peertube-checkbox>
+    <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist" [onPushWorkaround]="true"></my-peertube-checkbox>
 
     <div class="display-name">
       {{ playlist.displayName }}
@@ -56,7 +56,7 @@
   <div class="new-playlist-button dropdown-item" (click)="openCreateBlock($event)" [hidden]="isNewPlaylistBlockOpened">
     <my-global-icon iconName="add"></my-global-icon>
 
-    Create a new playlist
+    Create a private playlist
   </div>
 
   <form class="new-playlist-block dropdown-item" *ngIf="isNewPlaylistBlockOpened" (ngSubmit)="createPlaylist()" [formGroup]="form">
