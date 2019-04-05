@@ -54,11 +54,12 @@ async function checkActorFilesWereRemoved (actorUUID: string, serverNumber: numb
   }
 }
 
-function getAccountRatings (url: string, accountName: string, statusCodeExpected = 200) {
+function getAccountRatings (url: string, accountName: string, statusCodeExpected = 200, query = {}) {
   const path = '/api/v1/accounts/' + accountName + '/ratings'
 
   return request(url)
           .get(path)
+          .query(query)
           .set('Accept', 'application/json')
           .expect(statusCodeExpected)
           .expect('Content-Type', /json/)

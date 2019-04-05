@@ -42,6 +42,7 @@ const SORTABLE_COLUMNS = {
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
+  VIDEO_RATES: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ],

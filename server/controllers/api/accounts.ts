@@ -3,11 +3,13 @@ import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
+  videoRatingValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
-  videoPlaylistsSortValidator
+  videoPlaylistsSortValidator,
+  videoRatesSortValidator
 } from '../../middlewares'
 import { accountNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
@@ -65,10 +67,10 @@ accountsRouter.get('/:accountName/video-playlists',
 accountsRouter.get('/:accountName/ratings',
   asyncMiddleware(accountNameWithHostGetValidator),
   paginationValidator,
-  videosSortValidator,
+  videoRatesSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  optionalAuthenticate,
+  videoRatingValidator,
   asyncMiddleware(listAccountRatings)
 )
 
@@ -157,7 +159,8 @@ async function listAccountRatings (req: express.Request, res: express.Response) 
     accountId: account.id,
     start: req.query.start,
     count: req.query.count,
-    sort: req.query.sort
+    sort: req.query.sort,
+    type: req.query.rating
   })
   return res.json(getFormattedObjects(resultList.rows, resultList.count))
 }

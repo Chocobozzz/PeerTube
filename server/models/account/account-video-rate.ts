@@ -7,7 +7,7 @@ import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers'
 import { VideoModel } from '../video/video'
 import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid } from '../utils'
+import { throwIfNotValid, getSort } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { AccountVideoRate } from '../../../shared'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel'
@@ -94,11 +94,13 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     start: number,
     count: number,
     sort: string,
+    type?: string,
     accountId: number
   }) {
     const query: IFindOptions<AccountVideoRateModel> = {
       offset: options.start,
       limit: options.count,
+      order: getSort(options.sort),
       where: {
         accountId: options.accountId
       },
@@ -115,6 +117,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
         }
       ]
     }
+    if (options.type) query.where['type'] = options.type
 
     return AccountVideoRateModel.findAndCountAll(query)
   }
