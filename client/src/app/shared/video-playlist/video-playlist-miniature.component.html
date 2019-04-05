@@ -19,14 +19,14 @@
       {{ playlist.displayName }}
     </a>
 
-    <div class="video-info-privacy" *ngIf="displayPrivacy">{{ playlist.privacy.label }}</div>
+    <a i18n [routerLink]="[ '/video-channels', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
+      {{ playlist.videoChannelBy }}
+    </a>
 
-    <div class="video-info-by-date">
-      <a i18n [routerLink]="[ '/video-channels', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
-        {{ playlist.videoChannelBy }}
-      </a>
+    <div class="privacy-date">
+      <span class="video-info-privacy" *ngIf="displayPrivacy">{{ playlist.privacy.label }}</span>
 
-      <div i18n class="updated-at">Updated {{ playlist.updatedAt | myFromNow }}</div>
+      <span i18n class="updated-at">Updated {{ playlist.updatedAt | myFromNow }}</span>
     </div>
 
     <div *ngIf="displayDescription" class="video-info-description">{{ playlist.description }}</div>

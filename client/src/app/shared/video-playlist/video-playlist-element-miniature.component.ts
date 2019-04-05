@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/video/video.model'
 import { VideoPlaylistElementUpdate } from '@shared/models'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'

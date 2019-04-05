@@ -13,7 +13,7 @@
     background-color: rgba(0, 0, 0, 0.05);
 
     .more {
-      display: block;
+      opacity: 1;
     }
   }
 
@@ -24,11 +24,10 @@
   a {
     @include disable-default-a-behaviour;
 
-    min-width: 0;
     display: flex;
+    min-width: 0;
     align-items: center;
     cursor: pointer;
-    flex-grow: 1;
 
     .position {
       font-weight: $font-semibold;
@@ -55,6 +54,7 @@
     .video-info {
       display: flex;
       flex-direction: column;
+      align-self: flex-start;
       min-width: 0;
 
       a {
@@ -69,6 +69,7 @@
       .video-info-name {
         font-size: 18px;
         font-weight: $font-semibold;
+        display: inline-block;
 
         @include ellipsis;
       }
@@ -83,10 +84,10 @@
     justify-self: flex-end;
     margin-left: auto;
     cursor: pointer;
-    display: none;
+    opacity: 0;
 
     &.show {
-      display: block;
+      opacity: 1;
     }
 
     .icon-more {

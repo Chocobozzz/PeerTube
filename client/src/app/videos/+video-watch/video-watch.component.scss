@@ -16,6 +16,8 @@ $player-factor: 1.7; // 16/9
 
 @mixin playlist-below-player {
   width: 100%;
+  height: auto;
+  max-height: 300px;
   border-bottom: 1px solid $separator-border-color;
 }
 
@@ -51,6 +53,12 @@ $player-factor: 1.7; // 16/9
   justify-content: center;
   margin: 0 -15px;
 
+  #videojs-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+  }
+
   .remote-server-down {
     color: #fff;
     display: flex;
@@ -73,10 +81,12 @@ $player-factor: 1.7; // 16/9
   }
 
   .playlist {
-    width: 400px;
+    min-width: 200px;
+    max-width: 470px;
     height: 66vh;
     background-color: var(--mainBackgroundColor);
     overflow-y: auto;
+    border-bottom: 1px solid $separator-border-color;
 
     .playlist-info {
       padding: 5px 30px;
@@ -492,6 +502,15 @@ my-video-comments {
 }
 
 @media screen and (max-width: 1100px) {
+  #video-wrapper {
+    flex-direction: column;
+    justify-content: center;
+
+    .playlist {
+      @include playlist-below-player;
+    }
+  }
+
   .video-bottom {
     flex-direction: column;
 
@@ -502,22 +521,6 @@ my-video-comments {
         flex-direction: row;
         width: auto;
       }
-    }
-  }
-}
-
-@media screen and (max-width: 900px) {
-  #video-wrapper {
-    flex-direction: column;
-    justify-content: center;
-
-    #videojs-wrapper {
-      display: flex;
-      justify-content: center;
-    }
-
-    .playlist {
-      @include playlist-below-player;
     }
   }
 }

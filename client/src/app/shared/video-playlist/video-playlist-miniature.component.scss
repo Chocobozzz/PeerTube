@@ -43,29 +43,31 @@
 
     .miniature-name {
       @include miniature-name;
+
+      @include ellipsis-multiline(1.3em, 2);
+
+      margin: 0;
     }
 
-    .video-info-by-date {
-      display: flex;
-      font-size: 13px;
-      margin: 5px 0;
+    .by {
+      @include disable-default-a-behaviour;
 
-      .by {
-        @include disable-default-a-behaviour;
+      display: block;
+      color: $grey-foreground-color;
+    }
 
-        display: block;
-        color: var(--mainForegroundColor);
+    .privacy-date {
+      margin-top: 5px;
+
+      .video-info-privacy {
+        font-size: 14px;
+        font-weight: $font-semibold;
 
         &::after {
           content: '-';
           margin: 0 3px;
         }
       }
-    }
-
-    .video-info-privacy {
-      font-size: 13px;
-      font-weight: $font-semibold;
     }
 
     .video-info-description {
