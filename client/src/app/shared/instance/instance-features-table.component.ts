@@ -51,6 +51,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
         value: config.signup.allowed
       },
       {
+        label: this.i18n('Video uploads require manual validation by moderators'),
+        value: config.autoBlacklist.videos.ofUsers.enabled
+      },
+      {
         label: this.i18n('Transcode your videos in multiple resolutions'),
         value: config.transcoding.enabledResolutions.length !== 0
       },
