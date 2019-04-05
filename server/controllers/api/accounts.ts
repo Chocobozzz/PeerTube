@@ -11,6 +11,7 @@ import {
 } from '../../middlewares'
 import { accountNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
@@ -59,6 +60,16 @@ accountsRouter.get('/:accountName/video-playlists',
   setDefaultPagination,
   commonVideoPlaylistFiltersValidator,
   asyncMiddleware(listAccountPlaylists)
+)
+
+accountsRouter.get('/:accountName/ratings',
+  asyncMiddleware(accountNameWithHostGetValidator),
+  paginationValidator,
+  videosSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  optionalAuthenticate,
+  asyncMiddleware(listAccountRatings)
 )
 
 // ---------------------------------------------------------------------------
@@ -137,4 +148,16 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function listAccountRatings (req: express.Request, res: express.Response) {
+  const account = res.locals.account
+
+  const resultList = await AccountVideoRateModel.listByAccountForApi({
+    accountId: account.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort
+  })
+  return res.json(getFormattedObjects(resultList.rows, resultList.count))
 }

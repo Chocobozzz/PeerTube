@@ -9,7 +9,8 @@ import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { UserVideoRate } from '../../../shared'
+import { AccountVideoRate } from '../../../shared'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel'
 
 /*
   Account rates per video.
@@ -89,11 +90,30 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findOne(options)
   }
 
-  static listForAccount (accountId: number) {
-    const query = {
+  static listByAccountForApi (options: {
+    start: number,
+    count: number,
+    sort: string,
+    accountId: number
+  }) {
+    const query: IFindOptions<AccountVideoRateModel> = {
+      offset: options.start,
+      limit: options.count,
       where: {
-        accountId
-      }
+        accountId: options.accountId
+      },
+      include: [
+        {
+          model: VideoModel,
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel.scope({ method: [VideoChannelScopeNames.SUMMARY, true] }),
+              required: true
+            }
+          ]
+        }
+      ]
     }
 
     return AccountVideoRateModel.findAndCountAll(query)
@@ -197,9 +217,9 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     })
   }
 
-  toFormattedJSON (): UserVideoRate {
+  toFormattedJSON (): AccountVideoRate {
     return {
-      videoId: this.videoId,
+      video: this.Video.toFormattedJSON(),
       rating: this.type
     }
   }

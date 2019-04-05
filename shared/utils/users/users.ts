@@ -109,17 +109,6 @@ function getMyUserVideoRating (url: string, accessToken: string, videoId: number
           .expect('Content-Type', /json/)
 }
 
-function getMyUserVideoRatings (url: string, accessToken: string, specialStatus = 200) {
-  const path = '/api/v1/users/me/videos/ratings'
-
-  return request(url)
-          .get(path)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + accessToken)
-          .expect(specialStatus)
-          .expect('Content-Type', /json/)
-}
-
 function getUsersList (url: string, accessToken: string) {
   const path = '/api/v1/users'
 
@@ -305,7 +294,6 @@ export {
   registerUser,
   getMyUserInformation,
   getMyUserVideoRating,
-  getMyUserVideoRatings,
   deleteMe,
   getMyUserVideoQuotaUsed,
   getUsersList,

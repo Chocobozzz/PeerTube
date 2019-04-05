@@ -8,11 +8,11 @@ import {
   createUser,
   deleteMe,
   flushTests,
+  getAccountRatings,
   getBlacklistedVideosList,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
   getMyUserVideoRating,
-  getMyUserVideoRatings,
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
@@ -33,7 +33,7 @@ import {
   updateUser,
   uploadVideo,
   userLogin
-} from '../../../../shared/utils/index'
+} from '../../../../shared/utils'
 import { follow } from '../../../../shared/utils/server/follows'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
 import { getMyVideos } from '../../../../shared/utils/videos/videos'
@@ -140,10 +140,10 @@ describe('Test users', function () {
 
   it('Should retrieve ratings list', async function () {
     await rateVideo(server.url, accessToken, videoId, 'like')
-    const res = await getMyUserVideoRatings(server.url, accessToken)
+    const res = await getAccountRatings(server.url, server.user.username)
     const ratings = res.body
 
-    expect(ratings.data[0].videoId).to.equal(videoId)
+    expect(ratings.data[0].video.id).to.equal(videoId)
     expect(ratings.data[0].rating).to.equal('like')
   })
 

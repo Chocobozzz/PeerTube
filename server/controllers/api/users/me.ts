@@ -72,11 +72,6 @@ meRouter.get('/me/videos/:videoId/rating',
   asyncMiddleware(getUserVideoRating)
 )
 
-meRouter.get('/me/videos/ratings',
-  authenticate,
-  asyncMiddleware(getUserVideoRatings)
-)
-
 meRouter.put('/me',
   authenticate,
   asyncMiddleware(usersUpdateMeValidator),
@@ -160,13 +155,6 @@ async function getUserVideoRating (req: express.Request, res: express.Response) 
     rating
   }
   return res.json(json)
-}
-
-async function getUserVideoRatings (req: express.Request, res: express.Response) {
-  const accountId = +res.locals.oauth.token.User.Account.id
-
-  const resultList = await AccountVideoRateModel.listForAccount(accountId)
-  return res.json(getFormattedObjects(resultList.rows, resultList.count))
 }
 
 async function deleteMe (req: express.Request, res: express.Response) {

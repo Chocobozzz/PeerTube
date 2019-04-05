@@ -6,9 +6,9 @@ import { join } from 'path'
 import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
-  createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getMyUserVideoRatings, getUsersList, immutableAssign, killallServers,
-  makeGetRequest, makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo,
-  setAccessTokensToServers, updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
+  createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
+  makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
+  updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
 } from '../../../../shared/utils'
 import {
   checkBadCountPagination,
@@ -536,17 +536,6 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await getMyUserVideoRating(server.url, server.accessToken, videoId)
     })
-  })
-
-  describe('When getting my video ratings', function () {
-    it('Should fail with a non authenticated user', async function () {
-      await getMyUserVideoRatings(server.url, 'fake_token', 401)
-    })
-
-    it('Should succeed with the correct parameters', async function () {
-      await getMyUserVideoRatings(server.url, server.accessToken)
-    })
-
   })
 
   describe('When blocking/unblocking/removing user', function () {

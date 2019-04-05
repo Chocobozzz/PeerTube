@@ -1,5 +1,6 @@
 export * from './rate/user-video-rate-update.model'
 export * from './rate/user-video-rate.model'
+export * from './rate/account-video-rate.model'
 export * from './rate/user-video-rate.type'
 export * from './abuse/video-abuse-state.model'
 export * from './abuse/video-abuse-create.model'
