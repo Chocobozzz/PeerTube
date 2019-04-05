@@ -43,6 +43,9 @@ smtp:
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
+email:
+  enabled: false # Set to `true` if you want to enable emails (to reset a password for example)
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
