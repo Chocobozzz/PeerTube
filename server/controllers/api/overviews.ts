@@ -94,7 +94,7 @@ async function getVideos (
 ) {
   const query = Object.assign({
     start: 0,
-    count: 10,
+    count: 12,
     sort: '-createdAt',
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(res),
