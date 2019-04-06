@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
+  authenticate,
   asyncMiddleware,
   commonVideosFiltersValidator,
   videoRatingValidator,
@@ -11,7 +12,12 @@ import {
   videoPlaylistsSortValidator,
   videoRatesSortValidator
 } from '../../middlewares'
-import { accountNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
+import {
+  accountNameWithHostGetValidator,
+  accountsSortValidator,
+  videosSortValidator,
+  ensureUserAccountValidator
+} from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
@@ -65,7 +71,9 @@ accountsRouter.get('/:accountName/video-playlists',
 )
 
 accountsRouter.get('/:accountName/ratings',
+  authenticate,
   asyncMiddleware(accountNameWithHostGetValidator),
+  ensureUserAccountValidator,
   paginationValidator,
   videoRatesSortValidator,
   setDefaultSort,

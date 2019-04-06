@@ -22,6 +22,7 @@ import { logger } from '../../helpers/logger'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
+import { AccountModel } from '../../models/account/account'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 
@@ -317,6 +318,21 @@ const userAutocompleteValidator = [
   param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
 ]
 
+const ensureUserAccountValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.User
+    const userAccount = await AccountModel.load(user.Account.id)
+
+    if (userAccount.name !== req.params.accountName) {
+      return res.status(403)
+                .send({ error: 'Only owner can access ratings list.' })
+                .end()
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -335,7 +351,8 @@ export {
   usersResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersVerifyEmailValidator,
-  userAutocompleteValidator
+  userAutocompleteValidator,
+  ensureUserAccountValidator
 }
 
 // ---------------------------------------------------------------------------
