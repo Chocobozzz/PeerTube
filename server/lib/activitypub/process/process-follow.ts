@@ -24,14 +24,16 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processFollow (actor: ActorModel, targetActorURL: string) {
-  const { actorFollow, created } = await sequelizeTypescript.transaction(async t => {
+  const { actorFollow, created, isFollowingInstance } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
     if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')
 
     const serverActor = await getServerActor()
-    if (targetActor.id === serverActor.id && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+    const isFollowingInstance = targetActor.id === serverActor.id
+
+    if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
       return sendReject(actor, targetActor)
@@ -50,9 +52,6 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
       transaction: t
     })
 
-    actorFollow.ActorFollower = actor
-    actorFollow.ActorFollowing = targetActor
-
     if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
       actorFollow.state = 'accepted'
       await actorFollow.save({ transaction: t })
@@ -64,10 +63,16 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     // Target sends to actor he accepted the follow request
     if (actorFollow.state === 'accepted') await sendAccept(actorFollow)
 
-    return { actorFollow, created }
+    return { actorFollow, created, isFollowingInstance }
   })
 
-  if (created) Notifier.Instance.notifyOfNewFollow(actorFollow)
+  // Rejected
+  if (!actorFollow) return
+
+  if (created) {
+    if (isFollowingInstance) Notifier.Instance.notifyOfNewInstanceFollow(actorFollow)
+    else Notifier.Instance.notifyOfNewUserFollow(actorFollow)
+  }
 
   logger.info('Actor %s is followed by actor %s.', targetActorURL, actor.url)
 }

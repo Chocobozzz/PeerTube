@@ -298,6 +298,35 @@ async function checkNewActorFollow (
   await checkNotification(base, notificationChecker, emailFinder, type)
 }
 
+async function checkNewInstanceFollower (base: CheckerBaseParams, followerHost: string, type: CheckerType) {
+  const notificationType = UserNotificationType.NEW_INSTANCE_FOLLOWER
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      checkActor(notification.actorFollow.follower)
+      expect(notification.actorFollow.follower.name).to.equal('peertube')
+      expect(notification.actorFollow.follower.host).to.equal(followerHost)
+
+      expect(notification.actorFollow.following.name).to.equal('peertube')
+    } else {
+      expect(notification).to.satisfy(n => {
+        return n.type !== notificationType || n.actorFollow.follower.host !== followerHost
+      })
+    }
+  }
+
+  function emailFinder (email: object) {
+    const text: string = email[ 'text' ]
+
+    return text.includes('instance has a new follower') && text.includes(followerHost)
+  }
+
+  await checkNotification(base, notificationChecker, emailFinder, type)
+}
+
 async function checkCommentMention (
   base: CheckerBaseParams,
   uuid: string,
@@ -462,5 +491,6 @@ export {
   checkVideoAutoBlacklistForModerators,
   getUserNotifications,
   markAsReadNotifications,
-  getLastNotification
+  getLastNotification,
+  checkNewInstanceFollower
 }

@@ -418,6 +418,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
 
     const actorFollow = this.ActorFollow ? {
       id: this.ActorFollow.id,
+      state: this.ActorFollow.state,
       follower: {
         id: this.ActorFollow.ActorFollower.Account.id,
         displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),

@@ -75,7 +75,8 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     myVideoImportFinished: body.myVideoImportFinished,
     newFollow: body.newFollow,
     newUserRegistration: body.newUserRegistration,
-    commentMention: body.commentMention
+    commentMention: body.commentMention,
+    newInstanceFollower: body.newInstanceFollower
   }
 
   await UserNotificationSettingModel.update(values, query)

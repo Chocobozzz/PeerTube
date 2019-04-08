@@ -104,6 +104,15 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
   @AllowNull(false)
   @Default(null)
   @Is(
+    'UserNotificationSettingNewInstanceFollower',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'newInstanceFollower')
+  )
+  @Column
+  newInstanceFollower: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
     'UserNotificationSettingNewFollow',
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newFollow')
   )
@@ -154,7 +163,8 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
       myVideoImportFinished: this.myVideoImportFinished,
       newUserRegistration: this.newUserRegistration,
       commentMention: this.commentMention,
-      newFollow: this.newFollow
+      newFollow: this.newFollow,
+      newInstanceFollower: this.newInstanceFollower
     }
   }
 }

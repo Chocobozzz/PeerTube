@@ -110,7 +110,8 @@ function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Tr
     blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newUserRegistration: UserNotificationSettingValue.WEB,
     commentMention: UserNotificationSettingValue.WEB,
-    newFollow: UserNotificationSettingValue.WEB
+    newFollow: UserNotificationSettingValue.WEB,
+    newInstanceFollower: UserNotificationSettingValue.WEB
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })

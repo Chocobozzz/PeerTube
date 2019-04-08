@@ -15,4 +15,5 @@ export interface UserNotificationSetting {
   newUserRegistration: UserNotificationSettingValue
   newFollow: UserNotificationSettingValue
   commentMention: UserNotificationSettingValue
+  newInstanceFollower: UserNotificationSettingValue
 }

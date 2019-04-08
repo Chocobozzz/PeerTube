@@ -129,6 +129,24 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
+  addNewInstanceFollowerNotification (to: string[], actorFollow: ActorFollowModel) {
+    const awaitingApproval = actorFollow.state === 'pending' ? ' awaiting manual approval.' : ''
+
+    const text = `Hi dear admin,\n\n` +
+      `Your instance has a new follower: ${actorFollow.ActorFollower.url}${awaitingApproval}` +
+      `\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: 'New instance follower',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
   myVideoPublishedNotification (to: string[], video: VideoModel) {
     const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
 

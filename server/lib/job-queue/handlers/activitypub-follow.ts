@@ -73,5 +73,5 @@ async function follow (fromActor: ActorModel, targetActor: ActorModel) {
     return actorFollow
   })
 
-  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewFollow(actorFollow)
+  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewUserFollow(actorFollow)
 }

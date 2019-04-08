@@ -19,7 +19,7 @@ import {
   userLogin,
   wait,
   getCustomConfig,
-  updateCustomConfig, getVideoThreadComments, getVideoCommentThreads
+  updateCustomConfig, getVideoThreadComments, getVideoCommentThreads, follow
 } from '../../../../shared/utils'
 import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
@@ -41,7 +41,7 @@ import {
   getUserNotifications,
   markAsReadNotifications,
   updateMyNotificationSettings,
-  markAsReadAllNotifications
+  markAsReadAllNotifications, checkNewInstanceFollower
 } from '../../../../shared/utils/users/user-notifications'
 import {
   User,
@@ -103,7 +103,8 @@ describe('Test users notifications', function () {
     myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     commentMention: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+    newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 
   before(async function () {
@@ -118,7 +119,7 @@ describe('Test users notifications', function () {
         hostname: 'localhost'
       }
     }
-    servers = await flushAndRunMultipleServers(2, overrideConfig)
+    servers = await flushAndRunMultipleServers(3, overrideConfig)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -858,6 +859,32 @@ describe('Test users notifications', function () {
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
       await checkUserRegistered(immutableAssign(baseParams, userOverride), 'user_45', 'absence')
+    })
+  })
+
+  describe('New instance follower', function () {
+    let baseParams: CheckerBaseParams
+
+    before(async () => {
+      baseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: adminNotifications,
+        token: servers[0].accessToken
+      }
+    })
+
+    it('Should send a notification only to admin when there is a new instance follower', async function () {
+      this.timeout(10000)
+
+      await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+
+      await waitJobs(servers)
+
+      await checkNewInstanceFollower(baseParams, 'localhost:9003', 'presence')
+
+      const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
+      await checkNewInstanceFollower(immutableAssign(baseParams, userOverride), 'localhost:9003', 'absence')
     })
   })
 

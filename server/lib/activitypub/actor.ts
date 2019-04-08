@@ -342,6 +342,8 @@ function saveActorAndServerAndModelIfNotExist (
       actorCreated.VideoChannel.Account = ownerActor.Account
     }
 
+    actorCreated.Server = server
+
     return actorCreated
   }
 }
