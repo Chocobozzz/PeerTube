@@ -63,4 +63,34 @@ export class FollowService {
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
+
+  acceptFollower (follow: ActorFollow) {
+    const handle = follow.follower.name + '@' + follow.follower.host
+
+    return this.authHttp.post(`${FollowService.BASE_APPLICATION_URL}/followers/${handle}/accept`, {})
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }
+
+  rejectFollower (follow: ActorFollow) {
+    const handle = follow.follower.name + '@' + follow.follower.host
+
+    return this.authHttp.post(`${FollowService.BASE_APPLICATION_URL}/followers/${handle}/reject`, {})
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }
+
+  removeFollower (follow: ActorFollow) {
+    const handle = follow.follower.name + '@' + follow.follower.host
+
+    return this.authHttp.delete(`${FollowService.BASE_APPLICATION_URL}/followers/${handle}`)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }
 }

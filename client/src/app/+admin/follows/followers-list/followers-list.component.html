@@ -14,25 +14,33 @@
   <ng-template pTemplate="header">
     <tr>
       <th i18n style="width: 60px">ID</th>
-      <th i18n>Score</th>
-      <th i18n>Name</th>
-      <th i18n>Host</th>
+      <th i18n>Follower handle</th>
       <th i18n>State</th>
+      <th i18n>Score</th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-follow>
     <tr>
       <td>{{ follow.id }}</td>
-      <td>{{ follow.score }}</td>
-      <td>{{ follow.follower.name }}</td>
-      <td>{{ follow.follower.host }}</td>
+      <td>{{ follow.follower.name + '@' + follow.follower.host }}</td>
 
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
       <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
 
+      <td>{{ follow.score }}</td>
       <td>{{ follow.createdAt }}</td>
+
+      <td class="action-cell">
+        <ng-container *ngIf="follow.state === 'pending'">
+          <my-button i18n-label label="Accept" icon="tick" (click)="acceptFollower(follow)"></my-button>
+          <my-button i18n-label label="Refuse" icon="cross" (click)="rejectFollower(follow)"></my-button>
+        </ng-container>
+
+        <my-delete-button *ngIf="follow.state === 'accepted'" (click)="deleteFollower(follow)"></my-delete-button>
+      </td>
     </tr>
   </ng-template>
 </p-table>

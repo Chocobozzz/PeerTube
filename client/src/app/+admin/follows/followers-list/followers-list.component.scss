@@ -8,3 +8,9 @@
     @include peertube-input-text(250px);
   }
 }
+
+.action-cell {
+  my-button:first-child {
+    margin-right: 10px;
+  }
+}

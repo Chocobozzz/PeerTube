@@ -84,6 +84,7 @@
           </div>
         </ng-container>
 
+
         <div i18n class="inner-form-title">Signup</div>
 
         <ng-container formGroupName="signup">
@@ -110,6 +111,7 @@
             <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
           </div>
         </ng-container>
+
 
         <div i18n class="inner-form-title">Users</div>
 
@@ -139,6 +141,7 @@
           </div>
         </ng-container>
 
+
         <div i18n class="inner-form-title">Import</div>
 
         <ng-container formGroupName="import">
@@ -161,6 +164,7 @@
           </ng-container>
         </ng-container>
 
+
         <div i18n class="inner-form-title">Auto-blacklist</div>
 
         <ng-container formGroupName="autoBlacklist">
@@ -177,6 +181,29 @@
             </ng-container>
           </ng-container>
         </ng-container>
+
+
+        <div i18n class="inner-form-title">Instance followers</div>
+
+        <ng-container formGroupName="followers">
+          <ng-container formGroupName="instance">
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="followersInstanceEnabled" formControlName="enabled"
+                i18n-labelText labelText="Other instances can follow your instance"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="followersInstanceManualApproval" formControlName="manualApproval"
+                i18n-labelText labelText="Manually approve new instance follower"
+              ></my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+
 
         <div i18n class="inner-form-title">Administrator</div>
 

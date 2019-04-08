@@ -30,8 +30,7 @@
         </a>
       </td>
       <td>
-        <a [href]="videoChangeOwnership.video.url" i18n-title title="Go to the video" target="_blank"
-           rel="noopener noreferrer">
+        <a [href]="videoChangeOwnership.video.url" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
           {{ videoChangeOwnership.video.name }}
         </a>
       </td>
@@ -39,12 +38,8 @@
       <td i18n>{{ videoChangeOwnership.status }}</td>
       <td class="action-cell">
         <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
-          <my-button i18n label="Accept"
-                     icon="tick"
-                     (click)="openAcceptModal(videoChangeOwnership)"></my-button>
-          <my-button i18n label="Refuse"
-                     icon="cross"
-                     (click)="refuse(videoChangeOwnership)">Refuse</my-button>
+          <my-button i18n-label label="Accept" icon="tick" (click)="openAcceptModal(videoChangeOwnership)"></my-button>
+          <my-button i18n-label label="Refuse" icon="cross" (click)="refuse(videoChangeOwnership)"></my-button>
         </ng-container>
       </td>
     </tr>
