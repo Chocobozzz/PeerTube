@@ -130,49 +130,18 @@ type TranscodeOptions = {
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
     try {
-      let fps = await getVideoFileFPS(options.inputPath)
-      // On small/medium resolutions, limit FPS
-      if (
-        options.resolution !== undefined &&
-        options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-        fps > VIDEO_TRANSCODING_FPS.AVERAGE
-      ) {
-        fps = VIDEO_TRANSCODING_FPS.AVERAGE
-      }
-
       let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
         .output(options.outputPath)
-      command = await presetH264(command, options.resolution, fps)
+
+      if (options.hlsPlaylist) {
+        command = await buildHLSCommand(command, options)
+      } else {
+        command = await buildx264Command(command, options)
+      }
 
       if (CONFIG.TRANSCODING.THREADS > 0) {
         // if we don't set any threads ffmpeg will chose automatically
         command = command.outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
-      }
-
-      if (options.resolution !== undefined) {
-        // '?x720' or '720x?' for example
-        const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
-        command = command.size(size)
-      }
-
-      if (fps) {
-        // Hard FPS limits
-        if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = VIDEO_TRANSCODING_FPS.MAX
-        else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
-
-        command = command.withFPS(fps)
-      }
-
-      if (options.hlsPlaylist) {
-        const videoPath = getHLSVideoPath(options)
-
-        command = command.outputOption('-hls_time 4')
-                         .outputOption('-hls_list_size 0')
-                         .outputOption('-hls_playlist_type vod')
-                         .outputOption('-hls_segment_filename ' + videoPath)
-                         .outputOption('-hls_segment_type fmp4')
-                         .outputOption('-f hls')
-                         .outputOption('-hls_flags single_file')
       }
 
       command
@@ -207,6 +176,52 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
+  let fps = await getVideoFileFPS(options.inputPath)
+  // On small/medium resolutions, limit FPS
+  if (
+    options.resolution !== undefined &&
+    options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
+    fps > VIDEO_TRANSCODING_FPS.AVERAGE
+  ) {
+    fps = VIDEO_TRANSCODING_FPS.AVERAGE
+  }
+
+  command = await presetH264(command, options.resolution, fps)
+
+  if (options.resolution !== undefined) {
+    // '?x720' or '720x?' for example
+    const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
+    command = command.size(size)
+  }
+
+  if (fps) {
+    // Hard FPS limits
+    if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = VIDEO_TRANSCODING_FPS.MAX
+    else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
+
+    command = command.withFPS(fps)
+  }
+
+  return command
+}
+
+async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
+  const videoPath = getHLSVideoPath(options)
+
+  command = await presetCopy(command)
+
+  command = command.outputOption('-hls_time 4')
+                   .outputOption('-hls_list_size 0')
+                   .outputOption('-hls_playlist_type vod')
+                   .outputOption('-hls_segment_filename ' + videoPath)
+                   .outputOption('-hls_segment_type fmp4')
+                   .outputOption('-f hls')
+                   .outputOption('-hls_flags single_file')
+
+  return command
+}
 
 function getHLSVideoPath (options: TranscodeOptions) {
   return `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
@@ -396,4 +411,11 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, resolution: VideoResol
   localCommand = localCommand.outputOption(`-g ${ fps * 2 }`)
 
   return localCommand
+}
+
+async function presetCopy (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.FfmpegCommand> {
+  return command
+    .format('mp4')
+    .videoCodec('copy')
+    .audioCodec('copy')
 }
