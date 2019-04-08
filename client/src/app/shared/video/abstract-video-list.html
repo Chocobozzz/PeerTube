@@ -24,7 +24,7 @@
   >
     <my-video-miniature
       *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
-      [displayVideoActions]="displayVideoActions"
+      [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
       (videoBlacklisted)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
     >
     </my-video-miniature>

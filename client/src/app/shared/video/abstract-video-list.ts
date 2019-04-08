@@ -7,7 +7,7 @@ import { ComponentPagination } from '../rest/component-pagination.model'
 import { VideoSortField } from './sort-field.type'
 import { Video } from './video.model'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
+import { MiniatureDisplayOptions, OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 import { Syndication } from '@app/shared/video/syndication.model'
 import { Notifier, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
@@ -33,6 +33,16 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   displayVideoActions = true
 
   disabled = false
+
+  displayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: true,
+    privacyLabel: true,
+    privacyText: false,
+    state: false,
+    blacklistInfo: false
+  }
 
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
