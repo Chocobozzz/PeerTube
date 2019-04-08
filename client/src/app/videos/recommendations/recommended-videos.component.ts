@@ -29,4 +29,7 @@ export class RecommendedVideosComponent implements OnChanges {
     }
   }
 
+  onVideoRemoved () {
+    this.store.requestNewRecommendations(this.inputRecommendation)
+  }
 }

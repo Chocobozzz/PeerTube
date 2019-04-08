@@ -29,7 +29,6 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Video } from '@app/shared/video/video.model'
-import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
 
 @Component({
   selector: 'my-video-watch',
