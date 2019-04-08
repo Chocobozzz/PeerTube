@@ -18,7 +18,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 350
+const LAST_MIGRATION_VERSION = 355
 
 // ---------------------------------------------------------------------------
 
@@ -726,6 +726,8 @@ const TRACKER_RATE_LIMITS = {
   ANNOUNCES_PER_IP: 30 // maximum announces for all our torrents in the interval
 }
 
+const P2P_MEDIA_LOADER_PEER_VERSION = 2
+
 // ---------------------------------------------------------------------------
 
 // Special constants for a test instance
@@ -772,6 +774,7 @@ updateWebserverUrls()
 export {
   API_VERSION,
   HLS_REDUNDANCY_DIRECTORY,
+  P2P_MEDIA_LOADER_PEER_VERSION,
   AVATARS_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,

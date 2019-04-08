@@ -6,7 +6,7 @@ import * as Sequelize from 'sequelize'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, STATIC_PATHS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, STATIC_PATHS, P2P_MEDIA_LOADER_PEER_VERSION } from '../../initializers'
 import { VideoFileModel } from './video-file'
 import { join } from 'path'
 import { sha1 } from '../../helpers/core-utils'
@@ -48,6 +48,10 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
   @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
   @Column(DataType.ARRAY(DataType.STRING))
   p2pMediaLoaderInfohashes: string[]
+
+  @AllowNull(false)
+  @Column
+  p2pMediaLoaderPeerVersion: number
 
   @AllowNull(false)
   @Is('VideoStreamingSegmentsSha256Url', value => throwIfNotValid(value, isActivityPubUrlValid, 'segments sha256 url'))
@@ -92,12 +96,24 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
   static buildP2PMediaLoaderInfoHashes (playlistUrl: string, videoFiles: VideoFileModel[]) {
     const hashes: string[] = []
 
-    // https://github.com/Novage/p2p-media-loader/blob/master/p2p-media-loader-core/lib/p2p-media-manager.ts#L97
+    // https://github.com/Novage/p2p-media-loader/blob/master/p2p-media-loader-core/lib/p2p-media-manager.ts#L115
     for (let i = 0; i < videoFiles.length; i++) {
-      hashes.push(sha1(`1${playlistUrl}+V${i}`))
+      hashes.push(sha1(`${P2P_MEDIA_LOADER_PEER_VERSION}${playlistUrl}+V${i}`))
     }
 
     return hashes
+  }
+
+  static listByIncorrectPeerVersion () {
+    const query = {
+      where: {
+        p2pMediaLoaderPeerVersion: {
+          [Sequelize.Op.ne]: P2P_MEDIA_LOADER_PEER_VERSION
+        }
+      }
+    }
+
+    return VideoStreamingPlaylistModel.findAll(query)
   }
 
   static loadWithVideo (id: number) {

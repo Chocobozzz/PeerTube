@@ -58,7 +58,7 @@ export function parseDuration (duration: number | string): number {
     }
   }
 
-  throw new Error('Duration could not be properly parsed')
+  throw new Error(`Duration ${duration} could not be properly parsed`)
 }
 
 export function parseBytes (value: string | number): number {

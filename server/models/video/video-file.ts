@@ -23,6 +23,7 @@ import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import * as Sequelize from 'sequelize'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
+import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 
 @Table({
   tableName: 'videoFile',
@@ -118,6 +119,29 @@ export class VideoFileModel extends Model<VideoFileModel> {
     }
 
     return VideoFileModel.findByPk(id, options)
+  }
+
+  static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Sequelize.Transaction) {
+    const query = {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: VideoStreamingPlaylistModel.unscoped(),
+              required: true,
+              where: {
+                id: streamingPlaylistId
+              }
+            }
+          ]
+        }
+      ],
+      transaction
+    }
+
+    return VideoFileModel.findAll(query)
   }
 
   static async getStats () {

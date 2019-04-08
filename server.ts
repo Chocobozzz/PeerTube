@@ -103,6 +103,7 @@ import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-upd
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
+import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 
 // ----------- Command line -----------
 
@@ -232,6 +233,9 @@ async function startApplication () {
   Redis.Instance.init()
 
   PeerTubeSocket.Instance.init(server)
+
+  updateStreamingPlaylistsInfohashesIfNeeded()
+    .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
   // Make server listening
   server.listen(port, hostname, () => {

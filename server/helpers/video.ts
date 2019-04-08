@@ -1,7 +1,4 @@
-import { CONFIG } from '../initializers'
 import { VideoModel } from '../models/video/video'
-import { UserRight } from '../../shared'
-import { UserModel } from '../models/account/user'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none'
 

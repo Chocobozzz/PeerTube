@@ -290,7 +290,11 @@ async function updateVideoFromAP (options: {
       }
 
       {
-        const streamingPlaylistAttributes = streamingPlaylistActivityUrlToDBAttributes(options.video, options.videoObject)
+        const streamingPlaylistAttributes = streamingPlaylistActivityUrlToDBAttributes(
+          options.video,
+          options.videoObject,
+          options.video.VideoFiles
+        )
         const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 
         // Remove video files that do not exist anymore
@@ -449,9 +453,9 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     }
 
     const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
-    await Promise.all(videoFilePromises)
+    const videoFiles = await Promise.all(videoFilePromises)
 
-    const videoStreamingPlaylists = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject)
+    const videoStreamingPlaylists = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject, videoFiles)
     const playlistPromises = videoStreamingPlaylists.map(p => VideoStreamingPlaylistModel.create(p, { transaction: t }))
     await Promise.all(playlistPromises)
 
@@ -575,20 +579,12 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
   return attributes
 }
 
-function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObject: VideoTorrentObject) {
+function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObject: VideoTorrentObject, videoFiles: VideoFileModel[]) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
   const attributes: FilteredModelAttributes<VideoStreamingPlaylistModel>[] = []
   for (const playlistUrlObject of playlistUrls) {
-    const p2pMediaLoaderInfohashes = playlistUrlObject.tag
-                                                      .filter(t => t.type === 'Infohash')
-                                                      .map(t => t.name)
-    if (p2pMediaLoaderInfohashes.length === 0) {
-      logger.warn('No infohashes found in AP playlist object.', { playlistUrl: playlistUrlObject })
-      continue
-    }
-
     const segmentsSha256UrlObject = playlistUrlObject.tag
                                                      .find(t => {
                                                        return isAPPlaylistSegmentHashesUrlObject(t)
@@ -602,7 +598,7 @@ function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObj
       type: VideoStreamingPlaylistType.HLS,
       playlistUrl: playlistUrlObject.href,
       segmentsSha256Url: segmentsSha256UrlObject.href,
-      p2pMediaLoaderInfohashes,
+      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, videoFiles),
       videoId: video.id
     }
 
