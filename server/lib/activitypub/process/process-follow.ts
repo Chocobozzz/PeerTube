@@ -1,12 +1,13 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript, CONFIG } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { sendAccept } from '../send'
+import { sendAccept, sendReject } from '../send'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
+import { getServerActor } from '../../../helpers/utils'
 
 async function processFollowActivity (activity: ActivityFollow, byActor: ActorModel) {
   const activityObject = getAPId(activity.object)
@@ -28,6 +29,11 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
 
     if (!targetActor) throw new Error('Unknown actor')
     if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')
+
+    const serverActor = await getServerActor()
+    if (targetActor.id === serverActor.id && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+      return sendReject(actor, targetActor)
+    }
 
     const [ actorFollow, created ] = await ActorFollowModel.findOrCreate({
       where: {

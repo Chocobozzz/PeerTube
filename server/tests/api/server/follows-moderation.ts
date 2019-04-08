@@ -2,7 +2,13 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushAndRunMultipleServers, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/utils/index'
+import {
+  flushAndRunMultipleServers,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  updateCustomSubConfig
+} from '../../../../shared/utils/index'
 import {
   follow,
   getFollowersListPaginationAndSort,
@@ -13,6 +19,38 @@ import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { ActorFollow } from '../../../../shared/models/actors'
 
 const expect = chai.expect
+
+async function checkHasFollowers (servers: ServerInfo[]) {
+  {
+    const res = await getFollowingListPaginationAndSort(servers[0].url, 0, 5, 'createdAt')
+    expect(res.body.total).to.equal(1)
+
+    const follow = res.body.data[0] as ActorFollow
+    expect(follow.follower.url).to.equal('http://localhost:9001/accounts/peertube')
+    expect(follow.following.url).to.equal('http://localhost:9002/accounts/peertube')
+  }
+
+  {
+    const res = await getFollowersListPaginationAndSort(servers[1].url, 0, 5, 'createdAt')
+    expect(res.body.total).to.equal(1)
+
+    const follow = res.body.data[0] as ActorFollow
+    expect(follow.follower.url).to.equal('http://localhost:9001/accounts/peertube')
+    expect(follow.following.url).to.equal('http://localhost:9002/accounts/peertube')
+  }
+}
+
+async function checkNoFollowers (servers: ServerInfo[]) {
+  {
+    const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, 'createdAt')
+    expect(res.body.total).to.equal(0)
+  }
+
+  {
+    const res = await getFollowersListPaginationAndSort(servers[ 1 ].url, 0, 5, 'createdAt')
+    expect(res.body.total).to.equal(0)
+  }
+}
 
 describe('Test follows moderation', function () {
   let servers: ServerInfo[] = []
@@ -35,23 +73,7 @@ describe('Test follows moderation', function () {
   })
 
   it('Should have correct follows', async function () {
-    {
-      const res = await getFollowingListPaginationAndSort(servers[0].url, 0, 5, 'createdAt')
-      expect(res.body.total).to.equal(1)
-
-      const follow = res.body.data[0] as ActorFollow
-      expect(follow.follower.url).to.equal('http://localhost:9001/accounts/peertube')
-      expect(follow.following.url).to.equal('http://localhost:9002/accounts/peertube')
-    }
-
-    {
-      const res = await getFollowersListPaginationAndSort(servers[1].url, 0, 5, 'createdAt')
-      expect(res.body.total).to.equal(1)
-
-      const follow = res.body.data[0] as ActorFollow
-      expect(follow.follower.url).to.equal('http://localhost:9001/accounts/peertube')
-      expect(follow.following.url).to.equal('http://localhost:9002/accounts/peertube')
-    }
+    await checkHasFollowers(servers)
   })
 
   it('Should remove follower on server 2', async function () {
@@ -61,15 +83,41 @@ describe('Test follows moderation', function () {
   })
 
   it('Should not not have follows anymore', async function () {
-    {
-      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt')
-      expect(res.body.total).to.equal(0)
+    await checkNoFollowers(servers)
+  })
+
+  it('Should disable followers on server 2', async function () {
+    const subConfig = {
+      followers: {
+        instance: {
+          enabled: false
+        }
+      }
     }
 
-    {
-      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt')
-      expect(res.body.total).to.equal(0)
+    await updateCustomSubConfig(servers[1].url, servers[1].accessToken, subConfig)
+
+    await follow(servers[0].url, [ servers[1].url ], servers[0].accessToken)
+    await waitJobs(servers)
+
+    await checkNoFollowers(servers)
+  })
+
+  it('Should re enable followers on server 2', async function () {
+    const subConfig = {
+      followers: {
+        instance: {
+          enabled: true
+        }
+      }
     }
+
+    await updateCustomSubConfig(servers[1].url, servers[1].accessToken, subConfig)
+
+    await follow(servers[0].url, [ servers[1].url ], servers[0].accessToken)
+    await waitJobs(servers)
+
+    await checkHasFollowers(servers)
   })
 
   after(async function () {

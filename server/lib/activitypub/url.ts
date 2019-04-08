@@ -74,11 +74,8 @@ function getVideoDislikesActivityPubUrl (video: VideoModel) {
   return video.url + '/dislikes'
 }
 
-function getActorFollowActivityPubUrl (actorFollow: ActorFollowModel) {
-  const me = actorFollow.ActorFollower
-  const following = actorFollow.ActorFollowing
-
-  return me.url + '/follows/' + following.id
+function getActorFollowActivityPubUrl (follower: ActorModel, following: ActorModel) {
+  return follower.url + '/follows/' + following.id
 }
 
 function getActorFollowAcceptActivityPubUrl (actorFollow: ActorFollowModel) {
@@ -86,6 +83,10 @@ function getActorFollowAcceptActivityPubUrl (actorFollow: ActorFollowModel) {
   const me = actorFollow.ActorFollowing
 
   return follower.url + '/accepts/follows/' + me.id
+}
+
+function getActorFollowRejectActivityPubUrl (follower: ActorModel, following: ActorModel) {
+  return follower.url + '/rejects/follows/' + following.id
 }
 
 function getVideoAnnounceActivityPubUrl (byActor: ActorModel, video: VideoModel) {
@@ -120,6 +121,7 @@ export {
   getVideoViewActivityPubUrl,
   getVideoLikeActivityPubUrl,
   getVideoDislikeActivityPubUrl,
+  getActorFollowRejectActivityPubUrl,
   getVideoCommentActivityPubUrl,
   getDeleteActivityPubUrl,
   getVideoSharesActivityPubUrl,

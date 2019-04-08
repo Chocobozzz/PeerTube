@@ -17,7 +17,7 @@ async function sendAccept (actorFollow: ActorFollowModel) {
 
   logger.info('Creating job to accept follower %s.', follower.url)
 
-  const followUrl = getActorFollowActivityPubUrl(actorFollow)
+  const followUrl = getActorFollowActivityPubUrl(follower, me)
   const followData = buildFollowActivity(followUrl, follower, me)
 
   const url = getActorFollowAcceptActivityPubUrl(actorFollow)

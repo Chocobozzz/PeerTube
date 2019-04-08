@@ -139,7 +139,7 @@ async function removeFollowing (req: express.Request, res: express.Response) {
 async function removeFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
-  await sendReject(follow)
+  await sendReject(follow.ActorFollower, follow.ActorFollowing)
 
   await follow.destroy()
 

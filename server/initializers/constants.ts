@@ -324,6 +324,11 @@ const CONFIG = {
       get USERNAME () { return config.get<string>('services.twitter.username') },
       get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }
     }
+  },
+  FOLLOWERS: {
+    INSTANCE: {
+      get ENABLED () { return config.get<boolean>('followers.instance.enabled') }
+    }
   }
 }
 

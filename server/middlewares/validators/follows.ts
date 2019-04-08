@@ -9,7 +9,6 @@ import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { getOrCreateActorAndServerAndModel } from '../../lib/activitypub'
 import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 
 const followValidator = [
@@ -66,12 +65,16 @@ const removeFollowerValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const serverActor = await getServerActor()
+    let follow: ActorFollowModel
+    try {
+      const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
+      const actor = await ActorModel.loadByUrl(actorUrl)
 
-    const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
-    const actor = await ActorModel.loadByUrl(actorUrl)
-
-    const follow = await ActorFollowModel.loadByActorAndTarget(actor.id, serverActor.id)
+      const serverActor = await getServerActor()
+      follow = await ActorFollowModel.loadByActorAndTarget(actor.id, serverActor.id)
+    } catch (err) {
+      logger.warn('Cannot get actor from handle.', { handle: req.params.nameWithHost, err })
+    }
 
     if (!follow) {
       return res

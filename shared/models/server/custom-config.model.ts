@@ -86,4 +86,10 @@ export interface CustomConfig {
     }
   }
 
+  followers: {
+    instance: {
+      enabled: boolean
+    }
+  }
+
 }

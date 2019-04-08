@@ -1,15 +1,11 @@
 import { ActivityFollow, ActivityReject } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from '../url'
+import { getActorFollowActivityPubUrl, getActorFollowRejectActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
 
-async function sendReject (actorFollow: ActorFollowModel) {
-  const follower = actorFollow.ActorFollower
-  const me = actorFollow.ActorFollowing
-
+async function sendReject (follower: ActorModel, following: ActorModel) {
   if (!follower.serverId) { // This should never happen
     logger.warn('Do not sending reject to local follower.')
     return
@@ -17,13 +13,13 @@ async function sendReject (actorFollow: ActorFollowModel) {
 
   logger.info('Creating job to reject follower %s.', follower.url)
 
-  const followUrl = getActorFollowActivityPubUrl(actorFollow)
-  const followData = buildFollowActivity(followUrl, follower, me)
+  const followUrl = getActorFollowActivityPubUrl(follower, following)
+  const followData = buildFollowActivity(followUrl, follower, following)
 
-  const url = getActorFollowAcceptActivityPubUrl(actorFollow)
-  const data = buildRejectActivity(url, me, followData)
+  const url = getActorFollowRejectActivityPubUrl(follower, following)
+  const data = buildRejectActivity(url, following, followData)
 
-  return unicastTo(data, me, follower.inboxUrl)
+  return unicastTo(data, following, follower.inboxUrl)
 }
 
 // ---------------------------------------------------------------------------

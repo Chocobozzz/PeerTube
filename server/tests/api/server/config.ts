@@ -63,6 +63,8 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.import.videos.http.enabled).to.be.true
   expect(data.import.videos.torrent.enabled).to.be.true
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
+
+  expect(data.followers.instance.enabled).to.be.true
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -105,6 +107,8 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
+
+  expect(data.followers.instance.enabled).to.be.false
 }
 
 describe('Test config', function () {
@@ -233,6 +237,11 @@ describe('Test config', function () {
           ofUsers: {
             enabled: true
           }
+        }
+      },
+      followers: {
+        instance: {
+          enabled: false
         }
       }
     }

@@ -14,7 +14,7 @@ function sendFollow (actorFollow: ActorFollowModel) {
 
   logger.info('Creating job to send follow request to %s.', following.url)
 
-  const url = getActorFollowActivityPubUrl(actorFollow)
+  const url = getActorFollowActivityPubUrl(me, following)
   const data = buildFollowActivity(url, me, following)
 
   return unicastTo(data, me, following.inboxUrl)

@@ -279,6 +279,11 @@ function customConfig (): CustomConfig {
           enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
         }
       }
+    },
+    followers: {
+      instance: {
+        enabled: CONFIG.FOLLOWERS.INSTANCE.ENABLED
+      }
     }
   }
 }

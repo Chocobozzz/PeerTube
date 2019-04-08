@@ -144,6 +144,46 @@ describe('Test server follows API validators', function () {
       })
     })
 
+    describe('When removing a follower', function () {
+      const path = '/api/v1/server/followers'
+
+      it('Should fail with an invalid token', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002',
+          token: 'fake_token',
+          statusCodeExpected: 401
+        })
+      })
+
+      it('Should fail if the user is not an administrator', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002',
+          token: userAccessToken,
+          statusCodeExpected: 403
+        })
+      })
+
+      it('Should fail with an invalid follower', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto',
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
+      })
+
+      it('Should fail with an unknown follower', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9003',
+          token: server.accessToken,
+          statusCodeExpected: 404
+        })
+      })
+    })
+
     describe('When removing following', function () {
       const path = '/api/v1/server/following'
 

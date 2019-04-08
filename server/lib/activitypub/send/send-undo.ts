@@ -31,7 +31,7 @@ async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
 
   logger.info('Creating job to send an unfollow request to %s.', following.url)
 
-  const followUrl = getActorFollowActivityPubUrl(actorFollow)
+  const followUrl = getActorFollowActivityPubUrl(me, following)
   const undoUrl = getUndoActivityPubUrl(followUrl)
 
   const followActivity = buildFollowActivity(followUrl, me, following)

@@ -200,3 +200,8 @@ services:
     # If false, we use an image link card that will redirect on your PeerTube instance
     # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
     whitelisted: false
+
+followers:
+  instance:
+    # Allow or not other instances to follow yours
+    enabled: true

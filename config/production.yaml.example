@@ -180,8 +180,8 @@ auto_blacklist:
   # New videos automatically blacklisted so moderators can review before publishing
   videos:
     of_users:
-      enabled: false 
- 
+      enabled: false
+
 # Instance settings
 instance:
   name: 'PeerTube'
@@ -217,3 +217,8 @@ services:
     # If false, we use an image link card that will redirect on your PeerTube instance
     # Test on https://cards-dev.twitter.com/validator to see if you are whitelisted
     whitelisted: false
+
+followers:
+  instance:
+    # Allow or not other instances to follow yours
+    enabled: true

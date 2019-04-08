@@ -87,6 +87,11 @@ describe('Test config API validators', function () {
           enabled: false
         }
       }
+    },
+    followers: {
+      instance: {
+        enabled: false
+      }
     }
   }
 
