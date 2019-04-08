@@ -19,7 +19,7 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
     await sequelizeTypescript.transaction(async t => {
       const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlist.id, t)
 
-      playlist.p2pMediaLoaderInfohashes = await VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlist.playlistUrl, videoFiles)
+      playlist.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlist.playlistUrl, videoFiles)
       playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
       await playlist.save({ transaction: t })
     })

@@ -1,4 +1,4 @@
-import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY } from '../initializers'
+import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from '../initializers'
 import { join } from 'path'
 import { getVideoFileFPS, transcode } from '../helpers/ffmpeg-utils'
 import { ensureDir, move, remove, stat } from 'fs-extra'
@@ -118,6 +118,7 @@ async function generateHlsPlaylist (video: VideoModel, resolution: VideoResoluti
     playlistUrl,
     segmentsSha256Url: CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid),
     p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, video.VideoFiles),
+    p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
 
     type: VideoStreamingPlaylistType.HLS
   })

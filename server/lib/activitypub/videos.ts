@@ -17,7 +17,15 @@ import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, downloadImage } from '../../helpers/requests'
-import { ACTIVITY_PUB, CONFIG, MIMETYPES, REMOTE_SCHEME, sequelizeTypescript, THUMBNAILS_SIZE } from '../../initializers'
+import {
+  ACTIVITY_PUB,
+  CONFIG,
+  MIMETYPES,
+  P2P_MEDIA_LOADER_PEER_VERSION,
+  REMOTE_SCHEME,
+  sequelizeTypescript,
+  THUMBNAILS_SIZE
+} from '../../initializers'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -599,6 +607,7 @@ function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObj
       playlistUrl: playlistUrlObject.href,
       segmentsSha256Url: segmentsSha256UrlObject.href,
       p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, videoFiles),
+      p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
       videoId: video.id
     }
 
