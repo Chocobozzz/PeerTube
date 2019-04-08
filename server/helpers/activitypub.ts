@@ -29,47 +29,47 @@ function activityPubContextify <T> (data: T) {
         Infohash: 'pt:Infohash',
         originallyPublishedAt: 'sc:datePublished',
         views: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:views'
         },
         state: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:state'
         },
         size: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:size'
         },
         fps: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:fps'
         },
         startTimestamp: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:startTimestamp'
         },
         stopTimestamp: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:stopTimestamp'
         },
         position: {
-          type: 'sc:Number',
+          '@type': 'sc:Number',
           '@id': 'pt:position'
         },
         commentsEnabled: {
-          type: 'sc:Boolean',
+          '@type': 'sc:Boolean',
           '@id': 'pt:commentsEnabled'
         },
         downloadEnabled: {
-          type: 'sc:Boolean',
+          '@type': 'sc:Boolean',
           '@id': 'pt:downloadEnabled'
         },
         waitTranscoding: {
-          type: 'sc:Boolean',
+          '@type': 'sc:Boolean',
           '@id': 'pt:waitTranscoding'
         },
         support: {
-          type: 'sc:Text',
+          '@type': 'sc:Text',
           '@id': 'pt:support'
         }
       },
