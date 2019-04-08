@@ -47,13 +47,21 @@ async function follow (follower: string, following: string[], accessToken: strin
 async function unfollow (url: string, accessToken: string, target: ServerInfo, expectedStatus = 204) {
   const path = '/api/v1/server/following/' + target.host
 
-  const res = await request(url)
+  return request(url)
     .delete(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
     .expect(expectedStatus)
+}
 
-  return res
+function removeFollower (url: string, accessToken: string, follower: ServerInfo, expectedStatus = 204) {
+  const path = '/api/v1/server/followers/peertube@' + follower.host
+
+  return request(url)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
 }
 
 async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
@@ -74,6 +82,7 @@ export {
   getFollowersListPaginationAndSort,
   getFollowingListPaginationAndSort,
   unfollow,
+  removeFollower,
   follow,
   doubleFollow
 }

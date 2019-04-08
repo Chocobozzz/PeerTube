@@ -7,6 +7,10 @@ import { getServerActor } from '../../helpers/utils'
 import { CONFIG, SERVER_ACTOR_NAME } from '../../initializers'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
+import { ActorModel } from '../../models/activitypub/actor'
+import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
+import { getOrCreateActorAndServerAndModel } from '../../lib/activitypub'
+import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
@@ -33,7 +37,7 @@ const removeFollowingValidator = [
   param('host').custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking unfollow parameters', { parameters: req.params })
+    logger.debug('Checking unfollowing parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
@@ -44,7 +48,36 @@ const removeFollowingValidator = [
       return res
         .status(404)
         .json({
-          error: `Follower ${req.params.host} not found.`
+          error: `Following ${req.params.host} not found.`
+        })
+        .end()
+    }
+
+    res.locals.follow = follow
+    return next()
+  }
+]
+
+const removeFollowerValidator = [
+  param('nameWithHost').custom(isValidActorHandle).withMessage('Should have a valid nameWithHost'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking remove follower parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    const serverActor = await getServerActor()
+
+    const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
+    const actor = await ActorModel.loadByUrl(actorUrl)
+
+    const follow = await ActorFollowModel.loadByActorAndTarget(actor.id, serverActor.id)
+
+    if (!follow) {
+      return res
+        .status(404)
+        .json({
+          error: `Follower ${req.params.nameWithHost} not found.`
         })
         .end()
     }
@@ -58,5 +91,6 @@ const removeFollowingValidator = [
 
 export {
   followValidator,
-  removeFollowingValidator
+  removeFollowingValidator,
+  removeFollowerValidator
 }

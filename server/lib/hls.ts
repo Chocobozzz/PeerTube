@@ -1,6 +1,6 @@
 import { VideoModel } from '../models/video/video'
 import { basename, dirname, join } from 'path'
-import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, sequelizeTypescript } from '../initializers'
+import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, sequelizeTypescript } from '../initializers'
 import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
 import { getVideoFileSize } from '../helpers/ffmpeg-utils'
 import { sha256 } from '../helpers/core-utils'
@@ -20,6 +20,7 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
       const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlist.id, t)
 
       playlist.p2pMediaLoaderInfohashes = await VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlist.playlistUrl, videoFiles)
+      playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
       await playlist.save({ transaction: t })
     })
   }

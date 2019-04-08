@@ -3,18 +3,23 @@ import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
-import { sendUndoFollow } from '../../../lib/activitypub/send'
+import { sendReject, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
   authenticate,
   ensureUserHasRight,
   paginationValidator,
-  removeFollowingValidator,
   setBodyHostsPort,
   setDefaultPagination,
   setDefaultSort
 } from '../../../middlewares'
-import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
+import {
+  followersSortValidator,
+  followingSortValidator,
+  followValidator,
+  removeFollowerValidator,
+  removeFollowingValidator
+} from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
 import { removeRedundancyOf } from '../../../lib/redundancy'
@@ -40,7 +45,7 @@ serverFollowsRouter.delete('/following/:host',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(removeFollowingValidator),
-  asyncMiddleware(removeFollow)
+  asyncMiddleware(removeFollowing)
 )
 
 serverFollowsRouter.get('/followers',
@@ -49,6 +54,13 @@ serverFollowsRouter.get('/followers',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listFollowers)
+)
+
+serverFollowsRouter.delete('/followers/:nameWithHost',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  asyncMiddleware(removeFollowerValidator),
+  asyncMiddleware(removeFollower)
 )
 
 // ---------------------------------------------------------------------------
@@ -103,7 +115,7 @@ async function followInstance (req: express.Request, res: express.Response) {
   return res.status(204).end()
 }
 
-async function removeFollow (req: express.Request, res: express.Response) {
+async function removeFollowing (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
   await sequelizeTypescript.transaction(async t => {
@@ -120,6 +132,16 @@ async function removeFollow (req: express.Request, res: express.Response) {
 
     await follow.destroy({ transaction: t })
   })
+
+  return res.status(204).end()
+}
+
+async function removeFollower (req: express.Request, res: express.Response) {
+  const follow = res.locals.follow
+
+  await sendReject(follow)
+
+  await follow.destroy()
 
   return res.status(204).end()
 }
