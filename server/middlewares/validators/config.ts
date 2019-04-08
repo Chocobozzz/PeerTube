@@ -44,6 +44,9 @@ const customConfigUpdateValidator = [
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
   body('import.videos.torrent.enabled').isBoolean().withMessage('Should have a valid import video torrent enabled boolean'),
 
+  body('followers.instance.enabled').isBoolean().withMessage('Should have a valid followers of instance boolean'),
+  body('followers.instance.manualApproval').isBoolean().withMessage('Should have a valid manual approval boolean'),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })
 

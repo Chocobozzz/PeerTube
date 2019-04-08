@@ -25,7 +25,7 @@ function checkMissedConfig () {
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
     'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
     'services.twitter.username', 'services.twitter.whitelisted',
-    'followers.instance.enabled'
+    'followers.instance.enabled', 'followers.instance.manual_approval'
   ]
   const requiredAlternatives = [
     [ // set

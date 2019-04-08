@@ -282,7 +282,8 @@ function customConfig (): CustomConfig {
     },
     followers: {
       instance: {
-        enabled: CONFIG.FOLLOWERS.INSTANCE.ENABLED
+        enabled: CONFIG.FOLLOWERS.INSTANCE.ENABLED,
+        manualApproval: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
       }
     }
   }

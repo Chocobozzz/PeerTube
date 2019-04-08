@@ -205,3 +205,5 @@ followers:
   instance:
     # Allow or not other instances to follow yours
     enabled: true
+    # Whether or not an administrator must manually validate a new follower
+    manual_approval: false

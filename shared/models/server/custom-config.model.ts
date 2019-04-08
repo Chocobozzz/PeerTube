@@ -88,7 +88,8 @@ export interface CustomConfig {
 
   followers: {
     instance: {
-      enabled: boolean
+      enabled: boolean,
+      manualApproval: boolean
     }
   }
 

@@ -3,7 +3,7 @@ import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
-import { sendReject, sendUndoFollow } from '../../../lib/activitypub/send'
+import { sendAccept, sendReject, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
   authenticate,
@@ -14,10 +14,11 @@ import {
   setDefaultSort
 } from '../../../middlewares'
 import {
+  acceptOrRejectFollowerValidator,
   followersSortValidator,
   followingSortValidator,
   followValidator,
-  removeFollowerValidator,
+  getFollowerValidator,
   removeFollowingValidator
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
@@ -59,8 +60,24 @@ serverFollowsRouter.get('/followers',
 serverFollowsRouter.delete('/followers/:nameWithHost',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
-  asyncMiddleware(removeFollowerValidator),
-  asyncMiddleware(removeFollower)
+  asyncMiddleware(getFollowerValidator),
+  asyncMiddleware(removeOrRejectFollower)
+)
+
+serverFollowsRouter.post('/followers/:nameWithHost/reject',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  asyncMiddleware(getFollowerValidator),
+  acceptOrRejectFollowerValidator,
+  asyncMiddleware(removeOrRejectFollower)
+)
+
+serverFollowsRouter.post('/followers/:nameWithHost/accept',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  asyncMiddleware(getFollowerValidator),
+  acceptOrRejectFollowerValidator,
+  asyncMiddleware(acceptFollower)
 )
 
 // ---------------------------------------------------------------------------
@@ -136,12 +153,23 @@ async function removeFollowing (req: express.Request, res: express.Response) {
   return res.status(204).end()
 }
 
-async function removeFollower (req: express.Request, res: express.Response) {
+async function removeOrRejectFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
   await sendReject(follow.ActorFollower, follow.ActorFollowing)
 
   await follow.destroy()
+
+  return res.status(204).end()
+}
+
+async function acceptFollower (req: express.Request, res: express.Response) {
+  const follow = res.locals.follow
+
+  await sendAccept(follow)
+
+  follow.state = 'accepted'
+  await follow.save()
 
   return res.status(204).end()
 }

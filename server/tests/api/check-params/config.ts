@@ -90,7 +90,8 @@ describe('Test config API validators', function () {
     },
     followers: {
       instance: {
-        enabled: false
+        enabled: false,
+        manualApproval: true
       }
     }
   }

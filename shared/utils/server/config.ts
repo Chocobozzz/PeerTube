@@ -122,7 +122,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
     },
     followers: {
       instance: {
-        enabled: true
+        enabled: true,
+        manualApproval: false
       }
     }
   }

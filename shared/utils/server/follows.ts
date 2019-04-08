@@ -1,6 +1,7 @@
 import * as request from 'supertest'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
+import { makeGetRequest, makePostBodyRequest } from '..'
 
 function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/server/followers'
@@ -14,6 +15,28 @@ function getFollowersListPaginationAndSort (url: string, start: number, count: n
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
+}
+
+function acceptFollower (url: string, token: string, follower: string, statusCodeExpected = 204) {
+  const path = '/api/v1/server/followers/' + follower + '/accept'
+
+  return makePostBodyRequest({
+    url,
+    token,
+    path,
+    statusCodeExpected
+  })
+}
+
+function rejectFollower (url: string, token: string, follower: string, statusCodeExpected = 204) {
+  const path = '/api/v1/server/followers/' + follower + '/reject'
+
+  return makePostBodyRequest({
+    url,
+    token,
+    path,
+    statusCodeExpected
+  })
 }
 
 function getFollowingListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
@@ -30,18 +53,16 @@ function getFollowingListPaginationAndSort (url: string, start: number, count: n
     .expect('Content-Type', /json/)
 }
 
-async function follow (follower: string, following: string[], accessToken: string, expectedStatus = 204) {
+function follow (follower: string, following: string[], accessToken: string, expectedStatus = 204) {
   const path = '/api/v1/server/following'
 
   const followingHosts = following.map(f => f.replace(/^http:\/\//, ''))
-  const res = await request(follower)
+  return request(follower)
     .post(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
     .send({ 'hosts': followingHosts })
     .expect(expectedStatus)
-
-  return res
 }
 
 async function unfollow (url: string, accessToken: string, target: ServerInfo, expectedStatus = 204) {
@@ -84,5 +105,7 @@ export {
   unfollow,
   removeFollower,
   follow,
-  doubleFollow
+  doubleFollow,
+  acceptFollower,
+  rejectFollower
 }

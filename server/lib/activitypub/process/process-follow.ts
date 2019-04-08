@@ -32,6 +32,8 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
 
     const serverActor = await getServerActor()
     if (targetActor.id === serverActor.id && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+      logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
+
       return sendReject(actor, targetActor)
     }
 
@@ -43,7 +45,7 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
       defaults: {
         actorId: actor.id,
         targetActorId: targetActor.id,
-        state: 'accepted'
+        state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL ? 'pending' : 'accepted'
       },
       transaction: t
     })
@@ -51,7 +53,7 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     actorFollow.ActorFollower = actor
     actorFollow.ActorFollowing = targetActor
 
-    if (actorFollow.state !== 'accepted') {
+    if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
       actorFollow.state = 'accepted'
       await actorFollow.save({ transaction: t })
     }
@@ -60,7 +62,7 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     actorFollow.ActorFollowing = targetActor
 
     // Target sends to actor he accepted the follow request
-    await sendAccept(actorFollow)
+    if (actorFollow.state === 'accepted') await sendAccept(actorFollow)
 
     return { actorFollow, created }
   })

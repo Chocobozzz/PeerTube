@@ -57,11 +57,11 @@ const removeFollowingValidator = [
   }
 ]
 
-const removeFollowerValidator = [
+const getFollowerValidator = [
   param('nameWithHost').custom(isValidActorHandle).withMessage('Should have a valid nameWithHost'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking remove follower parameters', { parameters: req.params })
+    logger.debug('Checking get follower parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
@@ -90,10 +90,24 @@ const removeFollowerValidator = [
   }
 ]
 
+const acceptOrRejectFollowerValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking accept/reject follower parameters', { parameters: req.params })
+
+    const follow = res.locals.follow
+    if (follow.state !== 'pending') {
+      return res.status(400).json({ error: 'Follow is not in pending state.' }).end()
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   followValidator,
   removeFollowingValidator,
-  removeFollowerValidator
+  getFollowerValidator,
+  acceptOrRejectFollowerValidator
 }

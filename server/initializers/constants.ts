@@ -327,7 +327,8 @@ const CONFIG = {
   },
   FOLLOWERS: {
     INSTANCE: {
-      get ENABLED () { return config.get<boolean>('followers.instance.enabled') }
+      get ENABLED () { return config.get<boolean>('followers.instance.enabled') },
+      get MANUAL_APPROVAL () { return config.get<boolean>('followers.instance.manual_approval') }
     }
   }
 }

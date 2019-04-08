@@ -65,6 +65,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
 
   expect(data.followers.instance.enabled).to.be.true
+  expect(data.followers.instance.manualApproval).to.be.false
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -109,6 +110,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.true
 
   expect(data.followers.instance.enabled).to.be.false
+  expect(data.followers.instance.manualApproval).to.be.true
 }
 
 describe('Test config', function () {
@@ -241,7 +243,8 @@ describe('Test config', function () {
       },
       followers: {
         instance: {
-          enabled: false
+          enabled: false,
+          manualApproval: true
         }
       }
     }
