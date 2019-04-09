@@ -59,6 +59,7 @@ export class UserNotification implements UserNotificationServer {
   accountUrl?: string
   videoImportIdentifier?: string
   videoImportUrl?: string
+  instanceFollowUrl?: string
 
   constructor (hash: UserNotificationServer) {
     this.id = hash.id
@@ -140,6 +141,10 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.NEW_FOLLOW:
           this.accountUrl = this.buildAccountUrl(this.actorFollow.follower)
+          break
+
+        case UserNotificationType.NEW_INSTANCE_FOLLOWER:
+          this.instanceFollowUrl = '/admin/follows/followers-list'
           break
       }
     } catch (err) {

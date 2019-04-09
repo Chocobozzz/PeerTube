@@ -43,7 +43,8 @@ const icons = {
   'videos': require('../../../assets/images/global/videos.html'),
   'folder': require('../../../assets/images/global/folder.html'),
   'administration': require('../../../assets/images/menu/administration.html'),
-  'subscriptions': require('../../../assets/images/menu/subscriptions.html')
+  'subscriptions': require('../../../assets/images/menu/subscriptions.html'),
+  'users': require('../../../assets/images/global/users.html')
 }
 
 export type GlobalIconName = keyof typeof icons

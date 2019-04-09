@@ -4,8 +4,8 @@
   <div i18n *ngIf="emailEnabled">Email</div>
 </div>
 
-<div class="custom-row" *ngFor="let notificationType of notificationSettingKeys">
-  <ng-container *ngIf="hasUserRight(notificationType)">
+<ng-container *ngFor="let notificationType of notificationSettingKeys">
+  <div class="custom-row" *ngIf="hasUserRight(notificationType)">
     <div>{{ labelNotifications[notificationType] }}</div>
 
     <div>
@@ -15,5 +15,5 @@
     <div *ngIf="emailEnabled">
       <p-inputSwitch [(ngModel)]="emailNotifications[notificationType]" (onChange)="updateEmailSetting(notificationType, $event.checked)"></p-inputSwitch>
     </div>
-  </ng-container>
-</div>
+  </div>
+</ng-container>

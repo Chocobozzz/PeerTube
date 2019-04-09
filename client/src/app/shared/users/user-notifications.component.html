@@ -102,6 +102,15 @@
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> mentioned you on <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">video {{ notification.comment.video.name }}</a>
         </div>
       </ng-container>
+
+      <ng-container i18n *ngSwitchCase="UserNotificationType.NEW_INSTANCE_FOLLOWER">
+        <my-global-icon iconName="users"></my-global-icon>
+
+        <div class="message">
+          Your instance has <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">a new follower</a>
+          <ng-container *ngIf="notification.actorFollow.state === 'pending'"> awaiting your approval</ng-container>
+        </div>
+      </ng-container>
     </ng-container>
 
     <div class="from-date">{{ notification.createdAt | myFromNow }}</div>

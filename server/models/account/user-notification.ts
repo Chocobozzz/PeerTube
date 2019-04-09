@@ -119,7 +119,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
       },
 
       {
-        attributes: [ 'id' ],
+        attributes: [ 'id', 'state' ],
         model: () => ActorFollowModel.unscoped(),
         required: false,
         include: [
