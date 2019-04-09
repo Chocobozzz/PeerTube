@@ -7,8 +7,10 @@ import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers'
 import { VideoModel } from '../video/video'
 import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid } from '../utils'
+import { throwIfNotValid, getSort } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { AccountVideoRate } from '../../../shared'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel'
 
 /*
   Account rates per video.
@@ -86,6 +88,38 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     if (transaction) options.transaction = transaction
 
     return AccountVideoRateModel.findOne(options)
+  }
+
+  static listByAccountForApi (options: {
+    start: number,
+    count: number,
+    sort: string,
+    type?: string,
+    accountId: number
+  }) {
+    const query: IFindOptions<AccountVideoRateModel> = {
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
+      where: {
+        accountId: options.accountId
+      },
+      include: [
+        {
+          model: VideoModel,
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel.scope({ method: [VideoChannelScopeNames.SUMMARY, true] }),
+              required: true
+            }
+          ]
+        }
+      ]
+    }
+    if (options.type) query.where['type'] = options.type
+
+    return AccountVideoRateModel.findAndCountAll(query)
   }
 
   static loadLocalAndPopulateVideo (rateType: VideoRateType, accountName: string, videoId: number, transaction?: Transaction) {
@@ -184,5 +218,12 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
       if (type === 'like') await VideoModel.increment({ likes: -deleted }, options)
       else if (type === 'dislike') await VideoModel.increment({ dislikes: -deleted }, options)
     })
+  }
+
+  toFormattedJSON (): AccountVideoRate {
+    return {
+      video: this.Video.toFormattedJSON(),
+      rating: this.type
+    }
   }
 }

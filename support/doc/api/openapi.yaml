@@ -1344,6 +1344,35 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoChannel'
+  '/accounts/{name}/ratings':
+    get:
+      summary: Get ratings of an account by its name
+      security:
+        - OAuth2: []
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - name: rating
+          in: query
+          required: false
+          description: Optionaly filter which ratings to retrieve
+          schema:
+            type: string
+            enum:
+              - like
+              - dislike
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoRating'
   '/videos/{id}/comment-threads':
     get:
       summary: Get the comment threads of a video by its id
@@ -2141,6 +2170,16 @@ components:
           description: 'Rating of the video '
       required:
         - id
+        - rating
+    VideoRating:
+      properties:
+        video:
+          $ref: '#/components/schemas/Video'
+        rating:
+          type: number
+          description: 'Rating of the video'
+      required:
+        - video
         - rating
     RegisterUser:
       properties:

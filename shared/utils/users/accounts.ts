@@ -1,5 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
+import * as request from 'supertest'
 import { expect } from 'chai'
 import { existsSync, readdir } from 'fs-extra'
 import { join } from 'path'
@@ -53,11 +54,24 @@ async function checkActorFilesWereRemoved (actorUUID: string, serverNumber: numb
   }
 }
 
+function getAccountRatings (url: string, accountName: string, accessToken: string, statusCodeExpected = 200, query = {}) {
+  const path = '/api/v1/accounts/' + accountName + '/ratings'
+
+  return request(url)
+          .get(path)
+          .query(query)
+          .set('Accept', 'application/json')
+          .set('Authorization', 'Bearer ' + accessToken)
+          .expect(statusCodeExpected)
+          .expect('Content-Type', /json/)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getAccount,
   expectAccountFollows,
   getAccountsList,
-  checkActorFilesWereRemoved
+  checkActorFilesWereRemoved,
+  getAccountRatings
 }

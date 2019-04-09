@@ -8,6 +8,7 @@ import {
   createUser,
   deleteMe,
   flushTests,
+  getAccountRatings,
   getBlacklistedVideosList,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
@@ -32,7 +33,7 @@ import {
   updateUser,
   uploadVideo,
   userLogin
-} from '../../../../shared/utils/index'
+} from '../../../../shared/utils'
 import { follow } from '../../../../shared/utils/server/follows'
 import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
 import { getMyVideos } from '../../../../shared/utils/videos/videos'
@@ -135,6 +136,35 @@ describe('Test users', function () {
 
     expect(rating.videoId).to.equal(videoId)
     expect(rating.rating).to.equal('like')
+  })
+
+  it('Should retrieve ratings list', async function () {
+    await rateVideo(server.url, accessToken, videoId, 'like')
+    const res = await getAccountRatings(server.url, server.user.username, server.accessToken, 200)
+    const ratings = res.body
+
+    expect(ratings.data[0].video.id).to.equal(videoId)
+    expect(ratings.data[0].rating).to.equal('like')
+  })
+
+  it('Should retrieve ratings list by rating type', async function () {
+    await rateVideo(server.url, accessToken, videoId, 'like')
+    let res = await getAccountRatings(server.url, server.user.username, server.accessToken, 200, { rating: 'like' })
+    let ratings = res.body
+    expect(ratings.data.length).to.equal(1)
+    res = await getAccountRatings(server.url, server.user.username, server.accessToken, 200, { rating: 'dislike' })
+    ratings = res.body
+    expect(ratings.data.length).to.equal(0)
+    await getAccountRatings(server.url, server.user.username, server.accessToken, 400, { rating: 'invalid' })
+  })
+
+  it('Should not access ratings list if not logged with correct user', async function () {
+    const user = { username: 'anuragh', password: 'passbyme' }
+    const resUser = await createUser(server.url, server.accessToken, user.username, user.password)
+    const userId = resUser.body.user.id
+    const userAccessToken = await userLogin(server, user)
+    await getAccountRatings(server.url, server.user.username, userAccessToken, 403)
+    await removeUser(server.url, userId, server.accessToken)
   })
 
   it('Should not be able to remove the video with an incorrect token', async function () {
