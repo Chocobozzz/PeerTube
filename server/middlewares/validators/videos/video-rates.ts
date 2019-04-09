@@ -1,7 +1,7 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
-import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { doesVideoExist, isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'

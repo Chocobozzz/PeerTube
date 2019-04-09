@@ -22,7 +22,6 @@ import { logger } from '../../helpers/logger'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
-import { AccountModel } from '../../models/account/account'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 

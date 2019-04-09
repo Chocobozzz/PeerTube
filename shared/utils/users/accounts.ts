@@ -7,6 +7,7 @@ import { join } from 'path'
 import { Account } from '../../models/actors'
 import { root } from '../miscs/miscs'
 import { makeGetRequest } from '../requests/requests'
+import { VideoRateType } from '../../models/videos'
 
 function getAccountsList (url: string, sort = '-createdAt', statusCodeExpected = 200) {
   const path = '/api/v1/accounts'
@@ -54,8 +55,10 @@ async function checkActorFilesWereRemoved (actorUUID: string, serverNumber: numb
   }
 }
 
-function getAccountRatings (url: string, accountName: string, accessToken: string, statusCodeExpected = 200, query = {}) {
+function getAccountRatings (url: string, accountName: string, accessToken: string, rating?: VideoRateType, statusCodeExpected = 200) {
   const path = '/api/v1/accounts/' + accountName + '/ratings'
+
+  const query = rating ? { rating } : {}
 
   return request(url)
           .get(path)

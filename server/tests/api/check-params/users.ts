@@ -538,6 +538,38 @@ describe('Test users API validators', function () {
     })
   })
 
+  describe('When retrieving my global ratings', function () {
+    const path = '/api/v1/accounts/user1/ratings'
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with a unauthenticated user', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 401 })
+    })
+
+    it('Should fail with a another user', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should fail with a bad type', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, query: { rating: 'toto ' }, statusCodeExpected: 400 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: 200 })
+    })
+  })
+
   describe('When blocking/unblocking/removing user', function () {
     it('Should fail with an incorrect id', async function () {
       await removeUser(server.url, 'blabla', server.accessToken, 400)

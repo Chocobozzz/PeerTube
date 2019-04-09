@@ -1,22 +1,22 @@
 import * as express from 'express'
 import { getFormattedObjects, getServerActor } from '../../helpers/utils'
 import {
-  authenticate,
   asyncMiddleware,
+  authenticate,
   commonVideosFiltersValidator,
-  videoRatingValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
   videoPlaylistsSortValidator,
-  videoRatesSortValidator
+  videoRatesSortValidator,
+  videoRatingValidator
 } from '../../middlewares'
 import {
   accountNameWithHostGetValidator,
   accountsSortValidator,
-  videosSortValidator,
-  ensureAuthUserOwnsAccountValidator
+  ensureAuthUserOwnsAccountValidator,
+  videosSortValidator
 } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
