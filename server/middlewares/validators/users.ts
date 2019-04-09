@@ -318,12 +318,11 @@ const userAutocompleteValidator = [
   param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
 ]
 
-const ensureUserAccountValidator = [
+const ensureAuthUserOwnsAccountValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const user = res.locals.oauth.token.User
-    const userAccount = await AccountModel.load(user.Account.id)
 
-    if (userAccount.name !== req.params.accountName) {
+    if (res.locals.account.id !== user.Account.id) {
       return res.status(403)
                 .send({ error: 'Only owner can access ratings list.' })
                 .end()
@@ -352,7 +351,7 @@ export {
   usersAskSendVerifyEmailValidator,
   usersVerifyEmailValidator,
   userAutocompleteValidator,
-  ensureUserAccountValidator
+  ensureAuthUserOwnsAccountValidator
 }
 
 // ---------------------------------------------------------------------------

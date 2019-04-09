@@ -16,7 +16,7 @@ import {
   accountNameWithHostGetValidator,
   accountsSortValidator,
   videosSortValidator,
-  ensureUserAccountValidator
+  ensureAuthUserOwnsAccountValidator
 } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
@@ -73,7 +73,7 @@ accountsRouter.get('/:accountName/video-playlists',
 accountsRouter.get('/:accountName/ratings',
   authenticate,
   asyncMiddleware(accountNameWithHostGetValidator),
-  ensureUserAccountValidator,
+  ensureAuthUserOwnsAccountValidator,
   paginationValidator,
   videoRatesSortValidator,
   setDefaultSort,
