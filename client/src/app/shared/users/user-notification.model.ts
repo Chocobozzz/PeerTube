@@ -1,4 +1,4 @@
-import { UserNotification as UserNotificationServer, UserNotificationType, VideoInfo, ActorInfo } from '../../../../../shared'
+import { ActorInfo, FollowState, UserNotification as UserNotificationServer, UserNotificationType, VideoInfo } from '../../../../../shared'
 import { Actor } from '@app/shared/actor/actor.model'
 
 export class UserNotification implements UserNotificationServer {
@@ -39,6 +39,7 @@ export class UserNotification implements UserNotificationServer {
 
   actorFollow?: {
     id: number
+    state: FollowState
     follower: ActorInfo & { avatarUrl?: string }
     following: {
       type: 'account' | 'channel'
