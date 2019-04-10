@@ -4,6 +4,10 @@ function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+function isWebRTCDisabled () {
+  return !!((window as any).RTCPeerConnection || (window as any).mozRTCPeerConnection || (window as any).webkitRTCPeerConnection) === false
+}
+
 // https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
 // Don't import all Angular stuff, just copy the code with shame
 const dictionaryBytes: Array<{max: number, type: string}> = [
@@ -141,6 +145,7 @@ export {
   toTitleCase,
   timeToInt,
   secondsToTime,
+  isWebRTCDisabled,
   buildVideoLink,
   buildVideoEmbed,
   videoFileMaxByResolution,

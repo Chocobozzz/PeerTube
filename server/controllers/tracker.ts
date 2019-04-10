@@ -23,6 +23,10 @@ const trackerServer = new TrackerServer({
   ws: false,
   dht: false,
   filter: async function (infoHash, params, cb) {
+    if (CONFIG.TRACKER.ENABLED === false) {
+      return cb(new Error('Tracker is disabled on this instance.'))
+    }
+
     let ip: string
 
     if (params.type === 'ws') {
@@ -36,11 +40,13 @@ const trackerServer = new TrackerServer({
     peersIps[ ip ] = peersIps[ ip ] ? peersIps[ ip ] + 1 : 1
     peersIpInfoHash[ key ] = peersIpInfoHash[ key ] ? peersIpInfoHash[ key ] + 1 : 1
 
-    if (peersIpInfoHash[ key ] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
+    if (CONFIG.TRACKER.REJECT_TOO_MANY_ANNOUNCES && peersIpInfoHash[ key ] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
       return cb(new Error(`Too many requests (${peersIpInfoHash[ key ]} of ip ${ip} for torrent ${infoHash}`))
     }
 
     try {
+      if (CONFIG.TRACKER.PRIVATE === false) return cb()
+
       const videoFileExists = await VideoFileModel.doesInfohashExist(infoHash)
       if (videoFileExists === true) return cb()
 
@@ -55,13 +61,16 @@ const trackerServer = new TrackerServer({
   }
 })
 
-trackerServer.on('error', function (err) {
-  logger.error('Error in tracker.', { err })
-})
+if (CONFIG.TRACKER.ENABLED !== false) {
 
-trackerServer.on('warning', function (err) {
-  logger.warn('Warning in tracker.', { err })
-})
+  trackerServer.on('error', function (err) {
+    logger.error('Error in tracker.', { err })
+  })
+
+  trackerServer.on('warning', function (err) {
+    logger.warn('Warning in tracker.', { err })
+  })
+}
 
 const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
 trackerRouter.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))

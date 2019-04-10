@@ -29,6 +29,7 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Video } from '@app/shared/video/video.model'
+import { isWebRTCDisabled } from '../../../assets/player/utils'
 
 @Component({
   selector: 'my-video-watch',
@@ -71,6 +72,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private currentTime: number
   private paramsSub: Subscription
   private queryParamsSub: Subscription
+  private configSub: Subscription
 
   constructor (
     private elementRef: ElementRef,
@@ -100,12 +102,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    if (
-      !!((window as any).RTCPeerConnection || (window as any).mozRTCPeerConnection || (window as any).webkitRTCPeerConnection) === false ||
-      peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
-    ) {
-      this.hasAlreadyAcceptedPrivacyConcern = true
-    }
+    this.configSub = this.serverService.configLoaded
+        .subscribe(() => {
+          if (
+            isWebRTCDisabled() ||
+            this.serverService.getConfig().tracker.enabled === false ||
+            peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
+          ) {
+            this.hasAlreadyAcceptedPrivacyConcern = true
+          }
+        })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const videoId = routeParams[ 'videoId' ]

@@ -97,4 +97,8 @@ export interface ServerConfig {
       intervalDays: number
     }
   }
+
+  tracker: {
+    enabled: boolean
+  }
 }

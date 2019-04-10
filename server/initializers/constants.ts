@@ -243,6 +243,11 @@ const CONFIG = {
     REPORT_ONLY: config.get<boolean>('csp.report_only'),
     REPORT_URI: config.get<boolean>('csp.report_uri')
   },
+  TRACKER: {
+    ENABLED: config.get<boolean>('tracker.enabled'),
+    PRIVATE: config.get<boolean>('tracker.private'),
+    REJECT_TOO_MANY_ANNOUNCES: config.get<boolean>('tracker.reject_too_many_announces')
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

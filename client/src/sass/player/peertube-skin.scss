@@ -21,16 +21,16 @@
   .vjs-dock-description {
     font-size: 11px;
 
-    &::before, &::after {
+    .text::before, .text::after {
       display: inline-block;
       content: '\1F308';
     }
 
-    &::before {
+    .text::before {
       margin-right: 4px;
     }
 
-    &::after {
+    .text::after {
       margin-left: 4px;
       transform: scale(-1, 1);
     }

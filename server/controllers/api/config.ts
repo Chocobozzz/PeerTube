@@ -136,6 +136,9 @@ async function getConfig (req: express.Request, res: express.Response) {
       videos: {
         intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
       }
+    },
+    tracker: {
+      enabled: CONFIG.TRACKER.ENABLED
     }
   }
 

@@ -101,6 +101,16 @@ csp:
   report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
   report_uri:
 
+tracker:
+  # If you disable the tracker, you disable the P2P aspect of PeerTube
+  enabled: true
+  # Only handle requests on your videos.
+  # If you set this to false it means you have a public tracker.
+  # Then, it is possible that clients overload your instance with external torrents
+  private: true
+  # Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)
+  reject_too_many_announces: false
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

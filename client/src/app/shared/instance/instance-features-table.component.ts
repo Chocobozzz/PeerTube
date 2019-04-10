@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ServerConfig } from '../../../../../shared'
 
 @Component({
   selector: 'my-instance-features-table',
@@ -65,6 +64,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
       {
         label: this.i18n('Torrent import'),
         value: config.import.videos.torrent.enabled
+      },
+      {
+        label: this.i18n('P2P enabled'),
+        value: config.tracker.enabled
       }
     ]
   }

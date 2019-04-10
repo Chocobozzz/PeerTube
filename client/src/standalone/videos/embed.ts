@@ -2,7 +2,7 @@ import './embed.scss'
 
 import * as Channel from 'jschannel'
 
-import { peertubeTranslate, ResultList, VideoDetails } from '../../../../shared'
+import { peertubeTranslate, ResultList, ServerConfig, VideoDetails } from '../../../../shared'
 import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
@@ -177,6 +177,10 @@ class PeerTubeEmbed {
     return fetch(this.getVideoUrl(videoId) + '/captions')
   }
 
+  loadConfig (): Promise<Response> {
+    return fetch('/api/v1/config')
+  }
+
   removeElement (element: HTMLElement) {
     element.parentElement.removeChild(element)
   }
@@ -237,10 +241,10 @@ class PeerTubeEmbed {
     try {
       const params = new URL(window.location.toString()).searchParams
 
-      this.autoplay = this.getParamToggle(params, 'autoplay')
-      this.controls = this.getParamToggle(params, 'controls')
-      this.muted = this.getParamToggle(params, 'muted')
-      this.loop = this.getParamToggle(params, 'loop')
+      this.autoplay = this.getParamToggle(params, 'autoplay', false)
+      this.controls = this.getParamToggle(params, 'controls', true)
+      this.muted = this.getParamToggle(params, 'muted', false)
+      this.loop = this.getParamToggle(params, 'loop', false)
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
 
       this.scope = this.getParamString(params, 'scope', this.scope)
@@ -258,10 +262,11 @@ class PeerTubeEmbed {
     const urlParts = window.location.pathname.split('/')
     const videoId = urlParts[ urlParts.length - 1 ]
 
-    const [ serverTranslations, videoResponse, captionsResponse ] = await Promise.all([
+    const [ serverTranslations, videoResponse, captionsResponse, configResponse ] = await Promise.all([
       PeertubePlayerManager.getServerTranslations(window.location.origin, navigator.language),
       this.loadVideoInfo(videoId),
-      this.loadVideoCaptions(videoId)
+      this.loadVideoCaptions(videoId),
+      this.loadConfig()
     ])
 
     if (!videoResponse.ok) {
@@ -338,9 +343,14 @@ class PeerTubeEmbed {
     window[ 'videojsPlayer' ] = this.player
 
     if (this.controls) {
+      const config: ServerConfig = await configResponse.json()
+      const description = config.tracker.enabled
+        ? '<span class="text">' + this.player.localize('Uses P2P, others may know your IP is downloading this video.') + '</span>'
+        : undefined
+
       this.player.dock({
         title: videoInfo.name,
-        description: this.player.localize('Uses P2P, others may know your IP is downloading this video.')
+        description
       })
     }
 

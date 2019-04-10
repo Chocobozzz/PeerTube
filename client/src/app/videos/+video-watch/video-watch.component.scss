@@ -427,6 +427,7 @@ my-video-comments {
 // If the view is not expanded, take into account the menu
 .privacy-concerns {
   width: calc(100% - #{$menu-width});
+  margin-left: -15px;
 }
 
 @media screen and (max-width: $small-view) {

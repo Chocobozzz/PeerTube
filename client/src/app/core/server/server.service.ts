@@ -105,6 +105,9 @@ export class ServerService {
           enabled: false
         }
       }
+    },
+    tracker: {
+      enabled: true
     }
   }
   private videoCategories: Array<VideoConstant<number>> = []
