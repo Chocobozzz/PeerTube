@@ -730,6 +730,8 @@ const FEEDS = {
   COUNT: 20
 }
 
+const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
+
 // ---------------------------------------------------------------------------
 
 const TRACKER_RATE_LIMITS = {
@@ -819,6 +821,7 @@ export {
   STATIC_PATHS,
   VIDEO_IMPORT_TIMEOUT,
   VIDEO_PLAYLIST_TYPES,
+  MAX_LOGS_OUTPUT_CHARACTERS,
   ACTIVITY_PUB,
   ACTIVITY_PUB_ACTOR_TYPES,
   THUMBNAILS_SIZE,

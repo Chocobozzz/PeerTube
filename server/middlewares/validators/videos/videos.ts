@@ -14,18 +14,18 @@ import {
 } from '../../../helpers/custom-validators/misc'
 import {
   checkUserCanManageVideo,
-  isVideoOriginallyPublishedAtValid,
+  doesVideoChannelOfAccountExist,
+  doesVideoExist,
   isScheduleVideoUpdatePrivacyValid,
   isVideoCategoryValid,
-  doesVideoChannelOfAccountExist,
   isVideoDescriptionValid,
-  doesVideoExist,
   isVideoFile,
   isVideoFilterValid,
   isVideoImage,
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
+  isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
   isVideoSupportValid,
   isVideoTagsValid
@@ -37,10 +37,8 @@ import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { VideoModel } from '../../../models/video/video'
-import { UserModel } from '../../../models/account/user'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
-import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
 import { AccountModel } from '../../../models/account/account'
 import { VideoFetchType } from '../../../helpers/video'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
