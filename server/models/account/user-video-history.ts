@@ -67,7 +67,7 @@ export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
     })
   }
 
-  static removeHistoryBefore (user: UserModel, beforeDate: string, t: Transaction) {
+  static removeUserHistoryBefore (user: UserModel, beforeDate: string, t: Transaction) {
     const query: DestroyOptions = {
       where: {
         userId: user.id
@@ -78,6 +78,18 @@ export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
     if (beforeDate) {
       query.where.updatedAt = {
         [Op.lt]: beforeDate
+      }
+    }
+
+    return UserVideoHistoryModel.destroy(query)
+  }
+
+  static removeOldHistory (beforeDate: string) {
+    const query: DestroyOptions = {
+      where: {
+        updatedAt: {
+          [Op.lt]: beforeDate
+        }
       }
     }
 

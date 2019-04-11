@@ -7,14 +7,15 @@ import {
   flushTests,
   getVideosListWithToken,
   getVideoWithToken,
-  killallServers,
+  killallServers, reRunServer,
   runServer,
   searchVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
   updateMyUser,
   uploadVideo,
-  userLogin
+  userLogin,
+  wait
 } from '../../../../shared/utils'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
 import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/utils/videos/video-history'
@@ -190,6 +191,35 @@ describe('Test videos history', function () {
     const videos: Video[] = res.body.data
     expect(videos[0].name).to.equal('video 1')
     expect(videos[1].name).to.equal('video 3')
+  })
+
+  it('Should not clean old history', async function () {
+    this.timeout(50000)
+
+    killallServers([ server ])
+
+    await reRunServer(server, { history: { videos: { max_age: '10 days' } } })
+
+    await wait(6000)
+
+    // Should still have history
+
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+
+    expect(res.body.total).to.equal(2)
+  })
+
+  it('Should clean old history', async function () {
+    this.timeout(50000)
+
+    killallServers([ server ])
+
+    await reRunServer(server, { history: { videos: { max_age: '5 seconds' } } })
+
+    await wait(6000)
+
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+    expect(res.body.total).to.equal(0)
   })
 
   after(async function () {

@@ -158,12 +158,12 @@ const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 const VIDEO_IMPORT_TIMEOUT = 1000 * 3600 // 1 hour
 
-// 1 hour
-let SCHEDULER_INTERVALS_MS = {
+const SCHEDULER_INTERVALS_MS = {
   actorFollowScores: 60000 * 60, // 1 hour
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
-  youtubeDLUpdate: 60000 * 60 * 24 // 1 day
+  youtubeDLUpdate: 60000 * 60 * 24, // 1 day
+  removeOldHistory: 60000 * 60 * 24 // 1 day
 }
 
 // ---------------------------------------------------------------------------
@@ -591,6 +591,7 @@ if (isTestInstance() === true) {
 
   SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
+  SCHEDULER_INTERVALS_MS.removeOldHistory = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   REPEAT_JOBS[ 'videos-views' ] = { every: 5000 }
 
@@ -734,7 +735,7 @@ function buildVideosExtname () {
 }
 
 function loadLanguages () {
-  VIDEO_LANGUAGES = buildLanguages()
+  Object.assign(VIDEO_LANGUAGES, buildLanguages())
 }
 
 function buildLanguages () {

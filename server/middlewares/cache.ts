@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as AsyncLock from 'async-lock'
-import { parseDuration } from '../helpers/core-utils'
+import { parseDurationToMs } from '../helpers/core-utils'
 import { Redis } from '../lib/redis'
 import { logger } from '../helpers/logger'
 
@@ -24,7 +24,7 @@ function cacheRoute (lifetimeArg: string | number) {
           res.send = (body) => {
             if (res.statusCode >= 200 && res.statusCode < 400) {
               const contentType = res.get('content-type')
-              const lifetime = parseDuration(lifetimeArg)
+              const lifetime = parseDurationToMs(lifetimeArg)
 
               Redis.Instance.setCachedRoute(req, body, lifetime, contentType, res.statusCode)
                    .then(() => done())

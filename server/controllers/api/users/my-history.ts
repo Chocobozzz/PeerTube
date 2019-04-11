@@ -48,7 +48,7 @@ async function removeUserHistory (req: express.Request, res: express.Response) {
   const beforeDate = req.body.beforeDate || null
 
   await sequelizeTypescript.transaction(t => {
-    return UserVideoHistoryModel.removeHistoryBefore(user, beforeDate, t)
+    return UserVideoHistoryModel.removeUserHistoryBefore(user, beforeDate, t)
   })
 
   // Do not send the delete to other instances, we delete OUR copy of this video abuse

@@ -5,7 +5,8 @@ import 'multer'
 import * as validator from 'validator'
 import { UserRight, VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
-  CONSTRAINTS_FIELDS, MIMETYPES,
+  CONSTRAINTS_FIELDS,
+  MIMETYPES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES,

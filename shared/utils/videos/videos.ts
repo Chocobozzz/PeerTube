@@ -18,8 +18,10 @@ import {
 } from '../'
 import * as validator from 'validator'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, loadLanguages, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
+
+loadLanguages()
 
 type VideoAttributes = {
   name?: string

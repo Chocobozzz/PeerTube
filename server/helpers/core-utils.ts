@@ -40,7 +40,7 @@ const timeTable = {
   month:        3600000 * 24 * 30
 }
 
-export function parseDuration (duration: number | string): number {
+export function parseDurationToMs (duration: number | string): number {
   if (typeof duration === 'number') return duration
 
   if (typeof duration === 'string') {

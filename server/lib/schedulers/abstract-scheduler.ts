@@ -1,4 +1,5 @@
 import { logger } from '../../helpers/logger'
+import * as Bluebird from 'bluebird'
 
 export abstract class AbstractScheduler {
 
@@ -30,5 +31,5 @@ export abstract class AbstractScheduler {
     }
   }
 
-  protected abstract internalExecute (): Promise<any>
+  protected abstract internalExecute (): Promise<any> | Bluebird<any>
 }

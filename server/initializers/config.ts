@@ -2,7 +2,7 @@ import { IConfig } from 'config'
 import { dirname, join } from 'path'
 import { VideosRedundancy } from '../../shared/models'
 // Do not use barrels, remain constants as independent as possible
-import { buildPath, parseBytes, parseDuration, root } from '../helpers/core-utils'
+import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import * as bytes from 'bytes'
 
@@ -80,7 +80,7 @@ const CONFIG = {
   },
   REDUNDANCY: {
     VIDEOS: {
-      CHECK_INTERVAL: parseDuration(config.get<string>('redundancy.videos.check_interval')),
+      CHECK_INTERVAL: parseDurationToMs(config.get<string>('redundancy.videos.check_interval')),
       STRATEGIES: buildVideosRedundancy(config.get<any[]>('redundancy.videos.strategies'))
     }
   },
@@ -93,6 +93,11 @@ const CONFIG = {
     ENABLED: config.get<boolean>('tracker.enabled'),
     PRIVATE: config.get<boolean>('tracker.private'),
     REJECT_TOO_MANY_ANNOUNCES: config.get<boolean>('tracker.reject_too_many_announces')
+  },
+  HISTORY: {
+    VIDEOS: {
+      MAX_AGE: parseDurationToMs(config.get('history.videos.max_age'))
+    }
   },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
@@ -216,7 +221,7 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
 
   return objs.map(obj => {
     return Object.assign({}, obj, {
-      minLifetime: parseDuration(obj.min_lifetime),
+      minLifetime: parseDurationToMs(obj.min_lifetime),
       size: bytes.parse(obj.size),
       minViews: obj.min_views
     })

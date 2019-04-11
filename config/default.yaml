@@ -111,6 +111,13 @@ tracker:
   # Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)
   reject_too_many_announces: false
 
+history:
+  videos:
+    # If you want to limit users videos history
+    # -1 means there is no limitations
+    # Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)
+    max_age: -1
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
