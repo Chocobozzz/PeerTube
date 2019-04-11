@@ -20,6 +20,7 @@ import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 import { JobsComponent } from '@app/+admin/system/jobs/jobs.component'
 import { JobService, LogsComponent, LogsService, SystemComponent } from '@app/+admin/system'
+import { DebugComponent, DebugService } from '@app/+admin/system/debug'
 
 @NgModule({
   imports: [
@@ -54,6 +55,7 @@ import { JobService, LogsComponent, LogsService, SystemComponent } from '@app/+a
     SystemComponent,
     JobsComponent,
     LogsComponent,
+    DebugComponent,
 
     ConfigComponent,
     EditCustomConfigComponent
@@ -68,6 +70,7 @@ import { JobService, LogsComponent, LogsService, SystemComponent } from '@app/+a
     RedundancyService,
     JobService,
     LogsService,
+    DebugService,
     ConfigService
   ]
 })

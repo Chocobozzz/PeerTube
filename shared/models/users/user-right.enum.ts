@@ -7,6 +7,8 @@ export enum UserRight {
 
   MANAGE_LOGS,
 
+  MANAGE_DEBUG,
+
   MANAGE_SERVER_REDUNDANCY,
 
   MANAGE_VIDEO_ABUSES,

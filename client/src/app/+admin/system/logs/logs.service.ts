@@ -9,7 +9,7 @@ import { LogLevel } from '@shared/models/server/log-level.type'
 
 @Injectable()
 export class LogsService {
-  private static BASE_JOB_URL = environment.apiUrl + '/api/v1/server/logs'
+  private static BASE_LOG_URL = environment.apiUrl + '/api/v1/server/logs'
 
   constructor (
     private authHttp: HttpClient,
@@ -17,14 +17,14 @@ export class LogsService {
     private restExtractor: RestExtractor
   ) {}
 
-  getLogs (level: LogLevel, startDate: string, endDate?: string): Observable<any> {
+  getLogs (level: LogLevel, startDate: string, endDate?: string): Observable<any[]> {
     let params = new HttpParams()
     params = params.append('startDate', startDate)
     params = params.append('level', level)
 
     if (endDate) params.append('endDate', endDate)
 
-    return this.authHttp.get<any[]>(LogsService.BASE_JOB_URL, { params })
+    return this.authHttp.get<any[]>(LogsService.BASE_LOG_URL, { params })
                .pipe(
                  map(rows => rows.map(r => new LogRow(r))),
                  catchError(err => this.restExtractor.handleError(err))

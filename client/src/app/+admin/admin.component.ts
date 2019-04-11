@@ -24,15 +24,19 @@ export class AdminComponent {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
 
-  hasJobsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
+  hasConfigRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
   }
 
   hasLogsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_LOGS)
   }
 
-  hasConfigRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
+  hasJobsRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
+  }
+
+  hasDebugRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)
   }
 }
