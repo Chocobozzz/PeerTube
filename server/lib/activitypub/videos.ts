@@ -19,7 +19,6 @@ import { logger } from '../../helpers/logger'
 import { doRequest, downloadImage } from '../../helpers/requests'
 import {
   ACTIVITY_PUB,
-  CONFIG,
   MIMETYPES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   REMOTE_SCHEME,
@@ -51,6 +50,7 @@ import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
+import { CONFIG } from '../../initializers/config'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and is published, we federate it

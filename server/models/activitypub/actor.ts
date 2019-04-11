@@ -30,7 +30,7 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
+import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers'
 import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
@@ -516,7 +516,7 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   getHost () {
-    return this.Server ? this.Server.host : CONFIG.WEBSERVER.HOST
+    return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 
   getRedundancyAllowed () {
@@ -526,7 +526,7 @@ export class ActorModel extends Model<ActorModel> {
   getAvatarUrl () {
     if (!this.avatarId) return undefined
 
-    return CONFIG.WEBSERVER.URL + this.Avatar.getWebserverPath()
+    return WEBSERVER.URL + this.Avatar.getWebserverPath()
   }
 
   isOutdated () {

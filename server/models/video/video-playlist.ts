@@ -26,12 +26,12 @@ import {
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
   ACTIVITY_PUB,
-  CONFIG,
   CONSTRAINTS_FIELDS,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
   VIDEO_PLAYLIST_PRIVACIES,
-  VIDEO_PLAYLIST_TYPES
+  VIDEO_PLAYLIST_TYPES,
+  WEBSERVER
 } from '../../initializers'
 import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
@@ -43,6 +43,7 @@ import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
 import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
+import { CONFIG } from '../../initializers/config'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -417,7 +418,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   }
 
   getThumbnailUrl () {
-    return CONFIG.WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.getThumbnailName()
+    return WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.getThumbnailName()
   }
 
   getThumbnailStaticPath () {

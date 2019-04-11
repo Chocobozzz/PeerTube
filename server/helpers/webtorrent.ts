@@ -2,7 +2,7 @@ import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
 import { createWriteStream, ensureDir, remove } from 'fs-extra'
-import { CONFIG } from '../initializers'
+import { CONFIG } from '../initializers/config'
 import { dirname, join } from 'path'
 
 async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: string }, timeout: number) {

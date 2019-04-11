@@ -3,7 +3,7 @@ import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { CONFIG, RATES_LIMIT, sequelizeTypescript } from '../../../initializers'
+import { RATES_LIMIT, sequelizeTypescript, WEBSERVER } from '../../../initializers'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
 import { createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
@@ -43,6 +43,7 @@ import { myVideosHistoryRouter } from './my-history'
 import { myNotificationsRouter } from './my-notifications'
 import { Notifier } from '../../../lib/notifier'
 import { mySubscriptionsRouter } from './my-subscriptions'
+import { CONFIG } from '../../../initializers/config'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -293,7 +294,7 @@ async function askResetUserPassword (req: express.Request, res: express.Response
   const user = res.locals.user
 
   const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
-  const url = CONFIG.WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
+  const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
   await Emailer.Instance.addPasswordResetEmailJob(user.email, url)
 
   return res.status(204).end()
@@ -310,7 +311,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
 
 async function sendVerifyUserEmail (user: UserModel) {
   const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
-  const url = CONFIG.WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
+  const url = WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
   await Emailer.Instance.addVerifyEmailJob(user.email, url)
   return
 }

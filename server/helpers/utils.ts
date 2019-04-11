@@ -1,5 +1,4 @@
 import { ResultList } from '../../shared'
-import { CONFIG } from '../initializers'
 import { ApplicationModel } from '../models/application/application'
 import { execPromise, execPromise2, pseudoRandomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
@@ -7,6 +6,7 @@ import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
+import { CONFIG } from '../initializers/config'
 
 function deleteFileAsync (path: string) {
   remove(path)

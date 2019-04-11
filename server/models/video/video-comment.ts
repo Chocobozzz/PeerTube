@@ -18,7 +18,7 @@ import { ActivityTagObject } from '../../../shared/models/activitypub/objects/co
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers'
 import { sendDeleteVideoComment } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
@@ -482,7 +482,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     let result: string[] = []
 
     const localMention = `@(${actorNameAlphabet}+)`
-    const remoteMention = `${localMention}@${CONFIG.WEBSERVER.HOST}`
+    const remoteMention = `${localMention}@${WEBSERVER.HOST}`
 
     const mentionRegex = this.isOwned()
       ? '(?:(?:' + remoteMention + ')|(?:' + localMention + '))' // Include local mentions?

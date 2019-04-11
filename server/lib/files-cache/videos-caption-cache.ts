@@ -1,8 +1,9 @@
 import { join } from 'path'
-import { FILES_CACHE, CONFIG } from '../../initializers'
+import { FILES_CACHE } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { CONFIG } from '../../initializers/config'
 
 type GetPathParam = { videoId: string, language: string }
 

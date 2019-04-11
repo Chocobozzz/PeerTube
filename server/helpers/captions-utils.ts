@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { CONFIG } from '../initializers'
+import { CONFIG } from '../initializers/config'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import * as srt2vtt from 'srt-to-vtt'
 import { createReadStream, createWriteStream, remove, move } from 'fs-extra'

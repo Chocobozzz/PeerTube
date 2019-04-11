@@ -51,10 +51,9 @@ import { getServerActor } from '../../helpers/utils'
 import {
   ACTIVITY_PUB,
   API_VERSION,
-  CONFIG,
   CONSTRAINTS_FIELDS,
-  HLS_STREAMING_PLAYLIST_DIRECTORY,
   HLS_REDUNDANCY_DIRECTORY,
+  HLS_STREAMING_PLAYLIST_DIRECTORY,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   STATIC_DOWNLOAD_PATHS,
@@ -64,7 +63,8 @@ import {
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES,
-  VIDEO_STATES
+  VIDEO_STATES,
+  WEBSERVER
 } from '../../initializers'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
@@ -77,12 +77,13 @@ import {
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
   createSimilarityAttribute,
-  getVideoSort, isOutdated,
+  getVideoSort,
+  isOutdated,
   throwIfNotValid
 } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
-import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel'
+import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
@@ -105,6 +106,7 @@ import { UserModel } from '../account/user'
 import { VideoImportModel } from './video-import'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoPlaylistElementModel } from './video-playlist-element'
+import { CONFIG } from '../../initializers/config'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -1664,10 +1666,10 @@ export class VideoModel extends Model<VideoModel> {
       name: `${this.name} ${videoFile.resolution}p${videoFile.extname}`,
       createdBy: 'PeerTube',
       announceList: [
-        [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ],
-        [ CONFIG.WEBSERVER.URL + '/tracker/announce' ]
+        [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
+        [ WEBSERVER.URL + '/tracker/announce' ]
       ],
-      urlList: [ CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
+      urlList: [ WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
     }
 
     const torrent = await createTorrentPromise(this.getVideoFilePath(videoFile), options)
@@ -1781,8 +1783,8 @@ export class VideoModel extends Model<VideoModel> {
     let baseUrlWs
 
     if (this.isOwned()) {
-      baseUrlHttp = CONFIG.WEBSERVER.URL
-      baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
+      baseUrlHttp = WEBSERVER.URL
+      baseUrlWs = WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT
     } else {
       baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Actor.Server.host
       baseUrlWs = REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Actor.Server.host

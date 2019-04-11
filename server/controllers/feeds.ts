@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
+import { FEEDS, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import { THUMBNAILS_SIZE } from '../initializers'
 import {
   asyncMiddleware,
@@ -14,6 +14,7 @@ import * as Feed from 'pfeed'
 import { cacheRoute } from '../middlewares/cache'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { buildNSFWFilter } from '../helpers/express-utils'
+import { CONFIG } from '../initializers/config'
 
 const feedsRouter = express.Router()
 
@@ -54,7 +55,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   // Adding video items to the feed, one at a time
   comments.forEach(comment => {
-    const link = CONFIG.WEBSERVER.URL + comment.getCommentStaticPath()
+    const link = WEBSERVER.URL + comment.getCommentStaticPath()
 
     feed.addItem({
       title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,
@@ -122,7 +123,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
     feed.addItem({
       title: video.name,
       id: video.url,
-      link: CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid,
+      link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
       description: video.getTruncatedDescription(),
       content: video.description,
       author: [
@@ -137,7 +138,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
       torrent: torrents,
       thumbnail: [
         {
-          url: CONFIG.WEBSERVER.URL + video.getThumbnailStaticPath(),
+          url: WEBSERVER.URL + video.getThumbnailStaticPath(),
           height: THUMBNAILS_SIZE.height,
           width: THUMBNAILS_SIZE.width
         }
@@ -150,7 +151,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
 }
 
 function initFeed (name: string, description: string) {
-  const webserverUrl = CONFIG.WEBSERVER.URL
+  const webserverUrl = WEBSERVER.URL
 
   return new Feed({
     title: name,

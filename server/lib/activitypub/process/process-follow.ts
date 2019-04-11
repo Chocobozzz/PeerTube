@@ -1,13 +1,14 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { sequelizeTypescript, CONFIG } from '../../../initializers'
+import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { sendAccept, sendReject } from '../send'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
+import { CONFIG } from '../../../initializers/config'
 
 async function processFollowActivity (activity: ActivityFollow, byActor: ActorModel) {
   const activityObject = getAPId(activity.object)

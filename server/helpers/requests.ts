@@ -1,10 +1,11 @@
 import * as Bluebird from 'bluebird'
 import { createWriteStream, remove } from 'fs-extra'
 import * as request from 'request'
-import { ACTIVITY_PUB, CONFIG } from '../initializers'
+import { ACTIVITY_PUB } from '../initializers'
 import { processImage } from './image-utils'
 import { join } from 'path'
 import { logger } from './logger'
+import { CONFIG } from '../initializers/config'
 
 function doRequest <T> (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean },

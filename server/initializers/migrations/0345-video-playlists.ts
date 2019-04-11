@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
-import { CONFIG } from '../constants'
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '../../../shared/models/videos'
 import * as uuidv4 from 'uuid/v4'
+import { WEBSERVER } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS "videoPlaylistElement"
     for (const username of usernames) {
       const uuid = uuidv4()
 
-      const baseUrl = CONFIG.WEBSERVER.URL + '/video-playlists/' + uuid
+      const baseUrl = WEBSERVER.URL + '/video-playlists/' + uuid
       const query = `
  INSERT INTO "videoPlaylist" ("url", "uuid", "name", "privacy", "type", "ownerAccountId", "createdAt", "updatedAt")
  SELECT '${baseUrl}' AS "url",

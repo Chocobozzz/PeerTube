@@ -4,7 +4,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
-import { CONFIG, SERVER_ACTOR_NAME } from '../../initializers'
+import { SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
@@ -16,7 +16,7 @@ const followValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Force https if the administrator wants to make friends
-    if (isTestInstance() === false && CONFIG.WEBSERVER.SCHEME === 'http') {
+    if (isTestInstance() === false && WEBSERVER.SCHEME === 'http') {
       return res.status(500)
         .json({
           error: 'Cannot follow on a non HTTPS web server.'

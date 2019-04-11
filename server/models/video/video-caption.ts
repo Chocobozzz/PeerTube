@@ -16,10 +16,11 @@ import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
-import { CONFIG, STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers'
+import { STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
+import { CONFIG } from '../../initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'

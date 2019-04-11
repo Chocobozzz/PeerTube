@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
-import { CONFIG, REMOTE_SCHEME, sequelizeTypescript } from '../../../initializers'
+import { REMOTE_SCHEME, sequelizeTypescript, WEBSERVER } from '../../../initializers'
 import { sendFollow } from '../../activitypub/send'
 import { sanitizeHost } from '../../../helpers/core-utils'
 import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
@@ -23,7 +23,7 @@ async function processActivityPubFollow (job: Bull.Job) {
   logger.info('Processing ActivityPub follow in job %d.', job.id)
 
   let targetActor: ActorModel
-  if (!host || host === CONFIG.WEBSERVER.HOST) {
+  if (!host || host === WEBSERVER.HOST) {
     targetActor = await ActorModel.loadLocalByName(payload.name)
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)

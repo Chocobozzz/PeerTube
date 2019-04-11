@@ -1,7 +1,8 @@
 import { join } from 'path'
-import { FILES_CACHE, CONFIG, STATIC_PATHS } from '../../initializers'
+import { FILES_CACHE, STATIC_PATHS } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
+import { CONFIG } from '../../initializers/config'
 
 class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
 

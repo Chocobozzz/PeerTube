@@ -6,9 +6,10 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../../initializers/constants'
+import { ROUTE_CACHE_LIFETIME } from '../../../initializers/constants'
 import { cacheRoute } from '../../../middlewares/cache'
 import { VideoFileModel } from '../../../models/video/video-file'
+import { CONFIG } from '../../../initializers/config'
 
 const statsRouter = express.Router()
 

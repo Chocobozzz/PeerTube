@@ -8,7 +8,6 @@ import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
-  CONFIG,
   MIMETYPES,
   PREVIEWS_SIZE,
   sequelizeTypescript,
@@ -61,6 +60,7 @@ import { move } from 'fs-extra'
 import { watchingRouter } from './watching'
 import { Notifier } from '../../../lib/notifier'
 import { sendView } from '../../../lib/activitypub/send/send-view'
+import { CONFIG } from '../../../initializers/config'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()

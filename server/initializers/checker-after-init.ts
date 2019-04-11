@@ -4,19 +4,20 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { parse } from 'url'
-import { CONFIG } from './constants'
+import { CONFIG } from './config'
 import { logger } from '../helpers/logger'
 import { getServerActor } from '../helpers/utils'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isArray } from '../helpers/custom-validators/misc'
 import { uniq } from 'lodash'
 import { Emailer } from '../lib/emailer'
+import { WEBSERVER } from './constants'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
 
   const parsed = parse(actor.url)
-  if (CONFIG.WEBSERVER.HOST !== parsed.host) {
+  if (WEBSERVER.HOST !== parsed.host) {
     const NODE_ENV = config.util.getEnv('NODE_ENV')
     const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
 

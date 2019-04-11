@@ -1,13 +1,13 @@
 import * as Sequelize from 'sequelize'
-import { CONFIG } from '../constants'
+import { WEBSERVER } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
   queryInterface: Sequelize.QueryInterface,
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
-  const toReplace = CONFIG.WEBSERVER.HOSTNAME + ':443'
-  const by = CONFIG.WEBSERVER.HOST
+  const toReplace = WEBSERVER.HOSTNAME + ':443'
+  const by = WEBSERVER.HOST
   const replacer = column => `replace("${column}", '${toReplace}', '${by}')`
 
   {

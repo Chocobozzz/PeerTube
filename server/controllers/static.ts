@@ -1,12 +1,12 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import {
-  CONFIG,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
   ROUTE_CACHE_LIFETIME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
-  STATIC_PATHS
+  STATIC_PATHS,
+  WEBSERVER
 } from '../initializers'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { cacheRoute } from '../middlewares/cache'
@@ -17,6 +17,7 @@ import { VideoCommentModel } from '../models/video/video-comment'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
+import { CONFIG } from '../initializers/config'
 
 const packageJSON = require('../../../package.json')
 const staticRouter = express.Router()
@@ -121,7 +122,7 @@ staticRouter.use('/.well-known/nodeinfo',
       links: [
         {
           rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0',
-          href: CONFIG.WEBSERVER.URL + '/nodeinfo/2.0.json'
+          href: WEBSERVER.URL + '/nodeinfo/2.0.json'
         }
       ]
     })

@@ -3,12 +3,13 @@ import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
 import {
-  CONFIG,
   CONTACT_FORM_LIFETIME,
   USER_EMAIL_VERIFY_LIFETIME,
   USER_PASSWORD_RESET_LIFETIME,
-  VIDEO_VIEW_LIFETIME
+  VIDEO_VIEW_LIFETIME,
+  WEBSERVER
 } from '../initializers'
+import { CONFIG } from '../initializers/config'
 
 type CachedRoute = {
   body: string,
@@ -41,7 +42,7 @@ class Redis {
       this.client.auth(CONFIG.REDIS.AUTH)
     }
 
-    this.prefix = 'redis-' + CONFIG.WEBSERVER.HOST + '-'
+    this.prefix = 'redis-' + WEBSERVER.HOST + '-'
   }
 
   static getRedisClient () {

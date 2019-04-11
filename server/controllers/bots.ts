@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { asyncMiddleware } from '../middlewares'
-import { CONFIG, ROUTE_CACHE_LIFETIME } from '../initializers'
+import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers'
 import * as sitemapModule from 'sitemap'
 import { logger } from '../helpers/logger'
 import { VideoModel } from '../models/video/video'
@@ -35,7 +35,7 @@ async function getSitemap (req: express.Request, res: express.Response) {
   urls = urls.concat(await getSitemapAccountUrls())
 
   const sitemap = sitemapModule.createSitemap({
-    hostname: CONFIG.WEBSERVER.URL,
+    hostname: WEBSERVER.URL,
     urls: urls
   })
 
@@ -54,7 +54,7 @@ async function getSitemapVideoChannelUrls () {
   const rows = await VideoChannelModel.listLocalsForSitemap('createdAt')
 
   return rows.map(channel => ({
-    url: CONFIG.WEBSERVER.URL + '/video-channels/' + channel.Actor.preferredUsername
+    url: WEBSERVER.URL + '/video-channels/' + channel.Actor.preferredUsername
   }))
 }
 
@@ -62,7 +62,7 @@ async function getSitemapAccountUrls () {
   const rows = await AccountModel.listLocalsForSitemap('createdAt')
 
   return rows.map(channel => ({
-    url: CONFIG.WEBSERVER.URL + '/accounts/' + channel.Actor.preferredUsername
+    url: WEBSERVER.URL + '/accounts/' + channel.Actor.preferredUsername
   }))
 }
 
@@ -78,14 +78,14 @@ async function getSitemapLocalVideoUrls () {
   })
 
   return resultList.data.map(v => ({
-    url: CONFIG.WEBSERVER.URL + '/videos/watch/' + v.uuid,
+    url: WEBSERVER.URL + '/videos/watch/' + v.uuid,
     video: [
       {
         title: v.name,
         // Sitemap description should be < 2000 characters
         description: truncate(v.description || v.name, { length: 2000, omission: '...' }),
-        player_loc: CONFIG.WEBSERVER.URL + '/videos/embed/' + v.uuid,
-        thumbnail_loc: CONFIG.WEBSERVER.URL + v.getThumbnailStaticPath()
+        player_loc: WEBSERVER.URL + '/videos/embed/' + v.uuid,
+        thumbnail_loc: WEBSERVER.URL + v.getThumbnailStaticPath()
       }
     ]
   }))
@@ -97,5 +97,5 @@ function getSitemapBasicUrls () {
     '/videos/local'
   ]
 
-  return paths.map(p => ({ url: CONFIG.WEBSERVER.URL + p }))
+  return paths.map(p => ({ url: WEBSERVER.URL + p }))
 }

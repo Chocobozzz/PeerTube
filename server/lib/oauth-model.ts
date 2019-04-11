@@ -4,8 +4,9 @@ import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
-import { CONFIG, CACHE } from '../initializers/constants'
+import { CACHE } from '../initializers/constants'
 import { Transaction } from 'sequelize'
+import { CONFIG } from '../initializers/config'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 let accessTokenCache: { [ accessToken: string ]: OAuthTokenModel } = {}

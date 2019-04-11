@@ -1,4 +1,4 @@
-import { CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from '../initializers'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers'
 import { join } from 'path'
 import { getVideoFileFPS, transcode } from '../helpers/ffmpeg-utils'
 import { ensureDir, move, remove, stat } from 'fs-extra'
@@ -9,6 +9,7 @@ import { VideoModel } from '../models/video/video'
 import { updateMasterHLSPlaylist, updateSha256Segments } from './hls'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
+import { CONFIG } from '../initializers/config'
 
 async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFileModel) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
@@ -111,12 +112,12 @@ async function generateHlsPlaylist (video: VideoModel, resolution: VideoResoluti
   await updateMasterHLSPlaylist(video)
   await updateSha256Segments(video)
 
-  const playlistUrl = CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
+  const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
 
   await VideoStreamingPlaylistModel.upsert({
     videoId: video.id,
     playlistUrl,
-    segmentsSha256Url: CONFIG.WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid),
+    segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid),
     p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, video.VideoFiles),
     p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
 

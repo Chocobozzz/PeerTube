@@ -3,13 +3,12 @@ import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { doesAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
-import { UserModel } from '../../models/account/user'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist'
 import { ServerModel } from '../../models/server/server'
-import { CONFIG } from '../../initializers'
 import { getServerActor } from '../../helpers/utils'
+import { WEBSERVER } from '../../initializers/constants'
 
 const blockAccountValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),
@@ -79,7 +78,7 @@ const blockServerValidator = [
 
     const host: string = req.body.host
 
-    if (host === CONFIG.WEBSERVER.HOST) {
+    if (host === WEBSERVER.HOST) {
       return res.status(409)
         .send({ error: 'You cannot block your own server.' })
         .end()

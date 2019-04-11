@@ -3,10 +3,11 @@ import { UserRight } from '../../../../shared/models/users'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
 import { mtimeSortFilesDesc } from '../../../../shared/utils/logs/logs'
 import { readdir, readFile } from 'fs-extra'
-import { CONFIG, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers'
+import { MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers'
 import { join } from 'path'
 import { getLogsValidator } from '../../../middlewares/validators/logs'
 import { LogLevel } from '../../../../shared/models/server/log-level.type'
+import { CONFIG } from '../../../initializers/config'
 
 const logsRouter = express.Router()
 

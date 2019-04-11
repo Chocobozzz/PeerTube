@@ -2,7 +2,7 @@
 import * as express from 'express'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
-import { CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
+import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers'
 import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'
@@ -19,7 +19,6 @@ import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
-import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
 import { cacheRoute } from '../../middlewares/cache'
@@ -35,11 +34,9 @@ import {
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
 import { getServerActor } from '../../helpers/utils'
-import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 
 const activityPubClientRouter = express.Router()
@@ -213,7 +210,7 @@ async function videoController (req: express.Request, res: express.Response) {
   // We need more attributes
   const video = await VideoModel.loadForGetAPI(res.locals.video.id)
 
-  if (video.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(video.url)
+  if (video.url.startsWith(WEBSERVER.URL) === false) return res.redirect(video.url)
 
   // We need captions to render AP object
   video.VideoCaptions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -232,7 +229,7 @@ async function videoController (req: express.Request, res: express.Response) {
 async function videoAnnounceController (req: express.Request, res: express.Response) {
   const share = res.locals.videoShare
 
-  if (share.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(share.url)
+  if (share.url.startsWith(WEBSERVER.URL) === false) return res.redirect(share.url)
 
   const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.video, undefined)
 
@@ -306,7 +303,7 @@ async function videoChannelFollowingController (req: express.Request, res: expre
 async function videoCommentController (req: express.Request, res: express.Response) {
   const videoComment = res.locals.videoComment
 
-  if (videoComment.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(videoComment.url)
+  if (videoComment.url.startsWith(WEBSERVER.URL) === false) return res.redirect(videoComment.url)
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   const isPublic = true // Comments are always public
@@ -324,7 +321,7 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
 async function videoRedundancyController (req: express.Request, res: express.Response) {
   const videoRedundancy = res.locals.videoRedundancy
-  if (videoRedundancy.url.startsWith(CONFIG.WEBSERVER.URL) === false) return res.redirect(videoRedundancy.url)
+  if (videoRedundancy.url.startsWith(WEBSERVER.URL) === false) return res.redirect(videoRedundancy.url)
 
   const serverActor = await getServerActor()
 
@@ -366,7 +363,7 @@ async function actorFollowing (req: express.Request, actor: ActorModel) {
     return ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
+  return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 async function actorFollowers (req: express.Request, actor: ActorModel) {
@@ -374,7 +371,7 @@ async function actorFollowers (req: express.Request, actor: ActorModel) {
     return ActorFollowModel.listAcceptedFollowerUrlsForAP([ actor.id ], undefined, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
+  return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 async function actorPlaylists (req: express.Request, account: AccountModel) {
@@ -382,7 +379,7 @@ async function actorPlaylists (req: express.Request, account: AccountModel) {
     return VideoPlaylistModel.listPublicUrlsOfForAP(account.id, start, count)
   }
 
-  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.path, handler, req.query.page)
+  return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
 function videoRates (req: express.Request, rateType: VideoRateType, video: VideoModel, url: string) {

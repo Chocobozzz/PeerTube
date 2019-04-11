@@ -4,11 +4,11 @@ import { diff } from 'deep-object-diff'
 import { chain } from 'lodash'
 import * as flatten from 'flat'
 import * as winston from 'winston'
-import { CONFIG } from '../initializers'
 import { jsonLoggerFormat, labelFormatter } from './logger'
 import { User, VideoAbuse, VideoChannel, VideoDetails, VideoImport } from '../../shared'
 import { VideoComment } from '../../shared/models/videos/video-comment.model'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
+import { CONFIG } from '../initializers/config'
 
 function getAuditIdFromRes (res: express.Response) {
   return res.locals.oauth.token.User.username

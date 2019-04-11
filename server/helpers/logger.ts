@@ -2,7 +2,7 @@
 import { mkdirpSync } from 'fs-extra'
 import * as path from 'path'
 import * as winston from 'winston'
-import { CONFIG } from '../initializers'
+import { CONFIG } from '../initializers/config'
 import { omit } from 'lodash'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT

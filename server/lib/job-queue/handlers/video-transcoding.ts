@@ -5,11 +5,12 @@ import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { CONFIG, sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript } from '../../../initializers'
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 import { generateHlsPlaylist, optimizeVideofile, transcodeOriginalVideofile } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
+import { CONFIG } from '../../../initializers/config'
 
 export type VideoTranscodingPayload = {
   videoUUID: string

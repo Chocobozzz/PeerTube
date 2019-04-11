@@ -3,7 +3,7 @@ import { WebFingerData } from '../../shared'
 import { ActorModel } from '../models/activitypub/actor'
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators/activitypub/misc'
-import { CONFIG } from '../initializers'
+import { WEBSERVER } from '../initializers/constants'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,
@@ -19,7 +19,7 @@ async function loadActorUrlOrGetFromWebfinger (uriArg: string) {
   const [ name, host ] = uri.split('@')
   let actor: ActorModel
 
-  if (host === CONFIG.WEBSERVER.HOST) {
+  if (host === WEBSERVER.HOST) {
     actor = await ActorModel.loadLocalByName(name)
   } else {
     actor = await ActorModel.loadByNameAndHost(name, host)

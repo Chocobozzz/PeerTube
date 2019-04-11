@@ -25,9 +25,9 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
-import { CONFIG } from '../../initializers'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
+import { WEBSERVER } from '../../initializers/constants'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -199,7 +199,7 @@ export class AccountModel extends Model<AccountModel> {
   static loadByNameWithHost (nameWithHost: string) {
     const [ accountName, host ] = nameWithHost.split('@')
 
-    if (!host || host === CONFIG.WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
+    if (!host || host === WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
 
     return AccountModel.loadByNameAndHost(accountName, host)
   }

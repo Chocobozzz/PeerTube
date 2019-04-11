@@ -7,7 +7,7 @@ import {
   ActivityUrlObject,
   VideoTorrentObject
 } from '../../../shared/models/activitypub/objects'
-import { CONFIG, MIMETYPES, THUMBNAILS_SIZE } from '../../initializers'
+import { MIMETYPES, THUMBNAILS_SIZE, WEBSERVER } from '../../initializers'
 import { VideoCaptionModel } from './video-caption'
 import {
   getVideoCommentsActivityPubUrl,
@@ -290,7 +290,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     type: 'Link',
     mimeType: 'text/html',
     mediaType: 'text/html',
-    href: CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+    href: WEBSERVER.URL + '/videos/watch/' + video.uuid
   })
 
   const subtitleLanguage = []

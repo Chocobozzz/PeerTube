@@ -7,7 +7,7 @@ import { getCommonVideoEditAttributes } from './videos'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { doesVideoChannelOfAccountExist, isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
-import { CONFIG } from '../../../initializers/constants'
+import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([

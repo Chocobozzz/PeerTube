@@ -5,10 +5,10 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
-import { CONFIG } from '../../initializers'
 import { areValidationErrors } from './utils'
+import { WEBSERVER } from '../../initializers/constants'
 
-const urlShouldStartWith = CONFIG.WEBSERVER.SCHEME + '://' + join(CONFIG.WEBSERVER.HOST, 'videos', 'watch') + '/'
+const urlShouldStartWith = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch') + '/'
 const videoWatchRegex = new RegExp('([^/]+)$')
 const isURLOptions = {
   require_host: true,

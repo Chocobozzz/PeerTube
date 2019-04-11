@@ -1,11 +1,12 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { dirname, join } from 'path'
 import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
-import { CONFIG, FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
+import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
-import { remove, readFile, writeFile } from 'fs-extra'
+import { readFile, remove, writeFile } from 'fs-extra'
+import { CONFIG } from '../initializers/config'
 
 function computeResolutionsToTranscode (videoFileHeight: number) {
   const resolutionsEnabled: number[] = []

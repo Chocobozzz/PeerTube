@@ -1,5 +1,5 @@
 import * as sequelize from 'sequelize'
-import { CONFIG } from '../initializers/constants'
+import { CONFIG } from '../initializers/config'
 import { VideoBlacklistType, UserRight } from '../../shared/models'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { UserModel } from '../models/account/user'

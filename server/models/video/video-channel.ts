@@ -8,7 +8,8 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
-  HasMany, IFindOptions,
+  HasMany,
+  IFindOptions,
   Is,
   Model,
   Scopes,
@@ -28,7 +29,7 @@ import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/a
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers'
 import { ServerModel } from '../server/server'
 import { DefineIndexesOptions } from 'sequelize'
 import { AvatarModel } from '../avatar/avatar'
@@ -419,7 +420,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadByNameWithHostAndPopulateAccount (nameWithHost: string) {
     const [ name, host ] = nameWithHost.split('@')
 
-    if (!host || host === CONFIG.WEBSERVER.HOST) return VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
+    if (!host || host === WEBSERVER.HOST) return VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
 
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }

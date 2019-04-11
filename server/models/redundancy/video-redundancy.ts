@@ -15,7 +15,7 @@ import {
 import { ActorModel } from '../activitypub/actor'
 import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers'
 import { VideoFileModel } from '../video/video-file'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
@@ -29,6 +29,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import * as Bluebird from 'bluebird'
 import * as Sequelize from 'sequelize'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
+import { CONFIG } from '../../initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'

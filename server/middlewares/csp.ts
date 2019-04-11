@@ -1,5 +1,5 @@
 import * as helmet from 'helmet'
-import { CONFIG } from '../initializers/constants'
+import { CONFIG } from '../initializers/config'
 
 const baseDirectives = Object.assign({},
   {

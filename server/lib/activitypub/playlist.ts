@@ -1,6 +1,6 @@
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { crawlCollectionPage } from './crawl'
-import { ACTIVITY_PUB, CONFIG, CRAWL_REQUEST_CONCURRENCY, sequelizeTypescript, THUMBNAILS_SIZE } from '../../initializers'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY, sequelizeTypescript, THUMBNAILS_SIZE } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { getOrCreateActorAndServerAndModel } from './actor'
@@ -17,6 +17,7 @@ import { VideoModel } from '../../models/video/video'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
+import { CONFIG } from '../../initializers/config'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: AccountModel, to: string[]) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPlaylistPrivacy.PUBLIC : VideoPlaylistPrivacy.UNLISTED

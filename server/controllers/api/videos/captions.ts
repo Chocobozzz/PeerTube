@@ -2,12 +2,13 @@ import * as express from 'express'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares'
 import { addVideoCaptionValidator, deleteVideoCaptionValidator, listVideoCaptionsValidator } from '../../../middlewares/validators'
 import { createReqFiles } from '../../../helpers/express-utils'
-import { CONFIG, MIMETYPES, sequelizeTypescript } from '../../../initializers'
+import { MIMETYPES, sequelizeTypescript } from '../../../initializers'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { logger } from '../../../helpers/logger'
 import { federateVideoIfNeeded } from '../../../lib/activitypub'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
+import { CONFIG } from '../../../initializers/config'
 
 const reqVideoCaptionAdd = createReqFiles(
   [ 'captionfile' ],

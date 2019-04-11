@@ -6,9 +6,10 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker-after-init'
-import { FILES_CACHE, CONFIG, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
+import { FILES_CACHE, HLS_STREAMING_PLAYLIST_DIRECTORY, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
-import { remove, ensureDir } from 'fs-extra'
+import { ensureDir, remove } from 'fs-extra'
+import { CONFIG } from './config'
 
 async function installApplication () {
   try {

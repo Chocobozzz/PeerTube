@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CONFIG, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE } from '../initializers'
+import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../initializers'
 import { join } from 'path'
 import { escapeHTML } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
@@ -11,6 +11,7 @@ import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
+import { CONFIG } from '../initializers/config'
 
 export class ClientHtml {
 
@@ -106,7 +107,7 @@ export class ClientHtml {
 
       // Save locale in cookies
       res.cookie('clientLanguage', lang, {
-        secure: CONFIG.WEBSERVER.SCHEME === 'https',
+        secure: WEBSERVER.SCHEME === 'https',
         sameSite: true,
         maxAge: 1000 * 3600 * 24 * 90 // 3 months
       })
@@ -143,12 +144,12 @@ export class ClientHtml {
   }
 
   private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
-    const previewUrl = CONFIG.WEBSERVER.URL + video.getPreviewStaticPath()
-    const videoUrl = CONFIG.WEBSERVER.URL + video.getWatchStaticPath()
+    const previewUrl = WEBSERVER.URL + video.getPreviewStaticPath()
+    const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
     const videoNameEscaped = escapeHTML(video.name)
     const videoDescriptionEscaped = escapeHTML(video.description)
-    const embedUrl = CONFIG.WEBSERVER.URL + video.getEmbedStaticPath()
+    const embedUrl = WEBSERVER.URL + video.getEmbedStaticPath()
 
     const openGraphMetaTags = {
       'og:type': 'video',
@@ -180,7 +181,7 @@ export class ClientHtml {
     const oembedLinkTags = [
       {
         type: 'application/json+oembed',
-        href: CONFIG.WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
+        href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
         title: videoNameEscaped
       }
     ]

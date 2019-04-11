@@ -4,10 +4,11 @@ import * as http from 'http'
 import * as bitTorrentTracker from 'bittorrent-tracker'
 import * as proxyAddr from 'proxy-addr'
 import { Server as WebSocketServer } from 'ws'
-import { CONFIG, TRACKER_RATE_LIMITS } from '../initializers/constants'
+import { TRACKER_RATE_LIMITS } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
 import { parse } from 'url'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { CONFIG } from '../initializers/config'
 
 const TrackerServer = bitTorrentTracker.Server
 

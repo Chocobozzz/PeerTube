@@ -7,7 +7,7 @@ import { body } from 'express-validator/check'
 import { isUserDisplayNameValid } from '../../helpers/custom-validators/users'
 import { Emailer } from '../../lib/emailer'
 import { Redis } from '../../lib/redis'
-import { CONFIG } from '../../initializers/constants'
+import { CONFIG } from '../../initializers/config'
 
 const serverGetValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),

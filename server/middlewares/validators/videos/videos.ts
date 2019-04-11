@@ -32,7 +32,7 @@ import {
 } from '../../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { CONFIG, CONSTRAINTS_FIELDS } from '../../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -43,6 +43,7 @@ import { AccountModel } from '../../../models/account/account'
 import { VideoFetchType } from '../../../helpers/video'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { getServerActor } from '../../../helpers/utils'
+import { CONFIG } from '../../../initializers/config'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')

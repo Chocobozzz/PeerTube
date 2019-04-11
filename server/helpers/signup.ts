@@ -1,6 +1,7 @@
-import { CONFIG } from '../initializers'
 import { UserModel } from '../models/account/user'
 import * as ipaddr from 'ipaddr.js'
+import { CONFIG } from '../initializers/config'
+
 const isCidr = require('is-cidr')
 
 async function isSignupAllowed () {

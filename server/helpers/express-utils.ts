@@ -1,10 +1,11 @@
 import * as express from 'express'
 import * as multer from 'multer'
-import { CONFIG, REMOTE_SCHEME } from '../initializers'
+import { REMOTE_SCHEME } from '../initializers'
 import { logger } from './logger'
 import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
+import { CONFIG } from '../initializers/config'
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -58,7 +59,7 @@ function getHostWithPort (host: string) {
   return host
 }
 
-function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
+function badRequest (req: express.Request, res: express.Response) {
   return res.type('json').status(400).end()
 }
 

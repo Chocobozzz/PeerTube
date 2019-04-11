@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { OAuthClientLocal } from '../../../shared'
 import { logger } from '../../helpers/logger'
-import { CONFIG } from '../../initializers'
+import { CONFIG } from '../../initializers/config'
 import { asyncMiddleware } from '../../middlewares'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
 

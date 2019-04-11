@@ -1,5 +1,5 @@
 import { AbstractScheduler } from './abstract-scheduler'
-import { CONFIG, HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers'
+import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT, WEBSERVER } from '../../initializers'
 import { logger } from '../../helpers/logger'
 import { VideosRedundancy } from '../../../shared/models/redundancy'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
@@ -15,6 +15,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../activitypub'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import { VideoModel } from '../../models/video/video'
 import { downloadPlaylistSegments } from '../hls'
+import { CONFIG } from '../../initializers/config'
 
 type CandidateToDuplicate = {
   redundancy: VideosRedundancy,
@@ -186,7 +187,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const createdModel = await VideoRedundancyModel.create({
       expiresOn: this.buildNewExpiration(redundancy.minLifetime),
       url: getVideoCacheFileActivityPubUrl(file),
-      fileUrl: video.getVideoRedundancyUrl(file, CONFIG.WEBSERVER.URL),
+      fileUrl: video.getVideoRedundancyUrl(file, WEBSERVER.URL),
       strategy: redundancy.strategy,
       videoFileId: file.id,
       actorId: serverActor.id
@@ -212,7 +213,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const createdModel = await VideoRedundancyModel.create({
       expiresOn: this.buildNewExpiration(redundancy.minLifetime),
       url: getVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
-      fileUrl: playlist.getVideoRedundancyUrl(CONFIG.WEBSERVER.URL),
+      fileUrl: playlist.getVideoRedundancyUrl(WEBSERVER.URL),
       strategy: redundancy.strategy,
       videoStreamingPlaylistId: playlist.id,
       actorId: serverActor.id
