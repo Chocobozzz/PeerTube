@@ -6,9 +6,9 @@ import { MetaGuard } from '@ngx-meta/core'
 
 import { AdminComponent } from './admin.component'
 import { FollowsRoutes } from './follows'
-import { JobsRoutes } from './jobs/job.routes'
 import { UsersRoutes } from './users'
 import { ModerationRoutes } from '@app/+admin/moderation/moderation.routes'
+import { SystemRoutes } from '@app/+admin/system'
 
 const adminRoutes: Routes = [
   {
@@ -25,7 +25,7 @@ const adminRoutes: Routes = [
       ...FollowsRoutes,
       ...UsersRoutes,
       ...ModerationRoutes,
-      ...JobsRoutes,
+      ...SystemRoutes,
       ...ConfigRoutes
     ]
   }

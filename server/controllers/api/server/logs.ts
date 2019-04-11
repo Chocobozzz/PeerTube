@@ -2,10 +2,8 @@ import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
 import { mtimeSortFilesDesc } from '../../../../shared/utils/logs/logs'
-import { readdir } from 'fs-extra'
+import { readdir, readFile } from 'fs-extra'
 import { CONFIG, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers'
-import { createInterface } from 'readline'
-import { createReadStream } from 'fs'
 import { join } from 'path'
 import { getLogsValidator } from '../../../middlewares/validators/logs'
 import { LogLevel } from '../../../../shared/models/server/log-level.type'
@@ -36,7 +34,7 @@ async function getLogs (req: express.Request, res: express.Response) {
   const endDate = req.query.endDate ? new Date(req.query.endDate) : new Date()
   const level: LogLevel = req.query.level || 'info'
 
-  let output = ''
+  let output: string[] = []
 
   for (const meta of sortedLogFiles) {
     const path = join(CONFIG.STORAGE.LOG_DIR, meta.file)
@@ -44,18 +42,19 @@ async function getLogs (req: express.Request, res: express.Response) {
     const result = await getOutputFromFile(path, startDate, endDate, level, currentSize)
     if (!result.output) break
 
-    output = output + result.output
+    output = result.output.concat(output)
     currentSize = result.currentSize
 
-    if (currentSize > MAX_LOGS_OUTPUT_CHARACTERS) break
+    if (currentSize > MAX_LOGS_OUTPUT_CHARACTERS || (result.logTime && result.logTime < startDate.getTime())) break
   }
 
   return res.json(output).end()
 }
 
-function getOutputFromFile (path: string, startDate: Date, endDate: Date, level: LogLevel, currentSize: number) {
+async function getOutputFromFile (path: string, startDate: Date, endDate: Date, level: LogLevel, currentSize: number) {
   const startTime = startDate.getTime()
   const endTime = endDate.getTime()
+  let logTime: number
 
   const logsLevel: { [ id in LogLevel ]: number } = {
     debug: 0,
@@ -64,27 +63,32 @@ function getOutputFromFile (path: string, startDate: Date, endDate: Date, level:
     error: 3
   }
 
-  return new Promise<{ output: string, currentSize: number }>(res => {
-    const stream = createReadStream(path)
-    let output = ''
+  const content = await readFile(path)
+  const lines = content.toString().split('\n')
+  const output: any[] = []
 
-    stream.once('close', () => res({ output, currentSize }))
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[ i ]
+    let log: any
 
-    const rl = createInterface({
-      input: stream
-    })
+    try {
+      log = JSON.parse(line)
+    } catch {
+      // Maybe there a multiple \n at the end of the file
+      continue
+    }
 
-    rl.on('line', line => {
-      const log = JSON.parse(line)
+    logTime = new Date(log.timestamp).getTime()
+    if (logTime >= startTime && logTime <= endTime && logsLevel[ log.level ] >= logsLevel[ level ]) {
+      output.push(log)
 
-      const logTime = new Date(log.timestamp).getTime()
-      if (logTime >= startTime && logTime <= endTime && logsLevel[log.level] >= logsLevel[level]) {
-        output += line
+      currentSize += line.length
 
-        currentSize += line.length
+      if (currentSize > MAX_LOGS_OUTPUT_CHARACTERS) break
+    } else if (logTime < startTime) {
+      break
+    }
+  }
 
-        if (currentSize > MAX_LOGS_OUTPUT_CHARACTERS) stream.close()
-      }
-    })
-  })
+  return { currentSize, output: output.reverse(), logTime }
 }

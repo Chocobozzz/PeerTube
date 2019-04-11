@@ -5,15 +5,15 @@ import { SortMeta } from 'primeng/primeng'
 import { Job } from '../../../../../../shared/index'
 import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
-import { JobService } from '../shared'
+import { JobService } from './job.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
-  selector: 'my-jobs-list',
-  templateUrl: './jobs-list.component.html',
-  styleUrls: [ './jobs-list.component.scss' ]
+  selector: 'my-jobs',
+  templateUrl: './jobs.component.html',
+  styleUrls: [ './jobs.component.scss' ]
 })
-export class JobsListComponent extends RestTable implements OnInit {
+export class JobsComponent extends RestTable implements OnInit {
   private static JOB_STATE_LOCAL_STORAGE_STATE = 'jobs-list-state'
 
   jobState: JobState = 'waiting'
@@ -58,12 +58,12 @@ export class JobsListComponent extends RestTable implements OnInit {
   }
 
   private loadJobState () {
-    const result = peertubeLocalStorage.getItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE)
+    const result = peertubeLocalStorage.getItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_STATE)
 
     if (result) this.jobState = result as JobState
   }
 
   private saveJobState () {
-    peertubeLocalStorage.setItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE, this.jobState)
+    peertubeLocalStorage.setItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_STATE, this.jobState)
   }
 }
