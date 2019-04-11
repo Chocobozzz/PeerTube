@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { FILES_CACHE } from '../../initializers'
+import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'

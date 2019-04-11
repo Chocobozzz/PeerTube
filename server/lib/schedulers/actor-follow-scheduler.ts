@@ -2,7 +2,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { ActorFollowScoreCache } from '../files-cache'
 
 export class ActorFollowScheduler extends AbstractScheduler {

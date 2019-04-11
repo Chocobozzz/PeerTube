@@ -1,6 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
-import { ACTIVITY_PUB } from '../initializers'
 
 type SortType = { sortModel: any, sortValue: string }
 

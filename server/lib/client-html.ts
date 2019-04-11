@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../initializers'
+import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../initializers/constants'
 import { join } from 'path'
 import { escapeHTML } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'

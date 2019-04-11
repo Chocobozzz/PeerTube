@@ -1,6 +1,6 @@
 import * as prompt from 'prompt'
 import { join } from 'path'
-import { CONFIG } from '../server/initializers/constants'
+import { CONFIG } from '../server/initializers/config'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
 import { remove, readdir } from 'fs-extra'

@@ -18,7 +18,7 @@ import { VideoPlaylistModel } from './video-playlist'
 import * as Sequelize from 'sequelize'
 import { getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import * as validator from 'validator'
 

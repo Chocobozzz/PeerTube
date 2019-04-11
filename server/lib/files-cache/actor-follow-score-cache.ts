@@ -1,4 +1,4 @@
-import { ACTOR_FOLLOW_SCORE } from '../../initializers'
+import { ACTOR_FOLLOW_SCORE } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 
 // Cache follows scores, instead of writing them too often in database

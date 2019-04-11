@@ -10,7 +10,7 @@ import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoAbuseState } from '../../../shared'
-import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 
 @Table({
   tableName: 'videoAbuse',

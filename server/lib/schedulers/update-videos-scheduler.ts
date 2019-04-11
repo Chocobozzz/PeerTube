@@ -3,10 +3,11 @@ import { AbstractScheduler } from './abstract-scheduler'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { federateVideoIfNeeded } from '../activitypub'
-import { SCHEDULER_INTERVALS_MS, sequelizeTypescript } from '../../initializers'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { Notifier } from '../notifier'
 import { VideoModel } from '../../models/video/video'
+import { sequelizeTypescript } from '../../initializers/database'
 
 export class UpdateVideosScheduler extends AbstractScheduler {
 

@@ -18,7 +18,7 @@ import { ActivityTagObject } from '../../../shared/models/activitypub/objects/co
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteVideoComment } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'

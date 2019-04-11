@@ -8,7 +8,7 @@ import {
   USER_PASSWORD_RESET_LIFETIME,
   VIDEO_VIEW_LIFETIME,
   WEBSERVER
-} from '../initializers'
+} from '../initializers/constants'
 import { CONFIG } from '../initializers/config'
 
 type CachedRoute = {

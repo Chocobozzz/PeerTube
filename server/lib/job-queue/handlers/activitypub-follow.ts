@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
-import { REMOTE_SCHEME, sequelizeTypescript, WEBSERVER } from '../../../initializers'
+import { REMOTE_SCHEME, WEBSERVER } from '../../../initializers/constants'
 import { sendFollow } from '../../activitypub/send'
 import { sanitizeHost } from '../../../helpers/core-utils'
 import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
@@ -9,6 +9,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number

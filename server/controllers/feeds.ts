@@ -1,6 +1,5 @@
 import * as express from 'express'
-import { FEEDS, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
-import { THUMBNAILS_SIZE } from '../initializers'
+import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,

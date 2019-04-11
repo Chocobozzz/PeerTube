@@ -2,7 +2,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { JobQueue } from '../job-queue'
 import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 
 export class RemoveOldJobsScheduler extends AbstractScheduler {
 

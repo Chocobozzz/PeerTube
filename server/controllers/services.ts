@@ -1,8 +1,7 @@
 import * as express from 'express'
-import { EMBED_SIZE, PREVIEWS_SIZE, WEBSERVER } from '../initializers'
+import { EMBED_SIZE, PREVIEWS_SIZE, WEBSERVER } from '../initializers/constants'
 import { asyncMiddleware, oembedValidator } from '../middlewares'
 import { accountNameWithHostGetValidator } from '../middlewares/validators'
-import { CONFIG } from '../initializers/config'
 
 const servicesRouter = express.Router()
 

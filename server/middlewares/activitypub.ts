@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
-import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers'
+import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants'
 import { getOrCreateActorAndServerAndModel } from '../lib/activitypub'
 import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
 

@@ -2,7 +2,7 @@ import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
-import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
+import { SERVER_ACTOR_NAME } from '../../../initializers/constants'
 import { sendAccept, sendReject, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
@@ -24,6 +24,7 @@ import {
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
 import { removeRedundancyOf } from '../../../lib/redundancy'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',

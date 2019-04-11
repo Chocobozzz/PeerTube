@@ -15,7 +15,7 @@ import {
 import { ActorModel } from '../activitypub/actor'
 import { getVideoSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
 import { VideoFileModel } from '../video/video-file'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'

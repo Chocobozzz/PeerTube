@@ -4,7 +4,7 @@ import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
 import { labelFormatter } from '../server/helpers/logger'
-import { CONFIG } from '../server/initializers/constants'
+import { CONFIG } from '../server/initializers/config'
 import { mtimeSortFilesDesc } from '../shared/utils/logs/logs'
 
 program

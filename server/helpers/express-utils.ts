@@ -1,6 +1,6 @@
 import * as express from 'express'
 import * as multer from 'multer'
-import { REMOTE_SCHEME } from '../initializers'
+import { REMOTE_SCHEME } from '../initializers/constants'
 import { logger } from './logger'
 import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'

@@ -32,7 +32,7 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   WEBSERVER
-} from '../../initializers'
+} from '../../initializers/constants'
 import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'

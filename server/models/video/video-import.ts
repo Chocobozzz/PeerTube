@@ -13,7 +13,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { getSort, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'

@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import * as validator from 'validator'
 import { exists } from './misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { VideoBlacklistModel } from '../../models/video/video-blacklist'
 import { VideoBlacklistType } from '../../../shared/models/videos'
 

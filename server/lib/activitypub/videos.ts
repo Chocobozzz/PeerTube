@@ -17,14 +17,7 @@ import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, downloadImage } from '../../helpers/requests'
-import {
-  ACTIVITY_PUB,
-  MIMETYPES,
-  P2P_MEDIA_LOADER_PEER_VERSION,
-  REMOTE_SCHEME,
-  sequelizeTypescript,
-  THUMBNAILS_SIZE
-} from '../../initializers'
+import { ACTIVITY_PUB, MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, REMOTE_SCHEME, THUMBNAILS_SIZE } from '../../initializers/constants'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -51,6 +44,7 @@ import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { CONFIG } from '../../initializers/config'
+import { sequelizeTypescript } from '../../initializers/database'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and is published, we federate it

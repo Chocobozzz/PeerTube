@@ -5,7 +5,7 @@ import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
 import { doesVideoExist, isVideoImage } from '../../../helpers/custom-validators/videos'
-import { CONSTRAINTS_FIELDS } from '../../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { isArrayOf, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntArray, toValueOrNull } from '../../../helpers/custom-validators/misc'
 import {
   doesVideoPlaylistExist,

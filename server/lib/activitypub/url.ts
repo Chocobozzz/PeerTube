@@ -1,4 +1,4 @@
-import { WEBSERVER } from '../../initializers'
+import { WEBSERVER } from '../../initializers/constants'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'

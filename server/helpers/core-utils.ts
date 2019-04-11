@@ -11,14 +11,13 @@ import * as pem from 'pem'
 import { URL } from 'url'
 import { truncate } from 'lodash'
 import { exec } from 'child_process'
-import { isArray } from './custom-validators/misc'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
     return valueConverter(oldObject)
   }
 
-  if (isArray(oldObject)) {
+  if (Array.isArray(oldObject)) {
     return oldObject.map(e => objectConverter(e, keyConverter, valueConverter))
   }
 

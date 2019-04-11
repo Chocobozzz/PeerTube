@@ -28,7 +28,8 @@ import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-be
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, FILES_CACHE } from './server/initializers/constants'
+import { API_VERSION, FILES_CACHE, WEBSERVER, loadLanguages } from './server/initializers/constants'
+import { CONFIG } from './server/initializers/config'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -78,6 +79,9 @@ migrate()
     process.exit(-1)
   })
 
+// ----------- Initialize -----------
+loadLanguages()
+
 // ----------- PeerTube modules -----------
 import { installApplication } from './server/initializers'
 import { Emailer } from './server/lib/emailer'
@@ -121,20 +125,26 @@ if (isTestInstance()) {
     credentials: true
   }))
 }
+
 // For the logger
 morgan.token('remote-addr', req => {
-  return (req.get('DNT') === '1') ?
-    anonymize(req.ip || (req.connection && req.connection.remoteAddress) || undefined,
-    16, // bitmask for IPv4
-    16  // bitmask for IPv6
-    ) :
-    req.ip
+  if (req.get('DNT') === '1') {
+    return anonymize(req.ip, 16, 16)
+  }
+
+  return req.ip
 })
-morgan.token('user-agent', req => (req.get('DNT') === '1') ?
-  useragent.parse(req.get('user-agent')).family : req.get('user-agent'))
+morgan.token('user-agent', req => {
+  if (req.get('DNT') === '1') {
+    return useragent.parse(req.get('user-agent')).family
+  }
+
+  return req.get('user-agent')
+})
 app.use(morgan('combined', {
   stream: { write: logger.info.bind(logger) }
 }))
+
 // For body requests
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({
@@ -145,8 +155,10 @@ app.use(bodyParser.json({
     if (valid !== true) throw new Error('Invalid digest')
   }
 }))
+
 // Cookies
 app.use(cookieParser())
+
 // W3C DNT Tracking Status
 app.use(advertiseDoNotTrack)
 
@@ -240,7 +252,7 @@ async function startApplication () {
   // Make server listening
   server.listen(port, hostname, () => {
     logger.info('Server listening on %s:%d', hostname, port)
-    logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
+    logger.info('Web server: %s', WEBSERVER.URL)
   })
 
   process.on('exit', () => {

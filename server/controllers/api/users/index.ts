@@ -3,7 +3,7 @@ import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { RATES_LIMIT, sequelizeTypescript, WEBSERVER } from '../../../initializers'
+import { RATES_LIMIT, WEBSERVER } from '../../../initializers/constants'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
 import { createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
@@ -44,6 +44,7 @@ import { myNotificationsRouter } from './my-notifications'
 import { Notifier } from '../../../lib/notifier'
 import { mySubscriptionsRouter } from './my-subscriptions'
 import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const auditLogger = auditLoggerFactory('users')
 

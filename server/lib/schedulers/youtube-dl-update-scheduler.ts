@@ -1,5 +1,5 @@
 import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { updateYoutubeDLBinary } from '../../helpers/youtube-dl'
 
 export class YoutubeDlUpdateScheduler extends AbstractScheduler {

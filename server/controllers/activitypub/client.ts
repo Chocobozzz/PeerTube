@@ -2,7 +2,7 @@
 import * as express from 'express'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
-import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers'
+import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
 import { buildAnnounceWithVideoAudience, buildLikeActivity } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { buildCreateActivity } from '../../lib/activitypub/send/send-create'

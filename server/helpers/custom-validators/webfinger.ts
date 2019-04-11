@@ -1,4 +1,4 @@
-import { REMOTE_SCHEME, WEBSERVER } from '../../initializers'
+import { REMOTE_SCHEME, WEBSERVER } from '../../initializers/constants'
 import { sanitizeHost } from '../core-utils'
 import { exists } from './misc'
 

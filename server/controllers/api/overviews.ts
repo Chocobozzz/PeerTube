@@ -4,7 +4,7 @@ import { VideoModel } from '../../models/video/video'
 import { asyncMiddleware } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
 import { VideosOverview } from '../../../shared/models/overviews'
-import { MEMOIZE_TTL, OVERVIEWS, ROUTE_CACHE_LIFETIME } from '../../initializers'
+import { MEMOIZE_TTL, OVERVIEWS, ROUTE_CACHE_LIFETIME } from '../../initializers/constants'
 import { cacheRoute } from '../../middlewares/cache'
 import * as memoizee from 'memoizee'
 

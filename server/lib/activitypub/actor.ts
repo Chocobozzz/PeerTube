@@ -12,7 +12,7 @@ import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, downloadImage } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { AVATARS_SIZE, MIMETYPES, sequelizeTypescript, WEBSERVER } from '../../initializers'
+import { AVATARS_SIZE, MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -22,6 +22,7 @@ import { JobQueue } from '../job-queue'
 import { getServerActor } from '../../helpers/utils'
 import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
 import { CONFIG } from '../../initializers/config'
+import { sequelizeTypescript } from '../../initializers/database'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {

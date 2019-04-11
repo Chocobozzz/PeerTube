@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { asyncMiddleware } from '../middlewares'
-import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers'
+import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import * as sitemapModule from 'sitemap'
 import { logger } from '../helpers/logger'
 import { VideoModel } from '../models/video/video'

@@ -341,7 +341,7 @@ const VIDEO_LICENCES = {
   7: 'Public Domain Dedication'
 }
 
-const VIDEO_LANGUAGES = buildLanguages()
+let VIDEO_LANGUAGES: { [id: string]: string } = {}
 
 const VIDEO_PRIVACIES = {
   [ VideoPrivacy.PUBLIC ]: 'Public',
@@ -684,6 +684,7 @@ export {
   VIDEO_VIEW_LIFETIME,
   CONTACT_FORM_LIFETIME,
   VIDEO_PLAYLIST_PRIVACIES,
+  loadLanguages,
   buildLanguages
 }
 
@@ -730,6 +731,10 @@ function buildVideosExtname () {
   return CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS
     ? [ '.mp4', '.ogv', '.webm', '.mkv', '.mov', '.avi', '.flv' ]
     : [ '.mp4', '.ogv', '.webm' ]
+}
+
+function loadLanguages () {
+  VIDEO_LANGUAGES = buildLanguages()
 }
 
 function buildLanguages () {

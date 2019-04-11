@@ -12,7 +12,7 @@ import {
 } from '../../middlewares'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
-import { MIMETYPES, sequelizeTypescript, THUMBNAILS_SIZE, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers'
+import { MIMETYPES, THUMBNAILS_SIZE, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
@@ -42,6 +42,7 @@ import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
 import { JobQueue } from '../../lib/job-queue'
 import { CONFIG } from '../../initializers/config'
+import { sequelizeTypescript } from '../../initializers/database'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 

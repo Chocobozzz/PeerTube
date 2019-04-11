@@ -1,11 +1,12 @@
 import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { sequelizeTypescript, VIDEO_RATE_TYPES } from '../../../initializers'
+import { VIDEO_RATE_TYPES } from '../../../initializers/constants'
 import { getRateUrl, sendVideoRateChange } from '../../../lib/activitypub'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUpdateRateValidator } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const rateVideoRouter = express.Router()
 

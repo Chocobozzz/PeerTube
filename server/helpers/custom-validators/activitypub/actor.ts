@@ -1,5 +1,5 @@
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { exists, isArray } from '../misc'
 import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'

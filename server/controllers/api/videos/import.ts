@@ -3,7 +3,7 @@ import * as magnetUtil from 'magnet-uri'
 import 'multer'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import { MIMETYPES, PREVIEWS_SIZE, sequelizeTypescript, THUMBNAILS_SIZE } from '../../../initializers'
+import { MIMETYPES, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../../../initializers/constants'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -25,6 +25,7 @@ import { getSecureTorrentName } from '../../../helpers/utils'
 import { move, readFile } from 'fs-extra'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()

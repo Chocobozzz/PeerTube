@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import 'multer'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { exists } from './misc'
 

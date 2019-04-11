@@ -7,7 +7,7 @@ import {
   ActivityUrlObject,
   VideoTorrentObject
 } from '../../../shared/models/activitypub/objects'
-import { MIMETYPES, THUMBNAILS_SIZE, WEBSERVER } from '../../initializers'
+import { MIMETYPES, THUMBNAILS_SIZE, WEBSERVER } from '../../initializers/constants'
 import { VideoCaptionModel } from './video-caption'
 import {
   getVideoCommentsActivityPubUrl,

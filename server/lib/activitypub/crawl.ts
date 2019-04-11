@@ -1,4 +1,4 @@
-import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT } from '../../initializers'
+import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT } from '../../initializers/constants'
 import { doRequest } from '../../helpers/requests'
 import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'

@@ -1,5 +1,5 @@
 import { truncate } from 'lodash'
-import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers/constants'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { join } from 'path'

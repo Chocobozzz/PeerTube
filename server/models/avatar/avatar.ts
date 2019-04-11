@@ -1,7 +1,7 @@
 import { join } from 'path'
 import { AfterDestroy, AllowNull, Column, CreatedAt, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
-import { STATIC_PATHS } from '../../initializers'
+import { STATIC_PATHS } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'

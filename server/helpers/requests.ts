@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { createWriteStream, remove } from 'fs-extra'
 import * as request from 'request'
-import { ACTIVITY_PUB } from '../initializers'
+import { ACTIVITY_PUB } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { join } from 'path'
 import { logger } from './logger'

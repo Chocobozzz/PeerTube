@@ -29,7 +29,7 @@ import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/a
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { DefineIndexesOptions } from 'sequelize'
 import { AvatarModel } from '../avatar/avatar'

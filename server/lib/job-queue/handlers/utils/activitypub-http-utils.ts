@@ -2,7 +2,7 @@ import { buildSignedActivity } from '../../../../helpers/activitypub'
 import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { sha256 } from '../../../../helpers/core-utils'
-import { HTTP_SIGNATURE } from '../../../../initializers'
+import { HTTP_SIGNATURE } from '../../../../initializers/constants'
 
 type Payload = { body: any, signatureActorId?: number }
 

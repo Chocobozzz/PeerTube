@@ -30,7 +30,7 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers'
+import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'

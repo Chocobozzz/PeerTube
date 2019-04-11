@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers'
+import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
 import { ActorModel } from '../models/activitypub/actor'
 import { bcryptComparePromise, bcryptGenSaltPromise, bcryptHashPromise, createPrivateKey, getPublicKey, sha256 } from './core-utils'
 import { jsig, jsonld } from './custom-jsonld-signature'

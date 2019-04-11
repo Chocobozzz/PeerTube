@@ -1,4 +1,4 @@
-import { SORTABLE_COLUMNS } from '../../initializers'
+import { SORTABLE_COLUMNS } from '../../initializers/constants'
 import { checkSort, createSortableColumns } from './utils'
 
 // Initialize constants here for better performances

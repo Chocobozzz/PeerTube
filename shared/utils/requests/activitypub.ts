@@ -1,5 +1,5 @@
 import { doRequest } from '../../../server/helpers/requests'
-import { HTTP_SIGNATURE } from '../../../server/initializers'
+import { HTTP_SIGNATURE } from '../../../server/initializers/constants'
 import { buildGlobalHeaders } from '../../../server/lib/job-queue/handlers/utils/activitypub-http-utils'
 import { activityPubContextify } from '../../../server/helpers/activitypub'
 

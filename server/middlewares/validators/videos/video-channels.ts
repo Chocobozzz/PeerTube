@@ -1,12 +1,11 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../../shared'
-import { doesAccountNameWithHostExist } from '../../../helpers/custom-validators/accounts'
 import {
   doesLocalVideoChannelNameExist,
+  doesVideoChannelNameWithHostExist,
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
-  doesVideoChannelNameWithHostExist,
   isVideoChannelSupportValid
 } from '../../../helpers/custom-validators/video-channels'
 import { logger } from '../../../helpers/logger'

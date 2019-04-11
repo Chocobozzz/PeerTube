@@ -1,4 +1,4 @@
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
 import { join } from 'path'
 import { getVideoFileFPS, transcode } from '../helpers/ffmpeg-utils'
 import { ensureDir, move, remove, stat } from 'fs-extra'

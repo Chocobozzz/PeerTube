@@ -32,7 +32,7 @@ import {
 } from '../../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { CONSTRAINTS_FIELDS } from '../../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'

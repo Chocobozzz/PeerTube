@@ -1,7 +1,7 @@
 import * as validator from 'validator'
-import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
+import { ACTIVITY_PUB } from '../../../initializers/constants'
 import { exists, isArray, isDateValid } from '../misc'
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid } from './misc'
 
 function sanitizeAndCheckVideoCommentObject (comment: any) {
   if (!comment || comment.type !== 'Note') return false

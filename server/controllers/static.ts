@@ -7,7 +7,7 @@ import {
   STATIC_MAX_AGE,
   STATIC_PATHS,
   WEBSERVER
-} from '../initializers'
+} from '../initializers/constants'
 import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'

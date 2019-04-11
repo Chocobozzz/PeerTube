@@ -2,7 +2,7 @@ import { VideoCommentObject } from '../../../shared/models/activitypub/objects/v
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments'
 import { logger } from '../../helpers/logger'
 import { doRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'

@@ -65,7 +65,7 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_STATES,
   WEBSERVER
-} from '../../initializers'
+} from '../../initializers/constants'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'

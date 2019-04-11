@@ -10,13 +10,12 @@ import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   MIMETYPES,
   PREVIEWS_SIZE,
-  sequelizeTypescript,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
-} from '../../../initializers'
+} from '../../../initializers/constants'
 import {
   changeVideoChannelShare,
   federateVideoIfNeeded,
@@ -61,6 +60,7 @@ import { watchingRouter } from './watching'
 import { Notifier } from '../../../lib/notifier'
 import { sendView } from '../../../lib/activitypub/send/send-view'
 import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()

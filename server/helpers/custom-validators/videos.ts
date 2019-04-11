@@ -11,7 +11,7 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
   VIDEO_STATES
-} from '../../initializers'
+} from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isDateValid, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'

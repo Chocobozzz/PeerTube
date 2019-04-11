@@ -16,7 +16,7 @@ import { VideoModel } from './video'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 @Table({
   tableName: 'videoBlacklist',

@@ -1,4 +1,4 @@
-import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
 import { Response } from 'express'
 import { VideoModel } from '../../models/video/video'

@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience } from '../../../shared/models/activitypub'
-import { ACTIVITY_PUB } from '../../initializers'
+import { ACTIVITY_PUB } from '../../initializers/constants'
 import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'

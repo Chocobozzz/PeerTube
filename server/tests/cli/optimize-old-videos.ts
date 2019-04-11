@@ -18,7 +18,7 @@ import {
 } from '../../../shared/utils'
 import { waitJobs } from '../../../shared/utils/server/jobs'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
-import { VIDEO_TRANSCODING_FPS } from '../../initializers'
+import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 import { join } from 'path'
 
 const expect = chai.expect

@@ -3,7 +3,7 @@ import 'express-validator'
 
 import { isArray, exists } from './misc'
 import { isTestInstance } from '../core-utils'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 function isHostValid (host: string) {
   const isURLOptions = {

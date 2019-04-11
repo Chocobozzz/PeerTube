@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'multer'
 import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { MIMETYPES, sequelizeTypescript } from '../../../initializers'
+import { MIMETYPES } from '../../../initializers/constants'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
@@ -27,6 +27,7 @@ import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../h
 import { VideoImportModel } from '../../../models/video/video-import'
 import { AccountModel } from '../../../models/account/account'
 import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const auditLogger = auditLoggerFactory('users-me')
 

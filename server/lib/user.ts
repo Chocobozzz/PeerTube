@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../initializers'
+import { SERVER_ACTOR_NAME } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
 import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
@@ -12,6 +12,7 @@ import { ActorModel } from '../models/activitypub/actor'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
 import { createWatchLaterPlaylist } from './video-playlist'
+import { sequelizeTypescript } from '../initializers/database'
 
 async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
