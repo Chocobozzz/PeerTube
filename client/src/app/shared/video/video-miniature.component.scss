@@ -64,16 +64,16 @@
       margin-right: 10px;
 
       /deep/ .dropdown-root:not(.show) {
-        display: none;
+        opacity: 0;
       }
 
       /deep/ .playlist-dropdown.show + my-action-dropdown .dropdown-root {
-        display: block;
+        opacity: 1;
       }
     }
 
     &:hover .video-actions /deep/ .dropdown-root {
-      display: block;
+      opacity: 1;
     }
 
     @media screen and (max-width: $small-view) {

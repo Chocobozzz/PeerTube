@@ -156,6 +156,7 @@ $player-factor: 1.7; // 16/9
 
 .alert {
   text-align: center;
+  border-radius: 0;
 }
 
 #video-not-found {
@@ -427,7 +428,6 @@ my-video-comments {
 // If the view is not expanded, take into account the menu
 .privacy-concerns {
   width: calc(100% - #{$menu-width});
-  margin-left: -15px;
 }
 
 @media screen and (max-width: $small-view) {
@@ -439,7 +439,6 @@ my-video-comments {
 :host-context(.expanded) {
   .privacy-concerns {
     width: 100%;
-    margin-left: 0;
   }
 }
 
