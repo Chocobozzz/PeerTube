@@ -83,7 +83,9 @@ We think it is acceptable for a video platform.
 
 ## Which container formats can I use for the videos I want to upload?
 
-WEBM, MP4 or OGV videos.
+WEBM, MP4 or OGV videos are supported by default (they are streamable formats),
+but instance administrators can additionally enable support for MKV, MOV, AVI
+and FLV formats when transcoding is enabled on their instance.
 
 
 ## I want to change my domain name, how can I do that?
@@ -118,7 +120,7 @@ So you would need:
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
-The reason is they connects to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
+The reason is they connect to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
 To check if your BitTorrent client supports WebTorrent you can see this issue: https://github.com/webtorrent/webtorrent/issues/369
 
 
