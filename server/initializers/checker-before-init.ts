@@ -26,7 +26,8 @@ function checkMissedConfig () {
     'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
     'services.twitter.username', 'services.twitter.whitelisted',
     'followers.instance.enabled', 'followers.instance.manual_approval',
-    'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces'
+    'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',
+    'history.videos.max_age', 'views.videos.remote.max_age'
   ]
   const requiredAlternatives = [
     [ // set

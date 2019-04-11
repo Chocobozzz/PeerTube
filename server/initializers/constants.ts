@@ -163,6 +163,7 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
+  removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24 // 1 day
 }
 
@@ -592,6 +593,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.actorFollowScores = 1000
   SCHEDULER_INTERVALS_MS.removeOldJobs = 10000
   SCHEDULER_INTERVALS_MS.removeOldHistory = 5000
+  SCHEDULER_INTERVALS_MS.removeOldViews = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   REPEAT_JOBS[ 'videos-views' ] = { every: 5000 }
 

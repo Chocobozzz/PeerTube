@@ -5,7 +5,7 @@ import { createInterface } from 'readline'
 import * as winston from 'winston'
 import { labelFormatter } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/config'
-import { mtimeSortFilesDesc } from '../shared/utils/logs/logs'
+import { mtimeSortFilesDesc } from '../shared/core-utils/logs/logs'
 
 program
   .option('-l, --level [level]', 'Level log (debug/info/warn/error)')

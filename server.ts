@@ -101,6 +101,7 @@ import {
 import { advertiseDoNotTrack } from './server/middlewares/dnt'
 import { Redis } from './server/lib/redis'
 import { ActorFollowScheduler } from './server/lib/schedulers/actor-follow-scheduler'
+import { RemoveOldViewsScheduler } from './server/lib/schedulers/remove-old-views-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-scheduler'
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
@@ -242,6 +243,7 @@ async function startApplication () {
   YoutubeDlUpdateScheduler.Instance.enable()
   VideosRedundancyScheduler.Instance.enable()
   RemoveOldHistoryScheduler.Instance.enable()
+  RemoveOldViewsScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

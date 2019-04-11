@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
-import { mtimeSortFilesDesc } from '../../../../shared/utils/logs/logs'
+import { mtimeSortFilesDesc } from '../../../../shared/core-utils/logs/logs'
 import { readdir, readFile } from 'fs-extra'
 import { MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants'
 import { join } from 'path'

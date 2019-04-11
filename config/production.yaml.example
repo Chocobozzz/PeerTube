@@ -119,6 +119,17 @@ history:
     # Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)
     max_age: -1
 
+views:
+  videos:
+    # PeerTube creates a database entry every hour for each video to track views over a period of time
+    # This is used in particular by the Trending page
+    # PeerTube could remove old remote video views if you want to reduce your database size (video view counter will not be altered)
+    # -1 means no cleanup
+    # Other values could be '6 months' or '30 days' etc (PeerTube will periodically delete old entries from database)
+    remote:
+      max_age: -1
+
+
 ###############################################################################
 #
 # From this point, all the following keys can be overridden by the web interface

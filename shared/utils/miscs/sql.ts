@@ -48,6 +48,20 @@ function setPlaylistField (serverNumber: number, uuid: string, field: string, va
   return seq.query(`UPDATE "videoPlaylist" SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
 }
 
+async function countVideoViewsOf (serverNumber: number, uuid: string) {
+  const seq = getSequelize(serverNumber)
+
+  // tslint:disable
+  const query = `SELECT SUM("videoView"."views") AS "total" FROM "videoView" INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
+
+  const options = { type: Sequelize.QueryTypes.SELECT }
+  const [ { total } ] = await seq.query(query, options)
+
+  if (!total) return 0
+
+  return parseInt(total, 10)
+}
+
 async function closeAllSequelize (servers: any[]) {
   for (let i = 1; i <= servers.length; i++) {
     if (sequelizes[ i ]) {
@@ -61,5 +75,6 @@ export {
   setVideoField,
   setPlaylistField,
   setActorField,
+  countVideoViewsOf,
   closeAllSequelize
 }

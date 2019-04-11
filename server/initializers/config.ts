@@ -99,6 +99,13 @@ const CONFIG = {
       MAX_AGE: parseDurationToMs(config.get('history.videos.max_age'))
     }
   },
+  VIEWS: {
+    VIDEOS: {
+      REMOTE: {
+        MAX_AGE: parseDurationToMs(config.get('views.videos.remote.max_age'))
+      }
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
