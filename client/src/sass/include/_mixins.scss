@@ -235,6 +235,10 @@
   position: relative;
   font-size: 15px;
 
+  @media screen and (max-width: $width) {
+    width: 100%;
+  }
+
   &:after {
     top: 50%;
     right: calc(0% + 15px);

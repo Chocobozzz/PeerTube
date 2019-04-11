@@ -147,7 +147,7 @@ label {
   }
 
   @media screen and (max-width: 500px) {
-    margin-right: 20px;
+    margin-right: 15px;
   }
 }
 
@@ -382,6 +382,8 @@ table {
       }
 
       .sub-menu {
+        width: 100vw;
+        overflow-x: auto;
         padding-left: 15px;
         padding-right: 15px;
         margin-bottom: 10px;

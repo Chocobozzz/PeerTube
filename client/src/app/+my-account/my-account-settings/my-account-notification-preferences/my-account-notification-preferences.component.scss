@@ -16,6 +16,14 @@
 
   & > div {
     width: 350px;
+
+    @media screen and (max-width: $small-view) {
+      width: auto;
+
+      &:first-child {
+        flex-grow: 1;
+      }
+    }
   }
 
   & > div {
