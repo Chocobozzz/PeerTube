@@ -54,7 +54,7 @@ describe('Test emails', function () {
     await setAccessTokensToServers([ server ])
 
     {
-      const res = await createUser(server.url, server.accessToken, user.username, user.password)
+      const res = await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       userId = res.body.user.id
 
       userAccessToken = await userLogin(server, user)

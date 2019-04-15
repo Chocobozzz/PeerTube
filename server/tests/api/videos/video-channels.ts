@@ -270,7 +270,7 @@ describe('Test video channels', function () {
     }
 
     {
-      await createUser(servers[ 0 ].url, servers[ 0 ].accessToken, 'toto', 'password')
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: 'toto', password: 'password' })
       const accessToken = await userLogin(servers[ 0 ], { username: 'toto', password: 'password' })
 
       const res = await getMyUserInformation(servers[ 0 ].url, accessToken)

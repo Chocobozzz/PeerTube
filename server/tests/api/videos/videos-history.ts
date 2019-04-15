@@ -58,7 +58,7 @@ describe('Test videos history', function () {
       username: 'user_1',
       password: 'super password'
     }
-    await createUser(server.url, server.accessToken, user.username, user.password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(server, user)
   })
 

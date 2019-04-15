@@ -133,7 +133,13 @@ describe('Test users notifications', function () {
       username: 'user_1',
       password: 'super password'
     }
-    await createUser(servers[0].url, servers[0].accessToken, user.username, user.password, 10 * 1000 * 1000)
+    await createUser({
+      url: servers[ 0 ].url,
+      accessToken: servers[ 0 ].accessToken,
+      username: user.username,
+      password: user.password,
+      videoQuota: 10 * 1000 * 1000
+    })
     userAccessToken = await userLogin(servers[0], user)
 
     await updateMyNotificationSettings(servers[0].url, userAccessToken, allNotificationSettings)

@@ -2,6 +2,7 @@ import { ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
 import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
 export abstract class UserEdit extends FormReactive {
   videoQuotaOptions: { value: string, label: string }[] = []
@@ -40,6 +41,10 @@ export abstract class UserEdit extends FormReactive {
 
   resetPassword () {
     return
+  }
+
+  protected buildAdminFlags (formValue: any) {
+    return formValue.byPassAutoBlacklist ? UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST : UserAdminFlag.NONE
   }
 
   protected buildQuotaOptions () {

@@ -37,7 +37,7 @@ describe('Test stats (excluding redundancy)', function () {
       username: 'user1',
       password: 'super_password'
     }
-    await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
     const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
     const videoUUID = resVideo.body.video.uuid

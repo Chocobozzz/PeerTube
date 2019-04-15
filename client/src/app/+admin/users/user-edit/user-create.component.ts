@@ -8,6 +8,7 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserService } from '@app/shared'
+import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
 @Component({
   selector: 'my-user-create',
@@ -45,7 +46,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       password: this.userValidatorsService.USER_PASSWORD,
       role: this.userValidatorsService.USER_ROLE,
       videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
-      videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY
+      videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
+      byPassAutoBlacklist: null
     }, defaultValues)
   }
 
@@ -54,8 +56,11 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     const userCreate: UserCreate = this.form.value
 
+    userCreate.adminFlags = this.buildAdminFlags(this.form.value)
+
     // A select in HTML is always mapped as a string, we convert it to number
     userCreate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
+    userCreate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
     this.userService.addUser(userCreate).subscribe(
       () => {

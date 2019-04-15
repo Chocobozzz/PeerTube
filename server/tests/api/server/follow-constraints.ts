@@ -47,7 +47,7 @@ describe('Test follow constraints', function () {
       username: 'user1',
       password: 'super_password'
     }
-    await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(servers[0], user)
 
     await doubleFollow(servers[0], servers[1])

@@ -149,8 +149,8 @@ describe('Test misc endpoints', function () {
       await addVideoChannel(server.url, server.accessToken, { name: 'channel1', displayName: 'channel 1' })
       await addVideoChannel(server.url, server.accessToken, { name: 'channel2', displayName: 'channel 2' })
 
-      await createUser(server.url, server.accessToken, 'user1', 'password')
-      await createUser(server.url, server.accessToken, 'user2', 'password')
+      await createUser({ url: server.url, accessToken: server.accessToken, username: 'user1', password: 'password' })
+      await createUser({ url: server.url, accessToken: server.accessToken, username: 'user2', password: 'password' })
 
       const res = await makeGetRequest({
         url: server.url,

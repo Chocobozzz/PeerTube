@@ -78,7 +78,7 @@ describe('Test video privacy', function () {
       username: 'hello',
       password: 'super password'
     }
-    await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
     const token = await userLogin(servers[0], user)
     await getVideoWithToken(servers[0].url, token, privateVideoUUID, 403)

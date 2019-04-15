@@ -263,7 +263,7 @@ describe('Test follows', function () {
 
       {
         const user = { username: 'captain', password: 'password' }
-        await createUser(servers[ 2 ].url, servers[ 2 ].accessToken, user.username, user.password)
+        await createUser({ url: servers[ 2 ].url, accessToken: servers[ 2 ].accessToken, username: user.username, password: user.password })
         const userAccessToken = await userLogin(servers[ 2 ], user)
 
         const resVideos = await getVideosList(servers[ 2 ].url)

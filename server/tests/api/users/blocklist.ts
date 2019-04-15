@@ -86,7 +86,7 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'user1', password: 'password' }
-      await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
       userToken1 = await userLogin(servers[0], user)
       await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
@@ -94,14 +94,14 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'moderator', password: 'password' }
-      await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
       userModeratorToken = await userLogin(servers[0], user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
-      await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
 
       userToken2 = await userLogin(servers[1], user)
       await uploadVideo(servers[1].url, userToken2, { name: 'video user 2' })

@@ -1,4 +1,6 @@
 import * as request from 'supertest'
+import { VideoBlacklistType } from '../../models/videos'
+import { makeGetRequest } from '..'
 
 function addVideoToBlacklist (
   url: string,
@@ -39,40 +41,25 @@ function removeVideoFromBlacklist (url: string, token: string, videoId: number |
           .expect(specialStatus)
 }
 
-function getBlacklistedVideosList (url: string, token: string, specialStatus = 200) {
+function getBlacklistedVideosList (parameters: {
+  url: string,
+  token: string,
+  sort?: string,
+  type?: VideoBlacklistType,
+  specialStatus?: number
+}) {
+  let { url, token, sort, type, specialStatus = 200 } = parameters
   const path = '/api/v1/videos/blacklist/'
 
-  return request(url)
-          .get(path)
-          .query({ sort: 'createdAt' })
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .expect(specialStatus)
-          .expect('Content-Type', /json/)
-}
+  const query = { sort, type }
 
-function getBlacklistedVideosListWithTypeFilter (url: string, token: string, type: number, specialStatus = 200) {
-  const path = '/api/v1/videos/blacklist/'
-
-  return request(url)
-          .get(path)
-          .query({ sort: 'createdAt', type })
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .expect(specialStatus)
-          .expect('Content-Type', /json/)
-}
-
-function getSortedBlacklistedVideosList (url: string, token: string, sort: string, specialStatus = 200) {
-  const path = '/api/v1/videos/blacklist/'
-
-  return request(url)
-          .get(path)
-          .query({ sort: sort })
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .expect(specialStatus)
-          .expect('Content-Type', /json/)
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    token,
+    statusCodeExpected: specialStatus
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -81,7 +68,5 @@ export {
   addVideoToBlacklist,
   removeVideoFromBlacklist,
   getBlacklistedVideosList,
-  getBlacklistedVideosListWithTypeFilter,
-  getSortedBlacklistedVideosList,
   updateVideoBlacklist
 }

@@ -107,7 +107,7 @@
         <my-global-icon iconName="users"></my-global-icon>
 
         <div class="message">
-          Your instance has <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">a new follower</a>
+          Your instance has <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">a new follower</a> ({{ notification.actorFollow.follower.host }})
           <ng-container *ngIf="notification.actorFollow.state === 'pending'"> awaiting your approval</ng-container>
         </div>
       </ng-container>

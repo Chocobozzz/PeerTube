@@ -5,6 +5,7 @@ import { body, param } from 'express-validator/check'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
+  isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserDescriptionValid,
@@ -32,6 +33,7 @@ const usersAddValidator = [
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
+  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
@@ -120,6 +122,7 @@ const usersUpdateValidator = [
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
+  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdate parameters', { parameters: req.body })

@@ -40,7 +40,7 @@ describe('Test a ActivityPub video channels search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      await createUser(servers[0].url, servers[0].accessToken, 'user1_server1', 'password')
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: 'user1_server1', password: 'password' })
       const channel = {
         name: 'channel1_server1',
         displayName: 'Channel 1 server 1'
@@ -50,7 +50,7 @@ describe('Test a ActivityPub video channels search', function () {
 
     {
       const user = { username: 'user1_server2', password: 'password' }
-      await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
       userServer2Token = await userLogin(servers[1], user)
 
       const channel = {

@@ -41,7 +41,7 @@ describe('Test videos API validator', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser(server.url, server.accessToken, username, password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
     userAccessToken = await userLogin(server, { username, password })
 
     {
@@ -265,7 +265,7 @@ describe('Test videos API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
       const accessTokenUser = await userLogin(server, user)
       const res = await getMyUserInformation(server.url, accessTokenUser)

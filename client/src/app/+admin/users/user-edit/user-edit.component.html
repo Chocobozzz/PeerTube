@@ -79,6 +79,13 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <my-peertube-checkbox
+      inputName="byPassAutoBlacklist" formControlName="byPassAutoBlacklist"
+      i18n-labelText labelText="Bypass video auto blacklist"
+    ></my-peertube-checkbox>
+  </div>
+
   <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
 </form>
 

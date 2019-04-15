@@ -38,7 +38,7 @@ describe('Test ActivityPub fetcher', function () {
 
     const user = { username: 'user1', password: 'password' }
     for (const server of servers) {
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     }
 
     const userAccessToken = await userLogin(servers[0], user)

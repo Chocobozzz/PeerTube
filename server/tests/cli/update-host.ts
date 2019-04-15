@@ -50,7 +50,7 @@ describe('Test update host scripts', function () {
     await uploadVideo(server.url, server.accessToken, videoAttributes)
 
     // Create a user
-    await createUser(server.url, server.accessToken, 'toto', 'coucou')
+    await createUser({ url: server.url, accessToken: server.accessToken, username: 'toto', password: 'coucou' })
 
     // Create channel
     const videoChannel = {

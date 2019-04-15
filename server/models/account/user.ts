@@ -22,6 +22,7 @@ import {
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
+  isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
@@ -49,6 +50,7 @@ import { VideoModel } from '../video/video'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { VideoImportModel } from '../video/video-import'
+import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -139,6 +141,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
+
+  @AllowNull(false)
+  @Default(UserAdminFlag.NONE)
+  @Is('UserAdminFlags', value => throwIfNotValid(value, isUserAdminFlagsValid, 'user admin flags'))
+  @Column
+  adminFlags?: UserAdminFlag
 
   @AllowNull(false)
   @Default(false)
@@ -516,11 +524,15 @@ export class UserModel extends Model<UserModel> {
     return hasUserRight(this.role, right)
   }
 
+  hasAdminFlag (flag: UserAdminFlag) {
+    return this.adminFlags & flag
+  }
+
   isPasswordMatch (password: string) {
     return comparePassword(password, this.password)
   }
 
-  toFormattedJSON (): User {
+  toFormattedJSON (parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
 
@@ -549,6 +561,10 @@ export class UserModel extends Model<UserModel> {
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
             ? parseInt(videoQuotaUsedDaily, 10)
             : undefined
+    }
+
+    if (parameters.withAdminFlags) {
+      Object.assign(json, { adminFlags: this.adminFlags })
     }
 
     if (Array.isArray(this.Account.VideoChannels) === true) {

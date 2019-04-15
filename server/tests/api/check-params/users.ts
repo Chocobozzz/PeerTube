@@ -19,6 +19,7 @@ import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { waitJobs } from '../../../../shared/utils/server/jobs'
 import { expect } from 'chai'
+import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -47,7 +48,13 @@ describe('Test users API validators', function () {
     await setAccessTokensToServers([ server ])
 
     const videoQuota = 42000000
-    await createUser(server.url, server.accessToken, user.username, user.password, videoQuota)
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: user.username,
+      password: user.password,
+      videoQuota: videoQuota
+    })
     userAccessToken = await userLogin(server, user)
 
     {
@@ -99,7 +106,8 @@ describe('Test users API validators', function () {
       password: 'my super password',
       videoQuota: -1,
       videoQuotaDaily: -1,
-      role: UserRole.USER
+      role: UserRole.USER,
+      adminFlags: UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST
     }
 
     it('Should fail with a too small username', async function () {
@@ -146,6 +154,12 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too long password', async function () {
       const fields = immutableAssign(baseCorrectParams, { password: 'super'.repeat(61) })
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with invalid admin flags', async function () {
+      const fields = immutableAssign(baseCorrectParams, { adminFlags: 'toto' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -496,6 +510,12 @@ describe('Test users API validators', function () {
       }
 
       await makePutBodyRequest({ url: server.url, path: path + rootId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with invalid admin flags', async function () {
+      const fields = { adminFlags: 'toto' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the correct params', async function () {

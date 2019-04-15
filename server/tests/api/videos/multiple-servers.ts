@@ -164,7 +164,7 @@ describe('Test multiple servers', function () {
         username: 'user1',
         password: 'super_password'
       }
-      await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
       const userAccessToken = await userLogin(servers[1], user)
 
       const videoAttributes = {

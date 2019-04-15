@@ -41,7 +41,7 @@ describe('Test video abuses API validators', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser(server.url, server.accessToken, username, password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
     userAccessToken = await userLogin(server, { username, password })
 
     const res = await uploadVideo(server.url, server.accessToken, {})

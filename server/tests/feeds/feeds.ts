@@ -50,7 +50,7 @@ describe('Test syndication feeds', () => {
 
     {
       const attr = { username: 'john', password: 'password' }
-      await createUser(servers[0].url, servers[0].accessToken, attr.username, attr.password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: attr.username, password: attr.password })
       userAccessToken = await userLogin(servers[0], attr)
 
       const res = await getMyUserInformation(servers[0].url, userAccessToken)

@@ -36,7 +36,7 @@ describe('Test blocklist API validators', function () {
     server = servers[0]
 
     const user = { username: 'user1', password: 'password' }
-    await createUser(server.url, server.accessToken, user.username, user.password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
     userAccessToken = await userLogin(server, user)
 

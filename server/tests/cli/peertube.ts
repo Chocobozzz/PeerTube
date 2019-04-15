@@ -24,7 +24,7 @@ describe('Test CLI wrapper', function () {
     server = await runServer(1)
     await setAccessTokensToServers([ server ])
 
-    await createUser(server.url, server.accessToken, 'user_1', 'super password')
+    await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super password' })
   })
 
   it('Should display no selected instance', async function () {

@@ -78,7 +78,7 @@ function createUserCustom (server: ServerInfo) {
   const username = Date.now().toString() + getRandomInt(0, 100000)
   console.log('Creating user %s.', username)
 
-  return createUser(server.url, server.accessToken, username, 'coucou')
+  return createUser({ url: server.url, accessToken: server.accessToken, username: username, password: 'coucou' })
 }
 
 function uploadCustom (server: ServerInfo) {

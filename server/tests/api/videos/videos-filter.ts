@@ -64,13 +64,15 @@ describe('Test videos filter validator', function () {
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
       await createUser(
-        server.url,
-        server.accessToken,
-        moderator.username,
-        moderator.password,
-        undefined,
-        undefined,
-        UserRole.MODERATOR
+        {
+          url: server.url,
+          accessToken: server.accessToken,
+          username: moderator.username,
+          password: moderator.password,
+          videoQuota: undefined,
+          videoQuotaDaily: undefined,
+          role: UserRole.MODERATOR
+        }
       )
       server['moderatorAccessToken'] = await userLogin(server, moderator)
 

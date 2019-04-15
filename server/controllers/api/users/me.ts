@@ -129,7 +129,7 @@ async function getUserInformation (req: express.Request, res: express.Response) 
   // We did not load channels in res.locals.user
   const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
 
-  return res.json(user.toFormattedJSON())
+  return res.json(user.toFormattedJSON({}))
 }
 
 async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
@@ -164,7 +164,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   await user.destroy()
 
-  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})))
 
   return res.sendStatus(204)
 }
@@ -173,7 +173,7 @@ async function updateMe (req: express.Request, res: express.Response) {
   const body: UserUpdateMe = req.body
 
   const user = res.locals.oauth.token.user
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON({}))
 
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
@@ -193,7 +193,7 @@ async function updateMe (req: express.Request, res: express.Response) {
 
     await sendUpdateActor(userAccount, t)
 
-    auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+    auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})), oldUserAuditView)
   })
 
   return res.sendStatus(204)
@@ -202,13 +202,13 @@ async function updateMe (req: express.Request, res: express.Response) {
 async function updateMyAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user = res.locals.oauth.token.user
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+  const oldUserAuditView = new UserAuditView(user.toFormattedJSON({}))
 
   const userAccount = await AccountModel.load(user.Account.id)
 
   const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount)
 
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})), oldUserAuditView)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }

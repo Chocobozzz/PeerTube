@@ -57,7 +57,12 @@ describe('Test users with multiple servers', function () {
         username: 'user1',
         password: 'password'
       }
-      const res = await createUser(servers[ 0 ].url, servers[ 0 ].accessToken, user.username, user.password)
+      const res = await createUser({
+        url: servers[ 0 ].url,
+        accessToken: servers[ 0 ].accessToken,
+        username: user.username,
+        password: user.password
+      })
       userId = res.body.user.id
       userAccessToken = await userLogin(servers[ 0 ], user)
     }

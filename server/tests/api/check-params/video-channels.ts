@@ -53,7 +53,7 @@ describe('Test video channels API validator', function () {
     }
 
     {
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       accessTokenUser = await userLogin(server, user)
     }
   })

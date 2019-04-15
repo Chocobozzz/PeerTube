@@ -2,14 +2,17 @@ import { hasUserRight, User as UserServerModel, UserNotificationSetting, UserRig
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
+import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
 export class User implements UserServerModel {
   id: number
   username: string
   email: string
   emailVerified: boolean
-  role: UserRole
   nsfwPolicy: NSFWPolicyType
+
+  role: UserRole
+  roleLabel: string
 
   webTorrentEnabled: boolean
   autoPlayVideo: boolean
@@ -21,6 +24,8 @@ export class User implements UserServerModel {
   videoChannels: VideoChannel[]
   createdAt: Date
 
+  adminFlags?: UserAdminFlag
+
   blocked: boolean
   blockedReason?: string
 
@@ -30,6 +35,7 @@ export class User implements UserServerModel {
     this.id = hash.id
     this.username = hash.username
     this.email = hash.email
+
     this.role = hash.role
 
     this.videoChannels = hash.videoChannels
@@ -40,6 +46,9 @@ export class User implements UserServerModel {
     this.videosHistoryEnabled = hash.videosHistoryEnabled
     this.autoPlayVideo = hash.autoPlayVideo
     this.createdAt = hash.createdAt
+
+    this.adminFlags = hash.adminFlags
+
     this.blocked = hash.blocked
     this.blockedReason = hash.blockedReason
 

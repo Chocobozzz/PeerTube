@@ -46,8 +46,20 @@ describe('Test video change ownership - nominal', function () {
     await setAccessTokensToServers(servers)
 
     const videoQuota = 42000000
-    await createUser(servers[0].url, servers[0].accessToken, firstUser.username, firstUser.password, videoQuota)
-    await createUser(servers[0].url, servers[0].accessToken, secondUser.username, secondUser.password, videoQuota)
+    await createUser({
+      url: servers[ 0 ].url,
+      accessToken: servers[ 0 ].accessToken,
+      username: firstUser.username,
+      password: firstUser.password,
+      videoQuota: videoQuota
+    })
+    await createUser({
+      url: servers[ 0 ].url,
+      accessToken: servers[ 0 ].accessToken,
+      username: secondUser.username,
+      password: secondUser.password,
+      videoQuota: videoQuota
+    })
 
     firstUserAccessToken = await userLogin(servers[0], firstUser)
     secondUserAccessToken = await userLogin(servers[0], secondUser)
@@ -219,8 +231,20 @@ describe('Test video change ownership - quota too small', function () {
 
     const videoQuota = 42000000
     const limitedVideoQuota = 10
-    await createUser(server.url, server.accessToken, firstUser.username, firstUser.password, videoQuota)
-    await createUser(server.url, server.accessToken, secondUser.username, secondUser.password, limitedVideoQuota)
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: firstUser.username,
+      password: firstUser.password,
+      videoQuota: videoQuota
+    })
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: secondUser.username,
+      password: secondUser.password,
+      videoQuota: limitedVideoQuota
+    })
 
     firstUserAccessToken = await userLogin(server, firstUser)
     secondUserAccessToken = await userLogin(server, secondUser)

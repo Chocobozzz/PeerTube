@@ -56,18 +56,20 @@ describe('Test videos filters', function () {
     await setDefaultVideoChannel([ server ])
 
     const user = { username: 'user1', password: 'my super password' }
-    await createUser(server.url, server.accessToken, user.username, user.password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(server, user)
 
     const moderator = { username: 'moderator', password: 'my super password' }
     await createUser(
-      server.url,
-      server.accessToken,
-      moderator.username,
-      moderator.password,
-      undefined,
-      undefined,
-      UserRole.MODERATOR
+      {
+        url: server.url,
+        accessToken: server.accessToken,
+        username: moderator.username,
+        password: moderator.password,
+        videoQuota: undefined,
+        videoQuotaDaily: undefined,
+        role: UserRole.MODERATOR
+      }
     )
     moderatorAccessToken = await userLogin(server, moderator)
 

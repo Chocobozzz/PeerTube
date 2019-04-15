@@ -45,7 +45,7 @@ describe('Test users subscriptions', function () {
     {
       for (const server of servers) {
         const user = { username: 'user' + server.serverNumber, password: 'password' }
-        await createUser(server.url, server.accessToken, user.username, user.password)
+        await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
         const accessToken = await userLogin(server, user)
         users.push({ accessToken })

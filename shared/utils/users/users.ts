@@ -4,22 +4,37 @@ import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '..
 import { UserRole } from '../../index'
 import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
 import { ServerInfo, userLogin } from '..'
+import { UserAdminFlag } from '../../models/users/user-flag.model'
 
-function createUser (
-  url: string,
+type CreateUserArgs = { url: string,
   accessToken: string,
   username: string,
   password: string,
-  videoQuota = 1000000,
-  videoQuotaDaily = -1,
-  role: UserRole = UserRole.USER,
-  specialStatus = 200
-) {
+  videoQuota?: number,
+  videoQuotaDaily?: number,
+  role?: UserRole,
+  adminFlags?: UserAdminFlag,
+  specialStatus?: number
+}
+function createUser (parameters: CreateUserArgs) {
+  const {
+    url,
+    accessToken,
+    username,
+    adminFlags,
+    password = 'password',
+    videoQuota = 1000000,
+    videoQuotaDaily = -1,
+    role = UserRole.USER,
+    specialStatus = 200
+  } = parameters
+
   const path = '/api/v1/users'
   const body = {
     username,
     password,
     role,
+    adminFlags,
     email: username + '@example.com',
     videoQuota,
     videoQuotaDaily
@@ -35,7 +50,7 @@ function createUser (
 
 async function generateUserAccessToken (server: ServerInfo, username: string) {
   const password = 'my super password'
-  await createUser(server.url, server.accessToken, username, password)
+  await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
 
   return userLogin(server, { username, password })
 }
@@ -222,6 +237,7 @@ function updateUser (options: {
   videoQuota?: number,
   videoQuotaDaily?: number,
   password?: string,
+  adminFlags?: UserAdminFlag,
   role?: UserRole
 }) {
   const path = '/api/v1/users/' + options.userId
@@ -233,6 +249,7 @@ function updateUser (options: {
   if (options.videoQuota !== undefined && options.videoQuota !== null) toSend['videoQuota'] = options.videoQuota
   if (options.videoQuotaDaily !== undefined && options.videoQuotaDaily !== null) toSend['videoQuotaDaily'] = options.videoQuotaDaily
   if (options.role !== undefined && options.role !== null) toSend['role'] = options.role
+  if (options.adminFlags !== undefined && options.adminFlags !== null) toSend['adminFlags'] = options.adminFlags
 
   return makePutBodyRequest({
     url: options.url,

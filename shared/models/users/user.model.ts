@@ -3,6 +3,7 @@ import { VideoChannel } from '../videos/channel/video-channel.model'
 import { UserRole } from './user-role'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { UserNotificationSetting } from './user-notification-setting.model'
+import { UserAdminFlag } from './user-flag.model'
 
 export interface User {
   id: number
@@ -11,11 +12,15 @@ export interface User {
   emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
 
+  adminFlags?: UserAdminFlag
+
   autoPlayVideo: boolean
   webTorrentEnabled: boolean
   videosHistoryEnabled: boolean
 
   role: UserRole
+  roleLabel: string
+
   videoQuota: number
   videoQuotaDaily: number
   createdAt: Date

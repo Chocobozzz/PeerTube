@@ -1,4 +1,5 @@
 import { UserRole } from './user-role'
+import { UserAdminFlag } from './user-flag.model'
 
 export interface UserUpdate {
   password?: string
@@ -7,4 +8,5 @@ export interface UserUpdate {
   videoQuota?: number
   videoQuotaDaily?: number
   role?: UserRole
+  adminFlags?: UserAdminFlag
 }

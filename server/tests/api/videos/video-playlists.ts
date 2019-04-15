@@ -815,7 +815,12 @@ describe('Test video playlists', function () {
     this.timeout(30000)
 
     const user = { username: 'user_1', password: 'password' }
-    const res = await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    const res = await createUser({
+      url: servers[ 0 ].url,
+      accessToken: servers[ 0 ].accessToken,
+      username: user.username,
+      password: user.password
+    })
 
     const userId = res.body.user.id
     const userAccessToken = await userLogin(servers[0], user)

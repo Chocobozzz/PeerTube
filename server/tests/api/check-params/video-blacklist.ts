@@ -8,7 +8,6 @@ import {
   flushAndRunMultipleServers,
   flushTests,
   getBlacklistedVideosList,
-  getBlacklistedVideosListWithTypeFilter,
   getVideo,
   getVideoWithToken,
   killallServers,
@@ -49,14 +48,14 @@ describe('Test video blacklist API validators', function () {
     {
       const username = 'user1'
       const password = 'my super password'
-      await createUser(servers[0].url, servers[0].accessToken, username, password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: username, password: password })
       userAccessToken1 = await userLogin(servers[0], { username, password })
     }
 
     {
       const username = 'user2'
       const password = 'my super password'
-      await createUser(servers[0].url, servers[0].accessToken, username, password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: username, password: password })
       userAccessToken2 = await userLogin(servers[0], { username, password })
     }
 
@@ -221,11 +220,11 @@ describe('Test video blacklist API validators', function () {
     const basePath = '/api/v1/videos/blacklist/'
 
     it('Should fail with a non authenticated user', async function () {
-      await getBlacklistedVideosList(servers[0].url, 'fake token', 401)
+      await getBlacklistedVideosList({ url: servers[0].url, token: 'fake token', specialStatus: 401 })
     })
 
     it('Should fail with a non admin user', async function () {
-      await getBlacklistedVideosList(servers[0].url, userAccessToken2, 403)
+      await getBlacklistedVideosList({ url: servers[0].url, token: userAccessToken2, specialStatus: 403 })
     })
 
     it('Should fail with a bad start pagination', async function () {
@@ -241,11 +240,11 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with an invalid type', async function () {
-      await getBlacklistedVideosListWithTypeFilter(servers[0].url, servers[0].accessToken, 0, 400)
+      await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken, type: 0, specialStatus: 400 })
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getBlacklistedVideosListWithTypeFilter(servers[0].url, servers[0].accessToken, VideoBlacklistType.MANUAL)
+      await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken, type: VideoBlacklistType.MANUAL })
     })
   })
 
