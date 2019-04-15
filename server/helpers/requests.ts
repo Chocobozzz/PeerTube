@@ -50,7 +50,14 @@ async function downloadImage (url: string, destDir: string, destName: string, si
   await doRequestAndSaveToFile({ method: 'GET', uri: url }, tmpPath)
 
   const destPath = join(destDir, destName)
-  await processImage({ path: tmpPath }, destPath, size)
+
+  try {
+    await processImage({ path: tmpPath }, destPath, size)
+  } catch (err) {
+    await remove(tmpPath)
+
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------

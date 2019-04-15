@@ -270,7 +270,7 @@ async function refreshActorIfNeeded (
       return { refreshed: true, actor }
     })
   } catch (err) {
-    logger.warn('Cannot refresh actor.', { err })
+    logger.warn('Cannot refresh actor %s.', actor.url, { err })
     return { actor, refreshed: false }
   }
 }
