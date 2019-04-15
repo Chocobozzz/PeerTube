@@ -19,9 +19,9 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers
-} from '../../../../shared/utils'
-import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 

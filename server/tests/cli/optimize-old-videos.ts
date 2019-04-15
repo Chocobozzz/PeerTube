@@ -15,8 +15,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, viewVideo, wait
-} from '../../../shared/utils'
-import { waitJobs } from '../../../shared/utils/server/jobs'
+} from '../../../shared/extra-utils'
+import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
 import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 import { join } from 'path'

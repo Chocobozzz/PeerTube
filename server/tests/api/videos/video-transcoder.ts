@@ -19,9 +19,9 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   webtorrentAdd
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { extname, join } from 'path'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect

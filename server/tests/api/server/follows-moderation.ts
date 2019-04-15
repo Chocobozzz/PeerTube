@@ -9,15 +9,15 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateCustomSubConfig
-} from '../../../../shared/utils/index'
+} from '../../../../shared/extra-utils/index'
 import {
   follow,
   getFollowersListPaginationAndSort,
   getFollowingListPaginationAndSort,
   removeFollower,
   rejectFollower
-} from '../../../../shared/utils/server/follows'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils/server/follows'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { ActorFollow } from '../../../../shared/models/actors'
 
 const expect = chai.expect

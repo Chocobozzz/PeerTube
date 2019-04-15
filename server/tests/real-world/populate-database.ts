@@ -10,7 +10,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../shared/utils'
+} from '../../../shared/extra-utils'
 import * as Bluebird from 'bluebird'
 
 start()

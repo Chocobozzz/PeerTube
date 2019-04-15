@@ -5,10 +5,10 @@ import 'mocha'
 import {
   registerUser, flushTests, getUserInformation, getMyUserInformation, killallServers,
   userLogin, login, runServer, ServerInfo, verifyEmail, updateCustomSubConfig, wait
-} from '../../../../shared/utils'
-import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
-import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 

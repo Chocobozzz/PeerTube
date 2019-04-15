@@ -13,9 +13,9 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { join } from 'path'
-import { createVideoCaption } from '../../../../shared/utils/videos/video-captions'
+import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
 
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'

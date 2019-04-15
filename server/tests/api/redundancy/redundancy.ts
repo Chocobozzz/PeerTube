@@ -24,16 +24,16 @@ import {
   viewVideo,
   wait,
   waitUntilLog
-} from '../../../../shared/utils'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 import * as magnetUtil from 'magnet-uri'
-import { updateRedundancy } from '../../../../shared/utils/server/redundancy'
+import { updateRedundancy } from '../../../../shared/extra-utils/server/redundancy'
 import { ActorFollow } from '../../../../shared/models/actors'
 import { readdir } from 'fs-extra'
 import { join } from 'path'
 import { VideoRedundancyStrategy } from '../../../../shared/models/redundancy'
-import { getStats } from '../../../../shared/utils/server/stats'
+import { getStats } from '../../../../shared/extra-utils/server/stats'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
 
 const expect = chai.expect

@@ -7,7 +7,7 @@ import { CustomConfig } from '../../../../shared/models/server/custom-config.mod
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, runServer, ServerInfo,
   setAccessTokensToServers, userLogin, immutableAssign
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'

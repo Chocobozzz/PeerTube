@@ -11,18 +11,18 @@ import {
   unfollow,
   updateVideo,
   userLogin
-} from '../../../../shared/utils'
-import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
-import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
+} from '../../../../shared/extra-utils'
+import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { Video, VideoChannel } from '../../../../shared/models/videos'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addUserSubscription,
   listUserSubscriptions,
   listUserSubscriptionVideos,
   removeUserSubscription,
   getUserSubscription, areSubscriptionsExist
-} from '../../../../shared/utils/users/user-subscriptions'
+} from '../../../../shared/extra-utils/users/user-subscriptions'
 
 const expect = chai.expect
 

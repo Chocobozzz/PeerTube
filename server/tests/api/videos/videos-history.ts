@@ -16,9 +16,9 @@ import {
   uploadVideo,
   userLogin,
   wait
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
-import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/utils/videos/video-history'
+import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/extra-utils/videos/video-history'
 
 const expect = chai.expect
 

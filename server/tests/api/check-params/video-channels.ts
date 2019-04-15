@@ -20,12 +20,12 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
+} from '../../../../shared/extra-utils/requests/check-api-params'
 import { User } from '../../../../shared/models/users'
 import { join } from 'path'
 

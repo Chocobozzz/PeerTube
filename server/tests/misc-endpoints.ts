@@ -12,7 +12,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../shared/utils'
+} from '../../shared/extra-utils'
 import { VideoPrivacy } from '../../shared/models/videos'
 
 const expect = chai.expect

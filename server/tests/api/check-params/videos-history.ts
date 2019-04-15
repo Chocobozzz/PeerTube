@@ -14,7 +14,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 
 const expect = chai.expect
 

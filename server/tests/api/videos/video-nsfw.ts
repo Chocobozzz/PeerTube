@@ -9,10 +9,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../../shared/utils/index'
-import { userLogin } from '../../../../shared/utils/users/login'
-import { createUser } from '../../../../shared/utils/users/users'
-import { getMyVideos } from '../../../../shared/utils/videos/videos'
+} from '../../../../shared/extra-utils/index'
+import { userLogin } from '../../../../shared/extra-utils/users/login'
+import { createUser } from '../../../../shared/extra-utils/users/users'
+import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import {
   getAccountVideos,
   getConfig,
@@ -25,7 +25,7 @@ import {
   searchVideoWithToken,
   updateCustomConfig,
   updateMyUser
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import { User } from '../../../../shared/models/users'

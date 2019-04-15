@@ -15,7 +15,7 @@ import {
   userLogin,
   viewVideo,
   wait
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 const expect = chai.expect
 
 import {
@@ -23,7 +23,7 @@ import {
   flushTests,
   runServer,
   registerUser, getCustomConfig, setAccessTokensToServers, updateCustomConfig
-} from '../../../../shared/utils/index'
+} from '../../../../shared/extra-utils/index'
 
 describe('Test application behind a reverse proxy', function () {
   let server = null

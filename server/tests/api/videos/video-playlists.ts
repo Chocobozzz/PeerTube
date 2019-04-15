@@ -36,7 +36,7 @@ import {
   uploadVideoAndGetId,
   userLogin,
   waitJobs
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-playlist.model'
 import { Video } from '../../../../shared/models/videos'

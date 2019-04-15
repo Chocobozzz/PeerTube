@@ -20,12 +20,12 @@ import {
   updateVideoPlaylist,
   updateVideoPlaylistElement,
   uploadVideoAndGetId
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
+} from '../../../../shared/extra-utils/requests/check-api-params'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 

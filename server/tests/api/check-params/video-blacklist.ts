@@ -18,12 +18,12 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin, waitJobs
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
+} from '../../../../shared/extra-utils/requests/check-api-params'
 import { VideoDetails, VideoBlacklistType } from '../../../../shared/models/videos'
 import { expect } from 'chai'
 

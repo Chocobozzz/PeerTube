@@ -15,12 +15,12 @@ import {
   updateVideoAbuse,
   uploadVideo,
   userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
+} from '../../../../shared/extra-utils/requests/check-api-params'
 import { VideoAbuseState } from '../../../../shared/models/videos'
 
 describe('Test video abuses API validators', function () {

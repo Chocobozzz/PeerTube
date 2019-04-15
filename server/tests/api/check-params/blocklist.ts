@@ -13,12 +13,12 @@ import {
   makePostBodyRequest,
   ServerInfo,
   setAccessTokensToServers, userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
+} from '../../../../shared/extra-utils/requests/check-api-params'
 
 describe('Test blocklist API validators', function () {
   let servers: ServerInfo[]

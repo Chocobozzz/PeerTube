@@ -11,7 +11,7 @@ import {
   ServerInfo,
   setAccessTokensToServers, setDefaultVideoChannel,
   userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { UserRole } from '../../../../shared/models/users'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 

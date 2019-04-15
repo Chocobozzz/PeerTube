@@ -14,9 +14,9 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers
-} from '../../../../shared/utils'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
-import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../../../shared/utils/videos/video-imports'
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../../../shared/extra-utils/videos/video-imports'
 
 const expect = chai.expect
 

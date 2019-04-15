@@ -10,13 +10,13 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
-import { makeGetRequest } from '../../../../shared/utils/requests/requests'
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'

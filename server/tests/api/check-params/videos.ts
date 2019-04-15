@@ -9,13 +9,13 @@ import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
   makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, uploadVideo,
   runServer, ServerInfo, setAccessTokensToServers, userLogin, updateCustomSubConfig
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
-import { getAccountsList } from '../../../../shared/utils/users/accounts'
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { getAccountsList } from '../../../../shared/extra-utils/users/accounts'
 
 const expect = chai.expect
 

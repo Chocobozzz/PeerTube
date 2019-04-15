@@ -9,10 +9,15 @@ import {
   removeVideo,
   uploadVideo,
   wait
-} from '../../../../shared/utils'
-import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/utils/index'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
-import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../../../shared/utils/videos/video-captions'
+} from '../../../../shared/extra-utils'
+import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import {
+  createVideoCaption,
+  deleteVideoCaption,
+  listVideoCaptions,
+  testCaptionFile
+} from '../../../../shared/extra-utils/videos/video-captions'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect

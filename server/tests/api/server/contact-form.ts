@@ -2,10 +2,10 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/utils'
-import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
-import { sendContactForm } from '../../../../shared/utils/server/contact-form'
+import { flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/extra-utils'
+import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
 
 const expect = chai.expect
 

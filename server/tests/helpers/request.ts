@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { get4KFileUrl, root, wait } from '../../../shared/utils'
+import { get4KFileUrl, root, wait } from '../../../shared/extra-utils'
 import { join } from 'path'
 import { pathExists, remove } from 'fs-extra'
 import { expect } from 'chai'

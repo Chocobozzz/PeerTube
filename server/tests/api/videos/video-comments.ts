@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { testImage } from '../../../../shared/utils'
+import { testImage } from '../../../../shared/extra-utils'
 import {
   dateIsValid,
   flushTests,
@@ -13,14 +13,14 @@ import {
   setAccessTokensToServers,
   updateMyAvatar,
   uploadVideo
-} from '../../../../shared/utils/index'
+} from '../../../../shared/extra-utils/index'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../../../shared/utils/videos/video-comments'
+} from '../../../../shared/extra-utils/videos/video-comments'
 
 const expect = chai.expect
 

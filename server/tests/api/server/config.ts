@@ -16,7 +16,7 @@ import {
   runServer,
   setAccessTokensToServers,
   updateCustomConfig
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
 
 const expect = chai.expect

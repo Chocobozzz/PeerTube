@@ -11,7 +11,7 @@ import {
   runServer,
   ServerInfo,
   setAccessTokensToServers
-} from '../../../shared/utils'
+} from '../../../shared/extra-utils'
 
 describe('Test CLI wrapper', function () {
   let server: ServerInfo

@@ -14,12 +14,12 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   wait
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
+} from '../../../../shared/extra-utils/requests/check-api-params'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../../shared/models/users'
 
 describe('Test user notifications API validators', function () {

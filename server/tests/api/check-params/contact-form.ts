@@ -10,15 +10,15 @@ import {
   runServer,
   ServerInfo,
   setAccessTokensToServers
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
-import { getAccount } from '../../../../shared/utils/users/accounts'
-import { sendContactForm } from '../../../../shared/utils/server/contact-form'
-import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { getAccount } from '../../../../shared/extra-utils/users/accounts'
+import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
+import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 
 describe('Test contact form API validators', function () {
   let server: ServerInfo

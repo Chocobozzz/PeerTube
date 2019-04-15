@@ -9,15 +9,15 @@ import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
   makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
   updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
-import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/utils/videos/video-imports'
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { expect } from 'chai'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 

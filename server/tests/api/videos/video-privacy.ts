@@ -10,12 +10,12 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../../shared/utils/index'
-import { doubleFollow } from '../../../../shared/utils/server/follows'
-import { userLogin } from '../../../../shared/utils/users/login'
-import { createUser } from '../../../../shared/utils/users/users'
-import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/utils/videos/videos'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils/index'
+import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
+import { userLogin } from '../../../../shared/extra-utils/users/login'
+import { createUser } from '../../../../shared/extra-utils/users/users'
+import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 

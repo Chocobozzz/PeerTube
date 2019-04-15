@@ -1,8 +1,8 @@
 import * as program from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
-import { getClient, login } from '../../shared/utils'
-import { uploadVideo } from '../../shared/utils/'
+import { getClient, login } from '../../shared/extra-utils'
+import { uploadVideo } from '../../shared/extra-utils/'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { netrc, getSettings } from './cli'
 

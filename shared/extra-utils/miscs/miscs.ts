@@ -33,7 +33,7 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
 }
 
 function root () {
-  // We are in /shared/utils/miscs
+  // We are in /miscs
   return join(__dirname, '..', '..', '..')
 }
 

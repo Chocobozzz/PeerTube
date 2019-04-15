@@ -13,7 +13,7 @@ import {
   uploadVideo,
   wait,
   immutableAssign
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 
 const expect = chai.expect
 

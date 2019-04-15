@@ -17,7 +17,7 @@ import {
   uploadVideo,
   userLogin,
   waitJobs
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import * as chai from 'chai'
 import { Video } from '../../../../shared/models/videos'
 

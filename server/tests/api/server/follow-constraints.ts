@@ -13,10 +13,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../../shared/utils'
-import { unfollow } from '../../../../shared/utils/server/follows'
-import { userLogin } from '../../../../shared/utils/users/login'
-import { createUser } from '../../../../shared/utils/users/users'
+} from '../../../../shared/extra-utils'
+import { unfollow } from '../../../../shared/extra-utils/server/follows'
+import { userLogin } from '../../../../shared/extra-utils/users/login'
+import { createUser } from '../../../../shared/extra-utils/users/users'
 
 const expect = chai.expect
 

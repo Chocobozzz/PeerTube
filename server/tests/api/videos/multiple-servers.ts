@@ -32,15 +32,15 @@ import {
   viewVideo,
   wait,
   webtorrentAdd
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../../../shared/utils/videos/video-comments'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 

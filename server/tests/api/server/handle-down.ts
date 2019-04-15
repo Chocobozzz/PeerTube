@@ -20,15 +20,15 @@ import {
   updateVideo,
   uploadVideo,
   wait
-} from '../../../../shared/utils'
-import { follow, getFollowersListPaginationAndSort } from '../../../../shared/utils/server/follows'
-import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
+import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../../../shared/utils/videos/video-comments'
+} from '../../../../shared/extra-utils/videos/video-comments'
 
 const expect = chai.expect
 

@@ -10,7 +10,7 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 
 describe('Test services API validators', function () {
   let server: ServerInfo

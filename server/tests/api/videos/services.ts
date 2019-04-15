@@ -10,8 +10,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../../../shared/utils/index'
-import { runServer } from '../../../../shared/utils/server/servers'
+} from '../../../../shared/extra-utils/index'
+import { runServer } from '../../../../shared/extra-utils/server/servers'
 
 const expect = chai.expect
 

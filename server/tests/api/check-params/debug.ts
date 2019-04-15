@@ -10,8 +10,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../../../shared/utils'
-import { makeGetRequest } from '../../../../shared/utils/requests/requests'
+} from '../../../../shared/extra-utils'
+import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
 
 describe('Test debug API validators', function () {
   const path = '/api/v1/server/debug'

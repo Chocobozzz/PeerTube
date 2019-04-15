@@ -18,13 +18,13 @@ import {
   setAccessTokensToServers,
   updateCustomSubConfig,
   userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
-import { getMagnetURI, getYoutubeVideoUrl } from '../../../../shared/utils/videos/video-imports'
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { getMagnetURI, getYoutubeVideoUrl } from '../../../../shared/extra-utils/videos/video-imports'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'

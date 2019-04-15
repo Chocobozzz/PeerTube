@@ -33,10 +33,10 @@ import {
   updateUser,
   uploadVideo,
   userLogin
-} from '../../../../shared/utils'
-import { follow } from '../../../../shared/utils/server/follows'
-import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
-import { getMyVideos } from '../../../../shared/utils/videos/videos'
+} from '../../../../shared/extra-utils'
+import { follow } from '../../../../shared/extra-utils/server/follows'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 
 const expect = chai.expect

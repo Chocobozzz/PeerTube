@@ -20,11 +20,11 @@ import {
   wait,
   getCustomConfig,
   updateCustomConfig, getVideoThreadComments, getVideoCommentThreads, follow
-} from '../../../../shared/utils'
-import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/utils/index'
-import { setAccessTokensToServers } from '../../../../shared/utils/users/login'
-import { waitJobs } from '../../../../shared/utils/server/jobs'
-import { getUserNotificationSocket } from '../../../../shared/utils/socket/socket-io'
+} from '../../../../shared/extra-utils'
+import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { getUserNotificationSocket } from '../../../../shared/extra-utils/socket/socket-io'
 import {
   checkCommentMention,
   CheckerBaseParams,
@@ -42,7 +42,7 @@ import {
   markAsReadNotifications,
   updateMyNotificationSettings,
   markAsReadAllNotifications, checkNewInstanceFollower
-} from '../../../../shared/utils/users/user-notifications'
+} from '../../../../shared/extra-utils/users/user-notifications'
 import {
   User,
   UserNotification,
@@ -50,13 +50,13 @@ import {
   UserNotificationSettingValue,
   UserNotificationType
 } from '../../../../shared/models/users'
-import { MockSmtpServer } from '../../../../shared/utils/miscs/email'
-import { addUserSubscription, removeUserSubscription } from '../../../../shared/utils/users/user-subscriptions'
+import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
+import { addUserSubscription, removeUserSubscription } from '../../../../shared/extra-utils/users/user-subscriptions'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { getBadVideoUrl, getYoutubeVideoUrl, importVideo } from '../../../../shared/utils/videos/video-imports'
-import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/utils/videos/video-comments'
+import { getBadVideoUrl, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
+import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
 import * as uuidv4 from 'uuid/v4'
-import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/utils/users/blocklist'
+import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/extra-utils/users/blocklist'
 import { CustomConfig } from '../../../../shared/models/server'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 

@@ -11,10 +11,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs
-} from '../../../../shared/utils'
-import { getVideosOverview } from '../../../../shared/utils/overviews/overviews'
+} from '../../../../shared/extra-utils'
+import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
-import { listMyVideosHistory } from '../../../../shared/utils/videos/video-history'
+import { listMyVideosHistory } from '../../../../shared/extra-utils/videos/video-history'
 
 const expect = chai.expect
 

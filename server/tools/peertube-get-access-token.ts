@@ -6,7 +6,7 @@ import {
   Server,
   Client,
   User
-} from '../../shared/utils'
+} from '../../shared/extra-utils'
 
 program
   .option('-u, --url <url>', 'Server url')

@@ -6,13 +6,13 @@ import {
   createUser,
   flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
   uploadVideo, userLogin
-} from '../../../../shared/utils'
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
-} from '../../../../shared/utils/requests/check-api-params'
-import { addVideoCommentThread } from '../../../../shared/utils/videos/video-comments'
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
 
 const expect = chai.expect
 
