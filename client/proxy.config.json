@@ -6,5 +6,9 @@
   "/static": {
     "target": "http://localhost:9000",
     "secure": false
+  },
+  "/socket.io": {
+    "target": "http://localhost:9000",
+    "secure": false
   }
 }

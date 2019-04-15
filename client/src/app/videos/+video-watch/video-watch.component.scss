@@ -432,13 +432,14 @@ my-video-comments {
 
 @media screen and (max-width: $small-view) {
   .privacy-concerns {
-    margin-left: $menu-width;
+    margin-left: $menu-width - 15px; // Menu is absolute
   }
 }
 
 :host-context(.expanded) {
   .privacy-concerns {
     width: 100%;
+    margin-left: -15px;
   }
 }
 
@@ -449,6 +450,7 @@ my-video-comments {
   padding: 5px 15px;
 
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
   background-color: rgba(0, 0, 0, 0.9);

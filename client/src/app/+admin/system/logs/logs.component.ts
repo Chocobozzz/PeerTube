@@ -106,6 +106,6 @@ export class LogsComponent implements OnInit {
       }
     ]
 
-    this.level = 'info'
+    this.level = 'warn'
   }
 }
