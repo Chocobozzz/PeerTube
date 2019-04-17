@@ -88,7 +88,7 @@ $play-overlay-width: 18px;
     height: inherit;
 
     &.blur-filter {
-      filter: blur(5px);
+      filter: blur(20px);
       transform : scale(1.03);
     }
   }
