@@ -3,11 +3,10 @@ import * as sequelize from 'sequelize'
 import * as magnetUtil from 'magnet-uri'
 import * as request from 'request'
 import {
-  ActivityIconObject,
   ActivityPlaylistSegmentHashesObject,
   ActivityPlaylistUrlObject,
   ActivityUrlObject,
-  ActivityVideoUrlObject,
+  ActivityVideoUrlObject, VideoCreate,
   VideoState
 } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -16,8 +15,15 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validat
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest, downloadImage } from '../../helpers/requests'
-import { ACTIVITY_PUB, MIMETYPES, P2P_MEDIA_LOADER_PEER_VERSION, REMOTE_SCHEME, THUMBNAILS_SIZE } from '../../initializers/constants'
+import { doRequest } from '../../helpers/requests'
+import {
+  ACTIVITY_PUB,
+  MIMETYPES,
+  P2P_MEDIA_LOADER_PEER_VERSION,
+  PREVIEWS_SIZE,
+  REMOTE_SCHEME,
+  STATIC_PATHS
+} from '../../initializers/constants'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -43,8 +49,11 @@ import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
-import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
+import { createPlaceholderThumbnail, createVideoThumbnailFromUrl } from '../thumbnail'
+import { ThumbnailModel } from '../../models/video/thumbnail'
+import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
+import { join } from 'path'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and is published, we federate it
@@ -100,18 +109,18 @@ async function fetchRemoteVideoDescription (video: VideoModel) {
 }
 
 function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Function) {
-  const host = video.VideoChannel.Account.Actor.Server.host
+  const url = buildRemoteBaseUrl(video, path)
 
   // We need to provide a callback, if no we could have an uncaught exception
-  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
+  return request.get(url, err => {
     if (err) reject(err)
   })
 }
 
-function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) {
-  const thumbnailName = video.getThumbnailName()
+function buildRemoteBaseUrl (video: VideoModel, path: string) {
+  const host = video.VideoChannel.Account.Actor.Server.host
 
-  return downloadImage(icon.url, CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName, THUMBNAILS_SIZE)
+  return REMOTE_SCHEME.HTTP + '://' + host + path
 }
 
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
@@ -236,6 +245,14 @@ async function updateVideoFromAP (options: {
   const wasUnlistedVideo = options.video.privacy === VideoPrivacy.UNLISTED
 
   try {
+    let thumbnailModel: ThumbnailModel
+
+    try {
+      thumbnailModel = await createVideoThumbnailFromUrl(options.videoObject.icon.url, options.video, ThumbnailType.THUMBNAIL)
+    } catch (err) {
+      logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err })
+    }
+
     await sequelizeTypescript.transaction(async t => {
       const sequelizeOptions = { transaction: t }
 
@@ -271,6 +288,17 @@ async function updateVideoFromAP (options: {
       options.video.set('views', videoData.views)
 
       await options.video.save(sequelizeOptions)
+
+      if (thumbnailModel) {
+        thumbnailModel.videoId = options.video.id
+        options.video.addThumbnail(await thumbnailModel.save({ transaction: t }))
+      }
+
+      // FIXME: use icon URL instead
+      const previewUrl = buildRemoteBaseUrl(options.video, join(STATIC_PATHS.PREVIEWS, options.video.getPreview().filename))
+      const previewModel = createPlaceholderThumbnail(previewUrl, options.video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
+
+      options.video.addThumbnail(await previewModel.save({ transaction: t }))
 
       {
         const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
@@ -347,12 +375,6 @@ async function updateVideoFromAP (options: {
     logger.debug('Cannot update the remote video.', { err })
     throw err
   }
-
-  try {
-    await generateThumbnailFromUrl(options.video, options.videoObject.icon)
-  } catch (err) {
-    logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err })
-  }
 }
 
 async function refreshVideoIfNeeded (options: {
@@ -412,7 +434,6 @@ export {
   getOrCreateVideoAndAccountAndChannel,
   fetchRemoteVideoStaticFile,
   fetchRemoteVideoDescription,
-  generateThumbnailFromUrl,
   getOrCreateVideoChannelFromVideoObject
 }
 
@@ -440,13 +461,34 @@ function isAPPlaylistSegmentHashesUrlObject (tag: any): tag is ActivityPlaylistS
 async function createVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
+  const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
+  const video = VideoModel.build(videoData)
+
+  const promiseThumbnail = createVideoThumbnailFromUrl(videoObject.icon.url, video, ThumbnailType.THUMBNAIL)
+
+  let thumbnailModel: ThumbnailModel
+  if (waitThumbnail === true) {
+    thumbnailModel = await promiseThumbnail
+  }
+
   const videoCreated: VideoModel = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
-    const video = VideoModel.build(videoData)
-
     const videoCreated = await video.save(sequelizeOptions)
+    videoCreated.VideoChannel = channelActor.VideoChannel
+
+    if (thumbnailModel) {
+      thumbnailModel.videoId = videoCreated.id
+
+      videoCreated.addThumbnail(await thumbnailModel.save({ transaction: t }))
+    }
+
+    // FIXME: use icon URL instead
+    const previewUrl = buildRemoteBaseUrl(videoCreated, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
+    const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
+    previewModel.videoId = videoCreated.id
+
+    videoCreated.addThumbnail(await previewModel.save({ transaction: t }))
 
     // Process files
     const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
@@ -476,14 +518,16 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
 
     logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
 
-    videoCreated.VideoChannel = channelActor.VideoChannel
     return videoCreated
   })
 
-  const p = generateThumbnailFromUrl(videoCreated, videoObject.icon)
-    .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
+  if (waitThumbnail === false) {
+    promiseThumbnail.then(thumbnailModel => {
+      thumbnailModel = videoCreated.id
 
-  if (waitThumbnail === true) await p
+      return thumbnailModel.save()
+    })
+  }
 
   return videoCreated
 }

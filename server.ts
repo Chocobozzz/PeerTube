@@ -255,8 +255,6 @@ async function startApplication () {
 
   // Make server listening
   server.listen(port, hostname, () => {
-    logger.debug('CONFIG', { CONFIG })
-
     logger.info('Server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
   })

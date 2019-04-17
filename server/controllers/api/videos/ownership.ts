@@ -17,7 +17,6 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { changeVideoChannelShare } from '../../../lib/activitypub'
 import { sendUpdateVideo } from '../../../lib/activitypub/send'
-import { UserModel } from '../../../models/account/user'
 
 const ownershipVideoRouter = express.Router()
 

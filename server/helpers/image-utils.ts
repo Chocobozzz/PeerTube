@@ -6,7 +6,8 @@ import { logger } from './logger'
 async function processImage (
   physicalFile: { path: string },
   destination: string,
-  newSize: { width: number, height: number }
+  newSize: { width: number, height: number },
+  keepOriginal = false
 ) {
   if (physicalFile.path === destination) {
     throw new Error('Sharp needs an input path different that the output path.')
@@ -24,7 +25,7 @@ async function processImage (
     .resize(newSize.width, newSize.height)
     .toFile(destination)
 
-  await remove(physicalFile.path)
+  if (keepOriginal !== true) await remove(physicalFile.path)
 }
 
 // ---------------------------------------------------------------------------

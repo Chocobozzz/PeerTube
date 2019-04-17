@@ -11,7 +11,7 @@ export interface PlaylistObject {
   totalItems: number
   attributedTo: string[]
 
-  icon: ActivityIconObject
+  icon?: ActivityIconObject
 
   published: string
   updated: string

@@ -12,7 +12,7 @@ import {
 } from '../../middlewares'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
-import { MIMETYPES, THUMBNAILS_SIZE, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
+import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
@@ -28,7 +28,6 @@ import {
 } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistCreate } from '../../../shared/models/videos/playlist/video-playlist-create.model'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { processImage } from '../../helpers/image-utils'
 import { join } from 'path'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getVideoPlaylistActivityPubUrl, getVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
@@ -37,12 +36,12 @@ import { VideoModel } from '../../models/video/video'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
 import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
-import { copy, pathExists } from 'fs-extra'
 import { AccountModel } from '../../models/account/account'
 import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/video-playlist-reorder.model'
 import { JobQueue } from '../../lib/job-queue'
 import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
+import { createPlaylistThumbnailFromExisting } from '../../lib/thumbnail'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -174,13 +173,17 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
   }
 
   const thumbnailField = req.files['thumbnailfile']
-  if (thumbnailField) {
-    const thumbnailPhysicalFile = thumbnailField[ 0 ]
-    await processImage(thumbnailPhysicalFile, join(CONFIG.STORAGE.THUMBNAILS_DIR, videoPlaylist.getThumbnailName()), THUMBNAILS_SIZE)
-  }
+  const thumbnailModel = thumbnailField
+    ? await createPlaylistThumbnailFromExisting(thumbnailField[0].path, videoPlaylist)
+    : undefined
 
   const videoPlaylistCreated: VideoPlaylistModel = await sequelizeTypescript.transaction(async t => {
     const videoPlaylistCreated = await videoPlaylist.save({ transaction: t })
+
+    if (thumbnailModel) {
+      thumbnailModel.videoPlaylistId = videoPlaylistCreated.id
+      videoPlaylistCreated.setThumbnail(await thumbnailModel.save({ transaction: t }))
+    }
 
     // We need more attributes for the federation
     videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
@@ -206,14 +209,9 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
 
   const thumbnailField = req.files['thumbnailfile']
-  if (thumbnailField) {
-    const thumbnailPhysicalFile = thumbnailField[ 0 ]
-    await processImage(
-      thumbnailPhysicalFile,
-      join(CONFIG.STORAGE.THUMBNAILS_DIR, videoPlaylistInstance.getThumbnailName()),
-      THUMBNAILS_SIZE
-    )
-  }
+  const thumbnailModel = thumbnailField
+    ? await createPlaylistThumbnailFromExisting(thumbnailField[0].path, videoPlaylistInstance)
+    : undefined
 
   try {
     await sequelizeTypescript.transaction(async t => {
@@ -240,6 +238,11 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
       }
 
       const playlistUpdated = await videoPlaylistInstance.save(sequelizeOptions)
+
+      if (thumbnailModel) {
+        thumbnailModel.videoPlaylistId = playlistUpdated.id
+        playlistUpdated.setThumbnail(await thumbnailModel.save({ transaction: t }))
+      }
 
       const isNewPlaylist = wasPrivatePlaylist && playlistUpdated.privacy !== VideoPlaylistPrivacy.PRIVATE
 
@@ -307,15 +310,15 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
   })
 
   // If the user did not set a thumbnail, automatically take the video thumbnail
-  if (playlistElement.position === 1) {
-    const playlistThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoPlaylist.getThumbnailName())
+  if (playlistElement.position === 1 && videoPlaylist.hasThumbnail() === false) {
+    logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
-    if (await pathExists(playlistThumbnailPath) === false) {
-      logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
+    const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnail().filename)
+    const thumbnailModel = await createPlaylistThumbnailFromExisting(inputPath, videoPlaylist, true)
 
-      const videoThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
-      await copy(videoThumbnailPath, playlistThumbnailPath)
-    }
+    thumbnailModel.videoPlaylistId = videoPlaylist.id
+
+    await thumbnailModel.save()
   }
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)

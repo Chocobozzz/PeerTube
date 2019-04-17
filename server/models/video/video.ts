@@ -107,6 +107,8 @@ import { VideoImportModel } from './video-import'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { CONFIG } from '../../initializers/config'
+import { ThumbnailModel } from './thumbnail'
+import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: Sequelize.DefineIndexesOptions[] = [
@@ -181,7 +183,8 @@ export enum ScopeNames {
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
   WITH_USER_HISTORY = 'WITH_USER_HISTORY',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
-  WITH_USER_ID = 'WITH_USER_ID'
+  WITH_USER_ID = 'WITH_USER_ID',
+  WITH_THUMBNAILS = 'WITH_THUMBNAILS'
 }
 
 type ForAPIOptions = {
@@ -472,6 +475,14 @@ type AvailableForListIDsOptions = {
     }
 
     return query
+  },
+  [ ScopeNames.WITH_THUMBNAILS ]: {
+    include: [
+      {
+        model: () => ThumbnailModel,
+        required: false
+      }
+    ]
   },
   [ ScopeNames.WITH_USER_ID ]: {
     include: [
@@ -771,6 +782,16 @@ export class VideoModel extends Model<VideoModel> {
   })
   Tags: TagModel[]
 
+  @HasMany(() => ThumbnailModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: true
+    },
+    hooks: true,
+    onDelete: 'cascade'
+  })
+  Thumbnails: ThumbnailModel[]
+
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
       name: 'videoId',
@@ -920,14 +941,10 @@ export class VideoModel extends Model<VideoModel> {
 
     logger.info('Removing files of video %s.', instance.url)
 
-    tasks.push(instance.removeThumbnail())
-
     if (instance.isOwned()) {
       if (!Array.isArray(instance.VideoFiles)) {
         instance.VideoFiles = await instance.$get('VideoFiles') as VideoFileModel[]
       }
-
-      tasks.push(instance.removePreview())
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
@@ -955,7 +972,11 @@ export class VideoModel extends Model<VideoModel> {
       }
     }
 
-    return VideoModel.scope([ ScopeNames.WITH_FILES, ScopeNames.WITH_STREAMING_PLAYLISTS ]).findAll(query)
+    return VideoModel.scope([
+      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_STREAMING_PLAYLISTS,
+      ScopeNames.WITH_THUMBNAILS
+    ]).findAll(query)
   }
 
   static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
@@ -1048,7 +1069,7 @@ export class VideoModel extends Model<VideoModel> {
 
     return Bluebird.all([
       // FIXME: typing issue
-      VideoModel.findAll(query as any),
+      VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query as any),
       VideoModel.sequelize.query(rawCountQuery, { type: Sequelize.QueryTypes.SELECT })
     ]).then(([ rows, totals ]) => {
       // totals: totalVideos + totalVideoShares
@@ -1102,12 +1123,14 @@ export class VideoModel extends Model<VideoModel> {
       })
     }
 
-    return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
-      return {
-        data: rows,
-        total: count
-      }
-    })
+    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS)
+                     .findAndCountAll(query)
+                     .then(({ rows, count }) => {
+                       return {
+                         data: rows,
+                         total: count
+                       }
+                     })
   }
 
   static async listForApi (options: {
@@ -1296,7 +1319,7 @@ export class VideoModel extends Model<VideoModel> {
       transaction: t
     }
 
-    return VideoModel.findOne(options)
+    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
   static loadWithRights (id: number | string, t?: Sequelize.Transaction) {
@@ -1306,7 +1329,11 @@ export class VideoModel extends Model<VideoModel> {
       transaction: t
     }
 
-    return VideoModel.scope([ ScopeNames.WITH_BLACKLISTED, ScopeNames.WITH_USER_ID ]).findOne(options)
+    return VideoModel.scope([
+      ScopeNames.WITH_BLACKLISTED,
+      ScopeNames.WITH_USER_ID,
+      ScopeNames.WITH_THUMBNAILS
+    ]).findOne(options)
   }
 
   static loadOnlyId (id: number | string, t?: Sequelize.Transaction) {
@@ -1318,12 +1345,15 @@ export class VideoModel extends Model<VideoModel> {
       transaction: t
     }
 
-    return VideoModel.findOne(options)
+    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
   static loadWithFiles (id: number, t?: Sequelize.Transaction, logging?: boolean) {
-    return VideoModel.scope([ ScopeNames.WITH_FILES, ScopeNames.WITH_STREAMING_PLAYLISTS ])
-                     .findByPk(id, { transaction: t, logging })
+    return VideoModel.scope([
+      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_STREAMING_PLAYLISTS,
+      ScopeNames.WITH_THUMBNAILS
+    ]).findByPk(id, { transaction: t, logging })
   }
 
   static loadByUUIDWithFile (uuid: string) {
@@ -1333,7 +1363,7 @@ export class VideoModel extends Model<VideoModel> {
       }
     }
 
-    return VideoModel.findOne(options)
+    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
   static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
@@ -1344,7 +1374,7 @@ export class VideoModel extends Model<VideoModel> {
       transaction
     }
 
-    return VideoModel.findOne(query)
+    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(query)
   }
 
   static loadByUrlAndPopulateAccount (url: string, transaction?: Sequelize.Transaction) {
@@ -1358,7 +1388,8 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope([
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS
+      ScopeNames.WITH_STREAMING_PLAYLISTS,
+      ScopeNames.WITH_THUMBNAILS
     ]).findOne(query)
   }
 
@@ -1377,7 +1408,8 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS
+      ScopeNames.WITH_STREAMING_PLAYLISTS,
+      ScopeNames.WITH_THUMBNAILS
     ]
 
     if (userId) {
@@ -1403,6 +1435,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_BLACKLISTED,
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
+      ScopeNames.WITH_THUMBNAILS,
       { method: [ ScopeNames.WITH_FILES, true ] } as any, // FIXME: typings
       { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] } as any // FIXME: typings
     ]
@@ -1555,7 +1588,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     // FIXME: typing
-    const apiScope: any[] = []
+    const apiScope: any[] = [ ScopeNames.WITH_THUMBNAILS ]
 
     if (options.user) {
       apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })
@@ -1611,18 +1644,37 @@ export class VideoModel extends Model<VideoModel> {
     return maxBy(this.VideoFiles, file => file.resolution)
   }
 
+  addThumbnail (thumbnail: ThumbnailModel) {
+    if (Array.isArray(this.Thumbnails) === false) this.Thumbnails = []
+
+    // Already have this thumbnail, skip
+    if (this.Thumbnails.find(t => t.id === thumbnail.id)) return
+
+    this.Thumbnails.push(thumbnail)
+  }
+
   getVideoFilename (videoFile: VideoFileModel) {
     return this.uuid + '-' + videoFile.resolution + videoFile.extname
   }
 
-  getThumbnailName () {
-    const extension = '.jpg'
-    return this.uuid + extension
+  generateThumbnailName () {
+    return this.uuid + '.jpg'
   }
 
-  getPreviewName () {
-    const extension = '.jpg'
-    return this.uuid + extension
+  getThumbnail () {
+    if (Array.isArray(this.Thumbnails) === false) return undefined
+
+    return this.Thumbnails.find(t => t.type === ThumbnailType.THUMBNAIL)
+  }
+
+  generatePreviewName () {
+    return this.uuid + '.jpg'
+  }
+
+  getPreview () {
+    if (Array.isArray(this.Thumbnails) === false) return undefined
+
+    return this.Thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
   }
 
   getTorrentFileName (videoFile: VideoFileModel) {
@@ -1632,24 +1684,6 @@ export class VideoModel extends Model<VideoModel> {
 
   isOwned () {
     return this.remote === false
-  }
-
-  createPreview (videoFile: VideoFileModel) {
-    return generateImageFromVideoFile(
-      this.getVideoFilePath(videoFile),
-      CONFIG.STORAGE.PREVIEWS_DIR,
-      this.getPreviewName(),
-      PREVIEWS_SIZE
-    )
-  }
-
-  createThumbnail (videoFile: VideoFileModel) {
-    return generateImageFromVideoFile(
-      this.getVideoFilePath(videoFile),
-      CONFIG.STORAGE.THUMBNAILS_DIR,
-      this.getThumbnailName(),
-      THUMBNAILS_SIZE
-    )
   }
 
   getTorrentFilePath (videoFile: VideoFileModel) {
@@ -1692,11 +1726,18 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   getThumbnailStaticPath () {
-    return join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName())
+    const thumbnail = this.getThumbnail()
+    if (!thumbnail) return null
+
+    return join(STATIC_PATHS.THUMBNAILS, thumbnail.filename)
   }
 
   getPreviewStaticPath () {
-    return join(STATIC_PATHS.PREVIEWS, this.getPreviewName())
+    const preview = this.getPreview()
+    if (!preview) return null
+
+    // We use a local cache, so specify our cache endpoint instead of potential remote URL
+    return join(STATIC_PATHS.PREVIEWS, preview.filename)
   }
 
   toFormattedJSON (options?: VideoFormattingJSONOptions): Video {
@@ -1730,18 +1771,6 @@ export class VideoModel extends Model<VideoModel> {
 
   getDescriptionAPIPath () {
     return `/api/${API_VERSION}/videos/${this.uuid}/description`
-  }
-
-  removeThumbnail () {
-    const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
-    return remove(thumbnailPath)
-      .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
-  }
-
-  removePreview () {
-    const previewPath = join(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
-    return remove(previewPath)
-      .catch(err => logger.warn('Cannot delete preview %s.', previewPath, { err }))
   }
 
   removeFile (videoFile: VideoFileModel, isRedundancy = false) {
@@ -1814,10 +1843,6 @@ export class VideoModel extends Model<VideoModel> {
 
   getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
     return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
-  }
-
-  getThumbnailUrl (baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.THUMBNAILS + this.getThumbnailName()
   }
 
   getTorrentUrl (videoFile: VideoFileModel, baseUrlHttp: string) {

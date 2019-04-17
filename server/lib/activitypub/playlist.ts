@@ -1,12 +1,12 @@
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { crawlCollectionPage } from './crawl'
-import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY, THUMBNAILS_SIZE } from '../../initializers/constants'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { AccountModel } from '../../models/account/account'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { logger } from '../../helpers/logger'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { doRequest, downloadImage } from '../../helpers/requests'
+import { doRequest } from '../../helpers/requests'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
 import * as Bluebird from 'bluebird'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
@@ -16,9 +16,8 @@ import { VideoPlaylistElementModel } from '../../models/video/video-playlist-ele
 import { VideoModel } from '../../models/video/video'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
-import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
+import { createPlaylistThumbnailFromUrl } from '../thumbnail'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: AccountModel, to: string[]) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPlaylistPrivacy.PUBLIC : VideoPlaylistPrivacy.UNLISTED
@@ -97,16 +96,20 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     return Promise.resolve()
   })
 
-  // Empty playlists generally do not have a miniature, so skip this
-  if (accItems.length !== 0) {
+  const refreshedPlaylist = await VideoPlaylistModel.loadWithAccountAndChannel(playlist.id, null)
+
+  if (playlistObject.icon) {
     try {
-      await generateThumbnailFromUrl(playlist, playlistObject.icon)
+      const thumbnailModel = await createPlaylistThumbnailFromUrl(playlistObject.icon.url, refreshedPlaylist)
+      thumbnailModel.videoPlaylistId = refreshedPlaylist.id
+
+      refreshedPlaylist.setThumbnail(await thumbnailModel.save())
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', playlistObject.id, { err })
     }
   }
 
-  return resetVideoPlaylistElements(accItems, playlist)
+  return resetVideoPlaylistElements(accItems, refreshedPlaylist)
 }
 
 async function refreshVideoPlaylistIfNeeded (videoPlaylist: VideoPlaylistModel): Promise<VideoPlaylistModel> {
@@ -189,12 +192,6 @@ async function resetVideoPlaylistElements (elementUrls: string[], playlist: Vide
   logger.info('Reset playlist %s with %s elements.', playlist.url, elementsToCreate.length)
 
   return undefined
-}
-
-function generateThumbnailFromUrl (playlist: VideoPlaylistModel, icon: ActivityIconObject) {
-  const thumbnailName = playlist.getThumbnailName()
-
-  return downloadImage(icon.url, CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName, THUMBNAILS_SIZE)
 }
 
 async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {

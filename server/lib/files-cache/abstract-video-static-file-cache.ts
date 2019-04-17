@@ -1,40 +1,28 @@
-import * as AsyncLRU from 'async-lru'
 import { createWriteStream, remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { fetchRemoteVideoStaticFile } from '../activitypub'
+import * as memoizee from 'memoizee'
 
 export abstract class AbstractVideoStaticFileCache <T> {
 
-  protected lru
+  getFilePath: (params: T) => Promise<string>
 
-  abstract getFilePath (params: T): Promise<string>
+  abstract getFilePathImpl (params: T): Promise<string>
 
   // Load and save the remote file, then return the local path from filesystem
   protected abstract loadRemoteFile (key: string): Promise<string>
 
   init (max: number, maxAge: number) {
-    this.lru = new AsyncLRU({
-      max,
+    this.getFilePath = memoizee(this.getFilePathImpl, {
       maxAge,
-      load: (key, cb) => {
-        this.loadRemoteFile(key)
-          .then(res => cb(null, res))
-          .catch(err => cb(err))
+      max,
+      promise: true,
+      dispose: (value: string) => {
+        remove(value)
+          .then(() => logger.debug('%s evicted from %s', value, this.constructor.name))
+          .catch(err => logger.error('Cannot remove %s from cache %s.', value, this.constructor.name, { err }))
       }
-    })
-
-    this.lru.on('evict', (obj: { key: string, value: string }) => {
-      remove(obj.value)
-        .then(() => logger.debug('%s evicted from %s', obj.value, this.constructor.name))
-    })
-  }
-
-  protected loadFromLRU (key: string) {
-    return new Promise<string>((res, rej) => {
-      this.lru.get(key, (err, value) => {
-        err ? rej(err) : res(value)
-      })
     })
   }
 

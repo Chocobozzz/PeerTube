@@ -1,6 +1,5 @@
 import {
   AllowNull,
-  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -8,6 +7,7 @@ import {
   Default,
   ForeignKey,
   HasMany,
+  HasOne,
   Is,
   IsUUID,
   Model,
@@ -40,16 +40,16 @@ import { join } from 'path'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
-import { remove } from 'fs-extra'
-import { logger } from '../../helpers/logger'
 import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
-import { CONFIG } from '../../initializers/config'
+import { ThumbnailModel } from './thumbnail'
+import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_VIDEOS_LENGTH = 'WITH_VIDEOS_LENGTH',
   WITH_ACCOUNT_AND_CHANNEL_SUMMARY = 'WITH_ACCOUNT_AND_CHANNEL_SUMMARY',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_THUMBNAIL = 'WITH_THUMBNAIL',
   WITH_ACCOUNT_AND_CHANNEL = 'WITH_ACCOUNT_AND_CHANNEL'
 }
 
@@ -62,6 +62,14 @@ type AvailableForListOptions = {
 }
 
 @Scopes({
+  [ ScopeNames.WITH_THUMBNAIL ]: {
+    include: [
+      {
+        model: () => ThumbnailModel,
+        required: false
+      }
+    ]
+  },
   [ ScopeNames.WITH_VIDEOS_LENGTH ]: {
     attributes: {
       include: [
@@ -256,12 +264,15 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   })
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
-  @BeforeDestroy
-  static async removeFiles (instance: VideoPlaylistModel) {
-    logger.info('Removing files of video playlist %s.', instance.url)
-
-    return instance.removeThumbnail()
-  }
+  @HasOne(() => ThumbnailModel, {
+    foreignKey: {
+      name: 'videoPlaylistId',
+      allowNull: true
+    },
+    onDelete: 'CASCADE',
+    hooks: true
+  })
+  Thumbnail: ThumbnailModel
 
   static listForApi (options: {
     followerActorId: number
@@ -292,7 +303,8 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
           } as AvailableForListOptions
         ]
       } as any, // FIXME: typings
-      ScopeNames.WITH_VIDEOS_LENGTH
+      ScopeNames.WITH_VIDEOS_LENGTH,
+      ScopeNames.WITH_THUMBNAIL
     ]
 
     return VideoPlaylistModel
@@ -365,7 +377,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
 
     return VideoPlaylistModel
-      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY, ScopeNames.WITH_VIDEOS_LENGTH ])
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
       .findOne(query)
   }
 
@@ -378,7 +390,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
 
     return VideoPlaylistModel
-      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH ])
+      .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
       .findOne(query)
   }
 
@@ -389,7 +401,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       }
     }
 
-    return VideoPlaylistModel.scope(ScopeNames.WITH_ACCOUNT).findOne(query)
+    return VideoPlaylistModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_THUMBNAIL ]).findOne(query)
   }
 
   static getPrivacyLabel (privacy: VideoPlaylistPrivacy) {
@@ -411,24 +423,34 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
   }
 
-  getThumbnailName () {
+  setThumbnail (thumbnail: ThumbnailModel) {
+    this.Thumbnail = thumbnail
+  }
+
+  getThumbnail () {
+    return this.Thumbnail
+  }
+
+  hasThumbnail () {
+    return !!this.Thumbnail
+  }
+
+  generateThumbnailName () {
     const extension = '.jpg'
 
     return 'playlist-' + this.uuid + extension
   }
 
   getThumbnailUrl () {
-    return WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.getThumbnailName()
+    if (!this.hasThumbnail()) return null
+
+    return WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.getThumbnail().filename
   }
 
   getThumbnailStaticPath () {
-    return join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName())
-  }
+    if (!this.hasThumbnail()) return null
 
-  removeThumbnail () {
-    const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
-    return remove(thumbnailPath)
-      .catch(err => logger.warn('Cannot delete thumbnail %s.', thumbnailPath, { err }))
+    return join(STATIC_PATHS.THUMBNAILS, this.getThumbnail().filename)
   }
 
   setAsRefreshed () {
@@ -482,6 +504,17 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count, t)
     }
 
+    let icon: ActivityIconObject
+    if (this.hasThumbnail()) {
+      icon = {
+        type: 'Image' as 'Image',
+        url: this.getThumbnailUrl(),
+        mediaType: 'image/jpeg' as 'image/jpeg',
+        width: THUMBNAILS_SIZE.width,
+        height: THUMBNAILS_SIZE.height
+      }
+    }
+
     return activityPubCollectionPagination(this.url, handler, page)
       .then(o => {
         return Object.assign(o, {
@@ -492,13 +525,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
           published: this.createdAt.toISOString(),
           updated: this.updatedAt.toISOString(),
           attributedTo: this.VideoChannel ? [ this.VideoChannel.Actor.url ] : [],
-          icon: {
-            type: 'Image' as 'Image',
-            url: this.getThumbnailUrl(),
-            mediaType: 'image/jpeg' as 'image/jpeg',
-            width: THUMBNAILS_SIZE.width,
-            height: THUMBNAILS_SIZE.height
-          }
+          icon
         })
       })
   }

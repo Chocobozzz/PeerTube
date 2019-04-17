@@ -164,7 +164,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getPreview (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getPreview (req: express.Request, res: express.Response) {
   const path = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
   if (!path) return res.sendStatus(404)
 

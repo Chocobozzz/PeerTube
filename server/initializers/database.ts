@@ -36,6 +36,7 @@ import { UserNotificationSettingModel } from '../models/account/user-notificatio
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
+import { ThumbnailModel } from '../models/video/thumbnail'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -105,7 +106,8 @@ async function initDatabaseModels (silent: boolean) {
     UserNotificationSettingModel,
     VideoStreamingPlaylistModel,
     VideoPlaylistModel,
-    VideoPlaylistElementModel
+    VideoPlaylistElementModel,
+    ThumbnailModel
   ])
 
   // Check extensions exist in the database

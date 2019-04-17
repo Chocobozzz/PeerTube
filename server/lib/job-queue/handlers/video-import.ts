@@ -6,8 +6,7 @@ import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { PREVIEWS_SIZE, THUMBNAILS_SIZE, VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
-import { downloadImage } from '../../../helpers/requests'
+import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
@@ -18,6 +17,9 @@ import { move, remove, stat } from 'fs-extra'
 import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { ThumbnailModel } from '../../../models/video/thumbnail'
+import { createVideoThumbnailFromUrl, generateVideoThumbnail } from '../../thumbnail'
+import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -146,25 +148,19 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail
-    if (options.downloadThumbnail) {
-      if (options.thumbnailUrl) {
-        await downloadImage(options.thumbnailUrl, CONFIG.STORAGE.THUMBNAILS_DIR, videoImport.Video.getThumbnailName(), THUMBNAILS_SIZE)
-      } else {
-        await videoImport.Video.createThumbnail(videoFile)
-      }
-    } else if (options.generateThumbnail) {
-      await videoImport.Video.createThumbnail(videoFile)
+    let thumbnailModel: ThumbnailModel
+    if (options.downloadThumbnail && options.thumbnailUrl) {
+      thumbnailModel = await createVideoThumbnailFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.THUMBNAIL)
+    } else if (options.generateThumbnail || options.downloadThumbnail) {
+      thumbnailModel = await generateVideoThumbnail(videoImport.Video, videoFile, ThumbnailType.THUMBNAIL)
     }
 
     // Process preview
-    if (options.downloadPreview) {
-      if (options.thumbnailUrl) {
-        await downloadImage(options.thumbnailUrl, CONFIG.STORAGE.PREVIEWS_DIR, videoImport.Video.getPreviewName(), PREVIEWS_SIZE)
-      } else {
-        await videoImport.Video.createPreview(videoFile)
-      }
-    } else if (options.generatePreview) {
-      await videoImport.Video.createPreview(videoFile)
+    let previewModel: ThumbnailModel
+    if (options.downloadPreview && options.thumbnailUrl) {
+      previewModel = await createVideoThumbnailFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.PREVIEW)
+    } else if (options.generatePreview || options.downloadPreview) {
+      previewModel = await generateVideoThumbnail(videoImport.Video, videoFile, ThumbnailType.PREVIEW)
     }
 
     // Create torrent
@@ -183,6 +179,15 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       video.duration = duration
       video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
       await video.save({ transaction: t })
+
+      if (thumbnailModel) {
+        thumbnailModel.videoId = video.id
+        video.addThumbnail(await thumbnailModel.save({ transaction: t }))
+      }
+      if (previewModel) {
+        previewModel.videoId = video.id
+        video.addThumbnail(await previewModel.save({ transaction: t }))
+      }
 
       // Now we can federate the video (reload from database, we need more attributes)
       const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)

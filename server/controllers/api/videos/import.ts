@@ -3,7 +3,7 @@ import * as magnetUtil from 'magnet-uri'
 import 'multer'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
-import { MIMETYPES, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../../../initializers/constants'
+import { MIMETYPES } from '../../../initializers/constants'
 import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
@@ -13,12 +13,10 @@ import { getVideoActivityPubUrl } from '../../../lib/activitypub'
 import { TagModel } from '../../../models/video/tag'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
-import { processImage } from '../../../helpers/image-utils'
 import { join } from 'path'
 import { isArray } from '../../../helpers/custom-validators/misc'
 import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { UserModel } from '../../../models/account/user'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
@@ -26,6 +24,9 @@ import { move, readFile } from 'fs-extra'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { createVideoThumbnailFromExisting } from '../../../lib/thumbnail'
+import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { ThumbnailModel } from '../../../models/video/thumbnail'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -89,10 +90,10 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoName = isArray(parsed.name) ? parsed.name[ 0 ] : parsed.name as string
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName }, user)
+  const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
 
-  await processThumbnail(req, video)
-  await processPreview(req, video)
+  const thumbnailModel = await processThumbnail(req, video)
+  const previewModel = await processPreview(req, video)
 
   const tags = body.tags || undefined
   const videoImportAttributes = {
@@ -101,7 +102,14 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     state: VideoImportState.PENDING,
     userId: user.id
   }
-  const videoImport = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
+  const videoImport = await insertIntoDB({
+    video,
+    thumbnailModel,
+    previewModel,
+    videoChannel: res.locals.videoChannel,
+    tags,
+    videoImportAttributes
+  })
 
   // Create job to import the video
   const payload = {
@@ -132,10 +140,10 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     }).end()
   }
 
-  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo, user)
+  const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
 
-  const downloadThumbnail = !await processThumbnail(req, video)
-  const downloadPreview = !await processPreview(req, video)
+  const thumbnailModel = await processThumbnail(req, video)
+  const previewModel = await processPreview(req, video)
 
   const tags = body.tags || youtubeDLInfo.tags
   const videoImportAttributes = {
@@ -143,15 +151,22 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     state: VideoImportState.PENDING,
     userId: user.id
   }
-  const videoImport = await insertIntoDB(video, res.locals.videoChannel, tags, videoImportAttributes)
+  const videoImport = await insertIntoDB({
+    video: video,
+    thumbnailModel,
+    previewModel,
+    videoChannel: res.locals.videoChannel,
+    tags,
+    videoImportAttributes
+  })
 
   // Create job to import the video
   const payload = {
     type: 'youtube-dl' as 'youtube-dl',
     videoImportId: videoImport.id,
     thumbnailUrl: youtubeDLInfo.thumbnailUrl,
-    downloadThumbnail,
-    downloadPreview
+    downloadThumbnail: !thumbnailModel,
+    downloadPreview: !previewModel
   }
   await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
@@ -160,7 +175,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   return res.json(videoImport.toFormattedJSON()).end()
 }
 
-function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo, user: UserModel) {
+function buildVideo (channelId: number, body: VideoImportCreate, importData: YoutubeDLInfo) {
   const videoData = {
     name: body.name || importData.name || 'Unknown name',
     remote: false,
@@ -189,38 +204,49 @@ async function processThumbnail (req: express.Request, video: VideoModel) {
   const thumbnailField = req.files ? req.files['thumbnailfile'] : undefined
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[ 0 ]
-    await processImage(thumbnailPhysicalFile, join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName()), THUMBNAILS_SIZE)
 
-    return true
+    return createVideoThumbnailFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.THUMBNAIL)
   }
 
-  return false
+  return undefined
 }
 
 async function processPreview (req: express.Request, video: VideoModel) {
   const previewField = req.files ? req.files['previewfile'] : undefined
   if (previewField) {
     const previewPhysicalFile = previewField[0]
-    await processImage(previewPhysicalFile, join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName()), PREVIEWS_SIZE)
 
-    return true
+    return createVideoThumbnailFromExisting(previewPhysicalFile.path, video, ThumbnailType.PREVIEW)
   }
 
-  return false
+  return undefined
 }
 
-function insertIntoDB (
+function insertIntoDB (parameters: {
   video: VideoModel,
+  thumbnailModel: ThumbnailModel,
+  previewModel: ThumbnailModel,
   videoChannel: VideoChannelModel,
   tags: string[],
   videoImportAttributes: FilteredModelAttributes<VideoImportModel>
-): Bluebird<VideoImportModel> {
+}): Bluebird<VideoImportModel> {
+  let { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes } = parameters
+
   return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     // Save video object in database
     const videoCreated = await video.save(sequelizeOptions)
     videoCreated.VideoChannel = videoChannel
+
+    if (thumbnailModel) {
+      thumbnailModel.videoId = videoCreated.id
+      videoCreated.addThumbnail(await thumbnailModel.save({ transaction: t }))
+    }
+    if (previewModel) {
+      previewModel.videoId = videoCreated.id
+      videoCreated.addThumbnail(await previewModel.save({ transaction: t }))
+    }
 
     await autoBlacklistVideoIfNeeded(video, videoChannel.Account.User, t)
 

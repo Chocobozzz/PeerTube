@@ -7,7 +7,7 @@ import {
   ActivityUrlObject,
   VideoTorrentObject
 } from '../../../shared/models/activitypub/objects'
-import { MIMETYPES, THUMBNAILS_SIZE, WEBSERVER } from '../../initializers/constants'
+import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { VideoCaptionModel } from './video-caption'
 import {
   getVideoCommentsActivityPubUrl,
@@ -326,10 +326,10 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     subtitleLanguage,
     icon: {
       type: 'Image',
-      url: video.getThumbnailUrl(baseUrlHttp),
+      url: video.getThumbnail().getUrl(),
       mediaType: 'image/jpeg',
-      width: THUMBNAILS_SIZE.width,
-      height: THUMBNAILS_SIZE.height
+      width: video.getThumbnail().width,
+      height: video.getThumbnail().height
     },
     url,
     likes: getVideoLikesActivityPubUrl(video),
