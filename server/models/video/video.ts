@@ -3,7 +3,18 @@ import { maxBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
-import * as Sequelize from 'sequelize'
+import {
+  CountOptions,
+  FindOptions,
+  IncludeOptions,
+  ModelIndexesOptions,
+  Op,
+  QueryTypes,
+  ScopeOptions,
+  Sequelize,
+  Transaction,
+  WhereOptions
+} from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -16,8 +27,6 @@ import {
   ForeignKey,
   HasMany,
   HasOne,
-  IFindOptions,
-  IIncludeOptions,
   Is,
   IsInt,
   IsUUID,
@@ -45,7 +54,7 @@ import {
   isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
-import { generateImageFromVideoFile, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
+import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
@@ -54,11 +63,9 @@ import {
   CONSTRAINTS_FIELDS,
   HLS_REDUNDANCY_DIRECTORY,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
-  PREVIEWS_SIZE,
   REMOTE_SCHEME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
-  THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
@@ -111,7 +118,7 @@ import { ThumbnailModel } from './thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
-const indexes: Sequelize.DefineIndexesOptions[] = [
+const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
   buildTrigramSearchIndex('video_name_trigram', 'name'),
 
   { fields: [ 'createdAt' ] },
@@ -123,7 +130,7 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
     fields: [ 'originallyPublishedAt' ],
     where: {
       originallyPublishedAt: {
-        [Sequelize.Op.ne]: null
+        [Op.ne]: null
       }
     }
   },
@@ -131,7 +138,7 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
     fields: [ 'category' ], // We don't care videos with an unknown category
     where: {
       category: {
-        [Sequelize.Op.ne]: null
+        [Op.ne]: null
       }
     }
   },
@@ -139,7 +146,7 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
     fields: [ 'licence' ], // We don't care videos with an unknown licence
     where: {
       licence: {
-        [Sequelize.Op.ne]: null
+        [Op.ne]: null
       }
     }
   },
@@ -147,7 +154,7 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
     fields: [ 'language' ], // We don't care videos with an unknown language
     where: {
       language: {
-        [Sequelize.Op.ne]: null
+        [Op.ne]: null
       }
     }
   },
@@ -222,10 +229,10 @@ type AvailableForListIDsOptions = {
 
 @Scopes({
   [ ScopeNames.FOR_API ]: (options: ForAPIOptions) => {
-    const query: IFindOptions<VideoModel> = {
+    const query: FindOptions = {
       where: {
         id: {
-          [ Sequelize.Op.any ]: options.ids
+          [ Op.in ]: options.ids // FIXME: sequelize any seems broken
         }
       },
       include: [
@@ -256,21 +263,21 @@ type AvailableForListIDsOptions = {
     return query
   },
   [ ScopeNames.AVAILABLE_FOR_LIST_IDS ]: (options: AvailableForListIDsOptions) => {
-    const query: IFindOptions<VideoModel> = {
+    const query: FindOptions = {
       raw: true,
       attributes: [ 'id' ],
       where: {
         id: {
-          [ Sequelize.Op.and ]: [
+          [ Op.and ]: [
             {
-              [ Sequelize.Op.notIn ]: Sequelize.literal(
+              [ Op.notIn ]: Sequelize.literal(
                 '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
               )
             }
           ]
         },
         channelId: {
-          [ Sequelize.Op.notIn ]: Sequelize.literal(
+          [ Op.notIn ]: Sequelize.literal(
             '(' +
               'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
                 buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
@@ -288,12 +295,12 @@ type AvailableForListIDsOptions = {
         // Always list public videos
         privacy: VideoPrivacy.PUBLIC,
         // Always list published videos, or videos that are being transcoded but on which we don't want to wait for transcoding
-        [ Sequelize.Op.or ]: [
+        [ Op.or ]: [
           {
             state: VideoState.PUBLISHED
           },
           {
-            [ Sequelize.Op.and ]: {
+            [ Op.and ]: {
               state: VideoState.TO_TRANSCODE,
               waitTranscoding: false
             }
@@ -318,7 +325,7 @@ type AvailableForListIDsOptions = {
     }
 
     if (options.filter || options.accountId || options.videoChannelId) {
-      const videoChannelInclude: IIncludeOptions = {
+      const videoChannelInclude: IncludeOptions = {
         attributes: [],
         model: VideoChannelModel.unscoped(),
         required: true
@@ -331,7 +338,7 @@ type AvailableForListIDsOptions = {
       }
 
       if (options.filter || options.accountId) {
-        const accountInclude: IIncludeOptions = {
+        const accountInclude: IncludeOptions = {
           attributes: [],
           model: AccountModel.unscoped(),
           required: true
@@ -371,8 +378,8 @@ type AvailableForListIDsOptions = {
 
       // Force actorId to be a number to avoid SQL injections
       const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
-      query.where[ 'id' ][ Sequelize.Op.and ].push({
-        [ Sequelize.Op.in ]: Sequelize.literal(
+      query.where[ 'id' ][ Op.and ].push({
+        [ Op.in ]: Sequelize.literal(
           '(' +
           'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
           'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
@@ -391,8 +398,8 @@ type AvailableForListIDsOptions = {
     }
 
     if (options.withFiles === true) {
-      query.where[ 'id' ][ Sequelize.Op.and ].push({
-        [ Sequelize.Op.in ]: Sequelize.literal(
+      query.where[ 'id' ][ Op.and ].push({
+        [ Op.in ]: Sequelize.literal(
           '(SELECT "videoId" FROM "videoFile")'
         )
       })
@@ -406,8 +413,8 @@ type AvailableForListIDsOptions = {
       }
 
       if (options.tagsOneOf) {
-        query.where[ 'id' ][ Sequelize.Op.and ].push({
-          [ Sequelize.Op.in ]: Sequelize.literal(
+        query.where[ 'id' ][ Op.and ].push({
+          [ Op.in ]: Sequelize.literal(
             '(' +
             'SELECT "videoId" FROM "videoTag" ' +
             'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
@@ -418,8 +425,8 @@ type AvailableForListIDsOptions = {
       }
 
       if (options.tagsAllOf) {
-        query.where[ 'id' ][ Sequelize.Op.and ].push({
-          [ Sequelize.Op.in ]: Sequelize.literal(
+        query.where[ 'id' ][ Op.and ].push({
+          [ Op.in ]: Sequelize.literal(
             '(' +
             'SELECT "videoId" FROM "videoTag" ' +
             'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
@@ -437,19 +444,19 @@ type AvailableForListIDsOptions = {
 
     if (options.categoryOneOf) {
       query.where[ 'category' ] = {
-        [ Sequelize.Op.or ]: options.categoryOneOf
+        [ Op.or ]: options.categoryOneOf
       }
     }
 
     if (options.licenceOneOf) {
       query.where[ 'licence' ] = {
-        [ Sequelize.Op.or ]: options.licenceOneOf
+        [ Op.or ]: options.licenceOneOf
       }
     }
 
     if (options.languageOneOf) {
       query.where[ 'language' ] = {
-        [ Sequelize.Op.or ]: options.languageOneOf
+        [ Op.or ]: options.languageOneOf
       }
     }
 
@@ -498,7 +505,7 @@ type AvailableForListIDsOptions = {
           }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   },
   [ ScopeNames.WITH_ACCOUNT_DETAILS ]: {
     include: [
@@ -550,7 +557,7 @@ type AvailableForListIDsOptions = {
           }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   },
   [ ScopeNames.WITH_TAGS ]: {
     include: [ () => TagModel ]
@@ -656,19 +663,19 @@ export class VideoModel extends Model<VideoModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoCategory', value => throwIfNotValid(value, isVideoCategoryValid, 'category'))
+  @Is('VideoCategory', value => throwIfNotValid(value, isVideoCategoryValid, 'category', true))
   @Column
   category: number
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoLicence', value => throwIfNotValid(value, isVideoLicenceValid, 'licence'))
+  @Is('VideoLicence', value => throwIfNotValid(value, isVideoLicenceValid, 'licence', true))
   @Column
   licence: number
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoLanguage', value => throwIfNotValid(value, isVideoLanguageValid, 'language'))
+  @Is('VideoLanguage', value => throwIfNotValid(value, isVideoLanguageValid, 'language', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.LANGUAGE.max))
   language: string
 
@@ -684,13 +691,13 @@ export class VideoModel extends Model<VideoModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoDescription', value => throwIfNotValid(value, isVideoDescriptionValid, 'description'))
+  @Is('VideoDescription', value => throwIfNotValid(value, isVideoDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max))
   description: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoSupport', value => throwIfNotValid(value, isVideoSupportValid, 'support'))
+  @Is('VideoSupport', value => throwIfNotValid(value, isVideoSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max))
   support: string
 
@@ -754,7 +761,7 @@ export class VideoModel extends Model<VideoModel> {
   updatedAt: Date
 
   @AllowNull(false)
-  @Default(Sequelize.NOW)
+  @Default(DataType.NOW)
   @Column
   publishedAt: Date
 
@@ -999,12 +1006,12 @@ export class VideoModel extends Model<VideoModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: getVideoSort('createdAt', [ 'Tags', 'name', 'ASC' ]),
+      order: getVideoSort('createdAt', [ 'Tags', 'name', 'ASC' ] as any), // FIXME: sequelize typings
       where: {
         id: {
-          [ Sequelize.Op.in ]: Sequelize.literal('(' + rawQuery + ')')
+          [ Op.in ]: Sequelize.literal('(' + rawQuery + ')')
         },
-        [ Sequelize.Op.or ]: [
+        [ Op.or ]: [
           { privacy: VideoPrivacy.PUBLIC },
           { privacy: VideoPrivacy.UNLISTED }
         ]
@@ -1021,10 +1028,10 @@ export class VideoModel extends Model<VideoModel> {
           required: false,
           // We only want videos shared by this actor
           where: {
-            [ Sequelize.Op.and ]: [
+            [ Op.and ]: [
               {
                 id: {
-                  [ Sequelize.Op.not ]: null
+                  [ Op.not ]: null
                 }
               },
               {
@@ -1070,13 +1077,13 @@ export class VideoModel extends Model<VideoModel> {
     return Bluebird.all([
       // FIXME: typing issue
       VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query as any),
-      VideoModel.sequelize.query(rawCountQuery, { type: Sequelize.QueryTypes.SELECT })
+      VideoModel.sequelize.query<{ total: number }>(rawCountQuery, { type: QueryTypes.SELECT })
     ]).then(([ rows, totals ]) => {
       // totals: totalVideos + totalVideoShares
       let totalVideos = 0
       let totalVideoShares = 0
-      if (totals[ 0 ]) totalVideos = parseInt(totals[ 0 ].total, 10)
-      if (totals[ 1 ]) totalVideoShares = parseInt(totals[ 1 ].total, 10)
+      if (totals[ 0 ]) totalVideos = parseInt(totals[ 0 ].total + '', 10)
+      if (totals[ 1 ]) totalVideoShares = parseInt(totals[ 1 ].total + '', 10)
 
       const total = totalVideos + totalVideoShares
       return {
@@ -1087,7 +1094,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static listUserVideosForApi (accountId: number, start: number, count: number, sort: string, withFiles = false) {
-    const query: IFindOptions<VideoModel> = {
+    const query: FindOptions = {
       offset: start,
       limit: count,
       order: getVideoSort(sort),
@@ -1158,7 +1165,7 @@ export class VideoModel extends Model<VideoModel> {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
-    const query: IFindOptions<VideoModel> = {
+    const query: FindOptions = {
       offset: options.start,
       limit: options.count,
       order: getVideoSort(options.sort)
@@ -1225,8 +1232,8 @@ export class VideoModel extends Model<VideoModel> {
     if (options.startDate || options.endDate) {
       const publishedAtRange = {}
 
-      if (options.startDate) publishedAtRange[ Sequelize.Op.gte ] = options.startDate
-      if (options.endDate) publishedAtRange[ Sequelize.Op.lte ] = options.endDate
+      if (options.startDate) publishedAtRange[ Op.gte ] = options.startDate
+      if (options.endDate) publishedAtRange[ Op.lte ] = options.endDate
 
       whereAnd.push({ publishedAt: publishedAtRange })
     }
@@ -1234,8 +1241,8 @@ export class VideoModel extends Model<VideoModel> {
     if (options.originallyPublishedStartDate || options.originallyPublishedEndDate) {
       const originallyPublishedAtRange = {}
 
-      if (options.originallyPublishedStartDate) originallyPublishedAtRange[ Sequelize.Op.gte ] = options.originallyPublishedStartDate
-      if (options.originallyPublishedEndDate) originallyPublishedAtRange[ Sequelize.Op.lte ] = options.originallyPublishedEndDate
+      if (options.originallyPublishedStartDate) originallyPublishedAtRange[ Op.gte ] = options.originallyPublishedStartDate
+      if (options.originallyPublishedEndDate) originallyPublishedAtRange[ Op.lte ] = options.originallyPublishedEndDate
 
       whereAnd.push({ originallyPublishedAt: originallyPublishedAtRange })
     }
@@ -1243,8 +1250,8 @@ export class VideoModel extends Model<VideoModel> {
     if (options.durationMin || options.durationMax) {
       const durationRange = {}
 
-      if (options.durationMin) durationRange[ Sequelize.Op.gte ] = options.durationMin
-      if (options.durationMax) durationRange[ Sequelize.Op.lte ] = options.durationMax
+      if (options.durationMin) durationRange[ Op.gte ] = options.durationMin
+      if (options.durationMax) durationRange[ Op.lte ] = options.durationMax
 
       whereAnd.push({ duration: durationRange })
     }
@@ -1256,7 +1263,7 @@ export class VideoModel extends Model<VideoModel> {
       whereAnd.push(
         {
           id: {
-            [ Sequelize.Op.in ]: Sequelize.literal(
+            [ Op.in ]: Sequelize.literal(
               '(' +
               'SELECT "video"."id" FROM "video" ' +
               'WHERE ' +
@@ -1282,7 +1289,7 @@ export class VideoModel extends Model<VideoModel> {
       )
     }
 
-    const query: IFindOptions<VideoModel> = {
+    const query: FindOptions = {
       attributes: {
         include: attributesInclude
       },
@@ -1290,7 +1297,7 @@ export class VideoModel extends Model<VideoModel> {
       limit: options.count,
       order: getVideoSort(options.sort),
       where: {
-        [ Sequelize.Op.and ]: whereAnd
+        [ Op.and ]: whereAnd
       }
     }
 
@@ -1312,7 +1319,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.getAvailableForApi(query, queryOptions)
   }
 
-  static load (id: number | string, t?: Sequelize.Transaction) {
+  static load (id: number | string, t?: Transaction) {
     const where = buildWhereIdOrUUID(id)
     const options = {
       where,
@@ -1322,7 +1329,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadWithRights (id: number | string, t?: Sequelize.Transaction) {
+  static loadWithRights (id: number | string, t?: Transaction) {
     const where = buildWhereIdOrUUID(id)
     const options = {
       where,
@@ -1336,7 +1343,7 @@ export class VideoModel extends Model<VideoModel> {
     ]).findOne(options)
   }
 
-  static loadOnlyId (id: number | string, t?: Sequelize.Transaction) {
+  static loadOnlyId (id: number | string, t?: Transaction) {
     const where = buildWhereIdOrUUID(id)
 
     const options = {
@@ -1348,7 +1355,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadWithFiles (id: number, t?: Sequelize.Transaction, logging?: boolean) {
+  static loadWithFiles (id: number, t?: Transaction, logging?: boolean) {
     return VideoModel.scope([
       ScopeNames.WITH_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
@@ -1366,8 +1373,8 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoModel> = {
+  static loadByUrl (url: string, transaction?: Transaction) {
+    const query: FindOptions = {
       where: {
         url
       },
@@ -1377,8 +1384,8 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, transaction?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoModel> = {
+  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction) {
+    const query: FindOptions = {
       where: {
         url
       },
@@ -1393,11 +1400,11 @@ export class VideoModel extends Model<VideoModel> {
     ]).findOne(query)
   }
 
-  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Sequelize.Transaction, userId?: number) {
+  static loadAndPopulateAccountAndServerAndTags (id: number | string, t?: Transaction, userId?: number) {
     const where = buildWhereIdOrUUID(id)
 
     const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ],
+      order: [ [ 'Tags', 'name', 'ASC' ] ] as any, // FIXME: sequelize typings
       where,
       transaction: t
     }
@@ -1421,11 +1428,11 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
-  static loadForGetAPI (id: number | string, t?: Sequelize.Transaction, userId?: number) {
+  static loadForGetAPI (id: number | string, t?: Transaction, userId?: number) {
     const where = buildWhereIdOrUUID(id)
 
     const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ],
+      order: [ [ 'Tags', 'name', 'ASC' ] ] as any, // FIXME: sequelize typings
       where,
       transaction: t
     }
@@ -1489,7 +1496,7 @@ export class VideoModel extends Model<VideoModel> {
     'LIMIT 1'
 
     const options = {
-      type: Sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
       bind: { followerActorId, videoId },
       raw: true
     }
@@ -1509,14 +1516,14 @@ export class VideoModel extends Model<VideoModel> {
       includeLocalVideos: true
     }
 
-    const query: IFindOptions<VideoModel> = {
+    const query: FindOptions = {
       attributes: [ field ],
       limit: count,
       group: field,
       having: Sequelize.where(Sequelize.fn('COUNT', Sequelize.col(field)), {
-        [ Sequelize.Op.gte ]: threshold
+        [ Op.gte ]: threshold
       }) as any, // FIXME: typings
-      order: [ this.sequelize.random() ]
+      order: [ (this.sequelize as any).random() ]
     }
 
     return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST_IDS, scopeOptions ] })
@@ -1532,7 +1539,7 @@ export class VideoModel extends Model<VideoModel> {
       required: false,
       where: {
         startDate: {
-          [ Sequelize.Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
+          [ Op.gte ]: new Date(new Date().getTime() - (24 * 3600 * 1000) * trendingDays)
         }
       }
     }
@@ -1549,11 +1556,11 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static async getAvailableForApi (
-    query: IFindOptions<VideoModel>,
+    query: FindOptions,
     options: AvailableForListIDsOptions,
     countVideos = true
   ) {
-    const idsScope = {
+    const idsScope: ScopeOptions = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST_IDS, options
       ]
@@ -1561,8 +1568,8 @@ export class VideoModel extends Model<VideoModel> {
 
     // Remove trending sort on count, because it uses a group by
     const countOptions = Object.assign({}, options, { trendingDays: undefined })
-    const countQuery = Object.assign({}, query, { attributes: undefined, group: undefined })
-    const countScope = {
+    const countQuery: CountOptions = Object.assign({}, query, { attributes: undefined, group: undefined })
+    const countScope: ScopeOptions = {
       method: [
         ScopeNames.AVAILABLE_FOR_LIST_IDS, countOptions
       ]
@@ -1576,7 +1583,7 @@ export class VideoModel extends Model<VideoModel> {
 
     if (ids.length === 0) return { data: [], total: count }
 
-    const secondQuery: IFindOptions<VideoModel> = {
+    const secondQuery: FindOptions = {
       offset: 0,
       limit: query.limit,
       attributes: query.attributes,

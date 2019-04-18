@@ -1,4 +1,3 @@
-import * as Sequelize from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -7,7 +6,6 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  IFindOptions,
   Is,
   Model,
   Scopes,
@@ -32,6 +30,7 @@ import { UserModel } from '../account/user'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { regexpCapture } from '../../helpers/regexp'
 import { uniq } from 'lodash'
+import { FindOptions, Op, Order, Sequelize, Transaction } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -86,7 +85,7 @@ enum ScopeNames {
           }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   },
   [ScopeNames.WITH_IN_REPLY_TO]: {
     include: [
@@ -120,7 +119,7 @@ enum ScopeNames {
           }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 @Table({
@@ -244,8 +243,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
   }
 
-  static loadById (id: number, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadById (id: number, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         id
       }
@@ -256,8 +255,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findOne(query)
   }
 
-  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         id
       }
@@ -270,8 +269,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadByUrlAndPopulateAccount (url: string, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         url
       }
@@ -282,8 +281,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         url
       }
@@ -307,7 +306,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         videoId,
         inReplyToCommentId: null,
         accountId: {
-          [Sequelize.Op.notIn]: Sequelize.literal(
+          [Op.notIn]: Sequelize.literal(
             '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
           )
         }
@@ -336,15 +335,15 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const userAccountId = user ? user.Account.id : undefined
 
     const query = {
-      order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ],
+      order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
       where: {
         videoId,
-        [ Sequelize.Op.or ]: [
+        [ Op.or ]: [
           { id: threadId },
           { originCommentId: threadId }
         ],
         accountId: {
-          [Sequelize.Op.notIn]: Sequelize.literal(
+          [Op.notIn]: Sequelize.literal(
             '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
           )
         }
@@ -366,12 +365,12 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static listThreadParentComments (comment: VideoCommentModel, t: Sequelize.Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+  static listThreadParentComments (comment: VideoCommentModel, t: Transaction, order: 'ASC' | 'DESC' = 'ASC') {
     const query = {
-      order: [ [ 'createdAt', order ] ],
+      order: [ [ 'createdAt', order ] ] as Order,
       where: {
         id: {
-          [ Sequelize.Op.in ]: Sequelize.literal('(' +
+          [ Op.in ]: Sequelize.literal('(' +
             'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
               `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${comment.id} ` +
               'UNION ' +
@@ -380,7 +379,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
             ') ' +
             'SELECT id FROM children' +
           ')'),
-          [ Sequelize.Op.ne ]: comment.id
+          [ Op.ne ]: comment.id
         }
       },
       transaction: t
@@ -391,9 +390,9 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findAll(query)
   }
 
-  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Sequelize.Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Transaction, order: 'ASC' | 'DESC' = 'ASC') {
     const query = {
-      order: [ [ 'createdAt', order ] ],
+      order: [ [ 'createdAt', order ] ] as Order,
       offset: start,
       limit: count,
       where: {
@@ -407,7 +406,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   static listForFeed (start: number, count: number, videoId?: number) {
     const query = {
-      order: [ [ 'createdAt', 'DESC' ] ],
+      order: [ [ 'createdAt', 'DESC' ] ] as Order,
       offset: start,
       limit: count,
       where: {},
@@ -457,7 +456,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const query = {
       where: {
         updatedAt: {
-          [Sequelize.Op.lt]: beforeUpdatedAt
+          [Op.lt]: beforeUpdatedAt
         },
         videoId
       }

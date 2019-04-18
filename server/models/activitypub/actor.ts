@@ -93,7 +93,7 @@ export const unusedActorAttributesForAPI = [
         model: () => AvatarModel,
         required: false
       }
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 @Table({
@@ -131,7 +131,7 @@ export const unusedActorAttributesForAPI = [
 export class ActorModel extends Model<ActorModel> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(values(ACTIVITY_PUB_ACTOR_TYPES)))
+  @Column({ type: DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)) }) // FIXME: sequelize typings
   type: ActivityPubActorType
 
   @AllowNull(false)
@@ -151,12 +151,12 @@ export class ActorModel extends Model<ActorModel> {
   url: string
 
   @AllowNull(true)
-  @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPublicKeyValid, 'public key'))
+  @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPublicKeyValid, 'public key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY.max))
   publicKey: string
 
   @AllowNull(true)
-  @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'private key'))
+  @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'private key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY.max))
   privateKey: string
 

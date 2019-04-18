@@ -7,7 +7,6 @@ import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
 import { createVideoChannel } from './video-channel'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { ActorModel } from '../models/activitypub/actor'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
@@ -73,7 +72,7 @@ async function createLocalAccountWithoutKeys (
     userId,
     applicationId,
     actorId: actorInstanceCreated.id
-  } as FilteredModelAttributes<AccountModel>)
+  })
 
   const accountInstanceCreated = await accountInstance.save({ transaction: t })
   accountInstanceCreated.Actor = actorInstanceCreated

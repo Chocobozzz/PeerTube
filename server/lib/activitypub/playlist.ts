@@ -14,7 +14,6 @@ import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '../../helpers/custom-validators/activitypub/playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { VideoModel } from '../../models/video/video'
-import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { sequelizeTypescript } from '../../initializers/database'
 import { createPlaylistThumbnailFromUrl } from '../thumbnail'
@@ -87,7 +86,8 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     }
   }
 
-  const [ playlist ] = await VideoPlaylistModel.upsert<VideoPlaylistModel>(playlistAttributes, { returning: true })
+  // FIXME: sequelize typings
+  const [ playlist ] = (await VideoPlaylistModel.upsert<VideoPlaylistModel>(playlistAttributes, { returning: true }) as any)
 
   let accItems: string[] = []
   await crawlCollectionPage<string>(playlistObject.id, items => {
@@ -156,7 +156,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function resetVideoPlaylistElements (elementUrls: string[], playlist: VideoPlaylistModel) {
-  const elementsToCreate: FilteredModelAttributes<VideoPlaylistElementModel>[] = []
+  const elementsToCreate: object[] = [] // FIXME: sequelize typings
 
   await Bluebird.map(elementUrls, async elementUrl => {
     try {

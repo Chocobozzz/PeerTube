@@ -1,8 +1,7 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, HasMany, Is, Model, Table, UpdatedAt, DataType } from 'sequelize-typescript'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import * as Sequelize from 'sequelize'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -11,6 +10,7 @@ import { VideoFileModel } from './video-file'
 import { join } from 'path'
 import { sha1 } from '../../helpers/core-utils'
 import { isArrayOf } from '../../helpers/custom-validators/misc'
+import { QueryTypes, Op } from 'sequelize'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -26,7 +26,7 @@ import { isArrayOf } from '../../helpers/custom-validators/misc'
       fields: [ 'p2pMediaLoaderInfohashes' ],
       using: 'gin'
     }
-  ]
+  ] as any // FIXME: sequelize typings
 })
 export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistModel> {
   @CreatedAt
@@ -46,7 +46,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
 
   @AllowNull(false)
   @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
-  @Column(DataType.ARRAY(DataType.STRING))
+  @Column({ type: DataType.ARRAY(DataType.STRING) }) // FIXME: typings
   p2pMediaLoaderInfohashes: string[]
 
   @AllowNull(false)
@@ -82,15 +82,13 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE $infoHash = ANY("p2pMediaLoaderInfohashes") LIMIT 1'
     const options = {
-      type: Sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
       bind: { infoHash },
       raw: true
     }
 
-    return VideoModel.sequelize.query(query, options)
-              .then(results => {
-                return results.length === 1
-              })
+    return VideoModel.sequelize.query<any>(query, options)
+              .then(results => results.length === 1)
   }
 
   static buildP2PMediaLoaderInfoHashes (playlistUrl: string, videoFiles: VideoFileModel[]) {
@@ -108,7 +106,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     const query = {
       where: {
         p2pMediaLoaderPeerVersion: {
-          [Sequelize.Op.ne]: P2P_MEDIA_LOADER_PEER_VERSION
+          [Op.ne]: P2P_MEDIA_LOADER_PEER_VERSION
         }
       }
     }

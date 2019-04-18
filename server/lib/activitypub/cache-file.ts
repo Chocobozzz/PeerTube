@@ -68,8 +68,8 @@ function updateCacheFile (
 
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
 
-  redundancyModel.set('expires', attributes.expiresOn)
-  redundancyModel.set('fileUrl', attributes.fileUrl)
+  redundancyModel.expiresOn = attributes.expiresOn
+  redundancyModel.fileUrl = attributes.fileUrl
 
   return redundancyModel.save({ transaction: t })
 }

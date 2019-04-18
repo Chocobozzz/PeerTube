@@ -39,7 +39,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoAbuseModerationComment', value => throwIfNotValid(value, isVideoAbuseModerationCommentValid, 'moderationComment'))
+  @Is('VideoAbuseModerationComment', value => throwIfNotValid(value, isVideoAbuseModerationCommentValid, 'moderationComment', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_ABUSES.MODERATION_COMMENT.max))
   moderationComment: string
 

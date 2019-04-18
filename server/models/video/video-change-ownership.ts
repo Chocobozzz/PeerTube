@@ -43,7 +43,7 @@ enum ScopeNames {
           { model: () => VideoFileModel }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> {

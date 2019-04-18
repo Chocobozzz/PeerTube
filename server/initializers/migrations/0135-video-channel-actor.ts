@@ -239,7 +239,8 @@ async function up (utils: {
 
   {
     const query = 'SELECT * FROM "actor" WHERE "serverId" IS NULL AND "publicKey" IS NULL'
-    const [ res ] = await utils.sequelize.query(query)
+    const options = { type: Sequelize.QueryTypes.SELECT as Sequelize.QueryTypes.SELECT }
+    const [ res ] = await utils.sequelize.query(query, options)
 
     for (const actor of res) {
       const { privateKey, publicKey } = await createPrivateAndPublicKeys()

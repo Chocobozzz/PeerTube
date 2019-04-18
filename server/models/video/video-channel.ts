@@ -9,7 +9,6 @@ import {
   DefaultScope,
   ForeignKey,
   HasMany,
-  IFindOptions,
   Is,
   Model,
   Scopes,
@@ -31,12 +30,12 @@ import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttr
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { DefineIndexesOptions } from 'sequelize'
+import { FindOptions, ModelIndexesOptions, Op } from 'sequelize'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from './video-playlist'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
-const indexes: DefineIndexesOptions[] = [
+const indexes: ModelIndexesOptions[] = [
   buildTrigramSearchIndex('video_channel_name_trigram', 'name'),
 
   {
@@ -69,7 +68,7 @@ type AvailableForListOptions = {
 })
 @Scopes({
   [ScopeNames.SUMMARY]: (withAccount = false) => {
-    const base: IFindOptions<VideoChannelModel> = {
+    const base: FindOptions = {
       attributes: [ 'name', 'description', 'id', 'actorId' ],
       include: [
         {
@@ -112,13 +111,13 @@ type AvailableForListOptions = {
           },
           model: ActorModel,
           where: {
-            [Sequelize.Op.or]: [
+            [Op.or]: [
               {
                 serverId: null
               },
               {
                 serverId: {
-                  [ Sequelize.Op.in ]: Sequelize.literal(inQueryInstanceFollow)
+                  [ Op.in ]: Sequelize.literal(inQueryInstanceFollow)
                 }
               }
             ]
@@ -172,13 +171,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description'))
+  @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.DESCRIPTION.max))
   description: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support'))
+  @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
 
@@ -313,7 +312,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       limit: options.count,
       order: getSort(options.sort),
       where: {
-        [Sequelize.Op.or]: [
+        [Op.or]: [
           Sequelize.literal(
             'lower(immutable_unaccent("VideoChannelModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
           ),

@@ -1,6 +1,6 @@
-import * as Sequelize from 'sequelize'
+import { QueryTypes, Sequelize } from 'sequelize'
 
-let sequelizes: { [ id: number ]: Sequelize.Sequelize } = {}
+let sequelizes: { [ id: number ]: Sequelize } = {}
 
 function getSequelize (serverNumber: number) {
   if (sequelizes[serverNumber]) return sequelizes[serverNumber]
@@ -27,7 +27,7 @@ function getSequelize (serverNumber: number) {
 function setActorField (serverNumber: number, to: string, field: string, value: string) {
   const seq = getSequelize(serverNumber)
 
-  const options = { type: Sequelize.QueryTypes.UPDATE }
+  const options = { type: QueryTypes.UPDATE }
 
   return seq.query(`UPDATE actor SET "${field}" = '${value}' WHERE url = '${to}'`, options)
 }
@@ -35,7 +35,7 @@ function setActorField (serverNumber: number, to: string, field: string, value: 
 function setVideoField (serverNumber: number, uuid: string, field: string, value: string) {
   const seq = getSequelize(serverNumber)
 
-  const options = { type: Sequelize.QueryTypes.UPDATE }
+  const options = { type: QueryTypes.UPDATE }
 
   return seq.query(`UPDATE video SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
 }
@@ -43,7 +43,7 @@ function setVideoField (serverNumber: number, uuid: string, field: string, value
 function setPlaylistField (serverNumber: number, uuid: string, field: string, value: string) {
   const seq = getSequelize(serverNumber)
 
-  const options = { type: Sequelize.QueryTypes.UPDATE }
+  const options = { type: QueryTypes.UPDATE }
 
   return seq.query(`UPDATE "videoPlaylist" SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
 }
@@ -54,12 +54,13 @@ async function countVideoViewsOf (serverNumber: number, uuid: string) {
   // tslint:disable
   const query = `SELECT SUM("videoView"."views") AS "total" FROM "videoView" INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
 
-  const options = { type: Sequelize.QueryTypes.SELECT }
-  const [ { total } ] = await seq.query(query, options)
+  const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
+  const [ { total } ] = await seq.query<{ total: number }>(query, options)
 
   if (!total) return 0
 
-  return parseInt(total, 10)
+  // FIXME: check if we really need parseInt
+  return parseInt(total + '', 10)
 }
 
 async function closeAllSequelize (servers: any[]) {

@@ -1,6 +1,5 @@
 import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
-import * as Sequelize from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -27,8 +26,8 @@ import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
-import { IIncludeOptions } from '../../../node_modules/sequelize-typescript/lib/interfaces/IIncludeOptions'
 import { AccountModel } from '../account/account'
+import { IncludeOptions, Op, Transaction, QueryTypes } from 'sequelize'
 
 @Table({
   tableName: 'actorFollow',
@@ -51,7 +50,7 @@ import { AccountModel } from '../account/account'
 export class ActorFollowModel extends Model<ActorFollowModel> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(values(FOLLOW_STATES)))
+  @Column(DataType.ENUM(...values(FOLLOW_STATES)))
   state: FollowState
 
   @AllowNull(false)
@@ -126,7 +125,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Sequelize.Transaction) {
+  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction) {
     const query = {
       where: {
         actorId,
@@ -150,8 +149,8 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Sequelize.Transaction) {
-    const actorFollowingPartInclude: IIncludeOptions = {
+  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Transaction) {
+    const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
       as: 'ActorFollowing',
@@ -208,7 +207,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       .map(t => {
         if (t.host) {
           return {
-            [ Sequelize.Op.and ]: [
+            [ Op.and ]: [
               {
                 '$preferredUsername$': t.name
               },
@@ -220,7 +219,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
         }
 
         return {
-          [ Sequelize.Op.and ]: [
+          [ Op.and ]: [
             {
               '$preferredUsername$': t.name
             },
@@ -234,9 +233,9 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     const query = {
       attributes: [],
       where: {
-        [ Sequelize.Op.and ]: [
+        [ Op.and ]: [
           {
-            [ Sequelize.Op.or ]: whereTab
+            [ Op.or ]: whereTab
           },
           {
             actorId
@@ -288,7 +287,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
               required: true,
               where: search ? {
                 host: {
-                  [Sequelize.Op.iLike]: '%' + search + '%'
+                  [Op.iLike]: '%' + search + '%'
                 }
               } : undefined
             }
@@ -323,7 +322,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
               required: true,
               where: search ? {
                 host: {
-                  [ Sequelize.Op.iLike ]: '%' + search + '%'
+                  [ Op.iLike ]: '%' + search + '%'
                 }
               } : undefined
             }
@@ -406,11 +405,11 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                            })
   }
 
-  static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+  static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Transaction, start?: number, count?: number) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('followers', actorIds, t, start, count)
   }
 
-  static listAcceptedFollowerSharedInboxUrls (actorIds: number[], t: Sequelize.Transaction) {
+  static listAcceptedFollowerSharedInboxUrls (actorIds: number[], t: Transaction) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery(
       'followers',
       actorIds,
@@ -422,7 +421,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     )
   }
 
-  static listAcceptedFollowingUrlsForApi (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+  static listAcceptedFollowingUrlsForApi (actorIds: number[], t: Transaction, start?: number, count?: number) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('following', actorIds, t, start, count)
   }
 
@@ -447,7 +446,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
   }
 
-  static updateFollowScore (inboxUrl: string, value: number, t?: Sequelize.Transaction) {
+  static updateFollowScore (inboxUrl: string, value: number, t?: Transaction) {
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
         'SELECT "actorFollow"."id" FROM "actorFollow" ' +
@@ -456,7 +455,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ')'
 
     const options = {
-      type: Sequelize.QueryTypes.BULKUPDATE,
+      type: QueryTypes.BULKUPDATE,
       transaction: t
     }
 
@@ -466,7 +465,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   private static async createListAcceptedFollowForApiQuery (
     type: 'followers' | 'following',
     actorIds: number[],
-    t: Sequelize.Transaction,
+    t: Transaction,
     start?: number,
     count?: number,
     columnUrl = 'url',
@@ -502,7 +501,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
       const options = {
         bind: { actorIds },
-        type: Sequelize.QueryTypes.SELECT,
+        type: QueryTypes.SELECT,
         transaction: t
       }
       tasks.push(ActorFollowModel.sequelize.query(query, options))
@@ -521,7 +520,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     const query = {
       where: {
         score: {
-          [Sequelize.Op.lte]: 0
+          [Op.lte]: 0
         }
       },
       logging: false

@@ -80,7 +80,7 @@ enum ScopeNames {
         model: () => UserNotificationSettingModel,
         required: true
       }
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 @Table({
@@ -115,13 +115,13 @@ export class UserModel extends Model<UserModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean'))
+  @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean', true))
   @Column
   emailVerified: boolean
 
   @AllowNull(false)
   @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
-  @Column(DataType.ENUM(values(NSFW_POLICY_TYPES)))
+  @Column(DataType.ENUM(...values(NSFW_POLICY_TYPES)))
   nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)
@@ -156,7 +156,7 @@ export class UserModel extends Model<UserModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('UserBlockedReason', value => throwIfNotValid(value, isUserBlockedReasonValid, 'blocked reason'))
+  @Is('UserBlockedReason', value => throwIfNotValid(value, isUserBlockedReasonValid, 'blocked reason', true))
   @Column
   blockedReason: string
 
@@ -556,10 +556,10 @@ export class UserModel extends Model<UserModel> {
       notificationSettings: this.NotificationSetting ? this.NotificationSetting.toFormattedJSON() : undefined,
       videoChannels: [],
       videoQuotaUsed: videoQuotaUsed !== undefined
-            ? parseInt(videoQuotaUsed, 10)
+            ? parseInt(videoQuotaUsed + '', 10)
             : undefined,
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
-            ? parseInt(videoQuotaUsedDaily, 10)
+            ? parseInt(videoQuotaUsedDaily + '', 10)
             : undefined
     }
 
@@ -619,14 +619,14 @@ export class UserModel extends Model<UserModel> {
   private static getTotalRawQuery (query: string, userId: number) {
     const options = {
       bind: { userId },
-      type: Sequelize.QueryTypes.SELECT
+      type: Sequelize.QueryTypes.SELECT as Sequelize.QueryTypes.SELECT
     }
 
-    return UserModel.sequelize.query(query, options)
+    return UserModel.sequelize.query<{ total: number }>(query, options)
                     .then(([ { total } ]) => {
                       if (total === null) return 0
 
-                      return parseInt(total, 10)
+                      return parseInt(total + '', 10)
                     })
   }
 }

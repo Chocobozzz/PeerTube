@@ -56,7 +56,10 @@ async function createRates (ratesUrl: string[], video: VideoModel, rate: VideoRa
   logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
 
   // This is "likes" and "dislikes"
-  if (rateCounts !== 0) await video.increment(rate + 's', { by: rateCounts })
+  if (rateCounts !== 0) {
+    const field = rate === 'like' ? 'likes' : 'dislikes'
+    await video.increment(field, { by: rateCounts })
+  }
 
   return
 }

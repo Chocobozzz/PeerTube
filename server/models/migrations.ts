@@ -1,24 +1,24 @@
-import * as Sequelize from 'sequelize'
+import { ModelAttributeColumnOptions } from 'sequelize'
 
 declare namespace Migration {
-  interface Boolean extends Sequelize.DefineAttributeColumnOptions {
+  interface Boolean extends ModelAttributeColumnOptions {
     defaultValue: boolean | null
   }
 
-  interface String extends Sequelize.DefineAttributeColumnOptions {
+  interface String extends ModelAttributeColumnOptions {
     defaultValue: string | null
   }
 
-  interface Integer extends Sequelize.DefineAttributeColumnOptions {
+  interface Integer extends ModelAttributeColumnOptions {
     defaultValue: number | null
   }
 
-  interface BigInteger extends Sequelize.DefineAttributeColumnOptions {
-    defaultValue: Sequelize.DataTypeBigInt | number | null
+  interface BigInteger extends ModelAttributeColumnOptions {
+    defaultValue: number | null
   }
 
-  interface UUID extends Sequelize.DefineAttributeColumnOptions {
-    defaultValue: Sequelize.DataTypeUUIDv4 | null
+  interface UUID extends ModelAttributeColumnOptions {
+    defaultValue: null
   }
 }
 

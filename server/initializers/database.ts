@@ -37,6 +37,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
 import { ThumbnailModel } from '../models/video/thumbnail'
+import { QueryTypes, Transaction } from 'sequelize'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -58,8 +59,7 @@ const sequelizeTypescript = new SequelizeTypescript({
     max: poolMax
   },
   benchmark: isTestInstance(),
-  isolationLevel: SequelizeTypescript.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-  operatorsAliases: false,
+  isolationLevel: Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   logging: (message: string, benchmark: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 
@@ -141,10 +141,15 @@ async function checkPostgresExtensions () {
 
 async function checkPostgresExtension (extension: string) {
   const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
-  const [ res ] = await sequelizeTypescript.query(query, { raw: true })
+  const options = {
+    type: QueryTypes.SELECT as QueryTypes.SELECT,
+    raw: true
+  }
+
+  const res = await sequelizeTypescript.query<{ enabled: boolean }>(query, options)
 
   if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
-    // Try to create the extension ourself
+    // Try to create the extension ourselves
     try {
       await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })
 

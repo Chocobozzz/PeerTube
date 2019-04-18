@@ -15,12 +15,12 @@ import {
 } from 'sequelize-typescript'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
-import * as Sequelize from 'sequelize'
 import { getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import * as validator from 'validator'
+import { AggregateOptions, Op, Sequelize, Transaction } from 'sequelize'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -96,7 +96,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
   })
   Video: VideoModel
 
-  static deleteAllOf (videoPlaylistId: number, transaction?: Sequelize.Transaction) {
+  static deleteAllOf (videoPlaylistId: number, transaction?: Transaction) {
     const query = {
       where: {
         videoPlaylistId
@@ -140,7 +140,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findOne(query)
   }
 
-  static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number, t?: Sequelize.Transaction) {
+  static listUrlsOfForAP (videoPlaylistId: number, start: number, count: number, t?: Transaction) {
     const query = {
       attributes: [ 'url' ],
       offset: start,
@@ -159,8 +159,8 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
       })
   }
 
-  static getNextPositionOf (videoPlaylistId: number, transaction?: Sequelize.Transaction) {
-    const query = {
+  static getNextPositionOf (videoPlaylistId: number, transaction?: Transaction) {
+    const query: AggregateOptions<number> = {
       where: {
         videoPlaylistId
       },
@@ -176,14 +176,14 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     firstPosition: number,
     endPosition: number,
     newPosition: number,
-    transaction?: Sequelize.Transaction
+    transaction?: Transaction
   ) {
     const query = {
       where: {
         videoPlaylistId,
         position: {
-          [Sequelize.Op.gte]: firstPosition,
-          [Sequelize.Op.lte]: endPosition
+          [Op.gte]: firstPosition,
+          [Op.lte]: endPosition
         }
       },
       transaction,
@@ -198,13 +198,13 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     fromPosition: number,
     toPosition?: number,
     by = 1,
-    transaction?: Sequelize.Transaction
+    transaction?: Transaction
   ) {
     const query = {
       where: {
         videoPlaylistId,
         position: {
-          [Sequelize.Op.gte]: fromPosition
+          [Op.gte]: fromPosition
         }
       },
       transaction

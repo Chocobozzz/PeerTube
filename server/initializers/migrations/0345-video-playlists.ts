@@ -51,7 +51,9 @@ CREATE TABLE IF NOT EXISTS "videoPlaylistElement"
 
   {
     const userQuery = 'SELECT "username" FROM "user";'
-    const userResult = await utils.sequelize.query(userQuery, { transaction, type: Sequelize.QueryTypes.SELECT })
+
+    const options = { transaction, type: Sequelize.QueryTypes.SELECT as Sequelize.QueryTypes.SELECT }
+    const userResult = await utils.sequelize.query<{ username: string }>(userQuery, options)
     const usernames = userResult.map(r => r.username)
 
     for (const username of usernames) {

@@ -3,6 +3,7 @@ import { logger } from '../helpers/logger'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 import { readdir } from 'fs-extra'
+import { QueryTypes } from 'sequelize'
 
 async function migrate () {
   const tables = await sequelizeTypescript.getQueryInterface().showAllTables()
@@ -13,7 +14,12 @@ async function migrate () {
 
   let actualVersion: number | null = null
 
-  const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "application"')
+  const query = 'SELECT "migrationVersion" FROM "application"'
+  const options = {
+    type: QueryTypes.SELECT as QueryTypes.SELECT
+  }
+
+  const rows = await sequelizeTypescript.query<{ migrationVersion: number }>(query, options)
   if (rows && rows[0] && rows[0].migrationVersion) {
     actualVersion = rows[0].migrationVersion
   }

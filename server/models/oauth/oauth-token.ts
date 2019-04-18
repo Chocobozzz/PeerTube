@@ -55,7 +55,7 @@ enum ScopeNames {
           }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 @Table({

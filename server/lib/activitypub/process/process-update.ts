@@ -120,9 +120,11 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
 
       await actor.save({ transaction: t })
 
-      accountOrChannelInstance.set('name', actorAttributesToUpdate.name || actorAttributesToUpdate.preferredUsername)
-      accountOrChannelInstance.set('description', actorAttributesToUpdate.summary)
-      accountOrChannelInstance.set('support', actorAttributesToUpdate.support)
+      accountOrChannelInstance.name = actorAttributesToUpdate.name || actorAttributesToUpdate.preferredUsername
+      accountOrChannelInstance.description = actorAttributesToUpdate.summary
+
+      if (accountOrChannelInstance instanceof VideoChannelModel) accountOrChannelInstance.support = actorAttributesToUpdate.support
+
       await accountOrChannelInstance.save({ transaction: t })
     })
 

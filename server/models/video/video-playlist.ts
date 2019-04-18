@@ -15,7 +15,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import * as Sequelize from 'sequelize'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
 import {
@@ -43,6 +42,7 @@ import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
 import { ThumbnailModel } from './thumbnail'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
+import { fn, literal, Op, Transaction } from 'sequelize'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -74,7 +74,11 @@ type AvailableForListOptions = {
     attributes: {
       include: [
         [
-          Sequelize.literal('(SELECT COUNT("id") FROM "videoPlaylistElement" WHERE "videoPlaylistId" = "VideoPlaylistModel"."id")'),
+          fn('COUNT', 'toto'),
+          'coucou'
+        ],
+        [
+          literal('(SELECT COUNT("id") FROM "videoPlaylistElement" WHERE "videoPlaylistId" = "VideoPlaylistModel"."id")'),
           'videosLength'
         ]
       ]
@@ -116,13 +120,13 @@ type AvailableForListOptions = {
     // Only list local playlists OR playlists that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
     const actorWhere = {
-      [ Sequelize.Op.or ]: [
+      [ Op.or ]: [
         {
           serverId: null
         },
         {
           serverId: {
-            [ Sequelize.Op.in ]: Sequelize.literal(inQueryInstanceFollow)
+            [ Op.in ]: literal(inQueryInstanceFollow)
           }
         }
       ]
@@ -155,7 +159,7 @@ type AvailableForListOptions = {
     }
 
     const where = {
-      [Sequelize.Op.and]: whereAnd
+      [Op.and]: whereAnd
     }
 
     const accountScope = {
@@ -206,7 +210,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   name: string
 
   @AllowNull(true)
-  @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description'))
+  @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description', true))
   @Column
   description: string
 
@@ -344,7 +348,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
           model: VideoPlaylistElementModel.unscoped(),
           where: {
             videoId: {
-              [Sequelize.Op.any]: videoIds
+              [Op.any]: videoIds
             }
           },
           required: true
@@ -368,7 +372,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static loadWithAccountAndChannelSummary (id: number | string, transaction: Sequelize.Transaction) {
+  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction) {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -381,7 +385,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadWithAccountAndChannel (id: number | string, transaction: Sequelize.Transaction) {
+  static loadWithAccountAndChannel (id: number | string, transaction: Transaction) {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -412,7 +416,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return VIDEO_PLAYLIST_TYPES[type] || 'Unknown'
   }
 
-  static resetPlaylistsOfChannel (videoChannelId: number, transaction: Sequelize.Transaction) {
+  static resetPlaylistsOfChannel (videoChannelId: number, transaction: Transaction) {
     const query = {
       where: {
         videoChannelId
@@ -489,7 +493,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
         label: VideoPlaylistModel.getTypeLabel(this.type)
       },
 
-      videosLength: this.get('videosLength'),
+      videosLength: this.get('videosLength') as number,
 
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
@@ -499,7 +503,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
   }
 
-  toActivityPubObject (page: number, t: Sequelize.Transaction): Promise<PlaylistObject> {
+  toActivityPubObject (page: number, t: Transaction): Promise<PlaylistObject> {
     const handler = (start: number, count: number) => {
       return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count, t)
     }

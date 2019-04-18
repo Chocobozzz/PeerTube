@@ -37,7 +37,9 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-      return sendReject(actor, targetActor)
+      await sendReject(actor, targetActor)
+
+      return { actorFollow: undefined }
     }
 
     const [ actorFollow, created ] = await ActorFollowModel.findOrCreate({

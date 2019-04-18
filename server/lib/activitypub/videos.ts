@@ -6,7 +6,7 @@ import {
   ActivityPlaylistSegmentHashesObject,
   ActivityPlaylistUrlObject,
   ActivityUrlObject,
-  ActivityVideoUrlObject, VideoCreate,
+  ActivityVideoUrlObject,
   VideoState
 } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -45,7 +45,6 @@ import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { Notifier } from '../notifier'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
-import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
@@ -312,7 +311,7 @@ async function updateVideoFromAP (options: {
 
         // Update or add other one
         const upsertTasks = videoFileAttributes.map(a => {
-          return VideoFileModel.upsert<VideoFileModel>(a, { returning: true, transaction: t })
+          return (VideoFileModel.upsert<VideoFileModel>(a, { returning: true, transaction: t }) as any) // FIXME: sequelize typings
             .then(([ file ]) => file)
         })
 
@@ -335,7 +334,8 @@ async function updateVideoFromAP (options: {
 
         // Update or add other one
         const upsertTasks = streamingPlaylistAttributes.map(a => {
-          return VideoStreamingPlaylistModel.upsert<VideoStreamingPlaylistModel>(a, { returning: true, transaction: t })
+          // FIXME: sequelize typings
+          return (VideoStreamingPlaylistModel.upsert<VideoStreamingPlaylistModel>(a, { returning: true, transaction: t }) as any)
                                .then(([ streamingPlaylist ]) => streamingPlaylist)
         })
 
@@ -594,7 +594,7 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
     throw new Error('Cannot find video files for ' + video.url)
   }
 
-  const attributes: FilteredModelAttributes<VideoFileModel>[] = []
+  const attributes: object[] = [] // FIXME: add typings
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
@@ -629,7 +629,7 @@ function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObj
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
-  const attributes: FilteredModelAttributes<VideoStreamingPlaylistModel>[] = []
+  const attributes: object[] = [] // FIXME: add typings
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag
                                                      .find(t => {

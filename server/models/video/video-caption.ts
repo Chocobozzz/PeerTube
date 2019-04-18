@@ -1,4 +1,4 @@
-import * as Sequelize from 'sequelize'
+import { OrderItem, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -115,19 +115,19 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return VideoCaptionModel.findOne(query)
   }
 
-  static insertOrReplaceLanguage (videoId: number, language: string, transaction: Sequelize.Transaction) {
+  static insertOrReplaceLanguage (videoId: number, language: string, transaction: Transaction) {
     const values = {
       videoId,
       language
     }
 
-    return VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true })
+    return (VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true }) as any) // FIXME: typings
       .then(([ caption ]) => caption)
   }
 
   static listVideoCaptions (videoId: number) {
     const query = {
-      order: [ [ 'language', 'ASC' ] ],
+      order: [ [ 'language', 'ASC' ] ] as OrderItem[],
       where: {
         videoId
       }
@@ -140,7 +140,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return VIDEO_LANGUAGES[language] || 'Unknown'
   }
 
-  static deleteAllCaptionsOfRemoteVideo (videoId: number, transaction: Sequelize.Transaction) {
+  static deleteAllCaptionsOfRemoteVideo (videoId: number, transaction: Transaction) {
     const query = {
       where: {
         videoId

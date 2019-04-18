@@ -58,7 +58,7 @@ export enum ScopeNames {
           }
         ]
       }
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 

@@ -1,16 +1,15 @@
 import { values } from 'lodash'
-import { Transaction, Op } from 'sequelize'
+import { FindOptions, Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
 import { VideoRateType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
 import { VideoModel } from '../video/video'
 import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid, getSort } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { AccountVideoRate } from '../../../shared'
-import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel'
+import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from '../video/video-channel'
 
 /*
   Account rates per video.
@@ -40,7 +39,7 @@ import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../vide
 export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
 
   @AllowNull(false)
-  @Column(DataType.ENUM(values(VIDEO_RATE_TYPES)))
+  @Column(DataType.ENUM(...values(VIDEO_RATE_TYPES)))
   type: VideoRateType
 
   @AllowNull(false)
@@ -79,7 +78,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   Account: AccountModel
 
   static load (accountId: number, videoId: number, transaction?: Transaction) {
-    const options: IFindOptions<AccountVideoRateModel> = {
+    const options: FindOptions = {
       where: {
         accountId,
         videoId
@@ -97,7 +96,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     type?: string,
     accountId: number
   }) {
-    const query: IFindOptions<AccountVideoRateModel> = {
+    const query: FindOptions = {
       offset: options.start,
       limit: options.count,
       order: getSort(options.sort),
@@ -123,7 +122,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   }
 
   static loadLocalAndPopulateVideo (rateType: VideoRateType, accountName: string, videoId: number, transaction?: Transaction) {
-    const options: IFindOptions<AccountVideoRateModel> = {
+    const options: FindOptions = {
       where: {
         videoId,
         type: rateType
@@ -155,7 +154,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   }
 
   static loadByUrl (url: string, transaction: Transaction) {
-    const options: IFindOptions<AccountVideoRateModel> = {
+    const options: FindOptions = {
       where: {
         url
       }

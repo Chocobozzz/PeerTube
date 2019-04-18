@@ -1,4 +1,3 @@
-import * as Sequelize from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -28,6 +27,7 @@ import { UserModel } from './user'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { WEBSERVER } from '../../initializers/constants'
+import { Op, Transaction, WhereOptions } from 'sequelize'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -42,7 +42,7 @@ export enum ScopeNames {
   ]
 })
 @Scopes({
-  [ ScopeNames.SUMMARY ]: (whereActor?: Sequelize.WhereOptions<ActorModel>) => {
+  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions) => {
     return {
       attributes: [ 'id', 'name' ],
       include: [
@@ -90,7 +90,7 @@ export class AccountModel extends Model<AccountModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description'))
+  @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description', true))
   @Column
   description: string
 
@@ -176,7 +176,7 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number, transaction?: Sequelize.Transaction) {
+  static load (id: number, transaction?: Transaction) {
     return AccountModel.findByPk(id, { transaction })
   }
 
@@ -207,15 +207,15 @@ export class AccountModel extends Model<AccountModel> {
   static loadLocalByName (name: string) {
     const query = {
       where: {
-        [ Sequelize.Op.or ]: [
+        [ Op.or ]: [
           {
             userId: {
-              [ Sequelize.Op.ne ]: null
+              [ Op.ne ]: null
             }
           },
           {
             applicationId: {
-              [ Sequelize.Op.ne ]: null
+              [ Op.ne ]: null
             }
           }
         ]
@@ -259,7 +259,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction) {
     const query = {
       include: [
         {

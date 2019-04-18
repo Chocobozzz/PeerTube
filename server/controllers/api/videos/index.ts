@@ -332,15 +332,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.downloadEnabled !== undefined) videoInstance.set('downloadEnabled', videoInfoToUpdate.downloadEnabled)
 
       if (videoInfoToUpdate.originallyPublishedAt !== undefined && videoInfoToUpdate.originallyPublishedAt !== null) {
-        videoInstance.set('originallyPublishedAt', videoInfoToUpdate.originallyPublishedAt)
+        videoInstance.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
       }
 
       if (videoInfoToUpdate.privacy !== undefined) {
         const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
-        videoInstance.set('privacy', newPrivacy)
+        videoInstance.privacy = newPrivacy
 
         if (wasPrivateVideo === true && newPrivacy !== VideoPrivacy.PRIVATE) {
-          videoInstance.set('publishedAt', new Date())
+          videoInstance.publishedAt = new Date()
         }
       }
 

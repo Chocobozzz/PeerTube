@@ -69,7 +69,7 @@ async function up (utils: {
   const options = {
     type: Sequelize.QueryTypes.SELECT
   }
-  const rawVideos = await utils.sequelize.query(query, options)
+  const rawVideos = await utils.sequelize.query(query, options) as any
 
   for (const rawVideo of rawVideos) {
     const videoChannel = await utils.db.VideoChannel.findOne({ where: { authorId: rawVideo.authorId } })

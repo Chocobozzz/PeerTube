@@ -1,17 +1,4 @@
-import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  Default,
-  ForeignKey,
-  IFindOptions,
-  Is,
-  Model,
-  Scopes,
-  Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { UserNotification, UserNotificationType } from '../../../shared'
 import { getSort, throwIfNotValid } from '../utils'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
@@ -19,7 +6,7 @@ import { isUserNotificationTypeValid } from '../../helpers/custom-validators/use
 import { UserModel } from './user'
 import { VideoModel } from '../video/video'
 import { VideoCommentModel } from '../video/video-comment'
-import { Op } from 'sequelize'
+import { FindOptions, Op } from 'sequelize'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 import { VideoAbuseModel } from '../video/video-abuse'
@@ -160,7 +147,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
       },
 
       buildAccountInclude(false, true)
-    ]
+    ] as any // FIXME: sequelize typings
   }
 })
 @Table({
@@ -225,7 +212,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
         }
       }
     }
-  ]
+  ] as any // FIXME: sequelize typings
 })
 export class UserNotificationModel extends Model<UserNotificationModel> {
 
@@ -344,7 +331,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
   ActorFollow: ActorFollowModel
 
   static listForApi (userId: number, start: number, count: number, sort: string, unread?: boolean) {
-    const query: IFindOptions<UserNotificationModel> = {
+    const query: FindOptions = {
       offset: start,
       limit: count,
       order: getSort(sort),

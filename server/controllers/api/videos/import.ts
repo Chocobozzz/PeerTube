@@ -15,7 +15,6 @@ import { VideoImportModel } from '../../../models/video/video-import'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
 import { join } from 'path'
 import { isArray } from '../../../helpers/custom-validators/misc'
-import { FilteredModelAttributes } from 'sequelize-typescript/lib/models/Model'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
@@ -228,7 +227,7 @@ function insertIntoDB (parameters: {
   previewModel: ThumbnailModel,
   videoChannel: VideoChannelModel,
   tags: string[],
-  videoImportAttributes: FilteredModelAttributes<VideoImportModel>
+  videoImportAttributes: Partial<VideoImportModel>
 }): Bluebird<VideoImportModel> {
   let { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes } = parameters
 

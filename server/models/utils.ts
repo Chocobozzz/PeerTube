@@ -1,26 +1,29 @@
 import { Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
+import { OrderItem } from 'sequelize'
+import { Col } from 'sequelize/types/lib/utils'
 
 type SortType = { sortModel: any, sortValue: string }
 
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
-function getSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
-  let { direction, field } = buildDirectionAndField(value)
+function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
+
+  let finalField: string | Col
 
   if (field.toLowerCase() === 'match') { // Search
-    field = Sequelize.col('similarity')
+    finalField = Sequelize.col('similarity')
+  } else {
+    finalField = field
   }
 
-  return [ [ field, direction ], lastSort ]
+  return [ [ finalField, direction ], lastSort ]
 }
 
-function getVideoSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
-  let { direction, field } = buildDirectionAndField(value)
+function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
 
-  // Alias
-  if (field.toLowerCase() === 'match') { // Search
-    field = Sequelize.col('similarity')
-  } else if (field.toLowerCase() === 'trending') { // Sort by aggregation
+  if (field.toLowerCase() === 'trending') { // Sort by aggregation
     return [
       [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoViews.views')), '0'), direction ],
 
@@ -30,15 +33,24 @@ function getVideoSort (value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
     ]
   }
 
-  const firstSort = typeof field === 'string' ?
-    field.split('.').concat([ direction ]) :
-    [ field, direction ]
+  let finalField: string | Col
+
+  // Alias
+  if (field.toLowerCase() === 'match') { // Search
+    finalField = Sequelize.col('similarity')
+  } else {
+    finalField = field
+  }
+
+  const firstSort = typeof finalField === 'string'
+    ? finalField.split('.').concat([ direction ]) as any // FIXME: sequelize typings
+    : [ finalField, direction ]
 
   return [ firstSort, lastSort ]
 }
 
-function getSortOnModel (model: any, value: string, lastSort: string[] = [ 'id', 'ASC' ]) {
-  let [ firstSort ] = getSort(value)
+function getSortOnModel (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const [ firstSort ] = getSort(value)
 
   if (model) return [ [ model, firstSort[0], firstSort[1] ], lastSort ]
   return [ firstSort, lastSort ]
@@ -52,7 +64,9 @@ function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterva
   return (now - createdAtTime) > refreshInterval && (now - updatedAtTime) > refreshInterval
 }
 
-function throwIfNotValid (value: any, validator: (value: any) => boolean, fieldName = 'value') {
+function throwIfNotValid (value: any, validator: (value: any) => boolean, fieldName = 'value', nullable = false) {
+  if (nullable && (value === null || value === undefined)) return
+
   if (validator(value) === false) {
     throw new Error(`"${value}" is not a valid ${fieldName}.`)
   }
@@ -131,7 +145,7 @@ function searchTrigramNormalizeCol (col: string) {
 }
 
 function buildDirectionAndField (value: string) {
-  let field: any
+  let field: string
   let direction: 'ASC' | 'DESC'
 
   if (value.substring(0, 1) === '-') {

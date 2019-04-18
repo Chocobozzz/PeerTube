@@ -21,7 +21,7 @@ async function up (utils: {
     const options = {
       type: Sequelize.QueryTypes.SELECT
     }
-    const res = await utils.sequelize.query(query, options)
+    const res = await utils.sequelize.query(query, options) as any
 
     if (!res[0] || res[0].total !== 0) {
       throw new Error('You need to quit friends.')
@@ -68,8 +68,8 @@ async function up (utils: {
     const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACTOR_NAME, null, applicationInstance.id, undefined)
 
     const { publicKey, privateKey } = await createPrivateAndPublicKeys()
-    accountCreated.set('publicKey', publicKey)
-    accountCreated.set('privateKey', privateKey)
+    accountCreated.Actor.publicKey = publicKey
+    accountCreated.Actor.privateKey = privateKey
 
     await accountCreated.save()
   }
@@ -86,8 +86,8 @@ async function up (utils: {
     const account = await createLocalAccountWithoutKeys(user.username, user.id, null, undefined)
 
     const { publicKey, privateKey } = await createPrivateAndPublicKeys()
-    account.set('publicKey', publicKey)
-    account.set('privateKey', privateKey)
+    account.Actor.publicKey = publicKey
+    account.Actor.privateKey = privateKey
     await account.save()
   }
 

@@ -76,7 +76,7 @@ export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
     }
 
     if (beforeDate) {
-      query.where.updatedAt = {
+      query.where['updatedAt'] = {
         [Op.lt]: beforeDate
       }
     }
