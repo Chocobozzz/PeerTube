@@ -6,7 +6,7 @@ import { isUserNotificationTypeValid } from '../../helpers/custom-validators/use
 import { UserModel } from './user'
 import { VideoModel } from '../video/video'
 import { VideoCommentModel } from '../video/video-comment'
-import { FindOptions, Op } from 'sequelize'
+import { FindOptions, ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 import { VideoAbuseModel } from '../video/video-abuse'
@@ -24,17 +24,17 @@ enum ScopeNames {
 function buildActorWithAvatarInclude () {
   return {
     attributes: [ 'preferredUsername' ],
-    model: () => ActorModel.unscoped(),
+    model: ActorModel.unscoped(),
     required: true,
     include: [
       {
         attributes: [ 'filename' ],
-        model: () => AvatarModel.unscoped(),
+        model: AvatarModel.unscoped(),
         required: false
       },
       {
         attributes: [ 'host' ],
-        model: () => ServerModel.unscoped(),
+        model: ServerModel.unscoped(),
         required: false
       }
     ]
@@ -44,7 +44,7 @@ function buildActorWithAvatarInclude () {
 function buildVideoInclude (required: boolean) {
   return {
     attributes: [ 'id', 'uuid', 'name' ],
-    model: () => VideoModel.unscoped(),
+    model: VideoModel.unscoped(),
     required
   }
 }
@@ -53,7 +53,7 @@ function buildChannelInclude (required: boolean, withActor = false) {
   return {
     required,
     attributes: [ 'id', 'name' ],
-    model: () => VideoChannelModel.unscoped(),
+    model: VideoChannelModel.unscoped(),
     include: withActor === true ? [ buildActorWithAvatarInclude() ] : []
   }
 }
@@ -62,12 +62,12 @@ function buildAccountInclude (required: boolean, withActor = false) {
   return {
     required,
     attributes: [ 'id', 'name' ],
-    model: () => AccountModel.unscoped(),
+    model: AccountModel.unscoped(),
     include: withActor === true ? [ buildActorWithAvatarInclude() ] : []
   }
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_ALL]: {
     include: [
       Object.assign(buildVideoInclude(false), {
@@ -76,7 +76,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
 
       {
         attributes: [ 'id', 'originCommentId' ],
-        model: () => VideoCommentModel.unscoped(),
+        model: VideoCommentModel.unscoped(),
         required: false,
         include: [
           buildAccountInclude(true, true),
@@ -86,56 +86,56 @@ function buildAccountInclude (required: boolean, withActor = false) {
 
       {
         attributes: [ 'id' ],
-        model: () => VideoAbuseModel.unscoped(),
+        model: VideoAbuseModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(true) ]
       },
 
       {
         attributes: [ 'id' ],
-        model: () => VideoBlacklistModel.unscoped(),
+        model: VideoBlacklistModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(true) ]
       },
 
       {
         attributes: [ 'id', 'magnetUri', 'targetUrl', 'torrentName' ],
-        model: () => VideoImportModel.unscoped(),
+        model: VideoImportModel.unscoped(),
         required: false,
         include: [ buildVideoInclude(false) ]
       },
 
       {
         attributes: [ 'id', 'state' ],
-        model: () => ActorFollowModel.unscoped(),
+        model: ActorFollowModel.unscoped(),
         required: false,
         include: [
           {
             attributes: [ 'preferredUsername' ],
-            model: () => ActorModel.unscoped(),
+            model: ActorModel.unscoped(),
             required: true,
             as: 'ActorFollower',
             include: [
               {
                 attributes: [ 'id', 'name' ],
-                model: () => AccountModel.unscoped(),
+                model: AccountModel.unscoped(),
                 required: true
               },
               {
                 attributes: [ 'filename' ],
-                model: () => AvatarModel.unscoped(),
+                model: AvatarModel.unscoped(),
                 required: false
               },
               {
                 attributes: [ 'host' ],
-                model: () => ServerModel.unscoped(),
+                model: ServerModel.unscoped(),
                 required: false
               }
             ]
           },
           {
             attributes: [ 'preferredUsername' ],
-            model: () => ActorModel.unscoped(),
+            model: ActorModel.unscoped(),
             required: true,
             as: 'ActorFollowing',
             include: [
@@ -147,9 +147,9 @@ function buildAccountInclude (required: boolean, withActor = false) {
       },
 
       buildAccountInclude(false, true)
-    ] as any // FIXME: sequelize typings
+    ]
   }
-})
+}))
 @Table({
   tableName: 'userNotification',
   indexes: [
@@ -212,7 +212,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
         }
       }
     }
-  ] as any // FIXME: sequelize typings
+  ] as (ModelIndexesOptions & { where?: WhereOptions })[]
 })
 export class UserNotificationModel extends Model<UserNotificationModel> {
 
@@ -357,7 +357,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       where: {
         userId,
         id: {
-          [Op.any]: notificationIds
+          [Op.in]: notificationIds // FIXME: sequelize ANY seems broken
         }
       }
     }

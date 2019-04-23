@@ -7461,17 +7461,17 @@ sequelize-pool@^1.0.2:
   dependencies:
     bluebird "^3.5.3"
 
-sequelize-typescript@^1.0.0-beta.1:
-  version "1.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-1.0.0-beta.1.tgz#402279fec52669cbd78ecbf50e189638483a7360"
-  integrity sha512-xD28kqa1rIKujlmgA4hWQgtwFfRM6tLv1/mnZOrOFEZxvSWazUbTzqGB7OZydZDNj3iJnyrV1l6i6HOfvrpvEw==
+sequelize-typescript@1.0.0-beta.2:
+  version "1.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-1.0.0-beta.2.tgz#fd9ae47ecf8b159e32e19c1298426cc9773cebd8"
+  integrity sha512-Iu67kF/RunoeBQBsU5llViJkxAHBVmeS9DBP+eC63hkEwxeDGZgxOkodyW5v5k3h2DJ0MBO+clRURXoDb+/OHg==
   dependencies:
     glob "7.1.2"
 
-sequelize@5.6.1:
-  version "5.6.1"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.6.1.tgz#fc22306109fb2504a6573edfb3c469ec86fae873"
-  integrity sha512-QsXUDar6ow0HrF9BtnHRaNumu6qRYb97dfwvez/Z5guH3i6w6k8+bp6gP3VCiDC+2qX+jQIyrYohKg9evy8GFg==
+sequelize@5.7.4:
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.7.4.tgz#1631faadff65f3a345b9757fca60429c65ba8e57"
+  integrity sha512-CaVYpAgZQEsGDuZ+Oq6uIZy4pxQxscotuh5UGIaFRa0VkTIgV0IiF7vAhSv+1Wn+NvhKCvgJJ85M34BP3AdGNg==
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"
@@ -8678,10 +8678,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.1.6:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.1.tgz#b6691be11a881ffa9a05765a205cb7383f3b63c6"
-  integrity sha512-3NSMb2VzDQm8oBTLH6Nj55VVtUEpe/rgkIzMir0qVoLyjDZlnMBva0U6vDiV3IH+sl/Yu6oP5QwsAQtHPmDd2Q==
+typescript@^3.4.3:
+  version "3.4.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.3.tgz#0eb320e4ace9b10eadf5bc6103286b0f8b7c224f"
+  integrity sha512-FFgHdPt4T/duxx6Ndf7hwgMZZjZpB+U0nMNGVCYPq0rEzWKjEDobm4J6yb3CS7naZ0yURFqdw9Gwc7UOh/P9oQ==
 
 uid-number@0.0.6:
   version "0.0.6"

@@ -68,6 +68,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
     const isAble = await user.isAbleToUploadVideo(videoFile)
+
     if (isAble === false) {
       res.status(403)
          .json({ error: 'The user video quota is exceeded with this video.' })

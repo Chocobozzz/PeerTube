@@ -21,18 +21,18 @@ import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { UserModel } from '../account/user'
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => UserModel.unscoped(),
+      model: UserModel.unscoped(),
       required: true
     },
     {
-      model: () => VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
+      model: VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
       required: false
     }
   ]
-})
+}))
 
 @Table({
   tableName: 'videoImport',

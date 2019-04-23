@@ -34,30 +34,30 @@ enum ScopeNames {
   WITH_USER = 'WITH_USER'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_USER]: {
     include: [
       {
-        model: () => UserModel.unscoped(),
+        model: UserModel.unscoped(),
         required: true,
         include: [
           {
             attributes: [ 'id' ],
-            model: () => AccountModel.unscoped(),
+            model: AccountModel.unscoped(),
             required: true,
             include: [
               {
                 attributes: [ 'id', 'url' ],
-                model: () => ActorModel.unscoped(),
+                model: ActorModel.unscoped(),
                 required: true
               }
             ]
           }
         ]
       }
-    ] as any // FIXME: sequelize typings
+    ]
   }
-})
+}))
 @Table({
   tableName: 'oAuthToken',
   indexes: [
@@ -167,11 +167,13 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
       }
     }
 
-    return OAuthTokenModel.scope(ScopeNames.WITH_USER).findOne(query).then(token => {
-      if (token) token['user'] = token.User
+    return OAuthTokenModel.scope(ScopeNames.WITH_USER)
+                          .findOne(query)
+                          .then(token => {
+                            if (token) token[ 'user' ] = token.User
 
-      return token
-    })
+                            return token
+                          })
   }
 
   static getByRefreshTokenAndPopulateUser (refreshToken: string) {

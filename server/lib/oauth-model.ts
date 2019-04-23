@@ -39,6 +39,8 @@ function clearCacheByToken (token: string) {
 function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
+  if (!bearerToken) return Bluebird.resolve(undefined)
+
   if (accessTokenCache[bearerToken] !== undefined) return Bluebird.resolve(accessTokenCache[bearerToken])
 
   return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)

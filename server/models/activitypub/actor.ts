@@ -56,46 +56,46 @@ export const unusedActorAttributesForAPI = [
   'updatedAt'
 ]
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => ServerModel,
+      model: ServerModel,
       required: false
     },
     {
-      model: () => AvatarModel,
+      model: AvatarModel,
       required: false
     }
   ]
-})
-@Scopes({
+}))
+@Scopes(() => ({
   [ScopeNames.FULL]: {
     include: [
       {
-        model: () => AccountModel.unscoped(),
+        model: AccountModel.unscoped(),
         required: false
       },
       {
-        model: () => VideoChannelModel.unscoped(),
+        model: VideoChannelModel.unscoped(),
         required: false,
         include: [
           {
-            model: () => AccountModel,
+            model: AccountModel,
             required: true
           }
         ]
       },
       {
-        model: () => ServerModel,
+        model: ServerModel,
         required: false
       },
       {
-        model: () => AvatarModel,
+        model: AvatarModel,
         required: false
       }
-    ] as any // FIXME: sequelize typings
+    ]
   }
-})
+}))
 @Table({
   tableName: 'actor',
   indexes: [
@@ -131,7 +131,7 @@ export const unusedActorAttributesForAPI = [
 export class ActorModel extends Model<ActorModel> {
 
   @AllowNull(false)
-  @Column({ type: DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)) }) // FIXME: sequelize typings
+  @Column(DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)))
   type: ActivityPubActorType
 
   @AllowNull(false)
@@ -280,14 +280,16 @@ export class ActorModel extends Model<ActorModel> {
               attributes: [ 'id' ],
               model: VideoChannelModel.unscoped(),
               required: true,
-              include: {
-                attributes: [ 'id' ],
-                model: VideoModel.unscoped(),
-                required: true,
-                where: {
-                  id: videoId
+              include: [
+                {
+                  attributes: [ 'id' ],
+                  model: VideoModel.unscoped(),
+                  required: true,
+                  where: {
+                    id: videoId
+                  }
                 }
-              }
+              ]
             }
           ]
         }
@@ -295,7 +297,7 @@ export class ActorModel extends Model<ActorModel> {
       transaction
     }
 
-    return ActorModel.unscoped().findOne(query as any) // FIXME: typings
+    return ActorModel.unscoped().findOne(query)
   }
 
   static isActorUrlExist (url: string) {
@@ -389,8 +391,7 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   static incrementFollows (id: number, column: 'followersCount' | 'followingCount', by: number) {
-    // FIXME: typings
-    return (ActorModel as any).increment(column, {
+    return ActorModel.increment(column, {
       by,
       where: {
         id

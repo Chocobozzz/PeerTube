@@ -23,7 +23,7 @@ import { move, readFile } from 'fs-extra'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoThumbnailFromExisting } from '../../../lib/thumbnail'
+import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { ThumbnailModel } from '../../../models/video/thumbnail'
 
@@ -204,7 +204,7 @@ async function processThumbnail (req: express.Request, video: VideoModel) {
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[ 0 ]
 
-    return createVideoThumbnailFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.THUMBNAIL)
+    return createVideoMiniatureFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.MINIATURE)
   }
 
   return undefined
@@ -215,7 +215,7 @@ async function processPreview (req: express.Request, video: VideoModel) {
   if (previewField) {
     const previewPhysicalFile = previewField[0]
 
-    return createVideoThumbnailFromExisting(previewPhysicalFile.path, video, ThumbnailType.PREVIEW)
+    return createVideoMiniatureFromExisting(previewPhysicalFile.path, video, ThumbnailType.PREVIEW)
   }
 
   return undefined
@@ -238,14 +238,8 @@ function insertIntoDB (parameters: {
     const videoCreated = await video.save(sequelizeOptions)
     videoCreated.VideoChannel = videoChannel
 
-    if (thumbnailModel) {
-      thumbnailModel.videoId = videoCreated.id
-      videoCreated.addThumbnail(await thumbnailModel.save({ transaction: t }))
-    }
-    if (previewModel) {
-      previewModel.videoId = videoCreated.id
-      videoCreated.addThumbnail(await previewModel.save({ transaction: t }))
-    }
+    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
+    if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     await autoBlacklistVideoIfNeeded(video, videoChannel.Account.User, t)
 

@@ -227,12 +227,12 @@ type AvailableForListIDsOptions = {
   historyOfUser?: UserModel
 }
 
-@Scopes({
+@Scopes(() => ({
   [ ScopeNames.FOR_API ]: (options: ForAPIOptions) => {
     const query: FindOptions = {
       where: {
         id: {
-          [ Op.in ]: options.ids // FIXME: sequelize any seems broken
+          [ Op.in ]: options.ids // FIXME: sequelize ANY seems broken
         }
       },
       include: [
@@ -486,7 +486,7 @@ type AvailableForListIDsOptions = {
   [ ScopeNames.WITH_THUMBNAILS ]: {
     include: [
       {
-        model: () => ThumbnailModel,
+        model: ThumbnailModel,
         required: false
       }
     ]
@@ -495,48 +495,48 @@ type AvailableForListIDsOptions = {
     include: [
       {
         attributes: [ 'accountId' ],
-        model: () => VideoChannelModel.unscoped(),
+        model: VideoChannelModel.unscoped(),
         required: true,
         include: [
           {
             attributes: [ 'userId' ],
-            model: () => AccountModel.unscoped(),
+            model: AccountModel.unscoped(),
             required: true
           }
         ]
       }
-    ] as any // FIXME: sequelize typings
+    ]
   },
   [ ScopeNames.WITH_ACCOUNT_DETAILS ]: {
     include: [
       {
-        model: () => VideoChannelModel.unscoped(),
+        model: VideoChannelModel.unscoped(),
         required: true,
         include: [
           {
             attributes: {
               exclude: [ 'privateKey', 'publicKey' ]
             },
-            model: () => ActorModel.unscoped(),
+            model: ActorModel.unscoped(),
             required: true,
             include: [
               {
                 attributes: [ 'host' ],
-                model: () => ServerModel.unscoped(),
+                model: ServerModel.unscoped(),
                 required: false
               },
               {
-                model: () => AvatarModel.unscoped(),
+                model: AvatarModel.unscoped(),
                 required: false
               }
             ]
           },
           {
-            model: () => AccountModel.unscoped(),
+            model: AccountModel.unscoped(),
             required: true,
             include: [
               {
-                model: () => ActorModel.unscoped(),
+                model: ActorModel.unscoped(),
                 attributes: {
                   exclude: [ 'privateKey', 'publicKey' ]
                 },
@@ -544,11 +544,11 @@ type AvailableForListIDsOptions = {
                 include: [
                   {
                     attributes: [ 'host' ],
-                    model: () => ServerModel.unscoped(),
+                    model: ServerModel.unscoped(),
                     required: false
                   },
                   {
-                    model: () => AvatarModel.unscoped(),
+                    model: AvatarModel.unscoped(),
                     required: false
                   }
                 ]
@@ -557,16 +557,16 @@ type AvailableForListIDsOptions = {
           }
         ]
       }
-    ] as any // FIXME: sequelize typings
+    ]
   },
   [ ScopeNames.WITH_TAGS ]: {
-    include: [ () => TagModel ]
+    include: [ TagModel ]
   },
   [ ScopeNames.WITH_BLACKLISTED ]: {
     include: [
       {
         attributes: [ 'id', 'reason' ],
-        model: () => VideoBlacklistModel,
+        model: VideoBlacklistModel,
         required: false
       }
     ]
@@ -588,8 +588,7 @@ type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoFileModel.unscoped(),
-          // FIXME: typings
-          [ 'separate' as any ]: true, // We may have multiple files, having multiple redundancies so let's separate this join
+          separate: true, // We may have multiple files, having multiple redundancies so let's separate this join
           required: false,
           include: subInclude
         }
@@ -613,8 +612,7 @@ type AvailableForListIDsOptions = {
       include: [
         {
           model: VideoStreamingPlaylistModel.unscoped(),
-          // FIXME: typings
-          [ 'separate' as any ]: true, // We may have multiple streaming playlists, having multiple redundancies so let's separate this join
+          separate: true, // We may have multiple streaming playlists, having multiple redundancies so let's separate this join
           required: false,
           include: subInclude
         }
@@ -624,7 +622,7 @@ type AvailableForListIDsOptions = {
   [ ScopeNames.WITH_SCHEDULED_UPDATE ]: {
     include: [
       {
-        model: () => ScheduleVideoUpdateModel.unscoped(),
+        model: ScheduleVideoUpdateModel.unscoped(),
         required: false
       }
     ]
@@ -643,7 +641,7 @@ type AvailableForListIDsOptions = {
       ]
     }
   }
-})
+}))
 @Table({
   tableName: 'video',
   indexes
@@ -1075,15 +1073,14 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return Bluebird.all([
-      // FIXME: typing issue
-      VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query as any),
-      VideoModel.sequelize.query<{ total: number }>(rawCountQuery, { type: QueryTypes.SELECT })
+      VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query),
+      VideoModel.sequelize.query<{ total: string }>(rawCountQuery, { type: QueryTypes.SELECT })
     ]).then(([ rows, totals ]) => {
       // totals: totalVideos + totalVideoShares
       let totalVideos = 0
       let totalVideoShares = 0
-      if (totals[ 0 ]) totalVideos = parseInt(totals[ 0 ].total + '', 10)
-      if (totals[ 1 ]) totalVideoShares = parseInt(totals[ 1 ].total + '', 10)
+      if (totals[ 0 ]) totalVideos = parseInt(totals[ 0 ].total, 10)
+      if (totals[ 1 ]) totalVideoShares = parseInt(totals[ 1 ].total, 10)
 
       const total = totalVideos + totalVideoShares
       return {
@@ -1094,50 +1091,58 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static listUserVideosForApi (accountId: number, start: number, count: number, sort: string, withFiles = false) {
-    const query: FindOptions = {
-      offset: start,
-      limit: count,
-      order: getVideoSort(sort),
-      include: [
-        {
-          model: VideoChannelModel,
-          required: true,
-          include: [
-            {
-              model: AccountModel,
-              where: {
-                id: accountId
-              },
-              required: true
-            }
-          ]
-        },
-        {
-          model: ScheduleVideoUpdateModel,
-          required: false
-        },
-        {
-          model: VideoBlacklistModel,
-          required: false
-        }
-      ]
+    function buildBaseQuery (): FindOptions {
+      return {
+        offset: start,
+        limit: count,
+        order: getVideoSort(sort),
+        include: [
+          {
+            model: VideoChannelModel,
+            required: true,
+            include: [
+              {
+                model: AccountModel,
+                where: {
+                  id: accountId
+                },
+                required: true
+              }
+            ]
+          }
+        ]
+      }
     }
 
+    const countQuery = buildBaseQuery()
+    const findQuery = buildBaseQuery()
+
+    findQuery.include.push({
+      model: ScheduleVideoUpdateModel,
+      required: false
+    })
+
+    findQuery.include.push({
+      model: VideoBlacklistModel,
+      required: false
+    })
+
     if (withFiles === true) {
-      query.include.push({
+      findQuery.include.push({
         model: VideoFileModel.unscoped(),
         required: true
       })
     }
 
-    return VideoModel.scope(ScopeNames.WITH_THUMBNAILS)
-                     .findAndCountAll(query)
-                     .then(({ rows, count }) => {
-                       return {
-                         data: rows,
-                         total: count
-                       }
-                     })
+    return Promise.all([
+      VideoModel.count(countQuery),
+      VideoModel.findAll(findQuery)
+    ]).then(([ count, rows ]) => {
+      return {
+        data: rows,
+        total: count
+      }
+    })
   }
 
   static async listForApi (options: {
@@ -1404,12 +1409,12 @@ export class VideoModel extends Model<VideoModel> {
     const where = buildWhereIdOrUUID(id)
 
     const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ] as any, // FIXME: sequelize typings
+      order: [ [ 'Tags', 'name', 'ASC' ] ] as any,
       where,
       transaction: t
     }
 
-    const scopes = [
+    const scopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_TAGS,
       ScopeNames.WITH_BLACKLISTED,
       ScopeNames.WITH_ACCOUNT_DETAILS,
@@ -1420,7 +1425,7 @@ export class VideoModel extends Model<VideoModel> {
     ]
 
     if (userId) {
-      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] } as any) // FIXME: typings
+      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] })
     }
 
     return VideoModel
@@ -1437,18 +1442,18 @@ export class VideoModel extends Model<VideoModel> {
       transaction: t
     }
 
-    const scopes = [
+    const scopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_TAGS,
       ScopeNames.WITH_BLACKLISTED,
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_THUMBNAILS,
-      { method: [ ScopeNames.WITH_FILES, true ] } as any, // FIXME: typings
-      { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] } as any // FIXME: typings
+      { method: [ ScopeNames.WITH_FILES, true ] },
+      { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
     ]
 
     if (userId) {
-      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] } as any) // FIXME: typings
+      scopes.push({ method: [ ScopeNames.WITH_USER_HISTORY, userId ] })
     }
 
     return VideoModel
@@ -1520,9 +1525,9 @@ export class VideoModel extends Model<VideoModel> {
       attributes: [ field ],
       limit: count,
       group: field,
-      having: Sequelize.where(Sequelize.fn('COUNT', Sequelize.col(field)), {
-        [ Op.gte ]: threshold
-      }) as any, // FIXME: typings
+      having: Sequelize.where(
+        Sequelize.fn('COUNT', Sequelize.col(field)), { [ Op.gte ]: threshold }
+      ),
       order: [ (this.sequelize as any).random() ]
     }
 
@@ -1594,16 +1599,10 @@ export class VideoModel extends Model<VideoModel> {
       ]
     }
 
-    // FIXME: typing
-    const apiScope: any[] = [ ScopeNames.WITH_THUMBNAILS ]
+    const apiScope: (string | ScopeOptions)[] = [ ScopeNames.WITH_THUMBNAILS ]
 
     if (options.user) {
       apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })
-
-      // Even if the relation is n:m, we know that a user only have 0..1 video history
-      // So we won't have multiple rows for the same video
-      // A subquery adds some bugs in our query so disable it
-      secondQuery.subQuery = false
     }
 
     apiScope.push({
@@ -1651,13 +1650,17 @@ export class VideoModel extends Model<VideoModel> {
     return maxBy(this.VideoFiles, file => file.resolution)
   }
 
-  addThumbnail (thumbnail: ThumbnailModel) {
+  async addAndSaveThumbnail (thumbnail: ThumbnailModel, transaction: Transaction) {
+    thumbnail.videoId = this.id
+
+    const savedThumbnail = await thumbnail.save({ transaction })
+
     if (Array.isArray(this.Thumbnails) === false) this.Thumbnails = []
 
     // Already have this thumbnail, skip
-    if (this.Thumbnails.find(t => t.id === thumbnail.id)) return
+    if (this.Thumbnails.find(t => t.id === savedThumbnail.id)) return
 
-    this.Thumbnails.push(thumbnail)
+    this.Thumbnails.push(savedThumbnail)
   }
 
   getVideoFilename (videoFile: VideoFileModel) {
@@ -1668,10 +1671,10 @@ export class VideoModel extends Model<VideoModel> {
     return this.uuid + '.jpg'
   }
 
-  getThumbnail () {
+  getMiniature () {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
-    return this.Thumbnails.find(t => t.type === ThumbnailType.THUMBNAIL)
+    return this.Thumbnails.find(t => t.type === ThumbnailType.MINIATURE)
   }
 
   generatePreviewName () {
@@ -1732,8 +1735,8 @@ export class VideoModel extends Model<VideoModel> {
     return '/videos/embed/' + this.uuid
   }
 
-  getThumbnailStaticPath () {
-    const thumbnail = this.getThumbnail()
+  getMiniatureStaticPath () {
+    const thumbnail = this.getMiniature()
     if (!thumbnail) return null
 
     return join(STATIC_PATHS.THUMBNAILS, thumbnail.filename)

@@ -140,15 +140,15 @@ async function checkPostgresExtensions () {
 }
 
 async function checkPostgresExtension (extension: string) {
-  const query = `SELECT true AS enabled FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
+  const query = `SELECT 1 FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
   const options = {
     type: QueryTypes.SELECT as QueryTypes.SELECT,
     raw: true
   }
 
-  const res = await sequelizeTypescript.query<{ enabled: boolean }>(query, options)
+  const res = await sequelizeTypescript.query<object>(query, options)
 
-  if (!res || res.length === 0 || res[ 0 ][ 'enabled' ] !== true) {
+  if (!res || res.length === 0) {
     // Try to create the extension ourselves
     try {
       await sequelizeTypescript.query(`CREATE EXTENSION ${extension};`, { raw: true })

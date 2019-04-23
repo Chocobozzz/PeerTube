@@ -41,7 +41,7 @@ import { VideoPlaylistReorder } from '../../../shared/models/videos/playlist/vid
 import { JobQueue } from '../../lib/job-queue'
 import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaylistThumbnailFromExisting } from '../../lib/thumbnail'
+import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -174,16 +174,13 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistThumbnailFromExisting(thumbnailField[0].path, videoPlaylist)
+    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylist)
     : undefined
 
   const videoPlaylistCreated: VideoPlaylistModel = await sequelizeTypescript.transaction(async t => {
     const videoPlaylistCreated = await videoPlaylist.save({ transaction: t })
 
-    if (thumbnailModel) {
-      thumbnailModel.videoPlaylistId = videoPlaylistCreated.id
-      videoPlaylistCreated.setThumbnail(await thumbnailModel.save({ transaction: t }))
-    }
+    if (thumbnailModel) await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
 
     // We need more attributes for the federation
     videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
@@ -210,7 +207,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistThumbnailFromExisting(thumbnailField[0].path, videoPlaylistInstance)
+    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylistInstance)
     : undefined
 
   try {
@@ -239,10 +236,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
       const playlistUpdated = await videoPlaylistInstance.save(sequelizeOptions)
 
-      if (thumbnailModel) {
-        thumbnailModel.videoPlaylistId = playlistUpdated.id
-        playlistUpdated.setThumbnail(await thumbnailModel.save({ transaction: t }))
-      }
+      if (thumbnailModel) await playlistUpdated.setAndSaveThumbnail(thumbnailModel, t)
 
       const isNewPlaylist = wasPrivatePlaylist && playlistUpdated.privacy !== VideoPlaylistPrivacy.PRIVATE
 
@@ -313,8 +307,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
   if (playlistElement.position === 1 && videoPlaylist.hasThumbnail() === false) {
     logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
-    const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnail().filename)
-    const thumbnailModel = await createPlaylistThumbnailFromExisting(inputPath, videoPlaylist, true)
+    const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getMiniature().filename)
+    const thumbnailModel = await createPlaylistMiniatureFromExisting(inputPath, videoPlaylist, true)
 
     thumbnailModel.videoPlaylistId = videoPlaylist.id
 

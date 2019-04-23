@@ -23,29 +23,29 @@ enum ScopeNames {
     }
   ]
 })
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.FULL]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         as: 'Initiator',
         required: true
       },
       {
-        model: () => AccountModel,
+        model: AccountModel,
         as: 'NextOwner',
         required: true
       },
       {
-        model: () => VideoModel,
+        model: VideoModel,
         required: true,
         include: [
-          { model: () => VideoFileModel }
+          { model: VideoFileModel }
         ]
       }
-    ] as any // FIXME: sequelize typings
+    ]
   }
-})
+}))
 export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> {
   @CreatedAt
   createdAt: Date

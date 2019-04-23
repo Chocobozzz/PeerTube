@@ -1,4 +1,4 @@
 export enum ThumbnailType {
-  THUMBNAIL = 1,
+  MINIATURE = 1,
   PREVIEW = 2
 }

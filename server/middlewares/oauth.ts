@@ -35,6 +35,8 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
 
   logger.debug('Checking socket access token %s.', accessToken)
 
+  if (!accessToken) return next(new Error('No access token provided'))
+
   getAccessToken(accessToken)
     .then(tokenDB => {
       const now = new Date()

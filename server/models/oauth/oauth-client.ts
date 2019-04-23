@@ -24,10 +24,10 @@ export class OAuthClientModel extends Model<OAuthClientModel> {
   @Column
   clientSecret: string
 
-  @Column({ type: DataType.ARRAY(DataType.STRING) }) // FIXME: sequelize typings
+  @Column(DataType.ARRAY(DataType.STRING))
   grants: string[]
 
-  @Column({ type: DataType.ARRAY(DataType.STRING) }) // FIXME: sequelize typings
+  @Column(DataType.ARRAY(DataType.STRING))
   redirectUris: string[]
 
   @CreatedAt

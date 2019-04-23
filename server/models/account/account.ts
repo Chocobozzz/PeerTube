@@ -33,15 +33,15 @@ export enum ScopeNames {
   SUMMARY = 'SUMMARY'
 }
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => ActorModel, // Default scope includes avatar and server
+      model: ActorModel, // Default scope includes avatar and server
       required: true
     }
   ]
-})
-@Scopes({
+}))
+@Scopes(() => ({
   [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions) => {
     return {
       attributes: [ 'id', 'name' ],
@@ -66,7 +66,7 @@ export enum ScopeNames {
       ]
     }
   }
-})
+}))
 @Table({
   tableName: 'account',
   indexes: [

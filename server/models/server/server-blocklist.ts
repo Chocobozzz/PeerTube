@@ -9,11 +9,11 @@ enum ScopeNames {
   WITH_SERVER = 'WITH_SERVER'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true
       }
     ]
@@ -21,12 +21,12 @@ enum ScopeNames {
   [ScopeNames.WITH_SERVER]: {
     include: [
       {
-        model: () => ServerModel,
+        model: ServerModel,
         required: true
       }
     ]
   }
-})
+}))
 
 @Table({
   tableName: 'serverBlocklist',

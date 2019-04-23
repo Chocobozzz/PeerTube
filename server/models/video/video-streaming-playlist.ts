@@ -26,7 +26,7 @@ import { QueryTypes, Op } from 'sequelize'
       fields: [ 'p2pMediaLoaderInfohashes' ],
       using: 'gin'
     }
-  ] as any // FIXME: sequelize typings
+  ]
 })
 export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistModel> {
   @CreatedAt
@@ -46,7 +46,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
 
   @AllowNull(false)
   @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
-  @Column({ type: DataType.ARRAY(DataType.STRING) }) // FIXME: typings
+  @Column(DataType.ARRAY(DataType.STRING))
   p2pMediaLoaderInfohashes: string[]
 
   @AllowNull(false)
@@ -87,7 +87,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
       raw: true
     }
 
-    return VideoModel.sequelize.query<any>(query, options)
+    return VideoModel.sequelize.query<object>(query, options)
               .then(results => results.length === 1)
   }
 

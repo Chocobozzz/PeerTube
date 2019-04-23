@@ -12,7 +12,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { throwIfNotValid } from '../utils'
+import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
@@ -26,17 +26,17 @@ export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_VIDEO_UUID_AND_REMOTE]: {
     include: [
       {
         attributes: [ 'uuid', 'remote' ],
-        model: () => VideoModel.unscoped(),
+        model: VideoModel.unscoped(),
         required: true
       }
     ]
   }
-})
+}))
 
 @Table({
   tableName: 'videoCaption',
@@ -97,11 +97,8 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     const videoInclude = {
       model: VideoModel.unscoped(),
       attributes: [ 'id', 'remote', 'uuid' ],
-      where: { }
+      where: buildWhereIdOrUUID(videoId)
     }
-
-    if (typeof videoId === 'string') videoInclude.where['uuid'] = videoId
-    else videoInclude.where['id'] = videoId
 
     const query = {
       where: {

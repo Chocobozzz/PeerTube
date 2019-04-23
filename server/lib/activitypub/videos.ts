@@ -49,10 +49,11 @@ import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaceholderThumbnail, createVideoThumbnailFromUrl } from '../thumbnail'
+import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
 import { ThumbnailModel } from '../../models/video/thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { join } from 'path'
+import { FilteredModelAttributes } from '../../typings/sequelize'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   // If the video is not private and is published, we federate it
@@ -247,7 +248,7 @@ async function updateVideoFromAP (options: {
     let thumbnailModel: ThumbnailModel
 
     try {
-      thumbnailModel = await createVideoThumbnailFromUrl(options.videoObject.icon.url, options.video, ThumbnailType.THUMBNAIL)
+      thumbnailModel = await createVideoMiniatureFromUrl(options.videoObject.icon.url, options.video, ThumbnailType.MINIATURE)
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', options.videoObject.id, { err })
     }
@@ -288,16 +289,12 @@ async function updateVideoFromAP (options: {
 
       await options.video.save(sequelizeOptions)
 
-      if (thumbnailModel) {
-        thumbnailModel.videoId = options.video.id
-        options.video.addThumbnail(await thumbnailModel.save({ transaction: t }))
-      }
+      if (thumbnailModel) if (thumbnailModel) await options.video.addAndSaveThumbnail(thumbnailModel, t)
 
       // FIXME: use icon URL instead
       const previewUrl = buildRemoteBaseUrl(options.video, join(STATIC_PATHS.PREVIEWS, options.video.getPreview().filename))
       const previewModel = createPlaceholderThumbnail(previewUrl, options.video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
-
-      options.video.addThumbnail(await previewModel.save({ transaction: t }))
+      await options.video.addAndSaveThumbnail(previewModel, t)
 
       {
         const videoFileAttributes = videoFileActivityUrlToDBAttributes(options.video, options.videoObject)
@@ -311,7 +308,7 @@ async function updateVideoFromAP (options: {
 
         // Update or add other one
         const upsertTasks = videoFileAttributes.map(a => {
-          return (VideoFileModel.upsert<VideoFileModel>(a, { returning: true, transaction: t }) as any) // FIXME: sequelize typings
+          return VideoFileModel.upsert<VideoFileModel>(a, { returning: true, transaction: t })
             .then(([ file ]) => file)
         })
 
@@ -334,8 +331,7 @@ async function updateVideoFromAP (options: {
 
         // Update or add other one
         const upsertTasks = streamingPlaylistAttributes.map(a => {
-          // FIXME: sequelize typings
-          return (VideoStreamingPlaylistModel.upsert<VideoStreamingPlaylistModel>(a, { returning: true, transaction: t }) as any)
+          return VideoStreamingPlaylistModel.upsert<VideoStreamingPlaylistModel>(a, { returning: true, transaction: t })
                                .then(([ streamingPlaylist ]) => streamingPlaylist)
         })
 
@@ -464,7 +460,7 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
   const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
   const video = VideoModel.build(videoData)
 
-  const promiseThumbnail = createVideoThumbnailFromUrl(videoObject.icon.url, video, ThumbnailType.THUMBNAIL)
+  const promiseThumbnail = createVideoMiniatureFromUrl(videoObject.icon.url, video, ThumbnailType.MINIATURE)
 
   let thumbnailModel: ThumbnailModel
   if (waitThumbnail === true) {
@@ -477,18 +473,12 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     const videoCreated = await video.save(sequelizeOptions)
     videoCreated.VideoChannel = channelActor.VideoChannel
 
-    if (thumbnailModel) {
-      thumbnailModel.videoId = videoCreated.id
-
-      videoCreated.addThumbnail(await thumbnailModel.save({ transaction: t }))
-    }
+    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
     // FIXME: use icon URL instead
     const previewUrl = buildRemoteBaseUrl(videoCreated, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
     const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
-    previewModel.videoId = videoCreated.id
-
-    videoCreated.addThumbnail(await previewModel.save({ transaction: t }))
+    if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     // Process files
     const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
@@ -594,7 +584,7 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
     throw new Error('Cannot find video files for ' + video.url)
   }
 
-  const attributes: object[] = [] // FIXME: add typings
+  const attributes: FilteredModelAttributes<VideoFileModel>[] = []
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
@@ -629,7 +619,7 @@ function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObj
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
-  const attributes: object[] = [] // FIXME: add typings
+  const attributes: FilteredModelAttributes<VideoStreamingPlaylistModel>[] = []
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag
                                                      .find(t => {

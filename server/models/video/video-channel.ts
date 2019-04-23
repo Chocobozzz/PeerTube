@@ -58,15 +58,15 @@ type AvailableForListOptions = {
   actorId: number
 }
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => ActorModel,
+      model: ActorModel,
       required: true
     }
   ]
-})
-@Scopes({
+}))
+@Scopes(() => ({
   [ScopeNames.SUMMARY]: (withAccount = false) => {
     const base: FindOptions = {
       attributes: [ 'name', 'description', 'id', 'actorId' ],
@@ -142,22 +142,22 @@ type AvailableForListOptions = {
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true
       }
     ]
   },
   [ScopeNames.WITH_VIDEOS]: {
     include: [
-      () => VideoModel
+      VideoModel
     ]
   },
   [ScopeNames.WITH_ACTOR]: {
     include: [
-      () => ActorModel
+      ActorModel
     ]
   }
-})
+}))
 @Table({
   tableName: 'videoChannel',
   indexes

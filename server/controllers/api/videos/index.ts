@@ -52,7 +52,7 @@ import { Notifier } from '../../../lib/notifier'
 import { sendView } from '../../../lib/activitypub/send/send-view'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoThumbnailFromExisting, generateVideoThumbnail } from '../../../lib/thumbnail'
+import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 
 const auditLogger = auditLoggerFactory('videos')
@@ -214,14 +214,14 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Process thumbnail or create it from the video
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createVideoThumbnailFromExisting(thumbnailField[0].path, video, ThumbnailType.THUMBNAIL)
-    : await generateVideoThumbnail(video, videoFile, ThumbnailType.THUMBNAIL)
+    ? await createVideoMiniatureFromExisting(thumbnailField[0].path, video, ThumbnailType.MINIATURE)
+    : await generateVideoMiniature(video, videoFile, ThumbnailType.MINIATURE)
 
   // Process preview or create it from the video
   const previewField = req.files['previewfile']
   const previewModel = previewField
-    ? await createVideoThumbnailFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW)
-    : await generateVideoThumbnail(video, videoFile, ThumbnailType.PREVIEW)
+    ? await createVideoMiniatureFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW)
+    : await generateVideoMiniature(video, videoFile, ThumbnailType.PREVIEW)
 
   // Create the torrent file
   await video.createTorrentAndSetInfoHash(videoFile)
@@ -231,11 +231,8 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     const videoCreated = await video.save(sequelizeOptions)
 
-    thumbnailModel.videoId = videoCreated.id
-    previewModel.videoId = videoCreated.id
-
-    videoCreated.addThumbnail(await thumbnailModel.save({ transaction: t }))
-    videoCreated.addThumbnail(await previewModel.save({ transaction: t }))
+    await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
+    await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
@@ -308,11 +305,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
   // Process thumbnail or create it from the video
   const thumbnailModel = req.files && req.files['thumbnailfile']
-    ? await createVideoThumbnailFromExisting(req.files['thumbnailfile'][0].path, videoInstance, ThumbnailType.THUMBNAIL)
+    ? await createVideoMiniatureFromExisting(req.files['thumbnailfile'][0].path, videoInstance, ThumbnailType.MINIATURE)
     : undefined
 
   const previewModel = req.files && req.files['previewfile']
-    ? await createVideoThumbnailFromExisting(req.files['previewfile'][0].path, videoInstance, ThumbnailType.PREVIEW)
+    ? await createVideoMiniatureFromExisting(req.files['previewfile'][0].path, videoInstance, ThumbnailType.PREVIEW)
     : undefined
 
   try {
@@ -346,14 +343,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 
-      if (thumbnailModel) {
-        thumbnailModel.videoId = videoInstanceUpdated.id
-        videoInstanceUpdated.addThumbnail(await thumbnailModel.save({ transaction: t }))
-      }
-      if (previewModel) {
-        previewModel.videoId = videoInstanceUpdated.id
-        videoInstanceUpdated.addThumbnail(await previewModel.save({ transaction: t }))
-      }
+      if (thumbnailModel) await videoInstanceUpdated.addAndSaveThumbnail(thumbnailModel, t)
+      if (previewModel) await videoInstanceUpdated.addAndSaveThumbnail(previewModel, t)
 
       // Video tags update?
       if (videoInfoToUpdate.tags !== undefined) {

@@ -59,7 +59,7 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
     views: video.views,
     likes: video.likes,
     dislikes: video.dislikes,
-    thumbnailPath: video.getThumbnailStaticPath(),
+    thumbnailPath: video.getMiniatureStaticPath(),
     previewPath: video.getPreviewStaticPath(),
     embedPath: video.getEmbedStaticPath(),
     createdAt: video.createdAt,
@@ -301,6 +301,8 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     })
   }
 
+  const miniature = video.getMiniature()
+
   return {
     type: 'Video' as 'Video',
     id: video.url,
@@ -326,10 +328,10 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     subtitleLanguage,
     icon: {
       type: 'Image',
-      url: video.getThumbnail().getUrl(),
+      url: miniature.getUrl(),
       mediaType: 'image/jpeg',
-      width: video.getThumbnail().width,
-      height: video.getThumbnail().height
+      width: miniature.width,
+      height: miniature.height
     },
     url,
     likes: getVideoLikesActivityPubUrl(video),

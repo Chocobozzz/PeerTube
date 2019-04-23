@@ -18,7 +18,7 @@ import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { ThumbnailModel } from '../../../models/video/thumbnail'
-import { createVideoThumbnailFromUrl, generateVideoThumbnail } from '../../thumbnail'
+import { createVideoMiniatureFromUrl, generateVideoMiniature } from '../../thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 
 type VideoImportYoutubeDLPayload = {
@@ -150,17 +150,17 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     // Process thumbnail
     let thumbnailModel: ThumbnailModel
     if (options.downloadThumbnail && options.thumbnailUrl) {
-      thumbnailModel = await createVideoThumbnailFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.THUMBNAIL)
+      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.MINIATURE)
     } else if (options.generateThumbnail || options.downloadThumbnail) {
-      thumbnailModel = await generateVideoThumbnail(videoImport.Video, videoFile, ThumbnailType.THUMBNAIL)
+      thumbnailModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.MINIATURE)
     }
 
     // Process preview
     let previewModel: ThumbnailModel
     if (options.downloadPreview && options.thumbnailUrl) {
-      previewModel = await createVideoThumbnailFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.PREVIEW)
+      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.PREVIEW)
     } else if (options.generatePreview || options.downloadPreview) {
-      previewModel = await generateVideoThumbnail(videoImport.Video, videoFile, ThumbnailType.PREVIEW)
+      previewModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.PREVIEW)
     }
 
     // Create torrent
@@ -180,14 +180,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
       await video.save({ transaction: t })
 
-      if (thumbnailModel) {
-        thumbnailModel.videoId = video.id
-        video.addThumbnail(await thumbnailModel.save({ transaction: t }))
-      }
-      if (previewModel) {
-        previewModel.videoId = video.id
-        video.addThumbnail(await previewModel.save({ transaction: t }))
-      }
+      if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
+      if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
 
       // Now we can federate the video (reload from database, we need more attributes)
       const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)

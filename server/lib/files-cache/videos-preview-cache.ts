@@ -20,7 +20,7 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     const video = await VideoModel.loadByUUIDWithFile(videoUUID)
     if (!video) return undefined
 
-    if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreview().filename)
+    if (video.isOwned()) return { isOwned: true, path: join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreview().filename) }
 
     return this.loadRemoteFile(videoUUID)
   }
@@ -35,7 +35,9 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     const remoteStaticPath = join(STATIC_PATHS.PREVIEWS, video.getPreview().filename)
     const destPath = join(FILES_CACHE.PREVIEWS.DIRECTORY, video.getPreview().filename)
 
-    return this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
+    const path = await this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
+
+    return { isOwned: false, path }
   }
 }
 

@@ -16,7 +16,8 @@ import { VideoPlaylistElementModel } from '../../models/video/video-playlist-ele
 import { VideoModel } from '../../models/video/video'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { sequelizeTypescript } from '../../initializers/database'
-import { createPlaylistThumbnailFromUrl } from '../thumbnail'
+import { createPlaylistMiniatureFromUrl } from '../thumbnail'
+import { FilteredModelAttributes } from '../../typings/sequelize'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: AccountModel, to: string[]) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPlaylistPrivacy.PUBLIC : VideoPlaylistPrivacy.UNLISTED
@@ -86,8 +87,7 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     }
   }
 
-  // FIXME: sequelize typings
-  const [ playlist ] = (await VideoPlaylistModel.upsert<VideoPlaylistModel>(playlistAttributes, { returning: true }) as any)
+  const [ playlist ] = await VideoPlaylistModel.upsert<VideoPlaylistModel>(playlistAttributes, { returning: true })
 
   let accItems: string[] = []
   await crawlCollectionPage<string>(playlistObject.id, items => {
@@ -100,10 +100,8 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
 
   if (playlistObject.icon) {
     try {
-      const thumbnailModel = await createPlaylistThumbnailFromUrl(playlistObject.icon.url, refreshedPlaylist)
-      thumbnailModel.videoPlaylistId = refreshedPlaylist.id
-
-      refreshedPlaylist.setThumbnail(await thumbnailModel.save())
+      const thumbnailModel = await createPlaylistMiniatureFromUrl(playlistObject.icon.url, refreshedPlaylist)
+      await refreshedPlaylist.setAndSaveThumbnail(thumbnailModel, undefined)
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', playlistObject.id, { err })
     }
@@ -156,7 +154,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function resetVideoPlaylistElements (elementUrls: string[], playlist: VideoPlaylistModel) {
-  const elementsToCreate: object[] = [] // FIXME: sequelize typings
+  const elementsToCreate: FilteredModelAttributes<VideoPlaylistElementModel>[] = []
 
   await Bluebird.map(elementUrls, async elementUrl => {
     try {

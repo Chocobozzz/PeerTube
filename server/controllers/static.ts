@@ -165,20 +165,20 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getPreview (req: express.Request, res: express.Response) {
-  const path = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
-  if (!path) return res.sendStatus(404)
+  const result = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
+  if (!result) return res.sendStatus(404)
 
-  return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
 }
 
 async function getVideoCaption (req: express.Request, res: express.Response) {
-  const path = await VideosCaptionCache.Instance.getFilePath({
+  const result = await VideosCaptionCache.Instance.getFilePath({
     videoId: req.params.videoId,
     language: req.params.captionLanguage
   })
-  if (!path) return res.sendStatus(404)
+  if (!result) return res.sendStatus(404)
 
-  return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
 }
 
 async function generateNodeinfo (req: express.Request, res: express.Response, next: express.NextFunction) {

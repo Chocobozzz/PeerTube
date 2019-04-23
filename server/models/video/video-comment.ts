@@ -30,7 +30,7 @@ import { UserModel } from '../account/user'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { regexpCapture } from '../../helpers/regexp'
 import { uniq } from 'lodash'
-import { FindOptions, Op, Order, Sequelize, Transaction } from 'sequelize'
+import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -39,7 +39,7 @@ enum ScopeNames {
   ATTRIBUTES_FOR_API = 'ATTRIBUTES_FOR_API'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.ATTRIBUTES_FOR_API]: (serverAccountId: number, userAccountId?: number) => {
     return {
       attributes: {
@@ -63,34 +63,34 @@ enum ScopeNames {
           ]
         ]
       }
-    }
+    } as FindOptions
   },
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         include: [
           {
-            model: () => ActorModel,
+            model: ActorModel,
             include: [
               {
-                model: () => ServerModel,
+                model: ServerModel,
                 required: false
               },
               {
-                model: () => AvatarModel,
+                model: AvatarModel,
                 required: false
               }
             ]
           }
         ]
       }
-    ] as any // FIXME: sequelize typings
+    ]
   },
   [ScopeNames.WITH_IN_REPLY_TO]: {
     include: [
       {
-        model: () => VideoCommentModel,
+        model: VideoCommentModel,
         as: 'InReplyToVideoComment'
       }
     ]
@@ -98,19 +98,19 @@ enum ScopeNames {
   [ScopeNames.WITH_VIDEO]: {
     include: [
       {
-        model: () => VideoModel,
+        model: VideoModel,
         required: true,
         include: [
           {
-            model: () => VideoChannelModel.unscoped(),
+            model: VideoChannelModel.unscoped(),
             required: true,
             include: [
               {
-                model: () => AccountModel,
+                model: AccountModel,
                 required: true,
                 include: [
                   {
-                    model: () => ActorModel,
+                    model: ActorModel,
                     required: true
                   }
                 ]
@@ -119,9 +119,9 @@ enum ScopeNames {
           }
         ]
       }
-    ] as any // FIXME: sequelize typings
+    ]
   }
-})
+}))
 @Table({
   tableName: 'videoComment',
   indexes: [
@@ -313,8 +313,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       }
     }
 
-    // FIXME: typings
-    const scopes: any[] = [
+    const scopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_ACCOUNT,
       {
         method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]

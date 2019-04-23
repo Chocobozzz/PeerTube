@@ -15,7 +15,6 @@ function getSequelize (serverNumber: number) {
     dialect: 'postgres',
     host,
     port,
-    operatorsAliases: false,
     logging: false
   })
 

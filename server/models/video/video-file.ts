@@ -19,11 +19,11 @@ import {
   isVideoFileSizeValid,
   isVideoFPSResolutionValid
 } from '../../helpers/custom-validators/videos'
-import { throwIfNotValid } from '../utils'
+import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import * as Sequelize from 'sequelize'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { FindOptions, QueryTypes, Transaction } from 'sequelize'
 
 @Table({
   tableName: 'videoFile',
@@ -97,15 +97,13 @@ export class VideoFileModel extends Model<VideoFileModel> {
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
     const options = {
-      type: Sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
       bind: { infoHash },
       raw: true
     }
 
     return VideoModel.sequelize.query(query, options)
-              .then(results => {
-                return results.length === 1
-              })
+              .then(results => results.length === 1)
   }
 
   static loadWithVideo (id: number) {
@@ -121,7 +119,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return VideoFileModel.findByPk(id, options)
   }
 
-  static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Sequelize.Transaction) {
+  static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {
     const query = {
       include: [
         {
@@ -144,8 +142,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return VideoFileModel.findAll(query)
   }
 
-  static async getStats () {
-    let totalLocalVideoFilesSize = await VideoFileModel.sum('size', {
+  static getStats () {
+    const query: FindOptions = {
       include: [
         {
           attributes: [],
@@ -155,13 +153,12 @@ export class VideoFileModel extends Model<VideoFileModel> {
           }
         }
       ]
-    } as any)
-    // Sequelize could return null...
-    if (!totalLocalVideoFilesSize) totalLocalVideoFilesSize = 0
-
-    return {
-      totalLocalVideoFilesSize
     }
+
+    return VideoFileModel.aggregate('size', 'SUM', query)
+      .then(result => ({
+        totalLocalVideoFilesSize: parseAggregateResult(result)
+      }))
   }
 
   hasSameUniqueKeysThan (other: VideoFileModel) {

@@ -142,8 +142,8 @@
     "reflect-metadata": "^0.1.12",
     "request": "^2.81.0",
     "scripty": "^1.5.0",
-    "sequelize": "5.6.1",
-    "sequelize-typescript": "^1.0.0-beta.1",
+    "sequelize": "5.7.4",
+    "sequelize-typescript": "1.0.0-beta.2",
     "sharp": "^0.22.0",
     "sitemap": "^2.1.0",
     "socket.io": "^2.2.0",
@@ -212,7 +212,7 @@
     "ts-node": "8.0.3",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.1.6",
+    "typescript": "^3.4.3",
     "xliff": "^4.0.0"
   },
   "scripty": {

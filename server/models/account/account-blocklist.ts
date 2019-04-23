@@ -8,22 +8,22 @@ enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_ACCOUNTS]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true,
         as: 'ByAccount'
       },
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true,
         as: 'BlockedAccount'
       }
     ]
   }
-})
+}))
 
 @Table({
   tableName: 'accountBlocklist',
@@ -83,7 +83,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       attributes: [ 'accountId', 'id' ],
       where: {
         accountId: {
-          [Op.any]: accountIds
+          [Op.in]: accountIds // FIXME: sequelize ANY seems broken
         },
         targetAccountId
       },

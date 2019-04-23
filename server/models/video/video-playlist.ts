@@ -42,7 +42,7 @@ import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-playlist-type.model'
 import { ThumbnailModel } from './thumbnail'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
-import { fn, literal, Op, Transaction } from 'sequelize'
+import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -61,11 +61,11 @@ type AvailableForListOptions = {
   privateAndUnlisted?: boolean
 }
 
-@Scopes({
+@Scopes(() => ({
   [ ScopeNames.WITH_THUMBNAIL ]: {
     include: [
       {
-        model: () => ThumbnailModel,
+        model: ThumbnailModel,
         required: false
       }
     ]
@@ -74,20 +74,16 @@ type AvailableForListOptions = {
     attributes: {
       include: [
         [
-          fn('COUNT', 'toto'),
-          'coucou'
-        ],
-        [
           literal('(SELECT COUNT("id") FROM "videoPlaylistElement" WHERE "videoPlaylistId" = "VideoPlaylistModel"."id")'),
           'videosLength'
         ]
       ]
     }
-  },
+  } as FindOptions,
   [ ScopeNames.WITH_ACCOUNT ]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true
       }
     ]
@@ -95,11 +91,11 @@ type AvailableForListOptions = {
   [ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY ]: {
     include: [
       {
-        model: () => AccountModel.scope(AccountScopeNames.SUMMARY),
+        model: AccountModel.scope(AccountScopeNames.SUMMARY),
         required: true
       },
       {
-        model: () => VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY),
+        model: VideoChannelModel.scope(VideoChannelScopeNames.SUMMARY),
         required: false
       }
     ]
@@ -107,11 +103,11 @@ type AvailableForListOptions = {
   [ ScopeNames.WITH_ACCOUNT_AND_CHANNEL ]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true
       },
       {
-        model: () => VideoChannelModel,
+        model: VideoChannelModel,
         required: false
       }
     ]
@@ -132,7 +128,7 @@ type AvailableForListOptions = {
       ]
     }
 
-    const whereAnd: any[] = []
+    const whereAnd: WhereOptions[] = []
 
     if (options.privateAndUnlisted !== true) {
       whereAnd.push({
@@ -178,9 +174,9 @@ type AvailableForListOptions = {
           required: false
         }
       ]
-    }
+    } as FindOptions
   }
-})
+}))
 
 @Table({
   tableName: 'videoPlaylist',
@@ -269,6 +265,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
   @HasOne(() => ThumbnailModel, {
+
     foreignKey: {
       name: 'videoPlaylistId',
       allowNull: true
@@ -294,7 +291,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       order: getSort(options.sort)
     }
 
-    const scopes = [
+    const scopes: (string | ScopeOptions)[] = [
       {
         method: [
           ScopeNames.AVAILABLE_FOR_LIST,
@@ -306,7 +303,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
             privateAndUnlisted: options.privateAndUnlisted
           } as AvailableForListOptions
         ]
-      } as any, // FIXME: typings
+      },
       ScopeNames.WITH_VIDEOS_LENGTH,
       ScopeNames.WITH_THUMBNAIL
     ]
@@ -348,7 +345,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
           model: VideoPlaylistElementModel.unscoped(),
           where: {
             videoId: {
-              [Op.any]: videoIds
+              [Op.in]: videoIds // FIXME: sequelize ANY seems broken
             }
           },
           required: true
@@ -427,12 +424,10 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
   }
 
-  setThumbnail (thumbnail: ThumbnailModel) {
-    this.Thumbnail = thumbnail
-  }
+  async setAndSaveThumbnail (thumbnail: ThumbnailModel, t: Transaction) {
+    thumbnail.videoPlaylistId = this.id
 
-  getThumbnail () {
-    return this.Thumbnail
+    this.Thumbnail = await thumbnail.save({ transaction: t })
   }
 
   hasThumbnail () {
@@ -448,13 +443,13 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   getThumbnailUrl () {
     if (!this.hasThumbnail()) return null
 
-    return WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.getThumbnail().filename
+    return WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + this.Thumbnail.filename
   }
 
   getThumbnailStaticPath () {
     if (!this.hasThumbnail()) return null
 
-    return join(STATIC_PATHS.THUMBNAILS, this.getThumbnail().filename)
+    return join(STATIC_PATHS.THUMBNAILS, this.Thumbnail.filename)
   }
 
   setAsRefreshed () {

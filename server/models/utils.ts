@@ -118,6 +118,15 @@ function buildWhereIdOrUUID (id: number | string) {
   return validator.isInt('' + id) ? { id } : { uuid: id }
 }
 
+function parseAggregateResult (result: any) {
+  if (!result) return 0
+
+  const total = parseInt(result + '', 10)
+  if (isNaN(total)) return 0
+
+  return total
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -131,7 +140,8 @@ export {
   buildServerIdsFollowedBy,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
-  isOutdated
+  isOutdated,
+  parseAggregateResult
 }
 
 // ---------------------------------------------------------------------------

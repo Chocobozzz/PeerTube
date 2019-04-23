@@ -1,14 +1,14 @@
 import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => AccountModel,
+      model: AccountModel,
       required: true
     }
   ]
-})
+}))
 @Table({
   tableName: 'application'
 })

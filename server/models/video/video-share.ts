@@ -14,15 +14,15 @@ enum ScopeNames {
   WITH_ACTOR = 'WITH_ACTOR'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.FULL]: {
     include: [
       {
-        model: () => ActorModel,
+        model: ActorModel,
         required: true
       },
       {
-        model: () => VideoModel,
+        model: VideoModel,
         required: true
       }
     ]
@@ -30,12 +30,12 @@ enum ScopeNames {
   [ScopeNames.WITH_ACTOR]: {
     include: [
       {
-        model: () => ActorModel,
+        model: ActorModel,
         required: true
       }
     ]
   }
-})
+}))
 @Table({
   tableName: 'videoShare',
   indexes: [

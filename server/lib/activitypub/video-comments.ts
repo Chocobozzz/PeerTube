@@ -73,8 +73,7 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
   const entry = await videoCommentActivityObjectToDBAttributes(videoInstance, actor, body)
   if (!entry) return { created: false }
 
-  // FIXME: sequelize typings
-  const [ comment, created ] = (await VideoCommentModel.upsert<VideoCommentModel>(entry, { returning: true }) as any)
+  const [ comment, created ] = await VideoCommentModel.upsert<VideoCommentModel>(entry, { returning: true })
   comment.Account = actor.Account
   comment.Video = videoInstance
 

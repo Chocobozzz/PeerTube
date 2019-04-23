@@ -75,7 +75,7 @@ export class TagModel extends Model<TagModel> {
       type: QueryTypes.SELECT as QueryTypes.SELECT
     }
 
-    return TagModel.sequelize.query<{ name }>(query, options)
+    return TagModel.sequelize.query<{ name: string }>(query, options)
                     .then(data => data.map(d => d.name))
   }
 }

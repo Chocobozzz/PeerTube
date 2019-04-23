@@ -75,8 +75,8 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   updatedAt: Date
 
   private static types: { [ id in ThumbnailType ]: { label: string, directory: string, staticPath: string } } = {
-    [ThumbnailType.THUMBNAIL]: {
-      label: 'thumbnail',
+    [ThumbnailType.MINIATURE]: {
+      label: 'miniature',
       directory: CONFIG.STORAGE.THUMBNAILS_DIR,
       staticPath: STATIC_PATHS.THUMBNAILS
     },
