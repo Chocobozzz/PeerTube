@@ -1973,7 +1973,7 @@ components:
             - Administrator
         videoQuota:
           type: number
-        dailyVideoQuota:
+        videoQuotaDaily:
           type: number
         createdAt:
           type: string
