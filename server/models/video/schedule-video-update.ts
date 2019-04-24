@@ -73,7 +73,8 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
             [
               VideoScopeNames.WITH_FILES,
               VideoScopeNames.WITH_ACCOUNT_DETAILS,
-              VideoScopeNames.WITH_BLACKLISTED
+              VideoScopeNames.WITH_BLACKLISTED,
+              VideoScopeNames.WITH_THUMBNAILS
             ]
           )
         }
