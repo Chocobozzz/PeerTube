@@ -304,7 +304,7 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
   })
 
   // If the user did not set a thumbnail, automatically take the video thumbnail
-  if (playlistElement.position === 1 && videoPlaylist.hasThumbnail() === false) {
+  if (videoPlaylist.hasThumbnail() === false) {
     logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
     const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getMiniature().filename)

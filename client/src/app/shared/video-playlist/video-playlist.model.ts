@@ -51,7 +51,12 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     this.privacy = hash.privacy
 
     this.thumbnailPath = hash.thumbnailPath
-    this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
+
+    if (this.thumbnailPath) {
+      this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
+    } else {
+      this.thumbnailUrl = window.location.origin + '/client/assets/images/default-playlist.jpg'
+    }
 
     this.videosLength = hash.videosLength
 
