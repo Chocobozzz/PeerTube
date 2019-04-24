@@ -11,7 +11,7 @@ import { truncate } from 'lodash'
 import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
-import { safeGetYoutubeDL, buildOriginallyPublishedAt } from '../helpers/youtube-dl'
+import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { getSettings, netrc } from './cli'
 
 let accessToken: string
@@ -34,29 +34,19 @@ program
 
 getSettings()
 .then(settings => {
-  if (
-    (!program['url'] ||
-    !program['username'] ||
-    !program['password']) &&
-    (settings.remotes.length === 0)
-  ) {
+  if ((!program['url'] || !program['username'] || !program['targetUrl']) && settings.remotes.length === 0) {
     if (!program['url']) console.error('--url field is required.')
     if (!program['username']) console.error('--username field is required.')
-    if (!program['password']) console.error('--password field is required.')
     if (!program['targetUrl']) console.error('--targetUrl field is required.')
+
     process.exit(-1)
   }
 
-  if (
-    (!program['url'] ||
-    !program['username'] ||
-    !program['password']) &&
-    (settings.remotes.length > 0)
-  ) {
-    if (!program['url']) {
-      program['url'] = (settings.default !== -1) ?
-        settings.remotes[settings.default] :
-        settings.remotes[0]
+  if ((!program[ 'url' ] || !program[ 'username' ]) && settings.remotes.length > 0) {
+    if (!program[ 'url' ]) {
+      program[ 'url' ] = settings.default !== -1
+        ? settings.remotes[ settings.default ]
+        : settings.remotes[ 0 ]
     }
 
     if (!program['username']) program['username'] = netrc.machines[program['url']].login

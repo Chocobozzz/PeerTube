@@ -120,7 +120,7 @@ $ node dist/server/tools/peertube-import-videos.js \
 
 * `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
 * `PEERTUBE_USER` : your PeerTube account where videos will be uploaded
-* `PEERTUBE_PASSWORD` : password of your PeerTube account (if `PEERTUBE_PASSWORD` is omitted, you will be prompted for it)
+* `PEERTUBE_PASSWORD` : password of your PeerTube account (if `--password PEERTUBE_PASSWORD` is omitted, you will be prompted for it)
 * `TARGET_URL` : the target url you want to import. Examples:
   * YouTube:
     * Channel: https://www.youtube.com/channel/ChannelId
