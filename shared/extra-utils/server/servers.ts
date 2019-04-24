@@ -87,11 +87,13 @@ function randomServer () {
   return Math.floor(Math.random() * (high - low) + low)
 }
 
-function flushAndRunServer (serverNumber: number, configOverrideArg?: Object, args = []) {
+async function flushAndRunServer (serverNumber: number, configOverrideArg?: Object, args = []) {
   const parallel = process.env.MOCHA_PARALLEL === 'true'
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
   const port = 9000 + internalServerNumber
+
+  await flushTests(serverNumber)
 
   const server: ServerInfo = {
     app: null,
@@ -175,45 +177,41 @@ function flushAndRunServer (serverNumber: number, configOverrideArg?: Object, ar
   }
 
   return new Promise<ServerInfo>(res => {
-    flushTests(internalServerNumber)
-      .then(() => {
+    server.app = fork(join(root(), 'dist', 'server.js'), args, options)
+    server.app.stdout.on('data', function onStdout (data) {
+      let dontContinue = false
 
-        server.app = fork(join(root(), 'dist', 'server.js'), args, options)
-        server.app.stdout.on('data', function onStdout (data) {
-          let dontContinue = false
+      // Capture things if we want to
+      for (const key of Object.keys(regexps)) {
+        const regexp = regexps[ key ]
+        const matches = data.toString().match(regexp)
+        if (matches !== null) {
+          if (key === 'client_id') server.client.id = matches[ 1 ]
+          else if (key === 'client_secret') server.client.secret = matches[ 1 ]
+          else if (key === 'user_username') server.user.username = matches[ 1 ]
+          else if (key === 'user_password') server.user.password = matches[ 1 ]
+        }
+      }
 
-          // Capture things if we want to
-          for (const key of Object.keys(regexps)) {
-            const regexp = regexps[ key ]
-            const matches = data.toString().match(regexp)
-            if (matches !== null) {
-              if (key === 'client_id') server.client.id = matches[ 1 ]
-              else if (key === 'client_secret') server.client.secret = matches[ 1 ]
-              else if (key === 'user_username') server.user.username = matches[ 1 ]
-              else if (key === 'user_password') server.user.password = matches[ 1 ]
-            }
-          }
+      // Check if all required sentences are here
+      for (const key of Object.keys(serverRunString)) {
+        if (data.toString().indexOf(key) !== -1) serverRunString[ key ] = true
+        if (serverRunString[ key ] === false) dontContinue = true
+      }
 
-          // Check if all required sentences are here
-          for (const key of Object.keys(serverRunString)) {
-            if (data.toString().indexOf(key) !== -1) serverRunString[ key ] = true
-            if (serverRunString[ key ] === false) dontContinue = true
-          }
+      // If no, there is maybe one thing not already initialized (client/user credentials generation...)
+      if (dontContinue === true) return
 
-          // If no, there is maybe one thing not already initialized (client/user credentials generation...)
-          if (dontContinue === true) return
+      server.app.stdout.removeListener('data', onStdout)
 
-          server.app.stdout.removeListener('data', onStdout)
-
-          process.on('exit', () => {
-            try {
-              process.kill(server.app.pid)
-            } catch { /* empty */ }
-          })
-
-          res(server)
-        })
+      process.on('exit', () => {
+        try {
+          process.kill(server.app.pid)
+        } catch { /* empty */ }
       })
+
+      res(server)
+    })
   })
 }
 

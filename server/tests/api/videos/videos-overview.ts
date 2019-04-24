@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, killallServers, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils'
+import { flushAndRunServer, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils'
 import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
 

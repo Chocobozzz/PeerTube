@@ -4,8 +4,15 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   createUser,
-  flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePostBodyRequest, flushAndRunServer, ServerInfo, setAccessTokensToServers,
-  uploadVideo, userLogin
+  flushAndRunServer,
+  killallServers,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePostBodyRequest,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  userLogin
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,

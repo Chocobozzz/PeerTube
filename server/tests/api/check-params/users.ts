@@ -6,9 +6,27 @@ import { join } from 'path'
 import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
-  createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
-  makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, flushAndRunServer, ServerInfo, setAccessTokensToServers,
-  updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
+  blockUser,
+  createUser,
+  deleteMe,
+  flushAndRunServer,
+  getMyUserInformation,
+  getMyUserVideoRating,
+  getUsersList,
+  immutableAssign,
+  killallServers,
+  makeGetRequest,
+  makePostBodyRequest,
+  makePutBodyRequest,
+  makeUploadRequest,
+  registerUser,
+  removeUser,
+  ServerInfo,
+  setAccessTokensToServers,
+  unblockUser,
+  updateUser,
+  uploadVideo,
+  userLogin
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
