@@ -207,6 +207,8 @@ type AvailableForListIDsOptions = {
   followerActorId: number
   includeLocalVideos: boolean
 
+  withoutId?: boolean
+
   filter?: VideoFilter
   categoryOneOf?: number[]
   nsfw?: boolean
@@ -268,9 +270,11 @@ type AvailableForListIDsOptions = {
     return query
   },
   [ ScopeNames.AVAILABLE_FOR_LIST_IDS ]: (options: AvailableForListIDsOptions) => {
+    const attributes = options.withoutId === true ? [] : [ 'id' ]
+
     const query: FindOptions = {
       raw: true,
-      attributes: [ 'id' ],
+      attributes,
       where: {
         id: {
           [ Op.and ]: [
@@ -1523,7 +1527,8 @@ export class VideoModel extends Model<VideoModel> {
     const scopeOptions: AvailableForListIDsOptions = {
       serverAccountId: serverActor.Account.id,
       followerActorId,
-      includeLocalVideos: true
+      includeLocalVideos: true,
+      withoutId: true // Don't break aggregation
     }
 
     const query: FindOptions = {

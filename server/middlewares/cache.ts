@@ -7,6 +7,8 @@ import { logger } from '../helpers/logger'
 const lock = new AsyncLock({ timeout: 5000 })
 
 function cacheRoute (lifetimeArg: string | number) {
+  const lifetime = parseDurationToMs(lifetimeArg)
+
   return async function (req: express.Request, res: express.Response, next: express.NextFunction) {
     const redisKey = Redis.Instance.generateCachedRouteKey(req)
 
@@ -24,7 +26,6 @@ function cacheRoute (lifetimeArg: string | number) {
           res.send = (body) => {
             if (res.statusCode >= 200 && res.statusCode < 400) {
               const contentType = res.get('content-type')
-              const lifetime = parseDurationToMs(lifetimeArg)
 
               Redis.Instance.setCachedRoute(req, body, lifetime, contentType, res.statusCode)
                    .then(() => done())

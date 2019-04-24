@@ -87,6 +87,6 @@ describe('Test contact form API validators', function () {
   after(async function () {
     MockSmtpServer.Instance.kill()
 
-    // await cleanupTests([ server ])
+    await cleanupTests([ server ])
   })
 })
