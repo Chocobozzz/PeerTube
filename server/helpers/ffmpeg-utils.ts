@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { dirname, join } from 'path'
-import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
+import { getTargetBitrate, getMaxBitrate, VideoResolution } from '../../shared/models/videos'
 import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -31,7 +31,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
 }
 
 async function getVideoFileSize (path: string) {
-  const videoStream = await getVideoFileStream(path)
+  const videoStream = await getVideoStreamFromFile(path)
 
   return {
     width: videoStream.width,
@@ -49,7 +49,7 @@ async function getVideoFileResolution (path: string) {
 }
 
 async function getVideoFileFPS (path: string) {
-  const videoStream = await getVideoFileStream(path)
+  const videoStream = await getVideoStreamFromFile(path)
 
   for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
     const valuesText: string = videoStream[key]
@@ -122,6 +122,7 @@ type TranscodeOptions = {
   outputPath: string
   resolution: VideoResolution
   isPortraitMode?: boolean
+  doQuickTranscode?: Boolean
 
   hlsPlaylist?: {
     videoFilename: string
@@ -134,7 +135,17 @@ function transcode (options: TranscodeOptions) {
       let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
         .output(options.outputPath)
 
-      if (options.hlsPlaylist) {
+      if (options.doQuickTranscode) {
+        if (options.hlsPlaylist) {
+          throw(Error("Quick transcode and HLS can't be used at the same time"))
+        }
+        command
+          .format('mp4')
+          .addOption('-c:v copy')
+          .addOption('-c:a copy')
+          .outputOption('-map_metadata -1') // strip all metadata
+          .outputOption('-movflags faststart')
+      } else if (options.hlsPlaylist) {
         command = await buildHLSCommand(command, options)
       } else {
         command = await buildx264Command(command, options)
@@ -162,6 +173,34 @@ function transcode (options: TranscodeOptions) {
   })
 }
 
+async function canDoQuickTranscode (path: string) {
+  // NOTE: This could be optimized by running ffprobe only once (but it runs fast anyway)
+  const videoStream = await getVideoStreamFromFile(path)
+  const parsedAudio = await audio.get(path)
+  const fps = await getVideoFileFPS(path)
+  const bitRate = await getVideoFileBitrate(path)
+  const resolution = await getVideoFileResolution(path)
+
+  // check video params
+  if (videoStream[ 'codec_name' ] !== 'h264')
+    return false
+  if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX)
+    return false
+  if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+    return false
+
+    // check audio params (if audio stream exists)
+  if (parsedAudio.audioStream) {
+    if (parsedAudio.audioStream[ 'codec_name' ] !== 'aac')
+      return false
+    const maxAudioBitrate = audio.bitrate[ 'aac' ](parsedAudio.audioStream[ 'bit_rate' ])
+    if (maxAudioBitrate != -1 && parsedAudio.audioStream[ 'bit_rate' ] > maxAudioBitrate)
+      return false
+  }
+  
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -173,7 +212,8 @@ export {
   getVideoFileFPS,
   computeResolutionsToTranscode,
   audio,
-  getVideoFileBitrate
+  getVideoFileBitrate,
+  canDoQuickTranscode
 }
 
 // ---------------------------------------------------------------------------
@@ -243,7 +283,7 @@ async function onTranscodingSuccess (options: TranscodeOptions) {
   await writeFile(options.outputPath, newContent)
 }
 
-function getVideoFileStream (path: string) {
+function getVideoStreamFromFile (path: string) {
   return new Promise<any>((res, rej) => {
     ffmpeg.ffprobe(path, (err, metadata) => {
       if (err) return rej(err)

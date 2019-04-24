@@ -1,6 +1,6 @@
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { join } from 'path'
-import { getVideoFileFPS, transcode } from '../helpers/ffmpeg-utils'
+import { getVideoFileFPS, transcode, canDoQuickTranscode } from '../helpers/ffmpeg-utils'
 import { ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
@@ -19,10 +19,13 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
   const videoInputPath = join(videosDirectory, video.getVideoFilename(inputVideoFile))
   const videoTranscodedPath = join(videosDirectory, video.id + '-transcoded' + newExtname)
 
+  const doQuickTranscode = await(canDoQuickTranscode(videoInputPath))
+
   const transcodeOptions = {
     inputPath: videoInputPath,
     outputPath: videoTranscodedPath,
-    resolution: inputVideoFile.resolution
+    resolution: inputVideoFile.resolution,
+    doQuickTranscode
   }
 
   // Could be very long!
