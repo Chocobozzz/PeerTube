@@ -17,6 +17,7 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { changeVideoChannelShare } from '../../../lib/activitypub'
 import { sendUpdateVideo } from '../../../lib/activitypub/send'
+import { VideoModel } from '../../../models/video/video'
 
 const ownershipVideoRouter = express.Router()
 
@@ -97,12 +98,15 @@ async function listVideoOwnership (req: express.Request, res: express.Response) 
 async function acceptOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
-    const targetVideo = videoChangeOwnership.Video
     const channel = res.locals.videoChannel
+
+    // We need more attributes for federation
+    const targetVideo = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoChangeOwnership.Video.id)
 
     const oldVideoChannel = await VideoChannelModel.loadByIdAndPopulateAccount(targetVideo.channelId)
 
-    targetVideo.set('channelId', channel.id)
+    targetVideo.channelId = channel.id
+
     const targetVideoUpdated = await targetVideo.save({ transaction: t })
     targetVideoUpdated.VideoChannel = channel
 
@@ -111,7 +115,7 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
       await sendUpdateVideo(targetVideoUpdated, t, oldVideoChannel.Account.Actor)
     }
 
-    videoChangeOwnership.set('status', VideoChangeOwnershipStatus.ACCEPTED)
+    videoChangeOwnership.status = VideoChangeOwnershipStatus.ACCEPTED
     await videoChangeOwnership.save({ transaction: t })
 
     return res.sendStatus(204)
@@ -122,7 +126,7 @@ async function refuseOwnership (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
-    videoChangeOwnership.set('status', VideoChangeOwnershipStatus.REFUSED)
+    videoChangeOwnership.status = VideoChangeOwnershipStatus.REFUSED
     await videoChangeOwnership.save({ transaction: t })
 
     return res.sendStatus(204)
