@@ -3,6 +3,7 @@ import { FILES_CACHE, STATIC_PATHS } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
 import { CONFIG } from '../../initializers/config'
+import { fetchRemoteVideoStaticFile } from '../activitypub'
 
 class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
 
@@ -35,9 +36,9 @@ class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
     const remoteStaticPath = join(STATIC_PATHS.PREVIEWS, video.getPreview().filename)
     const destPath = join(FILES_CACHE.PREVIEWS.DIRECTORY, video.getPreview().filename)
 
-    const path = await this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
+    await fetchRemoteVideoStaticFile(video, remoteStaticPath, destPath)
 
-    return { isOwned: false, path }
+    return { isOwned: false, path: destPath }
   }
 }
 

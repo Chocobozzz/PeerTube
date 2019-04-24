@@ -15,7 +15,7 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validat
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
+import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import {
   ACTIVITY_PUB,
   MIMETYPES,
@@ -108,13 +108,11 @@ async function fetchRemoteVideoDescription (video: VideoModel) {
   return body.description ? body.description : ''
 }
 
-function fetchRemoteVideoStaticFile (video: VideoModel, path: string, reject: Function) {
+function fetchRemoteVideoStaticFile (video: VideoModel, path: string, destPath: string) {
   const url = buildRemoteBaseUrl(video, path)
 
   // We need to provide a callback, if no we could have an uncaught exception
-  return request.get(url, err => {
-    if (err) reject(err)
-  })
+  return doRequestAndSaveToFile({ uri: url }, destPath)
 }
 
 function buildRemoteBaseUrl (video: VideoModel, path: string) {

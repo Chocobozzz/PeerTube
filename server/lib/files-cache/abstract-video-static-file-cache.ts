@@ -1,7 +1,5 @@
-import { createWriteStream, remove } from 'fs-extra'
+import { remove } from 'fs-extra'
 import { logger } from '../../helpers/logger'
-import { VideoModel } from '../../models/video/video'
-import { fetchRemoteVideoStaticFile } from '../activitypub'
 import * as memoizee from 'memoizee'
 
 type GetFilePathResult = { isOwned: boolean, path: string } | undefined
@@ -27,18 +25,6 @@ export abstract class AbstractVideoStaticFileCache <T> {
             .catch(err => logger.error('Cannot remove %s from cache %s.', result.path, this.constructor.name, { err }))
         }
       }
-    })
-  }
-
-  protected saveRemoteVideoFileAndReturnPath (video: VideoModel, remoteStaticPath: string, destPath: string) {
-    return new Promise<string>((res, rej) => {
-      const req = fetchRemoteVideoStaticFile(video, remoteStaticPath, rej)
-
-      const stream = createWriteStream(destPath)
-
-      req.pipe(stream)
-         .on('error', (err) => rej(err))
-         .on('finish', () => res(destPath))
     })
   }
 }

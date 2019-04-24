@@ -5,6 +5,7 @@ import { VideoCaptionModel } from '../../models/video/video-caption'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
 import { CONFIG } from '../../initializers/config'
 import { logger } from '../../helpers/logger'
+import { fetchRemoteVideoStaticFile } from '../activitypub'
 
 type GetPathParam = { videoId: string, language: string }
 
@@ -49,9 +50,9 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <GetPathParam> {
     const remoteStaticPath = videoCaption.getCaptionStaticPath()
     const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.getCaptionName())
 
-    const path = await this.saveRemoteVideoFileAndReturnPath(video, remoteStaticPath, destPath)
+    await fetchRemoteVideoStaticFile(video, remoteStaticPath, destPath)
 
-    return { isOwned: false, path }
+    return { isOwned: false, path: destPath }
   }
 }
 
