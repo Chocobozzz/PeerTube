@@ -20,19 +20,19 @@ function createPlaylistMiniatureFromExisting (inputPath: string, playlist: Video
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
 }
 
-function createPlaylistMiniatureFromUrl (url: string, playlist: VideoPlaylistModel, size?: ImageSize) {
+function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: VideoPlaylistModel, size?: ImageSize) {
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
-  const thumbnailCreator = () => downloadImage(url, basePath, filename, { width, height })
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, url })
+  const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function createVideoMiniatureFromUrl (url: string, video: VideoModel, type: ThumbnailType, size?: ImageSize) {
+function createVideoMiniatureFromUrl (fileUrl: string, video: VideoModel, type: ThumbnailType, size?: ImageSize) {
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => downloadImage(url, basePath, filename, { width, height })
+  const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, url })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
 function createVideoMiniatureFromExisting (inputPath: string, video: VideoModel, type: ThumbnailType, size?: ImageSize) {
@@ -51,7 +51,7 @@ function generateVideoMiniature (video: VideoModel, videoFile: VideoFileModel, t
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
 }
 
-function createPlaceholderThumbnail (url: string, video: VideoModel, type: ThumbnailType, size: ImageSize) {
+function createPlaceholderThumbnail (fileUrl: string, video: VideoModel, type: ThumbnailType, size: ImageSize) {
   const { filename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
   const thumbnail = existingThumbnail ? existingThumbnail : new ThumbnailModel()
@@ -60,7 +60,7 @@ function createPlaceholderThumbnail (url: string, video: VideoModel, type: Thumb
   thumbnail.height = height
   thumbnail.width = width
   thumbnail.type = type
-  thumbnail.url = url
+  thumbnail.fileUrl = fileUrl
 
   return thumbnail
 }
@@ -132,10 +132,10 @@ async function createThumbnailFromFunction (parameters: {
   height: number,
   width: number,
   type: ThumbnailType,
-  url?: string,
+  fileUrl?: string,
   existingThumbnail?: ThumbnailModel
 }) {
-  const { thumbnailCreator, filename, width, height, type, existingThumbnail, url = null } = parameters
+  const { thumbnailCreator, filename, width, height, type, existingThumbnail, fileUrl = null } = parameters
 
   const thumbnail = existingThumbnail ? existingThumbnail : new ThumbnailModel()
 
@@ -143,7 +143,7 @@ async function createThumbnailFromFunction (parameters: {
   thumbnail.height = height
   thumbnail.width = width
   thumbnail.type = type
-  thumbnail.url = url
+  thumbnail.fileUrl = fileUrl
 
   await thumbnailCreator()
 
