@@ -105,7 +105,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     })
 
     const destination = join(folder, imageName)
-    await processImage({ path: pendingImagePath }, destination, size)
+    await processImage(pendingImagePath, destination, size)
   } catch (err) {
     logger.error('Cannot generate image from video %s.', fromPath, { err })
 

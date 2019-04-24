@@ -15,7 +15,7 @@ async function updateActorAvatarFile (avatarPhysicalFile: Express.Multer.File, a
   const extension = extname(avatarPhysicalFile.filename)
   const avatarName = uuidv4() + extension
   const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-  await processImage(avatarPhysicalFile, destination, AVATARS_SIZE)
+  await processImage(avatarPhysicalFile.path, destination, AVATARS_SIZE)
 
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {

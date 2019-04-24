@@ -16,7 +16,7 @@ function createPlaylistMiniatureFromExisting (inputPath: string, playlist: Video
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
-  const thumbnailCreator = () => processImage({ path: inputPath }, outputPath, { width, height }, keepOriginal)
+  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
 }
 
@@ -37,7 +37,7 @@ function createVideoMiniatureFromUrl (url: string, video: VideoModel, type: Thum
 
 function createVideoMiniatureFromExisting (inputPath: string, video: VideoModel, type: ThumbnailType, size?: ImageSize) {
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
-  const thumbnailCreator = () => processImage({ path: inputPath }, outputPath, { width, height })
+  const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height })
 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
 }

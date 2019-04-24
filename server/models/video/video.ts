@@ -239,6 +239,11 @@ type AvailableForListIDsOptions = {
         {
           model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] }),
           required: true
+        },
+        {
+          attributes: [ 'type', 'filename' ],
+          model: ThumbnailModel,
+          required: false
         }
       ]
     }
@@ -1599,7 +1604,7 @@ export class VideoModel extends Model<VideoModel> {
       ]
     }
 
-    const apiScope: (string | ScopeOptions)[] = [ ScopeNames.WITH_THUMBNAILS ]
+    const apiScope: (string | ScopeOptions)[] = []
 
     if (options.user) {
       apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })

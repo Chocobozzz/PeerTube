@@ -4,19 +4,19 @@ import { readFile, remove } from 'fs-extra'
 import { logger } from './logger'
 
 async function processImage (
-  physicalFile: { path: string },
+  path: string,
   destination: string,
   newSize: { width: number, height: number },
   keepOriginal = false
 ) {
-  if (physicalFile.path === destination) {
+  if (path === destination) {
     throw new Error('Sharp needs an input path different that the output path.')
   }
 
-  logger.debug('Processing image %s to %s.', physicalFile.path, destination)
+  logger.debug('Processing image %s to %s.', path, destination)
 
   // Avoid sharp cache
-  const buf = await readFile(physicalFile.path)
+  const buf = await readFile(path)
   const sharpInstance = sharp(buf)
 
   await remove(destination)
@@ -25,7 +25,7 @@ async function processImage (
     .resize(newSize.width, newSize.height)
     .toFile(destination)
 
-  if (keepOriginal !== true) await remove(physicalFile.path)
+  if (keepOriginal !== true) await remove(path)
 }
 
 // ---------------------------------------------------------------------------
