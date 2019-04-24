@@ -87,7 +87,7 @@ function randomServer () {
   return Math.floor(Math.random() * (high - low) + low)
 }
 
-async function flushAndRunServer (serverNumber: number, configOverrideArg?: Object, args = []) {
+async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
   const parallel = process.env.MOCHA_PARALLEL === 'true'
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
@@ -113,11 +113,15 @@ async function flushAndRunServer (serverNumber: number, configOverrideArg?: Obje
     }
   }
 
+  return runServer(server, configOverride, args)
+}
+
+function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
     'Server listening': false
   }
-  const key = 'Database peertube_test' + internalServerNumber + ' is ready'
+  const key = 'Database peertube_test' + server.internalServerNumber + ' is ready'
   serverRunString[key] = false
 
   const regexps = {
@@ -130,36 +134,36 @@ async function flushAndRunServer (serverNumber: number, configOverrideArg?: Obje
   // Share the environment
   const env = Object.create(process.env)
   env['NODE_ENV'] = 'test'
-  env['NODE_APP_INSTANCE'] = serverNumber.toString()
+  env['NODE_APP_INSTANCE'] = server.serverNumber.toString()
 
   let configOverride: any = {}
 
-  if (parallel) {
+  if (server.parallel) {
     configOverride = {
       listen: {
-        port: port
+        port: server.port
       },
       webserver: {
-        port: port
+        port: server.port
       },
       database: {
-        suffix: '_test' + internalServerNumber
+        suffix: '_test' + server.internalServerNumber
       },
       storage: {
-        tmp: `test${internalServerNumber}/tmp/`,
-        avatars: `test${internalServerNumber}/avatars/`,
-        videos: `test${internalServerNumber}/videos/`,
-        streaming_playlists: `test${internalServerNumber}/streaming-playlists/`,
-        redundancy: `test${internalServerNumber}/redundancy/`,
-        logs: `test${internalServerNumber}/logs/`,
-        previews: `test${internalServerNumber}/previews/`,
-        thumbnails: `test${internalServerNumber}/thumbnails/`,
-        torrents: `test${internalServerNumber}/torrents/`,
-        captions: `test${internalServerNumber}/captions/`,
-        cache: `test${internalServerNumber}/cache/`
+        tmp: `test${server.internalServerNumber}/tmp/`,
+        avatars: `test${server.internalServerNumber}/avatars/`,
+        videos: `test${server.internalServerNumber}/videos/`,
+        streaming_playlists: `test${server.internalServerNumber}/streaming-playlists/`,
+        redundancy: `test${server.internalServerNumber}/redundancy/`,
+        logs: `test${server.internalServerNumber}/logs/`,
+        previews: `test${server.internalServerNumber}/previews/`,
+        thumbnails: `test${server.internalServerNumber}/thumbnails/`,
+        torrents: `test${server.internalServerNumber}/torrents/`,
+        captions: `test${server.internalServerNumber}/captions/`,
+        cache: `test${server.internalServerNumber}/cache/`
       },
       admin: {
-        email: `admin${internalServerNumber}@example.com`
+        email: `admin${server.internalServerNumber}@example.com`
       }
     }
   }
@@ -216,7 +220,7 @@ async function flushAndRunServer (serverNumber: number, configOverrideArg?: Obje
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {
-  const newServer = await flushAndRunServer(server.serverNumber, configOverride)
+  const newServer = await runServer(server, configOverride)
   server.app = newServer.app
 
   return server
