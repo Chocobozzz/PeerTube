@@ -165,7 +165,7 @@ describe('Test video update scheduler', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

@@ -7,7 +7,7 @@ import {
   immutableAssign,
   killallServers,
   reRunServer,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
@@ -34,11 +34,10 @@ describe('Test contact form API validators', function () {
   before(async function () {
     this.timeout(60000)
 
-    await flushTests()
     await MockSmtpServer.Instance.collectEmails(emails)
 
     // Email is disabled
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
   })
 
   it('Should not accept a contact form if emails are disabled', async function () {
@@ -84,13 +83,8 @@ describe('Test contact form API validators', function () {
     await sendContactForm(immutableAssign(defaultBody, { url: server.url }))
   })
 
-  after(async function () {
+  after(function () {
     MockSmtpServer.Instance.kill()
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

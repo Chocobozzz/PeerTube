@@ -55,8 +55,6 @@ describe('Test videos filter validator', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
     servers = await flushAndRunMultipleServers(2)
 
     await setAccessTokensToServers(servers)
@@ -121,12 +119,7 @@ describe('Test videos filter validator', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

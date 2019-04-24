@@ -8,7 +8,7 @@ import {
   dateIsValid,
   flushTests,
   killallServers,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   updateMyAvatar,
@@ -34,9 +34,7 @@ describe('Test video comments', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -201,7 +199,7 @@ describe('Test video comments', function () {
     expect(res.body.data[1].totalReplies).to.equal(0)
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

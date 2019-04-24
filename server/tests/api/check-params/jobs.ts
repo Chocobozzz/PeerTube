@@ -6,7 +6,7 @@ import {
   createUser,
   flushTests,
   killallServers,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   userLogin
@@ -28,9 +28,7 @@ describe('Test jobs API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -82,12 +80,7 @@ describe('Test jobs API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

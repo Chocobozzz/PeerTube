@@ -10,7 +10,7 @@ import {
   createUser, removeVideoFromBlacklist,
   reportVideoAbuse,
   resetPassword,
-  runServer,
+  flushAndRunServer,
   unblockUser,
   uploadVideo,
   userLogin,
@@ -43,14 +43,12 @@ describe('Test emails', function () {
 
     await MockSmtpServer.Instance.collectEmails(emails)
 
-    await flushTests()
-
     const overrideConfig = {
       smtp: {
         hostname: 'localhost'
       }
     }
-    server = await runServer(1, overrideConfig)
+    server = await flushAndRunServer(1, overrideConfig)
     await setAccessTokensToServers([ server ])
 
     {
@@ -258,7 +256,7 @@ describe('Test emails', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     MockSmtpServer.Instance.kill()
     killallServers([ server ])
   })

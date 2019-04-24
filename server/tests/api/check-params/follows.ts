@@ -3,7 +3,7 @@
 import 'mocha'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
+  createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, flushAndRunServer, ServerInfo, setAccessTokensToServers,
   userLogin
 } from '../../../../shared/extra-utils'
 import {
@@ -20,8 +20,7 @@ describe('Test server follows API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
   })
@@ -296,12 +295,7 @@ describe('Test server follows API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

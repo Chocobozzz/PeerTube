@@ -81,10 +81,5 @@ describe('Test ActivityPub fetcher', function () {
     killallServers(servers)
 
     await closeAllSequelize(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

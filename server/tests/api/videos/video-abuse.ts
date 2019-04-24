@@ -172,7 +172,7 @@ describe('Test video abuses', function () {
     expect(res.body.data.length).to.equal(0)
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

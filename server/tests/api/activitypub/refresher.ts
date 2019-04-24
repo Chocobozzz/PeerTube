@@ -153,7 +153,7 @@ describe('Test AP refresher', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

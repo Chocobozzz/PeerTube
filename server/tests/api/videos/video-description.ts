@@ -99,7 +99,7 @@ describe('Test video description', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

@@ -6,7 +6,7 @@ import {
   getVideosList,
   killallServers,
   rateVideo,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -19,11 +19,10 @@ start()
 // ----------------------------------------------------------------------------
 
 async function start () {
-  await flushTests()
 
   console.log('Flushed tests.')
 
-  const server = await runServer(6)
+  const server = await flushAndRunServer(6)
 
   process.on('exit', async () => {
     killallServers([ server ])

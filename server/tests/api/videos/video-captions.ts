@@ -29,8 +29,6 @@ describe('Test video captions', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
     servers = await flushAndRunMultipleServers(2)
 
     await setAccessTokensToServers(servers)
@@ -197,7 +195,7 @@ describe('Test video captions', function () {
     await checkVideoFilesWereRemoved(videoUUID, 1)
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

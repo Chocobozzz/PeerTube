@@ -14,7 +14,7 @@ import {
   makeGetRequest,
   removeVideoFromPlaylist,
   reorderVideosPlaylist,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers, setDefaultVideoChannel,
   updateVideoPlaylist,
@@ -43,9 +43,7 @@ describe('Test video playlists API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
@@ -670,12 +668,7 @@ describe('Test video playlists API validator', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

@@ -241,7 +241,7 @@ describe('Test video imports', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

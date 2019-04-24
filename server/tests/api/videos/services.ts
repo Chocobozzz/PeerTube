@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   uploadVideo
 } from '../../../../shared/extra-utils/index'
-import { runServer } from '../../../../shared/extra-utils/server/servers'
+import { flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
 
 const expect = chai.expect
 
@@ -21,9 +21,7 @@ describe('Test services', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -76,7 +74,7 @@ describe('Test services', function () {
     expect(res.body).to.not.have.property('thumbnail_height')
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

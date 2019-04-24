@@ -21,7 +21,14 @@ dropRedis () {
   redis-cli KEYS "redis-localhost:900$1*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
 }
 
-for i in $(seq 1 6); do
+seq=$(seq 1 6)
+
+if [ ! -z ${1+x} ]; then
+  seq=$1
+fi
+
+
+for i in $seq; do
   recreateDB "$i" &
   dropRedis "$i" &
   removeFiles "$i" &

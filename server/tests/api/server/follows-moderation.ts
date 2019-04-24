@@ -189,7 +189,7 @@ describe('Test follows moderation', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

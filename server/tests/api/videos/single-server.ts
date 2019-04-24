@@ -20,7 +20,7 @@ import {
   killallServers,
   rateVideo,
   removeVideo,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
@@ -107,9 +107,7 @@ describe('Test a single server', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
   })
@@ -426,12 +424,7 @@ describe('Test a single server', function () {
     expect(video.dislikes).to.equal(1)
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

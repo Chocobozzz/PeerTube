@@ -58,18 +58,17 @@ function flushAndRunMultipleServers (totalServers: number, configOverride?: Obje
       }
     }
 
-    flushTests()
-      .then(() => {
-        for (let j = 1; j <= totalServers; j++) {
-          runServer(j, configOverride).then(app => anotherServerDone(j, app))
-        }
-      })
+    for (let j = 1; j <= totalServers; j++) {
+      flushAndRunServer(j, configOverride).then(app => anotherServerDone(j, app))
+    }
   })
 }
 
-function flushTests () {
+function flushTests (serverNumber?: number) {
   return new Promise<void>((res, rej) => {
-    return exec('npm run clean:server:test', err => {
+    const suffix = serverNumber ? ` -- ${serverNumber}` : ''
+
+    return exec('npm run clean:server:test' + suffix, err => {
       if (err) return rej(err)
 
       return res()
@@ -77,7 +76,7 @@ function flushTests () {
   })
 }
 
-function runServer (serverNumber: number, configOverride?: Object, args = []) {
+function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
   const server: ServerInfo = {
     app: null,
     serverNumber: serverNumber,
@@ -123,47 +122,51 @@ function runServer (serverNumber: number, configOverride?: Object, args = []) {
   }
 
   return new Promise<ServerInfo>(res => {
-    server.app = fork(join(root(), 'dist', 'server.js'), args, options)
-    server.app.stdout.on('data', function onStdout (data) {
-      let dontContinue = false
+    flushTests(serverNumber)
+      .then(() => {
 
-      // Capture things if we want to
-      for (const key of Object.keys(regexps)) {
-        const regexp = regexps[key]
-        const matches = data.toString().match(regexp)
-        if (matches !== null) {
-          if (key === 'client_id') server.client.id = matches[1]
-          else if (key === 'client_secret') server.client.secret = matches[1]
-          else if (key === 'user_username') server.user.username = matches[1]
-          else if (key === 'user_password') server.user.password = matches[1]
-        }
-      }
+        server.app = fork(join(root(), 'dist', 'server.js'), args, options)
+        server.app.stdout.on('data', function onStdout (data) {
+          let dontContinue = false
 
-      // Check if all required sentences are here
-      for (const key of Object.keys(serverRunString)) {
-        if (data.toString().indexOf(key) !== -1) serverRunString[key] = true
-        if (serverRunString[key] === false) dontContinue = true
-      }
+          // Capture things if we want to
+          for (const key of Object.keys(regexps)) {
+            const regexp = regexps[ key ]
+            const matches = data.toString().match(regexp)
+            if (matches !== null) {
+              if (key === 'client_id') server.client.id = matches[ 1 ]
+              else if (key === 'client_secret') server.client.secret = matches[ 1 ]
+              else if (key === 'user_username') server.user.username = matches[ 1 ]
+              else if (key === 'user_password') server.user.password = matches[ 1 ]
+            }
+          }
 
-      // If no, there is maybe one thing not already initialized (client/user credentials generation...)
-      if (dontContinue === true) return
+          // Check if all required sentences are here
+          for (const key of Object.keys(serverRunString)) {
+            if (data.toString().indexOf(key) !== -1) serverRunString[ key ] = true
+            if (serverRunString[ key ] === false) dontContinue = true
+          }
 
-      server.app.stdout.removeListener('data', onStdout)
+          // If no, there is maybe one thing not already initialized (client/user credentials generation...)
+          if (dontContinue === true) return
 
-      process.on('exit', () => {
-        try {
-          process.kill(server.app.pid)
-        } catch { /* empty */ }
+          server.app.stdout.removeListener('data', onStdout)
+
+          process.on('exit', () => {
+            try {
+              process.kill(server.app.pid)
+            } catch { /* empty */
+            }
+          })
+
+          res(server)
+        })
       })
-
-      res(server)
-    })
-
   })
 }
 
 async function reRunServer (server: ServerInfo, configOverride?: any) {
-  const newServer = await runServer(server.serverNumber, configOverride)
+  const newServer = await flushAndRunServer(server.serverNumber, configOverride)
   server.app = newServer.app
 
   return server
@@ -212,7 +215,7 @@ export {
   ServerInfo,
   flushAndRunMultipleServers,
   flushTests,
-  runServer,
+  flushAndRunServer,
   killallServers,
   reRunServer,
   waitUntilLog

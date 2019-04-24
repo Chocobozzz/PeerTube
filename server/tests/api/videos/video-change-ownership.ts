@@ -5,19 +5,20 @@ import 'mocha'
 import {
   acceptChangeOwnership,
   changeVideoOwnership,
-  createUser, doubleFollow, flushAndRunMultipleServers,
-  flushTests,
+  createUser,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  flushAndRunServer,
   getMyUserInformation,
+  getVideo,
   getVideoChangeOwnershipList,
   getVideosList,
   killallServers,
   refuseChangeOwnership,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
-  getVideo
+  userLogin
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User } from '../../../../shared/models/users'
@@ -202,7 +203,7 @@ describe('Test video change ownership - nominal', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })
@@ -225,8 +226,7 @@ describe('Test video change ownership - quota too small', function () {
     this.timeout(50000)
 
     // Run one server
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([server])
 
     const videoQuota = 42000000
@@ -297,7 +297,7 @@ describe('Test video change ownership - quota too small', function () {
     await acceptChangeOwnership(server.url, secondUserAccessToken, lastRequestChangeOwnershipId, channelId, 403)
   })
 
-  after(async function () {
+  after(function () {
     killallServers([server])
   })
 })

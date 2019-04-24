@@ -7,7 +7,7 @@ import {
   flushTests,
   killallServers,
   makeGetRequest,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers, setDefaultVideoChannel,
   userLogin
@@ -48,9 +48,7 @@ describe('Test videos filters', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
@@ -131,12 +129,7 @@ describe('Test videos filters', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

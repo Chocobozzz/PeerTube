@@ -368,7 +368,7 @@ describe('Test users subscriptions', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

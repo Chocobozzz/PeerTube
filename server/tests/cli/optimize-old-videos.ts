@@ -31,8 +31,6 @@ describe('Test optimize old videos', function () {
   before(async function () {
     this.timeout(200000)
 
-    await flushTests()
-
     // Run server 2 to have transcoding enabled
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
@@ -114,7 +112,7 @@ describe('Test optimize old videos', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

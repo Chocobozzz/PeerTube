@@ -7,7 +7,7 @@ import {
   flushTests,
   killallServers,
   reRunServer,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs
@@ -26,8 +26,6 @@ describe('Test video views cleaner', function () {
 
   before(async function () {
     this.timeout(50000)
-
-    await flushTests()
 
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
@@ -102,12 +100,7 @@ describe('Test video views cleaner', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

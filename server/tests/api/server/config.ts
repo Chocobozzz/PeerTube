@@ -13,7 +13,7 @@ import {
   getConfig,
   getCustomConfig,
   registerUser,
-  runServer,
+  flushAndRunServer,
   setAccessTokensToServers,
   updateCustomConfig
 } from '../../../../shared/extra-utils'
@@ -118,9 +118,7 @@ describe('Test config', function () {
 
   before(async function () {
     this.timeout(30000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
   })
 
@@ -302,7 +300,7 @@ describe('Test config', function () {
     checkInitialConfig(data)
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

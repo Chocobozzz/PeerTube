@@ -2,7 +2,7 @@
 
 import 'mocha'
 
-import { flushTests, killallServers, runServer, ServerInfo } from '../../../../shared/extra-utils'
+import { flushTests, killallServers, flushAndRunServer, ServerInfo } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -19,9 +19,7 @@ describe('Test accounts API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
   })
 
   describe('When listing accounts', function () {
@@ -44,12 +42,7 @@ describe('Test accounts API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

@@ -2,7 +2,7 @@
 
 import * as magnetUtil from 'magnet-uri'
 import 'mocha'
-import { getVideo, killallServers, reRunServer, runServer, ServerInfo, uploadVideo } from '../../../../shared/extra-utils'
+import { getVideo, killallServers, reRunServer, flushAndRunServer, ServerInfo, uploadVideo } from '../../../../shared/extra-utils'
 import { flushTests, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { VideoDetails } from '../../../../shared/models/videos'
 import * as WebTorrent from 'webtorrent'
@@ -14,9 +14,7 @@ describe('Test tracker', function () {
 
   before(async function () {
     this.timeout(60000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     {
@@ -84,7 +82,7 @@ describe('Test tracker', function () {
       })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

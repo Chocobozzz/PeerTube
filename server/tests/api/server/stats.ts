@@ -26,8 +26,6 @@ describe('Test stats (excluding redundancy)', function () {
 
   before(async function () {
     this.timeout(60000)
-
-    await flushTests()
     servers = await flushAndRunMultipleServers(3)
     await setAccessTokensToServers(servers)
 
@@ -97,7 +95,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalInstanceFollowers).to.equal(0)
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

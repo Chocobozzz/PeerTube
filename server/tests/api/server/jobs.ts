@@ -56,7 +56,7 @@ describe('Test jobs', function () {
     expect(dateIsValid(job.finishedOn)).to.be.true
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

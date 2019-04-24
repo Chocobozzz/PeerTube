@@ -219,7 +219,7 @@ describe('Test follow constraints', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

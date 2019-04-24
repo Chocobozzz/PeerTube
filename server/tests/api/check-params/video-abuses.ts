@@ -9,7 +9,7 @@ import {
   killallServers,
   makeGetRequest,
   makePostBodyRequest,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   updateVideoAbuse,
@@ -33,9 +33,7 @@ describe('Test video abuses API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -190,12 +188,7 @@ describe('Test video abuses API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

@@ -21,7 +21,7 @@ const expect = chai.expect
 import {
   getConfig,
   flushTests,
-  runServer,
+  flushAndRunServer,
   registerUser, getCustomConfig, setAccessTokensToServers, updateCustomConfig
 } from '../../../../shared/extra-utils/index'
 
@@ -31,9 +31,7 @@ describe('Test application behind a reverse proxy', function () {
 
   before(async function () {
     this.timeout(30000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     const { body } = await uploadVideo(server.url, server.accessToken, {})
@@ -102,7 +100,7 @@ describe('Test application behind a reverse proxy', function () {
     await userLogin(server, user, 429)
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

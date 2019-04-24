@@ -39,7 +39,6 @@ describe('Test create import video jobs', function () {
 
   before(async function () {
     this.timeout(90000)
-    await flushTests()
 
     // Run server 2 to have transcoding enabled
     servers = await flushAndRunMultipleServers(2)
@@ -131,7 +130,7 @@ describe('Test create import video jobs', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

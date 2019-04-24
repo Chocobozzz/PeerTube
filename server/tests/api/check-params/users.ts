@@ -7,7 +7,7 @@ import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
-  makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
+  makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, flushAndRunServer, ServerInfo, setAccessTokensToServers,
   updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
 } from '../../../../shared/extra-utils'
 import {
@@ -40,10 +40,8 @@ describe('Test users API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
-    serverWithRegistrationDisabled = await runServer(2)
+    server = await flushAndRunServer(1)
+    serverWithRegistrationDisabled = await flushAndRunServer(2)
 
     await setAccessTokensToServers([ server ])
 
@@ -881,12 +879,7 @@ describe('Test users API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server, serverWithRegistrationDisabled ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

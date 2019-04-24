@@ -349,7 +349,7 @@ describe('Test video transcoding', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

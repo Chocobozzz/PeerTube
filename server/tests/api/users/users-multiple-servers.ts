@@ -235,7 +235,7 @@ describe('Test users with multiple servers', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

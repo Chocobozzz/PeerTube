@@ -8,7 +8,7 @@ import {
   flushTests,
   getEnvCli,
   killallServers,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
@@ -19,9 +19,7 @@ describe('Test CLI wrapper', function () {
 
   before(async function () {
     this.timeout(30000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super password' })

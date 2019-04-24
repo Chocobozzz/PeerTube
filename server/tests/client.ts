@@ -9,7 +9,7 @@ import {
   getVideosList,
   killallServers,
   makeHTMLRequest,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   serverLogin,
   updateCustomConfig,
@@ -31,9 +31,7 @@ describe('Test a client controllers', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     server.accessToken = await serverLogin(server)
 
     const videoAttributes = {
@@ -147,7 +145,7 @@ describe('Test a client controllers', function () {
     checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

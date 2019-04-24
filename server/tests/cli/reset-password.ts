@@ -7,7 +7,7 @@ import {
   getEnvCli,
   killallServers,
   login,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
@@ -17,9 +17,7 @@ describe('Test reset password scripts', function () {
 
   before(async function () {
     this.timeout(30000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super password' })
@@ -34,7 +32,7 @@ describe('Test reset password scripts', function () {
     await login(server.url, server.client, { username: 'user_1', password: 'coucou' }, 200)
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

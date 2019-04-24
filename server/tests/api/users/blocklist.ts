@@ -79,8 +79,6 @@ describe('Test blocklist', function () {
   before(async function () {
     this.timeout(60000)
 
-    await flushTests()
-
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
 
@@ -500,12 +498,7 @@ describe('Test blocklist', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this[ 'ok' ]) {
-      await flushTests()
-    }
   })
 })

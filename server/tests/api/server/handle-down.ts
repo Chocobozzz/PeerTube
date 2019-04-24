@@ -296,7 +296,7 @@ describe('Test handle downs', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

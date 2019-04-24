@@ -5,7 +5,7 @@ import 'mocha'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, runServer, ServerInfo,
+  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, flushAndRunServer, ServerInfo,
   setAccessTokensToServers, userLogin, immutableAssign
 } from '../../../../shared/extra-utils'
 
@@ -101,8 +101,7 @@ describe('Test config API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -230,12 +229,7 @@ describe('Test config API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

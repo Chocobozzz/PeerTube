@@ -8,7 +8,7 @@ import {
   flushTests,
   killallServers,
   makeGetRequest,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -23,9 +23,7 @@ describe('Test misc endpoints', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
   })
 
@@ -173,7 +171,7 @@ describe('Test misc endpoints', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

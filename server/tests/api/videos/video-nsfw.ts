@@ -20,7 +20,7 @@ import {
   getMyUserInformation,
   getVideoChannelVideos,
   getVideosListWithToken,
-  runServer,
+  flushAndRunServer,
   searchVideo,
   searchVideoWithToken,
   updateCustomConfig,
@@ -64,9 +64,7 @@ describe('Test video NSFW policy', function () {
 
   before(async function () {
     this.timeout(50000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     // Get the access tokens
     await setAccessTokensToServers([ server ])
@@ -243,7 +241,7 @@ describe('Test video NSFW policy', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

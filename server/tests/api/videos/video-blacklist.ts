@@ -425,7 +425,7 @@ describe('Test video blacklist', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

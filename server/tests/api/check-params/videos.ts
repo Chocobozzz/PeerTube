@@ -8,7 +8,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enu
 import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
   makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, uploadVideo,
-  runServer, ServerInfo, setAccessTokensToServers, userLogin, updateCustomSubConfig
+  flushAndRunServer, ServerInfo, setAccessTokensToServers, userLogin, updateCustomSubConfig
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -33,9 +33,7 @@ describe('Test videos API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -730,12 +728,7 @@ describe('Test videos API validator', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

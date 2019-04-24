@@ -128,12 +128,7 @@ describe('Test HLS videos', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })

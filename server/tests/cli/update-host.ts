@@ -17,7 +17,7 @@ import {
   killallServers,
   makeActivityPubGetRequest,
   parseTorrentVideo,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -32,15 +32,13 @@ describe('Test update host scripts', function () {
   before(async function () {
     this.timeout(60000)
 
-    await flushTests()
-
     const overrideConfig = {
       webserver: {
         port: 9256
       }
     }
     // Run server 2 to have transcoding enabled
-    server = await runServer(2, overrideConfig)
+    server = await flushAndRunServer(2, overrideConfig)
     await setAccessTokensToServers([ server ])
 
     // Upload two videos for our needs
@@ -72,7 +70,7 @@ describe('Test update host scripts', function () {
 
     killallServers([ server ])
     // Run server with standard configuration
-    server = await runServer(2)
+    server = await flushAndRunServer(2)
 
     const env = getEnvCli(server)
     await execCLI(`${env} npm run update-host`)
@@ -148,7 +146,7 @@ describe('Test update host scripts', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
   })
 })

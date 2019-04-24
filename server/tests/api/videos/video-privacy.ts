@@ -152,7 +152,7 @@ describe('Test video privacy', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })

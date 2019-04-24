@@ -6,7 +6,7 @@ import {
   flushTests,
   killallServers,
   makeGetRequest,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -20,9 +20,7 @@ describe('Test services API validators', function () {
   before(async function () {
     this.timeout(60000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     const res = await uploadVideo(server.url, server.accessToken, { name: 'my super name' })
@@ -93,13 +91,8 @@ describe('Test services API validators', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
   })
 })
 

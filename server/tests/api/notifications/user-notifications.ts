@@ -112,8 +112,6 @@ describe('Test users notifications', function () {
 
     await MockSmtpServer.Instance.collectEmails(emails)
 
-    await flushTests()
-
     const overrideConfig = {
       smtp: {
         hostname: 'localhost'
@@ -1297,7 +1295,7 @@ describe('Test users notifications', function () {
     })
   })
 
-  after(async function () {
+  after(function () {
     MockSmtpServer.Instance.kill()
 
     killallServers(servers)

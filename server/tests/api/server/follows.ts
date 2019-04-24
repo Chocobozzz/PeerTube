@@ -435,7 +435,7 @@ describe('Test follows', function () {
 
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })
