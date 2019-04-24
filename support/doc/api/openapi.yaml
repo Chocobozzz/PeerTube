@@ -1276,13 +1276,13 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
       requestBody:
         $ref: '#/components/requestBodies/VideoChannelInput'
-  '/video-channels/{id}':
+  '/video-channels/{channelHandle}':
     get:
       summary: Get a video channel by its id
       tags:
         - Video Channel
       parameters:
-        - $ref: '#/components/parameters/id3'
+        - $ref: '#/components/parameters/channelHandle'
       responses:
         '200':
           description: successful operation
@@ -1297,7 +1297,7 @@ paths:
       tags:
         - Video Channel
       parameters:
-        - $ref: '#/components/parameters/id3'
+        - $ref: '#/components/parameters/channelHandle'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1310,17 +1310,17 @@ paths:
       tags:
         - Video Channel
       parameters:
-        - $ref: '#/components/parameters/id3'
+        - $ref: '#/components/parameters/channelHandle'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
-  '/video-channels/{id}/videos':
+  '/video-channels/{channelHandle}/videos':
     get:
       summary: Get videos of a video channel by its id
       tags:
         - Video Channel
       parameters:
-        - $ref: '#/components/parameters/id3'
+        - $ref: '#/components/parameters/channelHandle'
       responses:
         '200':
           description: successful operation
@@ -1611,11 +1611,11 @@ components:
       description: The video id or uuid
       schema:
         type: string
-    id3:
-      name: id
+    channelHandle:
+      name: channelHandle
       in: path
       required: true
-      description: The video channel id or uuid
+      description: "The video channel handle (example: 'my_username@example.com' or 'my_username')"
       schema:
         type: string
     commentId:
