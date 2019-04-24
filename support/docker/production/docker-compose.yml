@@ -4,6 +4,7 @@ services:
 
   reverse-proxy:
     image: traefik
+    network_mode: "host"
     command: --docker # Tells Træfik to listen to docker
     ports:
       - "80:80"     # The HTTP port
@@ -13,7 +14,7 @@ services:
       - ./docker-volume/traefik/acme.json:/etc/acme.json
       - ./docker-volume/traefik/traefik.toml:/traefik.toml
     restart: "always"
-    # If you want to use the Traefik dashboard, you should expose it on a 
+    # If you want to use the Traefik dashboard, you should expose it on a
     # subdomain with HTTPS and authentification:
     # https://medium.com/@xavier.priour/secure-traefik-dashboard-with-https-and-password-in-docker-5b657e2aa15f
     # https://github.com/containous/traefik/issues/880#issuecomment-310301168
