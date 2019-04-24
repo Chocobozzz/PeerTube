@@ -1973,6 +1973,8 @@ components:
             - Administrator
         videoQuota:
           type: number
+        dailyVideoQuota:
+          type: number
         createdAt:
           type: string
         account:
@@ -2108,6 +2110,9 @@ components:
         videoQuota:
           type: string
           description: 'The user videoQuota '
+        videoQuotaDaily:
+          type: string
+          description: 'The user daily video quota '
         role:
           type: integer
           format: int32
@@ -2121,6 +2126,7 @@ components:
         - password
         - email
         - videoQuota
+        - videoQuotaDaily
         - role
     UpdateUser:
       properties:
@@ -2133,6 +2139,9 @@ components:
         videoQuota:
           type: string
           description: 'The updated videoQuota of the user '
+        videoQuotaDaily:
+          type: string
+          description: 'The updated daily video quota of the user '
         role:
           type: string
           description: 'The updated role of the user '
@@ -2140,6 +2149,7 @@ components:
         - id
         - email
         - videoQuota
+        - videoQuotaDaily
         - role
     UpdateMe:
       properties:
