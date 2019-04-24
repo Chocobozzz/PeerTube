@@ -12,6 +12,10 @@ interface ServerInfo {
   app: ChildProcess,
   url: string
   host: string
+
+  port: number
+  parallel: boolean
+  internalServerNumber: number
   serverNumber: number
 
   client: {
@@ -76,12 +80,27 @@ function flushTests (serverNumber?: number) {
   })
 }
 
-function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
+function randomServer () {
+  const low = 10
+  const high = 10000
+
+  return Math.floor(Math.random() * (high - low) + low)
+}
+
+function flushAndRunServer (serverNumber: number, configOverrideArg?: Object, args = []) {
+  const parallel = process.env.MOCHA_PARALLEL === 'true'
+
+  const internalServerNumber = parallel ? randomServer() : serverNumber
+  const port = 9000 + internalServerNumber
+
   const server: ServerInfo = {
     app: null,
-    serverNumber: serverNumber,
-    url: `http://localhost:${9000 + serverNumber}`,
-    host: `localhost:${9000 + serverNumber}`,
+    port,
+    internalServerNumber,
+    parallel,
+    serverNumber: internalServerNumber,
+    url: `http://localhost:${port}`,
+    host: `localhost:${port}`,
     client: {
       id: null,
       secret: null
@@ -96,7 +115,7 @@ function flushAndRunServer (serverNumber: number, configOverride?: Object, args 
   const serverRunString = {
     'Server listening': false
   }
-  const key = 'Database peertube_test' + serverNumber + ' is ready'
+  const key = 'Database peertube_test' + internalServerNumber + ' is ready'
   serverRunString[key] = false
 
   const regexps = {
@@ -111,9 +130,43 @@ function flushAndRunServer (serverNumber: number, configOverride?: Object, args 
   env['NODE_ENV'] = 'test'
   env['NODE_APP_INSTANCE'] = serverNumber.toString()
 
-  if (configOverride !== undefined) {
-    env['NODE_CONFIG'] = JSON.stringify(configOverride)
+  let configOverride: any = {}
+
+  if (parallel) {
+    configOverride = {
+      listen: {
+        port: port
+      },
+      webserver: {
+        port: port
+      },
+      database: {
+        suffix: '_test' + internalServerNumber
+      },
+      storage: {
+        tmp: `test${internalServerNumber}/tmp/`,
+        avatars: `test${internalServerNumber}/avatars/`,
+        videos: `test${internalServerNumber}/videos/`,
+        streaming_playlists: `test${internalServerNumber}/streaming-playlists/`,
+        redundancy: `test${internalServerNumber}/redundancy/`,
+        logs: `test${internalServerNumber}/logs/`,
+        previews: `test${internalServerNumber}/previews/`,
+        thumbnails: `test${internalServerNumber}/thumbnails/`,
+        torrents: `test${internalServerNumber}/torrents/`,
+        captions: `test${internalServerNumber}/captions/`,
+        cache: `test${internalServerNumber}/cache/`
+      },
+      admin: {
+        email: `admin${internalServerNumber}@example.com`
+      }
+    }
   }
+
+  if (configOverrideArg !== undefined) {
+    Object.assign(configOverride, configOverrideArg)
+  }
+
+  env['NODE_CONFIG'] = JSON.stringify(configOverride)
 
   const options = {
     silent: true,
@@ -122,7 +175,7 @@ function flushAndRunServer (serverNumber: number, configOverride?: Object, args 
   }
 
   return new Promise<ServerInfo>(res => {
-    flushTests(serverNumber)
+    flushTests(internalServerNumber)
       .then(() => {
 
         server.app = fork(join(root(), 'dist', 'server.js'), args, options)
@@ -155,8 +208,7 @@ function flushAndRunServer (serverNumber: number, configOverride?: Object, args 
           process.on('exit', () => {
             try {
               process.kill(server.app.pid)
-            } catch { /* empty */
-            }
+            } catch { /* empty */ }
           })
 
           res(server)
@@ -194,6 +246,19 @@ function killallServers (servers: ServerInfo[]) {
   }
 }
 
+function cleanupTests (servers: ServerInfo[]) {
+  killallServers(servers)
+
+  const p: Promise<any>[] = []
+  for (const server of servers) {
+    if (server.parallel) {
+      p.push(flushTests(server.internalServerNumber))
+    }
+  }
+
+  return Promise.all(p)
+}
+
 async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
   const logfile = join(root(), 'test' + server.serverNumber, 'logs/peertube.log')
 
@@ -213,6 +278,7 @@ export {
   checkDirectoryIsEmpty,
   checkTmpIsEmpty,
   ServerInfo,
+  cleanupTests,
   flushAndRunMultipleServers,
   flushTests,
   flushAndRunServer,

@@ -3,16 +3,16 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
-  killallServers,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
-  setAccessTokensToServers, userLogin
+  setAccessTokensToServers,
+  userLogin
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -190,7 +190,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:9001' },
+            fields: { host: 'localhost:' + server.port },
             statusCodeExpected: 409
           })
         })
@@ -200,7 +200,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:9002' },
+            fields: { host: 'localhost:' + servers[1].port },
             statusCodeExpected: 204
           })
         })
@@ -210,7 +210,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unauthenticated user', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9002',
+            path: path + '/localhost:' + servers[1].port,
             statusCodeExpected: 401
           })
         })
@@ -227,7 +227,7 @@ describe('Test blocklist API validators', function () {
         it('Should succeed with the correct params', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9002',
+            path: path + '/localhost:' + servers[1].port,
             token: server.accessToken,
             statusCodeExpected: 204
           })
@@ -400,7 +400,7 @@ describe('Test blocklist API validators', function () {
           await makePostBodyRequest({
             url: server.url,
             path,
-            fields: { host: 'localhost:9002' },
+            fields: { host: 'localhost:' + servers[1].port },
             statusCodeExpected: 401
           })
         })
@@ -410,7 +410,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: userAccessToken,
             path,
-            fields: { host: 'localhost:9002' },
+            fields: { host: 'localhost:' + servers[1].port },
             statusCodeExpected: 403
           })
         })
@@ -430,7 +430,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:9001' },
+            fields: { host: 'localhost:' + server.port },
             statusCodeExpected: 409
           })
         })
@@ -440,7 +440,7 @@ describe('Test blocklist API validators', function () {
             url: server.url,
             token: server.accessToken,
             path,
-            fields: { host: 'localhost:9002' },
+            fields: { host: 'localhost:' + servers[1].port },
             statusCodeExpected: 204
           })
         })
@@ -450,7 +450,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unauthenticated user', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9002',
+            path: path + '/localhost:' + servers[1].port,
             statusCodeExpected: 401
           })
         })
@@ -458,7 +458,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with a user without the appropriate rights', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9002',
+            path: path + '/localhost:' + servers[1].port,
             token: userAccessToken,
             statusCodeExpected: 403
           })
@@ -476,7 +476,7 @@ describe('Test blocklist API validators', function () {
         it('Should succeed with the correct params', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9002',
+            path: path + '/localhost:' + servers[1].port,
             token: server.accessToken,
             statusCodeExpected: 204
           })
@@ -485,7 +485,7 @@ describe('Test blocklist API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })
