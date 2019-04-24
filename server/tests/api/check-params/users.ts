@@ -7,6 +7,7 @@ import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
   blockUser,
+  cleanupTests,
   createUser,
   deleteMe,
   flushAndRunServer,
@@ -14,7 +15,6 @@ import {
   getMyUserVideoRating,
   getUsersList,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
@@ -713,7 +713,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail if we register a user with the same email', async function () {
-      const fields = immutableAssign(baseCorrectParams, { email: 'admin1@example.com' })
+      const fields = immutableAssign(baseCorrectParams, { email: 'admin' + server.internalServerNumber + '@example.com' })
 
       await makePostBodyRequest({
         url: server.url,
@@ -897,7 +897,7 @@ describe('Test users API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server, serverWithRegistrationDisabled ])
+  after(async function () {
+    await cleanupTests([ server, serverWithRegistrationDisabled ])
   })
 })

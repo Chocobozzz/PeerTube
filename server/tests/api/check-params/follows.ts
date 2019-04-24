@@ -3,7 +3,13 @@
 import 'mocha'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, flushAndRunServer, ServerInfo, setAccessTokensToServers,
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  makeDeleteRequest,
+  makePostBodyRequest,
+  ServerInfo,
+  setAccessTokensToServers,
   userLogin
 } from '../../../../shared/extra-utils'
 import {
@@ -295,7 +301,7 @@ describe('Test server follows API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

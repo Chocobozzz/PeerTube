@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoDetails, VideoImport, VideoPrivacy } from '../../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   getMyUserInformation,
@@ -241,7 +242,7 @@ describe('Test video imports', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

@@ -18,7 +18,7 @@ import {
   flushTests,
   killallServers,
   ServerInfo,
-  setAccessTokensToServers
+  setAccessTokensToServers, cleanupTests
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -256,8 +256,9 @@ describe('Test emails', function () {
     })
   })
 
-  after(function () {
+  after(async function () {
     MockSmtpServer.Instance.kill()
-    killallServers([ server ])
+
+    await cleanupTests([ server ])
   })
 })

@@ -1,11 +1,7 @@
 import 'mocha'
 import * as request from 'supertest'
-import {
-  flushTests,
-  killallServers,
-  ServerInfo
-} from '../../../../shared/extra-utils'
-import { flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
+import { ServerInfo } from '../../../../shared/extra-utils'
+import { cleanupTests, flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
 
 describe('Start and stop server without web client routes', function () {
   let server: ServerInfo
@@ -23,7 +19,7 @@ describe('Start and stop server without web client routes', function () {
     return req.expect(404)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

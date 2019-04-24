@@ -6,7 +6,7 @@ process.on('message', (msg) => {
   if (msg.start) {
     const maildev = new MailDev({
       ip: '127.0.0.1',
-      smtp: 1025,
+      smtp: msg.port,
       disableWeb: true,
       silent: true
     })

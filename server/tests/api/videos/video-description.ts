@@ -3,6 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   flushAndRunMultipleServers,
   getVideo,
   getVideoDescription,
@@ -99,7 +100,7 @@ describe('Test video description', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

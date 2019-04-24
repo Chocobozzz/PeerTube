@@ -15,7 +15,7 @@ import {
   updateVideo,
   uploadVideo,
   wait,
-  searchVideo
+  searchVideo, cleanupTests
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
@@ -149,7 +149,7 @@ describe('Test a ActivityPub videos search', function () {
     expect(res.body.data).to.have.lengthOf(0)
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

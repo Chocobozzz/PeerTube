@@ -2,25 +2,18 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import {
-  flushTests,
-  getVideosList,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
+import { cleanupTests, getVideosList, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils/index'
 import { userLogin } from '../../../../shared/extra-utils/users/login'
 import { createUser } from '../../../../shared/extra-utils/users/users'
 import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import {
+  flushAndRunServer,
   getAccountVideos,
   getConfig,
   getCustomConfig,
   getMyUserInformation,
   getVideoChannelVideos,
   getVideosListWithToken,
-  flushAndRunServer,
   searchVideo,
   searchVideoWithToken,
   updateCustomConfig,
@@ -241,7 +234,7 @@ describe('Test video NSFW policy', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

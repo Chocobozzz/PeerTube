@@ -5,7 +5,7 @@ import 'mocha'
 import { Account } from '../../../../shared/models/actors'
 import {
   checkTmpIsEmpty,
-  checkVideoFilesWereRemoved,
+  checkVideoFilesWereRemoved, cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -235,7 +235,7 @@ describe('Test users with multiple servers', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

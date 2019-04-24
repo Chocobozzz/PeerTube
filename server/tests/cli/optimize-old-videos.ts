@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
@@ -112,7 +113,7 @@ describe('Test optimize old videos', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

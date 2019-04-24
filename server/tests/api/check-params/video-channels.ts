@@ -4,19 +4,16 @@ import * as chai from 'chai'
 import { omit } from 'lodash'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   deleteVideoChannel,
-  flushTests,
+  flushAndRunServer,
   getAccountVideoChannelsList,
-  getMyUserInformation,
-  getVideoChannelsList,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   userLogin
@@ -26,7 +23,6 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { User } from '../../../../shared/models/users'
 import { join } from 'path'
 
 const expect = chai.expect
@@ -310,7 +306,7 @@ describe('Test video channels API validator', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

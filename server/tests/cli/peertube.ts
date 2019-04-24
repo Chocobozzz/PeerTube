@@ -10,7 +10,7 @@ import {
   killallServers,
   flushAndRunServer,
   ServerInfo,
-  setAccessTokensToServers
+  setAccessTokensToServers, cleanupTests
 } from '../../../shared/extra-utils'
 
 describe('Test CLI wrapper', function () {
@@ -46,6 +46,6 @@ describe('Test CLI wrapper', function () {
 
     await execCLI(cmd + ` auth del ${server.url}`)
 
-    killallServers([ server ])
+    await cleanupTests([ server ])
   })
 })

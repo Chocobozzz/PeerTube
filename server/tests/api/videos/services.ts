@@ -2,16 +2,8 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import {
-  flushTests,
-  getOEmbed,
-  getVideosList,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo
-} from '../../../../shared/extra-utils/index'
-import { flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
+import { getOEmbed, getVideosList, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils/index'
+import { cleanupTests, flushAndRunServer } from '../../../../shared/extra-utils/server/servers'
 
 const expect = chai.expect
 
@@ -74,7 +66,7 @@ describe('Test services', function () {
     expect(res.body).to.not.have.property('thumbnail_height')
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

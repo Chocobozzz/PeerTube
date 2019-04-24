@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   registerUser, flushTests, getUserInformation, getMyUserInformation, killallServers,
-  userLogin, login, flushAndRunServer, ServerInfo, verifyEmail, updateCustomSubConfig, wait
+  userLogin, login, flushAndRunServer, ServerInfo, verifyEmail, updateCustomSubConfig, wait, cleanupTests
 } from '../../../../shared/extra-utils'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
@@ -120,8 +120,9 @@ describe('Test users account verification', function () {
     await userLogin(server, user2)
   })
 
-  after(function () {
+  after(async function () {
     MockSmtpServer.Instance.kill()
-    killallServers([ server ])
+
+    await cleanupTests([ server ])
   })
 })

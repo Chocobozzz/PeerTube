@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  addVideoChannel,
+  addVideoChannel, cleanupTests,
   createUser,
   deleteVideoChannel,
   flushAndRunMultipleServers,
@@ -205,7 +205,7 @@ describe('Test a ActivityPub video channels search', function () {
     expect(res.body.data).to.have.lengthOf(0)
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

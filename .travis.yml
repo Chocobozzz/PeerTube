@@ -12,7 +12,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.9
-  postgresql: "9.4"
+  postgresql: "9.6"
 
 cache:
   directories:

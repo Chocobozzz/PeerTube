@@ -6,7 +6,7 @@ import { omit } from 'lodash'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
 import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
-  buildAbsoluteFixturePath,
+  buildAbsoluteFixturePath, cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
@@ -349,7 +349,7 @@ describe('Test video transcoding', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

@@ -4,12 +4,11 @@ import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
 import {
-  flushTests,
+  cleanupTests,
+  flushAndRunServer,
   getCustomConfig,
   getVideosList,
-  killallServers,
   makeHTMLRequest,
-  flushAndRunServer,
   ServerInfo,
   serverLogin,
   updateCustomConfig,
@@ -145,7 +144,7 @@ describe('Test a client controllers', function () {
     checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }')
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

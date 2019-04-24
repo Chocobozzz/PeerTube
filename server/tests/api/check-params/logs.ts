@@ -9,7 +9,8 @@ import {
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  userLogin
+  userLogin,
+  cleanupTests
 } from '../../../../shared/extra-utils'
 import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
 
@@ -104,7 +105,7 @@ describe('Test logs API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

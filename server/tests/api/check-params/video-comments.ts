@@ -3,9 +3,9 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   flushAndRunServer,
-  killallServers,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
@@ -258,7 +258,7 @@ describe('Test video comments API validator', function () {
     it('Should return conflict on comment thread add')
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

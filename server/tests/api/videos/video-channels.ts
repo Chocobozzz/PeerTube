@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { User, Video } from '../../../../shared/index'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -277,7 +278,7 @@ describe('Test video channels', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

@@ -9,7 +9,7 @@ import {
   reRunServer,
   flushAndRunServer,
   ServerInfo,
-  setAccessTokensToServers
+  setAccessTokensToServers, cleanupTests
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
@@ -28,13 +28,14 @@ describe('Test contact form API validators', function () {
     fromEmail: 'toto@example.com',
     body: 'Hello, how are you?'
   }
+  let emailPort: number
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(60000)
 
-    await MockSmtpServer.Instance.collectEmails(emails)
+    emailPort = await MockSmtpServer.Instance.collectEmails(emails)
 
     // Email is disabled
     server = await flushAndRunServer(1)
@@ -50,7 +51,7 @@ describe('Test contact form API validators', function () {
     killallServers([ server ])
 
     // Contact form is disabled
-    await reRunServer(server, { smtp: { hostname: 'localhost' }, contact_form: { enabled: false } })
+    await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort }, contact_form: { enabled: false } })
     await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 409 }))
   })
 
@@ -60,7 +61,7 @@ describe('Test contact form API validators', function () {
     killallServers([ server ])
 
     // Email & contact form enabled
-    await reRunServer(server, { smtp: { hostname: 'localhost' } })
+    await reRunServer(server, { smtp: { hostname: 'localhost', port: emailPort } })
 
     await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromEmail: 'badEmail' }))
     await sendContactForm(immutableAssign(defaultBody, { url: server.url, expectedStatus: 400, fromEmail: 'badEmail@' }))
@@ -83,8 +84,9 @@ describe('Test contact form API validators', function () {
     await sendContactForm(immutableAssign(defaultBody, { url: server.url }))
   })
 
-  after(function () {
+  after(async function () {
     MockSmtpServer.Instance.kill()
-    killallServers([ server ])
+
+    // await cleanupTests([ server ])
   })
 })

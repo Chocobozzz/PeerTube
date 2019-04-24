@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoAbuse, VideoAbuseState } from '../../../../shared/models/videos'
 import {
+  cleanupTests,
   deleteVideoAbuse,
   flushAndRunMultipleServers,
   getVideoAbusesList,
@@ -172,7 +173,7 @@ describe('Test video abuses', function () {
     expect(res.body.data.length).to.equal(0)
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

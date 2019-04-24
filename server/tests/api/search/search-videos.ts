@@ -12,7 +12,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   wait,
-  immutableAssign
+  immutableAssign,
+  cleanupTests
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -405,7 +406,7 @@ describe('Test a videos search', function () {
     }
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

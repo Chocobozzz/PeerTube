@@ -2,8 +2,16 @@
 
 import * as magnetUtil from 'magnet-uri'
 import 'mocha'
-import { getVideo, killallServers, reRunServer, flushAndRunServer, ServerInfo, uploadVideo } from '../../../../shared/extra-utils'
-import { flushTests, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import {
+  cleanupTests,
+  flushAndRunServer,
+  getVideo,
+  killallServers,
+  reRunServer,
+  ServerInfo,
+  uploadVideo
+} from '../../../../shared/extra-utils'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { VideoDetails } from '../../../../shared/models/videos'
 import * as WebTorrent from 'webtorrent'
 
@@ -82,7 +90,7 @@ describe('Test tracker', function () {
       })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

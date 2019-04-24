@@ -5,7 +5,7 @@ import 'mocha'
 import {
   checkDirectoryIsEmpty,
   checkSegmentHash,
-  checkTmpIsEmpty,
+  checkTmpIsEmpty, cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   flushTests,
@@ -128,7 +128,7 @@ describe('Test HLS videos', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

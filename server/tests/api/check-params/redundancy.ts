@@ -3,6 +3,7 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -43,7 +44,7 @@ describe('Test server redundancy API validators', function () {
     it('Should fail with an invalid token', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:9002',
+        path: path + '/localhost:' + servers[1].port,
         fields: { redundancyAllowed: true },
         token: 'fake_token',
         statusCodeExpected: 401
@@ -53,7 +54,7 @@ describe('Test server redundancy API validators', function () {
     it('Should fail if the user is not an administrator', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:9002',
+        path: path + '/localhost:' + servers[1].port,
         fields: { redundancyAllowed: true },
         token: userAccessToken,
         statusCodeExpected: 403
@@ -73,7 +74,7 @@ describe('Test server redundancy API validators', function () {
     it('Should fail without de redundancyAllowed param', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:9002',
+        path: path + '/localhost:' + servers[1].port,
         fields: { blabla: true },
         token: servers[0].accessToken,
         statusCodeExpected: 400
@@ -83,7 +84,7 @@ describe('Test server redundancy API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await makePutBodyRequest({
         url: servers[0].url,
-        path: path + '/localhost:9002',
+        path: path + '/localhost:' + servers[1].port,
         fields: { redundancyAllowed: true },
         token: servers[0].accessToken,
         statusCodeExpected: 204
@@ -91,7 +92,7 @@ describe('Test server redundancy API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

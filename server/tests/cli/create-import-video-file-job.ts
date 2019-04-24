@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails, VideoFile } from '../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
@@ -130,7 +131,7 @@ describe('Test create import video jobs', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

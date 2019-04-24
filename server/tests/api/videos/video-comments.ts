@@ -3,11 +3,9 @@
 import * as chai from 'chai'
 import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { testImage } from '../../../../shared/extra-utils'
+import { cleanupTests, testImage } from '../../../../shared/extra-utils'
 import {
   dateIsValid,
-  flushTests,
-  killallServers,
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -199,7 +197,7 @@ describe('Test video comments', function () {
     expect(res.body.data[1].totalReplies).to.equal(0)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

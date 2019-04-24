@@ -6,8 +6,9 @@ import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
   checkVideoFilesWereRemoved,
+  cleanupTests,
   completeVideoCheck,
-  flushTests,
+  flushAndRunServer,
   getVideo,
   getVideoCategories,
   getVideoLanguages,
@@ -17,10 +18,8 @@ import {
   getVideosListPagination,
   getVideosListSort,
   getVideosWithFilters,
-  killallServers,
   rateVideo,
   removeVideo,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
@@ -424,7 +423,7 @@ describe('Test a single server', function () {
     expect(video.dislikes).to.equal(1)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

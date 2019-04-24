@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  acceptFollower,
+  acceptFollower, cleanupTests,
   flushAndRunMultipleServers,
   killallServers,
   ServerInfo,
@@ -189,7 +189,7 @@ describe('Test follows moderation', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

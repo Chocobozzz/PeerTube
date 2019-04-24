@@ -3,6 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -207,7 +208,7 @@ describe('Test syndication feeds', () => {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

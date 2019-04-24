@@ -3,20 +3,20 @@
 import 'mocha'
 import {
   addVideoInPlaylist,
+  cleanupTests,
   createVideoPlaylist,
   deleteVideoPlaylist,
-  flushTests,
+  flushAndRunServer,
   generateUserAccessToken,
   getAccountPlaylistsListWithToken,
   getVideoPlaylist,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   removeVideoFromPlaylist,
   reorderVideosPlaylist,
-  flushAndRunServer,
   ServerInfo,
-  setAccessTokensToServers, setDefaultVideoChannel,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
   updateVideoPlaylist,
   updateVideoPlaylistElement,
   uploadVideoAndGetId
@@ -668,7 +668,7 @@ describe('Test video playlists API validator', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

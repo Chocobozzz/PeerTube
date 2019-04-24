@@ -3,10 +3,9 @@
 import 'mocha'
 
 import {
-  flushTests,
-  killallServers,
-  makeGetRequest,
+  cleanupTests,
   flushAndRunServer,
+  makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -40,47 +39,47 @@ describe('Test services API validators', function () {
     })
 
     it('Should fail with an invalid video id', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/blabla'
+      const embedUrl = `http://localhost:${server.port}/videos/watch/blabla`
       await checkParamEmbed(server, embedUrl)
     })
 
     it('Should fail with an unknown video', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/88fc0165-d1f0-4a35-a51a-3b47f668689c'
+      const embedUrl = `http://localhost:${server.port}/videos/watch/88fc0165-d1f0-4a35-a51a-3b47f668689c`
       await checkParamEmbed(server, embedUrl, 404)
     })
 
     it('Should fail with an invalid path', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watchs/' + server.video.uuid
+      const embedUrl = `http://localhost:${server.port}/videos/watchs/${server.video.uuid}`
 
       await checkParamEmbed(server, embedUrl)
     })
 
     it('Should fail with an invalid max height', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, 400, { maxheight: 'hello' })
     })
 
     it('Should fail with an invalid max width', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, 400, { maxwidth: 'hello' })
     })
 
     it('Should fail with an invalid format', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, 400, { format: 'blabla' })
     })
 
     it('Should fail with a non supported format', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
 
       await checkParamEmbed(server, embedUrl, 501, { format: 'xml' })
     })
 
     it('Should succeed with the correct params', async function () {
-      const embedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+      const embedUrl = `http://localhost:${server.port}/videos/watch/${server.video.uuid}`
       const query = {
         format: 'json',
         maxheight: 400,
@@ -91,8 +90,8 @@ describe('Test services API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })
 

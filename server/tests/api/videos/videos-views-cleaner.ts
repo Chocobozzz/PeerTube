@@ -10,7 +10,7 @@ import {
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs
+  uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs, cleanupTests
 } from '../../../../shared/extra-utils'
 import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
@@ -100,7 +100,7 @@ describe('Test video views cleaner', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

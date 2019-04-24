@@ -9,7 +9,7 @@ import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/
 import {
   addVideoChannel,
   checkTmpIsEmpty,
-  checkVideoFilesWereRemoved,
+  checkVideoFilesWereRemoved, cleanupTests,
   completeVideoCheck,
   createUser,
   dateIsValid,
@@ -1029,7 +1029,7 @@ describe('Test multiple servers', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

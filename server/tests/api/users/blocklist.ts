@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { AccountBlock, ServerBlock, Video } from '../../../../shared/index'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -498,7 +499,7 @@ describe('Test blocklist', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { cleanupTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { flushAndRunMultipleServers } from '../../../../shared/extra-utils/server/servers'
@@ -56,7 +56,7 @@ describe('Test jobs', function () {
     expect(dateIsValid(job.finishedOn)).to.be.true
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

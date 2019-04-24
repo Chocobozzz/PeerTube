@@ -2,7 +2,7 @@
 
 import 'mocha'
 
-import { flushTests, immutableAssign, killallServers, makeGetRequest, flushAndRunServer, ServerInfo } from '../../../../shared/extra-utils'
+import { cleanupTests, flushAndRunServer, immutableAssign, makeGetRequest, ServerInfo } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
@@ -144,7 +144,7 @@ describe('Test videos API validator', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

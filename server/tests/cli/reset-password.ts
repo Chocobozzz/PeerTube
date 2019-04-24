@@ -1,13 +1,12 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
   execCLI,
-  flushTests,
-  getEnvCli,
-  killallServers,
-  login,
   flushAndRunServer,
+  getEnvCli,
+  login,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
@@ -32,7 +31,7 @@ describe('Test reset password scripts', function () {
     await login(server.url, server.client, { username: 'user_1', password: 'coucou' }, 200)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

@@ -5,15 +5,15 @@ import * as chai from 'chai'
 import { About } from '../../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import {
+  cleanupTests,
   deleteCustomConfig,
+  flushAndRunServer,
   getAbout,
-  killallServers,
-  reRunServer,
-  flushTests,
   getConfig,
   getCustomConfig,
+  killallServers,
   registerUser,
-  flushAndRunServer,
+  reRunServer,
   setAccessTokensToServers,
   updateCustomConfig
 } from '../../../../shared/extra-utils'
@@ -300,7 +300,7 @@ describe('Test config', function () {
     checkInitialConfig(data)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

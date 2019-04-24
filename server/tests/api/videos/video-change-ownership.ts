@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   acceptChangeOwnership,
-  changeVideoOwnership,
+  changeVideoOwnership, cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -297,7 +297,7 @@ describe('Test video change ownership - quota too small', function () {
     await acceptChangeOwnership(server.url, secondUserAccessToken, lastRequestChangeOwnershipId, channelId, 403)
   })
 
-  after(function () {
-    killallServers([server])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

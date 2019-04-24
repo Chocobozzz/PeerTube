@@ -5,9 +5,10 @@ import 'mocha'
 import { User, UserRole } from '../../../../shared/index'
 import {
   blockUser,
+  cleanupTests,
   createUser,
   deleteMe,
-  flushTests,
+  flushAndRunServer,
   getAccountRatings,
   getBlacklistedVideosList,
   getMyUserInformation,
@@ -17,14 +18,12 @@ import {
   getUsersList,
   getUsersListPaginationAndSort,
   getVideosList,
-  killallServers,
   login,
   makePutBodyRequest,
   rateVideo,
   registerUser,
   removeUser,
   removeVideo,
-  flushAndRunServer,
   ServerInfo,
   testImage,
   unblockUser,
@@ -677,7 +676,7 @@ describe('Test users', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

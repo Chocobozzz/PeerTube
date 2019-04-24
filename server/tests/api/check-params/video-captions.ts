@@ -2,13 +2,12 @@
 
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
-  flushTests,
-  killallServers,
+  flushAndRunServer,
   makeDeleteRequest,
   makeGetRequest,
   makeUploadRequest,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
@@ -269,7 +268,7 @@ describe('Test video captions API validator', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

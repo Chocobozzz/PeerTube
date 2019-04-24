@@ -7,6 +7,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 import {
+  cleanupTests,
   completeVideoCheck,
   flushAndRunMultipleServers,
   getVideo,
@@ -296,7 +297,7 @@ describe('Test handle downs', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

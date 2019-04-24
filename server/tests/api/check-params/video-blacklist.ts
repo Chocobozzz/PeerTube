@@ -3,6 +3,7 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -247,7 +248,7 @@ describe('Test video blacklist API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

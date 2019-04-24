@@ -3,12 +3,13 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
-  flushTests,
+  flushAndRunServer,
   getVideosListWithToken,
   getVideoWithToken,
-  killallServers, reRunServer,
-  flushAndRunServer,
+  killallServers,
+  reRunServer,
   searchVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
@@ -220,7 +221,7 @@ describe('Test videos history', function () {
     expect(res.body.total).to.equal(0)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

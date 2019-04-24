@@ -2,28 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/server/about.model'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-import {
-  deleteCustomConfig,
-  getAbout,
-  getVideo,
-  killallServers,
-  login,
-  reRunServer,
-  uploadVideo,
-  userLogin,
-  viewVideo,
-  wait
-} from '../../../../shared/extra-utils'
-const expect = chai.expect
+import { cleanupTests, getVideo, uploadVideo, userLogin, viewVideo, wait } from '../../../../shared/extra-utils'
+import { flushAndRunServer, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 
-import {
-  getConfig,
-  flushTests,
-  flushAndRunServer,
-  registerUser, getCustomConfig, setAccessTokensToServers, updateCustomConfig
-} from '../../../../shared/extra-utils/index'
+const expect = chai.expect
 
 describe('Test application behind a reverse proxy', function () {
   let server = null
@@ -100,7 +82,7 @@ describe('Test application behind a reverse proxy', function () {
     await userLogin(server, user, 429)
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

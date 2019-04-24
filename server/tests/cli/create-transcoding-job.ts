@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
@@ -124,7 +125,7 @@ describe('Test create transcoding jobs', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import { orderBy } from 'lodash'
 import 'mocha'
 import {
-  addVideoToBlacklist,
+  addVideoToBlacklist, cleanupTests,
   createUser,
   flushAndRunMultipleServers,
   getBlacklistedVideosList,
@@ -425,7 +425,7 @@ describe('Test video blacklist', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

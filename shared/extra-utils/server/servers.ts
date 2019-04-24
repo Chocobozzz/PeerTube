@@ -3,10 +3,11 @@
 import { ChildProcess, exec, fork } from 'child_process'
 import { join } from 'path'
 import { root, wait } from '../miscs/miscs'
-import { readdir, readFile } from 'fs-extra'
+import { copy, readdir, readFile, remove } from 'fs-extra'
 import { existsSync } from 'fs'
 import { expect } from 'chai'
 import { VideoChannel } from '../../models/videos'
+import { randomInt } from '../../core-utils/miscs/miscs'
 
 interface ServerInfo {
   app: ChildProcess,
@@ -29,6 +30,8 @@ interface ServerInfo {
     email?: string
   }
 
+  customConfigFile?: string
+
   accessToken?: string
   videoChannel?: VideoChannel
 
@@ -47,6 +50,10 @@ interface ServerInfo {
   }
 
   videos?: { id: number, uuid: string }[]
+}
+
+function parallelTests () {
+  return process.env.MOCHA_PARALLEL === 'true'
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
@@ -84,23 +91,23 @@ function randomServer () {
   const low = 10
   const high = 10000
 
-  return Math.floor(Math.random() * (high - low) + low)
+  return randomInt(low, high)
 }
 
 async function flushAndRunServer (serverNumber: number, configOverride?: Object, args = []) {
-  const parallel = process.env.MOCHA_PARALLEL === 'true'
+  const parallel = parallelTests()
 
   const internalServerNumber = parallel ? randomServer() : serverNumber
   const port = 9000 + internalServerNumber
 
-  await flushTests(serverNumber)
+  await flushTests(internalServerNumber)
 
   const server: ServerInfo = {
     app: null,
     port,
     internalServerNumber,
     parallel,
-    serverNumber: internalServerNumber,
+    serverNumber,
     url: `http://localhost:${port}`,
     host: `localhost:${port}`,
     client: {
@@ -116,7 +123,7 @@ async function flushAndRunServer (serverNumber: number, configOverride?: Object,
   return runServer(server, configOverride, args)
 }
 
-function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
+async function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
     'Server listening': false
@@ -131,15 +138,19 @@ function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
     user_password: 'User password: (.+)'
   }
 
-  // Share the environment
-  const env = Object.create(process.env)
-  env['NODE_ENV'] = 'test'
-  env['NODE_APP_INSTANCE'] = server.serverNumber.toString()
+  if (server.internalServerNumber !== server.serverNumber) {
+    const basePath = join(root(), 'config')
 
-  let configOverride: any = {}
+    const tmpConfigFile = join(basePath, `test-${server.internalServerNumber}.yaml`)
+    await copy(join(basePath, `test-${server.serverNumber}.yaml`), tmpConfigFile)
+
+    server.customConfigFile = tmpConfigFile
+  }
+
+  const configOverride: any = {}
 
   if (server.parallel) {
-    configOverride = {
+    Object.assign(configOverride, {
       listen: {
         port: server.port
       },
@@ -165,18 +176,22 @@ function runServer (server: ServerInfo, configOverrideArg?: any, args = []) {
       admin: {
         email: `admin${server.internalServerNumber}@example.com`
       }
-    }
+    })
   }
 
   if (configOverrideArg !== undefined) {
     Object.assign(configOverride, configOverrideArg)
   }
 
+  // Share the environment
+  const env = Object.create(process.env)
+  env['NODE_ENV'] = 'test'
+  env['NODE_APP_INSTANCE'] = server.internalServerNumber.toString()
   env['NODE_CONFIG'] = JSON.stringify(configOverride)
 
   const options = {
     silent: true,
-    env: env,
+    env,
     detached: true
   }
 
@@ -244,7 +259,10 @@ async function checkDirectoryIsEmpty (server: ServerInfo, directory: string) {
 
 function killallServers (servers: ServerInfo[]) {
   for (const server of servers) {
+    if (!server.app) continue
+
     process.kill(-server.app.pid)
+    server.app = null
   }
 }
 
@@ -255,6 +273,10 @@ function cleanupTests (servers: ServerInfo[]) {
   for (const server of servers) {
     if (server.parallel) {
       p.push(flushTests(server.internalServerNumber))
+    }
+
+    if (server.customConfigFile) {
+      p.push(remove(server.customConfigFile))
     }
   }
 
@@ -280,6 +302,7 @@ export {
   checkDirectoryIsEmpty,
   checkTmpIsEmpty,
   ServerInfo,
+  parallelTests,
   cleanupTests,
   flushAndRunMultipleServers,
   flushTests,

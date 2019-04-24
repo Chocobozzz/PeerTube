@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { completeVideoCheck } from '../../../../shared/extra-utils'
+import { cleanupTests, completeVideoCheck } from '../../../../shared/extra-utils'
 import {
   flushAndRunMultipleServers,
   getVideosList,
@@ -435,7 +435,7 @@ describe('Test follows', function () {
 
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

@@ -3,13 +3,12 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
   deleteVideoAbuse,
-  flushTests,
-  killallServers,
+  flushAndRunServer,
   makeGetRequest,
   makePostBodyRequest,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   updateVideoAbuse,
@@ -188,7 +187,7 @@ describe('Test video abuses API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

@@ -2,7 +2,14 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, killallServers, flushAndRunServer, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import {
+  flushTests,
+  killallServers,
+  flushAndRunServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  cleanupTests
+} from '../../../../shared/extra-utils/index'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { uploadVideo } from '../../../../shared/extra-utils/videos/videos'
 import { getLogs } from '../../../../shared/extra-utils/logs/logs'
@@ -84,7 +91,7 @@ describe('Test logs', function () {
     }
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

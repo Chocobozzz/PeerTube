@@ -12,7 +12,7 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo
+  uploadVideo, cleanupTests
 } from '../../../../shared/extra-utils'
 import { unfollow } from '../../../../shared/extra-utils/server/follows'
 import { userLogin } from '../../../../shared/extra-utils/users/login'
@@ -219,7 +219,7 @@ describe('Test follow constraints', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

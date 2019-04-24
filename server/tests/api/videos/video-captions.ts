@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  checkVideoFilesWereRemoved,
+  checkVideoFilesWereRemoved, cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   removeVideo,
@@ -195,7 +195,7 @@ describe('Test video captions', function () {
     await checkVideoFilesWereRemoved(videoUUID, 1)
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

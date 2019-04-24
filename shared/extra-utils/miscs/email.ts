@@ -1,4 +1,6 @@
-import { fork, ChildProcess } from 'child_process'
+import { ChildProcess, fork } from 'child_process'
+import { randomInt } from '../../core-utils/miscs/miscs'
+import { parallelTests } from '../server/servers'
 
 class MockSmtpServer {
 
@@ -20,7 +22,9 @@ class MockSmtpServer {
   }
 
   collectEmails (emailsCollection: object[]) {
-    return new Promise((res, rej) => {
+    return new Promise<number>((res, rej) => {
+      const port = parallelTests() ? randomInt(1000, 2000) : 1025
+
       if (this.started) {
         this.emails = emailsCollection
         return res()
@@ -28,7 +32,7 @@ class MockSmtpServer {
 
       // ensure maildev isn't started until
       // unexpected exit can be reported to test runner
-      this.emailChildProcess.send({ start: true })
+      this.emailChildProcess.send({ start: true, port })
       this.emailChildProcess.on('exit', () => {
         return rej(new Error('maildev exited unexpectedly, confirm port not in use'))
       })
@@ -38,7 +42,7 @@ class MockSmtpServer {
         }
         this.started = true
         this.emails = emailsCollection
-        return res()
+        return res(port)
       })
     })
   }

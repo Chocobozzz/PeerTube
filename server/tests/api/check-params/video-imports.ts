@@ -5,15 +5,14 @@ import 'mocha'
 import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
+  cleanupTests,
   createUser,
-  flushTests,
+  flushAndRunServer,
   getMyUserInformation,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   updateCustomSubConfig,
@@ -311,7 +310,7 @@ describe('Test video imports API validator', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

@@ -5,12 +5,11 @@ import 'mocha'
 import {
   checkBadCountPagination,
   checkBadStartPagination,
-  flushTests,
-  killallServers,
+  cleanupTests,
+  flushAndRunServer,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -126,7 +125,7 @@ describe('Test videos history API validator', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

@@ -6,7 +6,7 @@ import { CustomConfig } from '../../../../shared/models/server/custom-config.mod
 
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, flushAndRunServer, ServerInfo,
-  setAccessTokensToServers, userLogin, immutableAssign
+  setAccessTokensToServers, userLogin, immutableAssign, cleanupTests
 } from '../../../../shared/extra-utils'
 
 describe('Test config API validators', function () {
@@ -181,7 +181,7 @@ describe('Test config API validators', function () {
     })
 
     it('Should fail if email disabled and signup requires email verification', async function () {
-      // opposite scenario - succcess when enable enabled - covered via tests/api/users/user-verification.ts
+      // opposite scenario - success when enable enabled - covered via tests/api/users/user-verification.ts
       const newUpdateParams = immutableAssign(updateParams, {
         signup: {
           enabled: true,
@@ -229,7 +229,7 @@ describe('Test config API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

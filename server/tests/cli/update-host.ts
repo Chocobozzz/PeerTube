@@ -7,17 +7,17 @@ import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import {
   addVideoChannel,
+  cleanupTests,
   createUser,
   execCLI,
-  flushTests,
+  flushAndRunServer,
   getEnvCli,
   getVideo,
   getVideoChannelsList,
   getVideosList,
   killallServers,
   makeActivityPubGetRequest,
-  parseTorrentVideo,
-  flushAndRunServer,
+  parseTorrentVideo, reRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -70,7 +70,7 @@ describe('Test update host scripts', function () {
 
     killallServers([ server ])
     // Run server with standard configuration
-    server = await flushAndRunServer(2)
+    await reRunServer(server)
 
     const env = getEnvCli(server)
     await execCLI(`${env} npm run update-host`)
@@ -146,7 +146,7 @@ describe('Test update host scripts', function () {
     }
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

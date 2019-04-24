@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   getMyVideos,
@@ -165,7 +166,7 @@ describe('Test video update scheduler', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

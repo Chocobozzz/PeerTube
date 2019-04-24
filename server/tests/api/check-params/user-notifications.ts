@@ -4,13 +4,12 @@ import 'mocha'
 import * as io from 'socket.io-client'
 
 import {
-  flushTests,
+  cleanupTests,
+  flushAndRunServer,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   wait
@@ -234,7 +233,7 @@ describe('Test user notifications API validators', function () {
 
   describe('When connecting to my notification socket', function () {
     it('Should fail with no token', function (next) {
-      const socket = io('http://localhost:9001/user-notifications', { reconnection: false })
+      const socket = io(`http://localhost:${server.port}/user-notifications`, { reconnection: false })
 
       socket.on('error', () => {
         socket.removeListener('error', this)
@@ -249,7 +248,7 @@ describe('Test user notifications API validators', function () {
     })
 
     it('Should fail with an invalid token', function (next) {
-      const socket = io('http://localhost:9001/user-notifications', {
+      const socket = io(`http://localhost:${server.port}/user-notifications`, {
         query: { accessToken: 'bad_access_token' },
         reconnection: false
       })
@@ -267,7 +266,7 @@ describe('Test user notifications API validators', function () {
     })
 
     it('Should success with the correct token', function (next) {
-      const socket = io('http://localhost:9001/user-notifications', {
+      const socket = io(`http://localhost:${server.port}/user-notifications`, {
         query: { accessToken: server.accessToken },
         reconnection: false
       })
@@ -286,7 +285,7 @@ describe('Test user notifications API validators', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

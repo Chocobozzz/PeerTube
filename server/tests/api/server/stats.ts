@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -95,7 +96,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalInstanceFollowers).to.equal(0)
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

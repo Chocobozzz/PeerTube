@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
+  cleanupTests,
   flushAndRunMultipleServers,
   getVideosList,
   killallServers,
@@ -152,7 +153,7 @@ describe('Test video privacy', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

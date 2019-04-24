@@ -19,7 +19,7 @@ import {
   userLogin,
   wait,
   getCustomConfig,
-  updateCustomConfig, getVideoThreadComments, getVideoCommentThreads, follow
+  updateCustomConfig, getVideoThreadComments, getVideoCommentThreads, follow, cleanupTests
 } from '../../../../shared/extra-utils'
 import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
@@ -1295,9 +1295,9 @@ describe('Test users notifications', function () {
     })
   })
 
-  after(function () {
+  after(async function () {
     MockSmtpServer.Instance.kill()
 
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

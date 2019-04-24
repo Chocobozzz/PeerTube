@@ -2,7 +2,15 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, killallServers, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/extra-utils'
+import {
+  flushTests,
+  killallServers,
+  flushAndRunServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  wait,
+  cleanupTests
+} from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'
@@ -78,8 +86,9 @@ describe('Test contact form', function () {
     })
   })
 
-  after(function () {
+  after(async function () {
     MockSmtpServer.Instance.kill()
-    killallServers([ server ])
+
+    await cleanupTests([ server ])
   })
 })

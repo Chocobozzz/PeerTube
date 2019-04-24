@@ -4,11 +4,10 @@ import 'mocha'
 import * as chai from 'chai'
 import {
   addVideoChannel,
+  cleanupTests,
   createUser,
-  flushTests,
-  killallServers,
-  makeGetRequest,
   flushAndRunServer,
+  makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -171,7 +170,7 @@ describe('Test misc endpoints', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

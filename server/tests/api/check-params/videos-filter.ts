@@ -2,14 +2,14 @@
 
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   createVideoPlaylist,
-  flushTests,
-  killallServers,
-  makeGetRequest,
   flushAndRunServer,
+  makeGetRequest,
   ServerInfo,
-  setAccessTokensToServers, setDefaultVideoChannel,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
   userLogin
 } from '../../../../shared/extra-utils'
 import { UserRole } from '../../../../shared/models/users'
@@ -129,7 +129,7 @@ describe('Test videos filters', function () {
     })
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

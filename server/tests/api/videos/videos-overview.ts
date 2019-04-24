@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushAndRunServer, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils'
 import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
 
@@ -87,7 +87,7 @@ describe('Test a videos overview', function () {
     expect(overview.channels[0].channel.name).to.equal('root_channel')
   })
 
-  after(function () {
-    killallServers([ server ])
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

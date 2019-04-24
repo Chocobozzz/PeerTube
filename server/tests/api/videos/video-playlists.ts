@@ -5,7 +5,7 @@ import 'mocha'
 import {
   addVideoChannel,
   addVideoInPlaylist,
-  checkPlaylistFilesWereRemoved,
+  checkPlaylistFilesWereRemoved, cleanupTests,
   createUser,
   createVideoPlaylist,
   deleteVideoChannel,
@@ -860,7 +860,7 @@ describe('Test video playlists', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })
