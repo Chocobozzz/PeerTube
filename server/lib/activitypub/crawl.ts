@@ -1,8 +1,10 @@
-import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT } from '../../initializers/constants'
+import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT, WEBSERVER } from '../../initializers/constants'
 import { doRequest } from '../../helpers/requests'
 import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
+import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { parse } from "url"
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
 type CleanerFunction = (startedDate: Date) => (Promise<any> | Bluebird<any>)
@@ -27,6 +29,10 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
   let i = 0
   let nextLink = firstBody.first
   while (nextLink && i < limit) {
+    // Don't crawl ourselves
+    const remoteHost = parse(nextLink).host
+    if (remoteHost === WEBSERVER.HOST) continue
+
     options.uri = nextLink
 
     const { body } = await doRequest<ActivityPubOrderedCollection<T>>(options)

@@ -4,24 +4,27 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   addVideoToBlacklist,
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
+  follow,
+  getCustomConfig,
   getMyUserInformation,
+  getVideoCommentThreads,
+  getVideoThreadComments,
   immutableAssign,
   registerUser,
   removeVideoFromBlacklist,
   reportVideoAbuse,
+  updateCustomConfig,
   updateMyUser,
   updateVideo,
   updateVideoChannel,
   userLogin,
-  wait,
-  getCustomConfig,
-  updateCustomConfig, getVideoThreadComments, getVideoCommentThreads, follow, cleanupTests
+  wait
 } from '../../../../shared/extra-utils'
-import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
+import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getUserNotificationSocket } from '../../../../shared/extra-utils/socket/socket-io'
@@ -32,16 +35,17 @@ import {
   checkNewActorFollow,
   checkNewBlacklistOnMyVideo,
   checkNewCommentOnMyVideo,
+  checkNewInstanceFollower,
   checkNewVideoAbuseForModerators,
-  checkVideoAutoBlacklistForModerators,
   checkNewVideoFromSubscription,
   checkUserRegistered,
+  checkVideoAutoBlacklistForModerators,
   checkVideoIsPublished,
   getLastNotification,
   getUserNotifications,
+  markAsReadAllNotifications,
   markAsReadNotifications,
-  updateMyNotificationSettings,
-  markAsReadAllNotifications, checkNewInstanceFollower
+  updateMyNotificationSettings
 } from '../../../../shared/extra-utils/users/user-notifications'
 import {
   User,
@@ -879,7 +883,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should send a notification only to admin when there is a new instance follower', async function () {
-      this.timeout(10000)
+      this.timeout(20000)
 
       await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
 
