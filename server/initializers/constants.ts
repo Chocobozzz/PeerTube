@@ -281,12 +281,12 @@ let CONSTRAINTS_FIELDS = {
 
 const RATES_LIMIT = {
   LOGIN: {
-    WINDOW_MS: 5 * 60 * 1000, // 5 minutes
-    MAX: 15 // 15 attempts
+    WINDOW_MS: config.get<number>('webserver.rates_limit.login.window_ms'),
+    MAX: config.get<number>('webserver.rates_limit.login.max')
   },
   ASK_SEND_EMAIL: {
-    WINDOW_MS: 5 * 60 * 1000, // 5 minutes
-    MAX: 3 // 3 attempts
+    WINDOW_MS: config.get<number>('webserver.rates_limit.ask_send_email.window_ms'),
+    MAX: config.get<number>('webserver.rates_limit.ask_send_email.max')
   }
 }
 
