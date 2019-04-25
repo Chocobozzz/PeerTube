@@ -1,22 +1,25 @@
 import * as program from 'commander'
 import * as prompt from 'prompt'
-const Table = require('cli-table')
-import { getSettings, writeSettings, netrc } from './cli'
+import { getSettings, writeSettings, getNetrc } from './cli'
 import { isHostValid } from '../helpers/custom-validators/servers'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
 
+const Table = require('cli-table')
+
 async function delInstance (url: string) {
-  const settings = await getSettings()
+  const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
   settings.remotes.splice(settings.remotes.indexOf(url))
   await writeSettings(settings)
 
   delete netrc.machines[url]
+
   await netrc.save()
 }
 
 async function setInstance (url: string, username: string, password: string) {
-  const settings = await getSettings()
+  const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
+
   if (settings.remotes.indexOf(url) === -1) {
     settings.remotes.push(url)
   }
@@ -82,12 +85,13 @@ program
   .command('list')
   .description('lists registered remote instances')
   .action(async () => {
-    const settings = await getSettings()
+    const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
+
     const table = new Table({
       head: ['instance', 'login'],
       colWidths: [30, 30]
     })
-    netrc.loadSync()
+
     settings.remotes.forEach(element => {
       table.push([
         element,

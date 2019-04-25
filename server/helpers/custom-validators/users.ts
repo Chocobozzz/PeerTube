@@ -1,10 +1,9 @@
 import 'express-validator'
 import * as validator from 'validator'
-import { UserNotificationSettingValue, UserRole } from '../../../shared'
+import { UserRole } from '../../../shared'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
-import { exists, isFileValid, isBooleanValid } from './misc'
+import { exists, isBooleanValid, isFileValid } from './misc'
 import { values } from 'lodash'
-import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 

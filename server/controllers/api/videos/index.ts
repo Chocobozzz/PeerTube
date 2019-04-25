@@ -182,7 +182,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     nsfw: videoInfo.nsfw || false,
     description: videoInfo.description,
     support: videoInfo.support,
-    privacy: videoInfo.privacy,
+    privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
     duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
     channelId: res.locals.videoChannel.id,
     originallyPublishedAt: videoInfo.originallyPublishedAt
