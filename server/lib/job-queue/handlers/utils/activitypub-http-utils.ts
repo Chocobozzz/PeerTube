@@ -28,7 +28,7 @@ async function buildSignedRequestOptions (payload: Payload) {
     actor = await getServerActor()
   }
 
-  const keyId = actor.getWebfingerUrl()
+  const keyId = actor.url
   return {
     algorithm: HTTP_SIGNATURE.ALGORITHM,
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,

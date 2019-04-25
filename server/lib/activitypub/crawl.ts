@@ -3,8 +3,7 @@ import { doRequest } from '../../helpers/requests'
 import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
-import { checkUrlsSameHost } from '../../helpers/activitypub'
-import { parse } from "url"
+import { parse } from 'url'
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
 type CleanerFunction = (startedDate: Date) => (Promise<any> | Bluebird<any>)

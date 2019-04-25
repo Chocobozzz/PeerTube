@@ -74,6 +74,8 @@ async function checkHttpSignature (req: Request, res: Response) {
 
   const verified = isHTTPSignatureVerified(parsed, actor)
   if (verified !== true) {
+    logger.warn('Signature from %s is invalid', actorUrl, { parsed })
+
     res.sendStatus(403)
     return false
   }
