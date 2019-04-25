@@ -19,6 +19,7 @@ import { ToastModule } from 'primeng/toast'
 import { Notifier } from './notification'
 import { MessageService } from 'primeng/api'
 import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
+import { ServerConfigResolver } from './routing/server-config-resolver.service'
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { UserNotificationSocket } from '@app/core/notification/user-notification
     RedirectService,
     Notifier,
     MessageService,
-    UserNotificationSocket
+    UserNotificationSocket,
+    ServerConfigResolver
   ]
 })
 export class CoreModule {

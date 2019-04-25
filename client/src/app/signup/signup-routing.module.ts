@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-
 import { MetaGuard } from '@ngx-meta/core'
-
 import { SignupComponent } from './signup.component'
+import { ServerConfigResolver } from '@app/core/routing/server-config-resolver.service'
 
 const signupRoutes: Routes = [
   {
@@ -14,6 +13,9 @@ const signupRoutes: Routes = [
       meta: {
         title: 'Signup'
       }
+    },
+    resolve: {
+      serverConfigLoaded: ServerConfigResolver
     }
   }
 ]
