@@ -153,7 +153,7 @@ export class AuthService {
       response_type: 'code',
       grant_type: 'password',
       scope: 'upload',
-      username,
+      username: username.toLowerCase(),
       password
     }
 
