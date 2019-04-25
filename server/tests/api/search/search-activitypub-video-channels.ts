@@ -24,7 +24,7 @@ import { searchVideoChannel } from '../../../../shared/extra-utils/search/video-
 
 const expect = chai.expect
 
-describe('Test a ActivityPub video channels search', function () {
+describe('Test ActivityPub video channels search', function () {
   let servers: ServerInfo[]
   let userServer2Token: string
   let videoServer2UUID: string

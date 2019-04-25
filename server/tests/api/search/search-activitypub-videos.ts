@@ -22,7 +22,7 @@ import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
-describe('Test a ActivityPub videos search', function () {
+describe('Test ActivityPub videos search', function () {
   let servers: ServerInfo[]
   let videoServer1UUID: string
   let videoServer2UUID: string

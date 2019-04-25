@@ -18,7 +18,7 @@ import {
 
 const expect = chai.expect
 
-describe('Test a videos search', function () {
+describe('Test videos search', function () {
   let server: ServerInfo = null
   let startDate: string
 
