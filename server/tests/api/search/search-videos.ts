@@ -4,16 +4,14 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   advancedVideosSearch,
-  flushTests,
-  killallServers,
+  cleanupTests,
   flushAndRunServer,
+  immutableAssign,
   searchVideo,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  wait,
-  immutableAssign,
-  cleanupTests
+  wait
 } from '../../../../shared/extra-utils'
 
 const expect = chai.expect

@@ -213,7 +213,7 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const channelURI = 'second_video_channel@localhost:9001'
+      const channelURI = 'second_video_channel@localhost:' + server.port
       const res1 = await getVideoChannelVideos(server.url, server.accessToken, channelURI, 0, 5)
       expect(res1.body.total).to.equal(1)
       expect(res1.body.data).to.be.an('array')
@@ -234,11 +234,11 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const secondChannelURI = 'second_video_channel@localhost:9001'
+      const secondChannelURI = 'second_video_channel@localhost:' + server.port
       const res1 = await getVideoChannelVideos(server.url, server.accessToken, secondChannelURI, 0, 5)
       expect(res1.body.total).to.equal(0)
 
-      const channelURI = 'root_channel@localhost:9001'
+      const channelURI = 'root_channel@localhost:' + server.port
       const res2 = await getVideoChannelVideos(server.url, server.accessToken, channelURI, 0, 5)
       expect(res2.body.total).to.equal(1)
 

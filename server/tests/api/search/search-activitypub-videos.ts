@@ -4,18 +4,17 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   addVideoChannel,
+  cleanupTests,
   flushAndRunMultipleServers,
-  flushTests,
   getVideosList,
-  killallServers,
   removeVideo,
+  searchVideo,
   searchVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
   updateVideo,
   uploadVideo,
-  wait,
-  searchVideo, cleanupTests
+  wait
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
@@ -49,7 +48,8 @@ describe('Test ActivityPub videos search', function () {
 
   it('Should not find a remote video', async function () {
     {
-      const res = await searchVideoWithToken(servers[ 0 ].url, 'http://localhost:9002/videos/watch/43', servers[ 0 ].accessToken)
+      const search = 'http://localhost:' + servers[1].port + '/videos/watch/43'
+      const res = await searchVideoWithToken(servers[ 0 ].url, search, servers[ 0 ].accessToken)
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
@@ -58,7 +58,8 @@ describe('Test ActivityPub videos search', function () {
 
     {
       // Without token
-      const res = await searchVideo(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID)
+      const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+      const res = await searchVideo(servers[0].url, search)
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
@@ -67,7 +68,8 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should search a local video', async function () {
-    const res = await searchVideo(servers[0].url, 'http://localhost:9001/videos/watch/' + videoServer1UUID)
+    const search = 'http://localhost:' + servers[0].port + '/videos/watch/' + videoServer1UUID
+    const res = await searchVideo(servers[0].url, search)
 
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.be.an('array')
@@ -76,7 +78,8 @@ describe('Test ActivityPub videos search', function () {
   })
 
   it('Should search a remote video', async function () {
-    const res = await searchVideoWithToken(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID, servers[0].accessToken)
+    const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+    const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
 
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.be.an('array')
@@ -114,12 +117,13 @@ describe('Test ActivityPub videos search', function () {
     await wait(10000)
 
     // Will run refresh async
-    await searchVideoWithToken(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID, servers[0].accessToken)
+    const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+    await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
 
     // Wait refresh
     await wait(5000)
 
-    const res = await searchVideoWithToken(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID, servers[0].accessToken)
+    const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.have.lengthOf(1)
 
@@ -139,12 +143,13 @@ describe('Test ActivityPub videos search', function () {
     await wait(10000)
 
     // Will run refresh async
-    await searchVideoWithToken(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID, servers[0].accessToken)
+    const search = 'http://localhost:' + servers[1].port + '/videos/watch/' + videoServer2UUID
+    await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
 
     // Wait refresh
     await wait(5000)
 
-    const res = await searchVideoWithToken(servers[0].url, 'http://localhost:9002/videos/watch/' + videoServer2UUID, servers[0].accessToken)
+    const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
     expect(res.body.total).to.equal(0)
     expect(res.body.data).to.have.lengthOf(0)
   })

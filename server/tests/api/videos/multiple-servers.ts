@@ -9,18 +9,17 @@ import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/
 import {
   addVideoChannel,
   checkTmpIsEmpty,
-  checkVideoFilesWereRemoved, cleanupTests,
+  checkVideoFilesWereRemoved,
+  cleanupTests,
   completeVideoCheck,
   createUser,
   dateIsValid,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   getLocalVideos,
   getVideo,
   getVideoChannelsList,
   getVideosList,
-  killallServers,
   rateVideo,
   removeVideo,
   ServerInfo,
@@ -110,7 +109,7 @@ describe('Test multiple servers', function () {
       // All servers should have this video
       let publishedAt: string = null
       for (const server of servers) {
-        const isLocal = server.url === 'http://localhost:9001'
+        const isLocal = server.url === 'http://localhost:' + servers[0].port
         const checkAttributes = {
           name: 'my super name for server 1',
           category: 5,
@@ -122,7 +121,7 @@ describe('Test multiple servers', function () {
           originallyPublishedAt: '2019-02-10T13:38:14.449Z',
           account: {
             name: 'root',
-            host: 'localhost:9001'
+            host: 'localhost:' + servers[0].port
           },
           isLocal,
           publishedAt,
@@ -187,7 +186,7 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       for (const server of servers) {
-        const isLocal = server.url === 'http://localhost:9002'
+        const isLocal = server.url === 'http://localhost:' + servers[1].port
         const checkAttributes = {
           name: 'my super name for server 2',
           category: 4,
@@ -198,7 +197,7 @@ describe('Test multiple servers', function () {
           support: 'my super support text for server 2',
           account: {
             name: 'user1',
-            host: 'localhost:9002'
+            host: 'localhost:' + servers[1].port
           },
           isLocal,
           commentsEnabled: true,
@@ -278,7 +277,7 @@ describe('Test multiple servers', function () {
 
       // All servers should have this video
       for (const server of servers) {
-        const isLocal = server.url === 'http://localhost:9003'
+        const isLocal = server.url === 'http://localhost:' + servers[2].port
         const res = await getVideosList(server.url)
 
         const videos = res.body.data
@@ -306,7 +305,7 @@ describe('Test multiple servers', function () {
           support: 'my super support text for server 3',
           account: {
             name: 'root',
-            host: 'localhost:9003'
+            host: 'localhost:' + servers[2].port
           },
           isLocal,
           duration: 5,
@@ -340,7 +339,7 @@ describe('Test multiple servers', function () {
           support: 'my super support text for server 3-2',
           account: {
             name: 'root',
-            host: 'localhost:9003'
+            host: 'localhost:' + servers[2].port
           },
           commentsEnabled: true,
           downloadEnabled: true,
@@ -646,7 +645,7 @@ describe('Test multiple servers', function () {
         const videoUpdated = videos.find(video => video.name === 'my super video updated')
         expect(!!videoUpdated).to.be.true
 
-        const isLocal = server.url === 'http://localhost:9003'
+        const isLocal = server.url === 'http://localhost:' + servers[2].port
         const checkAttributes = {
           name: 'my super video updated',
           category: 10,
@@ -658,7 +657,7 @@ describe('Test multiple servers', function () {
           originallyPublishedAt: '2019-02-11T13:38:14.449Z',
           account: {
             name: 'root',
-            host: 'localhost:9003'
+            host: 'localhost:' + servers[2].port
           },
           isLocal,
           duration: 5,
@@ -813,7 +812,7 @@ describe('Test multiple servers', function () {
           expect(comment).to.not.be.undefined
           expect(comment.inReplyToCommentId).to.be.null
           expect(comment.account.name).to.equal('root')
-          expect(comment.account.host).to.equal('localhost:9001')
+          expect(comment.account.host).to.equal('localhost:' + servers[0].port)
           expect(comment.totalReplies).to.equal(3)
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -824,7 +823,7 @@ describe('Test multiple servers', function () {
           expect(comment).to.not.be.undefined
           expect(comment.inReplyToCommentId).to.be.null
           expect(comment.account.name).to.equal('root')
-          expect(comment.account.host).to.equal('localhost:9003')
+          expect(comment.account.host).to.equal('localhost:' + servers[2].port)
           expect(comment.totalReplies).to.equal(0)
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -842,25 +841,25 @@ describe('Test multiple servers', function () {
         const tree: VideoCommentThreadTree = res2.body
         expect(tree.comment.text).equal('my super first comment')
         expect(tree.comment.account.name).equal('root')
-        expect(tree.comment.account.host).equal('localhost:9001')
+        expect(tree.comment.account.host).equal('localhost:' + servers[0].port)
         expect(tree.children).to.have.lengthOf(2)
 
         const firstChild = tree.children[0]
         expect(firstChild.comment.text).to.equal('my super answer to thread 1')
         expect(firstChild.comment.account.name).equal('root')
-        expect(firstChild.comment.account.host).equal('localhost:9002')
+        expect(firstChild.comment.account.host).equal('localhost:' + servers[1].port)
         expect(firstChild.children).to.have.lengthOf(1)
 
         childOfFirstChild = firstChild.children[0]
         expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
         expect(childOfFirstChild.comment.account.name).equal('root')
-        expect(childOfFirstChild.comment.account.host).equal('localhost:9003')
+        expect(childOfFirstChild.comment.account.host).equal('localhost:' + servers[2].port)
         expect(childOfFirstChild.children).to.have.lengthOf(0)
 
         const secondChild = tree.children[1]
         expect(secondChild.comment.text).to.equal('my second answer to thread 1')
         expect(secondChild.comment.account.name).equal('root')
-        expect(secondChild.comment.account.host).equal('localhost:9003')
+        expect(secondChild.comment.account.host).equal('localhost:' + servers[2].port)
         expect(secondChild.children).to.have.lengthOf(0)
       }
     })
@@ -915,7 +914,7 @@ describe('Test multiple servers', function () {
           expect(comment).to.not.be.undefined
           expect(comment.inReplyToCommentId).to.be.null
           expect(comment.account.name).to.equal('root')
-          expect(comment.account.host).to.equal('localhost:9003')
+          expect(comment.account.host).to.equal('localhost:' + servers[2].port)
           expect(comment.totalReplies).to.equal(0)
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -971,7 +970,7 @@ describe('Test multiple servers', function () {
         const res = await getVideosList(server.url)
         const video = res.body.data.find(v => v.name === 'minimum parameters')
 
-        const isLocal = server.url === 'http://localhost:9002'
+        const isLocal = server.url === 'http://localhost:' + servers[1].port
         const checkAttributes = {
           name: 'minimum parameters',
           category: null,
@@ -982,7 +981,7 @@ describe('Test multiple servers', function () {
           support: null,
           account: {
             name: 'root',
-            host: 'localhost:9002'
+            host: 'localhost:' + servers[1].port
           },
           isLocal,
           duration: 5,

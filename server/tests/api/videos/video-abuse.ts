@@ -9,7 +9,6 @@ import {
   flushAndRunMultipleServers,
   getVideoAbusesList,
   getVideosList,
-  killallServers,
   reportVideoAbuse,
   ServerInfo,
   setAccessTokensToServers,
@@ -90,7 +89,7 @@ describe('Test video abuses', function () {
     const abuse: VideoAbuse = res1.body.data[0]
     expect(abuse.reason).to.equal('my super bad reason')
     expect(abuse.reporterAccount.name).to.equal('root')
-    expect(abuse.reporterAccount.host).to.equal('localhost:9001')
+    expect(abuse.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse.video.id).to.equal(servers[0].video.id)
 
     const res2 = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
@@ -118,7 +117,7 @@ describe('Test video abuses', function () {
     const abuse1: VideoAbuse = res1.body.data[0]
     expect(abuse1.reason).to.equal('my super bad reason')
     expect(abuse1.reporterAccount.name).to.equal('root')
-    expect(abuse1.reporterAccount.host).to.equal('localhost:9001')
+    expect(abuse1.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse1.video.id).to.equal(servers[0].video.id)
     expect(abuse1.state.id).to.equal(VideoAbuseState.PENDING)
     expect(abuse1.state.label).to.equal('Pending')
@@ -127,7 +126,7 @@ describe('Test video abuses', function () {
     const abuse2: VideoAbuse = res1.body.data[1]
     expect(abuse2.reason).to.equal('my super bad reason 2')
     expect(abuse2.reporterAccount.name).to.equal('root')
-    expect(abuse2.reporterAccount.host).to.equal('localhost:9001')
+    expect(abuse2.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse2.video.id).to.equal(servers[1].video.id)
     expect(abuse2.state.id).to.equal(VideoAbuseState.PENDING)
     expect(abuse2.state.label).to.equal('Pending')
@@ -141,7 +140,7 @@ describe('Test video abuses', function () {
     abuseServer2 = res2.body.data[0]
     expect(abuseServer2.reason).to.equal('my super bad reason 2')
     expect(abuseServer2.reporterAccount.name).to.equal('root')
-    expect(abuseServer2.reporterAccount.host).to.equal('localhost:9001')
+    expect(abuseServer2.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuseServer2.state.id).to.equal(VideoAbuseState.PENDING)
     expect(abuseServer2.state.label).to.equal('Pending')
     expect(abuseServer2.moderationComment).to.be.null

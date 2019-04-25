@@ -24,11 +24,12 @@ describe('Test contact form', function () {
   before(async function () {
     this.timeout(30000)
 
-    await MockSmtpServer.Instance.collectEmails(emails)
+    const port = await MockSmtpServer.Instance.collectEmails(emails)
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost'
+        hostname: 'localhost',
+        port
       }
     }
     server = await flushAndRunServer(1, overrideConfig)

@@ -70,7 +70,7 @@ describe('Test handle downs', function () {
     support: 'my super support text for server 1',
     account: {
       name: 'root',
-      host: 'localhost:9001'
+      host: 'localhost:' + servers[0].port
     },
     isLocal: false,
     duration: 10,
@@ -172,7 +172,7 @@ describe('Test handle downs', function () {
     const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 2, 'createdAt')
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].follower.host).to.equal('localhost:9003')
+    expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
   })
 
   it('Should not have pending/processing jobs anymore', async function () {

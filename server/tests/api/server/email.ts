@@ -7,18 +7,18 @@ import {
   askResetPassword,
   askSendVerifyEmail,
   blockUser,
-  createUser, removeVideoFromBlacklist,
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  removeVideoFromBlacklist,
   reportVideoAbuse,
   resetPassword,
-  flushAndRunServer,
+  ServerInfo,
+  setAccessTokensToServers,
   unblockUser,
   uploadVideo,
   userLogin,
-  verifyEmail,
-  flushTests,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers, cleanupTests
+  verifyEmail
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -87,7 +87,7 @@ describe('Test emails', function () {
 
       const email = emails[0]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('password')
@@ -132,7 +132,7 @@ describe('Test emails', function () {
 
       const email = emails[1]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('admin1@example.com')
       expect(email['subject']).contains('abuse')
@@ -153,7 +153,7 @@ describe('Test emails', function () {
 
       const email = emails[2]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blocked')
@@ -171,7 +171,7 @@ describe('Test emails', function () {
 
       const email = emails[3]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblocked')
@@ -191,7 +191,7 @@ describe('Test emails', function () {
 
       const email = emails[4]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blacklisted')
@@ -209,7 +209,7 @@ describe('Test emails', function () {
 
       const email = emails[5]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblacklisted')
@@ -229,7 +229,7 @@ describe('Test emails', function () {
 
       const email = emails[6]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('Verify')
