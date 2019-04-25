@@ -129,6 +129,7 @@ $play-overlay-width: 18px;
       margin: 0 -15px 10px -15px;
       width: 100vw;
       height: calc(100vw / #{$video-thumbnail-ratio});
+      border-radius: 0;
 
       img {
         width: 100%;
