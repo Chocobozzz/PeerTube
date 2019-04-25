@@ -71,7 +71,7 @@ class JobQueue {
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
     const queueOptions = {
       prefix: this.jobRedisPrefix,
-      redis: Redis.getRedisClient(),
+      redis: Redis.getRedisClientOptions(),
       settings: {
         maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
       }

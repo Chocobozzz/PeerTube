@@ -91,9 +91,9 @@
     "@types/bluebird": "3.5.21"
   },
   "dependencies": {
+    "apicache": "^1.4.0",
     "application-config": "^1.0.1",
     "async": "^2.0.0",
-    "async-lock": "^1.1.2",
     "async-lru": "^1.1.1",
     "bcrypt": "3.0.5",
     "bittorrent-tracker": "^9.0.0",
@@ -159,6 +159,7 @@
     "youtube-dl": "^1.12.2"
   },
   "devDependencies": {
+    "@types/apicache": "^1.2.0",
     "@types/async": "^2.0.40",
     "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^3.0.0",
