@@ -50,7 +50,7 @@
 <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
-    [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
+    [validationMessages]="validationMessages" [videoPrivacies]="explainedVideoPrivacies" [userVideoChannels]="userVideoChannels"
     [waitTranscodingEnabled]="waitTranscodingEnabled"
   ></my-video-edit>
 

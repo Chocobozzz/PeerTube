@@ -190,7 +190,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       channelId
     })
 
-    this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+    this.explainedVideoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
 
     this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
       event => {

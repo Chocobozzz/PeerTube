@@ -24,6 +24,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
   isUpdatingVideo = false
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
+  explainedVideoPrivacies: VideoConstant<VideoPrivacy>[] = []
   userVideoChannels: { id: number, label: string, support: string }[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
@@ -65,7 +66,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
           }
 
-          this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+          this.explainedVideoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
 
           const videoFiles = (video as VideoDetails).files
           if (videoFiles.length > 1) { // Already transcoded

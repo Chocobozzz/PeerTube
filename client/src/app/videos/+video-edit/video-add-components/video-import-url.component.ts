@@ -91,7 +91,7 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
           previewUrl: null
         }))
 
-        this.videoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+        this.explainedVideoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
 
         this.hydrateFormFromVideo()
       },
