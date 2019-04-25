@@ -14,6 +14,8 @@
   & > .contact-admin {
     @include peertube-button;
     @include orange-button;
+
+    height: fit-content;
   }
 }
 
