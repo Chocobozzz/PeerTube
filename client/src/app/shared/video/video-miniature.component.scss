@@ -2,6 +2,9 @@
 @import '_mixins';
 @import '_miniature';
 
+$more-button-width: 41px;
+$more-margin-right: 10px;
+
 .video-miniature {
   width: $video-miniature-width;
   display: inline-flex;
@@ -14,7 +17,7 @@
     display: flex;
 
     .video-miniature-information {
-      width: 200px;
+      width: $video-miniature-width - $more-button-width - $more-margin-right;
       line-height: normal;
 
       .video-miniature-name {
@@ -61,7 +64,9 @@
 
     .video-actions {
       margin-top: 3px;
-      margin-right: 10px;
+      margin-right: $more-margin-right;
+      width: $more-button-width;
+      height: 30px;
 
       /deep/ .dropdown-root:not(.show) {
         opacity: 0;
@@ -86,7 +91,7 @@
         top: -3px;
 
         /deep/ .dropdown-root {
-          display: block !important;
+          opacity: 1 !important;
         }
       }
     }

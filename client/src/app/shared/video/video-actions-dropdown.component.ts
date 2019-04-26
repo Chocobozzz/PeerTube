@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction, DropdownButtonSize, DropdownDirection } from '@app/shared/buttons/action-dropdown.component'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
@@ -28,7 +28,7 @@ export type VideoActionsDisplayType = {
   templateUrl: './video-actions-dropdown.component.html',
   styleUrls: [ './video-actions-dropdown.component.scss' ]
 })
-export class VideoActionsDropdownComponent implements OnChanges {
+export class VideoActionsDropdownComponent implements AfterViewInit, OnChanges {
   @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown
   @ViewChild('playlistAdd') playlistAdd: VideoAddToPlaylistComponent
 
@@ -76,6 +76,13 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   get user () {
     return this.authService.getUser()
+  }
+
+  ngAfterViewInit () {
+    // We rely on mouseenter to lazy load actions
+    if (this.screenService.isInTouchScreen()) {
+      this.loadDropdownInformation()
+    }
   }
 
   ngOnChanges () {

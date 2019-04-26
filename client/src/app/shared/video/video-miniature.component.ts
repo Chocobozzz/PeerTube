@@ -74,7 +74,7 @@ export class VideoMiniatureComponent implements OnInit {
 
     // We rely on mouseenter to lazy load actions
     if (this.screenService.isInTouchScreen()) {
-      this.showActions = true
+      this.loadActions()
     }
   }
 
