@@ -27,7 +27,8 @@ function checkMissedConfig () {
     'services.twitter.username', 'services.twitter.whitelisted',
     'followers.instance.enabled', 'followers.instance.manual_approval',
     'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',
-    'history.videos.max_age', 'views.videos.remote.max_age'
+    'history.videos.max_age', 'views.videos.remote.max_age',
+    'rates_limit.login.window', 'rates_limit.login.max', 'rates_limit.ask_send_email.window', 'rates_limit.ask_send_email.max'
   ]
   const requiredAlternatives = [
     [ // set

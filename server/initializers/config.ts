@@ -63,6 +63,16 @@ const CONFIG = {
     HOSTNAME: config.get<string>('webserver.hostname'),
     PORT: config.get<number>('webserver.port')
   },
+  RATES_LIMIT: {
+    LOGIN: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login.window')),
+      MAX: config.get<number>('rates_limit.login.max')
+    },
+    ASK_SEND_EMAIL: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.ask_send_email.window')),
+      MAX: config.get<number>('rates_limit.ask_send_email.max')
+    }
+  },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level')

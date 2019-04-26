@@ -281,12 +281,12 @@ let CONSTRAINTS_FIELDS = {
 
 const RATES_LIMIT = {
   LOGIN: {
-    WINDOW_MS: config.get<number>('webserver.rates_limit.login.window_ms'),
-    MAX: config.get<number>('webserver.rates_limit.login.max')
+    WINDOW_MS: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
+    MAX: CONFIG.RATES_LIMIT.LOGIN.MAX
   },
   ASK_SEND_EMAIL: {
-    WINDOW_MS: config.get<number>('webserver.rates_limit.ask_send_email.window_ms'),
-    MAX: config.get<number>('webserver.rates_limit.ask_send_email.max')
+    WINDOW_MS: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
+    MAX: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
   }
 }
 

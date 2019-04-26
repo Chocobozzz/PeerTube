@@ -8,17 +8,16 @@ webserver:
   https: false
   hostname: 'localhost'
   port: 9000
-  rates_limit:
-    login:
-      # For 5 minutes (in ms).
-      window_ms: 300000
-      # 15 attemps
-      max: 150
-    ask_send_email:
-      # For 5 minutes (in ms).
-      window_ms: 300000
-      # 3 attemps
-      max: 3
+
+rates_limit:
+  login:
+    # 15 attempts in 5 min
+    window: 5 minutes
+    max: 15
+  ask_send_email:
+    # 3 attempts in 5 min
+    window: 5 minutes
+    max: 3
 
 # Proxies to trust to get real client IP
 # If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
