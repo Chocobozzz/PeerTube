@@ -100,11 +100,11 @@ class Emailer {
       `You can view it on ${videoUrl} ` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: channelName + ' just published a new video',
+      subject: CONFIG.EMAILS.PREFIX + channelName + ' just published a new video',
       text
     }
 
@@ -119,11 +119,11 @@ class Emailer {
       `Your ${followType} ${followingName} has a new subscriber: ${followerName}` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: 'New follower on your channel ' + followingName,
+      subject: CONFIG.EMAILS.PREFIX + 'New follower on your channel ' + followingName,
       text
     }
 
@@ -137,11 +137,11 @@ class Emailer {
       `Your instance has a new follower: ${actorFollow.ActorFollower.url}${awaitingApproval}` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: 'New instance follower',
+      subject: CONFIG.EMAILS.PREFIX + 'New instance follower',
       text
     }
 
@@ -157,11 +157,11 @@ class Emailer {
       `You can view it on ${videoUrl} ` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: `Your video ${video.name} is published`,
+      subject: CONFIG.EMAILS.PREFIX + `Your video ${video.name} is published`,
       text
     }
 
@@ -177,11 +177,11 @@ class Emailer {
       `You can view the imported video on ${videoUrl} ` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: `Your video import ${videoImport.getTargetIdentifier()} is finished`,
+      subject: CONFIG.EMAILS.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} is finished`,
       text
     }
 
@@ -197,11 +197,11 @@ class Emailer {
       `See your videos import dashboard for more information: ${importUrl}` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
+      subject: CONFIG.EMAILS.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
       text
     }
 
@@ -219,11 +219,11 @@ class Emailer {
       `You can view it on ${commentUrl} ` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: 'New comment on your video ' + video.name,
+      subject: CONFIG.EMAILS.PREFIX + 'New comment on your video ' + video.name,
       text
     }
 
@@ -241,11 +241,11 @@ class Emailer {
       `You can view the comment on ${commentUrl} ` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: 'Mention on video ' + video.name,
+      subject: CONFIG.EMAILS.PREFIX + 'Mention on video ' + video.name,
       text
     }
 
@@ -258,11 +258,11 @@ class Emailer {
     const text = `Hi,\n\n` +
       `${WEBSERVER.HOST} received an abuse for the following video ${videoUrl}\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: '[PeerTube] Received a video abuse',
+      subject: CONFIG.EMAILS.PREFIX + 'Received a video abuse',
       text
     }
 
@@ -281,11 +281,11 @@ class Emailer {
       `A full list of auto-blacklisted videos can be reviewed here: ${VIDEO_AUTO_BLACKLIST_URL}` +
       `\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: '[PeerTube] An auto-blacklisted video is awaiting review',
+      subject: CONFIG.EMAILS.PREFIX + 'An auto-blacklisted video is awaiting review',
       text
     }
 
@@ -296,11 +296,11 @@ class Emailer {
     const text = `Hi,\n\n` +
       `User ${user.username} just registered on ${WEBSERVER.HOST} PeerTube instance.\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: '[PeerTube] New user registration on ' + WEBSERVER.HOST,
+      subject: CONFIG.EMAILS.PREFIX + 'New user registration on ' + WEBSERVER.HOST,
       text
     }
 
@@ -318,11 +318,11 @@ class Emailer {
       blockedString +
       '\n\n' +
       'Cheers,\n' +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: `[PeerTube] Video ${videoName} blacklisted`,
+      subject: CONFIG.EMAILS.PREFIX + `Video ${videoName} blacklisted`,
       text
     }
 
@@ -336,11 +336,11 @@ class Emailer {
       `Your video ${video.name} (${videoUrl}) on ${WEBSERVER.HOST} has been unblacklisted.` +
       '\n\n' +
       'Cheers,\n' +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to,
-      subject: `[PeerTube] Video ${video.name} unblacklisted`,
+      subject: CONFIG.EMAILS.PREFIX + `Video ${video.name} unblacklisted`,
       text
     }
 
@@ -353,11 +353,11 @@ class Emailer {
       `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
       `If you are not the person who initiated this request, please ignore this email.\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: 'Reset your PeerTube password',
+      subject: CONFIG.EMAILS.PREFIX + 'Reset your password',
       text
     }
 
@@ -370,11 +370,11 @@ class Emailer {
       `Please follow this link to verify this email belongs to you: ${verifyEmailUrl}\n\n` +
       `If you are not the person who initiated this request, please ignore this email.\n\n` +
       `Cheers,\n` +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: 'Verify your PeerTube email',
+      subject: CONFIG.EMAILS.PREFIX + 'Verify your email',
       text
     }
 
@@ -390,12 +390,12 @@ class Emailer {
       blockedString +
       '\n\n' +
       'Cheers,\n' +
-      `PeerTube.`
+      `${CONFIG.EMAILS.SIGNATURE}`
 
     const to = user.email
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: '[PeerTube] Account ' + blockedWord,
+      subject: CONFIG.EMAILS.PREFIX + 'Account ' + blockedWord,
       text
     }
 
@@ -415,7 +415,7 @@ class Emailer {
       fromDisplayName: fromEmail,
       replyTo: fromEmail,
       to: [ CONFIG.ADMIN.EMAIL ],
-      subject: '[PeerTube] Contact form submitted',
+      subject: CONFIG.EMAILS.PREFIX + 'Contact form submitted',
       text
     }
 

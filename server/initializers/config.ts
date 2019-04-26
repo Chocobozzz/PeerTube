@@ -44,6 +44,10 @@ const CONFIG = {
     CA_FILE: config.get<string>('smtp.ca_file'),
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
+  EMAILS: {
+    SIGNATURE: config.get<string>('emails.signature'),
+    PREFIX: config.get<string>('emails.prefix') + ' '
+  },
   STORAGE: {
     TMP_DIR: buildPath(config.get<string>('storage.tmp')),
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
