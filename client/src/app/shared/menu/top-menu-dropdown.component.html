@@ -3,7 +3,7 @@
 
     <a *ngIf="menuEntry.routerLink" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page">{{ menuEntry.label }}</a>
 
-    <div *ngIf="!menuEntry.routerLink" ngbDropdown container="body" class="parent-entry" #dropdown="ngbDropdown" (mouseleave)="closeDropdownIfHovered(dropdown)">
+    <div *ngIf="!menuEntry.routerLink" ngbDropdown [container]="container" class="parent-entry" #dropdown="ngbDropdown" (mouseleave)="closeDropdownIfHovered(dropdown)">
       <span
         (mouseenter)="openDropdownOnHover(dropdown)" [ngClass]="{ active: !!suffixLabels[menuEntry.label] }" ngbDropdownAnchor
         (click)="dropdownAnchorClicked(dropdown)" role="button" class="title-page"
