@@ -1126,15 +1126,11 @@ export class VideoModel extends Model<VideoModel> {
     const countQuery = buildBaseQuery()
     const findQuery = buildBaseQuery()
 
-    findQuery.include.push({
-      model: ScheduleVideoUpdateModel,
-      required: false
-    })
-
-    findQuery.include.push({
-      model: VideoBlacklistModel,
-      required: false
-    })
+    const findScopes = [
+      ScopeNames.WITH_SCHEDULED_UPDATE,
+      ScopeNames.WITH_BLACKLISTED,
+      ScopeNames.WITH_THUMBNAILS
+    ]
 
     if (withFiles === true) {
       findQuery.include.push({
@@ -1145,7 +1141,7 @@ export class VideoModel extends Model<VideoModel> {
 
     return Promise.all([
       VideoModel.count(countQuery),
-      VideoModel.findAll(findQuery)
+      VideoModel.scope(findScopes).findAll(findQuery)
     ]).then(([ count, rows ]) => {
       return {
         data: rows,
