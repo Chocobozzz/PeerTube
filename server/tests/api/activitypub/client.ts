@@ -3,6 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   flushTests,
@@ -39,7 +40,7 @@ describe('Test activitypub', function () {
     const object = res.body
 
     expect(object.type).to.equal('Person')
-    expect(object.id).to.equal('http://localhost:9001/accounts/root')
+    expect(object.id).to.equal('http://localhost:' + servers[0].port + '/accounts/root')
     expect(object.name).to.equal('root')
     expect(object.preferredUsername).to.equal('root')
   })
@@ -49,17 +50,17 @@ describe('Test activitypub', function () {
     const object = res.body
 
     expect(object.type).to.equal('Video')
-    expect(object.id).to.equal('http://localhost:9001/videos/watch/' + videoUUID)
+    expect(object.id).to.equal('http://localhost:' + servers[0].port + '/videos/watch/' + videoUUID)
     expect(object.name).to.equal('video')
   })
 
   it('Should redirect to the origin video object', async function () {
     const res = await makeActivityPubGetRequest(servers[1].url, '/videos/watch/' + videoUUID, 302)
 
-    expect(res.header.location).to.equal('http://localhost:9001/videos/watch/' + videoUUID)
+    expect(res.header.location).to.equal('http://localhost:' + servers[0].port + '/videos/watch/' + videoUUID)
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })

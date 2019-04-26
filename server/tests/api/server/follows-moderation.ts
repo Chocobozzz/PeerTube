@@ -29,7 +29,7 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
 
     const follow = res.body.data[0] as ActorFollow
     expect(follow.state).to.equal(state)
-    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + 'accounts/peertube')
+    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + '/accounts/peertube')
     expect(follow.following.url).to.equal('http://localhost:' + servers[1].port + '/accounts/peertube')
   }
 
@@ -39,7 +39,7 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
 
     const follow = res.body.data[0] as ActorFollow
     expect(follow.state).to.equal(state)
-    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + 'accounts/peertube')
+    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + '/accounts/peertube')
     expect(follow.following.url).to.equal('http://localhost:' + servers[1].port + '/accounts/peertube')
   }
 }

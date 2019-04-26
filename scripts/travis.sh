@@ -23,13 +23,13 @@ elif [ "$1" = "api-1" ]; then
     sh ./server/tests/api/travis-1.sh
 elif [ "$1" = "api-2" ]; then
     npm run build:server
-    mocha --timeout 5000 --exit --require ts-node/register --bail server/tests/api/index-2.ts
+    sh ./server/tests/api/travis-2.sh
 elif [ "$1" = "api-3" ]; then
     npm run build:server
-    mocha --timeout 5000 --exit --require ts-node/register --bail server/tests/api/index-3.ts
+    sh ./server/tests/api/travis-3.sh
 elif [ "$1" = "api-4" ]; then
     npm run build:server
-    mocha --timeout 5000 --exit --require ts-node/register --bail server/tests/api/index-4.ts
+    sh ./server/tests/api/travis-4.sh
 elif [ "$1" = "lint" ]; then
     npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
 

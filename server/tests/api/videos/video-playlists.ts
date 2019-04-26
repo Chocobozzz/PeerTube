@@ -358,7 +358,7 @@ describe('Test video playlists', function () {
 
     for (const server of servers) {
       const results = [
-        await getAccountPlaylistsList(server.url, 'root@localhost:9002', 0, 5, '-createdAt'),
+        await getAccountPlaylistsList(server.url, 'root@localhost:' + servers[1].port, 0, 5, '-createdAt'),
         await getVideoPlaylistsList(server.url, 0, 2, '-createdAt')
       ]
 
@@ -757,7 +757,7 @@ describe('Test video playlists', function () {
     this.timeout(30000)
 
     for (const server of servers) {
-      await checkPlaylistFilesWereRemoved(playlistServer1UUID, server.serverNumber)
+      await checkPlaylistFilesWereRemoved(playlistServer1UUID, server.internalServerNumber)
     }
   })
 

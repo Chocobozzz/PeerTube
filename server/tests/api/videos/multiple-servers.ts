@@ -109,7 +109,7 @@ describe('Test multiple servers', function () {
       // All servers should have this video
       let publishedAt: string = null
       for (const server of servers) {
-        const isLocal = server.url === 'http://localhost:' + servers[0].port
+        const isLocal = server.port === servers[0].port
         const checkAttributes = {
           name: 'my super name for server 1',
           category: 5,

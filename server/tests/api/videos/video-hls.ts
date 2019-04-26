@@ -50,7 +50,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
 
     {
       for (const resolution of resolutions) {
-        const res2 = await getPlaylist(`http://localhost:${server.port}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
+        const res2 = await getPlaylist(`http://localhost:${servers[0].port}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
 
         const subPlaylist = res2.text
         expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
@@ -58,7 +58,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
     }
 
     {
-      const baseUrl = 'http://localhost:' + server.port + '/static/streaming-playlists/hls'
+      const baseUrl = 'http://localhost:' + servers[0].port + '/static/streaming-playlists/hls'
 
       for (const resolution of resolutions) {
         await checkSegmentHash(baseUrl, baseUrl, videoUUID, resolution, hlsPlaylist)

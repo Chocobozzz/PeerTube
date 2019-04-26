@@ -246,7 +246,7 @@ async function checkTmpIsEmpty (server: ServerInfo) {
 }
 
 async function checkDirectoryIsEmpty (server: ServerInfo, directory: string) {
-  const testDirectory = 'test' + server.serverNumber
+  const testDirectory = 'test' + server.internalServerNumber
 
   const directoryPath = join(root(), testDirectory, directory)
 

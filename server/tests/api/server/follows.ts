@@ -141,7 +141,7 @@ describe('Test follows', function () {
 
   it('Should search followers on server 2', async function () {
     {
-      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', '9001')
+      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', servers[0].port + '')
       const follows = res.body.data
 
       expect(res.body.total).to.equal(1)

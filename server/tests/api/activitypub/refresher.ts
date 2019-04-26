@@ -2,13 +2,14 @@
 
 import 'mocha'
 import {
+  cleanupTests, closeAllSequelize,
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
   generateUserAccessToken,
   getVideo,
   getVideoPlaylist,
-  killallServers, rateVideo,
+  killallServers,
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
@@ -48,26 +49,26 @@ describe('Test AP refresher', function () {
     }
 
     {
-      const a1 = await generateUserAccessToken(servers[1], 'user1')
-      await uploadVideo(servers[1].url, a1, { name: 'video4' })
+      const a1 = await generateUserAccessToken(servers[ 1 ], 'user1')
+      await uploadVideo(servers[ 1 ].url, a1, { name: 'video4' })
 
-      const a2 = await generateUserAccessToken(servers[1], 'user2')
-      await uploadVideo(servers[1].url, a2, { name: 'video5' })
+      const a2 = await generateUserAccessToken(servers[ 1 ], 'user2')
+      await uploadVideo(servers[ 1 ].url, a2, { name: 'video5' })
     }
 
     {
-      const playlistAttrs = { displayName: 'playlist1', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
-      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs })
+      const playlistAttrs = { displayName: 'playlist1', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[ 1 ].videoChannel.id }
+      const res = await createVideoPlaylist({ url: servers[ 1 ].url, token: servers[ 1 ].accessToken, playlistAttrs })
       playlistUUID1 = res.body.videoPlaylist.uuid
     }
 
     {
-      const playlistAttrs = { displayName: 'playlist2', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[1].videoChannel.id }
-      const res = await createVideoPlaylist({ url: servers[1].url, token: servers[1].accessToken, playlistAttrs })
+      const playlistAttrs = { displayName: 'playlist2', privacy: VideoPlaylistPrivacy.PUBLIC, videoChannelId: servers[ 1 ].videoChannel.id }
+      const res = await createVideoPlaylist({ url: servers[ 1 ].url, token: servers[ 1 ].accessToken, playlistAttrs })
       playlistUUID2 = res.body.videoPlaylist.uuid
     }
 
-    await doubleFollow(servers[0], servers[1])
+    await doubleFollow(servers[ 0 ], servers[ 1 ])
   })
 
   describe('Videos refresher', function () {
@@ -78,7 +79,7 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change UUID so the remote server returns a 404
-      await setVideoField(2, videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
+      await setVideoField(servers[ 1 ].internalServerNumber, videoUUID1, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174f')
 
       await getVideo(servers[ 0 ].url, videoUUID1)
       await getVideo(servers[ 0 ].url, videoUUID2)
@@ -94,7 +95,7 @@ describe('Test AP refresher', function () {
 
       killallServers([ servers[ 1 ] ])
 
-      await setVideoField(2, videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
+      await setVideoField(servers[ 1 ].internalServerNumber, videoUUID3, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b174e')
 
       // Video will need a refresh
       await wait(10000)
@@ -121,15 +122,16 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change actor name so the remote server returns a 404
-      await setActorField(2, 'http://localhost:9002/accounts/user2', 'preferredUsername', 'toto')
+      const to = 'http://localhost:' + servers[ 1 ].port + '/accounts/user2'
+      await setActorField(servers[ 1 ].internalServerNumber, to, 'preferredUsername', 'toto')
 
-      await getAccount(servers[ 0 ].url, 'user1@localhost:9002')
-      await getAccount(servers[ 0 ].url, 'user2@localhost:9002')
+      await getAccount(servers[ 0 ].url, 'user1@localhost:' + servers[ 1 ].port)
+      await getAccount(servers[ 0 ].url, 'user2@localhost:' + servers[ 1 ].port)
 
       await waitJobs(servers)
 
-      await getAccount(servers[ 0 ].url, 'user1@localhost:9002', 200)
-      await getAccount(servers[ 0 ].url, 'user2@localhost:9002', 404)
+      await getAccount(servers[ 0 ].url, 'user1@localhost:' + servers[ 1 ].port, 200)
+      await getAccount(servers[ 0 ].url, 'user2@localhost:' + servers[ 1 ].port, 404)
     })
   })
 
@@ -141,7 +143,7 @@ describe('Test AP refresher', function () {
       await wait(10000)
 
       // Change UUID so the remote server returns a 404
-      await setPlaylistField(2, playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
+      await setPlaylistField(servers[ 1 ].internalServerNumber, playlistUUID2, 'uuid', '304afe4f-39f9-4d49-8ed7-ac57b86b178e')
 
       await getVideoPlaylist(servers[ 0 ].url, playlistUUID1)
       await getVideoPlaylist(servers[ 0 ].url, playlistUUID2)
@@ -153,7 +155,11 @@ describe('Test AP refresher', function () {
     })
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    this.timeout(10000)
+
+    await cleanupTests(servers)
+
+    await closeAllSequelize(servers)
   })
 })
