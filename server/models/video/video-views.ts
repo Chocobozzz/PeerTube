@@ -4,6 +4,7 @@ import * as Sequelize from 'sequelize'
 
 @Table({
   tableName: 'videoView',
+  updatedAt: false,
   indexes: [
     {
       fields: [ 'videoId' ]

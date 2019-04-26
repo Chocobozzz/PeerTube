@@ -10,7 +10,8 @@ import { AccountModel } from '../account/account'
   ]
 }))
 @Table({
-  tableName: 'application'
+  tableName: 'application',
+  timestamps: false
 })
 export class ApplicationModel extends Model<ApplicationModel> {
 
