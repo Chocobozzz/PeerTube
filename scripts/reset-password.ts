@@ -1,3 +1,4 @@
+// vim:set sw=2 ts=2 sts=2:
 import * as program from 'commander'
 import { initDatabaseModels } from '../server/initializers'
 import { UserModel } from '../server/models/account/user'
@@ -22,31 +23,46 @@ initDatabaseModels(true)
       process.exit(-1)
     }
 
-    const readline = require('readline')
-    const Writable = require('stream').Writable
-    const mutableStdout = new Writable({
-      write: function (chunk, encoding, callback) {
-        callback()
-      }
-    })
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: mutableStdout,
-      terminal: true
-    })
-
-    console.log('New password?')
-    rl.on('line', function (password) {
-      if (!isUserPasswordValid(password)) {
+    if (process.env.PEERTUBE_NEW_PASSWORD) {
+      console.log('Using environment variable PEERTUBE_NEW_PASSWORD')
+      if (!isUserPasswordValid(process.env.PEERTUBE_NEW_PASSWORD)) {
         console.error('New password is invalid.')
         process.exit(-1)
       }
 
-      user.password = password
+      user.password = process.env.PEERTUBE_NEW_PASSWORD
 
       user.save()
         .then(() => console.log('User password updated.'))
         .catch(err => console.error(err))
         .finally(() => process.exit(0))
-    })
+    } else {
+      const readline = require('readline')
+      const Writable = require('stream').Writable
+      const mutableStdout = new Writable({
+        write: function (chunk, encoding, callback) {
+          callback()
+        }
+      })
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: mutableStdout,
+        terminal: true
+      })
+
+      console.log('New password?')
+      rl.on('line', function (password) {
+        if (!isUserPasswordValid(password)) {
+          console.error('New password is invalid.')
+          process.exit(-1)
+        }
+
+        user.password = password
+
+        user.save()
+          .then(() => console.log('User password updated.'))
+          .catch(err => console.error(err))
+          .finally(() => process.exit(0))
+      })
+    }
   })
