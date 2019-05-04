@@ -173,7 +173,7 @@ function transcode (options: TranscodeOptions) {
   })
 }
 
-async function canDoQuickTranscode (path: string) {
+async function canDoQuickTranscode (path: string): Promise<boolean> {
   // NOTE: This could be optimized by running ffprobe only once (but it runs fast anyway)
   const videoStream = await getVideoStreamFromFile(path)
   const parsedAudio = await audio.get(path)
@@ -182,22 +182,27 @@ async function canDoQuickTranscode (path: string) {
   const resolution = await getVideoFileResolution(path)
 
   // check video params
-  if (videoStream[ 'codec_name' ] !== 'h264')
+  if (videoStream[ 'codec_name' ] !== 'h264') {
     return false
-  if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX)
+  }
+  if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) {
     return false
-  if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS))
+  }
+  if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) {
     return false
+  }
 
     // check audio params (if audio stream exists)
   if (parsedAudio.audioStream) {
-    if (parsedAudio.audioStream[ 'codec_name' ] !== 'aac')
+    if (parsedAudio.audioStream[ 'codec_name' ] !== 'aac') {
       return false
+    }
     const maxAudioBitrate = audio.bitrate[ 'aac' ](parsedAudio.audioStream[ 'bit_rate' ])
-    if (maxAudioBitrate != -1 && parsedAudio.audioStream[ 'bit_rate' ] > maxAudioBitrate)
+    if (maxAudioBitrate !== -1 && parsedAudio.audioStream[ 'bit_rate' ] > maxAudioBitrate) {
       return false
+    }
   }
-  
+
   return true
 }
 
