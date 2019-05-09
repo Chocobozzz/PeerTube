@@ -118,7 +118,7 @@ async function getConfig (req: express.Request, res: express.Response) {
         }
       },
       file: {
-        extensions: CONFIG.TRANSCODING.ENABLED ? CONSTRAINTS_FIELDS.VIDEOS.EXTNAME : CONSTRAINTS_FIELDS.VIDEOS.BROWSER_EXTNAME
+        extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
       }
     },
     videoCaption: {
@@ -309,3 +309,4 @@ function convertCustomConfigBody (body: CustomConfig) {
 
   return objectConverter(body, keyConverter, valueConverter)
 }
+
