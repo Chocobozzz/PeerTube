@@ -18,7 +18,6 @@ exports.config = {
   multiCapabilities: [
     {
       browserName: 'Chrome',
-      version: '66',
       name: 'Latest Chrome Desktop'
     },
     {
@@ -28,17 +27,15 @@ exports.config = {
     },
     {
       browserName: 'Firefox',
-      version: '52', // ESR,
-      name: 'Old Firefox ESR Desktop'
+      version: '60', // ESR,
+      name: 'Firefox ESR Desktop'
     },
     {
       browserName: 'Firefox',
-      version: '60',
       name: 'Latest Firefox Desktop'
     },
     {
       browserName: 'Edge',
-      version: '16',
       name: 'Latest Edge Desktop'
     },
     {

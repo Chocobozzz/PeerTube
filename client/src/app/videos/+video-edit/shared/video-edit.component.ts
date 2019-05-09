@@ -1,8 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { ServerService } from '../../../core/server'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { map } from 'rxjs/operators'
@@ -26,7 +26,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
-  @Input() videoCaptions: VideoCaptionEdit[] = []
+  @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
+  @Input() waitTranscodingEnabled = true
 
   @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
 
@@ -44,6 +45,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   calendarLocale: any = {}
   minScheduledDate = new Date()
+  myYearRange = '1880:' + (new Date()).getFullYear()
 
   calendarTimezone: string
   calendarDateFormat: string
@@ -58,9 +60,10 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private route: ActivatedRoute,
     private router: Router,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private serverService: ServerService,
-    private i18nPrimengCalendarService: I18nPrimengCalendarService
+    private i18nPrimengCalendarService: I18nPrimengCalendarService,
+    private ngZone: NgZone
   ) {
     this.tagValidators = this.videoValidatorsService.VIDEO_TAGS.VALIDATORS
     this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
@@ -80,6 +83,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     const defaultValues: any = {
       nsfw: 'false',
       commentsEnabled: 'true',
+      downloadEnabled: 'true',
       waitTranscoding: 'true',
       tags: []
     }
@@ -89,6 +93,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       channelId: this.videoValidatorsService.VIDEO_CHANNEL,
       nsfw: null,
       commentsEnabled: null,
+      downloadEnabled: null,
       waitTranscoding: null,
       category: this.videoValidatorsService.VIDEO_CATEGORY,
       licence: this.videoValidatorsService.VIDEO_LICENCE,
@@ -98,7 +103,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       thumbnailfile: null,
       previewfile: null,
       support: this.videoValidatorsService.VIDEO_SUPPORT,
-      schedulePublicationAt: this.videoValidatorsService.VIDEO_SCHEDULE_PUBLICATION_AT
+      schedulePublicationAt: this.videoValidatorsService.VIDEO_SCHEDULE_PUBLICATION_AT,
+      originallyPublishedAt: this.videoValidatorsService.VIDEO_ORIGINALLY_PUBLISHED_AT
     }
 
     this.formValidatorService.updateForm(
@@ -127,9 +133,11 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
 
-    this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
-
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
+
+    this.ngZone.runOutsideAngular(() => {
+      this.schedulerInterval = setInterval(() => this.minScheduledDate = new Date(), 1000 * 60) // Update every minute
+    })
   }
 
   ngOnDestroy () {

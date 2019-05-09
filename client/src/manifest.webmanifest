@@ -43,5 +43,5 @@
   ],
   "name": "PeerTube",
   "short_name": "PeerTube",
-  "start_url": "/videos/trending"
+  "start_url": "/"
 }

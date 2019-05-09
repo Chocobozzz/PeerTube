@@ -1,0 +1,51 @@
+@import '_variables';
+@import '_mixins';
+
+.create-button {
+  @include create-button;
+}
+
+/deep/ .action-button {
+  &.action-button-delete {
+    margin-right: 10px;
+  }
+}
+
+.video-playlist {
+  @include row-blocks;
+
+  .miniature-wrapper {
+    flex-grow: 1;
+
+    /deep/ .miniature {
+      display: flex;
+
+      .miniature-info {
+        margin-left: 10px;
+        width: auto;
+      }
+    }
+  }
+
+  .video-playlist-buttons {
+    min-width: 190px;
+  }
+}
+
+.video-playlists-header {
+  text-align: right;
+  margin: 20px 0 50px;
+}
+
+@media screen and (max-width: 800px) {
+  .video-playlists-header {
+    text-align: center;
+  }
+
+  .video-playlist {
+
+    .video-playlist-buttons {
+      margin-top: 10px;
+    }
+  }
+}

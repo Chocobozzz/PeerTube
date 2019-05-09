@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { getMaxBitrate, Video, VideoDetails, VideoResolution } from '../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
@@ -15,10 +16,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, viewVideo, wait
-} from '../utils'
-import { waitJobs } from '../utils/server/jobs'
+} from '../../../shared/extra-utils'
+import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
-import { VIDEO_TRANSCODING_FPS } from '../../initializers'
+import { VIDEO_TRANSCODING_FPS } from '../../initializers/constants'
 import { join } from 'path'
 
 const expect = chai.expect
@@ -30,8 +31,6 @@ describe('Test optimize old videos', function () {
 
   before(async function () {
     this.timeout(200000)
-
-    await flushTests()
 
     // Run server 2 to have transcoding enabled
     servers = await flushAndRunMultipleServers(2)
@@ -115,6 +114,6 @@ describe('Test optimize old videos', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

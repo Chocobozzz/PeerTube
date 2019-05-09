@@ -11,6 +11,10 @@ export class LoginPage {
 
     await element(by.css('form input[type=submit]')).click()
 
-    return browser.wait(browser.ExpectedConditions.urlContains('/videos/'))
+    expect(this.getLoggedInInfo().getText()).toContain('root')
+  }
+
+  private getLoggedInInfo () {
+    return element(by.css('.logged-in-display-name'))
   }
 }

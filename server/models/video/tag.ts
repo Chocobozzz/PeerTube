@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import * as Sequelize from 'sequelize'
+import { QueryTypes, Transaction } from 'sequelize'
 import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
@@ -37,7 +37,7 @@ export class TagModel extends Model<TagModel> {
   })
   Videos: VideoModel[]
 
-  static findOrCreateTags (tags: string[], transaction: Sequelize.Transaction) {
+  static findOrCreateTags (tags: string[], transaction: Transaction) {
     if (tags === null) return []
 
     const tasks: Bluebird<TagModel>[] = []
@@ -72,10 +72,10 @@ export class TagModel extends Model<TagModel> {
 
     const options = {
       bind: { threshold, count, videoPrivacy: VideoPrivacy.PUBLIC, videoState: VideoState.PUBLISHED },
-      type: Sequelize.QueryTypes.SELECT
+      type: QueryTypes.SELECT as QueryTypes.SELECT
     }
 
-    return TagModel.sequelize.query(query, options)
+    return TagModel.sequelize.query<{ name: string }>(query, options)
                     .then(data => data.map(d => d.name))
   }
 }

@@ -2,7 +2,7 @@ import { buildSignedActivity } from '../../../../helpers/activitypub'
 import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { sha256 } from '../../../../helpers/core-utils'
-import { HTTP_SIGNATURE } from '../../../../initializers'
+import { HTTP_SIGNATURE } from '../../../../initializers/constants'
 
 type Payload = { body: any, signatureActorId?: number }
 
@@ -28,7 +28,7 @@ async function buildSignedRequestOptions (payload: Payload) {
     actor = await getServerActor()
   }
 
-  const keyId = actor.getWebfingerUrl()
+  const keyId = actor.url
   return {
     algorithm: HTTP_SIGNATURE.ALGORITHM,
     authorizationHeaderName: HTTP_SIGNATURE.HEADER_NAME,
@@ -38,15 +38,20 @@ async function buildSignedRequestOptions (payload: Payload) {
   }
 }
 
-function buildGlobalHeaders (body: object) {
-  const digest = 'SHA-256=' + sha256(JSON.stringify(body), 'base64')
-
+function buildGlobalHeaders (body: any) {
   return {
-    'Digest': digest
+    'Digest': buildDigest(body)
   }
 }
 
+function buildDigest (body: any) {
+  const rawBody = typeof body === 'string' ? body : JSON.stringify(body)
+
+  return 'SHA-256=' + sha256(rawBody, 'base64')
+}
+
 export {
+  buildDigest,
   buildGlobalHeaders,
   computeBody,
   buildSignedRequestOptions

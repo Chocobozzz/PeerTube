@@ -1,4 +1,4 @@
-import * as Sequelize from 'sequelize'
+import { OrderItem, Transaction } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -12,30 +12,31 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { throwIfNotValid } from '../utils'
+import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
-import { CONFIG, STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers'
+import { STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers/constants'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
+import { CONFIG } from '../../initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_VIDEO_UUID_AND_REMOTE]: {
     include: [
       {
         attributes: [ 'uuid', 'remote' ],
-        model: () => VideoModel.unscoped(),
+        model: VideoModel.unscoped(),
         required: true
       }
     ]
   }
-})
+}))
 
 @Table({
   tableName: 'videoCaption',
@@ -96,11 +97,8 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     const videoInclude = {
       model: VideoModel.unscoped(),
       attributes: [ 'id', 'remote', 'uuid' ],
-      where: { }
+      where: buildWhereIdOrUUID(videoId)
     }
-
-    if (typeof videoId === 'string') videoInclude.where['uuid'] = videoId
-    else videoInclude.where['id'] = videoId
 
     const query = {
       where: {
@@ -114,19 +112,19 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return VideoCaptionModel.findOne(query)
   }
 
-  static insertOrReplaceLanguage (videoId: number, language: string, transaction: Sequelize.Transaction) {
+  static insertOrReplaceLanguage (videoId: number, language: string, transaction: Transaction) {
     const values = {
       videoId,
       language
     }
 
-    return VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true })
+    return (VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true }) as any) // FIXME: typings
       .then(([ caption ]) => caption)
   }
 
   static listVideoCaptions (videoId: number) {
     const query = {
-      order: [ [ 'language', 'ASC' ] ],
+      order: [ [ 'language', 'ASC' ] ] as OrderItem[],
       where: {
         videoId
       }
@@ -139,7 +137,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return VIDEO_LANGUAGES[language] || 'Unknown'
   }
 
-  static deleteAllCaptionsOfRemoteVideo (videoId: number, transaction: Sequelize.Transaction) {
+  static deleteAllCaptionsOfRemoteVideo (videoId: number, transaction: Transaction) {
     const query = {
       where: {
         videoId

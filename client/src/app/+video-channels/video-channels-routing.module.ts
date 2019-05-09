@@ -4,10 +4,11 @@ import { MetaGuard } from '@ngx-meta/core'
 import { VideoChannelsComponent } from './video-channels.component'
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelAboutComponent } from './video-channel-about/video-channel-about.component'
+import { VideoChannelPlaylistsComponent } from '@app/+video-channels/video-channel-playlists/video-channel-playlists.component'
 
 const videoChannelsRoutes: Routes = [
   {
-    path: ':videoChannelId',
+    path: ':videoChannelName',
     component: VideoChannelsComponent,
     canActivateChild: [ MetaGuard ],
     children: [
@@ -22,6 +23,19 @@ const videoChannelsRoutes: Routes = [
         data: {
           meta: {
             title: 'Video channel videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'video-channel-videos-list'
+          }
+        }
+      },
+      {
+        path: 'video-playlists',
+        component: VideoChannelPlaylistsComponent,
+        data: {
+          meta: {
+            title: 'Video channel playlists'
           }
         }
       },

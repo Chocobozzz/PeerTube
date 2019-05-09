@@ -18,6 +18,10 @@
       .actor-info-display-name {
         font-size: 20px;
         font-weight: $font-bold;
+
+        @media screen and (max-width: $small-view) {
+          font-size: 16px;
+        }
       }
 
       .actor-info-username {

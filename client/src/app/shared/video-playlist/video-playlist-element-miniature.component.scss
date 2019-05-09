@@ -1,0 +1,125 @@
+@import '_variables';
+@import '_mixins';
+@import '_miniature';
+
+.video {
+  display: flex;
+  align-items: center;
+  background-color: var(--mainBackgroundColor);
+  padding: 10px;
+  border-bottom: 1px solid $separator-border-color;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+
+    .more {
+      opacity: 1;
+    }
+  }
+
+  &.playing {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    cursor: pointer;
+
+    .position {
+      font-weight: $font-semibold;
+      margin-right: 10px;
+      color: $grey-foreground-color;
+      min-width: 25px;
+
+      my-global-icon {
+        @include apply-svg-color($grey-foreground-color);
+
+        width: 17px;
+        position: relative;
+        left: -2px;
+      }
+    }
+
+    my-video-thumbnail {
+      @include thumbnail-size-component(130px, 72px);
+
+      display: flex; // Avoids an issue with line-height that adds space below the element
+      margin-right: 10px;
+    }
+
+    .video-info {
+      display: flex;
+      flex-direction: column;
+      align-self: flex-start;
+      min-width: 0;
+
+      a {
+        color: var(--mainForegroundColor);
+        width: auto;
+
+        &:hover {
+          text-decoration: underline !important;
+        }
+      }
+
+      .video-info-name {
+        font-size: 18px;
+        font-weight: $font-semibold;
+        display: inline-block;
+
+        @include ellipsis;
+      }
+
+      .video-info-account, .video-info-timestamp {
+        color: $grey-foreground-color;
+      }
+    }
+  }
+
+  .more {
+    justify-self: flex-end;
+    margin-left: auto;
+    cursor: pointer;
+    opacity: 0;
+
+    &.show {
+      opacity: 1;
+    }
+
+    .icon-more {
+      @include apply-svg-color($grey-foreground-color);
+
+      display: flex;
+
+      &::after {
+        border: none;
+      }
+    }
+
+    .dropdown-item {
+      @include dropdown-with-icon-item;
+    }
+
+    .timestamp-options {
+      padding-top: 0;
+      padding-left: 35px;
+      margin-bottom: 15px;
+
+      > div {
+        display: flex;
+        align-items: center;
+      }
+
+      input {
+        @include peertube-button;
+        @include orange-button;
+
+        margin-top: 10px;
+      }
+    }
+  }
+}

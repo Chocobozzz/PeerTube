@@ -2,8 +2,8 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils'
-import { getVideosOverview } from '../../utils/overviews/overviews'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils'
+import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
 
 const expect = chai.expect
@@ -14,9 +14,7 @@ describe('Test a videos overview', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
   })
@@ -90,11 +88,6 @@ describe('Test a videos overview', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

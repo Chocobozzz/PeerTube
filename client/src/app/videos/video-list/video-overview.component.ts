@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AuthService } from '@app/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideosOverview } from '@app/shared/overview/videos-overview.model'
 import { OverviewService } from '@app/shared/overview'
@@ -21,7 +20,7 @@ export class VideoOverviewComponent implements OnInit {
 
   constructor (
     private i18n: I18n,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private authService: AuthService,
     private overviewService: OverviewService
   ) { }
@@ -43,10 +42,7 @@ export class VideoOverviewComponent implements OnInit {
             ) this.notResults = true
           },
 
-          err => {
-            console.log(err)
-            this.notificationsService.error('Error', err.text)
-          }
+          err => this.notifier.error(err.message)
         )
   }
 

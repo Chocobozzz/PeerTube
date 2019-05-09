@@ -6,24 +6,24 @@
 
   <ngb-tabset class="video-add-tabset root-tabset bootstrap" [ngClass]="{ 'hide-nav': secondStepType !== undefined }">
 
-    <ngb-tab i18n-title title="">
+    <ngb-tab>
       <ng-template ngbTabTitle><span i18n>Upload a file</span></ng-template>
       <ng-template ngbTabContent>
-        <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)"></my-video-upload>
+        <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)" (firstStepError)="onError()"></my-video-upload>
       </ng-template>
     </ngb-tab>
 
     <ngb-tab *ngIf="isVideoImportHttpEnabled()">
       <ng-template ngbTabTitle><span i18n>Import with URL</span></ng-template>
       <ng-template ngbTabContent>
-        <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)"></my-video-import-url>
+        <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)" (firstStepError)="onError()"></my-video-import-url>
       </ng-template>
     </ngb-tab>
 
     <ngb-tab *ngIf="isVideoImportTorrentEnabled()">
       <ng-template ngbTabTitle><span i18n>Import with torrent</span></ng-template>
       <ng-template ngbTabContent>
-        <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)"></my-video-import-torrent>
+        <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"></my-video-import-torrent>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

@@ -3,18 +3,23 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
-  flushTests,
-  killallServers,
+  flushAndRunServer,
   makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+} from '../../../../shared/extra-utils'
+
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 describe('Test user subscriptions API validators', function () {
   const path = '/api/v1/users/me/subscriptions'
@@ -26,9 +31,7 @@ describe('Test user subscriptions API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -36,7 +39,7 @@ describe('Test user subscriptions API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    await createUser(server.url, server.accessToken, user.username, user.password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(server, user)
   })
 
@@ -109,7 +112,7 @@ describe('Test user subscriptions API validators', function () {
       await makePostBodyRequest({
         url: server.url,
         path,
-        fields: { uri: 'user1_channel@localhost:9001' },
+        fields: { uri: 'user1_channel@localhost:' + server.port },
         statusCodeExpected: 401
       })
     })
@@ -141,13 +144,17 @@ describe('Test user subscriptions API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
+      this.timeout(20000)
+
       await makePostBodyRequest({
         url: server.url,
         path,
         token: server.accessToken,
-        fields: { uri: 'user1_channel@localhost:9001' },
+        fields: { uri: 'user1_channel@localhost:' + server.port },
         statusCodeExpected: 204
       })
+
+      await waitJobs([ server ])
     })
   })
 
@@ -155,7 +162,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with a non authenticated user', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:9001',
+        path: path + '/user1_channel@localhost:' + server.port,
         statusCodeExpected: 401
       })
     })
@@ -186,7 +193,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with an unknown subscription', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + '/root1@localhost:9001',
+        path: path + '/root1@localhost:' + server.port,
         token: server.accessToken,
         statusCodeExpected: 404
       })
@@ -195,14 +202,14 @@ describe('Test user subscriptions API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:9001',
+        path: path + '/user1_channel@localhost:' + server.port,
         token: server.accessToken,
         statusCodeExpected: 200
       })
     })
   })
 
-  describe('When checking if subscriptions exist', async function () {
+  describe('When checking if subscriptions exist', function () {
     const existPath = path + '/exist'
 
     it('Should fail with a non authenticated user', async function () {
@@ -235,7 +242,7 @@ describe('Test user subscriptions API validators', function () {
       await makeGetRequest({
         url: server.url,
         path: existPath,
-        query: { 'uris[]': 'coucou@localhost:9001' },
+        query: { 'uris[]': 'coucou@localhost:' + server.port },
         token: server.accessToken,
         statusCodeExpected: 200
       })
@@ -246,7 +253,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with a non authenticated user', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:9001',
+        path: path + '/user1_channel@localhost:' + server.port,
         statusCodeExpected: 401
       })
     })
@@ -277,7 +284,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should fail with an unknown subscription', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/root1@localhost:9001',
+        path: path + '/root1@localhost:' + server.port,
         token: server.accessToken,
         statusCodeExpected: 404
       })
@@ -286,7 +293,7 @@ describe('Test user subscriptions API validators', function () {
     it('Should succeed with the correct parameters', async function () {
       await makeDeleteRequest({
         url: server.url,
-        path: path + '/user1_channel@localhost:9001',
+        path: path + '/user1_channel@localhost:' + server.port,
         token: server.accessToken,
         statusCodeExpected: 204
       })
@@ -294,11 +301,6 @@ describe('Test user subscriptions API validators', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

@@ -81,11 +81,11 @@
       </trans-unit>
       <trans-unit id="Subtitles">
         <source>Subtitles</source>
-        <target>ترجمة</target>
+        <target>الترجمات</target>
       </trans-unit>
       <trans-unit id="subtitles off">
         <source>subtitles off</source>
-        <target>ألغ الترجمة</target>
+        <target>تعطيل الترجمة النصية</target>
       </trans-unit>
       <trans-unit id="Captions">
         <source>Captions</source>
@@ -93,7 +93,7 @@
       </trans-unit>
       <trans-unit id="captions off">
         <source>captions off</source>
-        <target>ألغ التعليقات</target>
+        <target>تعطيل التعليقات</target>
       </trans-unit>
       <trans-unit id="Chapters">
         <source>Chapters</source>
@@ -169,7 +169,7 @@
       </trans-unit>
       <trans-unit id=", opens subtitles settings dialog">
         <source>, opens subtitles settings dialog</source>
-        <target>، إفتح نافذة  إعدادات الترجمة</target>
+        <target>، إفتح نافذة  إعدادات الترجمات النصية</target>
       </trans-unit>
       <trans-unit id=", opens descriptions settings dialog">
         <source>, opens descriptions settings dialog</source>
@@ -247,9 +247,17 @@
         <source>Font Size</source>
         <target>حجم الخط</target>
       </trans-unit>
+      <trans-unit id="Text Edge Style">
+        <source>Text Edge Style</source>
+        <target>نمط حواف النص</target>
+      </trans-unit>
       <trans-unit id="None">
         <source>None</source>
-        <target>لا شيئ</target>
+        <target>لا شيء</target>
+      </trans-unit>
+      <trans-unit id="Font Family">
+        <source>Font Family</source>
+        <target>صنف الخط</target>
       </trans-unit>
       <trans-unit id="Reset">
         <source>Reset</source>
@@ -257,7 +265,7 @@
       </trans-unit>
       <trans-unit id="restore all settings to the default values">
         <source>restore all settings to the default values</source>
-        <target>أعد كل الإعدادات الى القيم الافتراضية</target>
+        <target>أعادة كافة الإعدادات إلى القيم الإفتراضية</target>
       </trans-unit>
       <trans-unit id="Done">
         <source>Done</source>
@@ -265,7 +273,11 @@
       </trans-unit>
       <trans-unit id="Caption Settings Dialog">
         <source>Caption Settings Dialog</source>
-        <target>اعدادات التعليقات</target>
+        <target>إعدادات التعليقات</target>
+      </trans-unit>
+      <trans-unit id="Beginning of dialog window. Escape will cancel and close the window.">
+        <source>Beginning of dialog window. Escape will cancel and close the window.</source>
+        <target>الضغط على زر Esc في بداية نافذة الحوار سيلغي ويقفل النافذة</target>
       </trans-unit>
       <trans-unit id="End of dialog window.">
         <source>End of dialog window.</source>
@@ -287,9 +299,17 @@
         <source>Speed</source>
         <target>السرعة</target>
       </trans-unit>
+      <trans-unit id="Subtitles/CC">
+        <source>Subtitles/CC</source>
+        <target>الترجمات النصية</target>
+      </trans-unit>
       <trans-unit id="peers">
         <source>peers</source>
         <target>الأقران</target>
+      </trans-unit>
+      <trans-unit id="peer">
+        <source>peer</source>
+        <target>نظير</target>
       </trans-unit>
       <trans-unit id="Go to the video page">
         <source>Go to the video page</source>
@@ -298,6 +318,10 @@
       <trans-unit id="Settings">
         <source>Settings</source>
         <target>الإعدادات</target>
+      </trans-unit>
+      <trans-unit id="Uses P2P, others may know you are watching this video.">
+        <source>Uses P2P, others may know you are watching this video.</source>
+        <target>يستخدم P2P، يمكن للآخرين معرفة إن كنت تشاهد هذا الفيديو.</target>
       </trans-unit>
       <trans-unit id="Copy the video URL">
         <source>Copy the video URL</source>
@@ -309,7 +333,15 @@
       </trans-unit>
       <trans-unit id="Copy embed code">
         <source>Copy embed code</source>
-        <target>نسخ الكود المضمن</target>
+        <target>نسخ الرمز المدمج</target>
+      </trans-unit>
+      <trans-unit id="Total downloaded: ">
+        <source>Total downloaded: </source>
+        <target>التحميل الكلي</target>
+      </trans-unit>
+      <trans-unit id="Total uploaded: ">
+        <source>Total uploaded: </source>
+        <target>الرفع الكلي</target>
       </trans-unit>
     </body>
   </file></xliff>

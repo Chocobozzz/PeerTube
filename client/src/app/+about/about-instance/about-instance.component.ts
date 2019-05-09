@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core'
-import { ServerService } from '@app/core'
-import { MarkdownService } from '@app/videos/shared'
-import { NotificationsService } from 'angular2-notifications'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { Notifier, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
+import { InstanceService } from '@app/shared/instance/instance.service'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-about-instance',
   templateUrl: './about-instance.component.html',
   styleUrls: [ './about-instance.component.scss' ]
 })
-
 export class AboutInstanceComponent implements OnInit {
+  @ViewChild('contactAdminModal') contactAdminModal: ContactAdminModalComponent
+
   shortDescription = ''
   descriptionHTML = ''
   termsHTML = ''
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private serverService: ServerService,
+    private instanceService: InstanceService,
     private markdownService: MarkdownService,
     private i18n: I18n
   ) {}
@@ -26,25 +29,30 @@ export class AboutInstanceComponent implements OnInit {
     return this.serverService.getConfig().instance.name
   }
 
-  get userVideoQuota () {
-    return this.serverService.getConfig().user.videoQuota
+  get isContactFormEnabled () {
+    return this.serverService.getConfig().email.enabled && this.serverService.getConfig().contactForm.enabled
   }
 
-  get isSignupAllowed () {
-    return this.serverService.getConfig().signup.allowed
+  get isNSFW () {
+    return this.serverService.getConfig().instance.isNSFW
   }
 
   ngOnInit () {
-    this.serverService.getAbout()
+    this.instanceService.getAbout()
       .subscribe(
-        res => {
+        async res => {
           this.shortDescription = res.instance.shortDescription
-          this.descriptionHTML = this.markdownService.textMarkdownToHTML(res.instance.description)
-          this.termsHTML = this.markdownService.textMarkdownToHTML(res.instance.terms)
+
+          this.descriptionHTML = await this.markdownService.textMarkdownToHTML(res.instance.description)
+          this.termsHTML = await this.markdownService.textMarkdownToHTML(res.instance.terms)
         },
 
-        err => this.notificationsService.error(this.i18n('Error getting about from server'), err)
+        () => this.notifier.error(this.i18n('Cannot get about information from server'))
       )
+  }
+
+  openContactModal () {
+    return this.contactAdminModal.show()
   }
 
 }

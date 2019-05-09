@@ -1,4 +1,3 @@
-import * as Sequelize from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -7,7 +6,6 @@ import {
   CreatedAt,
   DataType,
   ForeignKey,
-  IFindOptions,
   Is,
   Model,
   Scopes,
@@ -18,7 +16,7 @@ import { ActivityTagObject } from '../../../shared/models/activitypub/objects/co
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { sendDeleteVideoComment } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
@@ -29,6 +27,10 @@ import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { getServerActor } from '../../helpers/utils'
 import { UserModel } from '../account/user'
+import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
+import { regexpCapture } from '../../helpers/regexp'
+import { uniq } from 'lodash'
+import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -37,7 +39,7 @@ enum ScopeNames {
   ATTRIBUTES_FOR_API = 'ATTRIBUTES_FOR_API'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.ATTRIBUTES_FOR_API]: (serverAccountId: number, userAccountId?: number) => {
     return {
       attributes: {
@@ -61,22 +63,22 @@ enum ScopeNames {
           ]
         ]
       }
-    }
+    } as FindOptions
   },
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         include: [
           {
-            model: () => ActorModel,
+            model: ActorModel,
             include: [
               {
-                model: () => ServerModel,
+                model: ServerModel,
                 required: false
               },
               {
-                model: () => AvatarModel,
+                model: AvatarModel,
                 required: false
               }
             ]
@@ -88,7 +90,7 @@ enum ScopeNames {
   [ScopeNames.WITH_IN_REPLY_TO]: {
     include: [
       {
-        model: () => VideoCommentModel,
+        model: VideoCommentModel,
         as: 'InReplyToVideoComment'
       }
     ]
@@ -96,19 +98,19 @@ enum ScopeNames {
   [ScopeNames.WITH_VIDEO]: {
     include: [
       {
-        model: () => VideoModel,
+        model: VideoModel,
         required: true,
         include: [
           {
-            model: () => VideoChannelModel.unscoped(),
+            model: VideoChannelModel.unscoped(),
             required: true,
             include: [
               {
-                model: () => AccountModel,
+                model: AccountModel,
                 required: true,
                 include: [
                   {
-                    model: () => ActorModel,
+                    model: ActorModel,
                     required: true
                   }
                 ]
@@ -119,7 +121,7 @@ enum ScopeNames {
       }
     ]
   }
-})
+}))
 @Table({
   tableName: 'videoComment',
   indexes: [
@@ -241,8 +243,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
   }
 
-  static loadById (id: number, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadById (id: number, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         id
       }
@@ -253,8 +255,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findOne(query)
   }
 
-  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         id
       }
@@ -267,8 +269,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadByUrlAndPopulateAccount (url: string, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         url
       }
@@ -279,8 +281,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
+  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Transaction) {
+    const query: FindOptions = {
       where: {
         url
       }
@@ -304,15 +306,14 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         videoId,
         inReplyToCommentId: null,
         accountId: {
-          [Sequelize.Op.notIn]: Sequelize.literal(
+          [Op.notIn]: Sequelize.literal(
             '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
           )
         }
       }
     }
 
-    // FIXME: typings
-    const scopes: any[] = [
+    const scopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_ACCOUNT,
       {
         method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
@@ -333,15 +334,15 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const userAccountId = user ? user.Account.id : undefined
 
     const query = {
-      order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ],
+      order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
       where: {
         videoId,
-        [ Sequelize.Op.or ]: [
+        [ Op.or ]: [
           { id: threadId },
           { originCommentId: threadId }
         ],
         accountId: {
-          [Sequelize.Op.notIn]: Sequelize.literal(
+          [Op.notIn]: Sequelize.literal(
             '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
           )
         }
@@ -363,19 +364,21 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static listThreadParentComments (comment: VideoCommentModel, t: Sequelize.Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+  static listThreadParentComments (comment: VideoCommentModel, t: Transaction, order: 'ASC' | 'DESC' = 'ASC') {
     const query = {
-      order: [ [ 'createdAt', order ] ],
+      order: [ [ 'createdAt', order ] ] as Order,
       where: {
         id: {
-          [ Sequelize.Op.in ]: Sequelize.literal('(' +
+          [ Op.in ]: Sequelize.literal('(' +
             'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
-            'SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ' + comment.id + ' UNION ' +
-            'SELECT p.id, p."inReplyToCommentId" from "videoComment" p ' +
-            'INNER JOIN children c ON c."inReplyToCommentId" = p.id) ' +
+              `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${comment.id} ` +
+              'UNION ' +
+              'SELECT "parent"."id", "parent"."inReplyToCommentId" FROM "videoComment" "parent" ' +
+              'INNER JOIN "children" ON "children"."inReplyToCommentId" = "parent"."id"' +
+            ') ' +
             'SELECT id FROM children' +
           ')'),
-          [ Sequelize.Op.ne ]: comment.id
+          [ Op.ne ]: comment.id
         }
       },
       transaction: t
@@ -386,9 +389,9 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findAll(query)
   }
 
-  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Sequelize.Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Transaction, order: 'ASC' | 'DESC' = 'ASC') {
     const query = {
-      order: [ [ 'createdAt', order ] ],
+      order: [ [ 'createdAt', order ] ] as Order,
       offset: start,
       limit: count,
       where: {
@@ -402,7 +405,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   static listForFeed (start: number, count: number, videoId?: number) {
     const query = {
-      order: [ [ 'createdAt', 'DESC' ] ],
+      order: [ [ 'createdAt', 'DESC' ] ] as Order,
       offset: start,
       limit: count,
       where: {},
@@ -448,12 +451,67 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
   }
 
+  static cleanOldCommentsOf (videoId: number, beforeUpdatedAt: Date) {
+    const query = {
+      where: {
+        updatedAt: {
+          [Op.lt]: beforeUpdatedAt
+        },
+        videoId
+      }
+    }
+
+    return VideoCommentModel.destroy(query)
+  }
+
+  getCommentStaticPath () {
+    return this.Video.getWatchStaticPath() + ';threadId=' + this.getThreadId()
+  }
+
   getThreadId (): number {
     return this.originCommentId || this.id
   }
 
   isOwned () {
     return this.Account.isOwned()
+  }
+
+  extractMentions () {
+    let result: string[] = []
+
+    const localMention = `@(${actorNameAlphabet}+)`
+    const remoteMention = `${localMention}@${WEBSERVER.HOST}`
+
+    const mentionRegex = this.isOwned()
+      ? '(?:(?:' + remoteMention + ')|(?:' + localMention + '))' // Include local mentions?
+      : '(?:' + remoteMention + ')'
+
+    const firstMentionRegex = new RegExp(`^${mentionRegex} `, 'g')
+    const endMentionRegex = new RegExp(` ${mentionRegex}$`, 'g')
+    const remoteMentionsRegex = new RegExp(' ' + remoteMention + ' ', 'g')
+
+    result = result.concat(
+      regexpCapture(this.text, firstMentionRegex)
+        .map(([ , username1, username2 ]) => username1 || username2),
+
+      regexpCapture(this.text, endMentionRegex)
+        .map(([ , username1, username2 ]) => username1 || username2),
+
+      regexpCapture(this.text, remoteMentionsRegex)
+        .map(([ , username ]) => username)
+    )
+
+    // Include local mentions
+    if (this.isOwned()) {
+      const localMentionsRegex = new RegExp(' ' + localMention + ' ', 'g')
+
+      result = result.concat(
+        regexpCapture(this.text, localMentionsRegex)
+          .map(([ , username ]) => username)
+      )
+    }
+
+    return uniq(result)
   }
 
   toFormattedJSON () {

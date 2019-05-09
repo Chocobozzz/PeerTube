@@ -3,6 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -13,7 +14,7 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../utils'
+} from '../../../../shared/extra-utils'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { UserRole } from '../../../../shared/models/users'
 
@@ -55,8 +56,6 @@ describe('Test videos filter validator', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
     servers = await flushAndRunMultipleServers(2)
 
     await setAccessTokensToServers(servers)
@@ -64,13 +63,15 @@ describe('Test videos filter validator', function () {
     for (const server of servers) {
       const moderator = { username: 'moderator', password: 'my super password' }
       await createUser(
-        server.url,
-        server.accessToken,
-        moderator.username,
-        moderator.password,
-        undefined,
-        undefined,
-        UserRole.MODERATOR
+        {
+          url: server.url,
+          accessToken: server.accessToken,
+          username: moderator.username,
+          password: moderator.password,
+          videoQuota: undefined,
+          videoQuotaDaily: undefined,
+          role: UserRole.MODERATOR
+        }
       )
       server['moderatorAccessToken'] = await userLogin(server, moderator)
 
@@ -120,11 +121,6 @@ describe('Test videos filter validator', function () {
   })
 
   after(async function () {
-    killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests(servers)
   })
 })

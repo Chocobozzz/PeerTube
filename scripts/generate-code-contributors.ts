@@ -41,7 +41,7 @@ async function run () {
 }
 
 function get (url: string, headers: any = {}) {
-  return doRequest({
+  return doRequest<any>({
     uri: url,
     json: true,
     headers: Object.assign(headers, {
@@ -70,11 +70,17 @@ async function fetchGithub (url: string) {
 
 async function fetchZanata (zanataUsername: string, zanataPassword: string) {
   const today = new Date().toISOString().split('T')[0]
-  const url = `https://trad.framasoft.org/zanata/rest/project/peertube/version/develop/contributors/2018-01-01..${today}`
+  const year2018 = `https://trad.framasoft.org/zanata/rest/project/peertube/version/develop/contributors/2018-01-01..2019-01-01`
+  const year2019 = `https://trad.framasoft.org/zanata/rest/project/peertube/version/develop/contributors/2019-01-01..${today}`
 
   const headers = {
     'X-Auth-User': zanataUsername,
     'X-Auth-Token': zanataPassword
   }
-  return get(url, headers)
+  const [ results2018, results2019 ] = await Promise.all([
+    get(year2018, headers),
+    get(year2019, headers)
+  ])
+
+  return results2018.concat(results2019)
 }

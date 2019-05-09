@@ -5,9 +5,11 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "module": "esnext",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors":true,
     "alwaysStrict": true,
     "target": "es5",
@@ -26,6 +28,7 @@
     "baseUrl": "src",
     "paths": {
       "@app/*": [ "app/*" ],
+      "@shared/*": [ "../../shared/*" ],
       "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ],
       "fs": [ "./shims/noop" ],
       "http": [ "./shims/http" ],
@@ -39,11 +42,15 @@
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true
   },
+  "include": [
+    "./src",
+    "../../shared"
+  ],
   "exclude": [
+    "../../node_modules",
     "../node_modules",
-    "node_modules",
-    "dist",
-    "../server",
-    "src/**/*.spec.ts"
+    "../dist",
+    "../../server",
+    "../src/**/*.spec.ts"
   ]
 }

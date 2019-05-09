@@ -5,6 +5,8 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { ActorModel } from '../../../models/activitypub/actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { getVideoLikeActivityPubUrl } from '../url'
+import { getAPId } from '../../../helpers/activitypub'
 
 async function processLikeActivity (activity: ActivityLike, byActor: ActorModel) {
   return retryTransactionWrapper(processLikeVideo, byActor, activity)
@@ -19,7 +21,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
-  const videoUrl = activity.object
+  const videoUrl = getAPId(activity.object)
 
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
@@ -34,7 +36,7 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
     }
     const [ , created ] = await AccountVideoRateModel.findOrCreate({
       where: rate,
-      defaults: rate,
+      defaults: Object.assign({}, rate, { url: getVideoLikeActivityPubUrl(byActor, video) }),
       transaction: t
     })
     if (created === true) await video.increment('likes', { transaction: t })

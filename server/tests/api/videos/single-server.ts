@@ -6,8 +6,9 @@ import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
   checkVideoFilesWereRemoved,
+  cleanupTests,
   completeVideoCheck,
-  flushTests,
+  flushAndRunServer,
   getVideo,
   getVideoCategories,
   getVideoLanguages,
@@ -17,10 +18,8 @@ import {
   getVideosListPagination,
   getVideosListSort,
   getVideosWithFilters,
-  killallServers,
   rateVideo,
   removeVideo,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   testImage,
@@ -28,7 +27,7 @@ import {
   uploadVideo,
   viewVideo,
   wait
-} from '../../utils'
+} from '../../../../shared/extra-utils'
 
 const expect = chai.expect
 
@@ -55,6 +54,7 @@ describe('Test a single server', function () {
     tags: [ 'tag1', 'tag2', 'tag3' ],
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
+    downloadEnabled: true,
     channel: {
       displayName: 'Main root channel',
       name: 'root_channel',
@@ -87,6 +87,7 @@ describe('Test a single server', function () {
     privacy: VideoPrivacy.PUBLIC,
     duration: 5,
     commentsEnabled: false,
+    downloadEnabled: false,
     channel: {
       name: 'root_channel',
       displayName: 'Main root channel',
@@ -105,9 +106,7 @@ describe('Test a single server', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
   })
@@ -356,6 +355,7 @@ describe('Test a single server', function () {
       nsfw: false,
       description: 'my super description updated',
       commentsEnabled: false,
+      downloadEnabled: false,
       tags: [ 'tagup1', 'tagup2' ]
     }
     await updateVideo(server.url, server.accessToken, videoId, attributes)
@@ -424,11 +424,6 @@ describe('Test a single server', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

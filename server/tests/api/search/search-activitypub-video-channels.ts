@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  addVideoChannel,
+  addVideoChannel, cleanupTests,
   createUser,
   deleteVideoChannel,
   flushAndRunMultipleServers,
@@ -17,10 +17,10 @@ import {
   uploadVideo,
   userLogin,
   wait
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { VideoChannel } from '../../../../shared/models/videos'
-import { searchVideoChannel } from '../../utils/search/video-channels'
+import { searchVideoChannel } from '../../../../shared/extra-utils/search/video-channels'
 
 const expect = chai.expect
 
@@ -33,14 +33,12 @@ describe('Test a ActivityPub video channels search', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
     servers = await flushAndRunMultipleServers(2)
 
     await setAccessTokensToServers(servers)
 
     {
-      await createUser(servers[0].url, servers[0].accessToken, 'user1_server1', 'password')
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: 'user1_server1', password: 'password' })
       const channel = {
         name: 'channel1_server1',
         displayName: 'Channel 1 server 1'
@@ -50,7 +48,7 @@ describe('Test a ActivityPub video channels search', function () {
 
     {
       const user = { username: 'user1_server2', password: 'password' }
-      await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
       userServer2Token = await userLogin(servers[1], user)
 
       const channel = {
@@ -208,11 +206,6 @@ describe('Test a ActivityPub video channels search', function () {
   })
 
   after(async function () {
-    killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests(servers)
   })
 })

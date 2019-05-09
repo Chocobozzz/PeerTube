@@ -43,7 +43,7 @@ directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 tar_name="peertube-$version.tar.xz"
 
-changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
+changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "## $version" | sed '1{/^$/d}')
 
 printf "Changelog will be:\\n\\n%s\\n\\n" "$changelog"
 
@@ -60,7 +60,9 @@ fi
 
 npm version -f --no-git-tag-version --no-commit-hooks "$1"
 
-git commit package.json client/package.json -m "Bumped to version $version"
+./scripts/openapi-peertube-version.sh
+
+git commit package.json client/package.json ./support/doc/api/openapi.yaml -m "Bumped to version $version"
 git tag -s -a "$version" -m "$version"
 
 npm run build

@@ -4,18 +4,20 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { parse } from 'url'
-import { CONFIG } from './constants'
+import { CONFIG } from './config'
 import { logger } from '../helpers/logger'
 import { getServerActor } from '../helpers/utils'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isArray } from '../helpers/custom-validators/misc'
 import { uniq } from 'lodash'
+import { Emailer } from '../lib/emailer'
+import { WEBSERVER } from './constants'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
 
   const parsed = parse(actor.url)
-  if (CONFIG.WEBSERVER.HOST !== parsed.host) {
+  if (WEBSERVER.HOST !== parsed.host) {
     const NODE_ENV = config.util.getEnv('NODE_ENV')
     const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
 
@@ -32,9 +34,25 @@ async function checkActivityPubUrls () {
 // Some checks on configuration files
 // Return an error message, or null if everything is okay
 function checkConfig () {
-  const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
+
+  // Moved configuration keys
+  if (config.has('services.csp-logger')) {
+    logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
+  }
+
+  // Email verification
+  if (!Emailer.isEnabled()) {
+    if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
+      return 'Emailer is disabled but you require signup email verification.'
+    }
+
+    if (CONFIG.CONTACT_FORM.ENABLED) {
+      logger.warn('Emailer is disabled so the contact form will not work.')
+    }
+  }
 
   // NSFW policy
+  const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
   {
     const available = [ 'do_not_list', 'blur', 'display' ]
     if (available.indexOf(defaultNSFWPolicy) === -1) {
@@ -66,8 +84,11 @@ function checkConfig () {
     if (recentlyAddedStrategy && isNaN(recentlyAddedStrategy.minViews)) {
       return 'Min views in recently added strategy is not a number'
     }
+  } else {
+    return 'Videos redundancy should be an array (you must uncomment lines containing - too)'
   }
 
+  // Check storage directory locations
   if (isProdInstance()) {
     const configStorage = config.get('storage')
     for (const key of Object.keys(configStorage)) {

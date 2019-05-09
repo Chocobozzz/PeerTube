@@ -6,11 +6,11 @@ import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } fr
 import { ResultList } from '../../../../../shared/models/result-list.model'
 import {
   UserVideoRate,
+  UserVideoRateType,
   UserVideoRateUpdate,
   VideoConstant,
   VideoFilter,
   VideoPrivacy,
-  VideoRateType,
   VideoUpdate
 } from '../../../../../shared/models/videos'
 import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
@@ -31,6 +31,8 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
+import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 export interface VideosProvider {
   getVideos (
@@ -81,6 +83,7 @@ export class VideoService implements VideosProvider {
     const description = video.description || null
     const support = video.support || null
     const scheduleUpdate = video.scheduleUpdate || null
+    const originallyPublishedAt = video.originallyPublishedAt || null
 
     const body: VideoUpdate = {
       name: video.name,
@@ -95,9 +98,11 @@ export class VideoService implements VideosProvider {
       nsfw: video.nsfw,
       waitTranscoding: video.waitTranscoding,
       commentsEnabled: video.commentsEnabled,
+      downloadEnabled: video.downloadEnabled,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile,
-      scheduleUpdate
+      scheduleUpdate,
+      originallyPublishedAt
     }
 
     const data = objectToFormData(body)
@@ -161,6 +166,23 @@ export class VideoService implements VideosProvider {
 
     return this.authHttp
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
+               .pipe(
+                 switchMap(res => this.extractVideos(res)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getPlaylistVideos (
+    videoPlaylistId: number | string,
+    videoPagination: ComponentPagination
+  ): Observable<{ videos: Video[], totalVideos: number }> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    return this.authHttp
+               .get<ResultList<Video>>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))
@@ -332,7 +354,7 @@ export class VideoService implements VideosProvider {
     return privacies
   }
 
-  private setVideoRate (id: number, rateType: VideoRateType) {
+  private setVideoRate (id: number, rateType: UserVideoRateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate'
     const body: UserVideoRateUpdate = {
       rating: rateType

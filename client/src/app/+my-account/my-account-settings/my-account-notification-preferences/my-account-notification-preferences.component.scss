@@ -1,0 +1,33 @@
+@import '_variables';
+@import '_mixins';
+
+.custom-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $separator-border-color;
+
+  &:first-child {
+    font-size: 16px;
+
+    & > div {
+      font-weight: $font-semibold;
+    }
+  }
+
+  & > div {
+    width: 350px;
+
+    @media screen and (max-width: $small-view) {
+      width: auto;
+
+      &:first-child {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  & > div {
+    padding: 10px
+  }
+}
+

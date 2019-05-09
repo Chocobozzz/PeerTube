@@ -3,6 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -13,10 +14,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, userLogin
-} from '../utils'
+} from '../../../shared/extra-utils'
 import * as libxmljs from 'libxmljs'
-import { addVideoCommentThread } from '../utils/videos/video-comments'
-import { waitJobs } from '../utils/server/jobs'
+import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
+import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { User } from '../../../shared/models/users'
 
 chai.use(require('chai-xml'))
@@ -50,7 +51,7 @@ describe('Test syndication feeds', () => {
 
     {
       const attr = { username: 'john', password: 'password' }
-      await createUser(servers[0].url, servers[0].accessToken, attr.username, attr.password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: attr.username, password: attr.password })
       userAccessToken = await userLogin(servers[0], attr)
 
       const res = await getMyUserInformation(servers[0].url, userAccessToken)
@@ -208,11 +209,6 @@ describe('Test syndication feeds', () => {
   })
 
   after(async function () {
-    killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests(servers)
   })
 })

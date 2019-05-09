@@ -3,13 +3,14 @@ import { ActivityAudience, ActivityCreate } from '../../../../shared/models/acti
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist'
+import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
+import { getServerActor } from '../../../helpers/utils'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
@@ -25,32 +26,34 @@ async function sendCreateVideo (video: VideoModel, t: Transaction) {
   return broadcastToFollowers(createActivity, byActor, [ byActor ], t)
 }
 
-async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel) {
-  if (!video.VideoChannel.Account.Actor.serverId) return // Local
-
-  const url = getVideoAbuseActivityPubUrl(videoAbuse)
-
-  logger.info('Creating job to send video abuse %s.', url)
-
-  // Custom audience, we only send the abuse to the origin instance
-  const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
-  const createActivity = buildCreateActivity(url, byActor, videoAbuse.toActivityPubObject(), audience)
-
-  return unicastTo(createActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-}
-
-async function sendCreateCacheFile (byActor: ActorModel, fileRedundancy: VideoRedundancyModel) {
+async function sendCreateCacheFile (byActor: ActorModel, video: VideoModel, fileRedundancy: VideoRedundancyModel) {
   logger.info('Creating job to send file cache of %s.', fileRedundancy.url)
-
-  const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(fileRedundancy.VideoFile.Video.id)
-  const redundancyObject = fileRedundancy.toActivityPubObject()
 
   return sendVideoRelatedCreateActivity({
     byActor,
     video,
     url: fileRedundancy.url,
-    object: redundancyObject
+    object: fileRedundancy.toActivityPubObject()
   })
+}
+
+async function sendCreateVideoPlaylist (playlist: VideoPlaylistModel, t: Transaction) {
+  if (playlist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
+
+  logger.info('Creating job to send create video playlist of %s.', playlist.url)
+
+  const byActor = playlist.OwnerAccount.Actor
+  const audience = getAudience(byActor, playlist.privacy === VideoPlaylistPrivacy.PUBLIC)
+
+  const object = await playlist.toActivityPubObject(null, t)
+  const createActivity = buildCreateActivity(playlist.url, byActor, object, audience)
+
+  const serverActor = await getServerActor()
+  const toFollowersOf = [ byActor, serverActor ]
+
+  if (playlist.VideoChannel) toFollowersOf.push(playlist.VideoChannel.Actor)
+
+  return broadcastToFollowers(createActivity, byActor, toFollowersOf, t)
 }
 
 async function sendCreateVideoComment (comment: VideoCommentModel, t: Transaction) {
@@ -91,37 +94,6 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
   return unicastTo(createActivity, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
-async function sendCreateView (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  logger.info('Creating job to send view of %s.', video.url)
-
-  const url = getVideoViewActivityPubUrl(byActor, video)
-  const viewActivity = buildViewActivity(byActor, video)
-
-  return sendVideoRelatedCreateActivity({
-    // Use the server actor to send the view
-    byActor,
-    video,
-    url,
-    object: viewActivity,
-    transaction: t
-  })
-}
-
-async function sendCreateDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  logger.info('Creating job to dislike %s.', video.url)
-
-  const url = getVideoDislikeActivityPubUrl(byActor, video)
-  const dislikeActivity = buildDislikeActivity(byActor, video)
-
-  return sendVideoRelatedCreateActivity({
-    byActor,
-    video,
-    url,
-    object: dislikeActivity,
-    transaction: t
-  })
-}
-
 function buildCreateActivity (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityCreate {
   if (!audience) audience = getAudience(byActor)
 
@@ -136,32 +108,13 @@ function buildCreateActivity (url: string, byActor: ActorModel, object: any, aud
   )
 }
 
-function buildDislikeActivity (byActor: ActorModel, video: VideoModel) {
-  return {
-    type: 'Dislike',
-    actor: byActor.url,
-    object: video.url
-  }
-}
-
-function buildViewActivity (byActor: ActorModel, video: VideoModel) {
-  return {
-    type: 'View',
-    actor: byActor.url,
-    object: video.url
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   sendCreateVideo,
-  sendVideoAbuse,
   buildCreateActivity,
-  sendCreateView,
-  sendCreateDislike,
-  buildDislikeActivity,
   sendCreateVideoComment,
+  sendCreateVideoPlaylist,
   sendCreateCacheFile
 }
 

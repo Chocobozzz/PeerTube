@@ -54,7 +54,7 @@
           <ng-container i18n>View all {{ comment.totalReplies }} replies</ng-container>
 
           <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>
-          <my-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-loader>
+          <my-small-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-small-loader>
         </div>
       </div>
     </div>

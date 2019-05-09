@@ -2,20 +2,19 @@
 
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
-  flushTests,
-  killallServers,
+  flushAndRunServer,
   makeDeleteRequest,
   makeGetRequest,
   makeUploadRequest,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
   userLogin
-} from '../../utils'
+} from '../../../../shared/extra-utils'
 import { join } from 'path'
-import { createVideoCaption } from '../../utils/videos/video-captions'
+import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
 
 describe('Test video captions API validator', function () {
   const path = '/api/v1/videos/'
@@ -29,9 +28,7 @@ describe('Test video captions API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -45,7 +42,7 @@ describe('Test video captions API validator', function () {
         username: 'user1',
         password: 'my super password'
       }
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       userAccessToken = await userLogin(server, user)
     }
   })
@@ -272,11 +269,6 @@ describe('Test video captions API validator', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

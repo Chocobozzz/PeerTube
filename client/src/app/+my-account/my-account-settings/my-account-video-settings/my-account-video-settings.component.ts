@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { UserUpdateMe } from '../../../../../../shared'
 import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
@@ -19,7 +19,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private i18n: I18n
   ) {
@@ -54,12 +54,12 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
 
     this.userService.updateMyProfile(details).subscribe(
       () => {
-        this.notificationsService.success(this.i18n('Success'), this.i18n('Information updated.'))
+        this.notifier.success(this.i18n('Information updated.'))
 
         this.authService.refreshUserInformation()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 }

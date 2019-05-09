@@ -13,7 +13,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { getSort, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
 import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../helpers/custom-validators/video-imports'
@@ -21,18 +21,18 @@ import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { UserModel } from '../account/user'
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => UserModel.unscoped(),
+      model: UserModel.unscoped(),
       required: true
     },
     {
-      model: () => VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
+      model: VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
       required: false
     }
   ]
-})
+}))
 
 @Table({
   tableName: 'videoImport',
@@ -55,13 +55,13 @@ export class VideoImportModel extends Model<VideoImportModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoImportTargetUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'targetUrl'))
+  @Is('VideoImportTargetUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'targetUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max))
   targetUrl: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoImportMagnetUri', value => throwIfNotValid(value, isVideoMagnetUriValid, 'magnetUri'))
+  @Is('VideoImportMagnetUri', value => throwIfNotValid(value, isVideoMagnetUriValid, 'magnetUri', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_IMPORTS.URL.max)) // Use the same constraints than URLs
   magnetUri: string
 
@@ -115,7 +115,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
   }
 
   static loadAndPopulateVideo (id: number) {
-    return VideoImportModel.findById(id)
+    return VideoImportModel.findByPk(id)
   }
 
   static listUserVideoImportsForApi (userId: number, start: number, count: number, sort: string) {
@@ -142,6 +142,10 @@ export class VideoImportModel extends Model<VideoImportModel> {
                                total: count
                              }
                            })
+  }
+
+  getTargetIdentifier () {
+    return this.targetUrl || this.magnetUri || this.torrentName
   }
 
   toFormattedJSON (): VideoImport {

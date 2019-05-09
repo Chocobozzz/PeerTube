@@ -4,16 +4,19 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
-import { CONFIG, SERVER_ACTOR_NAME } from '../../initializers'
+import { SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
+import { ActorModel } from '../../models/activitypub/actor'
+import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
+import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Force https if the administrator wants to make friends
-    if (isTestInstance() === false && CONFIG.WEBSERVER.SCHEME === 'http') {
+    if (isTestInstance() === false && WEBSERVER.SCHEME === 'http') {
       return res.status(500)
         .json({
           error: 'Cannot follow on a non HTTPS web server.'
@@ -33,7 +36,7 @@ const removeFollowingValidator = [
   param('host').custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking unfollow parameters', { parameters: req.params })
+    logger.debug('Checking unfollowing parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
@@ -44,7 +47,7 @@ const removeFollowingValidator = [
       return res
         .status(404)
         .json({
-          error: `Follower ${req.params.host} not found.`
+          error: `Following ${req.params.host} not found.`
         })
         .end()
     }
@@ -54,9 +57,57 @@ const removeFollowingValidator = [
   }
 ]
 
+const getFollowerValidator = [
+  param('nameWithHost').custom(isValidActorHandle).withMessage('Should have a valid nameWithHost'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking get follower parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    let follow: ActorFollowModel
+    try {
+      const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
+      const actor = await ActorModel.loadByUrl(actorUrl)
+
+      const serverActor = await getServerActor()
+      follow = await ActorFollowModel.loadByActorAndTarget(actor.id, serverActor.id)
+    } catch (err) {
+      logger.warn('Cannot get actor from handle.', { handle: req.params.nameWithHost, err })
+    }
+
+    if (!follow) {
+      return res
+        .status(404)
+        .json({
+          error: `Follower ${req.params.nameWithHost} not found.`
+        })
+        .end()
+    }
+
+    res.locals.follow = follow
+    return next()
+  }
+]
+
+const acceptOrRejectFollowerValidator = [
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking accept/reject follower parameters', { parameters: req.params })
+
+    const follow = res.locals.follow
+    if (follow.state !== 'pending') {
+      return res.status(400).json({ error: 'Follow is not in pending state.' }).end()
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   followValidator,
-  removeFollowingValidator
+  removeFollowingValidator,
+  getFollowerValidator,
+  acceptOrRejectFollowerValidator
 }

@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'mixins';
+
+.information {
+  margin-bottom: 20px;
+}
+
+textarea {
+  @include peertube-textarea(100%, 100px);
+}

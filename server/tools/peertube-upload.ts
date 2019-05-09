@@ -1,10 +1,10 @@
 import * as program from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
-import { getClient, login } from '../tests/utils'
-import { uploadVideo } from '../tests/utils/index'
+import { getClient, login } from '../../shared/extra-utils'
+import { uploadVideo } from '../../shared/extra-utils/'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { netrc, getSettings } from './cli'
+import { getRemoteObjectOrDie, getSettings } from './cli'
 
 program
   .name('upload')
@@ -26,48 +26,15 @@ program
   .option('-f, --file <file>', 'Video absolute file path')
   .parse(process.argv)
 
-if (!program['tags']) program['tags'] = []
-if (!program['nsfw']) program['nsfw'] = false
-if (!program['privacy']) program['privacy'] = VideoPrivacy.PUBLIC
-if (!program['commentsEnabled']) program['commentsEnabled'] = false
-
 getSettings()
   .then(settings => {
-    if (
-      (!program['url'] ||
-      !program['username'] ||
-      !program['password']) &&
-      (settings.remotes.length === 0)
-    ) {
-      if (!program['url']) console.error('--url field is required.')
-      if (!program['username']) console.error('--username field is required.')
-      if (!program['password']) console.error('--password field is required.')
-      if (!program['videoName']) console.error('--video-name field is required.')
-      if (!program['file']) console.error('--file field is required.')
-      process.exit(-1)
-    }
+    const { url, username, password } = getRemoteObjectOrDie(program, settings)
 
-    if (
-      (!program['url'] ||
-      !program['username'] ||
-      !program['password']) &&
-      (settings.remotes.length > 0)
-    ) {
-      if (!program['url']) {
-        program['url'] = (settings.default !== -1) ?
-          settings.remotes[settings.default] :
-          settings.remotes[0]
-      }
-      if (!program['username']) program['username'] = netrc.machines[program['url']].login
-      if (!program['password']) program['password'] = netrc.machines[program['url']].password
-    }
+    if (!program['videoName'] || !program['file'] || !program['channelId']) {
+      if (!program['videoName']) console.error('--video-name is required.')
+      if (!program['file']) console.error('--file is required.')
+      if (!program['channelId']) console.error('--channel-id is required.')
 
-    if (
-      !program['videoName'] ||
-      !program['file']
-    ) {
-      if (!program['videoName']) console.error('--video-name field is required.')
-      if (!program['file']) console.error('--file field is required.')
       process.exit(-1)
     }
 
@@ -76,28 +43,25 @@ getSettings()
       process.exit(-1)
     }
 
-    run().catch(err => {
+    run(url, username, password).catch(err => {
       console.error(err)
       process.exit(-1)
     })
   })
 
-async function run () {
-  const res = await getClient(program[ 'url' ])
+async function run (url: string, username: string, password: string) {
+  const resClient = await getClient(program[ 'url' ])
   const client = {
-    id: res.body.client_id,
-    secret: res.body.client_secret
+    id: resClient.body.client_id,
+    secret: resClient.body.client_secret
   }
 
-  const user = {
-    username: program[ 'username' ],
-    password: program[ 'password' ]
-  }
+  const user = { username, password }
 
   let accessToken: string
   try {
-    const res2 = await login(program[ 'url' ], client, user)
-    accessToken = res2.body.access_token
+    const res = await login(url, client, user)
+    accessToken = res.body.access_token
   } catch (err) {
     throw new Error('Cannot authenticate. Please check your username/password.')
   }
@@ -108,26 +72,32 @@ async function run () {
 
   const videoAttributes = {
     name: program['videoName'],
-    category: program['category'],
+    category: program['category'] || undefined,
     channelId: program['channelId'],
-    licence: program['licence'],
-    language: program['language'],
-    nsfw: program['nsfw'],
-    description: program['videoDescription'],
-    tags: program['tags'],
-    commentsEnabled: program['commentsEnabled'],
+    licence: program['licence'] || undefined,
+    language: program['language'] || undefined,
+    nsfw: program['nsfw'] !== undefined ? program['nsfw'] : false,
+    description: program['videoDescription'] || '',
+    tags: program['tags'] || [],
+    commentsEnabled: program['commentsEnabled'] !== undefined ? program['commentsEnabled'] : true,
+    downloadEnabled: program['downloadEnabled'] !== undefined ? program['downloadEnabled'] : true,
     fixture: program['file'],
     thumbnailfile: program['thumbnail'],
     previewfile: program['preview'],
     waitTranscoding: true,
-    privacy: program['privacy'],
+    privacy: program['privacy'] || VideoPrivacy.PUBLIC,
     support: undefined
   }
 
-  await uploadVideo(program[ 'url' ], accessToken, videoAttributes)
-
-  console.log(`Video ${program['videoName']} uploaded.`)
-  process.exit(0)
+  try {
+    await uploadVideo(url, accessToken, videoAttributes)
+    console.log(`Video ${program['videoName']} uploaded.`)
+    process.exit(0)
+  } catch (err) {
+    console.log('coucou')
+    console.error(require('util').inspect(err))
+    process.exit(-1)
+  }
 }
 
 // ----------------------------------------------------------------------------

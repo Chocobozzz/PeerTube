@@ -9,7 +9,7 @@ fi
 # Always copy default and custom env configuration file, in cases where new keys were added
 cp /app/config/default.yaml /config
 cp /app/support/docker/production/config/custom-environment-variables.yaml /config
-chown -R peertube:peertube /config
+find /config ! -user peertube -exec chown peertube:peertube {} \;
 
 # first arg is `-f` or `--some-option`
 # or first arg is `something.conf`
@@ -19,7 +19,7 @@ fi
 
 # allow the container to be started with `--user`
 if [ "$1" = 'npm' -a "$(id -u)" = '0' ]; then
-    chown -R peertube:peertube /data
+    find /data ! -user peertube -exec  chown peertube:peertube {} \;
     exec gosu peertube "$0" "$@"
 fi
 

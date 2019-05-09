@@ -6,11 +6,11 @@ import {
   getVideosList,
   killallServers,
   rateVideo,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../utils'
+} from '../../../shared/extra-utils'
 import * as Bluebird from 'bluebird'
 
 start()
@@ -19,11 +19,10 @@ start()
 // ----------------------------------------------------------------------------
 
 async function start () {
-  await flushTests()
 
   console.log('Flushed tests.')
 
-  const server = await runServer(6)
+  const server = await flushAndRunServer(6)
 
   process.on('exit', async () => {
     killallServers([ server ])
@@ -78,7 +77,7 @@ function createUserCustom (server: ServerInfo) {
   const username = Date.now().toString() + getRandomInt(0, 100000)
   console.log('Creating user %s.', username)
 
-  return createUser(server.url, server.accessToken, username, 'coucou')
+  return createUser({ url: server.url, accessToken: server.accessToken, username: username, password: 'coucou' })
 }
 
 function uploadCustom (server: ServerInfo) {

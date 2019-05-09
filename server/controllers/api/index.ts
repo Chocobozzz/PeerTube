@@ -11,6 +11,7 @@ import { videoChannelRouter } from './video-channel'
 import * as cors from 'cors'
 import { searchRouter } from './search'
 import { overviewsRouter } from './overviews'
+import { videoPlaylistRouter } from './video-playlist'
 
 const apiRouter = express.Router()
 
@@ -26,6 +27,7 @@ apiRouter.use('/config', configRouter)
 apiRouter.use('/users', usersRouter)
 apiRouter.use('/accounts', accountsRouter)
 apiRouter.use('/video-channels', videoChannelRouter)
+apiRouter.use('/video-playlists', videoPlaylistRouter)
 apiRouter.use('/videos', videosRouter)
 apiRouter.use('/jobs', jobsRouter)
 apiRouter.use('/search', searchRouter)
@@ -39,6 +41,6 @@ export { apiRouter }
 
 // ---------------------------------------------------------------------------
 
-function pong (req: express.Request, res: express.Response, next: express.NextFunction) {
+function pong (req: express.Request, res: express.Response) {
   return res.send('pong').status(200).end()
 }

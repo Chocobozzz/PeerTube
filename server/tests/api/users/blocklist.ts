@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { AccountBlock, ServerBlock, Video } from '../../../../shared/index'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -12,16 +13,16 @@ import {
   ServerInfo,
   uploadVideo,
   userLogin
-} from '../../utils/index'
-import { setAccessTokensToServers } from '../../utils/users/login'
-import { getVideosListWithToken, getVideosList } from '../../utils/videos/videos'
+} from '../../../../shared/extra-utils/index'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { getVideosListWithToken, getVideosList } from '../../../../shared/extra-utils/videos/videos'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/extra-utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import {
   addAccountToAccountBlocklist,
@@ -36,7 +37,7 @@ import {
   removeAccountFromServerBlocklist,
   removeServerFromAccountBlocklist,
   removeServerFromServerBlocklist
-} from '../../utils/users/blocklist'
+} from '../../../../shared/extra-utils/users/blocklist'
 
 const expect = chai.expect
 
@@ -79,14 +80,12 @@ describe('Test blocklist', function () {
   before(async function () {
     this.timeout(60000)
 
-    await flushTests()
-
     servers = await flushAndRunMultipleServers(2)
     await setAccessTokensToServers(servers)
 
     {
       const user = { username: 'user1', password: 'password' }
-      await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
       userToken1 = await userLogin(servers[0], user)
       await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
@@ -94,14 +93,14 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'moderator', password: 'password' }
-      await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
       userModeratorToken = await userLogin(servers[0], user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
-      await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
+      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
 
       userToken2 = await userLogin(servers[1], user)
       await uploadVideo(servers[1].url, userToken2, { name: 'video user 2' })
@@ -501,11 +500,6 @@ describe('Test blocklist', function () {
   })
 
   after(async function () {
-    killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this[ 'ok' ]) {
-      await flushTests()
-    }
+    await cleanupTests(servers)
   })
 })

@@ -1,6 +1,6 @@
 <div *ngIf="!hasImportedVideo" class="upload-video-container">
-  <div class="import-video-torrent">
-    <div class="icon icon-upload"></div>
+  <div class="first-step-block">
+    <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
 
     <div class="button-file">
       <span i18n>Select the torrent to import</span>
@@ -45,7 +45,12 @@
   </div>
 </div>
 
-<div *ngIf="hasImportedVideo" class="alert alert-info" i18n>
+<div *ngIf="error" class="alert alert-danger">
+  <div i18n>Sorry, but something went wrong</div>
+  {{ error }}
+</div>
+
+<div *ngIf="hasImportedVideo && !error" class="alert alert-info" i18n>
   Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
 </div>
 
@@ -53,7 +58,7 @@
 <form [hidden]="!hasImportedVideo" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions" [schedulePublicationPossible]="false"
-    [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
+    [validationMessages]="validationMessages" [videoPrivacies]="explainedVideoPrivacies" [userVideoChannels]="userVideoChannels"
   ></my-video-edit>
 
   <div class="submit-container">
@@ -61,7 +66,7 @@
        (click)="updateSecondStep()"
        [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true }"
     >
-      <span class="icon icon-validate"></span>
+      <my-global-icon iconName="validate"></my-global-icon>
       <input type="button" i18n-value value="Update" />
     </div>
   </div>

@@ -3,7 +3,7 @@ import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../../shared'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments'
-import { isVideoExist } from '../../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { VideoModel } from '../../../models/video/video'
@@ -17,7 +17,7 @@ const listVideoCommentThreadsValidator = [
     logger.debug('Checking listVideoCommentThreads parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res, 'only-video')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
 
     return next()
   }
@@ -31,8 +31,8 @@ const listVideoThreadCommentsValidator = [
     logger.debug('Checking listVideoThreadComments parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res, 'only-video')) return
-    if (!await isVideoCommentThreadExist(req.params.threadId, res.locals.video, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'only-video')) return
+    if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.video, res)) return
 
     return next()
   }
@@ -46,7 +46,7 @@ const addVideoCommentThreadValidator = [
     logger.debug('Checking addVideoCommentThread parameters.', { parameters: req.params, body: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
     if (!isVideoCommentsEnabled(res.locals.video, res)) return
 
     return next()
@@ -62,9 +62,9 @@ const addVideoCommentReplyValidator = [
     logger.debug('Checking addVideoCommentReply parameters.', { parameters: req.params, body: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
     if (!isVideoCommentsEnabled(res.locals.video, res)) return
-    if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.video, res)) return
 
     return next()
   }
@@ -78,8 +78,8 @@ const videoCommentGetValidator = [
     logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res, 'id')) return
-    if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.video, res)) return
 
     return next()
   }
@@ -93,8 +93,8 @@ const removeVideoCommentValidator = [
     logger.debug('Checking removeVideoCommentValidator parameters.', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
-    if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.video, res)) return
 
     // Check if the user who did the request is able to delete the video
     if (!checkUserCanDeleteVideoComment(res.locals.oauth.token.User, res.locals.videoComment, res)) return
@@ -116,7 +116,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function isVideoCommentThreadExist (id: number, video: VideoModel, res: express.Response) {
+async function doesVideoCommentThreadExist (id: number, video: VideoModel, res: express.Response) {
   const videoComment = await VideoCommentModel.loadById(id)
 
   if (!videoComment) {
@@ -147,7 +147,7 @@ async function isVideoCommentThreadExist (id: number, video: VideoModel, res: ex
   return true
 }
 
-async function isVideoCommentExist (id: number, video: VideoModel, res: express.Response) {
+async function doesVideoCommentExist (id: number, video: VideoModel, res: express.Response) {
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {

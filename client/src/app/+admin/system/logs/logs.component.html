@@ -1,0 +1,31 @@
+<div class="header">
+  <div class="peertube-select-container">
+    <select [(ngModel)]="startDate" (ngModelChange)="refresh()">
+      <option *ngFor="let timeChoice of timeChoices" [value]="timeChoice.id">{{ timeChoice.label }}</option>
+    </select>
+  </div>
+
+  <div class="peertube-select-container">
+    <select [(ngModel)]="level" (ngModelChange)="refresh()">
+      <option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">{{ levelChoice.label }}</option>
+    </select>
+  </div>
+
+  <my-button i18n-label label="Refresh" icon="refresh" (click)="refresh()"></my-button>
+</div>
+
+<div class="logs">
+  <div *ngIf="loading">Loading...</div>
+
+  <div #logsElement>
+    <div *ngFor="let log of logs" class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
+      <span class="log-level">{{ log.level }}</span>
+
+      <span class="log-date">[{{ log.localeDate }}]</span>
+
+      {{ log.message }}
+
+      {{ log.meta }}
+    </div>
+  </div>
+</div>

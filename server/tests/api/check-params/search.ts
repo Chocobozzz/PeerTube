@@ -2,8 +2,12 @@
 
 import 'mocha'
 
-import { flushTests, immutableAssign, killallServers, makeGetRequest, runServer, ServerInfo } from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+import { cleanupTests, flushAndRunServer, immutableAssign, makeGetRequest, ServerInfo } from '../../../../shared/extra-utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
 
 describe('Test videos API validator', function () {
   let server: ServerInfo
@@ -13,9 +17,7 @@ describe('Test videos API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
   })
 
   describe('When searching videos', function () {
@@ -109,6 +111,12 @@ describe('Test videos API validator', function () {
 
       const customQuery2 = immutableAssign(query, { endDate: 'hello' })
       await makeGetRequest({ url: server.url, path, query: customQuery2, statusCodeExpected: 400 })
+
+      const customQuery3 = immutableAssign(query, { originallyPublishedStartDate: 'hello' })
+      await makeGetRequest({ url: server.url, path, query: customQuery3, statusCodeExpected: 400 })
+
+      const customQuery4 = immutableAssign(query, { originallyPublishedEndDate: 'hello' })
+      await makeGetRequest({ url: server.url, path, query: customQuery4, statusCodeExpected: 400 })
     })
   })
 
@@ -137,11 +145,6 @@ describe('Test videos API validator', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

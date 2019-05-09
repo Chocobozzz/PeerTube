@@ -5,8 +5,6 @@ import { logger } from '../../helpers/logger'
 import { processActivities } from '../../lib/activitypub/process/process'
 import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChannelValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
-import { VideoChannelModel } from '../../models/video/video-channel'
-import { AccountModel } from '../../models/account/account'
 import { queue } from 'async'
 import { ActorModel } from '../../models/activitypub/actor'
 
@@ -43,11 +41,13 @@ export {
 // ---------------------------------------------------------------------------
 
 const inboxQueue = queue<{ activities: Activity[], signatureActor?: ActorModel, inboxActor?: ActorModel }, Error>((task, cb) => {
-  processActivities(task.activities, task.signatureActor, task.inboxActor)
+  const options = { signatureActor: task.signatureActor, inboxActor: task.inboxActor }
+
+  processActivities(task.activities, options)
     .then(() => cb())
 })
 
-function inboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
+function inboxController (req: express.Request, res: express.Response) {
   const rootActivity: RootActivity = req.body
   let activities: Activity[] = []
 
@@ -64,12 +64,7 @@ function inboxController (req: express.Request, res: express.Response, next: exp
   activities = activities.filter(a => isActivityValid(a))
   logger.debug('We keep %d activities.', activities.length, { activities })
 
-  let accountOrChannel: VideoChannelModel | AccountModel
-  if (res.locals.account) {
-    accountOrChannel = res.locals.account
-  } else if (res.locals.videoChannel) {
-    accountOrChannel = res.locals.videoChannel
-  }
+  const accountOrChannel = res.locals.account || res.locals.videoChannel
 
   logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor.url)
 

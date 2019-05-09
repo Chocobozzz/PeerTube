@@ -23,10 +23,6 @@ my-peertube-checkbox {
     display: block;
   }
 
-  input, select {
-    font-size: 15px
-  }
-
   .label-tags + span {
     font-size: 15px;
   }
@@ -42,7 +38,7 @@ my-peertube-checkbox {
     text-align: right;
 
     .create-caption {
-      @include create-button('../../../../assets/images/global/add.svg');
+      @include create-button;
     }
   }
 
@@ -100,13 +96,14 @@ my-peertube-checkbox {
     display: inline-block;
     margin-right: 25px;
 
-    color: #585858;
+    color: $grey-foreground-color;
     font-size: 15px;
   }
 
   .submit-button {
     @include peertube-button;
     @include orange-button;
+    @include button-with-icon(20px, 1px);
 
     display: inline-block;
 
@@ -118,16 +115,6 @@ my-peertube-checkbox {
       outline: 0;
       color: inherit;
       font-weight: $font-semibold;
-    }
-
-    .icon.icon-validate {
-      @include icon(20px);
-
-      cursor: inherit;
-      position: relative;
-      top: -1px;
-      margin-right: 4px;
-      background-image: url('../../../../assets/images/global/validate.svg');
     }
   }
 }
@@ -176,10 +163,10 @@ p-calendar {
   }
 
   tag {
-    background-color: var(--inputColor) !important;
+    background-color: $grey-background-color !important;
+    color: #000 !important;
     border-radius: 3px !important;
     font-size: 15px !important;
-    color: var(--mainForegroundColor) !important;
     height: 30px !important;
     line-height: 30px !important;
     margin: 0 5px 0 0 !important;
@@ -202,7 +189,10 @@ p-calendar {
       top: -1px;
       height: auto !important;
       vertical-align: middle !important;
-      fill: #585858 !important;
+
+      path  {
+        fill: $grey-foreground-color !important;
+      }
     }
 
     &:hover {

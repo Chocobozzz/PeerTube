@@ -12,12 +12,12 @@
       Moderation
     </a>
 
-    <a i18n *ngIf="hasJobsRight()" routerLink="/admin/jobs" routerLinkActive="active" class="title-page">
-      Jobs
-    </a>
-
     <a i18n *ngIf="hasConfigRight()" routerLink="/admin/config" routerLinkActive="active" class="title-page">
       Configuration
+    </a>
+
+    <a i18n *ngIf="hasJobsRight() || hasLogsRight() || hasDebugRight()" routerLink="/admin/system" routerLinkActive="active" class="title-page">
+      System
     </a>
   </div>
 

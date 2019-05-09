@@ -5,9 +5,9 @@ import 'mocha'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, runServer, ServerInfo,
-  setAccessTokensToServers, userLogin, immutableAssign
-} from '../../utils'
+  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, flushAndRunServer, ServerInfo,
+  setAccessTokensToServers, userLogin, immutableAssign, cleanupTests
+} from '../../../../shared/extra-utils'
 
 describe('Test config API validators', function () {
   const path = '/api/v1/config/custom'
@@ -19,6 +19,7 @@ describe('Test config API validators', function () {
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
+      isNSFW: true,
       defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
       customizations: {
@@ -48,12 +49,16 @@ describe('Test config API validators', function () {
     admin: {
       email: 'superadmin1@example.com'
     },
+    contactForm: {
+      enabled: false
+    },
     user: {
       videoQuota: 5242881,
       videoQuotaDaily: 318742
     },
     transcoding: {
       enabled: true,
+      allowAdditionalExtensions: true,
       threads: 1,
       resolutions: {
         '240p': false,
@@ -61,6 +66,9 @@ describe('Test config API validators', function () {
         '480p': true,
         '720p': false,
         '1080p': false
+      },
+      hls: {
+        enabled: false
       }
     },
     import: {
@@ -72,6 +80,19 @@ describe('Test config API validators', function () {
           enabled: false
         }
       }
+    },
+    autoBlacklist: {
+      videos: {
+        ofUsers: {
+          enabled: false
+        }
+      }
+    },
+    followers: {
+      instance: {
+        enabled: false,
+        manualApproval: true
+      }
     }
   }
 
@@ -80,8 +101,7 @@ describe('Test config API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -89,7 +109,7 @@ describe('Test config API validators', function () {
       username: 'user1',
       password: 'password'
     }
-    await createUser(server.url, server.accessToken, user.username, user.password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(server, user)
   })
 
@@ -160,6 +180,25 @@ describe('Test config API validators', function () {
       })
     })
 
+    it('Should fail if email disabled and signup requires email verification', async function () {
+      // opposite scenario - success when enable enabled - covered via tests/api/users/user-verification.ts
+      const newUpdateParams = immutableAssign(updateParams, {
+        signup: {
+          enabled: true,
+          limit: 5,
+          requiresEmailVerification: true
+        }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+    })
+
     it('Should success with the correct parameters', async function () {
       await makePutBodyRequest({
         url: server.url,
@@ -191,11 +230,6 @@ describe('Test config API validators', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

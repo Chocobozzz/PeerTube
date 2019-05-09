@@ -1,51 +1,52 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
-import { VideoModel } from './video'
+import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { getSort } from '../utils'
-import { VideoFileModel } from './video-file'
 
 enum ScopeNames {
-  FULL = 'FULL'
+  WITH_ACCOUNTS = 'WITH_ACCOUNTS',
+  WITH_VIDEO = 'WITH_VIDEO'
 }
 
 @Table({
   tableName: 'videoChangeOwnership',
   indexes: [
     {
-      fields: ['videoId']
+      fields: [ 'videoId' ]
     },
     {
-      fields: ['initiatorAccountId']
+      fields: [ 'initiatorAccountId' ]
     },
     {
-      fields: ['nextOwnerAccountId']
+      fields: [ 'nextOwnerAccountId' ]
     }
   ]
 })
-@Scopes({
-  [ScopeNames.FULL]: {
+@Scopes(() => ({
+  [ScopeNames.WITH_ACCOUNTS]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         as: 'Initiator',
         required: true
       },
       {
-        model: () => AccountModel,
+        model: AccountModel,
         as: 'NextOwner',
         required: true
-      },
+      }
+    ]
+  },
+  [ScopeNames.WITH_VIDEO]: {
+    include: [
       {
-        model: () => VideoModel,
-        required: true,
-        include: [
-          { model: () => VideoFileModel }
-        ]
+        model: VideoModel.scope([ VideoScopeNames.WITH_THUMBNAILS, VideoScopeNames.WITH_FILES ]),
+        required: true
       }
     ]
   }
-})
+}))
 export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> {
   @CreatedAt
   createdAt: Date
@@ -105,12 +106,15 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
       }
     }
 
-    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findAndCountAll(query)
-                                    .then(({ rows, count }) => ({ total: count, data: rows }))
+    return Promise.all([
+      VideoChangeOwnershipModel.scope(ScopeNames.WITH_ACCOUNTS).count(query),
+      VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ]).findAll(query)
+    ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
 
   static load (id: number) {
-    return VideoChangeOwnershipModel.scope(ScopeNames.FULL).findById(id)
+    return VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ])
+                                    .findByPk(id)
   }
 
   toFormattedJSON (): VideoChangeOwnership {

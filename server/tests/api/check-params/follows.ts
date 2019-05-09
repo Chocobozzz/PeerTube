@@ -3,10 +3,20 @@
 import 'mocha'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  makeDeleteRequest,
+  makePostBodyRequest,
+  ServerInfo,
+  setAccessTokensToServers,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+} from '../../../../shared/extra-utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
 
 describe('Test server follows API validators', function () {
   let server: ServerInfo
@@ -16,8 +26,7 @@ describe('Test server follows API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
   })
@@ -31,7 +40,7 @@ describe('Test server follows API validators', function () {
         password: 'password'
       }
 
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       userAccessToken = await userLogin(server, user)
     })
 
@@ -140,6 +149,126 @@ describe('Test server follows API validators', function () {
       })
     })
 
+    describe('When removing a follower', function () {
+      const path = '/api/v1/server/followers'
+
+      it('Should fail with an invalid token', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002',
+          token: 'fake_token',
+          statusCodeExpected: 401
+        })
+      })
+
+      it('Should fail if the user is not an administrator', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002',
+          token: userAccessToken,
+          statusCodeExpected: 403
+        })
+      })
+
+      it('Should fail with an invalid follower', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto',
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
+      })
+
+      it('Should fail with an unknown follower', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9003',
+          token: server.accessToken,
+          statusCodeExpected: 404
+        })
+      })
+    })
+
+    describe('When accepting a follower', function () {
+      const path = '/api/v1/server/followers'
+
+      it('Should fail with an invalid token', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002/accept',
+          token: 'fake_token',
+          statusCodeExpected: 401
+        })
+      })
+
+      it('Should fail if the user is not an administrator', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002/accept',
+          token: userAccessToken,
+          statusCodeExpected: 403
+        })
+      })
+
+      it('Should fail with an invalid follower', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto/accept',
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
+      })
+
+      it('Should fail with an unknown follower', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9003/accept',
+          token: server.accessToken,
+          statusCodeExpected: 404
+        })
+      })
+    })
+
+    describe('When rejecting a follower', function () {
+      const path = '/api/v1/server/followers'
+
+      it('Should fail with an invalid token', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002/reject',
+          token: 'fake_token',
+          statusCodeExpected: 401
+        })
+      })
+
+      it('Should fail if the user is not an administrator', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9002/reject',
+          token: userAccessToken,
+          statusCodeExpected: 403
+        })
+      })
+
+      it('Should fail with an invalid follower', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto/reject',
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
+      })
+
+      it('Should fail with an unknown follower', async function () {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + '/toto@localhost:9003/reject',
+          token: server.accessToken,
+          statusCodeExpected: 404
+        })
+      })
+    })
+
     describe('When removing following', function () {
       const path = '/api/v1/server/following'
 
@@ -173,11 +302,6 @@ describe('Test server follows API validators', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

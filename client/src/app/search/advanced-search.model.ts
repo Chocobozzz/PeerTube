@@ -4,6 +4,9 @@ export class AdvancedSearch {
   startDate: string // ISO 8601
   endDate: string // ISO 8601
 
+  originallyPublishedStartDate: string // ISO 8601
+  originallyPublishedEndDate: string // ISO 8601
+
   nsfw: NSFWQuery
 
   categoryOneOf: string
@@ -23,6 +26,8 @@ export class AdvancedSearch {
   constructor (options?: {
     startDate?: string
     endDate?: string
+    originallyPublishedStartDate?: string
+    originallyPublishedEndDate?: string
     nsfw?: NSFWQuery
     categoryOneOf?: string
     licenceOneOf?: string
@@ -37,6 +42,9 @@ export class AdvancedSearch {
 
     this.startDate = options.startDate || undefined
     this.endDate = options.endDate || undefined
+    this.originallyPublishedStartDate = options.originallyPublishedStartDate || undefined
+    this.originallyPublishedEndDate = options.originallyPublishedEndDate || undefined
+
     this.nsfw = options.nsfw || undefined
     this.categoryOneOf = options.categoryOneOf || undefined
     this.licenceOneOf = options.licenceOneOf || undefined
@@ -66,6 +74,8 @@ export class AdvancedSearch {
   reset () {
     this.startDate = undefined
     this.endDate = undefined
+    this.originallyPublishedStartDate = undefined
+    this.originallyPublishedEndDate = undefined
     this.nsfw = undefined
     this.categoryOneOf = undefined
     this.licenceOneOf = undefined
@@ -82,6 +92,8 @@ export class AdvancedSearch {
     return {
       startDate: this.startDate,
       endDate: this.endDate,
+      originallyPublishedStartDate: this.originallyPublishedStartDate,
+      originallyPublishedEndDate: this.originallyPublishedEndDate,
       nsfw: this.nsfw,
       categoryOneOf: this.categoryOneOf,
       licenceOneOf: this.licenceOneOf,
@@ -98,6 +110,8 @@ export class AdvancedSearch {
     return {
       startDate: this.startDate,
       endDate: this.endDate,
+      originallyPublishedStartDate: this.originallyPublishedStartDate,
+      originallyPublishedEndDate: this.originallyPublishedEndDate,
       nsfw: this.nsfw,
       categoryOneOf: this.intoArray(this.categoryOneOf),
       licenceOneOf: this.intoArray(this.licenceOneOf),

@@ -1,8 +1,8 @@
 import 'express-validator'
 import * as validator from 'validator'
 import { UserRole } from '../../../shared'
-import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers'
-import { exists, isFileValid, isBooleanValid } from './misc'
+import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
+import { exists, isBooleanValid, isFileValid } from './misc'
 import { values } from 'lodash'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
@@ -46,8 +46,16 @@ function isUserWebTorrentEnabledValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserVideosHistoryEnabledValid (value: any) {
+  return isBooleanValid(value)
+}
+
 function isUserAutoPlayVideoValid (value: any) {
   return isBooleanValid(value)
+}
+
+function isUserAdminFlagsValid (value: any) {
+  return exists(value) && validator.isInt('' + value)
 }
 
 function isUserBlockedValid (value: any) {
@@ -73,6 +81,7 @@ function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } |
 // ---------------------------------------------------------------------------
 
 export {
+  isUserVideosHistoryEnabledValid,
   isUserBlockedValid,
   isUserPasswordValid,
   isUserBlockedReasonValid,
@@ -80,6 +89,7 @@ export {
   isUserVideoQuotaValid,
   isUserVideoQuotaDailyValid,
   isUserUsernameValid,
+  isUserAdminFlagsValid,
   isUserEmailVerifiedValid,
   isUserNSFWPolicyValid,
   isUserWebTorrentEnabledValid,

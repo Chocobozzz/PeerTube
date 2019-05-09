@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   getMyVideos,
@@ -15,9 +16,8 @@ import {
   updateVideo,
   uploadVideo,
   wait
-} from '../../utils'
-import { join } from 'path'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 
@@ -167,6 +167,6 @@ describe('Test video update scheduler', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

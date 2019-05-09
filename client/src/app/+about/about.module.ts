@@ -5,6 +5,7 @@ import { AboutComponent } from './about.component'
 import { SharedModule } from '../shared'
 import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
+import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertub
   declarations: [
     AboutComponent,
     AboutInstanceComponent,
-    AboutPeertubeComponent
+    AboutPeertubeComponent,
+    ContactAdminModalComponent
   ],
 
   exports: [

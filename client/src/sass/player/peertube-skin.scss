@@ -21,16 +21,16 @@
   .vjs-dock-description {
     font-size: 11px;
 
-    &::before, &::after {
+    .text::before, .text::after {
       display: inline-block;
       content: '\1F308';
     }
 
-    &::before {
+    .text::before {
       margin-right: 4px;
     }
 
-    &::after {
+    .text::after {
       margin-left: 4px;
       transform: scale(-1, 1);
     }
@@ -55,7 +55,7 @@
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
 
-    border: 6px solid #fff;
+    border: 4px solid #fff;
     border-radius: 100%;
 
     left: 50%;
@@ -483,7 +483,7 @@
 
     .vjs-big-play-button {
       font-size: 5em;
-      border-width: 5px;
+      border-width: 3px;
 
       .vjs-icon-placeholder::before {
         @include big-play-button-triangle-size(32px);
@@ -498,7 +498,7 @@
 
     .vjs-big-play-button {
       font-size: 4.5em;
-      border-width: 4.5px;
+      border-width: 2.5px;
 
       .vjs-icon-placeholder::before {
         @include big-play-button-triangle-size(27px);
@@ -521,7 +521,7 @@
 
     .vjs-big-play-button {
       font-size: 3em;
-      border-width: 3px;
+      border-width: 2px;
 
       .vjs-icon-placeholder::before {
         @include big-play-button-triangle-size(20px);

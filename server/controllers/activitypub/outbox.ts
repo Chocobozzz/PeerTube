@@ -32,8 +32,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function outboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const accountOrVideoChannel: AccountModel | VideoChannelModel = res.locals.account || res.locals.videoChannel
+async function outboxController (req: express.Request, res: express.Response) {
+  const accountOrVideoChannel = res.locals.account || res.locals.videoChannel
   const actor = accountOrVideoChannel.Actor
   const actorOutboxUrl = actor.url + '/outbox'
 

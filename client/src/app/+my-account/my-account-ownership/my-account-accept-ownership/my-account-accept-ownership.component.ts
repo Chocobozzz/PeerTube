@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier } from '@app/core'
 import { FormReactive } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoOwnershipService } from '@app/shared/video-ownership'
@@ -8,7 +8,6 @@ import { VideoAcceptOwnershipValidatorsService } from '@app/shared/forms/form-va
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { AuthService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
@@ -31,7 +30,7 @@ export class MyAccountAcceptOwnershipComponent extends FormReactive implements O
     protected formValidatorService: FormValidatorService,
     private videoChangeOwnershipValidatorsService: VideoAcceptOwnershipValidatorsService,
     private videoOwnershipService: VideoOwnershipService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private authService: AuthService,
     private videoChannelService: VideoChannelService,
     private modalService: NgbModal,
@@ -68,12 +67,12 @@ export class MyAccountAcceptOwnershipComponent extends FormReactive implements O
       .acceptOwnership(videoChangeOwnership.id, { channelId: channel })
       .subscribe(
         () => {
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership accepted'))
+          this.notifier.success(this.i18n('Ownership accepted'))
           if (this.accepted) this.accepted.emit()
           this.videoChangeOwnership = undefined
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

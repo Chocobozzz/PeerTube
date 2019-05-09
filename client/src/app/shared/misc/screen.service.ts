@@ -18,6 +18,10 @@ export class ScreenService {
     return this.getWindowInnerWidth() < 500
   }
 
+  isInTouchScreen () {
+    return 'ontouchstart' in window || navigator.msMaxTouchPoints
+  }
+
   // Cache window inner width, because it's an expensive call
   private getWindowInnerWidth () {
     if (this.cacheWindowInnerWidthExpired()) this.refreshWindowInnerWidth()
@@ -32,6 +36,8 @@ export class ScreenService {
   }
 
   private cacheWindowInnerWidthExpired () {
+    if (!this.lastFunctionCallTime) return true
+
     return new Date().getTime() > (this.lastFunctionCallTime + this.cacheForMs)
   }
 }

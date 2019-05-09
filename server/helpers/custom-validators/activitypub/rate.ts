@@ -1,20 +1,13 @@
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
-
-function isLikeActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Like') &&
-    isActivityPubUrlValid(activity.object)
-}
+import { isActivityPubUrlValid, isObjectValid } from './misc'
 
 function isDislikeActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    activity.object.type === 'Dislike' &&
-    isActivityPubUrlValid(activity.object.actor) &&
-    isActivityPubUrlValid(activity.object.object)
+  return activity.type === 'Dislike' &&
+    isActivityPubUrlValid(activity.actor) &&
+    isObjectValid(activity.object)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isLikeActivityValid,
   isDislikeActivityValid
 }

@@ -1,6 +1,5 @@
 import * as config from 'config'
 import { promisify0 } from '../helpers/core-utils'
-import { isArray } from '../helpers/custom-validators/misc'
 
 // ONLY USE CORE MODULES IN THIS FILE!
 
@@ -12,18 +11,24 @@ function checkMissedConfig () {
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password', 'database.pool.max',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
+    'storage.redundancy', 'storage.tmp', 'storage.streaming_playlists',
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
-    'cache.previews.size', 'admin.email',
+    'csp.enabled', 'csp.report_only', 'csp.report_uri',
+    'cache.previews.size', 'admin.email', 'contact_form.enabled',
     'signup.enabled', 'signup.limit', 'signup.requires_email_verification',
     'signup.filters.cidr.whitelist', 'signup.filters.cidr.blacklist',
     'redundancy.videos.strategies', 'redundancy.videos.check_interval',
-    'transcoding.enabled', 'transcoding.threads',
-    'import.videos.http.enabled', 'import.videos.torrent.enabled',
+    'transcoding.enabled', 'transcoding.threads', 'transcoding.allow_additional_extensions',
+    'import.videos.http.enabled', 'import.videos.torrent.enabled', 'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
-    'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
-    'services.twitter.username', 'services.twitter.whitelisted'
+    'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
+    'services.twitter.username', 'services.twitter.whitelisted',
+    'followers.instance.enabled', 'followers.instance.manual_approval',
+    'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',
+    'history.videos.max_age', 'views.videos.remote.max_age',
+    'rates_limit.login.window', 'rates_limit.login.max', 'rates_limit.ask_send_email.window', 'rates_limit.ask_send_email.max'
   ]
   const requiredAlternatives = [
     [ // set
@@ -40,7 +45,8 @@ function checkMissedConfig () {
   }
 
   const redundancyVideos = config.get<any>('redundancy.videos.strategies')
-  if (isArray(redundancyVideos)) {
+
+  if (Array.isArray(redundancyVideos)) {
     for (const r of redundancyVideos) {
       if (!r.size) miss.push('redundancy.videos.strategies.size')
       if (!r.min_lifetime) miss.push('redundancy.videos.strategies.min_lifetime')

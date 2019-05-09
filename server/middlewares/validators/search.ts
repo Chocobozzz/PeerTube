@@ -10,6 +10,9 @@ const videosSearchValidator = [
   query('startDate').optional().custom(isDateValid).withMessage('Should have a valid start date'),
   query('endDate').optional().custom(isDateValid).withMessage('Should have a valid end date'),
 
+  query('originallyPublishedStartDate').optional().custom(isDateValid).withMessage('Should have a valid published start date'),
+  query('originallyPublishedEndDate').optional().custom(isDateValid).withMessage('Should have a valid published end date'),
+
   query('durationMin').optional().isInt().withMessage('Should have a valid min duration'),
   query('durationMax').optional().isInt().withMessage('Should have a valid max duration'),
 

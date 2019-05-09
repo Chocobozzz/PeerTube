@@ -4,18 +4,19 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
+  cleanupTests,
   flushAndRunMultipleServers,
   getVideosList,
   killallServers,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../utils/index'
-import { doubleFollow } from '../../utils/server/follows'
-import { userLogin } from '../../utils/users/login'
-import { createUser } from '../../utils/users/users'
-import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../utils/videos/videos'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/extra-utils/index'
+import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
+import { userLogin } from '../../../../shared/extra-utils/users/login'
+import { createUser } from '../../../../shared/extra-utils/users/users'
+import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 
@@ -78,7 +79,7 @@ describe('Test video privacy', function () {
       username: 'hello',
       password: 'super password'
     }
-    await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
     const token = await userLogin(servers[0], user)
     await getVideoWithToken(servers[0].url, token, privateVideoUUID, 403)
@@ -153,6 +154,6 @@ describe('Test video privacy', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

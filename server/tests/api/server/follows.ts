@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { completeVideoCheck } from '../../utils'
+import { cleanupTests, completeVideoCheck } from '../../../../shared/extra-utils'
 import {
   flushAndRunMultipleServers,
   getVideosList,
@@ -12,21 +12,26 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
-} from '../../utils/index'
-import { dateIsValid } from '../../utils/miscs/miscs'
-import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
-import { expectAccountFollows } from '../../utils/users/accounts'
-import { userLogin } from '../../utils/users/login'
-import { createUser } from '../../utils/users/users'
+} from '../../../../shared/extra-utils/index'
+import { dateIsValid } from '../../../../shared/extra-utils/miscs/miscs'
+import {
+  follow,
+  getFollowersListPaginationAndSort,
+  getFollowingListPaginationAndSort,
+  unfollow
+} from '../../../../shared/extra-utils/server/follows'
+import { expectAccountFollows } from '../../../../shared/extra-utils/users/accounts'
+import { userLogin } from '../../../../shared/extra-utils/users/login'
+import { createUser } from '../../../../shared/extra-utils/users/users'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
-import { rateVideo } from '../../utils/videos/videos'
-import { waitJobs } from '../../utils/server/jobs'
-import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
+} from '../../../../shared/extra-utils/videos/video-comments'
+import { rateVideo } from '../../../../shared/extra-utils/videos/videos'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { createVideoCaption, listVideoCaptions, testCaptionFile } from '../../../../shared/extra-utils/videos/video-captions'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect
@@ -236,7 +241,7 @@ describe('Test follows', function () {
     expect(res.body.data[0].name).to.equal('server3')
   })
 
-  describe('Should propagate data on a new following', async function () {
+  describe('Should propagate data on a new following', function () {
     let video4: Video
 
     before(async function () {
@@ -258,7 +263,7 @@ describe('Test follows', function () {
 
       {
         const user = { username: 'captain', password: 'password' }
-        await createUser(servers[ 2 ].url, servers[ 2 ].accessToken, user.username, user.password)
+        await createUser({ url: servers[ 2 ].url, accessToken: servers[ 2 ].accessToken, username: user.username, password: user.password })
         const userAccessToken = await userLogin(servers[ 2 ], user)
 
         const resVideos = await getVideosList(servers[ 2 ].url)
@@ -343,6 +348,7 @@ describe('Test follows', function () {
         },
         isLocal,
         commentsEnabled: true,
+        downloadEnabled: true,
         duration: 5,
         tags: [ 'tag1', 'tag2', 'tag3' ],
         privacy: VideoPrivacy.PUBLIC,
@@ -430,6 +436,6 @@ describe('Test follows', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

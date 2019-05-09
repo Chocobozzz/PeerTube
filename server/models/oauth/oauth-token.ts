@@ -1,5 +1,5 @@
 import {
-  AfterDelete,
+  AfterDestroy,
   AfterUpdate,
   AllowNull,
   BelongsTo,
@@ -34,21 +34,21 @@ enum ScopeNames {
   WITH_USER = 'WITH_USER'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.WITH_USER]: {
     include: [
       {
-        model: () => UserModel.unscoped(),
+        model: UserModel.unscoped(),
         required: true,
         include: [
           {
             attributes: [ 'id' ],
-            model: () => AccountModel.unscoped(),
+            model: AccountModel.unscoped(),
             required: true,
             include: [
               {
-                attributes: [ 'id' ],
-                model: () => ActorModel.unscoped(),
+                attributes: [ 'id', 'url' ],
+                model: ActorModel.unscoped(),
                 required: true
               }
             ]
@@ -57,7 +57,7 @@ enum ScopeNames {
       }
     ]
   }
-})
+}))
 @Table({
   tableName: 'oAuthToken',
   indexes: [
@@ -126,7 +126,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
   OAuthClients: OAuthClientModel[]
 
   @AfterUpdate
-  @AfterDelete
+  @AfterDestroy
   static removeTokenCache (token: OAuthTokenModel) {
     return clearCacheByToken(token.accessToken)
   }
@@ -167,11 +167,13 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
       }
     }
 
-    return OAuthTokenModel.scope(ScopeNames.WITH_USER).findOne(query).then(token => {
-      if (token) token['user'] = token.User
+    return OAuthTokenModel.scope(ScopeNames.WITH_USER)
+                          .findOne(query)
+                          .then(token => {
+                            if (token) token[ 'user' ] = token.User
 
-      return token
-    })
+                            return token
+                          })
   }
 
   static getByRefreshTokenAndPopulateUser (refreshToken: string) {

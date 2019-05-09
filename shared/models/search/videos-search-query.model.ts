@@ -11,6 +11,9 @@ export interface VideosSearchQuery {
   startDate?: string // ISO 8601
   endDate?: string // ISO 8601
 
+  originallyPublishedStartDate?: string // ISO 8601
+  originallyPublishedEndDate?: string // ISO 8601
+
   nsfw?: NSFWQuery
 
   categoryOneOf?: number[]

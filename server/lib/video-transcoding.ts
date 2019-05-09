@@ -1,11 +1,15 @@
-import { CONFIG } from '../initializers'
-import { extname, join } from 'path'
-import { getVideoFileFPS, getVideoFileResolution, transcode } from '../helpers/ffmpeg-utils'
-import { copy, remove, rename, stat } from 'fs-extra'
+import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
+import { join } from 'path'
+import { getVideoFileFPS, transcode } from '../helpers/ffmpeg-utils'
+import { ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoModel } from '../models/video/video'
+import { updateMasterHLSPlaylist, updateSha256Segments } from './hls'
+import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
+import { CONFIG } from '../initializers/config'
 
 async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFileModel) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
@@ -17,7 +21,8 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
 
   const transcodeOptions = {
     inputPath: videoInputPath,
-    outputPath: videoTranscodedPath
+    outputPath: videoTranscodedPath,
+    resolution: inputVideoFile.resolution
   }
 
   // Could be very long!
@@ -30,7 +35,7 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
     inputVideoFile.set('extname', newExtname)
 
     const videoOutputPath = video.getVideoFilePath(inputVideoFile)
-    await rename(videoTranscodedPath, videoOutputPath)
+    await move(videoTranscodedPath, videoOutputPath)
     const stats = await stat(videoOutputPath)
     const fps = await getVideoFileFPS(videoOutputPath)
 
@@ -47,7 +52,7 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
   }
 }
 
-async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
+async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoResolution, isPortrait: boolean) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const extname = '.mp4'
 
@@ -60,13 +65,13 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
     size: 0,
     videoId: video.id
   })
-  const videoOutputPath = join(videosDirectory, video.getVideoFilename(newVideoFile))
+  const videoOutputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(newVideoFile))
 
   const transcodeOptions = {
     inputPath: videoInputPath,
     outputPath: videoOutputPath,
     resolution,
-    isPortraitMode
+    isPortraitMode: isPortrait
   }
 
   await transcode(transcodeOptions)
@@ -84,48 +89,44 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
   video.VideoFiles.push(newVideoFile)
 }
 
-async function importVideoFile (video: VideoModel, inputFilePath: string) {
-  const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
-  const { size } = await stat(inputFilePath)
-  const fps = await getVideoFileFPS(inputFilePath)
+async function generateHlsPlaylist (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
+  const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
+  await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
 
-  let updatedVideoFile = new VideoFileModel({
-    resolution: videoFileResolution,
-    extname: extname(inputFilePath),
-    size,
-    fps,
-    videoId: video.id
-  })
+  const videoInputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(video.getOriginalFile()))
+  const outputPath = join(baseHlsDirectory, VideoStreamingPlaylistModel.getHlsPlaylistFilename(resolution))
 
-  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
+  const transcodeOptions = {
+    inputPath: videoInputPath,
+    outputPath,
+    resolution,
+    isPortraitMode,
 
-  if (currentVideoFile) {
-    // Remove old file and old torrent
-    await video.removeFile(currentVideoFile)
-    await video.removeTorrent(currentVideoFile)
-    // Remove the old video file from the array
-    video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
-
-    // Update the database
-    currentVideoFile.set('extname', updatedVideoFile.extname)
-    currentVideoFile.set('size', updatedVideoFile.size)
-    currentVideoFile.set('fps', updatedVideoFile.fps)
-
-    updatedVideoFile = currentVideoFile
+    hlsPlaylist: {
+      videoFilename: VideoStreamingPlaylistModel.getHlsVideoName(video.uuid, resolution)
+    }
   }
 
-  const outputPath = video.getVideoFilePath(updatedVideoFile)
-  await copy(inputFilePath, outputPath)
+  await transcode(transcodeOptions)
 
-  await video.createTorrentAndSetInfoHash(updatedVideoFile)
+  await updateMasterHLSPlaylist(video)
+  await updateSha256Segments(video)
 
-  await updatedVideoFile.save()
+  const playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
 
-  video.VideoFiles.push(updatedVideoFile)
+  await VideoStreamingPlaylistModel.upsert({
+    videoId: video.id,
+    playlistUrl,
+    segmentsSha256Url: WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid),
+    p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrl, video.VideoFiles),
+    p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
+
+    type: VideoStreamingPlaylistType.HLS
+  })
 }
 
 export {
+  generateHlsPlaylist,
   optimizeVideofile,
-  transcodeOriginalVideofile,
-  importVideoFile
+  transcodeOriginalVideofile
 }

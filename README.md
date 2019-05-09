@@ -1,19 +1,29 @@
 <h1 align="center">
   <a href="https://joinpeertube.org">
-  <img src="https://joinpeertube.org/img/brand.png" alt="PeerTube">
-  <a>
+    <img src="https://joinpeertube.org/img/brand.png" alt="PeerTube">
+  </a>
 </h1>
 
 <p align=center>
   <strong><a href="https://joinpeertube.org">Website</a></strong>
   | <strong><a href="https://instances.joinpeertube.org">Join an instance</a></strong>
-  | <strong><a href="#package-create-your-own-instance">Create one</a></strong>
+  | <strong><a href="#package-create-your-own-instance">Create an instance</a></strong>
   | <strong><a href="#contact">Chat with us</a></strong>
+  | <strong><a href="https://framasoft.org/en/#soutenir">Donate</a></strong>
 </p>
 
 <p align="center">
-Federated (ActivityPub) video streaming platform using P2P (BitTorrent)
-directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+Be part of a network of multiple small federated, interoperable video hosting providers. Follow video creators and create videos. No vendor lock-in. All on a platform that is community-owned and ad-free.
+</p>
+
+<p align="center">
+  <strong>Developed with &#10084; by <a href="https://framasoft.org">Framasoft</a></strong>
+</p>
+
+<p align="center">
+  <a href="https://framasoft.org">
+    <img width="150px" src="http://lutim.cpy.re/Prd3ci7G.png" alt="Framasoft logo"/>
+  </a>
 </p>
 
 <p align="center">
@@ -60,6 +70,20 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
   </a>
 </p>
 
+Introduction
+----------------------------------------------------------------
+
+PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper: But one organization hosting PeerTube alone may not have enough money to pay for bandwidth and video storage of its servers, all servers of PeerTube are interoperable as a federated network, and non-PeerTube servers can be part of the larger Vidiverse (federated video network) by talking our implementation of ActivityPub. Video load is reduced thanks to P2P (BitTorrent) in the web browser via <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+
+To learn more, see:
+* This [two-minute video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) (hosted on PeerTube) explaining what PeerTube is and how it works
+* PeerTube's project homepage, [joinpeertube.org](https://joinpeertube.org)
+* Demonstration instances:
+  * [peertube.cpy.re](https://peertube.cpy.re)
+  * [peertube2.cpy.re](https://peertube2.cpy.re)
+  * [peertube3.cpy.re](https://peertube3.cpy.re)
+* This [video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) demonstrating the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon) (a decentralized Twitter alternative)
+
 :sparkles: Features
 ----------------------------------------------------------------
 
@@ -75,7 +99,7 @@ Just upload your videos, and be sure they will stream anywhere. Add a descriptio
 
 <h3 align="right">Keep in touch with video creators</h3>
 <p align="right">
-Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma and plenty others), or just with good ol' RSS.
+Follow your favorite channels from PeerTube or really any other place. No need to have an account on the instance you watched a video to follow its author, you can do all of that from the Fediverse (Mastodon, Pleroma, and plenty others), or just with good ol' RSS.
 </p>
 
 ---
@@ -91,35 +115,29 @@ Be it as a user or an instance administrator, you can decide what your experienc
 
 <h3 align="right">Communities that help each other</h3>
 <p align="right">
-In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="/support/doc/redundancy.md">redundancy guide</a>).
+In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances">redundancy guide</a>).
 </p>
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
 </p>
 
----
-
-Want to see it in action?
-
-   * Demonstration servers:
-     * [peertube.cpy.re](https://peertube.cpy.re)
-     * [peertube2.cpy.re](https://peertube2.cpy.re)
-     * [peertube3.cpy.re](https://peertube3.cpy.re)
-   * [Video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) explaining what PeerTube is
-   * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) showing the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
-
-:question: Motivation
+:raised_hands: Contributing
 ----------------------------------------------------------------
 
-We can't build a FOSS video streaming alternative to YouTube, Dailymotion,
-Vimeo... with centralized software. One organization alone may not have
-enough money to pay for bandwidth and video storage of its servers.
+You don't need to be a coder to help!
 
-So we need to have a decentralized network of servers seeding videos (as
-[Diaspora](https://github.com/diaspora/diaspora) for example).  But it's not
-enough because one video could become popular and overload the server.  That is 
-why we need to use a P2P protocol to limit the server load.  Thanks to
-[WebTorrent](https://github.com/feross/webtorrent), we can make BitTorrent inside the web browser, as of today.
+You can give us your feedback, report bugs, help us translate PeerTube, write documentation, and more. Check out the [contributing
+guide](/.github/CONTRIBUTING.md) to know how, it takes less than 2 minutes to get started. :wink:
+
+You can also join the cheerful bunch that makes our community:
+
+* Chat<a name="contact"></a>:
+  * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
+  * Matrix (bridged on IRC and [Discord](https://discord.gg/wj8DDUT)) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+* Forum:
+  * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
+    
+Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
 :package: Create your own instance
 ----------------------------------------------------------------
@@ -136,20 +154,6 @@ why we need to use a P2P protocol to limit the server load.  Thanks to
 See the [production guide](/support/doc/production.md), which is the recommended way.
 
 See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
-
-:wrench: Contribute/Translate/Test
-----------------------------------------------------------------
-
-*Spoiler alert*: you don't need to be a coder to help!
-
-See the [contributing
-guide](/.github/CONTRIBUTING.md). Or simply join the cheerful bunch that makes our community:
-
-  * Chat<a name="contact"></a>:
-    * IRC : **[#peertube on chat.freenode.net:6697](https://kiwiirc.com/client/irc.freenode.net/#peertube)**
-    * Matrix (bridged on the IRC channel) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
-  * Forum:
-    * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
 
 :book: Documentation
 ----------------------------------------------------------------
@@ -174,36 +178,13 @@ See the more general [admin documentation](https://docs.joinpeertube.org/lang/en
 
 ### Technical documentation
 
-See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation of the architectural choices.
+See the [architecture blueprint](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html) for a more detailed explanation of the architectural choices.
 
-#### Backend
+See our REST API documentation:
+  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+  * Spec explorer: [docs.joinpeertube.org/api.html](http://docs.joinpeertube.org/api.html)
 
-  * REST API:
-    * Quick Start: [/support/doc/api/quickstart.md](/support/doc/api/quickstart.md)
-    * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
-    * HTML explorer: [/support/doc/api/html/index.html](https://htmlpreview.github.io/?https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/html/index.html)
-  * Servers communicate with each other with [Activity
-    Pub](https://www.w3.org/TR/activitypub/).
-  * Each server has its own users who query it (search videos, query where the
-    torrent URI of this specific video is...).
-  * When a user uploads a video, the server sends its followers metadata about the video (name, short description, torrent URI...).
-  * A server is a tracker responsible for all the videos uploaded on it.
-  * Even if nobody watches a video, it is seeded by the server (through
-    [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the
-    video was uploaded.
-
-Here are some simple schemes:
-
-<p align="center">
-
-<img src="support/doc/user/decentralized.png" alt="Decentralized" />
-
-<img src="support/doc/user/watch-video.png" alt="Watch a video" />
-
-<img src="support/doc/user/watch-p2p.png" alt="Watch a P2P video" />
-
-</p>
-
+See our [ActivityPub documentation](https://docs.joinpeertube.org/lang/en/devdocs/federation.html).
 
 :heart: Supports of our crowdfunding
 ----------------------------------------------------------------
@@ -215,7 +196,7 @@ Quonfucius, IP Solution, \_Laure\_, @lex666, 0x010C, 3dsman, 3rw4n-G3D, aallrd, 
 
 ## License
 
-Copyright (C) 2018 PeerTube Contributors
+Copyright (C) 2015-2019 PeerTube Contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published

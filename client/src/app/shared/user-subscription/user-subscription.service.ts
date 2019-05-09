@@ -28,7 +28,7 @@ export class UserSubscriptionService {
     this.existsObservable = this.existsSubject.pipe(
       bufferTime(500),
       filter(uris => uris.length !== 0),
-      switchMap(uris => this.areSubscriptionExist(uris)),
+      switchMap(uris => this.doSubscriptionsExist(uris)),
       share()
     )
   }
@@ -69,13 +69,13 @@ export class UserSubscriptionService {
                )
   }
 
-  isSubscriptionExists (nameWithHost: string) {
+  doesSubscriptionExist (nameWithHost: string) {
     this.existsSubject.next(nameWithHost)
 
     return this.existsObservable.pipe(first())
   }
 
-  private areSubscriptionExist (uris: string[]): Observable<SubscriptionExistResult> {
+  private doSubscriptionsExist (uris: string[]): Observable<SubscriptionExistResult> {
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/exist'
     let params = new HttpParams()
 

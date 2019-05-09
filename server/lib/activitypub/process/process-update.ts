@@ -12,6 +12,8 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-vali
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { forwardVideoRelatedActivity } from '../send/utils'
+import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
+import { createOrUpdateVideoPlaylist } from '../playlist'
 
 async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorModel) {
   const objectType = activity.object.type
@@ -30,6 +32,10 @@ async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorMo
     // We need more attributes
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
     return retryTransactionWrapper(processUpdateCacheFile, byActorFull, activity)
+  }
+
+  if (objectType === 'Playlist') {
+    return retryTransactionWrapper(processUpdatePlaylist, byActor, activity)
   }
 
   return undefined
@@ -51,7 +57,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
     return undefined
   }
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id })
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id, allowRefresh: false })
   const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
 
   const updateOptions = {
@@ -59,7 +65,6 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
     videoObject,
     account: actor.Account,
     channel: channelActor.VideoChannel,
-    updateViews: true,
     overrideTo: activity.to
   }
   return updateVideoFromAP(updateOptions)
@@ -115,9 +120,11 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
 
       await actor.save({ transaction: t })
 
-      accountOrChannelInstance.set('name', actorAttributesToUpdate.name || actorAttributesToUpdate.preferredUsername)
-      accountOrChannelInstance.set('description', actorAttributesToUpdate.summary)
-      accountOrChannelInstance.set('support', actorAttributesToUpdate.support)
+      accountOrChannelInstance.name = actorAttributesToUpdate.name || actorAttributesToUpdate.preferredUsername
+      accountOrChannelInstance.description = actorAttributesToUpdate.summary
+
+      if (accountOrChannelInstance instanceof VideoChannelModel) accountOrChannelInstance.support = actorAttributesToUpdate.support
+
       await accountOrChannelInstance.save({ transaction: t })
     })
 
@@ -135,4 +142,13 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
     logger.debug('Cannot update the remote account.', { err })
     throw err
   }
+}
+
+async function processUpdatePlaylist (byActor: ActorModel, activity: ActivityUpdate) {
+  const playlistObject = activity.object as PlaylistObject
+  const byAccount = byActor.Account
+
+  if (!byAccount) throw new Error('Cannot update video playlist with the non account actor ' + byActor.url)
+
+  await createOrUpdateVideoPlaylist(playlistObject, byAccount, activity.to)
 }

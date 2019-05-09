@@ -3,7 +3,6 @@ import { UserRight, VideoAbuseCreate, VideoAbuseState } from '../../../../shared
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
-import { sendVideoAbuse } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -18,10 +17,10 @@ import {
   videoAbuseUpdateValidator
 } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
-import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
-import { UserModel } from '../../../models/account/user'
+import { Notifier } from '../../../lib/notifier'
+import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -68,7 +67,7 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
 }
 
 async function updateVideoAbuse (req: express.Request, res: express.Response) {
-  const videoAbuse: VideoAbuseModel = res.locals.videoAbuse
+  const videoAbuse = res.locals.videoAbuse
 
   if (req.body.moderationComment !== undefined) videoAbuse.moderationComment = req.body.moderationComment
   if (req.body.state !== undefined) videoAbuse.state = req.body.state
@@ -83,7 +82,7 @@ async function updateVideoAbuse (req: express.Request, res: express.Response) {
 }
 
 async function deleteVideoAbuse (req: express.Request, res: express.Response) {
-  const videoAbuse: VideoAbuseModel = res.locals.videoAbuse
+  const videoAbuse = res.locals.videoAbuse
 
   await sequelizeTypescript.transaction(t => {
     return videoAbuse.destroy({ transaction: t })
@@ -95,11 +94,11 @@ async function deleteVideoAbuse (req: express.Request, res: express.Response) {
 }
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video as VideoModel
+  const videoInstance = res.locals.video
   const body: VideoAbuseCreate = req.body
 
   const videoAbuse: VideoAbuseModel = await sequelizeTypescript.transaction(async t => {
-    const reporterAccount = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+    const reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,
@@ -116,6 +115,8 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
     if (videoInstance.isOwned() === false) {
       await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance)
     }
+
+    Notifier.Instance.notifyOnNewVideoAbuse(videoAbuseInstance)
 
     auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseInstance.toFormattedJSON()))
 

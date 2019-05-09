@@ -153,6 +153,15 @@ export class UserService {
                )
   }
 
+  updateUsers (users: User[], userUpdate: UserUpdate) {
+    return from(users)
+      .pipe(
+        concatMap(u => this.authHttp.put(UserService.BASE_USERS_URL + u.id, userUpdate)),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
   getUser (userId: number) {
     return this.authHttp.get<User>(UserService.BASE_USERS_URL + userId)
                .pipe(catchError(err => this.restExtractor.handleError(err)))

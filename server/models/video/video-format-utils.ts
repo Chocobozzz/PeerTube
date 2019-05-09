@@ -1,8 +1,13 @@
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoModel } from './video'
 import { VideoFileModel } from './video-file'
-import { ActivityUrlObject, VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { CONFIG, THUMBNAILS_SIZE, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import {
+  ActivityPlaylistInfohashesObject,
+  ActivityPlaylistSegmentHashesObject,
+  ActivityUrlObject,
+  VideoTorrentObject
+} from '../../../shared/models/activitypub/objects'
+import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { VideoCaptionModel } from './video-caption'
 import {
   getVideoCommentsActivityPubUrl,
@@ -11,6 +16,8 @@ import {
   getVideoSharesActivityPubUrl
 } from '../../lib/activitypub'
 import { isArray } from '../../helpers/custom-validators/misc'
+import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
+import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
@@ -19,12 +26,10 @@ export type VideoFormattingJSONOptions = {
     waitTranscoding?: boolean,
     scheduledUpdate?: boolean,
     blacklistInfo?: boolean
+    playlistInfo?: boolean
   }
 }
 function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormattingJSONOptions): Video {
-  const formattedAccount = video.VideoChannel.Account.toFormattedJSON()
-  const formattedVideoChannel = video.VideoChannel.toFormattedJSON()
-
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -54,30 +59,16 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
     views: video.views,
     likes: video.likes,
     dislikes: video.dislikes,
-    thumbnailPath: video.getThumbnailStaticPath(),
+    thumbnailPath: video.getMiniatureStaticPath(),
     previewPath: video.getPreviewStaticPath(),
     embedPath: video.getEmbedStaticPath(),
     createdAt: video.createdAt,
     updatedAt: video.updatedAt,
     publishedAt: video.publishedAt,
-    account: {
-      id: formattedAccount.id,
-      uuid: formattedAccount.uuid,
-      name: formattedAccount.name,
-      displayName: formattedAccount.displayName,
-      url: formattedAccount.url,
-      host: formattedAccount.host,
-      avatar: formattedAccount.avatar
-    },
-    channel: {
-      id: formattedVideoChannel.id,
-      uuid: formattedVideoChannel.uuid,
-      name: formattedVideoChannel.name,
-      displayName: formattedVideoChannel.displayName,
-      url: formattedVideoChannel.url,
-      host: formattedVideoChannel.host,
-      avatar: formattedVideoChannel.avatar
-    },
+    originallyPublishedAt: video.originallyPublishedAt,
+
+    account: video.VideoChannel.Account.toFormattedSummaryJSON(),
+    channel: video.VideoChannel.toFormattedSummaryJSON(),
 
     userHistory: userHistory ? {
       currentTime: userHistory.currentTime
@@ -107,6 +98,17 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
       videoObject.blacklisted = !!video.VideoBlacklist
       videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
     }
+
+    if (options.additionalAttributes.playlistInfo === true) {
+      // We filtered on a specific videoId/videoPlaylistId, that is unique
+      const playlistElement = video.VideoPlaylistElements[0]
+
+      videoObject.playlistElement = {
+        position: playlistElement.position,
+        startTimestamp: playlistElement.startTimestamp,
+        stopTimestamp: playlistElement.stopTimestamp
+      }
+    }
   }
 
   return videoObject
@@ -120,7 +122,12 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
     }
   })
 
+  const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
+
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
+
+  const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
+
   const detailsJson = {
     support: video.support,
     descriptionPath: video.getDescriptionAPIPath(),
@@ -128,18 +135,42 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
     account: video.VideoChannel.Account.toFormattedJSON(),
     tags,
     commentsEnabled: video.commentsEnabled,
+    downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
     state: {
       id: video.state,
       label: VideoModel.getStateLabel(video.state)
     },
-    files: []
+
+    trackerUrls: video.getTrackerUrls(baseUrlHttp, baseUrlWs),
+
+    files: [],
+    streamingPlaylists
   }
 
   // Format and sort video files
   detailsJson.files = videoFilesModelToFormattedJSON(video, video.VideoFiles)
 
   return Object.assign(formattedJson, detailsJson)
+}
+
+function streamingPlaylistsModelToFormattedJSON (video: VideoModel, playlists: VideoStreamingPlaylistModel[]): VideoStreamingPlaylist[] {
+  if (isArray(playlists) === false) return []
+
+  return playlists
+    .map(playlist => {
+      const redundancies = isArray(playlist.RedundancyVideos)
+        ? playlist.RedundancyVideos.map(r => ({ baseUrl: r.fileUrl }))
+        : []
+
+      return {
+        id: playlist.id,
+        type: playlist.type,
+        playlistUrl: playlist.playlistUrl,
+        segmentsSha256Url: playlist.segmentsSha256Url,
+        redundancies
+      } as VideoStreamingPlaylist
+    })
 }
 
 function videoFilesModelToFormattedJSON (video: VideoModel, videoFiles: VideoFileModel[]): VideoFile[] {
@@ -207,8 +238,8 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
   for (const file of video.VideoFiles) {
     url.push({
       type: 'Link',
-      mimeType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
-      mediaType: VIDEO_EXT_MIMETYPE[ file.extname ] as any,
+      mimeType: MIMETYPES.VIDEO.EXT_MIMETYPE[ file.extname ] as any,
+      mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ file.extname ] as any,
       href: video.getVideoFileUrl(file, baseUrlHttp),
       height: file.resolution,
       size: file.size,
@@ -232,12 +263,34 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     })
   }
 
+  for (const playlist of (video.VideoStreamingPlaylists || [])) {
+    let tag: (ActivityPlaylistSegmentHashesObject | ActivityPlaylistInfohashesObject)[]
+
+    tag = playlist.p2pMediaLoaderInfohashes
+                  .map(i => ({ type: 'Infohash' as 'Infohash', name: i }))
+    tag.push({
+      type: 'Link',
+      name: 'sha256',
+      mimeType: 'application/json' as 'application/json',
+      mediaType: 'application/json' as 'application/json',
+      href: playlist.segmentsSha256Url
+    })
+
+    url.push({
+      type: 'Link',
+      mimeType: 'application/x-mpegURL' as 'application/x-mpegURL',
+      mediaType: 'application/x-mpegURL' as 'application/x-mpegURL',
+      href: playlist.playlistUrl,
+      tag
+    })
+  }
+
   // Add video url too
   url.push({
     type: 'Link',
     mimeType: 'text/html',
     mediaType: 'text/html',
-    href: CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+    href: WEBSERVER.URL + '/videos/watch/' + video.uuid
   })
 
   const subtitleLanguage = []
@@ -247,6 +300,8 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
       name: VideoCaptionModel.getLanguageLabel(caption.language)
     })
   }
+
+  const miniature = video.getMiniature()
 
   return {
     type: 'Video' as 'Video',
@@ -263,7 +318,9 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     waitTranscoding: video.waitTranscoding,
     state: video.state,
     commentsEnabled: video.commentsEnabled,
+    downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),
+    originallyPublishedAt: video.originallyPublishedAt ? video.originallyPublishedAt.toISOString() : null,
     updated: video.updatedAt.toISOString(),
     mediaType: 'text/markdown',
     content: video.getTruncatedDescription(),
@@ -271,10 +328,10 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     subtitleLanguage,
     icon: {
       type: 'Image',
-      url: video.getThumbnailUrl(baseUrlHttp),
+      url: miniature.getFileUrl(),
       mediaType: 'image/jpeg',
-      width: THUMBNAILS_SIZE.width,
-      height: THUMBNAILS_SIZE.height
+      width: miniature.width,
+      height: miniature.height
     },
     url,
     likes: getVideoLikesActivityPubUrl(video),

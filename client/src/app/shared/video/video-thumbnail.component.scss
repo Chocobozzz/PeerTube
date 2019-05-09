@@ -1,39 +1,15 @@
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
 .video-thumbnail {
-  display: inline-block;
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-  width: $video-thumbnail-width;
-  height: $video-thumbnail-height;
-  background-color: #ececec;
-
-  &:hover {
-    text-decoration: none !important;
-  }
-
-  @include disable-outline;
-  &.focus-visible {
-    box-shadow: 0 0 0 2px var(--mainColor);
-  }
-
-  img {
-    width: $video-thumbnail-width;
-    height: $video-thumbnail-height;
-
-    &.blur-filter {
-      filter: blur(5px);
-      transform : scale(1.03);
-    }
-  }
+  @include miniature-thumbnail;
 
   .progress-bar {
     height: 3px;
     width: 100%;
-    position: relative;
-    top: -3px;
+    position: absolute;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.20);
 
     div {
@@ -42,16 +18,15 @@
     }
   }
 
-  .video-thumbnail-overlay {
+  .video-thumbnail-duration-overlay {
+    @include static-thumbnail-overlay;
+
     position: absolute;
     right: 5px;
     bottom: 5px;
-    display: inline-block;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
     font-size: 12px;
     font-weight: $font-bold;
-    border-radius: 3px;
-    padding: 0 5px;
   }
 }

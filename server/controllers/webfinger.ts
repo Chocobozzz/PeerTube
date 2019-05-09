@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { asyncMiddleware } from '../middlewares'
 import { webfingerValidator } from '../middlewares/validators'
-import { ActorModel } from '../models/activitypub/actor'
 
 const webfingerRouter = express.Router()
 
@@ -18,8 +17,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function webfingerController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const actor = res.locals.actor as ActorModel
+function webfingerController (req: express.Request, res: express.Response) {
+  const actor = res.locals.actor
 
   const json = {
     subject: req.query.resource,

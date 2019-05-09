@@ -185,9 +185,8 @@ $ sudo journalctl -feu peertube
 On FreeBSD, copy the startup script and update rc.conf:
 
 ```
-$ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
-$ sudo chmod +x /usr/local/etc/rc.d/peertube
-$ sudo echo peertube_enable="YES" >> /etc/rc.conf
+$ sudo install -m 0555 /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
+$ sudo sysrc peertube_enable="YES"
 ```
 
 Run:
@@ -211,6 +210,7 @@ Now your instance is up you can:
  
  * Subscribe to the mailing list for PeerTube administrators: https://framalistes.org/sympa/subscribe/peertube-admin
  * Add you instance to the public PeerTube instances index if you want to: https://instances.peertu.be/
+ * Check [available CLI tools](/support/doc/tools.md)
 
 ## Upgrade
 

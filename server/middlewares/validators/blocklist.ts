@@ -2,14 +2,13 @@ import { body, param } from 'express-validator/check'
 import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
-import { isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
-import { UserModel } from '../../models/account/user'
+import { doesAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist'
 import { ServerModel } from '../../models/server/server'
-import { CONFIG } from '../../initializers'
 import { getServerActor } from '../../helpers/utils'
+import { WEBSERVER } from '../../initializers/constants'
 
 const blockAccountValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),
@@ -18,9 +17,9 @@ const blockAccountValidator = [
     logger.debug('Checking blockAccountByAccountValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isAccountNameWithHostExist(req.body.accountName, res)) return
+    if (!await doesAccountNameWithHostExist(req.body.accountName, res)) return
 
-    const user = res.locals.oauth.token.User as UserModel
+    const user = res.locals.oauth.token.User
     const accountToBlock = res.locals.account
 
     if (user.Account.id === accountToBlock.id) {
@@ -42,11 +41,11 @@ const unblockAccountByAccountValidator = [
     logger.debug('Checking unblockAccountByAccountValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isAccountNameWithHostExist(req.params.accountName, res)) return
+    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
 
-    const user = res.locals.oauth.token.User as UserModel
+    const user = res.locals.oauth.token.User
     const targetAccount = res.locals.account
-    if (!await isUnblockAccountExists(user.Account.id, targetAccount.id, res)) return
+    if (!await doesUnblockAccountExist(user.Account.id, targetAccount.id, res)) return
 
     return next()
   }
@@ -59,11 +58,11 @@ const unblockAccountByServerValidator = [
     logger.debug('Checking unblockAccountByServerValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isAccountNameWithHostExist(req.params.accountName, res)) return
+    if (!await doesAccountNameWithHostExist(req.params.accountName, res)) return
 
     const serverActor = await getServerActor()
     const targetAccount = res.locals.account
-    if (!await isUnblockAccountExists(serverActor.Account.id, targetAccount.id, res)) return
+    if (!await doesUnblockAccountExist(serverActor.Account.id, targetAccount.id, res)) return
 
     return next()
   }
@@ -79,7 +78,7 @@ const blockServerValidator = [
 
     const host: string = req.body.host
 
-    if (host === CONFIG.WEBSERVER.HOST) {
+    if (host === WEBSERVER.HOST) {
       return res.status(409)
         .send({ error: 'You cannot block your own server.' })
         .end()
@@ -106,8 +105,8 @@ const unblockServerByAccountValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const user = res.locals.oauth.token.User as UserModel
-    if (!await isUnblockServerExists(user.Account.id, req.params.host, res)) return
+    const user = res.locals.oauth.token.User
+    if (!await doesUnblockServerExist(user.Account.id, req.params.host, res)) return
 
     return next()
   }
@@ -122,7 +121,7 @@ const unblockServerByServerValidator = [
     if (areValidationErrors(req, res)) return
 
     const serverActor = await getServerActor()
-    if (!await isUnblockServerExists(serverActor.Account.id, req.params.host, res)) return
+    if (!await doesUnblockServerExist(serverActor.Account.id, req.params.host, res)) return
 
     return next()
   }
@@ -141,7 +140,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function isUnblockAccountExists (accountId: number, targetAccountId: number, res: express.Response) {
+async function doesUnblockAccountExist (accountId: number, targetAccountId: number, res: express.Response) {
   const accountBlock = await AccountBlocklistModel.loadByAccountAndTarget(accountId, targetAccountId)
   if (!accountBlock) {
     res.status(404)
@@ -156,7 +155,7 @@ async function isUnblockAccountExists (accountId: number, targetAccountId: numbe
   return true
 }
 
-async function isUnblockServerExists (accountId: number, host: string, res: express.Response) {
+async function doesUnblockServerExist (accountId: number, host: string, res: express.Response) {
   const serverBlock = await ServerBlocklistModel.loadByAccountAndHost(accountId, host)
   if (!serverBlock) {
     res.status(404)

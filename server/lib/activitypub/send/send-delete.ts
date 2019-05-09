@@ -8,6 +8,8 @@ import { getDeleteActivityPubUrl } from '../url'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
+import { VideoPlaylistModel } from '../../../models/video/video-playlist'
+import { getServerActor } from '../../../helpers/utils'
 
 async function sendDeleteVideo (video: VideoModel, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
@@ -29,7 +31,12 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
   const url = getDeleteActivityPubUrl(byActor.url)
   const activity = buildDeleteActivity(url, byActor.url, byActor)
 
-  const actorsInvolved = await VideoShareModel.loadActorsByVideoOwner(byActor.id, t)
+  const actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, t)
+
+  // In case the actor did not have any videos
+  const serverActor = await getServerActor()
+  actorsInvolved.push(serverActor)
+
   actorsInvolved.push(byActor)
 
   return broadcastToFollowers(activity, byActor, actorsInvolved, t)
@@ -64,12 +71,29 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
   return unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
+async function sendDeleteVideoPlaylist (videoPlaylist: VideoPlaylistModel, t: Transaction) {
+  logger.info('Creating job to send delete of playlist %s.', videoPlaylist.url)
+
+  const byActor = videoPlaylist.OwnerAccount.Actor
+
+  const url = getDeleteActivityPubUrl(videoPlaylist.url)
+  const activity = buildDeleteActivity(url, videoPlaylist.url, byActor)
+
+  const serverActor = await getServerActor()
+  const toFollowersOf = [ byActor, serverActor ]
+
+  if (videoPlaylist.VideoChannel) toFollowersOf.push(videoPlaylist.VideoChannel.Actor)
+
+  return broadcastToFollowers(activity, byActor, toFollowersOf, t)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   sendDeleteVideo,
   sendDeleteActor,
-  sendDeleteVideoComment
+  sendDeleteVideoComment,
+  sendDeleteVideoPlaylist
 }
 
 // ---------------------------------------------------------------------------

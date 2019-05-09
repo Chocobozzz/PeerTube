@@ -62,14 +62,13 @@ function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model
   const obj = baseInstance.toJSON()
 
   for (const key of Object.keys(obj)) {
-    instanceToUpdate.set(key, obj[key])
+    instanceToUpdate[key] = obj[key]
   }
 }
 
 function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   Object.keys(savedFields).forEach(key => {
-    const value = savedFields[key]
-    instance.set(key, value)
+    instance[key] = savedFields[key]
   })
 }
 

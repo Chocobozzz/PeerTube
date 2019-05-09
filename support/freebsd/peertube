@@ -16,6 +16,7 @@ load_rc_config $name
 
 : ${peertube_enable:=NO}
 
+sig_stop=-KILL
 peertube_chdir="/var/www/peertube/peertube-latest"
 peertube_env="HOME=/var/www/peertube \
 NODE_ENV=production \
@@ -23,7 +24,7 @@ NODE_CONFIG_DIR=/var/www/peertube/config \
 USER=peertube"
 peertube_user=peertube
 
-command="/usr/local/bin/npm"
-command_args="start >> /var/log/peertube/${name}.log 2>&1 &"
+command="/usr/local/bin/node"
+command_args="dist/server >> /var/log/peertube/${name}.log 2>&1 &"
 
 run_rc_command "$1"

@@ -1,6 +1,5 @@
 import * as express from 'express'
-import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
-import { THUMBNAILS_SIZE } from '../initializers'
+import { FEEDS, ROUTE_CACHE_LIFETIME, THUMBNAILS_SIZE, WEBSERVER } from '../initializers/constants'
 import {
   asyncMiddleware,
   commonVideosFiltersValidator,
@@ -11,11 +10,10 @@ import {
 } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
-import { AccountModel } from '../models/account/account'
 import { cacheRoute } from '../middlewares/cache'
-import { VideoChannelModel } from '../models/video/video-channel'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { buildNSFWFilter } from '../helpers/express-utils'
+import { CONFIG } from '../initializers/config'
 
 const feedsRouter = express.Router()
 
@@ -42,10 +40,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function generateVideoCommentsFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateVideoCommentsFeed (req: express.Request, res: express.Response) {
   const start = 0
 
-  const video = res.locals.video as VideoModel
+  const video = res.locals.video
   const videoId: number = video ? video.id : undefined
 
   const comments = await VideoCommentModel.listForFeed(start, FEEDS.COUNT, videoId)
@@ -56,7 +54,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
 
   // Adding video items to the feed, one at a time
   comments.forEach(comment => {
-    const link = CONFIG.WEBSERVER.URL + '/videos/watch/' + comment.Video.uuid + ';threadId=' + comment.getThreadId()
+    const link = WEBSERVER.URL + comment.getCommentStaticPath()
 
     feed.addItem({
       title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,
@@ -77,11 +75,11 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   return sendFeed(feed, req, res)
 }
 
-async function generateVideoFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateVideoFeed (req: express.Request, res: express.Response) {
   const start = 0
 
-  const account: AccountModel = res.locals.account
-  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const account = res.locals.account
+  const videoChannel = res.locals.videoChannel
   const nsfw = buildNSFWFilter(res, req.query.nsfw)
 
   let name: string
@@ -124,7 +122,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
     feed.addItem({
       title: video.name,
       id: video.url,
-      link: CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid,
+      link: WEBSERVER.URL + '/videos/watch/' + video.uuid,
       description: video.getTruncatedDescription(),
       content: video.description,
       author: [
@@ -139,7 +137,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
       torrent: torrents,
       thumbnail: [
         {
-          url: CONFIG.WEBSERVER.URL + video.getThumbnailStaticPath(),
+          url: WEBSERVER.URL + video.getMiniatureStaticPath(),
           height: THUMBNAILS_SIZE.height,
           width: THUMBNAILS_SIZE.width
         }
@@ -152,7 +150,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response, n
 }
 
 function initFeed (name: string, description: string) {
-  const webserverUrl = CONFIG.WEBSERVER.URL
+  const webserverUrl = WEBSERVER.URL
 
   return new Feed({
     title: name,

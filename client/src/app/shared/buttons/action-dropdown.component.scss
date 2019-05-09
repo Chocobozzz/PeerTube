@@ -1,15 +1,26 @@
 @import '_variables';
 @import '_mixins';
 
+.dropdown-divider:last-child {
+  display: none;
+}
+
 .action-button {
   @include peertube-button;
 
-  &.grey {
-    @include grey-button;
-  }
+  &.button-styled {
 
-  &.orange {
-    @include orange-button;
+    &.grey {
+      @include grey-button;
+    }
+
+    &.orange {
+      @include orange-button;
+    }
+
+    &:hover, &:active, &:focus {
+      background-color: $grey-background-color;
+    }
   }
 
   display: inline-block;
@@ -19,15 +30,8 @@
     display: none;
   }
 
-  &:hover, &:active, &:focus {
-    background-color: $grey-color;
-  }
-
-  .icon-action {
-    @include icon(21px);
-
-    background-image: url('../../../assets/images/video/more.svg');
-    top: -1px;
+  .more-icon {
+    width: 21px;
   }
 
   &.small {
@@ -46,6 +50,10 @@
   .dropdown-item {
     cursor: pointer;
     color: #000 !important;
+
+    &.with-icon {
+      @include dropdown-with-icon-item;
+    }
 
     a, span {
       display: block;

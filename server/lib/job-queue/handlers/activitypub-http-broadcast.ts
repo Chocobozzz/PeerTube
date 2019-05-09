@@ -2,9 +2,9 @@ import * as Bull from 'bull'
 import * as Bluebird from 'bluebird'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
-import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers'
+import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
+import { ActorFollowScoreCache } from '../../files-cache'
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
@@ -38,7 +38,7 @@ async function processActivityPubHttpBroadcast (job: Bull.Job) {
       .catch(() => badUrls.push(uri))
   }, { concurrency: BROADCAST_CONCURRENCY })
 
-  return ActorFollowModel.updateActorFollowsScore(goodUrls, badUrls, undefined)
+  return ActorFollowScoreCache.Instance.updateActorFollowsScore(goodUrls, badUrls)
 }
 
 // ---------------------------------------------------------------------------

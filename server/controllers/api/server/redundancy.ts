@@ -2,7 +2,6 @@ import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares'
 import { updateServerRedundancyValidator } from '../../../middlewares/validators/redundancy'
-import { ServerModel } from '../../../models/server/server'
 import { removeRedundancyOf } from '../../../lib/redundancy'
 import { logger } from '../../../helpers/logger'
 
@@ -23,8 +22,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateRedundancy (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const server = res.locals.server as ServerModel
+async function updateRedundancy (req: express.Request, res: express.Response) {
+  const server = res.locals.server
 
   server.redundancyAllowed = req.body.redundancyAllowed
 

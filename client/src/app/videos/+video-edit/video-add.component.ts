@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core'
+import { Component, HostListener, ViewChild } from '@angular/core'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
 import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
@@ -27,7 +27,22 @@ export class VideoAddComponent implements CanComponentDeactivate {
     this.videoName = videoName
   }
 
-  canDeactivate () {
+  onError () {
+    this.videoName = undefined
+    this.secondStepType = undefined
+  }
+
+  @HostListener('window:beforeunload', [ '$event' ])
+  onUnload (event: any) {
+    const { text, canDeactivate } = this.canDeactivate()
+
+    if (canDeactivate) return
+
+    event.returnValue = text
+    return text
+  }
+
+  canDeactivate (): { canDeactivate: boolean, text?: string} {
     if (this.secondStepType === 'upload') return this.videoUpload.canDeactivate()
     if (this.secondStepType === 'import-url') return this.videoImportUrl.canDeactivate()
     if (this.secondStepType === 'import-torrent') return this.videoImportTorrent.canDeactivate()

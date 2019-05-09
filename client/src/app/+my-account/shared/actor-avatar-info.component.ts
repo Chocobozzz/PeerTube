@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { ServerService } from '../../core/server'
-import { NotificationsService } from 'angular2-notifications'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { Account } from '@app/shared/account/account.model'
+import { Notifier } from '@app/core'
 
 @Component({
   selector: 'my-actor-avatar-info',
@@ -18,13 +18,13 @@ export class ActorAvatarInfoComponent {
 
   constructor (
     private serverService: ServerService,
-    private notificationsService: NotificationsService
+    private notifier: Notifier
   ) {}
 
   onAvatarChange () {
     const avatarfile = this.avatarfileInput.nativeElement.files[ 0 ]
     if (avatarfile.size > this.maxAvatarSize) {
-      this.notificationsService.error('Error', 'This image is too large.')
+      this.notifier.error('Error', 'This image is too large.')
       return
     }
 

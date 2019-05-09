@@ -23,6 +23,10 @@ const accountsRoutes: Routes = [
         data: {
           meta: {
             title: 'Account videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'account-videos-list'
           }
         }
       },

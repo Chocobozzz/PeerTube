@@ -10,4 +10,4 @@ const advertiseDoNotTrack = (_, res, next) => {
 
 export {
   advertiseDoNotTrack
- }
+}

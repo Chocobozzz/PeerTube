@@ -5,24 +5,26 @@ import { body, param } from 'express-validator/check'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isUserAutoPlayVideoValid, isUserBlockedReasonValid,
+  isUserAdminFlagsValid,
+  isUserAutoPlayVideoValid,
+  isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
+  isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
-  isUserVideoQuotaDailyValid
+  isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
-import { comparePassword } from '../../helpers/peertube-crypto'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -31,6 +33,7 @@ const usersAddValidator = [
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
+  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
@@ -100,7 +103,7 @@ const usersBlockingValidator = [
 
 const deleteMeValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const user: UserModel = res.locals.oauth.token.User
+    const user = res.locals.oauth.token.User
     if (user.username === 'root') {
       return res.status(400)
                 .send({ error: 'You cannot delete your root account.' })
@@ -113,10 +116,13 @@ const deleteMeValidator = [
 
 const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
+  body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
   body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
+  body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdate parameters', { parameters: req.body })
@@ -143,6 +149,9 @@ const usersUpdateMeValidator = [
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('nsfwPolicy').optional().custom(isUserNSFWPolicyValid).withMessage('Should have a valid display Not Safe For Work policy'),
   body('autoPlayVideo').optional().custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
+  body('videosHistoryEnabled')
+    .optional()
+    .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled attribute'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
@@ -154,8 +163,7 @@ const usersUpdateMeValidator = [
                   .end()
       }
 
-      const user: UserModel = res.locals.oauth.token.User
-
+      const user = res.locals.oauth.token.User
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.status(401)
                   .send({ error: 'currentPassword is invalid.' })
@@ -189,7 +197,7 @@ const usersVideoRatingValidator = [
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res, 'id')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
     return next()
   }
@@ -229,6 +237,7 @@ const usersAskResetPasswordValidator = [
     logger.debug('Checking usersAskResetPassword parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
     const exists = await checkUserEmailExist(req.body.email, res, false)
     if (!exists) {
       logger.debug('User with email %s does not exist (asking reset password).', req.body.email)
@@ -251,7 +260,7 @@ const usersResetPasswordValidator = [
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
-    const user = res.locals.user as UserModel
+    const user = res.locals.user
     const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
@@ -293,7 +302,7 @@ const usersVerifyEmailValidator = [
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
-    const user = res.locals.user as UserModel
+    const user = res.locals.user
     const redisVerificationString = await Redis.Instance.getVerifyEmailLink(user.id)
 
     if (redisVerificationString !== req.body.verificationString) {
@@ -309,6 +318,20 @@ const usersVerifyEmailValidator = [
 
 const userAutocompleteValidator = [
   param('search').isString().not().isEmpty().withMessage('Should have a search parameter')
+]
+
+const ensureAuthUserOwnsAccountValidator = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const user = res.locals.oauth.token.User
+
+    if (res.locals.account.id !== user.Account.id) {
+      return res.status(403)
+                .send({ error: 'Only owner can access ratings list.' })
+                .end()
+    }
+
+    return next()
+  }
 ]
 
 // ---------------------------------------------------------------------------
@@ -329,7 +352,8 @@ export {
   usersResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersVerifyEmailValidator,
-  userAutocompleteValidator
+  userAutocompleteValidator,
+  ensureAuthUserOwnsAccountValidator
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,3 @@
-import * as Sequelize from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -11,10 +10,11 @@ import {
   HasMany,
   Is,
   Model,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { Account } from '../../../shared/models/actors'
+import { Account, AccountSummary } from '../../../shared/models/actors'
 import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
@@ -24,15 +24,49 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
+import { AvatarModel } from '../avatar/avatar'
+import { VideoPlaylistModel } from '../video/video-playlist'
+import { WEBSERVER } from '../../initializers/constants'
+import { Op, Transaction, WhereOptions } from 'sequelize'
 
-@DefaultScope({
+export enum ScopeNames {
+  SUMMARY = 'SUMMARY'
+}
+
+@DefaultScope(() => ({
   include: [
     {
-      model: () => ActorModel, // Default scope includes avatar and server
+      model: ActorModel, // Default scope includes avatar and server
       required: true
     }
   ]
-})
+}))
+@Scopes(() => ({
+  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions) => {
+    return {
+      attributes: [ 'id', 'name' ],
+      include: [
+        {
+          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          where: whereActor,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+  }
+}))
 @Table({
   tableName: 'account',
   indexes: [
@@ -56,7 +90,7 @@ export class AccountModel extends Model<AccountModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description'))
+  @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description', true))
   @Column
   description: string
 
@@ -111,6 +145,15 @@ export class AccountModel extends Model<AccountModel> {
   })
   VideoChannels: VideoChannelModel[]
 
+  @HasMany(() => VideoPlaylistModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoPlaylists: VideoPlaylistModel[]
+
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
       allowNull: false
@@ -133,8 +176,8 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number, transaction?: Sequelize.Transaction) {
-    return AccountModel.findById(id, { transaction })
+  static load (id: number, transaction?: Transaction) {
+    return AccountModel.findByPk(id, { transaction })
   }
 
   static loadByUUID (uuid: string) {
@@ -153,18 +196,26 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
+  static loadByNameWithHost (nameWithHost: string) {
+    const [ accountName, host ] = nameWithHost.split('@')
+
+    if (!host || host === WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
+
+    return AccountModel.loadByNameAndHost(accountName, host)
+  }
+
   static loadLocalByName (name: string) {
     const query = {
       where: {
-        [ Sequelize.Op.or ]: [
+        [ Op.or ]: [
           {
             userId: {
-              [ Sequelize.Op.ne ]: null
+              [ Op.ne ]: null
             }
           },
           {
             applicationId: {
-              [ Sequelize.Op.ne ]: null
+              [ Op.ne ]: null
             }
           }
         ]
@@ -208,7 +259,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction) {
     const query = {
       include: [
         {
@@ -241,6 +292,27 @@ export class AccountModel extends Model<AccountModel> {
       })
   }
 
+  static listLocalsForSitemap (sort: string) {
+    const query = {
+      attributes: [ ],
+      offset: 0,
+      order: getSort(sort),
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'serverId' ],
+          model: ActorModel.unscoped(),
+          where: {
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return AccountModel
+      .unscoped()
+      .findAll(query)
+  }
+
   toFormattedJSON (): Account {
     const actor = this.Actor.toFormattedJSON()
     const account = {
@@ -255,6 +327,20 @@ export class AccountModel extends Model<AccountModel> {
     return Object.assign(actor, account)
   }
 
+  toFormattedSummaryJSON (): AccountSummary {
+    const actor = this.Actor.toFormattedJSON()
+
+    return {
+      id: this.id,
+      uuid: actor.uuid,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
+  }
+
   toActivityPubObject () {
     const obj = this.Actor.toActivityPubObject(this.name, 'Account')
 
@@ -265,6 +351,10 @@ export class AccountModel extends Model<AccountModel> {
 
   isOwned () {
     return this.Actor.isOwned()
+  }
+
+  isOutdated () {
+    return this.Actor.isOutdated()
   }
 
   getDisplayName () {

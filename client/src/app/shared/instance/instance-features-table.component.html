@@ -2,6 +2,20 @@
 
   <table class="table">
     <tr>
+      <td i18n class="label">Default NSFW/sensitive videos policy (can be redefined by the users)</td>
+
+      <td class="value">{{ buildNSFWLabel() }}</td>
+    </tr>
+
+    <tr *ngFor="let feature of features">
+      <td class="label">{{ feature.label }}</td>
+      <td>
+        <span *ngIf="feature.value === true" class="glyphicon glyphicon-ok"></span>
+        <span *ngIf="feature.value === false" class="glyphicon glyphicon-remove"></span>
+      </td>
+    </tr>
+
+    <tr>
       <td i18n class="label">Video quota</td>
 
       <td class="value">
@@ -14,14 +28,6 @@
         <ng-container i18n *ngIf="initialUserVideoQuota === -1">
           Unlimited <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
         </ng-container>
-      </td>
-    </tr>
-
-    <tr *ngFor="let feature of features">
-      <td class="label">{{ feature.label }}</td>
-      <td>
-        <span *ngIf="feature.value === true" class="glyphicon glyphicon-ok"></span>
-        <span *ngIf="feature.value === false" class="glyphicon glyphicon-remove"></span>
       </td>
     </tr>
   </table>

@@ -48,13 +48,10 @@
     </div>
 
     <div *ngIf="isVideo(result)" class="entry video">
-      <my-video-thumbnail [video]="result"></my-video-thumbnail>
-
-      <div class="video-info">
-        <a tabindex="-1" class="video-info-name" [routerLink]="['/videos/watch', result.uuid]" [attr.title]="result.name">{{ result.name }}</a>
-        <span i18n class="video-info-date-views">{{ result.publishedAt | myFromNow }} - {{ result.views | myNumberFormatter }} views</span>
-        <a tabindex="-1" class="video-info-account" [routerLink]="[ '/accounts', result.byAccount ]">{{ result.byAccount }}</a>
-      </div>
+      <my-video-miniature
+        [video]="result" [user]="user" [displayAsRow]="true"
+        (videoBlacklisted)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
+      ></my-video-miniature>
     </div>
   </ng-container>
 

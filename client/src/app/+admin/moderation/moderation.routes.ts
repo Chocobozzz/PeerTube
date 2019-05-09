@@ -3,6 +3,7 @@ import { UserRight } from '../../../../../shared'
 import { UserRightGuard } from '@app/core'
 import { VideoAbuseListComponent } from '@app/+admin/moderation/video-abuse-list'
 import { VideoBlacklistListComponent } from '@app/+admin/moderation/video-blacklist-list'
+import { VideoAutoBlacklistListComponent } from '@app/+admin/moderation/video-auto-blacklist-list'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 
@@ -27,6 +28,11 @@ export const ModerationRoutes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'video-auto-blacklist',
+        redirectTo: 'video-auto-blacklist/list',
+        pathMatch: 'full'
+      },
+      {
         path: 'video-abuses/list',
         component: VideoAbuseListComponent,
         canActivate: [ UserRightGuard ],
@@ -34,6 +40,17 @@ export const ModerationRoutes: Routes = [
           userRight: UserRight.MANAGE_VIDEO_ABUSES,
           meta: {
             title: 'Video abuses list'
+          }
+        }
+      },
+      {
+        path: 'video-auto-blacklist/list',
+        component: VideoAutoBlacklistListComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
+          meta: {
+            title: 'Auto-blacklisted videos'
           }
         }
       },
@@ -64,7 +81,7 @@ export const ModerationRoutes: Routes = [
         component: InstanceServerBlocklistComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_SERVER_REDUNDANCY,
+          userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
           meta: {
             title: 'Muted instances'
           }

@@ -1,16 +1,23 @@
 import * as cors from 'cors'
 import * as express from 'express'
-import { CONFIG, ROUTE_CACHE_LIFETIME, STATIC_DOWNLOAD_PATHS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
-import { VideosPreviewCache } from '../lib/cache'
+import {
+  HLS_STREAMING_PLAYLIST_DIRECTORY,
+  ROUTE_CACHE_LIFETIME,
+  STATIC_DOWNLOAD_PATHS,
+  STATIC_MAX_AGE,
+  STATIC_PATHS,
+  WEBSERVER
+} from '../initializers/constants'
+import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
-import { VideosCaptionCache } from '../lib/cache/videos-caption-cache'
 import { UserModel } from '../models/account/user'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
+import { CONFIG } from '../initializers/config'
 
 const packageJSON = require('../../../package.json')
 const staticRouter = express.Router()
@@ -34,16 +41,28 @@ staticRouter.use(
 )
 
 // Videos path for webseeding
-const videosPhysicalPath = CONFIG.STORAGE.VIDEOS_DIR
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(videosPhysicalPath)
+  express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
 )
+staticRouter.use(
+  STATIC_PATHS.REDUNDANCY,
+  cors(),
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
+)
+
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(downloadVideoFile)
+)
+
+// HLS
+staticRouter.use(
+  STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
+  cors(),
+  express.static(HLS_STREAMING_PLAYLIST_DIRECTORY, { fallthrough: false }) // 404 if the file does not exist
 )
 
 // Thumbnails path for express
@@ -103,7 +122,7 @@ staticRouter.use('/.well-known/nodeinfo',
       links: [
         {
           rel: 'http://nodeinfo.diaspora.software/ns/schema/2.0',
-          href: CONFIG.WEBSERVER.URL + '/nodeinfo/2.0.json'
+          href: WEBSERVER.URL + '/nodeinfo/2.0.json'
         }
       ]
     })
@@ -131,6 +150,12 @@ staticRouter.use('/.well-known/dnt/',
   }
 )
 
+staticRouter.use('/.well-known/change-password',
+  (_, res: express.Response) => {
+    res.redirect('/my-account/settings')
+  }
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -139,21 +164,21 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getPreview (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const path = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
-  if (!path) return res.sendStatus(404)
+async function getPreview (req: express.Request, res: express.Response) {
+  const result = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
+  if (!result) return res.sendStatus(404)
 
-  return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
 }
 
 async function getVideoCaption (req: express.Request, res: express.Response) {
-  const path = await VideosCaptionCache.Instance.getFilePath({
+  const result = await VideosCaptionCache.Instance.getFilePath({
     videoId: req.params.videoId,
     language: req.params.captionLanguage
   })
-  if (!path) return res.sendStatus(404)
+  if (!result) return res.sendStatus(404)
 
-  return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
+  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
 }
 
 async function generateNodeinfo (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -220,7 +245,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response, n
 
 function getVideoAndFile (req: express.Request, res: express.Response) {
   const resolution = parseInt(req.params.resolution, 10)
-  const video: VideoModel = res.locals.video
+  const video = res.locals.video
 
   const videoFile = video.VideoFiles.find(f => f.resolution === resolution)
 

@@ -1,6 +1,6 @@
 import { Response } from 'express'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 import { exists } from './misc'
 import { VideoAbuseModel } from '../../models/video/video-abuse'
 
@@ -18,7 +18,7 @@ function isVideoAbuseStateValid (value: string) {
   return exists(value) && VIDEO_ABUSE_STATES[ value ] !== undefined
 }
 
-async function isVideoAbuseExist (abuseId: number, videoId: number, res: Response) {
+async function doesVideoAbuseExist (abuseId: number, videoId: number, res: Response) {
   const videoAbuse = await VideoAbuseModel.loadByIdAndVideoId(abuseId, videoId)
 
   if (videoAbuse === null) {
@@ -36,7 +36,7 @@ async function isVideoAbuseExist (abuseId: number, videoId: number, res: Respons
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoAbuseExist,
+  doesVideoAbuseExist,
   isVideoAbuseStateValid,
   isVideoAbuseReasonValid,
   isVideoAbuseModerationCommentValid

@@ -1,11 +1,12 @@
-import { CONFIG, initDatabaseModels } from '../server/initializers'
+import { WEBSERVER } from '../server/initializers/constants'
 import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
 import { VideoModel } from '../server/models/video/video'
 import { ActorModel } from '../server/models/activitypub/actor'
 import {
   getAccountActivityPubUrl,
-  getAnnounceActivityPubUrl,
-  getVideoActivityPubUrl, getVideoChannelActivityPubUrl,
+  getVideoActivityPubUrl,
+  getVideoAnnounceActivityPubUrl,
+  getVideoChannelActivityPubUrl,
   getVideoCommentActivityPubUrl
 } from '../server/lib/activitypub'
 import { VideoShareModel } from '../server/models/video/video-share'
@@ -13,6 +14,8 @@ import { VideoCommentModel } from '../server/models/video/video-comment'
 import { getServerActor } from '../server/helpers/utils'
 import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
+import { VideoStreamingPlaylistModel } from '../server/models/video/video-streaming-playlist'
+import { initDatabaseModels } from '../server/initializers'
 
 run()
   .then(() => process.exit(0))
@@ -61,7 +64,7 @@ async function run () {
     actor.url = newUrl
     actor.inboxUrl = newUrl + '/inbox'
     actor.outboxUrl = newUrl + '/outbox'
-    actor.sharedInboxUrl = CONFIG.WEBSERVER.URL + '/inbox'
+    actor.sharedInboxUrl = WEBSERVER.URL + '/inbox'
     actor.followersUrl = newUrl + '/followers'
     actor.followingUrl = newUrl + '/following'
 
@@ -78,7 +81,7 @@ async function run () {
 
     console.log('Updating video share ' + videoShare.url)
 
-    videoShare.url = getAnnounceActivityPubUrl(videoShare.Video.url, videoShare.Actor)
+    videoShare.url = getVideoAnnounceActivityPubUrl(videoShare.Actor, videoShare.Video)
     await videoShare.save()
   }
 
@@ -109,11 +112,9 @@ async function run () {
 
   console.log('Updating video and torrent files.')
 
-  const videos = await VideoModel.list()
+  const videos = await VideoModel.listLocal()
   for (const video of videos) {
-    if (video.isOwned() === false) continue
-
-    console.log('Updated video ' + video.uuid)
+    console.log('Updating video ' + video.uuid)
 
     video.url = getVideoActivityPubUrl(video)
     await video.save()
@@ -121,6 +122,13 @@ async function run () {
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
       await video.createTorrentAndSetInfoHash(file)
+    }
+
+    for (const playlist of video.VideoStreamingPlaylists) {
+      playlist.playlistUrl = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsMasterPlaylistStaticPath(video.uuid)
+      playlist.segmentsSha256Url = WEBSERVER.URL + VideoStreamingPlaylistModel.getHlsSha256SegmentsStaticPath(video.uuid)
+
+      await playlist.save()
     }
   }
 }

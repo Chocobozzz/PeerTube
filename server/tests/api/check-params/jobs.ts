@@ -2,9 +2,22 @@
 
 import 'mocha'
 
-import { createUser, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, userLogin } from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { makeGetRequest } from '../../utils/requests/requests'
+import {
+  createUser,
+  flushTests,
+  killallServers,
+  flushAndRunServer,
+  ServerInfo,
+  setAccessTokensToServers,
+  userLogin,
+  cleanupTests
+} from '../../../../shared/extra-utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'
@@ -16,9 +29,7 @@ describe('Test jobs API validators', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -26,7 +37,7 @@ describe('Test jobs API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    await createUser(server.url, server.accessToken, user.username, user.password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(server, user)
   })
 
@@ -71,11 +82,6 @@ describe('Test jobs API validators', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

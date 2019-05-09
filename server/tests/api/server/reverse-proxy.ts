@@ -2,28 +2,10 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/server/about.model'
-import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
-import {
-  deleteCustomConfig,
-  getAbout,
-  getVideo,
-  killallServers,
-  login,
-  reRunServer,
-  uploadVideo,
-  userLogin,
-  viewVideo,
-  wait
-} from '../../utils'
-const expect = chai.expect
+import { cleanupTests, getVideo, uploadVideo, userLogin, viewVideo, wait } from '../../../../shared/extra-utils'
+import { flushAndRunServer, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 
-import {
-  getConfig,
-  flushTests,
-  runServer,
-  registerUser, getCustomConfig, setAccessTokensToServers, updateCustomConfig
-} from '../../utils/index'
+const expect = chai.expect
 
 describe('Test application behind a reverse proxy', function () {
   let server = null
@@ -31,9 +13,7 @@ describe('Test application behind a reverse proxy', function () {
 
   before(async function () {
     this.timeout(30000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     const { body } = await uploadVideo(server.url, server.accessToken, {})
@@ -95,7 +75,7 @@ describe('Test application behind a reverse proxy', function () {
   it('Should rate limit logins', async function () {
     const user = { username: 'root', password: 'fail' }
 
-    for (let i = 0; i < 14; i++) {
+    for (let i = 0; i < 19; i++) {
       await userLogin(server, user, 400)
     }
 
@@ -103,6 +83,6 @@ describe('Test application behind a reverse proxy', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
+    await cleanupTests([ server ])
   })
 })

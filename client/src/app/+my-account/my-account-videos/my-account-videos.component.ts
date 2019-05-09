@@ -1,87 +1,81 @@
-import { from as observableFrom, Observable } from 'rxjs'
-import { concatAll, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit, Inject, LOCALE_ID, ViewChild } from '@angular/core'
+import { concat, Observable } from 'rxjs'
+import { tap, toArray } from 'rxjs/operators'
+import { Component, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier, ServerService } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
-import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoPrivacy, VideoState } from '../../../../../shared/models/videos'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoChangeOwnershipComponent } from './video-change-ownership/video-change-ownership.component'
+import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
+import { SelectionType, VideosSelectionComponent } from '@app/shared/video/videos-selection.component'
+import { VideoSortField } from '@app/shared/video/sort-field.type'
+import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 
 @Component({
   selector: 'my-account-videos',
   templateUrl: './my-account-videos.component.html',
   styleUrls: [ './my-account-videos.component.scss' ]
 })
-export class MyAccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class MyAccountVideosComponent implements DisableForReuseHook {
+  @ViewChild('videosSelection') videosSelection: VideosSelectionComponent
+  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
+
   titlePage: string
-  currentRoute = '/my-account/videos'
-  checkedVideos: { [ id: number ]: boolean } = {}
+  selection: SelectionType = {}
   pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 5,
     totalItems: null
   }
-
-  protected baseVideoWidth = -1
-  protected baseVideoHeight = 155
-
-  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
+  miniatureDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: false,
+    privacyLabel: false,
+    privacyText: true,
+    state: true,
+    blacklistInfo: true
+  }
+  videos: Video[] = []
+  getVideosObservableFunction = this.getVideosObservable.bind(this)
 
   constructor (
     protected router: Router,
+    protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected authService: AuthService,
-    protected notificationsService: NotificationsService,
-    protected location: Location,
+    protected notifier: Notifier,
     protected screenService: ScreenService,
-    protected i18n: I18n,
+    private i18n: I18n,
     private confirmService: ConfirmService,
-    private videoService: VideoService,
-    @Inject(LOCALE_ID) private localeId: string
+    private videoService: VideoService
   ) {
-    super()
-
     this.titlePage = this.i18n('My videos')
   }
 
-  ngOnInit () {
-    super.ngOnInit()
+  disableForReuse () {
+    this.videosSelection.disableForReuse()
   }
 
-  ngOnDestroy () {
-    super.ngOnDestroy()
+  enabledForReuse () {
+    this.videosSelection.enabledForReuse()
   }
 
-  abortSelectionMode () {
-    this.checkedVideos = {}
-  }
-
-  isInSelectionMode () {
-    return Object.keys(this.checkedVideos).some(k => this.checkedVideos[ k ] === true)
-  }
-
-  getVideosObservable (page: number) {
+  getVideosObservable (page: number, sort: VideoSortField) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, this.sort)
-  }
-
-  generateSyndicationList () {
-    throw new Error('Method not implemented.')
+    return this.videoService.getMyVideos(newPagination, sort)
   }
 
   async deleteSelectedVideos () {
-    const toDeleteVideosIds = Object.keys(this.checkedVideos)
-                                    .filter(k => this.checkedVideos[ k ] === true)
+    const toDeleteVideosIds = Object.keys(this.selection)
+                                    .filter(k => this.selection[ k ] === true)
                                     .map(k => parseInt(k, 10))
 
     const res = await this.confirmService.confirm(
@@ -93,25 +87,21 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     const observables: Observable<any>[] = []
     for (const videoId of toDeleteVideosIds) {
       const o = this.videoService.removeVideo(videoId)
-                    .pipe(tap(() => this.spliceVideosById(videoId)))
+                    .pipe(tap(() => this.removeVideoFromArray(videoId)))
 
       observables.push(o)
     }
 
-    observableFrom(observables)
-      .pipe(concatAll())
+    concat(...observables)
+      .pipe(toArray())
       .subscribe(
-        res => {
-          this.notificationsService.success(
-            this.i18n('Success'),
-            this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length })
-          )
+        () => {
+          this.notifier.success(this.i18n('{{deleteLength}} videos deleted.', { deleteLength: toDeleteVideosIds.length }))
 
-          this.abortSelectionMode()
-          this.reloadVideos()
+          this.selection = {}
         },
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -124,15 +114,12 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
     this.videoService.removeVideo(video.id)
         .subscribe(
-          status => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Video {{videoName}} deleted.', { videoName: video.name })
-            )
-            this.reloadVideos()
+          () => {
+            this.notifier.success(this.i18n('Video {{videoName}} deleted.', { videoName: video.name }))
+            this.removeVideoFromArray(video.id)
           },
 
-          error => this.notificationsService.error(this.i18n('Error'), error.message)
+          error => this.notifier.error(error.message)
         )
   }
 
@@ -141,41 +128,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     this.videoChangeOwnershipModal.show(video)
   }
 
-  getStateLabel (video: Video) {
-    let suffix: string
-
-    if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
-      suffix = this.i18n('Published')
-    } else if (video.scheduledUpdate) {
-      const updateAt = new Date(video.scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
-      suffix = this.i18n('Publication scheduled on ') + updateAt
-    } else if (video.state.id === VideoState.TO_TRANSCODE && video.waitTranscoding === true) {
-      suffix = this.i18n('Waiting transcoding')
-    } else if (video.state.id === VideoState.TO_TRANSCODE) {
-      suffix = this.i18n('To transcode')
-    } else if (video.state.id === VideoState.TO_IMPORT) {
-      suffix = this.i18n('To import')
-    } else {
-      return ''
-    }
-
-    return ' - ' + suffix
-  }
-
-  protected buildVideoHeight () {
-    // In account videos, the video height is fixed
-    return this.baseVideoHeight
-  }
-
-  private spliceVideosById (id: number) {
-    for (const key of Object.keys(this.loadedPages)) {
-      const videos: Video[] = this.loadedPages[ key ]
-      const index = videos.findIndex(v => v.id === id)
-
-      if (index !== -1) {
-        videos.splice(index, 1)
-        return
-      }
-    }
+  private removeVideoFromArray (id: number) {
+    this.videos = this.videos.filter(v => v.id !== id)
   }
 }

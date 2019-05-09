@@ -16,6 +16,7 @@
 /config/production.yaml
 /config/local*
 /ffmpeg/
+/ffmpeg-3/
 /ffmpeg-4/
 /thumbnails/
 /torrents/

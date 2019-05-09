@@ -2,9 +2,21 @@
 @import '_mixins';
 
 .about-instance-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+
+  & > div {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  & > .contact-admin {
+    @include peertube-button;
+    @include orange-button;
+
+    height: fit-content;
+  }
 }
 
 .section-title {
@@ -15,4 +27,9 @@
 
 .short-description, .description, .terms, .signup {
   margin-bottom: 30px;
+}
+
+.short-description .dedicated-to-nsfw {
+  margin-top: 20px;
+  font-weight: $font-semibold;
 }

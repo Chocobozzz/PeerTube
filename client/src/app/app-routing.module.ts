@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core'
-import { RouterModule, Routes } from '@angular/router'
+import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
 
 import { PreloadSelectedModulesList } from './core'
 import { AppComponent } from '@app/app.component'
+import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 
 const routes: Routes = [
   {
@@ -43,11 +44,14 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       useHash: Boolean(history.pushState) === false,
-      preloadingStrategy: PreloadSelectedModulesList
+      scrollPositionRestoration: 'disabled',
+      preloadingStrategy: PreloadSelectedModulesList,
+      anchorScrolling: 'disabled'
     })
   ],
   providers: [
-    PreloadSelectedModulesList
+    PreloadSelectedModulesList,
+    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],
   exports: [ RouterModule ]
 })

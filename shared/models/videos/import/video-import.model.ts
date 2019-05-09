@@ -11,6 +11,7 @@ export interface VideoImport {
 
   createdAt: string
   updatedAt: string
+  originallyPublishedAt?: string
   state: VideoConstant<VideoImportState>
   error?: string
 

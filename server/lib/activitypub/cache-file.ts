@@ -2,10 +2,27 @@ import { CacheFileObject } from '../../../shared/index'
 import { VideoModel } from '../../models/video/video'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { Transaction } from 'sequelize'
+import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 
 function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }) {
-  const url = cacheFileObject.url
 
+  if (cacheFileObject.url.mediaType === 'application/x-mpegURL') {
+    const url = cacheFileObject.url
+
+    const playlist = video.VideoStreamingPlaylists.find(t => t.type === VideoStreamingPlaylistType.HLS)
+    if (!playlist) throw new Error('Cannot find HLS playlist of video ' + video.url)
+
+    return {
+      expiresOn: new Date(cacheFileObject.expires),
+      url: cacheFileObject.id,
+      fileUrl: url.href,
+      strategy: null,
+      videoStreamingPlaylistId: playlist.id,
+      actorId: byActor.id
+    }
+  }
+
+  const url = cacheFileObject.url
   const videoFile = video.VideoFiles.find(f => {
     return f.resolution === url.height && f.fps === url.fps
   })
@@ -15,7 +32,7 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
   return {
     expiresOn: new Date(cacheFileObject.expires),
     url: cacheFileObject.id,
-    fileUrl: cacheFileObject.url.href,
+    fileUrl: url.href,
     strategy: null,
     videoFileId: videoFile.id,
     actorId: byActor.id
@@ -51,8 +68,8 @@ function updateCacheFile (
 
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
 
-  redundancyModel.set('expires', attributes.expiresOn)
-  redundancyModel.set('fileUrl', attributes.fileUrl)
+  redundancyModel.expiresOn = attributes.expiresOn
+  redundancyModel.fileUrl = attributes.fileUrl
 
   return redundancyModel.save({ transaction: t })
 }

@@ -1,28 +1,26 @@
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid } from './misc'
 import { isRemoteVideoUrlValid } from './videos'
-import { isDateValid, exists } from '../misc'
+import { exists, isDateValid } from '../misc'
 import { CacheFileObject } from '../../../../shared/models/activitypub/objects'
-
-function isCacheFileCreateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    isCacheFileObjectValid(activity.object)
-}
-
-function isCacheFileUpdateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Update') &&
-    isCacheFileObjectValid(activity.object)
-}
 
 function isCacheFileObjectValid (object: CacheFileObject) {
   return exists(object) &&
     object.type === 'CacheFile' &&
     isDateValid(object.expires) &&
     isActivityPubUrlValid(object.object) &&
-    isRemoteVideoUrlValid(object.url)
+    (isRemoteVideoUrlValid(object.url) || isPlaylistRedundancyUrlValid(object.url))
 }
 
+// ---------------------------------------------------------------------------
+
 export {
-  isCacheFileUpdateActivityValid,
-  isCacheFileCreateActivityValid,
   isCacheFileObjectValid
+}
+
+// ---------------------------------------------------------------------------
+
+function isPlaylistRedundancyUrlValid (url: any) {
+  return url.type === 'Link' &&
+    (url.mediaType || url.mimeType) === 'application/x-mpegURL' &&
+    isActivityPubUrlValid(url.href)
 }

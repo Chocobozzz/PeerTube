@@ -1,0 +1,34 @@
+<div class="miniature" [ngClass]="{ 'no-videos': playlist.videosLength === 0, 'to-manage': toManage }">
+  <a
+    [routerLink]="getPlaylistUrl()" [attr.title]="playlist.description"
+    class="miniature-thumbnail"
+  >
+    <img alt="" [attr.aria-labelledby]="playlist.displayName" [attr.src]="playlist.thumbnailUrl" />
+
+    <div class="miniature-playlist-info-overlay">
+      <ng-container i18n>{playlist.videosLength, plural, =0 {No videos} =1 {1 video} other {{{ playlist.videosLength }} videos}}</ng-container>
+    </div>
+
+    <div class="play-overlay">
+      <div class="icon"></div>
+    </div>
+  </a>
+
+  <div class="miniature-info">
+    <a tabindex="-1" class="miniature-name" [routerLink]="getPlaylistUrl()" [attr.title]="playlist.description">
+      {{ playlist.displayName }}
+    </a>
+
+    <a i18n [routerLink]="[ '/video-channels', playlist.videoChannelBy ]" class="by" *ngIf="displayChannel && playlist.videoChannelBy">
+      {{ playlist.videoChannelBy }}
+    </a>
+
+    <div class="privacy-date">
+      <span class="video-info-privacy" *ngIf="displayPrivacy">{{ playlist.privacy.label }}</span>
+
+      <span i18n class="updated-at">Updated {{ playlist.updatedAt | myFromNow }}</span>
+    </div>
+
+    <div *ngIf="displayDescription" class="video-info-description">{{ playlist.description }}</div>
+  </div>
+</div>

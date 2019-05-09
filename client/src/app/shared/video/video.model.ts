@@ -1,11 +1,12 @@
 import { User } from '../'
-import { Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
+import { PlaylistElement, UserRight, Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { durationToString, getAbsoluteAPIUrl } from '../misc/utils'
 import { peertubeTranslate, ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
+import { AuthUser } from '@app/core'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -17,6 +18,7 @@ export class Video implements VideoServerModel {
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
+  originallyPublishedAt: Date | string
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<string>
@@ -46,6 +48,8 @@ export class Video implements VideoServerModel {
   blacklisted?: boolean
   blacklistedReason?: string
 
+  playlistElement?: PlaylistElement
+
   account: {
     id: number
     uuid: string
@@ -53,7 +57,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar: Avatar
+    avatar?: Avatar
   }
 
   channel: {
@@ -63,7 +67,7 @@ export class Video implements VideoServerModel {
     displayName: string
     url: string
     host: string
-    avatar: Avatar
+    avatar?: Avatar
   }
 
   userHistory?: {
@@ -116,12 +120,16 @@ export class Video implements VideoServerModel {
     this.privacy.label = peertubeTranslate(this.privacy.label, translations)
 
     this.scheduledUpdate = hash.scheduledUpdate
+    this.originallyPublishedAt = hash.originallyPublishedAt ? new Date(hash.originallyPublishedAt.toString()) : null
+
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
     this.blacklisted = hash.blacklisted
     this.blacklistedReason = hash.blacklistedReason
 
     this.userHistory = hash.userHistory
+
+    this.playlistElement = hash.playlistElement
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {
@@ -133,5 +141,21 @@ export class Video implements VideoServerModel {
 
     // Return default instance config
     return serverConfig.instance.defaultNSFWPolicy !== 'display'
+  }
+
+  isRemovableBy (user: AuthUser) {
+    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
+  }
+
+  isBlackistableBy (user: AuthUser) {
+    return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
+  }
+
+  isUnblacklistableBy (user: AuthUser) {
+    return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
+  }
+
+  isUpdatableBy (user: AuthUser) {
+    return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 }

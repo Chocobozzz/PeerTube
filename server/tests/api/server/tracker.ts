@@ -2,8 +2,16 @@
 
 import * as magnetUtil from 'magnet-uri'
 import 'mocha'
-import { getVideo, killallServers, runServer, ServerInfo, uploadVideo } from '../../utils'
-import { flushTests, setAccessTokensToServers } from '../../utils/index'
+import {
+  cleanupTests,
+  flushAndRunServer,
+  getVideo,
+  killallServers,
+  reRunServer,
+  ServerInfo,
+  uploadVideo
+} from '../../../../shared/extra-utils'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { VideoDetails } from '../../../../shared/models/videos'
 import * as WebTorrent from 'webtorrent'
 
@@ -14,9 +22,7 @@ describe('Test tracker', function () {
 
   before(async function () {
     this.timeout(60000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
     {
@@ -34,7 +40,7 @@ describe('Test tracker', function () {
     }
   })
 
-  it('Should return an error when adding an incorrect infohash', done => {
+  it('Should return an error when adding an incorrect infohash', function (done) {
     this.timeout(10000)
     const webtorrent = new WebTorrent()
 
@@ -49,7 +55,7 @@ describe('Test tracker', function () {
     torrent.on('done', () => done(new Error('No error on infohash')))
   })
 
-  it('Should succeed with the correct infohash', done => {
+  it('Should succeed with the correct infohash', function (done) {
     this.timeout(10000)
     const webtorrent = new WebTorrent()
 
@@ -64,7 +70,27 @@ describe('Test tracker', function () {
     torrent.on('done', done)
   })
 
-  after(async function () {
+  it('Should disable the tracker', function (done) {
+    this.timeout(20000)
+
     killallServers([ server ])
+    reRunServer(server, { tracker: { enabled: false } })
+      .then(() => {
+        const webtorrent = new WebTorrent()
+
+        const torrent = webtorrent.add(goodMagnet)
+
+        torrent.on('error', done)
+        torrent.on('warning', warn => {
+          const message = typeof warn === 'string' ? warn : warn.message
+          if (message.indexOf('disabled ') !== -1) return done()
+        })
+
+        torrent.on('done', () => done(new Error('Tracker is enabled')))
+      })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

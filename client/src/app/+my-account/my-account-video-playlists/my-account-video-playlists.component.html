@@ -1,0 +1,21 @@
+<div class="video-playlists-header">
+  <a class="create-button" routerLink="create">
+    <my-global-icon iconName="add"></my-global-icon>
+    <ng-container i18n>Create a new playlist</ng-container>
+  </a>
+</div>
+
+<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()">
+  <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
+    <div class="miniature-wrapper">
+      <my-video-playlist-miniature [playlist]="playlist" [toManage]="true" [displayChannel]="true" [displayDescription]="true" [displayPrivacy]="true"
+      ></my-video-playlist-miniature>
+    </div>
+
+    <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">
+      <my-delete-button (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
+
+      <my-edit-button [routerLink]="[ 'update', playlist.uuid ]"></my-edit-button>
+    </div>
+  </div>
+</div>

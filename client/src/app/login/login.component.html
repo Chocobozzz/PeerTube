@@ -55,11 +55,17 @@
 <ng-template #forgotPasswordModal>
   <div class="modal-header">
     <h4 i18n class="modal-title">Forgot your password</h4>
-    <span class="close" aria-hidden="true" (click)="hideForgotPasswordModal()"></span>
+
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideForgotPasswordModal()"></my-global-icon>
   </div>
 
   <div class="modal-body">
-    <div class="form-group">
+
+    <div *ngIf="isEmailDisabled()" class="alert alert-danger" i18n>
+      We are sorry, you cannot recover you password because your instance administrator did not configure the PeerTube email system.
+    </div>
+
+    <div class="form-group" [hidden]="isEmailDisabled()">
       <label i18n for="forgot-password-email">Email</label>
       <input
         type="email" id="forgot-password-email" i18n-placeholder placeholder="Email address" required

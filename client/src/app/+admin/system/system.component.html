@@ -1,0 +1,13 @@
+<div class="admin-sub-header">
+  <div i18n class="form-sub-title">System</div>
+
+  <div class="admin-sub-nav">
+    <a *ngIf="hasJobsRight()" i18n routerLink="jobs" routerLinkActive="active">Jobs</a>
+
+    <a *ngIf="hasLogsRight()" i18n routerLink="logs" routerLinkActive="active">Logs</a>
+
+    <a *ngIf="hasDebugRight()" i18n routerLink="debug" routerLinkActive="active">Debug</a>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

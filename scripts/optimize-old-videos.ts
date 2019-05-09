@@ -1,11 +1,12 @@
-import { CONFIG, VIDEO_TRANSCODING_FPS } from '../server/initializers/constants'
-import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution, getDurationFromVideoFile } from '../server/helpers/ffmpeg-utils'
+import { VIDEO_TRANSCODING_FPS } from '../server/initializers/constants'
+import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffmpeg-utils'
 import { getMaxBitrate } from '../shared/models/videos'
 import { VideoModel } from '../server/models/video/video'
 import { optimizeVideofile } from '../server/lib/video-transcoding'
 import { initDatabaseModels } from '../server/initializers'
-import { join, basename, dirname } from 'path'
-import { copy, remove, move } from 'fs-extra'
+import { basename, dirname, join } from 'path'
+import { copy, move, remove } from 'fs-extra'
+import { CONFIG } from '../server/initializers/config'
 
 run()
   .then(() => process.exit(0))

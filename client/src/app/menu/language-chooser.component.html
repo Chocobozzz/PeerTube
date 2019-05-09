@@ -1,8 +1,13 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
     <h4 i18n class="modal-title">Change the language</h4>
-    <span class="close" aria-label="Close" role="button" (click)="hide()"></span>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
+
+
+  <a i18n class="help-to-translate" target="_blank" rel="noreferrer noopener" href="https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md">
+    Help to translate PeerTube!
+  </a>
 
   <div class="modal-body">
     <a *ngFor="let lang of languages" [href]="buildLanguageLink(lang)">{{ lang.label }}</a>

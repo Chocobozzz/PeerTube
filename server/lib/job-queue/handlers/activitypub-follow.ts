@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
-import { CONFIG, REMOTE_SCHEME, sequelizeTypescript } from '../../../initializers'
+import { REMOTE_SCHEME, WEBSERVER } from '../../../initializers/constants'
 import { sendFollow } from '../../activitypub/send'
 import { sanitizeHost } from '../../../helpers/core-utils'
 import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
@@ -8,6 +8,8 @@ import { getOrCreateActorAndServerAndModel } from '../../activitypub/actor'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { Notifier } from '../../notifier'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
@@ -22,7 +24,7 @@ async function processActivityPubFollow (job: Bull.Job) {
   logger.info('Processing ActivityPub follow in job %d.', job.id)
 
   let targetActor: ActorModel
-  if (!host || host === CONFIG.WEBSERVER.HOST) {
+  if (!host || host === WEBSERVER.HOST) {
     targetActor = await ActorModel.loadLocalByName(payload.name)
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
@@ -42,7 +44,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function follow (fromActor: ActorModel, targetActor: ActorModel) {
+async function follow (fromActor: ActorModel, targetActor: ActorModel) {
   if (fromActor.id === targetActor.id) {
     throw new Error('Follower is the same than target actor.')
   }
@@ -50,7 +52,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
   // Same server, direct accept
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
-  return sequelizeTypescript.transaction(async t => {
+  const actorFollow = await sequelizeTypescript.transaction(async t => {
     const [ actorFollow ] = await ActorFollowModel.findOrCreate({
       where: {
         actorId: fromActor.id,
@@ -68,5 +70,9 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
 
     // Send a notification to remote server if our follow is not already accepted
     if (actorFollow.state !== 'accepted') await sendFollow(actorFollow)
+
+    return actorFollow
   })
+
+  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewUserFollow(actorFollow)
 }

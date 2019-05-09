@@ -41,7 +41,7 @@
       }
 
       .comment-date {
-        color: #585858;
+        color: $grey-foreground-color;
         margin-left: 10px;
       }
     }
@@ -69,7 +69,7 @@
 
       .comment-action-reply,
       .comment-action-delete {
-        color: #585858;
+        color: $grey-foreground-color;
         cursor: pointer;
         margin-right: 10px;
 

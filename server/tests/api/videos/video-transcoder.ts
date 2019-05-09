@@ -3,13 +3,13 @@
 import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
-import * as ffmpeg from 'fluent-ffmpeg'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
 import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
-  buildAbsoluteFixturePath,
+  buildAbsoluteFixturePath, cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
+  generateHighBitrateVideo,
   getMyVideos,
   getVideo,
   getVideosList,
@@ -18,12 +18,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  webtorrentAdd,
-  generateHighBitrateVideo
-} from '../../utils'
-import { join } from 'path'
-import { waitJobs } from '../../utils/server/jobs'
-import { pathExists } from 'fs-extra'
+  webtorrentAdd
+} from '../../../../shared/extra-utils'
+import { extname, join } from 'path'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
@@ -323,28 +321,35 @@ describe('Test video transcoding', function () {
     }
   })
 
-  it('Should not upload the mkv video on server 1', async function () {
-    const videoAttributes = {
-      name: 'my super mkv name',
-      category: 2,
-      nsfw: false,
-      licence: 6,
-      tags: [ 'tag1', 'tag2', 'tag3' ]
+  it('Should accept and transcode additional extensions', async function () {
+    this.timeout(300000)
+
+    for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
+      const videoAttributes = {
+        name: fixture,
+        fixture
+      }
+
+      await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributes)
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const res = await getVideosList(server.url)
+
+        const video = res.body.data.find(v => v.name === videoAttributes.name)
+        const res2 = await getVideo(server.url, video.id)
+        const videoDetails = res2.body
+
+        expect(videoDetails.files).to.have.lengthOf(4)
+
+        const magnetUri = videoDetails.files[ 0 ].magnetUri
+        expect(magnetUri).to.contain('.mp4')
+      }
     }
-    const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes, 400)
-  })
-  it('Should upload and transcode the mkv video on server 2', async function () {
-    const videoAttributes = {
-      name: 'my super mkv name',
-      category: 2,
-      nsfw: false,
-      licence: 6,
-      tags: [ 'tag1', 'tag2', 'tag3' ]
-    }
-    const res = await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

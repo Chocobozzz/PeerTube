@@ -1,5 +1,5 @@
+import './users-verification'
 import './blocklist'
 import './user-subscriptions'
 import './users'
-import './users-verification'
 import './users-multiple-servers'

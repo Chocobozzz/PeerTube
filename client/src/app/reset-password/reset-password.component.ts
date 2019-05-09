@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { UserService, UserValidatorsService } from '@app/shared'
-import { NotificationsService } from 'angular2-notifications'
-import { FormReactive } from '../shared'
+import { UserService, UserValidatorsService, FormReactive } from '@app/shared'
+import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { ResetPasswordValidatorsService } from '@app/shared/forms/form-validators/reset-password-validators.service'
@@ -22,7 +21,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     private resetPasswordValidatorsService: ResetPasswordValidatorsService,
     private userValidatorsService: UserValidatorsService,
     private userService: UserService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
     private i18n: I18n
@@ -40,7 +39,7 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     this.verificationString = this.route.snapshot.queryParams['verificationString']
 
     if (!this.userId || !this.verificationString) {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('Unable to find user id or verification string.'))
+      this.notifier.error(this.i18n('Unable to find user id or verification string.'))
       this.router.navigate([ '/' ])
     }
   }
@@ -49,11 +48,11 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
     this.userService.resetPassword(this.userId, this.verificationString, this.form.value.password)
       .subscribe(
         () => {
-          this.notificationsService.success(this.i18n('Success'), this.i18n('Your password has been successfully reset!'))
+          this.notifier.success(this.i18n('Your password has been successfully reset!'))
           this.router.navigate([ '/login' ])
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notifier.error(err.message)
       )
   }
 

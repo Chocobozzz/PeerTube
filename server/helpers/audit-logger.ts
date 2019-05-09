@@ -4,15 +4,14 @@ import { diff } from 'deep-object-diff'
 import { chain } from 'lodash'
 import * as flatten from 'flat'
 import * as winston from 'winston'
-import { CONFIG } from '../initializers'
 import { jsonLoggerFormat, labelFormatter } from './logger'
-import { VideoDetails, User, VideoChannel, VideoAbuse, VideoImport } from '../../shared'
+import { User, VideoAbuse, VideoChannel, VideoDetails, VideoImport } from '../../shared'
 import { VideoComment } from '../../shared/models/videos/video-comment.model'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
-import { UserModel } from '../models/account/user'
+import { CONFIG } from '../initializers/config'
 
 function getAuditIdFromRes (res: express.Response) {
-  return (res.locals.oauth.token.User as UserModel).username
+  return res.locals.oauth.token.User.username
 }
 
 enum AUDIT_TYPE {
@@ -117,7 +116,8 @@ const videoKeysToKeep = [
   'channel-uuid',
   'channel-name',
   'support',
-  'commentsEnabled'
+  'commentsEnabled',
+  'downloadEnabled'
 ]
 class VideoAuditView extends EntityAuditView {
   constructor (private video: VideoDetails) {

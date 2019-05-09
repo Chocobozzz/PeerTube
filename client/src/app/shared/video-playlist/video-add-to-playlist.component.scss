@@ -1,0 +1,107 @@
+@import '_variables';
+@import '_mixins';
+
+.root {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.header {
+  min-width: 240px;
+  padding: 6px 24px 10px 24px;
+
+  margin-bottom: 10px;
+  border-bottom: 1px solid $separator-border-color;
+
+  .first-row {
+    display: flex;
+    align-items: center;
+
+    .title {
+      font-size: 18px;
+      flex-grow: 1;
+    }
+
+    .options {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      cursor: pointer;
+
+      my-global-icon {
+        @include apply-svg-color(#333);
+
+        width: 16px;
+        height: 23px;
+        margin-right: 3px;
+      }
+    }
+  }
+
+  .options-row {
+    margin-top: 10px;
+    padding-left: 10px;
+
+    > div {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.dropdown-item {
+  padding: 6px 24px;
+}
+
+.playlist {
+  display: flex;
+  cursor: pointer;
+
+  my-peertube-checkbox {
+    margin-right: 10px;
+  }
+
+  .display-name {
+    display: flex;
+    align-items: flex-end;
+
+    .timestamp-info {
+      font-size: 0.9em;
+      color: $grey-foreground-color;
+      margin-left: 5px;
+    }
+  }
+}
+
+.new-playlist-button,
+.new-playlist-block {
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid $separator-border-color;
+}
+
+.new-playlist-button  {
+  cursor: pointer;
+
+  my-global-icon {
+    @include apply-svg-color(#333);
+
+    position: relative;
+    left: -1px;
+    top: -1px;
+    margin-right: 4px;
+    width: 21px;
+    height: 21px;
+  }
+}
+
+input[type=text] {
+  @include peertube-input-text(200px);
+
+  display: block;
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+}

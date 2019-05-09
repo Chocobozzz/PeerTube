@@ -43,6 +43,10 @@
         <source>Entertainment</source>
         <target>ترفيه</target>
       </trans-unit>
+      <trans-unit id="News &amp; Politics">
+        <source>News &amp; Politics</source>
+        <target>أخبار وسياسة</target>
+      </trans-unit>
       <trans-unit id="How To">
         <source>How To</source>
         <target>كيف</target>
@@ -95,6 +99,10 @@
         <source>Attribution - Non Commercial - No Derivatives</source>
         <target>نسب المصنف - غير تجاري - منع الشتقاق</target>
       </trans-unit>
+      <trans-unit id="Public Domain Dedication">
+        <source>Public Domain Dedication</source>
+        <target>رخصة عمومية</target>
+      </trans-unit>
       <trans-unit id="Public">
         <source>Public</source>
         <target>عام</target>
@@ -107,9 +115,21 @@
         <source>Private</source>
         <target>خاص</target>
       </trans-unit>
+      <trans-unit id="Published">
+        <source>Published</source>
+        <target>تم نشرها</target>
+      </trans-unit>
+      <trans-unit id="To transcode">
+        <source>To transcode</source>
+        <target>إعادة ترميز</target>
+      </trans-unit>
       <trans-unit id="To import">
         <source>To import</source>
         <target>للاستيراد</target>
+      </trans-unit>
+      <trans-unit id="Pending">
+        <source>Pending</source>
+        <target>معلّقة</target>
       </trans-unit>
       <trans-unit id="Success">
         <source>Success</source>
@@ -119,13 +139,29 @@
         <source>Failed</source>
         <target>فشل</target>
       </trans-unit>
+      <trans-unit id="This video does not exist.">
+        <source>This video does not exist.</source>
+        <target>هذا الفيديو غير موجود</target>
+      </trans-unit>
+      <trans-unit id="We cannot fetch the video. Please try again later.">
+        <source>We cannot fetch the video. Please try again later.</source>
+        <target>لا يمكن الوصول للفيديو. أعد المحاولة لاحقا </target>
+      </trans-unit>
+      <trans-unit id="Sorry">
+        <source>Sorry</source>
+        <target>عذرا</target>
+      </trans-unit>
+      <trans-unit id="This video is not available because the remote instance is not responding.">
+        <source>This video is not available because the remote instance is not responding.</source>
+        <target>هذا الفيديو غير متوفر لأن مثيل الخادوم البعيد لا يستجيب</target>
+      </trans-unit>
       <trans-unit id="Misc">
         <source>Misc</source>
         <target>أخرى</target>
       </trans-unit>
       <trans-unit id="Unknown">
         <source>Unknown</source>
-        <target>مجهول</target>
+        <target>مجهولة</target>
       </trans-unit>
     </body>
   </file></xliff>

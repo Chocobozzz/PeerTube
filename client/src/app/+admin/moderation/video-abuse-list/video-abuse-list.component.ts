@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Account } from '../../../shared/account/account.model'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { VideoAbuse, VideoAbuseState } from '../../../../../../shared'
 import { RestPagination, RestTable, VideoAbuseService } from '../../../shared'
@@ -9,6 +9,7 @@ import { DropdownAction } from '../../../shared/buttons/action-dropdown.componen
 import { ConfirmService } from '../../../core/index'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { Video } from '../../../shared/video/video.model'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -18,7 +19,7 @@ import { Video } from '../../../shared/video/video.model'
 export class VideoAbuseListComponent extends RestTable implements OnInit {
   @ViewChild('moderationCommentModal') moderationCommentModal: ModerationCommentModalComponent
 
-  videoAbuses: VideoAbuse[] = []
+  videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
@@ -27,10 +28,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   videoAbuseActions: DropdownAction<VideoAbuse>[] = []
 
   constructor (
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private videoAbuseService: VideoAbuseService,
     private confirmService: ConfirmService,
-    private i18n: I18n
+    private i18n: I18n,
+    private markdownRenderer: MarkdownService
   ) {
     super()
 
@@ -90,14 +92,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
     this.videoAbuseService.removeVideoAbuse(videoAbuse).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('Abuse deleted.')
-        )
+        this.notifier.success(this.i18n('Abuse deleted.'))
         this.loadData()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -106,7 +105,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
       .subscribe(
         () => this.loadData(),
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
 
   }
@@ -114,12 +113,25 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   protected loadData () {
     return this.videoAbuseService.getVideoAbuses(this.pagination, this.sort)
                .subscribe(
-                 resultList => {
-                   this.videoAbuses = resultList.data
+                 async resultList => {
                    this.totalRecords = resultList.total
+
+                   this.videoAbuses = resultList.data
+
+                   for (const abuse of this.videoAbuses) {
+                     Object.assign(abuse, {
+                       reasonHtml: await this.toHtml(abuse.reason),
+                       moderationCommentHtml: await this.toHtml(abuse.moderationComment)
+                     })
+                   }
+
                  },
 
-                 err => this.notificationsService.error(this.i18n('Error'), err.message)
+                 err => this.notifier.error(err.message)
                )
+  }
+
+  private toHtml (text: string) {
+    return this.markdownRenderer.textMarkdownToHTML(text)
   }
 }

@@ -10,8 +10,11 @@ database:
 
 # From the project root directory
 storage:
+  tmp: 'test4/tmp/'
   avatars: 'test4/avatars/'
   videos: 'test4/videos/'
+  streaming_playlists: 'test4/streaming-playlists/'
+  redundancy: 'test4/redundancy/'
   logs: 'test4/logs/'
   previews: 'test4/previews/'
   thumbnails: 'test4/thumbnails/'

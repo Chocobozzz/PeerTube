@@ -1,12 +1,5 @@
 @import '_mixins';
-
-.videos {
-  text-align: center;
-
-  my-video-miniature {
-    text-align: left;
-  }
-}
+@import '_miniature';
 
 .videos-header {
   display: flex;
@@ -19,8 +12,8 @@
 
   my-feed {
     display: inline-block;
-    position: relative;
     top: 1px;
+    min-width: 60px;
   }
 
   .moderation-block {
@@ -31,8 +24,33 @@
   }
 }
 
-@media screen and (max-width: 500px) {
-  .videos {
-    @include video-miniature-small-screen;
+.margin-content {
+  width: $video-miniature-width * 6;
+  margin: auto !important;
+
+  @media screen and (max-width: 1800px) {
+    width: $video-miniature-width * 5;
+  }
+
+  @media screen and (max-width: 1800px - $video-miniature-width) {
+    width: $video-miniature-width * 4;
+  }
+
+  @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
+    width: $video-miniature-width * 3;
+  }
+
+  @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
+    width: $video-miniature-width * 2;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+    margin: 0 !important;
+
+    .videos {
+      @include video-miniature-small-screen;
+    }
   }
 }
+

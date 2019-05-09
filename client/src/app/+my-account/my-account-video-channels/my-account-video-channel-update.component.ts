@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { NotificationsService } from 'angular2-notifications'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 import { VideoChannelUpdate } from '../../../../../shared/models/videos'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { Subscription } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { AuthService, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators/video-channel-validators.service'
@@ -26,7 +25,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
     private videoChannelValidatorsService: VideoChannelValidatorsService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
     private videoChannelService: VideoChannelService,
@@ -79,10 +78,11 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.name, videoChannelUpdate).subscribe(
       () => {
         this.authService.refreshUserInformation()
-        this.notificationsService.success(
-          this.i18n('Success'),
+
+        this.notifier.success(
           this.i18n('Video channel {{videoChannelName}} updated.', { videoChannelName: videoChannelUpdate.displayName })
         )
+
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
 
@@ -94,12 +94,12 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     this.videoChannelService.changeVideoChannelAvatar(this.videoChannelToUpdate.name, formData)
         .subscribe(
           data => {
-            this.notificationsService.success(this.i18n('Success'), this.i18n('Avatar changed.'))
+            this.notifier.success(this.i18n('Avatar changed.'))
 
             this.videoChannelToUpdate.updateAvatar(data.avatar)
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 

@@ -12,8 +12,6 @@ describe('Videos workflow', () => {
   let isSafari = false
 
   beforeEach(async () => {
-    await browser.waitForAngularEnabled(false)
-
     videoWatchPage = new VideoWatchPage()
     pageUploadPage = new VideoUploadPage()
     loginPage = new LoginPage()
@@ -21,6 +19,14 @@ describe('Videos workflow', () => {
     const caps = await browser.getCapabilities()
     isMobileDevice = caps.get('realMobile') === 'true' || caps.get('realMobile') === true
     isSafari = caps.get('browserName') && caps.get('browserName').toLowerCase() === 'safari'
+
+    if (isMobileDevice) {
+      console.log('Mobile device detected.')
+    }
+
+    if (isSafari) {
+      console.log('Safari detected.')
+    }
   })
 
   it('Should log in', () => {
@@ -66,14 +72,29 @@ describe('Videos workflow', () => {
   })
 
   it('Should play the video', async () => {
-    await videoWatchPage.pauseVideo(!isMobileDevice, isMobileDevice)
+    await videoWatchPage.playAndPauseVideo(true, isMobileDevice)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the associated embed video', async () => {
+    await browser.waitForAngularEnabled(false)
+
     await videoWatchPage.goOnAssociatedEmbed()
 
-    await videoWatchPage.pauseVideo(false, isMobileDevice)
+    await videoWatchPage.playAndPauseVideo(false, isMobileDevice)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
+
+    await browser.waitForAngularEnabled(true)
+  })
+
+  it('Should watch the p2p media loader embed video', async () => {
+    await browser.waitForAngularEnabled(false)
+
+    await videoWatchPage.goOnP2PMediaLoaderEmbed()
+
+    await videoWatchPage.playAndPauseVideo(false, isMobileDevice)
+    expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
+
+    await browser.waitForAngularEnabled(true)
   })
 })

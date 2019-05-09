@@ -6,15 +6,20 @@ import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { extname, join } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { CONFIG, sequelizeTypescript, VIDEO_IMPORT_TIMEOUT } from '../../../initializers'
-import { doRequestAndSaveToFile } from '../../../helpers/requests'
+import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
-import { remove, rename, stat } from 'fs-extra'
+import { move, remove, stat } from 'fs-extra'
+import { Notifier } from '../../notifier'
+import { CONFIG } from '../../../initializers/config'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { ThumbnailModel } from '../../../models/video/thumbnail'
+import { createVideoMiniatureFromUrl, generateVideoMiniature } from '../../thumbnail'
+import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -109,6 +114,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
   let tempVideoPath: string
   let videoDestFile: string
   let videoFile: VideoFileModel
+
   try {
     // Download video from youtubeDL
     tempVideoPath = await downloader()
@@ -133,36 +139,28 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       videoId: videoImport.videoId
     }
     videoFile = new VideoFileModel(videoFileData)
-    // Import if the import fails, to clean files
+    // To clean files if the import fails
     videoImport.Video.VideoFiles = [ videoFile ]
 
     // Move file
     videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
-    await rename(tempVideoPath, videoDestFile)
+    await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail
-    if (options.downloadThumbnail) {
-      if (options.thumbnailUrl) {
-        const destThumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoImport.Video.getThumbnailName())
-        await doRequestAndSaveToFile({ method: 'GET', uri: options.thumbnailUrl }, destThumbnailPath)
-      } else {
-        await videoImport.Video.createThumbnail(videoFile)
-      }
-    } else if (options.generateThumbnail) {
-      await videoImport.Video.createThumbnail(videoFile)
+    let thumbnailModel: ThumbnailModel
+    if (options.downloadThumbnail && options.thumbnailUrl) {
+      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.MINIATURE)
+    } else if (options.generateThumbnail || options.downloadThumbnail) {
+      thumbnailModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.MINIATURE)
     }
 
     // Process preview
-    if (options.downloadPreview) {
-      if (options.thumbnailUrl) {
-        const destPreviewPath = join(CONFIG.STORAGE.PREVIEWS_DIR, videoImport.Video.getPreviewName())
-        await doRequestAndSaveToFile({ method: 'GET', uri: options.thumbnailUrl }, destPreviewPath)
-      } else {
-        await videoImport.Video.createPreview(videoFile)
-      }
-    } else if (options.generatePreview) {
-      await videoImport.Video.createPreview(videoFile)
+    let previewModel: ThumbnailModel
+    if (options.downloadPreview && options.thumbnailUrl) {
+      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.PREVIEW)
+    } else if (options.generatePreview || options.downloadPreview) {
+      previewModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.PREVIEW)
     }
 
     // Create torrent
@@ -180,7 +178,10 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       // Update video DB object
       video.duration = duration
       video.state = CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED
-      const videoUpdated = await video.save({ transaction: t })
+      await video.save({ transaction: t })
+
+      if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
+      if (previewModel) await video.addAndSaveThumbnail(previewModel, t)
 
       // Now we can federate the video (reload from database, we need more attributes)
       const videoForFederation = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
@@ -192,9 +193,17 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
       logger.info('Video %s imported.', video.uuid)
 
-      videoImportUpdated.Video = videoUpdated
+      videoImportUpdated.Video = videoForFederation
       return videoImportUpdated
     })
+
+    Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
+
+    if (videoImportUpdated.Video.VideoBlacklist) {
+      Notifier.Instance.notifyOnVideoAutoBlacklist(videoImportUpdated.Video)
+    } else {
+      Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
+    }
 
     // Create transcoding jobs?
     if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {
@@ -204,7 +213,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
         isNewVideo: true
       }
 
-      await JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
+      await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
     }
 
   } catch (err) {
@@ -217,6 +226,8 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     videoImport.error = err.message
     videoImport.state = VideoImportState.FAILED
     await videoImport.save()
+
+    Notifier.Instance.notifyOnFinishedVideoImport(videoImport, false)
 
     throw err
   }

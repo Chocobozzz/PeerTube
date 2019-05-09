@@ -17,23 +17,25 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
-import { VideoChannel } from '../../../shared/models/videos'
+import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel } from '../account/account'
+import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
-import { buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
+import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { DefineIndexesOptions } from 'sequelize'
+import { FindOptions, ModelIndexesOptions, Op } from 'sequelize'
+import { AvatarModel } from '../avatar/avatar'
+import { VideoPlaylistModel } from './video-playlist'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
-const indexes: DefineIndexesOptions[] = [
+const indexes: ModelIndexesOptions[] = [
   buildTrigramSearchIndex('video_channel_name_trigram', 'name'),
 
   {
@@ -44,35 +46,62 @@ const indexes: DefineIndexesOptions[] = [
   }
 ]
 
-enum ScopeNames {
+export enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
-  WITH_VIDEOS = 'WITH_VIDEOS'
+  WITH_VIDEOS = 'WITH_VIDEOS',
+  SUMMARY = 'SUMMARY'
 }
 
 type AvailableForListOptions = {
   actorId: number
 }
 
-@DefaultScope({
+@DefaultScope(() => ({
   include: [
     {
-      model: () => ActorModel,
+      model: ActorModel,
       required: true
     }
   ]
-})
-@Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
-    const actorIdNumber = parseInt(options.actorId + '', 10)
+}))
+@Scopes(() => ({
+  [ScopeNames.SUMMARY]: (withAccount = false) => {
+    const base: FindOptions = {
+      attributes: [ 'name', 'description', 'id', 'actorId' ],
+      include: [
+        {
+          attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
 
+    if (withAccount === true) {
+      base.include.push({
+        model: AccountModel.scope(AccountModelScopeNames.SUMMARY),
+        required: true
+      })
+    }
+
+    return base
+  },
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
     // Only list local channels OR channels that are on an instance followed by actorId
-    const inQueryInstanceFollow = '(' +
-      'SELECT "actor"."serverId" FROM "actorFollow" ' +
-      'INNER JOIN "actor" ON actor.id=  "actorFollow"."targetActorId" ' +
-      'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-    ')'
+    const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
 
     return {
       include: [
@@ -82,13 +111,13 @@ type AvailableForListOptions = {
           },
           model: ActorModel,
           where: {
-            [Sequelize.Op.or]: [
+            [Op.or]: [
               {
                 serverId: null
               },
               {
                 serverId: {
-                  [ Sequelize.Op.in ]: Sequelize.literal(inQueryInstanceFollow)
+                  [ Op.in ]: Sequelize.literal(inQueryInstanceFollow)
                 }
               }
             ]
@@ -113,22 +142,22 @@ type AvailableForListOptions = {
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: () => AccountModel,
+        model: AccountModel,
         required: true
       }
     ]
   },
   [ScopeNames.WITH_VIDEOS]: {
     include: [
-      () => VideoModel
+      VideoModel
     ]
   },
   [ScopeNames.WITH_ACTOR]: {
     include: [
-      () => ActorModel
+      ActorModel
     ]
   }
-})
+}))
 @Table({
   tableName: 'videoChannel',
   indexes
@@ -142,13 +171,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description'))
+  @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.DESCRIPTION.max))
   description: string
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support'))
+  @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
 
@@ -192,6 +221,15 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   })
   Videos: VideoModel[]
 
+  @HasMany(() => VideoPlaylistModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'CASCADE',
+    hooks: true
+  })
+  VideoPlaylists: VideoPlaylistModel[]
+
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
     if (!instance.Actor) {
@@ -233,6 +271,27 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
+  static listLocalsForSitemap (sort: string) {
+    const query = {
+      attributes: [ ],
+      offset: 0,
+      order: getSort(sort),
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'serverId' ],
+          model: ActorModel.unscoped(),
+          where: {
+            serverId: null
+          }
+        }
+      ]
+    }
+
+    return VideoChannelModel
+      .unscoped()
+      .findAll(query)
+  }
+
   static searchForApi (options: {
     actorId: number
     search: string
@@ -253,7 +312,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       limit: options.count,
       order: getSort(options.sort),
       where: {
-        [Sequelize.Op.or]: [
+        [Op.or]: [
           Sequelize.literal(
             'lower(immutable_unaccent("VideoChannelModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
           ),
@@ -299,7 +358,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadByIdAndPopulateAccount (id: number) {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findById(id)
+      .findByPk(id)
   }
 
   static loadByIdAndAccount (id: number, accountId: number) {
@@ -318,7 +377,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   static loadAndPopulateAccount (id: number) {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
-      .findById(id)
+      .findByPk(id)
   }
 
   static loadByUUIDAndPopulateAccount (uuid: string) {
@@ -355,6 +414,14 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel
       .scope([ ScopeNames.WITH_ACCOUNT ])
       .findOne(query)
+  }
+
+  static loadByNameWithHostAndPopulateAccount (nameWithHost: string) {
+    const [ name, host ] = nameWithHost.split('@')
+
+    if (!host || host === WEBSERVER.HOST) return VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
+
+    return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
   static loadLocalByNameAndPopulateAccount (name: string) {
@@ -410,7 +477,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
-      .findById(id, options)
+      .findByPk(id, options)
   }
 
   toFormattedJSON (): VideoChannel {
@@ -431,6 +498,20 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return Object.assign(actor, videoChannel)
   }
 
+  toFormattedSummaryJSON (): VideoChannelSummary {
+    const actor = this.Actor.toFormattedJSON()
+
+    return {
+      id: this.id,
+      uuid: actor.uuid,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
+  }
+
   toActivityPubObject (): ActivityPubActor {
     const obj = this.Actor.toActivityPubObject(this.name, 'VideoChannel')
 
@@ -448,5 +529,9 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   getDisplayName () {
     return this.name
+  }
+
+  isOutdated () {
+    return this.Actor.isOutdated()
   }
 }

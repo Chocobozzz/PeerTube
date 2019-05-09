@@ -6,10 +6,13 @@ $font-regular: 400;
 $font-semibold: 600;
 $font-bold: 700;
 
-$grey-color: #E5E5E5;
-$grey-hoover-color: #EFEFEF;;
+$grey-background-color: #E5E5E5;
+$grey-background-hover-color: #EFEFEF;
+$grey-foreground-color: #585858;
+$grey-foreground-hover-color: #303030;
+
 $orange-color: #F1680D;
-$orange-hoover-color: #F97D46;
+$orange-hover-color: #F97D46;
 
 $bg-color: #fff;
 $fg-color: #000;
@@ -41,13 +44,19 @@ $footer-margin: 30px;
 
 $footer-border-color: $header-border-color;
 
-$video-thumbnail-height: 110px;
-$video-thumbnail-width: 200px;
+$separator-border-color: rgba(0, 0, 0, 0.10);
+
+$video-miniature-width: 238px;
+$video-thumbnail-height: 122px;
+$video-thumbnail-width: 223px;
+$video-thumbnail-ratio: $video-thumbnail-width / $video-thumbnail-height;
 
 $theater-bottom-space: 115px;
 
 $input-background-color: $bg-color;
 $input-placeholder-color: #898989;
+
+$sub-menu-margin-bottom: 30px;
 
 /*** map theme ***/
 

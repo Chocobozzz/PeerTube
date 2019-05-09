@@ -1,0 +1,76 @@
+<div class="root">
+  <div class="header">
+    <div class="first-row">
+      <div i18n class="title">Save to</div>
+
+      <div class="options" (click)="displayOptions = !displayOptions">
+        <my-global-icon iconName="cog"></my-global-icon>
+
+        <span i18n>Options</span>
+      </div>
+    </div>
+
+    <div class="options-row" *ngIf="displayOptions">
+      <div>
+        <my-peertube-checkbox
+          inputName="startAt" [(ngModel)]="timestampOptions.startTimestampEnabled"
+          i18n-labelText labelText="Start at"
+        ></my-peertube-checkbox>
+
+        <my-timestamp-input
+          [timestamp]="timestampOptions.startTimestamp"
+          [maxTimestamp]="video.duration"
+          [disabled]="!timestampOptions.startTimestampEnabled"
+          [(ngModel)]="timestampOptions.startTimestamp"
+        ></my-timestamp-input>
+      </div>
+
+      <div>
+        <my-peertube-checkbox
+          inputName="stopAt" [(ngModel)]="timestampOptions.stopTimestampEnabled"
+          i18n-labelText labelText="Stop at"
+        ></my-peertube-checkbox>
+
+        <my-timestamp-input
+          [timestamp]="timestampOptions.stopTimestamp"
+          [maxTimestamp]="video.duration"
+          [disabled]="!timestampOptions.stopTimestampEnabled"
+          [(ngModel)]="timestampOptions.stopTimestamp"
+        ></my-timestamp-input>
+      </div>
+    </div>
+  </div>
+
+  <div class="playlist dropdown-item" *ngFor="let playlist of videoPlaylists" (click)="togglePlaylist($event, playlist)">
+    <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist" [onPushWorkaround]="true"></my-peertube-checkbox>
+
+    <div class="display-name">
+      {{ playlist.displayName }}
+
+      <div *ngIf="playlist.inPlaylist && (playlist.startTimestamp || playlist.stopTimestamp)" class="timestamp-info">
+        {{ formatTimestamp(playlist) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="new-playlist-button dropdown-item" (click)="openCreateBlock($event)" [hidden]="isNewPlaylistBlockOpened">
+    <my-global-icon iconName="add"></my-global-icon>
+
+    Create a private playlist
+  </div>
+
+  <form class="new-playlist-block dropdown-item" *ngIf="isNewPlaylistBlockOpened" (ngSubmit)="createPlaylist()" [formGroup]="form">
+    <div class="form-group">
+      <label i18n for="displayName">Display name</label>
+      <input
+        type="text" id="displayName"
+        formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+      >
+      <div *ngIf="formErrors['displayName']" class="form-error">
+        {{ formErrors['displayName'] }}
+      </div>
+    </div>
+
+    <input type="submit" i18n-value value="Create" [disabled]="!form.valid">
+  </form>
+</div>

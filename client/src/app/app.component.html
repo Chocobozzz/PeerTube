@@ -30,12 +30,27 @@
 
       <footer class="row">
         <a href="https://joinpeertube.org" title="PeerTube website" target="_blank" rel="noopener noreferrer">PeerTube v{{ serverVersion }}{{ serverCommit }}</a>&nbsp;-&nbsp;
-        <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube license" target="_blank" rel="noopener noreferrer">CopyLeft 2015-2018</a>
+        <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube license" target="_blank" rel="noopener noreferrer">CopyLeft 2015-2019</a>
       </footer>
     </div>
   </div>
 </div>
 
 <ngx-loading-bar [includeSpinner]="false"></ngx-loading-bar>
+
 <my-confirm></my-confirm>
-<simple-notifications [options]="notificationOptions"></simple-notifications>
+
+<p-toast position="bottom-right">
+  <ng-template let-message pTemplate="message">
+    <div class="notification-block">
+      <div class="message">
+        <h3>{{ message.summary }}</h3>
+        <p>{{ message.detail }}</p>
+      </div>
+
+      <span *ngIf="message.severity === 'success'" class="glyphicon glyphicon-ok"></span>
+      <span *ngIf="message.severity === 'info'" class="glyphicon glyphicon-info-sign"></span>
+      <span *ngIf="message.severity === 'error'" class="glyphicon glyphicon-remove"></span>
+    </div>
+  </ng-template>
+</p-toast>

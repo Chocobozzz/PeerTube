@@ -1,10 +1,11 @@
-import { VideoResolution, VideoState } from '../../index'
+import { AccountSummary, VideoChannelSummary, VideoResolution, VideoState } from '../../index'
 import { Account } from '../actors'
 import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './channel/video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoConstant } from './video-constant.model'
+import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
 
 export interface VideoFile {
   magnetUri: string
@@ -17,24 +18,10 @@ export interface VideoFile {
   fps: number
 }
 
-export interface VideoChannelAttribute {
-  id: number
-  uuid: string
-  name: string
-  displayName: string
-  url: string
-  host: string
-  avatar: Avatar
-}
-
-export interface AccountAttribute {
-  id: number
-  uuid: string
-  name: string
-  displayName: string
-  url: string
-  host: string
-  avatar: Avatar
+export interface PlaylistElement {
+  position: number
+  startTimestamp: number
+  stopTimestamp: number
 }
 
 export interface Video {
@@ -43,6 +30,7 @@ export interface Video {
   createdAt: Date | string
   updatedAt: Date | string
   publishedAt: Date | string
+  originallyPublishedAt: Date | string
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<string>
@@ -66,12 +54,14 @@ export interface Video {
   blacklisted?: boolean
   blacklistedReason?: string
 
-  account: AccountAttribute
-  channel: VideoChannelAttribute
+  account: AccountSummary
+  channel: VideoChannelSummary
 
   userHistory?: {
     currentTime: number
   }
+
+  playlistElement?: PlaylistElement
 }
 
 export interface VideoDetails extends Video {
@@ -82,8 +72,13 @@ export interface VideoDetails extends Video {
   files: VideoFile[]
   account: Account
   commentsEnabled: boolean
+  downloadEnabled: boolean
 
   // Not optional in details (unlike in Video)
   waitTranscoding: boolean
   state: VideoConstant<VideoState>
+
+  trackerUrls: string[]
+
+  streamingPlaylists: VideoStreamingPlaylist[]
 }

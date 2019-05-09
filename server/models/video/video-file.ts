@@ -1,4 +1,3 @@
-import { values } from 'lodash'
 import {
   AllowNull,
   BelongsTo,
@@ -14,16 +13,17 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import {
+  isVideoFileExtnameValid,
   isVideoFileInfoHashValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
   isVideoFPSResolutionValid
 } from '../../helpers/custom-validators/videos'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { throwIfNotValid } from '../utils'
+import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import * as Sequelize from 'sequelize'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
+import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { FindOptions, QueryTypes, Transaction } from 'sequelize'
 
 @Table({
   tableName: 'videoFile',
@@ -58,11 +58,12 @@ export class VideoFileModel extends Model<VideoFileModel> {
   size: number
 
   @AllowNull(false)
-  @Column(DataType.ENUM(values(CONSTRAINTS_FIELDS.VIDEOS.EXTNAME)))
+  @Is('VideoFileExtname', value => throwIfNotValid(value, isVideoFileExtnameValid, 'extname'))
+  @Column
   extname: string
 
   @AllowNull(false)
-  @Is('VideoFileSize', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash'))
+  @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash'))
   @Column
   infoHash: string
 
@@ -86,25 +87,23 @@ export class VideoFileModel extends Model<VideoFileModel> {
 
   @HasMany(() => VideoRedundancyModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'CASCADE',
     hooks: true
   })
   RedundancyVideos: VideoRedundancyModel[]
 
-  static isInfohashExists (infoHash: string) {
+  static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
     const options = {
-      type: Sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
       bind: { infoHash },
       raw: true
     }
 
     return VideoModel.sequelize.query(query, options)
-              .then(results => {
-                return results.length === 1
-              })
+              .then(results => results.length === 1)
   }
 
   static loadWithVideo (id: number) {
@@ -117,7 +116,49 @@ export class VideoFileModel extends Model<VideoFileModel> {
       ]
     }
 
-    return VideoFileModel.findById(id, options)
+    return VideoFileModel.findByPk(id, options)
+  }
+
+  static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {
+    const query = {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: true,
+          include: [
+            {
+              model: VideoStreamingPlaylistModel.unscoped(),
+              required: true,
+              where: {
+                id: streamingPlaylistId
+              }
+            }
+          ]
+        }
+      ],
+      transaction
+    }
+
+    return VideoFileModel.findAll(query)
+  }
+
+  static getStats () {
+    const query: FindOptions = {
+      include: [
+        {
+          attributes: [],
+          model: VideoModel.unscoped(),
+          where: {
+            remote: false
+          }
+        }
+      ]
+    }
+
+    return VideoFileModel.aggregate('size', 'SUM', query)
+      .then(result => ({
+        totalLocalVideoFilesSize: parseAggregateResult(result)
+      }))
   }
 
   hasSameUniqueKeysThan (other: VideoFileModel) {

@@ -17,7 +17,7 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function populateAsyncUserVideoChannels (authService: AuthService, channel: { id: number, label: string, support: string }[]) {
+function populateAsyncUserVideoChannels (authService: AuthService, channel: { id: number, label: string, support?: string }[]) {
   return new Promise(res => {
     authService.userInformationLoaded
       .subscribe(
@@ -78,10 +78,10 @@ function objectToUrlEncoded (obj: any) {
 
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34
 function objectToFormData (obj: any, form?: FormData, namespace?: string) {
-  let fd = form || new FormData()
+  const fd = form || new FormData()
   let formKey
 
-  for (let key of Object.keys(obj)) {
+  for (const key of Object.keys(obj)) {
     if (namespace) formKey = `${namespace}[${key}]`
     else formKey = key
 
@@ -102,10 +102,16 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   return fd
 }
 
-function lineFeedToHtml (obj: any, keyToNormalize: string) {
+function objectLineFeedToHtml (obj: any, keyToNormalize: string) {
   return immutableAssign(obj, {
-    [keyToNormalize]: obj[keyToNormalize].replace(/\r?\n|\r/g, '<br />')
+    [keyToNormalize]: lineFeedToHtml(obj[keyToNormalize])
   })
+}
+
+function lineFeedToHtml (text: string) {
+  if (!text) return text
+
+  return text.replace(/\r?\n|\r/g, '<br />')
 }
 
 function removeElementFromArray <T> (arr: T[], elem: T) {
@@ -124,9 +130,14 @@ function sortBy (obj: any[], key1: string, key2?: string) {
   })
 }
 
+function scrollToTop () {
+  window.scroll(0, 0)
+}
+
 export {
   sortBy,
   durationToString,
+  lineFeedToHtml,
   objectToUrlEncoded,
   getParameterByName,
   populateAsyncUserVideoChannels,
@@ -134,6 +145,7 @@ export {
   dateToHuman,
   immutableAssign,
   objectToFormData,
-  lineFeedToHtml,
-  removeElementFromArray
+  objectLineFeedToHtml,
+  removeElementFromArray,
+  scrollToTop
 }

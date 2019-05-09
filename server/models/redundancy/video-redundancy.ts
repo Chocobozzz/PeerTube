@@ -13,9 +13,9 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActorModel } from '../activitypub/actor'
-import { getVideoSort, throwIfNotValid } from '../utils'
+import { getVideoSort, parseAggregateResult, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONFIG, CONSTRAINTS_FIELDS, VIDEO_EXT_MIMETYPE } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
 import { VideoFileModel } from '../video/video-file'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
@@ -27,28 +27,40 @@ import { ServerModel } from '../server/server'
 import { sample } from 'lodash'
 import { isTestInstance } from '../../helpers/core-utils'
 import * as Bluebird from 'bluebird'
-import * as Sequelize from 'sequelize'
+import { col, FindOptions, fn, literal, Op, Transaction } from 'sequelize'
+import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
+import { CONFIG } from '../../initializers/config'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ ScopeNames.WITH_VIDEO ]: {
     include: [
       {
-        model: () => VideoFileModel,
-        required: true,
+        model: VideoFileModel,
+        required: false,
         include: [
           {
-            model: () => VideoModel,
+            model: VideoModel,
+            required: true
+          }
+        ]
+      },
+      {
+        model: VideoStreamingPlaylistModel,
+        required: false,
+        include: [
+          {
+            model: VideoModel,
             required: true
           }
         ]
       }
     ]
   }
-})
+}))
 
 @Table({
   tableName: 'videoRedundancy',
@@ -97,11 +109,23 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   @BelongsTo(() => VideoFileModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'cascade'
   })
   VideoFile: VideoFileModel
+
+  @ForeignKey(() => VideoStreamingPlaylistModel)
+  @Column
+  videoStreamingPlaylistId: number
+
+  @BelongsTo(() => VideoStreamingPlaylistModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  VideoStreamingPlaylist: VideoStreamingPlaylistModel
 
   @ForeignKey(() => ActorModel)
   @Column
@@ -117,16 +141,27 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   @BeforeDestroy
   static async removeFile (instance: VideoRedundancyModel) {
-    // Not us
-    if (!instance.strategy) return
+    if (!instance.isOwned()) return
 
-    const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
+    if (instance.videoFileId) {
+      const videoFile = await VideoFileModel.loadWithVideo(instance.videoFileId)
 
-    const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
-    logger.info('Removing duplicated video file %s.', logIdentifier)
+      const logIdentifier = `${videoFile.Video.uuid}-${videoFile.resolution}`
+      logger.info('Removing duplicated video file %s.', logIdentifier)
 
-    videoFile.Video.removeFile(videoFile)
-             .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
+      videoFile.Video.removeFile(videoFile, true)
+               .catch(err => logger.error('Cannot delete %s files.', logIdentifier, { err }))
+    }
+
+    if (instance.videoStreamingPlaylistId) {
+      const videoStreamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(instance.videoStreamingPlaylistId)
+
+      const videoUUID = videoStreamingPlaylist.Video.uuid
+      logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
+
+      videoStreamingPlaylist.Video.removeStreamingPlaylist(true)
+               .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
+    }
 
     return undefined
   }
@@ -144,7 +179,20 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+  static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number) {
+    const actor = await getServerActor()
+
+    const query = {
+      where: {
+        actorId: actor.id,
+        videoStreamingPlaylistId
+      }
+    }
+
+    return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
+  }
+
+  static loadByUrl (url: string, transaction?: Transaction) {
     const query = {
       where: {
         url
@@ -192,7 +240,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     const ids = rows.map(r => r.id)
     const id = sample(ids)
 
-    return VideoModel.loadWithFile(id, undefined, !isTestInstance())
+    return VideoModel.loadWithFiles(id, undefined, !isTestInstance())
   }
 
   static async findMostViewToDuplicate (randomizedFactor: number) {
@@ -244,7 +292,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       where: {
         privacy: VideoPrivacy.PUBLIC,
         views: {
-          [ Sequelize.Op.gte ]: minViews
+          [ Op.gte ]: minViews
         }
       },
       include: [
@@ -267,7 +315,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
         actorId: actor.id,
         strategy,
         createdAt: {
-          [ Sequelize.Op.lt ]: expiredDate
+          [ Op.lt ]: expiredDate
         }
       }
     }
@@ -278,7 +326,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
 
-    const options = {
+    const query: FindOptions = {
       include: [
         {
           attributes: [],
@@ -292,7 +340,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    return VideoFileModel.sum('size', options as any) // FIXME: typings
+    return VideoFileModel.aggregate('size', 'SUM', query)
+      .then(result => parseAggregateResult(result))
   }
 
   static async listLocalExpired () {
@@ -302,7 +351,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       where: {
         actorId: actor.id,
         expiresOn: {
-          [ Sequelize.Op.lt ]: new Date()
+          [ Op.lt ]: new Date()
         }
       }
     }
@@ -316,10 +365,10 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     const query = {
       where: {
         actorId: {
-          [Sequelize.Op.ne]: actor.id
+          [Op.ne]: actor.id
         },
         expiresOn: {
-          [ Sequelize.Op.lt ]: new Date()
+          [ Op.lt ]: new Date()
         }
       }
     }
@@ -329,6 +378,27 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async listLocalOfServer (serverId: number) {
     const actor = await getServerActor()
+    const buildVideoInclude = () => ({
+      model: VideoModel,
+      required: true,
+      include: [
+        {
+          attributes: [],
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: ActorModel.unscoped(),
+              required: true,
+              where: {
+                serverId
+              }
+            }
+          ]
+        }
+      ]
+    })
 
     const query = {
       where: {
@@ -337,30 +407,13 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       include: [
         {
           model: VideoFileModel,
-          required: true,
-          include: [
-            {
-              model: VideoModel,
-              required: true,
-              include: [
-                {
-                  attributes: [],
-                  model: VideoChannelModel.unscoped(),
-                  required: true,
-                  include: [
-                    {
-                      attributes: [],
-                      model: ActorModel.unscoped(),
-                      required: true,
-                      where: {
-                        serverId
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+          required: false,
+          include: [ buildVideoInclude() ]
+        },
+        {
+          model: VideoStreamingPlaylistModel,
+          required: false,
+          include: [ buildVideoInclude() ]
         }
       ]
     }
@@ -371,12 +424,12 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   static async getStats (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
 
-    const query = {
+    const query: FindOptions = {
       raw: true,
       attributes: [
-        [ Sequelize.fn('COALESCE', Sequelize.fn('SUM', Sequelize.col('VideoFile.size')), '0'), 'totalUsed' ],
-        [ Sequelize.fn('COUNT', Sequelize.fn('DISTINCT', Sequelize.col('videoId'))), 'totalVideos' ],
-        [ Sequelize.fn('COUNT', Sequelize.col('videoFileId')), 'totalVideoFiles' ]
+        [ fn('COALESCE', fn('SUM', col('VideoFile.size')), '0'), 'totalUsed' ],
+        [ fn('COUNT', fn('DISTINCT', col('videoId'))), 'totalVideos' ],
+        [ fn('COUNT', col('videoFileId')), 'totalVideoFiles' ]
       ],
       where: {
         strategy,
@@ -391,15 +444,40 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       ]
     }
 
-    return VideoRedundancyModel.find(query as any) // FIXME: typings
+    return VideoRedundancyModel.findOne(query)
       .then((r: any) => ({
-        totalUsed: parseInt(r.totalUsed.toString(), 10),
+        totalUsed: parseAggregateResult(r.totalUsed),
         totalVideos: r.totalVideos,
         totalVideoFiles: r.totalVideoFiles
       }))
   }
 
+  getVideo () {
+    if (this.VideoFile) return this.VideoFile.Video
+
+    return this.VideoStreamingPlaylist.Video
+  }
+
+  isOwned () {
+    return !!this.strategy
+  }
+
   toActivityPubObject (): CacheFileObject {
+    if (this.VideoStreamingPlaylist) {
+      return {
+        id: this.url,
+        type: 'CacheFile' as 'CacheFile',
+        object: this.VideoStreamingPlaylist.Video.url,
+        expires: this.expiresOn.toISOString(),
+        url: {
+          type: 'Link',
+          mimeType: 'application/x-mpegURL',
+          mediaType: 'application/x-mpegURL',
+          href: this.fileUrl
+        }
+      }
+    }
+
     return {
       id: this.url,
       type: 'CacheFile' as 'CacheFile',
@@ -407,8 +485,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       expires: this.expiresOn.toISOString(),
       url: {
         type: 'Link',
-        mimeType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
-        mediaType: VIDEO_EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mimeType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,
         size: this.VideoFile.size,
@@ -421,9 +499,9 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   private static async buildVideoFileForDuplication () {
     const actor = await getServerActor()
 
-    const notIn = Sequelize.literal(
+    const notIn = literal(
       '(' +
-        `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id}` +
+        `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "videoFileId" IS NOT NULL` +
       ')'
     )
 
@@ -433,7 +511,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       required: true,
       where: {
         id: {
-          [ Sequelize.Op.notIn ]: notIn
+          [ Op.notIn ]: notIn
         }
       }
     }

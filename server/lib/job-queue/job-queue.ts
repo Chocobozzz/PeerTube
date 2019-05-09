@@ -2,15 +2,17 @@ import * as Bull from 'bull'
 import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { Redis } from '../redis'
-import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS } from '../../initializers'
+import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
 import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { EmailPayload, processEmail } from './handlers/email'
-import { processVideoFile, processVideoFileImport, VideoFileImportPayload, VideoFilePayload } from './handlers/video-file'
+import { processVideoTranscoding, VideoTranscodingPayload } from './handlers/video-transcoding'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 import { processVideoImport, VideoImportPayload } from './handlers/video-import'
-import { processVideosViewsViews } from './handlers/video-views'
+import { processVideosViews } from './handlers/video-views'
+import { refreshAPObject, RefreshPayload } from './handlers/activitypub-refresher'
+import { processVideoFileImport, VideoFileImportPayload } from './handlers/video-file-import'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -18,21 +20,24 @@ type CreateJobArgument =
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
   { type: 'video-file-import', payload: VideoFileImportPayload } |
-  { type: 'video-file', payload: VideoFilePayload } |
+  { type: 'video-transcoding', payload: VideoTranscodingPayload } |
   { type: 'email', payload: EmailPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
+  { type: 'activitypub-refresher', payload: RefreshPayload } |
   { type: 'videos-views', payload: {} }
 
-const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
+const handlers: { [ id in (JobType | 'video-file') ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
-  'video-file': processVideoFile,
+  'video-transcoding': processVideoTranscoding,
+  'video-file': processVideoTranscoding, // TODO: remove it (changed in 1.3)
   'email': processEmail,
   'video-import': processVideoImport,
-  'videos-views': processVideosViewsViews
+  'videos-views': processVideosViews,
+  'activitypub-refresher': refreshAPObject
 }
 
 const jobTypes: JobType[] = [
@@ -41,10 +46,11 @@ const jobTypes: JobType[] = [
   'activitypub-http-fetcher',
   'activitypub-http-unicast',
   'email',
-  'video-file',
+  'video-transcoding',
   'video-file-import',
   'video-import',
-  'videos-views'
+  'videos-views',
+  'activitypub-refresher'
 ]
 
 class JobQueue {
@@ -62,10 +68,10 @@ class JobQueue {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.jobRedisPrefix = 'bull-' + CONFIG.WEBSERVER.HOST
+    this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
     const queueOptions = {
       prefix: this.jobRedisPrefix,
-      redis: Redis.getRedisClient(),
+      redis: Redis.getRedisClientOptions(),
       settings: {
         maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
       }
@@ -84,7 +90,6 @@ class JobQueue {
 
       queue.on('error', err => {
         logger.error('Error in job queue %s.', handlerName, { err })
-        process.exit(-1)
       })
 
       this.queues[handlerName] = queue
@@ -162,10 +167,10 @@ class JobQueue {
     return total
   }
 
-  removeOldJobs () {
+  async removeOldJobs () {
     for (const key of Object.keys(this.queues)) {
       const queue = this.queues[key]
-      queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
+      await queue.clean(JOB_COMPLETED_LIFETIME, 'completed')
     }
   }
 

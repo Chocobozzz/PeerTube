@@ -2,23 +2,23 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
-import { userLogin } from '../../utils/users/login'
-import { createUser } from '../../utils/users/users'
-import { getMyVideos } from '../../utils/videos/videos'
+import { cleanupTests, getVideosList, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils/index'
+import { userLogin } from '../../../../shared/extra-utils/users/login'
+import { createUser } from '../../../../shared/extra-utils/users/users'
+import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import {
+  flushAndRunServer,
   getAccountVideos,
   getConfig,
   getCustomConfig,
   getMyUserInformation,
   getVideoChannelVideos,
   getVideosListWithToken,
-  runServer,
   searchVideo,
   searchVideoWithToken,
   updateCustomConfig,
   updateMyUser
-} from '../../utils'
+} from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import { User } from '../../../../shared/models/users'
@@ -57,9 +57,7 @@ describe('Test video NSFW policy', function () {
 
   before(async function () {
     this.timeout(50000)
-
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     // Get the access tokens
     await setAccessTokensToServers([ server ])
@@ -137,7 +135,7 @@ describe('Test video NSFW policy', function () {
     it('Should create a user having the default nsfw policy', async function () {
       const username = 'user1'
       const password = 'my super password'
-      await createUser(server.url, server.accessToken, username, password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
 
       userAccessToken = await userLogin(server, { username, password })
 
@@ -237,6 +235,6 @@ describe('Test video NSFW policy', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
+    await cleanupTests([ server ])
   })
 })

@@ -5,6 +5,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Why did you create PeerTube?](#why-did-you-create-peertube)
 - [I don't like the name "PeerTube"](#i-dont-like-the-name-peertube)
 - [If nobody watches a video, is it seeded?](#if-nobody-watches-a-video-is-it-seeded)
 - [What is WebSeed?](#what-is-webseed)
@@ -12,6 +13,8 @@
 - [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
 - [Which container formats can I use for the videos I want to upload?](#which-container-formats-can-i-use-for-the-videos-i-want-to-upload)
 - [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
+- [Why do we have to put our Twitter username in PeerTube configuration?](#why-do-we-have-to-put-our-twitter-username-in-peertube-configuration)
+- [How video views are calculated?](#how-video-views-are-calculated)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
 - [Why host on GitHub and Framagit?](#why-host-on-github-and-framagit)
@@ -21,6 +24,28 @@
 - [I have found a security vulnerability in PeerTube. Where and how should I report it?](#i-have-found-a-security-vulnerability-in-peertube-where-and-how-should-i-report-it)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Why did you create PeerTube?
+
+We can't build a FOSS video streaming alternative to YouTube, Dailymotion,
+Vimeo... with centralized software. One organization alone may not have
+enough money to pay for bandwidth and video storage of its servers.
+
+Our stance is that only a decentralized network of servers can provide an
+acceptable answer to technical issues (bandwidth, transcoding expenses, etc.)
+and social answers (need for a particular moderation policy, preserving
+content, etc.).
+
+While a paragraph is not enough to answer all these problems, PeerTube has
+very early prouded itself for using a contributory design, both for creating
+communities as federated nodes (as [Mastodon](https://joinmastodon.org/) for
+example), and for seeding videos (instances can seed each other's videos). But it's not
+enough because one video could become popular and overload the server. That is
+why we need to use a P2P protocol to limit the server load. Thanks to
+[WebTorrent](https://github.com/feross/webtorrent), we can use BitTorrent
+inside most modern web browsers, and users become seeds as the video gets
+more viewers.
+
 
 ## I don't like the name "PeerTube"
 
@@ -33,7 +58,7 @@ is named "Framatube".
 
 Yes, the origin server always seeds videos uploaded on it thanks to
 [Webseed](http://www.bittorrent.org/beps/bep_0019.html).
-It can also be helped by other servers using [redundancy](/support/doc/redundancy.md).
+It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances).
 
 
 ## What is WebSeed?
@@ -58,12 +83,26 @@ We think it is acceptable for a video platform.
 
 ## Which container formats can I use for the videos I want to upload?
 
-WEBM, MP4 or OGV videos.
+WEBM, MP4 or OGV videos are supported by default (they are streamable formats),
+but instance administrators can additionally enable support for MKV, MOV, AVI
+and FLV formats when transcoding is enabled on their instance.
 
 
 ## I want to change my domain name, how can I do that?
 
 You can't. You'll need to reinstall an instance and reupload your videos.
+
+
+## Why do we have to put our Twitter username in PeerTube configuration?
+
+You don't have to: we set a default value if you don't have a Twitter account.
+We need this information because Twitter requires an account for links share/videos embed on their platform.
+
+
+## How video views are calculated?
+
+Your web browser sends a view to the server after 30 seconds of playback. Then, the IP cannot send another view in the next hour.
+Views are buffered, so don't panic if the view counter stays the same after you watched a video.
 
 
 ## Should I have a big server to run PeerTube?
@@ -81,7 +120,7 @@ So you would need:
 ## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
 
 Yes you can, but you won't be able to send data to users that watch the video in their web browser.
-The reason is they connects to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
+The reason is they connect to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
 To check if your BitTorrent client supports WebTorrent you can see this issue: https://github.com/webtorrent/webtorrent/issues/369
 
 

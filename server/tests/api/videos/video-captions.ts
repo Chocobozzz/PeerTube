@@ -2,10 +2,22 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { checkVideoFilesWereRemoved, doubleFollow, flushAndRunMultipleServers, removeVideo, uploadVideo, wait } from '../../utils'
-import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
-import { waitJobs } from '../../utils/server/jobs'
-import { createVideoCaption, deleteVideoCaption, listVideoCaptions, testCaptionFile } from '../../utils/videos/video-captions'
+import {
+  checkVideoFilesWereRemoved, cleanupTests,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  removeVideo,
+  uploadVideo,
+  wait
+} from '../../../../shared/extra-utils'
+import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import {
+  createVideoCaption,
+  deleteVideoCaption,
+  listVideoCaptions,
+  testCaptionFile
+} from '../../../../shared/extra-utils/videos/video-captions'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 
 const expect = chai.expect
@@ -16,8 +28,6 @@ describe('Test video captions', function () {
 
   before(async function () {
     this.timeout(30000)
-
-    await flushTests()
 
     servers = await flushAndRunMultipleServers(2)
 
@@ -186,6 +196,6 @@ describe('Test video captions', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

@@ -1,0 +1,26 @@
+<div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
+
+<div myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" class="videos">
+  <div class="video" *ngFor="let video of videos; let i = index">
+    <div class="checkbox-container">
+      <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="_selection[video.id]"></my-peertube-checkbox>
+    </div>
+
+    <my-video-miniature [video]="video" [displayAsRow]="true" [displayOptions]="miniatureDisplayOptions" [displayVideoActions]="false"></my-video-miniature>
+
+    <!-- Display only once -->
+    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
+      <div class="action-selection-mode-child">
+        <span i18n class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
+          Cancel
+        </span>
+
+        <ng-container *ngTemplateOutlet="globalButtonsTemplate"></ng-container>
+      </div>
+    </div>
+
+    <ng-container  *ngIf="isInSelectionMode() === false">
+      <ng-container *ngTemplateOutlet="rowButtonsTemplate; context: {$implicit: video}"></ng-container>
+    </ng-container>
+  </div>
+</div>

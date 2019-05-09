@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoDetails, VideoImport, VideoPrivacy } from '../../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   getMyUserInformation,
@@ -14,9 +15,9 @@ import {
   killallServers,
   ServerInfo,
   setAccessTokensToServers
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
-import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../utils/videos/video-imports'
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../../../shared/extra-utils/videos/video-imports'
 
 const expect = chai.expect
 
@@ -37,6 +38,11 @@ describe('Test video imports', function () {
     expect(videoHttp.description).to.equal('this is a super description')
     expect(videoHttp.tags).to.deep.equal([ 'tag1', 'tag2' ])
     expect(videoHttp.files).to.have.lengthOf(1)
+
+    const originallyPublishedAt = new Date(videoHttp.originallyPublishedAt)
+    expect(originallyPublishedAt.getDate()).to.equal(14)
+    expect(originallyPublishedAt.getMonth()).to.equal(0)
+    expect(originallyPublishedAt.getFullYear()).to.equal(2019)
 
     const resMagnet = await getVideo(url, idMagnet)
     const videoMagnet: VideoDetails = resMagnet.body
@@ -237,6 +243,6 @@ describe('Test video imports', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

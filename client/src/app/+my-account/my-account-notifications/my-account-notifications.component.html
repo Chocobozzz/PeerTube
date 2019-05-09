@@ -1,0 +1,13 @@
+<div class="header">
+  <a routerLink="/my-account/settings" fragment="notifications" i18n>
+    <my-global-icon iconName="cog"></my-global-icon>
+    Notification preferences
+  </a>
+
+  <button (click)="markAllAsRead()" i18n>
+    <my-global-icon iconName="circle-tick"></my-global-icon>
+    Mark all as read
+  </button>
+</div>
+
+<my-user-notifications #userNotification></my-user-notifications>

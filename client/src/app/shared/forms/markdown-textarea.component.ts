@@ -1,10 +1,10 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { MarkdownService } from '@app/videos/shared'
 import { Subject } from 'rxjs'
 import truncate from 'lodash-es/truncate'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-markdown-textarea',
@@ -82,11 +82,11 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     return this.screenService.isInSmallView() === false
   }
 
-  private updatePreviews () {
+  private async updatePreviews () {
     if (this.content === null || this.content === undefined) return
 
-    this.truncatedPreviewHTML = this.markdownRender(truncate(this.content, { length: this.truncate }))
-    this.previewHTML = this.markdownRender(this.content)
+    this.truncatedPreviewHTML = await this.markdownRender(truncate(this.content, { length: this.truncate }))
+    this.previewHTML = await this.markdownRender(this.content)
   }
 
   private markdownRender (text: string) {

@@ -4,18 +4,17 @@ import 'mocha'
 import * as chai from 'chai'
 import * as request from 'supertest'
 import {
-  flushTests,
+  cleanupTests,
+  flushAndRunServer,
   getCustomConfig,
   getVideosList,
-  killallServers,
   makeHTMLRequest,
-  runServer,
   ServerInfo,
   serverLogin,
   updateCustomConfig,
   updateCustomSubConfig,
   uploadVideo
-} from './utils'
+} from '../../shared/extra-utils'
 
 const expect = chai.expect
 
@@ -31,9 +30,7 @@ describe('Test a client controllers', function () {
   before(async function () {
     this.timeout(120000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     server.accessToken = await serverLogin(server)
 
     const videoAttributes = {
@@ -148,6 +145,6 @@ describe('Test a client controllers', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
+    await cleanupTests([ server ])
   })
 })

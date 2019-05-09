@@ -32,9 +32,7 @@ export class VideoAbuseService {
 
   reportVideo (id: number, reason: string) {
     const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + id + '/abuse'
-    const body = {
-      reason
-    }
+    const body = { reason }
 
     return this.authHttp.post(url, body)
                .pipe(

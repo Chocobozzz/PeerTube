@@ -2,12 +2,12 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
-import { doubleFollow } from '../../utils/server/follows'
-import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../utils/server/jobs'
-import { flushAndRunMultipleServers } from '../../utils/server/servers'
-import { uploadVideo } from '../../utils/videos/videos'
-import { dateIsValid } from '../../utils/miscs/miscs'
+import { cleanupTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
+import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { flushAndRunMultipleServers } from '../../../../shared/extra-utils/server/servers'
+import { uploadVideo } from '../../../../shared/extra-utils/videos/videos'
+import { dateIsValid } from '../../../../shared/extra-utils/miscs/miscs'
 
 const expect = chai.expect
 
@@ -57,6 +57,6 @@ describe('Test jobs', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

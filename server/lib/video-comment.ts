@@ -28,7 +28,7 @@ async function createVideoComment (obj: {
     videoId: obj.video.id,
     accountId: obj.account.id,
     url: 'fake url'
-  }, { transaction: t, validate: false })
+  }, { transaction: t, validate: false } as any) // FIXME: sequelize typings
 
   comment.set('url', getVideoCommentActivityPubUrl(obj.video, comment))
 

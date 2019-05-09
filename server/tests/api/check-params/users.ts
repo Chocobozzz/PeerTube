@@ -6,15 +6,38 @@ import { join } from 'path'
 import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
-  createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
-  makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
-  updateUser, uploadVideo, userLogin, deleteMe, unblockUser, blockUser
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../utils/videos/video-imports'
+  blockUser,
+  cleanupTests,
+  createUser,
+  deleteMe,
+  flushAndRunServer,
+  getMyUserInformation,
+  getMyUserVideoRating,
+  getUsersList,
+  immutableAssign,
+  makeGetRequest,
+  makePostBodyRequest,
+  makePutBodyRequest,
+  makeUploadRequest,
+  registerUser,
+  removeUser,
+  ServerInfo,
+  setAccessTokensToServers,
+  unblockUser,
+  updateUser,
+  uploadVideo,
+  userLogin
+} from '../../../../shared/extra-utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { waitJobs } from '../../utils/server/jobs'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { expect } from 'chai'
+import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -35,15 +58,19 @@ describe('Test users API validators', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
-    serverWithRegistrationDisabled = await runServer(2)
+    server = await flushAndRunServer(1)
+    serverWithRegistrationDisabled = await flushAndRunServer(2)
 
     await setAccessTokensToServers([ server ])
 
     const videoQuota = 42000000
-    await createUser(server.url, server.accessToken, user.username, user.password, videoQuota)
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: user.username,
+      password: user.password,
+      videoQuota: videoQuota
+    })
     userAccessToken = await userLogin(server, user)
 
     {
@@ -95,17 +122,18 @@ describe('Test users API validators', function () {
       password: 'my super password',
       videoQuota: -1,
       videoQuotaDaily: -1,
-      role: UserRole.USER
+      role: UserRole.USER,
+      adminFlags: UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'fi' })
+      const fields = immutableAssign(baseCorrectParams, { username: '' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -142,6 +170,12 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too long password', async function () {
       const fields = immutableAssign(baseCorrectParams, { password: 'super'.repeat(61) })
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with invalid admin flags', async function () {
+      const fields = immutableAssign(baseCorrectParams, { adminFlags: 'toto' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
@@ -304,6 +338,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid videosHistoryEnabled attribute', async function () {
+      const fields = {
+        videosHistoryEnabled: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should fail with an non authenticated user', async function () {
       const fields = {
         currentPassword: 'my super password',
@@ -428,6 +470,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
     })
 
+    it('Should fail with an invalid emailVerified attribute', async function () {
+      const fields = {
+        emailVerified: 'yes'
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
     it('Should fail with an invalid videoQuota attribute', async function () {
       const fields = {
         videoQuota: -90
@@ -439,6 +489,24 @@ describe('Test users API validators', function () {
     it('Should fail with an invalid user role attribute', async function () {
       const fields = {
         role: 54878
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a too small password', async function () {
+      const fields = {
+        currentPassword: 'my super password',
+        password: 'bla'
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a too long password', async function () {
+      const fields = {
+        currentPassword: 'my super password',
+        password: 'super'.repeat(61)
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
@@ -460,15 +528,21 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + rootId, token: server.accessToken, fields })
     })
 
+    it('Should fail with invalid admin flags', async function () {
+      const fields = { adminFlags: 'toto' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
     it('Should succeed with the correct params', async function () {
       const fields = {
         email: 'email@example.com',
+        emailVerified: true,
         videoQuota: 42,
-        role: UserRole.MODERATOR
+        role: UserRole.USER
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields, statusCodeExpected: 204 })
-      userAccessToken = await userLogin(server, user)
     })
   })
 
@@ -497,6 +571,38 @@ describe('Test users API validators', function () {
 
     it('Should succeed with the correct parameters', async function () {
       await getMyUserVideoRating(server.url, server.accessToken, videoId)
+    })
+  })
+
+  describe('When retrieving my global ratings', function () {
+    const path = '/api/v1/accounts/user1/ratings'
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, userAccessToken)
+    })
+
+    it('Should fail with a unauthenticated user', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 401 })
+    })
+
+    it('Should fail with a another user', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should fail with a bad type', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, query: { rating: 'toto ' }, statusCodeExpected: 400 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: 200 })
     })
   })
 
@@ -541,13 +647,13 @@ describe('Test users API validators', function () {
     }
 
     it('Should fail with a too small username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'ji' })
+      const fields = immutableAssign(baseCorrectParams, { username: '' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
+      const fields = immutableAssign(baseCorrectParams, { username: 'super'.repeat(50) })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
@@ -607,7 +713,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail if we register a user with the same email', async function () {
-      const fields = immutableAssign(baseCorrectParams, { email: 'admin1@example.com' })
+      const fields = immutableAssign(baseCorrectParams, { email: 'admin' + server.internalServerNumber + '@example.com' })
 
       await makePostBodyRequest({
         url: server.url,
@@ -792,11 +898,6 @@ describe('Test users API validators', function () {
   })
 
   after(async function () {
-    killallServers([ server, serverWithRegistrationDisabled ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server, serverWithRegistrationDisabled ])
   })
 })

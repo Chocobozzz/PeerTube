@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
+import { Notifier } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { FormReactive, UserService } from '../../../shared/index'
 import { Video } from '@app/shared/video/video.model'
@@ -25,7 +25,7 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     protected formValidatorService: FormValidatorService,
     private videoChangeOwnershipValidatorsService: VideoChangeOwnershipValidatorsService,
     private videoOwnershipService: VideoOwnershipService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private userService: UserService,
     private modalService: NgbModal,
     private i18n: I18n
@@ -53,11 +53,9 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     const query = event.query
     this.userService.autocomplete(query)
       .subscribe(
-        usernames => {
-          this.usernamePropositions = usernames
-        },
+        usernames => this.usernamePropositions = usernames,
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notifier.error(err.message)
       )
   }
 
@@ -67,9 +65,9 @@ export class VideoChangeOwnershipComponent extends FormReactive implements OnIni
     this.videoOwnershipService
       .changeOwnership(this.video.id, username)
       .subscribe(
-        () => this.notificationsService.success(this.i18n('Success'), this.i18n('Ownership change request sent.')),
+        () => this.notifier.success(this.i18n('Ownership change request sent.')),
 
-        err => this.notificationsService.error(this.i18n('Error'), err.message)
+        err => this.notifier.error(err.message)
       )
   }
 }

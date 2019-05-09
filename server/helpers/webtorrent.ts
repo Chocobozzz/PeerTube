@@ -1,18 +1,18 @@
 import { logger } from './logger'
-import { generateVideoTmpPath } from './utils'
+import { generateVideoImportTmpPath } from './utils'
 import * as WebTorrent from 'webtorrent'
 import { createWriteStream, ensureDir, remove } from 'fs-extra'
-import { CONFIG } from '../initializers'
+import { CONFIG } from '../initializers/config'
 import { dirname, join } from 'path'
 
 async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: string }, timeout: number) {
   const id = target.magnetUri || target.torrentName
   let timer
 
-  const path = generateVideoTmpPath(id)
+  const path = generateVideoImportTmpPath(id)
   logger.info('Importing torrent video %s', id)
 
-  const directoryPath = join(CONFIG.STORAGE.VIDEOS_DIR, 'import')
+  const directoryPath = join(CONFIG.STORAGE.TMP_DIR, 'webtorrent')
   await ensureDir(directoryPath)
 
   return new Promise<string>((res, rej) => {

@@ -2,12 +2,14 @@ import { ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
 import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
 export abstract class UserEdit extends FormReactive {
-
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
   roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
+  username: string
+  userId: number
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
@@ -22,7 +24,9 @@ export abstract class UserEdit extends FormReactive {
   }
 
   computeQuotaWithTranscoding () {
-    const resolutions = this.serverService.getConfig().transcoding.enabledResolutions
+    const transcodingConfig = this.serverService.getConfig().transcoding
+
+    const resolutions = transcodingConfig.enabledResolutions
     const higherResolution = VideoResolution.H_1080P
     let multiplier = 0
 
@@ -30,7 +34,17 @@ export abstract class UserEdit extends FormReactive {
       multiplier += resolution / higherResolution
     }
 
+    if (transcodingConfig.hls.enabled) multiplier *= 2
+
     return multiplier * parseInt(this.form.value['videoQuota'], 10)
+  }
+
+  resetPassword () {
+    return
+  }
+
+  protected buildAdminFlags (formValue: any) {
+    return formValue.byPassAutoBlacklist ? UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST : UserAdminFlag.NONE
   }
 
   protected buildQuotaOptions () {

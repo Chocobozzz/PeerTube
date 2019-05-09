@@ -1,0 +1,26 @@
+<div class="row">
+
+  <div class="playlist-info col-xs-12 col-md-5 col-xl-3">
+    <my-video-playlist-miniature
+      *ngIf="playlist" [playlist]="playlist" [toManage]="false" [displayChannel]="true"
+      [displayDescription]="true" [displayPrivacy]="true"
+    ></my-video-playlist-miniature>
+  </div>
+
+  <div class="playlist-elements col-xs-12 col-md-7 col-xl-9">
+    <div i18n class="no-results" *ngIf="pagination.totalItems === 0">No videos in this playlist.</div>
+
+    <div
+      class="videos" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()"
+      cdkDropList (cdkDropListDropped)="drop($event)"
+    >
+      <div class="video" *ngFor="let video of videos; trackBy: trackByFn" cdkDrag (cdkDragMoved)="onDragMove($event)">
+        <my-video-playlist-element-miniature
+          [video]="video" [playlist]="playlist" [owned]="true" (elementRemoved)="onElementRemoved($event)"
+          [position]="video.playlistElement.position"
+        >
+        </my-video-playlist-element-miniature>
+      </div>
+    </div>
+  </div>
+</div>

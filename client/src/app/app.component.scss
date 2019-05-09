@@ -48,9 +48,8 @@
       overflow: hidden;
 
       .instance-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        @include ellipsis;
+
         width: 100%;
       }
 
@@ -90,9 +89,4 @@ footer {
   margin-top: $footer-margin;
   height: $footer-height;
   justify-content: center;
-}
-
-simple-notifications {
-  position: relative;
-  z-index: 1500;
 }

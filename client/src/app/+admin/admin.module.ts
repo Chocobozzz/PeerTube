@@ -7,15 +7,20 @@ import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import { FollowersListComponent, FollowingAddComponent, FollowsComponent, FollowService } from './follows'
 import { FollowingListComponent } from './follows/following-list/following-list.component'
-import { JobsComponent } from './jobs/job.component'
-import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
-import { JobService } from './jobs/shared/job.service'
-import { UserCreateComponent, UserListComponent, UsersComponent, UserUpdateComponent } from './users'
-import { ModerationCommentModalComponent, VideoAbuseListComponent, VideoBlacklistListComponent } from './moderation'
+import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersComponent, UserUpdateComponent } from './users'
+import {
+  ModerationCommentModalComponent,
+  VideoAbuseListComponent,
+  VideoAutoBlacklistListComponent,
+  VideoBlacklistListComponent
+} from './moderation'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
 import { RedundancyService } from '@app/+admin/follows/shared/redundancy.service'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
+import { JobsComponent } from '@app/+admin/system/jobs/jobs.component'
+import { JobService, LogsComponent, LogsService, SystemComponent } from '@app/+admin/system'
+import { DebugComponent, DebugService } from '@app/+admin/system/debug'
 
 @NgModule({
   imports: [
@@ -36,17 +41,21 @@ import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } f
     UsersComponent,
     UserCreateComponent,
     UserUpdateComponent,
+    UserPasswordComponent,
     UserListComponent,
 
     ModerationComponent,
     VideoBlacklistListComponent,
     VideoAbuseListComponent,
+    VideoAutoBlacklistListComponent,
     ModerationCommentModalComponent,
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,
 
+    SystemComponent,
     JobsComponent,
-    JobsListComponent,
+    LogsComponent,
+    DebugComponent,
 
     ConfigComponent,
     EditCustomConfigComponent
@@ -60,6 +69,8 @@ import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } f
     FollowService,
     RedundancyService,
     JobService,
+    LogsService,
+    DebugService,
     ConfigService
   ]
 })

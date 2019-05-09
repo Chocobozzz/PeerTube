@@ -4,22 +4,23 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   acceptChangeOwnership,
-  changeVideoOwnership,
-  createUser, doubleFollow, flushAndRunMultipleServers,
-  flushTests,
+  changeVideoOwnership, cleanupTests,
+  createUser,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  flushAndRunServer,
   getMyUserInformation,
+  getVideo,
   getVideoChangeOwnershipList,
   getVideosList,
   killallServers,
   refuseChangeOwnership,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin,
-  getVideo
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+  userLogin
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { User } from '../../../../shared/models/users'
 import { VideoDetails } from '../../../../shared/models/videos'
 
@@ -46,8 +47,20 @@ describe('Test video change ownership - nominal', function () {
     await setAccessTokensToServers(servers)
 
     const videoQuota = 42000000
-    await createUser(servers[0].url, servers[0].accessToken, firstUser.username, firstUser.password, videoQuota)
-    await createUser(servers[0].url, servers[0].accessToken, secondUser.username, secondUser.password, videoQuota)
+    await createUser({
+      url: servers[ 0 ].url,
+      accessToken: servers[ 0 ].accessToken,
+      username: firstUser.username,
+      password: firstUser.password,
+      videoQuota: videoQuota
+    })
+    await createUser({
+      url: servers[ 0 ].url,
+      accessToken: servers[ 0 ].accessToken,
+      username: secondUser.username,
+      password: secondUser.password,
+      videoQuota: videoQuota
+    })
 
     firstUserAccessToken = await userLogin(servers[0], firstUser)
     secondUserAccessToken = await userLogin(servers[0], secondUser)
@@ -190,7 +203,7 @@ describe('Test video change ownership - nominal', function () {
     }
   })
 
-  after(async function () {
+  after(function () {
     killallServers(servers)
   })
 })
@@ -213,14 +226,25 @@ describe('Test video change ownership - quota too small', function () {
     this.timeout(50000)
 
     // Run one server
-    await flushTests()
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
     await setAccessTokensToServers([server])
 
     const videoQuota = 42000000
     const limitedVideoQuota = 10
-    await createUser(server.url, server.accessToken, firstUser.username, firstUser.password, videoQuota)
-    await createUser(server.url, server.accessToken, secondUser.username, secondUser.password, limitedVideoQuota)
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: firstUser.username,
+      password: firstUser.password,
+      videoQuota: videoQuota
+    })
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: secondUser.username,
+      password: secondUser.password,
+      videoQuota: limitedVideoQuota
+    })
 
     firstUserAccessToken = await userLogin(server, firstUser)
     secondUserAccessToken = await userLogin(server, secondUser)
@@ -274,6 +298,6 @@ describe('Test video change ownership - quota too small', function () {
   })
 
   after(async function () {
-    killallServers([server])
+    await cleanupTests([ server ])
   })
 })

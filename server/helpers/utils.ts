@@ -1,5 +1,4 @@
 import { ResultList } from '../../shared'
-import { CONFIG } from '../initializers'
 import { ApplicationModel } from '../models/application/application'
 import { execPromise, execPromise2, pseudoRandomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
@@ -7,6 +6,7 @@ import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
+import { CONFIG } from '../initializers/config'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -19,10 +19,7 @@ async function generateRandomString (size: number) {
   return raw.toString('hex')
 }
 
-interface FormattableToJSON {
-  toFormattedJSON (args?: any)
-}
-
+interface FormattableToJSON { toFormattedJSON (args?: any) }
 function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number, formattedArg?: any) {
   const formattedObjects: U[] = []
 
@@ -46,18 +43,18 @@ const getServerActor = memoizee(async function () {
   return actor
 })
 
-function generateVideoTmpPath (target: string | ParseTorrent) {
+function generateVideoImportTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash
 
   const hash = sha256(id)
-  return join(CONFIG.STORAGE.VIDEOS_DIR, hash + '-import.mp4')
+  return join(CONFIG.STORAGE.TMP_DIR, hash + '-import.mp4')
 }
 
 function getSecureTorrentName (originalName: string) {
   return sha256(originalName) + '.torrent'
 }
 
-async function getVersion () {
+async function getServerCommit () {
   try {
     const tag = await execPromise2(
       '[ ! -d .git ] || git name-rev --name-only --tags --no-undefined HEAD 2>/dev/null || true',
@@ -77,7 +74,7 @@ async function getVersion () {
     logger.debug('Cannot get version from git HEAD.', { err })
   }
 
-  return require('../../../package.json').version
+  return ''
 }
 
 /**
@@ -102,7 +99,7 @@ export {
   getFormattedObjects,
   getSecureTorrentName,
   getServerActor,
-  getVersion,
-  generateVideoTmpPath,
+  getServerCommit,
+  generateVideoImportTmpPath,
   getUUIDFromFilename
 }

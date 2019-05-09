@@ -1,4 +1,5 @@
 import { UserRole } from './user-role'
+import { UserAdminFlag } from './user-flag.model'
 
 export interface UserCreate {
   username: string
@@ -7,4 +8,5 @@ export interface UserCreate {
   videoQuota: number
   videoQuotaDaily: number
   role: UserRole
+  adminFlags?: UserAdminFlag
 }

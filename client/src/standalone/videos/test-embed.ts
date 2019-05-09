@@ -7,13 +7,13 @@ window.addEventListener('load', async () => {
   const lastPart = urlParts[ urlParts.length - 1 ]
   const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[ 0 ]
 
-  let iframe = document.createElement('iframe')
+  const iframe = document.createElement('iframe')
   iframe.src = `/videos/embed/${videoId}?autoplay=1&controls=0&api=1`
-  let mainElement = document.querySelector('#host')
+  const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
 
   console.log(`Document finished loading.`)
-  let player = new PeerTubePlayer(document.querySelector('iframe'))
+  const player = new PeerTubePlayer(document.querySelector('iframe'))
 
   window[ 'player' ] = player
 
@@ -21,7 +21,7 @@ window.addEventListener('load', async () => {
   await player.ready
   console.log(`Player is ready.`)
 
-  let monitoredEvents = [
+  const monitoredEvents = [
     'pause',
     'play',
     'playbackStatusUpdate',
@@ -36,18 +36,18 @@ window.addEventListener('load', async () => {
   let playbackRates: number[] = []
   let currentRate = await player.getPlaybackRate()
 
-  let updateRates = async () => {
-    let rateListEl = document.querySelector('#rate-list')
+  const updateRates = async () => {
+    const rateListEl = document.querySelector('#rate-list')
     rateListEl.innerHTML = ''
 
     playbackRates.forEach(rate => {
       if (currentRate === rate) {
-        let itemEl = document.createElement('strong')
+        const itemEl = document.createElement('strong')
         itemEl.innerText = `${rate} (active)`
         itemEl.style.display = 'block'
         rateListEl.appendChild(itemEl)
       } else {
-        let itemEl = document.createElement('a')
+        const itemEl = document.createElement('a')
         itemEl.href = 'javascript:;'
         itemEl.innerText = rate.toString()
         itemEl.addEventListener('click', () => {
@@ -66,18 +66,18 @@ window.addEventListener('load', async () => {
     updateRates()
   })
 
-  let updateResolutions = ((resolutions: PeerTubeResolution[]) => {
-    let resolutionListEl = document.querySelector('#resolution-list')
+  const updateResolutions = ((resolutions: PeerTubeResolution[]) => {
+    const resolutionListEl = document.querySelector('#resolution-list')
     resolutionListEl.innerHTML = ''
 
     resolutions.forEach(resolution => {
       if (resolution.active) {
-        let itemEl = document.createElement('strong')
+        const itemEl = document.createElement('strong')
         itemEl.innerText = `${resolution.label} (active)`
         itemEl.style.display = 'block'
         resolutionListEl.appendChild(itemEl)
       } else {
-        let itemEl = document.createElement('a')
+        const itemEl = document.createElement('a')
         itemEl.href = 'javascript:;'
         itemEl.innerText = resolution.label
         itemEl.addEventListener('click', () => {

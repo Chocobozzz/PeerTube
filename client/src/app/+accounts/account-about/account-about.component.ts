@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
-import { MarkdownService } from '@app/videos/shared'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-account-about',
@@ -25,9 +25,9 @@ export class AccountAboutComponent implements OnInit, OnDestroy {
   ngOnInit () {
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
-      .subscribe(account => {
+      .subscribe(async account => {
         this.account = account
-        this.descriptionHTML = this.markdownService.textMarkdownToHTML(this.account.description)
+        this.descriptionHTML = await this.markdownService.textMarkdownToHTML(this.account.description)
       })
   }
 

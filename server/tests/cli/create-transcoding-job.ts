@@ -4,6 +4,7 @@ import 'mocha'
 import * as chai from 'chai'
 import { VideoDetails } from '../../../shared/models/videos'
 import {
+  cleanupTests,
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
@@ -15,8 +16,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo, wait
-} from '../utils'
-import { waitJobs } from '../utils/server/jobs'
+} from '../../../shared/extra-utils'
+import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 
@@ -27,8 +28,6 @@ describe('Test create transcoding jobs', function () {
 
   before(async function () {
     this.timeout(60000)
-
-    await flushTests()
 
     // Run server 2 to have transcoding enabled
     servers = await flushAndRunMultipleServers(2)
@@ -127,6 +126,6 @@ describe('Test create transcoding jobs', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

@@ -1,16 +1,24 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
     <h4 i18n class="modal-title">Share</h4>
-    <span class="close" aria-hidden="true" (click)="hide()"></span>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
 
-    <div *ngIf="currentVideoTimestampString" class="start-at">
+    <div class="start-at">
       <my-peertube-checkbox
         inputName="startAt" [(ngModel)]="startAtCheckbox"
-        i18n-labelText [labelText]="getStartCheckboxLabel()"
+        i18n-labelText labelText="Start at"
       ></my-peertube-checkbox>
+
+      <my-timestamp-input
+        [timestamp]="currentVideoTimestamp"
+        [maxTimestamp]="video.duration"
+        [disabled]="!startAtCheckbox"
+        [(ngModel)]="currentVideoTimestamp"
+      >
+      </my-timestamp-input>
     </div>
 
     <div class="form-group">

@@ -3,8 +3,7 @@ import { UserRight } from '../../../../shared'
 import { AuthService } from '../core/auth/auth.service'
 
 @Component({
-  templateUrl: './admin.component.html',
-  styleUrls: [ './admin.component.scss' ]
+  templateUrl: './admin.component.html'
 })
 export class AdminComponent {
   constructor (private auth: AuthService) {}
@@ -25,11 +24,19 @@ export class AdminComponent {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
 
+  hasConfigRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
+  }
+
+  hasLogsRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_LOGS)
+  }
+
   hasJobsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
   }
 
-  hasConfigRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
+  hasDebugRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)
   }
 }

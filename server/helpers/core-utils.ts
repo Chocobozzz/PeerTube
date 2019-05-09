@@ -12,6 +12,24 @@ import { URL } from 'url'
 import { truncate } from 'lodash'
 import { exec } from 'child_process'
 
+const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
+  if (!oldObject || typeof oldObject !== 'object') {
+    return valueConverter(oldObject)
+  }
+
+  if (Array.isArray(oldObject)) {
+    return oldObject.map(e => objectConverter(e, keyConverter, valueConverter))
+  }
+
+  const newObject = {}
+  Object.keys(oldObject).forEach(oldKey => {
+    const newKey = keyConverter(oldKey)
+    newObject[ newKey ] = objectConverter(oldObject[ oldKey ], keyConverter, valueConverter)
+  })
+
+  return newObject
+}
+
 const timeTable = {
   ms:           1,
   second:       1000,
@@ -22,7 +40,7 @@ const timeTable = {
   month:        3600000 * 24 * 30
 }
 
-export function parseDuration (duration: number | string): number {
+export function parseDurationToMs (duration: number | string): number {
   if (typeof duration === 'number') return duration
 
   if (typeof duration === 'string') {
@@ -39,7 +57,7 @@ export function parseDuration (duration: number | string): number {
     }
   }
 
-  throw new Error('Duration could not be properly parsed')
+  throw new Error(`Duration ${duration} could not be properly parsed`)
 }
 
 export function parseBytes (value: string | number): number {
@@ -174,8 +192,12 @@ function peertubeTruncate (str: string, maxLength: number) {
   return truncate(str, options)
 }
 
-function sha256 (str: string, encoding: HexBase64Latin1Encoding = 'hex') {
+function sha256 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
   return createHash('sha256').update(str).digest(encoding)
+}
+
+function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') {
+  return createHash('sha1').update(str).digest(encoding)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
@@ -235,6 +257,7 @@ export {
   isTestInstance,
   isProdInstance,
 
+  objectConverter,
   root,
   escapeHTML,
   pageToStartAndCount,
@@ -242,7 +265,9 @@ export {
   sanitizeHost,
   buildPath,
   peertubeTruncate,
+
   sha256,
+  sha1,
 
   promisify0,
   promisify1,

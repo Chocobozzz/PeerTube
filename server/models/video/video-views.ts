@@ -4,6 +4,7 @@ import * as Sequelize from 'sequelize'
 
 @Table({
   tableName: 'videoView',
+  updatedAt: false,
   indexes: [
     {
       fields: [ 'videoId' ]
@@ -41,4 +42,18 @@ export class VideoViewModel extends Model<VideoViewModel> {
   })
   Video: VideoModel
 
+  static removeOldRemoteViewsHistory (beforeDate: string) {
+    const query = {
+      where: {
+        startDate: {
+          [Sequelize.Op.lt]: beforeDate
+        },
+        videoId: {
+          [Sequelize.Op.in]: Sequelize.literal('(SELECT "id" FROM "video" WHERE "remote" IS TRUE)')
+        }
+      }
+    }
+
+    return VideoViewModel.destroy(query)
+  }
 }

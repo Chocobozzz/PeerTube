@@ -45,13 +45,13 @@ import 'core-js/es7/object'
 /** IE10 and IE11 requires the following for the Reflect API. */
 
 // For Google Bot
-import 'core-js/es6/reflect'
+// import 'core-js/es6/reflect'; // --> dealt with in src/environment.ts
 
 /**
  * Evergreen browsers require these.
  */
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect'
+// import 'core-js/es7/reflect' // --> dealt with in src/environment.ts
 
 /**
  * Required to support Web Animations `@angular/platform-browser/animations`.
@@ -76,6 +76,7 @@ import 'core-js/es7/reflect'
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
+// tslint:disable
 import 'zone.js/dist/zone'  // Included with Angular CLI.
 
 /***************************************************************************************************

@@ -1,4 +1,4 @@
-import { CONFIG, REMOTE_SCHEME } from '../../initializers'
+import { REMOTE_SCHEME, WEBSERVER } from '../../initializers/constants'
 import { sanitizeHost } from '../core-utils'
 import { exists } from './misc'
 
@@ -11,7 +11,7 @@ function isWebfingerLocalResourceValid (value: string) {
   if (actorParts.length !== 2) return false
 
   const host = actorParts[1]
-  return sanitizeHost(host, REMOTE_SCHEME.HTTP) === CONFIG.WEBSERVER.HOST
+  return sanitizeHost(host, REMOTE_SCHEME.HTTP) === WEBSERVER.HOST
 }
 
 // ---------------------------------------------------------------------------

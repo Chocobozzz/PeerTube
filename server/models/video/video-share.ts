@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
@@ -14,15 +14,15 @@ enum ScopeNames {
   WITH_ACTOR = 'WITH_ACTOR'
 }
 
-@Scopes({
+@Scopes(() => ({
   [ScopeNames.FULL]: {
     include: [
       {
-        model: () => ActorModel,
+        model: ActorModel,
         required: true
       },
       {
-        model: () => VideoModel,
+        model: VideoModel,
         required: true
       }
     ]
@@ -30,12 +30,12 @@ enum ScopeNames {
   [ScopeNames.WITH_ACTOR]: {
     include: [
       {
-        model: () => ActorModel,
+        model: ActorModel,
         required: true
       }
     ]
   }
-})
+}))
 @Table({
   tableName: 'videoShare',
   indexes: [
@@ -88,7 +88,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
   })
   Video: VideoModel
 
-  static load (actorId: number, videoId: number, t: Sequelize.Transaction) {
+  static load (actorId: number, videoId: number, t?: Sequelize.Transaction) {
     return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
       where: {
         actorId,
@@ -125,7 +125,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .then(res => res.map(r => r.Actor))
   }
 
-  static loadActorsByVideoOwner (actorOwnerId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
+  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
     const query = {
       attributes: [],
       include: [
@@ -199,5 +199,18 @@ export class VideoShareModel extends Model<VideoShareModel> {
     }
 
     return VideoShareModel.findAndCountAll(query)
+  }
+
+  static cleanOldSharesOf (videoId: number, beforeUpdatedAt: Date) {
+    const query = {
+      where: {
+        updatedAt: {
+          [Sequelize.Op.lt]: beforeUpdatedAt
+        },
+        videoId
+      }
+    }
+
+    return VideoShareModel.destroy(query)
   }
 }

@@ -4,25 +4,25 @@ import * as chai from 'chai'
 import { omit } from 'lodash'
 import 'mocha'
 import {
+  cleanupTests,
   createUser,
   deleteVideoChannel,
-  flushTests,
+  flushAndRunServer,
   getAccountVideoChannelsList,
-  getMyUserInformation,
-  getVideoChannelsList,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeUploadRequest,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { User } from '../../../../shared/models/users'
+} from '../../../../shared/extra-utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
 import { join } from 'path'
 
 const expect = chai.expect
@@ -37,9 +37,7 @@ describe('Test video channels API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -49,7 +47,7 @@ describe('Test video channels API validator', function () {
     }
 
     {
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
       accessTokenUser = await userLogin(server, user)
     }
   })
@@ -309,11 +307,6 @@ describe('Test video channels API validator', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

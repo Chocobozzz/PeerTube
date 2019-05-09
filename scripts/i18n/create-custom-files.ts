@@ -5,7 +5,7 @@ import {
   buildLanguages,
   VIDEO_CATEGORIES,
   VIDEO_IMPORT_STATES,
-  VIDEO_LICENCES,
+  VIDEO_LICENCES, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../server/initializers/constants'
@@ -23,12 +23,16 @@ const playerKeys = {
   'Speed': 'Speed',
   'Subtitles/CC': 'Subtitles/CC',
   'peers': 'peers',
+  'peer': 'peer',
   'Go to the video page': 'Go to the video page',
   'Settings': 'Settings',
   'Uses P2P, others may know you are watching this video.': 'Uses P2P, others may know you are watching this video.',
   'Copy the video URL': 'Copy the video URL',
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
-  'Copy embed code': 'Copy embed code'
+  'Copy embed code': 'Copy embed code',
+  'Copy magnet URI': 'Copy magnet URI',
+  'Total downloaded: ': 'Total downloaded: ',
+  'Total uploaded: ': 'Total uploaded: '
 }
 const playerTranslations = {
   target: join(__dirname, '../../../client/src/locale/source/player_en_US.xml'),
@@ -42,6 +46,14 @@ values(VIDEO_CATEGORIES)
   .concat(values(VIDEO_PRIVACIES))
   .concat(values(VIDEO_STATES))
   .concat(values(VIDEO_IMPORT_STATES))
+  .concat(values(VIDEO_PLAYLIST_PRIVACIES))
+  .concat(values(VIDEO_PLAYLIST_TYPES))
+  .concat([
+    'This video does not exist.',
+    'We cannot fetch the video. Please try again later.',
+    'Sorry',
+    'This video is not available because the remote instance is not responding.'
+  ])
   .forEach(v => serverKeys[v] = v)
 
 // More keys

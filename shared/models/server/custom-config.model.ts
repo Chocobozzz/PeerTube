@@ -6,6 +6,7 @@ export interface CustomConfig {
     shortDescription: string
     description: string
     terms: string
+    isNSFW: boolean
     defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
     customizations: {
@@ -41,6 +42,10 @@ export interface CustomConfig {
     email: string
   }
 
+  contactForm: {
+    enabled: boolean
+  }
+
   user: {
     videoQuota: number
     videoQuotaDaily: number
@@ -48,6 +53,7 @@ export interface CustomConfig {
 
   transcoding: {
     enabled: boolean
+    allowAdditionalExtensions: boolean
     threads: number
     resolutions: {
       '240p': boolean
@@ -55,6 +61,9 @@ export interface CustomConfig {
       '480p': boolean
       '720p': boolean
       '1080p': boolean
+    }
+    hls: {
+      enabled: boolean
     }
   }
 
@@ -68,4 +77,20 @@ export interface CustomConfig {
       }
     }
   }
+
+  autoBlacklist: {
+    videos: {
+      ofUsers: {
+        enabled: boolean
+      }
+    }
+  }
+
+  followers: {
+    instance: {
+      enabled: boolean,
+      manualApproval: boolean
+    }
+  }
+
 }

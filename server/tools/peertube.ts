@@ -58,7 +58,7 @@ if (!process.argv.slice(2).length) {
             ,"\\/
       _,.__/"\\/_                     (the CLI for red chocobos)
      / \\) "./,  ".
-  --/---"---" "-) )---- by Chocobozzz et al.`)
+  --/---"---" "-) )---- by Chocobozzz et al.\n`)
 }
 
 getSettings()

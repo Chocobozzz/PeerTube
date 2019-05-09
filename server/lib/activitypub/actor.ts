@@ -1,19 +1,18 @@
 import * as Bluebird from 'bluebird'
-import { join } from 'path'
 import { Transaction } from 'sequelize'
 import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { getActorUrl } from '../../helpers/activitypub'
+import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { doRequest, downloadImage } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -22,6 +21,8 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../job-queue'
 import { getServerActor } from '../../helpers/utils'
 import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
+import { CONFIG } from '../../initializers/config'
+import { sequelizeTypescript } from '../../initializers/database'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {
@@ -43,8 +44,9 @@ async function getOrCreateActorAndServerAndModel (
   recurseIfNeeded = true,
   updateCollections = false
 ) {
-  const actorUrl = getActorUrl(activityActor)
+  const actorUrl = getAPId(activityActor)
   let created = false
+  let accountPlaylistsUrl: string
 
   let actor = await fetchActorByUrl(actorUrl, fetchType)
   // Orphan actor (not associated to an account of channel) so recreate it
@@ -65,9 +67,14 @@ async function getOrCreateActorAndServerAndModel (
       const accountAttributedTo = result.attributedTo.find(a => a.type === 'Person')
       if (!accountAttributedTo) throw new Error('Cannot find account attributed to video channel ' + actor.url)
 
+      if (checkUrlsSameHost(accountAttributedTo.id, actorUrl) !== true) {
+        throw new Error(`Account attributed to ${accountAttributedTo.id} does not have the same host than actor url ${actorUrl}`)
+      }
+
       try {
-        // Assert we don't recurse another time
-        ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', false)
+        // Don't recurse another time
+        const recurseIfNeeded = false
+        ownerActor = await getOrCreateActorAndServerAndModel(accountAttributedTo.id, 'all', recurseIfNeeded)
       } catch (err) {
         logger.error('Cannot get or create account attributed to video channel ' + actor.url)
         throw new Error(err)
@@ -76,6 +83,7 @@ async function getOrCreateActorAndServerAndModel (
 
     actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, result, ownerActor)
     created = true
+    accountPlaylistsUrl = result.playlists
   }
 
   if (actor.Account) actor.Account.Actor = actor
@@ -86,6 +94,12 @@ async function getOrCreateActorAndServerAndModel (
 
   if ((created === true || refreshed === true) && updateCollections === true) {
     const payload = { uri: actor.outboxUrl, type: 'activity' as 'activity' }
+    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+  }
+
+  // We created a new account: fetch the playlists
+  if (created === true && actor.Account && accountPlaylistsUrl) {
+    const payload = { uri: accountPlaylistsUrl, accountId: actor.Account.id, type: 'account-playlists' as 'account-playlists' }
     await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
   }
 
@@ -104,7 +118,7 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
     followingCount: 0,
     inboxUrl: url + '/inbox',
     outboxUrl: url + '/outbox',
-    sharedInboxUrl: CONFIG.WEBSERVER.URL + '/inbox',
+    sharedInboxUrl: WEBSERVER.URL + '/inbox',
     followersUrl: url + '/followers',
     followingUrl: url + '/following'
   })
@@ -168,18 +182,13 @@ async function fetchActorTotalItems (url: string) {
 
 async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   if (
-    actorJSON.icon && actorJSON.icon.type === 'Image' && IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
+    actorJSON.icon && actorJSON.icon.type === 'Image' && MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
     isActivityPubUrlValid(actorJSON.icon.url)
   ) {
-    const extension = IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType]
+    const extension = MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType]
 
     const avatarName = uuidv4() + extension
-    const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-
-    await doRequestAndSaveToFile({
-      method: 'GET',
-      uri: actorJSON.icon.url
-    }, destPath)
+    await downloadImage(actorJSON.icon.url, CONFIG.STORAGE.AVATARS_DIR, avatarName, AVATARS_SIZE)
 
     return avatarName
   }
@@ -203,6 +212,69 @@ async function addFetchOutboxJob (actor: ActorModel) {
   return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
 }
 
+async function refreshActorIfNeeded (
+  actorArg: ActorModel,
+  fetchedType: ActorFetchByUrlType
+): Promise<{ actor: ActorModel, refreshed: boolean }> {
+  if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
+
+  // We need more attributes
+  const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
+
+  try {
+    let actorUrl: string
+    try {
+      actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
+    } catch (err) {
+      logger.warn('Cannot get actor URL from webfinger, keeping the old one.', err)
+      actorUrl = actor.url
+    }
+
+    const { result, statusCode } = await fetchRemoteActor(actorUrl)
+
+    if (statusCode === 404) {
+      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
+      actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
+      return { actor: undefined, refreshed: false }
+    }
+
+    if (result === undefined) {
+      logger.warn('Cannot fetch remote actor in refresh actor.')
+      return { actor, refreshed: false }
+    }
+
+    return sequelizeTypescript.transaction(async t => {
+      updateInstanceWithAnother(actor, result.actor)
+
+      if (result.avatarName !== undefined) {
+        await updateActorAvatarInstance(actor, result.avatarName, t)
+      }
+
+      // Force update
+      actor.setDataValue('updatedAt', new Date())
+      await actor.save({ transaction: t })
+
+      if (actor.Account) {
+        actor.Account.set('name', result.name)
+        actor.Account.set('description', result.summary)
+
+        await actor.Account.save({ transaction: t })
+      } else if (actor.VideoChannel) {
+        actor.VideoChannel.set('name', result.name)
+        actor.VideoChannel.set('description', result.summary)
+        actor.VideoChannel.set('support', result.support)
+
+        await actor.VideoChannel.save({ transaction: t })
+      }
+
+      return { refreshed: true, actor }
+    })
+  } catch (err) {
+    logger.warn('Cannot refresh actor %s.', actor.url, { err })
+    return { actor, refreshed: false }
+  }
+}
+
 export {
   getOrCreateActorAndServerAndModel,
   buildActorInstance,
@@ -210,6 +282,7 @@ export {
   fetchActorTotalItems,
   fetchAvatarIfExists,
   updateActorInstance,
+  refreshActorIfNeeded,
   updateActorAvatarInstance,
   addFetchOutboxJob
 }
@@ -271,6 +344,8 @@ function saveActorAndServerAndModelIfNotExist (
       actorCreated.VideoChannel.Account = ownerActor.Account
     }
 
+    actorCreated.Server = server
+
     return actorCreated
   }
 }
@@ -280,6 +355,7 @@ type FetchRemoteActorResult = {
   name: string
   summary: string
   support?: string
+  playlists?: string
   avatarName?: string
   attributedTo: ActivityPubAttributedTo[]
 }
@@ -293,13 +369,17 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  const requestResult = await doRequest(options)
+  const requestResult = await doRequest<ActivityPubActor>(options)
   normalizeActor(requestResult.body)
 
-  const actorJSON: ActivityPubActor = requestResult.body
-
+  const actorJSON = requestResult.body
   if (isActorObjectValid(actorJSON) === false) {
-    logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
+    logger.debug('Remote actor JSON is not valid.', { actorJSON })
+    return { result: undefined, statusCode: requestResult.response.statusCode }
+  }
+
+  if (checkUrlsSameHost(actorJSON.id, actorUrl) !== true) {
+    logger.warn('Actor url %s has not the same host than its AP id %s', actorUrl, actorJSON.id)
     return { result: undefined, statusCode: requestResult.response.statusCode }
   }
 
@@ -333,6 +413,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
       avatarName,
       summary: actorJSON.summary,
       support: actorJSON.support,
+      playlists: actorJSON.playlists,
       attributedTo: actorJSON.attributedTo
     }
   }
@@ -370,60 +451,4 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
   })
 
   return videoChannelCreated
-}
-
-async function refreshActorIfNeeded (
-  actorArg: ActorModel,
-  fetchedType: ActorFetchByUrlType
-): Promise<{ actor: ActorModel, refreshed: boolean }> {
-  if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
-
-  // We need more attributes
-  const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
-
-  try {
-    const actorUrl = await getUrlFromWebfinger(actor.preferredUsername + '@' + actor.getHost())
-    const { result, statusCode } = await fetchRemoteActor(actorUrl)
-
-    if (statusCode === 404) {
-      logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
-      actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
-      return { actor: undefined, refreshed: false }
-    }
-
-    if (result === undefined) {
-      logger.warn('Cannot fetch remote actor in refresh actor.')
-      return { actor, refreshed: false }
-    }
-
-    return sequelizeTypescript.transaction(async t => {
-      updateInstanceWithAnother(actor, result.actor)
-
-      if (result.avatarName !== undefined) {
-        await updateActorAvatarInstance(actor, result.avatarName, t)
-      }
-
-      // Force update
-      actor.setDataValue('updatedAt', new Date())
-      await actor.save({ transaction: t })
-
-      if (actor.Account) {
-        actor.Account.set('name', result.name)
-        actor.Account.set('description', result.summary)
-
-        await actor.Account.save({ transaction: t })
-      } else if (actor.VideoChannel) {
-        actor.VideoChannel.set('name', result.name)
-        actor.VideoChannel.set('description', result.summary)
-        actor.VideoChannel.set('support', result.support)
-
-        await actor.VideoChannel.save({ transaction: t })
-      }
-
-      return { refreshed: true, actor }
-    })
-  } catch (err) {
-    logger.warn('Cannot refresh actor.', { err })
-    return { actor, refreshed: false }
-  }
 }

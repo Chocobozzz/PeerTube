@@ -5,22 +5,25 @@ import 'mocha'
 import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
+  cleanupTests,
   createUser,
-  flushTests,
+  flushAndRunServer,
   getMyUserInformation,
   immutableAssign,
-  killallServers,
   makeGetRequest,
   makePostBodyRequest,
   makeUploadRequest,
-  runServer,
   ServerInfo,
   setAccessTokensToServers,
   updateCustomSubConfig,
   userLogin
-} from '../../utils'
-import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
-import { getMagnetURI, getYoutubeVideoUrl } from '../../utils/videos/video-imports'
+} from '../../../../shared/extra-utils'
+import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination
+} from '../../../../shared/extra-utils/requests/check-api-params'
+import { getMagnetURI, getYoutubeVideoUrl } from '../../../../shared/extra-utils/videos/video-imports'
 
 describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
@@ -34,15 +37,13 @@ describe('Test video imports API validator', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser(server.url, server.accessToken, username, password)
+    await createUser({ url: server.url, accessToken: server.accessToken, username: username, password: password })
     userAccessToken = await userLogin(server, { username, password })
 
     {
@@ -84,6 +85,7 @@ describe('Test video imports API validator', function () {
         language: 'pt',
         nsfw: false,
         commentsEnabled: true,
+        downloadEnabled: true,
         waitTranscoding: true,
         description: 'my super description',
         support: 'my super support text',
@@ -162,7 +164,7 @@ describe('Test video imports API validator', function () {
         username: 'fake',
         password: 'fake_password'
       }
-      await createUser(server.url, server.accessToken, user.username, user.password)
+      await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
 
       const accessTokenUser = await userLogin(server, user)
       const res = await getMyUserInformation(server.url, accessTokenUser)
@@ -309,11 +311,6 @@ describe('Test video imports API validator', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests([ server ])
   })
 })

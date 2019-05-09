@@ -1,14 +1,17 @@
-<div [ngClass]="{ 'margin-content': marginContent }">
+<div class="margin-content">
   <div class="videos-header">
     <div *ngIf="titlePage" class="title-page title-page-single">
-      {{ titlePage }}
+      <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
+        {{ titlePage }}
+      </div>
     </div>
+
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
       <my-peertube-checkbox
         (change)="toggleModerationDisplay()"
-        inputName="display-unlisted-private"  i18n-labelText labelText="Display unlisted and private videos"
+        inputName="display-unlisted-private" i18n-labelText labelText="Display unlisted and private videos"
       >
       </my-peertube-checkbox>
     </div>
@@ -16,13 +19,14 @@
 
   <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div
-    myInfiniteScroller
-    [pageHeight]="pageHeight" [firstLoadedPage]="firstLoadedPage"
-    (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
-    class="videos" #videosElement
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true"
+    class="videos"
   >
-    <div *ngFor="let videos of videoPages; trackBy: pageByVideoId" class="videos-page">
-      <my-video-miniature *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"></my-video-miniature>
-    </div>
+    <my-video-miniature
+      *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
+      [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
+      (videoBlacklisted)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
+    >
+    </my-video-miniature>
   </div>
 </div>

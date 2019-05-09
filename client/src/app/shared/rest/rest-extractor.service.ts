@@ -80,6 +80,7 @@ export class RestExtractor {
       errorMessage = errorMessage ? errorMessage : 'Unknown error.'
       console.error(`Backend returned code ${err.status}, errorMessage is: ${errorMessage}`)
     } else {
+      console.error(err)
       errorMessage = err
     }
 

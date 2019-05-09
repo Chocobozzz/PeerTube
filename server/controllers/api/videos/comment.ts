@@ -8,7 +8,8 @@ import { buildFormattedCommentTree, createVideoComment } from '../../../lib/vide
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
-  authenticate, optionalAuthenticate,
+  authenticate,
+  optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
@@ -21,11 +22,10 @@ import {
   removeVideoCommentValidator,
   videoCommentThreadsSortValidator
 } from '../../../middlewares/validators'
-import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { AccountModel } from '../../../models/account/account'
-import { UserModel } from '../../../models/account/user'
+import { Notifier } from '../../../lib/notifier'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -69,9 +69,9 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listVideoThreads (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const video = res.locals.video as VideoModel
-  const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+async function listVideoThreads (req: express.Request, res: express.Response) {
+  const video = res.locals.video
+  const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   let resultList: ResultList<VideoCommentModel>
 
@@ -87,9 +87,9 @@ async function listVideoThreads (req: express.Request, res: express.Response, ne
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listVideoThreadComments (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const video = res.locals.video as VideoModel
-  const user: UserModel = res.locals.oauth ? res.locals.oauth.token.User : undefined
+async function listVideoThreadComments (req: express.Request, res: express.Response) {
+  const video = res.locals.video
+  const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   let resultList: ResultList<VideoCommentModel>
 
@@ -109,7 +109,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
   const videoCommentInfo: VideoCommentCreate = req.body
 
   const comment = await sequelizeTypescript.transaction(async t => {
-    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+    const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     return createVideoComment({
       text: videoCommentInfo.text,
@@ -119,6 +119,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
     }, t)
   })
 
+  Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({
@@ -130,7 +131,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
   const videoCommentInfo: VideoCommentCreate = req.body
 
   const comment = await sequelizeTypescript.transaction(async t => {
-    const account = await AccountModel.load((res.locals.oauth.token.User as UserModel).Account.id, t)
+    const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     return createVideoComment({
       text: videoCommentInfo.text,
@@ -140,13 +141,14 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
     }, t)
   })
 
+  Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
   return res.json({ comment: comment.toFormattedJSON() }).end()
 }
 
 async function removeVideoComment (req: express.Request, res: express.Response) {
-  const videoCommentInstance: VideoCommentModel = res.locals.videoComment
+  const videoCommentInstance = res.locals.videoComment
 
   await sequelizeTypescript.transaction(async t => {
     await videoCommentInstance.destroy({ transaction: t })

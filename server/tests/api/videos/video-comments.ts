@@ -3,24 +3,22 @@
 import * as chai from 'chai'
 import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { testImage } from '../../utils'
+import { cleanupTests, testImage } from '../../../../shared/extra-utils'
 import {
   dateIsValid,
-  flushTests,
-  killallServers,
-  runServer,
+  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
   updateMyAvatar,
   uploadVideo
-} from '../../utils/index'
+} from '../../../../shared/extra-utils/index'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
   deleteVideoComment,
   getVideoCommentThreads,
   getVideoThreadComments
-} from '../../utils/videos/video-comments'
+} from '../../../../shared/extra-utils/videos/video-comments'
 
 const expect = chai.expect
 
@@ -34,9 +32,7 @@ describe('Test video comments', function () {
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -202,6 +198,6 @@ describe('Test video comments', function () {
   })
 
   after(async function () {
-    killallServers([ server ])
+    await cleanupTests([ server ])
   })
 })

@@ -1,7 +1,7 @@
 import { truncate } from 'lodash'
-import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers'
+import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers/constants'
 import { logger } from './logger'
-import { generateVideoTmpPath } from './utils'
+import { generateVideoImportTmpPath } from './utils'
 import { join } from 'path'
 import { root } from './core-utils'
 import { ensureDir, writeFile, remove } from 'fs-extra'
@@ -16,6 +16,7 @@ export type YoutubeDLInfo = {
   nsfw?: boolean
   tags?: string[]
   thumbnailUrl?: string
+  originallyPublishedAt?: Date
 }
 
 const processOptions = {
@@ -24,10 +25,10 @@ const processOptions = {
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>(async (res, rej) => {
-    const options = opts || [ '-j', '--flat-playlist' ]
+    const args = opts || [ '-j', '--flat-playlist' ]
 
     const youtubeDL = await safeGetYoutubeDL()
-    youtubeDL.getInfo(url, options, (err, info) => {
+    youtubeDL.getInfo(url, args, processOptions, (err, info) => {
       if (err) return rej(err)
       if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
 
@@ -40,12 +41,17 @@ function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo>
 }
 
 function downloadYoutubeDLVideo (url: string, timeout: number) {
-  const path = generateVideoTmpPath(url)
+  const path = generateVideoImportTmpPath(url)
   let timer
 
   logger.info('Importing youtubeDL video %s', url)
 
   const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
+
+  if (process.env.FFMPEG_PATH) {
+    options.push('--ffmpeg-location')
+    options.push(process.env.FFMPEG_PATH)
+  }
 
   return new Promise<string>(async (res, rej) => {
     const youtubeDL = await safeGetYoutubeDL()
@@ -142,13 +148,33 @@ async function safeGetYoutubeDL () {
   return youtubeDL
 }
 
+function buildOriginallyPublishedAt (obj: any) {
+  let originallyPublishedAt: Date = null
+
+  const uploadDateMatcher = /^(\d{4})(\d{2})(\d{2})$/.exec(obj.upload_date)
+  if (uploadDateMatcher) {
+    originallyPublishedAt = new Date()
+    originallyPublishedAt.setHours(0, 0, 0, 0)
+
+    const year = parseInt(uploadDateMatcher[1], 10)
+    // Month starts from 0
+    const month = parseInt(uploadDateMatcher[2], 10) - 1
+    const day = parseInt(uploadDateMatcher[3], 10)
+
+    originallyPublishedAt.setFullYear(year, month, day)
+  }
+
+  return originallyPublishedAt
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   updateYoutubeDLBinary,
   downloadYoutubeDLVideo,
   getYoutubeDLInfo,
-  safeGetYoutubeDL
+  safeGetYoutubeDL,
+  buildOriginallyPublishedAt
 }
 
 // ---------------------------------------------------------------------------
@@ -180,7 +206,8 @@ function buildVideoInfo (obj: any) {
     licence: getLicence(obj.license),
     nsfw: isNSFW(obj),
     tags: getTags(obj.tags),
-    thumbnailUrl: obj.thumbnail || undefined
+    thumbnailUrl: obj.thumbnail || undefined,
+    originallyPublishedAt: buildOriginallyPublishedAt(obj)
   }
 }
 

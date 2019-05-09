@@ -1,4 +1,4 @@
-import { CONSTRAINTS_FIELDS, VIDEO_CAPTIONS_MIMETYPE_EXT, VIDEO_LANGUAGES } from '../../initializers'
+import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
 import { Response } from 'express'
 import { VideoModel } from '../../models/video/video'
@@ -8,7 +8,7 @@ function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_LANGUAGES[ value ] !== undefined
 }
 
-const videoCaptionTypes = Object.keys(VIDEO_CAPTIONS_MIMETYPE_EXT)
+const videoCaptionTypes = Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
                                 .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream ><
                                 .map(m => `(${m})`)
 const videoCaptionTypesRegex = videoCaptionTypes.join('|')
@@ -16,7 +16,7 @@ function isVideoCaptionFile (files: { [ fieldname: string ]: Express.Multer.File
   return isFileValid(files, videoCaptionTypesRegex, field, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)
 }
 
-async function isVideoCaptionExist (video: VideoModel, language: string, res: Response) {
+async function doesVideoCaptionExist (video: VideoModel, language: string, res: Response) {
   const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
 
   if (!videoCaption) {
@@ -36,5 +36,5 @@ async function isVideoCaptionExist (video: VideoModel, language: string, res: Re
 export {
   isVideoCaptionFile,
   isVideoCaptionLanguageValid,
-  isVideoCaptionExist
+  doesVideoCaptionExist
 }

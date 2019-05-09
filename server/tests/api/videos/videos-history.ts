@@ -3,17 +3,23 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  flushTests,
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
   getVideosListWithToken,
   getVideoWithToken,
-  killallServers, makePutBodyRequest,
-  runServer, searchVideoWithToken,
+  killallServers,
+  reRunServer,
+  searchVideoWithToken,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo
-} from '../../utils'
+  updateMyUser,
+  uploadVideo,
+  userLogin,
+  wait
+} from '../../../../shared/extra-utils'
 import { Video, VideoDetails } from '../../../../shared/models/videos'
-import { userWatchVideo } from '../../utils/videos/video-history'
+import { listMyVideosHistory, removeMyVideosHistory, userWatchVideo } from '../../../../shared/extra-utils/videos/video-history'
 
 const expect = chai.expect
 
@@ -22,13 +28,13 @@ describe('Test videos history', function () {
   let video1UUID: string
   let video2UUID: string
   let video3UUID: string
+  let video3WatchedDate: Date
+  let userAccessToken: string
 
   before(async function () {
     this.timeout(30000)
 
-    await flushTests()
-
-    server = await runServer(1)
+    server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
 
@@ -46,6 +52,13 @@ describe('Test videos history', function () {
       const res = await uploadVideo(server.url, server.accessToken, { name: 'video 3' })
       video3UUID = res.body.video.uuid
     }
+
+    const user = {
+      username: 'user_1',
+      password: 'super password'
+    }
+    await createUser({ url: server.url, accessToken: server.accessToken, username: user.username, password: user.password })
+    userAccessToken = await userLogin(server, user)
   })
 
   it('Should get videos, without watching history', async function () {
@@ -62,8 +75,8 @@ describe('Test videos history', function () {
   })
 
   it('Should watch the first and second video', async function () {
-    await userWatchVideo(server.url, server.accessToken, video1UUID, 3)
     await userWatchVideo(server.url, server.accessToken, video2UUID, 8)
+    await userWatchVideo(server.url, server.accessToken, video1UUID, 3)
   })
 
   it('Should return the correct history when listing, searching and getting videos', async function () {
@@ -117,12 +130,98 @@ describe('Test videos history', function () {
     }
   })
 
-  after(async function () {
+  it('Should have these videos when listing my history', async function () {
+    video3WatchedDate = new Date()
+    await userWatchVideo(server.url, server.accessToken, video3UUID, 2)
+
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+
+    expect(res.body.total).to.equal(3)
+
+    const videos: Video[] = res.body.data
+    expect(videos[0].name).to.equal('video 3')
+    expect(videos[1].name).to.equal('video 1')
+    expect(videos[2].name).to.equal('video 2')
+  })
+
+  it('Should not have videos history on another user', async function () {
+    const res = await listMyVideosHistory(server.url, userAccessToken)
+
+    expect(res.body.total).to.equal(0)
+    expect(res.body.data).to.have.lengthOf(0)
+  })
+
+  it('Should clear my history', async function () {
+    await removeMyVideosHistory(server.url, server.accessToken, video3WatchedDate.toISOString())
+  })
+
+  it('Should have my history cleared', async function () {
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+
+    expect(res.body.total).to.equal(1)
+
+    const videos: Video[] = res.body.data
+    expect(videos[0].name).to.equal('video 3')
+  })
+
+  it('Should disable videos history', async function () {
+    await updateMyUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      videosHistoryEnabled: false
+    })
+
+    await userWatchVideo(server.url, server.accessToken, video2UUID, 8, 409)
+  })
+
+  it('Should re-enable videos history', async function () {
+    await updateMyUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      videosHistoryEnabled: true
+    })
+
+    await userWatchVideo(server.url, server.accessToken, video1UUID, 8)
+
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+
+    expect(res.body.total).to.equal(2)
+
+    const videos: Video[] = res.body.data
+    expect(videos[0].name).to.equal('video 1')
+    expect(videos[1].name).to.equal('video 3')
+  })
+
+  it('Should not clean old history', async function () {
+    this.timeout(50000)
+
     killallServers([ server ])
 
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await reRunServer(server, { history: { videos: { max_age: '10 days' } } })
+
+    await wait(6000)
+
+    // Should still have history
+
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+
+    expect(res.body.total).to.equal(2)
+  })
+
+  it('Should clean old history', async function () {
+    this.timeout(50000)
+
+    killallServers([ server ])
+
+    await reRunServer(server, { history: { videos: { max_age: '5 seconds' } } })
+
+    await wait(6000)
+
+    const res = await listMyVideosHistory(server.url, server.accessToken)
+    expect(res.body.total).to.equal(0)
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

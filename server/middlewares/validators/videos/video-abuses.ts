@@ -2,11 +2,11 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param } from 'express-validator/check'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
-import { isVideoExist } from '../../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import {
-  isVideoAbuseExist,
+  doesVideoAbuseExist,
   isVideoAbuseModerationCommentValid,
   isVideoAbuseReasonValid,
   isVideoAbuseStateValid
@@ -20,7 +20,7 @@ const videoAbuseReportValidator = [
     logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
 
     return next()
   }
@@ -34,8 +34,8 @@ const videoAbuseGetValidator = [
     logger.debug('Checking videoAbuseGetValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
-    if (!await isVideoAbuseExist(req.params.id, res.locals.video.id, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoAbuseExist(req.params.id, res.locals.video.id, res)) return
 
     return next()
   }
@@ -55,8 +55,8 @@ const videoAbuseUpdateValidator = [
     logger.debug('Checking videoAbuseUpdateValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isVideoExist(req.params.videoId, res)) return
-    if (!await isVideoAbuseExist(req.params.id, res.locals.video.id, res)) return
+    if (!await doesVideoExist(req.params.videoId, res)) return
+    if (!await doesVideoAbuseExist(req.params.id, res.locals.video.id, res)) return
 
     return next()
   }

@@ -1,18 +1,16 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
-import { NotificationsService } from 'angular2-notifications'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { UserBanModalComponent } from '@app/shared/moderation/user-ban-modal.component'
 import { UserService } from '@app/shared/users'
-import { AuthService, ConfirmService } from '@app/core'
+import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { User, UserRight } from '../../../../../shared/models/users'
 import { Account } from '@app/shared/account/account.model'
 import { BlocklistService } from '@app/shared/blocklist'
 
 @Component({
   selector: 'my-user-moderation-dropdown',
-  templateUrl: './user-moderation-dropdown.component.html',
-  styleUrls: [ './user-moderation-dropdown.component.scss' ]
+  templateUrl: './user-moderation-dropdown.component.html'
 })
 export class UserModerationDropdownComponent implements OnChanges {
   @ViewChild('userBanModal') userBanModal: UserBanModalComponent
@@ -26,16 +24,21 @@ export class UserModerationDropdownComponent implements OnChanges {
   @Output() userChanged = new EventEmitter()
   @Output() userDeleted = new EventEmitter()
 
-  userActions: DropdownAction<{ user: User, account: Account }>[] = []
+  userActions: DropdownAction<{ user: User, account: Account }>[][] = []
 
   constructor (
     private authService: AuthService,
-    private notificationsService: NotificationsService,
+    private notifier: Notifier,
     private confirmService: ConfirmService,
+    private serverService: ServerService,
     private userService: UserService,
     private blocklistService: BlocklistService,
     private i18n: I18n
   ) { }
+
+  get requiresEmailVerification () {
+    return this.serverService.getConfig().signup.requiresEmailVerification
+  }
 
   ngOnChanges () {
     this.buildActions()
@@ -43,7 +46,7 @@ export class UserModerationDropdownComponent implements OnChanges {
 
   openBanUserModal (user: User) {
     if (user.username === 'root') {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot ban root.'))
+      this.notifier.error(this.i18n('You cannot ban root.'))
       return
     }
 
@@ -62,21 +65,18 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.userService.unbanUsers(user)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('User {{username}} unbanned.', { username: user.username })
-            )
+            this.notifier.success(this.i18n('User {{username}} unbanned.', { username: user.username }))
 
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
   async removeUser (user: User) {
     if (user.username === 'root') {
-      this.notificationsService.error(this.i18n('Error'), this.i18n('You cannot delete root.'))
+      this.notifier.error(this.i18n('You cannot delete root.'))
       return
     }
 
@@ -86,14 +86,23 @@ export class UserModerationDropdownComponent implements OnChanges {
 
     this.userService.removeUser(user).subscribe(
       () => {
-        this.notificationsService.success(
-          this.i18n('Success'),
-          this.i18n('User {{username}} deleted.', { username: user.username })
-        )
+        this.notifier.success(this.i18n('User {{username}} deleted.', { username: user.username }))
         this.userDeleted.emit()
       },
 
-      err => this.notificationsService.error(this.i18n('Error'), err.message)
+      err => this.notifier.error(err.message)
+    )
+  }
+
+  setEmailAsVerified (user: User) {
+    this.userService.updateUser(user.id, { emailVerified: true }).subscribe(
+      () => {
+        this.notifier.success(this.i18n('User {{username}} email set as verified', { username: user.username }))
+
+        this.userChanged.emit()
+      },
+
+      err => this.notifier.error(err.message)
     )
   }
 
@@ -101,16 +110,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByUser(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} muted.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} muted.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByUser = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -118,16 +124,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockAccountByUser(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} unmuted.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} unmuted.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByUser = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -135,16 +138,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockServerByUser(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} muted.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} muted.', { host }))
 
             this.account.mutedServerByUser = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -152,16 +152,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockServerByUser(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} unmuted.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} unmuted.', { host }))
 
             this.account.mutedServerByUser = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -169,16 +166,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByInstance(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByInstance = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -186,16 +180,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockAccountByInstance(account)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Account {{nameWithHost}} unmuted by the instance.', { nameWithHost: account.nameWithHost })
-            )
+            this.notifier.success(this.i18n('Account {{nameWithHost}} unmuted by the instance.', { nameWithHost: account.nameWithHost }))
 
             this.account.mutedByInstance = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -203,16 +194,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockServerByInstance(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} muted by the instance.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} muted by the instance.', { host }))
 
             this.account.mutedServerByInstance = true
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -220,16 +208,13 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockServerByInstance(host)
         .subscribe(
           () => {
-            this.notificationsService.success(
-              this.i18n('Success'),
-              this.i18n('Instance {{host}} unmuted by the instance.', { host })
-            )
+            this.notifier.success(this.i18n('Instance {{host}} unmuted by the instance.', { host }))
 
             this.account.mutedServerByInstance = false
             this.userChanged.emit()
           },
 
-          err => this.notificationsService.error(this.i18n('Error'), err.message)
+          err => this.notifier.error(err.message)
         )
   }
 
@@ -246,7 +231,7 @@ export class UserModerationDropdownComponent implements OnChanges {
       if (this.user && authUser.id === this.user.id) return
 
       if (this.user && authUser.hasRight(UserRight.MANAGE_USERS)) {
-        this.userActions = this.userActions.concat([
+        this.userActions.push([
           {
             label: this.i18n('Edit'),
             linkBuilder: ({ user }) => this.getRouterUserEditLink(user)
@@ -257,13 +242,18 @@ export class UserModerationDropdownComponent implements OnChanges {
           },
           {
             label: this.i18n('Ban'),
-            handler: ({ user }: { user: User }) => this.openBanUserModal(user),
-            isDisplayed: ({ user }: { user: User }) => !user.blocked
+            handler: ({ user }) => this.openBanUserModal(user),
+            isDisplayed: ({ user }) => !user.blocked
           },
           {
             label: this.i18n('Unban'),
-            handler: ({ user }: { user: User }) => this.unbanUser(user),
-            isDisplayed: ({ user }: { user: User }) => user.blocked
+            handler: ({ user }) => this.unbanUser(user),
+            isDisplayed: ({ user }) => user.blocked
+          },
+          {
+            label: this.i18n('Set Email as Verified'),
+            handler: ({ user }) => this.setEmailAsVerified(user),
+            isDisplayed: ({ user }) => this.requiresEmailVerification && !user.blocked && user.emailVerified === false
           }
         ])
       }
@@ -271,59 +261,65 @@ export class UserModerationDropdownComponent implements OnChanges {
       // Actions on accounts/servers
       if (this.account) {
         // User actions
-        this.userActions = this.userActions.concat([
+        this.userActions.push([
           {
             label: this.i18n('Mute this account'),
-            isDisplayed: ({ account }: { account: Account }) => account.mutedByUser === false,
-            handler: ({ account }: { account: Account }) => this.blockAccountByUser(account)
+            isDisplayed: ({ account }) => account.mutedByUser === false,
+            handler: ({ account }) => this.blockAccountByUser(account)
           },
           {
             label: this.i18n('Unmute this account'),
-            isDisplayed: ({ account }: { account: Account }) => account.mutedByUser === true,
-            handler: ({ account }: { account: Account }) => this.unblockAccountByUser(account)
+            isDisplayed: ({ account }) => account.mutedByUser === true,
+            handler: ({ account }) => this.unblockAccountByUser(account)
           },
           {
             label: this.i18n('Mute the instance'),
-            isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === false,
-            handler: ({ account }: { account: Account }) => this.blockServerByUser(account.host)
+            isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
+            handler: ({ account }) => this.blockServerByUser(account.host)
           },
           {
             label: this.i18n('Unmute the instance'),
-            isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === true,
-            handler: ({ account }: { account: Account }) => this.unblockServerByUser(account.host)
+            isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
+            handler: ({ account }) => this.unblockServerByUser(account.host)
           }
         ])
 
+        let instanceActions: DropdownAction<{ user: User, account: Account }>[] = []
+
         // Instance actions
         if (authUser.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)) {
-          this.userActions = this.userActions.concat([
+          instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute this account by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => account.mutedByInstance === false,
-              handler: ({ account }: { account: Account }) => this.blockAccountByInstance(account)
+              isDisplayed: ({ account }) => account.mutedByInstance === false,
+              handler: ({ account }) => this.blockAccountByInstance(account)
             },
             {
               label: this.i18n('Unmute this account by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => account.mutedByInstance === true,
-              handler: ({ account }: { account: Account }) => this.unblockAccountByInstance(account)
+              isDisplayed: ({ account }) => account.mutedByInstance === true,
+              handler: ({ account }) => this.unblockAccountByInstance(account)
             }
           ])
         }
 
         // Instance actions
         if (authUser.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
-          this.userActions = this.userActions.concat([
+          instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute the instance by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === false,
-              handler: ({ account }: { account: Account }) => this.blockServerByInstance(account.host)
+              isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
+              handler: ({ account }) => this.blockServerByInstance(account.host)
             },
             {
               label: this.i18n('Unmute the instance by your instance'),
-              isDisplayed: ({ account }: { account: Account }) => !account.userId && account.mutedServerByInstance === true,
-              handler: ({ account }: { account: Account }) => this.unblockServerByInstance(account.host)
+              isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
+              handler: ({ account }) => this.unblockServerByInstance(account.host)
             }
           ])
+        }
+
+        if (instanceActions.length !== 0) {
+          this.userActions.push(instanceActions)
         }
       }
     }

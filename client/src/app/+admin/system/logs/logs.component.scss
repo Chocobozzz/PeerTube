@@ -1,0 +1,49 @@
+@import '_variables';
+@import '_mixins';
+
+.logs {
+  font-family: monospace;
+  font-size: 13px;
+  max-height: 500px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.03);
+  padding: 20px;
+
+  .log-row {
+    margin-top: 1px;
+    word-break: break-word;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.07);
+    }
+  }
+
+  .log-level {
+    font-weight: $font-semibold;
+    margin-right: 5px;
+  }
+
+  .warn {
+    color: $orange-color;
+  }
+
+  .error {
+    color: $red;
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+
+  .peertube-select-container {
+    @include peertube-select-container(150px);
+  }
+
+  my-button,
+  .peertube-select-container {
+    margin-left: 10px;
+  }
+}
+

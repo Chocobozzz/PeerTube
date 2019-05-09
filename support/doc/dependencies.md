@@ -28,13 +28,13 @@
      [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
   4. Install NodeJS 8.x (current LTS):
      [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-  5. Install yarn, and be sure to have a recent version (>= 1.5.1, the latest release):
+  5. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
      [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
   6. Run:
 
 ```
 $ sudo apt update
-$ sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git
+$ sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
 $ ffmpeg -version # Should be >= 3.x
 $ g++ -v # Should be >= 5.x
 ```

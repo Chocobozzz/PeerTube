@@ -1,7 +1,7 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Sequelize, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { Transaction } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -51,7 +51,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
       attributes: [ 'id' ],
       where: {
         updateAt: {
-          [Sequelize.Op.lte]: new Date()
+          [Op.lte]: new Date()
         }
       }
     }
@@ -64,7 +64,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
     const query = {
       where: {
         updateAt: {
-          [Sequelize.Op.lte]: new Date()
+          [Op.lte]: new Date()
         }
       },
       include: [
@@ -72,7 +72,9 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
           model: VideoModel.scope(
             [
               VideoScopeNames.WITH_FILES,
-              VideoScopeNames.WITH_ACCOUNT_DETAILS
+              VideoScopeNames.WITH_ACCOUNT_DETAILS,
+              VideoScopeNames.WITH_BLACKLISTED,
+              VideoScopeNames.WITH_THUMBNAILS
             ]
           )
         }

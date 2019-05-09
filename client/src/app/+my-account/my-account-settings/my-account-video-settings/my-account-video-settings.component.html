@@ -15,15 +15,19 @@
     </div>
   </div>
 
-  <my-peertube-checkbox
-    inputName="webTorrentEnabled" formControlName="webTorrentEnabled"
-    i18n-labelText labelText="Use WebTorrent to exchange parts of the video with others"
-  ></my-peertube-checkbox>
+  <div class="form-group">
+    <my-peertube-checkbox
+      inputName="webTorrentEnabled" formControlName="webTorrentEnabled"
+      i18n-labelText labelText="Use WebTorrent to exchange parts of the video with others"
+    ></my-peertube-checkbox>
+  </div>
 
-  <my-peertube-checkbox
-    inputName="autoPlayVideo" formControlName="autoPlayVideo"
-    i18n-labelText labelText="Automatically plays video"
-  ></my-peertube-checkbox>
+  <div class="form-group">
+    <my-peertube-checkbox
+      inputName="autoPlayVideo" formControlName="autoPlayVideo"
+      i18n-labelText labelText="Automatically plays video"
+    ></my-peertube-checkbox>
+  </div>
 
   <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
 </form>

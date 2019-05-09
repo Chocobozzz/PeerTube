@@ -1,7 +1,10 @@
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
 .section {
+  max-height: 500px; // 2 rows max
+  overflow: hidden;
   padding-top: 10px;
 
   &:first-child {
@@ -43,11 +46,18 @@
 }
 
 @media screen and (max-width: 500px) {
+  .margin-content {
+    margin: 0 !important;
+  }
+
   .section-title {
     font-size: 17px;
   }
 
   .section {
+    max-height: initial;
+    overflow: initial;
+
     @include video-miniature-small-screen;
   }
 }

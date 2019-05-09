@@ -1,23 +1,11 @@
-import {
-  AfterCreate,
-  AfterDestroy,
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  Is,
-  Model,
-  Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { isVideoBlacklistReasonValid } from '../../helpers/custom-validators/video-blacklist'
-import { Emailer } from '../../lib/emailer'
-import { VideoBlacklist } from '../../../shared/models/videos'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
+import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
+import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { FindOptions } from 'sequelize'
 
 @Table({
   tableName: 'videoBlacklist',
@@ -31,9 +19,19 @@ import { CONSTRAINTS_FIELDS } from '../../initializers'
 export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
 
   @AllowNull(true)
-  @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason'))
+  @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_BLACKLIST.REASON.max))
   reason: string
+
+  @AllowNull(false)
+  @Column
+  unfederated: boolean
+
+  @AllowNull(false)
+  @Default(null)
+  @Is('VideoBlacklistType', value => throwIfNotValid(value, isVideoBlacklistTypeValid, 'type'))
+  @Column
+  type: VideoBlacklistType
 
   @CreatedAt
   createdAt: Date
@@ -53,27 +51,27 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   })
   Video: VideoModel
 
-  @AfterCreate
-  static sendBlacklistEmailNotification (instance: VideoBlacklistModel) {
-    return Emailer.Instance.addVideoBlacklistReportJob(instance.videoId, instance.reason)
-  }
-
-  @AfterDestroy
-  static sendUnblacklistEmailNotification (instance: VideoBlacklistModel) {
-    return Emailer.Instance.addVideoUnblacklistReportJob(instance.videoId)
-  }
-
-  static listForApi (start: number, count: number, sort: SortType) {
-    const query = {
+  static listForApi (start: number, count: number, sort: SortType, type?: VideoBlacklistType) {
+    const query: FindOptions = {
       offset: start,
       limit: count,
       order: getSortOnModel(sort.sortModel, sort.sortValue),
       include: [
         {
           model: VideoModel,
-          required: true
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] }),
+              required: true
+            }
+          ]
         }
       ]
+    }
+
+    if (type) {
+      query.where = { type }
     }
 
     return VideoBlacklistModel.findAndCountAll(query)
@@ -96,25 +94,15 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   }
 
   toFormattedJSON (): VideoBlacklist {
-    const video = this.Video
-
     return {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       reason: this.reason,
+      unfederated: this.unfederated,
+      type: this.type,
 
-      video: {
-        id: video.id,
-        name: video.name,
-        uuid: video.uuid,
-        description: video.description,
-        duration: video.duration,
-        views: video.views,
-        likes: video.likes,
-        dislikes: video.dislikes,
-        nsfw: video.nsfw
-      }
+      video: this.Video.toFormattedJSON()
     }
   }
 }

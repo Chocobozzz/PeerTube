@@ -1,7 +1,7 @@
 import 'express-validator'
 import 'multer'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 const VIDEO_COMMENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_COMMENTS
 

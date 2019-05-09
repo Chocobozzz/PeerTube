@@ -1,59 +1,151 @@
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
 .video-miniature {
-  display: inline-block;
-  padding-right: 15px;
+  width: $video-miniature-width;
+  display: inline-flex;
+  flex-direction: column;
   margin-bottom: 30px;
-  height: 175px;
+  height: 195px;
   vertical-align: top;
 
-  .video-miniature-information {
-    width: 200px;
-    margin-top: 2px;
-    line-height: normal;
+  .video-bottom {
+    display: flex;
 
-    .video-miniature-name {
-      @include ellipsis-multiline(
-        $font-size: 1rem,
-        $line-height: 1,
-        $lines-to-show: 2
-      );
-      transition: color 0.2s;
-      font-size: 16px;
-      font-weight: $font-semibold;
-      color: var(--mainForegroundColor);
-      margin-top: 5px;
-      margin-bottom: 5px;
+    .video-miniature-information {
+      width: 200px;
+      line-height: normal;
 
-      &:hover {
-        text-decoration: none;
+      .video-miniature-name {
+        @include miniature-name;
       }
 
-      &.blur-filter {
-        filter: blur(3px);
-        padding-left: 4px;
+      .video-miniature-created-at-views {
+        display: block;
+        font-size: 13px;
+      }
+
+      .video-miniature-account,
+      .video-miniature-channel {
+        @include disable-default-a-behaviour;
+        @include ellipsis;
+
+        display: block;
+        font-size: 13px;
+        color: $grey-foreground-color;
+
+        &:hover {
+          color: $grey-foreground-hover-color;
+        }
+      }
+
+      .video-info-privacy,
+      .video-info-blacklisted .blacklisted-label,
+      .video-info-nsfw {
+        font-weight: $font-semibold;
+      }
+
+      .video-info-blacklisted {
+        color: red;
+
+        .blacklisted-reason::before {
+          content: ' - ';
+        }
+      }
+
+      .video-info-nsfw {
+        color: red;
       }
     }
 
-    .video-miniature-created-at-views {
-      display: block;
-      font-size: 13px;
+    .video-actions {
+      margin-top: 3px;
+      margin-right: 10px;
+
+      /deep/ .dropdown-root:not(.show) {
+        opacity: 0;
+      }
+
+      /deep/ .playlist-dropdown.show + my-action-dropdown .dropdown-root {
+        opacity: 1;
+      }
     }
 
-    .video-miniature-account,
-    .video-miniature-channel {
-      @include disable-default-a-behaviour;
+    &:hover .video-actions /deep/ .dropdown-root {
+      opacity: 1;
+    }
 
-      display: block;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-size: 13px;
-      color: #585858;
+    @media screen and (max-width: $small-view) {
+      .video-miniature-information .video-miniature-name {
+        margin-top: 0;
+      }
 
-      &:hover {
-        color: #303030;
+      .video-actions {
+        margin: 0;
+        top: -3px;
+
+        /deep/ .dropdown-root {
+          display: block !important;
+        }
+      }
+    }
+  }
+
+  &.display-as-row {
+    flex-direction: row;
+    margin-bottom: 0;
+    height: auto;
+    width: 100%;
+
+    my-video-thumbnail {
+      margin-right: 10px;
+    }
+
+    .video-bottom {
+      .video-miniature-information {
+        width: auto;
+        min-width: 500px;
+
+        .video-miniature-name {
+          @include ellipsis-multiline(1.3em, 2);
+
+          margin-top: 2px;
+          margin-bottom: 5px;
+        }
+
+        .video-miniature-created-at-views,
+        .video-miniature-account,
+        .video-miniature-channel {
+          font-size: 14px;
+          width: fit-content;
+        }
+
+        .video-info-privacy {
+          margin-top: 5px;
+        }
+
+        .video-info-blacklisted {
+          margin-top: 3px;
+        }
+      }
+
+      .video-actions {
+        margin: 0;
+        top: -3px;
+      }
+    }
+
+    @media screen and (max-width: $small-view) {
+      flex-direction: column;
+      height: auto;
+
+      my-video-thumbnail {
+        margin-right: 0;
+      }
+
+      .video-miniature-information {
+        min-width: initial;
       }
     }
   }

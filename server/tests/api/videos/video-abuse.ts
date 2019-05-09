@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { VideoAbuse, VideoAbuseState } from '../../../../shared/models/videos'
 import {
+  cleanupTests,
   deleteVideoAbuse,
   flushAndRunMultipleServers,
   getVideoAbusesList,
@@ -14,9 +15,9 @@ import {
   setAccessTokensToServers,
   updateVideoAbuse,
   uploadVideo
-} from '../../utils/index'
-import { doubleFollow } from '../../utils/server/follows'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/extra-utils/index'
+import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 
@@ -173,6 +174,6 @@ describe('Test video abuses', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

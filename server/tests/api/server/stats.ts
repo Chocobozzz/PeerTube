@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { ServerStats } from '../../../../shared/models/server/server-stats.model'
 import {
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -13,11 +14,11 @@ import {
   uploadVideo,
   viewVideo,
   wait
-} from '../../utils'
-import { flushTests, setAccessTokensToServers } from '../../utils/index'
-import { getStats } from '../../utils/server/stats'
-import { addVideoCommentThread } from '../../utils/videos/video-comments'
-import { waitJobs } from '../../utils/server/jobs'
+} from '../../../../shared/extra-utils'
+import { flushTests, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { getStats } from '../../../../shared/extra-utils/server/stats'
+import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
 const expect = chai.expect
 
@@ -26,8 +27,6 @@ describe('Test stats (excluding redundancy)', function () {
 
   before(async function () {
     this.timeout(60000)
-
-    await flushTests()
     servers = await flushAndRunMultipleServers(3)
     await setAccessTokensToServers(servers)
 
@@ -37,9 +36,9 @@ describe('Test stats (excluding redundancy)', function () {
       username: 'user1',
       password: 'super_password'
     }
-    await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
-    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, {})
+    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
     const videoUUID = resVideo.body.video.uuid
 
     await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'comment')
@@ -60,6 +59,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalLocalVideoComments).to.equal(1)
     expect(data.totalLocalVideos).to.equal(1)
     expect(data.totalLocalVideoViews).to.equal(1)
+    expect(data.totalLocalVideoFilesSize).to.equal(218910)
     expect(data.totalUsers).to.equal(2)
     expect(data.totalVideoComments).to.equal(1)
     expect(data.totalVideos).to.equal(1)
@@ -74,6 +74,7 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalLocalVideoComments).to.equal(0)
     expect(data.totalLocalVideos).to.equal(0)
     expect(data.totalLocalVideoViews).to.equal(0)
+    expect(data.totalLocalVideoFilesSize).to.equal(0)
     expect(data.totalUsers).to.equal(1)
     expect(data.totalVideoComments).to.equal(1)
     expect(data.totalVideos).to.equal(1)
@@ -96,6 +97,6 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    await cleanupTests(servers)
   })
 })

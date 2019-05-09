@@ -15,9 +15,9 @@ import {
   updateVideo,
   uploadVideo,
   wait,
-  searchVideo
-} from '../../utils'
-import { waitJobs } from '../../utils/server/jobs'
+  searchVideo, cleanupTests
+} from '../../../../shared/extra-utils'
+import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 
 const expect = chai.expect
@@ -29,8 +29,6 @@ describe('Test a ActivityPub videos search', function () {
 
   before(async function () {
     this.timeout(120000)
-
-    await flushTests()
 
     servers = await flushAndRunMultipleServers(2)
 
@@ -152,11 +150,6 @@ describe('Test a ActivityPub videos search', function () {
   })
 
   after(async function () {
-    killallServers(servers)
-
-    // Keep the logs if the test failed
-    if (this['ok']) {
-      await flushTests()
-    }
+    await cleanupTests(servers)
   })
 })

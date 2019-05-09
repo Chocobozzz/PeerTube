@@ -12,7 +12,7 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.9
-  postgresql: "9.4"
+  postgresql: "9.6"
 
 cache:
   directories:
@@ -45,15 +45,14 @@ matrix:
   - env: TEST_SUITE=api-4
   - env: TEST_SUITE=cli
   - env: TEST_SUITE=lint
-  - env: TEST_SUITE=jest
 
 script:
-  - travis_retry npm run travis -- "$TEST_SUITE"
+  - NODE_PENDING_JOB_WAIT=2000 travis_retry npm run travis -- "$TEST_SUITE"
 
 after_failure:
-  - cat test1/logs/all-logs.log
-  - cat test2/logs/all-logs.log
-  - cat test3/logs/all-logs.log
-  - cat test4/logs/all-logs.log
-  - cat test5/logs/all-logs.log
-  - cat test6/logs/all-logs.log
+  - cat test1/logs/peertube.log
+  - cat test2/logs/peertube.log
+  - cat test3/logs/peertube.log
+  - cat test4/logs/peertube.log
+  - cat test5/logs/peertube.log
+  - cat test6/logs/peertube.log

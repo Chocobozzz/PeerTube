@@ -1,6 +1,4 @@
-export interface EventHandler<T> {
-  (ev: T): void
-}
+export type EventHandler<T> = (ev: T) => void
 
 export type PlayerEventType =
   'pause' | 'play' |

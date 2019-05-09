@@ -14,6 +14,7 @@ export class VideoEdit implements VideoUpdate {
   tags: string[]
   nsfw: boolean
   commentsEnabled: boolean
+  downloadEnabled: boolean
   waitTranscoding: boolean
   channelId: number
   privacy: VideoPrivacy
@@ -25,8 +26,17 @@ export class VideoEdit implements VideoUpdate {
   uuid?: string
   id?: number
   scheduleUpdate?: VideoScheduleUpdate
+  originallyPublishedAt?: Date | string
 
-  constructor (video?: Video & { tags: string[], commentsEnabled: boolean, support: string, thumbnailUrl: string, previewUrl: string }) {
+  constructor (
+    video?: Video & {
+      tags: string[],
+      commentsEnabled: boolean,
+      downloadEnabled: boolean,
+      support: string,
+      thumbnailUrl: string,
+      previewUrl: string
+    }) {
     if (video) {
       this.id = video.id
       this.uuid = video.uuid
@@ -38,6 +48,7 @@ export class VideoEdit implements VideoUpdate {
       this.tags = video.tags
       this.nsfw = video.nsfw
       this.commentsEnabled = video.commentsEnabled
+      this.downloadEnabled = video.downloadEnabled
       this.waitTranscoding = video.waitTranscoding
       this.channelId = video.channel.id
       this.privacy = video.privacy.id
@@ -46,6 +57,7 @@ export class VideoEdit implements VideoUpdate {
       this.previewUrl = video.previewUrl
 
       this.scheduleUpdate = video.scheduledUpdate
+      this.originallyPublishedAt = video.originallyPublishedAt ? new Date(video.originallyPublishedAt) : null
     }
   }
 
@@ -67,6 +79,12 @@ export class VideoEdit implements VideoUpdate {
     } else {
       this.scheduleUpdate = null
     }
+
+    // Convert originallyPublishedAt to string so that function objectToFormData() works correctly
+    if (this.originallyPublishedAt) {
+      const originallyPublishedAt = new Date(values['originallyPublishedAt'])
+      this.originallyPublishedAt = originallyPublishedAt.toISOString()
+    }
   }
 
   toFormPatch () {
@@ -80,9 +98,11 @@ export class VideoEdit implements VideoUpdate {
       tags: this.tags,
       nsfw: this.nsfw,
       commentsEnabled: this.commentsEnabled,
+      downloadEnabled: this.downloadEnabled,
       waitTranscoding: this.waitTranscoding,
       channelId: this.channelId,
-      privacy: this.privacy
+      privacy: this.privacy,
+      originallyPublishedAt: this.originallyPublishedAt
     }
 
     // Special case if we scheduled an update

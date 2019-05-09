@@ -11,10 +11,12 @@ export interface VideoUpdate {
   privacy?: VideoPrivacy
   tags?: string[]
   commentsEnabled?: boolean
+  downloadEnabled?: boolean
   nsfw?: boolean
   waitTranscoding?: boolean
   channelId?: number
   thumbnailfile?: Blob
   previewfile?: Blob
   scheduleUpdate?: VideoScheduleUpdate
+  originallyPublishedAt?: Date | string
 }

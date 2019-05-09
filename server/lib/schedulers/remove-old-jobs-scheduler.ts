@@ -2,7 +2,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { JobQueue } from '../job-queue'
 import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers'
+import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 
 export class RemoveOldJobsScheduler extends AbstractScheduler {
 
@@ -14,10 +14,10 @@ export class RemoveOldJobsScheduler extends AbstractScheduler {
     super()
   }
 
-  async execute () {
-    if (!isTestInstance()) logger.info('Removing old jobs (scheduler).')
+  protected internalExecute () {
+    if (!isTestInstance()) logger.info('Removing old jobs in scheduler.')
 
-    JobQueue.Instance.removeOldJobs()
+    return JobQueue.Instance.removeOldJobs()
   }
 
   static get Instance () {

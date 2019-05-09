@@ -8,6 +8,16 @@ webserver:
   hostname: undefined
   port: 443
 
+rates_limit:
+  login:
+    # 15 attempts in 5 min
+    window: 5 minutes
+    max: 15
+  ask_send_email:
+    # 3 attempts in 5 min
+    window: 5 minutes
+    max: 3
+
 # Proxies to trust to get real client IP
 # If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
 # If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
@@ -32,8 +42,10 @@ redis:
 
 # From the project root directory
 storage:
+  tmp: '../data/tmp/'
   avatars: '../data/avatars/'
   videos: '../data/videos/'
+  redundancy: '../data/redundancy/'
   logs: '../data/logs/'
   previews: '../data/previews/'
   thumbnails: '../data/thumbnails/'
@@ -43,6 +55,10 @@ storage:
 
 log:
   level: 'info' # debug/info/warning/error
+
+tracker:
+  enabled: true
+  reject_too_many_announces: false # false because we have issues with traefik and ws ip/port forwarding
 
 admin:
   email: null

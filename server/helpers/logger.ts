@@ -2,11 +2,13 @@
 import { mkdirpSync } from 'fs-extra'
 import * as path from 'path'
 import * as winston from 'winston'
-import { CONFIG } from '../initializers'
+import { CONFIG } from '../initializers/config'
+import { omit } from 'lodash'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 // Create the directory if it does not exist
+// FIXME: use async
 mkdirpSync(CONFIG.STORAGE.LOG_DIR)
 
 function loggerReplacer (key: string, value: any) {
@@ -22,13 +24,10 @@ function loggerReplacer (key: string, value: any) {
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
-  const obj = {
-    meta: info.meta,
-    err: info.err,
-    sql: info.sql
-  }
+  const obj = omit(info, 'label', 'timestamp', 'level', 'message')
 
   let additionalInfos = JSON.stringify(obj, loggerReplacer, 2)
+
   if (additionalInfos === undefined || additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
@@ -57,7 +56,7 @@ const logger = winston.createLogger({
       filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
       handleExceptions: true,
       maxsize: 1024 * 1024 * 12,
-      maxFiles: 5,
+      maxFiles: 20,
       format: winston.format.combine(
         winston.format.timestamp(),
         jsonLoggerFormat
