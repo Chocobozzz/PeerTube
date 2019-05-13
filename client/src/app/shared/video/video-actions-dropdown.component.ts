@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction, DropdownButtonSize, DropdownDirection } from '@app/shared/buttons/action-dropdown.component'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
@@ -133,6 +133,10 @@ export class VideoActionsDropdownComponent implements AfterViewInit, OnChanges {
     return this.video.isUnblacklistableBy(this.user)
   }
 
+  isVideoDownloadable () {
+    return this.video && this.video instanceof VideoDetails && this.video.downloadEnabled
+  }
+
   /* Action handlers */
 
   async unblacklistVideo () {
@@ -202,7 +206,7 @@ export class VideoActionsDropdownComponent implements AfterViewInit, OnChanges {
         {
           label: this.i18n('Download'),
           handler: () => this.showDownloadModal(),
-          isDisplayed: () => this.displayOptions.download,
+          isDisplayed: () => this.displayOptions.download && this.isVideoDownloadable(),
           iconName: 'download'
         },
         {

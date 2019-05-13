@@ -11,6 +11,7 @@ import { VideoWatchComponent } from './video-watch.component'
 import { NgxQRCodeModule } from 'ngx-qrcode2'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
+import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { RecommendationsModule } from '@app/videos/recommendations/recommendatio
 
   declarations: [
     VideoWatchComponent,
+    VideoWatchPlaylistComponent,
 
     VideoShareComponent,
     VideoSupportComponent,

@@ -2,6 +2,13 @@
 @import '_mixins';
 @import '_miniature';
 
+my-video-thumbnail {
+  @include thumbnail-size-component(130px, 72px);
+
+  display: flex; // Avoids an issue with line-height that adds space below the element
+  margin-right: 10px;
+}
+
 .video {
   display: flex;
   align-items: center;
@@ -42,13 +49,6 @@
         position: relative;
         left: -2px;
       }
-    }
-
-    my-video-thumbnail {
-      @include thumbnail-size-component(130px, 72px);
-
-      display: flex; // Avoids an issue with line-height that adds space below the element
-      margin-right: 10px;
     }
 
     .video-info {
