@@ -461,6 +461,27 @@
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e3f47a553df834db218dd456c462c29f14ece449">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.host }}"/>)
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Jouw instantie heeft <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>een nieuwe volger<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.host }}"/>)
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> wacht op jouw toestemming<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">106</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566">
         <source>Save to</source>
         <target>Opslaan in</target>
@@ -634,11 +655,33 @@ Annuleer</target>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87">
+        <source>
+        Sensitive
+      </source>
+        <target>
+        Gevoelig
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</source>
         <target>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} andere {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582">
+        <source>
+      <x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/>
+    </source>
+        <target>
+      <x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/>
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4">
@@ -808,6 +851,13 @@ Abonnement opzeggen</target>
         <target>Je kan hiermee interactie hebben via elke ActivityPub-mogelijke fediverse instantie. Bijvoorbeeld met Mastodon of Pleroma kan je de huidige URL in de zoekbalk typen en er daar interactie mee hebben.</target>
         <context-group name="null">
           <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2350869d835dfca2643c32e0ef1f5e35dc64f64b">
+        <source>Default NSFW/sensitive videos policy (can be redefined by the users)</source>
+        <target>Standaardbeleid voor video's met gevoelige inhoud (kan geherdefinieerd worden door de gebruikers)</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
@@ -1859,6 +1909,15 @@ Ondertussen willen we verschillende ideeën testen die gerelateerd zijn aan dit 
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c9a1f510f6a1365c5bc5615661f8505792889347">
+        <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.&lt;br /&gt;&lt;br /&gt;
+              Moreover, the NSFW checkbox on video upload will be automatically checked by default.</source>
+        <target>Als u dit inschakelt, kunnen andere beheerders weten dat u voornamelijk gevoelige inhoud federeert.&lt;br /&gt;&lt;br /&gt;
+              Bovendien wordt het selectievakje NSFW bij het uploaden van video's standaard automatisch aangevinkt.</target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="554488d11165f38b27b8fe230aba8a2e30d57003">
         <source>Default client route</source>
         <target>Startpagina</target>
@@ -1997,6 +2056,34 @@ Ondertussen willen we verschillende ideeën testen die gerelateerd zijn aan dit 
         <target>Automatisch op zwarte lijst zetten</target>
         <context-group name="null">
           <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b78d9ff04931504a241a6c6fc394d677c7a0946c">
+        <source>New videos of users automatically blacklisted enabled</source>
+        <target>Nieuwe video's van gebruikers automatisch op de zwarte lijst ingeschakeld</target>
+        <context-group name="null">
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2c2af9710d6f6c3ab117c3a74f5aa9d40710f5b9">
+        <source>Instance followers</source>
+        <target>Instantie volgers</target>
+        <context-group name="null">
+          <context context-type="linenumber">186</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fda0a09374e5d89c25522b7c49cf8f440cfb9db8">
+        <source>Other instances can follow your instance</source>
+        <target>Andere instanties kunnen jouw instantie volgen</target>
+        <context-group name="null">
+          <context context-type="linenumber">194</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1df9e784f36295ebd75a87980873e5bce62e8cd9">
+        <source>Manually approve new instance follower</source>
+        <target>Handmatig nieuwe instantie volger goedkeuren</target>
+        <context-group name="null">
+          <context context-type="linenumber">201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
@@ -2178,6 +2265,41 @@ Cache
           <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d90e081933221a99c87e2ad9769afb6be6ff6fc4">
+        <source>
+                    Write directly CSS code. Example:&lt;br /&gt;&lt;br /&gt;
+                    &lt;pre&gt;
+  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+    color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+                    &lt;/pre&gt;
+
+                    Prepend with &lt;em&gt;#custom-css&lt;/em&gt; to override styles. Example:&lt;br /&gt;&lt;br /&gt;
+                    &lt;pre&gt;
+  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+    color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+                    &lt;/pre&gt;
+                  </source>
+        <target>
+                    Schrijf rechtstreeks CSS-code. Voorbeeld:&lt;br /&gt;&lt;br /&gt;
+                    &lt;pre&gt;
+  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+    color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+                    &lt;/pre&gt;
+
+                    Voorafzetten met &lt;em&gt;#custom-css&lt;/em&gt; om stijlen te overschrijven. Voorbeeld:&lt;br /&gt;&lt;br /&gt;
+                    &lt;pre&gt;
+  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+    color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+                    &lt;/pre&gt;
+                  </target>
+        <context-group name="null">
+          <context context-type="linenumber">364</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
         <source>Advanced configuration</source>
         <target>Geavanceerde configuratie</target>
@@ -2239,6 +2361,17 @@ Configuratie</target>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c">
+        <source>
+      System
+    </source>
+        <target>
+      Systeem
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
         <source>1 host (without "http://") per line</source>
         <target>1 host (zonder "http://") per lijn</target>
@@ -2277,6 +2410,13 @@ Het ziet ernaar uit dat je op een server bent zonder HTTPS. Op je webserver moet
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1d284acc5ec053b3cd87e4e9fcd7aaefec0c54fb">
+        <source>Follower handle</source>
+        <target>Volger naam</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
         <source>State</source>
         <target>Status</target>
@@ -2310,6 +2450,13 @@ Het ziet ernaar uit dat je op een server bent zonder HTTPS. Op je webserver moet
         <target>In behandeling</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6fc5e65900ae1415d3170d5d2842f0dcae1b6645">
+        <source>Accept</source>
+        <target>Accepteren</target>
+        <context-group name="null">
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2">
@@ -2414,6 +2561,13 @@ Het ziet ernaar uit dat je op een server bent zonder HTTPS. Op je webserver moet
         <target>Dagelijks videoquotum</target>
         <context-group name="null">
           <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="021ae82dcaddcb3e8d1c5e9645952b7c7e772fe1">
+        <source>Bypass video auto blacklist</source>
+        <target>Omzeil automatisch op zwarte lijst zetten van video </target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="85614ebfd89fe16873dfcf593a05f18b7468daac">
@@ -2650,6 +2804,20 @@ Deze opmerking kan alleen door jou en andere beheerders gezien worden.</target>
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6053443ad364f974301570cfadfa86ee0b43f1a9">
+        <source><x id="INTERPOLATION" equiv-text="{{ autoBlacklistVideosEnabled ? 'Manually blacklisted videos' : 'Blacklisted videos' }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ autoBlacklistVideosEnabled ? 'Handmatig op zwarte lijst gezette videos' : 'Op zwarte lijst gezette videos' }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6106bd52908f3f323ed1d6bdcd53230d55401d45">
+        <source>Auto-blacklisted videos</source>
+        <target>Video's die automatisch op de zwarte lijst zijn gezet</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
         <source>Muted accounts</source>
         <target>Gedempte accounts</target>
@@ -2711,6 +2879,41 @@ Deze opmerking kan alleen door jou en andere beheerders gezien worden.</target>
         <target>Voltooid op</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a">
+        <source>Refresh</source>
+        <target>Verversen</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
+        <source>System</source>
+        <target>Systeem</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="43f1cc191ebc0b8ce89f6916aa634f5a57158798">
+        <source>Jobs</source>
+        <target>Taken</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eb3d5aefff38a814b76da74371cbf02c0789a1ef">
+        <source>Logs</source>
+        <target>Logs</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dcfc990a822e11feb00eb91d9cf4d6ec0ed37dd0">
+        <source>Debug</source>
+        <target>Debug</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -2897,6 +3100,19 @@ Als je een video uploadt op dit kanaal, wordt deze tekst ingevuld in het "onders
         <target>Geschiedenis ingeschakeld</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="29c45bf49891748f930ef78b2e09857498b15131">
+        <source>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Delete history
+  </source>
+        <target>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Verwijder geschiedenis
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6b4dc5732f1f2211833d4b5e76deb5985f3749af">
@@ -3622,11 +3838,66 @@ Deze url is niet beveiligd (geen HTTPS), dus de ingebedde video werkt niet op HT
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="38e66e2d779d6d819cd7703ab73ab1bab75f8614">
+        <source>
+      The video is being imported, it will be available when the import is finished.
+    </source>
+        <target>
+      De video wordt geïmporteerd en is beschikbaar wanneer het importeren is voltooid.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2a8e8e4e5345201c07ba03a7fafe8b663230246">
+        <source>
+      The video is being transcoded, it may not work properly.
+    </source>
+        <target>
+      De video wordt getranscodeerd, deze werkt mogelijk niet correct.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a">
+        <source>
+      This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>.
+    </source>
+        <target>
+      Deze video wordt gepubliceerd op <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f52722430ddd59507177f005a357bfd335ffa7fd">
+        <source>
+      This playlist does not have videos.
+    </source>
+        <target>
+      Deze afspeellijst heeft geen video's.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bd7055d3e38beff538463e75d508d1c75c683710">
         <source>This video is blacklisted.</source>
         <target>Deze video staat op de zwarte lijst.</target>
         <context-group name="null">
           <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99686034581579c92a971f4eeebd2c072c812e2d">
+        <source>
+              Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
+            </source>
+        <target>
+              Gepubliceerd <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> keer bekeken
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3da5360f8314aa95973aa52629c9f635363c5a36">
@@ -4019,6 +4290,48 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="44e174dd30570e69f7cbf216477a01f956ce058b">
+        <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> accepted in instance followers</source>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> geaccepteerd in instantie volgers</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3d8e85e3f78a29db7959c495e74cc9af90838430">
+        <source>Do you really want to reject this follower?</source>
+        <target>Wil je echt deze volger afkeuren?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="20c3d69c0b67a74df0aa3920485016b2080578f6">
+        <source>Reject</source>
+        <target>Afkeuren</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7faa627518f768d9ea813d018c121608af5cbd79">
+        <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> rejected from instance followers</source>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> afgekeurd in instantie volgers</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="150d48f01a24d84c2bfffb2761419b9482074b61">
+        <source>Do you really want to delete this follower?</source>
+        <target>Wil je echt deze volger verwijderen?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53fb638407fb04c8b403fa392cc628a699e2c0bc">
+        <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> removed from instance followers</source>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> verwijderd van instantie volgers</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fc5731a28a99b25c62d43333ceebb250d60aff84">
         <source><x id="INTERPOLATION" equiv-text="{{host}}"/> is not valid</source>
         <target><x id="INTERPOLATION" equiv-text="{{host}}"/> is niet valide</target>
@@ -4166,6 +4479,20 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="36e4cdb23056253e5ef0c62b7d4bbeb3f759f611">
+        <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</source>
+        <target>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> verwijderd van de zwarte lijst.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3d651e314544825348900b3120e2cd5ff38c7fa5">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> videos removed from blacklist.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> videos verwijderd van de zwarte lijst.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0594812d4c50c2adbd1a892a3497c4e5c19e4b32">
         <source>yes</source>
         <target>ja</target>
@@ -4190,6 +4517,27 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
         <target>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> verwijdert van de zwarte lijst.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f">
+        <source>Last week</source>
+        <target>Laatste week</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="76f7f502edd5c7a38bbf2a262db38f90cc440441">
+        <source>Last day</source>
+        <target>Laatste dag</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9c152780247b402c410b861e521967dca7d9fd10">
+        <source>Last hour</source>
+        <target>Laatste uur</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4488,6 +4836,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f4bb57154f8b6b30f3272f340dc40e143af8607f">
+        <source>Your instance has a new follower</source>
+        <target>Jouw instantie heeft een nieuwe volger</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a0f04081717f5f00c0a2c723903c3a2d4c296401">
         <source>Preferences saved</source>
         <target>Voorkeuren opgeslagen</target>
@@ -4547,6 +4902,34 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
         <target>Videokanaal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> verwijdert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7e4d8688bd06d723e512ab063c0c4fdf4a9804d">
+        <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> created.</source>
+        <target>Afspeellijst <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> gemaakt.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3222e26b41803055328d893a73df485ec8a0328d">
+        <source>Playlist <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> updated.</source>
+        <target>Afspeellijst <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> bijgewerkt.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="082d28149b07cd5178cad0fdaf2cd8963833b783">
+        <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/>?</source>
+        <target>Wil je echt <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> verwijderen?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d6c948062aa2a0482332d4f7de420a39ac253a86">
+        <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> deleted.</source>
+        <target>Afspeellijst <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> verwijderd.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5953,6 +6336,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5">
+        <source>P2P enabled</source>
+        <target>P2P ingeschakeld</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
         <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
         <target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
@@ -6317,6 +6707,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0f829293d953936450158c2dd7b483d6b960ed2b">
+        <source>Save to playlist</source>
+        <target>Opslaan in afspeellijst</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
         <source>Blacklist</source>
         <target>Zet op de zwarte lijst</target>
@@ -6479,6 +6876,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8d850ce30ecdacf4755d85cce1fe44cb0d1fc38d">
+        <source> It is a remote comment, so the deletion will only be effective on your instance.</source>
+        <target> Het is een externe opmerking, dus de verwijdering zal alleen op jouw instantie effectief zijn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0e65067fdcc9d8725a41896cb1e229d1415a45f6">
         <source>Like the video</source>
         <target>Like de video</target>
@@ -6531,6 +6935,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df">
         <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
         <target>Trending voor de laatste <x id="INTERPOLATION" equiv-text="{{days}}"/> dagen</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509">
+        <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
+        <target>Trending-video's zijn de video's die het grootste aantal weergaven totaliseren tijdens de laatste <x id="INTERPOLATION" equiv-text="{{days}}"/> dagen</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
