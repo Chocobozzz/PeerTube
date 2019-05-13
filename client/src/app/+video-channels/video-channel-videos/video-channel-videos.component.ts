@@ -7,7 +7,7 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { tap } from 'rxjs/operators'
+import { first, tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -50,12 +50,13 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
     // Parent get the video channel for us
     this.videoChannelSub = this.videoChannelService.videoChannelLoaded
-      .subscribe(videoChannel => {
-        this.videoChannel = videoChannel
+                               .pipe(first())
+                               .subscribe(videoChannel => {
+                                 this.videoChannel = videoChannel
 
-        this.reloadVideos()
-        this.generateSyndicationList()
-      })
+                                 this.reloadVideos()
+                                 this.generateSyndicationList()
+                               })
   }
 
   ngOnDestroy () {

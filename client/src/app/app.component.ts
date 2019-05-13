@@ -125,8 +125,8 @@ export class AppComponent implements OnInit {
                         try {
                           resetScroll = false
 
-                          const previousUrl = new URL(window.location.origin + e1.url)
-                          const nextUrl = new URL(window.location.origin + e2.url)
+                          const previousUrl = new URL(window.location.origin + e1.urlAfterRedirects)
+                          const nextUrl = new URL(window.location.origin + e2.urlAfterRedirects)
 
                           if (previousUrl.pathname !== nextUrl.pathname) {
                             resetScroll = true
