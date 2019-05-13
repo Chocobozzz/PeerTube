@@ -35,8 +35,12 @@ async function run () {
 
   {
     console.log('\n\n# Design\n')
-    console.log('By [Olivier Massain](https://twitter.com/omassain)\n')
-    console.log('Icons from [Robbie Pearce](https://robbiepearce.com/softies/)')
+    console.log(' * [Olivier Massain](https://twitter.com/omassain)')
+
+    console.log('\n\n# Icons\n')
+    console.log(' * [Robbie Pearce](https://robbiepearce.com/softies/)')
+    console.log(' * [Fork-Awesome](https://github.com/ForkAwesome/Fork-Awesome)')
+    console.log(' * playlist add by Google')
   }
 }
 
