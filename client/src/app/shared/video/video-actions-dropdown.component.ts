@@ -28,7 +28,7 @@ export type VideoActionsDisplayType = {
   templateUrl: './video-actions-dropdown.component.html',
   styleUrls: [ './video-actions-dropdown.component.scss' ]
 })
-export class VideoActionsDropdownComponent implements AfterViewInit, OnChanges {
+export class VideoActionsDropdownComponent implements OnChanges {
   @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown
   @ViewChild('playlistAdd') playlistAdd: VideoAddToPlaylistComponent
 
@@ -76,13 +76,6 @@ export class VideoActionsDropdownComponent implements AfterViewInit, OnChanges {
 
   get user () {
     return this.authService.getUser()
-  }
-
-  ngAfterViewInit () {
-    // We rely on mouseenter to lazy load actions
-    if (this.screenService.isInTouchScreen()) {
-      this.loadDropdownInformation()
-    }
   }
 
   ngOnChanges () {
