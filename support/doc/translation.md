@@ -26,6 +26,8 @@ There are 4 files:
 
 ## Tips
 
+### Special tags
+
 You must not translate special tags like `<x id="INTERPOLATION" ... />`.
 
 For example: 
@@ -33,3 +35,16 @@ For example:
 
 should be in french 
 ```<x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> vues```
+
+
+### Singular/plural
+
+For singular/plural translations, you must translate values inside `{` and `}`.
+
+For example:
+
+```{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }```
+
+should be in french 
+
+```{VAR_PLURAL, plural, =0 {Aucune vidéos} =1 {1 vidéo} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> vidéos} }```
