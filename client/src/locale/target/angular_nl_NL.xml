@@ -334,7 +334,7 @@
         <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
 
         <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> heeft een opmerking over jouw video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> heeft een reactie op jouw video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
         <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
       </target>
         <context-group name="null">
@@ -2670,7 +2670,7 @@ Het ziet ernaar uit dat je op een server bent zonder HTTPS. Op je webserver moet
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f">
         <source>Moderation comment</source>
-        <target>Beheerdersopmerking</target>
+        <target>Beheer reactie</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -2680,7 +2680,8 @@ Het ziet ernaar uit dat je op een server bent zonder HTTPS. Op je webserver moet
         This comment can only be seen by you or the other moderators.
       </source>
         <target>
-Deze opmerking kan alleen door jou en andere beheerders gezien worden.</target>
+        Deze reactie kan alleen door jou of andere beheerders gezien worden.
+      </target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -2743,7 +2744,7 @@ Deze opmerking kan alleen door jou en andere beheerders gezien worden.</target>
       </trans-unit>
       <trans-unit id="018cbb63c7eda4b82d17dd9058cfaa0fd055c638">
         <source>Moderation comment:</source>
-        <target>Beheerderopmerking:</target>
+        <target>Beheer reactie:</target>
         <context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
@@ -4794,6 +4795,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="051dd48c3e6254785c6f366656aaee58f8b46c47">
+        <source>Video auto-blacklisted waiting review</source>
+        <target>Video die automatisch op de zwarte lijst is gezet wacht op beoordeling</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="abac8b7629cfcd85bff25770f83ea229f646f996">
         <source>One of your video is blacklisted/unblacklisted</source>
         <target>Eén van je video's is op de zwarte lijst gezet/verwijderd</target>
@@ -4888,6 +4896,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
       <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
         <target>Videokanaal <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> bijgewerkt.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e613272923d6f1976e3c73e8b857ac45c37b791">
+        <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</source>
+        <target>Wil je echt <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/> verwijderen? Alle videos die in dit kanaal zijn geüpload, worden verwijderd en u kunt geen ander kanaal met dezelfde naam maken (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -6315,6 +6330,13 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="55e17373c208e821dbb43ed4f6da7d0c5b800cab">
+        <source>Video uploads require manual validation by moderators</source>
+        <target>Video-uploads vereisen handmatige validatie door beheerders</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a0fdb831d4557925dbaa4f8aff7e5035f7506411">
         <source>Transcode your videos in multiple resolutions</source>
         <target>Transcodeer je videos in meerdere resoluties</target>
@@ -6876,9 +6898,16 @@ Als je een account op Mastodon of Pleroma hebt, kan je het direct openen vanuit 
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f18ffad7896788364e69a9ac6a376c84f54c58f7">
+        <source> The deletion will be sent to remote instances so they remove the comment too.</source>
+        <target> De verwijdering wordt naar externe instanties verzonden, zodat ook zij de reactie verwijderen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8d850ce30ecdacf4755d85cce1fe44cb0d1fc38d">
         <source> It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target> Het is een externe opmerking, dus de verwijdering zal alleen op jouw instantie effectief zijn.</target>
+        <target> Het is een externe reactie, dus de verwijdering zal alleen op jouw instantie effectief zijn.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
