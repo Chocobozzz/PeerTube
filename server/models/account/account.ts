@@ -3,7 +3,7 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt,
+  CreatedAt, DataType,
   Default,
   DefaultScope,
   ForeignKey,
@@ -26,7 +26,7 @@ import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
-import { WEBSERVER } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { Op, Transaction, WhereOptions } from 'sequelize'
 
 export enum ScopeNames {
@@ -91,7 +91,7 @@ export class AccountModel extends Model<AccountModel> {
   @AllowNull(true)
   @Default(null)
   @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description', true))
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max))
   description: string
 
   @CreatedAt
