@@ -28,10 +28,6 @@
       This video will be published on {{ video.scheduledUpdate.updateAt | date: 'full' }}.
     </div>
 
-    <div i18n class="col-md-12 alert alert-info" *ngIf="noPlaylistVideos">
-      This playlist does not have videos.
-    </div>
-
     <div class="col-md-12 alert alert-danger" *ngIf="video?.blacklisted">
       <div class="blacklisted-label" i18n>This video is blacklisted.</div>
       {{ video.blacklistedReason }}
@@ -219,6 +215,7 @@
       OK
     </div>
   </div>
+</div>
 
 <ng-template [ngIf]="video !== null">
   <my-video-support #videoSupportModal [video]="video"></my-video-support>
