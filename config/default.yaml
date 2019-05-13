@@ -187,7 +187,7 @@ transcoding:
   #     * Resolution change is smoother
   #     * Faster playback in particular with long videos
   #     * More stable playback (less bugs/infinite loading)
-  # /!\ Multiply videos storage by 2 /!\
+  # /!\ Multiplies videos storage by 2 /!\
   hls:
     enabled: false
 
