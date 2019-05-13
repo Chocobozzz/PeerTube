@@ -47,7 +47,9 @@ export class VideoWatchPlaylistComponent {
   }
 
   isPlaylistOwned () {
-    return this.playlist.isLocal === true && this.playlist.ownerAccount.name === this.auth.getUser().username
+    return this.playlist.isLocal === true &&
+      this.auth.isLoggedIn() &&
+      this.playlist.ownerAccount.name === this.auth.getUser().username
   }
 
   isUnlistedPlaylist () {

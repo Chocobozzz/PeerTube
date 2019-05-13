@@ -1,9 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { flatMap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
 import { Notifier } from '@app/core'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
@@ -28,7 +26,6 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
   private videoChannel: VideoChannel
 
   constructor (
-    private authService: AuthService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoPlaylistService: VideoPlaylistService,
@@ -57,8 +54,7 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
   }
 
   private loadVideoPlaylists () {
-    this.authService.userInformationLoaded
-        .pipe(flatMap(() => this.videoPlaylistService.listChannelPlaylists(this.videoChannel)))
+    this.videoPlaylistService.listChannelPlaylists(this.videoChannel)
         .subscribe(res => {
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
