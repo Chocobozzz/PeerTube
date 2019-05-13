@@ -778,6 +778,7 @@ function buildLanguages () {
 
   // Override Occitan label
   languages[ 'oc' ] = 'Occitan'
+  languages[ 'el' ] = 'Greek'
 
   return languages
 }
