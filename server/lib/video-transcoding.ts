@@ -13,11 +13,12 @@ import { CONFIG } from '../initializers/config'
 
 async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFileModel) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
+  const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
   const inputVideoFile = inputVideoFileArg ? inputVideoFileArg : video.getOriginalFile()
   const videoInputPath = join(videosDirectory, video.getVideoFilename(inputVideoFile))
-  const videoTranscodedPath = join(videosDirectory, video.id + '-transcoded' + newExtname)
+  const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
   const transcodeOptions = {
     inputPath: videoInputPath,
@@ -34,10 +35,11 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
     // Important to do this before getVideoFilename() to take in account the new file extension
     inputVideoFile.set('extname', newExtname)
 
+    const stats = await stat(videoTranscodedPath)
+    const fps = await getVideoFileFPS(videoTranscodedPath)
+
     const videoOutputPath = video.getVideoFilePath(inputVideoFile)
     await move(videoTranscodedPath, videoOutputPath)
-    const stats = await stat(videoOutputPath)
-    const fps = await getVideoFileFPS(videoOutputPath)
 
     inputVideoFile.set('size', stats.size)
     inputVideoFile.set('fps', fps)
@@ -54,6 +56,7 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
 
 async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoResolution, isPortrait: boolean) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
+  const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const extname = '.mp4'
 
   // We are sure it's x264 in mp4 because optimizeOriginalVideofile was already executed
@@ -66,18 +69,21 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
     videoId: video.id
   })
   const videoOutputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(newVideoFile))
+  const videoTranscodedPath = join(transcodeDirectory, video.getVideoFilename(newVideoFile))
 
   const transcodeOptions = {
     inputPath: videoInputPath,
-    outputPath: videoOutputPath,
+    outputPath: videoTranscodedPath,
     resolution,
     isPortraitMode: isPortrait
   }
 
   await transcode(transcodeOptions)
 
-  const stats = await stat(videoOutputPath)
-  const fps = await getVideoFileFPS(videoOutputPath)
+  const stats = await stat(videoTranscodedPath)
+  const fps = await getVideoFileFPS(videoTranscodedPath)
+
+  await move(videoTranscodedPath, videoOutputPath)
 
   newVideoFile.set('size', stats.size)
   newVideoFile.set('fps', fps)
