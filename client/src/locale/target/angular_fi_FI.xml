@@ -1186,8 +1186,10 @@
         <source>
       An HTTP request has to be sent on each tracker for each video to spy.
       If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-    </source>
-        <context-group name="null">
+    </source><target>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </target><context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>

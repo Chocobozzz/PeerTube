@@ -783,8 +783,10 @@ Leiratkozás</target>
         <source>
     <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
     <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </source>
-        <context-group name="null">
+  </source><target>
+    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+  </target><context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>

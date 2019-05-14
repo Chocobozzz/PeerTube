@@ -160,8 +160,9 @@
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
         <source>
     Unsubscribe
-  </source>
-        <context-group name="null">
+  </source><target>
+    Unsubscribe
+  </target><context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
