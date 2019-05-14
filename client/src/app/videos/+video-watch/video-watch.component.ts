@@ -423,7 +423,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }
     }
 
-    const mode: PlayerMode = urlOptions.playerMode === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
+    let mode: PlayerMode
+
+    if (urlOptions.playerMode) {
+      if (urlOptions.playerMode === 'p2p-media-loader') mode = 'p2p-media-loader'
+      else mode = 'webtorrent'
+    } else {
+      if (this.video.hasHlsPlaylist()) mode = 'p2p-media-loader'
+      else mode = 'webtorrent'
+    }
 
     if (mode === 'p2p-media-loader') {
       const hlsPlaylist = this.video.getHlsPlaylist()
