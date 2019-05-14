@@ -204,6 +204,9 @@ logs. You can set another password with:
 $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
 
+Alternatively you can set the environment variable `PT_INITIAL_ROOT_PASSWORD`,
+to your own administrator password, although it must be 6 characters or more.
+
 ### What now?
 
 Now your instance is up you can:

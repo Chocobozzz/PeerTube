@@ -128,6 +128,8 @@ async function createOAuthAdminIfNotExist () {
 
     // Our password is weak so do not validate it
     validatePassword = false
+  } else if (process.env.PT_INITIAL_ROOT_PASSWORD) {
+    password = process.env.PT_INITIAL_ROOT_PASSWORD
   } else {
     password = passwordGenerator(16, true)
   }
