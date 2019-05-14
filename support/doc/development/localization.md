@@ -31,3 +31,10 @@ Then, `iso639` files will be merged in `server` files (so we have only one JSON 
 ```
 $ zanata-cli pull
 ```
+
+## Support a new language
+
+ * Add it to [/shared/models/i18n/i18n.ts](/shared/models/i18n/i18n.ts)
+ * Add it to [/scripts/build/client.sh](/scripts/build/client.sh)
+ * Pull using zanata (that will execute hooks to correctly generate files of this new language)
+ * Build the application and check the new language correctly works
