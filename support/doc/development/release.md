@@ -13,6 +13,7 @@
  * Check Travis tests are green
  * Run E2E tests: `BROWSERSTACK_USER=my_user BROWSERSTACK_KEY=my_key npm run e2e`
  * Release: `GITHUB_TOKEN=my_token npm run release -- 1.x.x`
+ * Create a dedicated branch: `git checkout -b release/1.x.x && git push origin release/1.x.x`
  * Check the release is okay: https://github.com/Chocobozzz/PeerTube/releases
  * Update https://peertube3.cpy.re and check it works correctly
  * Update all other instances and check it works correctly
