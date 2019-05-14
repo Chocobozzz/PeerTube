@@ -4,7 +4,7 @@
 
 ## IMPORTANT NOTES
 
- * **nginx** Remove `text/html` from `grip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
+ * **nginx** Remove `text/html` from `gzip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
  * Add `streaming_playlists` directory in configuration file. **You should configure it in your production.yaml**
  * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110) 
  
