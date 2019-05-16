@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
-import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { audio, canDoQuickTranscode, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -18,10 +18,10 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
+  waitJobs,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
 import { join } from 'path'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
@@ -324,6 +324,15 @@ describe('Test video transcoding', function () {
   it('Should accept and transcode additional extensions', async function () {
     this.timeout(300000)
 
+    let tempFixturePath: string
+
+    {
+      tempFixturePath = await generateHighBitrateVideo()
+
+      const bitrate = await getVideoFileBitrate(tempFixturePath)
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
+    }
+
     for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
       const videoAttributes = {
         name: fixture,
@@ -347,6 +356,13 @@ describe('Test video transcoding', function () {
         expect(magnetUri).to.contain('.mp4')
       }
     }
+  })
+
+  it('Should correctly detect if quick transcode is possible', async function () {
+    this.timeout(10000)
+
+    expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'))).to.be.true
+    expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'))).to.be.false
   })
 
   after(async function () {
