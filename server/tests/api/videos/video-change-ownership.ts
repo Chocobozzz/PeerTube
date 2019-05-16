@@ -4,7 +4,8 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   acceptChangeOwnership,
-  changeVideoOwnership, cleanupTests,
+  changeVideoOwnership,
+  cleanupTests,
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
@@ -13,7 +14,6 @@ import {
   getVideo,
   getVideoChangeOwnershipList,
   getVideosList,
-  killallServers,
   refuseChangeOwnership,
   ServerInfo,
   setAccessTokensToServers,
@@ -203,8 +203,8 @@ describe('Test video change ownership - nominal', function () {
     }
   })
 
-  after(function () {
-    killallServers(servers)
+  after(async function () {
+    await cleanupTests(servers)
   })
 })
 

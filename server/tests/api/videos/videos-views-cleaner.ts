@@ -10,7 +10,7 @@ import {
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs, cleanupTests
+  uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs, cleanupTests, closeAllSequelize
 } from '../../../../shared/extra-utils'
 import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
@@ -58,22 +58,20 @@ describe('Test video views cleaner', function () {
 
     {
       for (const server of servers) {
-        const total = await countVideoViewsOf(server.serverNumber, videoIdServer1)
+        const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer1)
         expect(total).to.equal(2)
       }
     }
 
     {
       for (const server of servers) {
-        const total = await countVideoViewsOf(server.serverNumber, videoIdServer2)
+        const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer2)
         expect(total).to.equal(2)
       }
     }
   })
 
   it('Should clean old video views', async function () {
-    this.timeout(50000)
-
     this.timeout(50000)
 
     killallServers([ servers[0] ])
@@ -86,21 +84,23 @@ describe('Test video views cleaner', function () {
 
     {
       for (const server of servers) {
-        const total = await countVideoViewsOf(server.serverNumber, videoIdServer1)
+        const total = await countVideoViewsOf(server.internalServerNumber, videoIdServer1)
         expect(total).to.equal(2)
       }
     }
 
     {
-      const totalServer1 = await countVideoViewsOf(servers[0].serverNumber, videoIdServer2)
+      const totalServer1 = await countVideoViewsOf(servers[0].internalServerNumber, videoIdServer2)
       expect(totalServer1).to.equal(0)
 
-      const totalServer2 = await countVideoViewsOf(servers[1].serverNumber, videoIdServer2)
+      const totalServer2 = await countVideoViewsOf(servers[1].internalServerNumber, videoIdServer2)
       expect(totalServer2).to.equal(2)
     }
   })
 
   after(async function () {
+    await closeAllSequelize(servers)
+
     await cleanupTests(servers)
   })
 })

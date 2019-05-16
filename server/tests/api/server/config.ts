@@ -11,9 +11,9 @@ import {
   getAbout,
   getConfig,
   getCustomConfig,
-  killallServers,
+  killallServers, parallelTests,
   registerUser,
-  reRunServer,
+  reRunServer, ServerInfo,
   setAccessTokensToServers,
   updateCustomConfig
 } from '../../../../shared/extra-utils'
@@ -21,7 +21,7 @@ import { ServerConfig } from '../../../../shared/models'
 
 const expect = chai.expect
 
-function checkInitialConfig (data: CustomConfig) {
+function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
   expect(data.instance.shortDescription).to.equal(
     'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
@@ -45,7 +45,7 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.signup.limit).to.equal(4)
   expect(data.signup.requiresEmailVerification).to.be.false
 
-  expect(data.admin.email).to.equal('admin1@example.com')
+  expect(data.admin.email).to.equal('admin' + server.internalServerNumber + '@example.com')
   expect(data.contactForm.enabled).to.be.true
 
   expect(data.user.videoQuota).to.equal(5242880)
@@ -89,7 +89,11 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.signup.limit).to.equal(5)
   expect(data.signup.requiresEmailVerification).to.be.false
 
-  expect(data.admin.email).to.equal('superadmin1@example.com')
+  // We override admin email in parallel tests, so skip this exception
+  if (parallelTests() === false) {
+    expect(data.admin.email).to.equal('superadmin1@example.com')
+  }
+
   expect(data.contactForm.enabled).to.be.false
 
   expect(data.user.videoQuota).to.equal(5242881)
@@ -118,6 +122,7 @@ describe('Test config', function () {
 
   before(async function () {
     this.timeout(30000)
+
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
   })
@@ -160,7 +165,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body as CustomConfig
 
-    checkInitialConfig(data)
+    checkInitialConfig(server, data)
   })
 
   it('Should update the customized configuration', async function () {
@@ -297,7 +302,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
-    checkInitialConfig(data)
+    checkInitialConfig(server, data)
   })
 
   after(async function () {

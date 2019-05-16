@@ -252,10 +252,10 @@ function reorderVideosPlaylist (options: {
 
 async function checkPlaylistFilesWereRemoved (
   playlistUUID: string,
-  serverNumber: number,
+  internalServerNumber: number,
   directories = [ 'thumbnails' ]
 ) {
-  const testDirectory = 'test' + serverNumber
+  const testDirectory = 'test' + internalServerNumber
 
   for (const directory of directories) {
     const directoryPath = join(root(), testDirectory, directory)

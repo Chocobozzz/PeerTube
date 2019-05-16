@@ -246,7 +246,7 @@ async function checkTmpIsEmpty (server: ServerInfo) {
 }
 
 async function checkDirectoryIsEmpty (server: ServerInfo, directory: string) {
-  const testDirectory = 'test' + server.serverNumber
+  const testDirectory = 'test' + server.internalServerNumber
 
   const directoryPath = join(root(), testDirectory, directory)
 
@@ -284,7 +284,7 @@ function cleanupTests (servers: ServerInfo[]) {
 }
 
 async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
-  const logfile = join(root(), 'test' + server.serverNumber, 'logs/peertube.log')
+  const logfile = join(root(), 'test' + server.internalServerNumber, 'logs/peertube.log')
 
   while (true) {
     const buf = await readFile(logfile)

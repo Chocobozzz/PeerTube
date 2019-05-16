@@ -1,11 +1,12 @@
 import { QueryTypes, Sequelize } from 'sequelize'
+import { ServerInfo } from '../server/servers'
 
 let sequelizes: { [ id: number ]: Sequelize } = {}
 
-function getSequelize (serverNumber: number) {
-  if (sequelizes[serverNumber]) return sequelizes[serverNumber]
+function getSequelize (internalServerNumber: number) {
+  if (sequelizes[internalServerNumber]) return sequelizes[internalServerNumber]
 
-  const dbname = 'peertube_test' + serverNumber
+  const dbname = 'peertube_test' + internalServerNumber
   const username = 'peertube'
   const password = 'peertube'
   const host = 'localhost'
@@ -18,37 +19,37 @@ function getSequelize (serverNumber: number) {
     logging: false
   })
 
-  sequelizes[serverNumber] = seq
+  sequelizes[internalServerNumber] = seq
 
   return seq
 }
 
-function setActorField (serverNumber: number, to: string, field: string, value: string) {
-  const seq = getSequelize(serverNumber)
+function setActorField (internalServerNumber: number, to: string, field: string, value: string) {
+  const seq = getSequelize(internalServerNumber)
 
   const options = { type: QueryTypes.UPDATE }
 
   return seq.query(`UPDATE actor SET "${field}" = '${value}' WHERE url = '${to}'`, options)
 }
 
-function setVideoField (serverNumber: number, uuid: string, field: string, value: string) {
-  const seq = getSequelize(serverNumber)
+function setVideoField (internalServerNumber: number, uuid: string, field: string, value: string) {
+  const seq = getSequelize(internalServerNumber)
 
   const options = { type: QueryTypes.UPDATE }
 
   return seq.query(`UPDATE video SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
 }
 
-function setPlaylistField (serverNumber: number, uuid: string, field: string, value: string) {
-  const seq = getSequelize(serverNumber)
+function setPlaylistField (internalServerNumber: number, uuid: string, field: string, value: string) {
+  const seq = getSequelize(internalServerNumber)
 
   const options = { type: QueryTypes.UPDATE }
 
   return seq.query(`UPDATE "videoPlaylist" SET "${field}" = '${value}' WHERE uuid = '${uuid}'`, options)
 }
 
-async function countVideoViewsOf (serverNumber: number, uuid: string) {
-  const seq = getSequelize(serverNumber)
+async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
+  const seq = getSequelize(internalServerNumber)
 
   // tslint:disable
   const query = `SELECT SUM("videoView"."views") AS "total" FROM "videoView" INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
@@ -62,11 +63,11 @@ async function countVideoViewsOf (serverNumber: number, uuid: string) {
   return parseInt(total + '', 10)
 }
 
-async function closeAllSequelize (servers: any[]) {
-  for (let i = 1; i <= servers.length; i++) {
-    if (sequelizes[ i ]) {
-      await sequelizes[ i ].close()
-      delete sequelizes[ i ]
+async function closeAllSequelize (servers: ServerInfo[]) {
+  for (const server of servers) {
+    if (sequelizes[ server.internalServerNumber ]) {
+      await sequelizes[ server.internalServerNumber ].close()
+      delete sequelizes[ server.internalServerNumber ]
     }
   }
 }

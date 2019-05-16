@@ -316,7 +316,7 @@ describe('Test users', function () {
 
       const rootUser = users[ 1 ]
       expect(rootUser.username).to.equal('root')
-      expect(rootUser.email).to.equal('admin1@example.com')
+      expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
       userId = user.id
@@ -334,7 +334,7 @@ describe('Test users', function () {
 
       const user = users[ 0 ]
       expect(user.username).to.equal('root')
-      expect(user.email).to.equal('admin1@example.com')
+      expect(user.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.roleLabel).to.equal('Administrator')
       expect(user.nsfwPolicy).to.equal('display')
     })
@@ -379,7 +379,7 @@ describe('Test users', function () {
       expect(users.length).to.equal(2)
 
       expect(users[ 0 ].username).to.equal('root')
-      expect(users[ 0 ].email).to.equal('admin1@example.com')
+      expect(users[ 0 ].email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(users[ 0 ].nsfwPolicy).to.equal('display')
 
       expect(users[ 1 ].username).to.equal('user_1')

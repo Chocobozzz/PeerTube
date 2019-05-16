@@ -144,7 +144,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await addAccountToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:9002')
+        await addAccountToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
@@ -209,7 +209,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user2')
           expect(block.blockedAccount.name).to.equal('user2')
-          expect(block.blockedAccount.host).to.equal('localhost:9002')
+          expect(block.blockedAccount.host).to.equal('localhost:' + servers[1].port)
         }
 
         {
@@ -223,12 +223,12 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user1')
           expect(block.blockedAccount.name).to.equal('user1')
-          expect(block.blockedAccount.host).to.equal('localhost:9001')
+          expect(block.blockedAccount.host).to.equal('localhost:' + servers[0].port)
         }
       })
 
       it('Should unblock the remote account', async function () {
-        await removeAccountFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:9002')
+        await removeAccountFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should display its videos', async function () {
@@ -260,7 +260,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await addServerToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:9002')
+        await addServerToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
@@ -291,11 +291,11 @@ describe('Test blocklist', function () {
         const block = blocks[ 0 ]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
-        expect(block.blockedServer.host).to.equal('localhost:9002')
+        expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
       it('Should unblock the remote server', async function () {
-        await removeServerFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:9002')
+        await removeServerFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should display its videos', function () {
@@ -324,7 +324,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote account', async function () {
-        await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:9002')
+        await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
@@ -387,7 +387,7 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user2')
           expect(block.blockedAccount.name).to.equal('user2')
-          expect(block.blockedAccount.host).to.equal('localhost:9002')
+          expect(block.blockedAccount.host).to.equal('localhost:' + servers[1].port)
         }
 
         {
@@ -401,12 +401,12 @@ describe('Test blocklist', function () {
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user1')
           expect(block.blockedAccount.name).to.equal('user1')
-          expect(block.blockedAccount.host).to.equal('localhost:9001')
+          expect(block.blockedAccount.host).to.equal('localhost:' + servers[0].port)
         }
       })
 
       it('Should unblock the remote account', async function () {
-        await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:9002')
+        await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should display its videos', async function () {
@@ -446,7 +446,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a remote server', async function () {
-        await addServerToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:9002')
+        await addServerToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
@@ -478,11 +478,11 @@ describe('Test blocklist', function () {
         const block = blocks[ 0 ]
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
-        expect(block.blockedServer.host).to.equal('localhost:9002')
+        expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
       it('Should unblock the remote server', async function () {
-        await removeServerFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:9002')
+        await removeServerFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should list all videos', async function () {

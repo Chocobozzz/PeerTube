@@ -24,11 +24,12 @@ describe('Test contact form', function () {
   before(async function () {
     this.timeout(30000)
 
-    await MockSmtpServer.Instance.collectEmails(emails)
+    const port = await MockSmtpServer.Instance.collectEmails(emails)
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost'
+        hostname: 'localhost',
+        port
       }
     }
     server = await flushAndRunServer(1, overrideConfig)
@@ -53,7 +54,7 @@ describe('Test contact form', function () {
 
     expect(email['from'][0]['address']).equal('test-admin@localhost')
     expect(email['from'][0]['name']).equal('toto@example.com')
-    expect(email['to'][0]['address']).equal('admin1@example.com')
+    expect(email['to'][0]['address']).equal('admin' + server.internalServerNumber + '@example.com')
     expect(email['subject']).contains('Contact form')
     expect(email['text']).contains('my super message')
   })

@@ -37,7 +37,7 @@ describe('Test a single server', function () {
   let videoUUID = ''
   let videosListBase: any[] = null
 
-  const getCheckAttributes = {
+  const getCheckAttributes = () => ({
     name: 'my super name',
     category: 2,
     licence: 6,
@@ -47,7 +47,7 @@ describe('Test a single server', function () {
     support: 'my super support text',
     account: {
       name: 'root',
-      host: 'localhost:9001'
+      host: 'localhost:' + server.port
     },
     isLocal: true,
     duration: 5,
@@ -68,9 +68,9 @@ describe('Test a single server', function () {
         size: 218910
       }
     ]
-  }
+  })
 
-  const updateCheckAttributes = {
+  const updateCheckAttributes = () => ({
     name: 'my super video updated',
     category: 4,
     licence: 2,
@@ -80,7 +80,7 @@ describe('Test a single server', function () {
     support: 'my super support text updated',
     account: {
       name: 'root',
-      host: 'localhost:9001'
+      host: 'localhost:' + server.port
     },
     isLocal: true,
     tags: [ 'tagup1', 'tagup2' ],
@@ -101,7 +101,7 @@ describe('Test a single server', function () {
         size: 292677
       }
     ]
-  }
+  })
 
   before(async function () {
     this.timeout(30000)
@@ -182,7 +182,7 @@ describe('Test a single server', function () {
     expect(res.body.data.length).to.equal(1)
 
     const video = res.body.data[0]
-    await completeVideoCheck(server.url, video, getCheckAttributes)
+    await completeVideoCheck(server.url, video, getCheckAttributes())
   })
 
   it('Should get the video by UUID', async function () {
@@ -191,7 +191,7 @@ describe('Test a single server', function () {
     const res = await getVideo(server.url, videoUUID)
 
     const video = res.body
-    await completeVideoCheck(server.url, video, getCheckAttributes)
+    await completeVideoCheck(server.url, video, getCheckAttributes())
   })
 
   it('Should have the views updated', async function () {
@@ -376,7 +376,7 @@ describe('Test a single server', function () {
     const res = await getVideo(server.url, videoId)
     const video = res.body
 
-    await completeVideoCheck(server.url, video, updateCheckAttributes)
+    await completeVideoCheck(server.url, video, updateCheckAttributes())
   })
 
   it('Should update only the tags of a video', async function () {
@@ -388,7 +388,7 @@ describe('Test a single server', function () {
     const res = await getVideo(server.url, videoId)
     const video = res.body
 
-    await completeVideoCheck(server.url, video, Object.assign(updateCheckAttributes, attributes))
+    await completeVideoCheck(server.url, video, Object.assign(updateCheckAttributes(), attributes))
   })
 
   it('Should update only the description of a video', async function () {
@@ -400,7 +400,8 @@ describe('Test a single server', function () {
     const res = await getVideo(server.url, videoId)
     const video = res.body
 
-    await completeVideoCheck(server.url, video, Object.assign(updateCheckAttributes, attributes))
+    const expectedAttributes = Object.assign(updateCheckAttributes(), { tags: [ 'supertag', 'tag1', 'tag2' ] }, attributes)
+    await completeVideoCheck(server.url, video, expectedAttributes)
   })
 
   it('Should like a video', async function () {

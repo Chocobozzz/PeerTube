@@ -3,9 +3,9 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  acceptFollower, cleanupTests,
+  acceptFollower,
+  cleanupTests,
   flushAndRunMultipleServers,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   updateCustomSubConfig
@@ -14,8 +14,8 @@ import {
   follow,
   getFollowersListPaginationAndSort,
   getFollowingListPaginationAndSort,
-  removeFollower,
-  rejectFollower
+  rejectFollower,
+  removeFollower
 } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { ActorFollow } from '../../../../shared/models/actors'
@@ -29,8 +29,8 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
 
     const follow = res.body.data[0] as ActorFollow
     expect(follow.state).to.equal(state)
-    expect(follow.follower.url).to.equal('http://localhost:9001/accounts/peertube')
-    expect(follow.following.url).to.equal('http://localhost:9002/accounts/peertube')
+    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + '/accounts/peertube')
+    expect(follow.following.url).to.equal('http://localhost:' + servers[1].port + '/accounts/peertube')
   }
 
   {
@@ -39,8 +39,8 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
 
     const follow = res.body.data[0] as ActorFollow
     expect(follow.state).to.equal(state)
-    expect(follow.follower.url).to.equal('http://localhost:9001/accounts/peertube')
-    expect(follow.following.url).to.equal('http://localhost:9002/accounts/peertube')
+    expect(follow.follower.url).to.equal('http://localhost:' + servers[0].port + '/accounts/peertube')
+    expect(follow.following.url).to.equal('http://localhost:' + servers[1].port + '/accounts/peertube')
   }
 }
 
@@ -151,7 +151,7 @@ describe('Test follows moderation', function () {
   })
 
   it('Should accept a follower', async function () {
-    await acceptFollower(servers[1].url, servers[1].accessToken, 'peertube@localhost:9001')
+    await acceptFollower(servers[1].url, servers[1].accessToken, 'peertube@localhost:' + servers[0].port)
     await waitJobs(servers)
 
     await checkServer1And2HasFollowers(servers)
@@ -178,7 +178,7 @@ describe('Test follows moderation', function () {
       expect(res.body.total).to.equal(1)
     }
 
-    await rejectFollower(servers[2].url, servers[2].accessToken, 'peertube@localhost:9001')
+    await rejectFollower(servers[2].url, servers[2].accessToken, 'peertube@localhost:' + servers[0].port)
     await waitJobs(servers)
 
     await checkServer1And2HasFollowers(servers)

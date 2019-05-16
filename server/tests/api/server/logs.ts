@@ -45,7 +45,7 @@ describe('Test logs', function () {
   })
 
   it('Should get logs with an end date', async function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     await uploadVideo(server.url, server.accessToken, { name: 'video 3' })
     await waitJobs([ server ])

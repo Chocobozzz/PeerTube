@@ -568,8 +568,8 @@ async function completeVideoCheck (
     expect(file).not.to.be.undefined
 
     let extension = extname(attributes.fixture)
-    // Transcoding enabled on server 2, extension will always be .mp4
-    if (attributes.account.host === 'localhost:9002') extension = '.mp4'
+    // Transcoding enabled: extension will always be .mp4
+    if (attributes.files.length > 1) extension = '.mp4'
 
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)

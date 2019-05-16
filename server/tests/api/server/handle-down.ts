@@ -60,47 +60,49 @@ describe('Test handle downs', function () {
     privacy: VideoPrivacy.UNLISTED
   })
 
-  const checkAttributes = {
-    name: 'my super name for server 1',
-    category: 5,
-    licence: 4,
-    language: 'ja',
-    nsfw: true,
-    description: 'my super description for server 1',
-    support: 'my super support text for server 1',
-    account: {
-      name: 'root',
-      host: 'localhost:9001'
-    },
-    isLocal: false,
-    duration: 10,
-    tags: [ 'tag1p1', 'tag2p1' ],
-    privacy: VideoPrivacy.PUBLIC,
-    commentsEnabled: true,
-    downloadEnabled: true,
-    channel: {
-      name: 'root_channel',
-      displayName: 'Main root channel',
-      description: '',
-      isLocal: false
-    },
-    fixture: 'video_short1.webm',
-    files: [
-      {
-        resolution: 720,
-        size: 572456
-      }
-    ]
-  }
-
-  const unlistedCheckAttributes = immutableAssign(checkAttributes, {
-    privacy: VideoPrivacy.UNLISTED
-  })
+  let checkAttributes: any
+  let unlistedCheckAttributes: any
 
   before(async function () {
     this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(3)
+
+    checkAttributes = {
+      name: 'my super name for server 1',
+      category: 5,
+      licence: 4,
+      language: 'ja',
+      nsfw: true,
+      description: 'my super description for server 1',
+      support: 'my super support text for server 1',
+      account: {
+        name: 'root',
+        host: 'localhost:' + servers[0].port
+      },
+      isLocal: false,
+      duration: 10,
+      tags: [ 'tag1p1', 'tag2p1' ],
+      privacy: VideoPrivacy.PUBLIC,
+      commentsEnabled: true,
+      downloadEnabled: true,
+      channel: {
+        name: 'root_channel',
+        displayName: 'Main root channel',
+        description: '',
+        isLocal: false
+      },
+      fixture: 'video_short1.webm',
+      files: [
+        {
+          resolution: 720,
+          size: 572456
+        }
+      ]
+    }
+    unlistedCheckAttributes = immutableAssign(checkAttributes, {
+      privacy: VideoPrivacy.UNLISTED
+    })
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -172,7 +174,7 @@ describe('Test handle downs', function () {
     const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 2, 'createdAt')
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].follower.host).to.equal('localhost:9003')
+    expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
