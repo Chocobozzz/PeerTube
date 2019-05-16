@@ -24,6 +24,7 @@ import { VideoModel } from './video'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { FindOptions, QueryTypes, Transaction } from 'sequelize'
+import { MIMETYPES } from '../../initializers/constants'
 
 @Table({
   tableName: 'videoFile',
@@ -159,6 +160,10 @@ export class VideoFileModel extends Model<VideoFileModel> {
       .then(result => ({
         totalLocalVideoFilesSize: parseAggregateResult(result)
       }))
+  }
+
+  isAudio () {
+    return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
   }
 
   hasSameUniqueKeysThan (other: VideoFileModel) {

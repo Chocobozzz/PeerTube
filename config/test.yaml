@@ -55,6 +55,7 @@ signup:
 transcoding:
   enabled: true
   allow_additional_extensions: false
+  allow_audio_files: false
   threads: 2
   resolutions:
     240p: true

@@ -188,6 +188,8 @@ transcoding:
   enabled: true
   # Allow your users to upload .mkv, .mov, .avi, .flv videos
   allow_additional_extensions: true
+  # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
+  allow_audio_files: true
   threads: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false

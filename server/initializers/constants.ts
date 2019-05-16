@@ -1,10 +1,10 @@
 import { join } from 'path'
-import { JobType, VideoRateType, VideoState } from '../../shared/models'
+import { JobType, VideoRateType, VideoResolution, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { isTestInstance, sanitizeHost, sanitizeUrl, root } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
@@ -228,7 +228,7 @@ let CONSTRAINTS_FIELDS = {
         max: 2 * 1024 * 1024 // 2MB
       }
     },
-    EXTNAME: buildVideosExtname(),
+    EXTNAME: [] as string[],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
@@ -299,6 +299,8 @@ const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MAX: 60,
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
 }
+
+const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
@@ -380,8 +382,18 @@ const VIDEO_PLAYLIST_TYPES = {
 }
 
 const MIMETYPES = {
+  AUDIO: {
+    MIMETYPE_EXT: {
+      'audio/mpeg': '.mp3',
+      'audio/mp3': '.mp3',
+      'application/ogg': '.ogg',
+      'audio/ogg': '.ogg',
+      'audio/flac': '.flac'
+    },
+    EXT_MIMETYPE: null as { [ id: string ]: string }
+  },
   VIDEO: {
-    MIMETYPE_EXT: buildVideoMimetypeExt(),
+    MIMETYPE_EXT: null as { [ id: string ]: string },
     EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   IMAGE: {
@@ -403,7 +415,7 @@ const MIMETYPES = {
     }
   }
 }
-MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
+MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 
 // ---------------------------------------------------------------------------
 
@@ -429,7 +441,7 @@ const ACTIVITY_PUB = {
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 100,
   URL_MIME_TYPES: {
-    VIDEO: Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT),
+    VIDEO: [] as string[],
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
@@ -543,6 +555,10 @@ const REDUNDANCY = {
 
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
+const ASSETS_PATH = {
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'server', 'assets', 'default-audio-background.jpg')
+}
+
 // ---------------------------------------------------------------------------
 
 const CUSTOM_HTML_TAG_COMMENTS = {
@@ -612,6 +628,7 @@ if (isTestInstance() === true) {
 }
 
 updateWebserverUrls()
+updateWebserverConfig()
 
 registerConfigChangedHandler(() => {
   updateWebserverUrls()
@@ -681,12 +698,14 @@ export {
   RATES_LIMIT,
   MIMETYPES,
   CRAWL_REQUEST_CONCURRENCY,
+  DEFAULT_AUDIO_RESOLUTION,
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   CONTACT_FORM_LIFETIME,
   VIDEO_PLAYLIST_PRIVACIES,
+  ASSETS_PATH,
   loadLanguages,
   buildLanguages
 }
@@ -700,15 +719,21 @@ function buildVideoMimetypeExt () {
     'video/mp4': '.mp4'
   }
 
-  if (CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
-    Object.assign(data, {
-      'video/quicktime': '.mov',
-      'video/x-msvideo': '.avi',
-      'video/x-flv': '.flv',
-      'video/x-matroska': '.mkv',
-      'application/octet-stream': '.mkv',
-      'video/avi': '.avi'
-    })
+  if (CONFIG.TRANSCODING.ENABLED) {
+    if (CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
+      Object.assign(data, {
+        'video/quicktime': '.mov',
+        'video/x-msvideo': '.avi',
+        'video/x-flv': '.flv',
+        'video/x-matroska': '.mkv',
+        'application/octet-stream': '.mkv',
+        'video/avi': '.avi'
+      })
+    }
+
+    if (CONFIG.TRANSCODING.ALLOW_AUDIO_FILES) {
+      Object.assign(data, MIMETYPES.AUDIO.MIMETYPE_EXT)
+    }
   }
 
   return data
@@ -724,16 +749,15 @@ function updateWebserverUrls () {
 }
 
 function updateWebserverConfig () {
-  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = buildVideosExtname()
-
   MIMETYPES.VIDEO.MIMETYPE_EXT = buildVideoMimetypeExt()
   MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
+  ACTIVITY_PUB.URL_MIME_TYPES.VIDEO = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
+
+  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = buildVideosExtname()
 }
 
 function buildVideosExtname () {
-  return CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS
-    ? [ '.mp4', '.ogv', '.webm', '.mkv', '.mov', '.avi', '.flv' ]
-    : [ '.mp4', '.ogv', '.webm' ]
+  return Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
 }
 
 function loadLanguages () {

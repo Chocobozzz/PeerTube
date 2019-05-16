@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { extname, join } from 'path'
-import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
+import { VideoCreate, VideoPrivacy, VideoResolution, VideoState, VideoUpdate } from '../../../../shared'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import { MIMETYPES, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers/constants'
+import { MIMETYPES, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES, DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 import {
   changeVideoChannelShare,
   federateVideoIfNeeded,
@@ -54,6 +54,7 @@ import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -191,17 +192,18 @@ async function addVideo (req: express.Request, res: express.Response) {
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  // Build the file object
-  const { videoFileResolution } = await getVideoFileResolution(videoPhysicalFile.path)
-  const fps = await getVideoFileFPS(videoPhysicalFile.path)
-
   const videoFileData = {
     extname: extname(videoPhysicalFile.filename),
-    resolution: videoFileResolution,
-    size: videoPhysicalFile.size,
-    fps
+    size: videoPhysicalFile.size
   }
   const videoFile = new VideoFileModel(videoFileData)
+
+  if (!videoFile.isAudio()) {
+    videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path)
+    videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
+  } else {
+    videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
+  }
 
   // Move physical file
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
@@ -279,9 +281,21 @@ async function addVideo (req: express.Request, res: express.Response) {
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now
-    const dataInput = {
-      videoUUID: videoCreated.uuid,
-      isNewVideo: true
+    let dataInput: VideoTranscodingPayload
+
+    if (videoFile.isAudio()) {
+      dataInput = {
+        type: 'merge-audio' as 'merge-audio',
+        resolution: DEFAULT_AUDIO_RESOLUTION,
+        videoUUID: videoCreated.uuid,
+        isNewVideo: true
+      }
+    } else {
+      dataInput = {
+        type: 'optimize' as 'optimize',
+        videoUUID: videoCreated.uuid,
+        isNewVideo: true
+      }
     }
 
     await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })

@@ -209,6 +209,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {
       // Put uuid because we don't have id auto incremented for now
       const dataInput = {
+        type: 'optimize' as 'optimize',
         videoUUID: videoImportUpdated.Video.uuid,
         isNewVideo: true
       }

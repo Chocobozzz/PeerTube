@@ -255,6 +255,7 @@ function customConfig (): CustomConfig {
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
+      allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
         '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
