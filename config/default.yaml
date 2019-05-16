@@ -53,9 +53,11 @@ smtp:
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
-emails:
-  signature: "PeerTube"
-  prefix: "[PeerTube]"
+email:
+  body:
+    signature: "PeerTube"
+  object:
+    prefix: "[PeerTube]"
 
 # From the project root directory
 storage:
