@@ -53,6 +53,12 @@ smtp:
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
+email:
+  body:
+    signature: "PeerTube"
+  object:
+    prefix: "[PeerTube]"
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
