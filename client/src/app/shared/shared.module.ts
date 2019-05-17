@@ -69,7 +69,7 @@ import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/sha
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
 import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { ImageUploadComponent } from '@app/shared/images/image-upload.component'
+import { PreviewUploadComponent } from '@app/shared/images/preview-upload.component'
 import { GlobalIconComponent } from '@app/shared/images/global-icon.component'
 import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
 import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
@@ -154,7 +154,7 @@ import { ClipboardModule } from 'ngx-clipboard'
     ConfirmComponent,
 
     GlobalIconComponent,
-    ImageUploadComponent
+    PreviewUploadComponent
   ],
 
   exports: [
@@ -218,7 +218,7 @@ import { ClipboardModule } from 'ngx-clipboard'
     ConfirmComponent,
 
     GlobalIconComponent,
-    ImageUploadComponent,
+    PreviewUploadComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,

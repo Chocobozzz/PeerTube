@@ -1,9 +1,20 @@
 @import 'variables';
 @import 'mixins';
 
-.first-step-block .form-group-channel {
-  margin-bottom: 20px;
-  margin-top: 35px;
+.first-step-block {
+
+  .form-group-channel {
+    margin-bottom: 20px;
+    margin-top: 35px;
+  }
+
+  .audio-image-info {
+    margin-bottom: 10px;
+  }
+
+  .audio-preview {
+    margin: 30px 0;
+  }
 }
 
 .upload-progress-cancel {

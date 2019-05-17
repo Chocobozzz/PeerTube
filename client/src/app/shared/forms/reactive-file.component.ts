@@ -2,6 +2,7 @@ import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { GlobalIconName } from '@app/shared/images/global-icon.component'
 
 @Component({
   selector: 'my-reactive-file',
@@ -21,6 +22,7 @@ export class ReactiveFileComponent implements OnInit, ControlValueAccessor {
   @Input() extensions: string[] = []
   @Input() maxFileSize: number
   @Input() displayFilename = false
+  @Input() icon: GlobalIconName
 
   @Output() fileChanged = new EventEmitter<Blob>()
 
