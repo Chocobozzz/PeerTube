@@ -114,6 +114,8 @@ describe('Test HLS videos', function () {
   })
 
   it('Should update the video', async function () {
+    this.timeout(10000)
+
     await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video 1 updated' })
 
     await waitJobs(servers)
@@ -122,6 +124,8 @@ describe('Test HLS videos', function () {
   })
 
   it('Should delete videos', async function () {
+    this.timeout(10000)
+
     await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
     await removeVideo(servers[0].url, servers[0].accessToken, videoAudioUUID)
 
