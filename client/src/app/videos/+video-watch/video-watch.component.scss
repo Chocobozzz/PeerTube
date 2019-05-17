@@ -18,6 +18,7 @@ $player-factor: 1.7; // 16/9
   width: 100% !important;
   height: auto !important;
   max-height: 300px !important;
+  max-width: initial;
   border-bottom: 1px solid $separator-border-color !important;
 }
 
