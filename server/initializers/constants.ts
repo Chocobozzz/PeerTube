@@ -509,8 +509,8 @@ const THUMBNAILS_SIZE = {
   height: 122
 }
 const PREVIEWS_SIZE = {
-  width: 560,
-  height: 315
+  width: 850,
+  height: 480
 }
 const AVATARS_SIZE = {
   width: 120,

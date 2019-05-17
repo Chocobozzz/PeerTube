@@ -1,12 +1,19 @@
 import * as express from 'express'
 import { extname, join } from 'path'
-import { VideoCreate, VideoPrivacy, VideoResolution, VideoState, VideoUpdate } from '../../../../shared'
+import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
-import { MIMETYPES, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES, DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
+import {
+  DEFAULT_AUDIO_RESOLUTION,
+  MIMETYPES,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES
+} from '../../../initializers/constants'
 import {
   changeVideoChannelShare,
   federateVideoIfNeeded,

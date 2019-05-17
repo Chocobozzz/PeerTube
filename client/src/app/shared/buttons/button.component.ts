@@ -9,7 +9,7 @@ import { GlobalIconName } from '@app/shared/images/global-icon.component'
 
 export class ButtonComponent {
   @Input() label = ''
-  @Input() className: 'orange-button' | 'grey-button' = 'grey-button'
+  @Input() className = 'grey-button'
   @Input() icon: GlobalIconName = undefined
   @Input() title: string = undefined
 

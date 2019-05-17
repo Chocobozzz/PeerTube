@@ -14,6 +14,7 @@ import {
   getMyVideos,
   getVideo,
   getVideosList,
+  makeGetRequest,
   root,
   ServerInfo,
   setAccessTokensToServers,
@@ -363,6 +364,56 @@ describe('Test video transcoding', function () {
 
     expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'))).to.be.true
     expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'))).to.be.false
+  })
+
+  it('Should merge an audio file with the preview file', async function () {
+    this.timeout(60000)
+
+    const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+    await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributesArg)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === 'audio_with_preview')
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails: VideoDetails = res2.body
+
+      expect(videoDetails.files).to.have.lengthOf(1)
+
+      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: 200 })
+
+      const magnetUri = videoDetails.files[ 0 ].magnetUri
+      expect(magnetUri).to.contain('.mp4')
+    }
+  })
+
+  it('Should upload an audio file and choose a default background image', async function () {
+    this.timeout(60000)
+
+    const videoAttributesArg = { name: 'audio_without_preview', fixture: 'sample.ogg' }
+    await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributesArg)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === 'audio_without_preview')
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails = res2.body
+
+      expect(videoDetails.files).to.have.lengthOf(1)
+
+      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: 200 })
+
+      const magnetUri = videoDetails.files[ 0 ].magnetUri
+      expect(magnetUri).to.contain('.mp4')
+    }
   })
 
   after(async function () {

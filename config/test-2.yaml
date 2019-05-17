@@ -31,3 +31,4 @@ signup:
 transcoding:
   enabled: true
   allow_additional_extensions: true
+  allow_audio_files: true
