@@ -119,23 +119,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (videoId) this.loadVideo(videoId)
     })
 
-    this.hotkeys = [
-      new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
-        this.setLike()
-        return false
-      }, undefined, this.i18n('Like the video')),
-      new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
-        this.setDislike()
-        return false
-      }, undefined, this.i18n('Dislike the video')),
-      new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
-        this.subscribeButton.subscribed ?
-          this.subscribeButton.unsubscribe() :
-          this.subscribeButton.subscribe()
-        return false
-      }, undefined, this.i18n('Subscribe to the account'))
-    ]
-    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+    this.initHotkeys()
   }
 
   ngOnDestroy () {
@@ -564,5 +548,25 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.dispose()
       this.player = undefined
     }
+  }
+
+  private initHotkeys () {
+    this.hotkeys = [
+      new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
+        this.setLike()
+        return false
+      }, undefined, this.i18n('Like the video')),
+      new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
+        this.setDislike()
+        return false
+      }, undefined, this.i18n('Dislike the video')),
+      new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
+        this.subscribeButton.subscribed ?
+          this.subscribeButton.unsubscribe() :
+          this.subscribeButton.subscribe()
+        return false
+      }, undefined, this.i18n('Subscribe to the account'))
+    ]
+    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
   }
 }
