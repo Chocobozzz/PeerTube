@@ -84,6 +84,7 @@ export class VideoService implements VideosProvider {
 
     const body: VideoUpdate = {
       name: video.name,
+      articleid: video.articleid,
       category,
       licence,
       language,

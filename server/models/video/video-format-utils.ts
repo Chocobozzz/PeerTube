@@ -288,6 +288,7 @@ function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
     url,
     likes: getVideoLikesActivityPubUrl(video),
     dislikes: getVideoDislikesActivityPubUrl(video),
+    articleid: video.articleid,
     shares: getVideoSharesActivityPubUrl(video),
     comments: getVideoCommentsActivityPubUrl(video),
     attributedTo: [

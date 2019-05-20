@@ -5,6 +5,7 @@ import { exists, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
   isVideoDurationValid,
   isVideoNameValid,
+  isVideoArticleidValid,
   isVideoStateValid,
   isVideoTagValid,
   isVideoAutorValid,
@@ -61,6 +62,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
 
   return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
+    isVideoArticleidValid(video.articleid) &&
     isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
     (!video.category || isRemoteNumberIdentifierValid(video.category)) &&

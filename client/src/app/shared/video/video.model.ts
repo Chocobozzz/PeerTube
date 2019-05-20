@@ -93,6 +93,7 @@ export class Video implements VideoServerModel {
     this.uuid = hash.uuid
     this.isLocal = hash.isLocal
     this.name = hash.name
+    this.articleid = hash.articleid
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
     this.previewPath = hash.previewPath

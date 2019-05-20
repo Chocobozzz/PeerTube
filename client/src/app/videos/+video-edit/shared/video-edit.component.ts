@@ -90,6 +90,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     }
     const obj: any = {
       name: this.videoValidatorsService.VIDEO_NAME,
+      articleid: this.videoValidatorsService.VIDEO_ARTICLEID,
       privacy: this.videoValidatorsService.VIDEO_PRIVACY,
       channelId: this.videoValidatorsService.VIDEO_CHANNEL,
       nsfw: null,

@@ -175,6 +175,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Prepare data so we don't block the transaction
   const videoData = {
     name: videoInfo.name,
+    articleid: videoInfo.articleid,
     remote: false,
     category: videoInfo.category,
     licence: videoInfo.licence,
@@ -321,6 +322,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const oldVideoChannel = videoInstance.VideoChannel
 
       if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
+      if (videoInfoToUpdate.articleid !== undefined) videoInstance.set('articleid', videoInfoToUpdate.articleid)
       if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)

@@ -201,6 +201,10 @@
               class="video-attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ autorsOneOf: [ autor ] }"
             >{{ autor }}</a>
           </div>
+        <!-- <div class="video-attribute">
+            <span i18n class="video-attribute-label">Article</span>
+            <span class="video-attribute-value">{{ video.articleid }}</span>
+          </div>-->
         </div>
 
         <my-video-comments [video]="video" [user]="user"></my-video-comments>

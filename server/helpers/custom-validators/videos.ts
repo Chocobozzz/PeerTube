@@ -62,7 +62,9 @@ function isVideoSupportValid (value: string) {
 function isVideoNameValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
-
+function isVideoArticleidValid (value: string) {
+   return exists(value) && validator.isInt(value, VIDEOS_CONSTRAINTS_FIELDS.ARTICLEID)
+}
 function isVideoTagValid (tag: string) {
   return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
 }
@@ -221,6 +223,7 @@ export {
   isVideoDescriptionValid,
   isVideoFileInfoHashValid,
   isVideoNameValid,
+  isVideoArticleidValid,
   isVideoTagsValid,
   isVideoAutorsValid,
   isVideoFPSResolutionValid,

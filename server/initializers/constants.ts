@@ -338,6 +338,7 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
+    ARTICLEID: { min: 1, max: 2 }, // Length
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length

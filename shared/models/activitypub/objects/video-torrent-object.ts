@@ -34,6 +34,7 @@ export interface VideoTorrentObject {
   url: ActivityUrlObject[]
   likes: string
   dislikes: string
+  articleid: number
   shares: string
   comments: string
   attributedTo: ActivityPubAttributedTo[]

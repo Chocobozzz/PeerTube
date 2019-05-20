@@ -6,6 +6,7 @@ import { BuildFormValidator } from '@app/shared'
 @Injectable()
 export class VideoValidatorsService {
   readonly VIDEO_NAME: BuildFormValidator
+  readonly VIDEO_ARTICLEID: BuildFormValidator
   readonly VIDEO_PRIVACY: BuildFormValidator
   readonly VIDEO_CATEGORY: BuildFormValidator
   readonly VIDEO_LICENCE: BuildFormValidator
@@ -27,6 +28,11 @@ export class VideoValidatorsService {
         'minlength': this.i18n('Video name must be at least 3 characters long.'),
         'maxlength': this.i18n('Video name cannot be more than 120 characters long.')
       }
+    }
+    
+    this.VIDEO_ARTICLEID = {
+      VALIDATORS: [ ],
+      MESSAGES: {}
     }
 
     this.VIDEO_PRIVACY = {

@@ -41,6 +41,7 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
+  isVideoArticleidValid,
   isVideoPrivacyValid,
   isVideoStateValid,
   isVideoSupportValid
@@ -106,6 +107,7 @@ const indexes: Sequelize.DefineIndexesOptions[] = [
   { fields: [ 'duration' ] },
   { fields: [ 'category' ] },
   { fields: [ 'licence' ] },
+  { fields: [ 'articleid' ] },
   { fields: [ 'nsfw' ] },
   { fields: [ 'language' ] },
   { fields: [ 'waitTranscoding' ] },
@@ -578,13 +580,14 @@ export class VideoModel extends Model<VideoModel> {
   @Column
   name: string
 
+ 
   @AllowNull(true)
   @Default(null)
   @Is('VideoCategory', value => throwIfNotValid(value, isVideoCategoryValid, 'category'))
   @Column
   category: number
 
-  @AllowNull(true)
+    @AllowNull(true)
   @Default(null)
   @Is('VideoLicence', value => throwIfNotValid(value, isVideoLicenceValid, 'licence'))
   @Column
@@ -645,9 +648,7 @@ export class VideoModel extends Model<VideoModel> {
   dislikes: number
 
   @AllowNull(true)
-  @Default(null)
-  @IsInt
-  @Min(0)
+  @Is('VideoArticle', value => throwIfNotValid(value, isVideoArticleidValid, 'articleid'))
   @Column
   articleid: number
 

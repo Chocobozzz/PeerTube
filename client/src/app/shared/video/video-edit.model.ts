@@ -11,6 +11,7 @@ export class VideoEdit implements VideoUpdate {
   language: string
   description: string
   name: string
+  articleid: number
   tags: string[]
   autors: string[]
   nsfw: boolean
@@ -36,6 +37,7 @@ export class VideoEdit implements VideoUpdate {
       this.language = video.language.id
       this.description = video.description
       this.name = video.name
+      this.articleid = video.articleid
       this.tags = video.tags
       this.autors = video.autors
       this.nsfw = video.nsfw
@@ -79,6 +81,7 @@ export class VideoEdit implements VideoUpdate {
       description: this.description,
       support: this.support,
       name: this.name,
+      articleid: this.articleid,
       tags: this.tags,
       autors: this.autors,
       nsfw: this.nsfw,

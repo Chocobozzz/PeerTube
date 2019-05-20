@@ -3,6 +3,7 @@ import { VideoScheduleUpdate } from './video-schedule-update.model'
 
 export interface VideoUpdate {
   name?: string
+  articleid?: number
   category?: number
   licence?: number
   language?: string
