@@ -1,6 +1,6 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
-import { VideoModel } from './video'
+import { VideoModel, ScopeNames as VideoModelScopeNames } from './video'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
@@ -58,7 +58,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       order: getSortOnModel(sort.sortModel, sort.sortValue),
       include: [
         {
-          model: VideoModel,
+          model: VideoModel.scope(VideoModelScopeNames.WITH_THUMBNAILS),
           required: true,
           include: [
             {
