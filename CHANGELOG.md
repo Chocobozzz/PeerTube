@@ -1,26 +1,44 @@
 # Changelog
 
+## v1.3.0-rc.2
+
+### Docker
+
+ * Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) 
+and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L8) to fix IP forwarding issue ([@Nutomic](https://github.com/nutomic))
+
+### Bug fixes
+
+ * Fix playlist block width when the player is in theater mode
+ * Reset playlist add dropdown in watch page on video change
+ * Fix follow with Mastodon
+ * Fix playlist elements reordering
+ * Fix my videos list pagination
+ * Fix video thumbnails in admin blacklist page
+ * Fix video views that are not considered
+
+
 ## v1.3.0-rc.1
 
-## IMPORTANT NOTES
+### IMPORTANT NOTES
 
  * **nginx** Remove `text/html` from `gzip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
  * Add `streaming_playlists` directory in configuration file. **You should configure it in your production.yaml**
  * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110) 
  
-### Maintenance
+## Maintenance
 
  * Add GitPod support ([@jankeromnes](https://github.com/jankeromnes)) that could help people to contribute on PeerTube: https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#online-development
  * Add reminder to restart PeerTube in upgrade script ([@ldidry](https://github.com/ldidry))
  * Add argument to dockerfile to pass options to npm run build ([@NaPs](https://github.com/NaPs))
  * Add `NOCLIENT` env support to only install server dependencies. Example: `NOCLIENT=true yarn install --pure-lockfile` ([@rigelk](https://github.com/rigelk))
 
-## Docker
+### Docker
  
  * **Important**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
  * Fix SMTP default configuration ([@Nutomic](https://github.com/nutomic))
 
-## Features
+### Features
  
  * Add video playlist support
    * A user has a default `Watch-later` playlist
@@ -73,7 +91,7 @@
  * Add `Add /accounts/:username/ratings endpoint` ([@yohanboniface](https://github.com/yohanboniface))
  * Allow to control API rates limit from configuration ([@yohanboniface](https://github.com/yohanboniface))
 
-## Bug fixes
+### Bug fixes
 
  * Don't notify prior to scheduled update ([@joshmorel](https://github.com/joshmorel))
  * Fix account description database error
@@ -98,7 +116,7 @@
 
 ## v1.2.1
 
-## Bug fixes
+### Bug fixes
 
  * **Important** Fix invalid `From` email header in contact form that could lead to the blacklisting of your SMTP server
  * Fix too long display name overflow in menu
@@ -172,7 +190,7 @@
  * Increase video abuse length to 3000 characters
  * Add totalLocalVideoFilesSize in the stats endpoint
 
-## Bug fixes
+### Bug fixes
 
  * Fix the addition of captions to a video
  * Fix federation of some videos
