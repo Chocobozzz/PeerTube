@@ -27,6 +27,12 @@ async function processVideosViews () {
         logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
 
         try {
+          const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+          if (!video) {
+            logger.debug('Video %d does not exist anymore, skipping videos view addition.', videoId)
+            continue
+          }
+
           await VideoViewModel.create({
             startDate,
             endDate,
@@ -34,7 +40,6 @@ async function processVideosViews () {
             videoId
           })
 
-          const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
           if (video.isOwned()) {
             // If this is a remote video, the origin instance will send us an update
             await VideoModel.incrementViews(videoId, views)
@@ -44,13 +49,13 @@ async function processVideosViews () {
             await federateVideoIfNeeded(video, false)
           }
         } catch (err) {
-          logger.debug('Cannot create video views for video %d in hour %d. Maybe the video does not exist anymore?', videoId, hour)
+          logger.error('Cannot create video views for video %d in hour %d.', videoId, hour, { err })
         }
       }
 
       await Redis.Instance.deleteVideoViews(videoId, hour)
     } catch (err) {
-      logger.error('Cannot update video views of video %d in hour %d.', videoId, hour)
+      logger.error('Cannot update video views of video %d in hour %d.', videoId, hour, { err })
     }
   }
 }
