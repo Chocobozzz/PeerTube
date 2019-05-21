@@ -79,6 +79,11 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   ngOnChanges () {
+    if (this.loaded) {
+      this.loaded = false
+      this.playlistAdd.unload()
+    }
+
     this.buildActions()
   }
 
