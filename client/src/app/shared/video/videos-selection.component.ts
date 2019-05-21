@@ -19,6 +19,7 @@ import { Observable } from 'rxjs'
 import { Video } from '@app/shared/video/video.model'
 import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
 import { VideoSortField } from '@app/shared/video/sort-field.type'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 
 export type SelectionType = { [ id: number ]: boolean }
 
@@ -28,6 +29,7 @@ export type SelectionType = { [ id: number ]: boolean }
   styleUrls: [ './videos-selection.component.scss' ]
 })
 export class VideosSelectionComponent extends AbstractVideoList implements OnInit, OnDestroy, AfterContentInit {
+  @Input() pagination: ComponentPagination
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
   @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<{ videos: Video[], totalVideos: number }>
@@ -52,18 +54,6 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
     super()
   }
 
-  ngAfterContentInit () {
-    {
-      const t = this.templates.find(t => t.name === 'rowButtons')
-      if (t) this.rowButtonsTemplate = t.template
-    }
-
-    {
-      const t = this.templates.find(t => t.name === 'globalButtons')
-      if (t) this.globalButtonsTemplate = t.template
-    }
-  }
-
   @Input() get selection () {
     return this._selection
   }
@@ -84,6 +74,18 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
 
   ngOnInit () {
     super.ngOnInit()
+  }
+
+  ngAfterContentInit () {
+    {
+      const t = this.templates.find(t => t.name === 'rowButtons')
+      if (t) this.rowButtonsTemplate = t.template
+    }
+
+    {
+      const t = this.templates.find(t => t.name === 'globalButtons')
+      if (t) this.globalButtonsTemplate = t.template
+    }
   }
 
   ngOnDestroy () {
