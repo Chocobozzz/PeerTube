@@ -1,27 +1,28 @@
-import { Component, forwardRef, Input } from '@angular/core'
+import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
 
 @Component({
-  selector: 'my-image-upload',
-  styleUrls: [ './image-upload.component.scss' ],
-  templateUrl: './image-upload.component.html',
+  selector: 'my-preview-upload',
+  styleUrls: [ './preview-upload.component.scss' ],
+  templateUrl: './preview-upload.component.html',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ImageUploadComponent),
+      useExisting: forwardRef(() => PreviewUploadComponent),
       multi: true
     }
   ]
 })
-export class ImageUploadComponent implements ControlValueAccessor {
+export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   @Input() inputLabel: string
   @Input() inputName: string
   @Input() previewWidth: string
   @Input() previewHeight: string
 
   imageSrc: SafeResourceUrl
+  allowedExtensionsMessage = ''
 
   private file: File
 
@@ -36,6 +37,10 @@ export class ImageUploadComponent implements ControlValueAccessor {
 
   get maxVideoImageSize () {
     return this.serverService.getConfig().video.image.size.max
+  }
+
+  ngOnInit () {
+    this.allowedExtensionsMessage = this.videoImageExtensions.join(', ')
   }
 
   onFileChanged (file: File) {

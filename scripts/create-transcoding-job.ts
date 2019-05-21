@@ -2,6 +2,7 @@ import * as program from 'commander'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
 import { JobQueue } from '../server/lib/job-queue'
+import { VideoTranscodingPayload } from '../server/lib/job-queue/handlers/video-transcoding'
 
 program
   .option('-v, --video [videoUUID]', 'Video UUID')
@@ -31,15 +32,9 @@ async function run () {
   const video = await VideoModel.loadByUUIDWithFile(program['video'])
   if (!video) throw new Error('Video not found.')
 
-  const dataInput = {
-    videoUUID: video.uuid,
-    isNewVideo: false,
-    resolution: undefined
-  }
-
-  if (program.resolution !== undefined) {
-    dataInput.resolution = program.resolution
-  }
+  const dataInput: VideoTranscodingPayload = program.resolution !== undefined
+   ? { type: 'new-resolution' as 'new-resolution', videoUUID: video.uuid, isNewVideo: false, resolution: program.resolution }
+   : { type: 'optimize' as 'optimize', videoUUID: video.uuid, isNewVideo: false }
 
   await JobQueue.Instance.init()
   await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })

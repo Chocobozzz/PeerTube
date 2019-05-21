@@ -107,10 +107,12 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     return WEBSERVER.URL + staticPath + this.filename
   }
 
-  removeThumbnail () {
+  getPath () {
     const directory = ThumbnailModel.types[this.type].directory
-    const thumbnailPath = join(directory, this.filename)
+    return join(directory, this.filename)
+  }
 
-    return remove(thumbnailPath)
+  removeThumbnail () {
+    return remove(this.getPath())
   }
 }

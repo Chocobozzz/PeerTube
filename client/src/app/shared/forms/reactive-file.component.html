@@ -1,14 +1,15 @@
 <div class="root">
-  <div class="button-file">
+  <div class="button-file" [ngClass]="{ 'with-icon': !!icon }">
+    <my-global-icon *ngIf="icon" [iconName]="icon"></my-global-icon>
+
     <span>{{ inputLabel }}</span>
+
     <input
       type="file"
       [name]="inputName" [id]="inputName" [accept]="extensions"
       (change)="fileChange($event)" [(ngModel)]="fileInputValue"
     />
   </div>
-
-  <div i18n class="file-constraints">(extensions: {{ allowedExtensionsMessage }}, max size: {{ maxFileSize | bytes }})</div>
 
   <div class="filename" *ngIf="displayFilename === true && filename">{{ filename }}</div>
 </div>

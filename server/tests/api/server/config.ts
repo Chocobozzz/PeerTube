@@ -15,7 +15,7 @@ import {
   registerUser,
   reRunServer, ServerInfo,
   setAccessTokensToServers,
-  updateCustomConfig
+  updateCustomConfig, uploadVideo
 } from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
 
@@ -52,6 +52,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.user.videoQuotaDaily).to.equal(-1)
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
+  expect(data.transcoding.allowAudioFiles).to.be.false
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
@@ -102,6 +103,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
   expect(data.transcoding.allowAdditionalExtensions).to.be.true
+  expect(data.transcoding.allowAudioFiles).to.be.true
   expect(data.transcoding.resolutions['240p']).to.be.false
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
@@ -157,6 +159,9 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.mp4')
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
+
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 400)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 400)
 
     expect(data.contactForm.enabled).to.be.true
   })
@@ -215,6 +220,7 @@ describe('Test config', function () {
       transcoding: {
         enabled: true,
         allowAdditionalExtensions: true,
+        allowAudioFiles: true,
         threads: 1,
         resolutions: {
           '240p': false,
@@ -269,6 +275,12 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogv')
     expect(data.video.file.extensions).to.contain('.flv')
     expect(data.video.file.extensions).to.contain('.mkv')
+    expect(data.video.file.extensions).to.contain('.mp3')
+    expect(data.video.file.extensions).to.contain('.ogg')
+    expect(data.video.file.extensions).to.contain('.flac')
+
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 200)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 200)
   })
 
   it('Should have the configuration updated after a restart', async function () {

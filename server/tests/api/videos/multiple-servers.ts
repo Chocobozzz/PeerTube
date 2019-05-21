@@ -215,7 +215,7 @@ describe('Test multiple servers', function () {
           files: [
             {
               resolution: 240,
-              size: 187000
+              size: 189000
             },
             {
               resolution: 360,
@@ -223,7 +223,7 @@ describe('Test multiple servers', function () {
             },
             {
               resolution: 480,
-              size: 383000
+              size: 384000
             },
             {
               resolution: 720,

@@ -59,6 +59,7 @@ describe('Test config API validators', function () {
     transcoding: {
       enabled: true,
       allowAdditionalExtensions: true,
+      allowAudioFiles: true,
       threads: 1,
       resolutions: {
         '240p': false,

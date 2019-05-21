@@ -116,6 +116,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         enabled: null,
         threads: this.customConfigValidatorsService.TRANSCODING_THREADS,
         allowAdditionalExtensions: null,
+        allowAudioFiles: null,
         resolutions: {}
       },
       autoBlacklist: {

@@ -181,7 +181,7 @@ async function getVideoCaption (req: express.Request, res: express.Response) {
   return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
 }
 
-async function generateNodeinfo (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateNodeinfo (req: express.Request, res: express.Response) {
   const { totalVideos } = await VideoModel.getStats()
   const { totalLocalVideoComments } = await VideoCommentModel.getStats()
   const { totalUsers } = await UserModel.getStats()

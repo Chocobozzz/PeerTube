@@ -100,7 +100,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       language: this.videoValidatorsService.VIDEO_LANGUAGE,
       description: this.videoValidatorsService.VIDEO_DESCRIPTION,
       tags: null,
-      thumbnailfile: null,
       previewfile: null,
       support: this.videoValidatorsService.VIDEO_SUPPORT,
       schedulePublicationAt: this.videoValidatorsService.VIDEO_SCHEDULE_PUBLICATION_AT,

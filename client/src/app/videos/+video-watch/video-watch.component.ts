@@ -545,8 +545,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private flushPlayer () {
     // Remove player if it exists
     if (this.player) {
-      this.player.dispose()
-      this.player = undefined
+      try {
+        this.player.dispose()
+        this.player = undefined
+      } catch (err) {
+        console.error('Cannot dispose player.', err)
+      }
     }
   }
 

@@ -1,7 +1,7 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
-import { publishVideoIfNeeded } from './video-transcoding'
+import { publishNewResolutionIfNeeded } from './video-transcoding'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { copy, stat } from 'fs-extra'
 import { VideoFileModel } from '../../../models/video/video-file'
@@ -25,7 +25,7 @@ async function processVideoFileImport (job: Bull.Job) {
 
   await updateVideoFile(video, payload.filePath)
 
-  await publishVideoIfNeeded(video)
+  await publishNewResolutionIfNeeded(video)
   return video
 }
 

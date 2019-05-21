@@ -117,8 +117,17 @@ export class PeertubePlayerManager {
       videojs(options.common.playerElement, videojsOptions, function (this: any) {
         const player = this
 
-        player.tech_.one('error', () => self.maybeFallbackToWebTorrent(mode, player, options))
-        player.one('error', () => self.maybeFallbackToWebTorrent(mode, player, options))
+        let alreadyFallback = false
+
+        player.tech_.one('error', () => {
+          if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
+          alreadyFallback = true
+        })
+
+        player.one('error', () => {
+          if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
+          alreadyFallback = true
+        })
 
         self.addContextMenu(mode, player, options.common.embedUrl)
 

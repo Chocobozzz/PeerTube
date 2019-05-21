@@ -1,0 +1,27 @@
+@import '_variables';
+@import '_mixins';
+
+.root {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+
+  .preview-container {
+    position: relative;
+
+    my-reactive-file {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
+
+    .preview {
+      border: 2px solid grey;
+      border-radius: 4px;
+
+      &.no-image {
+        background-color: #ececec;
+      }
+    }
+  }
+}

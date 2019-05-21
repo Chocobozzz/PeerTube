@@ -287,6 +287,14 @@
             </div>
 
             <div class="form-group">
+              <my-peertube-checkbox
+                inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
+                i18n-labelText labelText="Allow audio files upload"
+                i18n-helpHtml helpHtml="Allow your users to upload audio files that will be merged with the preview file on upload"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
               <label i18n for="transcodingThreads">Transcoding threads</label>
               <div class="peertube-select-container">
                 <select id="transcodingThreads" formControlName="threads">

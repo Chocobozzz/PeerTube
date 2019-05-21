@@ -41,8 +41,8 @@ describe('Test services', function () {
     expect(res.body.width).to.equal(560)
     expect(res.body.height).to.equal(315)
     expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
-    expect(res.body.thumbnail_width).to.equal(560)
-    expect(res.body.thumbnail_height).to.equal(315)
+    expect(res.body.thumbnail_width).to.equal(850)
+    expect(res.body.thumbnail_height).to.equal(480)
   })
 
   it('Should have a valid oEmbed response with small max height query', async function () {

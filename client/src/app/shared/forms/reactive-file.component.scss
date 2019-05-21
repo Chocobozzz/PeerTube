@@ -8,13 +8,11 @@
 
   .button-file {
     @include peertube-button-file(auto);
+    @include grey-button;
 
-    min-width: 190px;
-  }
-
-  .file-constraints {
-    margin-left: 5px;
-    font-size: 13px;
+    &.with-icon {
+      @include button-with-icon;
+    }
   }
 
   .filename {

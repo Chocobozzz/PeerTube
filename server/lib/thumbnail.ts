@@ -1,7 +1,7 @@
 import { VideoFileModel } from '../models/video/video-file'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { CONFIG } from '../initializers/config'
-import { PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
+import { PREVIEWS_SIZE, THUMBNAILS_SIZE, ASSETS_PATH } from '../initializers/constants'
 import { VideoModel } from '../models/video/video'
 import { ThumbnailModel } from '../models/video/thumbnail'
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
@@ -45,8 +45,10 @@ function createVideoMiniatureFromExisting (inputPath: string, video: VideoModel,
 function generateVideoMiniature (video: VideoModel, videoFile: VideoFileModel, type: ThumbnailType) {
   const input = video.getVideoFilePath(videoFile)
 
-  const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type)
-  const thumbnailCreator = () => generateImageFromVideoFile(input, basePath, filename, { height, width })
+  const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
+  const thumbnailCreator = videoFile.isAudio()
+    ? () => processImage(ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND, outputPath, { width, height }, true)
+    : () => generateImageFromVideoFile(input, basePath, filename, { height, width })
 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
 }
