@@ -72,3 +72,10 @@ services:
     labels:
       traefik.enable: "false"
     restart: "always"
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+      - subnet:  172.18.0.0/16
