@@ -47,7 +47,7 @@ $ curl -H 'Authorization: Bearer 90286a0bdf0f7315d9d3fe8dabf9e1d2be9c97d0' https
 ```
 
 
-### List videos
+## List videos
 
 ```bash
 $ curl https://peertube.example.com/api/v1/videos

@@ -38,7 +38,7 @@ info:
     }
     ```
 externalDocs:
-  url: https://docs.joinpeertube.org/api.html
+  url: https://docs.joinpeertube.org/#/api-rest-reference.html
 tags:
   - name: Accounts
     description: >
@@ -1739,7 +1739,7 @@ components:
 
         - Have an account with sufficient authorization levels
 
-        - [Generate](https://docs.joinpeertube.org/lang/en/devdocs/rest.html) a
+        - [Generate](https://docs.joinpeertube.org/#/api-rest-getting-started) a
         Bearer Token
 
         - Make Authenticated Requests

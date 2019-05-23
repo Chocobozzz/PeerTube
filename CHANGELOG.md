@@ -224,8 +224,8 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
 
 ### Maintenance
 
- * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
- * Add basic ActivityPub documentation: https://docs.joinpeertube.org/lang/en/devdocs/federation.html ([@rigelk](https://github.com/rigelk))
+ * Improve REST API documentation ([@rigelk](https://github.com/rigelk))
+ * Add basic ActivityPub documentation ([@rigelk](https://github.com/rigelk))
  * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
  * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
  * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
@@ -310,8 +310,8 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
 
 ### Maintenance
 
- * Improve REST API documentation: https://docs.joinpeertube.org/api.html ([@rigelk](https://github.com/rigelk))
- * Add basic ActivityPub documentation: https://docs.joinpeertube.org/lang/en/devdocs/federation.html ([@rigelk](https://github.com/rigelk))
+ * Improve REST API documentation ([@rigelk](https://github.com/rigelk))
+ * Add basic ActivityPub documentation ([@rigelk](https://github.com/rigelk))
  * Add CLI option to run PeerTube without client ([@rigelk](https://github.com/rigelk))
  * Add manpage to peertube CLI ([@rigelk](https://github.com/rigelk))
  * Make backups of files in optimize-old-videos script ([@Nutomic](https://github.com/nutomic))
@@ -525,7 +525,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
 
 ### Features
 
- * Video redundancy system (experimental, see [the doc](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances))
+ * Video redundancy system (experimental)
  * Add peertube script (see [the doc](/support/doc/tools.md#cli-wrapper)) ([@rigelk](https://github.com/rigelk))
  * Improve download modal ([@rigelk](https://github.com/rigelk))
  * Add redirect after login ([@BO41](https://github.com/BO41))

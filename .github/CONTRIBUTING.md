@@ -9,8 +9,6 @@ Interested in contributing? Awesome!
   * [Write documentation](#write-documentation)
   * [Develop](#develop)
   * [Improve the website](#improve-the-website)
-  * [Troubleshooting](#troubleshooting)
-  * [Tutorials](#tutorials)
 
 ## Translate
 
@@ -101,7 +99,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](/support/doc/development/server/code.md).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/#/contribute-architecture?id=server-code).
 
 To develop on the server-side:
 
@@ -116,7 +114,7 @@ restart.
 ### Client side
 
 You can find a documentation of the server code/architecture
-[here](/support/doc/development/client/code.md).
+[here](https://docs.joinpeertube.org/#/contribute-architecture?id=client-code).
 
 
 To develop on the client side:
@@ -193,11 +191,3 @@ $ npm run mocha -- --exit --require ts-node/register/type-check --bail server/te
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
-
-### Troubleshooting
-
-Please check out the issues and [list of common errors](https://docs.joinpeertube.org/lang/en/devdocs/troubleshooting.html).
-
-### Tutorials
-
-Please check out the related section in the [development documentation](https://docs.joinpeertube.org/lang/en/devdocs/index.html#tutorials). Contribute tutorials at [framagit.org/framasoft/peertube/documentation](https://framagit.org/framasoft/peertube/documentation).
