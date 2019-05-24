@@ -1026,7 +1026,7 @@ paths:
                   description: Video preview file
                   type: string
                 privacy:
-                  $ref: '#/components/schemas/VideoPrivacy'
+                  $ref: '#/components/schemas/VideoPrivacySet'
                 category:
                   description: Video category
                   type: string
@@ -1130,7 +1130,7 @@ paths:
                   description: Video preview file
                   type: string
                 privacy:
-                  $ref: '#/components/schemas/VideoPrivacy'
+                  $ref: '#/components/schemas/VideoPrivacySet'
                 category:
                   description: Video category
                   type: string
@@ -1824,12 +1824,23 @@ components:
           type: string
         label:
           type: string
-    VideoPrivacy:
-      type: string
+    VideoPrivacySet:
+      type: integer
       enum:
-        - Public
-        - Unlisted
-        - Private
+        - 1
+        - 2
+        - 3
+      description: 'The video privacy (Public = 1, Unlisted = 2, Private = 3)'
+    VideoPrivacyConstant:
+      properties:
+        id:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+        label:
+          type: string
     Video:
       properties:
         id:
@@ -1849,7 +1860,7 @@ components:
         language:
           $ref: '#/components/schemas/VideoConstantString'
         privacy:
-          $ref: '#/components/schemas/VideoPrivacy'
+          $ref: '#/components/schemas/VideoPrivacyConstant'
         description:
           type: string
         duration:
