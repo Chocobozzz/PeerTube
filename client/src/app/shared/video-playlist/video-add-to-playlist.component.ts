@@ -65,7 +65,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     }
   }
 
-  init () {
+  reload () {
     this.resetOptions(true)
 
     if (this.lazyLoad !== true) this.load()
@@ -74,7 +74,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   reload () {
     this.videoPlaylists = []
 
-    this.init()
+    this.reload()
 
     this.cd.markForCheck()
   }
