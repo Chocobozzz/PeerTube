@@ -61,20 +61,20 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   ngOnChanges (simpleChanges: SimpleChanges) {
     if (simpleChanges['video']) {
-      this.unload()
+      this.reload()
     }
   }
 
-  reload () {
+  init () {
     this.resetOptions(true)
 
     if (this.lazyLoad !== true) this.load()
   }
 
-  unload () {
+  reload () {
     this.videoPlaylists = []
 
-    this.reload()
+    this.init()
 
     this.cd.markForCheck()
   }
