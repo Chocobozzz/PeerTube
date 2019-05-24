@@ -151,7 +151,7 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
   * **yarn >= 1.x**
   * **FFmpeg >= 3.x**
 
-See the [production guide](/support/doc/production.md), which is the recommended way.
+See the [production guide](/support/doc/production.md), which is the recommended way to install or upgrade PeerTube.
 
 See the [community packages](https://docs.joinpeertube.org/#/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
 
