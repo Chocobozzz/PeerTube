@@ -153,7 +153,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoListResponse'
       x-code-samples:
         - lang: JavaScript
           source: |
@@ -576,9 +576,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoListResponse'
   /users/me/subscriptions:
     get:
       summary: Get subscriptions of the current user
@@ -639,9 +637,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoListResponse'
   '/users/me/subscriptions/{uri}':
     get:
       summary: Get subscription of the current user for a given uri
@@ -731,9 +727,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoListResponse'
   /videos/categories:
     get:
       summary: Get list of video licences known by the server
@@ -1371,6 +1365,7 @@ paths:
     get:
       summary: Get videos of a video channel by its id
       tags:
+        - Video
         - Video Channel
       parameters:
         - $ref: '#/components/parameters/channelHandle'
@@ -1380,7 +1375,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoListResponse'
   '/accounts/{name}/video-channels':
     get:
       summary: Get video channels of an account by its name
@@ -1540,9 +1535,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoListResponse'
 servers:
   - url: 'https://peertube.cpy.re/api/v1'
     description: Live Test Server (live data - stable version)
@@ -2180,6 +2173,14 @@ components:
       properties:
         comment:
           $ref: '#/components/schemas/VideoComment'
+    VideoListResponse:
+      properties:
+        total:
+          type: number
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Video'
     AddUser:
       properties:
         username:
