@@ -99,6 +99,7 @@ x-tagGroups:
   - name: Videos
     tags:
       - Video
+      - Video Caption
       - Video Channel
       - Video Comment
       - Video Following
@@ -1247,6 +1248,58 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoBlacklist'
+  /videos/{id}/captions:
+    get:
+      summary: Get list of video's captions
+      tags:
+        - Video Caption
+      parameters:
+        - $ref: '#/components/parameters/id2'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoCaption'
+  /videos/{id}/captions/{captionLanguage}:
+    put:
+      summary: Add or replace a video caption
+      tags:
+        - Video Caption
+      parameters:
+        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/captionLanguage'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                captionfile:
+                  description: The file to upload.
+                  type: string
+                  format: binary
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+    delete:
+      summary: Delete a video caption
+      tags:
+        - Video Caption
+      parameters:
+        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/captionLanguage'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
   /video-channels:
     get:
       summary: Get list of video channels
@@ -1611,6 +1664,13 @@ components:
       description: The video id or uuid
       schema:
         type: string
+    captionLanguage:
+      name: captionLanguage
+      in: path
+      required: true
+      description: The caption language
+      schema:
+        type: string
     channelHandle:
       name: channelHandle
       in: path
@@ -1917,6 +1977,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VideoCommentThreadTree'
+    VideoCaption:
+      properties:
+        language:
+          $ref: '#/components/schemas/VideoConstantString'
+        captionPath:
+          type: string
     Avatar:
       properties:
         path:
