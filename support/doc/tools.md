@@ -35,7 +35,7 @@ You need to follow all the following steps even if you are on a PeerTube server 
 
 ### Dependencies
 
-Install the [PeerTube dependencies](dependencies.md).
+Install the [PeerTube dependencies](dependencies.md) except PostgreSQL and Redis.
 
 ### Installation
 
@@ -44,18 +44,14 @@ Clone the PeerTube repo to get the latest version (even if you are on your PeerT
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube.git
 $ CLONE="$(pwd)/PeerTube"
+$ cd ${CLONE}
 ```
 
-Run ``yarn install --pure-lockfile``
-```
-$ cd ${CLONE}
-$ yarn install --pure-lockfile
-```
+Install dependencies and build CLI tools:
 
-Build server tools:
 ```
-$ cd ${CLONE}
-$ npm run build:server
+$ NOCLIENT=1 yarn install --pure-lockfile
+$ npm run setup:cli
 ```
 
 ### CLI wrapper

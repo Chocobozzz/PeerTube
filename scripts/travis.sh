@@ -28,7 +28,8 @@ elif [ "$1" = "api-3" ]; then
     npm run build:server
     sh ./server/tests/api/travis-3.sh 2
 elif [ "$1" = "api-4" ]; then
-    npm run build:server
+    npm run setup:cli
+    npm run build-server
     sh ./server/tests/api/travis-4.sh 2
 elif [ "$1" = "lint" ]; then
     npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
