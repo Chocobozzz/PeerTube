@@ -1966,6 +1966,13 @@ components:
         autoPlayVideo:
           type: boolean
         role:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
+        roleLabel:
           type: string
           enum:
             - User
@@ -2115,12 +2122,11 @@ components:
           description: 'The user daily video quota '
         role:
           type: integer
-          format: int32
           enum:
             - 0
             - 1
             - 2
-          description: 'The user role '
+          description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
       required:
         - username
         - password
@@ -2143,8 +2149,12 @@ components:
           type: string
           description: 'The updated daily video quota of the user '
         role:
-          type: string
-          description: 'The updated role of the user '
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
       required:
         - id
         - email
