@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "application-config": "^1.0.1",
-    "summon-install": "^0.4.6"
+    "webtorrent-hybrid": "^2.1.0"
   },
   "summon": {
     "silent": true
