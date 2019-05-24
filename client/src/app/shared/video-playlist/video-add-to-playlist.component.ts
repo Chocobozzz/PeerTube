@@ -57,8 +57,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.buildForm({
       displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
     })
-
-    this.init()
   }
 
   ngOnChanges (simpleChanges: SimpleChanges) {
@@ -67,7 +65,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     }
   }
 
-  init () {
+  reload () {
     this.resetOptions(true)
 
     if (this.lazyLoad !== true) this.load()
@@ -76,7 +74,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   unload () {
     this.videoPlaylists = []
 
-    this.init()
+    this.reload()
 
     this.cd.markForCheck()
   }
