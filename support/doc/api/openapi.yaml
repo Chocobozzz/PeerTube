@@ -1491,7 +1491,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
     delete:
-      summary: 'Delete a comment in a comment therad by its id, of a video by its id'
+      summary: 'Delete a comment in a comment thread by its id, of a video by its id'
       security:
         - OAuth2: []
       tags:
