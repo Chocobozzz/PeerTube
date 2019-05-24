@@ -1,43 +1,61 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { AuthService, Notifier } from '@app/core'
-import { forkJoin } from 'rxjs'
-import { Video, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy } from '@shared/models'
-import { FormReactive, FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/forms'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { secondsToTime } from '../../../assets/player/utils'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges
+} from "@angular/core";
+import { VideoPlaylistService } from "@app/shared/video-playlist/video-playlist.service";
+import { AuthService, Notifier } from "@app/core";
+import { forkJoin } from "rxjs";
+import {
+  Video,
+  VideoPlaylistCreate,
+  VideoPlaylistElementCreate,
+  VideoPlaylistPrivacy
+} from "@shared/models";
+import {
+  FormReactive,
+  FormValidatorService,
+  VideoPlaylistValidatorsService
+} from "@app/shared/forms";
+import { I18n } from "@ngx-translate/i18n-polyfill";
+import { secondsToTime } from "../../../assets/player/utils";
 
 type PlaylistSummary = {
-  id: number
-  inPlaylist: boolean
-  displayName: string
+  id: number;
+  inPlaylist: boolean;
+  displayName: string;
 
-  startTimestamp?: number
-  stopTimestamp?: number
-}
+  startTimestamp?: number;
+  stopTimestamp?: number;
+};
 
 @Component({
-  selector: 'my-video-add-to-playlist',
-  styleUrls: [ './video-add-to-playlist.component.scss' ],
-  templateUrl: './video-add-to-playlist.component.html',
+  selector: "my-video-add-to-playlist",
+  styleUrls: ["./video-add-to-playlist.component.scss"],
+  templateUrl: "./video-add-to-playlist.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VideoAddToPlaylistComponent extends FormReactive implements OnInit, OnChanges {
-  @Input() video: Video
-  @Input() currentVideoTimestamp: number
-  @Input() lazyLoad = false
+export class VideoAddToPlaylistComponent extends FormReactive
+  implements OnInit, OnChanges {
+  @Input() video: Video;
+  @Input() currentVideoTimestamp: number;
+  @Input() lazyLoad = false;
 
-  isNewPlaylistBlockOpened = false
-  videoPlaylists: PlaylistSummary[] = []
+  isNewPlaylistBlockOpened = false;
+  videoPlaylists: PlaylistSummary[] = [];
   timestampOptions: {
-    startTimestampEnabled: boolean
-    startTimestamp: number
-    stopTimestampEnabled: boolean
-    stopTimestamp: number
-  }
-  displayOptions = false
+    startTimestampEnabled: boolean;
+    startTimestamp: number;
+    stopTimestampEnabled: boolean;
+    stopTimestamp: number;
+  };
+  displayOptions = false;
 
-  constructor (
+  constructor(
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
     private notifier: Notifier,
@@ -46,183 +64,206 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     private videoPlaylistValidatorsService: VideoPlaylistValidatorsService,
     private cd: ChangeDetectorRef
   ) {
-    super()
+    super();
   }
 
-  get user () {
-    return this.authService.getUser()
+  get user() {
+    return this.authService.getUser();
   }
 
-  ngOnInit () {
+  ngOnInit() {
     this.buildForm({
-      displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
-    })
+      displayName: this.videoPlaylistValidatorsService
+        .VIDEO_PLAYLIST_DISPLAY_NAME
+    });
   }
 
-  ngOnChanges (simpleChanges: SimpleChanges) {
-    if (simpleChanges['video']) {
-      this.reload()
+  ngOnChanges(simpleChanges: SimpleChanges) {
+    if (simpleChanges["video"]) {
+      this.reload();
     }
   }
 
-  reload () {
-    this.resetOptions(true)
+  reload() {
+    this.resetOptions(true);
 
-    if (this.lazyLoad !== true) this.load()
+    if (this.lazyLoad !== true) this.load();
   }
 
-  reload () {
-    this.videoPlaylists = []
+  unload() {
+    this.videoPlaylists = [];
 
-    this.reload()
+    this.reload();
 
-    this.cd.markForCheck()
+    this.cd.markForCheck();
   }
 
-  load () {
+  load() {
     forkJoin([
-      this.videoPlaylistService.listAccountPlaylists(this.user.account, '-updatedAt'),
+      this.videoPlaylistService.listAccountPlaylists(
+        this.user.account,
+        "-updatedAt"
+      ),
       this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
-    ])
-      .subscribe(
-        ([ playlistsResult, existResult ]) => {
-          for (const playlist of playlistsResult.data) {
-            const existingPlaylist = existResult[ this.video.id ].find(p => p.playlistId === playlist.id)
+    ]).subscribe(([playlistsResult, existResult]) => {
+      for (const playlist of playlistsResult.data) {
+        const existingPlaylist = existResult[this.video.id].find(
+          p => p.playlistId === playlist.id
+        );
 
-            this.videoPlaylists.push({
-              id: playlist.id,
-              displayName: playlist.displayName,
-              inPlaylist: !!existingPlaylist,
-              startTimestamp: existingPlaylist ? existingPlaylist.startTimestamp : undefined,
-              stopTimestamp: existingPlaylist ? existingPlaylist.stopTimestamp : undefined
-            })
-          }
+        this.videoPlaylists.push({
+          id: playlist.id,
+          displayName: playlist.displayName,
+          inPlaylist: !!existingPlaylist,
+          startTimestamp: existingPlaylist
+            ? existingPlaylist.startTimestamp
+            : undefined,
+          stopTimestamp: existingPlaylist
+            ? existingPlaylist.stopTimestamp
+            : undefined
+        });
+      }
 
-          this.cd.markForCheck()
-        }
-      )
+      this.cd.markForCheck();
+    });
   }
 
-  openChange (opened: boolean) {
+  openChange(opened: boolean) {
     if (opened === false) {
-      this.isNewPlaylistBlockOpened = false
-      this.displayOptions = false
+      this.isNewPlaylistBlockOpened = false;
+      this.displayOptions = false;
     }
   }
 
-  openCreateBlock (event: Event) {
-    event.preventDefault()
+  openCreateBlock(event: Event) {
+    event.preventDefault();
 
-    this.isNewPlaylistBlockOpened = true
+    this.isNewPlaylistBlockOpened = true;
   }
 
-  togglePlaylist (event: Event, playlist: PlaylistSummary) {
-    event.preventDefault()
+  togglePlaylist(event: Event, playlist: PlaylistSummary) {
+    event.preventDefault();
 
     if (playlist.inPlaylist === true) {
-      this.removeVideoFromPlaylist(playlist)
+      this.removeVideoFromPlaylist(playlist);
     } else {
-      this.addVideoInPlaylist(playlist)
+      this.addVideoInPlaylist(playlist);
     }
 
-    playlist.inPlaylist = !playlist.inPlaylist
-    this.resetOptions()
+    playlist.inPlaylist = !playlist.inPlaylist;
+    this.resetOptions();
 
-    this.cd.markForCheck()
+    this.cd.markForCheck();
   }
 
-  createPlaylist () {
-    const displayName = this.form.value[ 'displayName' ]
+  createPlaylist() {
+    const displayName = this.form.value["displayName"];
 
     const videoPlaylistCreate: VideoPlaylistCreate = {
       displayName,
       privacy: VideoPlaylistPrivacy.PRIVATE
-    }
+    };
 
-    this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate).subscribe(
-      res => {
-        this.videoPlaylists.push({
-          id: res.videoPlaylist.id,
-          displayName,
-          inPlaylist: false
-        })
+    this.videoPlaylistService
+      .createVideoPlaylist(videoPlaylistCreate)
+      .subscribe(
+        res => {
+          this.videoPlaylists.push({
+            id: res.videoPlaylist.id,
+            displayName,
+            inPlaylist: false
+          });
 
-        this.isNewPlaylistBlockOpened = false
+          this.isNewPlaylistBlockOpened = false;
 
-        this.cd.markForCheck()
-      },
+          this.cd.markForCheck();
+        },
 
-      err => this.notifier.error(err.message)
-    )
+        err => this.notifier.error(err.message)
+      );
   }
 
-  resetOptions (resetTimestamp = false) {
-    this.displayOptions = false
+  resetOptions(resetTimestamp = false) {
+    this.displayOptions = false;
 
-    this.timestampOptions = {} as any
-    this.timestampOptions.startTimestampEnabled = false
-    this.timestampOptions.stopTimestampEnabled = false
+    this.timestampOptions = {} as any;
+    this.timestampOptions.startTimestampEnabled = false;
+    this.timestampOptions.stopTimestampEnabled = false;
 
     if (resetTimestamp) {
-      this.timestampOptions.startTimestamp = 0
-      this.timestampOptions.stopTimestamp = this.video.duration
+      this.timestampOptions.startTimestamp = 0;
+      this.timestampOptions.stopTimestamp = this.video.duration;
     }
   }
 
-  formatTimestamp (playlist: PlaylistSummary) {
-    const start = playlist.startTimestamp ? secondsToTime(playlist.startTimestamp) : ''
-    const stop = playlist.stopTimestamp ? secondsToTime(playlist.stopTimestamp) : ''
+  formatTimestamp(playlist: PlaylistSummary) {
+    const start = playlist.startTimestamp
+      ? secondsToTime(playlist.startTimestamp)
+      : "";
+    const stop = playlist.stopTimestamp
+      ? secondsToTime(playlist.stopTimestamp)
+      : "";
 
-    return `(${start}-${stop})`
+    return `(${start}-${stop})`;
   }
 
-  private removeVideoFromPlaylist (playlist: PlaylistSummary) {
-    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, this.video.id)
-        .subscribe(
-          () => {
-            this.notifier.success(this.i18n('Video removed from {{name}}', { name: playlist.displayName }))
-
-            playlist.inPlaylist = false
-          },
-
-          err => {
-            this.notifier.error(err.message)
-
-            playlist.inPlaylist = true
-          },
-
-          () => this.cd.markForCheck()
-        )
-  }
-
-  private addVideoInPlaylist (playlist: PlaylistSummary) {
-    const body: VideoPlaylistElementCreate = { videoId: this.video.id }
-
-    if (this.timestampOptions.startTimestampEnabled) body.startTimestamp = this.timestampOptions.startTimestamp
-    if (this.timestampOptions.stopTimestampEnabled) body.stopTimestamp = this.timestampOptions.stopTimestamp
-
-    this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
+  private removeVideoFromPlaylist(playlist: PlaylistSummary) {
+    this.videoPlaylistService
+      .removeVideoFromPlaylist(playlist.id, this.video.id)
       .subscribe(
         () => {
-          playlist.inPlaylist = true
+          this.notifier.success(
+            this.i18n("Video removed from {{name}}", {
+              name: playlist.displayName
+            })
+          );
 
-          playlist.startTimestamp = body.startTimestamp
-          playlist.stopTimestamp = body.stopTimestamp
-
-          const message = body.startTimestamp || body.stopTimestamp
-            ? this.i18n('Video added in {{n}} at timestamps {{t}}', { n: playlist.displayName, t: this.formatTimestamp(playlist) })
-            : this.i18n('Video added in {{n}}', { n: playlist.displayName })
-
-          this.notifier.success(message)
+          playlist.inPlaylist = false;
         },
 
         err => {
-          this.notifier.error(err.message)
+          this.notifier.error(err.message);
 
-          playlist.inPlaylist = false
+          playlist.inPlaylist = true;
         },
 
         () => this.cd.markForCheck()
-      )
+      );
+  }
+
+  private addVideoInPlaylist(playlist: PlaylistSummary) {
+    const body: VideoPlaylistElementCreate = { videoId: this.video.id };
+
+    if (this.timestampOptions.startTimestampEnabled)
+      body.startTimestamp = this.timestampOptions.startTimestamp;
+    if (this.timestampOptions.stopTimestampEnabled)
+      body.stopTimestamp = this.timestampOptions.stopTimestamp;
+
+    this.videoPlaylistService.addVideoInPlaylist(playlist.id, body).subscribe(
+      () => {
+        playlist.inPlaylist = true;
+
+        playlist.startTimestamp = body.startTimestamp;
+        playlist.stopTimestamp = body.stopTimestamp;
+
+        const message =
+          body.startTimestamp || body.stopTimestamp
+            ? this.i18n("Video added in {{n}} at timestamps {{t}}", {
+                n: playlist.displayName,
+                t: this.formatTimestamp(playlist)
+              })
+            : this.i18n("Video added in {{n}}", { n: playlist.displayName });
+
+        this.notifier.success(message);
+      },
+
+      err => {
+        this.notifier.error(err.message);
+
+        playlist.inPlaylist = false;
+      },
+
+      () => this.cd.markForCheck()
+    );
   }
 }
