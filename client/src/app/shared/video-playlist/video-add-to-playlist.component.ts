@@ -57,8 +57,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.buildForm({
       displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
     })
-
-    this.init()
   }
 
   ngOnChanges (simpleChanges: SimpleChanges) {
