@@ -51,7 +51,7 @@ async function getConfig (req: express.Request, res: express.Response) {
   if (serverCommit === undefined) serverCommit = await getServerCommit()
 
   const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-   .filter(key => CONFIG.TRANSCODING.ENABLED === CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
+   .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
    .map(r => parseInt(r, 10))
 
   const json: ServerConfig = {
