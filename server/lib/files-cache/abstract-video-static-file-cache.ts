@@ -18,8 +18,8 @@ export abstract class AbstractVideoStaticFileCache <T> {
       maxAge,
       max,
       promise: true,
-      dispose: (result: GetFilePathResult) => {
-        if (result.isOwned !== true) {
+      dispose: (result?: GetFilePathResult) => {
+        if (result && result.isOwned !== true) {
           remove(result.path)
             .then(() => logger.debug('%s removed from %s', result.path, this.constructor.name))
             .catch(err => logger.error('Cannot remove %s from cache %s.', result.path, this.constructor.name, { err }))
