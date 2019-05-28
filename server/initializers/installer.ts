@@ -146,7 +146,7 @@ async function createOAuthAdminIfNotExist () {
   }
   const user = new UserModel(userData)
 
-  await createUserAccountAndChannelAndPlaylist(user, validatePassword)
+  await createUserAccountAndChannelAndPlaylist(user, undefined, validatePassword)
   logger.info('Username: ' + username)
   logger.info('User password: ' + password)
 }

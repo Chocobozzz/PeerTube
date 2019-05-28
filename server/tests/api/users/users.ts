@@ -31,7 +31,8 @@ import {
   updateMyUser,
   updateUser,
   uploadVideo,
-  userLogin
+  userLogin,
+  registerUserWithChannel, getVideoChannel
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
@@ -617,7 +618,10 @@ describe('Test users', function () {
 
   describe('Registering a new user', function () {
     it('Should register a new user', async function () {
-      await registerUser(server.url, 'user_15', 'my super password')
+      const user = { username: 'user_15', password: 'my super password' }
+      const channel = { name: 'my_user_15_channel', displayName: 'my channel rocks' }
+
+      await registerUserWithChannel({ url: server.url, user, channel })
     })
 
     it('Should be able to login with this registered user', async function () {
@@ -634,6 +638,12 @@ describe('Test users', function () {
       const user = res.body
 
       expect(user.videoQuota).to.equal(5 * 1024 * 1024)
+    })
+
+    it('Should have created the channel', async function () {
+      const res = await getVideoChannel(server.url, 'my_user_15_channel')
+
+      expect(res.body.displayName).to.equal('my channel rocks')
     })
 
     it('Should remove me', async function () {

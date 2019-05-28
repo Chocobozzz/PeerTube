@@ -13,7 +13,8 @@ import { UserNotificationSetting, UserNotificationSettingValue } from '../../sha
 import { createWatchLaterPlaylist } from './video-playlist'
 import { sequelizeTypescript } from '../initializers/database'
 
-async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, validateUser = true) {
+type ChannelNames = { name: string, displayName: string }
+async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, channelNames?: ChannelNames, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
     const userOptions = {
       transaction: t,
@@ -26,18 +27,8 @@ async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, 
     const accountCreated = await createLocalAccountWithoutKeys(userCreated.username, userCreated.id, null, t)
     userCreated.Account = accountCreated
 
-    let channelName = userCreated.username + '_channel'
-
-    // Conflict, generate uuid instead
-    const actor = await ActorModel.loadLocalByName(channelName)
-    if (actor) channelName = uuidv4()
-
-    const videoChannelDisplayName = `Main ${userCreated.username} channel`
-    const videoChannelInfo = {
-      name: channelName,
-      displayName: videoChannelDisplayName
-    }
-    const videoChannel = await createVideoChannel(videoChannelInfo, accountCreated, t)
+    const channelAttributes = await buildChannelAttributes(userCreated, channelNames)
+    const videoChannel = await createVideoChannel(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
 
@@ -115,4 +106,21 @@ function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Tr
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })
+}
+
+async function buildChannelAttributes (user: UserModel, channelNames?: ChannelNames) {
+  if (channelNames) return channelNames
+
+  let channelName = user.username + '_channel'
+
+  // Conflict, generate uuid instead
+  const actor = await ActorModel.loadLocalByName(channelName)
+  if (actor) channelName = uuidv4()
+
+  const videoChannelDisplayName = `Main ${user.username} channel`
+
+  return {
+    name: channelName,
+    displayName: videoChannelDisplayName
+  }
 }

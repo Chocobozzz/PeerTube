@@ -6,6 +6,7 @@ import { join } from 'path'
 import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
+  addVideoChannel,
   blockUser,
   cleanupTests,
   createUser,
@@ -638,7 +639,7 @@ describe('Test users API validators', function () {
     })
   })
 
-  describe('When register a new user', function () {
+  describe('When registering a new user', function () {
     const registrationPath = path + '/register'
     const baseCorrectParams = {
       username: 'user3',
@@ -724,12 +725,35 @@ describe('Test users API validators', function () {
       })
     })
 
+    it('Should fail with a bad channel name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: '[]azf', displayName: 'toto' } })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad channel display name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'toto', displayName: '' } })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an existing channel', async function () {
+      const videoChannelAttributesArg = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
+      await addVideoChannel(server.url, server.accessToken, videoChannelAttributesArg)
+
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'existing_channel', displayName: 'toto' } })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields, statusCodeExpected: 409 })
+    })
+
     it('Should succeed with the correct params', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'super_channel', displayName: 'toto' } })
+
       await makePostBodyRequest({
         url: server.url,
         path: registrationPath,
         token: server.accessToken,
-        fields: baseCorrectParams,
+        fields: fields,
         statusCodeExpected: 204
       })
     })

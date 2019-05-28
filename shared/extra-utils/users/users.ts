@@ -1,10 +1,11 @@
 import * as request from 'supertest'
-import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
 
-import { UserRole } from '../../index'
+import { UserCreate, UserRole } from '../../index'
 import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
 import { ServerInfo, userLogin } from '..'
 import { UserAdminFlag } from '../../models/users/user-flag.model'
+import { UserRegister } from '../../models/users/user-register.model'
 
 type CreateUserArgs = { url: string,
   accessToken: string,
@@ -68,6 +69,27 @@ function registerUser (url: string, username: string, password: string, specialS
           .set('Accept', 'application/json')
           .send(body)
           .expect(specialStatus)
+}
+
+function registerUserWithChannel (options: {
+  url: string,
+  user: { username: string, password: string },
+  channel: { name: string, displayName: string }
+}) {
+  const path = '/api/v1/users/register'
+  const body: UserRegister = {
+    username: options.user.username,
+    password: options.user.password,
+    email: options.user.username + '@example.com',
+    channel: options.channel
+  }
+
+  return makePostBodyRequest({
+    url: options.url,
+    path,
+    fields: body,
+    statusCodeExpected: 204
+  })
 }
 
 function getMyUserInformation (url: string, accessToken: string, specialStatus = 200) {
@@ -312,6 +334,7 @@ export {
   getMyUserInformation,
   getMyUserVideoRating,
   deleteMe,
+  registerUserWithChannel,
   getMyUserVideoQuotaUsed,
   getUsersList,
   getUsersListPaginationAndSort,

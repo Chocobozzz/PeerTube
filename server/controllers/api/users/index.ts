@@ -46,6 +46,7 @@ import { mySubscriptionsRouter } from './my-subscriptions'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+import { UserRegister } from '../../../../shared/models/users/user-register.model'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -197,7 +198,7 @@ async function createUser (req: express.Request, res: express.Response) {
 }
 
 async function registerUser (req: express.Request, res: express.Response) {
-  const body: UserCreate = req.body
+  const body: UserRegister = req.body
 
   const userToCreate = new UserModel({
     username: body.username,
@@ -211,7 +212,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
-  const { user } = await createUserAccountAndChannelAndPlaylist(userToCreate)
+  const { user } = await createUserAccountAndChannelAndPlaylist(userToCreate, body.channel)
 
   auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account registered.', body.username)

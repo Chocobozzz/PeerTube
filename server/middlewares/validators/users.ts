@@ -25,6 +25,10 @@ import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
+import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
+import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
+import { UserCreate } from '../../../shared/models/users'
+import { UserRegister } from '../../../shared/models/users/user-register.model'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -49,12 +53,30 @@ const usersRegisterValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username'),
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
+  body('channel.name').optional().custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+  body('channel.displayName').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
+
+    const body: UserRegister = req.body
+    if (body.channel) {
+      if (!body.channel.name || !body.channel.displayName) {
+        return res.status(400)
+          .send({ error: 'Channel is optional but if you specify it, channel.name and channel.displayName are required.' })
+          .end()
+      }
+
+      const existing = await ActorModel.loadLocalByName(body.channel.name)
+      if (existing) {
+        return res.status(409)
+                  .send({ error: `Channel with name ${body.channel.name} already exists.` })
+                  .end()
+      }
+    }
 
     return next()
   }
