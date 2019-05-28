@@ -59,10 +59,12 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
 
   // Handle strings like @toto@example.com
   if (parts.length === 3 && parts[0].length === 0) parts.shift()
-  const isWebfingerSearch = parts.length === 2 && parts.every(p => p.indexOf(' ') === -1)
+  const isWebfingerSearch = parts.length === 2 && parts.every(p => p && p.indexOf(' ') === -1)
 
   if (isURISearch || isWebfingerSearch) return searchVideoChannelURI(search, isWebfingerSearch, res)
 
+  // @username -> username to search in DB
+  if (query.search.startsWith('@')) query.search = query.search.replace(/^@/, '')
   return searchVideoChannelsDB(query, res)
 }
 
@@ -85,7 +87,15 @@ async function searchVideoChannelURI (search: string, isWebfingerSearch: boolean
   let videoChannel: VideoChannelModel
   let uri = search
 
-  if (isWebfingerSearch) uri = await loadActorUrlOrGetFromWebfinger(search)
+  if (isWebfingerSearch) {
+    try {
+      uri = await loadActorUrlOrGetFromWebfinger(search)
+    } catch (err) {
+      logger.warn('Cannot load actor URL or get from webfinger.', { search, err })
+
+      return res.json({ total: 0, data: [] })
+    }
+  }
 
   if (isUserAbleToSearchRemoteURI(res)) {
     try {
