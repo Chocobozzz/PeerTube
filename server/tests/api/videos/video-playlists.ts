@@ -36,7 +36,8 @@ import {
   uploadVideo,
   uploadVideoAndGetId,
   userLogin,
-  waitJobs
+  waitJobs,
+  generateUserAccessToken
 } from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylist } from '../../../../shared/models/videos/playlist/video-playlist.model'
@@ -136,6 +137,18 @@ describe('Test video playlists', function () {
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.have.lengthOf(0)
     }
+  })
+
+  it('Should get private playlist for a classic user', async function () {
+    const token = await generateUserAccessToken(servers[0], 'toto')
+
+    const res = await getAccountPlaylistsListWithToken(servers[0].url, token, 'toto', 0, 5)
+
+    expect(res.body.total).to.equal(1)
+    expect(res.body.data).to.have.lengthOf(1)
+
+    const playlistId = res.body.data[0].id
+    await getPlaylistVideos(servers[0].url, token, playlistId, 0, 5)
   })
 
   it('Should create a playlist on server 1 and have the playlist on server 2 and 3', async function () {
