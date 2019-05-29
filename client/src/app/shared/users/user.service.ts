@@ -9,6 +9,7 @@ import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { SortMeta } from 'primeng/api'
 import { BytesPipe } from 'ngx-pipes'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { UserRegister } from '@shared/models/users/user-register.model'
 
 @Injectable()
 export class UserService {
@@ -64,7 +65,7 @@ export class UserService {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  signup (userCreate: UserCreate) {
+  signup (userCreate: UserRegister) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                .pipe(
                  map(this.restExtractor.extractDataBool),

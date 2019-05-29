@@ -1,0 +1,66 @@
+@import '_variables';
+@import '_mixins';
+
+$grey-color: #9CA3AB;
+$index-block-height: 32px;
+
+header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin-bottom: 30px;
+
+  .step-info {
+    color: $grey-color;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: $index-block-height;
+
+    .step-index {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: $index-block-height;
+      height: $index-block-height;
+      border-radius: 100px;
+      border: 2px solid $grey-color;
+      margin-bottom: 10px;
+
+      my-global-icon {
+        @include apply-svg-color(var(--mainBackgroundColor));
+
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    .step-label {
+      width: max-content;
+    }
+
+    &.active,
+    &.completed {
+      .step-index {
+        border-color: var(--mainColor);
+        background-color: var(--mainColor);
+        color: var(--mainBackgroundColor);
+      }
+
+      .step-label {
+        color: var(--mainColor);
+      }
+    }
+
+    &.completed {
+      cursor: pointer;
+    }
+  }
+
+  .connector {
+    flex: auto;
+    margin: $index-block-height/2 10px 0 10px;
+    height: 2px;
+    background-color: $grey-color;
+  }
+}

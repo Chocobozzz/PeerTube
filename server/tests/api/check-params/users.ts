@@ -737,6 +737,13 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
+    it('Should fail with a channel name that is the same than user username', async function () {
+      const source = { username: 'super_user', channel: { name: 'super_user', displayName: 'display name' } }
+      const fields = immutableAssign(baseCorrectParams, source)
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
     it('Should fail with an existing channel', async function () {
       const videoChannelAttributesArg = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
       await addVideoChannel(server.url, server.accessToken, videoChannelAttributesArg)

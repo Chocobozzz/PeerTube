@@ -70,6 +70,12 @@ const usersRegisterValidator = [
           .end()
       }
 
+      if (body.channel.name === body.username) {
+        return res.status(400)
+                  .send({ error: 'Channel name cannot be the same than user username.' })
+                  .end()
+      }
+
       const existing = await ActorModel.loadLocalByName(body.channel.name)
       if (existing) {
         return res.status(409)

@@ -4,64 +4,35 @@
     Create an account
   </div>
 
+
+  <my-success *ngIf="signupDone"></my-success>
   <div *ngIf="info" class="alert alert-info">{{ info }}</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
 
-  <div class="d-flex justify-content-left flex-wrap">
-    <form role="form" (ngSubmit)="signup()" [formGroup]="form">
-      <div class="form-group">
-        <label for="username" i18n>Username</label>
+  <div class="wrapper" *ngIf="!signupDone">
+    <div>
+      <my-custom-stepper linear *ngIf="!signupDone">
+        <cdk-step [stepControl]="formStepUser" i18n-label label="User information">
+          <my-signup-step-user (formBuilt)="onUserFormBuilt($event)"></my-signup-step-user>
 
-        <div class="input-group">
-          <input
-            type="text" id="username" i18n-placeholder placeholder="Example: jane_doe"
-            formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+          <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid">Next</button>
+        </cdk-step>
+
+        <cdk-step [stepControl]="formStepChannel" i18n-label label="Channel information">
+          <my-signup-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-signup-step-channel>
+
+          <button i18n cdkStepperNext (click)="signup()"
+                  [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()"
           >
-          <div class="input-group-append">
-            <span class="input-group-text">@{{ instanceHost }}</span>
-          </div>
-        </div>
+            Create my account
+          </button>
+        </cdk-step>
 
-        <div *ngIf="formErrors.username" class="form-error">
-          {{ formErrors.username }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="email" i18n>Email</label>
-        <input
-          type="text" id="email" i18n-placeholder placeholder="Email"
-          formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
-        >
-        <div *ngIf="formErrors.email" class="form-error">
-          {{ formErrors.email }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="password" i18n>Password</label>
-        <input
-          type="password" id="password" i18n-placeholder placeholder="Password"
-          formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
-        >
-        <div *ngIf="formErrors.password" class="form-error">
-          {{ formErrors.password }}
-        </div>
-      </div>
-
-      <div class="form-group form-group-terms">
-        <my-peertube-checkbox
-          inputName="terms" formControlName="terms"
-          i18n-labelHtml labelHtml="I am at least 16 years old and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
-        ></my-peertube-checkbox>
-
-        <div *ngIf="formErrors.terms" class="form-error">
-          {{ formErrors.terms }}
-        </div>
-      </div>
-
-      <input type="submit" i18n-value value="Signup" [disabled]="!form.valid || signupDone">
-    </form>
+        <cdk-step i18n-label label="Done" editable="false">
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        </cdk-step>
+      </my-custom-stepper>
+    </div>
 
     <div>
       <label i18n>Features found on this instance</label>

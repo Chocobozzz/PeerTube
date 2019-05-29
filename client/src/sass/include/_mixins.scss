@@ -331,7 +331,12 @@
 }
 
 @mixin peertube-checkbox ($border-width) {
-  display: none;
+  opacity: 0;
+  width: 0;
+
+  &:focus + span {
+    outline: auto;
+  }
 
   & + span {
     position: relative;

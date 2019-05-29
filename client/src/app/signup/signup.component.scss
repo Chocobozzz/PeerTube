@@ -1,14 +1,30 @@
 @import '_variables';
 @import '_mixins';
 
+.alert {
+  font-size: 15px;
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  & > div {
+    margin-bottom: 40px;
+    width: 450px;
+
+    @media screen and (max-width: 500px) {
+      width: auto;
+    }
+  }
+}
+
 my-instance-features-table {
   display: block;
 
   margin-bottom: 40px;
-}
-
-form {
-  margin: 0 60px 40px 0;
 }
 
 .form-group-terms {
@@ -25,15 +41,18 @@ form {
 
 input:not([type=submit]) {
   @include peertube-input-text(400px);
+
   display: block;
 
-  &#username {
-    width: auto;
+  &#username,
+  &#name {
+    width: auto !important;
     flex-grow: 1;
   }
 }
 
-input[type=submit] {
+input[type=submit],
+button {
   @include peertube-button;
   @include orange-button;
 }
