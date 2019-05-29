@@ -67,8 +67,30 @@ describe('Test video channels API validator', function () {
   })
 
   describe('When listing account video channels', function () {
+    const accountChannelPath = '/api/v1/accounts/fake/video-channels'
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, accountChannelPath, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, accountChannelPath, server.accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, accountChannelPath, server.accessToken)
+    })
+
     it('Should fail with a unknown account', async function () {
-      await getAccountVideoChannelsList(server.url, 'unknown', 404)
+      await getAccountVideoChannelsList({ url: server.url, accountName: 'unknown', specialStatus: 404 })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: accountChannelPath,
+        statusCodeExpected: 200
+      })
     })
   })
 

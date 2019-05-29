@@ -334,14 +334,21 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static listByAccount (accountId: number) {
+  static listByAccount (options: {
+    accountId: number,
+    start: number,
+    count: number,
+    sort: string
+  }) {
     const query = {
-      order: getSort('createdAt'),
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
       include: [
         {
           model: AccountModel,
           where: {
-            id: accountId
+            id: options.accountId
           },
           required: true
         }

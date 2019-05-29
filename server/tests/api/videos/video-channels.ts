@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, Video } from '../../../../shared/index'
+import { User, Video, VideoChannel } from '../../../../shared/index'
 import {
   cleanupTests,
   createUser,
@@ -108,7 +108,11 @@ describe('Test video channels', function () {
   })
 
   it('Should have two video channels when getting account channels on server 1', async function () {
-    const res = await getAccountVideoChannelsList(servers[0].url, userInfo.account.name + '@' + userInfo.account.host)
+    const res = await getAccountVideoChannelsList({
+      url: servers[ 0 ].url,
+      accountName: userInfo.account.name + '@' + userInfo.account.host
+    })
+
     expect(res.body.total).to.equal(2)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(2)
@@ -123,8 +127,62 @@ describe('Test video channels', function () {
     expect(videoChannels[1].support).to.equal('super video channel support text')
   })
 
+  it('Should paginate and sort account channels', async function () {
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[ 0 ].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        start: 0,
+        count: 1,
+        sort: 'createdAt'
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      expect(videoChannel.name).to.equal('root_channel')
+    }
+
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[ 0 ].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        start: 0,
+        count: 1,
+        sort: '-createdAt'
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      expect(videoChannel.name).to.equal('second_video_channel')
+    }
+
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[ 0 ].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        start: 1,
+        count: 1,
+        sort: '-createdAt'
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      expect(videoChannel.name).to.equal('root_channel')
+    }
+  })
+
   it('Should have one video channel when getting account channels on server 2', async function () {
-    const res = await getAccountVideoChannelsList(servers[1].url, userInfo.account.name + '@' + userInfo.account.host)
+    const res = await getAccountVideoChannelsList({
+      url: servers[ 1 ].url,
+      accountName: userInfo.account.name + '@' + userInfo.account.host
+    })
+
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
