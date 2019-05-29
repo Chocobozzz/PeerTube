@@ -138,3 +138,98 @@ $play-overlay-width: 18px;
     }
   }
 }
+
+@mixin miniature-rows {
+  max-height: 540px; // 2 rows max
+  overflow: hidden;
+  padding-top: 10px;
+
+  &:first-child {
+    padding-top: 30px;
+  }
+
+  my-video-miniature {
+    text-align: left;
+  }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: $font-semibold;
+    margin-bottom: 30px;
+
+    a {
+      &:hover, &:focus:not(.focus-visible), &:active {
+        text-decoration: none;
+        outline: none;
+      }
+
+      color: var(--mainForegroundColor);
+    }
+  }
+
+  &.channel {
+    .section-title {
+      a {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+
+        img {
+          @include avatar(28px);
+
+          margin-right: 8px;
+        }
+      }
+
+      .followers {
+        color: $grey-foreground-color;
+        font-weight: normal;
+        font-size: 14px;
+        margin-left: 10px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    max-height: initial;
+    overflow: initial;
+
+    @include video-miniature-small-screen;
+
+    .section-title {
+      font-size: 17px;
+    }
+  }
+}
+
+@mixin adapt-margin-content-width {
+  width: $video-miniature-width * 6;
+  margin: auto !important;
+
+  @media screen and (max-width: 1800px) {
+    width: $video-miniature-width * 5;
+  }
+
+  @media screen and (max-width: 1800px - $video-miniature-width) {
+    width: $video-miniature-width * 4;
+  }
+
+  @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
+    width: $video-miniature-width * 3;
+  }
+
+  @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
+    width: $video-miniature-width * 2;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+    margin: 0 !important;
+
+    .videos {
+      @include video-miniature-small-screen;
+    }
+  }
+}

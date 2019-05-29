@@ -2,62 +2,10 @@
 @import '_mixins';
 @import '_miniature';
 
+.margin-content {
+  @include adapt-margin-content-width;
+}
+
 .section {
-  max-height: 500px; // 2 rows max
-  overflow: hidden;
-  padding-top: 10px;
-
-  &:first-child {
-    padding-top: 30px;
-  }
-
-  my-video-miniature {
-    text-align: left;
-  }
-}
-
-.section-title {
-  font-size: 24px;
-  font-weight: $font-semibold;
-  margin-bottom: 10px;
-
-  a {
-    &:hover, &:focus:not(.focus-visible), &:active {
-      text-decoration: none;
-      outline: none;
-    }
-
-    color: var(--mainForegroundColor);
-  }
-}
-
-.channel {
-  .section-title a {
-    display: flex;
-    width: fit-content;
-    align-items: center;
-
-    img {
-      @include avatar(28px);
-
-      margin-right: 8px;
-    }
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .margin-content {
-    margin: 0 !important;
-  }
-
-  .section-title {
-    font-size: 17px;
-  }
-
-  .section {
-    max-height: initial;
-    overflow: initial;
-
-    @include video-miniature-small-screen;
-  }
+  @include miniature-rows;
 }

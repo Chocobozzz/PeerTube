@@ -6,7 +6,7 @@
       </div>
     </div>
 
-    <my-feed [syndicationItems]="syndicationItems"></my-feed>
+    <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
       <my-peertube-checkbox

@@ -41,8 +41,6 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     private videoService: VideoService
   ) {
     super()
-
-    this.titlePage = this.i18n('Published videos')
   }
 
   ngOnInit () {

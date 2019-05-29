@@ -1,11 +1,17 @@
-<div *ngIf="account" class="row">
-  <a
-    *ngFor="let videoChannel of videoChannels" [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]"
-    class="video-channel" i18n-title title="See this video channel"
-  >
-    <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+<div class="margin-content">
 
-    <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
-    <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
-  </a>
+  <div class="channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true">
+    <div class="section channel" *ngFor="let videoChannel of videoChannels">
+      <div class="section-title">
+        <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" i18n-title title="See this video channel">
+          <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+
+          <div>{{ videoChannel.displayName }}</div>
+          <div i18n class="followers">{{ videoChannel.followersCount }} subscribers</div>
+        </a>
+      </div>
+
+      <my-video-miniature *ngFor="let video of getVideosOf(videoChannel)" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>
+    </div>
+  </div>
 </div>

@@ -14,7 +14,7 @@ const accountsRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'videos',
+        redirectTo: 'video-channels',
         pathMatch: 'full'
       },
       {
