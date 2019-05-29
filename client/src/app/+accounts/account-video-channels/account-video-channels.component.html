@@ -9,6 +9,8 @@
           <div>{{ videoChannel.displayName }}</div>
           <div i18n class="followers">{{ videoChannel.followersCount }} subscribers</div>
         </a>
+
+        <my-subscribe-button [videoChannel]="videoChannel"></my-subscribe-button>
       </div>
 
       <my-video-miniature *ngFor="let video of getVideosOf(videoChannel)" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>

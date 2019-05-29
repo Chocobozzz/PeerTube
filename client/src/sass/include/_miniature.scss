@@ -156,6 +156,8 @@ $play-overlay-width: 18px;
     font-size: 24px;
     font-weight: $font-semibold;
     margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
 
     a {
       &:hover, &:focus:not(.focus-visible), &:active {
