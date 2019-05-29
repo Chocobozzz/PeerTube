@@ -1,16 +1,16 @@
 import { Component } from '@angular/core'
 import { AuthService, Notifier, RedirectService, ServerService } from '@app/core'
-import { UserService, UserValidatorsService } from '../shared'
+import { UserService, UserValidatorsService } from '@app/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRegister } from '@shared/models/users/user-register.model'
 import { FormGroup } from '@angular/forms'
 
 @Component({
-  selector: 'my-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: [ './signup.component.scss' ]
+  selector: 'my-register',
+  templateUrl: './register.component.html',
+  styleUrls: [ './register.component.scss' ]
 })
-export class SignupComponent {
+export class RegisterComponent {
   info: string = null
   error: string = null
   success: string = null
@@ -61,7 +61,7 @@ export class SignupComponent {
   signup () {
     this.error = null
 
-    const body: UserRegister = Object.assign(this.formStepUser.value, this.formStepChannel.value)
+    const body: UserRegister = Object.assign(this.formStepUser.value, { channel: this.formStepChannel.value })
 
     this.userService.signup(body).subscribe(
       () => {

@@ -20,6 +20,7 @@ import { Notifier } from './notification'
 import { MessageService } from 'primeng/api'
 import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 import { ServerConfigResolver } from './routing/server-config-resolver.service'
+import { UnloggedGuard } from '@app/core/routing/unlogged-guard.service'
 
 @NgModule({
   imports: [
@@ -58,6 +59,8 @@ import { ServerConfigResolver } from './routing/server-config-resolver.service'
     ThemeService,
     LoginGuard,
     UserRightGuard,
+    UnloggedGuard,
+
     RedirectService,
     Notifier,
     MessageService,

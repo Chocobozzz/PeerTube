@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
-import { SignupComponent } from './signup.component'
+import { RegisterComponent } from './register.component'
 import { ServerConfigResolver } from '@app/core/routing/server-config-resolver.service'
+import { UnloggedGuard } from '@app/core/routing/unlogged-guard.service'
 
-const signupRoutes: Routes = [
+const registerRoutes: Routes = [
   {
-    path: 'signup',
-    component: SignupComponent,
-    canActivate: [ MetaGuard ],
+    path: '',
+    component: RegisterComponent,
+    canActivate: [ MetaGuard, UnloggedGuard ],
     data: {
       meta: {
-        title: 'Signup'
+        title: 'Register'
       }
     },
     resolve: {
@@ -21,7 +22,7 @@ const signupRoutes: Routes = [
 ]
 
 @NgModule({
-  imports: [ RouterModule.forChild(signupRoutes) ],
+  imports: [ RouterModule.forChild(registerRoutes) ],
   exports: [ RouterModule ]
 })
-export class SignupRoutingModule {}
+export class RegisterRoutingModule {}

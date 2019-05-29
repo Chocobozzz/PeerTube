@@ -40,9 +40,6 @@ export class VerifyAccountEmailComponent implements OnInit {
       .subscribe(
         () => {
           this.success = true
-          setTimeout(() => {
-            this.router.navigate([ '/login' ])
-          }, 2000)
         },
 
         err => {

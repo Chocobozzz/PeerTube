@@ -16,7 +16,7 @@ const routes: Routes = [
   },
   {
     path: 'verify-account',
-    loadChildren: './+verify-account/verify-account.module#VerifyAccountModule'
+    loadChildren: './+signup/+verify-account/verify-account.module#VerifyAccountModule'
   },
   {
     path: 'accounts',
@@ -29,6 +29,10 @@ const routes: Routes = [
   {
     path: 'about',
     loadChildren: './+about/about.module#AboutModule'
+  },
+  {
+    path: 'signup',
+    loadChildren: './+signup/+register/register.module#RegisterModule'
   },
   {
     path: '',

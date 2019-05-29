@@ -1,15 +1,15 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { AuthService } from '@app/core'
-import { FormReactive, UserValidatorsService } from '../shared'
+import { FormReactive, UserValidatorsService } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { FormGroup } from '@angular/forms'
 
 @Component({
-  selector: 'my-signup-step-user',
-  templateUrl: './signup-step-user.component.html',
-  styleUrls: [ './signup.component.scss' ]
+  selector: 'my-register-step-user',
+  templateUrl: './register-step-user.component.html',
+  styleUrls: [ './register.component.scss' ]
 })
-export class SignupStepUserComponent extends FormReactive implements OnInit {
+export class RegisterStepUserComponent extends FormReactive implements OnInit {
   @Output() formBuilt = new EventEmitter<FormGroup>()
 
   constructor (

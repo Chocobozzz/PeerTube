@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService } from '@app/core'
-import { FormReactive, VideoChannelValidatorsService } from '../shared'
+import { FormReactive, VideoChannelValidatorsService } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { FormGroup } from '@angular/forms'
 
 @Component({
-  selector: 'my-signup-step-channel',
-  templateUrl: './signup-step-channel.component.html',
-  styleUrls: [ './signup.component.scss' ]
+  selector: 'my-register-step-channel',
+  templateUrl: './register-step-channel.component.html',
+  styleUrls: [ './register.component.scss' ]
 })
-export class SignupStepChannelComponent extends FormReactive implements OnInit {
+export class RegisterStepChannelComponent extends FormReactive implements OnInit {
   @Input() username: string
   @Output() formBuilt = new EventEmitter<FormGroup>()
 

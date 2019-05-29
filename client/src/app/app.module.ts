@@ -14,7 +14,6 @@ import { HeaderComponent } from './header'
 import { LoginModule } from './login'
 import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
 import { SharedModule } from './shared'
-import { SignupModule } from './signup'
 import { VideosModule } from './videos'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
@@ -53,7 +52,6 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     CoreModule,
     LoginModule,
     ResetPasswordModule,
-    SignupModule,
     SearchModule,
     SharedModule,
     VideosModule,

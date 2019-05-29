@@ -3,9 +3,9 @@
     Verify account email confirmation
   </div>
 
-  <div i18n *ngIf="success; else verificationError">
-    Your email has been verified and you may now login. Redirecting...
-  </div>
+  <my-signup-success i18n *ngIf="success; else verificationError" message="Your email has been verified and you may now login.">
+  </my-signup-success>
+
   <ng-template #verificationError>
     <div>
       <span i18n>An error occurred. </span>

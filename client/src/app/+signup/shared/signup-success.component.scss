@@ -26,14 +26,16 @@ svg {
   }
 }
 
-p {
+.bottom-message {
   text-align: center;
   margin: 20px 0 60px;
   font-size: 1.25em;
+  color: #73AF55;
+}
 
-  &.success {
-    color: #73AF55;
-  }
+.alert {
+  font-size: 15px;
+  text-align: center;
 }
 
 

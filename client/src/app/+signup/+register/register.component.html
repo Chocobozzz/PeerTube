@@ -4,22 +4,20 @@
     Create an account
   </div>
 
-
-  <my-success *ngIf="signupDone"></my-success>
+  <my-signup-success *ngIf="signupDone" [message]="success"></my-signup-success>
   <div *ngIf="info" class="alert alert-info">{{ info }}</div>
-  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
 
   <div class="wrapper" *ngIf="!signupDone">
     <div>
       <my-custom-stepper linear *ngIf="!signupDone">
         <cdk-step [stepControl]="formStepUser" i18n-label label="User information">
-          <my-signup-step-user (formBuilt)="onUserFormBuilt($event)"></my-signup-step-user>
+          <my-register-step-user (formBuilt)="onUserFormBuilt($event)"></my-register-step-user>
 
           <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid">Next</button>
         </cdk-step>
 
         <cdk-step [stepControl]="formStepChannel" i18n-label label="Channel information">
-          <my-signup-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-signup-step-channel>
+          <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
 
           <button i18n cdkStepperNext (click)="signup()"
                   [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()"
