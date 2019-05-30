@@ -59,10 +59,11 @@ Make sure that you have followed
 [the steps](/support/doc/dependencies.md)
 to install the dependencies.
 
-Then clone the sources and install node modules:
+Fork the github repository,
+and then clone the sources and install node modules:
 
 ```
-$ git clone https://github.com/Chocobozzz/PeerTube
+$ git clone https://github.com/YOUR_GITHUB_USERNAME/PeerTube
 $ cd PeerTube
 $ yarn install --pure-lockfile
 ```
