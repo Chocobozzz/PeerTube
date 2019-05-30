@@ -63,7 +63,7 @@ Fork the github repository,
 and then clone the sources and install node modules:
 
 ```
-$ git clone https://github.com/Chocobozzz/YOUR_GITHUB_USERNAME
+$ git clone https://github.com/YOUR_GITHUB_USERNAME/PeerTube
 $ cd PeerTube
 $ yarn install --pure-lockfile
 ```
