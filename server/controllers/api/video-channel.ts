@@ -143,15 +143,14 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)
-    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, { err }))
+    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.url, { err }))
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
-  logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
+  logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
 
   return res.json({
     videoChannel: {
-      id: videoChannelCreated.id,
-      uuid: videoChannelCreated.Actor.uuid
+      id: videoChannelCreated.id
     }
   }).end()
 }
@@ -180,7 +179,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         new VideoChannelAuditView(videoChannelInstanceUpdated.toFormattedJSON()),
         oldVideoChannelAuditKeys
       )
-      logger.info('Video channel with name %s and uuid %s updated.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
+      logger.info('Video channel %s updated.', videoChannelInstance.Actor.url)
     })
   } catch (err) {
     logger.debug('Cannot update the video channel.', { err })
@@ -205,7 +204,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
     await videoChannelInstance.destroy({ transaction: t })
 
     auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
-    logger.info('Video channel with name %s and uuid %s deleted.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
+    logger.info('Video channel %s deleted.', videoChannelInstance.Actor.url)
   })
 
   return res.type('json').status(204).end()

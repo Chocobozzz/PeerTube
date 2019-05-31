@@ -12,7 +12,6 @@ export interface VideoChannel extends Actor {
 
 export interface VideoChannelSummary {
   id: number
-  uuid: string
   name: string
   displayName: string
   url: string

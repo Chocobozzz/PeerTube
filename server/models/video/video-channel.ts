@@ -72,7 +72,7 @@ type AvailableForListOptions = {
       attributes: [ 'name', 'description', 'id', 'actorId' ],
       include: [
         {
-          attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
           include: [
@@ -387,24 +387,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findByPk(id)
   }
 
-  static loadByUUIDAndPopulateAccount (uuid: string) {
-    const query = {
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            uuid
-          }
-        }
-      ]
-    }
-
-    return VideoChannelModel
-      .scope([ ScopeNames.WITH_ACCOUNT ])
-      .findOne(query)
-  }
-
   static loadByUrlAndPopulateAccount (url: string) {
     const query = {
       include: [
@@ -510,7 +492,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return {
       id: this.id,
-      uuid: actor.uuid,
       name: actor.name,
       displayName: this.getDisplayName(),
       url: actor.url,

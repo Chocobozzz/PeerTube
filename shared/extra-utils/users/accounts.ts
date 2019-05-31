@@ -39,7 +39,7 @@ async function expectAccountFollows (url: string, nameWithDomain: string, follow
   expect(account.followingCount).to.equal(followingCount, message)
 }
 
-async function checkActorFilesWereRemoved (actorUUID: string, serverNumber: number) {
+async function checkActorFilesWereRemoved (filename: string, serverNumber: number) {
   const testDirectory = 'test' + serverNumber
 
   for (const directory of [ 'avatars' ]) {
@@ -50,7 +50,7 @@ async function checkActorFilesWereRemoved (actorUUID: string, serverNumber: numb
 
     const files = await readdir(directoryPath)
     for (const file of files) {
-      expect(file).to.not.contain(actorUUID)
+      expect(file).to.not.contain(filename)
     }
   }
 }

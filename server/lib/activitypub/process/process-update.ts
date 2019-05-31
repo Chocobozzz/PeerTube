@@ -95,7 +95,7 @@ async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUp
 async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {
   const actorAttributesToUpdate = activity.object as ActivityPubActor
 
-  logger.debug('Updating remote account "%s".', actorAttributesToUpdate.uuid)
+  logger.debug('Updating remote account "%s".', actorAttributesToUpdate.url)
   let accountOrChannelInstance: AccountModel | VideoChannelModel
   let actorFieldsSave: object
   let accountOrChannelFieldsSave: object
@@ -128,7 +128,7 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
       await accountOrChannelInstance.save({ transaction: t })
     })
 
-    logger.info('Remote account with uuid %s updated', actorAttributesToUpdate.uuid)
+    logger.info('Remote account %s updated', actorAttributesToUpdate.url)
   } catch (err) {
     if (actor !== undefined && actorFieldsSave !== undefined) {
       resetSequelizeInstance(actor, actorFieldsSave)

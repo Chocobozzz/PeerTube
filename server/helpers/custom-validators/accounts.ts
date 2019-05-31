@@ -1,7 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { Response } from 'express'
 import 'express-validator'
-import * as validator from 'validator'
 import { AccountModel } from '../../models/account/account'
 import { isUserDescriptionValid, isUserUsernameValid } from './users'
 import { exists } from './misc'
@@ -18,14 +17,8 @@ function isAccountDescriptionValid (value: string) {
   return isUserDescriptionValid(value)
 }
 
-function doesAccountIdExist (id: number | string, res: Response, sendNotFound = true) {
-  let promise: Bluebird<AccountModel>
-
-  if (validator.isInt('' + id)) {
-    promise = AccountModel.load(+id)
-  } else { // UUID
-    promise = AccountModel.loadByUUID('' + id)
-  }
+function doesAccountIdExist (id: number, res: Response, sendNotFound = true) {
+  const promise = AccountModel.load(id)
 
   return doesAccountExist(promise, res, sendNotFound)
 }

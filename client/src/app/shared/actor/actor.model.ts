@@ -4,7 +4,6 @@ import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 
 export abstract class Actor implements ActorServer {
   id: number
-  uuid: string
   url: string
   name: string
   host: string
@@ -35,7 +34,6 @@ export abstract class Actor implements ActorServer {
 
   protected constructor (hash: ActorServer) {
     this.id = hash.id
-    this.uuid = hash.uuid
     this.url = hash.url
     this.name = hash.name
     this.host = hash.host

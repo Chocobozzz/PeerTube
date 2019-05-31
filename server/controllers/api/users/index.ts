@@ -190,8 +190,7 @@ async function createUser (req: express.Request, res: express.Response) {
     user: {
       id: user.id,
       account: {
-        id: account.id,
-        uuid: account.Actor.uuid
+        id: account.id
       }
     }
   }).end()

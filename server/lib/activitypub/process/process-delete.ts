@@ -95,23 +95,23 @@ async function processDeleteVideoPlaylist (actor: ActorModel, playlistToDelete: 
 }
 
 async function processDeleteAccount (accountToRemove: AccountModel) {
-  logger.debug('Removing remote account "%s".', accountToRemove.Actor.uuid)
+  logger.debug('Removing remote account "%s".', accountToRemove.Actor.url)
 
   await sequelizeTypescript.transaction(async t => {
     await accountToRemove.destroy({ transaction: t })
   })
 
-  logger.info('Remote account with uuid %s removed.', accountToRemove.Actor.uuid)
+  logger.info('Remote account %s removed.', accountToRemove.Actor.url)
 }
 
 async function processDeleteVideoChannel (videoChannelToRemove: VideoChannelModel) {
-  logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.uuid)
+  logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.url)
 
   await sequelizeTypescript.transaction(async t => {
     await videoChannelToRemove.destroy({ transaction: t })
   })
 
-  logger.info('Remote video channel with uuid %s removed.', videoChannelToRemove.Actor.uuid)
+  logger.info('Remote video channel %s removed.', videoChannelToRemove.Actor.url)
 }
 
 function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {

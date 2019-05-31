@@ -18,12 +18,10 @@ import {
 import {
   addVideoChannel,
   deleteVideoChannel,
-  flushTests,
   getAccountVideoChannelsList,
   getMyUserInformation,
   getVideoChannel,
   getVideoChannelsList,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   updateVideoChannel
@@ -35,7 +33,6 @@ const expect = chai.expect
 describe('Test video channels', function () {
   let servers: ServerInfo[]
   let userInfo: User
-  let accountUUID: string
   let firstVideoChannelId: number
   let secondVideoChannelId: number
   let videoUUID: string
@@ -51,7 +48,6 @@ describe('Test video channels', function () {
     {
       const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
       const user: User = res.body
-      accountUUID = user.account.uuid
 
       firstVideoChannelId = user.videoChannels[0].id
     }

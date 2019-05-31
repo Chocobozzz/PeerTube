@@ -524,7 +524,6 @@ async function completeVideoCheck (
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
   expect(video.account.id).to.be.a('number')
-  expect(video.account.uuid).to.be.a('string')
   expect(video.account.host).to.equal(attributes.account.host)
   expect(video.account.name).to.equal(attributes.account.name)
   expect(video.channel.displayName).to.equal(attributes.channel.displayName)

@@ -33,7 +33,7 @@ function setAsyncActorKeys (actor: ActorModel) {
       return actor.save()
     })
     .catch(err => {
-      logger.error('Cannot set public/private keys of actor %d.', actor.uuid, { err })
+      logger.error('Cannot set public/private keys of actor %d.', actor.url, { err })
       return actor
     })
 }
@@ -128,18 +128,17 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   const followersCount = await fetchActorTotalItems(attributes.followers)
   const followingCount = await fetchActorTotalItems(attributes.following)
 
-  actorInstance.set('type', attributes.type)
-  actorInstance.set('uuid', attributes.uuid)
-  actorInstance.set('preferredUsername', attributes.preferredUsername)
-  actorInstance.set('url', attributes.id)
-  actorInstance.set('publicKey', attributes.publicKey.publicKeyPem)
-  actorInstance.set('followersCount', followersCount)
-  actorInstance.set('followingCount', followingCount)
-  actorInstance.set('inboxUrl', attributes.inbox)
-  actorInstance.set('outboxUrl', attributes.outbox)
-  actorInstance.set('sharedInboxUrl', attributes.endpoints.sharedInbox)
-  actorInstance.set('followersUrl', attributes.followers)
-  actorInstance.set('followingUrl', attributes.following)
+  actorInstance.type = attributes.type
+  actorInstance.preferredUsername = attributes.preferredUsername
+  actorInstance.url = attributes.id
+  actorInstance.publicKey = attributes.publicKey.publicKeyPem
+  actorInstance.followersCount = followersCount
+  actorInstance.followingCount = followingCount
+  actorInstance.inboxUrl = attributes.inbox
+  actorInstance.outboxUrl = attributes.outbox
+  actorInstance.sharedInboxUrl = attributes.endpoints.sharedInbox
+  actorInstance.followersUrl = attributes.followers
+  actorInstance.followingUrl = attributes.following
 }
 
 async function updateActorAvatarInstance (actorInstance: ActorModel, avatarName: string, t: Transaction) {
@@ -388,7 +387,6 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   const actor = new ActorModel({
     type: actorJSON.type,
-    uuid: actorJSON.uuid,
     preferredUsername: actorJSON.preferredUsername,
     url: actorJSON.id,
     publicKey: actorJSON.publicKey.publicKeyPem,

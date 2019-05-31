@@ -26,13 +26,8 @@ async function doesLocalVideoChannelNameExist (name: string, res: express.Respon
   return processVideoChannelExist(videoChannel, res)
 }
 
-async function doesVideoChannelIdExist (id: number | string, res: express.Response) {
-  let videoChannel: VideoChannelModel
-  if (validator.isInt('' + id)) {
-    videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
-  } else { // UUID
-    videoChannel = await VideoChannelModel.loadByUUIDAndPopulateAccount('' + id)
-  }
+async function doesVideoChannelIdExist (id: number, res: express.Response) {
+  const videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
 
   return processVideoChannelExist(videoChannel, res)
 }

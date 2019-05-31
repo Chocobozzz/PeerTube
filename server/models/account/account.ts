@@ -47,7 +47,7 @@ export enum ScopeNames {
       attributes: [ 'id', 'name' ],
       include: [
         {
-          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
           where: whereActor,
@@ -178,22 +178,6 @@ export class AccountModel extends Model<AccountModel> {
 
   static load (id: number, transaction?: Transaction) {
     return AccountModel.findByPk(id, { transaction })
-  }
-
-  static loadByUUID (uuid: string) {
-    const query = {
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            uuid
-          }
-        }
-      ]
-    }
-
-    return AccountModel.findOne(query)
   }
 
   static loadByNameWithHost (nameWithHost: string) {
@@ -332,7 +316,6 @@ export class AccountModel extends Model<AccountModel> {
 
     return {
       id: this.id,
-      uuid: actor.uuid,
       name: actor.name,
       displayName: this.getDisplayName(),
       url: actor.url,

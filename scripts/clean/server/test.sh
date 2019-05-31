@@ -17,8 +17,11 @@ removeFiles () {
 }
 
 dropRedis () {
-  redis-cli KEYS "bull-localhost:900$1*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
-  redis-cli KEYS "redis-localhost:900$1*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
+  port=$((9000+$1))
+
+  redis-cli KEYS "bull-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
+  redis-cli KEYS "redis-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
+  redis-cli KEYS "*redis-localhost:$port-" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
 }
 
 seq=$(seq 1 6)
