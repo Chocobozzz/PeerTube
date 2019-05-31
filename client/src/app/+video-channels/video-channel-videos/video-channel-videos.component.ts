@@ -29,6 +29,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   private videoChannelSub: Subscription
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -36,7 +37,6 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     protected notifier: Notifier,
     protected confirmService: ConfirmService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService
   ) {

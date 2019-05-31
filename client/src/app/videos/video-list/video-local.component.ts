@@ -22,13 +22,13 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   filter: VideoFilter = 'local'
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

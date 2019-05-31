@@ -17,15 +17,16 @@ import { Notifier, ServerService } from '@app/core'
 export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
   sort: VideoSortField = '-publishedAt'
+  groupByDate = true
 
   constructor (
+    protected i18n: I18n,
     protected route: ActivatedRoute,
     protected serverService: ServerService,
     protected router: Router,
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

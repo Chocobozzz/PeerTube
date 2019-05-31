@@ -20,6 +20,7 @@ import { Video } from '@app/shared/video/video.model'
 import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
 import { VideoSortField } from '@app/shared/video/sort-field.type'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export type SelectionType = { [ id: number ]: boolean }
 
@@ -44,6 +45,7 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   globalButtonsTemplate: TemplateRef<any>
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected route: ActivatedRoute,
     protected notifier: Notifier,

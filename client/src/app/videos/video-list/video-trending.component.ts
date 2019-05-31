@@ -19,13 +19,13 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   defaultSort: VideoSortField = '-trending'
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

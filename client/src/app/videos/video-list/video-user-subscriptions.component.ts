@@ -19,15 +19,16 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
   titlePage: string
   sort = '-publishedAt' as VideoSortField
   ownerDisplayType: OwnerDisplayType = 'auto'
+  groupByDate = true
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private videoService: VideoService
   ) {
     super()

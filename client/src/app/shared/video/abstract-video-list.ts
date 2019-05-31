@@ -11,6 +11,17 @@ import { MiniatureDisplayOptions, OwnerDisplayType } from '@app/shared/video/vid
 import { Syndication } from '@app/shared/video/syndication.model'
 import { Notifier, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { isThisMonth, isThisWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
+
+enum GroupDate {
+  UNKNOWN = 0,
+  TODAY = 1,
+  YESTERDAY = 2,
+  THIS_WEEK = 3,
+  THIS_MONTH = 4,
+  OLDER = 5
+}
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableForReuseHook {
   pagination: ComponentPagination = {
@@ -31,6 +42,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   displayModerationBlock = false
   titleTooltip: string
   displayVideoActions = true
+  groupByDate = false
 
   disabled = false
 
@@ -50,10 +62,14 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   protected abstract serverService: ServerService
   protected abstract screenService: ScreenService
   protected abstract router: Router
+  protected abstract i18n: I18n
   abstract titlePage: string
 
   private resizeSubscription: Subscription
   private angularState: number
+
+  private groupedDateLabels: { [id in GroupDate]: string }
+  private groupedDates: { [id: number]: GroupDate } = {}
 
   abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number }>
 
@@ -64,6 +80,15 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
 
   ngOnInit () {
+    this.groupedDateLabels = {
+      [GroupDate.UNKNOWN]: null,
+      [GroupDate.TODAY]: this.i18n('Today'),
+      [GroupDate.YESTERDAY]: this.i18n('Yesterday'),
+      [GroupDate.THIS_WEEK]: this.i18n('This week'),
+      [GroupDate.THIS_MONTH]: this.i18n('This month'),
+      [GroupDate.OLDER]: this.i18n('Older')
+    }
+
     // Subscribe to route changes
     const routeParams = this.route.snapshot.queryParams
     this.loadRouteParams(routeParams)
@@ -113,6 +138,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
         this.pagination.totalItems = totalVideos
         this.videos = this.videos.concat(videos)
 
+        if (this.groupByDate) this.buildGroupedDateLabels()
+
         this.onMoreVideos()
       },
 
@@ -132,6 +159,49 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   removeVideoFromArray (video: Video) {
     this.videos = this.videos.filter(v => v.id !== video.id)
+  }
+
+  buildGroupedDateLabels () {
+    let currentGroupedDate: GroupDate = GroupDate.UNKNOWN
+
+    for (const video of this.videos) {
+      const publishedDate = video.publishedAt
+
+      if (currentGroupedDate < GroupDate.TODAY && isToday(publishedDate)) {
+        currentGroupedDate = GroupDate.TODAY
+        this.groupedDates[ video.id ] = currentGroupedDate
+        continue
+      }
+
+      if (currentGroupedDate < GroupDate.YESTERDAY && isYesterday(publishedDate)) {
+        currentGroupedDate = GroupDate.YESTERDAY
+        this.groupedDates[ video.id ] = currentGroupedDate
+        continue
+      }
+
+      if (currentGroupedDate < GroupDate.THIS_WEEK && isThisWeek(publishedDate)) {
+        currentGroupedDate = GroupDate.THIS_WEEK
+        this.groupedDates[ video.id ] = currentGroupedDate
+        continue
+      }
+
+      if (currentGroupedDate < GroupDate.THIS_MONTH && isThisMonth(publishedDate)) {
+        currentGroupedDate = GroupDate.THIS_MONTH
+        this.groupedDates[ video.id ] = currentGroupedDate
+        continue
+      }
+
+      if (currentGroupedDate < GroupDate.OLDER) {
+        currentGroupedDate = GroupDate.OLDER
+        this.groupedDates[ video.id ] = currentGroupedDate
+      }
+    }
+  }
+
+  getCurrentGroupedDateLabel (video: Video) {
+    if (this.groupByDate === false) return undefined
+
+    return this.groupedDateLabels[this.groupedDates[video.id]]
   }
 
   // On videos hook for children that want to do something

@@ -29,6 +29,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   private accountSub: Subscription
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -36,7 +37,6 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected notifier: Notifier,
     protected confirmService: ConfirmService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private accountService: AccountService,
     private videoService: VideoService
   ) {

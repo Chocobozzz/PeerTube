@@ -24,6 +24,18 @@
   }
 }
 
+.date-title {
+  font-size: 16px;
+  font-weight: $font-semibold;
+  margin-bottom: 20px;
+  margin-top: -10px;
+  padding-top: 20px;
+
+  &:not(:first-child) {
+    border-top: 1px solid $separator-border-color;
+  }
+}
+
 .margin-content {
   @include adapt-margin-content-width;
 }
