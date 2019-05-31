@@ -3,7 +3,8 @@ import * as uuidv4 from 'uuid/v4'
 import { VideoChannelCreate } from '../../shared/models'
 import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { buildActorInstance, getVideoChannelActivityPubUrl } from './activitypub'
+import { buildActorInstance, federateVideoIfNeeded, getVideoChannelActivityPubUrl } from './activitypub'
+import { VideoModel } from '../models/video/video'
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountModel, t: Sequelize.Transaction) {
   const uuid = uuidv4()
@@ -33,8 +34,19 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   return videoChannelCreated
 }
 
+async function federateAllVideosOfChannel (videoChannel: VideoChannelModel) {
+  const videoIds = await VideoModel.getAllIdsFromChannel(videoChannel)
+
+  for (const videoId of videoIds) {
+    const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+
+    await federateVideoIfNeeded(video, false)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  createVideoChannel
+  createVideoChannel,
+  federateAllVideosOfChannel
 }

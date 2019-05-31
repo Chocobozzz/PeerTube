@@ -87,6 +87,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
       commentObject.inReplyTo,
       { err }
     )
+    return
   }
 
   const { comment, created } = await addVideoComment(video, commentObject.id)

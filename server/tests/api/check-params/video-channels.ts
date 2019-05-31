@@ -24,6 +24,7 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 import { join } from 'path'
+import { VideoChannelUpdate } from '../../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -169,9 +170,11 @@ describe('Test video channels API validator', function () {
   })
 
   describe('When updating a video channel', function () {
-    const baseCorrectParams = {
+    const baseCorrectParams: VideoChannelUpdate = {
       displayName: 'hello',
-      description: 'super description'
+      description: 'super description',
+      support: 'toto',
+      bulkVideosSupportUpdate: false
     }
     let path: string
 
@@ -211,6 +214,11 @@ describe('Test video channels API validator', function () {
 
     it('Should fail with a long support text', async function () {
       const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(201) })
+      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad bulkVideosSupportUpdate field', async function () {
+      const fields = immutableAssign(baseCorrectParams, { bulkVideosSupportUpdate: 'super' })
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 

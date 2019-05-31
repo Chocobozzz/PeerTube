@@ -14,6 +14,7 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors } from '../utils'
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { isBooleanValid } from '../../../helpers/custom-validators/misc'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
@@ -40,9 +41,18 @@ const videoChannelsAddValidator = [
 
 const videoChannelsUpdateValidator = [
   param('nameWithHost').exists().withMessage('Should have an video channel name with host'),
-  body('displayName').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
-  body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
-  body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
+  body('displayName')
+    .optional()
+    .custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+  body('description')
+    .optional()
+    .custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
+  body('support')
+    .optional()
+    .custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
+  body('bulkVideosSupportUpdate')
+    .optional()
+    .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })

@@ -2,12 +2,12 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, Video, VideoChannel } from '../../../../shared/index'
+import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
 import {
   cleanupTests,
   createUser,
   doubleFollow,
-  flushAndRunMultipleServers,
+  flushAndRunMultipleServers, getVideo,
   getVideoChannelVideos,
   testImage,
   updateVideo,
@@ -79,7 +79,8 @@ describe('Test video channels', function () {
 
     // The channel is 1 is propagated to servers 2
     {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'my video name', channelId: secondVideoChannelId })
+      const videoAttributesArg = { name: 'my video name', channelId: secondVideoChannelId, support: 'video support field' }
+      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributesArg)
       videoUUID = res.body.video.uuid
     }
 
@@ -201,12 +202,12 @@ describe('Test video channels', function () {
   })
 
   it('Should update video channel', async function () {
-    this.timeout(5000)
+    this.timeout(15000)
 
     const videoChannelAttributes = {
       displayName: 'video channel updated',
       description: 'video channel description updated',
-      support: 'video channel support text updated'
+      support: 'support updated'
     }
 
     await updateVideoChannel(servers[0].url, servers[0].accessToken, 'second_video_channel', videoChannelAttributes)
@@ -224,7 +225,36 @@ describe('Test video channels', function () {
       expect(res.body.data[0].name).to.equal('second_video_channel')
       expect(res.body.data[0].displayName).to.equal('video channel updated')
       expect(res.body.data[0].description).to.equal('video channel description updated')
-      expect(res.body.data[0].support).to.equal('video channel support text updated')
+      expect(res.body.data[0].support).to.equal('support updated')
+    }
+  })
+
+  it('Should not have updated the video support field', async function () {
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const video: VideoDetails = res.body
+
+      expect(video.support).to.equal('video support field')
+    }
+  })
+
+  it('Should update the channel support field and update videos too', async function () {
+    this.timeout(35000)
+
+    const videoChannelAttributes = {
+      support: 'video channel support text updated',
+      bulkVideosSupportUpdate: true
+    }
+
+    await updateVideoChannel(servers[0].url, servers[0].accessToken, 'second_video_channel', videoChannelAttributes)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const video: VideoDetails = res.body
+
+      expect(video.support).to.equal(videoChannelAttributes.support)
     }
   })
 

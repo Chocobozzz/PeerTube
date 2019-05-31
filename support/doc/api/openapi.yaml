@@ -1322,7 +1322,10 @@ paths:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
       requestBody:
-        $ref: '#/components/requestBodies/VideoChannelInput'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoChannelCreate'
   '/video-channels/{channelHandle}':
     get:
       summary: Get a video channel by its id
@@ -1349,7 +1352,10 @@ paths:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
       requestBody:
-        $ref: '#/components/requestBodies/VideoChannelInput'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoChannelUpdate'
     delete:
       summary: Delete a video channel by its id
       security:
@@ -1775,12 +1781,6 @@ components:
         type: array
         items:
           type: string
-  requestBodies:
-    VideoChannelInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/VideoChannelInput'
   securitySchemes:
     OAuth2:
       description: >
@@ -2294,10 +2294,28 @@ components:
         - username
         - password
         - email
-    VideoChannelInput:
+    VideoChannelCreate:
       properties:
         name:
           type: string
+        displayName:
+          type: string
         description:
           type: string
+        support:
+          type: string
+      required:
+        - name
+        - displayName
+    VideoChannelUpdate:
+      properties:
+        displayName:
+          type: string
+        description:
+          type: string
+        support:
+          type: string
+        bulkVideosSupportUpdate:
+          type: boolean
+          description: 'Update all videos support field of this channel'
 

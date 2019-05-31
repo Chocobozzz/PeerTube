@@ -74,12 +74,13 @@ function updateVideoChannel (
   attributes: VideoChannelUpdate,
   expectedStatus = 204
 ) {
-  const body = {}
+  const body: any = {}
   const path = '/api/v1/video-channels/' + channelName
 
-  if (attributes.displayName) body['displayName'] = attributes.displayName
-  if (attributes.description) body['description'] = attributes.description
-  if (attributes.support) body['support'] = attributes.support
+  if (attributes.displayName) body.displayName = attributes.displayName
+  if (attributes.description) body.description = attributes.description
+  if (attributes.support) body.support = attributes.support
+  if (attributes.bulkVideosSupportUpdate) body.bulkVideosSupportUpdate = attributes.bulkVideosSupportUpdate
 
   return request(url)
     .put(path)

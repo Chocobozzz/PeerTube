@@ -355,6 +355,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
               .field('name', attributes.name)
+              .field('support', attributes.support)
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
               .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))

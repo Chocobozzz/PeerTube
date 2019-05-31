@@ -1,5 +1,7 @@
 export interface VideoChannelUpdate {
-  displayName: string
+  displayName?: string
   description?: string
   support?: string
+
+  bulkVideosSupportUpdate?: boolean
 }

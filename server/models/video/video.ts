@@ -1515,6 +1515,29 @@ export class VideoModel extends Model<VideoModel> {
                      .then(results => results.length === 1)
   }
 
+  static bulkUpdateSupportField (videoChannel: VideoChannelModel, t: Transaction) {
+    const options = {
+      where: {
+        channelId: videoChannel.id
+      },
+      transaction: t
+    }
+
+    return VideoModel.update({ support: videoChannel.support }, options)
+  }
+
+  static getAllIdsFromChannel (videoChannel: VideoChannelModel) {
+    const query = {
+      attributes: [ 'id' ],
+      where: {
+        channelId: videoChannel.id
+      }
+    }
+
+    return VideoModel.findAll(query)
+      .then(videos => videos.map(v => v.id))
+  }
+
   // threshold corresponds to how many video the field should have to be returned
   static async getRandomFieldSamples (field: 'category' | 'channelId', threshold: number, count: number) {
     const serverActor = await getServerActor()
