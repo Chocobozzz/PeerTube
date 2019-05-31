@@ -5,7 +5,7 @@ import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
+import { sanitizeAndCheckActorObject } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
@@ -369,10 +369,9 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
   logger.info('Fetching remote actor %s.', actorUrl)
 
   const requestResult = await doRequest<ActivityPubActor>(options)
-  normalizeActor(requestResult.body)
-
   const actorJSON = requestResult.body
-  if (isActorObjectValid(actorJSON) === false) {
+
+  if (sanitizeAndCheckActorObject(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON })
     return { result: undefined, statusCode: requestResult.response.statusCode }
   }

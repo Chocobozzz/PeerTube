@@ -9,9 +9,6 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { createOrUpdateCacheFile } from '../cache-file'
 import { Notifier } from '../../notifier'
-import { processViewActivity } from './process-view'
-import { processDislikeActivity } from './process-dislike'
-import { processFlagActivity } from './process-flag'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { VideoModel } from '../../../models/video/video'
@@ -19,18 +16,6 @@ import { VideoModel } from '../../../models/video/video'
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
   const activityType = activityObject.type
-
-  if (activityType === 'View') {
-    return processViewActivity(activity, byActor)
-  }
-
-  if (activityType === 'Dislike') {
-    return retryTransactionWrapper(processDislikeActivity, activity, byActor)
-  }
-
-  if (activityType === 'Flag') {
-    return retryTransactionWrapper(processFlagActivity, activity, byActor)
-  }
 
   if (activityType === 'Video') {
     return processCreateVideo(activity)
