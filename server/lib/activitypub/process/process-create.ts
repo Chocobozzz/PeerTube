@@ -14,6 +14,7 @@ import { processDislikeActivity } from './process-dislike'
 import { processFlagActivity } from './process-flag'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
+import { VideoModel } from '../../../models/video/video'
 
 async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
   const activityObject = activity.object
@@ -91,7 +92,17 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
-  const { video } = await resolveThread(commentObject.inReplyTo)
+  let video: VideoModel
+  try {
+    const resolveThreadResult = await resolveThread(commentObject.inReplyTo)
+    video = resolveThreadResult.video
+  } catch (err) {
+    logger.debug(
+      'Cannot process video comment because we could not resolve thread %s. Maybe it was not a video thread, so skip it.',
+      commentObject.inReplyTo,
+      { err }
+    )
+  }
 
   const { comment, created } = await addVideoComment(video, commentObject.id)
 

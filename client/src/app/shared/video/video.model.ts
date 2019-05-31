@@ -52,7 +52,6 @@ export class Video implements VideoServerModel {
 
   account: {
     id: number
-    uuid: string
     name: string
     displayName: string
     url: string
@@ -62,7 +61,6 @@ export class Video implements VideoServerModel {
 
   channel: {
     id: number
-    uuid: string
     name: string
     displayName: string
     url: string

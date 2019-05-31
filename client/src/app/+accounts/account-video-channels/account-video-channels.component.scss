@@ -10,4 +10,8 @@
   @include miniature-rows;
 
   padding-top: 0 !important;
+
+  .section-title {
+    align-items: center;
+  }
 }

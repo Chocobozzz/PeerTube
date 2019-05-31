@@ -80,7 +80,8 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
   return { comment, created }
 }
 
-async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
+type ResolveThreadResult = Promise<{ video: VideoModel, parents: VideoCommentModel[] }>
+async function resolveThread (url: string, comments: VideoCommentModel[] = []): ResolveThreadResult {
    // Already have this comment?
   const commentFromDatabase = await VideoCommentModel.loadByUrlAndPopulateReplyAndVideo(url)
   if (commentFromDatabase) {
@@ -161,7 +162,6 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
     return resolveThread(body.inReplyTo, comments.concat([ comment ]))
   }
-
 }
 
 export {
