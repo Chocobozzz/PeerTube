@@ -6,7 +6,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { Notifier, ServerService } from '@app/core'
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, Observable, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
@@ -135,22 +135,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   setLike () {
     if (this.isUserLoggedIn() === false) return
-    if (this.userRating === 'like') {
-      // Already liked this video
-      this.setRating('none')
-    } else {
-      this.setRating('like')
-    }
+
+    // Already liked this video
+    if (this.userRating === 'like') this.setRating('none')
+    else this.setRating('like')
   }
 
   setDislike () {
     if (this.isUserLoggedIn() === false) return
-    if (this.userRating === 'dislike') {
-      // Already disliked this video
-      this.setRating('none')
-    } else {
-      this.setRating('dislike')
-    }
+
+    // Already disliked this video
+    if (this.userRating === 'dislike') this.setRating('none')
+    else this.setRating('dislike')
   }
 
   showMoreDescription () {
@@ -249,12 +245,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       )
       .subscribe(([ video, captionsResult ]) => {
         const queryParams = this.route.snapshot.queryParams
-        const startTime = queryParams.start
-        const stopTime = queryParams.stop
-        const subtitle = queryParams.subtitle
-        const playerMode = queryParams.mode
 
-        this.onVideoFetched(video, captionsResult.data, { startTime, stopTime, subtitle, playerMode })
+        const urlOptions = {
+          startTime: queryParams.start,
+          stopTime: queryParams.stop,
+          subtitle: queryParams.subtitle,
+          playerMode: queryParams.mode
+        }
+
+        this.onVideoFetched(video, captionsResult.data, urlOptions)
             .catch(err => this.handleError(err))
       })
   }
@@ -279,6 +278,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private updateVideoDescription (description: string) {
     this.video.description = description
     this.setVideoDescriptionHTML()
+      .catch(err => console.error(err))
   }
 
   private async setVideoDescriptionHTML () {
@@ -385,7 +385,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         captions: videoCaptions.length !== 0,
         peertubeLink: false,
 
-        videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
+        videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE
+          ? this.videoService.getVideoViewUrl(this.video.uuid)
+          : null,
         embedUrl: this.video.embedUrl,
 
         language: this.localeId,
@@ -466,20 +468,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setRating (nextRating: UserVideoRateType) {
-    let method
-    switch (nextRating) {
-      case 'like':
-        method = this.videoService.setVideoLike
-        break
-      case 'dislike':
-        method = this.videoService.setVideoDislike
-        break
-      case 'none':
-        method = this.videoService.unsetVideoLike
-        break
+    const ratingMethods: { [id in UserVideoRateType]: (id: number) => Observable<any> } = {
+      like: this.videoService.setVideoLike,
+      dislike: this.videoService.setVideoDislike,
+      none: this.videoService.unsetVideoLike
     }
 
-    method.call(this.videoService, this.video.id)
+    ratingMethods[nextRating].call(this.videoService, this.video.id)
           .subscribe(
             () => {
               // Update the video like attribute
@@ -556,18 +551,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private initHotkeys () {
     this.hotkeys = [
-      new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
+      new Hotkey('shift+l', () => {
         this.setLike()
         return false
       }, undefined, this.i18n('Like the video')),
-      new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
+
+      new Hotkey('shift+d', () => {
         this.setDislike()
         return false
       }, undefined, this.i18n('Dislike the video')),
-      new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
-        this.subscribeButton.subscribed ?
-          this.subscribeButton.unsubscribe() :
-          this.subscribeButton.subscribe()
+
+      new Hotkey('shift+s', () => {
+        this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
         return false
       }, undefined, this.i18n('Subscribe to the account'))
     ]
