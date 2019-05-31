@@ -20,6 +20,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   videoChannelToUpdate: VideoChannel
 
   private paramsSub: Subscription
+  private oldSupportField: string
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -39,7 +40,8 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     this.buildForm({
       'display-name': this.videoChannelValidatorsService.VIDEO_CHANNEL_DISPLAY_NAME,
       description: this.videoChannelValidatorsService.VIDEO_CHANNEL_DESCRIPTION,
-      support: this.videoChannelValidatorsService.VIDEO_CHANNEL_SUPPORT
+      support: this.videoChannelValidatorsService.VIDEO_CHANNEL_SUPPORT,
+      bulkVideosSupportUpdate: null
     })
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -48,6 +50,8 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
       this.videoChannelService.getVideoChannel(videoChannelId).subscribe(
         videoChannelToUpdate => {
           this.videoChannelToUpdate = videoChannelToUpdate
+
+          this.oldSupportField = videoChannelToUpdate.support
 
           this.form.patchValue({
             'display-name': videoChannelToUpdate.displayName,
@@ -72,7 +76,8 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     const videoChannelUpdate: VideoChannelUpdate = {
       displayName: body['display-name'],
       description: body.description || null,
-      support: body.support || null
+      support: body.support || null,
+      bulkVideosSupportUpdate: body.bulkVideosSupportUpdate || false
     }
 
     this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.name, videoChannelUpdate).subscribe(
@@ -117,5 +122,11 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
 
   getFormButtonTitle () {
     return this.i18n('Update')
+  }
+
+  isBulkUpdateVideosDisplayed () {
+    if (this.oldSupportField === undefined) return false
+
+    return this.oldSupportField !== this.form.value['support']
   }
 }
