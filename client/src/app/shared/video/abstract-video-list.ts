@@ -167,31 +167,41 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     for (const video of this.videos) {
       const publishedDate = video.publishedAt
 
-      if (currentGroupedDate < GroupDate.TODAY && isToday(publishedDate)) {
+      if (currentGroupedDate <= GroupDate.TODAY && isToday(publishedDate)) {
+        if (currentGroupedDate === GroupDate.TODAY) continue
+
         currentGroupedDate = GroupDate.TODAY
         this.groupedDates[ video.id ] = currentGroupedDate
         continue
       }
 
-      if (currentGroupedDate < GroupDate.YESTERDAY && isYesterday(publishedDate)) {
+      if (currentGroupedDate <= GroupDate.YESTERDAY && isYesterday(publishedDate)) {
+        if (currentGroupedDate === GroupDate.YESTERDAY) continue
+
         currentGroupedDate = GroupDate.YESTERDAY
         this.groupedDates[ video.id ] = currentGroupedDate
         continue
       }
 
-      if (currentGroupedDate < GroupDate.THIS_WEEK && isThisWeek(publishedDate)) {
+      if (currentGroupedDate <= GroupDate.THIS_WEEK && isThisWeek(publishedDate)) {
+        if (currentGroupedDate === GroupDate.THIS_WEEK) continue
+
         currentGroupedDate = GroupDate.THIS_WEEK
         this.groupedDates[ video.id ] = currentGroupedDate
         continue
       }
 
-      if (currentGroupedDate < GroupDate.THIS_MONTH && isThisMonth(publishedDate)) {
+      if (currentGroupedDate <= GroupDate.THIS_MONTH && isThisMonth(publishedDate)) {
+        if (currentGroupedDate === GroupDate.THIS_MONTH) continue
+
         currentGroupedDate = GroupDate.THIS_MONTH
         this.groupedDates[ video.id ] = currentGroupedDate
         continue
       }
 
-      if (currentGroupedDate < GroupDate.OLDER) {
+      if (currentGroupedDate <= GroupDate.OLDER) {
+        if (currentGroupedDate === GroupDate.OLDER) continue
+
         currentGroupedDate = GroupDate.OLDER
         this.groupedDates[ video.id ] = currentGroupedDate
       }
