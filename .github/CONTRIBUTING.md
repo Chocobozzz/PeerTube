@@ -114,7 +114,7 @@ restart.
 
 ### Client side
 
-You can find a documentation of the server code/architecture
+You can find a documentation of the client code/architecture
 [here](https://docs.joinpeertube.org/#/contribute-architecture?id=client-code).
 
 
