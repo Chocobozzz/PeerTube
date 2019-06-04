@@ -31,13 +31,27 @@ function isThisMonth (d: Date) {
   return d.getMonth() === thisMonth
 }
 
+function isLastMonth (d: Date) {
+  const now = new Date()
+
+  return getDaysDifferences(now, d) <= 30
+}
+
+function isLastWeek (d: Date) {
+  const now = new Date()
+
+  return getDaysDifferences(now, d) <= 7
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   isYesterday,
   isThisWeek,
   isThisMonth,
-  isToday
+  isToday,
+  isLastMonth,
+  isLastWeek
 }
 
 // ---------------------------------------------------------------------------
@@ -46,4 +60,8 @@ function areDatesEqual (d1: Date, d2: Date) {
   return d1.getFullYear() === d2.getFullYear() &&
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate()
+}
+
+function getDaysDifferences (d1: Date, d2: Date) {
+  return (d1.getTime() - d2.getTime()) / (86400000)
 }
