@@ -18,7 +18,8 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
     VideoResolution.H_360P,
     VideoResolution.H_720P,
     VideoResolution.H_240P,
-    VideoResolution.H_1080P
+    VideoResolution.H_1080P,
+    VideoResolution.H_4K
   ]
 
   for (const resolution of resolutions) {

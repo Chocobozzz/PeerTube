@@ -205,11 +205,11 @@ async function addVideo (req: express.Request, res: express.Response) {
   }
   const videoFile = new VideoFileModel(videoFileData)
 
-  if (!videoFile.isAudio()) {
+  if (videoFile.isAudio()) {
+    videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
+  } else {
     videoFile.fps = await getVideoFileFPS(videoPhysicalFile.path)
     videoFile.resolution = (await getVideoFileResolution(videoPhysicalFile.path)).videoFileResolution
-  } else {
-    videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
   }
 
   // Move physical file

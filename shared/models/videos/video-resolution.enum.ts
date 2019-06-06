@@ -5,7 +5,8 @@ export enum VideoResolution {
   H_360P = 360,
   H_480P = 480,
   H_720P = 720,
-  H_1080P = 1080
+  H_1080P = 1080,
+  H_4K = 2160
 }
 
 /**
@@ -33,11 +34,14 @@ function getBaseBitrate (resolution: VideoResolution) {
     // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
     // Quality according to YouTube Video Info: 1752 Kbps
     return 1750 * 1000
-  case VideoResolution.H_1080P: // fallthrough
-  default:
+  case VideoResolution.H_1080P:
     // quality according to Google Live Encoder: 3000 - 6000 Kbps
     // Quality according to YouTube Video Info: 3277 Kbps
     return 3300 * 1000
+  case VideoResolution.H_4K: // fallthrough
+  default:
+    // quality according to Google Live Encoder: 13000 - 34000 Kbps
+    return 15000 * 1000
   }
 }
 

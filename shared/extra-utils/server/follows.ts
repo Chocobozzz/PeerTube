@@ -1,7 +1,7 @@
 import * as request from 'supertest'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
-import { makeGetRequest, makePostBodyRequest } from '..'
+import { makePostBodyRequest } from '../requests/requests'
 
 function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/server/followers'

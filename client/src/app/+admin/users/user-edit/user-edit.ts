@@ -7,7 +7,8 @@ import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 export abstract class UserEdit extends FormReactive {
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
-  roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
+  roles = Object.keys(USER_ROLE_LABELS)
+                .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
   username: string
   userId: number
 
@@ -27,7 +28,7 @@ export abstract class UserEdit extends FormReactive {
     const transcodingConfig = this.serverService.getConfig().transcoding
 
     const resolutions = transcodingConfig.enabledResolutions
-    const higherResolution = VideoResolution.H_1080P
+    const higherResolution = VideoResolution.H_4K
     let multiplier = 0
 
     for (const resolution of resolutions) {
