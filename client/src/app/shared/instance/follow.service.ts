@@ -3,13 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/primeng'
 import { Observable } from 'rxjs'
-import { ActorFollow, ResultList } from '../../../../../../shared'
-import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestPagination, RestService } from '../../../shared'
+import { ActorFollow, ResultList } from '@shared/index'
+import { environment } from '../../../environments/environment'
+import { RestExtractor, RestPagination, RestService } from '../rest'
 
 @Injectable()
 export class FollowService {
-  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
+  private static BASE_APPLICATION_URL = 'https://peertube2.cpy.re' + '/api/v1/server'
 
   constructor (
     private authHttp: HttpClient,

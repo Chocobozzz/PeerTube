@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table'
 import { SharedModule } from '../shared'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
-import { FollowersListComponent, FollowingAddComponent, FollowsComponent, FollowService } from './follows'
+import { FollowersListComponent, FollowingAddComponent, FollowsComponent } from './follows'
 import { FollowingListComponent } from './follows/following-list/following-list.component'
 import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersComponent, UserUpdateComponent } from './users'
 import {
@@ -66,7 +66,6 @@ import { DebugComponent, DebugService } from '@app/+admin/system/debug'
   ],
 
   providers: [
-    FollowService,
     RedundancyService,
     JobService,
     LogsService,

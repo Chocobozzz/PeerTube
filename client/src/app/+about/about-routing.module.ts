@@ -4,6 +4,7 @@ import { MetaGuard } from '@ngx-meta/core'
 import { AboutComponent } from './about.component'
 import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
+import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.component'
 
 const aboutRoutes: Routes = [
   {
@@ -31,6 +32,15 @@ const aboutRoutes: Routes = [
         data: {
           meta: {
             title: 'About PeerTube'
+          }
+        }
+      },
+      {
+        path: 'follows',
+        component: AboutFollowsComponent,
+        data: {
+          meta: {
+            title: 'About follows'
           }
         }
       }

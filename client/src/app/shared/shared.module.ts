@@ -85,6 +85,7 @@ import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklis
 import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.component'
 import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
 import { ClipboardModule } from 'ngx-clipboard'
+import { FollowService } from '@app/shared/instance/follow.service'
 
 @NgModule({
   imports: [
@@ -270,6 +271,8 @@ import { ClipboardModule } from 'ngx-clipboard'
     ScreenService,
 
     UserNotificationService,
+
+    FollowService,
 
     I18n
   ]
