@@ -160,12 +160,16 @@ function getUsersList (url: string, accessToken: string) {
 function getUsersListPaginationAndSort (url: string, accessToken: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/users'
 
+  const query = {
+    start,
+    count,
+    sort,
+    search
+  }
+
   return request(url)
           .get(path)
-          .query({ start })
-          .query({ count })
-          .query({ sort })
-          .query({ search })
+          .query(query)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
           .expect(200)

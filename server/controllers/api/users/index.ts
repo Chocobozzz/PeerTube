@@ -50,11 +50,14 @@ import { UserRegister } from '../../../../shared/models/users/user-register.mode
 
 const auditLogger = auditLoggerFactory('users')
 
-const loginRateLimiter = new RateLimit({
+// FIXME: https://github.com/nfriedly/express-rate-limit/issues/138
+// @ts-ignore
+const loginRateLimiter = RateLimit({
   windowMs: RATES_LIMIT.LOGIN.WINDOW_MS,
   max: RATES_LIMIT.LOGIN.MAX
 })
 
+// @ts-ignore
 const askSendEmailLimiter = new RateLimit({
   windowMs: RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
   max: RATES_LIMIT.ASK_SEND_EMAIL.MAX

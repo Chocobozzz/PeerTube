@@ -6,9 +6,11 @@ import { immutableAssign } from '../miscs/miscs'
 
 function searchVideo (url: string, search: string) {
   const path = '/api/v1/search/videos'
+
+  const query = { sort: '-publishedAt', search: search }
   const req = request(url)
     .get(path)
-    .query({ sort: '-publishedAt', search })
+    .query(query)
     .set('Accept', 'application/json')
 
   return req.expect(200)
@@ -30,11 +32,15 @@ function searchVideoWithToken (url: string, search: string, token: string, query
 function searchVideoWithPagination (url: string, search: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/search/videos'
 
+  const query = {
+    start,
+    search,
+    count
+  }
+
   const req = request(url)
     .get(path)
-    .query({ start })
-    .query({ search })
-    .query({ count })
+    .query(query)
 
   if (sort) req.query({ sort })
 
@@ -46,10 +52,11 @@ function searchVideoWithPagination (url: string, search: string, start: number, 
 function searchVideoWithSort (url: string, search: string, sort: string) {
   const path = '/api/v1/search/videos'
 
+  const query = { search, sort }
+
   return request(url)
     .get(path)
-    .query({ search })
-    .query({ sort })
+    .query(query)
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
