@@ -24,6 +24,9 @@ import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
+  body('displayName')
+    .custom(isVideoPlaylistNameValid).withMessage('Should have a valid display name'),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsAddValidator parameters', { parameters: req.body })
 
@@ -46,6 +49,10 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
   param('playlistId')
     .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
 
+  body('displayName')
+    .optional()
+    .custom(isVideoPlaylistNameValid).withMessage('Should have a valid display name'),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistsUpdateValidator parameters', { parameters: req.body })
 
@@ -60,12 +67,6 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
     }
 
     const body: VideoPlaylistUpdate = req.body
-
-    if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PRIVATE && body.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      cleanUpReqFiles(req)
-      return res.status(400)
-                .json({ error: 'Cannot set "private" a video playlist that was not private.' })
-    }
 
     const newPrivacy = body.privacy || videoPlaylist.privacy
     if (newPrivacy === VideoPlaylistPrivacy.PUBLIC &&
@@ -368,8 +369,6 @@ function getCommonPlaylistEditAttributes () {
       + CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.EXTNAME.join(', ')
     ),
 
-    body('displayName')
-      .custom(isVideoPlaylistNameValid).withMessage('Should have a valid display name'),
     body('description')
       .optional()
       .customSanitizer(toValueOrNull)

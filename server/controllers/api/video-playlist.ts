@@ -203,7 +203,9 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   const videoPlaylistInstance = res.locals.videoPlaylist
   const videoPlaylistFieldsSave = videoPlaylistInstance.toJSON()
   const videoPlaylistInfoToUpdate = req.body as VideoPlaylistUpdate
+
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
+  const wasNotPrivatePlaylist = videoPlaylistInstance.privacy !== VideoPlaylistPrivacy.PRIVATE
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
@@ -232,6 +234,10 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
       if (videoPlaylistInfoToUpdate.privacy !== undefined) {
         videoPlaylistInstance.privacy = parseInt(videoPlaylistInfoToUpdate.privacy.toString(), 10)
+
+        if (wasNotPrivatePlaylist === true && videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE) {
+          await sendDeleteVideoPlaylist(videoPlaylistInstance, t)
+        }
       }
 
       const playlistUpdated = await videoPlaylistInstance.save(sequelizeOptions)

@@ -754,6 +754,40 @@ describe('Test video playlists', function () {
     }
   })
 
+
+  it('Should be able to create a public playlist, and set it to private', async function () {
+    this.timeout(30000)
+
+    const res = await createVideoPlaylist({
+      url: servers[0].url,
+      token: servers[0].accessToken,
+      playlistAttrs: {
+        displayName: 'my super public playlist',
+        privacy: VideoPlaylistPrivacy.PUBLIC,
+        videoChannelId: servers[0].videoChannel.id
+      }
+    })
+    const videoPlaylistIds = res.body.videoPlaylist
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      await getVideoPlaylist(server.url, videoPlaylistIds.uuid, 200)
+    }
+
+    const playlistAttrs = { privacy: VideoPlaylistPrivacy.PRIVATE }
+    await updateVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistId: videoPlaylistIds.id, playlistAttrs })
+
+    await waitJobs(servers)
+
+    for (const server of [ servers[1], servers[2] ]) {
+      await getVideoPlaylist(server.url, videoPlaylistIds.uuid, 404)
+    }
+    await getVideoPlaylist(servers[0].url, videoPlaylistIds.uuid, 401)
+
+    await getVideoPlaylistWithToken(servers[0].url, servers[0].accessToken, videoPlaylistIds.uuid, 200)
+  })
+
   it('Should delete the playlist on server 1 and delete on server 2 and 3', async function () {
     this.timeout(30000)
 

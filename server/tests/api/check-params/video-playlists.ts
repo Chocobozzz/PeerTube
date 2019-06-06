@@ -205,7 +205,6 @@ describe('Test video playlists API validator', function () {
       const params = getBase({ displayName: undefined })
 
       await createVideoPlaylist(params)
-      await updateVideoPlaylist(getUpdate(params, playlistUUID))
     })
 
     it('Should fail with an incorrect display name', async function () {
@@ -267,17 +266,6 @@ describe('Test video playlists API validator', function () {
         getBase({}, { token: userAccessToken, expectedStatus: 403 }),
         playlistUUID
       ))
-    })
-
-    it('Should fail to update to private a public/unlisted playlist', async function () {
-      const params = getBase({ privacy: VideoPlaylistPrivacy.PUBLIC }, { expectedStatus: 200 })
-
-      const res = await createVideoPlaylist(params)
-      const playlist = res.body.videoPlaylist
-
-      const paramsUpdate = getBase({ privacy: VideoPlaylistPrivacy.PRIVATE }, { expectedStatus: 400 })
-
-      await updateVideoPlaylist(getUpdate(paramsUpdate, playlist.id))
     })
 
     it('Should fail to update the watch later playlist', async function () {
