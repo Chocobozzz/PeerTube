@@ -6,8 +6,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enu
 import {
   cleanupTests,
   flushAndRunMultipleServers,
-  getVideosList,
-  killallServers,
+  getVideosList, getVideosListWithToken,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -150,6 +149,29 @@ describe('Test video privacy', function () {
       expect(res.body.data).to.have.lengthOf(1)
       expect(res.body.data[0].name).to.equal('super video public')
       expect(new Date(res.body.data[0].publishedAt).getTime()).to.be.at.least(now)
+    }
+  })
+
+  it('Should set this new video as private', async function () {
+    this.timeout(10000)
+
+    await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, { privacy: VideoPrivacy.PRIVATE })
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.have.lengthOf(0)
+    }
+
+    {
+      const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 5)
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('super video public')
     }
   })
 

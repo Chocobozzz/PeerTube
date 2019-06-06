@@ -111,17 +111,9 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
     if (!await doesVideoExist(req.params.id, res)) return cleanUpReqFiles(req)
 
-    const video = res.locals.video
-
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
     if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
-
-    if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
-      cleanUpReqFiles(req)
-      return res.status(409)
-        .json({ error: 'Cannot set "private" a video that was not private.' })
-    }
 
     if (req.body.channelId && !await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 

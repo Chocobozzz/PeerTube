@@ -199,11 +199,10 @@ async function addVideo (req: express.Request, res: express.Response) {
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
-  const videoFileData = {
+  const videoFile = new VideoFileModel({
     extname: extname(videoPhysicalFile.filename),
     size: videoPhysicalFile.size
-  }
-  const videoFile = new VideoFileModel(videoFileData)
+  })
 
   if (videoFile.isAudio()) {
     videoFile.resolution = DEFAULT_AUDIO_RESOLUTION
@@ -321,7 +320,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoFieldsSave = videoInstance.toJSON()
   const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
+
   const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
+  const wasNotPrivateVideo = videoInstance.privacy !== VideoPrivacy.PRIVATE
   const wasUnlistedVideo = videoInstance.privacy === VideoPrivacy.UNLISTED
 
   // Process thumbnail or create it from the video
@@ -357,8 +358,14 @@ async function updateVideo (req: express.Request, res: express.Response) {
         const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
         videoInstance.privacy = newPrivacy
 
+        // The video was private, and is not anymore -> publish it
         if (wasPrivateVideo === true && newPrivacy !== VideoPrivacy.PRIVATE) {
           videoInstance.publishedAt = new Date()
+        }
+
+        // The video was not private, but now it is -> we need to unfederate it
+        if (wasNotPrivateVideo === true && newPrivacy === VideoPrivacy.PRIVATE) {
+          await VideoModel.sendDelete(videoInstance, { transaction: t })
         }
       }
 
