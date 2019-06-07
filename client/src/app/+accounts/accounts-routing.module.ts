@@ -8,6 +8,10 @@ import { AccountVideoChannelsComponent } from './account-video-channels/account-
 
 const accountsRoutes: Routes = [
   {
+    path: 'peertube',
+    redirectTo: '/videos/local'
+  },
+  {
     path: ':accountId',
     component: AccountsComponent,
     canActivateChild: [ MetaGuard ],
