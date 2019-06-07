@@ -73,7 +73,7 @@ function registerUser (url: string, username: string, password: string, specialS
 
 function registerUserWithChannel (options: {
   url: string,
-  user: { username: string, password: string },
+  user: { username: string, password: string, displayName?: string },
   channel: { name: string, displayName: string }
 }) {
   const path = '/api/v1/users/register'
@@ -82,6 +82,10 @@ function registerUserWithChannel (options: {
     password: options.user.password,
     email: options.user.username + '@example.com',
     channel: options.channel
+  }
+
+  if (options.user.displayName) {
+    Object.assign(body, { displayName: options.user.displayName })
   }
 
   return makePostBodyRequest({

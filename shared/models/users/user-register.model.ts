@@ -3,6 +3,8 @@ export interface UserRegister {
   password: string
   email: string
 
+  displayName?: string
+
   channel?: {
     name: string
     displayName: string

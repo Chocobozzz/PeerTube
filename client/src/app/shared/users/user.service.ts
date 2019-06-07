@@ -136,6 +136,22 @@ export class UserService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
+  getNewUsername (oldDisplayName: string, newDisplayName: string, currentUsername: string) {
+    // Don't update display name, the user seems to have changed it
+    if (this.displayNameToUsername(oldDisplayName) !== currentUsername) return currentUsername
+
+    return this.displayNameToUsername(newDisplayName)
+  }
+
+  displayNameToUsername (displayName: string) {
+    if (!displayName) return ''
+
+    return displayName
+      .toLowerCase()
+      .replace(/\s/g, '_')
+      .replace(/[^a-z0-9_.]/g, '')
+  }
+
   /* ###### Admin methods ###### */
 
   addUser (userCreate: UserCreate) {

@@ -17,11 +17,12 @@ import {
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
+  getVideoChannel,
   getVideosList,
   login,
   makePutBodyRequest,
   rateVideo,
-  registerUser,
+  registerUserWithChannel,
   removeUser,
   removeVideo,
   ServerInfo,
@@ -31,8 +32,7 @@ import {
   updateMyUser,
   updateUser,
   uploadVideo,
-  userLogin,
-  registerUserWithChannel, getVideoChannel
+  userLogin
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
@@ -618,7 +618,7 @@ describe('Test users', function () {
 
   describe('Registering a new user', function () {
     it('Should register a new user', async function () {
-      const user = { username: 'user_15', password: 'my super password' }
+      const user = { displayName: 'super user 15', username: 'user_15', password: 'my super password' }
       const channel = { name: 'my_user_15_channel', displayName: 'my channel rocks' }
 
       await registerUserWithChannel({ url: server.url, user, channel })
@@ -631,6 +631,13 @@ describe('Test users', function () {
       }
 
       accessToken = await userLogin(server, user15)
+    })
+
+    it('Should have the correct display name', async function () {
+      const res = await getMyUserInformation(server.url, accessToken)
+      const user: User = res.body
+
+      expect(user.account.displayName).to.equal('super user 15')
     })
 
     it('Should have the correct video quota', async function () {

@@ -2290,6 +2290,19 @@ components:
         email:
           type: string
           description: 'The email of the user '
+        displayName:
+          type: string
+          description: 'The user display name'
+        channel:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 'The default channel name'
+            displayName:
+              type: string
+              description: 'The default channel display name'
+
       required:
         - username
         - password

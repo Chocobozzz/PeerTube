@@ -1,6 +1,21 @@
 <form role="form" [formGroup]="form">
 
   <div class="form-group">
+    <label for="displayName" i18n>Display name</label>
+
+    <div class="input-group">
+      <input
+        type="text" id="displayName" placeholder="John Doe"
+        formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+      >
+    </div>
+
+    <div *ngIf="formErrors.displayName" class="form-error">
+      {{ formErrors.displayName }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="username" i18n>Username</label>
 
     <div class="input-group">
@@ -11,6 +26,10 @@
       <div class="input-group-append">
         <span class="input-group-text">@{{ instanceHost }}</span>
       </div>
+    </div>
+
+    <div class="name-information" i18n>
+      The username is a unique identifier of your account on this instance. It's like an address mail, so other people can find you.
     </div>
 
     <div *ngIf="formErrors.username" class="form-error">

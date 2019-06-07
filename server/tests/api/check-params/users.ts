@@ -643,6 +643,7 @@ describe('Test users API validators', function () {
     const registrationPath = path + '/register'
     const baseCorrectParams = {
       username: 'user3',
+      displayName: 'super user',
       email: 'test3@example.com',
       password: 'my super password'
     }
@@ -723,6 +724,12 @@ describe('Test users API validators', function () {
         fields,
         statusCodeExpected: 409
       })
+    })
+
+    it('Should fail with a bad display name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { displayName: 'a'.repeat(150) })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad channel name', async function () {

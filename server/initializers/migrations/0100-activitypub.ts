@@ -65,7 +65,12 @@ async function up (utils: {
   // Create application account
   {
     const applicationInstance = await ApplicationModel.findOne()
-    const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACTOR_NAME, null, applicationInstance.id, undefined)
+    const accountCreated = await createLocalAccountWithoutKeys({
+      name: SERVER_ACTOR_NAME,
+      userId: null,
+      applicationId: applicationInstance.id,
+      t: undefined
+    })
 
     const { publicKey, privateKey } = await createPrivateAndPublicKeys()
     accountCreated.Actor.publicKey = publicKey
@@ -83,7 +88,7 @@ async function up (utils: {
   // Recreate accounts for each user
   const users = await db.User.findAll()
   for (const user of users) {
-    const account = await createLocalAccountWithoutKeys(user.username, user.id, null, undefined)
+    const account = await createLocalAccountWithoutKeys({ name: user.username, userId: user.id, applicationId: null, t: undefined })
 
     const { publicKey, privateKey } = await createPrivateAndPublicKeys()
     account.Actor.publicKey = publicKey

@@ -754,7 +754,6 @@ describe('Test video playlists', function () {
     }
   })
 
-
   it('Should be able to create a public playlist, and set it to private', async function () {
     this.timeout(30000)
 

@@ -100,7 +100,6 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
           previewUrl: null
         }))
 
-
         this.hydrateFormFromVideo()
       },
 

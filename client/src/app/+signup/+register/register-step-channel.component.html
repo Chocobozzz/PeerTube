@@ -12,6 +12,21 @@
   </div>
 
   <div class="form-group">
+    <label for="displayName" i18n>Channel display name</label>
+
+    <div class="input-group">
+      <input
+        type="text" id="displayName"
+        formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+      >
+    </div>
+
+    <div *ngIf="formErrors.displayName" class="form-error">
+      {{ formErrors.displayName }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="name" i18n>Channel name</label>
 
     <div class="input-group">
@@ -24,27 +39,16 @@
       </div>
     </div>
 
+    <div class="name-information" i18n>
+      The channel name is a unique identifier of your channel on this instance. It's like an address mail, so other people can find your channel.
+    </div>
+
     <div *ngIf="formErrors.name" class="form-error">
       {{ formErrors.name }}
     </div>
 
     <div *ngIf="isSameThanUsername()" class="form-error" i18n>
       Channel name cannot be the same than your account name. You can click on the first step to update your account name.
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="displayName" i18n>Channel display name</label>
-
-    <div class="input-group">
-      <input
-        type="text" id="displayName"
-        formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
-      >
-    </div>
-
-    <div *ngIf="formErrors.displayName" class="form-error">
-      {{ formErrors.displayName }}
     </div>
   </div>
 </form>

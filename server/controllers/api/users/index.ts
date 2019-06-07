@@ -184,7 +184,7 @@ async function createUser (req: express.Request, res: express.Response) {
     adminFlags: body.adminFlags || UserAdminFlag.NONE
   })
 
-  const { user, account } = await createUserAccountAndChannelAndPlaylist(userToCreate)
+  const { user, account } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
@@ -214,7 +214,11 @@ async function registerUser (req: express.Request, res: express.Response) {
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
-  const { user } = await createUserAccountAndChannelAndPlaylist(userToCreate, body.channel)
+  const { user } = await createUserAccountAndChannelAndPlaylist({
+    userToCreate: userToCreate,
+    userDisplayName: body.displayName || undefined,
+    channelNames: body.channel
+  })
 
   auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account registered.', body.username)

@@ -53,8 +53,16 @@ const usersRegisterValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username'),
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
-  body('channel.name').optional().custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
-  body('channel.displayName').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
+  body('displayName')
+    .optional()
+    .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
+
+  body('channel.name')
+    .optional()
+    .custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
+  body('channel.displayName')
+    .optional()
+    .custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })

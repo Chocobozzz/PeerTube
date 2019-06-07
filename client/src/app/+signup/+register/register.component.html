@@ -27,6 +27,12 @@
         </cdk-step>
 
         <cdk-step i18n-label label="Done" editable="false">
+          <div *ngIf="!signupDone && !error" class="done-loader">
+            <my-loader [loading]="true"></my-loader>
+
+            <div i18n>PeerTube is creating your account...</div>
+          </div>
+
           <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
         </cdk-step>
       </my-custom-stepper>

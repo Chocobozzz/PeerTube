@@ -56,3 +56,26 @@ button {
   @include peertube-button;
   @include orange-button;
 }
+
+.name-information {
+  margin-top: 10px;
+}
+
+.done-loader {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  my-loader {
+    margin-bottom: 20px;
+
+    /deep/ .loader div {
+      border-color: var(--mainColor) transparent transparent transparent;
+    }
+
+    & + div {
+      font-size: 15px;
+    }
+  }
+}

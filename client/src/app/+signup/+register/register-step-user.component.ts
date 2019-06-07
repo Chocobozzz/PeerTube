@@ -1,8 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core'
 import { AuthService } from '@app/core'
-import { FormReactive, UserValidatorsService } from '@app/shared'
+import { FormReactive, UserService, UserValidatorsService } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { FormGroup } from '@angular/forms'
+import { pairwise } from 'rxjs/operators'
+import { concat, of } from 'rxjs'
 
 @Component({
   selector: 'my-register-step-user',
@@ -15,6 +17,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
+    private userService: UserService,
     private userValidatorsService: UserValidatorsService
   ) {
     super()
@@ -26,6 +29,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
+      displayName: this.userValidatorsService.USER_DISPLAY_NAME_REQUIRED,
       username: this.userValidatorsService.USER_USERNAME,
       password: this.userValidatorsService.USER_PASSWORD,
       email: this.userValidatorsService.USER_EMAIL,
@@ -33,5 +37,18 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
     })
 
     setTimeout(() => this.formBuilt.emit(this.form))
+
+    concat(
+      of(''),
+      this.form.get('displayName').valueChanges
+    ).pipe(pairwise())
+     .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
+  }
+
+  private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {
+    const username = this.form.value['username'] || ''
+
+    const newUsername = this.userService.getNewUsername(oldDisplayName, newDisplayName, username)
+    this.form.patchValue({ username: newUsername })
   }
 }
