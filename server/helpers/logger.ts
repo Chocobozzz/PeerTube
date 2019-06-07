@@ -46,7 +46,7 @@ const labelFormatter = winston.format.label({
 })
 
 
-let file_logger_options = {
+const file_logger_options = {
   filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
   handleExceptions: true,
   format: winston.format.combine(
