@@ -188,19 +188,16 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   private buildActions () {
-    this.videoActions = []
-
-    if (this.authService.isLoggedIn()) {
-      this.videoActions.push([
+    this.videoActions = [
+      [
         {
           label: this.i18n('Save to playlist'),
           handler: () => this.playlistDropdown.toggle(),
-          isDisplayed: () => this.displayOptions.playlist,
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.playlist,
           iconName: 'playlist-add'
         }
-      ])
-
-      this.videoActions.push([
+      ],
+      [
         {
           label: this.i18n('Download'),
           handler: () => this.showDownloadModal(),
@@ -211,36 +208,35 @@ export class VideoActionsDropdownComponent implements OnChanges {
           label: this.i18n('Update'),
           linkBuilder: ({ video }) => [ '/videos/update', video.uuid ],
           iconName: 'edit',
-          isDisplayed: () => this.displayOptions.update && this.isVideoUpdatable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
         },
         {
           label: this.i18n('Blacklist'),
           handler: () => this.showBlacklistModal(),
           iconName: 'no',
-          isDisplayed: () => this.displayOptions.blacklist && this.isVideoBlacklistable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoBlacklistable()
         },
         {
           label: this.i18n('Unblacklist'),
           handler: () => this.unblacklistVideo(),
           iconName: 'undo',
-          isDisplayed: () => this.displayOptions.blacklist && this.isVideoUnblacklistable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoUnblacklistable()
         },
         {
           label: this.i18n('Delete'),
           handler: () => this.removeVideo(),
-          isDisplayed: () => this.displayOptions.delete && this.isVideoRemovable(),
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.delete && this.isVideoRemovable(),
           iconName: 'delete'
         }
-      ])
-
-      this.videoActions.push([
+      ],
+      [
         {
           label: this.i18n('Report'),
           handler: () => this.showReportModal(),
-          isDisplayed: () => this.displayOptions.report,
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.report,
           iconName: 'alert'
         }
-      ])
-    }
+      ]
+    ]
   }
 }

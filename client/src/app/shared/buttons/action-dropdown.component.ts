@@ -41,10 +41,4 @@ export class ActionDropdownComponent<T> {
   areActionsDisplayed (actions: DropdownAction<T>[], entry: T) {
     return actions.some(a => a.isDisplayed === undefined || a.isDisplayed(entry))
   }
-
-  handleClick (event: Event, action: DropdownAction<T>) {
-    event.preventDefault()
-
-    // action.handler(entry)
-  }
 }

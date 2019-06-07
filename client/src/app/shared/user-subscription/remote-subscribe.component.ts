@@ -11,7 +11,7 @@ import {
   styleUrls: ['./remote-subscribe.component.scss']
 })
 export class RemoteSubscribeComponent extends FormReactive implements OnInit {
-  @Input() account: string
+  @Input() uri: string
   @Input() interact = false
   @Input() showHelp = false
 
@@ -42,19 +42,20 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
     fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
       .then(response => response.json())
       .then(data => new Promise((resolve, reject) => {
+        console.log(data)
+
         if (data && Array.isArray(data.links)) {
-          const link: {
-            template: string
-          } = data.links.find((link: any) =>
-            link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe')
+          const link: { template: string } = data.links.find((link: any) => {
+            return link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe'
+          })
 
           if (link && link.template.includes('{uri}')) {
-            resolve(link.template.replace('{uri}', `acct:${this.account}`))
+            resolve(link.template.replace('{uri}', encodeURIComponent(this.uri)))
           }
         }
         reject()
       }))
       .then(window.open)
-      .catch(() => window.open(`https://${hostname}/authorize_interaction?acct=${this.account}`))
+      .catch(err => console.error(err))
   }
 }

@@ -41,7 +41,7 @@
     <span i18n>
       If you have an account on Mastodon or Pleroma, you can open it directly in their interface:
     </span>
-    <my-remote-subscribe [interact]="true" [account]="getUrl()"></my-remote-subscribe>
+    <my-remote-subscribe [interact]="true" [uri]="getUri()"></my-remote-subscribe>
   </div>
   <div class="modal-footer inputs">
     <span i18n class="action-button action-button-cancel" role="button" (click)="hideVisitorModal()">

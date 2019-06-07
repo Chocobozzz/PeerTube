@@ -4,10 +4,11 @@ import * as chai from 'chai'
 import { orderBy } from 'lodash'
 import 'mocha'
 import {
-  addVideoToBlacklist, cleanupTests,
+  addVideoToBlacklist,
+  cleanupTests,
   createUser,
   flushAndRunMultipleServers,
-  getBlacklistedVideosList,
+  getBlacklistedVideosList, getMyUserInformation,
   getMyVideos,
   getVideosList,
   killallServers,
@@ -16,6 +17,7 @@ import {
   searchVideo,
   ServerInfo,
   setAccessTokensToServers,
+  setDefaultVideoChannel,
   updateVideo,
   updateVideoBlacklist,
   uploadVideo,
@@ -25,7 +27,8 @@ import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
-import { UserRole } from '../../../../shared/models/users'
+import { User, UserRole, UserUpdateMe } from '../../../../shared/models/users'
+import { getMagnetURI, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 
 const expect = chai.expect
 
@@ -351,6 +354,7 @@ describe('Test video blacklist', function () {
   describe('When auto blacklist videos', function () {
     let userWithoutFlag: string
     let userWithFlag: string
+    let channelOfUserWithoutFlag: number
 
     before(async function () {
       this.timeout(20000)
@@ -380,6 +384,10 @@ describe('Test video blacklist', function () {
         })
 
         userWithoutFlag = await userLogin(servers[0], user)
+
+        const res = await getMyUserInformation(servers[0].url, userWithoutFlag)
+        const body: User = res.body
+        channelOfUserWithoutFlag = body.videoChannels[0].id
       }
 
       {
@@ -399,7 +407,7 @@ describe('Test video blacklist', function () {
       await waitJobs(servers)
     })
 
-    it('Should auto blacklist a video', async function () {
+    it('Should auto blacklist a video on upload', async function () {
       await uploadVideo(servers[0].url, userWithoutFlag, { name: 'blacklisted' })
 
       const res = await getBlacklistedVideosList({
@@ -412,7 +420,45 @@ describe('Test video blacklist', function () {
       expect(res.body.data[0].video.name).to.equal('blacklisted')
     })
 
-    it('Should not auto blacklist a video', async function () {
+    it('Should auto blacklist a video on URL import', async function () {
+      const attributes = {
+        targetUrl: getYoutubeVideoUrl(),
+        name: 'URL import',
+        channelId: channelOfUserWithoutFlag
+      }
+      await importVideo(servers[ 0 ].url, userWithoutFlag, attributes)
+
+      const res = await getBlacklistedVideosList({
+        url: servers[ 0 ].url,
+        token: servers[ 0 ].accessToken,
+        sort: 'createdAt',
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data[1].video.name).to.equal('URL import')
+    })
+
+    it('Should auto blacklist a video on torrent import', async function () {
+      const attributes = {
+        magnetUri: getMagnetURI(),
+        name: 'Torrent import',
+        channelId: channelOfUserWithoutFlag
+      }
+      await importVideo(servers[ 0 ].url, userWithoutFlag, attributes)
+
+      const res = await getBlacklistedVideosList({
+        url: servers[ 0 ].url,
+        token: servers[ 0 ].accessToken,
+        sort: 'createdAt',
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
+      })
+
+      expect(res.body.total).to.equal(3)
+      expect(res.body.data[2].video.name).to.equal('Torrent import')
+    })
+
+    it('Should not auto blacklist a video on upload if the user has the bypass blacklist flag', async function () {
       await uploadVideo(servers[0].url, userWithFlag, { name: 'not blacklisted' })
 
       const res = await getBlacklistedVideosList({
@@ -421,7 +467,7 @@ describe('Test video blacklist', function () {
         type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
       })
 
-      expect(res.body.total).to.equal(1)
+      expect(res.body.total).to.equal(3)
     })
   })
 
