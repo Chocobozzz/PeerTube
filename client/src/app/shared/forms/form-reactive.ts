@@ -57,7 +57,7 @@ export abstract class FormReactive {
 
       // Don't care if dirty on force check
       const isDirty = control.dirty || forceCheck === true
-      if (control && isDirty && !control.valid) {
+      if (control && isDirty && control.enabled && !control.valid) {
         const messages = validationMessages[ field ]
         for (const key of Object.keys(control.errors)) {
           formErrors[ field ] += messages[ key ] + ' '
