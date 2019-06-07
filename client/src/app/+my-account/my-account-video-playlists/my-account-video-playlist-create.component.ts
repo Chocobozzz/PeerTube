@@ -7,7 +7,6 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { VideoPlaylistValidatorsService } from '@app/shared'
 import { VideoPlaylistCreate } from '@shared/models/videos/playlist/video-playlist-create.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { VideoConstant } from '@shared/models'
 import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
 import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
 
@@ -18,7 +17,6 @@ import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
 })
 export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylistEdit implements OnInit {
   error: string
-  videoPlaylistPrivacies: VideoConstant<VideoPlaylistPrivacy>[] = []
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -47,6 +45,7 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
     })
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+      .catch(err => console.error('Cannot populate user video channels.', err))
 
     this.serverService.videoPlaylistPrivaciesLoaded.subscribe(
       () => {

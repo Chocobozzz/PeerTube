@@ -188,8 +188,6 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       previewfile: this.previewfileUpload
     })
 
-    this.explainedVideoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
-
     this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {

@@ -9,9 +9,8 @@ import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylistValidatorsService } from '@app/shared'
 import { VideoPlaylistUpdate } from '@shared/models/videos/playlist/video-playlist-update.model'
-import { VideoConstant } from '@shared/models'
-import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
+import { delayWhen, map, switchMap } from 'rxjs/operators'
 
 @Component({
   selector: 'my-account-video-playlist-update',
@@ -21,7 +20,6 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylistEdit implements OnInit, OnDestroy {
   error: string
   videoPlaylistToUpdate: VideoPlaylist
-  videoPlaylistPrivacies: VideoConstant<VideoPlaylistPrivacy>[] = []
 
   private paramsSub: Subscription
 
@@ -53,31 +51,24 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
     })
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+      .catch(err => console.error('Cannot populate user video channels.', err))
 
-    this.paramsSub = this.route.params.subscribe(routeParams => {
-      const videoPlaylistId = routeParams['videoPlaylistId']
+    this.paramsSub = this.route.params
+                         .pipe(
+                           map(routeParams => routeParams['videoPlaylistId']),
+                           switchMap(videoPlaylistId => this.videoPlaylistService.getVideoPlaylist(videoPlaylistId)),
+                           delayWhen(() => this.serverService.videoPlaylistPrivaciesLoaded)
+                         )
+                         .subscribe(
+                           videoPlaylistToUpdate => {
+                             this.videoPlaylistPrivacies = this.serverService.getVideoPlaylistPrivacies()
+                             this.videoPlaylistToUpdate = videoPlaylistToUpdate
 
-      this.videoPlaylistService.getVideoPlaylist(videoPlaylistId).subscribe(
-        videoPlaylistToUpdate => {
-          this.videoPlaylistToUpdate = videoPlaylistToUpdate
+                             this.hydrateFormFromPlaylist()
+                           },
 
-          this.hydrateFormFromPlaylist()
-
-          this.serverService.videoPlaylistPrivaciesLoaded.subscribe(
-            () => {
-              this.videoPlaylistPrivacies = this.serverService.getVideoPlaylistPrivacies()
-                .filter(p => {
-                  // If the playlist is not private, we cannot put it in private anymore
-                  return this.videoPlaylistToUpdate.privacy.id === VideoPlaylistPrivacy.PRIVATE ||
-                    p.id !== VideoPlaylistPrivacy.PRIVATE
-                })
-            }
-          )
-        },
-
-        err => this.error = err.message
-      )
-    })
+                           err => this.error = err.message
+                         )
   }
 
   ngOnDestroy () {
