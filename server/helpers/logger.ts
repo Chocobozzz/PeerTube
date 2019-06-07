@@ -45,6 +45,21 @@ const labelFormatter = winston.format.label({
   label
 })
 
+
+let file_logger_options = {
+  filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
+  handleExceptions: true,
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    jsonLoggerFormat
+  )
+};
+
+if(CONFIG.LOG.ROTATION) {
+  file_logger_options['maxsize'] = 1024 * 1024 * 12;
+  file_logger_options['maxFiles'] = 20;
+}
+
 const logger = winston.createLogger({
   level: CONFIG.LOG.LEVEL,
   format: winston.format.combine(
@@ -52,16 +67,7 @@ const logger = winston.createLogger({
     winston.format.splat()
   ),
   transports: [
-    new winston.transports.File({
-      filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
-      handleExceptions: true,
-      maxsize: 1024 * 1024 * 12,
-      maxFiles: 20,
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        jsonLoggerFormat
-      )
-    }),
+    new winston.transports.File(file_logger_options),
     new winston.transports.Console({
       handleExceptions: true,
       format: winston.format.combine(
