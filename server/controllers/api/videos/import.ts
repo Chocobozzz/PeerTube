@@ -26,6 +26,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { ThumbnailModel } from '../../../models/video/thumbnail'
+import { UserModel } from '../../../models/account/user'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -107,7 +108,8 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     previewModel,
     videoChannel: res.locals.videoChannel,
     tags,
-    videoImportAttributes
+    videoImportAttributes,
+    user
   })
 
   // Create job to import the video
@@ -151,12 +153,13 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     userId: user.id
   }
   const videoImport = await insertIntoDB({
-    video: video,
+    video,
     thumbnailModel,
     previewModel,
     videoChannel: res.locals.videoChannel,
     tags,
-    videoImportAttributes
+    videoImportAttributes,
+    user
   })
 
   // Create job to import the video
@@ -227,9 +230,10 @@ function insertIntoDB (parameters: {
   previewModel: ThumbnailModel,
   videoChannel: VideoChannelModel,
   tags: string[],
-  videoImportAttributes: Partial<VideoImportModel>
+  videoImportAttributes: Partial<VideoImportModel>,
+  user: UserModel
 }): Bluebird<VideoImportModel> {
-  let { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes } = parameters
+  const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
 
   return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
@@ -241,7 +245,7 @@ function insertIntoDB (parameters: {
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
-    await autoBlacklistVideoIfNeeded(video, videoChannel.Account.User, t)
+    await autoBlacklistVideoIfNeeded(video, user, t)
 
     // Set tags to the video
     if (tags) {

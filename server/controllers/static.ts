@@ -158,7 +158,7 @@ staticRouter.use('/.well-known/change-password',
 
 staticRouter.use('/.well-known/host-meta',
   (_, res: express.Response) => {
-    res.type('application/xml');
+    res.type('application/xml')
 
     const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
       '<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n' +
