@@ -12,6 +12,7 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { VideoDetails } from '@app/shared/video/video-details.model'
+import { VideoPrivacy } from '@shared/models'
 
 @Component({
   selector: 'my-videos-update',
@@ -52,6 +53,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           this.video = new VideoEdit(video)
           this.userVideoChannels = videoChannels
           this.videoCaptions = videoCaptions
+
+          this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
 
           const videoFiles = (video as VideoDetails).files
           if (videoFiles.length > 1) { // Already transcoded
