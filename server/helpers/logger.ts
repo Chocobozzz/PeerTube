@@ -2,6 +2,7 @@
 import { mkdirpSync } from 'fs-extra'
 import * as path from 'path'
 import * as winston from 'winston'
+import { FileTransportOptions } from 'winston/lib/winston/transports';
 import { CONFIG } from '../initializers/config'
 import { omit } from 'lodash'
 
@@ -45,7 +46,8 @@ const labelFormatter = winston.format.label({
   label
 })
 
-const fileLoggerOptions = {
+const fileLoggerOptions: FileTransportOptions = {
+
   filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
   handleExceptions: true,
   format: winston.format.combine(
@@ -55,8 +57,8 @@ const fileLoggerOptions = {
 }
 
 if (CONFIG.LOG.ROTATION) {
-  fileLoggerOptions['maxsize'] = 1024 * 1024 * 12
-  fileLoggerOptions['maxFiles'] = 20
+  fileLoggerOptions.maxsize = 1024 * 1024 * 12
+  fileLoggerOptions.maxFiles = 20
 }
 
 const logger = winston.createLogger({
