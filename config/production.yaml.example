@@ -76,6 +76,8 @@ storage:
 
 log:
   level: 'info' # debug/info/warning/error
+  rotation:
+    enabled : true
 
 search:
   # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
