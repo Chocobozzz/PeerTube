@@ -114,6 +114,11 @@ export class UserModel extends Model<UserModel> {
   email: string
 
   @AllowNull(true)
+  @IsEmail
+  @Column(DataType.STRING(400))
+  pendingEmail: string
+
+  @AllowNull(true)
   @Default(null)
   @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean', true))
   @Column
@@ -540,6 +545,7 @@ export class UserModel extends Model<UserModel> {
       id: this.id,
       username: this.username,
       email: this.email,
+      pendingEmail: this.pendingEmail,
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
       webTorrentEnabled: this.webTorrentEnabled,

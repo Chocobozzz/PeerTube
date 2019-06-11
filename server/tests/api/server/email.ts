@@ -250,7 +250,7 @@ describe('Test emails', function () {
     })
 
     it('Should not verify the email with an invalid verification string', async function () {
-      await verifyEmail(server.url, userId, verificationString + 'b', 403)
+      await verifyEmail(server.url, userId, verificationString + 'b', false, 403)
     })
 
     it('Should verify the email', async function () {

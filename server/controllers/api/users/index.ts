@@ -6,7 +6,7 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { RATES_LIMIT, WEBSERVER } from '../../../initializers/constants'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
-import { createUserAccountAndChannelAndPlaylist } from '../../../lib/user'
+import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -147,7 +147,7 @@ usersRouter.post('/:id/reset-password',
 usersRouter.post('/ask-send-verify-email',
   askSendEmailLimiter,
   asyncMiddleware(usersAskSendVerifyEmailValidator),
-  asyncMiddleware(askSendVerifyUserEmail)
+  asyncMiddleware(reSendVerifyUserEmail)
 )
 
 usersRouter.post('/:id/verify-email',
@@ -320,14 +320,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
   return res.status(204).end()
 }
 
-async function sendVerifyUserEmail (user: UserModel) {
-  const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
-  const url = WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
-  await Emailer.Instance.addVerifyEmailJob(user.email, url)
-  return
-}
-
-async function askSendVerifyUserEmail (req: express.Request, res: express.Response) {
+async function reSendVerifyUserEmail (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
   await sendVerifyUserEmail(user)
@@ -338,6 +331,11 @@ async function askSendVerifyUserEmail (req: express.Request, res: express.Respon
 async function verifyUserEmail (req: express.Request, res: express.Response) {
   const user = res.locals.user
   user.emailVerified = true
+
+  if (req.body.isPendingEmail === true) {
+    user.email = user.pendingEmail
+    user.pendingEmail = null
+  }
 
   await user.save()
 

@@ -27,7 +27,6 @@ import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
-import { UserCreate } from '../../../shared/models/users'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
 
 const usersAddValidator = [
@@ -178,13 +177,27 @@ const usersUpdateValidator = [
 ]
 
 const usersUpdateMeValidator = [
-  body('displayName').optional().custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
-  body('description').optional().custom(isUserDescriptionValid).withMessage('Should have a valid description'),
-  body('currentPassword').optional().custom(isUserPasswordValid).withMessage('Should have a valid current password'),
-  body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
-  body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
-  body('nsfwPolicy').optional().custom(isUserNSFWPolicyValid).withMessage('Should have a valid display Not Safe For Work policy'),
-  body('autoPlayVideo').optional().custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
+  body('displayName')
+    .optional()
+    .custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
+  body('description')
+    .optional()
+    .custom(isUserDescriptionValid).withMessage('Should have a valid description'),
+  body('currentPassword')
+    .optional()
+    .custom(isUserPasswordValid).withMessage('Should have a valid current password'),
+  body('password')
+    .optional()
+    .custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  body('email')
+    .optional()
+    .isEmail().withMessage('Should have a valid email attribute'),
+  body('nsfwPolicy')
+    .optional()
+    .custom(isUserNSFWPolicyValid).withMessage('Should have a valid display Not Safe For Work policy'),
+  body('autoPlayVideo')
+    .optional()
+    .custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
   body('videosHistoryEnabled')
     .optional()
     .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled attribute'),
@@ -329,8 +342,14 @@ const usersAskSendVerifyEmailValidator = [
 ]
 
 const usersVerifyEmailValidator = [
-  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
-  body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
+  param('id')
+    .isInt().not().isEmpty().withMessage('Should have a valid id'),
+
+  body('verificationString')
+    .not().isEmpty().withMessage('Should have a valid verification string'),
+  body('isPendingEmail')
+    .optional()
+    .toBoolean(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVerifyEmail parameters', { parameters: req.params })

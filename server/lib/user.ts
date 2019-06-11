@@ -1,6 +1,6 @@
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { SERVER_ACTOR_NAME } from '../initializers/constants'
+import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
 import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
@@ -12,6 +12,8 @@ import { UserNotificationSetting, UserNotificationSettingValue } from '../../sha
 import { createWatchLaterPlaylist } from './video-playlist'
 import { sequelizeTypescript } from '../initializers/database'
 import { Transaction } from 'sequelize/types'
+import { Redis } from './redis'
+import { Emailer } from './emailer'
 
 type ChannelNames = { name: string, displayName: string }
 async function createUserAccountAndChannelAndPlaylist (parameters: {
@@ -100,12 +102,24 @@ async function createApplicationActor (applicationId: number) {
   return accountCreated
 }
 
+async function sendVerifyUserEmail (user: UserModel, isPendingEmail = false) {
+  const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
+  let url = WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
+
+  if (isPendingEmail) url += '&isPendingEmail=true'
+
+  const email = isPendingEmail ? user.pendingEmail : user.email
+
+  await Emailer.Instance.addVerifyEmailJob(email, url)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   createApplicationActor,
   createUserAccountAndChannelAndPlaylist,
-  createLocalAccountWithoutKeys
+  createLocalAccountWithoutKeys,
+  sendVerifyUserEmail
 }
 
 // ---------------------------------------------------------------------------

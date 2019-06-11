@@ -323,13 +323,16 @@ function askSendVerifyEmail (url: string, email: string) {
   })
 }
 
-function verifyEmail (url: string, userId: number, verificationString: string, statusCodeExpected = 204) {
+function verifyEmail (url: string, userId: number, verificationString: string, isPendingEmail = false, statusCodeExpected = 204) {
   const path = '/api/v1/users/' + userId + '/verify-email'
 
   return makePostBodyRequest({
     url,
     path,
-    fields: { verificationString },
+    fields: {
+      verificationString,
+      isPendingEmail
+    },
     statusCodeExpected
   })
 }

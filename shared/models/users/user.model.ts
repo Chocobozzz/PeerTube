@@ -9,6 +9,7 @@ export interface User {
   id: number
   username: string
   email: string
+  pendingEmail: string | null
   emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
 
