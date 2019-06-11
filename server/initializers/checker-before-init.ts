@@ -10,6 +10,7 @@ function checkMissedConfig () {
     'trust_proxy',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password', 'database.pool.max',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
+    'email.body.signature', 'email.object.prefix',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
     'storage.redundancy', 'storage.tmp', 'storage.streaming_playlists',
     'log.level',

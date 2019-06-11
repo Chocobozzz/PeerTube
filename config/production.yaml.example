@@ -54,6 +54,12 @@ smtp:
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
+email:
+  body:
+    signature: "PeerTube"
+  object:
+    prefix: "[PeerTube]"
+
 # From the project root directory
 storage:
   tmp: '/var/www/peertube/storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
@@ -248,8 +254,6 @@ instance:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
 
 services:
-  # You can provide a reporting endpoint for Content Security Policy violations
-  csp-logger:
   # Cards configuration to format video in Twitter
   twitter:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
