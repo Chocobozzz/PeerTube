@@ -347,6 +347,7 @@ $player-factor: 1.7; // 16/9
   /deep/ .other-videos {
     padding-left: 15px;
     flex-basis: $other-videos-width;
+    min-width: $other-videos-width;
 
     .title-page {
       margin-top: 0 !important;

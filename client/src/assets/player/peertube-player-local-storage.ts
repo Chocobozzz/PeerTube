@@ -29,7 +29,7 @@ function getStoredTheater () {
   const value = getLocalStorage('theater-enabled')
   if (value !== null && value !== undefined) return value === 'true'
 
-  return undefined
+  return false
 }
 
 function saveVolumeInStore (value: number) {

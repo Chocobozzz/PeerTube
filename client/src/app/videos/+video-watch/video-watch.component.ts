@@ -31,6 +31,7 @@ import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.
 import { Video } from '@app/shared/video/video.model'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
+import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 
 @Component({
   selector: 'my-video-watch',
@@ -121,6 +122,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
 
     this.initHotkeys()
+
+    this.theaterEnabled = getStoredTheater()
   }
 
   ngOnDestroy () {
@@ -445,7 +448,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(mode, options)
-      this.theaterEnabled = this.player.theaterEnabled
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 
