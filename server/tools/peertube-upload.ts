@@ -77,7 +77,7 @@ async function run (url: string, username: string, password: string) {
     licence: program['licence'] || undefined,
     language: program['language'] || undefined,
     nsfw: program['nsfw'] !== undefined ? program['nsfw'] : false,
-    description: program['videoDescription'] || '',
+    description: program['videoDescription'] || undefined,
     tags: program['tags'] || [],
     commentsEnabled: program['commentsEnabled'] !== undefined ? program['commentsEnabled'] : true,
     downloadEnabled: program['downloadEnabled'] !== undefined ? program['downloadEnabled'] : true,
@@ -94,7 +94,6 @@ async function run (url: string, username: string, password: string) {
     console.log(`Video ${program['videoName']} uploaded.`)
     process.exit(0)
   } catch (err) {
-    console.log('coucou')
     console.error(require('util').inspect(err))
     process.exit(-1)
   }

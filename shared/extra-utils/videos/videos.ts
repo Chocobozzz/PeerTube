@@ -355,13 +355,16 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
               .field('name', attributes.name)
-              .field('support', attributes.support)
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
               .field('downloadEnabled', JSON.stringify(attributes.downloadEnabled))
               .field('waitTranscoding', JSON.stringify(attributes.waitTranscoding))
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
+
+  if (attributes.support !== undefined) {
+    req.field('support', attributes.support)
+  }
 
   if (attributes.description !== undefined) {
     req.field('description', attributes.description)
