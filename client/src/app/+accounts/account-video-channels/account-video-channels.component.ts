@@ -79,7 +79,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   }
 
   getVideosOf (videoChannel: VideoChannel) {
-    return this.videos[ videoChannel.id ] || []
+    return this.videos[ videoChannel.id ]
   }
 
   onNearOfBottom () {

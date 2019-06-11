@@ -9,9 +9,20 @@
 .section {
   @include miniature-rows;
 
+  overflow: visible; // For the subscribe dropdown
   padding-top: 0 !important;
 
   .section-title {
     align-items: center;
   }
+
+  .videos {
+    overflow: hidden;
+
+    .no-results {
+      height: 50px;
+    }
+  }
 }
+
+
