@@ -84,7 +84,7 @@ const CONFIG = {
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level'),
-    ROTATION: config.get<boolean>('log.rotation')
+    ROTATION: config.get<boolean>('log.rotation.enabled')
   },
   SEARCH: {
     REMOTE_URI: {
