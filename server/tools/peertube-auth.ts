@@ -93,6 +93,8 @@ program
     })
 
     settings.remotes.forEach(element => {
+      if (!netrc.machines[element]) return
+
       table.push([
         element,
         netrc.machines[element].login

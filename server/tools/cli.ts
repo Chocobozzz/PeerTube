@@ -42,7 +42,7 @@ function writeSettings (settings) {
 function getRemoteObjectOrDie (program: any, settings: Settings) {
   if (!program['url'] || !program['username'] || !program['password']) {
     // No remote and we don't have program parameters: throw
-    if (settings.remotes.length === 0) {
+    if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
       if (!program[ 'url' ]) console.error('--url field is required.')
       if (!program[ 'username' ]) console.error('--username field is required.')
       if (!program[ 'password' ]) console.error('--password field is required.')
@@ -60,8 +60,9 @@ function getRemoteObjectOrDie (program: any, settings: Settings) {
         : settings.remotes[0]
     }
 
-    if (!username) username = netrc.machines[url].login
-    if (!password) password = netrc.machines[url].password
+    const machine = netrc.machines[url]
+    if (!username) username = machine.login
+    if (!password) password = machine.password
 
     return { url, username, password }
   }
