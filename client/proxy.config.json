@@ -8,7 +8,8 @@
     "secure": false
   },
   "/socket.io": {
-    "target": "http://localhost:9000",
-    "secure": false
+    "target": "ws://localhost:9000",
+    "secure": false,
+    "ws": true
   }
 }

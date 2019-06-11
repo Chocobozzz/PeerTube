@@ -205,7 +205,7 @@ const usersUpdateMeValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
 
-    if (req.body.password) {
+    if (req.body.password || req.body.email) {
       if (!req.body.currentPassword) {
         return res.status(400)
                   .send({ error: 'currentPassword parameter is missing.' })

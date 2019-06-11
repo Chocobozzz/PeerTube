@@ -36,6 +36,7 @@ import {
   MyAccountVideoPlaylistElementsComponent
 } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
 import { DragDropModule } from '@angular/cdk/drag-drop'
+import { MyAccountChangeEmailComponent } from '@app/+my-account/my-account-settings/my-account-change-email'
 
 @NgModule({
   imports: [
@@ -54,7 +55,10 @@ import { DragDropModule } from '@angular/cdk/drag-drop'
     MyAccountChangePasswordComponent,
     MyAccountVideoSettingsComponent,
     MyAccountProfileComponent,
+    MyAccountChangeEmailComponent,
+
     MyAccountVideosComponent,
+
     VideoChangeOwnershipComponent,
     MyAccountOwnershipComponent,
     MyAccountAcceptOwnershipComponent,

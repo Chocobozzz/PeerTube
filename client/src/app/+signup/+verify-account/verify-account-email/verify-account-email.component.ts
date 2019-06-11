@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { UserService } from '@app/shared'
 
 @Component({
@@ -11,12 +11,15 @@ import { UserService } from '@app/shared'
 
 export class VerifyAccountEmailComponent implements OnInit {
   success = false
+  failed = false
+  isPendingEmail = false
 
   private userId: number
   private verificationString: string
 
   constructor (
     private userService: UserService,
+    private authService: AuthService,
     private notifier: Notifier,
     private router: Router,
     private route: ActivatedRoute,
@@ -25,8 +28,12 @@ export class VerifyAccountEmailComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.userId = this.route.snapshot.queryParams['userId']
-    this.verificationString = this.route.snapshot.queryParams['verificationString']
+    const queryParams = this.route.snapshot.queryParams
+    this.userId = queryParams['userId']
+    this.verificationString = queryParams['verificationString']
+    this.isPendingEmail = queryParams['isPendingEmail'] === 'true'
+
+    console.log(this.isPendingEmail)
 
     if (!this.userId || !this.verificationString) {
       this.notifier.error(this.i18n('Unable to find user id or verification string.'))
@@ -36,13 +43,17 @@ export class VerifyAccountEmailComponent implements OnInit {
   }
 
   verifyEmail () {
-    this.userService.verifyEmail(this.userId, this.verificationString)
+    this.userService.verifyEmail(this.userId, this.verificationString, this.isPendingEmail)
       .subscribe(
         () => {
+          this.authService.refreshUserInformation()
+
           this.success = true
         },
 
         err => {
+          this.failed = true
+
           this.notifier.error(err.message)
         }
       )
