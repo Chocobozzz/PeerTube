@@ -468,10 +468,11 @@ describe('Test users', function () {
       expect(user.autoPlayVideo).to.be.false
     })
 
-    it('Should be able to change the email display attribute', async function () {
+    it('Should be able to change the email attribute', async function () {
       await updateMyUser({
         url: server.url,
         accessToken: accessTokenUser,
+        currentPassword: 'new password',
         email: 'updated@example.com'
       })
 
