@@ -12,7 +12,7 @@ import { Notifier } from '@app/core'
 export class VideoDownloadComponent {
   @ViewChild('modal') modal: ElementRef
 
-  downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
+  downloadType: 'direct' | 'torrent' = 'torrent'
   resolutionId: number | string = -1
 
   video: VideoDetails
@@ -57,9 +57,6 @@ export class VideoDownloadComponent {
 
       case 'torrent':
         return file.torrentDownloadUrl
-
-      case 'magnet':
-        return file.magnetUri
     }
   }
 
