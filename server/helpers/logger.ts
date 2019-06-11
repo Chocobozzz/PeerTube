@@ -2,7 +2,7 @@
 import { mkdirpSync } from 'fs-extra'
 import * as path from 'path'
 import * as winston from 'winston'
-import { FileTransportOptions } from 'winston/lib/winston/transports';
+import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
 import { omit } from 'lodash'
 
