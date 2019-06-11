@@ -844,21 +844,8 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
-                scheduleUpdate: &ref_0
-                  type: object
-                  properties:
-                    privacy:
-                      type: string
-                      enum:
-                        - Public
-                        - Unlisted
-                      description: Video privacy target
-                    updateAt:
-                      type: string
-                      format: date
-                      description: When to update the video
-                  required:
-                    - updateAt
+                scheduleUpdate:
+                  $ref: '#/components/schemas/VideoScheduledUpdate'
     get:
       summary: Get a video by its id
       tags:
@@ -871,7 +858,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Video'
+                $ref: '#/components/schemas/VideoDetails'
     delete:
       summary: Delete a video by its id
       security:
@@ -1053,7 +1040,8 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
-                scheduleUpdate: *ref_0
+                scheduleUpdate:
+                  $ref: '#/components/schemas/VideoScheduledUpdate'
               required:
                 - videofile
                 - channelId
@@ -1157,7 +1145,8 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
-                scheduleUpdate: *ref_0
+                scheduleUpdate:
+                  $ref: '#/components/schemas/VideoScheduledUpdate'
               required:
                 - channelId
                 - name
@@ -1834,6 +1823,112 @@ components:
             - 3
         label:
           type: string
+    VideoStateConstant:
+      properties:
+        id:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+          description: 'The video state (Published = 1, to transcode = 2, to import = 3)'
+        label:
+          type: string
+    VideoResolutionConstant:
+      properties:
+        id:
+          type: integer
+          description: 'Video resolution (240, 360, 720 ...)'
+        label:
+          type: string
+    VideoScheduledUpdate:
+      properties:
+        privacy:
+          $ref: '#/components/schemas/VideoPrivacySet'
+          description: Video privacy target
+        updateAt:
+          type: string
+          format: date
+          description: When to update the video
+      required:
+        - updateAt
+    VideoAccountSummary:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        displayName:
+          type: string
+        url:
+          type: string
+        host:
+          type: string
+        avatar:
+          nullable: true
+          $ref: '#/components/schemas/Avatar'
+    VideoChannelSummary:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        displayName:
+          type: string
+        url:
+          type: string
+        host:
+          type: string
+        avatar:
+          nullable: true
+          $ref: '#/components/schemas/Avatar'
+    PlaylistElement:
+      properties:
+        position:
+          type: number
+        startTimestamp:
+          type: number
+        stopTimestamp:
+          type: number
+    VideoFile:
+      properties:
+        magnetUri:
+          type: string
+        resolution:
+          $ref: '#/components/schemas/VideoResolutionConstant'
+        size:
+          type: number
+          description: 'Video file size in bytes'
+        torrentUrl:
+          type: string
+        torrentDownaloadUrl:
+          type: string
+        fileUrl:
+          type: string
+        fileDownloadUrl:
+          type: string
+        fps:
+          type: number
+    VideoStreamingPlaylists:
+      properties:
+        id:
+          type: number
+        type:
+          type: number
+          enum:
+            - 1
+          description: 'Playlist type (HLS = 1)'
+        playlistUrl:
+          type: string
+        segmentsSha256Url:
+          type: string
+        redundancies:
+          type: array
+          items:
+            type: object
+            properties:
+              baseUrl:
+                type: string
     Video:
       properties:
         id:
@@ -1845,6 +1940,8 @@ components:
         publishedAt:
           type: string
         updatedAt:
+          type: string
+        originallyPublishedAt:
           type: string
         category:
           $ref: '#/components/schemas/VideoConstantNumber'
@@ -1876,19 +1973,66 @@ components:
           type: number
         nsfw:
           type: boolean
+        waitTranscoding:
+          type: boolean
+          nullable: true
+        state:
+          $ref: '#/components/schemas/VideoStateConstant'
+        scheduledUpdate:
+          nullable: true
+          $ref: '#/components/schemas/VideoScheduledUpdate'
+        blacklisted:
+          nullable: true
+          type: boolean
+        blacklistedReason:
+          nullable: true
+          type: string
         account:
+          $ref: '#/components/schemas/VideoAccountSummary'
+        channel:
+          $ref: '#/components/schemas/VideoChannelSummary'
+        userHistory:
+          nullable: true
           type: object
           properties:
-            name:
+            currentTime:
+              type: number
+        playlistElement:
+          nullable: true
+          $ref: '#/components/schemas/PlaylistElement'
+    VideoDetails:
+      allOf:
+        - $ref: '#/components/schemas/Video'
+        - type: object
+          properties:
+            descriptionPath:
               type: string
-            displayName:
+            support:
               type: string
-            url:
-              type: string
-            host:
-              type: string
-            avatar:
-              $ref: '#/components/schemas/Avatar'
+            channel:
+              $ref: '#/components/schemas/VideoChannel'
+            account:
+              $ref: '#/components/schemas/Account'
+            tags:
+              type: array
+              items:
+                type: string
+            files:
+              type: array
+              items:
+                $ref: '#/components/schemas/VideoFile'
+            commentsEnabled:
+              type: boolean
+            downloadEnabled:
+              type: boolean
+            trackerUrls:
+              type: array
+              items:
+                type: string
+            streamingPlaylists:
+              type: array
+              items:
+                $ref: '#/components/schemas/VideoStreamingPlaylists'
     VideoAbuse:
       properties:
         id:
