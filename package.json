@@ -57,6 +57,7 @@
     "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",
     "tsc": "tsc",
     "commander": "commander",
+    "lint": "npm run travis -- lint",
     "ng": "ng",
     "nodemon": "nodemon",
     "ts-node": "ts-node",
