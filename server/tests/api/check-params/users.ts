@@ -379,8 +379,7 @@ describe('Test users API validators', function () {
     it('Should succeed without password change with the correct params', async function () {
       const fields = {
         nsfwPolicy: 'blur',
-        autoPlayVideo: false,
-        email: 'super_email@example.com'
+        autoPlayVideo: false
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })

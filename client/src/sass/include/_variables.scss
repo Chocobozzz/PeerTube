@@ -71,7 +71,9 @@ $variables: (
   --menuForegroundColor: var(--menuForegroundColor),
   --submenuColor: var(--submenuColor),
   --inputColor: var(--inputColor),
-  --inputPlaceholderColor: var(--inputPlaceholderColor)
+  --inputPlaceholderColor: var(--inputPlaceholderColor),
+  --embedForegroundColor: var(--embedForegroundColor),
+  --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
 );
 
 /*** theme helper ***/

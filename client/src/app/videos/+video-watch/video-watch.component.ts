@@ -20,6 +20,7 @@ import { environment } from '../../../environments/environment'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { MarkdownService } from '@app/shared/renderer'
 import {
+  CustomizationOptions,
   P2PMediaLoaderOptions,
   PeertubePlayerManager,
   PeertubePlayerManagerOptions,
@@ -28,7 +29,7 @@ import {
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { Video } from '@app/shared/video/video.model'
-import { isWebRTCDisabled } from '../../../assets/player/utils'
+import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 
 @Component({
@@ -249,8 +250,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         const urlOptions = {
           startTime: queryParams.start,
           stopTime: queryParams.stop,
+
+          muted: queryParams.muted,
+          loop: queryParams.loop,
           subtitle: queryParams.subtitle,
-          playerMode: queryParams.mode
+
+          playerMode: queryParams.mode,
+          peertubeLink: false
         }
 
         this.onVideoFetched(video, captionsResult.data, urlOptions)
@@ -327,7 +333,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private async onVideoFetched (
     video: VideoDetails,
     videoCaptions: VideoCaption[],
-    urlOptions: { startTime?: number, stopTime?: number, subtitle?: string, playerMode?: string }
+    urlOptions: CustomizationOptions & { playerMode: PlayerMode }
   ) {
     this.video = video
 
@@ -339,7 +345,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoWatchPlaylist.updatePlaylistIndex(video)
 
-    let startTime = urlOptions.startTime || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
+    let startTime = timeToInt(urlOptions.startTime) || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
     // If we are at the end of the video, reset the timer
     if (this.video.duration - startTime <= 1) startTime = 0
 
@@ -378,12 +384,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         enableHotkeys: true,
         inactivityTimeout: 2500,
         poster: this.video.previewUrl,
+
         startTime,
         stopTime: urlOptions.stopTime,
+        controls: urlOptions.controls,
+        muted: urlOptions.muted,
+        loop: urlOptions.loop,
+        subtitle: urlOptions.subtitle,
+
+        peertubeLink: urlOptions.peertubeLink,
 
         theaterMode: true,
         captions: videoCaptions.length !== 0,
-        peertubeLink: false,
 
         videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE
           ? this.videoService.getVideoViewUrl(this.video.uuid)
@@ -391,8 +403,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         embedUrl: this.video.embedUrl,
 
         language: this.localeId,
-
-        subtitle: urlOptions.subtitle,
 
         userWatching: this.user && this.user.videosHistoryEnabled === true ? {
           url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),

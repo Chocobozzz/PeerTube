@@ -39,7 +39,19 @@ export type P2PMediaLoaderOptions = {
   videoFiles: VideoFile[]
 }
 
-export type CommonOptions = {
+export interface CustomizationOptions {
+  startTime: number | string
+  stopTime: number | string
+
+  controls?: boolean
+  muted?: boolean
+  loop?: boolean
+  subtitle?: string
+
+  peertubeLink: boolean
+}
+
+export interface CommonOptions extends CustomizationOptions {
   playerElement: HTMLVideoElement
   onPlayerElementChange: (element: HTMLVideoElement) => void
 
@@ -48,21 +60,14 @@ export type CommonOptions = {
   enableHotkeys: boolean
   inactivityTimeout: number
   poster: string
-  startTime: number | string
-  stopTime: number | string
 
   theaterMode: boolean
   captions: boolean
-  peertubeLink: boolean
 
   videoViewUrl: string
   embedUrl: string
 
   language?: string
-  controls?: boolean
-  muted?: boolean
-  loop?: boolean
-  subtitle?: string
 
   videoCaptions: VideoJSCaption[]
 

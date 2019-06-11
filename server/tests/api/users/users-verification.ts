@@ -109,7 +109,8 @@ describe('Test users account verification', function () {
       await updateMyUser({
         url: server.url,
         accessToken: userAccessToken,
-        email: 'updated@example.com'
+        email: 'updated@example.com',
+        currentPassword: user1.password
       })
 
       await waitJobs(server)
