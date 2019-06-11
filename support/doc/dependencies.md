@@ -26,7 +26,7 @@
 
   3. Install certbot (choose instructions for nginx and your distribution) :
      [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-  4. Install NodeJS 8.x (current LTS):
+  4. Install NodeJS 8.x:
      [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
   5. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
      [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
@@ -56,7 +56,7 @@ $ sudo systemctl start redis postgresql
   1. Run:
 
 ```
-$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+$ sudo pacman -S nodejs-lts-dubnium yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -66,7 +66,7 @@ $ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-  1. Install NodeJS 8.x (current LTS):
+  1. Install NodeJS 8.x:
      [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
   2. Install yarn:
      [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -114,7 +114,7 @@ su my-peertube-user
 ```
 2. (Optional) Install certbot (choose instructions for nginx and your distribution) :
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-3. Install NodeJS 8.x (current LTS):
+3. Install NodeJS 8.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 4. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)

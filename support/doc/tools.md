@@ -36,6 +36,7 @@ You need to follow all the following steps even if you are on a PeerTube server 
 ### Dependencies
 
 Install the [PeerTube dependencies](dependencies.md) except PostgreSQL and Redis.
+PeerTube only supports NodeJS 8.x or 10.x.
 
 ### Installation
 
