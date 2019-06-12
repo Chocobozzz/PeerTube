@@ -50,8 +50,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playerElement: HTMLVideoElement
   theaterEnabled = false
   userRating: UserVideoRateType = null
-  video: VideoDetails = null
   descriptionLoading = false
+
+  video: VideoDetails = null
+  videoCaptions: VideoCaption[] = []
 
   playlist: VideoPlaylist = null
 
@@ -339,6 +341,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     urlOptions: CustomizationOptions & { playerMode: PlayerMode }
   ) {
     this.video = video
+    this.videoCaptions = videoCaptions
 
     // Re init attributes
     this.descriptionLoading = false

@@ -446,7 +446,7 @@ export class PeertubePlayerManager {
         label: player.localize('Copy the video URL at the current time'),
         listener: function () {
           const player = this as videojs.Player
-          copyToClipboard(buildVideoLink(player.currentTime()))
+          copyToClipboard(buildVideoLink({ startTime: player.currentTime() }))
         }
       },
       {

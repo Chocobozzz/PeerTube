@@ -219,5 +219,5 @@
 
 <ng-template [ngIf]="video !== null">
   <my-video-support #videoSupportModal [video]="video"></my-video-support>
-  <my-video-share #videoShareModal [video]="video"></my-video-share>
+  <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions"></my-video-share>
 </ng-template>

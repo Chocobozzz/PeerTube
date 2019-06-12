@@ -27,17 +27,54 @@ function isMobile () {
   return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
 }
 
-function buildVideoLink (time?: number, url?: string) {
-  if (!url) url = window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
+function buildVideoLink (options: {
+  baseUrl?: string,
 
-  if (time) {
-    const timeInt = Math.floor(time)
+  startTime?: number,
+  stopTime?: number,
 
-    const params = new URLSearchParams(window.location.search)
-    params.set('start', secondsToTime(timeInt))
+  subtitle?: string,
 
-    return url + '?' + params.toString()
+  loop?: boolean,
+  autoplay?: boolean,
+  muted?: boolean,
+
+  // Embed options
+  title?: boolean,
+  warningTitle?: boolean,
+  controls?: boolean
+} = {}) {
+  const { baseUrl } = options
+
+  const url = baseUrl
+    ? baseUrl
+    : window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
+
+  const params = new URLSearchParams(window.location.search)
+
+  if (options.startTime) {
+    const startTimeInt = Math.floor(options.startTime)
+    params.set('start', secondsToTime(startTimeInt))
   }
+
+  if (options.stopTime) {
+    const stopTimeInt = Math.floor(options.stopTime)
+    params.set('stop', secondsToTime(stopTimeInt))
+  }
+
+  if (options.subtitle) params.set('subtitle', options.subtitle)
+
+  if (options.loop === true) params.set('loop', '1')
+  if (options.autoplay === true) params.set('autoplay', '1')
+  if (options.muted === true) params.set('muted', '1')
+  if (options.title === false) params.set('title', '0')
+  if (options.warningTitle === false) params.set('warningTitle', '0')
+  if (options.controls === false) params.set('controls', '0')
+
+  let hasParams = false
+  params.forEach(() => hasParams = true)
+
+  if (hasParams) return url + '?' + params.toString()
 
   return url
 }

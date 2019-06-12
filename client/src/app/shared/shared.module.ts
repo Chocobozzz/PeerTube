@@ -53,7 +53,14 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
-import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
+import {
+  NgbCollapseModule,
+  NgbDropdownModule,
+  NgbModalModule,
+  NgbPopoverModule,
+  NgbTabsetModule,
+  NgbTooltipModule
+} from '@ng-bootstrap/ng-bootstrap'
 import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
 import { OverviewService } from '@app/shared/overview'
@@ -100,6 +107,7 @@ import { FollowService } from '@app/shared/instance/follow.service'
     NgbPopoverModule,
     NgbTabsetModule,
     NgbTooltipModule,
+    NgbCollapseModule,
 
     ClipboardModule,
 
@@ -170,6 +178,7 @@ import { FollowService } from '@app/shared/instance/follow.service'
     NgbPopoverModule,
     NgbTabsetModule,
     NgbTooltipModule,
+    NgbCollapseModule,
 
     ClipboardModule,
 

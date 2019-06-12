@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="results-filter" [ngbCollapse]="isSearchFilterCollapsed">
+    <div class="results-filter collapse-transition" [ngbCollapse]="isSearchFilterCollapsed">
       <my-search-filters [advancedSearch]="advancedSearch" (filtered)="onFiltered()"></my-search-filters>
     </div>
   </div>

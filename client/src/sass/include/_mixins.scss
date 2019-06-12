@@ -235,6 +235,14 @@
   position: relative;
   font-size: 15px;
 
+  &.disabled {
+    background-color: #E5E5E5;
+
+    select {
+      cursor: default;
+    }
+  }
+
   @media screen and (max-width: $width) {
     width: 100%;
   }
@@ -279,16 +287,6 @@
     option {
       color: #000;
     }
-  }
-}
-
-@mixin peertube-select-disabled-container ($width) {
-  @include peertube-select-container($width);
-
-  background-color: #E5E5E5;
-
-  select {
-    cursor: default;
   }
 }
 
