@@ -66,7 +66,8 @@ describe('Test config API validators', function () {
         '360p': true,
         '480p': true,
         '720p': false,
-        '1080p': false
+        '1080p': false,
+        '2160p': false
       },
       hls: {
         enabled: false
