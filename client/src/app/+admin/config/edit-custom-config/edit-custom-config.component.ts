@@ -15,7 +15,7 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
   customConfig: CustomConfig
 
-  resolutions: string[] = []
+  resolutions: { id: string, label: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
 
   constructor (
@@ -30,11 +30,30 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     super()
 
     this.resolutions = [
-      this.i18n('240p'),
-      this.i18n('360p'),
-      this.i18n('480p'),
-      this.i18n('720p'),
-      this.i18n('1080p')
+      {
+        id: '240p',
+        label: this.i18n('240p')
+      },
+      {
+        id: '360p',
+        label: this.i18n('360p')
+      },
+      {
+        id: '480p',
+        label: this.i18n('480p')
+      },
+      {
+        id: '720p',
+        label: this.i18n('720p')
+      },
+      {
+        id: '1080p',
+        label: this.i18n('1080p')
+      },
+      {
+        id: '2160p',
+        label: this.i18n('2160p')
+      }
     ]
 
     this.transcodingThreadOptions = [
@@ -140,8 +159,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       }
     }
     for (const resolution of this.resolutions) {
-      defaultValues.transcoding.resolutions[resolution] = 'false'
-      formGroupData.transcoding.resolutions[resolution] = null
+      defaultValues.transcoding.resolutions[resolution.id] = 'false'
+      formGroupData.transcoding.resolutions[resolution.id] = null
     }
 
     this.buildForm(formGroupData)

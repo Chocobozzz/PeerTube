@@ -156,7 +156,8 @@ const CONFIG = {
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
       get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
       get '720p' () { return config.get<boolean>('transcoding.resolutions.720p') },
-      get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') }
+      get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') },
+      get '2160p' () { return config.get<boolean>('transcoding.resolutions.2160p') }
     },
     HLS: {
       get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') }

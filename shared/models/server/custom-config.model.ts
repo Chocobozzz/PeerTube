@@ -62,6 +62,7 @@ export interface CustomConfig {
       '480p': boolean
       '720p': boolean
       '1080p': boolean
+      '2160p': boolean
     }
     hls: {
       enabled: boolean
