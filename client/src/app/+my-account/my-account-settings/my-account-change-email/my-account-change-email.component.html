@@ -9,7 +9,7 @@
   <span class="email">{{ user.pendingEmail }}</span> is awaiting email verification
 </div>
 
-<form role="form" (ngSubmit)="changeEmail()" [formGroup]="form">
+<form role="form" class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form">
 
   <div class="form-group">
     <label i18n for="new-email">New email</label>

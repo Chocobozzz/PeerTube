@@ -5,7 +5,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { User } from '../../../../../../shared'
-import { switchMap, tap } from 'rxjs/operators'
+import { tap } from 'rxjs/operators'
 
 @Component({
   selector: 'my-account-change-email',
