@@ -1,7 +1,9 @@
 import { Netrc } from 'netrc-parser'
-import { isTestInstance, getAppNumber } from '../helpers/core-utils'
+import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 import { join } from 'path'
-import { root } from '../../shared/extra-utils'
+import { getVideoChannel, root } from '../../shared/extra-utils'
+import { Command } from 'commander'
+import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -94,6 +96,64 @@ function getRemoteObjectOrDie (program: any, settings: Settings, netrc: Netrc) {
   }
 }
 
+function buildCommonVideoOptions (command: Command) {
+  function list (val) {
+    return val.split(',')
+  }
+
+  return command
+    .option('-n, --video-name <name>', 'Video name')
+    .option('-c, --category <category_number>', 'Category number')
+    .option('-l, --licence <licence_number>', 'Licence number')
+    .option('-L, --language <language_code>', 'Language ISO 639 code (fr or en...)')
+    .option('-t, --tags <tags>', 'Video tags', list)
+    .option('-N, --nsfw', 'Video is Not Safe For Work')
+    .option('-d, --video-description <description>', 'Video description')
+    .option('-P, --privacy <privacy_number>', 'Privacy')
+    .option('-C, --channel-name <channel_name>', 'Channel name')
+    .option('-m, --comments-enabled', 'Enable comments')
+    .option('-s, --support <support>', 'Video support text')
+    .option('-w, --wait-transcoding', 'Wait transcoding before publishing the video')
+}
+
+async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any) {
+  const booleanAttributes: { [id: string]: boolean } = {}
+
+  for (const key of [ 'nsfw', 'commentsEnabled', 'downloadEnabled', 'waitTranscoding' ]) {
+    if (command[ key ] !== undefined) {
+      booleanAttributes[key] = command[ key ]
+    } else if (defaultAttributes[key] !== undefined) {
+      booleanAttributes[key] = defaultAttributes[key]
+    } else {
+      booleanAttributes[key] = false
+    }
+  }
+
+  const videoAttributes = {
+    name: command[ 'videoName' ] || defaultAttributes.name,
+    category: command[ 'category' ] || defaultAttributes.category || undefined,
+    licence: command[ 'licence' ] || defaultAttributes.licence || undefined,
+    language: command[ 'language' ] || defaultAttributes.language || undefined,
+    privacy: command[ 'privacy' ] || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
+    support: command[ 'support' ] || defaultAttributes.support || undefined
+  }
+
+  Object.assign(videoAttributes, booleanAttributes)
+
+  if (command[ 'channelName' ]) {
+    const res = await getVideoChannel(url, command['channelName'])
+    const videoChannel: VideoChannel = res.body
+
+    Object.assign(videoAttributes, { channelId: videoChannel.id })
+
+    if (!videoAttributes.support && videoChannel.support) {
+      Object.assign(videoAttributes, { support: videoChannel.support })
+    }
+  }
+
+  return videoAttributes
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -103,5 +163,8 @@ export {
   getNetrc,
   getRemoteObjectOrDie,
   writeSettings,
-  deleteSettings
+  deleteSettings,
+
+  buildCommonVideoOptions,
+  buildVideoAttributesFromCommander
 }

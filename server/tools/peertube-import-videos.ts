@@ -3,7 +3,6 @@ require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import * as program from 'commander'
 import { join } from 'path'
-import { VideoPrivacy } from '../../shared/models/videos'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
@@ -12,7 +11,7 @@ import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
-import { getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
+import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
 
 type UserInfo = {
   username: string
@@ -24,14 +23,16 @@ const processOptions = {
   maxBuffer: Infinity
 }
 
-program
+let command = program
   .name('import-videos')
+
+command = buildCommonVideoOptions(command)
+
+command
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-t, --target-url <targetUrl>', 'Video target URL')
-  .option('-C, --channel-id <channel_id>', 'Channel ID')
-  .option('-l, --language <languageCode>', 'Language ISO 639 code (fr or en...)')
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
@@ -179,7 +180,7 @@ async function uploadVideoOnPeerTube (parameters: {
 
   const originallyPublishedAt = buildOriginallyPublishedAt(videoInfo)
 
-  const videoAttributes = {
+  const defaultAttributes = {
     name: truncate(videoInfo.title, {
       'length': CONSTRAINTS_FIELDS.VIDEOS.NAME.max,
       'separator': /,? +/,
@@ -187,24 +188,19 @@ async function uploadVideoOnPeerTube (parameters: {
     }),
     category,
     licence,
-    language: program[ 'language' ],
     nsfw: isNSFW(videoInfo),
-    waitTranscoding: true,
-    commentsEnabled: true,
-    downloadEnabled: true,
-    description: videoInfo.description || undefined,
-    support: undefined,
-    tags,
-    privacy: VideoPrivacy.PUBLIC,
-    fixture: videoPath,
-    thumbnailfile,
-    previewfile: thumbnailfile,
-    originallyPublishedAt: originallyPublishedAt ? originallyPublishedAt.toISOString() : null
+    description: videoInfo.description,
+    tags
   }
 
-  if (program[ 'channelId' ]) {
-    Object.assign(videoAttributes, { channelId: program['channelId'] })
-  }
+  const videoAttributes = await buildVideoAttributesFromCommander(url, program, defaultAttributes)
+
+  Object.assign(videoAttributes, {
+    originallyPublishedAt: originallyPublishedAt ? originallyPublishedAt.toISOString() : null,
+    thumbnailfile,
+    previewfile: thumbnailfile,
+    fixture: videoPath
+  })
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
 

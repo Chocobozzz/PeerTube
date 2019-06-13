@@ -3,24 +3,18 @@ import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
 import { getClient, login } from '../../shared/extra-utils'
 import { uploadVideo } from '../../shared/extra-utils/'
-import { VideoPrivacy } from '../../shared/models/videos'
-import { getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
+import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
 
-program
+let command = program
   .name('upload')
+
+command = buildCommonVideoOptions(command)
+
+command
+
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
-  .option('-n, --video-name <name>', 'Video name')
-  .option('-P, --privacy <privacy_number>', 'Privacy')
-  .option('-N, --nsfw', 'Video is Not Safe For Work')
-  .option('-c, --category <category_number>', 'Category number')
-  .option('-C, --channel-id <channel_id>', 'Channel ID')
-  .option('-m, --comments-enabled', 'Enable comments')
-  .option('-l, --licence <licence_number>', 'Licence number')
-  .option('-L, --language <language_code>', 'Language ISO 639 code (fr or en...)')
-  .option('-d, --video-description <description>', 'Video description')
-  .option('-t, --tags <tags>', 'Video tags', list)
   .option('-b, --thumbnail <thumbnailPath>', 'Thumbnail path')
   .option('-v, --preview <previewPath>', 'Preview path')
   .option('-f, --file <file>', 'Video absolute file path')
@@ -30,10 +24,9 @@ Promise.all([ getSettings(), getNetrc() ])
        .then(([ settings, netrc ]) => {
          const { url, username, password } = getRemoteObjectOrDie(program, settings, netrc)
 
-         if (!program[ 'videoName' ] || !program[ 'file' ] || !program[ 'channelId' ]) {
+         if (!program[ 'videoName' ] || !program[ 'file' ]) {
            if (!program[ 'videoName' ]) console.error('--video-name is required.')
            if (!program[ 'file' ]) console.error('--file is required.')
-           if (!program[ 'channelId' ]) console.error('--channel-id is required.')
 
            process.exit(-1)
          }
@@ -70,24 +63,17 @@ async function run (url: string, username: string, password: string) {
 
   console.log('Uploading %s video...', program[ 'videoName' ])
 
-  const videoAttributes = {
-    name: program[ 'videoName' ],
-    category: program[ 'category' ] || undefined,
-    channelId: program[ 'channelId' ],
-    licence: program[ 'licence' ] || undefined,
-    language: program[ 'language' ] || undefined,
-    nsfw: program[ 'nsfw' ] !== undefined ? program[ 'nsfw' ] : false,
-    description: program[ 'videoDescription' ] || undefined,
-    tags: program[ 'tags' ] || [],
-    commentsEnabled: program[ 'commentsEnabled' ] !== undefined ? program[ 'commentsEnabled' ] : true,
-    downloadEnabled: program[ 'downloadEnabled' ] !== undefined ? program[ 'downloadEnabled' ] : true,
+  const defaultAttributes = {
+    tags: command[ 'tags' ],
+    description: command[ 'videoDescription' ]
+  }
+  const videoAttributes = await buildVideoAttributesFromCommander(url, program, defaultAttributes)
+
+  Object.assign(videoAttributes, {
     fixture: program[ 'file' ],
     thumbnailfile: program[ 'thumbnail' ],
-    previewfile: program[ 'preview' ],
-    waitTranscoding: true,
-    privacy: program[ 'privacy' ] || VideoPrivacy.PUBLIC,
-    support: undefined
-  }
+    previewfile: program[ 'preview' ]
+  })
 
   try {
     await uploadVideo(url, accessToken, videoAttributes)
@@ -100,7 +86,3 @@ async function run (url: string, username: string, password: string) {
 }
 
 // ----------------------------------------------------------------------------
-
-function list (val) {
-  return val.split(',')
-}

@@ -10,18 +10,20 @@ import {
   execCLI,
   flushAndRunServer,
   getEnvCli,
-  getMyUserInformation,
+  getVideo,
   getVideosList,
+  getVideosListWithToken, removeVideo,
   ServerInfo,
   setAccessTokensToServers,
-  userLogin, waitJobs
+  userLogin,
+  waitJobs
 } from '../../../shared/extra-utils'
-import { User, Video } from '../../../shared'
+import { Video, VideoDetails } from '../../../shared'
 import { getYoutubeVideoUrl } from '../../../shared/extra-utils/videos/video-imports'
 
 describe('Test CLI wrapper', function () {
   let server: ServerInfo
-  let channelId: number
+  let userAccessToken: string
 
   const cmd = 'node ./dist/server/tools/peertube.js'
 
@@ -33,11 +35,11 @@ describe('Test CLI wrapper', function () {
 
     await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super_password' })
 
-    const userAccessToken = await userLogin(server, { username: 'user_1', password: 'super_password' })
+    userAccessToken = await userLogin(server, { username: 'user_1', password: 'super_password' })
 
     {
-      const res = await addVideoChannel(server.url, userAccessToken, { name: 'user_channel', displayName: 'User channel' })
-      channelId = res.body.videoChannel.id
+      const args = { name: 'user_channel', displayName: 'User channel', support: 'super support text' }
+      await addVideoChannel(server.url, userAccessToken, args)
     }
   })
 
@@ -82,7 +84,7 @@ describe('Test CLI wrapper', function () {
 
     const fixture = buildAbsoluteFixturePath('60fps_720p_small.mp4')
 
-    const params = `-f ${fixture} --video-name 'test upload' --channel-id ${channelId}`
+    const params = `-f ${fixture} --video-name 'test upload' --channel-name user_channel --support 'support_text'`
 
     await execCLI(`${env} ${cmd} upload ${params}`)
   })
@@ -93,8 +95,12 @@ describe('Test CLI wrapper', function () {
     expect(res.body.total).to.equal(1)
 
     const videos: Video[] = res.body.data
-    expect(videos[0].name).to.equal('test upload')
-    expect(videos[0].channel.name).to.equal('user_channel')
+
+    const video: VideoDetails = (await getVideo(server.url, videos[0].uuid)).body
+
+    expect(video.name).to.equal('test upload')
+    expect(video.support).to.equal('support_text')
+    expect(video.channel.name).to.equal('user_channel')
   })
 
   it('Should import a video', async function () {
@@ -102,7 +108,7 @@ describe('Test CLI wrapper', function () {
 
     const env = getEnvCli(server)
 
-    const params = `--target-url ${getYoutubeVideoUrl()} --channel-id ${channelId}`
+    const params = `--target-url ${getYoutubeVideoUrl()} --channel-name user_channel`
 
     await execCLI(`${env} ${cmd} import ${params}`)
   })
@@ -118,9 +124,41 @@ describe('Test CLI wrapper', function () {
 
     const videos: Video[] = res.body.data
     const video = videos.find(v => v.name === 'small video - youtube')
-
     expect(video).to.not.be.undefined
-    expect(video.channel.name).to.equal('user_channel')
+
+    const videoDetails: VideoDetails = (await getVideo(server.url, video.id)).body
+    expect(videoDetails.channel.name).to.equal('user_channel')
+    expect(videoDetails.support).to.equal('super support text')
+    expect(videoDetails.nsfw).to.be.false
+
+    // So we can reimport it
+    await removeVideo(server.url, userAccessToken, video.id)
+  })
+
+  it('Should import and override some imported attributes', async function () {
+    this.timeout(60000)
+
+    const env = getEnvCli(server)
+
+    const params = `--target-url ${getYoutubeVideoUrl()} --channel-name user_channel --video-name toto --nsfw --support support`
+
+    await execCLI(`${env} ${cmd} import ${params}`)
+
+    await waitJobs([ server ])
+
+    {
+      const res = await getVideosList(server.url)
+      expect(res.body.total).to.equal(2)
+
+      const videos: Video[] = res.body.data
+      const video = videos.find(v => v.name === 'toto')
+      expect(video).to.not.be.undefined
+
+      const videoDetails: VideoDetails = (await getVideo(server.url, video.id)).body
+      expect(videoDetails.channel.name).to.equal('user_channel')
+      expect(videoDetails.support).to.equal('support')
+      expect(videoDetails.nsfw).to.be.true
+    }
   })
 
   it('Should remove the auth user', async function () {
