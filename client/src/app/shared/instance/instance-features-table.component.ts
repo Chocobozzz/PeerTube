@@ -50,8 +50,8 @@ export class InstanceFeaturesTableComponent implements OnInit {
         value: config.signup.allowed
       },
       {
-        label: this.i18n('Video uploads require manual validation by moderators'),
-        value: config.autoBlacklist.videos.ofUsers.enabled
+        label: config.autoBlacklist.videos.ofUsers.enabled ? this.i18n('Video uploads require manual validation by moderators') : this.i18n('Uploads are published without moderator verification'),
+        value: true
       },
       {
         label: this.i18n('Transcode your videos in multiple resolutions'),
