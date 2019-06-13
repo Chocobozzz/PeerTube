@@ -134,6 +134,10 @@ function isProdInstance () {
   return process.env.NODE_ENV === 'production'
 }
 
+function getAppNumber () {
+  return process.env.NODE_APP_INSTANCE
+}
+
 function root () {
   // We are in /helpers/utils.js
   const paths = [ __dirname, '..', '..' ]
@@ -256,6 +260,7 @@ const execPromise = promisify1<string, string>(exec)
 export {
   isTestInstance,
   isProdInstance,
+  getAppNumber,
 
   objectConverter,
   root,

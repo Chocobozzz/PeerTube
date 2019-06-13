@@ -43,7 +43,7 @@ const start = async () => {
         Object.defineProperty(context, prop, {
           configurable: false,
           enumerable: true,
-          value: properties[prop]
+          value: properties[ prop ]
         })
       }
     }
@@ -69,8 +69,7 @@ const start = async () => {
 
 }
 
-start().then((data) => {
-  // do nothing
-}).catch((err) => {
-  console.error(err)
-})
+start()
+  .catch((err) => {
+    console.error(err)
+  })

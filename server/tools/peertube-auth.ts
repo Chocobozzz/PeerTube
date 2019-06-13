@@ -9,7 +9,11 @@ const Table = require('cli-table')
 async function delInstance (url: string) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
-  settings.remotes.splice(settings.remotes.indexOf(url))
+  const index = settings.remotes.indexOf(url)
+  settings.remotes.splice(index)
+
+  if (settings.default === index) settings.default = -1
+
   await writeSettings(settings)
 
   delete netrc.machines[url]
@@ -17,12 +21,17 @@ async function delInstance (url: string) {
   await netrc.save()
 }
 
-async function setInstance (url: string, username: string, password: string) {
+async function setInstance (url: string, username: string, password: string, isDefault: boolean) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
   if (settings.remotes.indexOf(url) === -1) {
     settings.remotes.push(url)
   }
+
+  if (isDefault || settings.remotes.length === 1) {
+    settings.default = settings.remotes.length - 1
+  }
+
   await writeSettings(settings)
 
   netrc.machines[url] = { login: username, password }
@@ -66,7 +75,7 @@ program
         }
       }
     }, async (_, result) => {
-      await setInstance(result.url, result.username, result.password)
+      await setInstance(result.url, result.username, result.password, program['default'])
 
       process.exit(0)
     })

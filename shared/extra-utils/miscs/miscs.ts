@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import * as chai from 'chai'
-import { isAbsolute, join } from 'path'
+import { basename, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
 import { pathExists, readFile } from 'fs-extra'
@@ -34,7 +34,11 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
 
 function root () {
   // We are in /miscs
-  return join(__dirname, '..', '..', '..')
+  let root = join(__dirname, '..', '..', '..')
+
+  if (basename(root) === 'dist') root = resolve(root, '..')
+
+  return root
 }
 
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {

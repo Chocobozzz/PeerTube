@@ -13,7 +13,7 @@ recreateDB () {
 }
 
 removeFiles () {
-  rm -rf "./test$1" "./config/local-test.json" "./config/local-test-$1.json"
+  rm -rf "./test$1" "./config/local-test.json" "./config/local-test-$1.json" ~/.config/PeerTube/CLI-$1
 }
 
 dropRedis () {

@@ -12,5 +12,4 @@ rm -rf ./dist/server/tools/
 )
 
 npm run tsc -- --build ./server/tools/tsconfig.json
-
-mv "./server/tools/node_modules" "./dist/server/tools"
+cp -r "./server/tools/node_modules" "./dist/server/tools"

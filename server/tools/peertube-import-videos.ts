@@ -14,8 +14,10 @@ import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
 import { getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
 
-let accessToken: string
-let client: { id: string, secret: string }
+type UserInfo = {
+  username: string
+  password: string
+}
 
 const processOptions = {
   cwd: __dirname,
@@ -28,13 +30,14 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-t, --target-url <targetUrl>', 'Video target URL')
+  .option('-C, --channel-id <channel_id>', 'Channel ID')
   .option('-l, --language <languageCode>', 'Language ISO 639 code (fr or en...)')
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
 Promise.all([ getSettings(), getNetrc() ])
        .then(([ settings, netrc ]) => {
-         const { url, username, password } = getRemoteObjectOrDie(program, settings)
+         const { url, username, password } = getRemoteObjectOrDie(program, settings, netrc)
 
          if (!program[ 'targetUrl' ]) {
            console.error('--targetUrl field is required.')
@@ -45,54 +48,18 @@ Promise.all([ getSettings(), getNetrc() ])
          removeEndSlashes(url)
          removeEndSlashes(program[ 'targetUrl' ])
 
-         const user = {
-           username: username,
-           password: password
-         }
+         const user = { username, password }
 
-         run(user, url)
+         run(url, user)
            .catch(err => {
              console.error(err)
              process.exit(-1)
            })
        })
 
-async function promptPassword () {
-  return new Promise((res, rej) => {
-    prompt.start()
-    const schema = {
-      properties: {
-        password: {
-          hidden: true,
-          required: true
-        }
-      }
-    }
-    prompt.get(schema, function (err, result) {
-      if (err) {
-        return rej(err)
-      }
-      return res(result.password)
-    })
-  })
-}
-
-async function run (user, url: string) {
+async function run (url: string, user: UserInfo) {
   if (!user.password) {
     user.password = await promptPassword()
-  }
-
-  const res = await getClient(url)
-  client = {
-    id: res.body.client_id,
-    secret: res.body.client_secret
-  }
-
-  try {
-    const res = await login(program[ 'url' ], client, user)
-    accessToken = res.body.access_token
-  } catch (err) {
-    throw new Error('Cannot authenticate. Please check your username/password.')
   }
 
   const youtubeDL = await safeGetYoutubeDL()
@@ -115,7 +82,12 @@ async function run (user, url: string) {
     console.log('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
-      await processVideo(info, program[ 'language' ], processOptions.cwd, url, user)
+      await processVideo({
+        cwd: processOptions.cwd,
+        url,
+        user,
+        youtubeInfo: info
+      })
     }
 
     console.log('Video/s for user %s imported: %s', program[ 'username' ], program[ 'targetUrl' ])
@@ -123,11 +95,18 @@ async function run (user, url: string) {
   })
 }
 
-function processVideo (info: any, languageCode: string, cwd: string, url: string, user) {
-  return new Promise(async res => {
-    if (program[ 'verbose' ]) console.log('Fetching object.', info)
+function processVideo (parameters: {
+  cwd: string,
+  url: string,
+  user: { username: string, password: string },
+  youtubeInfo: any
+}) {
+  const { youtubeInfo, cwd, url, user } = parameters
 
-    const videoInfo = await fetchObject(info)
+  return new Promise(async res => {
+    if (program[ 'verbose' ]) console.log('Fetching object.', youtubeInfo)
+
+    const videoInfo = await fetchObject(youtubeInfo)
     if (program[ 'verbose' ]) console.log('Fetched object.', videoInfo)
 
     const result = await searchVideoWithSort(url, videoInfo.title, '-match')
@@ -153,7 +132,13 @@ function processVideo (info: any, languageCode: string, cwd: string, url: string
         }
 
         console.log(output.join('\n'))
-        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, cwd, url, user, languageCode)
+        await uploadVideoOnPeerTube({
+          cwd,
+          url,
+          user,
+          videoInfo: normalizeObject(videoInfo),
+          videoPath: path
+        })
         return res()
       })
     } catch (err) {
@@ -163,7 +148,15 @@ function processVideo (info: any, languageCode: string, cwd: string, url: string
   })
 }
 
-async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: string, url: string, user, language?: string) {
+async function uploadVideoOnPeerTube (parameters: {
+  videoInfo: any,
+  videoPath: string,
+  cwd: string,
+  url: string,
+  user: { username: string; password: string }
+}) {
+  const { videoInfo, videoPath, cwd, url, user } = parameters
+
   const category = await getCategory(videoInfo.categories, url)
   const licence = getLicence(videoInfo.license)
   let tags = []
@@ -194,7 +187,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     }),
     category,
     licence,
-    language,
+    language: program[ 'language' ],
     nsfw: isNSFW(videoInfo),
     waitTranscoding: true,
     commentsEnabled: true,
@@ -209,15 +202,21 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
     originallyPublishedAt: originallyPublishedAt ? originallyPublishedAt.toISOString() : null
   }
 
+  if (program[ 'channelId' ]) {
+    Object.assign(videoAttributes, { channelId: program['channelId'] })
+  }
+
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
+
+  let accessToken = await getAccessTokenOrDie(url, user)
+
   try {
     await uploadVideo(url, accessToken, videoAttributes)
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
       console.log('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
-      const res = await login(url, client, user)
-      accessToken = res.body.access_token
+      accessToken = await getAccessTokenOrDie(url, user)
 
       await uploadVideo(url, accessToken, videoAttributes)
     } else {
@@ -231,6 +230,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, cwd: st
 
   console.log('Uploaded video "%s"!\n', videoAttributes.name)
 }
+
+/* ---------------------------------------------------------- */
 
 async function getCategory (categories: string[], url: string) {
   if (!categories) return undefined
@@ -249,8 +250,6 @@ async function getCategory (categories: string[], url: string) {
 
   return undefined
 }
-
-/* ---------------------------------------------------------- */
 
 function getLicence (licence: string) {
   if (!licence) return undefined
@@ -305,13 +304,47 @@ function buildUrl (info: any) {
 }
 
 function isNSFW (info: any) {
-  if (info.age_limit && info.age_limit >= 16) return true
-
-  return false
+  return info.age_limit && info.age_limit >= 16
 }
 
 function removeEndSlashes (url: string) {
   while (url.endsWith('/')) {
     url.slice(0, -1)
+  }
+}
+
+async function promptPassword () {
+  return new Promise<string>((res, rej) => {
+    prompt.start()
+    const schema = {
+      properties: {
+        password: {
+          hidden: true,
+          required: true
+        }
+      }
+    }
+    prompt.get(schema, function (err, result) {
+      if (err) {
+        return rej(err)
+      }
+      return res(result.password)
+    })
+  })
+}
+
+async function getAccessTokenOrDie (url: string, user: UserInfo) {
+  const resClient = await getClient(url)
+  const client = {
+    id: resClient.body.client_id,
+    secret: resClient.body.client_secret
+  }
+
+  try {
+    const res = await login(url, client, user)
+    return res.body.access_token
+  } catch (err) {
+    console.error('Cannot authenticate. Please check your username/password.')
+    process.exit(-1)
   }
 }

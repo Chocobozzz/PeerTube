@@ -1,28 +1,44 @@
+/* tslint:disable:no-unused-expression */
+
 import 'mocha'
+import { expect } from 'chai'
 import {
-  expect
-} from 'chai'
-import {
+  addVideoChannel,
+  buildAbsoluteFixturePath,
+  cleanupTests,
   createUser,
   execCLI,
-  flushTests,
-  getEnvCli,
-  killallServers,
   flushAndRunServer,
+  getEnvCli,
+  getMyUserInformation,
+  getVideosList,
   ServerInfo,
-  setAccessTokensToServers, cleanupTests
+  setAccessTokensToServers,
+  userLogin, waitJobs
 } from '../../../shared/extra-utils'
+import { User, Video } from '../../../shared'
+import { getYoutubeVideoUrl } from '../../../shared/extra-utils/videos/video-imports'
 
 describe('Test CLI wrapper', function () {
   let server: ServerInfo
+  let channelId: number
+
   const cmd = 'node ./dist/server/tools/peertube.js'
 
   before(async function () {
     this.timeout(30000)
+
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
 
-    await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super password' })
+    await createUser({ url: server.url, accessToken: server.accessToken, username: 'user_1', password: 'super_password' })
+
+    const userAccessToken = await userLogin(server, { username: 'user_1', password: 'super_password' })
+
+    {
+      const res = await addVideoChannel(server.url, userAccessToken, { name: 'user_channel', displayName: 'User channel' })
+      channelId = res.body.videoChannel.id
+    }
   })
 
   it('Should display no selected instance', async function () {
@@ -31,20 +47,94 @@ describe('Test CLI wrapper', function () {
     const env = getEnvCli(server)
     const stdout = await execCLI(`${env} ${cmd} --help`)
 
-    expect(stdout).to.contain('selected')
+    expect(stdout).to.contain('no instance selected')
   })
 
-  it('Should remember the authentifying material of the user', async function () {
+  it('Should add a user', async function () {
     this.timeout(60000)
 
     const env = getEnvCli(server)
-    await execCLI(`${env} ` + cmd + ` auth add --url ${server.url} -U user_1 -p "super password"`)
+    await execCLI(`${env} ${cmd} auth add -u ${server.url} -U user_1 -p super_password`)
+  })
+
+  it('Should default to this user', async function () {
+    this.timeout(60000)
+
+    const env = getEnvCli(server)
+    const stdout = await execCLI(`${env} ${cmd} --help`)
+
+    expect(stdout).to.contain(`instance ${server.url} selected`)
+  })
+
+  it('Should remember the user', async function () {
+    this.timeout(60000)
+
+    const env = getEnvCli(server)
+    const stdout = await execCLI(`${env} ${cmd} auth list`)
+
+    expect(stdout).to.contain(server.url)
+  })
+
+  it('Should upload a video', async function () {
+    this.timeout(60000)
+
+    const env = getEnvCli(server)
+
+    const fixture = buildAbsoluteFixturePath('60fps_720p_small.mp4')
+
+    const params = `-f ${fixture} --video-name 'test upload' --channel-id ${channelId}`
+
+    await execCLI(`${env} ${cmd} upload ${params}`)
+  })
+
+  it('Should have the video uploaded', async function () {
+    const res = await getVideosList(server.url)
+
+    expect(res.body.total).to.equal(1)
+
+    const videos: Video[] = res.body.data
+    expect(videos[0].name).to.equal('test upload')
+    expect(videos[0].channel.name).to.equal('user_channel')
+  })
+
+  it('Should import a video', async function () {
+    this.timeout(60000)
+
+    const env = getEnvCli(server)
+
+    const params = `--target-url ${getYoutubeVideoUrl()} --channel-id ${channelId}`
+
+    await execCLI(`${env} ${cmd} import ${params}`)
+  })
+
+  it('Should have imported the video', async function () {
+    this.timeout(60000)
+
+    await waitJobs([ server ])
+
+    const res = await getVideosList(server.url)
+
+    expect(res.body.total).to.equal(2)
+
+    const videos: Video[] = res.body.data
+    const video = videos.find(v => v.name === 'small video - youtube')
+
+    expect(video).to.not.be.undefined
+    expect(video.channel.name).to.equal('user_channel')
+  })
+
+  it('Should remove the auth user', async function () {
+    const env = getEnvCli(server)
+
+    await execCLI(`${env} ${cmd} auth del ${server.url}`)
+
+    const stdout = await execCLI(`${env} ${cmd} --help`)
+
+    expect(stdout).to.contain('no instance selected')
   })
 
   after(async function () {
     this.timeout(10000)
-
-    await execCLI(cmd + ` auth del ${server.url}`)
 
     await cleanupTests([ server ])
   })

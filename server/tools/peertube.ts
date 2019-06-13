@@ -63,9 +63,10 @@ if (!process.argv.slice(2).length) {
 
 getSettings()
   .then(settings => {
-    const state = (settings.default === undefined || settings.default === -1) ?
-      'no instance selected, commands will require explicit arguments' :
-      ('instance ' + settings.remotes[settings.default] + ' selected')
+    const state = (settings.default === undefined || settings.default === -1)
+      ? 'no instance selected, commands will require explicit arguments'
+      : 'instance ' + settings.remotes[settings.default] + ' selected'
+
     program
       .on('--help', function () {
         console.log()

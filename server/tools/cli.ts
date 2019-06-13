@@ -1,5 +1,12 @@
-const config = require('application-config')('PeerTube/CLI')
-const netrc = require('netrc-parser').default
+import { Netrc } from 'netrc-parser'
+import { isTestInstance, getAppNumber } from '../helpers/core-utils'
+import { join } from 'path'
+import { root } from '../../shared/extra-utils'
+
+let configName = 'PeerTube/CLI'
+if (isTestInstance()) configName += `-${getAppNumber()}`
+
+const config = require('application-config')(configName)
 
 const version = require('../../../package.json').version
 
@@ -12,7 +19,7 @@ function getSettings () {
   return new Promise<Settings>((res, rej) => {
     const defaultSettings = {
       remotes: [],
-      default: 0
+      default: -1
     }
 
     config.read((err, data) => {
@@ -24,6 +31,12 @@ function getSettings () {
 }
 
 async function getNetrc () {
+  const Netrc = require('netrc-parser').Netrc
+
+  const netrc = isTestInstance()
+    ? new Netrc(join(root(), 'test' + getAppNumber(), 'netrc'))
+    : new Netrc()
+
   await netrc.load()
 
   return netrc
@@ -31,7 +44,7 @@ async function getNetrc () {
 
 function writeSettings (settings) {
   return new Promise((res, rej) => {
-    config.write(settings, function (err) {
+    config.write(settings, err => {
       if (err) return rej(err)
 
       return res()
@@ -39,9 +52,19 @@ function writeSettings (settings) {
   })
 }
 
-function getRemoteObjectOrDie (program: any, settings: Settings) {
+function deleteSettings () {
+  return new Promise((res, rej) => {
+    config.trash((err) => {
+      if (err) return rej(err)
+
+      return res()
+    })
+  })
+}
+
+function getRemoteObjectOrDie (program: any, settings: Settings, netrc: Netrc) {
   if (!program['url'] || !program['username'] || !program['password']) {
-    // No remote and we don't have program parameters: throw
+    // No remote and we don't have program parameters: quit
     if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
       if (!program[ 'url' ]) console.error('--url field is required.')
       if (!program[ 'username' ]) console.error('--username field is required.')
@@ -54,15 +77,12 @@ function getRemoteObjectOrDie (program: any, settings: Settings) {
     let username: string = program['username']
     let password: string = program['password']
 
-    if (!url) {
-      url = settings.default !== -1
-        ? settings.remotes[settings.default]
-        : settings.remotes[0]
-    }
+    if (!url && settings.default !== -1) url = settings.remotes[settings.default]
 
     const machine = netrc.machines[url]
-    if (!username) username = machine.login
-    if (!password) password = machine.password
+
+    if (!username && machine) username = machine.login
+    if (!password && machine) password = machine.password
 
     return { url, username, password }
   }
@@ -82,5 +102,6 @@ export {
   getSettings,
   getNetrc,
   getRemoteObjectOrDie,
-  writeSettings
+  writeSettings,
+  deleteSettings
 }

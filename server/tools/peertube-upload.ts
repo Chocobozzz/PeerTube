@@ -4,7 +4,7 @@ import { isAbsolute } from 'path'
 import { getClient, login } from '../../shared/extra-utils'
 import { uploadVideo } from '../../shared/extra-utils/'
 import { VideoPrivacy } from '../../shared/models/videos'
-import { getRemoteObjectOrDie, getSettings } from './cli'
+import { getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
 
 program
   .name('upload')
@@ -26,31 +26,31 @@ program
   .option('-f, --file <file>', 'Video absolute file path')
   .parse(process.argv)
 
-getSettings()
-  .then(settings => {
-    const { url, username, password } = getRemoteObjectOrDie(program, settings)
+Promise.all([ getSettings(), getNetrc() ])
+       .then(([ settings, netrc ]) => {
+         const { url, username, password } = getRemoteObjectOrDie(program, settings, netrc)
 
-    if (!program['videoName'] || !program['file'] || !program['channelId']) {
-      if (!program['videoName']) console.error('--video-name is required.')
-      if (!program['file']) console.error('--file is required.')
-      if (!program['channelId']) console.error('--channel-id is required.')
+         if (!program[ 'videoName' ] || !program[ 'file' ] || !program[ 'channelId' ]) {
+           if (!program[ 'videoName' ]) console.error('--video-name is required.')
+           if (!program[ 'file' ]) console.error('--file is required.')
+           if (!program[ 'channelId' ]) console.error('--channel-id is required.')
 
-      process.exit(-1)
-    }
+           process.exit(-1)
+         }
 
-    if (isAbsolute(program['file']) === false) {
-      console.error('File path should be absolute.')
-      process.exit(-1)
-    }
+         if (isAbsolute(program[ 'file' ]) === false) {
+           console.error('File path should be absolute.')
+           process.exit(-1)
+         }
 
-    run(url, username, password).catch(err => {
-      console.error(err)
-      process.exit(-1)
-    })
-  })
+         run(url, username, password).catch(err => {
+           console.error(err)
+           process.exit(-1)
+         })
+       })
 
 async function run (url: string, username: string, password: string) {
-  const resClient = await getClient(program[ 'url' ])
+  const resClient = await getClient(url)
   const client = {
     id: resClient.body.client_id,
     secret: resClient.body.client_secret
@@ -71,27 +71,27 @@ async function run (url: string, username: string, password: string) {
   console.log('Uploading %s video...', program[ 'videoName' ])
 
   const videoAttributes = {
-    name: program['videoName'],
-    category: program['category'] || undefined,
-    channelId: program['channelId'],
-    licence: program['licence'] || undefined,
-    language: program['language'] || undefined,
-    nsfw: program['nsfw'] !== undefined ? program['nsfw'] : false,
-    description: program['videoDescription'] || undefined,
-    tags: program['tags'] || [],
-    commentsEnabled: program['commentsEnabled'] !== undefined ? program['commentsEnabled'] : true,
-    downloadEnabled: program['downloadEnabled'] !== undefined ? program['downloadEnabled'] : true,
-    fixture: program['file'],
-    thumbnailfile: program['thumbnail'],
-    previewfile: program['preview'],
+    name: program[ 'videoName' ],
+    category: program[ 'category' ] || undefined,
+    channelId: program[ 'channelId' ],
+    licence: program[ 'licence' ] || undefined,
+    language: program[ 'language' ] || undefined,
+    nsfw: program[ 'nsfw' ] !== undefined ? program[ 'nsfw' ] : false,
+    description: program[ 'videoDescription' ] || undefined,
+    tags: program[ 'tags' ] || [],
+    commentsEnabled: program[ 'commentsEnabled' ] !== undefined ? program[ 'commentsEnabled' ] : true,
+    downloadEnabled: program[ 'downloadEnabled' ] !== undefined ? program[ 'downloadEnabled' ] : true,
+    fixture: program[ 'file' ],
+    thumbnailfile: program[ 'thumbnail' ],
+    previewfile: program[ 'preview' ],
     waitTranscoding: true,
-    privacy: program['privacy'] || VideoPrivacy.PUBLIC,
+    privacy: program[ 'privacy' ] || VideoPrivacy.PUBLIC,
     support: undefined
   }
 
   try {
     await uploadVideo(url, accessToken, videoAttributes)
-    console.log(`Video ${program['videoName']} uploaded.`)
+    console.log(`Video ${program[ 'videoName' ]} uploaded.`)
     process.exit(0)
   } catch (err) {
     console.error(require('util').inspect(err))
