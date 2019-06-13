@@ -117,15 +117,22 @@ function buildCommonVideoOptions (command: Command) {
 }
 
 async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any) {
-  const booleanAttributes: { [id: string]: boolean } = {}
+  const defaultBooleanAttributes = {
+    nsfw: false,
+    commentsEnabled: true,
+    downloadEnabled: true,
+    waitTranscoding: true
+  }
 
-  for (const key of [ 'nsfw', 'commentsEnabled', 'downloadEnabled', 'waitTranscoding' ]) {
+  const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } | {} = {}
+
+  for (const key of Object.keys(defaultBooleanAttributes)) {
     if (command[ key ] !== undefined) {
       booleanAttributes[key] = command[ key ]
     } else if (defaultAttributes[key] !== undefined) {
       booleanAttributes[key] = defaultAttributes[key]
     } else {
-      booleanAttributes[key] = false
+      booleanAttributes[key] = defaultBooleanAttributes[key]
     }
   }
 

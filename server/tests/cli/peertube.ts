@@ -158,6 +158,7 @@ describe('Test CLI wrapper', function () {
       expect(videoDetails.channel.name).to.equal('user_channel')
       expect(videoDetails.support).to.equal('support')
       expect(videoDetails.nsfw).to.be.true
+      expect(videoDetails.commentsEnabled).to.be.true
     }
   })
 
