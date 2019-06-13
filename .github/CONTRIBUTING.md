@@ -63,7 +63,8 @@ Fork the github repository,
 and then clone the sources and install node modules:
 
 ```
-$ git clone https://github.com/YOUR_GITHUB_USERNAME/PeerTube
+$ git clone https://github.com/Chocobozzz/PeerTube
+$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
 $ cd PeerTube
 $ yarn install --pure-lockfile
 ```
@@ -71,6 +72,12 @@ $ yarn install --pure-lockfile
 Note that development is done on the `develop` branch. If you want to hack on
 Peertube, you should switch to that branch. Also note that you have to repeat
 the `yarn install --pure-lockfile` command.
+
+When you create a new branch you should also tell to use your repo for upload
+not default one. To do just do:
+```
+$ git push --set-upstream me <your branch name>
+```
 
 Then, create a postgres database and user with the values set in the
 `config/default.yaml` file. For instance, if you do not change the values
