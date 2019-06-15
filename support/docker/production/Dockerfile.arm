@@ -7,8 +7,8 @@ ARG NPM_RUN_BUILD_OPTS
 
 RUN set -ex; \
     if ! command -v gpg > /dev/null; then \
-      apt-get update; \
-      apt-get install -y --no-install-recommends \
+      apt update; \
+      apt install -y --no-install-recommends \
         gnupg \
         dirmngr \
       ; \
@@ -17,16 +17,16 @@ fi
 
 # install nodejs and npm
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update \
-    && apt-get install -y apt-utils nano htop curl git build-essential gcc g++ make \
+RUN apt update \
+    && apt install -y apt-utils nano htop curl git build-essential gcc g++ make \
     && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-    && apt-get install -yq nodejs \
+    && apt install -yq nodejs \
     && rm -rf /var/lib/apt/lists/ \
     && npm install npm@latest -g && npm install yarn@latest -g
 
 # Install dependencies
-RUN apt-get update \
-    && apt-get -y install ffmpeg \
+RUN apt update \
+    && apt -y install ffmpeg \
     && rm /var/lib/apt/lists/* -fR
 
 # Add peertube user
@@ -35,8 +35,8 @@ RUN groupadd -r peertube \
 
 # grab gosu for easy step-down from root
 RUN set -eux; \
-	apt-get update; \
-	apt-get install -y gosu; \
+	apt update; \
+	apt install -y gosu; \
 	rm -rf /var/lib/apt/lists/*; \
 	gosu nobody true
 
