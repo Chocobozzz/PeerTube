@@ -1,0 +1,65 @@
+FROM arm64v8/debian:stretch-slim
+
+RUN set -ex; \
+    if ! command -v gpg > /dev/null; then \
+      apt-get update; \
+      apt-get install -y --no-install-recommends \
+        gnupg \
+        dirmngr \
+      ; \
+      rm -rf /var/lib/apt/lists/*; \
+fi
+
+# install nodejs and npm
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update \
+&& apt-get install -y apt-utils nano htop curl git build-essential gcc g++ make \
+&& curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+&& apt-get install -yq nodejs \
+&& rm -rf /var/lib/apt/lists/ \
+&& npm install npm@latest -g && npm install yarn@latest -g
+
+# Install dependencies
+RUN apt-get update \
+    && apt-get -y install ffmpeg \
+    && rm /var/lib/apt/lists/* -fR
+
+# Add peertube user
+RUN groupadd -r peertube \
+    && useradd -r -g peertube -m peertube
+
+# grab gosu for easy step-down from root
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y gosu; \
+	rm -rf /var/lib/apt/lists/*; \
+	gosu nobody true
+
+# Install PeerTube
+WORKDIR /app
+COPY . ./
+RUN chown -R peertube:peertube /app
+
+USER peertube
+# from: https://github.com/yarnpkg/yarn/issues/5259#issuecomment-421067226
+RUN for attempt in $(seq 1 100); do yarn install --pure-lockfile --verbose && break; done
+RUN npm run build && rm -r ./node_modules ./client/node_modules
+RUN for attempt in $(seq 1 100); do yarn install --pure-lockfile --verbose --production && break; done && yarn cache clean
+
+USER root
+
+RUN mkdir /data /config
+RUN chown -R peertube:peertube /data /config
+
+ENV NODE_ENV production
+ENV NODE_CONFIG_DIR /config
+
+VOLUME /data
+VOLUME /config
+
+COPY ./support/docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+# Run the application
+CMD ["npm", "start"]
+EXPOSE 9000
