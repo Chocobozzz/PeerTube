@@ -1,5 +1,10 @@
 FROM arm64v8/debian:stretch-slim
 
+# Allow to pass extra options to the npm run build
+# eg: --light --light-fr to not build all client languages
+#     (speed up build time if i18n is not required)
+ARG NPM_RUN_BUILD_OPTS
+
 RUN set -ex; \
     if ! command -v gpg > /dev/null; then \
       apt-get update; \
@@ -13,11 +18,11 @@ fi
 # install nodejs and npm
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update \
-&& apt-get install -y apt-utils nano htop curl git build-essential gcc g++ make \
-&& curl -sL https://deb.nodesource.com/setup_8.x | bash - \
-&& apt-get install -yq nodejs \
-&& rm -rf /var/lib/apt/lists/ \
-&& npm install npm@latest -g && npm install yarn@latest -g
+    && apt-get install -y apt-utils nano htop curl git build-essential gcc g++ make \
+    && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+    && apt-get install -yq nodejs \
+    && rm -rf /var/lib/apt/lists/ \
+    && npm install npm@latest -g && npm install yarn@latest -g
 
 # Install dependencies
 RUN apt-get update \
@@ -41,10 +46,13 @@ COPY . ./
 RUN chown -R peertube:peertube /app
 
 USER peertube
+
 # from: https://github.com/yarnpkg/yarn/issues/5259#issuecomment-421067226
-RUN for attempt in $(seq 1 100); do yarn install --pure-lockfile --verbose && break; done
-RUN npm run build && rm -r ./node_modules ./client/node_modules
-RUN for attempt in $(seq 1 100); do yarn install --pure-lockfile --verbose --production && break; done && yarn cache clean
+RUN for attempt in $(seq 1 100); do yarn install --pure-lockfile && break; done \
+    && npm run build -- $NPM_RUN_BUILD_OPTS \
+    && rm -r ./node_modules ./client/node_modules \
+    && for attempt in $(seq 1 100); do yarn install --pure-lockfile --production && break; done \
+    && yarn cache clean
 
 USER root
 
