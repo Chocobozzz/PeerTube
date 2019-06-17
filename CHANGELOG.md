@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.3.1
+
+### Bug fixes
+
+ * Fix Mastodon remote interactions
+ * Fix missing video download button
+ * Fix error in video upload/update form when scheduling publication
+ * Fix black theme on some pages
+ * Fix video import if auto blacklist is enabled
+  
+
 ## v1.3.0
 
 **Since v1.2.0**
