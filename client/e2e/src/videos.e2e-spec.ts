@@ -31,7 +31,9 @@ describe('Videos workflow', () => {
   let myAccountPage: MyAccountPage
   let loginPage: LoginPage
 
-  const videoName = new Date().getTime() + ' video'
+  let videoName = new Date().getTime() + ' video'
+  const video2Name = new Date().getTime() + ' second video'
+  const playlistName = new Date().getTime() + ' playlist'
   let videoWatchUrl: string
 
   beforeEach(async () => {
@@ -122,41 +124,42 @@ describe('Videos workflow', () => {
 
     await videoWatchPage.clickOnUpdate()
 
-    await videoUpdatePage.updateName('my new name')
+    videoName += ' updated'
+    await videoUpdatePage.updateName(videoName)
 
     await videoUpdatePage.validUpdate()
 
     const name = await videoWatchPage.getVideoName()
-    expect(name).toEqual('my new name')
+    expect(name).toEqual(videoName)
   })
 
   it('Should add the video in my playlist', async () => {
     if (await skipIfUploadNotSupported()) return
 
     await videoWatchPage.clickOnSave()
-    await videoWatchPage.saveToWatchLater()
+
+    await videoWatchPage.createPlaylist(playlistName)
+
+    await videoWatchPage.saveToPlaylist(playlistName)
 
     await videoUploadPage.navigateTo()
 
     await videoUploadPage.uploadVideo()
-    await videoUploadPage.validSecondUploadStep('second video')
+    await videoUploadPage.validSecondUploadStep(video2Name)
 
     await videoWatchPage.clickOnSave()
-    await videoWatchPage.saveToWatchLater()
+    await videoWatchPage.saveToPlaylist(playlistName)
   })
 
-  it('Should have the watch later playlist in my account', async () => {
+  it('Should have the playlist in my account', async () => {
     if (await skipIfUploadNotSupported()) return
 
     await myAccountPage.navigateToMyPlaylists()
 
-    const name = await myAccountPage.getLastUpdatedPlaylistName()
-    expect(name).toEqual('Watch later')
-
-    const videosNumberText = await myAccountPage.getLastUpdatedPlaylistVideosText()
+    const videosNumberText = await myAccountPage.getPlaylistVideosText(playlistName)
     expect(videosNumberText).toEqual('2 videos')
 
-    await myAccountPage.clickOnLastUpdatedPlaylist()
+    await myAccountPage.clickOnPlaylist(playlistName)
 
     const count = await myAccountPage.countTotalPlaylistElements()
     expect(count).toEqual(2)
@@ -167,35 +170,25 @@ describe('Videos workflow', () => {
 
     await myAccountPage.playPlaylist()
 
-    await videoWatchPage.waitUntilVideoName('second video', 20000 * 1000)
+    await videoWatchPage.waitUntilVideoName(video2Name, 20000 * 1000)
   })
 
-  it('Should have the video in my account', async () => {
+  it('Should delete the video 2', async () => {
     if (await skipIfUploadNotSupported()) return
 
     await myAccountPage.navigateToMyVideos()
 
-    const lastVideoName = await myAccountPage.getLastVideoName()
-    expect(lastVideoName).toEqual('second video')
-  })
-
-  it('Should delete the last video', async () => {
-    if (await skipIfUploadNotSupported()) return
-
-    await myAccountPage.removeLastVideo()
+    await myAccountPage.removeVideo(video2Name)
     await myAccountPage.validRemove()
 
-    const count = await myAccountPage.countVideos()
+    const count = await myAccountPage.countVideos([ videoName, video2Name ])
     expect(count).toEqual(1)
   })
 
   it('Should delete the first video', async () => {
     if (await skipIfUploadNotSupported()) return
 
-    await myAccountPage.removeLastVideo()
+    await myAccountPage.removeVideo(videoName)
     await myAccountPage.validRemove()
-
-    const count = await myAccountPage.countVideos()
-    expect(count).toEqual(0)
   })
 })

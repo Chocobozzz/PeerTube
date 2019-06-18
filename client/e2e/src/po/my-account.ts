@@ -16,34 +16,32 @@ export class MyAccountPage {
 
   // My account Videos
 
-  getLastVideoName () {
-    return this.getAllVideoNameElements().first().getText()
-  }
-
-  removeLastVideo () {
-    return this.getLastVideoElement().element(by.css('my-delete-button')).click()
+  removeVideo (name: string) {
+    return this.getVideoElement(name).element(by.css('my-delete-button')).click()
   }
 
   validRemove () {
     return element(by.css('.action-button-submit')).click()
   }
 
-  countVideos () {
-    return this.getAllVideoNameElements().count()
+  countVideos (names: string[]) {
+    return element.all(by.css('.video'))
+                  .filter(e => {
+                    return e.element(by.css('.video-miniature-name'))
+                            .getText()
+                            .then(t => names.some(n => t.includes(n)))
+                  })
+                  .count()
   }
 
   // My account playlists
 
-  getLastUpdatedPlaylistName () {
-    return this.getLastUpdatedPlaylist().element(by.css('.miniature-name')).getText()
+  getPlaylistVideosText (name: string) {
+    return this.getPlaylist(name).element(by.css('.miniature-playlist-info-overlay')).getText()
   }
 
-  getLastUpdatedPlaylistVideosText () {
-    return this.getLastUpdatedPlaylist().element(by.css('.miniature-playlist-info-overlay')).getText()
-  }
-
-  clickOnLastUpdatedPlaylist () {
-    return this.getLastUpdatedPlaylist().element(by.css('.miniature-thumbnail')).click()
+  clickOnPlaylist (name: string) {
+    return this.getPlaylist(name).element(by.css('.miniature-thumbnail')).click()
   }
 
   countTotalPlaylistElements () {
@@ -56,17 +54,17 @@ export class MyAccountPage {
 
   // My account Videos
 
-  private getLastVideoElement () {
-    return element.all(by.css('.video')).first()
-  }
-
-  private getAllVideoNameElements () {
-    return element.all(by.css('.video-miniature-name'))
+  private getVideoElement (name: string) {
+    return element.all(by.css('.video'))
+                  .filter(e => e.element(by.css('.video-miniature-name')).getText().then(t => t.includes(name)))
+                  .first()
   }
 
   // My account playlists
 
-  private getLastUpdatedPlaylist () {
-    return element.all(by.css('my-video-playlist-miniature')).first()
+  private getPlaylist (name: string) {
+    return element.all(by.css('my-video-playlist-miniature'))
+      .filter(e => e.element(by.css('.miniature-name')).getText().then(t => t.includes(name)))
+      .first()
   }
 }

@@ -126,8 +126,18 @@ export class VideoWatchPage {
     return element(by.css('.action-button-save')).click()
   }
 
-  async saveToWatchLater () {
-    return element.all(by.css('my-video-add-to-playlist .playlist')).first().click()
+  async createPlaylist (name: string) {
+    await element(by.css('.new-playlist-button')).click()
+
+    await element(by.css('#displayName')).sendKeys(name)
+
+    return element(by.css('.new-playlist-block input[type=submit]')).click()
+  }
+
+  async saveToPlaylist (name: string) {
+    return element.all(by.css('my-video-add-to-playlist .playlist'))
+                  .filter(p => p.getText().then(t => t === name))
+                  .click()
   }
 
   waitUntilVideoName (name: string, maxTime: number) {
