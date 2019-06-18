@@ -23,7 +23,7 @@ export abstract class Actor implements ActorServer {
     return window.location.origin + '/client/assets/images/default-avatar.png'
   }
 
-  static CREATE_BY_STRING (accountName: string, host: string, forceHostname: boolean = false) {
+  static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
     const thisHost = new URL(absoluteAPIUrl).host
 
