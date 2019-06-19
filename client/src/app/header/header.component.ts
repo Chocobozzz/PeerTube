@@ -1,7 +1,9 @@
-import { filter, map } from 'rxjs/operators'
+import { filter, first, map, tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { getParameterByName } from '../shared/misc/utils'
+import { AuthService } from '@app/core'
+import { of } from 'rxjs'
 
 @Component({
   selector: 'my-header',
@@ -12,7 +14,10 @@ import { getParameterByName } from '../shared/misc/utils'
 export class HeaderComponent implements OnInit {
   searchValue = ''
 
-  constructor (private router: Router) {}
+  constructor (
+    private router: Router,
+    private auth: AuthService
+  ) {}
 
   ngOnInit () {
     this.router.events
@@ -24,8 +29,22 @@ export class HeaderComponent implements OnInit {
   }
 
   doSearch () {
-    this.router.navigate([ '/search' ], {
-      queryParams: { search: this.searchValue }
-    })
+    const queryParams: any = {
+      search: this.searchValue
+    }
+
+    const o = this.auth.isLoggedIn()
+      ? this.loadUserLanguages(queryParams)
+      : of(true)
+
+    o.subscribe(() => this.router.navigate([ '/search' ], { queryParams }))
+  }
+
+  private loadUserLanguages (queryParams: any) {
+    return this.auth.userInformationLoaded
+               .pipe(
+                 first(),
+                 tap(() => Object.assign(queryParams, { languageOneOf: this.auth.getUser().videoLanguages }))
+               )
   }
 }
