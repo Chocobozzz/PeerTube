@@ -380,7 +380,7 @@ export class UserModel extends Model<UserModel> {
   static loadByEmail (email: string) {
     const query = {
       where: {
-        email
+        email: { [ Op.iLike ]: email}
       }
     }
 
@@ -392,7 +392,7 @@ export class UserModel extends Model<UserModel> {
 
     const query = {
       where: {
-        [ Op.or ]: [ { username }, { email } ]
+        [ Op.or ]: [ { username }, { email: { [ Op.iLike ]: email } } ]
       }
     }
 
