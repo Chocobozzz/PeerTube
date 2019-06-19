@@ -26,6 +26,7 @@ describe('Test contact form API validators', function () {
   const defaultBody = {
     fromName: 'super name',
     fromEmail: 'toto@example.com',
+    subject: 'my subject',
     body: 'Hello, how are you?'
   }
   let emailPort: number
