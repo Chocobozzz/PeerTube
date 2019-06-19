@@ -8,6 +8,7 @@ export interface UserUpdateMe {
   webTorrentEnabled?: boolean
   autoPlayVideo?: boolean
   videosHistoryEnabled?: boolean
+  videoLanguages?: string[]
 
   email?: string
   currentPassword?: string

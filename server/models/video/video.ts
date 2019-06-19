@@ -83,6 +83,7 @@ import {
   buildBlockedAccountSQL,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
+  createSafeIn,
   createSimilarityAttribute,
   getVideoSort,
   isOutdated,
@@ -227,6 +228,8 @@ type AvailableForListIDsOptions = {
   trendingDays?: number
   user?: UserModel,
   historyOfUser?: UserModel
+
+  baseWhere?: WhereOptions[]
 }
 
 @Scopes(() => ({
@@ -270,33 +273,33 @@ type AvailableForListIDsOptions = {
     return query
   },
   [ ScopeNames.AVAILABLE_FOR_LIST_IDS ]: (options: AvailableForListIDsOptions) => {
-    const attributes = options.withoutId === true ? [] : [ 'id' ]
+    const whereAnd = options.baseWhere ? options.baseWhere : []
 
     const query: FindOptions = {
       raw: true,
-      attributes,
-      where: {
-        id: {
-          [ Op.and ]: [
-            {
-              [ Op.notIn ]: Sequelize.literal(
-                '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-              )
-            }
-          ]
-        },
-        channelId: {
-          [ Op.notIn ]: Sequelize.literal(
-            '(' +
-              'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
-                buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
-              ')' +
-            ')'
-          )
-        }
-      },
+      attributes: options.withoutId === true ? [] : [ 'id' ],
       include: []
     }
+
+    whereAnd.push({
+      id: {
+        [ Op.notIn ]: Sequelize.literal(
+          '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
+        )
+      }
+    })
+
+    whereAnd.push({
+      channelId: {
+        [ Op.notIn ]: Sequelize.literal(
+          '(' +
+            'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
+              buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
+            ')' +
+          ')'
+        )
+      }
+    })
 
     // Only list public/published videos
     if (!options.filter || options.filter !== 'all-local') {
@@ -317,7 +320,7 @@ type AvailableForListIDsOptions = {
         ]
       }
 
-      Object.assign(query.where, privacyWhere)
+      whereAnd.push(privacyWhere)
     }
 
     if (options.videoPlaylistId) {
@@ -387,86 +390,114 @@ type AvailableForListIDsOptions = {
 
       // Force actorId to be a number to avoid SQL injections
       const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
-      query.where[ 'id' ][ Op.and ].push({
-        [ Op.in ]: Sequelize.literal(
-          '(' +
-          'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-          'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-          'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-          ' UNION ALL ' +
-          'SELECT "video"."id" AS "id" FROM "video" ' +
-          'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-          'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-          'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-          'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-          'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-          localVideosReq +
-          ')'
-        )
+      whereAnd.push({
+        id: {
+          [ Op.in ]: Sequelize.literal(
+            '(' +
+            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+            ' UNION ALL ' +
+            'SELECT "video"."id" AS "id" FROM "video" ' +
+            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+            localVideosReq +
+            ')'
+          )
+        }
       })
     }
 
     if (options.withFiles === true) {
-      query.where[ 'id' ][ Op.and ].push({
-        [ Op.in ]: Sequelize.literal(
-          '(SELECT "videoId" FROM "videoFile")'
-        )
+      whereAnd.push({
+        id: {
+          [ Op.in ]: Sequelize.literal(
+            '(SELECT "videoId" FROM "videoFile")'
+          )
+        }
       })
     }
 
     // FIXME: issues with sequelize count when making a join on n:m relation, so we just make a IN()
     if (options.tagsAllOf || options.tagsOneOf) {
-      const createTagsIn = (tags: string[]) => {
-        return tags.map(t => VideoModel.sequelize.escape(t))
-                   .join(', ')
-      }
-
       if (options.tagsOneOf) {
-        query.where[ 'id' ][ Op.and ].push({
-          [ Op.in ]: Sequelize.literal(
-            '(' +
-            'SELECT "videoId" FROM "videoTag" ' +
-            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-            'WHERE "tag"."name" IN (' + createTagsIn(options.tagsOneOf) + ')' +
-            ')'
-          )
+        whereAnd.push({
+          id: {
+            [ Op.in ]: Sequelize.literal(
+              '(' +
+              'SELECT "videoId" FROM "videoTag" ' +
+              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+              'WHERE "tag"."name" IN (' + createSafeIn(VideoModel, options.tagsOneOf) + ')' +
+              ')'
+            )
+          }
         })
       }
 
       if (options.tagsAllOf) {
-        query.where[ 'id' ][ Op.and ].push({
-          [ Op.in ]: Sequelize.literal(
-            '(' +
-            'SELECT "videoId" FROM "videoTag" ' +
-            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-            'WHERE "tag"."name" IN (' + createTagsIn(options.tagsAllOf) + ')' +
-            'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
-            ')'
-          )
+        whereAnd.push({
+          id: {
+            [ Op.in ]: Sequelize.literal(
+              '(' +
+              'SELECT "videoId" FROM "videoTag" ' +
+              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+              'WHERE "tag"."name" IN (' + createSafeIn(VideoModel, options.tagsAllOf) + ')' +
+              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
+              ')'
+            )
+          }
         })
       }
     }
 
     if (options.nsfw === true || options.nsfw === false) {
-      query.where[ 'nsfw' ] = options.nsfw
+      whereAnd.push({ nsfw: options.nsfw })
     }
 
     if (options.categoryOneOf) {
-      query.where[ 'category' ] = {
-        [ Op.or ]: options.categoryOneOf
-      }
+      whereAnd.push({
+        category: {
+          [ Op.or ]: options.categoryOneOf
+        }
+      })
     }
 
     if (options.licenceOneOf) {
-      query.where[ 'licence' ] = {
-        [ Op.or ]: options.licenceOneOf
-      }
+      whereAnd.push({
+        licence: {
+          [ Op.or ]: options.licenceOneOf
+        }
+      })
     }
 
     if (options.languageOneOf) {
-      query.where[ 'language' ] = {
-        [ Op.or ]: options.languageOneOf
+      let videoLanguages = options.languageOneOf
+      if (options.languageOneOf.find(l => l === '_unknown')) {
+        videoLanguages = videoLanguages.concat([ null ])
       }
+
+      whereAnd.push({
+        [Op.or]: [
+          {
+            language: {
+              [ Op.or ]: videoLanguages
+            }
+          },
+          {
+            id: {
+              [ Op.in ]: Sequelize.literal(
+                '(' +
+                'SELECT "videoId" FROM "videoCaption" ' +
+                'WHERE "language" IN (' + createSafeIn(VideoModel, options.languageOneOf) + ') ' +
+                ')'
+              )
+            }
+          }
+        ]
+      })
     }
 
     if (options.trendingDays) {
@@ -488,6 +519,10 @@ type AvailableForListIDsOptions = {
       // So we won't have multiple rows for the same video
       // Without this, we would not be able to sort on "updatedAt" column of UserVideoHistoryModel
       query.subQuery = false
+    }
+
+    query.where = {
+      [ Op.and ]: whereAnd
     }
 
     return query
@@ -1175,7 +1210,7 @@ export class VideoModel extends Model<VideoModel> {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
-    const query: FindOptions = {
+    const query: FindOptions & { where?: null } = {
       offset: options.start,
       limit: options.count,
       order: getVideoSort(options.sort)
@@ -1299,16 +1334,13 @@ export class VideoModel extends Model<VideoModel> {
       )
     }
 
-    const query: FindOptions = {
+    const query = {
       attributes: {
         include: attributesInclude
       },
       offset: options.start,
       limit: options.count,
-      order: getVideoSort(options.sort),
-      where: {
-        [ Op.and ]: whereAnd
-      }
+      order: getVideoSort(options.sort)
     }
 
     const serverActor = await getServerActor()
@@ -1323,7 +1355,8 @@ export class VideoModel extends Model<VideoModel> {
       tagsOneOf: options.tagsOneOf,
       tagsAllOf: options.tagsAllOf,
       user: options.user,
-      filter: options.filter
+      filter: options.filter,
+      baseWhere: whereAnd
     }
 
     return VideoModel.getAvailableForApi(query, queryOptions)
@@ -1590,7 +1623,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static async getAvailableForApi (
-    query: FindOptions,
+    query: FindOptions & { where?: null }, // Forbid where field in query
     options: AvailableForListIDsOptions,
     countVideos = true
   ) {
@@ -1609,11 +1642,15 @@ export class VideoModel extends Model<VideoModel> {
       ]
     }
 
-    const [ count, rowsId ] = await Promise.all([
-      countVideos ? VideoModel.scope(countScope).count(countQuery) : Promise.resolve<number>(undefined),
-      VideoModel.scope(idsScope).findAll(query)
+    const [ count, ids ] = await Promise.all([
+      countVideos
+        ? VideoModel.scope(countScope).count(countQuery)
+        : Promise.resolve<number>(undefined),
+
+      VideoModel.scope(idsScope)
+                .findAll(query)
+                .then(rows => rows.map(r => r.id))
     ])
-    const ids = rowsId.map(r => r.id)
 
     if (ids.length === 0) return { data: [], total: count }
 

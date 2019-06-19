@@ -182,6 +182,7 @@ async function updateMe (req: express.Request, res: express.Response) {
   if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
   if (body.videosHistoryEnabled !== undefined) user.videosHistoryEnabled = body.videosHistoryEnabled
+  if (body.videoLanguages !== undefined) user.videoLanguages = body.videoLanguages
 
   if (body.email !== undefined) {
     if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {

@@ -1,7 +1,7 @@
-import { debounceTime } from 'rxjs/operators'
+import { debounceTime, first, tap } from 'rxjs/operators'
 import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { fromEvent, Observable, Subscription } from 'rxjs'
+import { fromEvent, Observable, of, Subscription } from 'rxjs'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { VideoSortField } from './sort-field.type'
@@ -32,18 +32,20 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   sort: VideoSortField = '-publishedAt'
 
   categoryOneOf?: number
+  languageOneOf?: string[]
   defaultSort: VideoSortField = '-publishedAt'
 
   syndicationItems: Syndication[] = []
 
   loadOnInit = true
-  videos: Video[] = []
+  useUserVideoLanguagePreferences = false
   ownerDisplayType: OwnerDisplayType = 'account'
   displayModerationBlock = false
   titleTooltip: string
   displayVideoActions = true
   groupByDate = false
 
+  videos: Video[] = []
   disabled = false
 
   displayOptions: MiniatureDisplayOptions = {
@@ -98,7 +100,12 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       .subscribe(() => this.calcPageSizes())
 
     this.calcPageSizes()
-    if (this.loadOnInit === true) this.loadMoreVideos()
+
+    const loadUserObservable = this.loadUserVideoLanguagesIfNeeded()
+
+    if (this.loadOnInit === true) {
+      loadUserObservable.subscribe(() => this.loadMoreVideos())
+    }
   }
 
   ngOnDestroy () {
@@ -244,5 +251,17 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     if (!path || path === '/') path = this.serverService.getConfig().instance.defaultClientRoute
 
     this.router.navigate([ path ], { queryParams, replaceUrl: true, queryParamsHandling: 'merge' })
+  }
+
+  private loadUserVideoLanguagesIfNeeded () {
+    if (!this.authService.isLoggedIn() || !this.useUserVideoLanguagePreferences) {
+      return of(true)
+    }
+
+    return this.authService.userInformationLoaded
+        .pipe(
+          first(),
+          tap(() => this.languageOneOf = this.user.videoLanguages)
+        )
   }
 }

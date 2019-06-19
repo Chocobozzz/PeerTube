@@ -31,6 +31,7 @@ import {
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
+  isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid,
@@ -146,6 +147,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
+  @Column(DataType.ARRAY(DataType.STRING))
+  videoLanguages: string[]
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
@@ -551,6 +558,7 @@ export class UserModel extends Model<UserModel> {
       webTorrentEnabled: this.webTorrentEnabled,
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      videoLanguages: this.videoLanguages,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,

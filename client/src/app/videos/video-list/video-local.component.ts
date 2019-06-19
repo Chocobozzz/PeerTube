@@ -21,6 +21,8 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
+  useUserVideoLanguagePreferences = true
+
   constructor (
     protected i18n: I18n,
     protected router: Router,
@@ -54,7 +56,13 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideos(newPagination, this.sort, this.filter, this.categoryOneOf)
+    return this.videoService.getVideos({
+      videoPagination: newPagination,
+      sort: this.sort,
+      filter: this.filter,
+      categoryOneOf: this.categoryOneOf,
+      languageOneOf: this.languageOneOf
+    })
   }
 
   generateSyndicationList () {

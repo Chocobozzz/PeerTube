@@ -19,6 +19,8 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   sort: VideoSortField = '-publishedAt'
   groupByDate = true
 
+  useUserVideoLanguagePreferences = true
+
   constructor (
     protected i18n: I18n,
     protected route: ActivatedRoute,
@@ -47,7 +49,13 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideos(newPagination, this.sort, undefined, this.categoryOneOf)
+    return this.videoService.getVideos({
+      videoPagination: newPagination,
+      sort: this.sort,
+      filter: undefined,
+      categoryOneOf: this.categoryOneOf,
+      languageOneOf: this.languageOneOf
+    })
   }
 
   generateSyndicationList () {

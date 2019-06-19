@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 390
+const LAST_MIGRATION_VERSION = 395
 
 // ---------------------------------------------------------------------------
 
@@ -177,6 +177,7 @@ let CONSTRAINTS_FIELDS = {
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
+    VIDEO_LANGUAGES: { max: 500 }, // Array length
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {

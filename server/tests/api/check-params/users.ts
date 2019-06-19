@@ -364,6 +364,29 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid videoLanguages attribute', async function () {
+      {
+        const fields = {
+          videoLanguages: 'toto'
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      }
+
+      {
+        const languages = []
+        for (let i = 0; i < 1000; i++) {
+          languages.push('fr')
+        }
+
+        const fields = {
+          videoLanguages: languages
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      }
+    })
+
     it('Should succeed to change password with the correct params', async function () {
       const fields = {
         currentPassword: 'my super password',

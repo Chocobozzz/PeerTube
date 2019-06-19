@@ -1,7 +1,7 @@
-import { Sequelize } from 'sequelize-typescript'
+import { Model, Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
-import { OrderItem } from 'sequelize'
 import { Col } from 'sequelize/types/lib/utils'
+import { OrderItem } from 'sequelize/types'
 
 type SortType = { sortModel: any, sortValue: string }
 
@@ -127,6 +127,11 @@ function parseAggregateResult (result: any) {
   return total
 }
 
+const createSafeIn = (model: typeof Model, stringArr: string[]) => {
+  return stringArr.map(t => model.sequelize.escape(t))
+                  .join(', ')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -141,7 +146,8 @@ export {
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
   isOutdated,
-  parseAggregateResult
+  parseAggregateResult,
+  createSafeIn
 }
 
 // ---------------------------------------------------------------------------

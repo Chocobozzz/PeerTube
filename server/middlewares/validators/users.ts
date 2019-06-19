@@ -13,7 +13,7 @@ import {
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
-  isUserUsernameValid,
+  isUserUsernameValid, isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
@@ -198,6 +198,9 @@ const usersUpdateMeValidator = [
   body('autoPlayVideo')
     .optional()
     .custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
+  body('videoLanguages')
+    .optional()
+    .custom(isUserVideoLanguages).withMessage('Should have a valid video languages attribute'),
   body('videosHistoryEnabled')
     .optional()
     .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled attribute'),

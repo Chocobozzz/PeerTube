@@ -18,6 +18,8 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   titlePage: string
   defaultSort: VideoSortField = '-trending'
 
+  useUserVideoLanguagePreferences = true
+
   constructor (
     protected i18n: I18n,
     protected router: Router,
@@ -59,7 +61,13 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
-    return this.videoService.getVideos(newPagination, this.sort, undefined, this.categoryOneOf)
+    return this.videoService.getVideos({
+      videoPagination: newPagination,
+      sort: this.sort,
+      filter: undefined,
+      categoryOneOf: this.categoryOneOf,
+      languageOneOf: this.languageOneOf
+    })
   }
 
   generateSyndicationList () {

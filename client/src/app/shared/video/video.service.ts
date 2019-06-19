@@ -35,12 +35,13 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 export interface VideosProvider {
-  getVideos (
+  getVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField,
     filter?: VideoFilter,
-    categoryOneOf?: number
-  ): Observable<{ videos: Video[], totalVideos: number }>
+    categoryOneOf?: number,
+    languageOneOf?: string[]
+  }): Observable<{ videos: Video[], totalVideos: number }>
 }
 
 @Injectable()
@@ -206,12 +207,15 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideos (
+  getVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField,
     filter?: VideoFilter,
-    categoryOneOf?: number
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+    categoryOneOf?: number,
+    languageOneOf?: string[]
+  }): Observable<{ videos: Video[], totalVideos: number }> {
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -223,6 +227,12 @@ export class VideoService implements VideosProvider {
 
     if (categoryOneOf) {
       params = params.set('categoryOneOf', categoryOneOf + '')
+    }
+
+    if (languageOneOf) {
+      for (const l of languageOneOf) {
+        params = params.append('languageOneOf[]', l)
+      }
     }
 
     return this.authHttp

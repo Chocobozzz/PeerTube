@@ -232,6 +232,43 @@ p-table {
   }
 }
 
+// multiselect customizations
+p-multiselect {
+  .ui-multiselect-label {
+    font-size: 15px !important;
+    padding: 4px 30px 4px 12px !important;
+
+    $width: 338px;
+    width: $width !important;
+
+    @media screen and (max-width: $width) {
+      width: 100% !important;
+    }
+  }
+
+  .pi.pi-chevron-down{
+    margin-left: 0 !important;
+
+    &::after {
+      @include select-arrow-down;
+
+      right: 0;
+      margin-top: 6px;
+    }
+  }
+
+  .ui-chkbox-icon {
+    //position: absolute !important;
+    width: 18px;
+    height: 18px;
+    //left: 0;
+
+    //&::after {
+    //  left: -2px !important;
+    //}
+  }
+}
+
 // PrimeNG calendar tweaks
 p-calendar .ui-datepicker {
   a {

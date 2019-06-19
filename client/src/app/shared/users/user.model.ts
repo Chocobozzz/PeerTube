@@ -18,6 +18,7 @@ export class User implements UserServerModel {
   webTorrentEnabled: boolean
   autoPlayVideo: boolean
   videosHistoryEnabled: boolean
+  videoLanguages: string[]
 
   videoQuota: number
   videoQuotaDaily: number

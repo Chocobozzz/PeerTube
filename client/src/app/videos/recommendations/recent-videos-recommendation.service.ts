@@ -32,7 +32,7 @@ export class RecentVideosRecommendationService implements RecommendationService 
 
   private fetchPage (page: number, recommendation: RecommendationInfo): Observable<Video[]> {
     const pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
-    const defaultSubscription = this.videos.getVideos(pagination, '-createdAt')
+    const defaultSubscription = this.videos.getVideos({ videoPagination: pagination, sort: '-createdAt' })
                                     .pipe(map(v => v.videos))
 
     if (!recommendation.tags || recommendation.tags.length === 0) return defaultSubscription
