@@ -14,7 +14,7 @@ contactRouter.post('/contact',
 async function contactAdministrator (req: express.Request, res: express.Response) {
   const data = req.body as ContactForm
 
-  await Emailer.Instance.addContactFormJob(data.fromEmail, data.fromName, data.body)
+  await Emailer.Instance.addContactFormJob(data.fromEmail, data.fromName, data.subject, data.body)
 
   await Redis.Instance.setContactFormIp(req.ip)
 

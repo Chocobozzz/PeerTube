@@ -402,7 +402,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addContactFormJob (fromEmail: string, fromName: string, body: string) {
+  addContactFormJob (fromEmail: string, fromName: string, subject: string, body: string) {
     const text = 'Hello dear admin,\n\n' +
       fromName + ' sent you a message' +
       '\n\n---------------------------------------\n\n' +
@@ -415,7 +415,7 @@ class Emailer {
       fromDisplayName: fromEmail,
       replyTo: fromEmail,
       to: [ CONFIG.ADMIN.EMAIL ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Contact form submitted',
+      subject: CONFIG.EMAIL.OBJECT.PREFIX + subject,
       text
     }
 
