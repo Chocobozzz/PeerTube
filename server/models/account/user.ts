@@ -360,7 +360,7 @@ export class UserModel extends Model<UserModel> {
   static loadByUsername (username: string) {
     const query = {
       where: {
-        username
+        username: { [ Op.iLike ]: username }
       }
     }
 
@@ -370,7 +370,7 @@ export class UserModel extends Model<UserModel> {
   static loadByUsernameAndPopulateChannels (username: string) {
     const query = {
       where: {
-        username
+        username: { [ Op.iLike ]: username }
       }
     }
 
@@ -380,7 +380,7 @@ export class UserModel extends Model<UserModel> {
   static loadByEmail (email: string) {
     const query = {
       where: {
-        email: { [ Op.iLike ]: email}
+        email
       }
     }
 
@@ -392,7 +392,7 @@ export class UserModel extends Model<UserModel> {
 
     const query = {
       where: {
-        [ Op.or ]: [ { username }, { email: { [ Op.iLike ]: email } } ]
+        [ Op.or ]: [ { username: { [ Op.iLike ]: username } }, { email } ]
       }
     }
 
