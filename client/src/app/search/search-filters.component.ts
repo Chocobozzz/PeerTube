@@ -57,12 +57,12 @@ export class SearchFiltersComponent implements OnInit {
         label: this.i18n('Short (< 4 min)')
       },
       {
-        id: 'long',
-        label: this.i18n('Long (> 10 min)')
-      },
-      {
         id: 'medium',
         label: this.i18n('Medium (4-10 min)')
+      },
+      {
+        id: 'long',
+        label: this.i18n('Long (> 10 min)')
       }
     ]
 
