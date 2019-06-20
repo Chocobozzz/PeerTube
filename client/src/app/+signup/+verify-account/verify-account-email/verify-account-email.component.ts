@@ -33,8 +33,6 @@ export class VerifyAccountEmailComponent implements OnInit {
     this.verificationString = queryParams['verificationString']
     this.isPendingEmail = queryParams['isPendingEmail'] === 'true'
 
-    console.log(this.isPendingEmail)
-
     if (!this.userId || !this.verificationString) {
       this.notifier.error(this.i18n('Unable to find user id or verification string.'))
     } else {
@@ -46,7 +44,9 @@ export class VerifyAccountEmailComponent implements OnInit {
     this.userService.verifyEmail(this.userId, this.verificationString, this.isPendingEmail)
       .subscribe(
         () => {
-          this.authService.refreshUserInformation()
+          if (this.authService.isLoggedIn()) {
+            this.authService.refreshUserInformation()
+          }
 
           this.success = true
         },
