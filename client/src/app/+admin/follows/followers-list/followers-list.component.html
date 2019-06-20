@@ -25,7 +25,7 @@
   <ng-template pTemplate="body" let-follow>
     <tr>
       <td>{{ follow.id }}</td>
-      <td>{{ follow.follower.name + '@' + follow.follower.host }}</td>
+      <td><a [href]="follow.follower.url" target="_blank" rel="noopener noreferrer">{{ follow.follower.name + '@' + follow.follower.host }}</a></td>
 
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
       <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
