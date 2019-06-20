@@ -9,7 +9,7 @@ import { RestExtractor, RestPagination, RestService } from '../rest'
 
 @Injectable()
 export class FollowService {
-  private static BASE_APPLICATION_URL = 'https://peertube2.cpy.re' + '/api/v1/server'
+  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
 
   constructor (
     private authHttp: HttpClient,
