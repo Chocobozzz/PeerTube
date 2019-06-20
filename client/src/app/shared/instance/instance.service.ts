@@ -22,7 +22,7 @@ export class InstanceService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  contactAdministrator (fromEmail: string, fromName: string, subject:string, message: string) {
+  contactAdministrator (fromEmail: string, fromName: string, subject: string, message: string) {
     const body = {
       fromEmail,
       fromName,
