@@ -269,7 +269,10 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   private getTotalFileSizes (files: VideoFileModel[], playlists: VideoStreamingPlaylistModel[]) {
     const fileReducer = (previous: number, current: VideoFileModel) => previous + current.size
 
-    return files.reduce(fileReducer, 0) * playlists.length
+    const totalSize = files.reduce(fileReducer, 0)
+    if (playlists.length === 0) return totalSize
+
+    return totalSize * playlists.length
   }
 
   private async loadAndRefreshVideo (videoUrl: string) {
