@@ -26,6 +26,15 @@
       </div>
 
       <div class="form-group">
+        <label i18n for="subject">Subject</label>
+        <input
+          type="text" id="subject"
+          formControlName="subject" [ngClass]="{ 'input-error': formErrors['subject'] }"
+        >
+        <div *ngIf="formErrors.subject" class="form-error">{{ formErrors.subject }}</div>
+      </div>
+
+      <div class="form-group">
         <label i18n for="body">Your message</label>
         <textarea id="body" formControlName="body" [ngClass]="{ 'input-error': formErrors['body'] }">
         </textarea>
