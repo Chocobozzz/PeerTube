@@ -90,6 +90,7 @@ export interface ServerConfig {
   user: {
     videoQuota: number
     videoQuotaDaily: number
+    resetPasswordLifetime: number
   }
 
   trending: {

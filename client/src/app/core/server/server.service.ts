@@ -83,7 +83,8 @@ export class ServerService {
     },
     user: {
       videoQuota: -1,
-      videoQuotaDaily: -1
+      videoQuotaDaily: -1,
+      resetPasswordLifetime: 5
     },
     import: {
       videos: {

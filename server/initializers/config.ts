@@ -144,7 +144,8 @@ const CONFIG = {
   },
   USER: {
     get VIDEO_QUOTA () { return parseBytes(config.get<number>('user.video_quota')) },
-    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) }
+    get VIDEO_QUOTA_DAILY () { return parseBytes(config.get<number>('user.video_quota_daily')) },
+    get USER_PASSWORD_RESET_LIFETIME () { return parseBytes(config.get<number>('user.password_reset_lifetime')) }
   },
   TRANSCODING: {
     get ENABLED () { return config.get<boolean>('transcoding.enabled') },

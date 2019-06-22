@@ -78,7 +78,7 @@ export class LoginComponent extends FormReactive implements OnInit {
       .subscribe(
         () => {
           const message = this.i18n(
-            'An email with the reset password instructions will be sent to {{email}}. The link will expire within 5 minutes.',
+            `An email with the reset password instructions will be sent to {{email}}. The link will expire within ${this.getResetPasswordLifetime()} minutes.`,
             { email: this.forgotPasswordEmail }
           )
           this.notifier.success(message)
@@ -95,5 +95,9 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   hideForgotPasswordModal () {
     this.openedForgotPasswordModal.close()
+  }
+
+  getResetPasswordLifetime () {
+    return this.serverService.getConfig().user.resetPasswordLifetime
   }
 }

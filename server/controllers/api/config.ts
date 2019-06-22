@@ -131,7 +131,8 @@ async function getConfig (req: express.Request, res: express.Response) {
     },
     user: {
       videoQuota: CONFIG.USER.VIDEO_QUOTA,
-      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+      videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+      resetPasswordLifetime: CONFIG.USER.USER_PASSWORD_RESET_LIFETIME
     },
     trending: {
       videos: {
