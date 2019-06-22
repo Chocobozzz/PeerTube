@@ -116,6 +116,17 @@ describe('Test users', function () {
 
       accessToken = res.body.access_token
     })
+
+    it('Should be able to login with an insensitive username', async function () {
+      const user = { username: 'RoOt', password: server.user.password }
+      const res = await login(server.url, server.client, user, 200)
+
+      const user2 = { username: 'rOoT', password: server.user.password }
+      const res2 = await login(server.url, server.client, user2, 200)
+
+      const user3 = { username: 'ROOt', password: server.user.password }
+      const res3 = await login(server.url, server.client, user3, 200)
+    })
   })
 
   describe('Upload', function () {
