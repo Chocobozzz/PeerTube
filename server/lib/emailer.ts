@@ -350,7 +350,7 @@ class Emailer {
   addPasswordResetEmailJob (to: string, resetPasswordUrl: string) {
     const text = `Hi dear user,\n\n` +
       `A reset password procedure for your account ${to} has been requested on ${WEBSERVER.HOST} ` +
-      `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
+      `Please follow this link to reset it: ${resetPasswordUrl}  (the link will expire within 5 minutes)\n\n` +
       `If you are not the person who initiated this request, please ignore this email.\n\n` +
       `Cheers,\n` +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
