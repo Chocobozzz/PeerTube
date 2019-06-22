@@ -250,9 +250,9 @@ emerge --config postgresql
 * (For OpenRC) Enable and then start the services (replace with the correct PostgreSQL slot):
 ```
 rc-update add redis
-rc-update add postgresql-10
+rc-update add postgresql-11
 rc-service redis start
-rc-service postgresql-10 start
+rc-service postgresql-11 start
 ```
    
 ## Other distributions
