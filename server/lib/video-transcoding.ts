@@ -15,13 +15,11 @@ import { CONFIG } from '../initializers/config'
  * Optimize the original video file and replace it. The resolution is not changed.
  */
 async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFileModel) {
-  const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
-  const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
 
   const inputVideoFile = inputVideoFileArg ? inputVideoFileArg : video.getOriginalFile()
-  const videoInputPath = join(videosDirectory, video.getVideoFilename(inputVideoFile))
-  const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
+  const videoInputPath = join(CONFIG.STORAGE.VIDEOS_TRANSCODING_DIR, video.getVideoFilename(inputVideoFile))
+  const videoTranscodedPath = join(CONFIG.STORAGE.TMP_DIR, video.id + '-transcoded' + newExtname)
 
   const transcodeType: TranscodeOptionsType = await canDoQuickTranscode(videoInputPath)
     ? 'quick-transcode'
@@ -43,7 +41,7 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
     // Important to do this before getVideoFilename() to take in account the new file extension
     inputVideoFile.extname = newExtname
 
-    const videoOutputPath = video.getVideoFilePath(inputVideoFile)
+    const videoOutputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(inputVideoFile))
 
     await onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
   } catch (err) {

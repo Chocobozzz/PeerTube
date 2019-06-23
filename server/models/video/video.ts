@@ -1767,7 +1767,11 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   getVideoFilePath (videoFile: VideoFileModel) {
-    return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
+    if (this.waitTranscoding) {
+      return join(CONFIG.STORAGE.VIDEOS_TRANSCODING_DIR, this.getVideoFilename(videoFile))
+    } else {
+      return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
+    }
   }
 
   async createTorrentAndSetInfoHash (videoFile: VideoFileModel) {

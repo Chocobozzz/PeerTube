@@ -5,6 +5,7 @@ import {
   ROUTE_CACHE_LIFETIME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
+  VIDEO_MAX_AGE,
   STATIC_PATHS,
   WEBSERVER
 } from '../initializers/constants'
@@ -44,12 +45,25 @@ staticRouter.use(
 staticRouter.use(
   STATIC_PATHS.WEBSEED,
   cors(),
-  express.static(CONFIG.STORAGE.VIDEOS_DIR, { fallthrough: false }) // 404 because we don't have this video
+  express.static(CONFIG.STORAGE.VIDEOS_DIR,
+    { fallthrough: false, // 404 because we don't have this video
+      maxAge: VIDEO_MAX_AGE,
+      immutable: true }) // immutable because video files cant change, deletions are handled by the UI
+)
+staticRouter.use(
+  STATIC_PATHS.WEBSEED_TRANSCODING,
+  cors(),
+  express.static(CONFIG.STORAGE.VIDEOS_TRANSCODING_DIR,
+    { fallthrough: false, // 404 because we don't have this video
+      maxAge: 60 * 60 * 1000 }) // one hour, approximately the time for a transcode, so the cache can be cleared after
 )
 staticRouter.use(
   STATIC_PATHS.REDUNDANCY,
   cors(),
-  express.static(CONFIG.STORAGE.REDUNDANCY_DIR, { fallthrough: false }) // 404 because we don't have this video
+  express.static(CONFIG.STORAGE.REDUNDANCY_DIR,
+    { fallthrough: false, // 404 because we don't have this video
+      maxAge: VIDEO_MAX_AGE,
+      immutable: true }) // immutable because video files cant change, deletions are handled by the UI
 )
 
 staticRouter.use(

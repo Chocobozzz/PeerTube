@@ -489,6 +489,7 @@ const STATIC_PATHS = {
   THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
+  WEBSEED_TRANSCODING: '/static/webseed/transcoding/',
   REDUNDANCY: '/static/redundancy/',
   STREAMING_PLAYLISTS: {
     HLS: '/static/streaming-playlists/hls'
@@ -503,6 +504,7 @@ const STATIC_DOWNLOAD_PATHS = {
 
 // Cache control
 let STATIC_MAX_AGE = '2h'
+let VIDEO_MAX_AGE = '7d'
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
@@ -599,6 +601,7 @@ if (isTestInstance() === true) {
   REMOTE_SCHEME.WS = 'ws'
 
   STATIC_MAX_AGE = '0'
+  VIDEO_MAX_AGE = '0'
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
@@ -671,6 +674,7 @@ export {
   JOB_TTL,
   NSFW_POLICY_TYPES,
   STATIC_MAX_AGE,
+  VIDEO_MAX_AGE,
   STATIC_PATHS,
   VIDEO_IMPORT_TIMEOUT,
   VIDEO_PLAYLIST_TYPES,

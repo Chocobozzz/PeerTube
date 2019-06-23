@@ -212,7 +212,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   }
 
   // Move physical file
-  const videoDir = CONFIG.STORAGE.VIDEOS_DIR
+  const videoDir = CONFIG.STORAGE.VIDEOS_TRANSCODING_DIR
   const destination = join(videoDir, video.getVideoFilename(videoFile))
   await move(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process

@@ -143,7 +143,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
     videoImport.Video.VideoFiles = [ videoFile ]
 
     // Move file
-    videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
+    videoDestFile = join(CONFIG.STORAGE.VIDEOS_TRANSCODING_DIR, videoImport.Video.getVideoFilename(videoFile))
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
