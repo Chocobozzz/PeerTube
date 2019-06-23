@@ -236,6 +236,15 @@ www-servers/nginx
 # app-crypt/certbot-nginx
 ```
 
+* If you are on a "stable" Gentoo you need to accept the testing keyword ~amd64 yarn:
+```
+mkdir -p /etc/portage/package.keywords
+cat << EOF >> /etc/portage/package.keywords/peertube
+# required by yarn (argument) for PeerTube
+sys-apps/yarn ~amd64
+EOF
+```
+
 * Compile the peertube set:
 ```
 emerge -a @peertube
