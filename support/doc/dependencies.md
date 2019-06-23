@@ -230,7 +230,6 @@ dev-vcs/git
 app-arch/unzip
 dev-lang/python:2.7
 www-servers/nginx
-media-libs/vips[jpeg,png,exif]
 
 # Optionnal, client for Let’s Encrypt:
 # app-crypt/certbot
