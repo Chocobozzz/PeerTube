@@ -301,6 +301,30 @@ const usersAskResetPasswordValidator = [
   }
 ]
 
+const usersResetPasswordLinkValidator = [
+  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersResetPassword parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    const user = res.locals.user
+    const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
+
+    if (redisVerificationString !== req.body.verificationString) {
+      return res
+        .status(403)
+        .send({ error: 'Invalid verification string.' })
+        .end()
+    }
+
+    return res.status(200).end();
+  }
+]
+
 const usersResetPasswordValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
   body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
@@ -407,6 +431,7 @@ export {
   ensureUserRegistrationAllowedForIP,
   usersGetValidator,
   usersAskResetPasswordValidator,
+  usersResetPasswordLinkValidator,
   usersResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersVerifyEmailValidator,

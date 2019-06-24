@@ -31,7 +31,8 @@ import {
   usersAskSendVerifyEmailValidator,
   usersBlockingValidator,
   usersResetPasswordValidator,
-  usersVerifyEmailValidator
+  usersVerifyEmailValidator,
+  usersResetPasswordLinkValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
@@ -137,6 +138,10 @@ usersRouter.delete('/:id',
 usersRouter.post('/ask-reset-password',
   asyncMiddleware(usersAskResetPasswordValidator),
   asyncMiddleware(askResetUserPassword)
+)
+
+usersRouter.post('/:id/reset-password-validation',
+  asyncMiddleware(usersResetPasswordLinkValidator)
 )
 
 usersRouter.post('/:id/reset-password',

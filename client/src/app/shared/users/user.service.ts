@@ -104,6 +104,19 @@ export class UserService {
                )
   }
 
+  verifyResetPasswordLink (userId: number, verificationString: string) {
+    const url = `${UserService.BASE_USERS_URL}/${userId}/reset-password-validation`
+    const body = {
+      verificationString
+    }
+
+    return this.authHttp.post(url, body)
+                /*.pipe(
+                  map(this.restExtractor.extractDataBool),
+                  catchError(res => this.restExtractor.handleError(res))
+                )*/
+  }
+
   resetPassword (userId: number, verificationString: string, password: string) {
     const url = `${UserService.BASE_USERS_URL}/${userId}/reset-password`
     const body = {
