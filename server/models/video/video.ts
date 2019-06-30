@@ -117,6 +117,7 @@ import { VideoPlaylistElementModel } from './video-playlist-element'
 import { CONFIG } from '../../initializers/config'
 import { ThumbnailModel } from './thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
+import fs = require('fs');
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -1766,8 +1767,16 @@ export class VideoModel extends Model<VideoModel> {
     return join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
   }
 
+  private isTranscoding (videoFile: VideoFileModel) {
+    // NOTE: This check is probably not ideal, but it's the best I could think of.
+    // We can't use waitTranscoding, because that is not yet unset when
+    // createTorrentAndSetInfoHash() is called after a video is transcoded, so we would
+    // return the wrong path and crash.
+    return !fs.existsSync(join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile)))
+  }
+
   getVideoFilePath (videoFile: VideoFileModel) {
-    if (this.waitTranscoding) {
+    if (this.isTranscoding) {
       return join(CONFIG.STORAGE.VIDEOS_TRANSCODING_DIR, this.getVideoFilename(videoFile))
     } else {
       return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
@@ -1783,7 +1792,7 @@ export class VideoModel extends Model<VideoModel> {
         [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
         [ WEBSERVER.URL + '/tracker/announce' ]
       ],
-      urlList: [ WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
+      urlList: [ this.getVideoFileUrl(videoFile, WEBSERVER.URL) ]
     }
 
     const torrent = await createTorrentPromise(this.getVideoFilePath(videoFile), options)
@@ -1934,7 +1943,11 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+    if (this.isTranscoding) {
+      return baseUrlHttp + STATIC_PATHS.WEBSEED_TRANSCODING + this.getVideoFilename(videoFile)
+    } else {
+      return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+    }
   }
 
   getVideoRedundancyUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
