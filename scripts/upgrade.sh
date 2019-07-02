@@ -32,7 +32,7 @@ if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ] ; then
 fi
 
 # Backup database
-if [ "$(whereis pg_dump | cut -d ":" -f 2)" != "" ]
+if [ -x "$(command -v pg_dump)" ]
 then 
   SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
   DB_USER=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
@@ -42,7 +42,7 @@ then
   mkdir -p $PEERTUBE_PATH/backup
   PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "peertube${DB_SUFFIX}" -f "$SQL_BACKUP_PATH"
 else
-  echo "pg_dump is not find. No backup"
+  echo "pg_dump not found. Cannot make a SQL backup!"
 fi
 
 # If there is a pre-release, give the user a choice which one to install.
