@@ -181,13 +181,13 @@ Then, we can create the databases (if they don't already exist):
 
 ```
 $ sudo -u postgres createuser you_username --createdb --superuser
-$ createdb -O peertube peertube_test{1,2,3,4,5,6}
+$ npm run clean:server:test
 ```
 
 Build the application and run the unit/integration tests:
 
 ```
-$ npm run build
+$ npm run build -- --light
 $ npm test
 ```
 
