@@ -27,7 +27,7 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
   logger.debug('Reporting remote abuse for video %s.', getAPId(flag.object))
 
   const account = byActor.Account
-  if (!account) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
+  if (!account) throw new Error('Cannot create video abuse with the non account actor ' + byActor.url)
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: flag.object })
 
