@@ -638,7 +638,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
-  '/users/me/subscriptions/{uri}':
+  '/users/me/subscriptions/{subscriptionHandle}':
     get:
       summary: Get subscription of the current user for a given uri
       security:
@@ -646,6 +646,8 @@ paths:
             - user
       tags:
         - User
+      parameters:
+        - $ref: '#/components/parameters/subscriptionHandle'
       responses:
         '200':
           description: successful operation
@@ -660,6 +662,8 @@ paths:
             - user
       tags:
         - User
+      parameters:
+        - $ref: '#/components/parameters/subscriptionHandle'
       responses:
         '200':
           description: successful operation
@@ -792,7 +796,7 @@ paths:
       tags:
         - Video
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '200':
           description: successful operation
@@ -851,7 +855,7 @@ paths:
       tags:
         - Video
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '200':
           description: successful operation
@@ -866,7 +870,7 @@ paths:
       tags:
         - Video
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -876,7 +880,7 @@ paths:
       tags:
         - Video
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '200':
           description: successful operation
@@ -890,7 +894,7 @@ paths:
       tags:
         - Video
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -902,7 +906,7 @@ paths:
       security:
         - OAuth2: []
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       requestBody:
         content:
           application/json:
@@ -919,8 +923,6 @@ paths:
         - Video
       security:
         - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/id2'
       responses:
         '200':
           description: successful operation
@@ -932,7 +934,7 @@ paths:
       security:
         - OAuth2: []
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -944,7 +946,7 @@ paths:
       security:
         - OAuth2: []
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -956,7 +958,7 @@ paths:
       security:
         - OAuth2: []
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       requestBody:
         required: true
         content:
@@ -1178,7 +1180,7 @@ paths:
       tags:
         - Video Abuse
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1192,7 +1194,7 @@ paths:
       tags:
         - Video Blacklist
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1205,7 +1207,7 @@ paths:
       tags:
         - Video Blacklist
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1237,7 +1239,7 @@ paths:
       tags:
         - Video Caption
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '200':
           description: successful operation
@@ -1258,7 +1260,7 @@ paths:
       tags:
         - Video Caption
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/captionLanguage'
       requestBody:
         content:
@@ -1278,7 +1280,7 @@ paths:
       tags:
         - Video Caption
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/captionLanguage'
       responses:
         '204':
@@ -1395,6 +1397,7 @@ paths:
       tags:
         - User
       parameters:
+        - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -1422,7 +1425,7 @@ paths:
       tags:
         - Video Comment
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -1440,7 +1443,7 @@ paths:
       tags:
         - Video Comment
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '200':
           description: successful operation
@@ -1454,13 +1457,8 @@ paths:
       tags:
         - Video Comment
       parameters:
-        - $ref: '#/components/parameters/id2'
-        - name: threadId
-          in: path
-          required: true
-          description: The thread id (root comment id)
-          schema:
-            type: number
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/threadId'
       responses:
         '200':
           description: successful operation
@@ -1476,7 +1474,7 @@ paths:
       tags:
         - Video Comment
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/commentId'
       responses:
         '200':
@@ -1492,7 +1490,7 @@ paths:
       tags:
         - Video Comment
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/commentId'
       responses:
         '204':
@@ -1505,7 +1503,7 @@ paths:
       tags:
         - Video Rate
       parameters:
-        - $ref: '#/components/parameters/id2'
+        - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1645,7 +1643,7 @@ components:
       description: The user id
       schema:
         type: number
-    id2:
+    idOrUUID:
       name: id
       in: path
       required: true
@@ -1666,8 +1664,22 @@ components:
       description: "The video channel handle (example: 'my_username@example.com' or 'my_username')"
       schema:
         type: string
-    commentId:
+    subscriptionHandle:
+      name: subscriptionHandle
+      in: path
+      required: true
+      description: "The subscription handle (example: 'my_username@example.com' or 'my_username')"
+      schema:
+        type: string
+    threadId:
       name: threadId
+      in: path
+      required: true
+      description: The thread id (root comment id)
+      schema:
+        type: number
+    commentId:
+      name: commentId
       in: path
       required: true
       description: The comment id
