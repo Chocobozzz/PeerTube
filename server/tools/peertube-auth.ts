@@ -39,7 +39,7 @@ async function setInstance (url: string, username: string, password: string, isD
 }
 
 function isURLaPeerTubeInstance (url: string) {
-  return isHostValid(url) || (url.includes('localhost'))
+  return url.startsWith('http://') || url.startsWith('https://')
 }
 
 program
@@ -61,6 +61,7 @@ program
         url: {
           description: 'instance url',
           conform: (value) => isURLaPeerTubeInstance(value),
+          message: 'It should be an URL (https://peertube.example.com)',
           required: true
         },
         username: {
