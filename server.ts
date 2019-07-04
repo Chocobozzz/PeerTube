@@ -27,9 +27,9 @@ const app = express()
 import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-before-init'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
-import { logger } from './server/helpers/logger'
-import { API_VERSION, FILES_CACHE, WEBSERVER, loadLanguages } from './server/initializers/constants'
 import { CONFIG } from './server/initializers/config'
+import { API_VERSION, FILES_CACHE, WEBSERVER, loadLanguages } from './server/initializers/constants'
+import { logger } from './server/helpers/logger'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {

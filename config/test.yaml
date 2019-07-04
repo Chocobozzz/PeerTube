@@ -5,6 +5,14 @@ listen:
 webserver:
   https: false
 
+rates_limit:
+  signup:
+    window: 10 minutes
+    max: 50
+  login:
+    window: 5 minutes
+    max: 20
+
 database:
   hostname: 'localhost'
   port: 5432

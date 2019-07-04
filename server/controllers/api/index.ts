@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as RateLimit from 'express-rate-limit'
 import { configRouter } from './config'
 import { jobsRouter } from './jobs'
 import { oauthClientsRouter } from './oauth-clients'
@@ -12,6 +13,7 @@ import * as cors from 'cors'
 import { searchRouter } from './search'
 import { overviewsRouter } from './overviews'
 import { videoPlaylistRouter } from './video-playlist'
+import { CONFIG } from '../../initializers/config'
 
 const apiRouter = express.Router()
 
@@ -20,6 +22,14 @@ apiRouter.use(cors({
   exposedHeaders: 'Retry-After',
   credentials: true
 }))
+
+// FIXME: https://github.com/nfriedly/express-rate-limit/issues/138
+// @ts-ignore
+const apiRateLimiter = RateLimit({
+  windowMs: CONFIG.RATES_LIMIT.API.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.API.MAX
+})
+apiRouter.use(apiRateLimiter)
 
 apiRouter.use('/server', serverRouter)
 apiRouter.use('/oauth-clients', oauthClientsRouter)

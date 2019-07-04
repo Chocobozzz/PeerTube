@@ -3,7 +3,7 @@ import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { RATES_LIMIT, WEBSERVER } from '../../../initializers/constants'
+import { WEBSERVER } from '../../../initializers/constants'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
 import { createUserAccountAndChannelAndPlaylist, sendVerifyUserEmail } from '../../../lib/user'
@@ -53,14 +53,21 @@ const auditLogger = auditLoggerFactory('users')
 // FIXME: https://github.com/nfriedly/express-rate-limit/issues/138
 // @ts-ignore
 const loginRateLimiter = RateLimit({
-  windowMs: RATES_LIMIT.LOGIN.WINDOW_MS,
-  max: RATES_LIMIT.LOGIN.MAX
+  windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.LOGIN.MAX
+})
+
+// @ts-ignore
+const signupRateLimiter = RateLimit({
+  windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
+  skipFailedRequests: true
 })
 
 // @ts-ignore
 const askSendEmailLimiter = new RateLimit({
-  windowMs: RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: RATES_LIMIT.ASK_SEND_EMAIL.MAX
+  windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
 })
 
 const usersRouter = express.Router()
@@ -114,6 +121,7 @@ usersRouter.post('/',
 )
 
 usersRouter.post('/register',
+  signupRateLimiter,
   asyncMiddleware(ensureUserRegistrationAllowed),
   ensureUserRegistrationAllowedForIP,
   asyncMiddleware(usersRegisterValidator),

@@ -72,6 +72,14 @@ const CONFIG = {
     PORT: config.get<number>('webserver.port')
   },
   RATES_LIMIT: {
+    API: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.api.window')),
+      MAX: config.get<number>('rates_limit.api.max')
+    },
+    SIGNUP: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.signup.window')),
+      MAX: config.get<number>('rates_limit.signup.max')
+    },
     LOGIN: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login.window')),
       MAX: config.get<number>('rates_limit.login.max')

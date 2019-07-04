@@ -10,10 +10,18 @@ webserver:
   port: 9000
 
 rates_limit:
+  api:
+    # 50 attempts in 10 seconds
+    window: 10 seconds
+    max: 50
   login:
     # 15 attempts in 5 min
     window: 5 minutes
     max: 15
+  signup:
+    # 2 attempts in 5 min (only succeeded attempts are taken into account)
+    window: 5 minutes
+    max: 2
   ask_send_email:
     # 3 attempts in 5 min
     window: 5 minutes
