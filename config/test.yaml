@@ -12,6 +12,9 @@ rates_limit:
   login:
     window: 5 minutes
     max: 20
+  api:
+    window: 10 seconds
+    max: 500
 
 database:
   hostname: 'localhost'
