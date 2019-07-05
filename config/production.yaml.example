@@ -81,6 +81,7 @@ storage:
   torrents: '/var/www/peertube/storage/torrents/'
   captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
+  plugins: '/var/www/peertube/storage/plugins/'
 
 log:
   level: 'info' # debug/info/warning/error

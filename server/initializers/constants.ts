@@ -277,6 +277,10 @@ let CONSTRAINTS_FIELDS = {
   CONTACT_FORM: {
     FROM_NAME: { min: 1, max: 120 }, // Length
     BODY: { min: 3, max: 5000 } // Length
+  },
+  PLUGINS: {
+    NAME: { min: 1, max: 214 }, // Length
+    DESCRIPTION: { min: 1, max: 20000 } // Length
   }
 }
 
@@ -578,6 +582,11 @@ const P2P_MEDIA_LOADER_PEER_VERSION = 2
 
 // ---------------------------------------------------------------------------
 
+const PLUGIN_GLOBAL_CSS_FILE_NAME = 'plugins-global.css'
+const PLUGIN_GLOBAL_CSS_PATH = join(CONFIG.STORAGE.TMP_DIR, PLUGIN_GLOBAL_CSS_FILE_NAME)
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   PRIVATE_RSA_KEY_SIZE = 1024
@@ -650,6 +659,8 @@ export {
   REMOTE_SCHEME,
   FOLLOW_STATES,
   SERVER_ACTOR_NAME,
+  PLUGIN_GLOBAL_CSS_FILE_NAME,
+  PLUGIN_GLOBAL_CSS_PATH,
   PRIVATE_RSA_KEY_SIZE,
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
