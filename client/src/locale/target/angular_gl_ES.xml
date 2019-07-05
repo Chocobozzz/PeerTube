@@ -213,13 +213,6 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
-        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <target>(extensións: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, tamaño máx.: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
         <target>Non ten notificacións</target>
@@ -453,14 +446,14 @@
         <source>Unlisted</source>
         <target>Non listado</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ddd8a4986d2d1717a274a5a0fbed04988a819e69">
         <source>Private</source>
         <target>Privado</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -481,7 +474,7 @@
         <source>Edit</source>
         <target>Editar</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -678,7 +671,7 @@
         <source>Request new verification email.</source>
         <target>Solicitar novo correo de validación.</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e08a77594f3d89311cdf6da5090044270909c194">
@@ -728,7 +721,7 @@
         <source>Password</source>
         <target>Contrasinal</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
@@ -814,52 +807,6 @@
         <target>Restablecer contrasinal</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
-        <source>
-    Create an account
-  </source>
-        <target>
-    Crear unha conta
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
-        <source>Username</source>
-        <target>Nome de usuaria</target>
-        <context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
-        <source>Example: jane_doe</source>
-        <target>Exemplo: jane_doe</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7fe213724c4c0a4112c40c673884acb98a0a3b92">
-        <source>I am at least 16 years old and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
-        <target>Teño ao menos 16 anos e acepto &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; de esta instancia</target>
-        <context-group name="null">
-          <context context-type="linenumber">55</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
-        <source>Signup</source>
-        <target>Abrir conta</target>
-        <context-group name="null">
-          <context context-type="linenumber">88</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
-        <source>Features found on this instance</source>
-        <target>Características de esta instancia</target>
-        <context-group name="null">
-          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9167c6d3c4c3b74373cf1e90997e4966844ded1a">
@@ -1045,21 +992,21 @@
         <source>Category</source>
         <target>Categoría</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>Licenza</target>
         <context-group name="null">
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>Idioma</target>
         <context-group name="null">
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -1325,14 +1272,14 @@
         <source><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> subscribers</source>
         <target><x id="INTERPOLATION" equiv-text="{{ account.followersCount }}"/> suscritoras</target>
         <context-group name="null">
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8">
         <source>Video channels</source>
         <target>Canles de vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -1360,7 +1307,7 @@
         <source>See this video channel</source>
         <target>Ver esta canle de vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
@@ -1438,6 +1385,13 @@
         <target>Mostrar</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
+        <source>Signup</source>
+        <target>Abrir conta</target>
+        <context-group name="null">
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
@@ -1563,56 +1517,49 @@
         <source>Transcoding threads</source>
         <target>Fíos de recodificación</target>
         <context-group name="null">
-          <context context-type="linenumber">290</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5afc7e831e59c325e8fb3e208ec108ff53fb3500">
-        <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution}}"/> enabled</source>
-        <target>Resolución <x id="INTERPOLATION" equiv-text="{{resolution}}"/> activada</target>
-        <context-group name="null">
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">298</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
         <target>Algúns ficheiros non se federan (vista previa, comentarios). Recollémolos directamente desde a instancia de orixe e almacenámolos.</target>
         <context-group name="null">
-          <context context-type="linenumber">318</context>
+          <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>Tamaño da caché de vista previa</target>
         <context-group name="null">
-          <context context-type="linenumber">324</context>
+          <context context-type="linenumber">332</context>
         </context-group>
       </trans-unit>
       <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
         <source>Video captions cache size</source>
         <target>Tamaño da caché de comentarios no vídeo</target>
         <context-group name="null">
-          <context context-type="linenumber">333</context>
+          <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>Personalizacións</target>
         <context-group name="null">
-          <context context-type="linenumber">342</context>
+          <context context-type="linenumber">350</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fda2339a6e6ba017ee43b560caf660ed4022333c">
         <source>Write directly JavaScript code.&lt;br /&gt;Example: &lt;pre&gt;console.log('my instance is amazing');&lt;/pre&gt;</source>
         <target>Escribir código JavaScript directamente.&lt;br /&gt;Exemplo: &lt;pre&gt;console.log('a miña instancia é tremenda');&lt;/pre&gt;</target>
         <context-group name="null">
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -1626,14 +1573,14 @@
         <source>Update configuration</source>
         <target>Actualizar configuración</target>
         <context-group name="null">
-          <context context-type="linenumber">393</context>
+          <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
         <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
         <target>Semella que a configuración non é válida. Por favor busque os erros potenciais nas diferentes pestanas.</target>
         <context-group name="null">
-          <context context-type="linenumber">394</context>
+          <context context-type="linenumber">402</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1656,6 +1603,45 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
+        <source>Username</source>
+        <target>Nome de usuaria</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
+        <source>
+    Create an account
+  </source>
+        <target>
+    Crear unha conta
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
+        <source>Features found on this instance</source>
+        <target>Características de esta instancia</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
+        <source>Example: jane_doe</source>
+        <target>Exemplo: jane_doe</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7fe213724c4c0a4112c40c673884acb98a0a3b92">
+        <source>I am at least 16 years old and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
+        <target>Teño ao menos 16 anos e acepto &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; de esta instancia</target>
+        <context-group name="null">
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
     </body>

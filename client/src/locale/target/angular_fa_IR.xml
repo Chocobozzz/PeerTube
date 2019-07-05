@@ -231,7 +231,7 @@
         <source>Edit</source>
         <target>ویرایش</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196">
@@ -295,7 +295,7 @@
         <source>Password</source>
         <target>گذرواژه</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
@@ -372,36 +372,6 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
-        <source>
-    Create an account
-  </source>
-        <target>
-    ساخت حساب
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
-        <source>Username</source><target>Username</target><context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
-        <source>Example: jane_doe</source>
-        <target>نمونه: مهراد_روستا</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
-        <source>Signup</source>
-        <target>ثبت‌نام</target>
-        <context-group name="null">
-          <context context-type="linenumber">88</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
         <source>
     No results found
@@ -439,13 +409,6 @@
         <target>اشتراک</target>
         <context-group name="null">
           <context context-type="linenumber">51</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e95ae009d0bdb45fcc656e8b65248cf7396080d5">
-        <source>Overview</source>
-        <target>نمای‌کلی</target>
-        <context-group name="null">
-          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
@@ -548,21 +511,21 @@
         <source>Category</source>
         <target>دسته‌بندی</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>مجوز</target>
         <context-group name="null">
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>زبان</target>
         <context-group name="null">
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
@@ -595,6 +558,13 @@
 </target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
+        <source>Followers</source>
+        <target>دنبال‌کننده‌ها</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -630,6 +600,13 @@
         <target>نمایش</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
+        <source>Signup</source>
+        <target>ثبت‌نام</target>
+        <context-group name="null">
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
@@ -678,7 +655,7 @@
         <source>JavaScript</source>
         <target>جاوااکسریپت</target>
         <context-group name="null">
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -727,18 +704,16 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
-        <source>Followers</source>
-        <target>دنبال‌کننده‌ها</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">
         <source>Create user</source>
         <target>ایجاد کاربر</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
+        <source>Username</source><target>Username</target><context-group name="null">
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05">
@@ -767,6 +742,24 @@
         <target>ویدئو</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
+        <source>
+    Create an account
+  </source>
+        <target>
+    ساخت حساب
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
+        <source>Example: jane_doe</source>
+        <target>نمونه: مهراد_روستا</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">

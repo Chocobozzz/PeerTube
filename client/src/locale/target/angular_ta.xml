@@ -147,7 +147,7 @@
         <source>Edit</source>
         <target>தொகு</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f">
@@ -209,7 +209,7 @@
         <source>Password</source>
         <target>கடவுச்சொல்</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -252,13 +252,6 @@
         <target>கடவுச்சொல் உறுதிசெய்யப்பட்டது</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
-        <source>Example: jane_doe</source>
-        <target>உதாரணம்: மாரி_முத்து</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -328,21 +321,21 @@
         <source>Category</source>
         <target>பிரிவு</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>உரிமம்</target>
         <context-group name="null">
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>மொழி</target>
         <context-group name="null">
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -364,6 +357,13 @@
         <target>PeerTube-ஐ Youtube-உடன் எப்படு ஒப்பிடுவது?</target>
         <context-group name="null">
           <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
+        <source>Followers</source>
+        <target>பின்பற்றுபவர்கள்</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
@@ -412,7 +412,7 @@
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -461,13 +461,6 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
-        <source>Followers</source>
-        <target>பின்பற்றுபவர்கள்</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a">
         <source>john</source>
         <target>john</target>
@@ -487,6 +480,13 @@
         <target>பயணர்கள் பட்டியல்</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
+        <source>Example: jane_doe</source>
+        <target>உதாரணம்: மாரி_முத்து</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
     </body>

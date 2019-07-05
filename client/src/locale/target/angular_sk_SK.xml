@@ -213,13 +213,6 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
-        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <target>(rozšírenia: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, najväčšia veľkosť: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
         <target>Nemáte upozornenia.</target>
