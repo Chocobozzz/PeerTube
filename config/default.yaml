@@ -80,6 +80,7 @@ storage:
   torrents: 'storage/torrents/'
   captions: 'storage/captions/'
   cache: 'storage/cache/'
+  plugins: 'storage/plugins/'
 
 log:
   level: 'info' # debug/info/warning/error

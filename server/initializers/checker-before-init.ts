@@ -12,7 +12,7 @@ function checkMissedConfig () {
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'email.body.signature', 'email.object.prefix',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
-    'storage.redundancy', 'storage.tmp', 'storage.streaming_playlists',
+    'storage.redundancy', 'storage.tmp', 'storage.streaming_playlists', 'storage.plugins',
     'log.level',
     'user.video_quota', 'user.video_quota_daily',
     'csp.enabled', 'csp.report_only', 'csp.report_uri',

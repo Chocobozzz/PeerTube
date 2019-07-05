@@ -94,6 +94,8 @@ import {
   feedsRouter,
   staticRouter,
   servicesRouter,
+  pluginsRouter,
+  themesRouter,
   webfingerRouter,
   trackerRouter,
   createWebsocketTrackerServer, botsRouter
@@ -172,6 +174,10 @@ app.use(apiRoute, apiRouter)
 
 // Services (oembed...)
 app.use('/services', servicesRouter)
+
+// Plugins & themes
+app.use('/plugins', pluginsRouter)
+app.use('/themes', themesRouter)
 
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)

@@ -1,8 +1,16 @@
 import 'multer'
 import * as validator from 'validator'
+import { sep } from 'path'
 
 function exists (value: any) {
   return value !== undefined && value !== null
+}
+
+function isSafePath (p: string) {
+  return exists(p) &&
+    (p + '').split(sep).every(part => {
+      return [ '', '.', '..' ].includes(part) === false
+    })
 }
 
 function isArray (value: any) {
@@ -97,6 +105,7 @@ export {
   isNotEmptyIntArray,
   isArray,
   isIdValid,
+  isSafePath,
   isUUIDValid,
   isIdOrUUIDValid,
   isDateValid,

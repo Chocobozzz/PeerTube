@@ -63,7 +63,8 @@ const CONFIG = {
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
-    CACHE_DIR: buildPath(config.get<string>('storage.cache'))
+    CACHE_DIR: buildPath(config.get<string>('storage.cache')),
+    PLUGINS_DIR: buildPath(config.get<string>('storage.plugins'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
