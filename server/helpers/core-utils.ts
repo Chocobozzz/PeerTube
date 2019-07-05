@@ -10,7 +10,7 @@ import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
 import { truncate } from 'lodash'
-import { exec } from 'child_process'
+import { exec, ExecOptions } from 'child_process'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
@@ -204,6 +204,16 @@ function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') 
   return createHash('sha1').update(str).digest(encoding)
 }
 
+function execShell (command: string, options?: ExecOptions) {
+  return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
+    exec(command, options, (err, stdout, stderr) => {
+      if (err) return rej({ err, stdout, stderr })
+
+      return res({ stdout, stderr })
+    })
+  })
+}
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -269,6 +279,7 @@ export {
   sanitizeUrl,
   sanitizeHost,
   buildPath,
+  execShell,
   peertubeTruncate,
 
   sha256,

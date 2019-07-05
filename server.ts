@@ -1,4 +1,6 @@
 // FIXME: https://github.com/nodejs/node/pull/16853
+import { PluginManager } from './server/lib/plugins/plugin-manager'
+
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
@@ -258,6 +260,8 @@ async function startApplication () {
 
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
+
+  await PluginManager.Instance.registerPlugins()
 
   // Make server listening
   server.listen(port, hostname, () => {

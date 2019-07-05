@@ -9,7 +9,7 @@ function exists (value: any) {
 function isSafePath (p: string) {
   return exists(p) &&
     (p + '').split(sep).every(part => {
-      return [ '', '.', '..' ].includes(part) === false
+      return [ '..' ].includes(part) === false
     })
 }
 

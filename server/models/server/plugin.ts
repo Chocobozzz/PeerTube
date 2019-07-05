@@ -42,7 +42,6 @@ export class PluginModel extends Model<PluginModel> {
   uninstalled: boolean
 
   @AllowNull(false)
-  @Is('PluginPeertubeEngine', value => throwIfNotValid(value, isPluginVersionValid, 'peertubeEngine'))
   @Column
   peertubeEngine: string
 
@@ -74,6 +73,16 @@ export class PluginModel extends Model<PluginModel> {
     }
 
     return PluginModel.findAll(query)
+  }
+
+  static uninstall (pluginName: string) {
+    const query = {
+      where: {
+        name: pluginName
+      }
+    }
+
+    return PluginModel.update({ enabled: false, uninstalled: true }, query)
   }
 
 }
