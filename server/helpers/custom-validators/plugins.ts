@@ -17,6 +17,13 @@ function isPluginNameValid (value: string) {
     validator.matches(value, /^[a-z\-]+$/)
 }
 
+function isNpmPluginNameValid (value: string) {
+  return exists(value) &&
+    validator.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
+    validator.matches(value, /^[a-z\-]+$/) &&
+    (value.startsWith('peertube-plugin-') || value.startsWith('peertube-theme-'))
+}
+
 function isPluginDescriptionValid (value: string) {
   return exists(value) && validator.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.DESCRIPTION)
 }
@@ -55,7 +62,7 @@ function isCSSPathsValid (css: any[]) {
 }
 
 function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginType) {
-  return isPluginNameValid(packageJSON.name) &&
+  return isNpmPluginNameValid(packageJSON.name) &&
     isPluginDescriptionValid(packageJSON.description) &&
     isPluginEngineValid(packageJSON.engine) &&
     isUrlValid(packageJSON.homepage) &&
@@ -78,5 +85,6 @@ export {
   isPluginVersionValid,
   isPluginNameValid,
   isPluginDescriptionValid,
-  isLibraryCodeValid
+  isLibraryCodeValid,
+  isNpmPluginNameValid
 }

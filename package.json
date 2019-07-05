@@ -32,6 +32,8 @@
     "clean:server:test": "scripty",
     "watch:client": "scripty",
     "watch:server": "scripty",
+    "plugin:install": "node ./dist/scripts/plugin/install.js",
+    "plugin:uninstall": "node ./dist/scripts/plugin/uninstall.js",
     "danger:clean:dev": "scripty",
     "danger:clean:prod": "scripty",
     "danger:clean:modules": "scripty",
