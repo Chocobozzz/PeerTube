@@ -38,7 +38,7 @@ info:
     }
     ```
 externalDocs:
-  url: https://docs.joinpeertube.org/#/api-rest-reference.html
+  url: https://docs.joinpeertube.org/api-rest-reference.html
 tags:
   - name: Accounts
     description: >
