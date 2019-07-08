@@ -75,6 +75,16 @@ export class PluginModel extends Model<PluginModel> {
     return PluginModel.findAll(query)
   }
 
+  static load (pluginName: string) {
+    const query = {
+      where: {
+        name: pluginName
+      }
+    }
+
+    return PluginModel.findOne(query)
+  }
+
   static uninstall (pluginName: string) {
     const query = {
       where: {

@@ -4,12 +4,13 @@ import { RegisterHookOptions } from '../../../shared/models/plugins/register.mod
 import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
-import { PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
+import { ClientScript, PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
 import { PluginLibrary } from '../../../shared/models/plugins/plugin-library.model'
 import { createReadStream, createWriteStream } from 'fs'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
+import { outputFile } from 'fs-extra'
 
 export interface RegisteredPlugin {
   name: string
@@ -22,6 +23,7 @@ export interface RegisteredPlugin {
   path: string
 
   staticDirs: { [name: string]: string }
+  clientScripts: { [name: string]: ClientScript }
 
   css: string[]
 
@@ -46,6 +48,8 @@ export class PluginManager {
   }
 
   async registerPlugins () {
+    await this.resetCSSGlobalFile()
+
     const plugins = await PluginModel.listEnabledPluginsAndThemes()
 
     for (const plugin of plugins) {
@@ -83,6 +87,16 @@ export class PluginManager {
     }
 
     await plugin.unregister()
+
+    // Remove hooks of this plugin
+    for (const key of Object.keys(this.hooks)) {
+      this.hooks[key] = this.hooks[key].filter(h => h.pluginName !== name)
+    }
+
+    delete this.registeredPlugins[plugin.name]
+
+    logger.info('Regenerating registered plugin CSS to global file.')
+    await this.regeneratePluginGlobalCSS()
   }
 
   async install (toInstall: string, version: string, fromDisk = false) {
@@ -132,9 +146,30 @@ export class PluginManager {
   }
 
   async uninstall (packageName: string) {
-    await PluginModel.uninstall(this.normalizePluginName(packageName))
+    logger.info('Uninstalling plugin %s.', packageName)
+
+    const pluginName = this.normalizePluginName(packageName)
+
+    try {
+      await this.unregister(pluginName)
+    } catch (err) {
+      logger.warn('Cannot unregister plugin %s.', pluginName, { err })
+    }
+
+    const plugin = await PluginModel.load(pluginName)
+    if (!plugin || plugin.uninstalled === true) {
+      logger.error('Cannot uninstall plugin %s: it does not exist or is already uninstalled.', packageName)
+      return
+    }
+
+    plugin.enabled = false
+    plugin.uninstalled = true
+
+    await plugin.save()
 
     await removeNpmPlugin(packageName)
+
+    logger.info('Plugin %s uninstalled.', packageName)
   }
 
   private async registerPluginOrTheme (plugin: PluginModel) {
@@ -152,6 +187,11 @@ export class PluginManager {
       library = await this.registerPlugin(plugin, pluginPath, packageJSON)
     }
 
+    const clientScripts: { [id: string]: ClientScript } = {}
+    for (const c of packageJSON.clientScripts) {
+      clientScripts[c.script] = c
+    }
+
     this.registeredPlugins[ plugin.name ] = {
       name: plugin.name,
       type: plugin.type,
@@ -160,6 +200,7 @@ export class PluginManager {
       peertubeEngine: plugin.peertubeEngine,
       path: pluginPath,
       staticDirs: packageJSON.staticDirs,
+      clientScripts,
       css: packageJSON.css,
       unregister: library ? library.unregister : undefined
     }
@@ -199,6 +240,10 @@ export class PluginManager {
     }
   }
 
+  private resetCSSGlobalFile () {
+    return outputFile(PLUGIN_GLOBAL_CSS_PATH, '')
+  }
+
   private async addCSSToGlobalFile (pluginPath: string, cssRelativePaths: string[]) {
     for (const cssPath of cssRelativePaths) {
       await this.concatFiles(join(pluginPath, cssPath), PLUGIN_GLOBAL_CSS_PATH)
@@ -207,8 +252,8 @@ export class PluginManager {
 
   private concatFiles (input: string, output: string) {
     return new Promise<void>((res, rej) => {
-      const outputStream = createWriteStream(input)
-      const inputStream = createReadStream(output)
+      const inputStream = createReadStream(input)
+      const outputStream = createWriteStream(output, { flags: 'a' })
 
       inputStream.pipe(outputStream)
 
@@ -231,6 +276,16 @@ export class PluginManager {
 
   private normalizePluginName (name: string) {
     return name.replace(/^peertube-((theme)|(plugin))-/, '')
+  }
+
+  private async regeneratePluginGlobalCSS () {
+    await this.resetCSSGlobalFile()
+
+    for (const key of Object.keys(this.registeredPlugins)) {
+      const plugin = this.registeredPlugins[key]
+
+      await this.addCSSToGlobalFile(plugin.path, plugin.css)
+    }
   }
 
   static get Instance () {
