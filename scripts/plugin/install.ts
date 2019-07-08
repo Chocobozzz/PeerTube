@@ -4,9 +4,9 @@ import { PluginManager } from '../../server/lib/plugins/plugin-manager'
 import { isAbsolute } from 'path'
 
 program
-  .option('-n, --pluginName [pluginName]', 'Plugin name to install')
-  .option('-v, --pluginVersion [pluginVersion]', 'Plugin version to install')
-  .option('-p, --pluginPath [pluginPath]', 'Path of the plugin you want to install')
+  .option('-n, --plugin-name [pluginName]', 'Plugin name to install')
+  .option('-v, --plugin-version [pluginVersion]', 'Plugin version to install')
+  .option('-p, --plugin-path [pluginPath]', 'Path of the plugin you want to install')
   .parse(process.argv)
 
 if (!program['pluginName'] && !program['pluginPath']) {

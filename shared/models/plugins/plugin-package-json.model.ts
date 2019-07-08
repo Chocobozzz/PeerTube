@@ -1,3 +1,8 @@
+export type ClientScript = {
+  script: string,
+  scopes: string[]
+}
+
 export type PluginPackageJson = {
   name: string
   version: string
@@ -12,5 +17,5 @@ export type PluginPackageJson = {
   staticDirs: { [ name: string ]: string }
   css: string[]
 
-  clientScripts: { script: string, scopes: string[] }[]
+  clientScripts: ClientScript[]
 }
