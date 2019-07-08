@@ -267,6 +267,8 @@ async function startApplication () {
   server.listen(port, hostname, () => {
     logger.info('Server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
+
+    PluginManager.Instance.runHook('action:application.listening')
   })
 
   process.on('exit', () => {
