@@ -42,6 +42,7 @@ export class ServerService {
         css: ''
       }
     },
+    plugins: [],
     email: {
       enabled: false
     },

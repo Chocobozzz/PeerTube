@@ -9,6 +9,7 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
 import { ViewportScroller } from '@angular/common'
+import { PluginService } from '@app/core/plugins/plugin.service'
 
 @Component({
   selector: 'my-app',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private serverService: ServerService,
+    private pluginService: PluginService,
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService,
     private screenService: ScreenService,
@@ -68,6 +70,8 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoLicences()
     this.serverService.loadVideoPrivacies()
     this.serverService.loadVideoPlaylistPrivacies()
+
+    this.loadPlugins()
 
     // Do not display menu on small screens
     if (this.screenService.isInSmallView()) {
@@ -194,6 +198,14 @@ export class AppComponent implements OnInit {
             this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
           }
         })
+  }
+
+  private async loadPlugins () {
+    this.pluginService.initializePlugins()
+
+    await this.pluginService.loadPluginsByScope('common')
+
+    this.pluginService.runHook('action:application.loaded')
   }
 
   private initHotkeys () {

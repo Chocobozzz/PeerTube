@@ -75,6 +75,27 @@ export class PluginManager {
     return registered
   }
 
+  getRegisteredPlugins () {
+    return this.registeredPlugins
+  }
+
+  async runHook (hookName: string, param?: any) {
+    let result = param
+
+    const wait = hookName.startsWith('static:')
+
+    for (const hook of this.hooks[hookName]) {
+      try {
+        if (wait) result = await hook.handler(param)
+        else result = hook.handler()
+      } catch (err) {
+        logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
+      }
+    }
+
+    return result
+  }
+
   async unregister (name: string) {
     const plugin = this.getRegisteredPlugin(name)
 
