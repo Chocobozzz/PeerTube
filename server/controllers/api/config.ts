@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { snakeCase } from 'lodash'
-import { ServerConfig, UserRight } from '../../../shared'
+import { ServerConfig, ServerConfigPlugin, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
@@ -15,6 +15,8 @@ import { Emailer } from '../../lib/emailer'
 import { isNumeric } from 'validator'
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
+import { PluginManager } from '../../lib/plugins/plugin-manager'
+import { PluginType } from '../../../shared/models/plugins/plugin.type'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -54,6 +56,20 @@ async function getConfig (req: express.Request, res: express.Response) {
    .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
    .map(r => parseInt(r, 10))
 
+  const plugins: ServerConfigPlugin[] = []
+  const registeredPlugins = PluginManager.Instance.getRegisteredPlugins()
+  for (const pluginName of Object.keys(registeredPlugins)) {
+    const plugin = registeredPlugins[ pluginName ]
+    if (plugin.type !== PluginType.PLUGIN) continue
+
+    plugins.push({
+      name: plugin.name,
+      version: plugin.version,
+      description: plugin.description,
+      clientScripts: plugin.clientScripts
+    })
+  }
+
   const json: ServerConfig = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
@@ -66,6 +82,7 @@ async function getConfig (req: express.Request, res: express.Response) {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
     },
+    plugins,
     email: {
       enabled: Emailer.isEnabled()
     },

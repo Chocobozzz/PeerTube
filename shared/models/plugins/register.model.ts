@@ -1,4 +1,4 @@
-export type RegisterHookOptions = {
+export interface RegisterHookOptions {
   target: string
   handler: Function
   priority?: number

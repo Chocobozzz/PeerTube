@@ -32,6 +32,7 @@ import { Video } from '@app/shared/video/video.model'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
+import { PluginService } from '@app/core/plugins/plugin.service'
 
 @Component({
   selector: 'my-video-watch',
@@ -85,6 +86,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private serverService: ServerService,
     private restExtractor: RestExtractor,
     private notifier: Notifier,
+    private pluginService: PluginService,
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
@@ -98,7 +100,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.getUser()
   }
 
-  ngOnInit () {
+  async ngOnInit () {
+    await this.pluginService.loadPluginsByScope('video-watch')
+
     this.configSub = this.serverService.configLoaded
         .subscribe(() => {
           if (
@@ -126,6 +130,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.initHotkeys()
 
     this.theaterEnabled = getStoredTheater()
+
+    this.pluginService.runHook('action:video-watch.loaded')
   }
 
   ngOnDestroy () {
