@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 395
+const LAST_MIGRATION_VERSION = 400
 
 // ---------------------------------------------------------------------------
 
@@ -585,6 +585,8 @@ const P2P_MEDIA_LOADER_PEER_VERSION = 2
 const PLUGIN_GLOBAL_CSS_FILE_NAME = 'plugins-global.css'
 const PLUGIN_GLOBAL_CSS_PATH = join(CONFIG.STORAGE.TMP_DIR, PLUGIN_GLOBAL_CSS_FILE_NAME)
 
+const DEFAULT_THEME = 'default'
+
 // ---------------------------------------------------------------------------
 
 // Special constants for a test instance
@@ -667,6 +669,7 @@ export {
   HLS_STREAMING_PLAYLIST_DIRECTORY,
   FEEDS,
   JOB_TTL,
+  DEFAULT_THEME,
   NSFW_POLICY_TYPES,
   STATIC_MAX_AGE,
   STATIC_PATHS,

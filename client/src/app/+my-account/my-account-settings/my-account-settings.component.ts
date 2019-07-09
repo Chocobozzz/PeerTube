@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
 import { BytesPipe } from 'ngx-pipes'
 import { AuthService } from '../../core'

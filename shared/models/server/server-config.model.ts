@@ -24,7 +24,14 @@ export interface ServerConfig {
     }
   }
 
-  plugins: ServerConfigPlugin[]
+  plugin: {
+    registered: ServerConfigPlugin[]
+  }
+
+  theme: {
+    registered: ServerConfigPlugin[]
+    default: string
+  }
 
   email: {
     enabled: boolean

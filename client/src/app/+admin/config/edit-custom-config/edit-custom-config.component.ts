@@ -73,6 +73,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     return this.configService.videoQuotaDailyOptions
   }
 
+  get availableThemes () {
+    return this.serverService.getConfig().theme.registered
+  }
+
   getResolutionKey (resolution: string) {
     return 'transcoding.resolutions.' + resolution
   }
@@ -91,6 +95,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           javascript: null,
           css: null
         }
+      },
+      theme: {
+        default: null
       },
       services: {
         twitter: {

@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { snakeCase } from 'lodash'
-import { ServerConfig, ServerConfigPlugin, UserRight } from '../../../shared'
+import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
@@ -16,7 +16,7 @@ import { isNumeric } from 'validator'
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { PluginType } from '../../../shared/models/plugins/plugin.type'
+import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 
 const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
@@ -56,19 +56,23 @@ async function getConfig (req: express.Request, res: express.Response) {
    .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
    .map(r => parseInt(r, 10))
 
-  const plugins: ServerConfigPlugin[] = []
   const registeredPlugins = PluginManager.Instance.getRegisteredPlugins()
-  for (const pluginName of Object.keys(registeredPlugins)) {
-    const plugin = registeredPlugins[ pluginName ]
-    if (plugin.type !== PluginType.PLUGIN) continue
+    .map(p => ({
+      name: p.name,
+      version: p.version,
+      description: p.description,
+      clientScripts: p.clientScripts
+    }))
 
-    plugins.push({
-      name: plugin.name,
-      version: plugin.version,
-      description: plugin.description,
-      clientScripts: plugin.clientScripts
-    })
-  }
+  const registeredThemes = PluginManager.Instance.getRegisteredThemes()
+                              .map(t => ({
+                                name: t.name,
+                                version: t.version,
+                                description: t.description,
+                                clientScripts: t.clientScripts
+                              }))
+
+  const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT)
 
   const json: ServerConfig = {
     instance: {
@@ -82,7 +86,13 @@ async function getConfig (req: express.Request, res: express.Response) {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
     },
-    plugins,
+    plugin: {
+      registered: registeredPlugins
+    },
+    theme: {
+      registered: registeredThemes,
+      default: defaultTheme
+    },
     email: {
       enabled: Emailer.isEnabled()
     },
@@ -239,6 +249,9 @@ function customConfig (): CustomConfig {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
       }
+    },
+    theme: {
+      default: CONFIG.THEME.DEFAULT
     },
     services: {
       twitter: {

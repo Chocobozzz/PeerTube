@@ -33,7 +33,7 @@ export class PluginService {
   initializePlugins () {
     this.server.configLoaded
       .subscribe(() => {
-        this.plugins = this.server.getConfig().plugins
+        this.plugins = this.server.getConfig().plugin.registered
 
         this.buildScopeStruct()
 

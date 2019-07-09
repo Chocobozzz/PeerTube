@@ -11,6 +11,7 @@ import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 import { outputFile } from 'fs-extra'
+import { ServerConfigPlugin } from '../../../shared/models/server'
 
 export interface RegisteredPlugin {
   name: string
@@ -47,7 +48,7 @@ export class PluginManager {
   private constructor () {
   }
 
-  async registerPlugins () {
+  async registerPluginsAndThemes () {
     await this.resetCSSGlobalFile()
 
     const plugins = await PluginModel.listEnabledPluginsAndThemes()
@@ -63,12 +64,20 @@ export class PluginManager {
     this.sortHooksByPriority()
   }
 
+  getRegisteredPluginOrTheme (name: string) {
+    return this.registeredPlugins[name]
+  }
+
   getRegisteredPlugin (name: string) {
-    return this.registeredPlugins[ name ]
+    const registered = this.getRegisteredPluginOrTheme(name)
+
+    if (!registered || registered.type !== PluginType.PLUGIN) return undefined
+
+    return registered
   }
 
   getRegisteredTheme (name: string) {
-    const registered = this.getRegisteredPlugin(name)
+    const registered = this.getRegisteredPluginOrTheme(name)
 
     if (!registered || registered.type !== PluginType.THEME) return undefined
 
@@ -76,7 +85,11 @@ export class PluginManager {
   }
 
   getRegisteredPlugins () {
-    return this.registeredPlugins
+    return this.getRegisteredPluginsOrThemes(PluginType.PLUGIN)
+  }
+
+  getRegisteredThemes () {
+    return this.getRegisteredPluginsOrThemes(PluginType.THEME)
   }
 
   async runHook (hookName: string, param?: any) {
@@ -307,6 +320,19 @@ export class PluginManager {
 
       await this.addCSSToGlobalFile(plugin.path, plugin.css)
     }
+  }
+
+  private getRegisteredPluginsOrThemes (type: PluginType) {
+    const plugins: RegisteredPlugin[] = []
+
+    for (const pluginName of Object.keys(this.registeredPlugins)) {
+      const plugin = this.registeredPlugins[ pluginName ]
+      if (plugin.type !== type) continue
+
+      plugins.push(plugin)
+    }
+
+    return plugins
   }
 
   static get Instance () {

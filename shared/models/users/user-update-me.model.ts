@@ -13,4 +13,6 @@ export interface UserUpdateMe {
   email?: string
   currentPassword?: string
   password?: string
+
+  theme?: string
 }

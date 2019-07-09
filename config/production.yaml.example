@@ -279,3 +279,6 @@ followers:
     enabled: true
     # Whether or not an administrator must manually validate a new follower
     manual_approval: false
+
+theme:
+  default: 'default'

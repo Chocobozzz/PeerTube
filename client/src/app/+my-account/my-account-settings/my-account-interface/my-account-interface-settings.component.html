@@ -1,0 +1,13 @@
+<form role="form" (ngSubmit)="updateInterfaceSettings()" [formGroup]="form">
+  <div class="form-group">
+    <label i18n for="theme">Theme</label>
+
+    <div class="peertube-select-container">
+      <select formControlName="theme" id="theme">
+        <option i18n value="default">default</option>
+
+        <option *ngFor="let theme of availableThemes" [value]="theme">{{ theme }}</option>
+      </select>
+    </div>
+  </div>
+</form>

@@ -190,6 +190,9 @@ describe('Test config', function () {
           css: 'body { background-color: red; }'
         }
       },
+      theme: {
+        default: 'default'
+      },
       services: {
         twitter: {
           username: '@Kuja',

@@ -28,6 +28,7 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { isActorPreferredUsernameValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
 import { UserRegister } from '../../../shared/models/users/user-register.model'
+import { isThemeValid } from '../../helpers/custom-validators/plugins'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -204,6 +205,9 @@ const usersUpdateMeValidator = [
   body('videosHistoryEnabled')
     .optional()
     .custom(isUserVideosHistoryEnabledValid).withMessage('Should have a valid videos history enabled attribute'),
+  body('theme')
+    .optional()
+    .custom(isThemeValid).withMessage('Should have a valid theme'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })

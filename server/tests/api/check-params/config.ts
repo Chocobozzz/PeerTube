@@ -27,6 +27,9 @@ describe('Test config API validators', function () {
         css: 'body { background-color: red; }'
       }
     },
+    theme: {
+      default: 'default'
+    },
     services: {
       twitter: {
         username: '@MySuperUsername',

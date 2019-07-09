@@ -261,7 +261,7 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
-  await PluginManager.Instance.registerPlugins()
+  await PluginManager.Instance.registerPluginsAndThemes()
 
   // Make server listening
   server.listen(port, hostname, () => {

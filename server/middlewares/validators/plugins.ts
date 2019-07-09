@@ -16,7 +16,7 @@ const servePluginStaticDirectoryValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const plugin = PluginManager.Instance.getRegisteredPlugin(req.params.pluginName)
+    const plugin = PluginManager.Instance.getRegisteredPluginOrTheme(req.params.pluginName)
 
     if (!plugin || plugin.version !== req.params.pluginVersion) {
       return res.sendStatus(404)
