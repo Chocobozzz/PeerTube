@@ -26,6 +26,8 @@ export class User implements UserServerModel {
   videoChannels: VideoChannel[]
   createdAt: Date
 
+  theme: string
+
   adminFlags?: UserAdminFlag
 
   blocked: boolean
@@ -48,6 +50,8 @@ export class User implements UserServerModel {
     this.videosHistoryEnabled = hash.videosHistoryEnabled
     this.autoPlayVideo = hash.autoPlayVideo
     this.createdAt = hash.createdAt
+
+    this.theme = hash.theme
 
     this.adminFlags = hash.adminFlags
 

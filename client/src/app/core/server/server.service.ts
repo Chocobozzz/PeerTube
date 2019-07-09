@@ -42,7 +42,13 @@ export class ServerService {
         css: ''
       }
     },
-    plugins: [],
+    plugin: {
+      registered: []
+    },
+    theme: {
+      registered: [],
+      default: 'default'
+    },
     email: {
       enabled: false
     },

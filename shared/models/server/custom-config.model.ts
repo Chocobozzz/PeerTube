@@ -15,6 +15,10 @@ export interface CustomConfig {
     }
   }
 
+  theme: {
+    default: string
+  }
+
   services: {
     twitter: {
       username: string

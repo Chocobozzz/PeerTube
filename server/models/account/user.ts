@@ -44,7 +44,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
-import { NSFW_POLICY_TYPES } from '../../initializers/constants'
+import { DEFAULT_THEME, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { clearCacheByUserId } from '../../lib/oauth-model'
 import { UserNotificationSettingModel } from './user-notification-setting'
 import { VideoModel } from '../video/video'
@@ -52,6 +52,8 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { VideoImportModel } from '../video/video-import'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
+import { isThemeValid } from '../../helpers/custom-validators/plugins'
+import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -186,6 +188,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
   @Column(DataType.BIGINT)
   videoQuotaDaily: number
+
+  @AllowNull(false)
+  @Default(DEFAULT_THEME)
+  @Is('UserTheme', value => throwIfNotValid(value, isThemeValid, 'theme'))
+  @Column
+  theme: string
 
   @CreatedAt
   createdAt: Date
@@ -560,6 +568,7 @@ export class UserModel extends Model<UserModel> {
       autoPlayVideo: this.autoPlayVideo,
       videoLanguages: this.videoLanguages,
       role: this.role,
+      theme: getThemeOrDefault(this.theme),
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
       videoQuotaDaily: this.videoQuotaDaily,

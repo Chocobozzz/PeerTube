@@ -59,6 +59,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
         css: 'body { background-color: red; }'
       }
     },
+    theme: {
+      default: 'default'
+    },
     services: {
       twitter: {
         username: '@MySuperUsername',
