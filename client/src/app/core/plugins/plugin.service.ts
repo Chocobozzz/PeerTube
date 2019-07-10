@@ -7,7 +7,7 @@ import { PluginScope } from '@shared/models/plugins/plugin-scope.type'
 import { environment } from '../../../environments/environment'
 import { RegisterHookOptions } from '@shared/models/plugins/register.model'
 import { ReplaySubject } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { first, shareReplay } from 'rxjs/operators'
 
 interface HookStructValue extends RegisterHookOptions {
   plugin: ServerConfigPlugin
@@ -21,6 +21,7 @@ export class PluginService {
   private plugins: ServerConfigPlugin[] = []
   private scopes: { [ scopeName: string ]: { plugin: ServerConfigPlugin, clientScript: ClientScript }[] } = {}
   private loadedScripts: { [ script: string ]: boolean } = {}
+  private loadedScopes: PluginScope[] = []
 
   private hooks: { [ name: string ]: HookStructValue[] } = {}
 
@@ -43,13 +44,47 @@ export class PluginService {
 
   ensurePluginsAreLoaded () {
     return this.pluginsLoaded.asObservable()
-               .pipe(first())
+               .pipe(first(), shareReplay())
                .toPromise()
+  }
+
+  addPlugin (plugin: ServerConfigPlugin) {
+    for (const key of Object.keys(plugin.clientScripts)) {
+      const clientScript = plugin.clientScripts[key]
+
+      for (const scope of clientScript.scopes) {
+        if (!this.scopes[scope]) this.scopes[scope] = []
+
+        this.scopes[scope].push({
+          plugin,
+          clientScript: {
+            script: environment.apiUrl + `/plugins/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`,
+            scopes: clientScript.scopes
+          }
+        })
+
+        this.loadedScripts[clientScript.script] = false
+      }
+    }
+  }
+
+  removePlugin (plugin: ServerConfigPlugin) {
+    for (const key of Object.keys(this.scopes)) {
+      this.scopes[key] = this.scopes[key].filter(o => o.plugin.name !== plugin.name)
+    }
+  }
+
+  async reloadLoadedScopes () {
+    for (const scope of this.loadedScopes) {
+      await this.loadPluginsByScope(scope)
+    }
   }
 
   async loadPluginsByScope (scope: PluginScope) {
     try {
       await this.ensurePluginsAreLoaded()
+
+      this.loadedScopes.push(scope)
 
       const toLoad = this.scopes[ scope ]
       if (!Array.isArray(toLoad)) return
@@ -63,7 +98,7 @@ export class PluginService {
         this.loadedScripts[ clientScript.script ] = true
       }
 
-      return Promise.all(promises)
+      await Promise.all(promises)
     } catch (err) {
       console.error('Cannot load plugins by scope %s.', scope, err)
     }
@@ -101,29 +136,14 @@ export class PluginService {
 
     console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
-    const url = environment.apiUrl + `/plugins/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`
-
-    return import(/* webpackIgnore: true */ url)
+    return import(/* webpackIgnore: true */ clientScript.script)
       .then(script => script.register({ registerHook }))
       .then(() => this.sortHooksByPriority())
   }
 
   private buildScopeStruct () {
     for (const plugin of this.plugins) {
-      for (const key of Object.keys(plugin.clientScripts)) {
-        const clientScript = plugin.clientScripts[key]
-
-        for (const scope of clientScript.scopes) {
-          if (!this.scopes[scope]) this.scopes[scope] = []
-
-          this.scopes[scope].push({
-            plugin,
-            clientScript
-          })
-
-          this.loadedScripts[clientScript.script] = false
-        }
-      }
+      this.addPlugin(plugin)
     }
   }
 

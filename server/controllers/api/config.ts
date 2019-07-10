@@ -4,7 +4,7 @@ import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME } from '../../initializers/constants'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
@@ -69,10 +69,11 @@ async function getConfig (req: express.Request, res: express.Response) {
                                 name: t.name,
                                 version: t.version,
                                 description: t.description,
+                                css: t.css,
                                 clientScripts: t.clientScripts
                               }))
 
-  const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT)
+  const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
   const json: ServerConfig = {
     instance: {

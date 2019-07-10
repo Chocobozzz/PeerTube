@@ -112,10 +112,6 @@ export class MenuComponent implements OnInit {
     this.hotkeysService.cheatSheetToggle.next(!this.helpVisible)
   }
 
-  toggleDarkTheme () {
-    this.themeService.toggleDarkTheme()
-  }
-
   private computeIsUserHasAdminAccess () {
     const right = this.getFirstAdminRightAvailable()
 

@@ -9,7 +9,7 @@ async function up (utils: {
   const data = {
     type: Sequelize.STRING,
     allowNull: false,
-    defaultValue: 'default'
+    defaultValue: 'instance-default'
   }
 
   await utils.queryInterface.addColumn('user', 'theme', data)

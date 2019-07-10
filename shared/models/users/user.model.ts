@@ -25,6 +25,9 @@ export interface User {
   videoQuota: number
   videoQuotaDaily: number
   createdAt: Date
+
+  theme: string
+
   account: Account
   notificationSettings?: UserNotificationSetting
   videoChannels?: VideoChannel[]

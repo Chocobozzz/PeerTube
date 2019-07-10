@@ -92,6 +92,7 @@ export class ClientHtml {
     let html = buffer.toString()
 
     html = ClientHtml.addCustomCSS(html)
+    html = ClientHtml.addPluginCSS(html)
 
     ClientHtml.htmlCache[ path ] = html
 
@@ -138,9 +139,15 @@ export class ClientHtml {
   }
 
   private static addCustomCSS (htmlStringPage: string) {
-    const styleTag = '<style class="custom-css-style">' + CONFIG.INSTANCE.CUSTOMIZATIONS.CSS + '</style>'
+    const styleTag = `<style class="custom-css-style">${CONFIG.INSTANCE.CUSTOMIZATIONS.CSS}</style>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
+  }
+
+  private static addPluginCSS (htmlStringPage: string) {
+    const linkTag = `<link rel="stylesheet" href="/plugins/global.css" />`
+
+    return htmlStringPage.replace('</head>', linkTag + '</head>')
   }
 
   private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
