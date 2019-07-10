@@ -21,11 +21,18 @@ import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } f
 import { JobsComponent } from '@app/+admin/system/jobs/jobs.component'
 import { JobService, LogsComponent, LogsService, SystemComponent } from '@app/+admin/system'
 import { DebugComponent, DebugService } from '@app/+admin/system/debug'
+import { PluginsComponent } from '@app/+admin/plugins/plugins.component'
+import { PluginListInstalledComponent } from '@app/+admin/plugins/plugin-list-installed/plugin-list-installed.component'
+import { PluginSearchComponent } from '@app/+admin/plugins/plugin-search/plugin-search.component'
+import { PluginShowInstalledComponent } from '@app/+admin/plugins/plugin-show-installed/plugin-show-installed.component'
+import { SelectButtonModule } from 'primeng/primeng'
+import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 
 @NgModule({
   imports: [
     AdminRoutingModule,
     TableModule,
+    SelectButtonModule,
     SharedModule
   ],
 
@@ -52,6 +59,11 @@ import { DebugComponent, DebugService } from '@app/+admin/system/debug'
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,
 
+    PluginsComponent,
+    PluginListInstalledComponent,
+    PluginSearchComponent,
+    PluginShowInstalledComponent,
+
     SystemComponent,
     JobsComponent,
     LogsComponent,
@@ -70,7 +82,8 @@ import { DebugComponent, DebugService } from '@app/+admin/system/debug'
     JobService,
     LogsService,
     DebugService,
-    ConfigService
+    ConfigService,
+    PluginApiService
   ]
 })
 export class AdminModule { }

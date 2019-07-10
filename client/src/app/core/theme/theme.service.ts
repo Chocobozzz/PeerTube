@@ -83,6 +83,7 @@ export class ThemeService {
     console.log('Enabling %s theme.', currentTheme)
 
     this.loadTheme(currentTheme)
+
     const theme = this.getTheme(currentTheme)
     if (theme) {
       console.log('Adding scripts of theme %s.', currentTheme)
@@ -95,6 +96,10 @@ export class ThemeService {
   }
 
   private listenUserTheme () {
+    if (!this.auth.isLoggedIn()) {
+      this.updateCurrentTheme()
+    }
+
     this.auth.userInformationLoaded
       .subscribe(() => this.updateCurrentTheme())
   }
