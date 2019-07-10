@@ -21,9 +21,9 @@ import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { RegisteredPlugin } from '../lib/plugins/plugin-manager'
+import { PluginModel } from '../models/server/plugin'
 
 declare module 'express' {
-
 
   interface Response {
     locals: {
@@ -81,6 +81,8 @@ declare module 'express' {
       authenticated?: boolean
 
       registeredPlugin?: RegisteredPlugin
+
+      plugin?: PluginModel
     }
   }
 }

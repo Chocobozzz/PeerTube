@@ -14,6 +14,7 @@ import { searchRouter } from './search'
 import { overviewsRouter } from './overviews'
 import { videoPlaylistRouter } from './video-playlist'
 import { CONFIG } from '../../initializers/config'
+import { pluginsRouter } from '../plugins'
 
 const apiRouter = express.Router()
 
@@ -42,6 +43,7 @@ apiRouter.use('/videos', videosRouter)
 apiRouter.use('/jobs', jobsRouter)
 apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
+apiRouter.use('/plugins', pluginsRouter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 
