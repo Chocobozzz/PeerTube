@@ -5,7 +5,7 @@ import { ServerService } from '@app/core/server/server.service'
 import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
 import { PluginScope } from '@shared/models/plugins/plugin-scope.type'
 import { environment } from '../../../environments/environment'
-import { RegisterHookOptions } from '@shared/models/plugins/register.model'
+import { RegisterHookOptions } from '@shared/models/plugins/register-hook.model'
 import { ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 
