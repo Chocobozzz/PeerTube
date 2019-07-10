@@ -29,6 +29,7 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
 
   get availableThemes () {
     return this.serverService.getConfig().theme.registered
+               .map(t => t.name)
   }
 
   ngOnInit () {
@@ -53,9 +54,9 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
 
     this.userService.updateMyProfile(details).subscribe(
       () => {
-        this.notifier.success(this.i18n('Interface settings updated.'))
+        this.authService.refreshUserInformation()
 
-        window.location.reload()
+        this.notifier.success(this.i18n('Interface settings updated.'))
       },
 
       err => this.notifier.error(err.message)

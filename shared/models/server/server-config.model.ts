@@ -1,11 +1,15 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { ClientScript } from '../plugins/plugin-package-json.model'
 
-export type ServerConfigPlugin = {
+export interface ServerConfigPlugin {
   name: string
   version: string
   description: string
   clientScripts: { [name: string]: ClientScript }
+}
+
+export interface ServerConfigTheme extends ServerConfigPlugin {
+  css: string[]
 }
 
 export interface ServerConfig {
@@ -29,7 +33,7 @@ export interface ServerConfig {
   }
 
   theme: {
-    registered: ServerConfigPlugin[]
+    registered: ServerConfigTheme[]
     default: string
   }
 

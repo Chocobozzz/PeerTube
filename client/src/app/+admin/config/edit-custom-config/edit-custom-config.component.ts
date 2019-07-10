@@ -75,6 +75,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   get availableThemes () {
     return this.serverService.getConfig().theme.registered
+      .map(t => t.name)
   }
 
   getResolutionKey (resolution: string) {

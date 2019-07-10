@@ -7,6 +7,10 @@
     "target": "http://localhost:9000",
     "secure": false
   },
+  "/themes": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
   "/static": {
     "target": "http://localhost:9000",
     "secure": false

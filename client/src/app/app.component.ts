@@ -72,6 +72,7 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoPlaylistPrivacies()
 
     this.loadPlugins()
+    this.themeService.initialize()
 
     // Do not display menu on small screens
     if (this.screenService.isInSmallView()) {
@@ -237,11 +238,7 @@ export class AppComponent implements OnInit {
       new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, undefined, this.i18n('Go to the videos upload page')),
-      new Hotkey('shift+t', (event: KeyboardEvent): boolean => {
-        this.themeService.toggleDarkTheme()
-        return false
-      }, undefined, this.i18n('Toggle Dark theme'))
+      }, undefined, this.i18n('Go to the videos upload page'))
     ])
   }
 }
