@@ -6,7 +6,8 @@ export interface PeerTubePlugin {
   uninstalled: boolean
   peertubeEngine: string
   description: string
-  settings: any
+  homepage: string
+  settings: { [ name: string ]: string }
   createdAt: Date
   updatedAt: Date
 }

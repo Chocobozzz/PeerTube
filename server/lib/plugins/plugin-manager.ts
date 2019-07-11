@@ -89,6 +89,8 @@ export class PluginManager {
   async runHook (hookName: string, param?: any) {
     let result = param
 
+    if (!this.hooks[hookName]) return result
+
     const wait = hookName.startsWith('static:')
 
     for (const hook of this.hooks[hookName]) {
@@ -162,8 +164,8 @@ export class PluginManager {
         : await installNpmPlugin(toInstall, version)
 
       name = fromDisk ? basename(toInstall) : toInstall
-      const pluginType = name.startsWith('peertube-theme-') ? PluginType.THEME : PluginType.PLUGIN
-      const pluginName = this.normalizePluginName(name)
+      const pluginType = PluginModel.getTypeFromNpmName(name)
+      const pluginName = PluginModel.normalizePluginName(name)
 
       const packageJSON = this.getPackageJSON(pluginName, pluginType)
       if (!isPackageJSONValid(packageJSON, pluginType)) {
@@ -173,6 +175,7 @@ export class PluginManager {
       [ plugin ] = await PluginModel.upsert({
         name: pluginName,
         description: packageJSON.description,
+        homepage: packageJSON.homepage,
         type: pluginType,
         version: packageJSON.version,
         enabled: true,
@@ -196,10 +199,10 @@ export class PluginManager {
     await this.registerPluginOrTheme(plugin)
   }
 
-  async uninstall (packageName: string) {
-    logger.info('Uninstalling plugin %s.', packageName)
+  async uninstall (npmName: string) {
+    logger.info('Uninstalling plugin %s.', npmName)
 
-    const pluginName = this.normalizePluginName(packageName)
+    const pluginName = PluginModel.normalizePluginName(npmName)
 
     try {
       await this.unregister(pluginName)
@@ -207,9 +210,9 @@ export class PluginManager {
       logger.warn('Cannot unregister plugin %s.', pluginName, { err })
     }
 
-    const plugin = await PluginModel.load(pluginName)
+    const plugin = await PluginModel.loadByNpmName(npmName)
     if (!plugin || plugin.uninstalled === true) {
-      logger.error('Cannot uninstall plugin %s: it does not exist or is already uninstalled.', packageName)
+      logger.error('Cannot uninstall plugin %s: it does not exist or is already uninstalled.', npmName)
       return
     }
 
@@ -218,9 +221,9 @@ export class PluginManager {
 
     await plugin.save()
 
-    await removeNpmPlugin(packageName)
+    await removeNpmPlugin(npmName)
 
-    logger.info('Plugin %s uninstalled.', packageName)
+    logger.info('Plugin %s uninstalled.', npmName)
   }
 
   // ###################### Private register ######################
@@ -351,10 +354,6 @@ export class PluginManager {
     const prefix = pluginType === PluginType.PLUGIN ? 'peertube-plugin-' : 'peertube-theme-'
 
     return join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules', prefix + pluginName)
-  }
-
-  private normalizePluginName (name: string) {
-    return name.replace(/^peertube-((theme)|(plugin))-/, '')
   }
 
   // ###################### Private getters ######################

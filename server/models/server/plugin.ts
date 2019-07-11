@@ -1,7 +1,7 @@
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSort, throwIfNotValid } from '../utils'
 import {
-  isPluginDescriptionValid,
+  isPluginDescriptionValid, isPluginHomepage,
   isPluginNameValid,
   isPluginTypeValid,
   isPluginVersionValid
@@ -20,7 +20,7 @@ import { FindAndCountOptions } from 'sequelize'
   tableName: 'plugin',
   indexes: [
     {
-      fields: [ 'name' ],
+      fields: [ 'name', 'type' ],
       unique: true
     }
   ]
@@ -59,6 +59,11 @@ export class PluginModel extends Model<PluginModel> {
   @Column
   description: string
 
+  @AllowNull(false)
+  @Is('PluginHomepage', value => throwIfNotValid(value, isPluginHomepage, 'homepage'))
+  @Column
+  homepage: string
+
   @AllowNull(true)
   @Column(DataType.JSONB)
   settings: any
@@ -84,10 +89,14 @@ export class PluginModel extends Model<PluginModel> {
     return PluginModel.findAll(query)
   }
 
-  static load (pluginName: string) {
+  static loadByNpmName (npmName: string) {
+    const name = this.normalizePluginName(npmName)
+    const type = this.getTypeFromNpmName(npmName)
+
     const query = {
       where: {
-        name: pluginName
+        name,
+        type
       }
     }
 
@@ -150,6 +159,16 @@ export class PluginModel extends Model<PluginModel> {
       })
   }
 
+  static normalizePluginName (name: string) {
+    return name.replace(/^peertube-((theme)|(plugin))-/, '')
+  }
+
+  static getTypeFromNpmName (npmName: string) {
+    return npmName.startsWith('peertube-plugin-')
+      ? PluginType.PLUGIN
+      : PluginType.THEME
+  }
+
   toFormattedJSON (): PeerTubePlugin {
     return {
       name: this.name,
@@ -159,6 +178,7 @@ export class PluginModel extends Model<PluginModel> {
       uninstalled: this.uninstalled,
       peertubeEngine: this.peertubeEngine,
       description: this.description,
+      homepage: this.homepage,
       settings: this.settings,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt

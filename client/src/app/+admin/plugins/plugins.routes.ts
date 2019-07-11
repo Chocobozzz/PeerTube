@@ -40,7 +40,7 @@ export const PluginsRoutes: Routes = [
         }
       },
       {
-        path: 'show/:name',
+        path: 'show/:npmName',
         component: PluginShowInstalledComponent,
         data: {
           meta: {

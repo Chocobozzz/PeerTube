@@ -41,6 +41,10 @@ function isPluginEngineValid (engine: any) {
   return exists(engine) && exists(engine.peertube)
 }
 
+function isPluginHomepage (value: string) {
+  return isUrlValid(value)
+}
+
 function isStaticDirectoriesValid (staticDirs: any) {
   if (!exists(staticDirs) || typeof staticDirs !== 'object') return false
 
@@ -70,7 +74,7 @@ function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginT
   return isNpmPluginNameValid(packageJSON.name) &&
     isPluginDescriptionValid(packageJSON.description) &&
     isPluginEngineValid(packageJSON.engine) &&
-    isUrlValid(packageJSON.homepage) &&
+    isPluginHomepage(packageJSON.homepage) &&
     exists(packageJSON.author) &&
     isUrlValid(packageJSON.bugs) &&
     (pluginType === PluginType.THEME || isSafePath(packageJSON.library)) &&
@@ -88,6 +92,7 @@ export {
   isPluginTypeValid,
   isPackageJSONValid,
   isThemeValid,
+  isPluginHomepage,
   isPluginVersionValid,
   isPluginNameValid,
   isPluginDescriptionValid,
