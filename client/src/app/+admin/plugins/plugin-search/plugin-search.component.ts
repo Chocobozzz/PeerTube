@@ -13,7 +13,10 @@ import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 @Component({
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
-  styleUrls: [ './plugin-search.component.scss' ]
+  styleUrls: [
+    '../shared/toggle-plugin-type.scss',
+    './plugin-search.component.scss'
+  ]
 })
 export class PluginSearchComponent implements OnInit {
   pluginTypeOptions: { label: string, value: PluginType }[] = []

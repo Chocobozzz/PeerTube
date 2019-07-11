@@ -12,7 +12,7 @@ import { pluginsSortValidator } from '../../middlewares/validators'
 import { PluginModel } from '../../models/server/plugin'
 import { UserRight } from '../../../shared/models/users'
 import {
-  enabledPluginValidator,
+  existingPluginValidator,
   installPluginValidator,
   listPluginsValidator,
   uninstallPluginValidator,
@@ -35,18 +35,25 @@ pluginRouter.get('/',
   asyncMiddleware(listPlugins)
 )
 
-pluginRouter.get('/:pluginName/settings',
+pluginRouter.get('/:npmName',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
-  asyncMiddleware(enabledPluginValidator),
-  asyncMiddleware(listPluginSettings)
+  asyncMiddleware(existingPluginValidator),
+  getPlugin
 )
 
-pluginRouter.put('/:pluginName/settings',
+pluginRouter.get('/:npmName/registered-settings',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_PLUGINS),
+  asyncMiddleware(existingPluginValidator),
+  asyncMiddleware(getPluginRegisteredSettings)
+)
+
+pluginRouter.put('/:npmName/settings',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   updatePluginSettingsValidator,
-  asyncMiddleware(enabledPluginValidator),
+  asyncMiddleware(existingPluginValidator),
   asyncMiddleware(updatePluginSettings)
 )
 
@@ -85,6 +92,12 @@ async function listPlugins (req: express.Request, res: express.Response) {
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
+function getPlugin (req: express.Request, res: express.Response) {
+  const plugin = res.locals.plugin
+
+  return res.json(plugin.toFormattedJSON())
+}
+
 async function installPlugin (req: express.Request, res: express.Response) {
   const body: InstallPlugin = req.body
 
@@ -101,7 +114,7 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
   return res.sendStatus(204)
 }
 
-async function listPluginSettings (req: express.Request, res: express.Response) {
+async function getPluginRegisteredSettings (req: express.Request, res: express.Response) {
   const plugin = res.locals.plugin
 
   const settings = await PluginManager.Instance.getSettings(plugin.name)

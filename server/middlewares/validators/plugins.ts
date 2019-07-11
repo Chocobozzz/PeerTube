@@ -63,7 +63,7 @@ const uninstallPluginValidator = [
   body('npmName').custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking managePluginValidator parameters', { parameters: req.body })
+    logger.debug('Checking uninstallPluginValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
 
@@ -71,15 +71,15 @@ const uninstallPluginValidator = [
   }
 ]
 
-const enabledPluginValidator = [
-  body('name').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
+const existingPluginValidator = [
+  param('npmName').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking enabledPluginValidator parameters', { parameters: req.body })
+    logger.debug('Checking enabledPluginValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
-    const plugin = await PluginModel.load(req.body.name)
+    const plugin = await PluginModel.loadByNpmName(req.params.npmName)
     if (!plugin) {
       return res.status(404)
          .json({ error: 'Plugin not found' })
@@ -110,7 +110,7 @@ export {
   servePluginStaticDirectoryValidator,
   updatePluginSettingsValidator,
   uninstallPluginValidator,
-  enabledPluginValidator,
+  existingPluginValidator,
   installPluginValidator,
   listPluginsValidator
 }
