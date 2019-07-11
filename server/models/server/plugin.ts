@@ -142,15 +142,17 @@ export class PluginModel extends Model<PluginModel> {
     count: number,
     sort: string
   }) {
+    const { uninstalled = false } = options
     const query: FindAndCountOptions = {
       offset: options.start,
       limit: options.count,
       order: getSort(options.sort),
-      where: {}
+      where: {
+        uninstalled
+      }
     }
 
     if (options.type) query.where['type'] = options.type
-    if (options.uninstalled) query.where['uninstalled'] = options.uninstalled
 
     return PluginModel
       .findAndCountAll(query)

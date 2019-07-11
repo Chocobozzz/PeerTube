@@ -3,7 +3,6 @@
   Useful to avoid circular dependencies.
 */
 
-import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
 import { createHash, HexBase64Latin1Encoding, pseudoRandomBytes } from 'crypto'
 import { isAbsolute, join } from 'path'
@@ -258,9 +257,6 @@ function promisify2WithVoid<T, U> (func: (arg1: T, arg2: U, cb: (err: any) => vo
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
-const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
-const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
-const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
@@ -287,13 +283,11 @@ export {
 
   promisify0,
   promisify1,
+  promisify2,
 
   pseudoRandomBytesPromise,
   createPrivateKey,
   getPublicKey,
-  bcryptComparePromise,
-  bcryptGenSaltPromise,
-  bcryptHashPromise,
   createTorrentPromise,
   execPromise2,
   execPromise

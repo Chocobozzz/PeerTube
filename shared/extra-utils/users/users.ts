@@ -1,11 +1,11 @@
 import * as request from 'supertest'
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
-
-import { UserCreate, UserRole } from '../../index'
+import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
 import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
-import { ServerInfo, userLogin } from '..'
 import { UserAdminFlag } from '../../models/users/user-flag.model'
 import { UserRegister } from '../../models/users/user-register.model'
+import { UserRole } from '../../models/users/user-role'
+import { ServerInfo } from '../server/servers'
+import { userLogin } from './login'
 
 type CreateUserArgs = { url: string,
   accessToken: string,

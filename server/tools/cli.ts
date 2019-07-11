@@ -1,7 +1,8 @@
 import { Netrc } from 'netrc-parser'
 import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 import { join } from 'path'
-import { getVideoChannel, root } from '../../shared/extra-utils'
+import { root } from '../../shared/extra-utils/miscs/miscs'
+import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
 import { Command } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 
@@ -64,7 +65,11 @@ function deleteSettings () {
   })
 }
 
-function getRemoteObjectOrDie (program: any, settings: Settings, netrc: Netrc) {
+function getRemoteObjectOrDie (
+  program: any,
+  settings: Settings,
+  netrc: Netrc
+): { url: string, username: string, password: string } {
   if (!program['url'] || !program['username'] || !program['password']) {
     // No remote and we don't have program parameters: quit
     if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
@@ -161,6 +166,13 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
   return videoAttributes
 }
 
+function getServerCredentials (program: any) {
+  return Promise.all([ getSettings(), getNetrc() ])
+         .then(([ settings, netrc ]) => {
+           return getRemoteObjectOrDie(program, settings, netrc)
+         })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -171,6 +183,8 @@ export {
   getRemoteObjectOrDie,
   writeSettings,
   deleteSettings,
+
+  getServerCredentials,
 
   buildCommonVideoOptions,
   buildVideoAttributesFromCommander

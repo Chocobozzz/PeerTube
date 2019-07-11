@@ -21,6 +21,7 @@ import {
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { InstallPlugin } from '../../../shared/models/plugins/install-plugin.model'
 import { ManagePlugin } from '../../../shared/models/plugins/manage-plugin.model'
+import { logger } from '../../helpers/logger'
 
 const pluginRouter = express.Router()
 
@@ -46,7 +47,7 @@ pluginRouter.get('/:npmName/registered-settings',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   asyncMiddleware(existingPluginValidator),
-  asyncMiddleware(getPluginRegisteredSettings)
+  getPluginRegisteredSettings
 )
 
 pluginRouter.put('/:npmName/settings',
@@ -101,7 +102,14 @@ function getPlugin (req: express.Request, res: express.Response) {
 async function installPlugin (req: express.Request, res: express.Response) {
   const body: InstallPlugin = req.body
 
-  await PluginManager.Instance.install(body.npmName)
+  const fromDisk = !!body.path
+  const toInstall = body.npmName || body.path
+  try {
+    await PluginManager.Instance.install(toInstall, undefined, fromDisk)
+  } catch (err) {
+    logger.warn('Cannot install plugin %s.', toInstall, { err })
+    return res.sendStatus(400)
+  }
 
   return res.sendStatus(204)
 }
@@ -114,10 +122,10 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
   return res.sendStatus(204)
 }
 
-async function getPluginRegisteredSettings (req: express.Request, res: express.Response) {
+function getPluginRegisteredSettings (req: express.Request, res: express.Response) {
   const plugin = res.locals.plugin
 
-  const settings = await PluginManager.Instance.getSettings(plugin.name)
+  const settings = PluginManager.Instance.getSettings(plugin.name)
 
   return res.json({
     settings

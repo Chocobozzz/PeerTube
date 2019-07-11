@@ -8,7 +8,7 @@ import { pathExists, readFile } from 'fs-extra'
 import * as ffmpeg from 'fluent-ffmpeg'
 
 const expect = chai.expect
-let webtorrent = new WebTorrent()
+let webtorrent: WebTorrent.Instance
 
 function immutableAssign <T, U> (target: T, source: U) {
   return Object.assign<{}, T, U>({}, target, source)
@@ -27,6 +27,9 @@ function wait (milliseconds: number) {
 }
 
 function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
+  const WebTorrent = require('webtorrent')
+
+  if (!webtorrent) webtorrent = new WebTorrent()
   if (refreshWebTorrent === true) webtorrent = new WebTorrent()
 
   return new Promise<WebTorrent.Torrent>(res => webtorrent.add(torrent, res))

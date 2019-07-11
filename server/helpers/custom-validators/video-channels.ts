@@ -51,7 +51,9 @@ export {
 
 function processVideoChannelExist (videoChannel: VideoChannelModel, res: express.Response) {
   if (!videoChannel) {
-    ``
+    res.status(404)
+       .json({ error: 'Video channel not found' })
+       .end()
 
     return false
   }

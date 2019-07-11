@@ -1,8 +1,10 @@
 import * as request from 'supertest'
-import { VideoChannelCreate, VideoChannelUpdate } from '../../models/videos'
+import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
+import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
 import { makeGetRequest, updateAvatarRequest } from '../requests/requests'
-import { getMyUserInformation, ServerInfo } from '..'
-import { User } from '../..'
+import { ServerInfo } from '../server/servers'
+import { User } from '../../models/users/user.model'
+import { getMyUserInformation } from '../users/users'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-channels'

@@ -6,6 +6,7 @@ import { isPluginNameValid, isPluginTypeValid, isPluginVersionValid, isNpmPlugin
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { isBooleanValid, isSafePath } from '../../helpers/custom-validators/misc'
 import { PluginModel } from '../../models/server/plugin'
+import { InstallPlugin } from '../../../shared/models/plugins/install-plugin.model'
 
 const servePluginStaticDirectoryValidator = [
   param('pluginName').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
@@ -48,12 +49,24 @@ const listPluginsValidator = [
 ]
 
 const installPluginValidator = [
-  body('npmName').custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
+  body('npmName')
+    .optional()
+    .custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
+  body('path')
+    .optional()
+    .custom(isSafePath).withMessage('Should have a valid safe path'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking installPluginValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
+    const body: InstallPlugin = req.body
+    if (!body.path && !body.npmName) {
+      return res.status(400)
+                .json({ error: 'Should have either a npmName or a path' })
+                .end()
+    }
 
     return next()
   }

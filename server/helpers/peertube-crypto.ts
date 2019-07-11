@@ -1,12 +1,17 @@
 import { Request } from 'express'
 import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
 import { ActorModel } from '../models/activitypub/actor'
-import { bcryptComparePromise, bcryptGenSaltPromise, bcryptHashPromise, createPrivateKey, getPublicKey, sha256 } from './core-utils'
+import { createPrivateKey, getPublicKey, promisify1, promisify2, sha256 } from './core-utils'
 import { jsig, jsonld } from './custom-jsonld-signature'
 import { logger } from './logger'
 import { cloneDeep } from 'lodash'
 import { createVerify } from 'crypto'
 import { buildDigest } from '../lib/job-queue/handlers/utils/activitypub-http-utils'
+import * as bcrypt from 'bcrypt'
+
+const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
+const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
+const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
 
 const httpSignature = require('http-signature')
 
@@ -147,3 +152,5 @@ export {
   cryptPassword,
   signJsonLDObject
 }
+
+// ---------------------------------------------------------------------------
