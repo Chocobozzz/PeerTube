@@ -1,8 +1,8 @@
 import * as program from 'commander'
 import * as prompt from 'prompt'
-import { getSettings, writeSettings, getNetrc } from './cli'
-import { isHostValid } from '../helpers/custom-validators/servers'
+import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
+import { getAccessToken, login } from '../../shared/extra-utils'
 
 const Table = require('cli-table')
 
@@ -76,6 +76,14 @@ program
         }
       }
     }, async (_, result) => {
+      // Check credentials
+      try {
+        await getAccessToken(result.url, result.username, result.password)
+      } catch (err) {
+        console.error(err.message)
+        process.exit(-1)
+      }
+
       await setInstance(result.url, result.username, result.password, program['default'])
 
       process.exit(0)

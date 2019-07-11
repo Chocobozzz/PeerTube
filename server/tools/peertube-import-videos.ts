@@ -11,7 +11,7 @@ import * as prompt from 'prompt'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
-import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
+import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
 
 type UserInfo = {
   username: string
@@ -36,27 +36,25 @@ command
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
-Promise.all([ getSettings(), getNetrc() ])
-       .then(([ settings, netrc ]) => {
-         const { url, username, password } = getRemoteObjectOrDie(program, settings, netrc)
+getServerCredentials(command)
+  .then(({ url, username, password }) => {
+    if (!program[ 'targetUrl' ]) {
+      console.error('--targetUrl field is required.')
 
-         if (!program[ 'targetUrl' ]) {
-           console.error('--targetUrl field is required.')
+      process.exit(-1)
+    }
 
-           process.exit(-1)
-         }
+    removeEndSlashes(url)
+    removeEndSlashes(program[ 'targetUrl' ])
 
-         removeEndSlashes(url)
-         removeEndSlashes(program[ 'targetUrl' ])
+    const user = { username, password }
 
-         const user = { username, password }
-
-         run(url, user)
-           .catch(err => {
-             console.error(err)
-             process.exit(-1)
-           })
-       })
+    run(url, user)
+      .catch(err => {
+        console.error(err)
+        process.exit(-1)
+      })
+  })
 
 async function run (url: string, user: UserInfo) {
   if (!user.password) {

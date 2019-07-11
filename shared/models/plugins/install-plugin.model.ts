@@ -1,3 +1,4 @@
 export interface InstallPlugin {
-  npmName: string
+  npmName?: string
+  path?: string
 }

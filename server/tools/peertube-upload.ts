@@ -1,9 +1,9 @@
 import * as program from 'commander'
 import { access, constants } from 'fs-extra'
 import { isAbsolute } from 'path'
-import { getClient, login } from '../../shared/extra-utils'
+import { getAccessToken } from '../../shared/extra-utils'
 import { uploadVideo } from '../../shared/extra-utils/'
-import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getNetrc, getRemoteObjectOrDie, getSettings } from './cli'
+import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
 
 let command = program
   .name('upload')
@@ -11,7 +11,6 @@ let command = program
 command = buildCommonVideoOptions(command)
 
 command
-
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
@@ -20,44 +19,28 @@ command
   .option('-f, --file <file>', 'Video absolute file path')
   .parse(process.argv)
 
-Promise.all([ getSettings(), getNetrc() ])
-       .then(([ settings, netrc ]) => {
-         const { url, username, password } = getRemoteObjectOrDie(program, settings, netrc)
+getServerCredentials(command)
+  .then(({ url, username, password }) => {
+    if (!program[ 'videoName' ] || !program[ 'file' ]) {
+      if (!program[ 'videoName' ]) console.error('--video-name is required.')
+      if (!program[ 'file' ]) console.error('--file is required.')
 
-         if (!program[ 'videoName' ] || !program[ 'file' ]) {
-           if (!program[ 'videoName' ]) console.error('--video-name is required.')
-           if (!program[ 'file' ]) console.error('--file is required.')
+      process.exit(-1)
+    }
 
-           process.exit(-1)
-         }
+    if (isAbsolute(program[ 'file' ]) === false) {
+      console.error('File path should be absolute.')
+      process.exit(-1)
+    }
 
-         if (isAbsolute(program[ 'file' ]) === false) {
-           console.error('File path should be absolute.')
-           process.exit(-1)
-         }
-
-         run(url, username, password).catch(err => {
-           console.error(err)
-           process.exit(-1)
-         })
-       })
+    run(url, username, password).catch(err => {
+      console.error(err)
+      process.exit(-1)
+    })
+  })
 
 async function run (url: string, username: string, password: string) {
-  const resClient = await getClient(url)
-  const client = {
-    id: resClient.body.client_id,
-    secret: resClient.body.client_secret
-  }
-
-  const user = { username, password }
-
-  let accessToken: string
-  try {
-    const res = await login(url, client, user)
-    accessToken = res.body.access_token
-  } catch (err) {
-    throw new Error('Cannot authenticate. Please check your username/password.')
-  }
+  const accessToken = await getAccessToken(url, username, password)
 
   await access(program[ 'file' ], constants.F_OK)
 
