@@ -9,7 +9,7 @@ import {
 } from '../../helpers/custom-validators/plugins'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
-import { FindAndCountOptions } from 'sequelize'
+import { FindAndCountOptions, json } from 'sequelize'
 
 @DefaultScope(() => ({
   attributes: {
@@ -140,6 +140,40 @@ export class PluginModel extends Model<PluginModel> {
 
     return PluginModel.update(toSave, query)
       .then(() => undefined)
+  }
+
+  static getData (pluginName: string, pluginType: PluginType, key: string) {
+    const query = {
+      raw: true,
+      attributes: [ [ json('storage.' + key), 'value' ] as any ], // FIXME: typings
+      where: {
+        name: pluginName,
+        type: pluginType
+      }
+    }
+
+    return PluginModel.findOne(query)
+      .then((c: any) =>  {
+        if (!c) return undefined
+
+        return c.value
+      })
+  }
+
+  static storeData (pluginName: string, pluginType: PluginType, key: string, data: any) {
+    const query = {
+      where: {
+        name: pluginName,
+        type: pluginType
+      }
+    }
+
+    const toSave = {
+      [`storage.${key}`]: data
+    }
+
+    return PluginModel.update(toSave, query)
+                      .then(() => undefined)
   }
 
   static listForApi (options: {

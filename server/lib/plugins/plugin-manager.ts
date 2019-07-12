@@ -13,6 +13,7 @@ import { outputFile } from 'fs-extra'
 import { RegisterSettingOptions } from '../../../shared/models/plugins/register-setting.model'
 import { RegisterHookOptions } from '../../../shared/models/plugins/register-hook.model'
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
+import { PluginStorageManager } from '../../../shared/models/plugins/plugin-storage-manager.model'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -307,13 +308,24 @@ export class PluginManager {
       setSetting: (name: string, value: string) => PluginModel.setSetting(plugin.name, plugin.type, name, value)
     }
 
+    const storageManager: PluginStorageManager = {
+      getData: (key: string) => PluginModel.getData(plugin.name, plugin.type, key),
+
+      storeData: (key: string, data: any) => PluginModel.storeData(plugin.name, plugin.type, key, data)
+    }
+
     const library: PluginLibrary = require(join(pluginPath, packageJSON.library))
 
     if (!isLibraryCodeValid(library)) {
       throw new Error('Library code is not valid (miss register or unregister function)')
     }
 
-    library.register({ registerHook, registerSetting, settingsManager })
+    library.register({
+      registerHook,
+      registerSetting,
+      settingsManager,
+      storageManager
+    })
 
     logger.info('Add plugin %s CSS to global file.', npmName)
 
