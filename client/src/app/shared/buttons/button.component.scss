@@ -1,6 +1,12 @@
 @import '_variables';
 @import '_mixins';
 
+my-small-loader /deep/ .root {
+  display: inline-block;
+  margin: 0 3px 0 0;
+  width: 20px;
+}
+
 .action-button {
   @include peertube-button-link;
   @include button-with-icon(21px, 0, -2px);

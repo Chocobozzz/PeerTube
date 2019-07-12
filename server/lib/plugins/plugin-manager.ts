@@ -15,6 +15,7 @@ import { RegisterHookOptions } from '../../../shared/models/plugins/register-hoo
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
 
 export interface RegisteredPlugin {
+  npmName: string
   name: string
   version: string
   description: string
@@ -34,6 +35,7 @@ export interface RegisteredPlugin {
 }
 
 export interface HookInformationValue {
+  npmName: string
   pluginName: string
   handler: Function
   priority: number
@@ -52,12 +54,13 @@ export class PluginManager {
 
   // ###################### Getters ######################
 
-  getRegisteredPluginOrTheme (name: string) {
-    return this.registeredPlugins[name]
+  getRegisteredPluginOrTheme (npmName: string) {
+    return this.registeredPlugins[npmName]
   }
 
   getRegisteredPlugin (name: string) {
-    const registered = this.getRegisteredPluginOrTheme(name)
+    const npmName = PluginModel.buildNpmName(name, PluginType.PLUGIN)
+    const registered = this.getRegisteredPluginOrTheme(npmName)
 
     if (!registered || registered.type !== PluginType.PLUGIN) return undefined
 
@@ -65,7 +68,8 @@ export class PluginManager {
   }
 
   getRegisteredTheme (name: string) {
-    const registered = this.getRegisteredPluginOrTheme(name)
+    const npmName = PluginModel.buildNpmName(name, PluginType.THEME)
+    const registered = this.getRegisteredPluginOrTheme(npmName)
 
     if (!registered || registered.type !== PluginType.THEME) return undefined
 
@@ -80,8 +84,8 @@ export class PluginManager {
     return this.getRegisteredPluginsOrThemes(PluginType.THEME)
   }
 
-  getSettings (name: string) {
-    return this.settings[name] || []
+  getRegisteredSettings (npmName: string) {
+    return this.settings[npmName] || []
   }
 
   // ###################### Hooks ######################
@@ -126,35 +130,36 @@ export class PluginManager {
     this.sortHooksByPriority()
   }
 
-  async unregister (name: string) {
-    const plugin = this.getRegisteredPlugin(name)
+  // Don't need the plugin type since themes cannot register server code
+  async unregister (npmName: string) {
+    logger.info('Unregister plugin %s.', npmName)
+
+    const plugin = this.getRegisteredPluginOrTheme(npmName)
 
     if (!plugin) {
-      throw new Error(`Unknown plugin ${name} to unregister`)
+      throw new Error(`Unknown plugin ${npmName} to unregister`)
     }
 
-    if (plugin.type === PluginType.THEME) {
-      throw new Error(`Cannot unregister ${name}: this is a theme`)
+    if (plugin.type === PluginType.PLUGIN) {
+      await plugin.unregister()
+
+      // Remove hooks of this plugin
+      for (const key of Object.keys(this.hooks)) {
+        this.hooks[key] = this.hooks[key].filter(h => h.pluginName !== npmName)
+      }
+
+      logger.info('Regenerating registered plugin CSS to global file.')
+      await this.regeneratePluginGlobalCSS()
     }
 
-    await plugin.unregister()
-
-    // Remove hooks of this plugin
-    for (const key of Object.keys(this.hooks)) {
-      this.hooks[key] = this.hooks[key].filter(h => h.pluginName !== name)
-    }
-
-    delete this.registeredPlugins[plugin.name]
-
-    logger.info('Regenerating registered plugin CSS to global file.')
-    await this.regeneratePluginGlobalCSS()
+    delete this.registeredPlugins[plugin.npmName]
   }
 
   // ###################### Installation ######################
 
   async install (toInstall: string, version?: string, fromDisk = false) {
     let plugin: PluginModel
-    let name: string
+    let npmName: string
 
     logger.info('Installing plugin %s.', toInstall)
 
@@ -163,9 +168,9 @@ export class PluginManager {
         ? await installNpmPluginFromDisk(toInstall)
         : await installNpmPlugin(toInstall, version)
 
-      name = fromDisk ? basename(toInstall) : toInstall
-      const pluginType = PluginModel.getTypeFromNpmName(name)
-      const pluginName = PluginModel.normalizePluginName(name)
+      npmName = fromDisk ? basename(toInstall) : toInstall
+      const pluginType = PluginModel.getTypeFromNpmName(npmName)
+      const pluginName = PluginModel.normalizePluginName(npmName)
 
       const packageJSON = this.getPackageJSON(pluginName, pluginType)
       if (!isPackageJSONValid(packageJSON, pluginType)) {
@@ -186,7 +191,7 @@ export class PluginManager {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err })
 
       try {
-        await removeNpmPlugin(name)
+        await removeNpmPlugin(npmName)
       } catch (err) {
         logger.error('Cannot remove plugin %s after failed installation.', toInstall, { err })
       }
@@ -197,17 +202,28 @@ export class PluginManager {
     logger.info('Successful installation of plugin %s.', toInstall)
 
     await this.registerPluginOrTheme(plugin)
+
+    return plugin
+  }
+
+  async update (toUpdate: string, version?: string, fromDisk = false) {
+    const npmName = fromDisk ? basename(toUpdate) : toUpdate
+
+    logger.info('Updating plugin %s.', npmName)
+
+    // Unregister old hooks
+    await this.unregister(npmName)
+
+    return this.install(toUpdate, version, fromDisk)
   }
 
   async uninstall (npmName: string) {
     logger.info('Uninstalling plugin %s.', npmName)
 
-    const pluginName = PluginModel.normalizePluginName(npmName)
-
     try {
-      await this.unregister(pluginName)
+      await this.unregister(npmName)
     } catch (err) {
-      logger.warn('Cannot unregister plugin %s.', pluginName, { err })
+      logger.warn('Cannot unregister plugin %s.', npmName, { err })
     }
 
     const plugin = await PluginModel.loadByNpmName(npmName)
@@ -229,7 +245,9 @@ export class PluginManager {
   // ###################### Private register ######################
 
   private async registerPluginOrTheme (plugin: PluginModel) {
-    logger.info('Registering plugin or theme %s.', plugin.name)
+    const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
+    logger.info('Registering plugin or theme %s.', npmName)
 
     const packageJSON = this.getPackageJSON(plugin.name, plugin.type)
     const pluginPath = this.getPluginPath(plugin.name, plugin.type)
@@ -248,7 +266,8 @@ export class PluginManager {
       clientScripts[c.script] = c
     }
 
-    this.registeredPlugins[ plugin.name ] = {
+    this.registeredPlugins[ npmName ] = {
+      npmName,
       name: plugin.name,
       type: plugin.type,
       version: plugin.version,
@@ -263,10 +282,13 @@ export class PluginManager {
   }
 
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJson) {
+    const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
     const registerHook = (options: RegisterHookOptions) => {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
       this.hooks[options.target].push({
+        npmName,
         pluginName: plugin.name,
         handler: options.handler,
         priority: options.priority || 0
@@ -274,15 +296,15 @@ export class PluginManager {
     }
 
     const registerSetting = (options: RegisterSettingOptions) => {
-      if (!this.settings[plugin.name]) this.settings[plugin.name] = []
+      if (!this.settings[npmName]) this.settings[npmName] = []
 
-      this.settings[plugin.name].push(options)
+      this.settings[npmName].push(options)
     }
 
     const settingsManager: PluginSettingsManager = {
-      getSetting: (name: string) => PluginModel.getSetting(plugin.name, name),
+      getSetting: (name: string) => PluginModel.getSetting(plugin.name, plugin.type, name),
 
-      setSetting: (name: string, value: string) => PluginModel.setSetting(plugin.name, name, value)
+      setSetting: (name: string, value: string) => PluginModel.setSetting(plugin.name, plugin.type, name, value)
     }
 
     const library: PluginLibrary = require(join(pluginPath, packageJSON.library))
@@ -293,7 +315,7 @@ export class PluginManager {
 
     library.register({ registerHook, registerSetting, settingsManager })
 
-    logger.info('Add plugin %s CSS to global file.', plugin.name)
+    logger.info('Add plugin %s CSS to global file.', npmName)
 
     await this.addCSSToGlobalFile(pluginPath, packageJSON.css)
 
@@ -351,9 +373,9 @@ export class PluginManager {
   }
 
   private getPluginPath (pluginName: string, pluginType: PluginType) {
-    const prefix = pluginType === PluginType.PLUGIN ? 'peertube-plugin-' : 'peertube-theme-'
+    const npmName = PluginModel.buildNpmName(pluginName, pluginType)
 
-    return join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules', prefix + pluginName)
+    return join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules', npmName)
   }
 
   // ###################### Private getters ######################
@@ -361,8 +383,8 @@ export class PluginManager {
   private getRegisteredPluginsOrThemes (type: PluginType) {
     const plugins: RegisteredPlugin[] = []
 
-    for (const pluginName of Object.keys(this.registeredPlugins)) {
-      const plugin = this.registeredPlugins[ pluginName ]
+    for (const npmName of Object.keys(this.registeredPlugins)) {
+      const plugin = this.registeredPlugins[ npmName ]
       if (plugin.type !== type) continue
 
       plugins.push(plugin)

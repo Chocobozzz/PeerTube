@@ -6,6 +6,7 @@ import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pa
 import { ConfirmService, Notifier } from '@app/core'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ActivatedRoute, Router } from '@angular/router'
+import { compareSemVer } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-plugin-list-installed',
@@ -26,6 +27,9 @@ export class PluginListInstalledComponent implements OnInit {
   sort = 'name'
 
   plugins: PeerTubePlugin[] = []
+  updating: { [name: string]: boolean } = {}
+
+  PluginType = PluginType
 
   constructor (
     private i18n: I18n,
@@ -49,7 +53,7 @@ export class PluginListInstalledComponent implements OnInit {
     this.pagination.currentPage = 1
     this.plugins = []
 
-    this.router.navigate([], { queryParams: { pluginType: this.pluginType }})
+    this.router.navigate([], { queryParams: { pluginType: this.pluginType } })
 
     this.loadMorePlugins()
   }
@@ -82,6 +86,18 @@ export class PluginListInstalledComponent implements OnInit {
     return this.i18n('You don\'t have themes installed yet.')
   }
 
+  isUpdateAvailable (plugin: PeerTubePlugin) {
+    return plugin.latestVersion && compareSemVer(plugin.latestVersion, plugin.version) > 0
+  }
+
+  getUpdateLabel (plugin: PeerTubePlugin) {
+    return this.i18n('Update to {{version}}', { version: plugin.latestVersion })
+  }
+
+  isUpdating (plugin: PeerTubePlugin) {
+    return !!this.updating[this.getUpdatingKey(plugin)]
+  }
+
   async uninstall (plugin: PeerTubePlugin) {
     const res = await this.confirmService.confirm(
       this.i18n('Do you really want to uninstall {{pluginName}}?', { pluginName: plugin.name }),
@@ -102,7 +118,32 @@ export class PluginListInstalledComponent implements OnInit {
       )
   }
 
+  async update (plugin: PeerTubePlugin) {
+    const updatingKey = this.getUpdatingKey(plugin)
+    if (this.updating[updatingKey]) return
+
+    this.updating[updatingKey] = true
+
+    this.pluginService.update(plugin.name, plugin.type)
+        .pipe()
+        .subscribe(
+          res => {
+            this.updating[updatingKey] = false
+
+            this.notifier.success(this.i18n('{{pluginName}} updated.', { pluginName: plugin.name }))
+
+            Object.assign(plugin, res)
+          },
+
+          err => this.notifier.error(err.message)
+        )
+  }
+
   getShowRouterLink (plugin: PeerTubePlugin) {
     return [ '/admin', 'plugins', 'show', this.pluginService.nameToNpmName(plugin.name, plugin.type) ]
+  }
+
+  private getUpdatingKey (plugin: PeerTubePlugin) {
+    return plugin.name + plugin.type
   }
 }

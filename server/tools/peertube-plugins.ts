@@ -2,7 +2,7 @@ import * as program from 'commander'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { getAccessToken } from '../../shared/extra-utils/users/login'
 import { getMyUserInformation } from '../../shared/extra-utils/users/users'
-import { installPlugin, listPlugins, uninstallPlugin } from '../../shared/extra-utils/server/plugins'
+import { installPlugin, listPlugins, uninstallPlugin, updatePlugin } from '../../shared/extra-utils/server/plugins'
 import { getServerCredentials } from './cli'
 import { User, UserRole } from '../../shared/models/users'
 import { PeerTubePlugin } from '../../shared/models/plugins/peertube-plugin.model'
@@ -33,6 +33,16 @@ program
   .option('-P --path <path>', 'Install from a path')
   .option('-n, --npm-name <npmName>', 'Install from npm')
   .action((options) => installPluginCLI(options))
+
+program
+  .command('update')
+  .description('Update a plugin or a theme')
+  .option('-u, --url <url>', 'Server url')
+  .option('-U, --username <username>', 'Username')
+  .option('-p, --password <token>', 'Password')
+  .option('-P --path <path>', 'Update from a path')
+  .option('-n, --npm-name <npmName>', 'Update from npm')
+  .action((options) => updatePluginCLI(options))
 
 program
   .command('uninstall')
@@ -119,6 +129,38 @@ async function installPluginCLI (options: any) {
   }
 
   console.log('Plugin installed.')
+  process.exit(0)
+}
+
+async function updatePluginCLI (options: any) {
+  if (!options['path'] && !options['npmName']) {
+    console.error('You need to specify the npm name or the path of the plugin you want to update.\n')
+    program.outputHelp()
+    process.exit(-1)
+  }
+
+  if (options['path'] && !isAbsolute(options['path'])) {
+    console.error('Path should be absolute.')
+    process.exit(-1)
+  }
+
+  const { url, username, password } = await getServerCredentials(options)
+  const accessToken = await getAdminTokenOrDie(url, username, password)
+
+  try {
+    await updatePlugin({
+      url,
+      accessToken,
+      npmName: options['npmName'],
+      path: options['path']
+    })
+  } catch (err) {
+    console.error('Cannot update plugin.', err)
+    process.exit(-1)
+    return
+  }
+
+  console.log('Plugin updated.')
   process.exit(0)
 }
 

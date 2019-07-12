@@ -1,7 +1,8 @@
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSort, throwIfNotValid } from '../utils'
 import {
-  isPluginDescriptionValid, isPluginHomepage,
+  isPluginDescriptionValid,
+  isPluginHomepage,
   isPluginNameValid,
   isPluginTypeValid,
   isPluginVersionValid
@@ -41,6 +42,11 @@ export class PluginModel extends Model<PluginModel> {
   @Is('PluginVersion', value => throwIfNotValid(value, isPluginVersionValid, 'version'))
   @Column
   version: string
+
+  @AllowNull(true)
+  @Is('PluginLatestVersion', value => throwIfNotValid(value, isPluginVersionValid, 'version'))
+  @Column
+  latestVersion: string
 
   @AllowNull(false)
   @Column
@@ -103,27 +109,28 @@ export class PluginModel extends Model<PluginModel> {
     return PluginModel.findOne(query)
   }
 
-  static getSetting (pluginName: string, settingName: string) {
+  static getSetting (pluginName: string, pluginType: PluginType, settingName: string) {
     const query = {
       attributes: [ 'settings' ],
       where: {
-        name: pluginName
+        name: pluginName,
+        type: pluginType
       }
     }
 
     return PluginModel.findOne(query)
-      .then(p => p.settings)
-      .then(settings => {
-        if (!settings) return undefined
+      .then(p => {
+        if (!p || !p.settings) return undefined
 
-        return settings[settingName]
+        return p.settings[settingName]
       })
   }
 
-  static setSetting (pluginName: string, settingName: string, settingValue: string) {
+  static setSetting (pluginName: string, pluginType: PluginType, settingName: string, settingValue: string) {
     const query = {
       where: {
-        name: pluginName
+        name: pluginName,
+        type: pluginType
       }
     }
 
@@ -171,11 +178,18 @@ export class PluginModel extends Model<PluginModel> {
       : PluginType.THEME
   }
 
+  static buildNpmName (name: string, type: PluginType) {
+    if (type === PluginType.THEME) return 'peertube-theme-' + name
+
+    return 'peertube-plugin-' + name
+  }
+
   toFormattedJSON (): PeerTubePlugin {
     return {
       name: this.name,
       type: this.type,
       version: this.version,
+      latestVersion: this.latestVersion,
       enabled: this.enabled,
       uninstalled: this.uninstalled,
       peertubeEngine: this.peertubeEngine,
