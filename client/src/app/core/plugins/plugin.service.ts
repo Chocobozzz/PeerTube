@@ -48,7 +48,9 @@ export class PluginService {
                .toPromise()
   }
 
-  addPlugin (plugin: ServerConfigPlugin) {
+  addPlugin (plugin: ServerConfigPlugin, isTheme = false) {
+    const pathPrefix = isTheme ? '/themes' : '/plugins'
+
     for (const key of Object.keys(plugin.clientScripts)) {
       const clientScript = plugin.clientScripts[key]
 
@@ -58,7 +60,7 @@ export class PluginService {
         this.scopes[scope].push({
           plugin,
           clientScript: {
-            script: environment.apiUrl + `/plugins/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`,
+            script: environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`,
             scopes: clientScript.scopes
           }
         })

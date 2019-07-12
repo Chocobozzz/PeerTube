@@ -35,3 +35,7 @@
   @include peertube-button-link;
   @include button-with-icon(21px, 0, -2px);
 }
+
+.update-button[disabled="true"] /deep/ .action-button {
+  cursor: default !important;
+}

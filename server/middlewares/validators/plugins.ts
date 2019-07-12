@@ -1,14 +1,15 @@
 import * as express from 'express'
-import { param, query, body } from 'express-validator/check'
+import { body, param, query } from 'express-validator/check'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
-import { isPluginNameValid, isPluginTypeValid, isPluginVersionValid, isNpmPluginNameValid } from '../../helpers/custom-validators/plugins'
+import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { isBooleanValid, isSafePath } from '../../helpers/custom-validators/misc'
 import { PluginModel } from '../../models/server/plugin'
-import { InstallPlugin } from '../../../shared/models/plugins/install-plugin.model'
+import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
+import { PluginType } from '../../../shared/models/plugins/plugin.type'
 
-const servePluginStaticDirectoryValidator = [
+const servePluginStaticDirectoryValidator = (pluginType: PluginType) => [
   param('pluginName').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
   param('pluginVersion').custom(isPluginVersionValid).withMessage('Should have a valid plugin version'),
   param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
@@ -18,7 +19,8 @@ const servePluginStaticDirectoryValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const plugin = PluginManager.Instance.getRegisteredPluginOrTheme(req.params.pluginName)
+    const npmName = PluginModel.buildNpmName(req.params.pluginName, pluginType)
+    const plugin = PluginManager.Instance.getRegisteredPluginOrTheme(npmName)
 
     if (!plugin || plugin.version !== req.params.pluginVersion) {
       return res.sendStatus(404)
@@ -48,7 +50,7 @@ const listPluginsValidator = [
   }
 ]
 
-const installPluginValidator = [
+const installOrUpdatePluginValidator = [
   body('npmName')
     .optional()
     .custom(isNpmPluginNameValid).withMessage('Should have a valid npm name'),
@@ -57,11 +59,11 @@ const installPluginValidator = [
     .custom(isSafePath).withMessage('Should have a valid safe path'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking installPluginValidator parameters', { parameters: req.body })
+    logger.debug('Checking installOrUpdatePluginValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
 
-    const body: InstallPlugin = req.body
+    const body: InstallOrUpdatePlugin = req.body
     if (!body.path && !body.npmName) {
       return res.status(400)
                 .json({ error: 'Should have either a npmName or a path' })
@@ -124,6 +126,6 @@ export {
   updatePluginSettingsValidator,
   uninstallPluginValidator,
   existingPluginValidator,
-  installPluginValidator,
+  installOrUpdatePluginValidator,
   listPluginsValidator
 }

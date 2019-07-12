@@ -36,6 +36,8 @@
     "danger:clean:prod": "scripty",
     "danger:clean:modules": "scripty",
     "i18n:generate": "scripty",
+    "plugin:install": "node ./dist/scripts/plugin/install.js",
+    "plugin:uninstall": "node ./dist/scripts/plugin/uninstall.js",
     "i18n:xliff2json": "node ./dist/scripts/i18n/xliff2json.js",
     "i18n:create-custom-files": "node ./dist/scripts/i18n/create-custom-files.js",
     "reset-password": "node ./dist/scripts/reset-password.js",

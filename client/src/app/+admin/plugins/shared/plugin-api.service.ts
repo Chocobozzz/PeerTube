@@ -9,7 +9,7 @@ import { ComponentPagination } from '@app/shared/rest/component-pagination.model
 import { ResultList } from '@shared/models'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ManagePlugin } from '@shared/models/plugins/manage-plugin.model'
-import { InstallPlugin } from '@shared/models/plugins/install-plugin.model'
+import { InstallOrUpdatePlugin } from '@shared/models/plugins/install-plugin.model'
 import { RegisterSettingOptions } from '@shared/models/plugins/register-setting.model'
 
 @Injectable()
@@ -89,8 +89,17 @@ export class PluginApiService {
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
+  update (pluginName: string, pluginType: PluginType) {
+    const body: ManagePlugin = {
+      npmName: this.nameToNpmName(pluginName, pluginType)
+    }
+
+    return this.authHttp.post(PluginApiService.BASE_APPLICATION_URL + '/update', body)
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
   install (npmName: string) {
-    const body: InstallPlugin = {
+    const body: InstallOrUpdatePlugin = {
       npmName
     }
 

@@ -85,8 +85,27 @@ function installPlugin (parameters: {
   npmName?: string
   expectedStatus?: number
 }) {
-  const { url, accessToken, npmName, path, expectedStatus = 204 } = parameters
+  const { url, accessToken, npmName, path, expectedStatus = 200 } = parameters
   const apiPath = '/api/v1/plugins/install'
+
+  return makePostBodyRequest({
+    url,
+    path: apiPath,
+    token: accessToken,
+    fields: { npmName, path },
+    statusCodeExpected: expectedStatus
+  })
+}
+
+function updatePlugin (parameters: {
+  url: string,
+  accessToken: string,
+  path?: string,
+  npmName?: string
+  expectedStatus?: number
+}) {
+  const { url, accessToken, npmName, path, expectedStatus = 200 } = parameters
+  const apiPath = '/api/v1/plugins/update'
 
   return makePostBodyRequest({
     url,
@@ -118,6 +137,7 @@ function uninstallPlugin (parameters: {
 export {
   listPlugins,
   installPlugin,
+  updatePlugin,
   getPlugin,
   uninstallPlugin,
   getPluginSettings,
