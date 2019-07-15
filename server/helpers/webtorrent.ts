@@ -4,6 +4,8 @@ import * as WebTorrent from 'webtorrent'
 import { createWriteStream, ensureDir, remove } from 'fs-extra'
 import { CONFIG } from '../initializers/config'
 import { dirname, join } from 'path'
+import * as createTorrent from 'create-torrent'
+import { promisify2 } from './core-utils'
 
 async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName?: string }, timeout: number) {
   const id = target.magnetUri || target.torrentName
@@ -57,9 +59,12 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
   })
 }
 
+const createTorrentPromise = promisify2<string, any, any>(createTorrent)
+
 // ---------------------------------------------------------------------------
 
 export {
+  createTorrentPromise,
   downloadWebTorrentVideo
 }
 
