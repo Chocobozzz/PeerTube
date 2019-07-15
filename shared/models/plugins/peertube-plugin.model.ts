@@ -1,6 +1,8 @@
+import { PluginType } from './plugin.type'
+
 export interface PeerTubePlugin {
   name: string
-  type: number
+  type: PluginType
   latestVersion: string
   version: string
   enabled: boolean
