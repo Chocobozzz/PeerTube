@@ -5,7 +5,8 @@ import { logger } from '../../helpers/logger'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { Emailer } from '../../lib/emailer'
 import { areValidationErrors } from './utils'
-import { isThemeValid } from '../../helpers/custom-validators/plugins'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
+import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists().withMessage('Should have a valid instance name'),
@@ -48,7 +49,7 @@ const customConfigUpdateValidator = [
   body('followers.instance.enabled').isBoolean().withMessage('Should have a valid followers of instance boolean'),
   body('followers.instance.manualApproval').isBoolean().withMessage('Should have a valid manual approval boolean'),
 
-  body('theme.default').custom(isThemeValid).withMessage('Should have a valid theme'),
+  body('theme.default').custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })

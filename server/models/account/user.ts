@@ -52,7 +52,7 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { VideoImportModel } from '../video/video-import'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
-import { isThemeValid } from '../../helpers/custom-validators/plugins'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 
 enum ScopeNames {
@@ -191,7 +191,7 @@ export class UserModel extends Model<UserModel> {
 
   @AllowNull(false)
   @Default(DEFAULT_THEME_NAME)
-  @Is('UserTheme', value => throwIfNotValid(value, isThemeValid, 'theme'))
+  @Is('UserTheme', value => throwIfNotValid(value, isThemeNameValid, 'theme'))
   @Column
   theme: string
 

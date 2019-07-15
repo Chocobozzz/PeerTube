@@ -171,7 +171,7 @@ const SCHEDULER_INTERVALS_MS = {
 
 // ---------------------------------------------------------------------------
 
-let CONSTRAINTS_FIELDS = {
+const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length

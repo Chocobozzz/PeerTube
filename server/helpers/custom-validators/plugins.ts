@@ -4,7 +4,6 @@ import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
 import { isUrlValid } from './activitypub/misc'
-import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
 
@@ -66,8 +65,8 @@ function isCSSPathsValid (css: any[]) {
   return isArray(css) && css.every(c => isSafePath(c))
 }
 
-function isThemeValid (name: string) {
-  return isPluginNameValid(name) && isThemeRegistered(name)
+function isThemeNameValid (name: string) {
+  return isPluginNameValid(name)
 }
 
 function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginType) {
@@ -91,7 +90,7 @@ function isLibraryCodeValid (library: any) {
 export {
   isPluginTypeValid,
   isPackageJSONValid,
-  isThemeValid,
+  isThemeNameValid,
   isPluginHomepage,
   isPluginVersionValid,
   isPluginNameValid,
