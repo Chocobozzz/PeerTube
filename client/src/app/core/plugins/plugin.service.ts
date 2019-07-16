@@ -14,12 +14,19 @@ interface HookStructValue extends RegisterHookOptions {
   clientScript: ClientScript
 }
 
+type PluginInfo = {
+  plugin: ServerConfigPlugin
+  clientScript: ClientScript
+  isTheme: boolean
+}
+
 @Injectable()
 export class PluginService {
   pluginsLoaded = new ReplaySubject<boolean>(1)
 
   private plugins: ServerConfigPlugin[] = []
-  private scopes: { [ scopeName: string ]: { plugin: ServerConfigPlugin, clientScript: ClientScript }[] } = {}
+  private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
+  private loadedPlugins: { [ name: string ]: boolean } = {}
   private loadedScripts: { [ script: string ]: boolean } = {}
   private loadedScopes: PluginScope[] = []
 
@@ -49,7 +56,7 @@ export class PluginService {
   }
 
   addPlugin (plugin: ServerConfigPlugin, isTheme = false) {
-    const pathPrefix = isTheme ? '/themes' : '/plugins'
+    const pathPrefix = this.getPluginPathPrefix(isTheme)
 
     for (const key of Object.keys(plugin.clientScripts)) {
       const clientScript = plugin.clientScripts[key]
@@ -62,7 +69,8 @@ export class PluginService {
           clientScript: {
             script: environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`,
             scopes: clientScript.scopes
-          }
+          },
+          isTheme
         })
 
         this.loadedScripts[clientScript.script] = false
@@ -78,24 +86,26 @@ export class PluginService {
 
   async reloadLoadedScopes () {
     for (const scope of this.loadedScopes) {
-      await this.loadPluginsByScope(scope)
+      await this.loadPluginsByScope(scope, true)
     }
   }
 
-  async loadPluginsByScope (scope: PluginScope) {
+  async loadPluginsByScope (scope: PluginScope, isReload = false) {
     try {
       await this.ensurePluginsAreLoaded()
 
-      this.loadedScopes.push(scope)
+      if (!isReload) this.loadedScopes.push(scope)
 
       const toLoad = this.scopes[ scope ]
       if (!Array.isArray(toLoad)) return
 
       const promises: Promise<any>[] = []
-      for (const { plugin, clientScript } of toLoad) {
+      for (const pluginInfo of toLoad) {
+        const clientScript = pluginInfo.clientScript
+
         if (this.loadedScripts[ clientScript.script ]) continue
 
-        promises.push(this.loadPlugin(plugin, clientScript))
+        promises.push(this.loadPlugin(pluginInfo))
 
         this.loadedScripts[ clientScript.script ] = true
       }
@@ -108,6 +118,8 @@ export class PluginService {
 
   async runHook (hookName: string, param?: any) {
     let result = param
+
+    if (!this.hooks[hookName]) return result
 
     const wait = hookName.startsWith('static:')
 
@@ -123,7 +135,9 @@ export class PluginService {
     return result
   }
 
-  private loadPlugin (plugin: ServerConfigPlugin, clientScript: ClientScript) {
+  private loadPlugin (pluginInfo: PluginInfo) {
+    const { plugin, clientScript } = pluginInfo
+
     const registerHook = (options: RegisterHookOptions) => {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
@@ -136,10 +150,12 @@ export class PluginService {
       })
     }
 
+    const peertubeHelpers = this.buildPeerTubeHelpers(pluginInfo)
+
     console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
     return import(/* webpackIgnore: true */ clientScript.script)
-      .then(script => script.register({ registerHook }))
+      .then(script => script.register({ registerHook, peertubeHelpers }))
       .then(() => this.sortHooksByPriority())
   }
 
@@ -155,5 +171,20 @@ export class PluginService {
         return b.priority - a.priority
       })
     }
+  }
+
+  private buildPeerTubeHelpers (pluginInfo: PluginInfo) {
+    const { plugin } = pluginInfo
+
+    return {
+      getBaseStaticRoute: () => {
+        const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
+        return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/static`
+      }
+    }
+  }
+
+  private getPluginPathPrefix (isTheme: boolean) {
+    return isTheme ? '/themes' : '/plugins'
   }
 }

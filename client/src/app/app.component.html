@@ -8,7 +8,7 @@
     <div class="top-left-block" [ngClass]="{ 'border-bottom': isMenuDisplayed === false }">
       <span class="icon icon-menu" (click)="toggleMenu()"></span>
 
-      <a id="peertube-title" [routerLink]="defaultRoute" title="Homepage">
+      <a class="peertube-title" [routerLink]="defaultRoute" title="Homepage">
         <span class="icon icon-logo"></span>
         <span class="instance-name">{{ instanceName }}</span>
       </a>
