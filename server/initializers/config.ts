@@ -137,7 +137,8 @@ const CONFIG = {
   PLUGINS: {
     INDEX: {
       ENABLED: config.get<boolean>('plugins.index.enabled'),
-      URL: config.get<boolean>('plugins.index.url')
+      CHECK_LATEST_VERSIONS_INTERVAL: parseDurationToMs(config.get<string>('plugins.index.check_latest_versions_interval')),
+      URL: config.get<string>('plugins.index.url')
     }
   },
   ADMIN: {

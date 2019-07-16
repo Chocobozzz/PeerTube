@@ -156,10 +156,11 @@ views:
       max_age: -1
 
 plugins:
-  # The website PeerTube will ask for available PeerTube plugins
-  # This is an unmoderated plugin index, so only install plugins you trust
+  # The website PeerTube will ask for available PeerTube plugins and themes
+  # This is an unmoderated plugin index, so only install plugins/themes you trust
   index:
     enabled: true
+    check_latest_versions_interval: '1 day' # How often you want to check new plugins/themes versions
     url: 'https://packages.joinpeertube.org'
 
 cache:
