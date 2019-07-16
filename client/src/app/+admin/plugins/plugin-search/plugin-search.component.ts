@@ -92,7 +92,12 @@ export class PluginSearchComponent implements OnInit {
             this.pagination.totalItems = res.total
           },
 
-          err => this.notifier.error(err.message)
+          err => {
+            console.error(err)
+
+            const message = this.i18n('The plugin index is not available. Please retry later.')
+            this.notifier.error(message)
+          }
         )
   }
 
