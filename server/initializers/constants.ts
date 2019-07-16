@@ -4,7 +4,7 @@ import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl, root } from '../helpers/core-utils'
+import { isTestInstance, sanitizeHost, sanitizeUrl, root, parseDurationToMs } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
@@ -167,7 +167,7 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
-  checkPlugins: 60000 * 60 * 24, // 1 day
+  checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24 // 1 day
 }
@@ -618,7 +618,6 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.removeOldHistory = 5000
   SCHEDULER_INTERVALS_MS.removeOldViews = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
-  SCHEDULER_INTERVALS_MS.checkPlugins = 10000
   REPEAT_JOBS[ 'videos-views' ] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1

@@ -53,7 +53,7 @@ export class PluginsCheckScheduler extends AbstractScheduler {
             plugin.latestVersion = result.latestVersion
             await plugin.save()
 
-            logger.info('Plugin %s has a new latest version %s.', PluginModel.buildNpmName(plugin.name, plugin.type), plugin.latestVersion)
+            logger.info('Plugin %s has a new latest version %s.', result.npmName, plugin.latestVersion)
           }
         }
       } catch (err) {
