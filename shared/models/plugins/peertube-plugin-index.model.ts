@@ -8,4 +8,7 @@ export interface PeerTubePluginIndex {
   popularity: number
 
   latestVersion: string
+
+  name?: string
+  installed?: boolean
 }

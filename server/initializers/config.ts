@@ -134,6 +134,12 @@ const CONFIG = {
       }
     }
   },
+  PLUGINS: {
+    INDEX: {
+      ENABLED: config.get<boolean>('plugins.index.enabled'),
+      URL: config.get<boolean>('plugins.index.url')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

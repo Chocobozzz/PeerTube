@@ -2,7 +2,7 @@
   <p-selectButton [options]="pluginTypeOptions" [(ngModel)]="pluginType" (ngModelChange)="reloadPlugins()"></p-selectButton>
 </div>
 
-<div class="no-results" i18n *ngIf="pagination.totalItems === 0">
+<div class="no-results" *ngIf="pagination.totalItems === 0">
   {{ getNoResultMessage() }}
 </div>
 
@@ -28,7 +28,7 @@
 
           <my-edit-button *ngIf="pluginType !== PluginType.THEME" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label></my-edit-button>
 
-          <my-button class="update-button" *ngIf="!isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"
+          <my-button class="update-button" *ngIf="isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"
                      [label]="getUpdateLabel(plugin)" icon="refresh" [attr.disabled]="isUpdating(plugin)"
           ></my-button>
 

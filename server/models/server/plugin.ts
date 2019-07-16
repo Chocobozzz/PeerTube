@@ -10,6 +10,7 @@ import {
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
 import { FindAndCountOptions, json } from 'sequelize'
+import { PeerTubePluginIndex } from '../../../shared/models/plugins/peertube-plugin-index.model'
 
 @DefaultScope(() => ({
   attributes: {
@@ -177,7 +178,7 @@ export class PluginModel extends Model<PluginModel> {
   }
 
   static listForApi (options: {
-    type?: PluginType,
+    pluginType?: PluginType,
     uninstalled?: boolean,
     start: number,
     count: number,
@@ -193,7 +194,7 @@ export class PluginModel extends Model<PluginModel> {
       }
     }
 
-    if (options.type) query.where['type'] = options.type
+    if (options.pluginType) query.where['type'] = options.pluginType
 
     return PluginModel
       .findAndCountAll(query)
@@ -202,8 +203,18 @@ export class PluginModel extends Model<PluginModel> {
       })
   }
 
-  static normalizePluginName (name: string) {
-    return name.replace(/^peertube-((theme)|(plugin))-/, '')
+  static listInstalled () {
+    const query = {
+      where: {
+        uninstalled: false
+      }
+    }
+
+    return PluginModel.findAll(query)
+  }
+
+  static normalizePluginName (npmName: string) {
+    return npmName.replace(/^peertube-((theme)|(plugin))-/, '')
   }
 
   static getTypeFromNpmName (npmName: string) {

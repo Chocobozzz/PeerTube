@@ -6,13 +6,14 @@ import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pa
 import { ConfirmService, Notifier } from '@app/core'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ActivatedRoute, Router } from '@angular/router'
-import { compareSemVer } from '@app/shared/misc/utils'
+import { compareSemVer } from '@shared/core-utils/miscs/miscs'
 
 @Component({
   selector: 'my-plugin-list-installed',
   templateUrl: './plugin-list-installed.component.html',
   styleUrls: [
     '../shared/toggle-plugin-type.scss',
+    '../shared/plugin-list.component.scss',
     './plugin-list-installed.component.scss'
   ]
 })

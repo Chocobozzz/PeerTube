@@ -8,12 +8,13 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
-import { pluginsSortValidator } from '../../middlewares/validators'
+import { availablePluginsSortValidator, pluginsSortValidator } from '../../middlewares/validators'
 import { PluginModel } from '../../models/server/plugin'
 import { UserRight } from '../../../shared/models/users'
 import {
   existingPluginValidator,
   installOrUpdatePluginValidator,
+  listAvailablePluginsValidator,
   listPluginsValidator,
   uninstallPluginValidator,
   updatePluginSettingsValidator
@@ -22,8 +23,21 @@ import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
 import { ManagePlugin } from '../../../shared/models/plugins/manage-plugin.model'
 import { logger } from '../../helpers/logger'
+import { listAvailablePluginsFromIndex } from '../../lib/plugins/plugin-index'
+import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
 
 const pluginRouter = express.Router()
+
+pluginRouter.get('/available',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_PLUGINS),
+  listAvailablePluginsValidator,
+  paginationValidator,
+  availablePluginsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listAvailablePlugins)
+)
 
 pluginRouter.get('/',
   authenticate,
@@ -88,10 +102,10 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listPlugins (req: express.Request, res: express.Response) {
-  const type = req.query.type
+  const pluginType = req.query.pluginType
 
   const resultList = await PluginModel.listForApi({
-    type,
+    pluginType,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort
@@ -159,4 +173,12 @@ async function updatePluginSettings (req: express.Request, res: express.Response
   await plugin.save()
 
   return res.sendStatus(204)
+}
+
+async function listAvailablePlugins (req: express.Request, res: express.Response) {
+  const query: PeertubePluginIndexList = req.query
+
+  const resultList = await listAvailablePluginsFromIndex(query)
+
+  return res.json(resultList)
 }

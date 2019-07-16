@@ -64,7 +64,9 @@ const SORTABLE_COLUMNS = {
 
   VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ],
 
-  PLUGINS: [ 'name', 'createdAt', 'updatedAt' ]
+  PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
+
+  AVAILABLE_PLUGINS: [ 'npmName', 'popularity' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -165,6 +167,7 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
+  checkPlugins: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24 // 1 day
 }

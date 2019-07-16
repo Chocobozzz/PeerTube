@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { RegisterSettingOptions } from '@shared/models/plugins/register-setting.model'
-import { BuildFormArgument, BuildFormDefaultValues, FormReactive, FormValidatorService } from '@app/shared'
+import { BuildFormArgument, FormReactive, FormValidatorService } from '@app/shared'
 
 @Component({
   selector: 'my-plugin-show-installed',
@@ -83,7 +83,6 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
   }
 
   private buildSettingsForm () {
-    const defaultValues: BuildFormDefaultValues = {}
     const buildOptions: BuildFormArgument = {}
     const settingsValues: any = {}
 

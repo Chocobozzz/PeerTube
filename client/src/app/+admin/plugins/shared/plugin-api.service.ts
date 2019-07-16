@@ -11,6 +11,7 @@ import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ManagePlugin } from '@shared/models/plugins/manage-plugin.model'
 import { InstallOrUpdatePlugin } from '@shared/models/plugins/install-plugin.model'
 import { RegisterSettingOptions } from '@shared/models/plugins/register-setting.model'
+import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
 
 @Injectable()
 export class PluginApiService {
@@ -45,7 +46,7 @@ export class PluginApiService {
   }
 
   getPlugins (
-    type: PluginType,
+    pluginType: PluginType,
     componentPagination: ComponentPagination,
     sort: string
   ) {
@@ -53,9 +54,27 @@ export class PluginApiService {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-    params = params.append('type', type.toString())
+    params = params.append('pluginType', pluginType.toString())
 
     return this.authHttp.get<ResultList<PeerTubePlugin>>(PluginApiService.BASE_APPLICATION_URL, { params })
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  searchAvailablePlugins (
+    pluginType: PluginType,
+    componentPagination: ComponentPagination,
+    sort: string,
+    search?: string
+  ) {
+    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+    params = params.append('pluginType', pluginType.toString())
+
+    if (search) params = params.append('search', search)
+
+    return this.authHttp.get<ResultList<PeerTubePluginIndex>>(PluginApiService.BASE_APPLICATION_URL + '/available', { params })
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

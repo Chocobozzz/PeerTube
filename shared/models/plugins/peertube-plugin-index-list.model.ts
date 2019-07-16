@@ -1,6 +1,6 @@
 import { PluginType } from './plugin.type'
 
-export interface PeertubePluginList {
+export interface PeertubePluginIndexList {
   start: number
   count: number
   sort: string
