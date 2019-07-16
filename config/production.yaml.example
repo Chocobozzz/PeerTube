@@ -156,6 +156,13 @@ views:
     remote:
       max_age: -1
 
+plugins:
+  # The website PeerTube will ask for available PeerTube plugins
+  # This is an unmoderated plugin index, so only install plugins you trust
+  index:
+    enabled: true
+    url: 'https://packages.joinpeertube.org'
+
 
 ###############################################################################
 #

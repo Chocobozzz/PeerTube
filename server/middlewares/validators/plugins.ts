@@ -8,6 +8,7 @@ import { isBooleanValid, isSafePath } from '../../helpers/custom-validators/misc
 import { PluginModel } from '../../models/server/plugin'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
+import { CONFIG } from '../../initializers/config'
 
 const servePluginStaticDirectoryValidator = (pluginType: PluginType) => [
   param('pluginName').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
@@ -33,7 +34,7 @@ const servePluginStaticDirectoryValidator = (pluginType: PluginType) => [
 ]
 
 const listPluginsValidator = [
-  query('type')
+  query('pluginType')
     .optional()
     .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
   query('uninstalled')
@@ -119,12 +120,39 @@ const updatePluginSettingsValidator = [
   }
 ]
 
+const listAvailablePluginsValidator = [
+  query('sort')
+    .optional()
+    .exists().withMessage('Should have a valid sort'),
+  query('search')
+    .optional()
+    .exists().withMessage('Should have a valid search'),
+  query('pluginType')
+    .optional()
+    .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking enabledPluginValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    if (CONFIG.PLUGINS.INDEX.ENABLED === false) {
+      return res.status(400)
+        .json({ error: 'Plugin index is not enabled' })
+        .end()
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   servePluginStaticDirectoryValidator,
   updatePluginSettingsValidator,
   uninstallPluginValidator,
+  listAvailablePluginsValidator,
   existingPluginValidator,
   installOrUpdatePluginValidator,
   listPluginsValidator

@@ -45,6 +45,7 @@ const icons = {
   'administration': require('../../../assets/images/menu/administration.html'),
   'subscriptions': require('../../../assets/images/menu/subscriptions.html'),
   'users': require('../../../assets/images/global/users.html'),
+  'search': require('../../../assets/images/global/search.html'),
   'refresh': require('../../../assets/images/global/refresh.html')
 }
 

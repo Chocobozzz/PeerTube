@@ -55,6 +55,10 @@ export class PluginManager {
 
   // ###################### Getters ######################
 
+  isRegistered (npmName: string) {
+    return !!this.getRegisteredPluginOrTheme(npmName)
+  }
+
   getRegisteredPluginOrTheme (npmName: string) {
     return this.registeredPlugins[npmName]
   }
