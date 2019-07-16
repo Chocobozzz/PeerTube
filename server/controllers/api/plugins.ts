@@ -180,5 +180,11 @@ async function listAvailablePlugins (req: express.Request, res: express.Response
 
   const resultList = await listAvailablePluginsFromIndex(query)
 
+  if (!resultList) {
+    return res.status(503)
+      .json({ error: 'Plugin index unavailable. Please retry later' })
+      .end()
+  }
+
   return res.json(resultList)
 }

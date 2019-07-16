@@ -27,13 +27,18 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins'
 
-  const { body } = await doRequest({ uri, qs, json: true })
+  try {
+    const { body } = await doRequest({ uri, qs, json: true })
 
-  logger.debug('Got result from PeerTube index.', { body })
+    logger.debug('Got result from PeerTube index.', { body })
 
-  await addInstanceInformation(body)
+    await addInstanceInformation(body)
 
-  return body as ResultList<PeerTubePluginIndex>
+    return body as ResultList<PeerTubePluginIndex>
+  } catch (err) {
+    logger.error('Cannot list available plugins from index %s.', uri, { err })
+    return undefined
+  }
 }
 
 async function addInstanceInformation (result: ResultList<PeerTubePluginIndex>) {
@@ -53,7 +58,7 @@ async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePlu
 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins/latest-version'
 
-  const { body } = await doRequest({ uri, body: bodyRequest })
+  const { body } = await doRequest({ uri, body: bodyRequest, json: true, method: 'POST' })
 
   return body
 }
