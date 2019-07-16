@@ -113,6 +113,7 @@ import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-hi
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
+import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
 
 // ----------- Command line -----------
 
@@ -250,6 +251,7 @@ async function startApplication () {
   VideosRedundancyScheduler.Instance.enable()
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
+  PluginsCheckScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()

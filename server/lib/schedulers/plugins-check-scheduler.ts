@@ -1,6 +1,5 @@
 import { logger } from '../../helpers/logger'
 import { AbstractScheduler } from './abstract-scheduler'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { CONFIG } from '../../initializers/config'
 import { PluginModel } from '../../models/server/plugin'
@@ -19,13 +18,13 @@ export class PluginsCheckScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    return retryTransactionWrapper(this.checkLatestPluginsVersion.bind(this))
+    return this.checkLatestPluginsVersion()
   }
 
   private async checkLatestPluginsVersion () {
     if (CONFIG.PLUGINS.INDEX.ENABLED === false) return
 
-    logger.info('Checkin latest plugins version.')
+    logger.info('Checking latest plugins version.')
 
     const plugins = await PluginModel.listInstalled()
 
@@ -39,19 +38,28 @@ export class PluginsCheckScheduler extends AbstractScheduler {
       }
 
       const npmNames = Object.keys(pluginIndex)
-      const results = await getLatestPluginsVersion(npmNames)
 
-      for (const result of results) {
-        const plugin = pluginIndex[result.npmName]
-        if (!result.latestVersion) continue
+      try {
+        const results = await getLatestPluginsVersion(npmNames)
 
-        if (plugin.latestVersion !== result.latestVersion && compareSemVer(plugin.latestVersion, result.latestVersion) < 0) {
-          plugin.latestVersion = result.latestVersion
-          await plugin.save()
+        for (const result of results) {
+          const plugin = pluginIndex[ result.npmName ]
+          if (!result.latestVersion) continue
+
+          if (
+            !plugin.latestVersion ||
+            (plugin.latestVersion !== result.latestVersion && compareSemVer(plugin.latestVersion, result.latestVersion) < 0)
+          ) {
+            plugin.latestVersion = result.latestVersion
+            await plugin.save()
+
+            logger.info('Plugin %s has a new latest version %s.', PluginModel.buildNpmName(plugin.name, plugin.type), plugin.latestVersion)
+          }
         }
+      } catch (err) {
+        logger.error('Cannot get latest plugins version.', { npmNames, err })
       }
     }
-
   }
 
   static get Instance () {
