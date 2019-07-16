@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { PluginType } from '@shared/models/plugins/plugin.type'
@@ -34,10 +34,12 @@ export class PluginSearchComponent implements OnInit {
 
   plugins: PeerTubePluginIndex[] = []
   installing: { [name: string]: boolean } = {}
+  pluginInstalled = false
 
   private searchSubject = new Subject<string>()
 
   constructor (
+    private server: ServerService,
     private i18n: I18n,
     private pluginService: PluginApiService,
     private notifier: Notifier,
@@ -121,6 +123,7 @@ export class PluginSearchComponent implements OnInit {
         .subscribe(
           () => {
             this.installing[plugin.npmName] = false
+            this.pluginInstalled = true
 
             this.notifier.success(this.i18n('{{pluginName}} installed.', { pluginName: plugin.name }))
 

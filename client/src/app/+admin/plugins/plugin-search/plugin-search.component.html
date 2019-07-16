@@ -6,6 +6,10 @@
   <input type="text" (input)="onSearchChange($event.target.value)" i18n-placeholder placeholder="Search..."/>
 </div>
 
+<div class="alert alert-info" i18n *ngIf="pluginInstalled">
+  To load your new installed plugins or themes, refresh the page.
+</div>
+
 <div class="result-title" *ngIf="!isSearching">
   <ng-container *ngIf="!search">
     <my-global-icon iconName="trending"></my-global-icon>
@@ -32,6 +36,8 @@
         <span class="plugin-name">{{ plugin.name }}</span>
 
         <span class="plugin-version">{{ plugin.latestVersion }}</span>
+
+        <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
       </div>
 
       <div class="second-row">
