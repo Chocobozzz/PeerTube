@@ -14,7 +14,7 @@ import { BuildFormArgument, FormReactive, FormValidatorService } from '@app/shar
   templateUrl: './plugin-show-installed.component.html',
   styleUrls: [ './plugin-show-installed.component.scss' ]
 })
-export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy{
+export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy {
   plugin: PeerTubePlugin
   registeredSettings: RegisterSettingOptions[] = []
   pluginTypeLabel: string

@@ -154,7 +154,7 @@ export class PluginModel extends Model<PluginModel> {
     }
 
     return PluginModel.findOne(query)
-      .then((c: any) =>  {
+      .then((c: any) => {
         if (!c) return undefined
 
         return c.value
