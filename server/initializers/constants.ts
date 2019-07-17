@@ -18,8 +18,8 @@ const LAST_MIGRATION_VERSION = 400
 
 // ---------------------------------------------------------------------------
 
-// API version
 const API_VERSION = 'v1'
+const PEERTUBE_VERSION = process.env.npm_package_version || 'unknown'
 
 const PAGINATION = {
   COUNT: {
@@ -645,6 +645,7 @@ registerConfigChangedHandler(() => {
 export {
   WEBSERVER,
   API_VERSION,
+  PEERTUBE_VERSION,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   AVATARS_SIZE,
