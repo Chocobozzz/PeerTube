@@ -119,6 +119,7 @@ import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-sch
 
 cli
   .option('--no-client', 'Start PeerTube without client interface')
+  .option('--no-plugins', 'Start PeerTube without plugins/themes enabled')
   .parse(process.argv)
 
 // ----------- App -----------
@@ -261,7 +262,7 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
-  await PluginManager.Instance.registerPluginsAndThemes()
+  if (cli.plugins) await PluginManager.Instance.registerPluginsAndThemes()
 
   // Make server listening
   server.listen(port, hostname, () => {
