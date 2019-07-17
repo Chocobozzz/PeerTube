@@ -19,7 +19,7 @@ const LAST_MIGRATION_VERSION = 400
 // ---------------------------------------------------------------------------
 
 const API_VERSION = 'v1'
-const PEERTUBE_VERSION = process.env.npm_package_version || 'unknown'
+const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
   COUNT: {

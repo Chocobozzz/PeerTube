@@ -156,6 +156,15 @@ export class PluginModel extends Model<PluginModel> {
     return PluginModel.findOne(query)
       .then((c: any) => {
         if (!c) return undefined
+        const value = c.value
+
+        if (typeof value === 'string' && value.startsWith('{')) {
+          try {
+            return JSON.parse(value)
+          } catch {
+            return value
+          }
+        }
 
         return c.value
       })
