@@ -10,8 +10,7 @@ import { PeerTubePluginIndex } from '../../../shared/models/plugins/peertube-plu
 import { PluginModel } from '../../models/server/plugin'
 import { PluginManager } from './plugin-manager'
 import { logger } from '../../helpers/logger'
-
-const packageJSON = require('../../../../package.json')
+import { PEERTUBE_VERSION } from '../../initializers/constants'
 
 async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {
   const { start = 0, count = 20, search, sort = 'npmName', pluginType } = options
@@ -22,7 +21,7 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
     sort,
     pluginType,
     search,
-    currentPeerTubeEngine: packageJSON.version
+    currentPeerTubeEngine: PEERTUBE_VERSION
   }
 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins'
@@ -53,7 +52,7 @@ async function addInstanceInformation (result: ResultList<PeerTubePluginIndex>) 
 async function getLatestPluginsVersion (npmNames: string[]): Promise<PeertubePluginLatestVersionResponse> {
   const bodyRequest: PeertubePluginLatestVersionRequest = {
     npmNames,
-    currentPeerTubeEngine: packageJSON.version
+    currentPeerTubeEngine: PEERTUBE_VERSION
   }
 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins/latest-version'

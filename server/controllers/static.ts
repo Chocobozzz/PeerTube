@@ -1,7 +1,7 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import {
-  HLS_STREAMING_PLAYLIST_DIRECTORY,
+  HLS_STREAMING_PLAYLIST_DIRECTORY, PEERTUBE_VERSION,
   ROUTE_CACHE_LIFETIME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
@@ -19,7 +19,6 @@ import { join } from 'path'
 import { root } from '../helpers/core-utils'
 import { CONFIG } from '../initializers/config'
 
-const packageJSON = require('../../../package.json')
 const staticRouter = express.Router()
 
 staticRouter.use(cors())
@@ -205,7 +204,7 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
       version: '2.0',
       software: {
         name: 'peertube',
-        version: packageJSON.version
+        version: PEERTUBE_VERSION
       },
       protocols: [
         'activitypub'

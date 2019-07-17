@@ -1,13 +1,11 @@
 import * as Bluebird from 'bluebird'
 import { createWriteStream, remove } from 'fs-extra'
 import * as request from 'request'
-import { ACTIVITY_PUB, WEBSERVER } from '../initializers/constants'
+import { ACTIVITY_PUB, PEERTUBE_VERSION, WEBSERVER } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { join } from 'path'
 import { logger } from './logger'
 import { CONFIG } from '../initializers/config'
-
-const packageJSON = require('../../../package.json')
 
 function doRequest <T> (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean },
@@ -68,7 +66,7 @@ async function downloadImage (url: string, destDir: string, destName: string, si
 }
 
 function getUserAgent () {
-  return `PeerTube/${packageJSON.version} (+${WEBSERVER.URL})`
+  return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
 // ---------------------------------------------------------------------------
