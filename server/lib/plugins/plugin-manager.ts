@@ -104,10 +104,12 @@ export class PluginManager {
 
     for (const hook of this.hooks[hookName]) {
       try {
+        const p = hook.handler(param)
+
         if (wait) {
-          result = await hook.handler(param)
-        } else {
-          result = hook.handler()
+          result = await p
+        } else if (p.catch) {
+          p.catch(err => logger.warn('Hook %s of plugin %s thrown an error.', hookName, hook.pluginName, { err }))
         }
       } catch (err) {
         logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
@@ -329,7 +331,7 @@ export class PluginManager {
       registerSetting,
       settingsManager,
       storageManager
-    })
+    }).catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
 
     logger.info('Add plugin %s CSS to global file.', npmName)
 
@@ -365,7 +367,7 @@ export class PluginManager {
   private async regeneratePluginGlobalCSS () {
     await this.resetCSSGlobalFile()
 
-    for (const key of Object.keys(this.registeredPlugins)) {
+    for (const key of Object.keys(this.getRegisteredPlugins())) {
       const plugin = this.registeredPlugins[key]
 
       await this.addCSSToGlobalFile(plugin.path, plugin.css)

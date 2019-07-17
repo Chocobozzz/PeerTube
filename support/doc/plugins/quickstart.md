@@ -18,10 +18,13 @@ A plugin registers functions in JavaScript to execute when PeerTube (server and 
 Example:
 
 ```js
-registerHook({
-  target: 'action:application.listening',
-  handler: () => displayHelloWorld()
-})
+// This register function is called by PeerTube, and **must** return a promise
+async function register ({ registerHook }) {
+  registerHook({
+    target: 'action:application.listening',
+    handler: () => displayHelloWorld()
+  })
+}
 ```
 
 On server side, these hooks are registered by the `library` file defined in `package.json`.
@@ -65,9 +68,7 @@ or `/themes/{theme-name}/{theme-version}/static/` routes.
 
 Plugins can declare CSS files that PeerTube will automatically inject in the client.
 
-### Server helpers
-
-**Only for plugins**
+### Server helpers (only for plugins)
 
 #### Settings
 
@@ -94,7 +95,7 @@ Example:
 
 ```js
 const value = await storageManager.getData('mykey')
-await storageManager.storeData('mykey', 'myvalue')
+await storageManager.storeData('mykey', { subkey: 'value' })
 ```
 
 ### Publishing
@@ -169,12 +170,13 @@ If you don't need static directories, use an empty `object`:
 }
 ```
 
-And if you don't need CSS files, use an empty `array`:
+And if you don't need CSS or client script files, use an empty `array`:
 
 ```json
 {
   ...,
   "css": [],
+  "clientScripts": [],
   ...
 }
 ```
@@ -197,8 +199,14 @@ You'll need to have a local PeerTube instance:
 ```
 $ npm run build -- --light
 ```
+
+ * Build the CLI:
  
- * Run it  (you can access to your instance on http://localhost:9000): 
+```
+$ npm run setup:cli
+```
+ 
+ * Run PeerTube (you can access to your instance on http://localhost:9000): 
 
 ```
 $ NODE_ENV=test npm start

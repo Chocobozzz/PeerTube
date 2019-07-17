@@ -125,8 +125,15 @@ export class PluginService {
 
     for (const hook of this.hooks[hookName]) {
       try {
-        if (wait) result = await hook.handler(param)
-        else result = hook.handler()
+        const p = hook.handler(param)
+
+        if (wait) {
+          result = await p
+        } else if (p.catch) {
+          p.catch((err: Error) => {
+            console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.plugin, hook.clientScript, err)
+          })
+        }
       } catch (err) {
         console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.plugin, hook.clientScript, err)
       }
