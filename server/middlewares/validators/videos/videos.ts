@@ -33,7 +33,7 @@ import {
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { authenticatePromiseIfNeeded } from '../../oauth'
+import { authenticate, authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { VideoModel } from '../../../models/video/video'
@@ -44,6 +44,8 @@ import { VideoFetchType } from '../../../helpers/video'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
+import { isLocalVideoAccepted } from '../../../lib/moderation'
+import { Hooks } from '../../../lib/plugins/hooks'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -62,14 +64,12 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
     if (areErrorsInScheduleUpdate(req, res)) return cleanUpReqFiles(req)
 
-    const videoFile: Express.Multer.File = req.files['videofile'][0]
+    const videoFile: Express.Multer.File & { duration?: number } = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
     if (!await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
-    const isAble = await user.isAbleToUploadVideo(videoFile)
-
-    if (isAble === false) {
+    if (await user.isAbleToUploadVideo(videoFile) === false) {
       res.status(403)
          .json({ error: 'The user video quota is exceeded with this video.' })
 
@@ -88,7 +88,9 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    videoFile['duration'] = duration
+    videoFile.duration = duration
+
+    if (!await isVideoAccepted(req, res, videoFile)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -433,4 +435,27 @@ function areErrorsInScheduleUpdate (req: express.Request, res: express.Response)
   }
 
   return false
+}
+
+async function isVideoAccepted (req: express.Request, res: express.Response, videoFile: Express.Multer.File & { duration?: number }) {
+  // Check we accept this video
+  const acceptParameters = {
+    videoBody: req.body,
+    videoFile,
+    user: res.locals.oauth.token.User
+  }
+  const acceptedResult = await Hooks.wrapObject(
+    isLocalVideoAccepted(acceptParameters),
+    'filter:api.video.upload.accept.result'
+  )
+
+  if (!acceptedResult || acceptedResult.accepted !== true) {
+    logger.info('Refused local video.', { acceptedResult, acceptParameters })
+    res.status(403)
+       .json({ error: acceptedResult.errorMessage || 'Refused local video' })
+
+    return false
+  }
+
+  return true
 }

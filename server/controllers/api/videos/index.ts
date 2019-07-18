@@ -62,6 +62,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
+import { Hooks } from '../../../lib/plugins/hooks'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -268,10 +269,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     }
 
     const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded(video, res.locals.oauth.token.User, t)
-
-    if (!videoWasAutoBlacklisted) {
-      await federateVideoIfNeeded(video, true, t)
-    }
+    if (!videoWasAutoBlacklisted) await federateVideoIfNeeded(video, true, t)
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
@@ -279,11 +277,8 @@ async function addVideo (req: express.Request, res: express.Response) {
     return { videoCreated, videoWasAutoBlacklisted }
   })
 
-  if (videoWasAutoBlacklisted) {
-    Notifier.Instance.notifyOnVideoAutoBlacklist(videoCreated)
-  } else {
-    Notifier.Instance.notifyOnNewVideo(videoCreated)
-  }
+  if (videoWasAutoBlacklisted) Notifier.Instance.notifyOnVideoAutoBlacklist(videoCreated)
+  else Notifier.Instance.notifyOnNewVideo(videoCreated)
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now
@@ -306,6 +301,8 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
   }
+
+  Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
 
   return res.json({
     video: {
@@ -421,6 +418,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
     if (wasUnlistedVideo || wasPrivateVideo) {
       Notifier.Instance.notifyOnNewVideo(videoInstanceUpdated)
     }
+
+    Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated })
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
@@ -436,7 +435,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
 async function getVideo (req: express.Request, res: express.Response) {
   // We need more attributes
   const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
-  const video = await VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId)
+
+  const video = await Hooks.wrapPromise(
+    VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId),
+    'filter:api.video.get.result'
+  )
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
@@ -464,6 +467,8 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   await sendView(serverActor, videoInstance, undefined)
 
+  Hooks.runAction('action:api.video.viewed', { video: videoInstance, ip })
+
   return res.status(204).end()
 }
 
@@ -481,7 +486,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
-  const resultList = await VideoModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -495,7 +500,12 @@ async function listVideos (req: express.Request, res: express.Response) {
     filter: req.query.filter as VideoFilter,
     withFiles: false,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined
-  })
+  }, 'filter:api.videos.list.params')
+
+  const resultList = await Hooks.wrapPromise(
+    VideoModel.listForApi(apiOptions),
+    'filter:api.videos.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -509,6 +519,8 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
+
+  Hooks.runAction('action:api.video.deleted', { video: videoInstance })
 
   return res.type('json').status(204).end()
 }

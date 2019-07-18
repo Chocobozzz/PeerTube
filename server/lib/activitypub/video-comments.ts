@@ -134,7 +134,7 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []): 
     })
 
     if (sanitizeAndCheckVideoCommentObject(body) === false) {
-      throw new Error('Remote video comment JSON is not valid :' + JSON.stringify(body))
+      throw new Error('Remote video comment JSON is not valid:' + JSON.stringify(body))
     }
 
     const actorUrl = body.attributedTo
