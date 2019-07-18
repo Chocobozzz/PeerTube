@@ -14,6 +14,10 @@ import { RegisterSettingOptions } from '../../../shared/models/plugins/register-
 import { RegisterHookOptions } from '../../../shared/models/plugins/register-hook.model'
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
 import { PluginStorageManager } from '../../../shared/models/plugins/plugin-storage-manager.model'
+import { ServerHookName, ServerHook } from '../../../shared/models/plugins/server-hook.model'
+import { isCatchable, isPromise } from '../../../shared/core-utils/miscs/miscs'
+import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
+import { HookType } from '../../../shared/models/plugins/hook-type.enum'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -42,7 +46,7 @@ export interface HookInformationValue {
   priority: number
 }
 
-export class PluginManager {
+export class PluginManager implements ServerHook {
 
   private static instance: PluginManager
 
@@ -95,25 +99,17 @@ export class PluginManager {
 
   // ###################### Hooks ######################
 
-  async runHook (hookName: string, param?: any) {
+  async runHook (hookName: ServerHookName, param?: any) {
     let result = param
 
     if (!this.hooks[hookName]) return result
 
-    const wait = hookName.startsWith('static:')
+    const hookType = getHookType(hookName)
 
     for (const hook of this.hooks[hookName]) {
-      try {
-        const p = hook.handler(param)
-
-        if (wait) {
-          result = await p
-        } else if (p.catch) {
-          p.catch(err => logger.warn('Hook %s of plugin %s thrown an error.', hookName, hook.pluginName, { err }))
-        }
-      } catch (err) {
+      result = await internalRunHook(hook.handler, hookType, param, err => {
         logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
-      }
+      })
     }
 
     return result

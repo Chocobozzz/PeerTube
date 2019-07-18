@@ -141,7 +141,7 @@ function root () {
   const paths = [ __dirname, '..', '..' ]
 
   // We are under /dist directory
-  if (process.mainModule && process.mainModule.filename.endsWith('.ts') === false) {
+  if (process.mainModule && process.mainModule.filename.endsWith('_mocha') === false) {
     paths.push('..')
   }
 

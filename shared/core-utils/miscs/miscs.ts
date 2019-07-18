@@ -19,7 +19,17 @@ function compareSemVer (a: string, b: string) {
   return segmentsA.length - segmentsB.length
 }
 
+function isPromise (value: any) {
+  return value && typeof value.then === 'function'
+}
+
+function isCatchable (value: any) {
+  return value && typeof value.catch === 'function'
+}
+
 export {
   randomInt,
-  compareSemVer
+  compareSemVer,
+  isPromise,
+  isCatchable
 }

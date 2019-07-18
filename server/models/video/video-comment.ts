@@ -293,7 +293,15 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static async listThreadsForApi (videoId: number, start: number, count: number, sort: string, user?: UserModel) {
+  static async listThreadsForApi (parameters: {
+    videoId: number,
+    start: number,
+    count: number,
+    sort: string,
+    user?: UserModel
+  }) {
+    const { videoId, start, count, sort, user } = parameters
+
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
     const userAccountId = user ? user.Account.id : undefined
@@ -328,7 +336,13 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static async listThreadCommentsForApi (videoId: number, threadId: number, user?: UserModel) {
+  static async listThreadCommentsForApi (parameters: {
+    videoId: number,
+    threadId: number,
+    user?: UserModel
+  }) {
+    const { videoId, threadId, user } = parameters
+
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
     const userAccountId = user ? user.Account.id : undefined
