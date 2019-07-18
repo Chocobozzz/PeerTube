@@ -143,6 +143,8 @@ export class PluginManager implements ServerHook {
       throw new Error(`Unknown plugin ${npmName} to unregister`)
     }
 
+    delete this.registeredPlugins[plugin.npmName]
+
     if (plugin.type === PluginType.PLUGIN) {
       await plugin.unregister()
 
@@ -154,8 +156,6 @@ export class PluginManager implements ServerHook {
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
     }
-
-    delete this.registeredPlugins[plugin.npmName]
   }
 
   // ###################### Installation ######################
