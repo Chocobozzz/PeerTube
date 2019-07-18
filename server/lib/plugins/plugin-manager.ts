@@ -4,7 +4,6 @@ import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
 import { ClientScript, PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
-import { PluginLibrary } from '../../../shared/models/plugins/plugin-library.model'
 import { createReadStream, createWriteStream } from 'fs'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
@@ -14,10 +13,10 @@ import { RegisterSettingOptions } from '../../../shared/models/plugins/register-
 import { RegisterHookOptions } from '../../../shared/models/plugins/register-hook.model'
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
 import { PluginStorageManager } from '../../../shared/models/plugins/plugin-storage-manager.model'
-import { ServerHookName, ServerHook } from '../../../shared/models/plugins/server-hook.model'
-import { isCatchable, isPromise } from '../../../shared/core-utils/miscs/miscs'
+import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
-import { HookType } from '../../../shared/models/plugins/hook-type.enum'
+import { RegisterOptions } from '../../typings/plugins/register-options.model'
+import { PluginLibrary } from '../../typings/plugins'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -287,47 +286,15 @@ export class PluginManager implements ServerHook {
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJson) {
     const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
 
-    const registerHook = (options: RegisterHookOptions) => {
-      if (!this.hooks[options.target]) this.hooks[options.target] = []
-
-      this.hooks[options.target].push({
-        npmName,
-        pluginName: plugin.name,
-        handler: options.handler,
-        priority: options.priority || 0
-      })
-    }
-
-    const registerSetting = (options: RegisterSettingOptions) => {
-      if (!this.settings[npmName]) this.settings[npmName] = []
-
-      this.settings[npmName].push(options)
-    }
-
-    const settingsManager: PluginSettingsManager = {
-      getSetting: (name: string) => PluginModel.getSetting(plugin.name, plugin.type, name),
-
-      setSetting: (name: string, value: string) => PluginModel.setSetting(plugin.name, plugin.type, name, value)
-    }
-
-    const storageManager: PluginStorageManager = {
-      getData: (key: string) => PluginModel.getData(plugin.name, plugin.type, key),
-
-      storeData: (key: string, data: any) => PluginModel.storeData(plugin.name, plugin.type, key, data)
-    }
-
     const library: PluginLibrary = require(join(pluginPath, packageJSON.library))
 
     if (!isLibraryCodeValid(library)) {
       throw new Error('Library code is not valid (miss register or unregister function)')
     }
 
-    library.register({
-      registerHook,
-      registerSetting,
-      settingsManager,
-      storageManager
-    }).catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
+    const registerHelpers = this.getRegisterHelpers(npmName, plugin)
+    library.register(registerHelpers)
+           .catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
 
     logger.info('Add plugin %s CSS to global file.', npmName)
 
@@ -405,6 +372,51 @@ export class PluginManager implements ServerHook {
     }
 
     return plugins
+  }
+
+  // ###################### Generate register helpers ######################
+
+  private getRegisterHelpers (npmName: string, plugin: PluginModel): RegisterOptions {
+    const registerHook = (options: RegisterHookOptions) => {
+      if (!this.hooks[options.target]) this.hooks[options.target] = []
+
+      this.hooks[options.target].push({
+        npmName,
+        pluginName: plugin.name,
+        handler: options.handler,
+        priority: options.priority || 0
+      })
+    }
+
+    const registerSetting = (options: RegisterSettingOptions) => {
+      if (!this.settings[npmName]) this.settings[npmName] = []
+
+      this.settings[npmName].push(options)
+    }
+
+    const settingsManager: PluginSettingsManager = {
+      getSetting: (name: string) => PluginModel.getSetting(plugin.name, plugin.type, name),
+
+      setSetting: (name: string, value: string) => PluginModel.setSetting(plugin.name, plugin.type, name, value)
+    }
+
+    const storageManager: PluginStorageManager = {
+      getData: (key: string) => PluginModel.getData(plugin.name, plugin.type, key),
+
+      storeData: (key: string, data: any) => PluginModel.storeData(plugin.name, plugin.type, key, data)
+    }
+
+    const peertubeHelpers = {
+      logger
+    }
+
+    return {
+      registerHook,
+      registerSetting,
+      settingsManager,
+      storageManager,
+      peertubeHelpers
+    }
   }
 
   static get Instance () {
