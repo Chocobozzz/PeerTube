@@ -88,7 +88,7 @@ const uninstallPluginValidator = [
 ]
 
 const existingPluginValidator = [
-  param('npmName').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
+  param('npmName').custom(isNpmPluginNameValid).withMessage('Should have a valid plugin name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking enabledPluginValidator parameters', { parameters: req.params })
@@ -121,9 +121,6 @@ const updatePluginSettingsValidator = [
 ]
 
 const listAvailablePluginsValidator = [
-  query('sort')
-    .optional()
-    .exists().withMessage('Should have a valid sort'),
   query('search')
     .optional()
     .exists().withMessage('Should have a valid search'),
