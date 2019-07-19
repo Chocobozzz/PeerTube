@@ -387,14 +387,15 @@ namespace audio {
   export namespace bitrate {
     const baseKbitrate = 384
 
-    const toBits = (kbits: number): number => { return kbits * 8000 }
+    const toBits = (kbits: number) => kbits * 8000
 
     export const aac = (bitrate: number): number => {
       switch (true) {
-      case bitrate > toBits(baseKbitrate):
-        return baseKbitrate
-      default:
-        return -1 // we interpret it as a signal to copy the audio stream as is
+        case bitrate > toBits(baseKbitrate):
+          return baseKbitrate
+
+        default:
+          return -1 // we interpret it as a signal to copy the audio stream as is
       }
     }
 
@@ -405,12 +406,14 @@ namespace audio {
       made here are not made to be accurate, especially with good mp3 encoders.
       */
       switch (true) {
-      case bitrate <= toBits(192):
-        return 128
-      case bitrate <= toBits(384):
-        return 256
-      default:
-        return baseKbitrate
+        case bitrate <= toBits(192):
+          return 128
+
+        case bitrate <= toBits(384):
+          return 256
+
+        default:
+          return baseKbitrate
       }
     }
   }

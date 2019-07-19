@@ -4,18 +4,13 @@ import { PluginManager } from '../../server/lib/plugins/plugin-manager'
 import { isAbsolute } from 'path'
 
 program
-  .option('-n, --plugin-name [pluginName]', 'Plugin name to install')
+  .option('-n, --npm-name [npmName]', 'Plugin to install')
   .option('-v, --plugin-version [pluginVersion]', 'Plugin version to install')
   .option('-p, --plugin-path [pluginPath]', 'Path of the plugin you want to install')
   .parse(process.argv)
 
-if (!program['pluginName'] && !program['pluginPath']) {
+if (!program['npmName'] && !program['pluginPath']) {
   console.error('You need to specify a plugin name with the desired version, or a plugin path.')
-  process.exit(-1)
-}
-
-if (program['pluginName'] && !program['pluginVersion']) {
-  console.error('You need to specify a the version of the plugin you want to install.')
   process.exit(-1)
 }
 
@@ -34,6 +29,6 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const toInstall = program['pluginName'] || program['pluginPath']
+  const toInstall = program['npmName'] || program['pluginPath']
   await PluginManager.Instance.install(toInstall, program['pluginVersion'], !!program['pluginPath'])
 }

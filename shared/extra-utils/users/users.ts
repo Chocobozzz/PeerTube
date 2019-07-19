@@ -6,6 +6,7 @@ import { UserRegister } from '../../models/users/user-register.model'
 import { UserRole } from '../../models/users/user-role'
 import { ServerInfo } from '../server/servers'
 import { userLogin } from './login'
+import { UserUpdateMe } from '../../models/users'
 
 type CreateUserArgs = { url: string,
   accessToken: string,
@@ -224,19 +225,21 @@ function updateMyUser (options: {
   displayName?: string
   description?: string
   videosHistoryEnabled?: boolean
+  theme?: string
 }) {
   const path = '/api/v1/users/me'
 
-  const toSend = {}
-  if (options.currentPassword !== undefined && options.currentPassword !== null) toSend['currentPassword'] = options.currentPassword
-  if (options.newPassword !== undefined && options.newPassword !== null) toSend['password'] = options.newPassword
-  if (options.nsfwPolicy !== undefined && options.nsfwPolicy !== null) toSend['nsfwPolicy'] = options.nsfwPolicy
-  if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend['autoPlayVideo'] = options.autoPlayVideo
-  if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
-  if (options.description !== undefined && options.description !== null) toSend['description'] = options.description
-  if (options.displayName !== undefined && options.displayName !== null) toSend['displayName'] = options.displayName
+  const toSend: UserUpdateMe = {}
+  if (options.currentPassword !== undefined && options.currentPassword !== null) toSend.currentPassword = options.currentPassword
+  if (options.newPassword !== undefined && options.newPassword !== null) toSend.password = options.newPassword
+  if (options.nsfwPolicy !== undefined && options.nsfwPolicy !== null) toSend.nsfwPolicy = options.nsfwPolicy
+  if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend.autoPlayVideo = options.autoPlayVideo
+  if (options.email !== undefined && options.email !== null) toSend.email = options.email
+  if (options.description !== undefined && options.description !== null) toSend.description = options.description
+  if (options.displayName !== undefined && options.displayName !== null) toSend.displayName = options.displayName
+  if (options.theme !== undefined && options.theme !== null) toSend.theme = options.theme
   if (options.videosHistoryEnabled !== undefined && options.videosHistoryEnabled !== null) {
-    toSend['videosHistoryEnabled'] = options.videosHistoryEnabled
+    toSend.videosHistoryEnabled = options.videosHistoryEnabled
   }
 
   return makePutBodyRequest({
